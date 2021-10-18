@@ -1,0 +1,51 @@
+@import "../../styles/mixin";
+
+.container {
+  @include container;
+
+  .page {
+    margin-top: 3rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 5rem;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+    &__side {
+      max-width: 100%;
+      display: flex;
+      border: 1px solid rgba(34,36,38,0.1);
+      box-shadow: 0 1px 2px 0 rgb(34 36 38 / 10%);
+      border-radius: 5px;
+      background-color: var(--white);
+      margin: 10px 20px 15px;
+
+      @media only screen and (min-width: 768px) {
+        display: block;
+        flex: 0 0 10%;
+        max-width: 10%;
+        height: 300px;
+      }
+    }
+
+    &__link {
+
+    }
+
+    &__title {
+      margin-top: 0;
+    }
+
+    &__content {
+      padding: 10px 20px;
+      flex: 0 0 100%;
+      max-width: 100%;
+
+      @media only screen and (min-width: 768px) {
+        flex: 0 0 75%;
+        max-width: 75%;
+      }
+    }
+  }
+}

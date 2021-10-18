@@ -1,0 +1,36 @@
+.notFound {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+
+  &__logo {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 30px;
+  }
+
+  &__title {
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: bold;
+    color: var(--black);
+    margin-bottom: 8px;
+  }
+
+  &__description {
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+    color: var(--black6);
+    margin-bottom: 24px;
+  }
+
+  &__link {
+    font-size: 14px;
+    line-height: 21px;
+    text-align: center;
+    color: var(--link);
+  }
+}

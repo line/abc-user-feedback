@@ -1,0 +1,20 @@
+.page {
+  &__action {
+    padding: 8px 0;
+    text-align: right;
+  }
+
+  &__list {
+    margin-bottom: 16px;
+    padding: 10px 0;
+  }
+
+  .feedback {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 8px;
+    margin-bottom: 10px;
+    background-color: var(--white);
+  }
+}

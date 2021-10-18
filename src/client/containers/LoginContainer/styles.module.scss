@@ -1,0 +1,84 @@
+@import "../../styles/mixin";
+
+.login {
+  @include container;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-top: 56px;
+  padding-bottom: 56px;
+
+  &__logo {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 30px;
+  }
+
+  &__title {
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 24px;
+    margin-bottom: 30px;
+
+    &__service {
+      margin-left: 6px;
+    }
+  }
+
+  &__description {
+    font-size: 16px;
+    line-height: 16px;
+  }
+
+  &__social {
+    background-color: var(--white);
+    text-align: center;
+    padding: 8px;
+    margin: 20px 0;
+    cursor: pointer;
+  }
+
+  .email {
+    &__title {
+      display: flex;
+      align-items: center;
+      margin: 0 0 12px;
+      font-weight: 500;
+      line-height: 16px;
+    }
+
+    &__register {
+      margin-left: auto;
+    }
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin-bottom: 16px;
+
+      &__forgot {
+        padding: 8px 0;
+        text-align: right;
+      }
+
+      &__input {
+        width: 360px;
+        flex: 1;
+      }
+    }
+
+    &__submitted {
+      display: flex;
+      align-items: center;
+      background: rgb(195, 250, 232);
+      border: 1px solid rgb(150, 242, 215);
+      padding: 8px;
+      text-align: center;
+      border-radius: 4px;
+      color: rgb(12, 166, 120);
+      min-width: 360px;
+    }
+  }
+}

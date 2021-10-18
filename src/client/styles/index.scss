@@ -1,0 +1,22 @@
+:root {
+  --black-base: 0, 0, 0;
+  --white-base: 255, 255, 255;
+  // Text
+  --black: rgba(var(--black-base), 1);
+  --black1: rgba(var(--black-base), 0.1);
+  --black3: rgba(var(--black-base), 0.3);
+  --black5: rgba(var(--black-base), 0.5);
+  --black6: rgba(var(--black-base), 0.6);
+  --white: rgba(var(--white-base), 1);
+
+  --info: rgba(18, 184, 134);
+  --border: rgb(240, 240, 240);
+  --warn: rgba(255,49,33, 1);
+  --link: rgba(60, 110, 240, 1);
+  --background: rgba(240, 242, 245, 0.5);
+  --primary: rgba(109, 43, 255, 1);
+}
+
+@import "reset";
+@import "global";
+@import "variables";

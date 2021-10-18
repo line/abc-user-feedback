@@ -1,0 +1,27 @@
+.invite {
+  &__title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+
+    h3 {
+      margin: 0 16px 0;
+    }
+  }
+
+  .role {
+    margin-bottom: 30px;
+    line-height: 20px;
+    font-weight: 400;
+
+    &__block {
+      padding-left: 24px;
+
+      > li {
+        list-style: disc;
+      }
+    }
+
+  }
+
+}

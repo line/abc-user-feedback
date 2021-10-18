@@ -1,0 +1,30 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  vertical-align: bottom;
+  font-size: 14px;
+
+  .textarea {
+    display: block;
+    resize: vertical;
+    padding: 5px 15px;
+    line-height: 1.5;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: inherit;
+    color: #606266;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #dcdfe6;
+    border-radius: 8px;
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+
+    &:disabled {
+      background-color: var(--black1);
+      border-color: #e4e7ed;
+      color: #c0c4cc;
+      cursor: not-allowed;
+    }
+  }
+}

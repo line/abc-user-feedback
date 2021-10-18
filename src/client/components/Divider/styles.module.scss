@@ -1,0 +1,66 @@
+.divider {
+  color: rgba(0,0,0,.85);
+  font-size: 14px;
+  font-weight: 400;
+  border-top: 1px solid rgba(229, 229, 234, 0.5);
+  box-sizing: border-box;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &--horizontal {
+    clear: both;
+    display: flex;
+    margin: 24px 0;
+    min-width: 100%;
+    width: 100%;
+  }
+
+  &--vertical {
+    border-left: 1px solid rgba(229, 229, 234, 0.5);
+    border-top: 0;
+    display: inline-block;
+    height: .9em;
+    margin: 0 8px;
+    position: relative;
+    top: -.06em;
+    vertical-align: middle;
+  }
+
+  &--has-children {
+    border-top: 0;
+    border-top-color: rgba(229, 229, 234, 0.5);
+    color: rgba(0,0,0,.85);
+    display: flex;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 16px 0;
+    text-align: center;
+    white-space: nowrap;
+
+    &::before {
+      border-bottom: 0;
+      border-top: 1px solid transparent;
+      border-top-color: inherit;
+      content: '';
+      position: relative;
+      top: 50%;
+      transform: translateY(50%);
+      width: 50%;
+    }
+
+    &::after {
+      border-bottom: 0;
+      border-top: 1px solid transparent;
+      border-top-color: inherit;
+      content: '';
+      position: relative;
+      top: 50%;
+      transform: translateY(50%);
+      width: 50%;
+    }
+
+  }
+}

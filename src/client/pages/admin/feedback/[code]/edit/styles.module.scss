@@ -1,0 +1,24 @@
+@import "../../../../../styles/mixin";
+
+.container {
+  .title {
+    display: flex;
+
+    &__action {
+      margin-left: auto;
+
+      &__create {
+        margin-left: 16px;
+      }
+    }
+  }
+
+  .delete {
+    margin-top: 5rem;
+
+    &__button {
+      max-width: 150px;
+    }
+  }
+}
+

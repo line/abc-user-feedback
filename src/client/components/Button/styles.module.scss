@@ -1,0 +1,50 @@
+.button {
+  position: relative;
+  display: inline-block;
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 18px;
+  white-space: nowrap;
+  text-align: center;
+  cursor: pointer;
+  background-color: var(--info);
+  transition: all .3s cubic-bezier(.645,.045,.355,1);
+  border: 1px solid var(--black1);
+  box-shadow: 0 2px #00000004;
+  user-select: none;
+  touch-action: manipulation;
+  min-height: 32px;
+  padding: 7px 24px;
+  border-radius: 4px;
+  color: white;
+  margin: 0 2px;
+
+  &:focus,
+  &:hover {
+    outline: 0;
+  }
+
+  &__default {
+    background-color: var(--white);
+    color: var(--black);
+  }
+
+  &__text {
+    border-color: transparent;
+    color: var(--link);
+    background: 0 0;
+    box-shadow: none;
+  }
+
+  &__primary {
+    background-color: var(--link);
+    color: white;
+  }
+
+  &--disabled {
+    background-color: var(--black1);
+    color: var(--black6);
+    opacity: 0.8;
+    cursor: not-allowed;
+  }
+}

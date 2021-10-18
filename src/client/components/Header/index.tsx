@@ -1,0 +1,81 @@
+/* */
+import React, { useState, useMemo } from 'react'
+import Link from 'next/link'
+
+/* */
+import styles from './styles.module.scss'
+import { LoginModal, DropDown, Avatar, Divider } from '~/components'
+import { useApp, useUser } from '~/hooks'
+
+const Header = () => {
+  const [showModal, setShowModal] = useState<boolean>(false)
+  const { user, requestLogout } = useUser()
+  const { service } = useApp()
+
+  const handleClickLogin = () => {
+    setShowModal(true)
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false)
+  }
+
+  const renderAvatar = useMemo(() => {
+    if (user) {
+      const isAvatarImageExist = !!user?.profile?.avatarUrl
+      const avatarType = isAvatarImageExist ? 'image' : 'text'
+      const src = isAvatarImageExist
+        ? user?.profile?.avatarUrl
+        : user?.profile?.nickname
+
+      return <Avatar type={avatarType} src={src} />
+    }
+    return null
+  }, [user])
+
+  return (
+    <div className={styles.header} id='u-header'>
+      <div className={styles.inner}>
+        <div className={styles.container}>
+          <div className={styles.item}>
+            <a className={styles.logo} href='/'>
+              {service?.logoUrl && (
+                <img
+                  src={service.logoUrl}
+                  className={styles.logo__icon}
+                  alt='Logo'
+                />
+              )}
+              <span className={styles.logo__text}>{service?.name}</span>
+            </a>
+            {!user ? (
+              <a className={styles.auth} onClick={handleClickLogin}>
+                Login
+              </a>
+            ) : (
+              <DropDown overlay={renderAvatar} className={styles.dropdown}>
+                {user.role >= 1 && (
+                  <>
+                    <Link href='/admin'>
+                      <a className={styles.dropdown__list}>Administration</a>
+                    </Link>
+                    <Divider margin={0.5} />
+                  </>
+                )}
+                <Link href='/setting'>
+                  <a className={styles.dropdown__list}>Settings</a>
+                </Link>
+                <div className={styles.dropdown__list} onClick={requestLogout}>
+                  Logout
+                </div>
+              </DropDown>
+            )}
+          </div>
+        </div>
+      </div>
+      <LoginModal isOpen={showModal} onClose={handleCloseModal} />
+    </div>
+  )
+}
+
+export default Header

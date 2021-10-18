@@ -1,0 +1,26 @@
+# config
+.eslintrc.js
+.prettierrc
+.env
+
+# test, docs, pipeline
+.github
+coverage
+.storybook
+docs
+LICENSE
+*.md
+example
+
+# build
+dist
+.next
+
+# etc
+README.md
+.gitignore
+Dockerfile
+*.log
+node_modules
+docker-compose.yml
+app

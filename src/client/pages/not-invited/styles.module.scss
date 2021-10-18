@@ -1,0 +1,11 @@
+@import "../../styles/mixin";
+
+.container {
+  @include container;
+
+  .page {
+    height: 60%;
+    text-align: center;
+    margin-top: 100px;
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "env": {
+    "production": {
+      "plugins": [
+        [
+          "transform-remove-console",
+          {
+            "exclude": ["info", "error"]
+          }
+        ]
+      ]
+    }
+  },
+  "plugins": [
+    "inline-react-svg"
+  ]
+}

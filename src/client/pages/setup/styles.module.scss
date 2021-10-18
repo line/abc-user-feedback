@@ -1,0 +1,15 @@
+@import "../../styles/mixin";
+
+.setup {
+  @include container;
+
+  .form {
+    @include page-content;
+
+    &__button {
+      margin-top: 16px;
+    }
+
+  }
+
+}

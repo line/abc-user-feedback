@@ -1,0 +1,30 @@
+.link {
+  position: relative;
+  display: block;
+  padding: 12px;
+  font-weight: 500;
+  border-bottom: 1px solid var(--black1);
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    width: 2px;
+    pointer-events: none;
+    content: '';
+  }
+
+  &--active {
+    color: var(--link);
+
+    &:before {
+      background-color: var(--info);
+    }
+  }
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
