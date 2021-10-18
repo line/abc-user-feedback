@@ -1,10 +1,10 @@
 import client from './apiClient'
 
-export const getCurrentUser = () =>
-  client.get('/user/current').then((res) => res.data)
-
 export const updateUserSetting = (payload) =>
   client.put('/user/setting', payload).then((res) => res.data)
+
+export const changePassword = (payload) =>
+  client.post('/auth/password', payload).then((res) => res.data)
 
 export const deleteUser = () => client.delete('/user')
 

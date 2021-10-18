@@ -9,7 +9,8 @@ import {
   Post,
   BadRequestException,
   Body,
-  UseGuards
+  UseGuards,
+  UnauthorizedException
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { Response } from 'express'
@@ -22,7 +23,8 @@ import {
   InvitationMailDto,
   SignUpDto,
   ConfirmDto,
-  SendResetPasswordMailDto
+  SendResetPasswordMailDto,
+  ChangePasswordDto
 } from './dto'
 import { RoleGuard } from '#/core/guard'
 import { Roles } from '#/core/decorators'
@@ -71,7 +73,24 @@ export class AuthController {
     return res.status(204).end()
   }
 
-  @Post('auth/reset/password')
+  @Post('auth/password')
+  async changePassword(
+    @Req() req,
+    @Res() res: Response,
+    @Body() data: ChangePasswordDto
+  ) {
+    const user = req.user
+
+    if (!user) {
+      throw new UnauthorizedException()
+    }
+
+    await this.authService.changePassword(user.id, data)
+
+    return res.status(204).end()
+  }
+
+  @Post('auth/password/reset')
   async resetPassword(@Res() res: Response, @Body() data: ResetPasswordDto) {
     await this.authService.resetPassword(data)
 

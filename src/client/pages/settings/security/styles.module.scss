@@ -1,0 +1,27 @@
+@import "../../../styles/mixin";
+
+.page {
+  .form {
+    margin: 0 auto 4rem;
+    padding-bottom: 4rem;
+
+    &__submit {
+      margin-top: 1rem;
+    }
+  }
+
+  .account {
+    &__delete {
+      color: var(--warn);
+      max-width: 200px;
+
+      &__description {
+        display: inline-block;
+        font-size: 12px;
+        padding: 4px 2px;
+        font-weight: 400;
+        color: var(--black6);
+      }
+    }
+  }
+}

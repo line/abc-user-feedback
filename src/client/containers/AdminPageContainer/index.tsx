@@ -1,44 +1,36 @@
 /* */
-import React from 'react'
-import cx from 'classnames'
+import React, { useMemo } from 'react'
 
 /* */
-import styles from './styles.module.scss'
-import { Header, ActiveLink } from '~/components'
+import { ActiveLink } from '~/components'
+import { SideMenuContainer } from '~/containers'
 import { useUser } from '~/hooks'
 
-interface Props {
-  children?: React.ReactNode
-  title?: React.ReactNode
-  className?: string
-}
-
-const AdminPageContainer = (props: Props) => {
-  const { children, title, className } = props
-
+const AdminPageContainer = (props) => {
   const { user } = useUser()
 
-  return (
-    <div className={cx(styles.container, className)}>
-      <Header />
-      <div className={styles.page}>
-        <div className={styles.page__side}>
-          {user?.role >= 2 && <ActiveLink href='/admin'>Service</ActiveLink>}
-          {user?.role >= 2 && (
-            <ActiveLink href='/admin/invitation'>Invitation</ActiveLink>
-          )}
-          {user?.role >= 1 && (
-            <ActiveLink href='/admin/feedback'>Feedback</ActiveLink>
-          )}
-          {user?.role >= 1 && <ActiveLink href='/admin/user'>User</ActiveLink>}
-        </div>
-        <div className={styles.page__content}>
-          <h1 className={styles.page__title}>{title}</h1>
-          {children}
-        </div>
-      </div>
-    </div>
-  )
+  const menus = useMemo(() => {
+    const menu = []
+    if (user) {
+      if (user.role >= 2) {
+        menu.push([
+          <ActiveLink href='/admin'>Service</ActiveLink>,
+          <ActiveLink href='/admin/invitation'>Invitation</ActiveLink>
+        ])
+      }
+
+      if (user.role >= 1) {
+        menu.push([
+          <ActiveLink href='/admin/feedback'>Feedback</ActiveLink>,
+          <ActiveLink href='/admin/user'>User</ActiveLink>
+        ])
+      }
+    }
+
+    return menu
+  }, [user])
+
+  return <SideMenuContainer menus={menus} {...props} heading='Admin Setting' />
 }
 
 export default AdminPageContainer

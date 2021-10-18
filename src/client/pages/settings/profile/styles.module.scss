@@ -1,0 +1,12 @@
+@import "../../../styles/mixin";
+
+.page {
+  .form {
+    margin: 0 auto 4rem;
+    padding-bottom: 4rem;
+
+    &__submit {
+      margin-top: 1rem;
+    }
+  }
+}

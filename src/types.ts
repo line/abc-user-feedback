@@ -1,5 +1,3 @@
-import { FeedbackField } from '#/core/entity'
-
 export enum LoginProvider {
   Google = 'google',
   Line = 'line'

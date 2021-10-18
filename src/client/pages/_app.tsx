@@ -39,14 +39,14 @@ const App = (props: any) => {
         <link
           rel='shortcut icon'
           type='image/x-icon'
-          href={service.logoUrl ?? '/favicon.ico'}
+          href={service?.logoUrl ?? '/favicon.ico'}
         />
         <meta property='og:title' content={serviceName} />
         <meta property='og:description' content={service?.description} key='og:description' />
         <meta property='og:site_name' content={serviceName} />
         <meta property='og:title' content={serviceName} key='og:title' />
         <meta property='og:type' content='website' key='og:type' />
-        <meta property='og:image' content={service.logoUrl ?? '/favicon.ico'} />
+        <meta property='og:image' content={service?.logoUrl ?? '/favicon.ico'} />
         <meta property='description' content={service?.description} key='description' />
       </Head>
       <StyletronProvider value={styletron}>

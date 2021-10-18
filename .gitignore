@@ -43,3 +43,4 @@ docker-compose.y*ml
 /data
 
 config.yaml
+ormconfig.json

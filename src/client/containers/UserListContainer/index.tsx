@@ -130,7 +130,7 @@ const UserListContainer = () => {
             {isUserDropDownVisible(user) && (
               <DropDown className={styles.user__menu} overlay={<MenuIcon />}>
                 <div className={styles.dropdown}>
-                  {currentUser?.role >= 2 && user.role > 2 && (
+                  {currentUser?.role >= 2 && user.role !== 2 && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(2, user.id)}
@@ -138,7 +138,7 @@ const UserListContainer = () => {
                       To Owner
                     </div>
                   )}
-                  {currentUser?.role >= 1 && user.role > 1 && (
+                  {currentUser?.role >= 1 && user.role !== 1 && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(1, user.id)}

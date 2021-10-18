@@ -62,7 +62,7 @@ const Header = () => {
                     <Divider margin={0.5} />
                   </>
                 )}
-                <Link href='/setting'>
+                <Link href='/settings/profile'>
                   <a className={styles.dropdown__list}>Settings</a>
                 </Link>
                 <div className={styles.dropdown__list} onClick={requestLogout}>

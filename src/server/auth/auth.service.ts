@@ -19,6 +19,7 @@ import { DateTime } from 'luxon'
 /* */
 import { Account, EmailAuth, Service, User } from '#/core/entity'
 import {
+  ChangePasswordDto,
   ConfirmDto,
   InvitationMailDto,
   ResetPasswordDto,
@@ -188,6 +189,34 @@ export class AuthService {
     )
 
     return user
+  }
+
+  async changePassword(userId: string, data: ChangePasswordDto) {
+    const { currentPassword, newPassword } = data
+
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId
+      },
+      select: ['id', 'hashPassword']
+    })
+
+    if (!user) {
+      throw new InternalServerErrorException()
+    }
+
+    const compared = await bcrypt.compare(currentPassword, user.hashPassword)
+
+    if (!compared) {
+      throw new BadRequestException('password not correct')
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    const hashPassword = await bcrypt.hash(newPassword, salt)
+
+    await this.userRepository.update(user.id, {
+      hashPassword
+    })
   }
 
   async resetPassword(data: ResetPasswordDto) {

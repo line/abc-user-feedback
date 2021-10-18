@@ -8,7 +8,7 @@ import styles from './styles.module.scss'
 import AdminPageContainer from '~/containers/AdminPageContainer'
 import { Button, Table } from '~/components'
 import { getFeedbacks } from '~/service/feedback'
-import { Pagination, SIZE as PaiginationSize } from 'baseui/pagination'
+import { Pagination, SIZE as PaginationSize } from 'baseui/pagination'
 
 const AdminFeedbackPage = () => {
   const { isLoading, isError, error, data } = useQuery(
@@ -72,8 +72,8 @@ const AdminFeedbackPage = () => {
             onRowClick={handleRowClick}
           />
           <Pagination
-            numPages={Math.floor(data?.totalCount / 100) + 1}
-            size={PaiginationSize.compact}
+            numPages={Math.floor((data?.totalCount ?? 0) / 100) + 1}
+            size={PaginationSize.compact}
             currentPage={currentPage}
             onPageChange={({ nextPage }) => {
               setCurrentPage(Math.min(Math.max(nextPage, 1), 20))

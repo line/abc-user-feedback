@@ -94,7 +94,7 @@ export class FeedbackService {
       .loadRelationCountAndMap('feedback.responses', 'feedback.responses')
       .skip(offset)
       .take(limit)
-      .getMany()
+      .getManyAndCount()
 
     return feedbacks
   }
