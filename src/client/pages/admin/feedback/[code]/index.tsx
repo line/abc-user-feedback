@@ -248,7 +248,7 @@ const AdminFeedbackDetailPage = () => {
               )}
             </TableBuilderColumn>
             <TableBuilderColumn header='Number'>
-              {(row, idx) => idx + 1}
+              {(row, idx) => REQUEST_COUNT * (currentPage - 1) + idx + 1}
             </TableBuilderColumn>
             <TableBuilderColumn header='Time'>
               {(row) =>
