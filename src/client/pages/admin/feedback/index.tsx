@@ -62,7 +62,7 @@ const AdminFeedbackPage = () => {
     <AdminPageContainer title='Feedback'>
       <div className={styles.page}>
         <div className={styles.page__action}>
-          <Button onClick={handleClickCreate}>Craete Feedback</Button>
+          <Button onClick={handleClickCreate}>Create Feedback</Button>
         </div>
         <div className={styles.page__list}>
           <Table

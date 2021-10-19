@@ -50,7 +50,7 @@ export class ViewController {
     const service = req.service
     const config = this.viewService.getClientConfig()
 
-    const emailAuth = await this.authService.checkEamilVeirification(
+    const emailAuth = await this.authService.checkEmailVerification(
       code,
       EmailAuthType.Invitation
     )
@@ -73,7 +73,7 @@ export class ViewController {
     const service = req.service
     const config = this.viewService.getClientConfig()
 
-    const emailAuth = await this.authService.checkEamilVeirification(
+    const emailAuth = await this.authService.checkEmailVerification(
       code,
       EmailAuthType.PasswordChange
     )
@@ -93,7 +93,7 @@ export class ViewController {
     @Res() res,
     @Query('code') code: string
   ) {
-    const emailAuth = await this.authService.checkEamilVeirification(
+    const emailAuth = await this.authService.checkEmailVerification(
       code,
       EmailAuthType.Register
     )

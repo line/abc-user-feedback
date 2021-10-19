@@ -19,15 +19,11 @@ export const deleteResponse = (responseId: string) => {
   client.delete(`/admin/response/${responseId}`).then((res) => res.data)
 }
 
-export const getFeedbackeponses = (code, params) => {
-  const option = {}
-
-  if (params?.type && params?.value) {
-    option['params'] = params
-  }
-
+export const getFeedbackreponses = (code, params) => {
   return client
-    .get(`/admin/feedback/${code}/response`, option)
+    .get(`/admin/feedback/${code}/response`, {
+      params
+    })
     .then((res) => res.data)
 }
 

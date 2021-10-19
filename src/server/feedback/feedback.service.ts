@@ -200,19 +200,50 @@ export class FeedbackService {
     query?: Record<string, any>
   ) {
     let queryBuilder = this.feedbackResponseRepository
-      .createQueryBuilder('response')
-      .where('response.feedbackId = :feedbackId', { feedbackId })
-      .leftJoin('response.user', 'user')
+      .createQueryBuilder('r')
+      .where('r.feedbackId = :feedbackId', { feedbackId })
+
+    if (query.start && query.end) {
+      queryBuilder = queryBuilder.where(
+        'r.createdTime >= :start AND r.createdTime <= :end',
+        {
+          start: query.start,
+          end: query.end
+        }
+      )
+    }
+
+    queryBuilder = queryBuilder
+      .leftJoin('r.user', 'user')
       .addSelect('user.id')
       .leftJoin('user.profile', 'profile')
       .addSelect('profile.nickname')
-      .leftJoin('response.feedbackResponseFields', 'feedbackResponseFields')
+      .leftJoinAndSelect('r.feedbackResponseFields', 'feedbackResponseFields')
       .leftJoin('feedbackResponseFields.feedbackField', 'feedbackField')
       .addSelect(['feedbackField.name', 'feedbackField.type'])
-      .addSelect('feedbackResponseFields.value')
-      .orderBy('response.createdTime', 'DESC')
 
-    return queryBuilder.offset(offset).getManyAndCount()
+    // const searchParams = Object.entries(query).filter(([name]) => {
+    //   return (
+    //     name !== 'start' &&
+    //     name !== 'end' &&
+    //     name !== 'offset' &&
+    //     name !== 'limit'
+    //   )
+    // })
+    //
+    // if (searchParams?.length) {
+    //   queryBuilder = queryBuilder.andWhere(
+    //     'feedbackResponseFields.value IN (:...values)',
+    //     {
+    //       // names: [searchParams.map((s) => s[0])],
+    //       values: [searchParams.map((s) => s[1])]
+    //     }
+    //   )
+    // }
+
+    queryBuilder = queryBuilder.orderBy('r.createdTime', 'DESC')
+
+    return queryBuilder.skip(offset).take(limit).getManyAndCount()
   }
 
   async deleteFeedback(feedbackId: string) {

@@ -130,7 +130,7 @@ export class AuthService {
     await this.sendRegisterVerifyMail(data.email)
   }
 
-  async checkEamilVeirification(
+  async checkEmailVerification(
     code: string,
     type: EmailAuthType
   ): Promise<EmailAuth> {
@@ -163,7 +163,7 @@ export class AuthService {
   }
 
   async confirmRegisterUser(data: ConfirmDto): Promise<User> {
-    const emailAuth = await this.checkEamilVeirification(
+    const emailAuth = await this.checkEmailVerification(
       data.code,
       EmailAuthType.Invitation
     )
@@ -182,7 +182,7 @@ export class AuthService {
     const user = await this.userService.create(
       {
         email: emailAuth.email,
-        nickname: emailAuth.email.split('@')[0],
+        nickname: data.nickname,
         avatarUrl: ''
       },
       { withVerify: true, password: data.password, role: emailAuth.asRole }
@@ -222,7 +222,7 @@ export class AuthService {
   async resetPassword(data: ResetPasswordDto) {
     const { password, code } = data
 
-    const emailAuth = await this.checkEamilVeirification(
+    const emailAuth = await this.checkEmailVerification(
       code,
       EmailAuthType.PasswordChange
     )

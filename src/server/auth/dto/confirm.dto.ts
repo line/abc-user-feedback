@@ -10,5 +10,8 @@ export class ConfirmDto {
   password: string
 
   @IsNotEmpty()
+  nickname: string
+
+  @IsNotEmpty()
   code: string
 }

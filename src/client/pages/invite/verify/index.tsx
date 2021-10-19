@@ -14,12 +14,13 @@ import {
 
 /* */
 import styles from './styles.module.scss'
-import { ErrorMessage, FormItem, Header, Input } from '~/components'
+import { Divider, ErrorMessage, FormItem, Header, Input } from '~/components'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { requestConfirm } from '~/service/auth'
 
 const schema = yup.object().shape({
+  nickname: yup.string().required(),
   password: yup.string().required()
 })
 
@@ -48,6 +49,7 @@ const VerifyPage = ({ email, code }) => {
     } else {
       await requestConfirm({
         password: payload.password,
+        nickname: payload.nickname,
         code
       })
 
@@ -71,6 +73,15 @@ const VerifyPage = ({ email, code }) => {
             <FormItem label='Email'>
               <span>{email}</span>
             </FormItem>
+            <FormItem label='Nickname'>
+              <Input
+                placeholder='nickname'
+                className={styles.email__form__input}
+                {...register('nickname')}
+              />
+              <ErrorMessage errors={errors} name='nickname' />
+            </FormItem>
+            <Divider />
             <FormItem label='Password'>
               <Input
                 placeholder='password'

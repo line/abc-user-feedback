@@ -11,7 +11,7 @@ import { Checkbox } from 'baseui/checkbox'
 import { ButtonGroup } from 'baseui/button-group'
 import { ListItem, ListItemLabel } from 'baseui/list'
 import { Button, KIND as ButtonKind, KIND, SIZE } from 'baseui/button'
-import { Pagination, SIZE as PaiginationSize } from 'baseui/pagination'
+import { Pagination, SIZE as PaginationSize } from 'baseui/pagination'
 import {
   Modal,
   ModalButton,
@@ -27,16 +27,11 @@ import BackIcon from '~/assets/back.svg'
 import { useToggle, useUser } from '~/hooks'
 import {
   getFeedbackByCode,
-  getFeedbackeponses,
+  getFeedbackreponses,
   deleteResponse,
   exportFeedbackResponse
 } from '~/service/feedback'
-import {
-  Header,
-  Input,
-  ResponseSnippetModal,
-  ResponseFilter
-} from '~/components'
+import { Header, ResponseSnippetModal, ResponseFilter } from '~/components'
 
 const AdminFeedbackDetailPage = () => {
   const router = useRouter()
@@ -47,6 +42,7 @@ const AdminFeedbackDetailPage = () => {
   const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
   const [selectedId, setSelectedId] = useState<Array<string>>([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [params, setParams] = useState<any>({})
   const { user } = useUser()
 
   const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
@@ -55,8 +51,13 @@ const AdminFeedbackDetailPage = () => {
   )
 
   const { isLoading: isFeedbackResponseLoading, data: response } = useQuery(
-    ['responses', router.query.code],
-    () => getFeedbackeponses(router.query.code, {})
+    ['responses', router.query.code, currentPage, params],
+    () =>
+      getFeedbackreponses(router.query.code, {
+        ...params,
+        offset: (currentPage - 1) * 100,
+        limit: 100
+      })
   )
 
   const [showExampleModal, setShowExampleModal] = useState<boolean>(false)
@@ -201,7 +202,12 @@ const AdminFeedbackDetailPage = () => {
             </tr>
           </tbody>
         </table>
-        <ResponseFilter feedback={feedback} />
+        <div className={styles.filter}>
+          <ResponseFilter
+            feedback={feedback}
+            onApply={(params) => setParams(params)}
+          />
+        </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
           <div style={{ marginLeft: 'auto' }}>
@@ -277,7 +283,7 @@ const AdminFeedbackDetailPage = () => {
             <div style={{ marginLeft: 'auto' }}>
               <Pagination
                 numPages={Math.floor(response?.totalCount ?? 0 / 100)}
-                size={PaiginationSize.compact}
+                size={PaginationSize.compact}
                 currentPage={currentPage}
                 onPageChange={({ nextPage }) => {
                   setCurrentPage(Math.min(Math.max(nextPage, 1), 20))
