@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
+import { Radio, RadioGroup } from 'baseui/radio'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
@@ -33,16 +34,22 @@ import {
 } from '~/service/feedback'
 import { Header, ResponseSnippetModal, ResponseFilter } from '~/components'
 
+const REQUEST_COUNT = 100
+
 const AdminFeedbackDetailPage = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
-  const [responseDetail, setResponseDetail] = useState<any>()
   const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
+  const [showExportModal, toggleExportModal] = useToggle(false)
+
   const [selectedId, setSelectedId] = useState<Array<string>>([])
-  const [currentPage, setCurrentPage] = useState(1)
+  const [responseDetail, setResponseDetail] = useState<any>()
+  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [exportType, setExportType] = useState<string>()
   const [params, setParams] = useState<any>({})
+
   const { user } = useUser()
 
   const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
@@ -55,8 +62,8 @@ const AdminFeedbackDetailPage = () => {
     () =>
       getFeedbackreponses(router.query.code, {
         ...params,
-        offset: (currentPage - 1) * 100,
-        limit: 100
+        offset: (currentPage - 1) * REQUEST_COUNT,
+        limit: REQUEST_COUNT
       })
   )
 
@@ -100,7 +107,7 @@ const AdminFeedbackDetailPage = () => {
   const handleRequestExcelExport = async () => {
     try {
       const code = router.query.code as string
-      await exportFeedbackResponse(code)
+      await exportFeedbackResponse(code, exportType)
     } catch (error) {
       enqueue({
         message: error.toString(),
@@ -240,6 +247,9 @@ const AdminFeedbackDetailPage = () => {
                 />
               )}
             </TableBuilderColumn>
+            <TableBuilderColumn header='Number'>
+              {(row, idx) => idx + 1}
+            </TableBuilderColumn>
             <TableBuilderColumn header='Time'>
               {(row) =>
                 DateTime.fromISO(row.createdTime).toFormat('yyyy-MM-dd, HH:mm')
@@ -272,21 +282,25 @@ const AdminFeedbackDetailPage = () => {
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {user.role >= 2 && (
               <Button
-                onClick={handleRequestExcelExport}
+                onClick={toggleExportModal}
                 kind={KIND.secondary}
                 size={SIZE.compact}
                 disabled={user.role < 2}
               >
-                Excel Download
+                Export
               </Button>
             )}
             <div style={{ marginLeft: 'auto' }}>
               <Pagination
-                numPages={Math.floor(response?.totalCount ?? 0 / 100)}
+                numPages={
+                  response?.totalCount
+                    ? Math.floor(response?.totalCount / REQUEST_COUNT) + 1
+                    : 1
+                }
                 size={PaginationSize.compact}
                 currentPage={currentPage}
                 onPageChange={({ nextPage }) => {
-                  setCurrentPage(Math.min(Math.max(nextPage, 1), 20))
+                  setCurrentPage(nextPage)
                 }}
               />
             </div>
@@ -327,6 +341,30 @@ const AdminFeedbackDetailPage = () => {
         </ModalBody>
         <ModalFooter>
           <ModalButton onClick={toggleResponseDetailModal}>Confirm</ModalButton>
+        </ModalFooter>
+      </Modal>
+      <Modal
+        isOpen={showExportModal}
+        size={SIZE.default}
+        role={ROLE.dialog}
+        onClose={toggleExportModal}
+      >
+        <ModalHeader>Export data</ModalHeader>
+        <ModalBody>
+          <RadioGroup
+            name='Select format'
+            onChange={(e) => setExportType(e.target.value)}
+            value={exportType}
+          >
+            <Radio value='xlsx'>excel</Radio>
+            <Radio value='csv'>csv</Radio>
+          </RadioGroup>
+        </ModalBody>
+        <ModalFooter>
+          <ModalButton onClick={toggleExportModal} kind={ButtonKind.tertiary}>
+            Cancel
+          </ModalButton>
+          <ModalButton onClick={handleRequestExcelExport}>Export</ModalButton>
         </ModalFooter>
       </Modal>
     </div>

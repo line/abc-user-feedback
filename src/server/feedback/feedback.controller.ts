@@ -138,7 +138,17 @@ export class FeedbackController {
 
   @Roles(UserRole.Owner)
   @Get('admin/feedback/:idOrCode/response/export')
-  async makeExcel(@Res() res: Response, @Param('idOrCode') idOrCode = '') {
+  async exportResponse(
+    @Res() res: Response,
+    @Param('idOrCode') idOrCode = '',
+    @Query('type') type
+  ) {
+    if (!type) {
+      throw new BadRequestException(`missing parameter type`)
+    } else if (type !== 'xlsx' && type !== 'csv') {
+      throw new BadRequestException(`not support type: ${type}`)
+    }
+
     const feedback = await this.feedbackService.findFeedback(idOrCode)
 
     if (!feedback) {
@@ -163,20 +173,27 @@ export class FeedbackController {
 
     const filename = `${feedback.title}-${DateTime.now().toFormat(
       'yyyy_MM_dd_HH_mm'
-    )}.xlsx`
+    )}.${type}`
 
     const workbook = XLSX.utils.book_new()
     const newWorksheet = XLSX.utils.json_to_sheet(mappaed)
 
     XLSX.utils.book_append_sheet(workbook, newWorksheet, 'feedback')
     const buffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
+      bookType: type,
       type: 'buffer'
     })
 
-    res.type(
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
+    if (type === 'xlsx') {
+      console.log('111')
+      res.type(
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      )
+    } else if (type === 'csv') {
+      console.log('222')
+      res.type('text/csv')
+    }
+
     res.header('Content-Disposition', `attachment; filename=${filename}`)
 
     return res.send(buffer)

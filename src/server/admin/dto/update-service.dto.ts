@@ -20,6 +20,9 @@ export class UpdateServiceDto {
   logoUrl: string
 
   @IsOptional()
+  entryPath: string = '/'
+
+  @IsOptional()
   @IsBoolean()
   isPrivate: boolean = false
 }

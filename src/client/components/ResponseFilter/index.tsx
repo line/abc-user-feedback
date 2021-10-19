@@ -41,7 +41,7 @@ const ResponseFilter = (props: Props) => {
 
   const renderFilterItems = useMemo(() => {
     const items = [
-      <FlexGridItem>
+      <FlexGridItem key='date'>
         <FormControl label='Date'>
           <Controller
             control={control}
@@ -76,7 +76,7 @@ const ResponseFilter = (props: Props) => {
     //       )
     //
     //       items.push(
-    //         <FlexGridItem>
+    //         <FlexGridItem key={field.name}>
     //           <FormControl label={field.name}>
     //             <Controller
     //               control={control}

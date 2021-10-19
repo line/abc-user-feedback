@@ -203,7 +203,7 @@ export class FeedbackService {
       .createQueryBuilder('r')
       .where('r.feedbackId = :feedbackId', { feedbackId })
 
-    if (query.start && query.end) {
+    if (query?.start && query?.end) {
       queryBuilder = queryBuilder.where(
         'r.createdTime >= :start AND r.createdTime <= :end',
         {

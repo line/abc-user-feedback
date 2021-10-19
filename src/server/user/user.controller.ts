@@ -53,7 +53,7 @@ export class UserController {
 
   @Delete('user')
   @HttpCode(204)
-  async deleteUser(@Req() req: any, @Res() res: Response) {
+  async deleteSelfUser(@Req() req: any, @Res() res: Response) {
     if (!req.user) {
       throw new UnauthorizedException()
     }
@@ -71,6 +71,12 @@ export class UserController {
   async getUsers() {
     return this.userService.getUsers()
   }
+
+  // @Delete('admin/user/:userId')
+  // @Roles(UserRole.Owner)
+  // async deleteUser() {
+  //   return this.userService.getUsers()
+  // }
 
   @Post('admin/user/role/:userRole')
   @Roles(UserRole.Owner, UserRole.Admin)
