@@ -14,8 +14,8 @@ export default TypeOrmModule.forRootAsync({
     migrationsRun: true,
     cli: {
       entitiesDir: resolve(__dirname, '../../core/entity'),
-      migrations: [process.cwd() + '/migrations'],
+      migrations: [process.cwd() + '/migrations']
     }
   }),
   inject: [ConfigService]
-})
+} as any)

@@ -42,7 +42,7 @@ const SetupPage = () => {
       })
 
       enqueue({
-        message: original ?? err.toString(),
+        message: original ?? error.toString(),
         startEnhancer: ({ size }) => <Delete size={size} />
       })
     }
