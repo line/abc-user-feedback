@@ -1,10 +1,11 @@
-# ABC User Feedback
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/20738369/138070075-d990fd46-971f-4eb3-87f2-2e36d8503ce0.png">
+    <h1 align="center">ABC User Feedback</h1>
+</p>
+
 
 A standalone webapp to collect and organize user feedback. Server API and web UI are packed into single Dockerfile.
 
-## Demo
-
-WIP
 
 ## Document
 WIP
@@ -45,3 +46,7 @@ then you can find message like
 ```bash
 app_1 | Application is running on: http://[::1]:3000
 ```
+
+## Demo
+
+WIP
