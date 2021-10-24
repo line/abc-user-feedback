@@ -20,6 +20,9 @@ export default class Service {
   description!: string
 
   @Column()
+  entryPath: string
+
+  @Column()
   logoUrl: string
 
   @Column({ default: false })

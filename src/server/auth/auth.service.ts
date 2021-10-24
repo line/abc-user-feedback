@@ -612,7 +612,8 @@ export class AuthService {
       to: email,
       subject: `User Feedback Invitation`,
       context: {
-        link
+        link,
+        service
       },
       template: process.cwd() + '/template/invitation'
     })

@@ -20,7 +20,7 @@ import styles from './styles.module.scss'
 import { useUser, useToggle } from '~/hooks'
 import { RequireLoginPage, AccountSettingContainer } from '~/containers'
 import { Button, Input, FormItem, Divider } from '~/components'
-import { updateUserSetting, deleteUser } from '~/service/user'
+import { updateUserSetting, deleteSelfUser } from '~/service/user'
 
 const AccountPage = () => {
   const { user, setUser } = useUser()
@@ -62,7 +62,7 @@ const AccountPage = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      await deleteUser()
+      await deleteSelfUser()
       setToggleDeleteModal()
       setUser(null)
       enqueue({

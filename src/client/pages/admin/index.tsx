@@ -3,6 +3,8 @@ import React, { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { useQuery } from 'react-query'
 import { AxiosError } from 'axios'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check } from 'baseui/icon'
 
@@ -18,6 +20,13 @@ import {
 } from '~/containers'
 import { useApp } from '~/hooks'
 
+const schema = yup.object().shape({
+  name: yup.string().required(),
+  logoUrl: yup.string().url(),
+  entryPath: yup.string(),
+  isPrivate: yup.boolean()
+})
+
 const AdminRoot = () => {
   const { isLoading, isError, error, data } = useQuery<any, AxiosError>(
     'service',
@@ -26,11 +35,12 @@ const AdminRoot = () => {
 
   const { enqueue } = useSnackbar()
 
-  const { config } = useApp()
+  const { config, setService } = useApp()
 
   const { register, handleSubmit, reset, setError, formState, control } =
-    useForm()
-  const { setService } = useApp()
+    useForm({
+      resolver: yupResolver(schema)
+    })
 
   const { isDirty } = formState
 
@@ -90,6 +100,12 @@ const AdminRoot = () => {
         </FormItem>
         <FormItem label='Logo URL'>
           <Input {...register('logoUrl')} />
+        </FormItem>
+        <FormItem
+          label='Entry path'
+          description='Path for first redirect after login or click logo'
+        >
+          <Input {...register('entryPath')} />
         </FormItem>
         <FormItem
           label='Private Service'

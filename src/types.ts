@@ -39,6 +39,7 @@ export interface IPost {
 export interface IService {
   name: string
   logoUrl: string
+  entryPath: string
   isPrivate: boolean
   isRestrictDomain: boolean
   allowDomains: Array<string>

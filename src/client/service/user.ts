@@ -6,7 +6,7 @@ export const updateUserSetting = (payload) =>
 export const changePassword = (payload) =>
   client.post('/auth/password', payload).then((res) => res.data)
 
-export const deleteUser = () => client.delete('/user')
+export const deleteSelfUser = () => client.delete('/user')
 
 export const logout = () => client.post('/auth/logout')
 
@@ -20,3 +20,6 @@ export const userRoleBinding = (role, userId) => {
 }
 
 export const getUsers = () => client.get('/admin/user').then((res) => res.data)
+
+export const deleteUserById = (userId: string) =>
+  client.delete(`/admin/user/${userId}`)

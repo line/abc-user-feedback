@@ -134,6 +134,10 @@ export class ViewController {
       return res.redirect('/setup')
     }
 
+    if (service?.entryPath && service.entryPath !== '/' && req.path === '/') {
+      return res.redirect(service.entryPath)
+    }
+
     if (
       !user &&
       this.configService.get<boolean>('auth.redirectToLoginPage') &&

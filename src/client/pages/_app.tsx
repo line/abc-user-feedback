@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { QueryClientProvider } from 'react-query'
 import { Provider as StyletronProvider } from 'styletron-react'
 import { LightTheme, BaseProvider } from 'baseui'
-import { SnackbarProvider } from 'baseui/snackbar'
+import { SnackbarProvider, PLACEMENT, DURATION } from 'baseui/snackbar'
 import { useRouter } from 'next/router'
 
 /*  */
@@ -42,16 +42,30 @@ const App = (props: any) => {
           href={service?.logoUrl ?? '/favicon.ico'}
         />
         <meta property='og:title' content={serviceName} />
-        <meta property='og:description' content={service?.description} key='og:description' />
+        <meta
+          property='og:description'
+          content={service?.description}
+          key='og:description'
+        />
         <meta property='og:site_name' content={serviceName} />
         <meta property='og:title' content={serviceName} key='og:title' />
         <meta property='og:type' content='website' key='og:type' />
-        <meta property='og:image' content={service?.logoUrl ?? '/favicon.ico'} />
-        <meta property='description' content={service?.description} key='description' />
+        <meta
+          property='og:image'
+          content={service?.logoUrl ?? '/favicon.ico'}
+        />
+        <meta
+          property='description'
+          content={service?.description}
+          key='description'
+        />
       </Head>
       <StyletronProvider value={styletron}>
         <BaseProvider theme={LightTheme}>
-          <SnackbarProvider>
+          <SnackbarProvider
+            placement={PLACEMENT.topRight}
+            defaultDuration={DURATION.medium}
+          >
             <QueryClientProvider client={queryClient}>
               <AppProvider service={service} config={config}>
                 <UserProvider currentUser={currentUser}>

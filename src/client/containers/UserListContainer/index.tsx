@@ -1,13 +1,24 @@
 /* */
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
+import cx from 'classnames'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
+import { KIND as ButtonKind } from 'baseui/button'
+import {
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ROLE,
+  SIZE,
+  ModalButton
+} from 'baseui/modal'
 
 /* */
 import styles from './styles.module.scss'
 import { UserLoader } from '~/components/Loader'
-import { getUsers, userRoleBinding } from '~/service/user'
+import { getUsers, userRoleBinding, deleteUserById } from '~/service/user'
 import SearchIcon from '~/assets/search.svg'
 import MenuIcon from '~/assets/menu.svg'
 import { IUser } from '@/types'
@@ -22,6 +33,8 @@ const UserListContainer = () => {
     getUsers
   )
 
+  const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false)
+  const [deleteUser, setDeleteUser] = useState<IUser>(null)
   const { user: currentUser } = useUser()
 
   const renderAvatar = useCallback((user: IUser) => {
@@ -57,6 +70,40 @@ const UserListContainer = () => {
         startEnhancer: ({ size }) => <Delete size={size} />
       })
     }
+  }
+
+  const handleCloseDeleteUserModal = () => {
+    setShowDeleteUserModal(false)
+    setDeleteUser(null)
+  }
+
+  const handleDeleteUser = async () => {
+    if (deleteUser) {
+      try {
+        await deleteUserById(deleteUser.id)
+        enqueue({
+          message: 'Success delete user',
+          startEnhancer: ({ size }) => <Check size={size} />
+        })
+
+        queryClient.setQueryData('users', (users: Array<IUser>) =>
+          users.filter((user) => user.id !== deleteUser.id)
+        )
+
+        setShowDeleteUserModal(false)
+        setDeleteUser(null)
+      } catch (error) {
+        enqueue({
+          message: error.toString(),
+          startEnhancer: ({ size }) => <Delete size={size} />
+        })
+      }
+    }
+  }
+
+  const handleShowDeleteModal = (user: IUser) => {
+    setDeleteUser(user)
+    setShowDeleteUserModal(true)
   }
 
   const renderUserTag = useCallback((user: IUser) => {
@@ -117,7 +164,7 @@ const UserListContainer = () => {
               <span className={styles.user__name}>
                 {user.profile?.nickname}
               </span>
-              <span className={styles.user__email}>({user.email})</span>
+              <span className={styles.user__email}>({user?.email})</span>
               <div className={styles.user__tags}>
                 {user.id === currentUser?.id && (
                   <Tag type='primary' className={styles.tag}>
@@ -154,12 +201,43 @@ const UserListContainer = () => {
                       To User
                     </div>
                   )}
+                  {currentUser?.role >= 1 && user.role !== 2 && (
+                    <div
+                      className={cx(
+                        styles.dropdown__item,
+                        styles.dropdown__item__warning
+                      )}
+                      onClick={() => handleShowDeleteModal(user)}
+                    >
+                      Delete User
+                    </div>
+                  )}
                 </div>
               </DropDown>
             )}
           </div>
         ))}
       </div>
+      <Modal
+        isOpen={showDeleteUserModal}
+        onClose={handleCloseDeleteUserModal}
+        size={SIZE.default}
+        role={ROLE.dialog}
+      >
+        <ModalHeader>Delete this User?</ModalHeader>
+        <ModalBody>{deleteUser?.email}</ModalBody>
+        <ModalFooter>
+          <ModalButton
+            onClick={handleCloseDeleteUserModal}
+            kind={ButtonKind.tertiary}
+          >
+            Cancel
+          </ModalButton>
+          <ModalButton kind={ButtonKind.primary} onClick={handleDeleteUser}>
+            Delete
+          </ModalButton>
+        </ModalFooter>
+      </Modal>
     </div>
   )
 }

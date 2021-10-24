@@ -72,11 +72,17 @@ export class UserController {
     return this.userService.getUsers()
   }
 
-  // @Delete('admin/user/:userId')
-  // @Roles(UserRole.Owner)
-  // async deleteUser() {
-  //   return this.userService.getUsers()
-  // }
+  @Delete('admin/user/:userId')
+  @Roles(UserRole.Owner, UserRole.Admin)
+  async deleteUser(@Req() req: any, @Param('userId') userId: string) {
+    const user = await this.userService.getUserById(userId)
+
+    if (user.role > req.user.role) {
+      throw new ForbiddenException()
+    }
+
+    await this.userService.deleteUser(userId)
+  }
 
   @Post('admin/user/role/:userRole')
   @Roles(UserRole.Owner, UserRole.Admin)

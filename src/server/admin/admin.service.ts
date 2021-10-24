@@ -31,6 +31,7 @@ export class AdminService {
     service.name = data.name
     service.logoUrl = data.logoUrl
     service.description = data.description
+    service.entryPath = data.entryPath
     service.isPrivate = data.isPrivate
 
     await this.serviceRepository.update(service.version, service)

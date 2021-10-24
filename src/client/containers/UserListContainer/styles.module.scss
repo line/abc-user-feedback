@@ -60,6 +60,10 @@
           &:hover {
             background: rgb(248, 249, 250);
           }
+
+          &__warning {
+            color: var(--warn);
+          }
         }
       }
     }

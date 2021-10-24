@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
-import { Check, Delete } from 'baseui/icon'
+import { Check, Delete, ArrowUp, ArrowDown } from 'baseui/icon'
 import { Radio, RadioGroup } from 'baseui/radio'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
@@ -43,6 +43,7 @@ const AdminFeedbackDetailPage = () => {
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
   const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
   const [showExportModal, toggleExportModal] = useToggle(false)
+  const [showLatest, toggleShowLatest] = useToggle(true)
 
   const [selectedId, setSelectedId] = useState<Array<string>>([])
   const [responseDetail, setResponseDetail] = useState<any>()
@@ -58,10 +59,11 @@ const AdminFeedbackDetailPage = () => {
   )
 
   const { isLoading: isFeedbackResponseLoading, data: response } = useQuery(
-    ['responses', router.query.code, currentPage, params],
+    ['responses', router.query.code, currentPage, params, showLatest],
     () =>
       getFeedbackreponses(router.query.code, {
         ...params,
+        order: showLatest ? 'DESC' : 'ASC',
         offset: (currentPage - 1) * REQUEST_COUNT,
         limit: REQUEST_COUNT
       })
@@ -161,6 +163,18 @@ const AdminFeedbackDetailPage = () => {
     return itemElem
   }, [feedback, responseDetail])
 
+  const renderDateHeader = useMemo(() => {
+    return (
+      <div
+        onClick={toggleShowLatest}
+        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
+      >
+        <span>date</span>
+        {showLatest ? <ArrowUp size={18} /> : <ArrowDown size={18} />}
+      </div>
+    )
+  }, [showLatest])
+
   return (
     <div className={styles.container}>
       <Header />
@@ -232,6 +246,7 @@ const AdminFeedbackDetailPage = () => {
           <TableBuilder
             data={response?.items ?? []}
             isLoading={isFeedbackLoading || isFeedbackResponseLoading}
+            emptyMessage={<h1>No data</h1>}
           >
             <TableBuilderColumn
               overrides={{
@@ -247,10 +262,23 @@ const AdminFeedbackDetailPage = () => {
                 />
               )}
             </TableBuilderColumn>
-            <TableBuilderColumn header='Number'>
+            <TableBuilderColumn
+              header='no.'
+              numeric
+              overrides={{
+                TableHeadCell: { style: { width: '20px' } },
+                TableBodyCell: { style: { width: '20px' } }
+              }}
+            >
               {(row, idx) => REQUEST_COUNT * (currentPage - 1) + idx + 1}
             </TableBuilderColumn>
-            <TableBuilderColumn header='Time'>
+            <TableBuilderColumn
+              header={renderDateHeader}
+              overrides={{
+                TableHeadCell: { style: { width: '200px' } },
+                TableBodyCell: { style: { width: '200px' } }
+              }}
+            >
               {(row) =>
                 DateTime.fromISO(row.createdTime).toFormat('yyyy-MM-dd, HH:mm')
               }

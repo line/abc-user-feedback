@@ -241,7 +241,7 @@ export class FeedbackService {
     //   )
     // }
 
-    queryBuilder = queryBuilder.orderBy('r.createdTime', 'DESC')
+    queryBuilder = queryBuilder.orderBy('r.createdTime', query?.order ?? 'DESC')
 
     return queryBuilder.skip(offset).take(limit).getManyAndCount()
   }
