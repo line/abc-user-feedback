@@ -54,7 +54,7 @@ const Header = () => {
               </a>
             ) : (
               <DropDown overlay={renderAvatar} className={styles.dropdown}>
-                {user.role >= 1 && (
+                {user.role >= 2 && (
                   <>
                     <Link href='/admin'>
                       <a className={styles.dropdown__list}>Administration</a>

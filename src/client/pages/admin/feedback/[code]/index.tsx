@@ -180,7 +180,12 @@ const AdminFeedbackDetailPage = () => {
       <Header />
       <div className={styles.page}>
         <h1 className={styles.title}>
-          <BackIcon className={styles.title__icon} onClick={handleClickBack} />
+          {user.role >= 2 && (
+            <BackIcon
+              className={styles.title__icon}
+              onClick={handleClickBack}
+            />
+          )}
           <span className={styles.title__text}>Feedback Detail</span>
           <div className={styles.title__action}>
             <ButtonGroup>
@@ -189,7 +194,7 @@ const AdminFeedbackDetailPage = () => {
                 kind={KIND.secondary}
                 size={SIZE.compact}
               >
-                Response form snippet
+                Response snippet
               </Button>
               <Button
                 onClick={handleClickEdit}

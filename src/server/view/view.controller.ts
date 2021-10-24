@@ -12,13 +12,13 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+
 /* */
 import { ViewService } from './view.service'
 import { EmailAuth, Service } from '#/core/entity'
 import { UserService } from '#/user/user.service'
 import { AuthService } from '#/auth/auth.service'
-import { Roles } from '#/core/decorators'
-import { EmailAuthType, UserRole } from '@/types'
+import { EmailAuthType } from '@/types'
 import { RoleGuard } from '#/core/guard'
 
 @Controller()
@@ -130,6 +130,9 @@ export class ViewController {
     const service = req.service
     const user = req.user
 
+    if (req.path.includes('/admin') && user?.role >= 2) {
+    }
+
     if (!service && req.path !== '/setup') {
       return res.redirect('/setup')
     }
@@ -161,11 +164,5 @@ export class ViewController {
       service,
       config
     })
-  }
-
-  @Get(['admin/*'])
-  @Roles(UserRole.Owner, UserRole.Admin)
-  public async setupWithAdmin(@Req() req: any, @Res() res) {
-    await this.setup(req, res)
   }
 }

@@ -131,6 +131,10 @@ const UserListContainer = () => {
           return false
         }
 
+        if (user.role > currentUser.role) {
+          return false
+        }
+
         return currentUser.role >= 1
       }
 
@@ -185,7 +189,8 @@ const UserListContainer = () => {
                       To Owner
                     </div>
                   )}
-                  {currentUser?.role >= 1 && user.role !== 1 && (
+                  {((currentUser?.role === 2 && user.role !== 1) ||
+                    (currentUser?.role === 1 && user.role === 0)) && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(1, user.id)}
@@ -193,7 +198,8 @@ const UserListContainer = () => {
                       To Admin
                     </div>
                   )}
-                  {currentUser?.role >= 1 && user.role !== 0 && (
+                  {((currentUser?.role === 2 && user.role !== 0) ||
+                    (currentUser?.role === 1 && user.role !== 2)) && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(0, user.id)}
