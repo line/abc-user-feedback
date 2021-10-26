@@ -185,12 +185,10 @@ export class FeedbackController {
     })
 
     if (type === 'xlsx') {
-      console.log('111')
       res.type(
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       )
     } else if (type === 'csv') {
-      console.log('222')
       res.type('text/csv')
     }
 

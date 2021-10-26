@@ -39,7 +39,7 @@ const AdminUserPage = () => {
           </span>
           <ul className={styles.role__block}>
             <li>
-              <b>Owner</b> has all privilege about service
+              <b>Manager</b> has all privilege about service
             </li>
             <li>
               <b>Admin</b> is admin but cannot setting service

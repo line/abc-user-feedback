@@ -1,5 +1,5 @@
 /* */
-import React from 'react'
+import React, { useMemo } from 'react'
 import cx from 'classnames'
 
 /* */
@@ -10,7 +10,7 @@ type AvatarSize = 'mini' | 'small' | 'medium'
 
 interface Props {
   src: string
-  type?: 'text' | 'image'
+  name?: string
   size?: AvatarSize
   className?: string
   badge?: boolean
@@ -21,22 +21,30 @@ const Avatar = (props: Props) => {
   const {
     className,
     src = '',
-    type = 'image',
+    name = '',
     onClick = () => {},
     size = 'medium',
     badge = false
   } = props
+
+  const avatarType = useMemo(() => {
+    if (src) {
+      return 'image'
+    }
+
+    return 'text'
+  }, [src, name])
 
   return (
     <div
       className={cx(
         styles.avatar,
         styles[`avatar--${size}`],
-        styles[`avatar__${type}`],
+        styles[`avatar__${avatarType}`],
         className
       )}
     >
-      {type === 'image' ? (
+      {avatarType === 'image' ? (
         <img
           className={styles.avatar__icon}
           src={src}
@@ -46,9 +54,9 @@ const Avatar = (props: Props) => {
       ) : (
         <span
           className={cx(styles.avatar__icon, styles.avatar__text)}
-          style={{ backgroundColor: generateHexColorFromText(src) }}
+          style={{ backgroundColor: generateHexColorFromText(name) }}
         >
-          {src.slice(0, 1).toUpperCase()}
+          {name.slice(0, 1).toUpperCase()}
         </span>
       )}
       {badge && (

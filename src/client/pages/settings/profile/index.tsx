@@ -6,7 +6,7 @@ import { Delete, Check } from 'baseui/icon'
 
 /* */
 import styles from './styles.module.scss'
-import { useUser } from '~/hooks'
+import { useApp, useUser } from '~/hooks'
 import { RequireLoginPage, AccountSettingContainer } from '~/containers'
 import { Button, Input, FormItem, Divider } from '~/components'
 import { updateUserSetting } from '~/service/user'
@@ -20,6 +20,8 @@ const ProfilePage = () => {
       nickname: user?.profile?.nickname
     }
   })
+
+  const { config } = useApp()
 
   const { isDirty } = formState
 
@@ -60,12 +62,13 @@ const ProfilePage = () => {
           >
             <div>{user.email}</div>
           </FormItem>
-          <FormItem
+          {config.app.useNickname && (<FormItem
             label='Name'
             description='information that shown in user profile'
           >
             <Input {...register('nickname')} />
           </FormItem>
+          )}
           <Button
             htmlType='submit'
             disabled={!isDirty}

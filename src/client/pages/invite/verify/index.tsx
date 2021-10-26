@@ -1,117 +1,44 @@
 /* */
 import React, { useEffect, useState } from 'react'
-import * as yup from 'yup'
-import { KIND as ButtonKind } from 'baseui/button'
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalButton,
-  SIZE,
-  ROLE
-} from 'baseui/modal'
+import { Modal, ROLE, SIZE } from 'baseui/modal'
 
 /* */
 import styles from './styles.module.scss'
-import { Divider, ErrorMessage, FormItem, Header, Input } from '~/components'
-import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { requestConfirm } from '~/service/auth'
-
-const schema = yup.object().shape({
-  nickname: yup.string().required(),
-  password: yup.string().required()
-})
+import { Header } from '~/components'
+import { VerifyContainer } from '~/containers'
+import { useApp } from '~/hooks'
+import { AppMode } from '@/types'
 
 const VerifyPage = ({ email, code }) => {
   const [showModal, setShowModal] = useState<boolean>(false)
+
+  const { config } = useApp()
 
   useEffect(() => {
     setShowModal(true)
   }, [])
 
-  const { register, formState, watch, setError, handleSubmit } = useForm({
-    resolver: yupResolver(schema)
-  })
-
-  const { errors } = formState
-
-  const watchPassword = watch('password')
-  const watchPasswordConfirm = watch('passwordConfirm')
-
-  const handleCompleteVerify = async (payload) => {
-    if (payload.password !== payload.passwordConfirm) {
-      setError('passwordConfirm', {
-        type: 'manual',
-        message: 'passwords must match'
-      })
-    } else {
-      await requestConfirm({
-        password: payload.password,
-        nickname: payload.nickname,
-        code
-      })
-
-      window.location.href = '/'
-    }
-  }
-
   return (
     <div className={styles.container}>
-      <Header />
-      <Modal
-        isOpen={showModal}
-        animate
-        autoFocus
-        size={SIZE.default}
-        role={ROLE.dialog}
-      >
-        <ModalHeader>Complete Sign Up</ModalHeader>
-        <form onSubmit={handleSubmit(handleCompleteVerify)}>
-          <ModalBody>
-            <FormItem label='Email'>
-              <span>{email}</span>
-            </FormItem>
-            <FormItem label='Nickname'>
-              <Input
-                placeholder='nickname'
-                className={styles.email__form__input}
-                {...register('nickname')}
-              />
-              <ErrorMessage errors={errors} name='nickname' />
-            </FormItem>
-            <Divider />
-            <FormItem label='Password'>
-              <Input
-                placeholder='password'
-                type='password'
-                className={styles.email__form__input}
-                {...register('password')}
-              />
-              <ErrorMessage errors={errors} name='password' />
-            </FormItem>
-            <FormItem label='Confirm Password'>
-              <Input
-                placeholder='password confirm'
-                type='password'
-                className={styles.email__form__input}
-                {...register('passwordConfirm')}
-              />
-              <ErrorMessage errors={errors} name='passwordConfirm' />
-            </FormItem>
-          </ModalBody>
-          <ModalFooter>
-            <ModalButton
-              kind={ButtonKind.primary}
-              type='submit'
-              disabled={!watchPassword || !watchPasswordConfirm}
-            >
-              Submit
-            </ModalButton>
-          </ModalFooter>
-        </form>
-      </Modal>
+      {config?.app?.mode === AppMode.Modal && (
+        <div>
+          <Header />
+          <Modal
+            isOpen={showModal}
+            animate
+            autoFocus
+            size={SIZE.default}
+            role={ROLE.dialog}
+          >
+            <VerifyContainer email={email} code={code} />
+          </Modal>
+        </div>
+      )}
+      {config?.app?.mode === AppMode.Page && (
+        <div className={styles.inner}>
+          <VerifyContainer email={email} code={code} />
+        </div>
+      )}
     </div>
   )
 }

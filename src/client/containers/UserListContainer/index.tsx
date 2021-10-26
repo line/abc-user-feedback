@@ -22,7 +22,7 @@ import { getUsers, userRoleBinding, deleteUserById } from '~/service/user'
 import SearchIcon from '~/assets/search.svg'
 import MenuIcon from '~/assets/menu.svg'
 import { IUser } from '@/types'
-import { useUser } from '~/hooks'
+import { useApp, useUser } from '~/hooks'
 import { Avatar, Input, DropDown, Tag } from '~/components'
 
 const UserListContainer = () => {
@@ -33,18 +33,14 @@ const UserListContainer = () => {
     getUsers
   )
 
+  const { config } = useApp()
+
   const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false)
   const [deleteUser, setDeleteUser] = useState<IUser>(null)
   const { user: currentUser } = useUser()
 
   const renderAvatar = useCallback((user: IUser) => {
-    const isAvatarImageExist = !!user?.profile?.avatarUrl
-    const avatarType = isAvatarImageExist ? 'image' : 'text'
-    const src = isAvatarImageExist
-      ? user?.profile?.avatarUrl
-      : user?.profile?.nickname
-
-    return <Avatar type={avatarType} src={src} />
+    return <Avatar src={user?.profile?.avatarUrl} name={user?.profile?.nickname || user?.email} />
   }, [])
 
   const handleRoleBinding = async (role: number, userId: string) => {
@@ -165,10 +161,13 @@ const UserListContainer = () => {
           <div key={user.id} className={styles.user}>
             <div className={styles.user__left}>{renderAvatar(user)}</div>
             <div className={styles.user__right}>
-              <span className={styles.user__name}>
+              {config.app.useNickname && (<span className={styles.user__name}>
                 {user.profile?.nickname}
               </span>
-              <span className={styles.user__email}>({user?.email})</span>
+              )}
+              <span className={styles.user__email}>
+                {config.app.useNickname ? `(${user?.email})` : user.email}
+              </span>
               <div className={styles.user__tags}>
                 {user.id === currentUser?.id && (
                   <Tag type='primary' className={styles.tag}>

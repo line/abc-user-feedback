@@ -23,6 +23,7 @@ export class TenantService {
     service.name = data.name
     service.description = data.description
     service.logoUrl = data.logoUrl
+    service.entryPath = '/'
     service.isPrivate = false
     service.isRestrictDomain = false
     service.allowDomains = []

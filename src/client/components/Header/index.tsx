@@ -22,13 +22,7 @@ const Header = () => {
 
   const renderAvatar = useMemo(() => {
     if (user) {
-      const isAvatarImageExist = !!user?.profile?.avatarUrl
-      const avatarType = isAvatarImageExist ? 'image' : 'text'
-      const src = isAvatarImageExist
-        ? user?.profile?.avatarUrl
-        : user?.profile?.nickname
-
-      return <Avatar type={avatarType} src={src} />
+      return <Avatar src={user?.profile?.avatarUrl} name={user?.profile?.nickname || user?.email} />
     }
     return null
   }, [user])

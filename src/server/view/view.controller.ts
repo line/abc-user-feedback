@@ -130,23 +130,22 @@ export class ViewController {
     const service = req.service
     const user = req.user
 
-    if (req.path.includes('/admin') && user?.role >= 2) {
-    }
+    const isPageMode = this.configService.get<string>('app.mode') === 'page'
 
-    if (!service && req.path !== '/setup') {
-      return res.redirect('/setup')
-    }
+    if (service) {
+      if (service.entryPath && service.entryPath !== '/' && req.path === '/') {
+        return res.redirect(service.entryPath)
+      }
 
-    if (service?.entryPath && service.entryPath !== '/' && req.path === '/') {
-      return res.redirect(service.entryPath)
-    }
-
-    if (
-      !user &&
-      this.configService.get<boolean>('auth.redirectToLoginPage') &&
-      req.path !== '/login'
-    ) {
-      return res.redirect('/login')
+      if (isPageMode) {
+        if (!user && req.path !== '/login') {
+          return res.redirect('/login')
+        }
+      }
+    } else {
+      if (req.path !== '/setup') {
+        return res.redirect('/setup')
+      }
     }
 
     let currentUser

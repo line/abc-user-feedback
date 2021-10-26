@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 
 /* */
-import { ClientConfig, LoginProvider } from '@/types'
+import { AppMode, ClientConfig, LoginProvider } from '@/types'
 
 @Injectable()
 export class ViewService {
@@ -21,6 +21,10 @@ export class ViewService {
 
   getClientConfig(): ClientConfig {
     const config = {
+      app: {
+        mode: AppMode.Modal,
+        useNickname: true
+      },
       email: {
         enable: false
       },
@@ -33,6 +37,14 @@ export class ViewService {
         }
       }
     } as ClientConfig
+
+    if (this.configService.get<string>('app.mode') === AppMode.Page) {
+      config.app.mode = AppMode.Page
+    }
+
+    if (!this.configService.get<boolean>('app.useNickname')) {
+      config.app.useNickname = false
+    }
 
     if (
       this.configService.get<string>('oauth.google.clientId') &&

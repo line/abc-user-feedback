@@ -32,7 +32,7 @@ import {
   deleteResponse,
   exportFeedbackResponse
 } from '~/service/feedback'
-import { Header, ResponseSnippetModal, ResponseFilter } from '~/components'
+import { Header, ResponseSnippetModal } from '~/components'
 
 const REQUEST_COUNT = 100
 
@@ -187,49 +187,29 @@ const AdminFeedbackDetailPage = () => {
             />
           )}
           <span className={styles.title__text}>Feedback Detail</span>
-          <div className={styles.title__action}>
-            <ButtonGroup>
-              <Button
-                onClick={handleToggleResponseExampleModal}
-                kind={KIND.secondary}
-                size={SIZE.compact}
-              >
-                Response snippet
-              </Button>
-              <Button
-                onClick={handleClickEdit}
-                kind={KIND.secondary}
-                size={SIZE.compact}
-              >
-                Edit
-              </Button>
-            </ButtonGroup>
-          </div>
+          {user.role >= 2 && (
+            <div className={styles.title__action}>
+              <ButtonGroup>
+                <Button
+                  onClick={handleToggleResponseExampleModal}
+                  kind={KIND.secondary}
+                  size={SIZE.compact}
+                >
+                  Response snippet
+                </Button>
+                <Button
+                  onClick={handleClickEdit}
+                  kind={KIND.secondary}
+                  size={SIZE.compact}
+                >
+                  Edit
+                </Button>
+              </ButtonGroup>
+            </div>
+          )}
         </h1>
-        <table className={styles.info}>
-          <tbody>
-            <tr>
-              <th colSpan={1}>Code</th>
-              <td colSpan={5}>{feedback?.code}</td>
-            </tr>
-            <tr>
-              <th colSpan={1}>Feedback title</th>
-              <td colSpan={5}>{feedback?.title}</td>
-            </tr>
-            <tr>
-              <th colSpan={1}>Created Time</th>
-              <td colSpan={3}>
-                {DateTime.fromISO(feedback?.createdTime).toFormat(
-                  'yyyy-MM-dd, HH:mm'
-                )}
-              </td>
-              <th colSpan={1}>Created by</th>
-              <td colSpan={3}>{feedback?.user?.profile?.nickname}</td>
-            </tr>
-          </tbody>
-        </table>
         <div className={styles.filter}>
-          <ResponseFilter
+          <ResponseFㄹilter
             feedback={feedback}
             onApply={(params) => setParams(params)}
           />

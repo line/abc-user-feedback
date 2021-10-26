@@ -5,13 +5,14 @@ import { join } from 'path'
 import * as yup from 'yup'
 import { InternalServerErrorException } from '@nestjs/common'
 
+/* */
+import { AppMode } from '@/types'
+
 const schema = yup.object().shape({
   app: yup.object().shape({
-    domain: yup.string().required()
-  }),
-  auth: yup.object().shape({
-    useBasicAuth: yup.boolean(),
-    redirectToLoginPage: yup.boolean()
+    domain: yup.string().required(),
+    mode: yup.string().oneOf([AppMode.Modal, AppMode.Page]).default(AppMode.Modal),
+    useNickname: yup.boolean().default(true)
   }),
   database: yup.object().shape({
     connectionString: yup.string().required()

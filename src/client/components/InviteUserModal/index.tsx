@@ -60,7 +60,7 @@ const InviteUserModal = (props: Props) => {
     () => [
       { value: 0, label: 'User', isDisabled: user.role < 1 },
       { value: 1, label: 'Admin', isDisabled: user.role < 1 },
-      { value: 2, label: 'Owner', isDisabled: user.role < 2 }
+      { value: 2, label: 'Manager', isDisabled: user.role < 2 }
     ],
     []
   )

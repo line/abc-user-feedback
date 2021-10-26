@@ -92,11 +92,16 @@ export enum EmailAuthType {
   EmailChange
 }
 
+export enum AppMode {
+  Modal = 'modal',
+  Page = 'page'
+}
+
 export interface ClientConfig {
-  auth: {
-    useBasicAuth: boolean
-    redirectToLoginPage: boolean
-  }
+  app: {
+    mode: AppMode
+    useNickname: boolean
+  },
   email: {
     enable: boolean
   }

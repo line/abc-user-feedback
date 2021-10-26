@@ -1,5 +1,5 @@
 /* */
-import { IsNotEmpty, Matches } from 'class-validator'
+import { IsNotEmpty, IsOptional, Matches } from 'class-validator'
 
 export class ConfirmDto {
   @IsNotEmpty()
@@ -9,8 +9,8 @@ export class ConfirmDto {
   })
   password: string
 
-  @IsNotEmpty()
-  nickname: string
+  @IsOptional()
+  nickname: string = ''
 
   @IsNotEmpty()
   code: string

@@ -31,31 +31,6 @@
       }
     }
 
-    .info {
-      table-layout: auto;
-      border: 1px solid var(--border);
-      width: 100%;
-      margin-bottom: 45px;
-
-      tr {
-        border-bottom: 1px solid var(--border);
-
-        th,
-        td {
-          padding: 16px 24px;
-        }
-
-        th {
-          background-color: var(--black1);
-          border-right: 1px solid var(--border);
-        }
-
-        td {
-          background-color: var(--white);
-        }
-      }
-    }
-
     .filter {
       border: 1px solid var(--black1);
       padding: 12px 20px;
