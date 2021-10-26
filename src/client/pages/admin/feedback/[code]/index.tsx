@@ -32,7 +32,7 @@ import {
   deleteResponse,
   exportFeedbackResponse
 } from '~/service/feedback'
-import { Header, ResponseSnippetModal } from '~/components'
+import { Header, ResponseSnippetModal, ResponseFilter } from '~/components'
 
 const REQUEST_COUNT = 100
 
@@ -209,7 +209,7 @@ const AdminFeedbackDetailPage = () => {
           )}
         </h1>
         <div className={styles.filter}>
-          <ResponseFㄹilter
+          <ResponseFilter
             feedback={feedback}
             onApply={(params) => setParams(params)}
           />
