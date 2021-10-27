@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react'
 import Head from 'next/head'
+import App from 'next/app'
 import { QueryClientProvider } from 'react-query'
 import { Provider as StyletronProvider } from 'styletron-react'
 import { LightTheme, BaseProvider } from 'baseui'
 import { SnackbarProvider, PLACEMENT, DURATION } from 'baseui/snackbar'
 import { useRouter } from 'next/router'
+import { appWithTranslation } from 'next-i18next'
 
 /*  */
 import '~/styles/index.scss'
@@ -14,7 +16,7 @@ import { AppProvider } from '~/hooks/useApp'
 import { PrivateBlockContainer } from '~/containers'
 import { styletron } from '~/styletron'
 
-const App = (props: any) => {
+const FeedbackApp = (props: any) => {
   const { Component, pageProps, currentUser, service, config, ...rest } = props
   const [queryClient] = useState(() => createQueryClient())
   const serviceName = service?.name ?? 'User Feedback'
@@ -85,13 +87,17 @@ const App = (props: any) => {
   )
 }
 
-App.getInitialProps = async ({ ctx }) => {
+FeedbackApp.getInitialProps = async (context) => {
+  const { ctx } = context
   const { query = {}, req } = ctx
 
+  const appProps = await App.getInitialProps(context)
+
   return {
+    ...appProps,
     ...query,
     ...req?.query
   }
 }
 
-export default App
+export default appWithTranslation(FeedbackApp)

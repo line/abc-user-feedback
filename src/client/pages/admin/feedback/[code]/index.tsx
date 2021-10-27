@@ -21,6 +21,7 @@ import {
   ModalHeader,
   ROLE
 } from 'baseui/modal'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -382,6 +383,15 @@ const AdminFeedbackDetailPage = () => {
       </Modal>
     </div>
   )
+}
+
+export const getServerSideProps = async ({ locale = 'ja' }) => {
+  console.log('L', locale)
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common']))
+    }
+  }
 }
 
 export default AdminFeedbackDetailPage

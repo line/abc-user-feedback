@@ -2,12 +2,14 @@
 const path = require('path')
 
 const nextConfig = {
-  // dir: path.resolve(__dirname, '..'),
-  distDir: '../../.next',
-  // sassOptions: {
-  //   includePaths: [path.join(__dirname, 'styles')],
-  //   prependData: `@import "src/styles/mixins";`
-  // },
+  i18n: {
+    defaultNS: 'common',
+    localeExtension: 'json',
+    defaultLocale: 'en',
+    locales: ['en', 'ja'],
+    localPath: process.cwd() + 'src/client/public/locale'
+  },
+  distDir: process.cwd() + '/.next',
   api: {
     externalResolver: true,
   },

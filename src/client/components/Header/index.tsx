@@ -1,6 +1,7 @@
 /* */
 import React, { useState, useMemo } from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
@@ -12,6 +13,8 @@ const Header = () => {
   const { user, requestLogout } = useUser()
   const { service } = useApp()
 
+  const { t } = useTranslation('common')
+
   const handleClickLogin = () => {
     setShowModal(true)
   }
@@ -22,7 +25,12 @@ const Header = () => {
 
   const renderAvatar = useMemo(() => {
     if (user) {
-      return <Avatar src={user?.profile?.avatarUrl} name={user?.profile?.nickname || user?.email} />
+      return (
+        <Avatar
+          src={user?.profile?.avatarUrl}
+          name={user?.profile?.nickname || user?.email}
+        />
+      )
     }
     return null
   }, [user])
@@ -60,7 +68,7 @@ const Header = () => {
                   <a className={styles.dropdown__list}>Settings</a>
                 </Link>
                 <div className={styles.dropdown__list} onClick={requestLogout}>
-                  Logout
+                  {t('menu_logout')}
                 </div>
               </DropDown>
             )}
