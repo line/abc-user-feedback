@@ -4,15 +4,14 @@ const { i18n } = require('../../next-i18next.config')
 
 const nextConfig = {
   i18n,
-  distDir: process.cwd() + '/.next',
+  distDir: '../../.next',
   api: {
-    externalResolver: true,
+    externalResolver: true
   },
   experimental: {
-    externalDir: true,
+    externalDir: true
   },
-  serverRuntimeConfig: {
-  },
+  serverRuntimeConfig: {},
   publicRuntimeConfig: {
     BUILD_VERSION: process.env.BUILD_VERSION || 'dev',
     SMTP_HOST: process.env.SMTP_HOST
