@@ -29,9 +29,23 @@ export class AdminService {
     }
 
     service.name = data.name
-    service.logoUrl = data.logoUrl
-    service.description = data.description
-    service.entryPath = data.entryPath
+
+    if (data.logoUrl) {
+      service.logoUrl = data.logoUrl
+    }
+
+    if (data.description) {
+      service.description = data.description
+    }
+
+    if (data.entryPath) {
+      service.entryPath = data.entryPath
+    }
+
+    if (service.locale) {
+      service.locale = data.locale
+    }
+
     service.isPrivate = data.isPrivate
 
     await this.serviceRepository.update(service.version, service)

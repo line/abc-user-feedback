@@ -101,7 +101,7 @@ export interface ClientConfig {
   app: {
     mode: AppMode
     useNickname: boolean
-  },
+  }
   email: {
     enable: boolean
   }
@@ -113,4 +113,10 @@ export interface ClientConfig {
       enable: boolean
     }
   }
+}
+
+export enum Locale {
+  EN = 'en',
+  JP = 'ja',
+  KR = 'ko'
 }

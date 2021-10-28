@@ -1,6 +1,7 @@
 /* */
 import React, { useEffect, useState } from 'react'
 import { Modal, SIZE, ROLE } from 'baseui/modal'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -40,6 +41,14 @@ const ResetPasswordPage = ({ code }) => {
       )}
     </div>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default ResetPasswordPage

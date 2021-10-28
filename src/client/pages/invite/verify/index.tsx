@@ -1,6 +1,7 @@
 /* */
 import React, { useEffect, useState } from 'react'
 import { Modal, ROLE, SIZE } from 'baseui/modal'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -41,6 +42,14 @@ const VerifyPage = ({ email, code }) => {
       )}
     </div>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default VerifyPage

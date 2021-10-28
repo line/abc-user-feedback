@@ -6,6 +6,7 @@ import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
 import { useQuery } from 'react-query'
 import { KIND as ButtonKind } from 'baseui/button'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
   Modal,
   ModalHeader,
@@ -165,6 +166,14 @@ const EditFeedbackPage = () => {
       </Modal>
     </AdminPageContainer>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default EditFeedbackPage

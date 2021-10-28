@@ -2,6 +2,7 @@
 import React, { useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -84,5 +85,14 @@ const AdminFeedbackPage = () => {
     </AdminPageContainer>
   )
 }
+
+export const getServerSideProps = async ({ locale = 'en' }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common']))
+    }
+  }
+}
+
 
 export default AdminFeedbackPage

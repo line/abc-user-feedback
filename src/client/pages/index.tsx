@@ -1,5 +1,6 @@
 /* */
 import React from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -15,9 +16,11 @@ const MainPage = () => {
   )
 }
 
-export async function getServerSideProps(ctx) {
+export const getServerSideProps = async ({ query }) => {
   return {
-    props: {}
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
   }
 }
 

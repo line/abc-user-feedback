@@ -8,6 +8,9 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm'
 
+/* */
+import { Locale } from '@/types'
+
 @Entity('service')
 export default class Service {
   @PrimaryGeneratedColumn('increment')
@@ -24,6 +27,9 @@ export default class Service {
 
   @Column()
   logoUrl: string
+
+  @Column('enum', { enum: Locale, nullable: false })
+  locale: Locale  
 
   @Column({ default: false })
   isPrivate: boolean

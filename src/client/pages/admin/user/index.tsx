@@ -1,5 +1,6 @@
 /* */
 import React, { useState } from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -58,6 +59,14 @@ const AdminUserPage = () => {
       />
     </AdminPageContainer>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default AdminUserPage

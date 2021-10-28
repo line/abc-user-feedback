@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete, ArrowUp, ArrowDown } from 'baseui/icon'
 import { Radio, RadioGroup } from 'baseui/radio'
+import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
@@ -45,6 +46,8 @@ const AdminFeedbackDetailPage = () => {
   const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
   const [showExportModal, toggleExportModal] = useToggle(false)
   const [showLatest, toggleShowLatest] = useToggle(true)
+
+  const { t } = useTranslation()
 
   const [selectedId, setSelectedId] = useState<Array<string>>([])
   const [responseDetail, setResponseDetail] = useState<any>()
@@ -385,8 +388,7 @@ const AdminFeedbackDetailPage = () => {
   )
 }
 
-export const getServerSideProps = async ({ locale = 'ja' }) => {
-  console.log('L', locale)
+export const getServerSideProps = async ({ locale = 'en' }) => {
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common']))
@@ -395,3 +397,4 @@ export const getServerSideProps = async ({ locale = 'ja' }) => {
 }
 
 export default AdminFeedbackDetailPage
+

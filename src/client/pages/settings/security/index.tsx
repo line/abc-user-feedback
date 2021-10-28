@@ -7,6 +7,7 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'baseui/button'
 import { Input } from 'baseui/input'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -85,6 +86,15 @@ const SecurityPage = () => {
       </div>
     </AccountSettingContainer>
   )
+}
+
+
+export const getServerSideProps = async ({ locale = 'en' }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common']))
+    }
+  }
 }
 
 export default SecurityPage

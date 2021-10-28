@@ -13,7 +13,7 @@ const Header = () => {
   const { user, requestLogout } = useUser()
   const { service } = useApp()
 
-  const { t } = useTranslation('common')
+  const { t } = useTranslation()
 
   const handleClickLogin = () => {
     setShowModal(true)
@@ -65,10 +65,10 @@ const Header = () => {
                   </>
                 )}
                 <Link href='/settings/profile'>
-                  <a className={styles.dropdown__list}>Settings</a>
+                  <a className={styles.dropdown__list}>{t('menu.account')}</a>
                 </Link>
                 <div className={styles.dropdown__list} onClick={requestLogout}>
-                  {t('menu_logout')}
+                  {t('menu.logout')}
                 </div>
               </DropDown>
             )}

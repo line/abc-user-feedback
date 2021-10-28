@@ -1,3 +1,4 @@
+/* */
 import {
   IsBoolean,
   IsNotEmpty,
@@ -5,6 +6,9 @@ import {
   IsString,
   IsUrl
 } from 'class-validator'
+
+/* */
+import { Locale } from '@/types'
 
 export class UpdateServiceDto {
   @IsString()
@@ -17,6 +21,9 @@ export class UpdateServiceDto {
 
   @IsOptional()
   logoUrl: string
+
+  @IsOptional()
+  locale: Locale
 
   @IsOptional()
   entryPath: string = '/'

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm'
 
 /* */
 import { Service } from '#/core/entity'
+import { Locale } from '@/types'
 import { CreateServiceDto } from './dto/create-service.dto'
 
 @Injectable()
@@ -24,6 +25,7 @@ export class TenantService {
     service.description = data.description
     service.logoUrl = data.logoUrl
     service.entryPath = '/'
+    service.locale = Locale.EN
     service.isPrivate = false
     service.isRestrictDomain = false
     service.allowDomains = []
