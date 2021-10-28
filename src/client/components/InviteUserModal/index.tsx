@@ -16,6 +16,7 @@ import {
   SIZE,
   ROLE
 } from 'baseui/modal'
+import { useTranslation } from 'next-i18next'
 import { KIND as ButtonKind } from 'baseui/button'
 
 /* */
@@ -24,28 +25,30 @@ import { sendInvitationEmail } from '~/service/mail'
 import { Textarea, FormItem, ErrorMessage } from '~/components'
 import { useApp, useUser } from '~/hooks'
 
-const schema = yup.object().shape({
-  emails: yup
-    .string()
-    .test('email format', 'not a email format', (emails = '') => {
-      const emailSchema = yup.string().email()
-      const parsed = emails
-        .split(/\n/)
-        .filter((email) => email)
-        .map((email) => email.trim())
-
-      return parsed.every((email) => emailSchema.isValidSync(email))
-    })
-    .required(),
-  role: yup.mixed().required()
-})
-
 interface Props extends ModalProps {
   onClose?: any
 }
 
 const InviteUserModal = (props: Props) => {
   const { onClose, isOpen } = props
+
+  const { t } = useTranslation()
+
+  const schema = yup.object().shape({
+    emails: yup
+      .string()
+      .test('email format', t('validation.email'), (emails = '') => {
+        const emailSchema = yup.string().email()
+        const parsed = emails
+          .split(/\n/)
+          .filter((email) => email)
+          .map((email) => email.trim())
+
+        return parsed.every((email) => emailSchema.isValidSync(email))
+      })
+      .required(),
+    role: yup.mixed().required()
+  })
 
   const { user } = useUser()
   const { service } = useApp()
@@ -122,7 +125,7 @@ const InviteUserModal = (props: Props) => {
       size={SIZE.default}
       role={ROLE.dialog}
     >
-      <ModalHeader>Invite User</ModalHeader>
+      <ModalHeader>{t('title.member.invite')}</ModalHeader>
       <form
         className={styles.invite}
         onSubmit={handleSubmit(handleSendInvitationEmail)}
@@ -134,7 +137,12 @@ const InviteUserModal = (props: Props) => {
                 control={control}
                 name='emails'
                 render={({ field }) => (
-                  <Textarea {...field} rows={1} className={styles.form__text} />
+                  <Textarea
+                    {...field}
+                    rows={1}
+                    className={styles.form__text}
+                    placeholder={t('placeholder.email')}
+                  />
                 )}
               />
               <ErrorMessage errors={errors} name='emails' />
@@ -146,7 +154,7 @@ const InviteUserModal = (props: Props) => {
                     {...field}
                     className={styles.form__select}
                     instanceId='role_select'
-                    placeholder='Select option'
+                    placeholder={t('placeholder.select.role')}
                     options={roleOptions}
                   />
                 )}
@@ -159,9 +167,11 @@ const InviteUserModal = (props: Props) => {
         </ModalBody>
         <ModalFooter>
           <ModalButton onClick={handleCloseModal} kind={ButtonKind.tertiary}>
-            Cancel
+            {t('action.cancel')}
           </ModalButton>
-          <ModalButton type='submit'>Send invitation</ModalButton>
+          <ModalButton type='submit'>
+            {t('action.send.mail.invitation')}
+          </ModalButton>
         </ModalFooter>
       </form>
     </Modal>

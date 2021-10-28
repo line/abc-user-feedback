@@ -4,6 +4,7 @@ import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete, ArrowUp, ArrowDown } from 'baseui/icon'
 import { Radio, RadioGroup } from 'baseui/radio'
+import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
@@ -21,6 +22,7 @@ import {
   ModalHeader,
   ROLE
 } from 'baseui/modal'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -44,6 +46,8 @@ const AdminFeedbackDetailPage = () => {
   const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
   const [showExportModal, toggleExportModal] = useToggle(false)
   const [showLatest, toggleShowLatest] = useToggle(true)
+
+  const { t } = useTranslation()
 
   const [selectedId, setSelectedId] = useState<Array<string>>([])
   const [responseDetail, setResponseDetail] = useState<any>()
@@ -186,7 +190,9 @@ const AdminFeedbackDetailPage = () => {
               onClick={handleClickBack}
             />
           )}
-          <span className={styles.title__text}>Feedback Detail</span>
+          <span className={styles.title__text}>
+            {t('title.feeback.detail')}
+          </span>
           {user.role >= 2 && (
             <div className={styles.title__action}>
               <ButtonGroup>
@@ -216,16 +222,18 @@ const AdminFeedbackDetailPage = () => {
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
-          <div style={{ marginLeft: 'auto' }}>
-            <Button
-              onClick={toggleDeleteResponseModal}
-              kind={KIND.secondary}
-              size={SIZE.compact}
-              disabled={!selectedId.length}
-            >
-              Delete
-            </Button>
-          </div>
+          {user.role >= 2 && (
+            <div style={{ marginLeft: 'auto' }}>
+              <Button
+                onClick={toggleDeleteResponseModal}
+                kind={KIND.secondary}
+                size={SIZE.compact}
+                disabled={!selectedId.length}
+              >
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
         <div className={styles.page__list}>
           <TableBuilder
@@ -346,15 +354,14 @@ const AdminFeedbackDetailPage = () => {
       <Modal
         isOpen={showResponseDetailModal}
         size={SIZE.default}
+        closeable
+        onClose={toggleResponseDetailModal}
         role={ROLE.dialog}
       >
-        <ModalHeader>Response Detail</ModalHeader>
+        <ModalHeader>{t('title.feeback.detail')}</ModalHeader>
         <ModalBody>
           <pre>{renderResponseDetail}</pre>
         </ModalBody>
-        <ModalFooter>
-          <ModalButton onClick={toggleResponseDetailModal}>Confirm</ModalButton>
-        </ModalFooter>
       </Modal>
       <Modal
         isOpen={showExportModal}
@@ -369,8 +376,8 @@ const AdminFeedbackDetailPage = () => {
             onChange={(e) => setExportType(e.target.value)}
             value={exportType}
           >
-            <Radio value='xlsx'>excel</Radio>
-            <Radio value='csv'>csv</Radio>
+            <Radio value='xlsx'>{t('action.download.excel')}</Radio>
+            <Radio value='csv'>{t('action.download.csv')}</Radio>
           </RadioGroup>
         </ModalBody>
         <ModalFooter>
@@ -382,6 +389,14 @@ const AdminFeedbackDetailPage = () => {
       </Modal>
     </div>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default AdminFeedbackDetailPage

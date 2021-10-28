@@ -7,6 +7,9 @@ import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check } from 'baseui/icon'
+import { Select } from 'baseui/select'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -19,6 +22,12 @@ import {
   UnauthorizedContainer
 } from '~/containers'
 import { useApp } from '~/hooks'
+import { Locale } from '@/types'
+
+const localeOptions = Object.entries(Locale).map(([label, id]) => ({
+  label,
+  id
+}))
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -35,6 +44,8 @@ const AdminRoot = () => {
 
   const { enqueue } = useSnackbar()
 
+  const { t, i18n } = useTranslation()
+
   const { config, setService } = useApp()
 
   const { register, handleSubmit, reset, setError, formState, control } =
@@ -46,7 +57,10 @@ const AdminRoot = () => {
 
   useEffect(() => {
     if (data) {
-      reset(data)
+      reset({
+        ...data,
+        locale: localeOptions.find((o) => o.id === data.locale)
+      })
     }
   }, [data])
 
@@ -71,8 +85,16 @@ const AdminRoot = () => {
 
   const handleSubmitSetting = async (payload) => {
     try {
-      const service = await updateService(payload)
+      const locale = payload.locale?.[0]?.id || 'en'
+      const service = await updateService({
+        ...payload,
+        locale
+      })
+
       setService(service)
+
+      i18n.changeLanguage(locale)
+
       enqueue({
         message: 'Service updated',
         startEnhancer: ({ size }) => <Check size={size} />
@@ -106,6 +128,22 @@ const AdminRoot = () => {
           description='Path for first redirect after login or click logo'
         >
           <Input {...register('entryPath')} />
+        </FormItem>
+        <FormItem label='Locale'>
+          <Controller
+            control={control}
+            name='locale'
+            render={({ field: { onChange, ...rest } }) => {
+              return (
+                <Select
+                  {...rest}
+                  onChange={(params) => onChange(params.value)}
+                  options={localeOptions}
+                  placeholder=''
+                />
+              )
+            }}
+          />
         </FormItem>
         <FormItem
           label='Private Service'
@@ -145,6 +183,14 @@ const AdminRoot = () => {
       </form>
     </AdminPageContainer>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default AdminRoot

@@ -4,6 +4,7 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check } from 'baseui/icon'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -110,6 +111,14 @@ const CreateFeedbackPage = () => {
       </div>
     </AdminPageContainer>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default CreateFeedbackPage

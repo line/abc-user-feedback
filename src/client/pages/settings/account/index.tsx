@@ -3,6 +3,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useSnackbar } from 'baseui/snackbar'
 import { Delete, Check } from 'baseui/icon'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/router'
 import { KIND as ButtonKind } from 'baseui/button'
 import {
@@ -120,4 +121,14 @@ const AccountPage = () => {
   )
 }
 
+export const getServerSideProps = async () => {
+  return {
+    props: {
+      ...(await serverSideTranslations('en', ['common']))
+    }
+  }
+}
+
+
 export default AccountPage
+

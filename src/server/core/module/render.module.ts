@@ -8,10 +8,19 @@ export default RenderModule.forRootAsync(
   Next({
     dev: !isProduction,
     dir: isProduction
-      ? resolve(__dirname, '../../../../')
+      ? resolve(__dirname, '../../../..')
       : resolve(__dirname, '../../../../src/client')
+    // conf: {
+    //   i18n: {
+    //     defaultLocale: 'en',
+    //     locales: ['en', 'ja'],
+    //     localeExtension: 'json',
+    //     localPath: process.cwd() + 'src/client/public/locale'
+    //   }
+    // }
   }),
   {
-    viewsDir: ''
+    passthrough404: true,
+    viewsDir: null
   }
 )

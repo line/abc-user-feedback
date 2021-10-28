@@ -3,6 +3,7 @@ import React from 'react'
 import { useForm } from 'react-hook-form'
 import { useSnackbar } from 'baseui/snackbar'
 import { Delete, Check } from 'baseui/icon'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -10,6 +11,7 @@ import { useApp, useUser } from '~/hooks'
 import { RequireLoginPage, AccountSettingContainer } from '~/containers'
 import { Button, Input, FormItem, Divider } from '~/components'
 import { updateUserSetting } from '~/service/user'
+import { createContext } from 'vm'
 
 const ProfilePage = () => {
   const { user, setUser } = useUser()
@@ -62,12 +64,13 @@ const ProfilePage = () => {
           >
             <div>{user.email}</div>
           </FormItem>
-          {config.app.useNickname && (<FormItem
-            label='Name'
-            description='information that shown in user profile'
-          >
-            <Input {...register('nickname')} />
-          </FormItem>
+          {config.app.useNickname && (
+            <FormItem
+              label='Name'
+              description='information that shown in user profile'
+            >
+              <Input {...register('nickname')} />
+            </FormItem>
           )}
           <Button
             htmlType='submit'
@@ -81,6 +84,15 @@ const ProfilePage = () => {
       </div>
     </AccountSettingContainer>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  const { service } = query
+  return {
+    props: {
+      ...(await serverSideTranslations(service.locale, ['common']))
+    }
+  }
 }
 
 export default ProfilePage

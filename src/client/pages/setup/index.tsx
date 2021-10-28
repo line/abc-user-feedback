@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'baseui/snackbar'
 import { Delete } from 'baseui/icon'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -77,18 +78,22 @@ const SetupPage = () => {
 export async function getServerSideProps({ query }) {
   const { service } = query
 
+  const props = {
+    ...(await serverSideTranslations(service.locale, ['common']))
+  }
+
   if (service) {
     return {
       redirect: {
         permanent: false,
         destination: '/'
       },
-      props: {}
+      props
     }
   }
 
   return {
-    props: {}
+    props
   }
 }
 

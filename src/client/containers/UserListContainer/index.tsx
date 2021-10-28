@@ -14,6 +14,7 @@ import {
   SIZE,
   ModalButton
 } from 'baseui/modal'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
@@ -33,6 +34,8 @@ const UserListContainer = () => {
     getUsers
   )
 
+  const { t } = useTranslation()
+
   const { config } = useApp()
 
   const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false)
@@ -40,7 +43,12 @@ const UserListContainer = () => {
   const { user: currentUser } = useUser()
 
   const renderAvatar = useCallback((user: IUser) => {
-    return <Avatar src={user?.profile?.avatarUrl} name={user?.profile?.nickname || user?.email} />
+    return (
+      <Avatar
+        src={user?.profile?.avatarUrl}
+        name={user?.profile?.nickname || user?.email}
+      />
+    )
   }, [])
 
   const handleRoleBinding = async (role: number, userId: string) => {
@@ -161,9 +169,10 @@ const UserListContainer = () => {
           <div key={user.id} className={styles.user}>
             <div className={styles.user__left}>{renderAvatar(user)}</div>
             <div className={styles.user__right}>
-              {config.app.useNickname && (<span className={styles.user__name}>
-                {user.profile?.nickname}
-              </span>
+              {config.app.useNickname && (
+                <span className={styles.user__name}>
+                  {user.profile?.nickname}
+                </span>
               )}
               <span className={styles.user__email}>
                 {config.app.useNickname ? `(${user?.email})` : user.email}
@@ -185,7 +194,7 @@ const UserListContainer = () => {
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(2, user.id)}
                     >
-                      To Owner
+                      {t('action.member.to.owner')}
                     </div>
                   )}
                   {((currentUser?.role === 2 && user.role !== 1) ||
@@ -194,7 +203,7 @@ const UserListContainer = () => {
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(1, user.id)}
                     >
-                      To Admin
+                      {t('action.member.to.admin')}
                     </div>
                   )}
                   {((currentUser?.role === 2 && user.role !== 0) ||
@@ -203,7 +212,7 @@ const UserListContainer = () => {
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(0, user.id)}
                     >
-                      To User
+                      {t('action.member.to.guest')}
                     </div>
                   )}
                   {currentUser?.role >= 1 && user.role !== 2 && (
@@ -214,7 +223,7 @@ const UserListContainer = () => {
                       )}
                       onClick={() => handleShowDeleteModal(user)}
                     >
-                      Delete User
+                      {t('action.member.delete')}
                     </div>
                   )}
                 </div>
@@ -229,17 +238,17 @@ const UserListContainer = () => {
         size={SIZE.default}
         role={ROLE.dialog}
       >
-        <ModalHeader>Delete this User?</ModalHeader>
+        <ModalHeader>{t('confirm.delete.member')}</ModalHeader>
         <ModalBody>{deleteUser?.email}</ModalBody>
         <ModalFooter>
           <ModalButton
             onClick={handleCloseDeleteUserModal}
             kind={ButtonKind.tertiary}
           >
-            Cancel
+            {t('action.cancel')}
           </ModalButton>
           <ModalButton kind={ButtonKind.primary} onClick={handleDeleteUser}>
-            Delete
+            {t('action.delete')}
           </ModalButton>
         </ModalFooter>
       </Modal>

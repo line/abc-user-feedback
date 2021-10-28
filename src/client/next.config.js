@@ -1,21 +1,17 @@
 /* */
 const path = require('path')
+const { i18n } = require('../../next-i18next.config')
 
 const nextConfig = {
-  // dir: path.resolve(__dirname, '..'),
+  i18n,
   distDir: '../../.next',
-  // sassOptions: {
-  //   includePaths: [path.join(__dirname, 'styles')],
-  //   prependData: `@import "src/styles/mixins";`
-  // },
   api: {
-    externalResolver: true,
+    externalResolver: true
   },
   experimental: {
-    externalDir: true,
+    externalDir: true
   },
-  serverRuntimeConfig: {
-  },
+  serverRuntimeConfig: {},
   publicRuntimeConfig: {
     BUILD_VERSION: process.env.BUILD_VERSION || 'dev',
     SMTP_HOST: process.env.SMTP_HOST

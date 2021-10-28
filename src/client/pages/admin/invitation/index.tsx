@@ -5,6 +5,7 @@ import { useQuery } from 'react-query'
 import { AxiosError } from 'axios'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check } from 'baseui/icon'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import styles from './styles.module.scss'
@@ -126,6 +127,14 @@ const AdminInvitationPage = () => {
       </form>
     </AdminPageContainer>
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default AdminInvitationPage

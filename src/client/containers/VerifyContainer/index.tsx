@@ -5,28 +5,15 @@ import { KIND as ButtonKind } from 'baseui/button'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useSnackbar } from 'baseui/snackbar'
-import {
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalButton,
-} from 'baseui/modal'
+import { Delete } from 'baseui/icon'
+import { ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
 import { Divider, ErrorMessage, FormItem, Input } from '~/components'
 import { requestConfirm } from '~/service/auth'
 import { useApp } from '~/hooks'
-import { Delete } from 'baseui/icon'
-
-const schema = yup.object().shape({
-  nickname: yup.string(),
-  password: yup.string().required(),
-  passwordConfirm: yup
-    .string()
-    .oneOf([yup.ref('password'), null], 'passwords must match')
-    .required()
-})
 
 interface Props {
   email?: string
@@ -38,6 +25,19 @@ const VerifyContainer = (props: Props) => {
 
   const { config } = useApp()
   const { enqueue } = useSnackbar()
+  const { t } = useTranslation()
+
+  const schema = yup.object().shape({
+    nickname: yup.string(),
+    password: yup.string().required(),
+    passwordConfirm: yup
+      .string()
+      .oneOf(
+        [yup.ref('password'), null],
+        t('validation.password.reset_confirm')
+      )
+      .required()
+  })
 
   const { register, formState, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema)
@@ -67,25 +67,26 @@ const VerifyContainer = (props: Props) => {
 
   return (
     <div>
-      <ModalHeader>Complete Sign Up</ModalHeader>
+      <ModalHeader>{t('title.settings.profile')}</ModalHeader>
       <form onSubmit={handleSubmit(handleCompleteVerify)}>
         <ModalBody>
-          <FormItem label='Email'>
+          <FormItem label={t('label.email')}>
             <span>{email}</span>
           </FormItem>
-          {config.app.useNickname && (<FormItem label='Nickname'>
-            <Input
-              placeholder='nickname'
-              className={styles.email__form__input}
-              {...register('nickname')}
-            />
-            <ErrorMessage errors={errors} name='nickname' />
-          </FormItem>
+          {config.app.useNickname && (
+            <FormItem label={t('label.password_new')}>
+              <Input
+                placeholder='nickname'
+                className={styles.email__form__input}
+                {...register('nickname')}
+              />
+              <ErrorMessage errors={errors} name='nickname' />
+            </FormItem>
           )}
           <Divider />
           <FormItem label='Password'>
             <Input
-              placeholder='password'
+              placeholder={t('placeholder.password.rule')}
               type='password'
               className={styles.email__form__input}
               {...register('password')}
@@ -108,7 +109,7 @@ const VerifyContainer = (props: Props) => {
             type='submit'
             disabled={!watchPassword || !watchPasswordConfirm}
           >
-            Submit
+            {t('action.save')}
           </ModalButton>
         </ModalFooter>
       </form>

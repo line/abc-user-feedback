@@ -6,6 +6,7 @@ import { Delete } from 'baseui/icon'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { Button, KIND as ButtonKind } from 'baseui/button'
+import { Paragraph3 } from 'baseui/typography'
 import {
   Modal,
   ROLE,
@@ -16,6 +17,7 @@ import {
   ModalButton
 } from 'baseui/modal'
 import { Input } from 'baseui/input'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import { sendFindPasswordEmail } from '~/service/mail'
@@ -25,14 +27,16 @@ interface Props extends ModalProps {
   onClose: any
 }
 
-const schema = yup.object().shape({
-  email: yup.string().email('not a email format').required()
-})
-
 const FindPasswordModal = (props: Props) => {
   const { isOpen, onClose } = props
   const { enqueue } = useSnackbar()
   const [emailSended, setEmailSended] = useState<boolean>(false)
+
+  const { t } = useTranslation()
+
+  const schema = yup.object().shape({
+    email: yup.string().email(t('validation.email')).required()
+  })
 
   const { register, watch, trigger, formState, getValues, reset, clearErrors } =
     useForm({
@@ -85,36 +89,38 @@ const FindPasswordModal = (props: Props) => {
       size={ModalSize.auto}
       role={ROLE.dialog}
     >
-      <ModalHeader> Forgot your password?</ModalHeader>
+      <ModalHeader>{t('title.password.reset')}</ModalHeader>
       <ModalBody>
-        <div>
+        <Paragraph3 $style={{ whiteSpace: 'pre-wrap', textAlign: 'center' }}>
           {emailSended
-            ? `Check your email`
-            : `Enter your email address and we'll send you a link to reset your
-          password`}
-        </div>
+            ? t('snackbar.success.send.mail.invitation')
+            : t('description.password.reset')}
+        </Paragraph3>
         {emailSended ? (
           <div style={{ marginTop: 10 }}>
             <Button kind={ButtonKind.primary} onClick={handleClose}>
-              Confirm
+              {t('action.send.mail.invitation')}
             </Button>
           </div>
         ) : (
           <>
             <div style={{ marginTop: 10 }}>
-              <Input {...register('email')} placeholder='your@email.com' />
+              <Input
+                {...register('email')}
+                placeholder={t('placeholder.email')}
+              />
               <ErrorMessage errors={errors} name='email' />
             </div>
             <div style={{ marginTop: 16 }}>
               <ModalButton onClick={handleClose} kind={ButtonKind.tertiary}>
-                Cancel
+                {t('action.cancel')}
               </ModalButton>
               <ModalButton
                 kind={ButtonKind.primary}
                 onClick={handleSendFindpasswordEmail}
                 disabled={!watchEmail}
               >
-                Send
+                {t('action.send.mail.invitation')}
               </ModalButton>
             </div>
           </>

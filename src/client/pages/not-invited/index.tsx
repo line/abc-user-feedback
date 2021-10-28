@@ -1,5 +1,6 @@
 /* */
 import React from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 /* */
 import { ErrorContainer } from '~/containers'
@@ -13,6 +14,14 @@ const NotInvitedPage = () => {
       linkMessage='Go back to Home'
     />
   )
+}
+
+export const getServerSideProps = async ({ query }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(query.service.locale, ['common']))
+    }
+  }
 }
 
 export default NotInvitedPage

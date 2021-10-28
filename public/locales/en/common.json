@@ -1,0 +1,53 @@
+{
+	"menu.account": "Account",
+	"menu.logout": "Logout",
+	
+	"placeholder.email": "Email",
+	"placeholder.password": "Password",
+	"placeholder.password.reset": "Including 8 or more letters, numbers, and special characters",
+	"placeholder.password.confirm": "Password confirm",
+	"placeholder.select.role": "Select role",
+	
+	"validation.email": "Check your email",
+	"validation.email.domain": "Check your email",
+	"validation.email_password": "Check yout email/password",
+	"validation.password.reset": "The password must contain at least 8 letters of English, numbers, and special characters",
+	"validation.password.reset_confirm": "Password not correct",
+	"validation.password.nicname": "Check your nickname",
+	"validation.select.role": "Select role",
+
+	"action.delete": "Delete",
+	"action.cancel": "Cancel",
+	"action.save": "Sace",
+
+	"action.password.set": "Set",
+	"action.login": "Login",
+	"action.remember_email": "Remember email",
+	"action.password.forgot": "Forget password",
+	"action.send.mail.password.reset": "Send email",
+	"action.submit.password.reset": "Submit",
+	"action.download.excel": "Excel download",
+	"action.download.csv": "CSV download",
+	"action.member.invite": "Invite member",
+	"action.member.to.guest": "To guest",
+	"action.member.to.admin": "To admin",
+	"action.member.delete": "Delete member",
+	"action.send.mail.invitation": "Send invitation",
+
+	"label.email": "Email",
+	"label.password_new": "New password",
+	"label.password_confirm": "Confirm new password",
+
+	"snackbar.success.send.mail.invitation": "Success send invitation mail",
+	"snackbar.success.settings.profile": "Success save profile",
+
+	"description.password.reset": "Send reset password email.\n(it expired after 24 hours)",
+	
+	"title.password.reset": "Reset password",
+	"title.feeback.detail": "Feedback detail",
+	"title.member": "Member",
+	"title.settings.profile": "Profile",
+
+	"confirm.delete.member": "Delete this member?"
+
+}

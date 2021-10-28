@@ -4,6 +4,7 @@ import { useFormContext } from 'react-hook-form'
 import { Check, Delete } from 'baseui/icon'
 import { useSnackbar } from 'baseui/snackbar'
 import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
@@ -41,6 +42,8 @@ const LoginContainer = () => {
     watch
   } = useFormContext()
 
+  const { t } = useTranslation()
+
   const watchEmail = watch('email')
   const watchPassword = watch('password')
   const watchPasswordConfirm = watch('passwordConfirm')
@@ -61,7 +64,7 @@ const LoginContainer = () => {
     if (payload.password !== payload.passwordConfirm) {
       setError('passwordConfirm', {
         type: 'manual',
-        message: 'passwords must match'
+        message: t('validation.password.reset_confirm')
       })
     } else {
       await requestSignUp({
@@ -76,13 +79,20 @@ const LoginContainer = () => {
   }
 
   const handleLogin = async () => {
-    const payload = getValues()
-    await requestLogin({
-      email: payload.email,
-      password: payload.password
-    })
+    try {
+      const payload = getValues()
+      await requestLogin({
+        email: payload.email,
+        password: payload.password
+      })
 
-    window.location.href = '/'
+      window.location.href = '/'
+    } catch {
+      enqueue({
+        message: t('validation.email_password'),
+        startEnhancer: ({ size }) => <Delete size={size} />
+      })
+    }
   }
 
   const handleClickGoogleLogin = (e) => {
@@ -159,14 +169,14 @@ const LoginContainer = () => {
             <FormItem label='Email'>
               <Input
                 className={styles.email__form__input}
-                placeholder='your@email.com'
+                placeholder={t('placeholder.email')}
                 {...register('email')}
               />
               <ErrorMessage errors={errors} name='email' />
             </FormItem>
             <FormItem label='Password'>
               <Input
-                placeholder='password'
+                placeholder={t('placeholder.password')}
                 type='password'
                 className={styles.email__form__input}
                 {...register('password')}
@@ -177,7 +187,7 @@ const LoginContainer = () => {
                   className={styles.email__form__forgot}
                   onClick={toggleShowFindPasswordModal}
                 >
-                  Forgot your password?
+                  {t('action.password.forgot')}
                 </Button>
               )}
               <ErrorMessage errors={errors} name='password' />
@@ -185,7 +195,7 @@ const LoginContainer = () => {
             {authMode === AuthMode.SignUp && (
               <FormItem label='Confirm Password'>
                 <Input
-                  placeholder='password confirm'
+                  placeholder={t('placeholder.password.confirm')}
                   type='password'
                   className={styles.email__form__input}
                   {...register('passwordConfirm')}
@@ -204,7 +214,7 @@ const LoginContainer = () => {
                   (authMode === AuthMode.SignUp && !watchPasswordConfirm)
                 }
               >
-                Submit
+                {t('action.login')}
               </Button>
               {renderLoginButton()}
             </div>

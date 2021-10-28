@@ -3,18 +3,24 @@
     "module": "commonjs",
     "declaration": true,
     "removeComments": true,
+    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "es2017",
     "sourceMap": true,
+    "skipLibCheck": true,
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "incremental": true,
-    "jsx": "react",
+    "noEmit": false,
+    "allowJs": false,
     "paths": {
-      "~/*": ["src/client/*"],
       "#/*": ["src/server/*"],
       "@/*": ["src/*"]
     }
-  }
+  },
+  "include": [
+    "src/server",
+    "src/types.ts"
+  ]
 }
