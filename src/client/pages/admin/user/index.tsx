@@ -1,6 +1,7 @@
 /* */
 import React, { useState } from 'react'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
@@ -12,6 +13,8 @@ const AdminUserPage = () => {
   const [showInviteModal, setShowInviteModal] = useState<boolean>(false)
 
   const { config } = useApp()
+
+  const { t } = useTranslation()
 
   const handleShowInviteUserModal = () => {
     setShowInviteModal(true)
@@ -30,7 +33,7 @@ const AdminUserPage = () => {
             onClick={handleShowInviteUserModal}
             disabled={!config.email.enable}
           >
-            Invite by email
+            {t('action.member.invite')}
             {!config.email.enable && ' (check smtp setting)'}
           </Button>
         </div>

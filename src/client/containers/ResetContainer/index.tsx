@@ -7,30 +7,31 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { KIND as ButtonKind } from 'baseui/button'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
-import {
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalButton,
-} from 'baseui/modal'
+import { ModalHeader, ModalBody, ModalFooter, ModalButton } from 'baseui/modal'
 import { Input } from 'baseui/input'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
 import { ErrorMessage, FormItem } from '~/components'
 import { requestChangePassword } from '~/service/auth'
 
-const schema = yup.object().shape({
-  password: yup.string().required(),
-  passwordConfirm: yup
-    .string()
-    .oneOf([yup.ref('password'), null], 'passwords must match')
-})
-
 const ResetPasswordPage = ({ code }) => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const { enqueue } = useSnackbar()
   const router = useRouter()
+
+  const { t } = useTranslation()
+
+  const schema = yup.object().shape({
+    password: yup.string().required(),
+    passwordConfirm: yup
+      .string()
+      .oneOf(
+        [yup.ref('password'), null],
+        t('validation.password.reset_confirm')
+      )
+  })
 
   useEffect(() => {
     setShowModal(true)
@@ -67,12 +68,12 @@ const ResetPasswordPage = ({ code }) => {
 
   return (
     <div>
-      <ModalHeader>Reset Password</ModalHeader>
+      <ModalHeader>{t('title.password.reset')}</ModalHeader>
       <form onSubmit={handleSubmit(handleResetPassword)}>
         <ModalBody>
           <FormItem label='Password'>
             <Input
-              placeholder='password'
+              placeholder={t('placeholder.password')}
               type='password'
               {...register('password')}
             />
@@ -80,7 +81,7 @@ const ResetPasswordPage = ({ code }) => {
           </FormItem>
           <FormItem label='Confirm Password'>
             <Input
-              placeholder='password confirm'
+              placeholder={t('placeholder.password.confirm')}
               type='password'
               {...register('passwordConfirm')}
             />
@@ -93,7 +94,7 @@ const ResetPasswordPage = ({ code }) => {
             type='submit'
             disabled={!watchPassword || !watchPasswordConfirm}
           >
-            Submit
+            {t('action.password.set')}
           </ModalButton>
         </ModalFooter>
       </form>

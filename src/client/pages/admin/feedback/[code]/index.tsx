@@ -190,7 +190,9 @@ const AdminFeedbackDetailPage = () => {
               onClick={handleClickBack}
             />
           )}
-          <span className={styles.title__text}>Feedback Detail</span>
+          <span className={styles.title__text}>
+            {t('title.feeback.detail')}
+          </span>
           {user.role >= 2 && (
             <div className={styles.title__action}>
               <ButtonGroup>
@@ -220,16 +222,18 @@ const AdminFeedbackDetailPage = () => {
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
-          <div style={{ marginLeft: 'auto' }}>
-            <Button
-              onClick={toggleDeleteResponseModal}
-              kind={KIND.secondary}
-              size={SIZE.compact}
-              disabled={!selectedId.length}
-            >
-              Delete
-            </Button>
-          </div>
+          {user.role >= 2 && (
+            <div style={{ marginLeft: 'auto' }}>
+              <Button
+                onClick={toggleDeleteResponseModal}
+                kind={KIND.secondary}
+                size={SIZE.compact}
+                disabled={!selectedId.length}
+              >
+                Delete
+              </Button>
+            </div>
+          )}
         </div>
         <div className={styles.page__list}>
           <TableBuilder
@@ -350,15 +354,14 @@ const AdminFeedbackDetailPage = () => {
       <Modal
         isOpen={showResponseDetailModal}
         size={SIZE.default}
+        closeable
+        onClose={toggleResponseDetailModal}
         role={ROLE.dialog}
       >
-        <ModalHeader>Response Detail</ModalHeader>
+        <ModalHeader>{t('title.feeback.detail')}</ModalHeader>
         <ModalBody>
           <pre>{renderResponseDetail}</pre>
         </ModalBody>
-        <ModalFooter>
-          <ModalButton onClick={toggleResponseDetailModal}>Confirm</ModalButton>
-        </ModalFooter>
       </Modal>
       <Modal
         isOpen={showExportModal}
@@ -373,8 +376,8 @@ const AdminFeedbackDetailPage = () => {
             onChange={(e) => setExportType(e.target.value)}
             value={exportType}
           >
-            <Radio value='xlsx'>excel</Radio>
-            <Radio value='csv'>csv</Radio>
+            <Radio value='xlsx'>{t('action.download.excel')}</Radio>
+            <Radio value='csv'>{t('action.download.csv')}</Radio>
           </RadioGroup>
         </ModalBody>
         <ModalFooter>
@@ -388,13 +391,12 @@ const AdminFeedbackDetailPage = () => {
   )
 }
 
-export const getServerSideProps = async ({ locale = 'en' }) => {
+export const getServerSideProps = async ({ query }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common']))
+      ...(await serverSideTranslations(query.service.locale, ['common']))
     }
   }
 }
 
 export default AdminFeedbackDetailPage
-

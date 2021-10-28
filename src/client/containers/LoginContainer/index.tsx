@@ -64,7 +64,7 @@ const LoginContainer = () => {
     if (payload.password !== payload.passwordConfirm) {
       setError('passwordConfirm', {
         type: 'manual',
-        message: 'passwords must match'
+        message: t('validation.password.reset_confirm')
       })
     } else {
       await requestSignUp({
@@ -79,13 +79,20 @@ const LoginContainer = () => {
   }
 
   const handleLogin = async () => {
-    const payload = getValues()
-    await requestLogin({
-      email: payload.email,
-      password: payload.password
-    })
+    try {
+      const payload = getValues()
+      await requestLogin({
+        email: payload.email,
+        password: payload.password
+      })
 
-    window.location.href = '/'
+      window.location.href = '/'
+    } catch {
+      enqueue({
+        message: t('validation.email_password'),
+        startEnhancer: ({ size }) => <Delete size={size} />
+      })
+    }
   }
 
   const handleClickGoogleLogin = (e) => {
