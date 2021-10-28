@@ -22,6 +22,7 @@ const FeedbackApp = (props: any) => {
   const serviceName = service?.name ?? 'User Feedback'
   const router = useRouter()
 
+
   const showPrivateDescription = useMemo(() => {
     const isAlwaysPublic =
       router.pathname === '/invite/verify' ||
@@ -101,3 +102,4 @@ FeedbackApp.getInitialProps = async (context) => {
 }
 
 export default appWithTranslation(FeedbackApp)
+

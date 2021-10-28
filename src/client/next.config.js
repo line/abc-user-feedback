@@ -1,14 +1,9 @@
 /* */
 const path = require('path')
+const { i18n } = require('../../next-i18next.config')
 
 const nextConfig = {
-  i18n: {
-    defaultNS: 'common',
-    localeExtension: 'json',
-    defaultLocale: 'en',
-    locales: ['en', 'ja'],
-    localPath: process.cwd() + 'src/client/public/locale'
-  },
+  i18n,
   distDir: process.cwd() + '/.next',
   api: {
     externalResolver: true,

@@ -19,6 +19,7 @@ ENV NODE_ENV production
 
 COPY --from=builder /pre/public ./public
 COPY --from=builder /pre/locale ./locale
+COPY --from=builder /pre/next-i18next.config.js ./next-i18next.config.js
 COPY --from=builder /pre/dist ./dist
 COPY --from=builder /pre/template ./template
 COPY --from=builder /pre/.next ./.next
