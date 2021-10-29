@@ -14,7 +14,7 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Get()
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Owner)
   getService() {
     return this.adminService.getService()
   }

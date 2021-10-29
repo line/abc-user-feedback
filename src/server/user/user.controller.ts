@@ -67,13 +67,13 @@ export class UserController {
    * Admin
    */
   @Get('admin/user')
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Manager)
   async getUsers() {
     return this.userService.getUsers()
   }
 
   @Delete('admin/user/:userId')
-  @Roles(UserRole.Owner, UserRole.Admin)
+  @Roles(UserRole.Manager)
   async deleteUser(@Req() req: any, @Param('userId') userId: string) {
     const user = await this.userService.getUserById(userId)
 
@@ -85,7 +85,7 @@ export class UserController {
   }
 
   @Post('admin/user/role/:userRole')
-  @Roles(UserRole.Owner, UserRole.Admin)
+  @Roles(UserRole.Manager)
   @HttpCode(204)
   async userRoleBindingToAdmin(
     @Req() req: any,

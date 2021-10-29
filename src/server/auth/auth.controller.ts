@@ -150,7 +150,7 @@ export class AuthController {
   }
 
   @Post('admin/auth/mail/invitation')
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Manager)
   async sendInvitationMail(
     @Res() res: Response,
     @Body() data: InvitationMailDto
