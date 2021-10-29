@@ -19,7 +19,7 @@
   "action.delete": "削除",
   "action.cancel": "キャンセル",
   "action.save": "保存する",
-  "action.seach": "検索",
+  "action.search": "検索",
   "action.clear": "条件を削除",
 
   "action.password.set": "パスワードを設定",
