@@ -25,10 +25,9 @@ const AdminUserPage = () => {
   }
 
   return (
-    <AdminPageContainer title='Users'>
+    <AdminPageContainer title={t('title.member')}>
       <div className={styles.invite}>
         <div className={styles.invite__title}>
-          <h3>Roles</h3>
           <Button
             onClick={handleShowInviteUserModal}
             disabled={!config.email.enable}
@@ -36,23 +35,6 @@ const AdminUserPage = () => {
             {t('action.member.invite')}
             {!config.email.enable && ' (check smtp setting)'}
           </Button>
-        </div>
-        <div className={styles.role}>
-          <span className={styles.role__description}>
-            The level of access depends on the role
-          </span>
-          <ul className={styles.role__block}>
-            <li>
-              <b>Manager</b> has all privilege about service
-            </li>
-            <li>
-              <b>Admin</b> is admin but cannot setting service
-            </li>
-            <li>
-              <b>User</b> is default member use this service. user can response
-              to feedback and sharing or comment post
-            </li>
-          </ul>
         </div>
       </div>
       <UserListContainer />

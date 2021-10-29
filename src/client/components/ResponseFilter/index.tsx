@@ -2,13 +2,11 @@
 import React, { useMemo, useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { FlexGrid, FlexGridItem } from 'baseui/flex-grid'
-import sortBy from 'lodash/sortBy'
 import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
 import { DatePicker } from 'baseui/datepicker'
 import { Button } from 'baseui/button'
 import { FormControl } from 'baseui/form-control'
-import { Select } from 'baseui/select'
-import { Input } from 'baseui/input'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import { FormFieldType, IFeedback } from '@/types'
@@ -22,6 +20,7 @@ const ResponseFilter = (props: Props) => {
   const { feedback, onApply } = props
   const { control, register, setValue, watch, reset, getValues } = useForm()
 
+  const { t } = useTranslation()
   const handleApplyParams = () => {
     const values = getValues()
     const params = {}
@@ -121,8 +120,8 @@ const ResponseFilter = (props: Props) => {
         {renderFilterItems}
       </FlexGrid>
       <ButtonGroup size={ButtonGroupSize.compact}>
-        <Button onClick={handleApplyParams}>Search</Button>
-        <Button onClick={handleClearParams}>Clear</Button>
+        <Button onClick={handleApplyParams}>{t('action.search')}</Button>
+        <Button onClick={handleClearParams}>{t('action.clear')}</Button>
       </ButtonGroup>
     </div>
   )

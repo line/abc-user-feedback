@@ -15,18 +15,20 @@ interface Props {
 }
 
 const SideMenuContainer = (props: Props) => {
-  const { children, title, className, menus, heading } = props
+  const { children, title, className, menus = [], heading } = props
 
   return (
     <div className={cx(styles.container, className)}>
       <Header />
       <div className={styles.page}>
-        <div className={styles.page__side}>
-          <div className={styles.page__side__heading}>{heading}</div>
-          {menus}
-        </div>
-        <div className={styles.page__content}>
-          <h1 className={styles.page__title}>{title}</h1>
+        {menus.length >= 2 && (
+          <div className={styles.side}>
+            <div className={styles.heading}>{heading}</div>
+            {menus}
+          </div>
+        )}
+        <div className={styles.content}>
+          <h1 className={styles.title}>{title}</h1>
           {children}
         </div>
       </div>

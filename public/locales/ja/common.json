@@ -19,6 +19,8 @@
   "action.delete": "削除",
   "action.cancel": "キャンセル",
   "action.save": "保存する",
+  "action.seach": "検索",
+  "action.clear": "条件を削除",
 
   "action.password.set": "パスワードを設定",
   "action.login": "ログイン",
@@ -30,6 +32,7 @@
   "action.download.csv": "CSVにダウンロード",
   "action.member.invite": "ユーザーを追加する",
   "action.member.to.owner": "Owner変更",
+  "action.member.to.manager": "Manager変更",
   "action.member.to.guest": "ゲストに変更",
   "action.member.to.admin": "管理者に変更",
   "action.member.delete": "ユーザーを削除する",

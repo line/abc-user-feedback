@@ -58,8 +58,10 @@ const Header = () => {
               <DropDown overlay={renderAvatar} className={styles.dropdown}>
                 {user.role >= 2 && (
                   <>
-                    <Link href='/admin'>
-                      <a className={styles.dropdown__list}>Administration</a>
+                    <Link href={user.role >= 3 ? '/admin' : '/admin/user'}>
+                      <a className={styles.dropdown__list}>
+                        {user.role >= 3 ? 'Administration' : t('ユーザー管理')}
+                      </a>
                     </Link>
                     <Divider margin={0.5} />
                   </>

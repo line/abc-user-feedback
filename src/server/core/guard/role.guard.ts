@@ -16,6 +16,10 @@ export default class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
   matchRole(requiredRoles: Array<UserRole>, userRole: UserRole): boolean {
+    if (userRole === UserRole.Owner) {
+      return true
+    }
+
     return requiredRoles.some((role) => userRole >= role)
   }
 

@@ -80,9 +80,10 @@ export enum UserState {
 }
 
 export enum UserRole {
-  User,
-  Admin,
-  Owner = 2
+  User = 0,
+  Admin = 1,
+  Manager = 2,
+  Owner = 3
 }
 
 export enum EmailAuthType {

@@ -121,6 +121,12 @@ const UserListContainer = () => {
       } else if (user.role === 2) {
         return (
           <Tag effect='dark' type='info' className={styles.tag}>
+            Manger
+          </Tag>
+        )
+      } else if (user.role === 3) {
+        return (
+          <Tag effect='dark' type='info' className={styles.tag}>
             Owner
           </Tag>
         )
@@ -189,16 +195,23 @@ const UserListContainer = () => {
             {isUserDropDownVisible(user) && (
               <DropDown className={styles.user__menu} overlay={<MenuIcon />}>
                 <div className={styles.dropdown}>
+                  {currentUser?.role >= 3 && user.role !== 3 && (
+                    <div
+                      className={styles.dropdown__item}
+                      onClick={() => handleRoleBinding(3, user.id)}
+                    >
+                      {t('action.member.to.owner')}
+                    </div>
+                  )}
                   {currentUser?.role >= 2 && user.role !== 2 && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(2, user.id)}
                     >
-                      {t('action.member.to.owner')}
+                      {t('action.member.to.manager')}
                     </div>
                   )}
-                  {((currentUser?.role === 2 && user.role !== 1) ||
-                    (currentUser?.role === 1 && user.role === 0)) && (
+                  {currentUser?.role >= 2 && user.role !== 1 && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(1, user.id)}
@@ -206,8 +219,7 @@ const UserListContainer = () => {
                       {t('action.member.to.admin')}
                     </div>
                   )}
-                  {((currentUser?.role === 2 && user.role !== 0) ||
-                    (currentUser?.role === 1 && user.role !== 2)) && (
+                  {currentUser?.role === 2 && user.role !== 0 && (
                     <div
                       className={styles.dropdown__item}
                       onClick={() => handleRoleBinding(0, user.id)}
@@ -215,7 +227,7 @@ const UserListContainer = () => {
                       {t('action.member.to.guest')}
                     </div>
                   )}
-                  {currentUser?.role >= 1 && user.role !== 2 && (
+                  {currentUser?.role >= 2 && (
                     <div
                       className={cx(
                         styles.dropdown__item,

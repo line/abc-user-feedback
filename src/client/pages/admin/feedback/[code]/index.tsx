@@ -3,14 +3,13 @@ import React, { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete, ArrowUp, ArrowDown } from 'baseui/icon'
-import { Radio, RadioGroup } from 'baseui/radio'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
 import { TableBuilder, TableBuilderColumn } from 'baseui/table-semantic'
 import { Checkbox } from 'baseui/checkbox'
-import { ButtonGroup } from 'baseui/button-group'
+import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
 import { ListItem, ListItemLabel } from 'baseui/list'
 import { Button, KIND as ButtonKind, KIND, SIZE } from 'baseui/button'
 import { Pagination, SIZE as PaginationSize } from 'baseui/pagination'
@@ -44,7 +43,6 @@ const AdminFeedbackDetailPage = () => {
   const { enqueue } = useSnackbar()
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
   const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
-  const [showExportModal, toggleExportModal] = useToggle(false)
   const [showLatest, toggleShowLatest] = useToggle(true)
 
   const { t } = useTranslation()
@@ -52,7 +50,6 @@ const AdminFeedbackDetailPage = () => {
   const [selectedId, setSelectedId] = useState<Array<string>>([])
   const [responseDetail, setResponseDetail] = useState<any>()
   const [currentPage, setCurrentPage] = useState<number>(1)
-  const [exportType, setExportType] = useState<string>()
   const [params, setParams] = useState<any>({})
 
   const { user } = useUser()
@@ -74,6 +71,10 @@ const AdminFeedbackDetailPage = () => {
   )
 
   const [showExampleModal, setShowExampleModal] = useState<boolean>(false)
+
+  const responseData = useMemo(() => {
+    return response?.items ?? []
+  }, [response])
 
   const responseColumns = useMemo(() => {
     return sortBy(feedback?.fields ?? [], (o) => o?.order).map(
@@ -110,10 +111,10 @@ const AdminFeedbackDetailPage = () => {
     }
   }
 
-  const handleRequestExcelExport = async () => {
+  const handleRequestExcelExport = async (type: string) => {
     try {
       const code = router.query.code as string
-      await exportFeedbackResponse(code, exportType)
+      await exportFeedbackResponse(code, type)
     } catch (error) {
       enqueue({
         message: error.toString(),
@@ -184,7 +185,7 @@ const AdminFeedbackDetailPage = () => {
       <Header />
       <div className={styles.page}>
         <h1 className={styles.title}>
-          {user.role >= 2 && (
+          {user.role >= 3 && (
             <BackIcon
               className={styles.title__icon}
               onClick={handleClickBack}
@@ -193,7 +194,7 @@ const AdminFeedbackDetailPage = () => {
           <span className={styles.title__text}>
             {t('title.feeback.detail')}
           </span>
-          {user.role >= 2 && (
+          {user.role >= 3 && (
             <div className={styles.title__action}>
               <ButtonGroup>
                 <Button
@@ -237,7 +238,7 @@ const AdminFeedbackDetailPage = () => {
         </div>
         <div className={styles.page__list}>
           <TableBuilder
-            data={response?.items ?? []}
+            data={responseData}
             isLoading={isFeedbackLoading || isFeedbackResponseLoading}
             emptyMessage={<h1>No data</h1>}
           >
@@ -302,14 +303,20 @@ const AdminFeedbackDetailPage = () => {
           </TableBuilder>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             {user.role >= 2 && (
-              <Button
-                onClick={toggleExportModal}
-                kind={KIND.secondary}
-                size={SIZE.compact}
-                disabled={user.role < 2}
-              >
-                Export
-              </Button>
+              <ButtonGroup size={ButtonGroupSize.compact}>
+                <Button
+                  onClick={() => handleRequestExcelExport('xlsx')}
+                  disabled={!responseData.length}
+                >
+                  {t('action.download.excel')}
+                </Button>
+                <Button
+                  onClick={() => handleRequestExcelExport('csv')}
+                  disabled={!responseData.length}
+                >
+                  {t('action.download.csv')}
+                </Button>
+              </ButtonGroup>
             )}
             <div style={{ marginLeft: 'auto' }}>
               <Pagination
@@ -362,30 +369,6 @@ const AdminFeedbackDetailPage = () => {
         <ModalBody>
           <pre>{renderResponseDetail}</pre>
         </ModalBody>
-      </Modal>
-      <Modal
-        isOpen={showExportModal}
-        size={SIZE.default}
-        role={ROLE.dialog}
-        onClose={toggleExportModal}
-      >
-        <ModalHeader>Export data</ModalHeader>
-        <ModalBody>
-          <RadioGroup
-            name='Select format'
-            onChange={(e) => setExportType(e.target.value)}
-            value={exportType}
-          >
-            <Radio value='xlsx'>{t('action.download.excel')}</Radio>
-            <Radio value='csv'>{t('action.download.csv')}</Radio>
-          </RadioGroup>
-        </ModalBody>
-        <ModalFooter>
-          <ModalButton onClick={toggleExportModal} kind={ButtonKind.tertiary}>
-            Cancel
-          </ModalButton>
-          <ModalButton onClick={handleRequestExcelExport}>Export</ModalButton>
-        </ModalFooter>
       </Modal>
     </div>
   )

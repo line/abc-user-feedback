@@ -33,7 +33,7 @@ import { UserRole } from '@/types'
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Manager)
   @Post('admin/feedback')
   async createFeedback(@Req() req: any, @Body() data: CreateFeedbackDto) {
     const userId = req.user.id
@@ -42,7 +42,7 @@ export class FeedbackController {
     return feedback
   }
 
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Manager)
   @Delete('admin/feedback/:idOrCode')
   @HttpCode(204)
   async deleteFeedback(
@@ -88,7 +88,7 @@ export class FeedbackController {
     return feedback
   }
 
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Manager)
   @Patch('admin/feedback/:idOrCode')
   async updateFeedback(
     @Param('idOrCode') idOrCode,
@@ -126,7 +126,7 @@ export class FeedbackController {
     }
   }
 
-  @Roles(UserRole.Admin)
+  @Roles(UserRole.Manager)
   @Delete('admin/response/:responseId')
   async deleteReponse(
     @Res() res: Response,
@@ -136,7 +136,7 @@ export class FeedbackController {
     res.status(204).end()
   }
 
-  @Roles(UserRole.Owner)
+  @Roles(UserRole.Manager)
   @Get('admin/feedback/:idOrCode/response/export')
   async exportResponse(
     @Res() res: Response,

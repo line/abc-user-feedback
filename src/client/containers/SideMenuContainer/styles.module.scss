@@ -1,4 +1,4 @@
-@import "../../styles/mixin";
+@import '../../styles/mixin';
 
 .container {
   @include container;
@@ -16,11 +16,11 @@
       flex-direction: row;
     }
 
-    &__side {
+    .side {
       max-width: 100%;
       display: flex;
       flex-direction: column;
-      border: 1px solid rgba(34,36,38,0.1);
+      border: 1px solid rgba(34, 36, 38, 0.1);
       box-shadow: 0 1px 2px 0 rgb(34 36 38 / 10%);
       border-radius: 5px;
       margin-right: 16px;
@@ -33,25 +33,25 @@
         width: 15%;
       }
 
-      &__heading {
+      .heading {
         position: relative;
         display: block;
         padding: 12px;
-        font-weight: 500;
+        font-weight: bold;
         border-bottom: 1px solid var(--black1);
       }
     }
 
-    &__title {
-      margin-top: 0;
-    }
-
-    &__content {
+    .content {
       padding: 10px 20px;
       width: 100%;
 
       @media only screen and (min-width: 768px) {
         flex: 1;
+      }
+
+      .title {
+        margin-top: 0;
       }
     }
   }
