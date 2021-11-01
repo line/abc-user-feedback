@@ -277,9 +277,6 @@ const AdminFeedbackDetailPage = () => {
                 DateTime.fromISO(row.createdTime).toFormat('yyyy-MM-dd, HH:mm')
               }
             </TableBuilderColumn>
-            <TableBuilderColumn header='User'>
-              {(row) => row?.user?.profile?.nickname ?? '-'}
-            </TableBuilderColumn>
             {responseColumns.map((col) => (
               <TableBuilderColumn header={col} key={col}>
                 {(row) =>
