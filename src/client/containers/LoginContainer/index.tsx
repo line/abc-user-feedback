@@ -1,10 +1,11 @@
 /* */
 import React, { useState } from 'react'
-import { useFormContext } from 'react-hook-form'
+import { useFormContext, Controller } from 'react-hook-form'
 import { Check, Delete } from 'baseui/icon'
 import { useSnackbar } from 'baseui/snackbar'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import { Checkbox, LABEL_PLACEMENT } from 'baseui/checkbox'
 
 /* */
 import styles from './styles.module.scss'
@@ -34,9 +35,11 @@ const LoginContainer = () => {
   const [authMode, setAuthMode] = useState<AuthMode>(AuthMode.SignIn)
   const {
     register,
+    control,
     handleSubmit,
     trigger,
     getValues,
+    setValue,
     setError,
     formState,
     watch
@@ -83,7 +86,8 @@ const LoginContainer = () => {
       const payload = getValues()
       await requestLogin({
         email: payload.email,
-        password: payload.password
+        password: payload.password,
+        rememberEmail: payload.rememberEmail
       })
 
       window.location.href = '/'
@@ -181,15 +185,33 @@ const LoginContainer = () => {
                 className={styles.email__form__input}
                 {...register('password')}
               />
-              {authMode === AuthMode.SignIn && (
-                <Button
-                  type='text'
-                  className={styles.email__form__forgot}
-                  onClick={toggleShowFindPasswordModal}
-                >
-                  {t('action.password.forgot')}
-                </Button>
-              )}
+              <div className={styles.email__form__action}>
+                <Controller
+                  name='rememberEmail'
+                  control={control}
+                  render={({ field: { onChange, ...rest } }) => (
+                    <Checkbox
+                      {...rest}
+                      checked={getValues('rememberEmail')}
+                      labelPlacement={LABEL_PLACEMENT.right}
+                      onChange={(e: any) => {
+                        setValue('rememberEmail', e.target.checked)
+                      }}
+                    >
+                      {t('action.remember_email')}
+                    </Checkbox>
+                  )}
+                />
+                {authMode === AuthMode.SignIn && (
+                  <Button
+                    type='text'
+                    className={styles.email__form__forgot}
+                    onClick={toggleShowFindPasswordModal}
+                  >
+                    {t('action.password.forgot')}
+                  </Button>
+                )}
+              </div>
               <ErrorMessage errors={errors} name='password' />
             </FormItem>
             {authMode === AuthMode.SignUp && (

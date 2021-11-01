@@ -40,8 +40,18 @@ export class AuthController {
 
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
-  async login(@Req() req, @Res() res: Response) {
+  async login(@Req() req, @Res() res: Response, @Body() data) {
     const user = req.user
+
+    const { email, rememberEmail } = data
+
+    if (rememberEmail) {
+      res.cookie('loginMail', email)
+    } else {
+      res.cookie('loginMail', '', {
+        maxAge: 0
+      })
+    }
 
     const { accessToken, refreshToken } =
       await this.authService.generateAuthToken({

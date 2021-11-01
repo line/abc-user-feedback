@@ -77,6 +77,7 @@ const SetupPage = () => {
 
 export async function getServerSideProps({ query }) {
   const { service } = query
+  
 
   const props = {
     ...(await serverSideTranslations(service.locale, ['common']))

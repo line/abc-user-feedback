@@ -20,7 +20,8 @@ const LoginModal = (props: Props) => {
 
   const schema = yup.object().shape({
     email: yup.string().email(t('validation.email')).required(),
-    password: yup.string().required()
+    password: yup.string().required(),
+    rememberEmail: yup.boolean()
   })
 
   const methods = useForm({

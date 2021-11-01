@@ -9,15 +9,24 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 /* */
 import { LoginContainer } from '~/containers'
 
-const LoginPage = () => {
+interface Props {
+  loginEmail?: string
+}
+
+const LoginPage = (props: Props) => {
   const { t } = useTranslation()
   const schema = yup.object().shape({
     email: yup.string().email(t('validation.email')).required(),
-    password: yup.string().required()
+    password: yup.string().required(),
+    rememberEmail: yup.boolean()
   })
 
   const methods = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    defaultValues: {
+      rememberEmail: !!props.loginEmail,
+      email: props.loginEmail
+    }
   })
 
   return (
@@ -27,10 +36,11 @@ const LoginPage = () => {
   )
 }
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps = async ({ req, query }) => {
   return {
     props: {
-      ...(await serverSideTranslations(query.service.locale, ['common']))
+      ...(await serverSideTranslations(query.service.locale, ['common'])),
+      loginEmail: req.cookies?.loginMail
     }
   }
 }
