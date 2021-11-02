@@ -24,8 +24,8 @@ const LoginPage = (props: Props) => {
   const methods = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      rememberEmail: !!props.loginEmail,
-      email: props.loginEmail
+      rememberEmail: !!props?.loginEmail,
+      email: props?.loginEmail
     }
   })
 
@@ -40,7 +40,7 @@ export const getServerSideProps = async ({ req, query }) => {
   return {
     props: {
       ...(await serverSideTranslations(query.service.locale, ['common'])),
-      loginEmail: req.cookies?.loginMail
+      loginEmail: req?.cookies?.loginMail ?? ''
     }
   }
 }

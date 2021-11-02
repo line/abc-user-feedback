@@ -223,7 +223,7 @@ const AdminFeedbackDetailPage = () => {
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
-          {user.role >= 2 && (
+          {user.role >= 3 && (
             <div style={{ marginLeft: 'auto' }}>
               <Button
                 onClick={toggleDeleteResponseModal}
@@ -242,20 +242,22 @@ const AdminFeedbackDetailPage = () => {
             isLoading={isFeedbackLoading || isFeedbackResponseLoading}
             emptyMessage={<h1>No data</h1>}
           >
-            <TableBuilderColumn
-              overrides={{
-                TableHeadCell: { style: { width: '1%' } },
-                TableBodyCell: { style: { width: '1%' } }
-              }}
-            >
-              {(row) => (
-                <Checkbox
-                  name={row.id}
-                  checked={selectedId.includes(row.id)}
-                  onChange={handleToggleCheckbox}
-                />
-              )}
-            </TableBuilderColumn>
+            {user.role >= 3 && (
+              <TableBuilderColumn
+                overrides={{
+                  TableHeadCell: { style: { width: '1%' } },
+                  TableBodyCell: { style: { width: '1%' } }
+                }}
+              >
+                {(row) => (
+                  <Checkbox
+                    name={row.id}
+                    checked={selectedId.includes(row.id)}
+                    onChange={handleToggleCheckbox}
+                  />
+                )}
+              </TableBuilderColumn>
+            )}
             <TableBuilderColumn
               header='no.'
               numeric

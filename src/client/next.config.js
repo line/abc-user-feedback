@@ -27,6 +27,9 @@ const nextConfig = {
     config.resolve.alias['~'] = path.join(__dirname)
     config.resolve.alias['@'] = path.join(__dirname, '../')
 
+    config.externals = config.externals || {}
+    config.externals['styletron-server'] = 'styletron-server'
+
     /**
      * Modules
      */

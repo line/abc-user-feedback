@@ -14,14 +14,13 @@ import { createQueryClient } from '~/service/queryClient'
 import { UserProvider } from '~/hooks/useUser'
 import { AppProvider } from '~/hooks/useApp'
 import { PrivateBlockContainer } from '~/containers'
-import { styletron } from '~/styletron'
+import { styletron, debug } from '~/styletron'
 
 const FeedbackApp = (props: any) => {
   const { Component, pageProps, currentUser, service, config, ...rest } = props
   const [queryClient] = useState(() => createQueryClient())
   const serviceName = service?.name ?? 'User Feedback'
   const router = useRouter()
-
 
   const showPrivateDescription = useMemo(() => {
     const isAlwaysPublic =
@@ -63,7 +62,7 @@ const FeedbackApp = (props: any) => {
           key='description'
         />
       </Head>
-      <StyletronProvider value={styletron}>
+      <StyletronProvider value={styletron} debug={debug} debugAfterHydration>
         <BaseProvider theme={LightTheme}>
           <SnackbarProvider
             placement={PLACEMENT.topRight}
@@ -102,4 +101,3 @@ FeedbackApp.getInitialProps = async (context) => {
 }
 
 export default appWithTranslation(FeedbackApp)
-

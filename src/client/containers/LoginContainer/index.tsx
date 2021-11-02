@@ -192,13 +192,19 @@ const LoginContainer = () => {
                   render={({ field: { onChange, ...rest } }) => (
                     <Checkbox
                       {...rest}
+                      overrides={{
+                        Label: {
+                          style: ({ $theme }) =>
+                            $theme.typography.MonoLabelSmall
+                        }
+                      }}
                       checked={getValues('rememberEmail')}
                       labelPlacement={LABEL_PLACEMENT.right}
                       onChange={(e: any) => {
                         setValue('rememberEmail', e.target.checked)
                       }}
                     >
-                      {t('action.remember_email')}
+                      <span>{t('action.remember_email')}</span>
                     </Checkbox>
                   )}
                 />
