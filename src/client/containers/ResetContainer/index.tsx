@@ -29,7 +29,7 @@ const ResetPasswordPage = ({ code }) => {
       .string()
       .oneOf(
         [yup.ref('password'), null],
-        t('validation.password.reset_confirm')
+        t('validation.password.confirm')
       )
   })
 

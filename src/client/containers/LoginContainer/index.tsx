@@ -67,7 +67,7 @@ const LoginContainer = () => {
     if (payload.password !== payload.passwordConfirm) {
       setError('passwordConfirm', {
         type: 'manual',
-        message: t('validation.password.reset_confirm')
+        message: t('validation.password.confirm')
       })
     } else {
       await requestSignUp({

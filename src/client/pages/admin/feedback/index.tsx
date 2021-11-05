@@ -86,13 +86,12 @@ const AdminFeedbackPage = () => {
   )
 }
 
-export const getServerSideProps = async ({ locale = 'en' }) => {
+export const getServerSideProps = async ({ query }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common']))
+      ...(await serverSideTranslations(query.service.locale, ['common']))
     }
   }
 }
-
 
 export default AdminFeedbackPage

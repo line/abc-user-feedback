@@ -1,18 +1,22 @@
 {
+  "menu.administration": "Administration",
   "menu.account": "Account",
+  "menu.password.change": "Change password",
   "menu.logout": "Logout",
+  "menu.member": "Members",
 
   "placeholder.email": "Email",
   "placeholder.password": "Password",
-  "placeholder.password.reset": "Including 8 or more letters, numbers, and special characters",
+  "placeholder.password.rule": "Including 8 or more letters, numbers, and special characters",
   "placeholder.password.confirm": "Password confirm",
+  "placeholder.password.current": "Current password",
   "placeholder.select.role": "Select role",
 
   "validation.email": "Check your email",
   "validation.email.domain": "Check your email",
   "validation.email_password": "Check yout email/password",
-  "validation.password.reset": "The password must contain at least 8 letters of English, numbers, and special characters",
-  "validation.password.reset_confirm": "Password not correct",
+  "validation.password": "The password must contain at least 8 letters of English, numbers, and special characters",
+  "validation.password.confirm": "Password not correct",
   "validation.password.nicname": "Check your nickname",
   "validation.select.role": "Select role",
 
@@ -37,20 +41,27 @@
   "action.member.to.admin": "To admin",
   "action.member.delete": "Delete member",
   "action.send.mail.invitation": "Send invitation",
+  "action.account.delete": "Delete account",
 
   "label.email": "Email",
+  "label.password_current": "Current password",
   "label.password_new": "New password",
   "label.password_confirm": "Confirm new password",
+  "label.setting.user": "User setting",
 
   "snackbar.success.send.mail.invitation": "Success send invitation mail",
   "snackbar.success.settings.profile": "Success save profile",
+  "snackbar.success.change.password": "Success save password",
 
   "description.password.reset": "Send reset password email.\n(it expired after 24 hours)",
 
   "title.password.reset": "Reset password",
+  "title.feeback.list": "Feedback list",
   "title.feeback.detail": "Feedback detail",
   "title.member": "Member",
   "title.settings.profile": "Profile",
+  "title.account.delete": "Delete account",
 
-  "confirm.delete.member": "Delete this member?"
+  "confirm.delete.member": "Delete this member?",
+  "confirm.account.delete": "Delete this account?"
 }

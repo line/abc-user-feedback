@@ -60,7 +60,9 @@ const Header = () => {
                   <>
                     <Link href={user.role >= 3 ? '/admin' : '/admin/user'}>
                       <a className={styles.dropdown__list}>
-                        {user.role >= 3 ? 'Administration' : t('ユーザー管理')}
+                        {user.role >= 3
+                          ? t('menu.administration')
+                          : t('menu.member')}
                       </a>
                     </Link>
                     <Divider margin={0.5} />

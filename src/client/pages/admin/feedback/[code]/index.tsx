@@ -174,7 +174,7 @@ const AdminFeedbackDetailPage = () => {
         onClick={toggleShowLatest}
         style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
       >
-        <span>date</span>
+        <span>Date</span>
         {showLatest ? <ArrowUp size={18} /> : <ArrowDown size={18} />}
       </div>
     )
@@ -259,7 +259,7 @@ const AdminFeedbackDetailPage = () => {
               </TableBuilderColumn>
             )}
             <TableBuilderColumn
-              header='no.'
+              header='No.'
               numeric
               overrides={{
                 TableHeadCell: { style: { width: '20px' } },

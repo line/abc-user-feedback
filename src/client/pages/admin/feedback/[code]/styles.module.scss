@@ -1,4 +1,4 @@
-@import "../../../../styles/mixin";
+@import '../../../../styles/mixin';
 
 .container {
   @include container;
@@ -56,6 +56,16 @@
     &__list {
       margin-bottom: 16px;
       padding: 10px 0;
+    }
+  }
+}
+
+table {
+  thead {
+    tr {
+      th {
+        text-transform: capitalize;
+      }
     }
   }
 }

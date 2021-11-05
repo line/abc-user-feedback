@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { Button } from 'baseui/button'
 import { Input } from 'baseui/input'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
@@ -15,19 +16,24 @@ import { useUser } from '~/hooks'
 import { RequireLoginPage, AccountSettingContainer } from '~/containers'
 import { FormItem, Divider, ErrorMessage } from '~/components'
 import { changePassword } from '~/service/user'
-
-const schema = yup.object().shape({
-  currentPassword: yup.string().required(),
-  newPassword: yup.string().required(),
-  newPasswordConfirm: yup
-    .string()
-    .oneOf([yup.ref('newPassword'), null], 'passwords must match')
-    .required()
-})
+import { PASSWORD_REGEXP } from '@/constant'
 
 const SecurityPage = () => {
   const { user } = useUser()
   const { enqueue } = useSnackbar()
+  const { t } = useTranslation()
+
+  const schema = yup.object().shape({
+    currentPassword: yup.string().required(),
+    newPassword: yup
+      .string()
+      .matches(PASSWORD_REGEXP, t('validation.password'))
+      .required(),
+    newPasswordConfirm: yup
+      .string()
+      .oneOf([yup.ref('newPassword'), null], t('validation.password.confirm'))
+      .required()
+  })
 
   const { register, handleSubmit, formState, reset } = useForm({
     resolver: yupResolver(schema)
@@ -47,7 +53,7 @@ const SecurityPage = () => {
       })
 
       enqueue({
-        message: 'Success change password',
+        message: t('snackbar.success.change.password'),
         startEnhancer: ({ size }) => <Check size={size} />
       })
       reset()
@@ -60,26 +66,38 @@ const SecurityPage = () => {
   }
 
   return (
-    <AccountSettingContainer title='Change Password'>
+    <AccountSettingContainer title={t('menu.password.change')}>
       <div className={styles.page}>
         <form
           className={styles.form}
           onSubmit={handleSubmit(handleChangePassword)}
         >
-          <FormItem label='Current password'>
-            <Input {...register('currentPassword')} type='password' />
+          <FormItem label={t('label.password_current')}>
+            <Input
+              {...register('currentPassword')}
+              type='password'
+              placeholder={t('placeholder.password.current')}
+            />
             <ErrorMessage errors={errors} name='currentPassword' />
           </FormItem>
-          <FormItem label='New password'>
-            <Input {...register('newPassword')} type='password' />
+          <FormItem label={t('label.password_new')}>
+            <Input
+              {...register('newPassword')}
+              type='password'
+              placeholder={t('placeholder.password.rule')}
+            />
             <ErrorMessage errors={errors} name='newPassword' />
           </FormItem>
-          <FormItem label='Confirm new Password'>
-            <Input {...register('newPasswordConfirm')} type='password' />
+          <FormItem label={t('label.password_confirm')}>
+            <Input
+              {...register('newPasswordConfirm')}
+              type='password'
+              placeholder={t('placeholder.password.confirm')}
+            />
             <ErrorMessage errors={errors} name='newPasswordConfirm' />
           </FormItem>
           <Button type='submit' disabled={!isDirty}>
-            Save
+            {t('action.save')}
           </Button>
         </form>
         <Divider />
@@ -88,11 +106,10 @@ const SecurityPage = () => {
   )
 }
 
-
-export const getServerSideProps = async ({ locale = 'en' }) => {
+export const getServerSideProps = async ({ query }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common']))
+      ...(await serverSideTranslations(query.service.locale, ['common']))
     }
   }
 }
