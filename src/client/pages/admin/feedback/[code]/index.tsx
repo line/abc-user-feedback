@@ -271,7 +271,9 @@ const AdminFeedbackDetailPage = () => {
             <TableBuilderColumn
               header={renderDateHeader}
               overrides={{
-                TableHeadCell: { style: { width: '200px' } },
+                TableHeadCell: {
+                  style: { width: '200px', textTransform: 'capitalize' }
+                },
                 TableBodyCell: { style: { width: '200px' } }
               }}
             >
@@ -280,7 +282,16 @@ const AdminFeedbackDetailPage = () => {
               }
             </TableBuilderColumn>
             {responseColumns.map((col) => (
-              <TableBuilderColumn header={col} key={col}>
+              <TableBuilderColumn
+                header={col}
+                key={col}
+                overrides={{
+                  TableHeadCell: {
+                    style: { textTransform: 'capitalize' }
+                  },
+                  TableBodyCell: { style: { width: '200px' } }
+                }}
+              >
                 {(row) =>
                   row.feedbackResponseFields.find(
                     (field) => field.feedbackField.name === col
