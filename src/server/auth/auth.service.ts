@@ -511,11 +511,11 @@ export class AuthService {
     await this.emailAuthRepository.save(emailAuth)
 
     const isCustomTemplateExist = await checkFileExists(
-      process.cwd() + '/app/etc/signIn.hbs'
+      process.cwd() + '/etc/signIn.hbs'
     )
 
     const template = isCustomTemplateExist
-      ? process.cwd() + '/app/etc/signIn'
+      ? process.cwd() + '/etc/signIn'
       : process.cwd() + '/template/signIn'
 
     await this.mailerService.sendMail({
@@ -561,11 +561,11 @@ export class AuthService {
     const link = `${domain}/reset/password?code=${randomCode}`
 
     const isCustomTemplateExist = await checkFileExists(
-      process.cwd() + '/app/etc/resetPassword.hbs'
+      process.cwd() + '/etc/resetPassword.hbs'
     )
 
     const template = isCustomTemplateExist
-      ? process.cwd() + '/app/etc/resetPassword'
+      ? process.cwd() + '/etc/resetPassword'
       : process.cwd() + '/template/resetPassword'
 
     await this.mailerService.sendMail({
@@ -627,11 +627,11 @@ export class AuthService {
     const link = `${domain}/invite/verify?code=${randomCode}`
 
     const isCustomTemplateExist = await checkFileExists(
-      process.cwd() + '/app/etc/invitation.hbs'
+      process.cwd() + '/etc/invitation.hbs'
     )
 
     const template = isCustomTemplateExist
-      ? process.cwd() + '/app/etc/invitation'
+      ? process.cwd() + '/invitation'
       : process.cwd() + '/template/invitation'
 
     await this.mailerService.sendMail({
