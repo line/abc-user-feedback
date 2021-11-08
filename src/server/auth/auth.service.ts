@@ -13,6 +13,7 @@ import { nanoid } from 'nanoid'
 import { google } from 'googleapis'
 import * as jwt from 'jsonwebtoken'
 import qs from 'querystring'
+import * as fs from 'fs'
 import * as bcrypt from 'bcrypt'
 import { DateTime } from 'luxon'
 
@@ -26,6 +27,7 @@ import {
   SendResetPasswordMailDto,
   SignUpDto
 } from './dto'
+import { checkFileExists } from '#/utils/file'
 import UserProfile from '#/core/entity/userProfile.entity'
 import { UserService } from '#/user/user.service'
 import { EmailAuthType } from '@/types'
@@ -508,6 +510,14 @@ export class AuthService {
 
     await this.emailAuthRepository.save(emailAuth)
 
+    const isCustomTemplateExist = await checkFileExists(
+      process.cwd() + '/app/etc/signIn.hbs'
+    )
+
+    const template = isCustomTemplateExist
+      ? process.cwd() + '/app/etc/signIn'
+      : process.cwd() + '/template/signIn'
+
     await this.mailerService.sendMail({
       to: email,
       subject: `Register to user feedback`,
@@ -515,7 +525,7 @@ export class AuthService {
         link: `${domain}/sign-in/verify?code=${randomCode}`,
         purpose: 'Register'
       },
-      template: process.cwd() + '/template/signIn'
+      template
     })
   }
 
@@ -550,13 +560,21 @@ export class AuthService {
 
     const link = `${domain}/reset/password?code=${randomCode}`
 
+    const isCustomTemplateExist = await checkFileExists(
+      process.cwd() + '/app/etc/resetPassword.hbs'
+    )
+
+    const template = isCustomTemplateExist
+      ? process.cwd() + '/app/etc/resetPassword'
+      : process.cwd() + '/template/resetPassword'
+
     await this.mailerService.sendMail({
       to: email,
       subject: `User feedback Reset password`,
       context: {
         link
       },
-      template: process.cwd() + '/template/resetPassword'
+      template
     })
   }
 
@@ -608,6 +626,14 @@ export class AuthService {
 
     const link = `${domain}/invite/verify?code=${randomCode}`
 
+    const isCustomTemplateExist = await checkFileExists(
+      process.cwd() + '/app/etc/invitation.hbs'
+    )
+
+    const template = isCustomTemplateExist
+      ? process.cwd() + '/app/etc/invitation'
+      : process.cwd() + '/template/invitation'
+
     await this.mailerService.sendMail({
       to: email,
       subject: `User Feedback Invitation`,
@@ -615,7 +641,7 @@ export class AuthService {
         link,
         service
       },
-      template: process.cwd() + '/template/invitation'
+      template
     })
   }
 }
