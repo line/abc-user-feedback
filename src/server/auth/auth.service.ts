@@ -631,7 +631,7 @@ export class AuthService {
     )
 
     const template = isCustomTemplateExist
-      ? process.cwd() + '/invitation'
+      ? process.cwd() + '/etc/invitation'
       : process.cwd() + '/template/invitation'
 
     await this.mailerService.sendMail({
