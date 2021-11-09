@@ -17,9 +17,11 @@ const MainPage = () => {
 }
 
 export const getServerSideProps = async ({ query }) => {
+  const locale = query?.service?.locale || 'en'
+
   return {
     props: {
-      ...(await serverSideTranslations(query.service.locale, ['common']))
+      ...(await serverSideTranslations(locale, ['common']))
     }
   }
 }

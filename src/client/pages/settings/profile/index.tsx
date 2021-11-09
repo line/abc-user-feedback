@@ -158,10 +158,11 @@ const ProfilePage = () => {
 }
 
 export const getServerSideProps = async ({ query }) => {
-  const { service } = query
+  const locale = query?.service?.locale || 'en'
+
   return {
     props: {
-      ...(await serverSideTranslations(service.locale, ['common']))
+      ...(await serverSideTranslations(locale, ['common']))
     }
   }
 }
