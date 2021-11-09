@@ -41,6 +41,7 @@ const EditFeedbackPage = () => {
       title: '',
       allowAnonymous: false,
       description: '',
+      code: '',
       fields: []
     }
   })
@@ -65,16 +66,17 @@ const EditFeedbackPage = () => {
       const result = await trigger()
       if (result) {
         const values = getValues()
-        await updateFeedback(code, {
+        const data = await updateFeedback(code, {
           title: values.title,
-          description: values.description
+          description: values.description,
+          code: values.code
         })
 
         enqueue({
           message: 'Success update feedback',
           startEnhancer: ({ size }) => <Check size={size} />
         })
-        await router.push(`/admin/feedback/${code}`)
+        await router.push(`/admin/feedback/${data?.code}`)
       }
     } catch (e) {
       const { original } = parseValidateError(e)

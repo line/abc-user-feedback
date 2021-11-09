@@ -75,9 +75,14 @@ export class FeedbackService {
       throw new NotFoundException()
     }
 
+    feedback.title = data.title
+    feedback.description = data.description
+    feedback.code = data.code
+
     await this.feedbackRepository.update(feedback.id, {
-      title: data.title,
-      description: data.description
+      title: feedback.title,
+      description: feedback.description,
+      code: feedback.code
     })
 
     return feedback

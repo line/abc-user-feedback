@@ -1,5 +1,8 @@
 /* */
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator'
+import { IsString, IsNotEmpty, IsOptional, Matches } from 'class-validator'
+
+/* */
+import { FEEDBACK_CODE_REGEXP } from '@/constant'
 
 export class UpdateFeedbackDto {
   @IsString()
@@ -9,4 +12,8 @@ export class UpdateFeedbackDto {
   @IsString()
   @IsOptional()
   description: string = ''
+
+  @IsString()
+  @Matches(FEEDBACK_CODE_REGEXP)
+  code: string
 }
