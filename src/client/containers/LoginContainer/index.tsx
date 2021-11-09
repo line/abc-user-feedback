@@ -1,5 +1,5 @@
 /* */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import { Check, Delete } from 'baseui/icon'
 import { useSnackbar } from 'baseui/snackbar'
@@ -171,19 +171,37 @@ const LoginContainer = () => {
           </span>
           <div className={styles.email__form}>
             <FormItem label='Email'>
-              <Input
-                className={styles.email__form__input}
-                placeholder={t('placeholder.email')}
-                {...register('email')}
+              <Controller
+                name='email'
+                control={control}
+                render={({ field: { onChange, ...rest } }) => (
+                  <Input
+                    {...rest}
+                    className={styles.email__form__input}
+                    placeholder={t('placeholder.email')}
+                    onChange={(e: any) => {
+                      onChange(e.target.value?.replace(/\s+/g, ''))
+                    }}
+                  />
+                )}
               />
               <ErrorMessage errors={errors} name='email' />
             </FormItem>
             <FormItem label='Password'>
-              <Input
-                placeholder={t('placeholder.password')}
-                type='password'
-                className={styles.email__form__input}
-                {...register('password')}
+              <Controller
+                name='password'
+                control={control}
+                render={({ field: { onChange, ...rest } }) => (
+                  <Input
+                    {...rest}
+                    type='password'
+                    className={styles.email__form__input}
+                    placeholder={t('placeholder.password')}
+                    onChange={(e: any) => {
+                      onChange(e.target.value?.replace(/\s+/g, ''))
+                    }}
+                  />
+                )}
               />
               <div className={styles.email__form__action}>
                 <Controller
