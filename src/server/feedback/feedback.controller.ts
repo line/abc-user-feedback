@@ -212,7 +212,6 @@ export class FeedbackController {
     if (!feedback.allowAnonymous && !req.user) {
       throw new UnauthorizedException()
     }
-
     return this.feedbackService.createResponse(data, feedback, req.user?.id)
   }
 }

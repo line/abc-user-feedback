@@ -182,6 +182,7 @@ export class FeedbackService {
     await queryRunner.connect()
     await queryRunner.startTransaction()
 
+    let response = null
     try {
       await getManager().transaction(async (entityManager) => {
         const feedbackResponse = new FeedbackResponse()
@@ -201,7 +202,7 @@ export class FeedbackService {
 
         await entityManager.save(FeedbackResponseField, responseFields)
 
-        return feedbackResponse
+        response = feedbackResponse
       })
     } catch (err) {
       await queryRunner.rollbackTransaction()
@@ -209,6 +210,8 @@ export class FeedbackService {
     } finally {
       await queryRunner.release()
     }
+
+    return response
   }
 
   async getResponses(
