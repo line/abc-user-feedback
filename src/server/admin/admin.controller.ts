@@ -1,5 +1,6 @@
 /* */
 import { Body, Controller, Get, Put, UseGuards } from '@nestjs/common'
+import { Logger, Req } from '@nestjs/common'
 
 /* */
 import { AdminService } from './admin.service'
@@ -11,11 +12,13 @@ import { UserRole } from '@/types'
 @Controller('api/v1/admin/service')
 @UseGuards(RoleGuard)
 export class AdminController {
+  private readonly logger = new Logger(AdminController.name)
+
   constructor(private readonly adminService: AdminService) {}
 
   @Get()
   @Roles(UserRole.Owner)
-  getService() {
+  getService(@Req() req) {
     return this.adminService.getService()
   }
 

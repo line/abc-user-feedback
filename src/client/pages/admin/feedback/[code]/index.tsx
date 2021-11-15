@@ -294,16 +294,19 @@ const AdminFeedbackDetailPage = () => {
                       width: '200px',
                       overflow: 'hidden',
                       maxWidth: '200px',
-                      textOverflow: 'ellipsis'
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap'
                     }
                   }
                 }}
               >
-                {(row) =>
-                  row.feedbackResponseFields.find(
+                {(row) => {
+                  const content = row.feedbackResponseFields.find(
                     (field) => field.feedbackField.name === col
                   )?.value
-                }
+
+                  return <span title={content}>{content}</span>
+                }}
               </TableBuilderColumn>
             ))}
             <TableBuilderColumn>
