@@ -27,15 +27,13 @@ const AdminUserPage = () => {
   return (
     <AdminPageContainer title={t('title.member')}>
       <div className={styles.invite}>
-        <div className={styles.invite__title}>
-          <Button
-            onClick={handleShowInviteUserModal}
-            disabled={!config.email.enable}
-          >
-            {t('action.member.invite')}
-            {!config.email.enable && ' (check smtp setting)'}
-          </Button>
-        </div>
+        <Button
+          onClick={handleShowInviteUserModal}
+          disabled={!config.email.enable}
+        >
+          {t('action.member.invite')}
+          {!config.email.enable && ' (check smtp setting)'}
+        </Button>
       </div>
       <UserListContainer />
       <InviteUserModal

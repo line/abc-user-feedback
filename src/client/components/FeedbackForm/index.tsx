@@ -147,10 +147,12 @@ const FeedbackForm = (props: Props) => {
       <FormItem label='Form Title' required>
         <Input {...register('title')} />
       </FormItem>
-      <FormItem label='Code' required>
-        <Input {...register('code')} />
-        <ErrorMessage errors={errors} name='code' />
-      </FormItem>
+      {isEdit && (
+        <FormItem label='Code' required>
+          <Input {...register('code')} />
+          <ErrorMessage errors={errors} name='code' />
+        </FormItem>
+      )}
       <FormItem
         label='Allow anonymous'
         description='If you set it true, can response to this feedback without auth check'

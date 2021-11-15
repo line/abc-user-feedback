@@ -102,6 +102,7 @@ export interface ClientConfig {
   app: {
     mode: AppMode
     useNickname: boolean
+    useDeleteAccount: boolean
   }
   email: {
     enable: boolean

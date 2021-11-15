@@ -23,7 +23,8 @@ export class ViewService {
     const config = {
       app: {
         mode: AppMode.Modal,
-        useNickname: true
+        useNickname: true,
+        useDeleteAccount: true
       },
       email: {
         enable: false
@@ -44,6 +45,10 @@ export class ViewService {
 
     if (!this.configService.get<boolean>('app.useNickname')) {
       config.app.useNickname = false
+    }
+
+    if (!this.configService.get<boolean>('app.useDeleteAccount')) {
+      config.app.useDeleteAccount = false
     }
 
     if (

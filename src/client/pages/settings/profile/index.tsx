@@ -119,11 +119,14 @@ const ProfilePage = () => {
         <div className={styles.account}>
           <FormItem
             label={t('title.account.delete')}
-            description='delete all your information'
+            description={
+              config.app.useDeleteAccount ? 'delete all your information' : ''
+            }
           >
             <Button
               className={styles.account__delete}
               onClick={setToggleDeleteModal}
+              disabled={!config.app.useDeleteAccount}
             >
               {t('action.account.delete')}
             </Button>

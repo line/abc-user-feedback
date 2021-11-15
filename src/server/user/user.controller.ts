@@ -12,8 +12,10 @@ import {
   HttpCode,
   UnauthorizedException,
   UseGuards,
-  Res
+  Res,
+  MethodNotAllowedException
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 
 /* */
@@ -30,7 +32,8 @@ import { AuthService } from '#/auth/auth.service'
 export class UserController {
   constructor(
     private readonly userService: UserService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService
   ) {}
 
   @Get('user/current')
@@ -54,6 +57,10 @@ export class UserController {
   @Delete('user')
   @HttpCode(204)
   async deleteSelfUser(@Req() req: any, @Res() res: Response) {
+    if (!this.configService.get<boolean>('app.useDeleteAccount')) {
+      throw new MethodNotAllowedException()
+    }
+
     if (!req.user) {
       throw new UnauthorizedException()
     }

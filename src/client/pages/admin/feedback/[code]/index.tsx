@@ -289,7 +289,14 @@ const AdminFeedbackDetailPage = () => {
                   TableHeadCell: {
                     style: { textTransform: 'capitalize' }
                   },
-                  TableBodyCell: { style: { width: '200px' } }
+                  TableBodyCell: {
+                    style: {
+                      width: '200px',
+                      overflow: 'hidden',
+                      maxWidth: '200px',
+                      textOverflow: 'ellipsis'
+                    }
+                  }
                 }}
               >
                 {(row) =>

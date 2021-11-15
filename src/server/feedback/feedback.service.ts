@@ -178,24 +178,37 @@ export class FeedbackService {
   ) {
     this.validateResponse(data, feedback.fields)
 
-    const feedbackResponse = new FeedbackResponse()
-    feedbackResponse.feedbackId = feedback.id
-    feedbackResponse.userId = userId
+    const queryRunner = await getConnection().createQueryRunner()
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
 
-    await this.feedbackResponseRepository.save(feedbackResponse)
+    try {
+      await getManager().transaction(async (entityManager) => {
+        const feedbackResponse = new FeedbackResponse()
+        feedbackResponse.feedbackId = feedback.id
+        feedbackResponse.userId = userId
 
-    const responseFields = feedback.fields.map((field) => {
-      const feedbackResponseField = new FeedbackResponseField()
-      feedbackResponseField.feedbackResponseId = feedbackResponse.id
-      feedbackResponseField.feedbackFieldId = field.id
-      feedbackResponseField.value = data[field.name]
+        await entityManager.save(FeedbackResponse, feedbackResponse)
 
-      return feedbackResponseField
-    })
+        const responseFields = feedback.fields.map((field) => {
+          const feedbackResponseField = new FeedbackResponseField()
+          feedbackResponseField.feedbackResponseId = feedbackResponse.id
+          feedbackResponseField.feedbackFieldId = field.id
+          feedbackResponseField.value = data[field.name]
 
-    await this.feedbackResponseFieldRepository.save(responseFields)
+          return feedbackResponseField
+        })
 
-    return feedbackResponse
+        await entityManager.save(FeedbackResponseField, responseFields)
+
+        return feedbackResponse
+      })
+    } catch (err) {
+      await queryRunner.rollbackTransaction()
+      throw new InternalServerErrorException()
+    } finally {
+      await queryRunner.release()
+    }
   }
 
   async getResponses(

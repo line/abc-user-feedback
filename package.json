@@ -37,7 +37,7 @@
     "@nestjs/serve-static": "^2.2.2",
     "@nestjs/terminus": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
-    "baseui": "^10.4.0",
+    "baseui": "^10.5.0",
     "bcrypt": "^5.0.1",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
