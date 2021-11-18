@@ -128,16 +128,6 @@ export class UserService {
       throw new BadRequestException('cannot find user')
     }
 
-    const userProfile = await this.userProfileRepository.findOne({
-      where: {
-        userId
-      }
-    })
-
-    if (!userProfile) {
-      throw new BadRequestException('cannot find user profile')
-    }
-
     const queryRunner = await getConnection().createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
