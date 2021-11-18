@@ -110,6 +110,7 @@ const InviteUserModal = (props: Props) => {
           message: `invitation has been sent`,
           startEnhancer: ({ size }) => <Check size={size} />
         })
+        handleCloseModal()
       }
     } catch (err) {
       enqueue({

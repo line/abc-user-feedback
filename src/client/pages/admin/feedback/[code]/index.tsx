@@ -1,5 +1,5 @@
 /* */
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete, ArrowUp, ArrowDown } from 'baseui/icon'
@@ -19,6 +19,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalHeader,
+  SIZE as ModalSize,
   ROLE
 } from 'baseui/modal'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -39,6 +40,7 @@ const REQUEST_COUNT = 100
 
 const AdminFeedbackDetailPage = () => {
   const router = useRouter()
+
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
@@ -90,6 +92,10 @@ const AdminFeedbackDetailPage = () => {
     } else {
       setSelectedId((s) => s.filter((id) => id !== name))
     }
+  }
+
+  const handleApplyFilter = async (params: Record<string, any>) => {
+    setParams(params)
   }
 
   const handleToggleResponseExampleModal = () => {
@@ -157,9 +163,26 @@ const AdminFeedbackDetailPage = () => {
       feedbackResponseFields.map((field) => {
         itemElem.push(
           <ListItem
+            overrides={{
+              EndEnhancerContainer: {
+                style: {
+                  whiteSpace: 'pre-wrap'
+                }
+              }
+            }}
             endEnhancer={() => <ListItemLabel>{field?.value}</ListItemLabel>}
           >
-            <ListItemLabel>{field?.feedbackField?.name}</ListItemLabel>
+            <ListItemLabel
+              overrides={{
+                LabelContent: {
+                  style: {
+                    minWidth: '200px'
+                  }
+                }
+              }}
+            >
+              {field?.feedbackField?.name}
+            </ListItemLabel>
           </ListItem>
         )
       })
@@ -216,10 +239,7 @@ const AdminFeedbackDetailPage = () => {
           )}
         </h1>
         <div className={styles.filter}>
-          <ResponseFilter
-            feedback={feedback}
-            onApply={(params) => setParams(params)}
-          />
+          <ResponseFilter feedback={feedback} onApply={handleApplyFilter} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
@@ -380,7 +400,7 @@ const AdminFeedbackDetailPage = () => {
       </Modal>
       <Modal
         isOpen={showResponseDetailModal}
-        size={SIZE.default}
+        size={ModalSize.auto}
         closeable
         onClose={toggleResponseDetailModal}
         role={ROLE.dialog}

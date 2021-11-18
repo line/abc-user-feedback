@@ -1,5 +1,5 @@
 /* */
-import React, { useMemo, useEffect } from 'react'
+import React, { useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { FlexGrid, FlexGridItem } from 'baseui/flex-grid'
 import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
@@ -7,9 +7,10 @@ import { DatePicker } from 'baseui/datepicker'
 import { Button } from 'baseui/button'
 import { FormControl } from 'baseui/form-control'
 import { useTranslation } from 'next-i18next'
+import { DateTime } from 'luxon'
 
 /* */
-import { FormFieldType, IFeedback } from '@/types'
+import { IFeedback } from '@/types'
 
 interface Props {
   feedback: IFeedback
@@ -18,16 +19,19 @@ interface Props {
 
 const ResponseFilter = (props: Props) => {
   const { feedback, onApply } = props
-  const { control, register, setValue, watch, reset, getValues } = useForm()
+
+  const { control, register, watch, reset, getValues, setValue } = useForm()
 
   const { t } = useTranslation()
+
   const handleApplyParams = () => {
     const values = getValues()
     const params = {}
 
     if (values.date?.length === 2) {
-      params['start'] = values.date[0]
-      params['end'] = values.date[1]
+      const [start, end] = values.date
+      params['start'] = DateTime.fromJSDate(start).startOf('day').toISO()
+      params['end'] = DateTime.fromJSDate(end).endOf('day').toISO()
     }
 
     onApply(params)

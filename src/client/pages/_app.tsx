@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import Head from 'next/head'
 import App from 'next/app'
 import { QueryClientProvider } from 'react-query'
@@ -95,8 +95,8 @@ FeedbackApp.getInitialProps = async (context) => {
 
   return {
     ...appProps,
-    ...query,
-    ...req?.query
+    ...req?.query,
+    ...query
   }
 }
 

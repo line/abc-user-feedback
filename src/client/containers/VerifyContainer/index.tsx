@@ -14,6 +14,7 @@ import styles from './styles.module.scss'
 import { Divider, ErrorMessage, FormItem, Input } from '~/components'
 import { requestConfirm } from '~/service/auth'
 import { useApp } from '~/hooks'
+import { PASSWORD_REGEXP } from '@/constant'
 
 interface Props {
   email?: string
@@ -29,13 +30,13 @@ const VerifyContainer = (props: Props) => {
 
   const schema = yup.object().shape({
     nickname: yup.string(),
-    password: yup.string().required(),
+    password: yup
+      .string()
+      .matches(PASSWORD_REGEXP, t('validation.password'))
+      .required(),
     passwordConfirm: yup
       .string()
-      .oneOf(
-        [yup.ref('password'), null],
-        t('validation.password.confirm')
-      )
+      .oneOf([yup.ref('password'), null], t('validation.password.confirm'))
       .required()
   })
 
@@ -95,7 +96,7 @@ const VerifyContainer = (props: Props) => {
           </FormItem>
           <FormItem label='Confirm Password'>
             <Input
-              placeholder='password confirm'
+              placeholder={t('placeholder.password.confirm')}
               type='password'
               className={styles.email__form__input}
               {...register('passwordConfirm')}

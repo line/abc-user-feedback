@@ -77,6 +77,9 @@ export class UserService {
       relations: ['profile'],
       where: {
         state: Not(UserState.Left + 1)
+      },
+      order: {
+        createdTime: 'DESC'
       }
     })
   }
@@ -147,11 +150,7 @@ export class UserService {
 
         await entityManager.update(User, user.id, user)
 
-        userProfile.nickname = null
-        userProfile.avatarUrl = null
-
-        await entityManager.update(UserProfile, userProfile.id, userProfile)
-
+        await entityManager.delete(UserProfile, { userId: user.id })
         await entityManager.delete(Account, { userId: user.id })
         await entityManager.delete(EmailAuth, { email: user.email })
       })
