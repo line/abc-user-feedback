@@ -65,7 +65,7 @@ const CreateFeedbackPage = () => {
           })
 
           enqueue({
-            message: 'Sucess create feedback',
+            message: 'Success create feedback',
             startEnhancer: ({ size }) => <Check size={size} />
           })
           await router.back()

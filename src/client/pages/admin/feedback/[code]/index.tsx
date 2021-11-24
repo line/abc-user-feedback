@@ -215,7 +215,7 @@ const AdminFeedbackDetailPage = () => {
             />
           )}
           <span className={styles.title__text}>
-            {t('title.feeback.detail')}
+            {t('title.feedback.detail')}
           </span>
           {user.role >= 3 && (
             <div className={styles.title__action}>
@@ -405,7 +405,7 @@ const AdminFeedbackDetailPage = () => {
         onClose={toggleResponseDetailModal}
         role={ROLE.dialog}
       >
-        <ModalHeader>{t('title.feeback.detail')}</ModalHeader>
+        <ModalHeader>{t('title.feedback.detail')}</ModalHeader>
         <ModalBody>
           <pre>{renderResponseDetail}</pre>
         </ModalBody>

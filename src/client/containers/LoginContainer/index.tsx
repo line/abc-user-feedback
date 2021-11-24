@@ -1,5 +1,5 @@
 /* */
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useFormContext, Controller } from 'react-hook-form'
 import { Check, Delete } from 'baseui/icon'
 import { useSnackbar } from 'baseui/snackbar'
@@ -28,7 +28,7 @@ enum AuthMode {
 }
 
 const LoginContainer = () => {
-  const { requesSocialLogin } = useUser()
+  const { requestSocialLogin } = useUser()
   const { service, config } = useApp()
   const { enqueue } = useSnackbar()
   const [showFindPasswordModal, toggleShowFindPasswordModal] = useToggle(false)
@@ -101,7 +101,7 @@ const LoginContainer = () => {
 
   const handleClickGoogleLogin = (e) => {
     e.preventDefault()
-    requesSocialLogin('google')
+    requestSocialLogin('google')
   }
 
   const handleSubmitEmail = async () => {

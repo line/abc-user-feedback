@@ -1,5 +1,5 @@
 /* */
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import * as yup from 'yup'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
@@ -12,30 +12,25 @@ import { Input } from 'baseui/input'
 import { useTranslation } from 'next-i18next'
 
 /* */
-import styles from './styles.module.scss'
 import { ErrorMessage, FormItem } from '~/components'
 import { requestChangePassword } from '~/service/auth'
+import { PASSWORD_REGEXP } from '@/constant'
 
 const ResetPasswordPage = ({ code }) => {
-  const [showModal, setShowModal] = useState<boolean>(false)
   const { enqueue } = useSnackbar()
   const router = useRouter()
 
   const { t } = useTranslation()
 
   const schema = yup.object().shape({
-    password: yup.string().required(),
+    password: yup
+      .string()
+      .matches(PASSWORD_REGEXP, t('validation.password'))
+      .required(),
     passwordConfirm: yup
       .string()
-      .oneOf(
-        [yup.ref('password'), null],
-        t('validation.password.confirm')
-      )
+      .oneOf([yup.ref('password'), null], t('validation.password.confirm'))
   })
-
-  useEffect(() => {
-    setShowModal(true)
-  }, [])
 
   const { register, formState, watch, handleSubmit } = useForm({
     resolver: yupResolver(schema)

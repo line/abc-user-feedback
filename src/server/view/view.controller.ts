@@ -161,7 +161,7 @@ export class ViewController {
     return res.render(viewPath, {
       currentUser,
       service,
-      config,
+      config
     })
   }
 }

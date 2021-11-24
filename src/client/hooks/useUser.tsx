@@ -14,7 +14,7 @@ interface UserContent {
   isError?: boolean
   error?: any
   user?: IUser
-  requesSocialLogin?: any
+  requestSocialLogin?: any
   requestLogout?: any
   setUser?: any
 }
@@ -30,7 +30,7 @@ export function UserProvider(props: Props) {
   const [user, setUser] = useState<IUser>(props?.currentUser)
   const router = useRouter()
 
-  const requesSocialLogin = (provider: string, next = '/') => {
+  const requestSocialLogin = (provider: string, next = '/') => {
     window.location.href = `${redirectBase}/auth/redirect/${provider}?next=${next}`
     return false
   }
@@ -44,7 +44,7 @@ export function UserProvider(props: Props) {
   const value = {
     user,
     setUser,
-    requesSocialLogin,
+    requestSocialLogin,
     requestLogout
   }
 

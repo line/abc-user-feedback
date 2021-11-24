@@ -59,15 +59,27 @@ const InviteUserModal = (props: Props) => {
       resolver: yupResolver(schema)
     })
 
-  const roleOptions = useMemo(
-    () => [
-      { value: 0, label: 'User', isDisabled: user.role < 1 },
-      { value: 1, label: 'Admin', isDisabled: user.role < 1 },
-      { value: 2, label: 'Manager', isDisabled: user.role < 2 },
-      { value: 3, label: 'Owner', isDisabled: user.role < 3 }
-    ],
-    []
-  )
+  const roleOptions = useMemo(() => {
+    const options = []
+
+    if (user.role >= 1) {
+      if (!service.isPrivate) {
+        options.push({ value: 0, label: 'User', isDisabled: user.role < 1 })
+      }
+
+      options.push({ value: 1, label: 'Admin', isDisabled: user.role < 1 })
+    }
+
+    if (user.role >= 2) {
+      options.push({ value: 2, label: 'Manager', isDisabled: user.role < 2 })
+    }
+
+    if (user.role >= 3) {
+      options.push({ value: 3, label: 'Owner', isDisabled: user.role < 3 })
+    }
+
+    return options
+  }, [user])
 
   const { errors } = formState
 

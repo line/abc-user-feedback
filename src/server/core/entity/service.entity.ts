@@ -29,7 +29,7 @@ export default class Service {
   logoUrl: string
 
   @Column('enum', { enum: Locale, nullable: false })
-  locale: Locale  
+  locale: Locale
 
   @Column({ default: false })
   isPrivate: boolean

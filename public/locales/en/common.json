@@ -17,7 +17,7 @@
   "validation.email_password": "Check yout email/password",
   "validation.password": "The password must contain at least 8 letters of English, numbers, and special characters",
   "validation.password.confirm": "Password not correct",
-  "validation.password.nicname": "Check your nickname",
+  "validation.password.nickname": "Check your nickname",
   "validation.select.role": "Select role",
 
   "action.delete": "Delete",
@@ -50,14 +50,15 @@
   "label.setting.user": "User setting",
 
   "snackbar.success.send.mail.invitation": "Success send invitation mail",
+  "snackbar.success.send.mail.reset.password": "Success send email",
   "snackbar.success.settings.profile": "Success save profile",
   "snackbar.success.change.password": "Success save password",
 
   "description.password.reset": "Send reset password email.\n(it expired after 24 hours)",
 
   "title.password.reset": "Reset password",
-  "title.feeback.list": "Feedback list",
-  "title.feeback.detail": "Feedback detail",
+  "title.feedback.list": "Feedback list",
+  "title.feedback.detail": "Feedback detail",
   "title.member": "Member",
   "title.settings.profile": "Profile",
   "title.account.delete": "Delete account",
