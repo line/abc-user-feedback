@@ -167,9 +167,9 @@ const UserListContainer = () => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.search}>
+      {/* <div className={styles.search}>
         <Input prepand={<SearchIcon />} />
-      </div>
+      </div> */}
       <div className={styles.list}>
         {data.map((user: IUser) => (
           <div key={user.id} className={styles.user}>

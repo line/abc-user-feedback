@@ -1,24 +1,29 @@
 /* */
 import React from 'react'
 import Link from 'next/link'
+import { Label1, Paragraph1 } from 'baseui/typography'
 
 /* */
 import styles from './styles.module.scss'
 
-const OtherErrorPage = ({ statusCode }) => {
+const OtherErrorPage = ({ statusCode, message, name }) => {
   return (
     <div className={styles.error}>
-      <div className={styles.error_title}>{statusCode} Error</div>
+      <Label1>{statusCode} Error</Label1>
+      <Paragraph1>{message}</Paragraph1>
       <Link href='/'>
-        <a className={styles.error__link}>Go back to Home</a>
+        <a className={styles.link}>Go back to Home</a>
       </Link>
     </div>
   )
 }
 
 OtherErrorPage.getInitialProps = ({ res, err }) => {
-  const statusCode = res ? res.status : err ? err.status : 404
-  return { statusCode }
+  const statusCode = err ? err.statusCode : res ? res.statusCode : 500
+  const name = err?.name
+  const message = err?.message
+
+  return { statusCode, name, message }
 }
 
 export default OtherErrorPage

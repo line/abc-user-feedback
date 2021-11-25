@@ -213,7 +213,7 @@ const LoginContainer = () => {
                       overrides={{
                         Label: {
                           style: ({ $theme }) =>
-                            $theme.typography.MonoLabelSmall
+                            $theme?.typography?.MonoLabelSmall
                         }
                       }}
                       checked={getValues('rememberEmail')}

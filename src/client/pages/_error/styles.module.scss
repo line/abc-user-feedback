@@ -5,23 +5,7 @@
   justify-content: center;
   min-height: 100vh;
 
-  &__title {
-    font-size: 18px;
-    line-height: 27px;
-    font-weight: bold;
-    color: var(--black);
-    margin-bottom: 8px;
-  }
-
-  &__description {
-    font-size: 14px;
-    line-height: 21px;
-    text-align: center;
-    color: var(--black6);
-    margin-bottom: 24px;
-  }
-
-  &__link {
+  .link {
     font-size: 14px;
     line-height: 21px;
     text-align: center;

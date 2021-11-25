@@ -7,7 +7,11 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
-import { TableBuilder, TableBuilderColumn } from 'baseui/table-semantic'
+import {
+  TableBuilder,
+  TableBuilderColumn,
+  SIZE as TableSize
+} from 'baseui/table-semantic'
 import { Checkbox } from 'baseui/checkbox'
 import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
 import { ListItem, ListItemLabel } from 'baseui/list'
@@ -85,6 +89,8 @@ const AdminFeedbackDetailPage = () => {
   }, [feedback])
 
   const handleToggleCheckbox = (e: any) => {
+    e.stopPropagation()
+
     const { checked, name } = e.currentTarget
 
     if (checked) {
@@ -166,7 +172,9 @@ const AdminFeedbackDetailPage = () => {
             overrides={{
               EndEnhancerContainer: {
                 style: {
-                  whiteSpace: 'pre-wrap'
+                  maxWidth: '640px',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'break-all'
                 }
               }
             }}
@@ -260,7 +268,19 @@ const AdminFeedbackDetailPage = () => {
           <TableBuilder
             data={responseData}
             isLoading={isFeedbackLoading || isFeedbackResponseLoading}
+            size={TableSize.compact}
             emptyMessage={<h1>No data</h1>}
+            overrides={{
+              TableBodyRow: {
+                props: {
+                  onClick: (e) => {
+                    handleClickResponseDetail(
+                      responseData[e.target.closest('tr').rowIndex - 1]
+                    )
+                  }
+                }
+              }
+            }}
           >
             {user.role >= 3 && (
               <TableBuilderColumn
@@ -311,7 +331,6 @@ const AdminFeedbackDetailPage = () => {
                   },
                   TableBodyCell: {
                     style: {
-                      width: '200px',
                       overflow: 'hidden',
                       maxWidth: '200px',
                       textOverflow: 'ellipsis',
@@ -329,19 +348,10 @@ const AdminFeedbackDetailPage = () => {
                 }}
               </TableBuilderColumn>
             ))}
-            <TableBuilderColumn>
-              {(row) => (
-                <Button
-                  onClick={() => handleClickResponseDetail(row)}
-                  kind={KIND.tertiary}
-                  size={SIZE.mini}
-                >
-                  Detail
-                </Button>
-              )}
-            </TableBuilderColumn>
           </TableBuilder>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div
+            style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}
+          >
             {user.role >= 2 && (
               <ButtonGroup size={ButtonGroupSize.compact}>
                 <Button

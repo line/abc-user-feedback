@@ -37,10 +37,18 @@ const FindPasswordModal = (props: Props) => {
     email: yup.string().email(t('validation.email')).required()
   })
 
-  const { register, watch, trigger, formState, getValues, reset, clearErrors } =
-    useForm({
-      resolver: yupResolver(schema)
-    })
+  const {
+    register,
+    watch,
+    trigger,
+    formState,
+    getValues,
+    reset,
+    clearErrors,
+    setError
+  } = useForm({
+    resolver: yupResolver(schema)
+  })
 
   const { errors } = formState
 
@@ -69,18 +77,11 @@ const FindPasswordModal = (props: Props) => {
         })
 
         onClose?.()
-      } catch (error) {
-        if (error?.response?.data?.message) {
-          enqueue({
-            message: error.response.data.message,
-            startEnhancer: ({ size }) => <Delete size={size} />
-          })
-        } else {
-          enqueue({
-            message: error.toString(),
-            startEnhancer: ({ size }) => <Delete size={size} />
-          })
-        }
+      } catch {
+        setError('email', {
+          type: 'manual',
+          message: t('validation.email')
+        })
       }
     }
   }
