@@ -82,7 +82,7 @@ export class RoleService {
 
     const roleUserBinding = await this.roleUserBindingRepository.findOne({
       where: {
-        user: userId
+        userId: userId
       }
     })
 
