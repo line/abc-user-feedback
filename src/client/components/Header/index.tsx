@@ -44,7 +44,7 @@ const Header = () => {
       hasPermission(Permission.MANAGE_TENANT)
     ) {
       menu.push(
-        <Link href='/admin'>
+        <Link href='/admin' key='admin'>
           <a className={styles.dropdown__list}>{t('menu.administration')}</a>
         </Link>,
         <Divider margin={0.5} />
@@ -54,15 +54,19 @@ const Header = () => {
         <Link href='/admin/user'>
           <a className={styles.dropdown__list}>{t('menu.member')}</a>
         </Link>,
-        <Divider margin={0.5} />
+        <Divider margin={0.5} key='divider' />
       )
     }
 
     menu.push(
-      <Link href='/settings/profile'>
+      <Link href='/settings/profile' key='profile'>
         <a className={styles.dropdown__list}>{t('menu.account')}</a>
       </Link>,
-      <div className={styles.dropdown__list} onClick={requestLogout}>
+      <div
+        className={styles.dropdown__list}
+        onClick={requestLogout}
+        key='logout'
+      >
         {t('menu.logout')}
       </div>
     )

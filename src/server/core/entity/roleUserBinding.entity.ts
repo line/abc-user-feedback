@@ -2,10 +2,10 @@
 import {
   Entity,
   Column,
+  ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn
 } from 'typeorm'
 
@@ -31,11 +31,11 @@ export default class RoleUserBinding {
   @UpdateDateColumn()
   updatedTime!: Date
 
-  @OneToOne((type) => User, { cascade: true })
+  @ManyToOne((type) => User, (user) => user.roleUserBindings)
   @JoinColumn({ name: 'userId' })
   user!: User
 
-  @OneToOne((type) => Role, { cascade: true })
+  @ManyToOne((type) => Role, (role) => role.roleUserBindings)
   @JoinColumn({ name: 'roleId' })
   role!: Role
 }

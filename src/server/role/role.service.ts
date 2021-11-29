@@ -41,7 +41,7 @@ export class RoleService {
   async findAllRole() {
     return this.roleRepository
       .createQueryBuilder('role')
-      .loadRelationCountAndMap('role.bindingCount', 'role.roleUserBinding')
+      .loadRelationCountAndMap('role.bindingCount', 'role.roleUserBindings')
       .getMany()
   }
 

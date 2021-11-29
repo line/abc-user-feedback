@@ -44,7 +44,7 @@ export default class User implements IUser {
 
   @OneToMany(
     (type) => RoleUserBinding,
-    (roleUserBinding) => roleUserBinding.user
+    (roleUserBindings) => roleUserBindings.user
   )
   roleUserBindings: Array<RoleUserBinding>
 }

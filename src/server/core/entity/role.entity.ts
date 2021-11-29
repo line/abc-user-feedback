@@ -41,7 +41,7 @@ export default class Role {
 
   @OneToMany(
     (type) => RoleUserBinding,
-    (roleUserBinding) => roleUserBinding.role
+    (roleUserBindings) => roleUserBindings.role
   )
-  roleUserBinding: Array<RoleUserBinding>
+  roleUserBindings: Array<RoleUserBinding>
 }
