@@ -47,14 +47,14 @@ const Header = () => {
         <Link href='/admin' key='admin'>
           <a className={styles.dropdown__list}>{t('menu.administration')}</a>
         </Link>,
-        <Divider margin={0.5} />
+        <Divider margin={0.5} key='divider-1' />
       )
     } else if (hasPermission(Permission.READ_USERS)) {
       menu.push(
-        <Link href='/admin/user'>
+        <Link href='/admin/user' key='user'>
           <a className={styles.dropdown__list}>{t('menu.member')}</a>
         </Link>,
-        <Divider margin={0.5} key='divider' />
+        <Divider margin={0.5} key='divider-2' />
       )
     }
 

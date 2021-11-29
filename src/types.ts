@@ -8,11 +8,11 @@ interface IUserProfile {
   avatarUrl: string
 }
 export interface IRole {
-  id: string
+  id?: string
   name: string
-  description: string
-  createdTime: Date
-  updatedTime: Date
+  description?: string
+  createdTime?: Date
+  updatedTime?: Date
 }
 
 export interface IUser {

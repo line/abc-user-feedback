@@ -64,7 +64,13 @@ const UserListContainer = () => {
       queryClient.setQueryData('users', (users: Array<IUser>) =>
         users.map((user) => {
           if (user.id === userId) {
-            user.role.name = roleName
+            if (user?.role) {
+              user.role.name = roleName
+            } else {
+              user.role = {
+                name: roleName
+              }
+            }
             return user
           }
 
