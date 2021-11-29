@@ -2,18 +2,17 @@
 import {
   Body,
   Controller,
-  ForbiddenException,
-  Get,
-  Param,
-  Post,
-  Put,
   Delete,
-  Req,
+  Get,
   HttpCode,
-  UnauthorizedException,
-  UseGuards,
+  MethodNotAllowedException,
+  NotFoundException,
+  Param,
+  Put,
+  Req,
   Res,
-  MethodNotAllowedException
+  UnauthorizedException,
+  UseGuards
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
@@ -21,14 +20,13 @@ import { Response } from 'express'
 /* */
 import { UserService } from './user.service'
 import { UpdateUserDto } from './dto/update-user.dto'
-import { BindingUserRoleDto } from './dto/binding-user-role-dto'
-import { RoleGuard } from '#/core/guard'
-import { Roles } from '#/core/decorators'
-import { UserRole } from '@/types'
+import { PermissionGuard } from '#/core/guard'
+import { Permissions } from '#/core/decorators'
+import { Permission } from '@/types'
 import { AuthService } from '#/auth/auth.service'
 
 @Controller('api/v1')
-@UseGuards(RoleGuard)
+@UseGuards(PermissionGuard)
 export class UserController {
   constructor(
     private readonly userService: UserService,
@@ -74,37 +72,20 @@ export class UserController {
    * Admin
    */
   @Get('admin/user')
-  @Roles(UserRole.Manager)
+  @Permissions(Permission.READ_USERS)
   async getUsers() {
     return this.userService.getUsers()
   }
 
   @Delete('admin/user/:userId')
-  @Roles(UserRole.Manager)
+  @Permissions(Permission.DELETE_USER)
   async deleteUser(@Req() req: any, @Param('userId') userId: string) {
     const user = await this.userService.getUserById(userId)
 
-    if (user.role > req.user.role) {
-      throw new ForbiddenException()
+    if (!user) {
+      throw new NotFoundException()
     }
 
     await this.userService.deleteUser(userId)
-  }
-
-  @Post('admin/user/role/:userRole')
-  @Roles(UserRole.Manager)
-  @HttpCode(204)
-  async userRoleBindingToAdmin(
-    @Req() req: any,
-    @Body() data: BindingUserRoleDto,
-    @Param('userRole') userRole: UserRole
-  ) {
-    const { userId } = data
-
-    if (req.user.role < userRole) {
-      throw new ForbiddenException()
-    }
-
-    await this.userService.roleBinding(userId, userRole)
   }
 }

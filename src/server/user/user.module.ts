@@ -12,7 +12,10 @@ import {
   EmailAuth,
   Service,
   User,
-  UserProfile
+  Role,
+  RolePermissionBinding,
+  UserProfile,
+  RoleUserBinding
 } from '#/core/entity'
 
 @Module({
@@ -23,6 +26,9 @@ import {
       Account,
       EmailAuth,
       CustomAuth,
+      Role,
+      RolePermissionBinding,
+      RoleUserBinding,
       Service
     ])
   ],

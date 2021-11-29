@@ -8,12 +8,14 @@ import { InjectRepository } from '@nestjs/typeorm'
 /* */
 import { AuthService } from '#/auth/auth.service'
 import { User } from '#/core/entity'
+import { UserService } from '#/user/user.service'
 
 @Injectable()
 export default class UserMiddleware implements NestMiddleware {
   constructor(
     private readonly configService: ConfigService,
     private readonly authService: AuthService,
+    private readonly userService: UserService,
     @InjectRepository(User)
     private readonly userRepository: Repository<User>
   ) {}

@@ -15,14 +15,19 @@ import { Repository } from 'typeorm'
 
 /* */
 import { ViewService } from './view.service'
-import { EmailAuth, Service } from '#/core/entity'
+import {
+  EmailAuth,
+  Service,
+  RoleUserBinding,
+  RolePermissionBinding
+} from '#/core/entity'
 import { UserService } from '#/user/user.service'
 import { AuthService } from '#/auth/auth.service'
 import { EmailAuthType } from '@/types'
-import { RoleGuard } from '#/core/guard'
+import { PermissionGuard } from '#/core/guard'
 
 @Controller()
-@UseGuards(RoleGuard)
+@UseGuards(PermissionGuard)
 export class ViewController {
   constructor(
     private readonly configService: ConfigService,
@@ -152,6 +157,10 @@ export class ViewController {
 
     if (user) {
       currentUser = await this.userService.getUserById(user.id)
+
+      if (req.permissions) {
+        currentUser.permissions = req.permissions
+      }
     }
 
     const config = this.viewService.getClientConfig()

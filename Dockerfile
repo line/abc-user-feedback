@@ -27,4 +27,4 @@ COPY --from=builder /pre/package.json ./package.json
 
 EXPOSE 3000
 
-CMD ["node", "dist/server/main"]
+CMD yarn run typeorm migration:run && node dist/server/main

@@ -1,8 +1,5 @@
 /* */
-import { IsNotEmpty, IsEmail, IsEnum } from 'class-validator'
-
-/* */
-import { UserRole } from '@/types'
+import { IsNotEmpty, IsEmail, IsString } from 'class-validator'
 
 export class InvitationMailDto {
   @IsNotEmpty()
@@ -10,6 +7,6 @@ export class InvitationMailDto {
   email: string
 
   @IsNotEmpty()
-  @IsEnum(UserRole)
-  role: UserRole
+  @IsString()
+  roleName: string
 }

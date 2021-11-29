@@ -8,7 +8,7 @@ import {
 } from 'typeorm'
 
 /* */
-import { EmailAuthType, UserRole } from '@/types'
+import { EmailAuthType } from '@/types'
 
 @Entity('email_auths')
 export default class EmailAuth {
@@ -27,8 +27,8 @@ export default class EmailAuth {
   @Column('enum', { enum: EmailAuthType, default: EmailAuthType.Register })
   type!: EmailAuthType
 
-  @Column('enum', { enum: UserRole, default: UserRole.User })
-  asRole!: UserRole
+  @Column()
+  asRole!: string
 
   @Column({ default: false })
   isVerified!: boolean

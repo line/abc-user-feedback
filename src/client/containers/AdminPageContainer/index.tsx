@@ -5,28 +5,47 @@ import React, { useMemo } from 'react'
 import { ActiveLink } from '~/components'
 import { SideMenuContainer } from '~/containers'
 import { useUser } from '~/hooks'
+import { Permission } from '@/types'
 
 const AdminPageContainer = (props: any) => {
-  const { user } = useUser()
+  const { user, hasPermission } = useUser()
 
   const menus = useMemo(() => {
     const menu = []
     if (user) {
-      if (user.role >= 3) {
+      if (hasPermission(Permission.MANAGE_TENANT)) {
         menu.push(
           <ActiveLink href='/admin' key='/admin'>
             Service
-          </ActiveLink>,
+          </ActiveLink>
+        )
+      }
+
+      if (hasPermission(Permission.READ_ROLES)) {
+        menu.push(
+          <ActiveLink href='/admin/role' key='/admin/role'>
+            Roles
+          </ActiveLink>
+        )
+      }
+
+      if (hasPermission(Permission.MANAGE_INVITATION)) {
+        menu.push(
           <ActiveLink href='/admin/invitation' key='/admin/invitation'>
             Invitation
-          </ActiveLink>,
+          </ActiveLink>
+        )
+      }
+
+      if (hasPermission(Permission.READ_FEEDBACKS)) {
+        menu.push(
           <ActiveLink href='/admin/feedback' key='/admin/feedback'>
             Feedback
           </ActiveLink>
         )
       }
 
-      if (user.role >= 2) {
+      if (hasPermission(Permission.READ_USERS)) {
         menu.push(
           <ActiveLink href='/admin/user' key='/admin/user'>
             User

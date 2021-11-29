@@ -1,20 +1,20 @@
 /* */
 import React, { useMemo } from 'react'
-import { useForm, Controller } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import Select from 'react-select'
 import { useSnackbar } from 'baseui/snackbar'
-import { Delete, Check } from 'baseui/icon'
+import { Check, Delete } from 'baseui/icon'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import {
   Modal,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
   ModalButton,
+  ModalFooter,
+  ModalHeader,
   ModalProps,
-  SIZE,
-  ROLE
+  ROLE,
+  SIZE
 } from 'baseui/modal'
 import { useTranslation } from 'next-i18next'
 import { KIND as ButtonKind } from 'baseui/button'
@@ -22,8 +22,12 @@ import { KIND as ButtonKind } from 'baseui/button'
 /* */
 import styles from './styles.module.scss'
 import { sendInvitationEmail } from '~/service/mail'
-import { Textarea, FormItem, ErrorMessage } from '~/components'
+import { ErrorMessage, FormItem, Textarea } from '~/components'
 import { useApp, useUser } from '~/hooks'
+import { OWNER_KEY } from '@/constant'
+import { useQuery } from 'react-query'
+import { IRole, Permission } from '@/types'
+import { getRoles } from '~/service/role'
 
 interface Props extends ModalProps {
   onClose?: any
@@ -33,6 +37,11 @@ const InviteUserModal = (props: Props) => {
   const { onClose, isOpen } = props
 
   const { t } = useTranslation()
+
+  const { isLoading, isError, error, data } = useQuery<Array<IRole>>(
+    'roles',
+    getRoles
+  )
 
   const schema = yup.object().shape({
     emails: yup
@@ -50,7 +59,7 @@ const InviteUserModal = (props: Props) => {
     role: yup.mixed().required()
   })
 
-  const { user } = useUser()
+  const { user, hasPermission } = useUser()
   const { service } = useApp()
   const { enqueue } = useSnackbar()
 
@@ -62,24 +71,18 @@ const InviteUserModal = (props: Props) => {
   const roleOptions = useMemo(() => {
     const options = []
 
-    if (user.role >= 1) {
-      if (!service.isPrivate) {
-        options.push({ value: 0, label: 'User', isDisabled: user.role < 1 })
-      }
-
-      options.push({ value: 1, label: 'Admin', isDisabled: user.role < 1 })
+    if (hasPermission(Permission.MANAGE_ALL)) {
+      options.push({ key: OWNER_KEY, value: OWNER_KEY, label: 'owner' })
     }
 
-    if (user.role >= 2) {
-      options.push({ value: 2, label: 'Manager', isDisabled: user.role < 2 })
-    }
-
-    if (user.role >= 3) {
-      options.push({ value: 3, label: 'Owner', isDisabled: user.role < 3 })
-    }
+    data
+      ?.filter((r) => r.name !== OWNER_KEY)
+      ?.map((r) => {
+        options.push({ key: r.name, value: r.name, label: r.name })
+      })
 
     return options
-  }, [user])
+  }, [data])
 
   const { errors } = formState
 
@@ -115,7 +118,7 @@ const InviteUserModal = (props: Props) => {
       if (flag) {
         await Promise.all(
           emails.map((email) =>
-            sendInvitationEmail({ email: email.trim(), role: role.value })
+            sendInvitationEmail({ email: email.trim(), roleName: role.value })
           )
         )
         enqueue({

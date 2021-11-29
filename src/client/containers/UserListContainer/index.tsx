@@ -7,24 +7,25 @@ import { Check, Delete } from 'baseui/icon'
 import { KIND as ButtonKind } from 'baseui/button'
 import {
   Modal,
-  ModalHeader,
   ModalBody,
+  ModalButton,
   ModalFooter,
+  ModalHeader,
   ROLE,
-  SIZE,
-  ModalButton
+  SIZE
 } from 'baseui/modal'
 import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
-import { UserLoader } from '~/components/Loader'
-import { getUsers, userRoleBinding, deleteUserById } from '~/service/user'
-import SearchIcon from '~/assets/search.svg'
 import MenuIcon from '~/assets/menu.svg'
-import { IUser } from '@/types'
+import { UserLoader } from '~/components/Loader'
+import { OWNER_KEY } from '@/constant'
+import { deleteUserById, getUsers, roleUserBinding } from '~/service/user'
+import { getRoles } from '~/service/role'
+import { IRole, IUser, Permission } from '@/types'
 import { useApp, useUser } from '~/hooks'
-import { Avatar, Input, DropDown, Tag } from '~/components'
+import { Avatar, DropDown, Tag } from '~/components'
 
 const UserListContainer = () => {
   const queryClient = useQueryClient()
@@ -34,13 +35,15 @@ const UserListContainer = () => {
     getUsers
   )
 
+  const { data: roleData } = useQuery<Array<IRole>>('roles', getRoles)
+
   const { t } = useTranslation()
 
   const { config } = useApp()
 
   const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false)
   const [deleteUser, setDeleteUser] = useState<IUser>(null)
-  const { user: currentUser } = useUser()
+  const { user: currentUser, hasPermission } = useUser()
 
   const renderAvatar = useCallback((user: IUser) => {
     return (
@@ -51,19 +54,24 @@ const UserListContainer = () => {
     )
   }, [])
 
-  const handleRoleBinding = async (role: number, userId: string) => {
+  const handleRoleBinding = async (roleName: string, userId: string) => {
     try {
-      await userRoleBinding(role, userId)
+      await roleUserBinding({
+        roleName,
+        userId
+      })
+
       queryClient.setQueryData('users', (users: Array<IUser>) =>
         users.map((user) => {
           if (user.id === userId) {
-            user.role = role
+            user.role.name = roleName
             return user
           }
 
           return user
         })
       )
+
       enqueue({
         message: 'Success role binding',
         startEnhancer: ({ size }) => <Check size={size} />
@@ -111,26 +119,12 @@ const UserListContainer = () => {
   }
 
   const renderUserTag = useCallback((user: IUser) => {
-    if (user) {
-      if (user.role === 1) {
-        return (
-          <Tag effect='dark' type='info' className={styles.tag}>
-            Admin
-          </Tag>
-        )
-      } else if (user.role === 2) {
-        return (
-          <Tag effect='dark' type='info' className={styles.tag}>
-            Manger
-          </Tag>
-        )
-      } else if (user.role === 3) {
-        return (
-          <Tag effect='dark' type='info' className={styles.tag}>
-            Owner
-          </Tag>
-        )
-      }
+    if (user && user?.role) {
+      return (
+        <Tag effect='dark' type='info' className={styles.tag}>
+          {user.role.name}
+        </Tag>
+      )
     }
   }, [])
 
@@ -145,7 +139,10 @@ const UserListContainer = () => {
           return false
         }
 
-        return currentUser.role >= 1
+        return (
+          hasPermission(Permission.DELETE_USER) ||
+          hasPermission(Permission.MANAGE_ROLE)
+        )
       }
 
       return false
@@ -167,9 +164,6 @@ const UserListContainer = () => {
 
   return (
     <div className={styles.container}>
-      {/* <div className={styles.search}>
-        <Input prepand={<SearchIcon />} />
-      </div> */}
       <div className={styles.list}>
         {data.map((user: IUser) => (
           <div key={user.id} className={styles.user}>
@@ -195,39 +189,31 @@ const UserListContainer = () => {
             {isUserDropDownVisible(user) && (
               <DropDown className={styles.user__menu} overlay={<MenuIcon />}>
                 <div className={styles.dropdown}>
-                  {currentUser?.role >= 3 && user.role !== 3 && (
+                  {hasPermission(Permission.MANAGE_ALL) && (
                     <div
                       className={styles.dropdown__item}
-                      onClick={() => handleRoleBinding(3, user.id)}
+                      onClick={() => handleRoleBinding(OWNER_KEY, user.id)}
                     >
-                      {t('action.member.to.owner')}
+                      {t('action.user.role.binding', { role: OWNER_KEY })}
                     </div>
                   )}
-                  {currentUser?.role >= 2 && user.role !== 2 && (
-                    <div
-                      className={styles.dropdown__item}
-                      onClick={() => handleRoleBinding(2, user.id)}
-                    >
-                      {t('action.member.to.manager')}
-                    </div>
-                  )}
-                  {currentUser?.role >= 2 && user.role !== 1 && (
-                    <div
-                      className={styles.dropdown__item}
-                      onClick={() => handleRoleBinding(1, user.id)}
-                    >
-                      {t('action.member.to.admin')}
-                    </div>
-                  )}
-                  {currentUser?.role === 2 && user.role !== 0 && (
-                    <div
-                      className={styles.dropdown__item}
-                      onClick={() => handleRoleBinding(0, user.id)}
-                    >
-                      {t('action.member.to.guest')}
-                    </div>
-                  )}
-                  {currentUser?.role >= 2 && (
+                  {hasPermission(Permission.MANAGE_ROLE) &&
+                    roleData
+                      ?.filter(
+                        (role) =>
+                          role.name !== OWNER_KEY &&
+                          role.name !== user?.role?.name
+                      )
+                      .map?.((role) => (
+                        <div
+                          key={role.name}
+                          className={styles.dropdown__item}
+                          onClick={() => handleRoleBinding(role.name, user.id)}
+                        >
+                          {t('action.user.role.binding', { role: role.name })}
+                        </div>
+                      ))}
+                  {hasPermission(Permission.DELETE_USER) && (
                     <div
                       className={cx(
                         styles.dropdown__item,

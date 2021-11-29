@@ -2,24 +2,26 @@
 import {
   BadRequestException,
   Injectable,
-  InternalServerErrorException,
-  NotFoundException
+  InternalServerErrorException
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { Repository, getManager, Not, getConnection } from 'typeorm'
+import * as bcrypt from 'bcrypt'
+import { Repository, getManager, Not, getConnection, In } from 'typeorm'
 
 /* */
 import { CreateUserDto } from './dto/create-user.dto'
 import { UpdateUserDto } from './dto/update-user.dto'
+import { OWNER_KEY } from '@/constant'
 import {
   User,
   UserProfile,
   Account,
   EmailAuth,
-  CustomAuth
+  Role,
+  RoleUserBinding,
+  RolePermissionBinding
 } from '#/core/entity'
-import { UserRole, UserState } from '@/types'
-import * as bcrypt from 'bcrypt'
+import { UserState } from '@/types'
 
 @Injectable()
 export class UserService {
@@ -31,12 +33,18 @@ export class UserService {
     @InjectRepository(Account)
     private readonly accountRepository: Repository<Account>,
     @InjectRepository(EmailAuth)
-    private readonly emailAuthRepository: Repository<EmailAuth> // @InjectRepository(CustomAuth) // private readonly customAuthRepository: Repository<CustomAuth>
+    private readonly emailAuthRepository: Repository<EmailAuth>,
+    @InjectRepository(Role)
+    private readonly roleRepository: Repository<Role>,
+    @InjectRepository(RoleUserBinding)
+    private readonly roleUserBindingRepository: Repository<RoleUserBinding>,
+    @InjectRepository(RolePermissionBinding)
+    private readonly rolePermissionBindingRepository: Repository<RolePermissionBinding>
   ) {}
 
   async create(
     data: CreateUserDto,
-    options?: { password?: string; withVerify?: boolean; role?: UserRole }
+    options?: { password?: string; withVerify?: boolean; role?: string }
   ) {
     const userCount = await this.userRepository.count()
     const user = new User()
@@ -52,15 +60,22 @@ export class UserService {
       user.isVerified = true
     }
 
-    if (options?.role) {
-      user.role = options.role
-    }
-
-    if (!userCount) {
-      user.role = UserRole.Owner
-    }
-
     await this.userRepository.save(user)
+
+    if (!userCount || options?.role) {
+      const roleName = !userCount ? OWNER_KEY : options.role
+      const role = await this.roleRepository.findOne({ name: roleName })
+
+      if (!role) {
+        throw new BadRequestException(`${options.role} role not exists`)
+      }
+
+      const roleUserBinding = new RoleUserBinding()
+      roleUserBinding.userId = user.id
+      roleUserBinding.roleId = role.id
+
+      await this.roleUserBindingRepository.save(roleUserBinding)
+    }
 
     const userProfile = new UserProfile()
     userProfile.userId = user.id
@@ -73,20 +88,28 @@ export class UserService {
   }
 
   async getUsers() {
-    return await this.userRepository.find({
-      relations: ['profile'],
-      where: {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where({
         state: Not(UserState.Left + 1)
-      },
-      order: {
-        createdTime: 'DESC'
-      }
-    })
+      })
+      .leftJoin('user.profile', 'profile')
+      .addSelect('profile.nickname')
+      .leftJoin('user.roleUserBindings', 'roleUserBindings')
+      .leftJoinAndMapOne(
+        'user.role',
+        Role,
+        'role',
+        'role.id = roleUserBindings.roleId'
+      )
+      .orderBy('user.createdTime', 'DESC')
+      .getMany()
   }
 
   async getUserById(userId: string) {
-    const user = this.userRepository.findOne(userId, { relations: ['profile'] })
-    return user
+    return this.userRepository.findOne(userId, {
+      relations: ['profile']
+    })
   }
 
   async getUserByEmail(email: string) {
@@ -136,10 +159,10 @@ export class UserService {
       await getManager().transaction(async (entityManager) => {
         user.email = null
         user.state = UserState.Left
-        user.role = UserRole.User
 
         await entityManager.update(User, user.id, user)
 
+        await entityManager.delete(RoleUserBinding, { userId: user.id })
         await entityManager.delete(UserProfile, { userId: user.id })
         await entityManager.delete(Account, { userId: user.id })
         await entityManager.delete(EmailAuth, { email: user.email })
@@ -152,20 +175,6 @@ export class UserService {
     } finally {
       await queryRunner.release()
     }
-
-    return
-  }
-
-  async roleBinding(userId: string, userRole: UserRole) {
-    const user = await this.userRepository.findOne(userId)
-
-    if (!user) {
-      throw new NotFoundException()
-    }
-
-    user.role = userRole
-
-    await this.userRepository.update(user.id, user)
 
     return
   }

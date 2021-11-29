@@ -5,12 +5,13 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
+  OneToMany
 } from 'typeorm'
 
 /* */
-import { UserProfile } from './index'
-import { UserState, UserRole } from '@/types'
+import { RoleUserBinding, UserProfile } from './index'
+import { UserState } from '@/types'
 import { IUser } from '@/types'
 
 @Entity('users')
@@ -27,9 +28,6 @@ export default class User implements IUser {
   @Column({ select: false, nullable: true })
   hashPassword: string
 
-  @Column('enum', { enum: UserRole, default: UserRole.User })
-  role: UserRole
-
   @Column('boolean', { default: false })
   isVerified: boolean
 
@@ -43,4 +41,10 @@ export default class User implements IUser {
   @Column('timestamptz')
   @UpdateDateColumn()
   updatedTime!: Date
+
+  @OneToMany(
+    (type) => RoleUserBinding,
+    (roleUserBinding) => roleUserBinding.user
+  )
+  roleUserBindings: Array<RoleUserBinding>
 }

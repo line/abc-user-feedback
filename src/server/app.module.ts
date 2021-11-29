@@ -13,16 +13,22 @@ import { ViewModule } from './view/view.module'
 import { AdminModule } from './admin/admin.module'
 import { TenantModule } from './tenant/tenant.module'
 import { FeedbackModule } from './feedback/feedback.module'
+import { RoleModule } from './role/role.module'
+import { PermissionModule } from './permission/permission.module'
 import {
   CheckTenantMiddleware,
   UserMiddleware,
-  CustomUserMiddleware
+  CustomUserMiddleware,
+  PermissionMiddleware
 } from './core/middleware'
 import { AuthService } from './auth/auth.service'
 import {
   Account,
   User,
   UserProfile,
+  RoleUserBinding,
+  RolePermissionBinding,
+  Role,
   Service,
   EmailAuth,
   CustomAuth
@@ -35,7 +41,6 @@ import {
 } from './core/module'
 import { UserService } from './user/user.service'
 import { HealthController } from './health/health.controller'
-import { CaslModule } from './casl/casl.module'
 
 const modules = [
   CoreTypeOrmModule,
@@ -48,14 +53,19 @@ const modules = [
     Service,
     CustomAuth,
     Account,
-    EmailAuth
+    EmailAuth,
+    Role,
+    RolePermissionBinding,
+    RoleUserBinding
   ]),
   UserModule,
+  PermissionModule,
   PostModule,
   AdminModule,
   FeedbackModule,
   AuthModule,
   TenantModule,
+  RoleModule,
   TerminusModule,
   CoreConfigModule,
   ViewModule
@@ -74,7 +84,7 @@ export class AppModule implements NestModule {
       .exclude('health')
       .exclude('_next*')
     consumer
-      .apply(CustomUserMiddleware, UserMiddleware)
+      .apply(CustomUserMiddleware, UserMiddleware, PermissionMiddleware)
       .exclude('_next*')
       .exclude('health')
       .forRoutes('*')

@@ -1,16 +1,17 @@
 /* */
-import React, { useState, useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 /* */
 import styles from './styles.module.scss'
-import { LoginModal, DropDown, Avatar, Divider } from '~/components'
+import { Avatar, DropDown, LoginModal, Divider } from '~/components'
 import { useApp, useUser } from '~/hooks'
+import { Permission } from '@/types'
 
 const Header = () => {
   const [showModal, setShowModal] = useState<boolean>(false)
-  const { user, requestLogout } = useUser()
+  const { user, hasPermission, requestLogout } = useUser()
   const { service } = useApp()
 
   const { t } = useTranslation()
@@ -35,6 +36,40 @@ const Header = () => {
     return null
   }, [user])
 
+  const renderDropdownMenu = useMemo(() => {
+    const menu = []
+
+    if (
+      hasPermission(Permission.READ_FEEDBACKS) ||
+      hasPermission(Permission.MANAGE_TENANT)
+    ) {
+      menu.push(
+        <Link href='/admin'>
+          <a className={styles.dropdown__list}>{t('menu.administration')}</a>
+        </Link>,
+        <Divider margin={0.5} />
+      )
+    } else if (hasPermission(Permission.READ_USERS)) {
+      menu.push(
+        <Link href='/admin/user'>
+          <a className={styles.dropdown__list}>{t('menu.member')}</a>
+        </Link>,
+        <Divider margin={0.5} />
+      )
+    }
+
+    menu.push(
+      <Link href='/settings/profile'>
+        <a className={styles.dropdown__list}>{t('menu.account')}</a>
+      </Link>,
+      <div className={styles.dropdown__list} onClick={requestLogout}>
+        {t('menu.logout')}
+      </div>
+    )
+
+    return menu
+  }, [user])
+
   return (
     <div className={styles.header} id='u-header'>
       <div className={styles.inner}>
@@ -56,24 +91,7 @@ const Header = () => {
               </a>
             ) : (
               <DropDown overlay={renderAvatar} className={styles.dropdown}>
-                {user.role >= 2 && (
-                  <>
-                    <Link href={user.role >= 3 ? '/admin' : '/admin/user'}>
-                      <a className={styles.dropdown__list}>
-                        {user.role >= 3
-                          ? t('menu.administration')
-                          : t('menu.member')}
-                      </a>
-                    </Link>
-                    <Divider margin={0.5} />
-                  </>
-                )}
-                <Link href='/settings/profile'>
-                  <a className={styles.dropdown__list}>{t('menu.account')}</a>
-                </Link>
-                <div className={styles.dropdown__list} onClick={requestLogout}>
-                  {t('menu.logout')}
-                </div>
+                {renderDropdownMenu}
               </DropDown>
             )}
           </div>

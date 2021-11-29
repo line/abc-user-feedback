@@ -35,6 +35,7 @@
   "action.download.excel": "엑셀 다운로드",
   "action.download.csv": "CSV 다운로드",
   "action.member.invite": "멤버 초대",
+  "action.user.role.binding": "{{role}}(으)로 변경",
   "action.member.to.owner": "Owner로 변경",
   "action.member.to.manager": "Manager로 변경",
   "action.member.to.guest": "Guest로 변경",

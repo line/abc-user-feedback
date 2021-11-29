@@ -1,16 +1,16 @@
 /* */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
-import { Check, Delete, ArrowUp, ArrowDown } from 'baseui/icon'
+import { ArrowDown, ArrowUp, Check, Delete } from 'baseui/icon'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
 import {
+  SIZE as TableSize,
   TableBuilder,
-  TableBuilderColumn,
-  SIZE as TableSize
+  TableBuilderColumn
 } from 'baseui/table-semantic'
 import { Checkbox } from 'baseui/checkbox'
 import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
@@ -19,12 +19,12 @@ import { Button, KIND as ButtonKind, KIND, SIZE } from 'baseui/button'
 import { Pagination, SIZE as PaginationSize } from 'baseui/pagination'
 import {
   Modal,
+  ModalBody,
   ModalButton,
   ModalFooter,
-  ModalBody,
   ModalHeader,
-  SIZE as ModalSize,
-  ROLE
+  ROLE,
+  SIZE as ModalSize
 } from 'baseui/modal'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -33,12 +33,13 @@ import styles from './styles.module.scss'
 import BackIcon from '~/assets/back.svg'
 import { useToggle, useUser } from '~/hooks'
 import {
-  getFeedbackByCode,
-  getFeedbackreponses,
   deleteResponse,
-  exportFeedbackResponse
+  exportFeedbackResponse,
+  getFeedbackByCode,
+  getFeedbackreponses
 } from '~/service/feedback'
-import { Header, ResponseSnippetModal, ResponseFilter } from '~/components'
+import { Header, ResponseFilter, ResponseSnippetModal } from '~/components'
+import { Permission } from '@/types'
 
 const REQUEST_COUNT = 100
 
@@ -58,7 +59,7 @@ const AdminFeedbackDetailPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [params, setParams] = useState<any>({})
 
-  const { user } = useUser()
+  const { user, hasPermission } = useUser()
 
   const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
     ['feedback', router.query.code],
@@ -216,7 +217,7 @@ const AdminFeedbackDetailPage = () => {
       <Header />
       <div className={styles.page}>
         <h1 className={styles.title}>
-          {user.role >= 3 && (
+          {hasPermission(Permission.READ_FEEDBACKS) && (
             <BackIcon
               className={styles.title__icon}
               onClick={handleClickBack}
@@ -225,7 +226,7 @@ const AdminFeedbackDetailPage = () => {
           <span className={styles.title__text}>
             {t('title.feedback.detail')}
           </span>
-          {user.role >= 3 && (
+          {hasPermission(Permission.UPDATE_FEEDBACK) && (
             <div className={styles.title__action}>
               <ButtonGroup>
                 <Button
@@ -251,7 +252,7 @@ const AdminFeedbackDetailPage = () => {
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
-          {user.role >= 3 && (
+          {hasPermission(Permission.DELETE_RESPONSE) && (
             <div style={{ marginLeft: 'auto' }}>
               <Button
                 onClick={toggleDeleteResponseModal}
@@ -282,7 +283,7 @@ const AdminFeedbackDetailPage = () => {
               }
             }}
           >
-            {user.role >= 3 && (
+            {hasPermission(Permission.DELETE_RESPONSE) && (
               <TableBuilderColumn
                 overrides={{
                   TableHeadCell: { style: { width: '1%' } },
@@ -352,7 +353,7 @@ const AdminFeedbackDetailPage = () => {
           <div
             style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}
           >
-            {user.role >= 2 && (
+            {hasPermission(Permission.EXPORT_RESPONSE) && (
               <ButtonGroup size={ButtonGroupSize.compact}>
                 <Button
                   onClick={() => handleRequestExcelExport('xlsx')}

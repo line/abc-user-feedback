@@ -1,5 +1,10 @@
 import client from './apiClient'
 
+interface RoleUserBindingPayload {
+  roleName: string
+  userId: string
+}
+
 export const updateUserSetting = (payload) =>
   client.put('/user/setting', payload).then((res) => res.data)
 
@@ -13,6 +18,20 @@ export const logout = () => client.post('/auth/logout')
 /**
  * Admin
  */
+export const roleUserBinding = (payload: RoleUserBindingPayload) => {
+  return client
+    .post(`/admin/roles/binding/user`, payload)
+    .then((res) => res.data)
+}
+
+export const roleUserUnbinding = (payload: RoleUserBindingPayload) => {
+  return client
+    .delete(`/admin/roles/binding/user`, {
+      data: payload
+    })
+    .then((res) => res.data)
+}
+
 export const userRoleBinding = (role, userId) => {
   return client
     .post(`/admin/user/role/${role}`, { userId })

@@ -24,17 +24,17 @@ import * as XLSX from 'xlsx'
 import { FeedbackService } from './feedback.service'
 import { CreateFeedbackDto, UpdateFeedbackDto } from './dto'
 import { PaginationParams } from '#/core/params'
-import { Roles } from '#/core/decorators'
-import { RoleGuard } from '#/core/guard'
-import { UserRole } from '@/types'
+import { PermissionGuard } from '#/core/guard'
+import { Permissions } from '#/core/decorators'
+import { Permission } from '@/types'
 
 @Controller('api/v1')
-@UseGuards(RoleGuard)
+@UseGuards(PermissionGuard)
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
-  @Roles(UserRole.Manager)
   @Post('admin/feedback')
+  @Permissions(Permission.CREATE_FEEDBACK)
   async createFeedback(@Req() req: any, @Body() data: CreateFeedbackDto) {
     const userId = req.user.id
     const feedback = await this.feedbackService.createFeedback(data, userId)
@@ -42,8 +42,8 @@ export class FeedbackController {
     return feedback
   }
 
-  @Roles(UserRole.Manager)
   @Delete('admin/feedback/:idOrCode')
+  @Permissions(Permission.DELETE_FEEDBACK)
   @HttpCode(204)
   async deleteFeedback(
     @Req() req: any,
@@ -61,8 +61,8 @@ export class FeedbackController {
     res.end()
   }
 
-  @Roles(UserRole.Admin)
   @Get('admin/feedback')
+  @Permissions(Permission.READ_FEEDBACKS)
   async getAll(@Query() pagination: PaginationParams) {
     const { offset, limit } = pagination
     const [items, totalCount] = await this.feedbackService.findAllFeedback(
@@ -76,8 +76,8 @@ export class FeedbackController {
     }
   }
 
-  @Roles(UserRole.Admin)
   @Get('admin/feedback/:idOrCode')
+  @Permissions(Permission.READ_FEEDBACK)
   async findById(@Param('idOrCode') idOrCode = ''): Promise<any> {
     const feedback = await this.feedbackService.findFeedback(idOrCode)
 
@@ -88,8 +88,8 @@ export class FeedbackController {
     return feedback
   }
 
-  @Roles(UserRole.Manager)
   @Patch('admin/feedback/:idOrCode')
+  @Permissions(Permission.UPDATE_FEEDBACK)
   async updateFeedback(
     @Param('idOrCode') idOrCode,
     @Body() data: UpdateFeedbackDto
@@ -98,8 +98,8 @@ export class FeedbackController {
     return feedback
   }
 
-  @Roles(UserRole.Admin)
   @Get('admin/feedback/:idOrCode/response')
+  @Permissions(Permission.READ_FEEDBACK)
   async getAllResponse(
     @Param('idOrCode') idOrCode = '',
     @Query() pagination: PaginationParams,
@@ -126,8 +126,8 @@ export class FeedbackController {
     }
   }
 
-  @Roles(UserRole.Manager)
   @Delete('admin/response/:responseId')
+  @Permissions(Permission.DELETE_RESPONSE)
   async deleteReponse(
     @Res() res: Response,
     @Param('responseId') responseId = ''
@@ -136,8 +136,8 @@ export class FeedbackController {
     res.status(204).end()
   }
 
-  @Roles(UserRole.Manager)
   @Get('admin/feedback/:idOrCode/response/export')
+  @Permissions(Permission.EXPORT_RESPONSE)
   async exportResponse(
     @Res() res: Response,
     @Param('idOrCode') idOrCode = '',

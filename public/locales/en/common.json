@@ -35,6 +35,7 @@
   "action.download.excel": "Excel download",
   "action.download.csv": "CSV download",
   "action.member.invite": "Invite member",
+  "action.user.role.binding": "To {{role}}",
   "action.member.to.owner": "To owner",
   "action.member.to.manager": "To manager",
   "action.member.to.guest": "To guest",

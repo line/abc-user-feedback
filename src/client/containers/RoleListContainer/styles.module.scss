@@ -1,0 +1,20 @@
+.container {
+  margin-bottom: 16px;
+
+  .list {
+    border: 1px solid var(--border);
+    background-color: var(--white);
+    box-shadow: none;
+    border-radius: 2px 2px 0 0;
+
+    .title {
+      display: flex;
+      align-items: center;
+      padding-right: 20px;
+      padding-left: 20px;
+      font-size: 1.4rem;
+      font-weight: 400;
+      line-height: 60px;
+    }
+  }
+}

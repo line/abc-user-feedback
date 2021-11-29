@@ -1,16 +1,16 @@
 /* */
 import {
-  Controller,
-  Query,
-  Param,
-  Res,
-  Req,
-  Get,
-  Post,
   BadRequestException,
   Body,
-  UseGuards,
-  UnauthorizedException
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  Req,
+  Res,
+  UnauthorizedException,
+  UseGuards
 } from '@nestjs/common'
 import { AuthGuard } from '@nestjs/passport'
 import { Response } from 'express'
@@ -19,19 +19,19 @@ import { ConfigService } from '@nestjs/config'
 /* */
 import { AuthService } from './auth.service'
 import {
-  ResetPasswordDto,
-  InvitationMailDto,
-  SignUpDto,
+  ChangePasswordDto,
   ConfirmDto,
+  InvitationMailDto,
+  ResetPasswordDto,
   SendResetPasswordMailDto,
-  ChangePasswordDto
+  SignUpDto
 } from './dto'
-import { RoleGuard } from '#/core/guard'
-import { Roles } from '#/core/decorators'
-import { UserRole } from '@/types'
+import { PermissionGuard } from '#/core/guard'
+import { Permissions } from '#/core/decorators'
+import { Permission } from '@/types'
 
 @Controller('api/v1')
-@UseGuards(RoleGuard)
+@UseGuards(PermissionGuard)
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -160,7 +160,7 @@ export class AuthController {
   }
 
   @Post('admin/auth/mail/invitation')
-  @Roles(UserRole.Manager)
+  @Permissions(Permission.INVITE_USER)
   async sendInvitationMail(
     @Res() res: Response,
     @Body() data: InvitationMailDto

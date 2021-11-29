@@ -7,12 +7,19 @@ interface IUserProfile {
   nickname: string
   avatarUrl: string
 }
+export interface IRole {
+  id: string
+  name: string
+  description: string
+  createdTime: Date
+  updatedTime: Date
+}
 
 export interface IUser {
   id: string
   email: string
   profile: IUserProfile
-  role: number
+  role?: IRole
   createdTime: Date
   updatedTime: Date
   isVerified: boolean
@@ -79,13 +86,6 @@ export enum UserState {
   Left
 }
 
-export enum UserRole {
-  User = 0,
-  Admin = 1,
-  Manager = 2,
-  Owner = 3
-}
-
 export enum EmailAuthType {
   Register,
   Invitation,
@@ -121,4 +121,32 @@ export enum Locale {
   EN = 'en',
   JP = 'ja',
   KR = 'ko'
+}
+
+export enum Permission {
+  // owner
+  MANAGE_ALL = 'manage.all',
+
+  // user
+  READ_USERS = 'read.users',
+  DELETE_USER = 'delete.user',
+  INVITE_USER = 'invite.user',
+
+  // feedback
+  READ_FEEDBACKS = 'read.feedbacks',
+  READ_FEEDBACK = 'read.feedback',
+  CREATE_FEEDBACK = 'create.feedback',
+  UPDATE_FEEDBACK = 'update.feedback',
+  DELETE_FEEDBACK = 'delete.feedback',
+
+  EXPORT_RESPONSE = 'export.response',
+  DELETE_RESPONSE = 'delete.response',
+
+  // tenant
+  MANAGE_TENANT = 'manage.service',
+  MANAGE_INVITATION = 'update.invitation',
+
+  // role
+  READ_ROLES = 'read.roles',
+  MANAGE_ROLE = 'manage.role'
 }

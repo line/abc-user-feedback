@@ -579,7 +579,7 @@ export class AuthService {
   }
 
   async sendInvitationMail(data: InvitationMailDto) {
-    const { email, role } = data
+    const { email, roleName } = data
 
     const service = await this.serviceRepository.findOne()
 
@@ -619,7 +619,7 @@ export class AuthService {
     const randomCode = nanoid()
     emailAuth.email = email
     emailAuth.code = randomCode
-    emailAuth.asRole = role
+    emailAuth.asRole = roleName
     emailAuth.type = EmailAuthType.Invitation
 
     await this.emailAuthRepository.save(emailAuth)
