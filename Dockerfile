@@ -24,6 +24,7 @@ COPY --from=builder /pre/template ./template
 COPY --from=builder /pre/.next ./.next
 COPY --from=builder /pre/node_modules ./node_modules
 COPY --from=builder /pre/package.json ./package.json
+COPY --from=builder /pre/ormconfig.js ./ormconfig.js
 
 EXPOSE 3000
 
