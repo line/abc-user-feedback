@@ -166,7 +166,67 @@ const AdminFeedbackDetailPage = () => {
     const itemElem = []
 
     if (responseDetail?.feedbackResponseFields) {
-      const { feedbackResponseFields = [] } = responseDetail
+      const { feedbackResponseFields = [], id, createdTime } = responseDetail
+      const idx = responseData.findIndex((d) => d.id === id)
+      const number = REQUEST_COUNT * (currentPage - 1) + idx + 1
+
+      itemElem.push(
+        <ListItem
+          overrides={{
+            EndEnhancerContainer: {
+              style: {
+                maxWidth: '640px',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-all'
+              }
+            }
+          }}
+          endEnhancer={() => <ListItemLabel>{number}</ListItemLabel>}
+        >
+          <ListItemLabel
+            overrides={{
+              LabelContent: {
+                style: {
+                  minWidth: '200px'
+                }
+              }
+            }}
+          >
+            No.
+          </ListItemLabel>
+        </ListItem>,
+        <ListItem
+          overrides={{
+            EndEnhancerContainer: {
+              style: {
+                maxWidth: '640px',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-all'
+              }
+            }
+          }}
+          endEnhancer={() => (
+            <ListItemLabel>
+              {DateTime.fromISO(createdTime, { zone: 'utc' }).toFormat(
+                'yyyy-MM-dd, HH:mm'
+              )}
+            </ListItemLabel>
+          )}
+        >
+          <ListItemLabel
+            overrides={{
+              LabelContent: {
+                style: {
+                  minWidth: '200px'
+                }
+              }
+            }}
+          >
+            Date
+          </ListItemLabel>
+        </ListItem>
+      )
+
       feedbackResponseFields.map((field) => {
         itemElem.push(
           <ListItem
@@ -319,7 +379,9 @@ const AdminFeedbackDetailPage = () => {
               }}
             >
               {(row) =>
-                DateTime.fromISO(row.createdTime).toFormat('yyyy-MM-dd, HH:mm')
+                DateTime.fromISO(row.createdTime, { zone: 'utc' }).toFormat(
+                  'yyyy-MM-dd, HH:mm'
+                )
               }
             </TableBuilderColumn>
             {responseColumns.map((col) => (

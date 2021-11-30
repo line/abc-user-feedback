@@ -2,8 +2,8 @@
 import React from 'react'
 import * as yup from 'yup'
 import { useSnackbar } from 'baseui/snackbar'
-import { Check, Delete } from 'baseui/icon'
-import { useForm } from 'react-hook-form'
+import { Check } from 'baseui/icon'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { KIND as ButtonKind } from 'baseui/button'
 import { Paragraph3 } from 'baseui/typography'
@@ -40,9 +40,9 @@ const FindPasswordModal = (props: Props) => {
   const {
     register,
     watch,
-    trigger,
+    control,
     formState,
-    getValues,
+    handleSubmit,
     reset,
     clearErrors,
     setError
@@ -60,29 +60,23 @@ const FindPasswordModal = (props: Props) => {
     onClose?.()
   }
 
-  const handleSendFindPasswordEmail = async () => {
-    const isValid = await trigger()
+  const handleSendFindPasswordEmail = async (payload) => {
+    try {
+      await sendFindPasswordEmail({
+        email: payload.email
+      })
 
-    if (isValid) {
-      const payload = getValues()
+      enqueue({
+        message: t('snackbar.success.send.mail.reset.password'),
+        startEnhancer: ({ size }) => <Check size={size} />
+      })
 
-      try {
-        await sendFindPasswordEmail({
-          email: payload.email
-        })
-
-        enqueue({
-          message: t('snackbar.success.send.mail.reset.password'),
-          startEnhancer: ({ size }) => <Check size={size} />
-        })
-
-        onClose?.()
-      } catch {
-        setError('email', {
-          type: 'manual',
-          message: t('validation.email')
-        })
-      }
+      handleClose?.()
+    } catch {
+      setError('email', {
+        type: 'manual',
+        message: t('validation.email')
+      })
     }
   }
 
@@ -94,28 +88,36 @@ const FindPasswordModal = (props: Props) => {
       size={ModalSize.auto}
       role={ROLE.dialog}
     >
-      <ModalHeader>{t('title.password.reset')}</ModalHeader>
-      <ModalBody>
-        <Paragraph3 $style={{ whiteSpace: 'pre-wrap', textAlign: 'center' }}>
-          {t('description.password.reset')}
-        </Paragraph3>
-        <div style={{ marginTop: 10 }}>
-          <Input {...register('email')} placeholder={t('placeholder.email')} />
-          <ErrorMessage errors={errors} name='email' />
-        </div>
-        <div style={{ marginTop: 16 }}>
-          <ModalButton onClick={handleClose} kind={ButtonKind.tertiary}>
-            {t('action.cancel')}
-          </ModalButton>
-          <ModalButton
-            kind={ButtonKind.primary}
-            onClick={handleSendFindPasswordEmail}
-            disabled={!watchEmail}
-          >
-            {t('action.send.mail.invitation')}
-          </ModalButton>
-        </div>
-      </ModalBody>
+      <form onSubmit={handleSubmit(handleSendFindPasswordEmail)}>
+        <ModalHeader>{t('title.password.reset')}</ModalHeader>
+        <ModalBody>
+          <Paragraph3 $style={{ whiteSpace: 'pre-wrap', textAlign: 'center' }}>
+            {t('description.password.reset')}
+          </Paragraph3>
+          <div style={{ marginTop: 10 }}>
+            <Controller
+              control={control}
+              name='email'
+              render={({ field }) => (
+                <Input {...field} placeholder={t('placeholder.email')} />
+              )}
+            />
+            <ErrorMessage errors={errors} name='email' />
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <ModalButton onClick={handleClose} kind={ButtonKind.tertiary}>
+              {t('action.cancel')}
+            </ModalButton>
+            <ModalButton
+              kind={ButtonKind.primary}
+              type='submit'
+              disabled={!watchEmail}
+            >
+              {t('action.send.mail.invitation')}
+            </ModalButton>
+          </div>
+        </ModalBody>
+      </form>
     </Modal>
   )
 }

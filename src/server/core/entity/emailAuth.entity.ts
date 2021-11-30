@@ -27,7 +27,7 @@ export default class EmailAuth {
   @Column('enum', { enum: EmailAuthType, default: EmailAuthType.Register })
   type!: EmailAuthType
 
-  @Column()
+  @Column({ nullable: true })
   asRole!: string
 
   @Column({ default: false })
