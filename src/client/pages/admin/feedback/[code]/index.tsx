@@ -227,7 +227,13 @@ const AdminFeedbackDetailPage = () => {
         </ListItem>
       )
 
-      feedbackResponseFields.map((field) => {
+      const sorted = sortBy(feedbackResponseFields, (response) => {
+        return feedback?.fields.find(
+          (f) => f.name === response.feedbackField.name
+        )?.order
+      })
+
+      sorted.map((field) => {
         itemElem.push(
           <ListItem
             overrides={{

@@ -210,7 +210,10 @@ export class AuthService {
     const compared = await bcrypt.compare(currentPassword, user.hashPassword)
 
     if (!compared) {
-      throw new BadRequestException('password not correct')
+      throw new BadRequestException(
+        'password not correct',
+        'error.password.not_correct'
+      )
     }
 
     const salt = await bcrypt.genSalt(10)
@@ -270,7 +273,10 @@ export class AuthService {
       const compared = await bcrypt.compare(password, user.hashPassword)
 
       if (!compared) {
-        throw new BadRequestException('email or password not correct')
+        throw new BadRequestException(
+          'email or password not correct',
+          'error.auth.not_correct'
+        )
       }
 
       user.hashPassword = ''
@@ -283,14 +289,14 @@ export class AuthService {
   async generateAuthToken(payload, options?: jwt.SignOptions): Promise<Token> {
     const tokenSecret = this.configService.get<string>('jwt.secret')
 
-    const accessToken = await jwt.sign(payload, tokenSecret, {
+    const accessToken = jwt.sign(payload, tokenSecret, {
       issuer: this.configService.get<string>('app.domain'),
       expiresIn: '1h',
       subject: 'access_token',
       ...options
     })
 
-    const refreshToken = await jwt.sign(payload, tokenSecret, {
+    const refreshToken = jwt.sign(payload, tokenSecret, {
       issuer: this.configService.get<string>('app.domain'),
       expiresIn: '7d',
       subject: 'refresh_token',
@@ -321,14 +327,14 @@ export class AuthService {
     }
 
     if (diff < 60 * 60 * 24 * 1000 * 4) {
-      refreshToken = await jwt.sign(payload, tokenSecret, {
+      refreshToken = jwt.sign(payload, tokenSecret, {
         issuer: this.configService.get<string>('app.domain'),
         expiresIn: '7d',
         subject: 'refresh_token'
       })
     }
 
-    const accessToken = await jwt.sign(payload, tokenSecret, {
+    const accessToken = jwt.sign(payload, tokenSecret, {
       issuer: this.configService.get<string>('app.domain'),
       expiresIn: '1h',
       subject: 'access_token'
@@ -599,7 +605,10 @@ export class AuthService {
     })
 
     if (user) {
-      throw new BadRequestException('user already registered')
+      throw new BadRequestException(
+        'user already registered',
+        'error.user.already_registerd'
+      )
     }
 
     // expire previous invitation mail

@@ -19,7 +19,7 @@ const LoginModal = (props: Props) => {
   const { t } = useTranslation()
 
   const schema = yup.object().shape({
-    email: yup.string().email(t('validation.email')).required(),
+    email: yup.string().email(t('validation.email.domain')).required(),
     password: yup.string().required(),
     rememberEmail: yup.boolean()
   })

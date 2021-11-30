@@ -46,7 +46,7 @@ const InviteUserModal = (props: Props) => {
   const schema = yup.object().shape({
     emails: yup
       .string()
-      .test('email format', t('validation.email'), (emails = '') => {
+      .test('email format', t('validation.email.domain'), (emails = '') => {
         const emailSchema = yup.string().email()
         const parsed = emails
           .split(/\n/)
@@ -55,8 +55,8 @@ const InviteUserModal = (props: Props) => {
 
         return parsed.every((email) => emailSchema.isValidSync(email))
       })
-      .required(),
-    role: yup.mixed().required()
+      .required(t('validation.email.domain')),
+    role: yup.mixed().required(t('validation.select.role'))
   })
 
   const { user, hasPermission } = useUser()
@@ -107,7 +107,7 @@ const InviteUserModal = (props: Props) => {
 
             setError('emails', {
               type: 'manual',
-              message: `${mailDomain} is not allowed domain`
+              message: t('validation.email.domain')
             })
 
             break
@@ -122,14 +122,15 @@ const InviteUserModal = (props: Props) => {
           )
         )
         enqueue({
-          message: `invitation has been sent`,
+          message: t('snackbar.success.send.mail.invitation'),
           startEnhancer: ({ size }) => <Check size={size} />
         })
         handleCloseModal()
       }
-    } catch (err) {
+    } catch (error) {
       enqueue({
-        message: 'error when send invitation',
+        message:
+          t(error?.response?.data?.error) ?? error?.response?.data?.message,
         startEnhancer: ({ size }) => <Delete size={size} />
       })
     }
@@ -149,7 +150,10 @@ const InviteUserModal = (props: Props) => {
       >
         <ModalBody>
           <div className={styles.form}>
-            <FormItem label='Email' description='send emails to user per line'>
+            <FormItem
+              label='Email'
+              description={t('placeholder.invitation.mail')}
+            >
               <Controller
                 control={control}
                 name='emails'
@@ -164,7 +168,7 @@ const InviteUserModal = (props: Props) => {
               />
               <ErrorMessage errors={errors} name='emails' />
             </FormItem>
-            <FormItem label='Role' description='select your role'>
+            <FormItem label='Role'>
               <Controller
                 render={({ field }) => (
                   <Select

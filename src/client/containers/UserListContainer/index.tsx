@@ -79,7 +79,7 @@ const UserListContainer = () => {
       )
 
       enqueue({
-        message: 'Success role binding',
+        message: t('snackbar.success.role.binding'),
         startEnhancer: ({ size }) => <Check size={size} />
       })
     } catch (error) {
@@ -100,7 +100,7 @@ const UserListContainer = () => {
       try {
         await deleteUserById(deleteUser.id)
         enqueue({
-          message: 'Success delete user',
+          message: t('snackbar.success.user.delete'),
           startEnhancer: ({ size }) => <Check size={size} />
         })
 

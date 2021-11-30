@@ -11,6 +11,7 @@
   "placeholder.password.confirm": "パスワードを再度入力",
   "placeholder.password.current": "現在のパスワードを入力",
   "placeholder.select.role": "権限を選択",
+  "placeholder.invitation.mail": "メールアドレスを入力",
 
   "validation.email": "入力されたメールアドレスは登録されていません。\nメールアドレスを確認してください",
   "validation.email.domain": "メールアドレスが間違っています。正しく入力されているかご確認ください",
@@ -54,6 +55,8 @@
   "snackbar.success.send.mail.reset.password": "メールを送付しました",
   "snackbar.success.settings.profile": "アカウント情報の変更を保存しました",
   "snackbar.success.change.password": "アカウント情報の変更を保存しました",
+  "snackbar.success.role.binding": "変更が完了しました。",
+  "snackbar.success.user.delete": "アカウントが削除されました。",
 
   "description.password.reset": "管理画面へのログインに使用しているメールアドレスを入力してください。入力されたメールアドレス宛に、パスワード再設定メールを送付します。\n*パスワード再設定リンクの有効期限は24時間です",
 
@@ -65,5 +68,8 @@
   "title.account.delete": "アカウント削除",
 
   "confirm.delete.member": "ユーザーを削除しますか",
-  "confirm.account.delete": "アカウントを削除します。よろしいですか？"
+  "confirm.account.delete": "アカウントを削除します。よろしいですか？",
+
+  "error.password.not_correct": "現在のパスワードを再度確認してください",
+  "error.user.already_registerd": "メールアドレスが間違っています。正しく入力されているかご確認ください"
 }

@@ -59,7 +59,8 @@ const SecurityPage = () => {
       reset()
     } catch (error) {
       enqueue({
-        message: error?.response?.data?.message,
+        message:
+          t(error?.response?.data?.error) ?? error?.response?.data?.message,
         startEnhancer: ({ size }) => <Delete size={size} />
       })
     }

@@ -34,11 +34,10 @@ const FindPasswordModal = (props: Props) => {
   const { t } = useTranslation()
 
   const schema = yup.object().shape({
-    email: yup.string().email(t('validation.email')).required()
+    email: yup.string().email(t('validation.email.domian')).required()
   })
 
   const {
-    register,
     watch,
     control,
     formState,
