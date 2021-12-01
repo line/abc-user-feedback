@@ -26,7 +26,8 @@ const LoginPage = (props: Props) => {
     defaultValues: {
       rememberEmail: !!props?.loginEmail,
       email: props?.loginEmail
-    }
+    },
+    reValidateMode: 'onSubmit'
   })
 
   return (

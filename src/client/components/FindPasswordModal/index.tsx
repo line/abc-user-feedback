@@ -1,5 +1,5 @@
 /* */
-import React from 'react'
+import React, { useEffect } from 'react'
 import * as yup from 'yup'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check } from 'baseui/icon'
@@ -46,7 +46,8 @@ const FindPasswordModal = (props: Props) => {
     clearErrors,
     setError
   } = useForm({
-    resolver: yupResolver(schema)
+    resolver: yupResolver(schema),
+    reValidateMode: 'onSubmit'
   })
 
   const { errors } = formState

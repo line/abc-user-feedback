@@ -13,13 +13,13 @@
   "placeholder.select.role": "権限を選択",
   "placeholder.invitation.mail": "メールアドレスを入力",
 
-  "validation.email": "入力されたメールアドレスは登録されていません。\nメールアドレスを確認してください",
-  "validation.email.domain": "メールアドレスが間違っています。正しく入力されているかご確認ください",
-  "validation.email_password": "ログインできませんでした。メールアドレス・パスワードが間違っていないかご確認ください",
-  "validation.password": "パスワードは、半角英数字・記号を含む8~20文字で入力してください",
-  "validation.password.confirm": "パスワードが一致しません",
-  "validation.password.nickname": "ニックネームを確認してください",
-  "validation.select.role": "権限を選択してください",
+  "validation.email": "入力されたメールアドレスは登録されていません。\nメールアドレスを確認してください。",
+  "validation.email.domain": "メールアドレスが間違っています。正しく入力されているかご確認ください。",
+  "validation.email_password": "ログインできませんでした。メールアドレス・パスワードが間違っていないかご確認ください。",
+  "validation.password": "パスワードは、半角英数字・記号を含む8~20文字で入力してください。",
+  "validation.password.confirm": "パスワードが一致しません。",
+  "validation.password.nickname": "ニックネームを確認してください。",
+  "validation.select.role": "権限を選択してください。",
 
   "action.delete": "削除",
   "action.cancel": "キャンセル",
@@ -51,14 +51,14 @@
   "label.password_confirm": "新しいパスワード（確認）",
   "label.setting.user": "ユーザーセッティング",
 
-  "snackbar.success.send.mail.invitation": "メールを送付しました",
-  "snackbar.success.send.mail.reset.password": "メールを送付しました",
-  "snackbar.success.settings.profile": "アカウント情報の変更を保存しました",
-  "snackbar.success.change.password": "アカウント情報の変更を保存しました",
+  "snackbar.success.send.mail.invitation": "メールを送付しました。",
+  "snackbar.success.send.mail.reset.password": "メールを送付しました。",
+  "snackbar.success.settings.profile": "アカウント情報の変更を保存しました。",
+  "snackbar.success.change.password": "アカウント情報の変更を保存しました。",
   "snackbar.success.role.binding": "変更が完了しました。",
   "snackbar.success.user.delete": "アカウントが削除されました。",
 
-  "description.password.reset": "管理画面へのログインに使用しているメールアドレスを入力してください。入力されたメールアドレス宛に、パスワード再設定メールを送付します。\n*パスワード再設定リンクの有効期限は24時間です",
+  "description.password.reset": "管理画面へのログインに使用しているメールアドレスを入力してください。入力されたメールアドレス宛に、パスワード再設定メールを送付します。\n*パスワード再設定リンクの有効期限は24時間です。",
 
   "title.password.reset": "パスワードの再設定",
   "title.feedback.list": "フィードバック管理",
@@ -67,9 +67,9 @@
   "title.settings.profile": "アカウント設定",
   "title.account.delete": "アカウント削除",
 
-  "confirm.delete.member": "ユーザーを削除しますか",
+  "confirm.delete.member": "ユーザーを削除しますか?",
   "confirm.account.delete": "アカウントを削除します。よろしいですか？",
 
-  "error.password.not_correct": "現在のパスワードを再度確認してください",
-  "error.user.already_registerd": "メールアドレスが間違っています。正しく入力されているかご確認ください"
+  "error.password.not_correct": "現在のパスワードを再度確認してください。",
+  "error.user.already_registerd": "メールアドレスが間違っています。正しく入力されているかご確認ください。"
 }
