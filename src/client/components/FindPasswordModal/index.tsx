@@ -46,8 +46,7 @@ const FindPasswordModal = (props: Props) => {
     clearErrors,
     setError
   } = useForm({
-    resolver: yupResolver(schema),
-    reValidateMode: 'onSubmit'
+    resolver: yupResolver(schema)
   })
 
   const { errors } = formState
@@ -55,10 +54,21 @@ const FindPasswordModal = (props: Props) => {
   const watchEmail = watch('email')
 
   const handleClose = () => {
-    reset()
-    clearErrors()
     onClose?.()
+    reset({
+      keepErrors: false,
+      keepIsSubmitted: false,
+      keepSubmitCount: false,
+      keepValues: false
+    })
+    clearErrors()
   }
+
+  useEffect(() => {
+    if (isOpen && !watchEmail) {
+      clearErrors()
+    }
+  }, [isOpen, watchEmail])
 
   const handleSendFindPasswordEmail = async (payload) => {
     try {
