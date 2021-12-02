@@ -28,5 +28,5 @@ COPY --from=builder /pre/ormconfig.js ./ormconfig.js
 
 EXPOSE 3000
 
-CMD typeorm migration:run && node dist/server/main
+CMD yarn run typeorm migration:run && node dist/server/main
 
