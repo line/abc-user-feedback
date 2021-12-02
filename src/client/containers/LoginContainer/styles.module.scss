@@ -73,6 +73,11 @@
         width: 360px;
         flex: 1;
       }
+
+      &__buttons {
+        display: flex;
+        align-items: center;
+      }
     }
 
     &__submitted {

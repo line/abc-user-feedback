@@ -152,14 +152,10 @@ const LoginContainer = () => {
         <img src={service.logoUrl} className={styles.login__logo} alt='logo' />
       )}
       <div className={styles.login__title}>
-        {service ? (
-          <>
-            Login to
-            <b className={styles['login__title__service']}>{service?.name}</b>
-          </>
-        ) : (
-          <>Login First</>
-        )}
+        Login to
+        <b className={styles['login__title__service']}>
+          {service?.name ?? 'User Feedback'}
+        </b>
       </div>
       {config.email.enable && (
         <form
@@ -204,28 +200,30 @@ const LoginContainer = () => {
                 )}
               />
               <div className={styles.email__form__action}>
-                <Controller
-                  name='rememberEmail'
-                  control={control}
-                  render={({ field: { onChange, ...rest } }) => (
-                    <Checkbox
-                      {...rest}
-                      overrides={{
-                        Label: {
-                          style: ({ $theme }) =>
-                            $theme?.typography?.MonoLabelSmall
-                        }
-                      }}
-                      checked={getValues('rememberEmail')}
-                      labelPlacement={LABEL_PLACEMENT.right}
-                      onChange={(e: any) => {
-                        setValue('rememberEmail', e.target.checked)
-                      }}
-                    >
-                      <span>{t('action.remember_email')}</span>
-                    </Checkbox>
-                  )}
-                />
+                {authMode === AuthMode.SignIn && (
+                  <Controller
+                    name='rememberEmail'
+                    control={control}
+                    render={({ field: { onChange, ...rest } }) => (
+                      <Checkbox
+                        {...rest}
+                        overrides={{
+                          Label: {
+                            style: ({ $theme }) =>
+                              $theme?.typography?.MonoLabelSmall
+                          }
+                        }}
+                        checked={getValues('rememberEmail')}
+                        labelPlacement={LABEL_PLACEMENT.right}
+                        onChange={(e: any) => {
+                          setValue('rememberEmail', e.target.checked)
+                        }}
+                      >
+                        <span>{t('action.remember_email')}</span>
+                      </Checkbox>
+                    )}
+                  />
+                )}
                 {authMode === AuthMode.SignIn && (
                   <Button
                     type='text'
@@ -249,7 +247,7 @@ const LoginContainer = () => {
                 <ErrorMessage errors={errors} name='passwordConfirm' />
               </FormItem>
             )}
-            <div>
+            <div className={styles.email__form__buttons}>
               <Button
                 className={styles.email__form__button}
                 type='primary'
@@ -260,7 +258,7 @@ const LoginContainer = () => {
                   (authMode === AuthMode.SignUp && !watchPasswordConfirm)
                 }
               >
-                {t('action.login')}
+                {authMode === AuthMode.SignUp ? 'Register' : t('action.login')}
               </Button>
               {renderLoginButton()}
             </div>

@@ -18,9 +18,6 @@ const schema = yup.object().shape({
     useNickname: yup.boolean().default(true),
     useDeleteAccount: yup.boolean().default(true)
   }),
-  database: yup.object().shape({
-    connectionString: yup.string().required()
-  }),
   customAuth: yup.object().shape({
     relayHeader: yup.string(),
     validateUrl: yup.string().url(),
