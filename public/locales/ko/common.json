@@ -71,5 +71,7 @@
   "confirm.account.delete": "계정을 삭제하시겠습니까?",
 
   "error.password.not_correct": "현재 비밀번호를 확인 해주세요",
-  "error.user.already_registerd": "이미 등록된 유저 입니다"
+  "error.user.already_registerd": "이미 등록된 유저 입니다",
+  "error.user.not_registerd": "등록되지 않은 유저 입니다",
+  "error.user.not_verified": "아직 인증하지 않은 유저 입니다"
 }

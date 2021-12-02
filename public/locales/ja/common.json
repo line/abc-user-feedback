@@ -71,5 +71,7 @@
   "confirm.account.delete": "アカウントを削除します。よろしいですか？",
 
   "error.password.not_correct": "現在のパスワードを再度確認してください。",
-  "error.user.already_registerd": "メールアドレスが間違っています。正しく入力されているかご確認ください。"
+  "error.user.already_registerd": "メールアドレスが間違っています。正しく入力されているかご確認ください。",
+  "error.user.not_registerd": "登録されていないユーザーです。",
+  "error.user.not_verified": "まだ認証されていないユーザーです。"
 }

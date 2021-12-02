@@ -16,11 +16,17 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const user = await this.authService.validateUser(email, password)
 
     if (!user) {
-      throw new BadRequestException('user not registerd')
+      throw new BadRequestException(
+        'user not registerd',
+        'error.user.not_registerd'
+      )
     }
 
     if (!user.isVerified) {
-      throw new BadRequestException('user not verify')
+      throw new BadRequestException(
+        'user not verified',
+        'error.user.not_verified'
+      )
     }
 
     return user

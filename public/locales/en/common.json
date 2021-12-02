@@ -15,7 +15,7 @@
 
   "validation.email": "Check your email",
   "validation.email.domain": "Check your email",
-  "validation.email_password": "Check yout email/password",
+  "validation.email_password": "Check your email/password",
   "validation.password": "The password must contain at least 8 letters of English, numbers, and special characters",
   "validation.password.confirm": "Password not correct",
   "validation.password.nickname": "Check your nickname",
@@ -71,5 +71,7 @@
   "confirm.account.delete": "Delete this account?",
 
   "error.password.not_correct": "Check your password",
-  "error.user.already_registerd": "User already registerd"
+  "error.user.already_registerd": "User already registerd",
+  "error.user.not_registerd": "User not registered",
+  "error.user.not_verified": "User not verified"
 }

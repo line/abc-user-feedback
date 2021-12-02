@@ -46,44 +46,67 @@ export class UserService {
     data: CreateUserDto,
     options?: { password?: string; withVerify?: boolean; role?: string }
   ) {
-    const userCount = await this.userRepository.count()
-    const user = new User()
-    user.email = data.email
+    const queryRunner = await getConnection().createQueryRunner()
+    await queryRunner.connect()
+    await queryRunner.startTransaction()
 
-    if (options?.password) {
-      const salt = await bcrypt.genSalt(10)
-      const hashPassword = await bcrypt.hash(options.password, salt)
-      user.hashPassword = hashPassword
-    }
+    let user = new User()
 
-    if (options?.withVerify) {
-      user.isVerified = true
-    }
+    try {
+      const userCount = await this.userRepository.count({
+        where: {
+          isVerified: true
+        }
+      })
 
-    await this.userRepository.save(user)
-
-    if (!userCount || options?.role) {
-      const roleName = !userCount ? OWNER_KEY : options.role
-      const role = await this.roleRepository.findOne({ name: roleName })
-
-      if (!role) {
-        throw new BadRequestException(`${options.role} role not exists`)
+      if (options?.password) {
+        const salt = await bcrypt.genSalt(10)
+        const hashPassword = await bcrypt.hash(options.password, salt)
+        user.hashPassword = hashPassword
       }
 
-      const roleUserBinding = new RoleUserBinding()
-      roleUserBinding.userId = user.id
-      roleUserBinding.roleId = role.id
+      if (options?.withVerify) {
+        user.isVerified = true
+      }
 
-      await this.roleUserBindingRepository.save(roleUserBinding)
+      await getManager().transaction(async (entityManager) => {
+        user.email = data.email
+
+        await entityManager.save(User, user)
+
+        if (!userCount || options?.role) {
+          const roleName = !userCount ? OWNER_KEY : options.role
+          const role = await this.roleRepository.findOne({
+            name: roleName
+          })
+
+          if (!role) {
+            throw new BadRequestException(`${options.role} role not exists`)
+          }
+
+          const roleUserBinding = new RoleUserBinding()
+          roleUserBinding.userId = user.id
+          roleUserBinding.roleId = role.id
+
+          await entityManager.save(RoleUserBinding, roleUserBinding)
+        }
+
+        const userProfile = new UserProfile()
+        userProfile.userId = user.id
+        userProfile.nickname = data.nickname
+        userProfile.avatarUrl = data.avatarUrl
+
+        await entityManager.save(UserProfile, userProfile)
+
+        user.hashPassword = ''
+      })
+    } catch (err) {
+      await queryRunner.rollbackTransaction()
+      throw new InternalServerErrorException(err)
+    } finally {
+      await queryRunner.release()
     }
 
-    const userProfile = new UserProfile()
-    userProfile.userId = user.id
-    userProfile.nickname = data.nickname
-    userProfile.avatarUrl = data.avatarUrl
-    await this.userProfileRepository.save(userProfile)
-
-    user.hashPassword = ''
     return user
   }
 
