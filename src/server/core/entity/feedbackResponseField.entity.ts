@@ -24,7 +24,7 @@ export default class FeedbackResponseField {
   @Column('uuid')
   feedbackResponseId!: string
 
-  @Column({ type: 'nvarchar', length: 1000 })
+  @Column({ type: 'nvarchar', length: 10000 })
   value!: any
 
   @Column('timestampz')
