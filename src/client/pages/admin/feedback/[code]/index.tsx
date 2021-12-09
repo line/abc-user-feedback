@@ -40,6 +40,7 @@ import {
 } from '~/service/feedback'
 import { Header, ResponseFilter, ResponseSnippetModal } from '~/components'
 import { Permission } from '@/types'
+import { withComma } from '@/server/utils/string'
 
 const REQUEST_COUNT = 100
 
@@ -208,7 +209,7 @@ const AdminFeedbackDetailPage = () => {
           endEnhancer={() => (
             <ListItemLabel>
               {DateTime.fromISO(createdTime, { zone: 'utc' }).toFormat(
-                'yyyy-MM-dd, HH:mm'
+                'yyyy-MM-dd HH:mm'
               )}
             </ListItemLabel>
           )}
@@ -373,7 +374,9 @@ const AdminFeedbackDetailPage = () => {
                 TableBodyCell: { style: { width: '20px' } }
               }}
             >
-              {(row, idx) => REQUEST_COUNT * (currentPage - 1) + idx + 1}
+              {(row, idx) =>
+                withComma(REQUEST_COUNT * (currentPage - 1) + idx + 1)
+              }
             </TableBuilderColumn>
             <TableBuilderColumn
               header={renderDateHeader}
@@ -386,7 +389,7 @@ const AdminFeedbackDetailPage = () => {
             >
               {(row) =>
                 DateTime.fromISO(row.createdTime, { zone: 'utc' }).toFormat(
-                  'yyyy-MM-dd, HH:mm'
+                  'yyyy-MM-dd HH:mm'
                 )
               }
             </TableBuilderColumn>
@@ -460,6 +463,8 @@ const AdminFeedbackDetailPage = () => {
         onClose={handleToggleResponseExampleModal}
       />
       <Modal
+        animate
+        autoFocus
         isOpen={showDeleteResponseModal}
         closeable={false}
         onClose={toggleDeleteResponseModal}

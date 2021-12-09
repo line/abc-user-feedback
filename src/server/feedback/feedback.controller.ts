@@ -159,7 +159,7 @@ export class FeedbackController {
     const mappaed = responses.map((response) => {
       const data = {
         time: DateTime.fromJSDate(response.createdTime).toFormat(
-          'yyyy-MM-dd, HH:mm'
+          'yyyy-MM-dd HH:mm'
         )
       }
 

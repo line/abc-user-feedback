@@ -61,3 +61,8 @@ button {
   color: inherit;
   border-radius: 0;
 }
+
+button:focus {
+  outline: none !important;
+  border: none !important;
+}
