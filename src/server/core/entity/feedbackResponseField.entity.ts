@@ -21,8 +21,8 @@ export default class FeedbackResponseField {
   @Column('uuid')
   feedbackFieldId!: string
 
-  @Column('uuid')
-  feedbackResponseId!: string
+  @Column('number')
+  feedbackResponseId!: number
 
   @Column({ type: 'nvarchar', length: 10000 })
   value!: any

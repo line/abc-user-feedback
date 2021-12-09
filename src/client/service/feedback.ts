@@ -15,7 +15,7 @@ export const updateFeedback = (code: string, payload) =>
 export const deleteFeedback = (code: string) =>
   client.delete(`/admin/feedback/${code}`).then((res) => res.data)
 
-export const deleteResponse = (responseId: string) => {
+export const deleteResponse = (responseId: number) => {
   client.delete(`/admin/response/${responseId}`).then((res) => res.data)
 }
 

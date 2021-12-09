@@ -17,8 +17,8 @@ import { User, Feedback, FeedbackResponseField } from './index'
 @Entity('feedbackResponses')
 @Index(['feedbackId'])
 export default class FeedbackResponse {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string
+  @PrimaryGeneratedColumn('increment')
+  id!: number
 
   @Column('uuid', { nullable: true })
   userId!: string

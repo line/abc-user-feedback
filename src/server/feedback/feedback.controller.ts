@@ -18,6 +18,7 @@ import {
 } from '@nestjs/common'
 import { DateTime } from 'luxon'
 import { Response } from 'express'
+import { sortBy } from 'lodash'
 import * as XLSX from 'xlsx'
 
 /* */
@@ -158,6 +159,7 @@ export class FeedbackController {
     const [responses] = await this.feedbackService.getResponses(feedback.id, 0)
     const mappaed = responses.map((response) => {
       const data = {
+        no: response.id,
         time: DateTime.fromJSDate(response.createdTime).toFormat(
           'yyyy-MM-dd HH:mm'
         )
@@ -165,7 +167,13 @@ export class FeedbackController {
 
       const { feedbackResponseFields } = response
 
-      feedbackResponseFields.map((field) => {
+      const sorted = sortBy(feedbackResponseFields, (response) => {
+        return feedback?.fields.find(
+          (f) => f.name === response.feedbackField.name
+        )?.order
+      })
+
+      sorted.map((field) => {
         data[field.feedbackField.name] = field.value
       })
       return data

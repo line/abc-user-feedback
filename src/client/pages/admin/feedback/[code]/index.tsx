@@ -55,7 +55,7 @@ const AdminFeedbackDetailPage = () => {
 
   const { t } = useTranslation()
 
-  const [selectedId, setSelectedId] = useState<Array<string>>([])
+  const [selectedId, setSelectedId] = useState<Array<number>>([])
   const [responseDetail, setResponseDetail] = useState<any>()
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [params, setParams] = useState<any>({})
@@ -94,11 +94,10 @@ const AdminFeedbackDetailPage = () => {
     e.stopPropagation()
 
     const { checked, name } = e.currentTarget
-
-    if (checked) {
-      setSelectedId((s) => s.concat(name))
+    if (checked && !selectedId.includes(+name)) {
+      setSelectedId((s) => s.concat(+name))
     } else {
-      setSelectedId((s) => s.filter((id) => id !== name))
+      setSelectedId((s) => s.filter((id) => +id !== +name))
     }
   }
 
@@ -143,10 +142,17 @@ const AdminFeedbackDetailPage = () => {
         await Promise.all(selectedId.map((id) => deleteResponse(id)))
 
         queryClient.setQueryData(
-          ['responses', router.query.code],
-          (prev: Array<any> = []) =>
-            prev.filter((response) => !selectedId.includes(response.id))
+          ['responses', router.query.code, currentPage, params, showLatest],
+          ({ items = [], totalCount }) => {
+            return {
+              items: items?.filter?.(
+                (response) => !selectedId.includes(response.id)
+              ),
+              totalCount: totalCount - 1
+            }
+          }
         )
+
         toggleDeleteResponseModal()
 
         enqueue({
@@ -168,8 +174,6 @@ const AdminFeedbackDetailPage = () => {
 
     if (responseDetail?.feedbackResponseFields) {
       const { feedbackResponseFields = [], id, createdTime } = responseDetail
-      const idx = responseData.findIndex((d) => d.id === id)
-      const number = REQUEST_COUNT * (currentPage - 1) + idx + 1
 
       itemElem.push(
         <ListItem
@@ -182,7 +186,7 @@ const AdminFeedbackDetailPage = () => {
               }
             }
           }}
-          endEnhancer={() => <ListItemLabel>{number}</ListItemLabel>}
+          endEnhancer={() => <ListItemLabel>{id}</ListItemLabel>}
         >
           <ListItemLabel
             overrides={{
@@ -374,9 +378,7 @@ const AdminFeedbackDetailPage = () => {
                 TableBodyCell: { style: { width: '20px' } }
               }}
             >
-              {(row, idx) =>
-                withComma(REQUEST_COUNT * (currentPage - 1) + idx + 1)
-              }
+              {(row) => withComma(row.id)}
             </TableBuilderColumn>
             <TableBuilderColumn
               header={renderDateHeader}
