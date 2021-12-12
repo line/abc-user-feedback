@@ -266,6 +266,7 @@ export class FeedbackService {
       .addSelect('profile.nickname')
       .leftJoinAndSelect('r.feedbackResponseFields', 'feedbackResponseFields')
       .leftJoin('feedbackResponseFields.feedbackField', 'feedbackField')
+      .leftJoinAndSelect('feedbackField.options', 'options')
       .addSelect(['feedbackField.name', 'feedbackField.type'])
 
     // const searchParams = Object.entries(query).filter(([name]) => {

@@ -39,7 +39,7 @@ import {
   getFeedbackreponses
 } from '~/service/feedback'
 import { Header, ResponseFilter, ResponseSnippetModal } from '~/components'
-import { Permission } from '@/types'
+import { FormFieldType, Permission } from '@/types'
 import { withComma } from '@/server/utils/string'
 
 const REQUEST_COUNT = 100
@@ -250,7 +250,15 @@ const AdminFeedbackDetailPage = () => {
                 }
               }
             }}
-            endEnhancer={() => <ListItemLabel>{field?.value}</ListItemLabel>}
+            endEnhancer={() => {
+              const value =
+                field.feedbackField.type === FormFieldType.Select
+                  ? field.feedbackField.options.find(
+                      (option) => option.value === field.value
+                    )?.label
+                  : field.value
+              return <ListItemLabel>{value}</ListItemLabel>
+            }}
           >
             <ListItemLabel
               overrides={{
@@ -414,11 +422,18 @@ const AdminFeedbackDetailPage = () => {
                 }}
               >
                 {(row) => {
-                  const content = row.feedbackResponseFields.find(
-                    (field) => field.feedbackField.name === col
-                  )?.value
+                  const content = row.feedbackResponseFields.find((field) => {
+                    return field.feedbackField.name === col
+                  })
 
-                  return <span title={content}>{content}</span>
+                  const value =
+                    content.feedbackField.type === FormFieldType.Select
+                      ? content.feedbackField.options.find(
+                          (option) => option.value === content.value
+                        )?.label
+                      : content.value
+
+                  return <span title={value}>{value}</span>
                 }}
               </TableBuilderColumn>
             ))}
