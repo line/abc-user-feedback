@@ -13,7 +13,7 @@ import {
 
 /* */
 import { FormFieldType } from '@/types'
-import { Feedback } from './index'
+import { Feedback, FeedbackFieldOption } from './index'
 
 @Entity('feedbackFields')
 @Index(['feedbackId'])
@@ -39,9 +39,6 @@ export default class FeedbackField {
   @Column('uuid')
   feedbackId!: string
 
-  @Column('simple-array')
-  option!: Array<string>
-
   @Column('timestampz')
   @CreateDateColumn()
   createdTime!: Date
@@ -53,4 +50,7 @@ export default class FeedbackField {
   @ManyToOne((type) => Feedback, (feedback) => feedback.fields)
   @JoinColumn({ name: 'feedbackId' })
   feedback!: Feedback
+
+  @OneToMany((type) => FeedbackFieldOption, (options) => options.feedbackField)
+  options: Array<FeedbackFieldOption>
 }

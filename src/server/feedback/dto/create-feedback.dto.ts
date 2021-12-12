@@ -41,7 +41,7 @@ export class FeedbackField {
   @ValidateIf((o) => o.type === FormFieldType.Select)
   @IsArray()
   @IsNotEmpty()
-  option: Array<string> = []
+  options: Array<{ label: string; value: string }> = []
 }
 
 export class CreateFeedbackDto {

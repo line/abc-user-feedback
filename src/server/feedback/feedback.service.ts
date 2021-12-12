@@ -18,6 +18,7 @@ import {
 import {
   Feedback,
   FeedbackField,
+  FeedbackFieldOption,
   FeedbackResponse,
   FeedbackResponseField,
   User
@@ -35,7 +36,9 @@ export class FeedbackService {
     @InjectRepository(FeedbackResponse)
     private readonly feedbackResponseRepository: Repository<FeedbackResponse>,
     @InjectRepository(FeedbackResponseField)
-    private readonly feedbackResponseFieldRepository: Repository<FeedbackResponseField>
+    private readonly feedbackResponseFieldRepository: Repository<FeedbackResponseField>,
+    @InjectRepository(FeedbackFieldOption)
+    private readonly feedbackFieldOptionRepository: Repository<FeedbackFieldOption>
   ) {}
 
   async createFeedback(data: CreateFeedbackDto, userId: string) {
@@ -49,19 +52,36 @@ export class FeedbackService {
 
     await this.feedbackRepository.save(feedback)
 
-    const fields = data.fields.map((field) => {
-      const feedbackField = new FeedbackField()
-      feedbackField.name = field.name
-      feedbackField.description = field.description
-      feedbackField.type = field.type
-      feedbackField.isRequired = field.isRequired
-      feedbackField.order = field.order
-      feedbackField.feedbackId = feedback.id
-      feedbackField.option = field.option
-      return feedbackField
-    })
+    const fields = await Promise.all(
+      data.fields.map(async (field) => {
+        const feedbackField = new FeedbackField()
+        feedbackField.name = field.name
+        feedbackField.description = field.description
+        feedbackField.type = field.type
+        feedbackField.isRequired = field.isRequired
+        feedbackField.order = field.order
+        feedbackField.feedbackId = feedback.id
 
-    await this.feedbackFieldRepository.save(fields)
+        await this.feedbackFieldRepository.save(feedbackField)
+
+        const options = await Promise.all(
+          field.options.map(async (option) => {
+            const feedbackFieldOption = new FeedbackFieldOption()
+            feedbackFieldOption.feedbackFieldId = feedbackField.id
+            feedbackFieldOption.label = option.label
+            feedbackFieldOption.value = option.value
+
+            await this.feedbackFieldOptionRepository.save(feedbackFieldOption)
+
+            return feedbackFieldOption
+          })
+        )
+
+        feedbackField.options = options
+
+        return feedbackField
+      })
+    )
 
     feedback.fields = fields
 
@@ -109,6 +129,7 @@ export class FeedbackService {
       .createQueryBuilder('feedback')
       .where('feedback.id = :id', { id })
       .leftJoinAndSelect('feedback.fields', 'fields')
+      .leftJoinAndSelect('fields.options', 'options')
       .leftJoin('feedback.user', 'user')
       .addSelect('user.id')
       .leftJoin('user.profile', 'profile')
@@ -123,6 +144,7 @@ export class FeedbackService {
       .createQueryBuilder('feedback')
       .where('feedback.code = :code', { code })
       .leftJoinAndSelect('feedback.fields', 'fields')
+      .leftJoinAndSelect('fields.options', 'options')
       .leftJoin('feedback.user', 'user')
       .addSelect('user.id')
       .leftJoin('user.profile', 'profile')
@@ -159,12 +181,15 @@ export class FeedbackService {
     fields.map((field) => {
       const { isRequired, name, type } = field
       const value = response?.[name]
+
       if (isRequired && !value) {
         throw new BadRequestException(`${name} is required`)
       }
 
-      if (type === FormFieldType.Select && !field.option.includes(value)) {
-        throw new BadRequestException(`${name} not allow value ${value}`)
+      if (type === FormFieldType.Select) {
+        if (!field.options.some((option) => option.value === value)) {
+          throw new BadRequestException(`${name} not allow value ${value}`)
+        }
       }
     })
 

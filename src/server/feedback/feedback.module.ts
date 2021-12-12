@@ -8,6 +8,7 @@ import { FeedbackController } from './feedback.controller'
 import {
   Feedback,
   FeedbackField,
+  FeedbackFieldOption,
   FeedbackResponse,
   FeedbackResponseField
 } from '#/core/entity'
@@ -18,7 +19,8 @@ import {
       Feedback,
       FeedbackField,
       FeedbackResponse,
-      FeedbackResponseField
+      FeedbackResponseField,
+      FeedbackFieldOption
     ])
   ],
   controllers: [FeedbackController],
