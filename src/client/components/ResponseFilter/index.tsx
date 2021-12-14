@@ -1,8 +1,10 @@
 /* */
-import React, { useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { FlexGrid, FlexGridItem } from 'baseui/flex-grid'
+import { Block } from 'baseui/block'
 import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
+import { CheckIndeterminate } from 'baseui/icon'
 import { DatePicker } from 'baseui/datepicker'
 import { Button } from 'baseui/button'
 import { FormControl } from 'baseui/form-control'
@@ -20,18 +22,40 @@ interface Props {
 const ResponseFilter = (props: Props) => {
   const { feedback, onApply } = props
 
-  const { control, register, watch, reset, getValues, setValue } = useForm()
+  const { control, watch, reset, getValues, setValue } = useForm({
+    defaultValues: {
+      startDate: null,
+      endDate: null
+    }
+  })
+
+  const watchStartDate = watch('startDate')
+  const watchEndDate = watch('endDate')
 
   const { t } = useTranslation()
+
+  useEffect(() => {
+    const start = DateTime.fromJSDate(watchStartDate)
+    const end = DateTime.fromJSDate(watchEndDate)
+
+    if (start.isValid && end.isValid) {
+      const { days } = start.diff(end, 'days')
+
+      if (days > 0) {
+        setValue('endDate', null)
+      }
+    }
+  }, [watchStartDate, watchEndDate])
 
   const handleApplyParams = () => {
     const values = getValues()
     const params = {}
 
-    if (values.date?.length === 2) {
-      const [start, end] = values.date
-      params['start'] = DateTime.fromJSDate(start).startOf('day').toISO()
-      params['end'] = DateTime.fromJSDate(end).endOf('day').toISO()
+    if (values.startDate && values.endDate) {
+      params['start'] = DateTime.fromJSDate(values.startDate)
+        .startOf('day')
+        .toISO()
+      params['end'] = DateTime.fromJSDate(values.endDate).endOf('day').toISO()
     }
 
     onApply(params)
@@ -42,24 +66,74 @@ const ResponseFilter = (props: Props) => {
     onApply({})
   }
 
+  const isSearchEnable = useMemo(() => {
+    return watchStartDate && watchEndDate
+  }, [watchStartDate, watchEndDate])
+
   const renderFilterItems = useMemo(() => {
     const items = [
       <FlexGridItem key='date'>
         <FormControl label='Date'>
-          <Controller
-            control={control}
-            name='date'
-            render={({ field: { onChange, ...rest } }) => (
-              <DatePicker
-                {...rest}
-                onChange={({ date }) => {
-                  setValue('date', Array.isArray(date) ? date : [date])
-                }}
-                placeholder='YYYY/MM/DD - YYYY/MM/DD'
-                range
-              />
-            )}
-          />
+          <Block
+            overrides={{
+              Block: {
+                style: { display: 'flex', alignItems: 'center' }
+              }
+            }}
+          >
+            <Controller
+              control={control}
+              name='startDate'
+              render={({ field: { onChange, ...rest } }) => (
+                <DatePicker
+                  {...rest}
+                  overrides={{
+                    InputWrapper: {
+                      style: {
+                        minWidth: '150px'
+                      }
+                    }
+                  }}
+                  onChange={({ date }) => {
+                    setValue('startDate', date)
+                  }}
+                  placeholder='YYYY/MM/DD'
+                  clearable
+                />
+              )}
+            />
+            <CheckIndeterminate
+              size={48}
+              overrides={{
+                Svg: {
+                  style: {
+                    margin: '0 5px'
+                  }
+                }
+              }}
+            />
+            <Controller
+              control={control}
+              name='endDate'
+              render={({ field: { onChange, ...rest } }) => (
+                <DatePicker
+                  {...rest}
+                  overrides={{
+                    InputWrapper: {
+                      style: {
+                        minWidth: '150px'
+                      }
+                    }
+                  }}
+                  onChange={({ date }) => {
+                    setValue('endDate', date)
+                  }}
+                  placeholder='YYYY/MM/DD'
+                  clearable
+                />
+              )}
+            />
+          </Block>
         </FormControl>
       </FlexGridItem>
     ]
@@ -116,7 +190,7 @@ const ResponseFilter = (props: Props) => {
   return (
     <div>
       <FlexGrid
-        flexGridColumnCount={4}
+        flexGridColumnCount={2}
         flexGridColumnGap='scale800'
         flexGridRowGap='scale800'
         marginBottom='scale800'
@@ -124,7 +198,9 @@ const ResponseFilter = (props: Props) => {
         {renderFilterItems}
       </FlexGrid>
       <ButtonGroup size={ButtonGroupSize.compact}>
-        <Button onClick={handleApplyParams}>{t('action.search')}</Button>
+        <Button onClick={handleApplyParams} disabled={!isSearchEnable}>
+          {t('action.search')}
+        </Button>
         <Button onClick={handleClearParams}>{t('action.clear')}</Button>
       </ButtonGroup>
     </div>
