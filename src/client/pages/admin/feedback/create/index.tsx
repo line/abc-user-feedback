@@ -18,7 +18,8 @@ const CreateFeedbackPage = () => {
     defaultValues: {
       title: '',
       allowAnonymous: true,
-      fields: []
+      fields: [],
+      options: []
     }
   })
   const { enqueue } = useSnackbar()
@@ -50,17 +51,18 @@ const CreateFeedbackPage = () => {
 
         if (result) {
           const values = getValues()
-
           await createFeedback({
-            ...values,
+            title: values.title,
+            allowAnonymous: values.allowAnonymous,
             fields: values.fields.map((field, idx) => ({
-              ...field,
+              name: field.name,
+              type: field.type,
+              isRequired: field.isRequired,
               order: idx,
-              option:
-                (field?.option ?? '')
-                  .split('\n')
-                  .filter((s) => s)
-                  .map((s) => s.trim()) ?? []
+              option: field.options.map((o) => ({
+                label: o.label,
+                value: o.value
+              }))
             }))
           })
 

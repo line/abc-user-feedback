@@ -1,10 +1,13 @@
 /* */
 import React, { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
-import { Delete } from 'baseui/icon'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
 import * as yup from 'yup'
+import { nanoid } from 'nanoid'
+import { Delete, Plus, DeleteAlt } from 'baseui/icon'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { KIND as ButtonKind } from 'baseui/button'
+import { Button, KIND as ButtonKind } from 'baseui/button'
+import { Block } from 'baseui/block'
+import { Input } from 'baseui/input'
 import {
   Modal,
   ModalBody,
@@ -20,8 +23,6 @@ import {
 import styles from './styles.module.scss'
 import { FormFieldType } from '@/types'
 import {
-  Input,
-  Textarea,
   Checkbox,
   FormItem,
   ErrorMessage,
@@ -77,6 +78,7 @@ const AddFormFieldModal = (props: Props) => {
     trigger,
     control,
     getValues,
+    unregister,
     setValue,
     formState,
     reset,
@@ -86,16 +88,30 @@ const AddFormFieldModal = (props: Props) => {
     defaultValues: {
       name: '',
       type: null,
-      option: '',
+      options: [{ id: nanoid(), label: '', value: '' }],
       isRequired: false
     }
   })
 
+  const {
+    fields: selectFields,
+    append,
+    remove
+  } = useFieldArray({
+    control,
+    name: 'options'
+  })
+
   const { errors, isDirty } = formState
+
   const watchType = watch('type')
 
   useEffect(() => {
     register('type')
+
+    return () => {
+      unregister('type')
+    }
   }, [])
 
   const handleCloseModal = () => {
@@ -144,7 +160,11 @@ const AddFormFieldModal = (props: Props) => {
       <ModalBody>
         <div className={styles.form}>
           <FormItem label='Form name' required>
-            <Input {...register('name')} />
+            <Controller
+              control={control}
+              name='name'
+              render={({ field }) => <Input {...field} />}
+            />
             <ErrorMessage errors={errors} name='name' />
           </FormItem>
           <FormItem label='Select field type' required>
@@ -166,18 +186,92 @@ const AddFormFieldModal = (props: Props) => {
             </div>
             <ErrorMessage errors={errors} name='type' />
           </FormItem>
-          <FormItem label='Select value list (one line per value)'>
-            <Controller
-              control={control}
-              name='option'
-              render={({ field }) => (
-                <Textarea
-                  {...field}
+          <FormItem label='Select options'>
+            {selectFields.map((field, index) => (
+              <Block
+                key={field.id}
+                overrides={{
+                  Block: {
+                    style: {
+                      display: 'flex',
+                      alignItems: 'center'
+                    }
+                  }
+                }}
+              >
+                <FormItem
+                  label='label'
+                  style={{ width: '100%', padding: '0 10px' }}
+                >
+                  <Controller
+                    control={control}
+                    name={`options.${index}.label`}
+                    render={({ field: controlField }) => (
+                      <Input
+                        {...controlField}
+                        disabled={watchType !== FormFieldType.Select}
+                        key={field.id}
+                        overrides={{
+                          Root: {
+                            style: {
+                              width: '100%'
+                            }
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                  <ErrorMessage
+                    errors={errors}
+                    name={`options.${index}.label`}
+                  />
+                </FormItem>
+                <FormItem
+                  label='value'
+                  style={{ width: '100%', padding: '0 20px 0 10px' }}
+                >
+                  <Controller
+                    control={control}
+                    name={`options.${index}.value`}
+                    render={({ field: controlField }) => (
+                      <Input
+                        {...controlField}
+                        disabled={watchType !== FormFieldType.Select}
+                        key={field.id}
+                        overrides={{
+                          Root: {
+                            style: {
+                              width: '100%',
+                              marginLeft: '8px'
+                            }
+                          }
+                        }}
+                      />
+                    )}
+                  />
+                  <ErrorMessage
+                    errors={errors}
+                    name={`options.${index}.value`}
+                  />
+                </FormItem>
+                <Button
+                  kind={ButtonKind.minimal}
+                  onClick={() => remove(index)}
                   disabled={watchType !== FormFieldType.Select}
-                  rows={watchType === FormFieldType.Select ? 7 : 1}
-                />
-              )}
-            />
+                  overrides={{ Root: { style: { marginTop: '10px' } } }}
+                >
+                  <DeleteAlt size={16} />
+                </Button>
+              </Block>
+            ))}
+            <Button
+              kind={ButtonKind.minimal}
+              startEnhancer={() => <Plus />}
+              disabled={watchType !== FormFieldType.Select}
+              onClick={() => append({ id: nanoid(), label: '', value: '' })}
+            >
+              Add Option
+            </Button>
             <ErrorMessage errors={errors} name='option' />
           </FormItem>
           <h3>Constraint</h3>
