@@ -54,7 +54,10 @@ const RoleListContainer = () => {
       })
 
       queryClient.setQueryData('roles', (roles: Array<IRole>) =>
-        roles.concat(role)
+        roles.concat({
+          ...role,
+          bindingCount: 0
+        })
       )
 
       toggleShowCreateRoleModal()

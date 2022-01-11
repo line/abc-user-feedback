@@ -6,13 +6,14 @@ import {
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
-import { In, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 
 /* */
 import { CreateRoleDto } from './dto/create-role.dto'
 import { UpdateRoleDto } from './dto/update-role.dto'
 import { RoleUserDto } from './dto/role-user-binding.dto'
 import { RolePermissionDto } from './dto/role-permission-binding.dto'
+import { GUEST_KEY, OWNER_KEY } from '@/constant'
 import { Role, RolePermissionBinding, RoleUserBinding } from '#/core/entity'
 
 @Injectable()
@@ -59,12 +60,63 @@ export class RoleService {
     return role
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`
+  async updateRole(roleName: string, updateRoleDto: UpdateRoleDto) {
+    if (roleName === OWNER_KEY || roleName === GUEST_KEY) {
+      throw new BadRequestException(`cannot update ${roleName}`)
+    }
+
+    const role = await this.roleRepository.findOne({
+      where: {
+        name: roleName
+      }
+    })
+
+    if (!role) {
+      throw new BadRequestException(`${roleName} role is not exists`)
+    }
+
+    const { name, description } = updateRoleDto
+
+    role.name = name
+
+    if (description) {
+      role.description = description
+    }
+
+    await this.roleRepository.update(role.id, role)
+
+    return role
   }
 
-  remove(roleName: string) {
-    return `This action removes a #${roleName} role`
+  async removeRole(roleName: string) {
+    if (roleName === OWNER_KEY || roleName === GUEST_KEY) {
+      throw new BadRequestException(`cannot remove ${roleName}`)
+    }
+
+    const role = await this.roleRepository.findOne({
+      where: {
+        name: roleName
+      }
+    })
+
+    if (!role) {
+      throw new BadRequestException(`${roleName} role is not exists`)
+    }
+
+    const roleUserBindingCount = await this.roleUserBindingRepository.count({
+      roleId: role.id
+    })
+
+    if (roleUserBindingCount > 0) {
+      throw new BadRequestException(
+        `cannot remove role with exist binding user`
+      )
+    }
+
+    await this.rolePermissionBindingRepository.delete({
+      roleId: role.id
+    })
+    await this.roleRepository.delete(role.id)
   }
 
   async roleUserBinding(data: RoleUserDto) {

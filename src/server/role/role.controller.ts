@@ -4,9 +4,11 @@ import {
   Get,
   Post,
   Delete,
+  Put,
   Body,
   Param,
-  Query
+  Query,
+  HttpCode
 } from '@nestjs/common'
 
 /* */
@@ -14,6 +16,7 @@ import { RoleService } from './role.service'
 import { CreateRoleDto } from './dto/create-role.dto'
 import { RoleUserDto } from './dto/role-user-binding.dto'
 import { RolePermissionDto } from './dto/role-permission-binding.dto'
+import { UpdateRoleDto } from './dto/update-role.dto'
 
 @Controller('api/v1/admin/roles')
 export class RoleController {
@@ -34,9 +37,18 @@ export class RoleController {
     return this.roleService.findRoleByName(roleName)
   }
 
+  @Put(':roleName')
+  updateRole(
+    @Param('roleName') roleName: string,
+    @Body() updateRoleDto: UpdateRoleDto
+  ) {
+    return this.roleService.updateRole(roleName, updateRoleDto)
+  }
+
   @Delete(':roleName')
+  @HttpCode(204)
   remove(@Param('roleName') roleName: string) {
-    return this.roleService.remove(roleName)
+    return this.roleService.removeRole(roleName)
   }
 
   @Post('binding/user')

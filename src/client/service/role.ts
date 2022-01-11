@@ -15,6 +15,10 @@ export const createRole = (payload) => {
   return client.post(`/admin/roles`, payload).then((res) => res.data)
 }
 
+export const updateRole = (roleName, payload) => {
+  return client.put(`/admin/roles/${roleName}`, payload).then((res) => res.data)
+}
+
 export const rolePermissionBinding = (payload) => {
   return client
     .post(`/admin/roles/binding/permission`, payload)
@@ -36,3 +40,7 @@ export const getRolePermissions = (roleName: string) => {
 }
 
 export const roleBindingPermission = () => {}
+
+export const deleteRole = (roleName: string) => {
+  return client.delete(`/admin/roles/${roleName}`).then((res) => res.data)
+}

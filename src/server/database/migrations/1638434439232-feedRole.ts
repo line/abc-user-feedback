@@ -3,7 +3,6 @@ import { MigrationInterface, QueryRunner } from 'typeorm'
 
 /* */
 import { GUEST_KEY, OWNER_KEY } from '@/constant'
-import { Role } from '#/core/entity'
 
 export class feedRole1638434439232 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
