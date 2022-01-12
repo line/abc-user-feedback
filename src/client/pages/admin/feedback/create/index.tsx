@@ -59,7 +59,7 @@ const CreateFeedbackPage = () => {
               type: field.type,
               isRequired: field.isRequired,
               order: idx,
-              option: field.options.map((o) => ({
+              options: field.options.map((o) => ({
                 label: o.label,
                 value: o.value
               }))
