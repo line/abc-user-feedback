@@ -229,6 +229,8 @@ export class FeedbackService {
 
         response = feedbackResponse
       })
+
+      await queryRunner.commitTransaction()
     } catch (err) {
       await queryRunner.rollbackTransaction()
       throw new InternalServerErrorException()

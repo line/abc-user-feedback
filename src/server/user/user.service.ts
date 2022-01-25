@@ -100,6 +100,8 @@ export class UserService {
 
         user.hashPassword = ''
       })
+
+      await queryRunner.commitTransaction()
     } catch (err) {
       await queryRunner.rollbackTransaction()
       throw new InternalServerErrorException(err)
