@@ -26,6 +26,7 @@
   "action.save": "保存する",
   "action.search": "検索",
   "action.clear": "条件を削除",
+  "action.confirm": "確認",
 
   "action.password.set": "パスワードを設定",
   "action.login": "ログイン",

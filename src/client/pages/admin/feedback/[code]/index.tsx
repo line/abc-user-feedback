@@ -1,30 +1,20 @@
 /* */
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
-import { ArrowDown, ArrowUp, Check, Delete } from 'baseui/icon'
+import { Check, Delete } from 'baseui/icon'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
-import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
-import {
-  SIZE as TableSize,
-  TableBuilder,
-  TableBuilderColumn
-} from 'baseui/table-semantic'
-import { Checkbox } from 'baseui/checkbox'
 import { ButtonGroup, SIZE as ButtonGroupSize } from 'baseui/button-group'
-import { ListItem, ListItemLabel } from 'baseui/list'
 import { Button, KIND as ButtonKind, KIND, SIZE } from 'baseui/button'
 import { Pagination, SIZE as PaginationSize } from 'baseui/pagination'
 import {
   Modal,
-  ModalBody,
   ModalButton,
   ModalFooter,
   ModalHeader,
-  ROLE,
-  SIZE as ModalSize
+  ROLE
 } from 'baseui/modal'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -38,29 +28,40 @@ import {
   getFeedbackByCode,
   getFeedbackreponses
 } from '~/service/feedback'
-import { Header, ResponseFilter, ResponseSnippetModal } from '~/components'
-import { FormFieldType, Permission } from '@/types'
-import { withComma } from '@/server/utils/string'
+import {
+  Header,
+  ResponseFilter,
+  ResponseSnippetModal,
+  FeedbackResponseTable,
+  FeedbackDetailModal
+} from '~/components'
+import { Permission } from '@/types'
 
 const REQUEST_COUNT = 100
 
-const AdminFeedbackDetailPage = () => {
+const AdminFeedbackDetailPage = (props) => {
   const router = useRouter()
 
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
+
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
-  const [showResponseDetailModal, toggleResponseDetailModal] = useToggle()
+  const [showResponseDetailModal, setShowResponseDetailModal] =
+    useState<boolean>(false)
+  const [showExampleModal, setShowExampleModal] = useState<boolean>(false)
+
   const [showLatest, toggleShowLatest] = useToggle(true)
 
   const { t } = useTranslation()
 
   const [selectedId, setSelectedId] = useState<Array<number>>([])
   const [responseDetail, setResponseDetail] = useState<any>()
-  const [currentPage, setCurrentPage] = useState<number>(1)
+  const [currentPage, setCurrentPage] = useState<number>(
+    (props?.query?.page as number) ?? 1
+  )
   const [params, setParams] = useState<any>({})
 
-  const { user, hasPermission } = useUser()
+  const { hasPermission } = useUser()
 
   const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
     ['feedback', router.query.code],
@@ -78,7 +79,11 @@ const AdminFeedbackDetailPage = () => {
       })
   )
 
-  const [showExampleModal, setShowExampleModal] = useState<boolean>(false)
+  const numPages = useMemo<number>(() => {
+    return response?.totalCount
+      ? Math.floor(response?.totalCount / REQUEST_COUNT) + 1
+      : 1
+  }, [response])
 
   const responseData = useMemo(() => {
     return response?.items ?? []
@@ -90,15 +95,40 @@ const AdminFeedbackDetailPage = () => {
     ) as any
   }, [feedback])
 
-  const handleToggleCheckbox = (e: any) => {
-    e.stopPropagation()
-
-    const { checked, name } = e.currentTarget
-    if (checked && !selectedId.includes(+name)) {
-      setSelectedId((s) => s.concat(+name))
-    } else {
-      setSelectedId((s) => s.filter((id) => +id !== +name))
+  const handleShowResponseDetail = (response: any) => {
+    if (response) {
+      setResponseDetail(response)
+      handleToggleResponseDetailModal(response.id)
     }
+  }
+
+  useEffect(() => {
+    if (responseData?.length) {
+      const hash = window.location.hash
+      if (hash && hash.includes('#modal-')) {
+        const id = hash.replaceAll('#modal-', '')
+        const idx = responseData.findIndex((d) => d.id === +id)
+
+        if (idx !== -1) {
+          const response = responseData[idx]
+          handleShowResponseDetail(response)
+        }
+      }
+    }
+  }, [responseData])
+
+  const handleToggleResponseDetailModal = async (id: number) => {
+    if (!showResponseDetailModal) {
+      window.history.pushState(null, null, `#modal-${id}`)
+      setShowResponseDetailModal(true)
+    } else {
+      window.history.pushState(null, null, ' ')
+      setShowResponseDetailModal(false)
+    }
+  }
+
+  const handleSelectCheckbox = (ids: Array<number>) => {
+    setSelectedId(ids)
   }
 
   const handleApplyFilter = async (params: Record<string, any>) => {
@@ -115,13 +145,6 @@ const AdminFeedbackDetailPage = () => {
 
   const handleClickEdit = async () => {
     await router.push(`/admin/feedback/${feedback.code}/edit`)
-  }
-
-  const handleClickResponseDetail = (response: any) => {
-    if (response) {
-      setResponseDetail(response)
-      toggleResponseDetailModal()
-    }
   }
 
   const handleRequestExcelExport = async (type: string) => {
@@ -168,128 +191,21 @@ const AdminFeedbackDetailPage = () => {
       })
     }
   }
-
-  const renderResponseDetail = useMemo(() => {
-    const itemElem = []
-
-    if (responseDetail?.feedbackResponseFields) {
-      const { feedbackResponseFields = [], id, createdTime } = responseDetail
-
-      itemElem.push(
-        <ListItem
-          overrides={{
-            EndEnhancerContainer: {
-              style: {
-                maxWidth: '640px',
-                whiteSpace: 'pre-wrap',
-                wordBreak: 'break-all'
-              }
-            }
-          }}
-          endEnhancer={() => <ListItemLabel>{id}</ListItemLabel>}
-        >
-          <ListItemLabel
-            overrides={{
-              LabelContent: {
-                style: {
-                  minWidth: '200px'
-                }
-              }
-            }}
-          >
-            No.
-          </ListItemLabel>
-        </ListItem>,
-        <ListItem
-          overrides={{
-            EndEnhancerContainer: {
-              style: {
-                maxWidth: '640px',
-                whiteSpace: 'pre-wrap',
-                wordBreak: 'break-all'
-              }
-            }
-          }}
-          endEnhancer={() => (
-            <ListItemLabel>
-              {DateTime.fromISO(createdTime, { zone: 'utc' }).toFormat(
-                'yyyy-MM-dd HH:mm'
-              )}
-            </ListItemLabel>
-          )}
-        >
-          <ListItemLabel
-            overrides={{
-              LabelContent: {
-                style: {
-                  minWidth: '200px'
-                }
-              }
-            }}
-          >
-            Date
-          </ListItemLabel>
-        </ListItem>
-      )
-
-      const sorted = sortBy(feedbackResponseFields, (response) => {
-        return feedback?.fields.find(
-          (f) => f.name === response.feedbackField.name
-        )?.order
-      })
-
-      sorted.map((field) => {
-        itemElem.push(
-          <ListItem
-            overrides={{
-              EndEnhancerContainer: {
-                style: {
-                  maxWidth: '640px',
-                  whiteSpace: 'pre-wrap',
-                  wordBreak: 'break-all'
-                }
-              }
-            }}
-            endEnhancer={() => {
-              const value =
-                field.feedbackField.type === FormFieldType.Select
-                  ? field.feedbackField.options.find(
-                      (option) => option.value === field.value
-                    )?.label
-                  : field.value
-              return <ListItemLabel>{value}</ListItemLabel>
-            }}
-          >
-            <ListItemLabel
-              overrides={{
-                LabelContent: {
-                  style: {
-                    minWidth: '200px'
-                  }
-                }
-              }}
-            >
-              {field?.feedbackField?.name}
-            </ListItemLabel>
-          </ListItem>
-        )
-      })
-    }
-
-    return itemElem
-  }, [feedback, responseDetail])
-
-  const renderDateHeader = useMemo(() => {
-    return (
-      <div
-        onClick={toggleShowLatest}
-        style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-      >
-        <span>Date</span>
-        {showLatest ? <ArrowUp size={18} /> : <ArrowDown size={18} />}
-      </div>
+  const handlePageChange = async ({
+    prevPage,
+    nextPage
+  }: {
+    prevPage: number
+    nextPage: number
+  }) => {
+    const page = Math.min(Math.max(+nextPage, 1), +numPages)
+    await router.push(
+      `/admin/feedback/${router.query.code}?page=${page}`,
+      undefined,
+      { shallow: true }
     )
-  }, [showLatest])
+    setCurrentPage(page)
+  }
 
   return (
     <div className={styles.container}>
@@ -345,99 +261,19 @@ const AdminFeedbackDetailPage = () => {
           )}
         </div>
         <div className={styles.page__list}>
-          <TableBuilder
+          <FeedbackResponseTable<any>
+            loading={isFeedbackLoading || isFeedbackResponseLoading}
             data={responseData}
-            isLoading={isFeedbackLoading || isFeedbackResponseLoading}
-            size={TableSize.compact}
-            emptyMessage={<h1>No data</h1>}
-            overrides={{
-              TableBodyRow: {
-                props: {
-                  onClick: (e) => {
-                    handleClickResponseDetail(
-                      responseData[e.target.closest('tr').rowIndex - 1]
-                    )
-                  }
-                }
-              }
+            selected={selectedId}
+            colums={responseColumns}
+            onSortToggle={toggleShowLatest}
+            onSelect={handleSelectCheckbox}
+            onRowClick={(e) => {
+              handleShowResponseDetail(
+                responseData[e.target.closest('tr').rowIndex - 1]
+              )
             }}
-          >
-            {hasPermission(Permission.DELETE_RESPONSE) && (
-              <TableBuilderColumn
-                overrides={{
-                  TableHeadCell: { style: { width: '1%' } },
-                  TableBodyCell: { style: { width: '1%' } }
-                }}
-              >
-                {(row) => (
-                  <Checkbox
-                    name={row.id}
-                    checked={selectedId.includes(row.id)}
-                    onChange={handleToggleCheckbox}
-                  />
-                )}
-              </TableBuilderColumn>
-            )}
-            <TableBuilderColumn
-              header='No.'
-              numeric
-              overrides={{
-                TableHeadCell: { style: { width: '20px' } },
-                TableBodyCell: { style: { width: '20px' } }
-              }}
-            >
-              {(row) => withComma(row.id)}
-            </TableBuilderColumn>
-            <TableBuilderColumn
-              header={renderDateHeader}
-              overrides={{
-                TableHeadCell: {
-                  style: { width: '200px', textTransform: 'capitalize' }
-                },
-                TableBodyCell: { style: { width: '200px' } }
-              }}
-            >
-              {(row) =>
-                DateTime.fromISO(row.createdTime, { zone: 'utc' }).toFormat(
-                  'yyyy-MM-dd HH:mm'
-                )
-              }
-            </TableBuilderColumn>
-            {responseColumns.map((col) => (
-              <TableBuilderColumn
-                header={col}
-                key={col}
-                overrides={{
-                  TableHeadCell: {
-                    style: { textTransform: 'capitalize' }
-                  },
-                  TableBodyCell: {
-                    style: {
-                      overflow: 'hidden',
-                      maxWidth: '200px',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap'
-                    }
-                  }
-                }}
-              >
-                {(row) => {
-                  const content = row.feedbackResponseFields.find((field) => {
-                    return field.feedbackField.name === col
-                  })
-
-                  const value =
-                    content.feedbackField.type === FormFieldType.Select
-                      ? content.feedbackField.options.find(
-                          (option) => option.value === content.value
-                        )?.label
-                      : content.value
-
-                  return <span title={value}>{value}</span>
-                }}
-              </TableBuilderColumn>
-            ))}
-          </TableBuilder>
+          />
           <div
             style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}
           >
@@ -459,16 +295,10 @@ const AdminFeedbackDetailPage = () => {
             )}
             <div style={{ marginLeft: 'auto' }}>
               <Pagination
-                numPages={
-                  response?.totalCount
-                    ? Math.floor(response?.totalCount / REQUEST_COUNT) + 1
-                    : 1
-                }
+                numPages={+numPages}
                 size={PaginationSize.compact}
-                currentPage={currentPage}
-                onPageChange={({ nextPage }) => {
-                  setCurrentPage(nextPage)
-                }}
+                currentPage={+currentPage}
+                onPageChange={handlePageChange}
               />
             </div>
           </div>
@@ -499,18 +329,12 @@ const AdminFeedbackDetailPage = () => {
           <ModalButton onClick={handleDeleteResponse}>Confirm</ModalButton>
         </ModalFooter>
       </Modal>
-      <Modal
-        isOpen={showResponseDetailModal}
-        size={ModalSize.auto}
-        closeable
-        onClose={toggleResponseDetailModal}
-        role={ROLE.dialog}
-      >
-        <ModalHeader>{t('title.feedback.detail')}</ModalHeader>
-        <ModalBody>
-          <pre>{renderResponseDetail}</pre>
-        </ModalBody>
-      </Modal>
+      <FeedbackDetailModal
+        show={showResponseDetailModal}
+        onClose={handleToggleResponseDetailModal}
+        feedback={feedback}
+        responseDetail={responseDetail}
+      />
     </div>
   )
 }

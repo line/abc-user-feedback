@@ -26,6 +26,7 @@
   "action.save": "Save",
   "action.search": "Search",
   "action.clear": "Clear",
+  "action.confirm": "Confirm",
 
   "action.password.set": "Set",
   "action.login": "Login",

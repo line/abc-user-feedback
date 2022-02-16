@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import Head from 'next/head'
 import App from 'next/app'
 import { QueryClientProvider } from 'react-query'
@@ -17,16 +17,25 @@ import { PrivateBlockContainer } from '~/containers'
 import { styletron, debug } from '~/styletron'
 
 const FeedbackApp = (props: any) => {
-  const { Component, pageProps, currentUser, service, config, ...rest } = props
+  const {
+    Component,
+    pageProps,
+    currentUser,
+    service,
+    config,
+    router,
+    ...rest
+  } = props
+
   const [queryClient] = useState(() => createQueryClient())
   const serviceName = service?.name ?? 'User Feedback'
-  const router = useRouter()
 
   const showPrivateDescription = useMemo(() => {
     const isAlwaysPublic =
       router.pathname === '/invite/verify' ||
       router.pathname === '/reset/password' ||
       router.pathname === '/login'
+
     return !isAlwaysPublic && service?.isPrivate && !currentUser
   }, [router, service, currentUser])
 
@@ -89,14 +98,16 @@ const FeedbackApp = (props: any) => {
 
 FeedbackApp.getInitialProps = async (context) => {
   const { ctx } = context
-  const { query = {}, req } = ctx
+  const { query: hydrate = {}, req } = ctx
 
   const appProps = await App.getInitialProps(context)
 
   return {
     ...appProps,
-    ...req?.query,
-    ...query
+    ...hydrate,
+    query: {
+      ...req?.query
+    }
   }
 }
 

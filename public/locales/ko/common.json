@@ -26,6 +26,7 @@
   "action.save": "저장",
   "action.search": "검색",
   "action.clear": "초기화",
+  "action.confirm": "확인",
 
   "action.password.set": "설정",
   "action.login": "로그인",
