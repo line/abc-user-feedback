@@ -12,6 +12,7 @@
     "build:client": "next build src/client",
     "build:server": "nest build -p tsconfig.server.json",
     "build:migration": "tsc src/server/database/migrations",
+    "codegen": "openapi-typescript http://localhost:3000/docs-json --output src/client/types/spec/index.ts",
     "typeorm:ts": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "typeorm": "./node_modules/typeorm/cli.js",
     "dev": "nest start --watch -p tsconfig.server.json",
@@ -37,6 +38,7 @@
     "@nestjs/passport": "^8.0.1",
     "@nestjs/platform-express": "^8.0.6",
     "@nestjs/serve-static": "^2.2.2",
+    "@nestjs/swagger": "^5.2.0",
     "@nestjs/terminus": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
     "baseui": "^10.5.0",
@@ -78,6 +80,7 @@
     "sharp": "^0.29.0",
     "styletron-engine-atomic": "^1.4.8",
     "styletron-react": "^6.0.1",
+    "swagger-ui-express": "^4.3.0",
     "typeorm": "^0.2.36",
     "xlsx": "^0.17.2",
     "yup": "^0.32.9"
@@ -116,12 +119,14 @@
     "eslint-config-prettier": "^6.10.0",
     "eslint-plugin-import": "^2.23.4",
     "jest": "26.0.0",
+    "openapi-typescript": "^5.2.0",
     "prettier": "^2.3.2",
     "sass": "^1.37.5",
     "supertest": "^6.1.4",
     "ts-jest": "27.0.4",
     "ts-loader": "^9.2.5",
     "ts-node": "10.1.0",
+    "ts-toolbelt": "^9.6.0",
     "typescript": "^4.4.2"
   },
   "jest": {

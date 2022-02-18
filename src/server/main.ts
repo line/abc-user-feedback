@@ -1,6 +1,7 @@
 /* */
 import { NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as cookieParser from 'cookie-parser'
 import { RenderService } from 'nest-next'
 
@@ -12,6 +13,18 @@ const PORT = process.env.PORT || 3000
 
 async function main() {
   const app = await NestFactory.create(AppModule)
+
+  // set swagger document
+  const config = new DocumentBuilder()
+    .setTitle('User feedback')
+    .setDescription('User feedback API description')
+    .setVersion('1.0.0')
+    .setBasePath('/api/v1')
+    .addTag('user-feedback')
+    .build()
+
+  const document = SwaggerModule.createDocument(app, config)
+  SwaggerModule.setup('docs', app, document)
 
   /**
    * nest-next handled error as next's error renderer (_error page)
