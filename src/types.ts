@@ -1,3 +1,8 @@
+export enum Order {
+  DESC = 'desc',
+  ASC = 'ASC'
+}
+
 export enum LoginProvider {
   Google = 'google',
   Line = 'line'
