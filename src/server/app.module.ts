@@ -74,7 +74,8 @@ const modules = [
 @Module({
   imports: modules,
   controllers: [HealthController],
-  providers: [AuthService, UserService, ConfigService]
+  providers: [AuthService, UserService, ConfigService],
+  exports: [ConfigService]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

@@ -241,6 +241,25 @@ export class FeedbackService {
     return response
   }
 
+  async getReponseById(feedbackId: string, id: number) {
+    let queryBuilder = this.feedbackResponseRepository
+      .createQueryBuilder('r')
+      .where('r.feedbackId = :feedbackId', { feedbackId })
+      .andWhere('r.id = :id', { id })
+
+    queryBuilder = queryBuilder
+      .leftJoin('r.user', 'user')
+      .addSelect('user.id')
+      .leftJoin('user.profile', 'profile')
+      .addSelect('profile.nickname')
+      .leftJoinAndSelect('r.feedbackResponseFields', 'feedbackResponseFields')
+      .leftJoin('feedbackResponseFields.feedbackField', 'feedbackField')
+      .leftJoinAndSelect('feedbackField.options', 'options')
+      .addSelect(['feedbackField.name', 'feedbackField.type'])
+
+    return queryBuilder.getOne()
+  }
+
   async getResponses(
     feedbackId: string,
     offset: number,
@@ -316,13 +335,18 @@ export class FeedbackService {
     }
   }
 
-  async deleteResponse(responseId: string) {
-    const response = await this.feedbackResponseRepository.findOne(responseId)
+  async deleteResponse(feedbackId: string, id: number) {
+    const response = await this.feedbackResponseRepository.findOne({
+      where: {
+        feedbackId,
+        id
+      }
+    })
 
     if (!response) {
       throw new NotFoundException('response not exist')
     }
 
-    await this.feedbackResponseRepository.delete(responseId)
+    await this.feedbackResponseRepository.delete(response)
   }
 }

@@ -15,6 +15,7 @@ import {
 import { AuthGuard } from '@nestjs/passport'
 import { Response } from 'express'
 import { ConfigService } from '@nestjs/config'
+import { ApiTags, ApiBody, ApiExcludeEndpoint } from '@nestjs/swagger'
 
 /* */
 import { AuthService } from './auth.service'
@@ -24,12 +25,14 @@ import {
   InvitationMailDto,
   ResetPasswordDto,
   SendResetPasswordMailDto,
-  SignUpDto
+  SignUpDto,
+  SignInDto
 } from './dto'
 import { PermissionGuard } from '#/core/guard'
 import { Permissions } from '#/core/decorators'
 import { Permission } from '@/types'
 
+@ApiTags('Auth')
 @Controller('api/v1')
 @UseGuards(PermissionGuard)
 export class AuthController {
@@ -38,9 +41,10 @@ export class AuthController {
     private readonly configService: ConfigService
   ) {}
 
+  @ApiBody({ type: SignInDto })
   @UseGuards(AuthGuard('local'))
   @Post('auth/login')
-  async login(@Req() req, @Res() res: Response, @Body() data) {
+  async login(@Req() req, @Res() res: Response, @Body() data: SignInDto) {
     const user = req.user
 
     const { email, rememberEmail } = data
@@ -63,6 +67,7 @@ export class AuthController {
     res.status(204).end()
   }
 
+  @ApiBody({ type: SignUpDto })
   @Post('auth/register')
   async signUp(@Req() req, @Res() res: Response, @Body() data: SignUpDto) {
     await this.authService.localRegisterUser(data)
@@ -83,6 +88,7 @@ export class AuthController {
     return res.status(204).end()
   }
 
+  @ApiBody({ type: ChangePasswordDto })
   @Post('auth/password')
   async changePassword(
     @Req() req,
@@ -100,6 +106,7 @@ export class AuthController {
     return res.status(204).end()
   }
 
+  @ApiBody({ type: ResetPasswordDto })
   @Post('auth/password/reset')
   async resetPassword(@Res() res: Response, @Body() data: ResetPasswordDto) {
     await this.authService.resetPassword(data)
@@ -107,6 +114,7 @@ export class AuthController {
     return res.status(204).end()
   }
 
+  @ApiExcludeEndpoint()
   @Get('auth/redirect/:provider')
   authRedirect(
     @Res() res: Response,
@@ -122,6 +130,7 @@ export class AuthController {
     res.redirect(targetUrl)
   }
 
+  @ApiExcludeEndpoint()
   @Get('auth/callback/:provider')
   async handleCallback(
     @Res() res: Response,
@@ -149,6 +158,7 @@ export class AuthController {
     res.redirect(redirectUrl)
   }
 
+  @ApiBody({ type: SendResetPasswordMailDto })
   @Post('auth/mail/reset-password')
   async sendResetPasswordMail(
     @Res() res: Response,
@@ -159,6 +169,7 @@ export class AuthController {
     res.status(204).end()
   }
 
+  @ApiBody({ type: InvitationMailDto })
   @Post('admin/auth/mail/invitation')
   @Permissions(Permission.INVITE_USER)
   async sendInvitationMail(

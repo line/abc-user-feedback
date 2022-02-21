@@ -16,6 +16,12 @@ import {
   Res,
   HttpCode
 } from '@nestjs/common'
+import {
+  ApiOperation,
+  ApiBody,
+  ApiParam,
+  ApiPropertyOptional
+} from '@nestjs/swagger'
 import { DateTime } from 'luxon'
 import { Response } from 'express'
 import { sortBy } from 'lodash'
@@ -24,7 +30,7 @@ import * as XLSX from 'xlsx'
 /* */
 import { FeedbackService } from './feedback.service'
 import { CreateFeedbackDto, UpdateFeedbackDto } from './dto'
-import { PaginationParams } from '#/core/params'
+import { PagingQuery } from '#/core/dto'
 import { PermissionGuard } from '#/core/guard'
 import { Permissions } from '#/core/decorators'
 import { Permission } from '@/types'
@@ -34,6 +40,8 @@ import { Permission } from '@/types'
 export class FeedbackController {
   constructor(private readonly feedbackService: FeedbackService) {}
 
+  @ApiOperation({ summary: 'Create user feedback' })
+  @ApiBody({ type: CreateFeedbackDto })
   @Post('admin/feedback')
   @Permissions(Permission.CREATE_FEEDBACK)
   async createFeedback(@Req() req: any, @Body() data: CreateFeedbackDto) {
@@ -43,28 +51,9 @@ export class FeedbackController {
     return feedback
   }
 
-  @Delete('admin/feedback/:idOrCode')
-  @Permissions(Permission.DELETE_FEEDBACK)
-  @HttpCode(204)
-  async deleteFeedback(
-    @Req() req: any,
-    @Res() res: Response,
-    @Param('idOrCode') idOrCode = ''
-  ) {
-    const feedback = await this.feedbackService.findFeedback(idOrCode)
-
-    if (!feedback) {
-      throw new NotFoundException()
-    }
-
-    await this.feedbackService.deleteFeedback(feedback.id)
-
-    res.end()
-  }
-
   @Get('admin/feedback')
   @Permissions(Permission.READ_FEEDBACKS)
-  async getAll(@Query() pagination: PaginationParams) {
+  async getAll(@Query() pagination: PagingQuery) {
     const { offset, limit } = pagination
     const [items, totalCount] = await this.feedbackService.findAllFeedback(
       offset,
@@ -77,9 +66,16 @@ export class FeedbackController {
     }
   }
 
+  @ApiOperation({ summary: 'Get user feedback' })
+  @ApiParam({
+    name: 'idOrCode',
+    required: true,
+    description: 'feedback code or uuid',
+    schema: { oneOf: [{ type: 'string' }, { type: 'integer' }] }
+  })
   @Get('admin/feedback/:idOrCode')
   @Permissions(Permission.READ_FEEDBACK)
-  async findById(@Param('idOrCode') idOrCode = ''): Promise<any> {
+  async findByIdOrCode(@Param('idOrCode') idOrCode = ''): Promise<any> {
     const feedback = await this.feedbackService.findFeedback(idOrCode)
 
     if (!feedback) {
@@ -99,11 +95,37 @@ export class FeedbackController {
     return feedback
   }
 
+  @ApiOperation({ summary: 'Delete user feedback' })
+  @ApiParam({
+    name: 'idOrCode',
+    required: true,
+    description: 'feedback code or uuid',
+    schema: { oneOf: [{ type: 'string' }, { type: 'integer' }] }
+  })
+  @Delete('admin/feedback/:idOrCode')
+  @Permissions(Permission.DELETE_FEEDBACK)
+  @HttpCode(204)
+  async deleteFeedback(
+    @Req() req: any,
+    @Res() res: Response,
+    @Param('idOrCode') idOrCode = ''
+  ) {
+    const feedback = await this.feedbackService.findFeedback(idOrCode)
+
+    if (!feedback) {
+      throw new NotFoundException()
+    }
+
+    await this.feedbackService.deleteFeedback(feedback.id)
+
+    res.end()
+  }
+
   @Get('admin/feedback/:idOrCode/response')
   @Permissions(Permission.READ_FEEDBACK)
   async getAllResponse(
     @Param('idOrCode') idOrCode = '',
-    @Query() pagination: PaginationParams,
+    @Query() pagination: PagingQuery,
     @Query() restQuery
   ): Promise<any> {
     const { offset, limit } = pagination
@@ -127,13 +149,38 @@ export class FeedbackController {
     }
   }
 
-  @Delete('admin/response/:responseId')
+  @Get('admin/feedback/:idOrCode/response/:id')
+  @Permissions(Permission.READ_FEEDBACK)
+  async getResponseById(
+    @Res() res: Response,
+    @Param('idOrCode') idOrCode = '',
+    @Param('id') id
+  ) {
+    const feedback = await this.feedbackService.findFeedback(idOrCode)
+
+    if (!feedback) {
+      throw new BadRequestException(`feedback from ${idOrCode} not exist`)
+    }
+
+    const response = await this.feedbackService.getReponseById(feedback.id, id)
+
+    return res.send(response)
+  }
+
+  @Delete('admin/feedback/:idOrCode/response/:id')
   @Permissions(Permission.DELETE_RESPONSE)
   async deleteReponse(
     @Res() res: Response,
-    @Param('responseId') responseId = ''
+    @Param('idOrCode') idOrCode = '',
+    @Param('id') id
   ) {
-    await this.feedbackService.deleteResponse(responseId)
+    const feedback = await this.feedbackService.findFeedback(idOrCode)
+
+    if (!feedback) {
+      throw new BadRequestException(`feedback from ${idOrCode} not exist`)
+    }
+
+    await this.feedbackService.deleteResponse(feedback.id, id)
     res.status(204).end()
   }
 
