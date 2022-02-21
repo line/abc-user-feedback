@@ -1,3 +1,10 @@
+import { ApiProperty } from '@nestjs/swagger'
+
 export class UpdateUserDto {
-  nickname: string
+  @ApiProperty({
+    example: '',
+    description: 'user nickname',
+    required: true
+  })
+  public nickname: string
 }

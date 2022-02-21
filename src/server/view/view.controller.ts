@@ -12,20 +12,17 @@ import {
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
+import { ApiExcludeController } from '@nestjs/swagger'
 
 /* */
 import { ViewService } from './view.service'
-import {
-  EmailAuth,
-  Service,
-  RoleUserBinding,
-  RolePermissionBinding
-} from '#/core/entity'
+import { EmailAuth, Service } from '#/core/entity'
 import { UserService } from '#/user/user.service'
 import { AuthService } from '#/auth/auth.service'
 import { EmailAuthType } from '@/types'
 import { PermissionGuard } from '#/core/guard'
 
+@ApiExcludeController()
 @Controller()
 @UseGuards(PermissionGuard)
 export class ViewController {

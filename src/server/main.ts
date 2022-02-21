@@ -1,6 +1,7 @@
 /* */
 import { NestFactory } from '@nestjs/core'
 import { Logger } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as cookieParser from 'cookie-parser'
 import { RenderService } from 'nest-next'
@@ -14,16 +15,29 @@ const PORT = process.env.PORT || 3000
 async function main() {
   const app = await NestFactory.create(AppModule)
 
+  // get app config
+  const config = app.get<ConfigService>(ConfigService)
+
   // set swagger document
-  const config = new DocumentBuilder()
+  const documentConfig = new DocumentBuilder()
     .setTitle('User feedback')
     .setDescription('User feedback API description')
     .setVersion('1.0.0')
     .setBasePath('/api/v1')
-    .addTag('user-feedback')
+    // .addCookieAuth(config.get('jwt.accessToken'), {
+    //   type: 'http',
+    //   scheme: 'bearer',
+    //   bearerFormat: 'Token',
+    //   in: 'Cookie'
+    // })
+    .addBearerAuth(
+      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'Header' },
+      'access-token'
+    )
     .build()
 
-  const document = SwaggerModule.createDocument(app, config)
+  const document = SwaggerModule.createDocument(app, documentConfig)
+
   SwaggerModule.setup('docs', app, document)
 
   /**
