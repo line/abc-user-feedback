@@ -25,14 +25,12 @@ export class User implements IUser {
   @Column({ unique: true, nullable: true, type: 'varchar' })
   email!: string | null
 
-  @ApiProperty()
   @Column('enum', { enum: UserState, default: UserState.Active })
   state: UserState
 
   @Column({ select: false, nullable: true })
   hashPassword: string
 
-  @ApiProperty()
   @Column('boolean', { default: false })
   isVerified: boolean
 
