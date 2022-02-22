@@ -1,5 +1,5 @@
 /* */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
@@ -29,11 +29,11 @@ import {
   getFeedbackreponses
 } from '~/service/feedback'
 import {
+  FeedbackDetailModal,
+  FeedbackResponseTable,
   Header,
   ResponseFilter,
-  ResponseSnippetModal,
-  FeedbackResponseTable,
-  FeedbackDetailModal
+  ResponseSnippetModal
 } from '~/components'
 import { Permission, Order } from '@/types'
 
