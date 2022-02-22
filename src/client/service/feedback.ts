@@ -34,7 +34,7 @@ export const getFeedbackreponses = (code, params) => {
 
 export const exportFeedbackResponse = (code: string, exportType: string) => {
   return client
-    .get(`/admin/feedback/${code}/response/export`, {
+    .get(`/admin/feedback/${code}/response-export`, {
       params: {
         type: exportType
       },

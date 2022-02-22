@@ -184,11 +184,17 @@ export class FeedbackController {
     res.status(204).end()
   }
 
-  @Get('admin/feedback/:idOrCode/response/export')
+  @ApiParam({
+    name: 'idOrCode',
+    required: true,
+    description: 'feedback code or uuid',
+    schema: { oneOf: [{ type: 'string' }, { type: 'integer' }] }
+  })
+  @Get('admin/feedback/:idOrCode/response-export')
   @Permissions(Permission.EXPORT_RESPONSE)
   async exportResponse(
     @Res() res: Response,
-    @Param('idOrCode') idOrCode = '',
+    @Param('idOrCode') idOrCode,
     @Query('type') type
   ) {
     if (!type) {
