@@ -23,13 +23,6 @@ async function main() {
     .setTitle('User feedback')
     .setDescription('User feedback API description')
     .setVersion('1.0.0')
-    .setBasePath('/api/v1')
-    // .addCookieAuth(config.get('jwt.accessToken'), {
-    //   type: 'http',
-    //   scheme: 'bearer',
-    //   bearerFormat: 'Token',
-    //   in: 'Cookie'
-    // })
     .addBearerAuth(
       { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'Header' },
       'access-token'
