@@ -9,10 +9,13 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { Repository } from 'typeorm'
 
 /* */
-import { CreateRoleDto } from './dto/create-role.dto'
-import { UpdateRoleDto } from './dto/update-role.dto'
-import { RoleUserDto } from './dto/role-user-binding.dto'
-import { RolePermissionDto } from './dto/role-permission-binding.dto'
+import {
+  RoleDto,
+  CreateRoleDto,
+  UpdateRoleDto,
+  RoleUserDto,
+  RolePermissionDto
+} from './dto'
 import { GUEST_KEY, OWNER_KEY } from '@/constant'
 import { Role, RolePermissionBinding, RoleUserBinding } from '#/core/entity'
 
@@ -39,11 +42,20 @@ export class RoleService {
     return role
   }
 
-  async findAllRole() {
+  async findAllRole(offset: number, limit: number) {
     return this.roleRepository
       .createQueryBuilder('role')
+      .select([
+        'role.id',
+        'role.name',
+        'role.description',
+        'role.createdTime',
+        'role.updatedTime'
+      ])
       .loadRelationCountAndMap('role.bindingCount', 'role.roleUserBindings')
-      .getMany()
+      .skip(offset)
+      .take(limit)
+      .getManyAndCount()
   }
 
   async findRoleByName(roleName: string) {

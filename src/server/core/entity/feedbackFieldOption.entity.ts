@@ -13,7 +13,7 @@ import {
 import { FeedbackField } from './index'
 
 @Entity('feedbackFieldOptions')
-export default class FeedbackFieldOption {
+export class FeedbackFieldOption {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

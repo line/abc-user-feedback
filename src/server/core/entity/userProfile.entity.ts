@@ -9,10 +9,10 @@ import {
 } from 'typeorm'
 
 /* */
-import { User } from './index'
+import { User } from './user.entity'
 
 @Entity('userProfiles')
-export default class UserProfile {
+export class UserProfile {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

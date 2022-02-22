@@ -14,7 +14,7 @@ import {
 import { User, Post } from './index'
 
 @Entity('postVotes')
-export default class PostVote {
+export class PostVote {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

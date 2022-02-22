@@ -13,7 +13,8 @@ export class PagingQuery {
   order?: Order = Order.ASC
 
   @ApiPropertyOptional({
-    minimum: 0
+    minimum: 0,
+    default: 0
   })
   @IsOptional()
   @Type(() => Number)
@@ -22,12 +23,12 @@ export class PagingQuery {
 
   @ApiPropertyOptional({
     minimum: 1,
-    maximum: 100
+    maximum: 100,
+    default: 100
   })
   @Type(() => Number)
   @Min(1)
   @Max(100)
   @IsOptional()
-  @Min(1)
   limit: number = 100
 }

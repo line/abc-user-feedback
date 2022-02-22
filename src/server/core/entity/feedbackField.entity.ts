@@ -17,7 +17,7 @@ import { Feedback, FeedbackFieldOption } from './index'
 
 @Entity('feedbackFields')
 @Index(['feedbackId'])
-export default class FeedbackField {
+export class FeedbackField {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

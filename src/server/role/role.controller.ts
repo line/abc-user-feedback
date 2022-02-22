@@ -14,10 +14,16 @@ import { ApiTags, ApiBody, ApiParam, ApiQuery } from '@nestjs/swagger'
 
 /* */
 import { RoleService } from './role.service'
-import { CreateRoleDto } from './dto/create-role.dto'
-import { RoleUserDto } from './dto/role-user-binding.dto'
-import { RolePermissionDto } from './dto/role-permission-binding.dto'
-import { UpdateRoleDto } from './dto/update-role.dto'
+import {
+  RoleDto,
+  CreateRoleDto,
+  RoleUserDto,
+  RolePermissionDto,
+  UpdateRoleDto
+} from './dto'
+import { Role } from '#/core/entity'
+import { ApiPaginatedResponse } from '#/core/decorators'
+import { PaginatedResultDto, PagingQuery } from '#/core/dto'
 
 @ApiTags('Role')
 @Controller('api/v1/admin/roles')
@@ -30,9 +36,19 @@ export class RoleController {
     return this.roleService.createRole(createRoleDto)
   }
 
+  @ApiPaginatedResponse(RoleDto)
   @Get()
-  findAll() {
-    return this.roleService.findAllRole()
+  async findAll(
+    @Query() pagination: PagingQuery
+  ): Promise<PaginatedResultDto<RoleDto>> {
+    const { offset, limit } = pagination
+
+    const [roles, total] = await this.roleService.findAllRole(offset, limit)
+
+    return {
+      total,
+      results: roles.map((role) => new RoleDto(role))
+    }
   }
 
   @Get(':roleName')

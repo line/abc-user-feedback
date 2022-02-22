@@ -10,10 +10,10 @@ import {
 } from 'typeorm'
 
 /* */
-import { User } from './index'
+import { User } from './user.entity'
 
 @Entity('accounts')
-export default class Account {
+export class Account {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

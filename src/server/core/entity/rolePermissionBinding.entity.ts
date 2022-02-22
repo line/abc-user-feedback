@@ -15,7 +15,7 @@ import { Permission } from '@/types'
 import { Role } from '#/core/entity/index'
 
 @Entity('rolePermissionBindings')
-export default class RolePermissionBinding {
+export class RolePermissionBinding {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

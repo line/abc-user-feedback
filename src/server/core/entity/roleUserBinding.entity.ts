@@ -13,7 +13,7 @@ import {
 import { User, Role } from '#/core/entity/index'
 
 @Entity('roleUserBindings')
-export default class RoleUserBinding {
+export class RoleUserBinding {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

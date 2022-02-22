@@ -1,10 +1,9 @@
-import { ApiProperty } from '@nestjs/swagger'
+/* */
+import { PickType } from '@nestjs/swagger'
 
-export class UpdateUserDto {
-  @ApiProperty({
-    example: '',
-    description: 'user nickname',
-    required: true
-  })
-  public nickname: string
-}
+/* */
+import { CreateUserDto } from './create-user.dto'
+
+export class UpdateUserDto extends PickType(CreateUserDto, [
+  'nickname'
+] as const) {}

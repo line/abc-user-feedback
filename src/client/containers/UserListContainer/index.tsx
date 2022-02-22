@@ -1,7 +1,7 @@
 /* */
 import React, { useCallback, useState } from 'react'
 import cx from 'classnames'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
 import { KIND as ButtonKind } from 'baseui/button'
@@ -21,31 +21,32 @@ import styles from './styles.module.scss'
 import MenuIcon from '~/assets/menu.svg'
 import { UserLoader } from '~/components/Loader'
 import { OWNER_KEY } from '@/constant'
-import { deleteUserById, getUsers, roleUserBinding } from '~/service/user'
-import { getRoles } from '~/service/role'
-import { IRole, IUser, Permission } from '@/types'
-import { useApp, useUser } from '~/hooks'
+import { deleteUserById, roleUserBinding } from '~/service/user'
+import { Permission } from '@/types'
+import { useApp, useOAIQuery, useUser } from '~/hooks'
 import { Avatar, DropDown, Tag } from '~/components'
 
 const UserListContainer = () => {
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
-  const { isLoading, isError, error, data } = useQuery<Array<IUser>>(
-    'users',
-    getUsers
-  )
 
-  const { data: roleData } = useQuery<Array<IRole>>('roles', getRoles)
+  const { isLoading, isError, error, data, queryKey } = useOAIQuery({
+    queryKey: '/api/v1/admin/user'
+  })
+
+  const { data: roleData } = useOAIQuery({
+    queryKey: '/api/v1/admin/roles'
+  })
 
   const { t } = useTranslation()
 
   const { config } = useApp()
 
   const [showDeleteUserModal, setShowDeleteUserModal] = useState<boolean>(false)
-  const [deleteUser, setDeleteUser] = useState<IUser>(null)
+  const [deleteUser, setDeleteUser] = useState(null)
   const { user: currentUser, hasPermission } = useUser()
 
-  const renderAvatar = useCallback((user: IUser) => {
+  const renderAvatar = useCallback((user) => {
     return (
       <Avatar
         src={user?.profile?.avatarUrl}
@@ -61,22 +62,25 @@ const UserListContainer = () => {
         userId
       })
 
-      queryClient.setQueryData('users', (users: Array<IUser>) =>
-        users.map((user) => {
-          if (user.id === userId) {
-            if (user?.role) {
-              user.role.name = roleName
-            } else {
-              user.role = {
-                name: roleName
+      queryClient.setQueryData(queryKey, (data: any) => {
+        return {
+          ...data,
+          results: data.results.map((user) => {
+            if (user.id === userId) {
+              if (user?.role) {
+                user.role.name = roleName
+              } else {
+                user.role = {
+                  name: roleName
+                }
               }
+              return user
             }
-            return user
-          }
 
-          return user
-        })
-      )
+            return user
+          })
+        }
+      })
 
       enqueue({
         message: t('snackbar.success.role.binding'),
@@ -104,9 +108,10 @@ const UserListContainer = () => {
           startEnhancer: ({ size }) => <Check size={size} />
         })
 
-        queryClient.setQueryData('users', (users: Array<IUser>) =>
-          users.filter((user) => user.id !== deleteUser.id)
-        )
+        queryClient.setQueryData('users', (data: any) => ({
+          ...data,
+          results: data.results.filter((user) => user.id !== deleteUser.id)
+        }))
 
         setShowDeleteUserModal(false)
         setDeleteUser(null)
@@ -119,12 +124,12 @@ const UserListContainer = () => {
     }
   }
 
-  const handleShowDeleteModal = (user: IUser) => {
+  const handleShowDeleteModal = (user) => {
     setDeleteUser(user)
     setShowDeleteUserModal(true)
   }
 
-  const renderUserTag = useCallback((user: IUser) => {
+  const renderUserTag = useCallback((user) => {
     if (user && user?.role) {
       return (
         <Tag effect='dark' type='info' className={styles.tag}>
@@ -135,7 +140,7 @@ const UserListContainer = () => {
   }, [])
 
   const isUserDropDownVisible = useCallback(
-    (user: IUser) => {
+    (user) => {
       if (user && currentUser) {
         if (currentUser.id === user.id) {
           return false
@@ -171,7 +176,7 @@ const UserListContainer = () => {
   return (
     <div className={styles.container}>
       <div className={styles.list}>
-        {data.map((user: IUser) => (
+        {data?.results?.map((user) => (
           <div key={user.id} className={styles.user}>
             <div className={styles.user__left}>{renderAvatar(user)}</div>
             <div className={styles.user__right}>
@@ -204,7 +209,7 @@ const UserListContainer = () => {
                     </div>
                   )}
                   {hasPermission(Permission.MANAGE_ROLE) &&
-                    roleData
+                    roleData?.results
                       ?.filter(
                         (role) =>
                           role.name !== OWNER_KEY &&

@@ -13,7 +13,6 @@ import { nanoid } from 'nanoid'
 import { google } from 'googleapis'
 import * as jwt from 'jsonwebtoken'
 import qs from 'querystring'
-import * as fs from 'fs'
 import * as bcrypt from 'bcrypt'
 import { DateTime } from 'luxon'
 
@@ -28,7 +27,7 @@ import {
   SignUpDto
 } from './dto'
 import { checkFileExists } from '#/utils/file'
-import UserProfile from '#/core/entity/userProfile.entity'
+import { UserProfile } from '#/core/entity/userProfile.entity'
 import { UserService } from '#/user/user.service'
 import { EmailAuthType } from '@/types'
 

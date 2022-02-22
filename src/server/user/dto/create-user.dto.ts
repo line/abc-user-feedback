@@ -5,8 +5,14 @@ import {
   IsOptional,
   IsUrl
 } from 'class-validator'
+import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateUserDto {
+  @ApiProperty({
+    example: '',
+    description: 'user nickname',
+    required: true
+  })
   @IsString()
   @IsNotEmpty()
   nickname: string
