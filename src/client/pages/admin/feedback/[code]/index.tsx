@@ -1,5 +1,5 @@
 /* */
-import React, { useMemo, useState, useEffect } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
@@ -29,13 +29,13 @@ import {
   getFeedbackreponses
 } from '~/service/feedback'
 import {
+  FeedbackDetailModal,
+  FeedbackResponseTable,
   Header,
   ResponseFilter,
-  ResponseSnippetModal,
-  FeedbackResponseTable,
-  FeedbackDetailModal
+  ResponseSnippetModal
 } from '~/components'
-import { Permission } from '@/types'
+import { Order, Permission } from '@/types'
 
 const REQUEST_COUNT = 100
 
@@ -73,7 +73,7 @@ const AdminFeedbackDetailPage = (props) => {
     () =>
       getFeedbackreponses(router.query.code, {
         ...params,
-        order: showLatest ? 'DESC' : 'ASC',
+        order: showLatest ? Order.DESC : Order.ASC,
         offset: (currentPage - 1) * REQUEST_COUNT,
         limit: REQUEST_COUNT
       })
