@@ -24,10 +24,6 @@ async function main() {
     .setTitle('User feedback')
     .setDescription('User feedback API description')
     .setVersion('1.0.0')
-    .addBearerAuth(
-      { type: 'http', scheme: 'bearer', bearerFormat: 'JWT', in: 'Header' },
-      'access-token'
-    )
     .build()
 
   const document = SwaggerModule.createDocument(app, documentConfig, {
