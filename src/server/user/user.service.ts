@@ -9,8 +9,7 @@ import * as bcrypt from 'bcrypt'
 import { Repository, getManager, Not, getConnection, In } from 'typeorm'
 
 /* */
-import { CreateUserDto } from './dto/create-user.dto'
-import { UpdateUserDto } from './dto/update-user.dto'
+import { CreateUserDto, UpdateUserDto } from './dto'
 import { OWNER_KEY } from '@/constant'
 import {
   User,
@@ -112,7 +111,7 @@ export class UserService {
     return user
   }
 
-  async getUsers() {
+  async getUsers(offset: number, limit?: number) {
     return this.userRepository
       .createQueryBuilder('user')
       .where({
@@ -128,7 +127,9 @@ export class UserService {
         'role.id = roleUserBindings.roleId'
       )
       .orderBy('user.createdTime', 'DESC')
-      .getMany()
+      .skip(offset)
+      .take(limit)
+      .getManyAndCount()
   }
 
   async getUserById(userId: string) {

@@ -23,11 +23,11 @@ export interface IRole {
 export interface IUser {
   id: string
   email: string
+  nickname?: string
   profile: IUserProfile
   role?: IRole
-  createdTime: Date
-  updatedTime: Date
-  isVerified: boolean
+  createdTime?: Date
+  updatedTime?: Date
 }
 
 export enum FormFieldType {}

@@ -13,7 +13,7 @@ import {
 import { User } from './index'
 
 @Entity('custom_auths')
-export default class CustomAuth {
+export class CustomAuth {
   @PrimaryColumn()
   id!: string
 

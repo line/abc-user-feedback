@@ -8,6 +8,7 @@ import { RenderService } from 'nest-next'
 
 /* */
 import { AppModule } from './app.module'
+import { PaginatedResultDto } from '#/core/dto'
 import ValidationPipe from './core/pipe/validation.pipe'
 
 const PORT = process.env.PORT || 3000
@@ -29,7 +30,9 @@ async function main() {
     )
     .build()
 
-  const document = SwaggerModule.createDocument(app, documentConfig)
+  const document = SwaggerModule.createDocument(app, documentConfig, {
+    extraModels: [PaginatedResultDto]
+  })
 
   SwaggerModule.setup('docs', app, document)
 

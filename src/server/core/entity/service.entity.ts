@@ -12,7 +12,7 @@ import {
 import { Locale } from '@/types'
 
 @Entity('service')
-export default class Service {
+export class Service {
   @PrimaryGeneratedColumn('increment')
   version!: number
 

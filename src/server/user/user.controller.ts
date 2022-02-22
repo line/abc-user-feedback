@@ -9,29 +9,27 @@ import {
   NotFoundException,
   Param,
   Put,
+  Query,
   Req,
   Res,
   UnauthorizedException,
   UseGuards
 } from '@nestjs/common'
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-  ApiBearerAuth
-} from '@nestjs/swagger'
+import { ApiTags, ApiBody, ApiBearerAuth } from '@nestjs/swagger'
 import { ConfigService } from '@nestjs/config'
 import { Response } from 'express'
 
 /* */
 import { UserService } from './user.service'
-import { UpdateUserDto } from './dto/update-user.dto'
+import { UserDto, UpdateUserDto } from './dto'
 import { PermissionGuard } from '#/core/guard'
-import { Permissions } from '#/core/decorators'
+import { Permissions, ApiPaginatedResponse } from '#/core/decorators'
 import { Permission } from '@/types'
 import { AuthService } from '#/auth/auth.service'
+import { PaginatedResultDto, PagingQuery } from '#/core/dto'
+import { User } from '#/core/entity'
 
+@ApiBearerAuth('access-token')
 @ApiTags('User')
 @Controller('api/v1')
 @UseGuards(PermissionGuard)
@@ -42,7 +40,6 @@ export class UserController {
     private readonly configService: ConfigService
   ) {}
 
-  @ApiBearerAuth('access-token')
   @Get('user/current')
   async getCurrentUser(@Req() req: any) {
     if (!req.user) {
@@ -62,8 +59,6 @@ export class UserController {
     return this.userService.updateUserProfile(req.user.id, data)
   }
 
-  @ApiOperation({ summary: 'Delete User' })
-  @ApiResponse({ description: 'Delete User' })
   @Delete('user')
   @HttpCode(204)
   async deleteSelfUser(@Req() req: any, @Res() res: Response) {
@@ -83,10 +78,20 @@ export class UserController {
   /**
    * Admin
    */
+  @ApiPaginatedResponse(UserDto)
   @Get('admin/user')
   @Permissions(Permission.READ_USERS)
-  async getUsers() {
-    return this.userService.getUsers()
+  async getUsers(
+    @Query() pagination: PagingQuery
+  ): Promise<PaginatedResultDto<UserDto>> {
+    const { offset, limit } = pagination
+
+    const [users, total] = await this.userService.getUsers(offset, limit)
+
+    return {
+      total,
+      results: users.map((user) => new UserDto(user))
+    }
   }
 
   @Delete('admin/user/:userId')

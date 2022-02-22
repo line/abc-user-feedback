@@ -35,7 +35,7 @@ import {
   ResponseFilter,
   ResponseSnippetModal
 } from '~/components'
-import { Order, Permission } from '@/types'
+import { Permission, Order } from '@/types'
 
 const REQUEST_COUNT = 100
 
@@ -44,6 +44,19 @@ const AdminFeedbackDetailPage = (props) => {
 
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
+
+  const idOrCode = useMemo<string>(() => {
+    if (router?.query) {
+      return router.query.code as string
+    }
+
+    return ''
+  }, [router])
+
+  const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
+    ['feedback', router.query.code],
+    getFeedbackByCode
+  )
 
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
   const [showResponseDetailModal, setShowResponseDetailModal] =
@@ -63,15 +76,10 @@ const AdminFeedbackDetailPage = (props) => {
 
   const { hasPermission } = useUser()
 
-  const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
-    ['feedback', router.query.code],
-    getFeedbackByCode
-  )
-
   const { isLoading: isFeedbackResponseLoading, data: response } = useQuery(
-    ['responses', router.query.code, currentPage, params, showLatest],
+    ['responses', idOrCode, currentPage, params, showLatest],
     () =>
-      getFeedbackreponses(router.query.code, {
+      getFeedbackreponses(idOrCode, {
         ...params,
         order: showLatest ? Order.DESC : Order.ASC,
         offset: (currentPage - 1) * REQUEST_COUNT,
@@ -162,7 +170,11 @@ const AdminFeedbackDetailPage = (props) => {
   const handleDeleteResponse = async () => {
     try {
       if (selectedId.length) {
-        await Promise.all(selectedId.map((id) => deleteResponse(id)))
+        await Promise.all(
+          selectedId.map((id) =>
+            deleteResponse(router.query.code as string, id)
+          )
+        )
 
         queryClient.setQueryData(
           ['responses', router.query.code, currentPage, params, showLatest],
@@ -330,6 +342,7 @@ const AdminFeedbackDetailPage = (props) => {
         </ModalFooter>
       </Modal>
       <FeedbackDetailModal
+        id={responseDetail.id}
         show={showResponseDetailModal}
         onClose={handleToggleResponseDetailModal}
         feedback={feedback}
