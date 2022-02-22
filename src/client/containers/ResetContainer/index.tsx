@@ -16,7 +16,7 @@ import { ErrorMessage, FormItem } from '~/components'
 import { requestChangePassword } from '~/service/auth'
 import { PASSWORD_REGEXP } from '@/constant'
 
-const ResetPasswordPage = ({ code }) => {
+const ResetContainer = ({ code }) => {
   const { enqueue } = useSnackbar()
   const router = useRouter()
 
@@ -97,4 +97,4 @@ const ResetPasswordPage = ({ code }) => {
   )
 }
 
-export default ResetPasswordPage
+export default ResetContainer

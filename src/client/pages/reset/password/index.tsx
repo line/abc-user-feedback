@@ -10,7 +10,7 @@ import { ResetContainer } from '~/containers'
 import { useApp } from '~/hooks'
 import { AppMode } from '@/types'
 
-const ResetPasswordPage = ({ code }) => {
+const ResetPasswordPage = ({ query }) => {
   const [showModal, setShowModal] = useState<boolean>(false)
   const { config } = useApp()
 
@@ -30,13 +30,13 @@ const ResetPasswordPage = ({ code }) => {
             size={SIZE.default}
             role={ROLE.dialog}
           >
-            <ResetContainer code={code} />
+            <ResetContainer code={query.code} />
           </Modal>
         </div>
       )}
       {config?.app?.mode === AppMode.Page && (
         <div className={styles.inner}>
-          <ResetContainer code={code} />
+          <ResetContainer code={query.code} />
         </div>
       )}
     </div>

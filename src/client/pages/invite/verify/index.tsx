@@ -1,5 +1,5 @@
 /* */
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { Modal, ROLE, SIZE } from 'baseui/modal'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -10,8 +10,16 @@ import { VerifyContainer } from '~/containers'
 import { useApp } from '~/hooks'
 import { AppMode } from '@/types'
 
-const VerifyPage = ({ email, code }) => {
+const VerifyPage = ({ email, query }) => {
   const [showModal, setShowModal] = useState<boolean>(false)
+
+  const code = useMemo<string>(() => {
+    if (query?.code) {
+      return query.code as string
+    }
+
+    return ''
+  }, [query])
 
   const { config } = useApp()
 
