@@ -1,24 +1,18 @@
+/* */
+import { PickType } from '@nestjs/swagger'
+
+/* */
+import { Role } from '#/core/entity'
 import { ApiProperty } from '@nestjs/swagger'
 
-export class RoleDto {
-  @ApiProperty()
-  id: string
-
-  @ApiProperty()
-  name: string
-
-  @ApiProperty()
-  description: string
-
-  @ApiProperty()
-  createdTime: Date
-
-  @ApiProperty()
-  updatedTime: Date
-
+export class RoleDto extends PickType(Role, [
+  'id',
+  'name',
+  'description',
+  'createdTime',
+  'updatedTime'
+] as const) {
   constructor(data) {
-    for (let key in data) {
-      this[key] = data[key]
-    }
+    super(data)
   }
 }
