@@ -47,7 +47,7 @@ export class RoleController {
 
     return {
       total,
-      results: roles.map((role) => new RoleDto(role))
+      results: roles
     }
   }
 

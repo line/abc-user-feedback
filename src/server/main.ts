@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger'
 import * as cookieParser from 'cookie-parser'
 import { RenderService } from 'nest-next'
+import 'reflect-metadata'
 
 /* */
 import { AppModule } from './app.module'

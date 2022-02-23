@@ -30,8 +30,6 @@ export interface IUser {
   updatedTime?: Date
 }
 
-export enum FormFieldType {}
-
 export interface IComment {
   id: string
 }
@@ -66,6 +64,12 @@ export enum FormFieldType {
   DateTime = 'datetime'
 }
 
+export interface IFeedbackFieldOption {
+  id: string
+  label: string
+  value: string
+}
+
 export interface IFeedbackField {
   id: string
   name: string
@@ -73,7 +77,8 @@ export interface IFeedbackField {
   type: FormFieldType
   isRequired: boolean
   order: number
-  option: Array<string>
+  feedbackId: string
+  options: Array<IFeedbackFieldOption>
 }
 
 export interface IFeedback {

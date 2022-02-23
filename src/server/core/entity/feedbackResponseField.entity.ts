@@ -6,9 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
-  Index
+  JoinColumn
 } from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
 /* */
 import { FeedbackField, FeedbackResponse } from './index'
@@ -21,9 +21,11 @@ export class FeedbackResponseField {
   @Column('uuid')
   feedbackFieldId!: string
 
+  @ApiProperty()
   @Column('number')
   feedbackResponseId!: number
 
+  @ApiProperty()
   @Column({ type: 'nvarchar', length: 10000 })
   value!: any
 
