@@ -13,6 +13,7 @@ import { PaginatedResultDto } from '#/core/dto'
 import ValidationPipe from './core/pipe/validation.pipe'
 
 const PORT = process.env.PORT || 3000
+const isProduction = process.env.NODE_ENV === 'production'
 
 async function main() {
   const app = await NestFactory.create(AppModule)
@@ -21,17 +22,19 @@ async function main() {
   const config = app.get<ConfigService>(ConfigService)
 
   // set swagger document
-  const documentConfig = new DocumentBuilder()
-    .setTitle('User feedback')
-    .setDescription('User feedback API description')
-    .setVersion('1.0.0')
-    .build()
+  if (!isProduction) {
+    const documentConfig = new DocumentBuilder()
+      .setTitle('User feedback')
+      .setDescription('User feedback API description')
+      .setVersion('1.0.0')
+      .build()
 
-  const document = SwaggerModule.createDocument(app, documentConfig, {
-    extraModels: [PaginatedResultDto]
-  })
+    const document = SwaggerModule.createDocument(app, documentConfig, {
+      extraModels: [PaginatedResultDto]
+    })
 
-  SwaggerModule.setup('docs', app, document)
+    SwaggerModule.setup('docs', app, document)
+  }
 
   /**
    * nest-next handled error as next's error renderer (_error page)
