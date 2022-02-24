@@ -3,10 +3,6 @@ import client from './apiClient'
 /**
  * Admin
  */
-export const getRoles = () => {
-  return client.get(`/admin/roles`).then((res) => res.data)
-}
-
 export const getRoleByName = (roleName: string) => {
   return client.get(`/admin/roles/${roleName}`).then((res) => res.data)
 }

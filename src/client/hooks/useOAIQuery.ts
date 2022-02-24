@@ -1,5 +1,6 @@
 /* */
 import { O } from 'ts-toolbelt'
+import axios from 'axios'
 import type { UseQueryOptions } from 'react-query'
 import { useQuery } from 'react-query'
 
@@ -69,22 +70,15 @@ export default function useOAIQuery<
     }
   : {
       variables: TVariables
-    })) {
+    })): any {
   const keys = [queryKey, variables]
   return {
     ...useQuery(
       keys,
-      async ({ signal }: any) => {
-        const response = await fetch(getRequestUrl(queryKey, variables), {
-          signal
-        })
+      async () => {
+        const response = await axios.get(getRequestUrl(queryKey, variables))
 
-        if (!response.ok) {
-          throw new Error('Response error')
-        }
-
-        const json = (await response.json()) as TData
-        return json
+        return response.data
       },
       queryOptions
     ),

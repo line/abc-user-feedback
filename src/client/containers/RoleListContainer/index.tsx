@@ -110,7 +110,9 @@ const RoleListContainer = () => {
               },
               props: {
                 onClick: async (e) => {
-                  const role = data?.[e.target.closest('tr').rowIndex - 1]
+                  const role =
+                    data?.results?.[e.target.closest('tr').rowIndex - 1]
+
                   if (role) {
                     await router.push(`/admin/role/${role.name}`)
                   }

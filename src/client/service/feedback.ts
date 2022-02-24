@@ -1,14 +1,5 @@
 import client from './apiClient'
 
-export const getFeedbacks = () =>
-  client.get('/admin/feedback').then((res) => res.data)
-
-export const getFeedbackByCode = ({ queryKey }) =>
-  client.get(`/admin/feedback/${queryKey[1]}`).then((res) => res.data)
-
-export const getFeedbackDetailById = ({ queryKey }) =>
-  client.get(`/admin/feedback/${queryKey[1]}`).then((res) => res.data)
-
 export const createFeedback = (payload) =>
   client.post('/admin/feedback', payload).then((res) => res.data)
 

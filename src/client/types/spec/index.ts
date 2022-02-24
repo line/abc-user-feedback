@@ -48,7 +48,7 @@ export interface paths {
     get: operations["FeedbackController_getResponseById"];
     delete: operations["FeedbackController_deleteReponse"];
   };
-  "/api/v1/admin/feedback/{idOrCode}/response/export": {
+  "/api/v1/admin/feedback/{idOrCode}/response-export": {
     get: operations["FeedbackController_exportResponse"];
   };
   "/api/v1/feedback/{idOrCode}/response": {
@@ -115,6 +115,21 @@ export interface components {
       nickname: string;
       avatarUrl: string;
     };
+    Service: {
+      version: number;
+      name: string;
+      description: string;
+      entryPath: string;
+      logoUrl: string;
+      locale: string;
+      isPrivate: boolean;
+      isRestrictDomain: boolean;
+      allowDomains: string[];
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: date-time */
+      updatedTime: string;
+    };
     UpdateServiceDto: {
       name: string;
       description?: string;
@@ -127,6 +142,36 @@ export interface components {
       isRestrictDomain: boolean;
       allowDomains?: string[];
     };
+    FeedbackFieldOption: {
+      id: string;
+      label: string;
+      value: string;
+      feedbackFieldId: string;
+    };
+    FeedbackField: {
+      id: string;
+      name: string;
+      description: string;
+      /** @enum {string} */
+      type: "text" | "textarea" | "select" | "number" | "boolean" | "datetime";
+      isRequired: boolean;
+      order: number;
+      feedbackId: string;
+      options: components["schemas"]["FeedbackFieldOption"][];
+    };
+    FeedbackDto: {
+      id: string;
+      title: string;
+      description: string;
+      allowAnonymous: boolean;
+      code: string;
+      /** Format: date-time */
+      createdTime: string;
+      /** Format: date-time */
+      updatedTime: string;
+      fields: components["schemas"]["FeedbackField"][];
+    };
+    FeedbackResponseDto: { [key: string]: unknown };
     CreateFeedbackDto: { [key: string]: unknown };
     UpdateFeedbackDto: { [key: string]: unknown };
     SignInDto: {
@@ -256,7 +301,7 @@ export interface operations {
   UserController_getUsers: {
     parameters: {
       query: {
-        order?: "desc" | "ASC";
+        order?: "DESC" | "ASC";
         offset?: number;
         limit?: number;
       };
@@ -290,7 +335,11 @@ export interface operations {
   AdminController_getService: {
     parameters: {};
     responses: {
-      200: unknown;
+      200: {
+        content: {
+          "application/json": components["schemas"]["Service"];
+        };
+      };
     };
   };
   AdminController_updateService: {
@@ -318,13 +367,19 @@ export interface operations {
   FeedbackController_getAll: {
     parameters: {
       query: {
-        order?: "desc" | "ASC";
+        order?: "DESC" | "ASC";
         offset?: number;
         limit?: number;
       };
     };
     responses: {
-      200: unknown;
+      200: {
+        content: {
+          "application/json": components["schemas"]["PaginatedResultDto"] & {
+            results?: components["schemas"]["FeedbackDto"][];
+          };
+        };
+      };
     };
   };
   FeedbackController_createFeedback: {
@@ -346,7 +401,11 @@ export interface operations {
       };
     };
     responses: {
-      200: unknown;
+      200: {
+        content: {
+          "application/json": components["schemas"]["FeedbackDto"];
+        };
+      };
     };
   };
   FeedbackController_deleteFeedback: {
@@ -374,17 +433,30 @@ export interface operations {
   FeedbackController_getAllResponse: {
     parameters: {
       query: {
-        order?: "desc" | "ASC";
+        order?: "DESC" | "ASC";
         offset?: number;
         limit?: number;
       };
     };
     responses: {
-      200: unknown;
+      200: {
+        content: {
+          "application/json": components["schemas"]["PaginatedResultDto"] & {
+            results?: components["schemas"]["FeedbackResponseDto"][];
+          };
+        };
+      };
     };
   };
   FeedbackController_getResponseById: {
-    parameters: {};
+    parameters: {
+      path: {
+        /** feedback response id */
+        id: number;
+        /** feedback code or uuid */
+        idOrCode: string | number;
+      };
+    };
     responses: {
       200: unknown;
     };
@@ -396,7 +468,12 @@ export interface operations {
     };
   };
   FeedbackController_exportResponse: {
-    parameters: {};
+    parameters: {
+      path: {
+        /** feedback code or uuid */
+        idOrCode: string | number;
+      };
+    };
     responses: {
       200: unknown;
     };
@@ -504,7 +581,7 @@ export interface operations {
   RoleController_findAll: {
     parameters: {
       query: {
-        order?: "desc" | "ASC";
+        order?: "DESC" | "ASC";
         offset?: number;
         limit?: number;
       };

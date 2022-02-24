@@ -9,7 +9,6 @@ import {
   ROLE,
   SIZE as ModalSize
 } from 'baseui/modal'
-import { useQuery } from 'react-query'
 import { ListItem, ListItemLabel } from 'baseui/list'
 import { DateTime } from 'luxon'
 import sortBy from 'lodash/sortBy'
@@ -20,36 +19,34 @@ import { Check, Delete } from 'baseui/icon'
 
 /* */
 import { FormFieldType } from '@/types'
+import { Loading } from '~/components'
 import { copyTextToClipboard } from '~/utils/text'
 import CopyLinkIcon from '~/assets/copy_link.svg'
 import { useOAIQuery } from '~/hooks'
 
 interface Props {
-  id: string
-
+  id: number
   feedback: any
-  responseDetail: any
   show: boolean
   onClose: (...args: any) => any
 }
 
 const FeedbackDetailModal = (props: Props) => {
-  const { id, feedback, responseDetail, show = false, onClose } = props
+  const { id, feedback, show = false, onClose } = props
 
   const { t } = useTranslation()
   const { enqueue } = useSnackbar()
 
-  // const { isLoading, data } = useOAIQuery({
-  //   queryKey: '/api/v1/admin/feedback/{idOrCode}/response',
-  //   variables: {
-  //     id
-  //   },
-  //   queryOptions: {
-  //     enabled: isOpen
-  //   }
-  // })
-
-  // const { isLoading, data } = useQuery(['feedback', code], getFeedbackByCode)
+  const { isLoading, data: responseDetail }: any = useOAIQuery({
+    queryKey: '/api/v1/admin/feedback/{idOrCode}/response/{id}',
+    queryOptions: {
+      enabled: !!feedback && !!id
+    },
+    variables: {
+      idOrCode: feedback ? feedback.id : null,
+      id
+    }
+  })
 
   const handleCopyLink = async () => {
     try {
@@ -185,7 +182,7 @@ const FeedbackDetailModal = (props: Props) => {
     >
       <ModalHeader>{t('title.feedback.detail')}</ModalHeader>
       <ModalBody>
-        <pre>{renderResponseDetail}</pre>
+        {isLoading ? <Loading /> : <pre>{renderResponseDetail}</pre>}
       </ModalBody>
       <ModalFooter style={{ display: 'flex', alignItems: 'center' }}>
         <ModalButton

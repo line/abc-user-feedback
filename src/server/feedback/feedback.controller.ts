@@ -58,18 +58,21 @@ export class FeedbackController {
     return feedback
   }
 
+  @ApiPaginatedResponse(FeedbackDto)
   @Get('admin/feedback')
   @Permissions(Permission.READ_FEEDBACKS)
-  async getAll(@Query() pagination: PagingQuery) {
+  async getAll(
+    @Query() pagination: PagingQuery
+  ): Promise<PaginatedResultDto<FeedbackDto>> {
     const { offset, limit } = pagination
-    const [items, totalCount] = await this.feedbackService.findAllFeedback(
+    const [items, total] = await this.feedbackService.findAllFeedback(
       offset,
       limit
     )
 
     return {
-      items,
-      totalCount
+      total,
+      results: items
     }
   }
 

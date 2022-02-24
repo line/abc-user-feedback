@@ -25,9 +25,7 @@ import { sendInvitationEmail } from '~/service/mail'
 import { ErrorMessage, FormItem, Textarea } from '~/components'
 import { useApp, useOAIQuery, useUser } from '~/hooks'
 import { OWNER_KEY } from '@/constant'
-import { useQuery } from 'react-query'
-import { IRole, Permission } from '@/types'
-import { getRoles } from '~/service/role'
+import { Permission } from '@/types'
 
 interface Props extends ModalProps {
   onClose?: any

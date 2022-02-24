@@ -21,7 +21,7 @@ import {
   InternalErrorContainer,
   UnauthorizedContainer
 } from '~/containers'
-import { useApp } from '~/hooks'
+import { useApp, useOAIQuery } from '~/hooks'
 import { Locale } from '@/types'
 
 const localeOptions = Object.entries(Locale).map(([label, id]) => ({
@@ -37,10 +37,9 @@ const schema = yup.object().shape({
 })
 
 const AdminRoot = () => {
-  const { isLoading, isError, error, data } = useQuery<any, AxiosError>(
-    'service',
-    getService
-  )
+  const { isLoading, isError, error, data } = useOAIQuery({
+    queryKey: '/api/v1/admin/service'
+  })
 
   const { enqueue } = useSnackbar()
 

@@ -23,7 +23,6 @@ export type OAIQueryParameters<
   TMethod extends OAIMethods
 > = O.Path<paths, [TPath, TMethod, 'parameters', 'query']>
 
-// react-query의 variables로 params, querystring을 통합해서 받아서 사용하기 위한 type
 export type OAIParameters<
   TPath extends OAIPathKeys,
   TMethod extends OAIMethods
@@ -38,12 +37,10 @@ export type OAIParameters<
   ? OAIQueryParameters<TPath, TMethod>
   : undefined
 
-// 특정 path, method의 statusCode 200에 대한 response type
 export type OAIResponse<
   TPath extends keyof paths,
   TMethod extends OAIMethods
 > = O.Path<
   paths,
-  // 아래의 path는 주어진 OpenApi Specs에 따라서 달라질 수 있습니다.
   [TPath, TMethod, 'responses', 200, 'content', 'application/json']
 >
