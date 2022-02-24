@@ -254,7 +254,7 @@ const AdminFeedbackDetailPage = (props) => {
           <ResponseFilter onApply={handleApplyFilter} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div>{response?.totalCount ?? 0}</div>
+          <div>{response?.total ?? 0}</div>
           {hasPermission(Permission.DELETE_RESPONSE) && (
             <div style={{ marginLeft: 'auto' }}>
               <Button
