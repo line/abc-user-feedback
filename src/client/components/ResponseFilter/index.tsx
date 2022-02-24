@@ -11,16 +11,12 @@ import { FormControl } from 'baseui/form-control'
 import { useTranslation } from 'next-i18next'
 import { DateTime } from 'luxon'
 
-/* */
-import { IFeedback } from '@/types'
-
 interface Props {
-  feedback: IFeedback
   onApply?: any
 }
 
 const ResponseFilter = (props: Props) => {
-  const { feedback, onApply } = props
+  const { onApply } = props
 
   const { control, watch, reset, getValues, setValue } = useForm({
     defaultValues: {
@@ -138,54 +134,8 @@ const ResponseFilter = (props: Props) => {
       </FlexGridItem>
     ]
 
-    // if (feedback?.fields) {
-    //   const sorted = sortBy(feedback?.fields ?? [], (o) => o?.order).map(
-    //     (field) => field
-    //   ) as any
-    //
-    //   sorted.map((field) => {
-    //     if (field.type === FormFieldType.Select) {
-    //       const option = [{ label: 'All', value: 'all' }].concat(
-    //         field.option.map((o) => ({
-    //           label: o,
-    //           value: o
-    //         }))
-    //       )
-    //
-    //       items.push(
-    //         <FlexGridItem key={field.name}>
-    //           <FormControl label={field.name}>
-    //             <Controller
-    //               control={control}
-    //               name={field.name}
-    //               render={({ field: { onChange, ...rest } }) => (
-    //                 <Select
-    //                   {...rest}
-    //                   options={option}
-    //                   placeholder={field.name}
-    //                   onChange={({ option }) => {
-    //                     onChange(option?.value)
-    //                   }}
-    //                 />
-    //               )}
-    //             />
-    //           </FormControl>
-    //         </FlexGridItem>
-    //       )
-    //     } else if (field.type === FormFieldType.Text) {
-    //       items.push(
-    //         <FlexGridItem>
-    //           <FormControl label={field.name}>
-    //             <Input {...register(field.name)} placeholder={field.name} />
-    //           </FormControl>
-    //         </FlexGridItem>
-    //       )
-    //     }
-    //   })
-    // }
-
     return items
-  }, [feedback])
+  }, [])
 
   return (
     <div>

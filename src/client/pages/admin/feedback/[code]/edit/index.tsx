@@ -4,7 +4,6 @@ import { useForm, FormProvider } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { useSnackbar } from 'baseui/snackbar'
 import { Check, Delete } from 'baseui/icon'
-import { useQuery } from 'react-query'
 import { KIND as ButtonKind } from 'baseui/button'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import {
@@ -21,12 +20,8 @@ import {
 import styles from './styles.module.scss'
 import { FeedbackForm, Button, FormItem } from '~/components'
 import { AdminPageContainer } from '~/containers'
-import { useToggle } from '~/hooks'
-import {
-  getFeedbackByCode,
-  updateFeedback,
-  deleteFeedback
-} from '~/service/feedback'
+import { useOAIQuery, useToggle } from '~/hooks'
+import { updateFeedback, deleteFeedback } from '~/service/feedback'
 import { parseValidateError } from '~/utils/error'
 
 const EditFeedbackPage = () => {
@@ -34,7 +29,16 @@ const EditFeedbackPage = () => {
   const code = router.query.code as string
   const [showDeleteModal, setToggleDeleteModal] = useToggle(false)
   const { enqueue } = useSnackbar()
-  const { isLoading, data } = useQuery(['feedback', code], getFeedbackByCode)
+
+  const { isLoading, data } = useOAIQuery({
+    queryKey: '/api/v1/admin/feedback/{idOrCode}',
+    queryOptions: {
+      enabled: !!code
+    },
+    variables: {
+      idOrCode: code
+    }
+  })
 
   const methods = useForm({
     defaultValues: {

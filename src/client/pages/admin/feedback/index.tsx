@@ -1,6 +1,5 @@
 /* */
 import React, { useMemo, useState } from 'react'
-import { useQuery } from 'react-query'
 import { useRouter } from 'next/router'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
@@ -8,15 +7,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import styles from './styles.module.scss'
 import AdminPageContainer from '~/containers/AdminPageContainer'
 import { Button, Table } from '~/components'
-import { getFeedbacks } from '~/service/feedback'
 import { Pagination, SIZE as PaginationSize } from 'baseui/pagination'
+import { useOAIQuery } from '~/hooks'
 
 const AdminFeedbackPage = () => {
-  const { isLoading, isError, error, data } = useQuery(
-    'feedbacks',
-    getFeedbacks
-  )
   const router = useRouter()
+  const { isLoading, isError, error, data } = useOAIQuery({
+    queryKey: '/api/v1/admin/feedback'
+  })
 
   const [currentPage, setCurrentPage] = useState(1)
 
@@ -67,13 +65,13 @@ const AdminFeedbackPage = () => {
         </div>
         <div className={styles.page__list}>
           <Table
-            data={data?.items ?? []}
+            data={data?.results ?? []}
             columns={tableColumns}
             loading={isLoading}
             onRowClick={handleRowClick}
           />
           <Pagination
-            numPages={Math.floor((data?.totalCount ?? 0) / 100) + 1}
+            numPages={Math.floor((data?.total ?? 0) / 100) + 1}
             size={PaginationSize.compact}
             currentPage={currentPage}
             onPageChange={({ nextPage }) => {

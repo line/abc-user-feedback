@@ -7,28 +7,34 @@ import {
   OneToOne,
   JoinColumn
 } from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
 /* */
-import { User } from './index'
+import { User } from './user.entity'
 
 @Entity('userProfiles')
-export default class UserProfile {
+export class UserProfile {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
+  @ApiProperty()
   @Column({ nullable: true })
   nickname!: string
 
+  @ApiProperty()
   @Column({ nullable: true })
   avatarUrl: string
 
+  @ApiProperty()
   @Column('uuid')
   userId!: string
 
+  @ApiProperty()
   @Column('timestampz')
   @CreateDateColumn()
   created_at!: Date
 
+  @ApiProperty()
   @Column('timestamptz')
   @UpdateDateColumn()
   updated_at!: Date

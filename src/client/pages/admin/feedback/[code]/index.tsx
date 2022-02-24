@@ -21,11 +21,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 /* */
 import styles from './styles.module.scss'
 import BackIcon from '~/assets/back.svg'
-import { useToggle, useUser } from '~/hooks'
+import { useOAIQuery, useToggle, useUser } from '~/hooks'
 import {
   deleteResponse,
   exportFeedbackResponse,
-  getFeedbackByCode,
   getFeedbackreponses
 } from '~/service/feedback'
 import {
@@ -35,19 +34,44 @@ import {
   ResponseFilter,
   ResponseSnippetModal
 } from '~/components'
-import { Order, Permission } from '@/types'
+import { Permission, Order } from '@/types'
 
 const REQUEST_COUNT = 100
 
 const AdminFeedbackDetailPage = (props) => {
   const router = useRouter()
+  const [responseId, setResponseId] = useState<number>(null)
 
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
 
+  useEffect(() => {
+    const hash = window.location.hash
+    if (hash && hash.includes('#modal-')) {
+      const id = hash.replaceAll('#modal-', '')
+      setResponseId(+id)
+    }
+  }, [])
+
+  const idOrCode = useMemo<string>(() => {
+    if (router?.query) {
+      return router.query.code as string
+    }
+
+    return ''
+  }, [router])
+
+  const { isLoading: isFeedbackLoading, data: feedback } = useOAIQuery({
+    queryKey: '/api/v1/admin/feedback/{idOrCode}',
+    queryOptions: {
+      enabled: !!idOrCode
+    },
+    variables: {
+      idOrCode
+    }
+  })
+
   const [showDeleteResponseModal, toggleDeleteResponseModal] = useToggle()
-  const [showResponseDetailModal, setShowResponseDetailModal] =
-    useState<boolean>(false)
   const [showExampleModal, setShowExampleModal] = useState<boolean>(false)
 
   const [showLatest, toggleShowLatest] = useToggle(true)
@@ -55,7 +79,6 @@ const AdminFeedbackDetailPage = (props) => {
   const { t } = useTranslation()
 
   const [selectedId, setSelectedId] = useState<Array<number>>([])
-  const [responseDetail, setResponseDetail] = useState<any>()
   const [currentPage, setCurrentPage] = useState<number>(
     (props?.query?.page as number) ?? 1
   )
@@ -63,15 +86,10 @@ const AdminFeedbackDetailPage = (props) => {
 
   const { hasPermission } = useUser()
 
-  const { isLoading: isFeedbackLoading, data: feedback } = useQuery(
-    ['feedback', router.query.code],
-    getFeedbackByCode
-  )
-
   const { isLoading: isFeedbackResponseLoading, data: response } = useQuery(
-    ['responses', router.query.code, currentPage, params, showLatest],
+    ['responses', idOrCode, currentPage, params, showLatest],
     () =>
-      getFeedbackreponses(router.query.code, {
+      getFeedbackreponses(idOrCode, {
         ...params,
         order: showLatest ? Order.DESC : Order.ASC,
         offset: (currentPage - 1) * REQUEST_COUNT,
@@ -80,13 +98,11 @@ const AdminFeedbackDetailPage = (props) => {
   )
 
   const numPages = useMemo<number>(() => {
-    return response?.totalCount
-      ? Math.floor(response?.totalCount / REQUEST_COUNT) + 1
-      : 1
+    return response?.total ? Math.floor(response?.total / REQUEST_COUNT) + 1 : 1
   }, [response])
 
   const responseData = useMemo(() => {
-    return response?.items ?? []
+    return response?.results ?? []
   }, [response])
 
   const responseColumns = useMemo(() => {
@@ -95,35 +111,13 @@ const AdminFeedbackDetailPage = (props) => {
     ) as any
   }, [feedback])
 
-  const handleShowResponseDetail = (response: any) => {
-    if (response) {
-      setResponseDetail(response)
-      handleToggleResponseDetailModal(response.id)
-    }
-  }
-
-  useEffect(() => {
-    if (responseData?.length) {
-      const hash = window.location.hash
-      if (hash && hash.includes('#modal-')) {
-        const id = hash.replaceAll('#modal-', '')
-        const idx = responseData.findIndex((d) => d.id === +id)
-
-        if (idx !== -1) {
-          const response = responseData[idx]
-          handleShowResponseDetail(response)
-        }
-      }
-    }
-  }, [responseData])
-
   const handleToggleResponseDetailModal = async (id: number) => {
-    if (!showResponseDetailModal) {
+    if (!responseId) {
       window.history.pushState(null, null, `#modal-${id}`)
-      setShowResponseDetailModal(true)
+      setResponseId(id)
     } else {
       window.history.pushState(null, null, ' ')
-      setShowResponseDetailModal(false)
+      setResponseId(null)
     }
   }
 
@@ -137,6 +131,15 @@ const AdminFeedbackDetailPage = (props) => {
 
   const handleToggleResponseExampleModal = () => {
     setShowExampleModal((s) => !s)
+  }
+
+  const handleRowClick = (e) => {
+    const response = responseData[e.target.closest('tr').rowIndex - 1]
+
+    if (response) {
+      window.history.pushState(null, null, `#modal-${response.id}`)
+      setResponseId(response.id)
+    }
   }
 
   const handleClickBack = async () => {
@@ -162,7 +165,11 @@ const AdminFeedbackDetailPage = (props) => {
   const handleDeleteResponse = async () => {
     try {
       if (selectedId.length) {
-        await Promise.all(selectedId.map((id) => deleteResponse(id)))
+        await Promise.all(
+          selectedId.map((id) =>
+            deleteResponse(router.query.code as string, id)
+          )
+        )
 
         queryClient.setQueryData(
           ['responses', router.query.code, currentPage, params, showLatest],
@@ -191,6 +198,7 @@ const AdminFeedbackDetailPage = (props) => {
       })
     }
   }
+
   const handlePageChange = async ({
     prevPage,
     nextPage
@@ -243,7 +251,7 @@ const AdminFeedbackDetailPage = (props) => {
           )}
         </h1>
         <div className={styles.filter}>
-          <ResponseFilter feedback={feedback} onApply={handleApplyFilter} />
+          <ResponseFilter onApply={handleApplyFilter} />
         </div>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <div>{response?.totalCount ?? 0}</div>
@@ -268,11 +276,7 @@ const AdminFeedbackDetailPage = (props) => {
             colums={responseColumns}
             onSortToggle={toggleShowLatest}
             onSelect={handleSelectCheckbox}
-            onRowClick={(e) => {
-              handleShowResponseDetail(
-                responseData[e.target.closest('tr').rowIndex - 1]
-              )
-            }}
+            onRowClick={handleRowClick}
           />
           <div
             style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}
@@ -330,17 +334,18 @@ const AdminFeedbackDetailPage = (props) => {
         </ModalFooter>
       </Modal>
       <FeedbackDetailModal
-        show={showResponseDetailModal}
+        id={responseId}
+        show={!!responseId}
         onClose={handleToggleResponseDetailModal}
         feedback={feedback}
-        responseDetail={responseDetail}
       />
     </div>
   )
 }
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps = async ({ query, req }) => {
   const locale = query?.service?.locale || 'en'
+
   return {
     props: {
       ...(await serverSideTranslations(locale, ['common']))

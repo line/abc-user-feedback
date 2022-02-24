@@ -1,6 +1,6 @@
 /* */
 import React from 'react'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQueryClient } from 'react-query'
 import { Button, KIND as ButtonKind } from 'baseui/button'
 import { useForm } from 'react-hook-form'
 import { Input } from 'baseui/input'
@@ -22,18 +22,18 @@ import { Check, Delete } from 'baseui/icon'
 /* */
 import styles from './styles.module.scss'
 import { UserLoader as RoleLoader } from '~/components/Loader'
-import { createRole, getRoles } from '~/service/role'
+import { createRole } from '~/service/role'
 import { IRole, Permission } from '@/types'
-import { useToggle, useUser } from '~/hooks'
+import { useOAIQuery, useToggle, useUser } from '~/hooks'
 import { ErrorMessage, FormItem } from '~/components'
 
 const RoleListContainer = () => {
   const queryClient = useQueryClient()
   const { enqueue } = useSnackbar()
-  const { isLoading, isError, error, data } = useQuery<Array<IRole>>(
-    'roles',
-    getRoles
-  )
+
+  const { isLoading, isError, error, data } = useOAIQuery({
+    queryKey: '/api/v1/admin/roles'
+  })
 
   const router = useRouter()
 
@@ -85,7 +85,7 @@ const RoleListContainer = () => {
     <div className={styles.container}>
       <div className={styles.list}>
         <div className={styles.title}>
-          <div>{data?.length} roles</div>
+          <div>{data?.total} roles</div>
           {hasPermission(Permission.MANAGE_ROLE) && (
             <Button
               onClick={toggleShowCreateRoleModal}
@@ -102,7 +102,7 @@ const RoleListContainer = () => {
           )}
         </div>
         <TableBuilder
-          data={data}
+          data={data.results}
           overrides={{
             TableBodyRow: {
               style: {
@@ -110,7 +110,9 @@ const RoleListContainer = () => {
               },
               props: {
                 onClick: async (e) => {
-                  const role = data?.[e.target.closest('tr').rowIndex - 1]
+                  const role =
+                    data?.results?.[e.target.closest('tr').rowIndex - 1]
+
                   if (role) {
                     await router.push(`/admin/role/${role.name}`)
                   }

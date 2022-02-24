@@ -43,7 +43,7 @@
     "@nestjs/typeorm": "^8.0.2",
     "baseui": "^10.5.0",
     "bcrypt": "^5.0.1",
-    "class-transformer": "^0.4.0",
+    "class-transformer": "^0.5.1",
     "class-validator": "^0.13.1",
     "classnames": "^2.3.1",
     "compression": "^1.7.4",

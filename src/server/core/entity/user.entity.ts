@@ -16,7 +16,7 @@ import { UserState } from '@/types'
 import { IUser } from '@/types'
 
 @Entity('users')
-export default class User implements IUser {
+export class User implements IUser {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id!: string
@@ -25,18 +25,16 @@ export default class User implements IUser {
   @Column({ unique: true, nullable: true, type: 'varchar' })
   email!: string | null
 
-  @ApiProperty()
   @Column('enum', { enum: UserState, default: UserState.Active })
   state: UserState
 
   @Column({ select: false, nullable: true })
   hashPassword: string
 
-  @ApiProperty()
   @Column('boolean', { default: false })
   isVerified: boolean
 
-  @ApiProperty()
+  @ApiProperty({ type: () => UserProfile })
   @OneToOne((type) => UserProfile, (profile) => profile.user)
   profile!: UserProfile
 

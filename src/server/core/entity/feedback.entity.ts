@@ -9,34 +9,44 @@ import {
   OneToMany,
   JoinColumn
 } from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
 /* */
 import { User, FeedbackField, FeedbackResponse } from './index'
+import { IFeedback } from '@/types'
 
 @Entity('feedbacks')
-export default class Feedback {
+export class Feedback implements IFeedback {
+  @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
+  @ApiProperty()
   @Column({ length: 255 })
   title!: string
 
+  @ApiProperty()
   @Column({ length: 255, default: '' })
   description: string
 
+  @ApiProperty()
   @Column('boolean', { default: false })
   allowAnonymous!: boolean
 
+  @ApiProperty()
   @Column({ length: 255 })
   code!: string
 
+  @ApiProperty()
   @Column('uuid')
   userId!: string
 
+  @ApiProperty()
   @Column('timestampz')
   @CreateDateColumn()
   createdTime!: Date
 
+  @ApiProperty()
   @Column('timestamptz')
   @UpdateDateColumn()
   updatedTime!: Date
@@ -45,6 +55,7 @@ export default class Feedback {
   @JoinColumn({ name: 'userId' })
   user!: User
 
+  @ApiProperty({ type: () => [FeedbackField] })
   @OneToMany((type) => FeedbackField, (fields) => fields.feedback)
   fields: Array<FeedbackField>
 

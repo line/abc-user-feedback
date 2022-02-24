@@ -6,24 +6,26 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  JoinColumn,
-  Index
+  JoinColumn
 } from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
 /* */
 import { FeedbackField, FeedbackResponse } from './index'
 
 @Entity('feedbackResponseFields')
-export default class FeedbackResponseField {
+export class FeedbackResponseField {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
   @Column('uuid')
   feedbackFieldId!: string
 
+  @ApiProperty()
   @Column('number')
   feedbackResponseId!: number
 
+  @ApiProperty()
   @Column({ type: 'nvarchar', length: 10000 })
   value!: any
 

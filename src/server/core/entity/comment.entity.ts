@@ -13,7 +13,7 @@ import {
 import { User, Post } from './index'
 
 @Entity('comments')
-export default class Comment {
+export class Comment {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

@@ -290,25 +290,6 @@ export class FeedbackService {
       .leftJoinAndSelect('feedbackField.options', 'options')
       .addSelect(['feedbackField.name', 'feedbackField.type'])
 
-    // const searchParams = Object.entries(query).filter(([name]) => {
-    //   return (
-    //     name !== 'start' &&
-    //     name !== 'end' &&
-    //     name !== 'offset' &&
-    //     name !== 'limit'
-    //   )
-    // })
-    //
-    // if (searchParams?.length) {
-    //   queryBuilder = queryBuilder.andWhere(
-    //     'feedbackResponseFields.value IN (:...values)',
-    //     {
-    //       // names: [searchParams.map((s) => s[0])],
-    //       values: [searchParams.map((s) => s[1])]
-    //     }
-    //   )
-    // }
-
     queryBuilder = queryBuilder.orderBy('r.createdTime', query?.order ?? 'DESC')
 
     return queryBuilder.skip(offset).take(limit).getManyAndCount()

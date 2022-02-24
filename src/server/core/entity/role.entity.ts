@@ -13,7 +13,7 @@ import { RoleUserBinding, RolePermissionBinding } from '#/core/entity'
 import { ApiProperty } from '@nestjs/swagger'
 
 @Entity('roles')
-export default class Role {
+export class Role {
   @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id!: string

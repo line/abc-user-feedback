@@ -8,21 +8,27 @@ import {
   ManyToOne,
   JoinColumn
 } from 'typeorm'
+import { ApiProperty } from '@nestjs/swagger'
 
 /* */
 import { FeedbackField } from './index'
+import { IFeedbackFieldOption } from '@/types'
 
 @Entity('feedbackFieldOptions')
-export default class FeedbackFieldOption {
+export class FeedbackFieldOption implements IFeedbackFieldOption {
+  @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
+  @ApiProperty()
   @Column({ length: 255, nullable: false })
   label!: string
 
+  @ApiProperty()
   @Column({ length: 255, nullable: false })
   value!: string
 
+  @ApiProperty()
   @Column('uuid')
   feedbackFieldId!: string
 

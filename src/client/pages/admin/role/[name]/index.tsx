@@ -6,7 +6,7 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import { Input } from 'baseui/input'
 import { useForm, Controller } from 'react-hook-form'
-import { useQuery, useQueryClient } from 'react-query'
+import { useQueryClient } from 'react-query'
 import { H5 } from 'baseui/typography'
 import { Checkbox } from 'baseui/checkbox'
 import { yupResolver } from '@hookform/resolvers/yup'
@@ -25,8 +25,6 @@ import {
 
 /* */
 import {
-  getRoleByName,
-  getRolePermissions,
   rolePermissionBinding,
   rolePermissionUnbinding,
   deleteRole,
@@ -36,7 +34,7 @@ import { GUEST_KEY, OWNER_KEY } from '@/constant'
 import { AdminPageContainer } from '~/containers'
 import { ErrorMessage, FormItem } from '~/components'
 import { Permission } from '@/types'
-import { useToggle } from '~/hooks'
+import { useOAIQuery, useToggle } from '~/hooks'
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -54,14 +52,17 @@ const AdminRoleDetailPage = () => {
 
   const roleName = router.query.name as string
 
-  const { data: roleData } = useQuery(['role', roleName], () =>
-    getRoleByName(roleName)
-  )
+  const { data: roleData } = useOAIQuery({
+    queryKey: '/api/v1/admin/roles/{roleName}',
+    variables: {
+      roleName
+    }
+  })
 
-  const { data: rolePermissionData } = useQuery(
-    ['rolePermissions', roleName],
-    () => getRolePermissions(roleName)
-  )
+  const { data: rolePermissionData }: any = useOAIQuery({
+    queryKey:
+      `/api/v1/admin/roles/binding/permission?roleName=${roleName}` as any
+  })
 
   const { control, formState, handleSubmit, reset } = useForm({
     resolver: yupResolver(schema)

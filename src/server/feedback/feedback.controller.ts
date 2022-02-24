@@ -20,7 +20,8 @@ import {
   ApiOperation,
   ApiBody,
   ApiParam,
-  ApiPropertyOptional
+  ApiExtraModels,
+  ApiOkResponse
 } from '@nestjs/swagger'
 import { DateTime } from 'luxon'
 import { Response } from 'express'
@@ -29,12 +30,18 @@ import * as XLSX from 'xlsx'
 
 /* */
 import { FeedbackService } from './feedback.service'
-import { CreateFeedbackDto, UpdateFeedbackDto } from './dto'
-import { PagingQuery } from '#/core/dto'
+import {
+  FeedbackDto,
+  FeedbackResponseDto,
+  CreateFeedbackDto,
+  UpdateFeedbackDto
+} from './dto'
+import { PaginatedResultDto, PagingQuery } from '#/core/dto'
 import { PermissionGuard } from '#/core/guard'
-import { Permissions } from '#/core/decorators'
+import { ApiPaginatedResponse, Permissions } from '#/core/decorators'
 import { Permission } from '@/types'
 
+@ApiExtraModels(FeedbackDto, FeedbackResponseDto)
 @Controller('api/v1')
 @UseGuards(PermissionGuard)
 export class FeedbackController {
@@ -51,22 +58,28 @@ export class FeedbackController {
     return feedback
   }
 
+  @ApiPaginatedResponse(FeedbackDto)
   @Get('admin/feedback')
   @Permissions(Permission.READ_FEEDBACKS)
-  async getAll(@Query() pagination: PagingQuery) {
+  async getAll(
+    @Query() pagination: PagingQuery
+  ): Promise<PaginatedResultDto<FeedbackDto>> {
     const { offset, limit } = pagination
-    const [items, totalCount] = await this.feedbackService.findAllFeedback(
+    const [items, total] = await this.feedbackService.findAllFeedback(
       offset,
       limit
     )
 
     return {
-      items,
-      totalCount
+      total,
+      results: items
     }
   }
 
   @ApiOperation({ summary: 'Get user feedback' })
+  @ApiOkResponse({
+    type: FeedbackDto
+  })
   @ApiParam({
     name: 'idOrCode',
     required: true,
@@ -75,7 +88,7 @@ export class FeedbackController {
   })
   @Get('admin/feedback/:idOrCode')
   @Permissions(Permission.READ_FEEDBACK)
-  async findByIdOrCode(@Param('idOrCode') idOrCode = ''): Promise<any> {
+  async findByIdOrCode(@Param('idOrCode') idOrCode = ''): Promise<FeedbackDto> {
     const feedback = await this.feedbackService.findFeedback(idOrCode)
 
     if (!feedback) {
@@ -121,13 +134,14 @@ export class FeedbackController {
     res.end()
   }
 
+  @ApiPaginatedResponse(FeedbackResponseDto)
   @Get('admin/feedback/:idOrCode/response')
   @Permissions(Permission.READ_FEEDBACK)
   async getAllResponse(
     @Param('idOrCode') idOrCode = '',
     @Query() pagination: PagingQuery,
     @Query() restQuery
-  ): Promise<any> {
+  ): Promise<PaginatedResultDto<FeedbackResponseDto>> {
     const { offset, limit } = pagination
 
     const feedback = await this.feedbackService.findFeedback(idOrCode)
@@ -136,7 +150,7 @@ export class FeedbackController {
       throw new BadRequestException(`feedback from ${idOrCode} not exist`)
     }
 
-    const [items, totalCount] = await this.feedbackService.getResponses(
+    const [items, total] = await this.feedbackService.getResponses(
       feedback.id,
       offset,
       limit,
@@ -144,11 +158,23 @@ export class FeedbackController {
     )
 
     return {
-      items,
-      totalCount
+      total,
+      results: items
     }
   }
 
+  @ApiParam({
+    name: 'idOrCode',
+    required: true,
+    description: 'feedback code or uuid',
+    schema: { oneOf: [{ type: 'string' }, { type: 'integer' }] }
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'feedback response id',
+    schema: { type: 'number' }
+  })
   @Get('admin/feedback/:idOrCode/response/:id')
   @Permissions(Permission.READ_FEEDBACK)
   async getResponseById(

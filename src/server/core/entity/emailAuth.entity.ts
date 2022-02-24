@@ -11,7 +11,7 @@ import {
 import { EmailAuthType } from '@/types'
 
 @Entity('email_auths')
-export default class EmailAuth {
+export class EmailAuth {
   @PrimaryGeneratedColumn('uuid')
   id!: string
 

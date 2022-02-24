@@ -23,11 +23,9 @@ import { KIND as ButtonKind } from 'baseui/button'
 import styles from './styles.module.scss'
 import { sendInvitationEmail } from '~/service/mail'
 import { ErrorMessage, FormItem, Textarea } from '~/components'
-import { useApp, useUser } from '~/hooks'
+import { useApp, useOAIQuery, useUser } from '~/hooks'
 import { OWNER_KEY } from '@/constant'
-import { useQuery } from 'react-query'
-import { IRole, Permission } from '@/types'
-import { getRoles } from '~/service/role'
+import { Permission } from '@/types'
 
 interface Props extends ModalProps {
   onClose?: any
@@ -38,10 +36,12 @@ const InviteUserModal = (props: Props) => {
 
   const { t } = useTranslation()
 
-  const { isLoading, isError, error, data } = useQuery<Array<IRole>>(
-    'roles',
-    getRoles
-  )
+  const { isLoading, data } = useOAIQuery({
+    queryKey: '/api/v1/admin/roles',
+    queryOptions: {
+      enabled: isOpen
+    }
+  })
 
   const schema = yup.object().shape({
     emails: yup
@@ -75,11 +75,13 @@ const InviteUserModal = (props: Props) => {
       options.push({ key: OWNER_KEY, value: OWNER_KEY, label: 'owner' })
     }
 
-    data
-      ?.filter((r) => r.name !== OWNER_KEY)
-      ?.map((r) => {
-        options.push({ key: r.name, value: r.name, label: r.name })
-      })
+    if (data?.results) {
+      data.results
+        ?.filter((r) => r.name !== OWNER_KEY)
+        ?.map((r) => {
+          options.push({ key: r.name, value: r.name, label: r.name })
+        })
+    }
 
     return options
   }, [data])

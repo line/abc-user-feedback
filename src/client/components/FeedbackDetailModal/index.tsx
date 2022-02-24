@@ -19,21 +19,34 @@ import { Check, Delete } from 'baseui/icon'
 
 /* */
 import { FormFieldType } from '@/types'
+import { Loading } from '~/components'
 import { copyTextToClipboard } from '~/utils/text'
 import CopyLinkIcon from '~/assets/copy_link.svg'
+import { useOAIQuery } from '~/hooks'
 
 interface Props {
+  id: number
   feedback: any
-  responseDetail: any
   show: boolean
   onClose: (...args: any) => any
 }
 
 const FeedbackDetailModal = (props: Props) => {
-  const { feedback, responseDetail, show = false, onClose } = props
+  const { id, feedback, show = false, onClose } = props
 
   const { t } = useTranslation()
   const { enqueue } = useSnackbar()
+
+  const { isLoading, data: responseDetail }: any = useOAIQuery({
+    queryKey: '/api/v1/admin/feedback/{idOrCode}/response/{id}',
+    queryOptions: {
+      enabled: !!feedback && !!id
+    },
+    variables: {
+      idOrCode: feedback ? feedback.id : null,
+      id
+    }
+  })
 
   const handleCopyLink = async () => {
     try {
@@ -169,7 +182,7 @@ const FeedbackDetailModal = (props: Props) => {
     >
       <ModalHeader>{t('title.feedback.detail')}</ModalHeader>
       <ModalBody>
-        <pre>{renderResponseDetail}</pre>
+        {isLoading ? <Loading /> : <pre>{renderResponseDetail}</pre>}
       </ModalBody>
       <ModalFooter style={{ display: 'flex', alignItems: 'center' }}>
         <ModalButton
