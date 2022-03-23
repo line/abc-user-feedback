@@ -2,7 +2,7 @@
 import React from 'react'
 import * as yup from 'yup'
 import { useRouter } from 'next/router'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { KIND as ButtonKind } from 'baseui/button'
 import { useSnackbar } from 'baseui/snackbar'
@@ -32,7 +32,7 @@ const ResetContainer = ({ code }) => {
       .oneOf([yup.ref('password'), null], t('validation.password.confirm'))
   })
 
-  const { register, formState, watch, handleSubmit } = useForm({
+  const { register, formState, watch, handleSubmit, control } = useForm({
     resolver: yupResolver(schema)
   })
 
@@ -67,18 +67,30 @@ const ResetContainer = ({ code }) => {
       <form onSubmit={handleSubmit(handleResetPassword)}>
         <ModalBody>
           <FormItem label='Password'>
-            <Input
-              placeholder={t('placeholder.password')}
-              type='password'
-              {...register('password')}
+            <Controller
+              control={control}
+              name='password'
+              render={({ field }) => (
+                <Input
+                  placeholder={t('placeholder.password')}
+                  type='password'
+                  {...field}
+                />
+              )}
             />
             <ErrorMessage errors={errors} name='password' />
           </FormItem>
           <FormItem label='Confirm Password'>
-            <Input
-              placeholder={t('placeholder.password.confirm')}
-              type='password'
-              {...register('passwordConfirm')}
+            <Controller
+              control={control}
+              name='passwordConfirm'
+              render={({ field }) => (
+                <Input
+                  placeholder={t('placeholder.password.confirm')}
+                  type='password'
+                  {...field}
+                />
+              )}
             />
             <ErrorMessage errors={errors} name='passwordConfirm' />
           </FormItem>

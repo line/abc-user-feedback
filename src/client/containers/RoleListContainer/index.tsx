@@ -2,7 +2,7 @@
 import React from 'react'
 import { useQueryClient } from 'react-query'
 import { Button, KIND as ButtonKind } from 'baseui/button'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { Input } from 'baseui/input'
 import { useSnackbar } from 'baseui/snackbar'
 import { useRouter } from 'next/router'
@@ -38,7 +38,7 @@ const RoleListContainer = () => {
   const router = useRouter()
 
   const { t } = useTranslation()
-  const { register, formState, handleSubmit } = useForm()
+  const { register, formState, handleSubmit, control } = useForm()
   const { errors } = formState
 
   const [showCreateRoleModal, toggleShowCreateRoleModal] = useToggle(false)
@@ -151,11 +151,21 @@ const RoleListContainer = () => {
           <ModalHeader>Create Role</ModalHeader>
           <ModalBody>
             <FormItem label='name' required>
-              <Input placeholder='name' {...register('name')} />
+              <Controller
+                control={control}
+                name='name'
+                render={({ field }) => <Input placeholder='name' {...field} />}
+              />
               <ErrorMessage errors={errors} name='name' />
             </FormItem>
             <FormItem label='description'>
-              <Input placeholder='description' {...register('description')} />
+              <Controller
+                control={control}
+                name='description'
+                render={({ field }) => (
+                  <Input placeholder='description' {...field} />
+                )}
+              />
               <ErrorMessage errors={errors} name='description' />
             </FormItem>
           </ModalBody>

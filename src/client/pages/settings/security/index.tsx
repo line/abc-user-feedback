@@ -1,6 +1,6 @@
 /* */
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { useSnackbar } from 'baseui/snackbar'
 import { Delete, Check } from 'baseui/icon'
 import * as yup from 'yup'
@@ -35,7 +35,7 @@ const SecurityPage = () => {
       .required()
   })
 
-  const { register, handleSubmit, formState, reset } = useForm({
+  const { register, handleSubmit, formState, reset, control } = useForm({
     resolver: yupResolver(schema)
   })
 
@@ -74,26 +74,44 @@ const SecurityPage = () => {
           onSubmit={handleSubmit(handleChangePassword)}
         >
           <FormItem label={t('label.password_current')}>
-            <Input
-              {...register('currentPassword')}
-              type='password'
-              placeholder={t('placeholder.password.current')}
+            <Controller
+              control={control}
+              name='currentPassword'
+              render={({ field }) => (
+                <Input
+                  placeholder={t('placeholder.password.current')}
+                  type='password'
+                  {...field}
+                />
+              )}
             />
             <ErrorMessage errors={errors} name='currentPassword' />
           </FormItem>
           <FormItem label={t('label.password_new')}>
-            <Input
-              {...register('newPassword')}
-              type='password'
-              placeholder={t('placeholder.password.rule')}
+            <Controller
+              control={control}
+              name='newPassword'
+              render={({ field }) => (
+                <Input
+                  placeholder={t('placeholder.password.rule')}
+                  type='password'
+                  {...field}
+                />
+              )}
             />
             <ErrorMessage errors={errors} name='newPassword' />
           </FormItem>
           <FormItem label={t('label.password_confirm')}>
-            <Input
-              {...register('newPasswordConfirm')}
-              type='password'
-              placeholder={t('placeholder.password.confirm')}
+            <Controller
+              control={control}
+              name='newPasswordConfirm'
+              render={({ field }) => (
+                <Input
+                  placeholder={t('placeholder.password.confirm')}
+                  type='password'
+                  {...field}
+                />
+              )}
             />
             <ErrorMessage errors={errors} name='newPasswordConfirm' />
           </FormItem>
