@@ -1,5 +1,5 @@
 # Build stage
-FROM node:14-alpine AS builder
+FROM node:16-alpine AS builder
 WORKDIR /pre
 
 ENV NODE_OPTIONS="–max_old_space_size=4096"
@@ -11,7 +11,7 @@ RUN yarn build:client
 RUN yarn install --production --ignore-scripts --prefer-offline
 
 # Runtime stage
-FROM node:14-alpine
+FROM node:16-alpine
 
 WORKDIR /usr/app
 

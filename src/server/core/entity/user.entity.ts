@@ -17,7 +17,7 @@ import { IUser } from '@/types'
 
 @Entity('users')
 export class User implements IUser {
-  @ApiProperty()
+  // @ApiProperty()
   @PrimaryGeneratedColumn('uuid')
   id!: string
 
