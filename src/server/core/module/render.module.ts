@@ -10,17 +10,8 @@ export default RenderModule.forRootAsync(
     dir: isProduction
       ? resolve(__dirname, '../../../..')
       : resolve(__dirname, '../../../../src/client')
-    // conf: {
-    //   i18n: {
-    //     defaultLocale: 'en',
-    //     locales: ['en', 'ja'],
-    //     localeExtension: 'json',
-    //     localPath: process.cwd() + 'src/client/public/locale'
-    //   }
-    // }
   }),
   {
-    passthrough404: true,
     viewsDir: null
   }
 )

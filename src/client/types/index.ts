@@ -4,10 +4,12 @@ import { O } from 'ts-toolbelt'
 /* */
 import { paths } from './spec'
 
-export type OAIPathKeys = keyof paths
-
 export type OAIMethods = 'get' | 'put' | 'post' | 'delete' | 'patch' | 'head'
 
+// /health, /api/v1/....
+export type OAIPathKeys = keyof paths
+
+// filter OAIPathKeys with has certain methods
 export type OAIMethodPathKeys<TMethod extends OAIMethods> = O.SelectKeys<
   paths,
   Record<TMethod, unknown>

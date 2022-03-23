@@ -10,20 +10,15 @@ import { InjectRepository } from '@nestjs/typeorm'
 import { getConnection, getManager, Repository } from 'typeorm'
 import { nanoid } from 'nanoid'
 /* */
-import {
-  CreateFeedbackDto,
-  CreateFeedbackResponseDto,
-  UpdateFeedbackDto
-} from './dto'
+import { CreateFeedbackDto, UpdateFeedbackDto } from './dto'
 import {
   Feedback,
   FeedbackField,
   FeedbackFieldOption,
   FeedbackResponse,
-  FeedbackResponseField,
-  User
+  FeedbackResponseField
 } from '#/core/entity'
-import { FormFieldType } from '@/types'
+import { FormFieldType, Order } from '@/types'
 
 @Injectable()
 export class FeedbackService {
@@ -264,7 +259,7 @@ export class FeedbackService {
     feedbackId: string,
     offset: number,
     limit?: number,
-    query?: Record<string, any>
+    query?: Record<string, unknown>
   ) {
     let queryBuilder = this.feedbackResponseRepository
       .createQueryBuilder('r')
@@ -290,7 +285,10 @@ export class FeedbackService {
       .leftJoinAndSelect('feedbackField.options', 'options')
       .addSelect(['feedbackField.name', 'feedbackField.type'])
 
-    queryBuilder = queryBuilder.orderBy('r.createdTime', query?.order ?? 'DESC')
+    queryBuilder = queryBuilder.orderBy(
+      'r.createdTime',
+      query?.order === Order.ASC ? Order.ASC : Order.DESC
+    )
 
     return queryBuilder.skip(offset).take(limit).getManyAndCount()
   }

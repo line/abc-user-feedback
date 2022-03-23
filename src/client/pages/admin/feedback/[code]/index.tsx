@@ -153,7 +153,7 @@ const AdminFeedbackDetailPage = (props) => {
   const handleRequestExcelExport = async (type: string) => {
     try {
       const code = router.query.code as string
-      await exportFeedbackResponse(code, type)
+      await exportFeedbackResponse(code, type, params)
     } catch (error) {
       enqueue({
         message: error.toString(),

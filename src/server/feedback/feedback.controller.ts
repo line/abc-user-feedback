@@ -221,7 +221,8 @@ export class FeedbackController {
   async exportResponse(
     @Res() res: Response,
     @Param('idOrCode') idOrCode,
-    @Query('type') type
+    @Query('type') type,
+    @Query() restQuery
   ) {
     if (!type) {
       throw new BadRequestException(`missing parameter type`)
@@ -235,7 +236,13 @@ export class FeedbackController {
       throw new BadRequestException(`feedback from ${idOrCode} not exist`)
     }
 
-    const [responses] = await this.feedbackService.getResponses(feedback.id, 0)
+    const [responses] = await this.feedbackService.getResponses(
+      feedback.id,
+      0,
+      null,
+      restQuery
+    )
+
     const mappaed = responses.map((response) => {
       const data = {
         no: response.id,

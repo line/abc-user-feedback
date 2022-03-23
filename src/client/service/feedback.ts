@@ -23,11 +23,16 @@ export const getFeedbackreponses = (code, params) => {
     .then((res) => res.data)
 }
 
-export const exportFeedbackResponse = (code: string, exportType: string) => {
+export const exportFeedbackResponse = (
+  code: string,
+  exportType: string,
+  params: Record<string, unknown>
+) => {
   return client
     .get(`/admin/feedback/${code}/response-export`, {
       params: {
-        type: exportType
+        type: exportType,
+        ...params
       },
       responseType: 'arraybuffer'
     })
