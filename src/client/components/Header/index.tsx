@@ -79,7 +79,7 @@ const Header = () => {
       <div className={styles.inner}>
         <div className={styles.container}>
           <div className={styles.item}>
-            <a className={styles.logo} href='/'>
+            <Link href='/'>
               {service?.logoUrl && (
                 <img
                   src={service.logoUrl}
@@ -88,7 +88,7 @@ const Header = () => {
                 />
               )}
               <span className={styles.logo__text}>{service?.name}</span>
-            </a>
+            </Link>
             {!user ? (
               <a className={styles.auth} onClick={handleClickLogin}>
                 Login

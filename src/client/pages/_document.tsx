@@ -3,12 +3,13 @@ import Document, { Html, Head, Main, NextScript } from 'next/document'
 import { Provider as StyletronProvider } from 'styletron-react'
 
 /* */
-import { styletron } from '../styletron'
+import { styletron } from '~/styletron'
 
 class FeedbackDocument extends Document {
   static async getInitialProps(context) {
     const renderPage = () =>
       context.renderPage({
+        /*eslint-disable */
         enhanceApp: (App) => (props) =>
           (
             <StyletronProvider value={styletron}>

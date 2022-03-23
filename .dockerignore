@@ -1,5 +1,5 @@
 # config
-.eslintrc.js
+.eslintrc.json
 .prettierrc
 .env
 

@@ -53,9 +53,17 @@ function Table<T extends any>(props: Props<T>) {
       <table {...getTableProps()} className={styles.table}>
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              key={headerGroup.getHeaderGroupProps().key}
+            >
               {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th
+                  {...column.getHeaderProps()}
+                  key={column.getHeaderProps().key}
+                >
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
           ))}
@@ -69,12 +77,14 @@ function Table<T extends any>(props: Props<T>) {
               return (
                 <tr
                   {...row.getRowProps()}
+                  key={row.getRowProps().key}
                   onClick={() => onRowClick((row as any).original)}
                 >
                   {row.cells.map((cell) => {
                     return (
                       <td
                         {...cell.getCellProps()}
+                        key={cell.getCellProps().key}
                         title={cell.value?.value || cell?.value}
                       >
                         {cell.render('Cell')}

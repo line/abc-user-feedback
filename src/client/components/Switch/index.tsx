@@ -39,4 +39,6 @@ const Switch = forwardRef((props: Props, ref) => {
   )
 })
 
+Switch.displayName = 'Switch'
+
 export default Switch
