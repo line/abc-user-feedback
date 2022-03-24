@@ -80,14 +80,16 @@ const Header = () => {
         <div className={styles.container}>
           <div className={styles.item}>
             <Link href='/'>
-              {service?.logoUrl && (
-                <img
-                  src={service.logoUrl}
-                  className={styles.logo__icon}
-                  alt='Logo'
-                />
-              )}
-              <span className={styles.logo__text}>{service?.name}</span>
+              <>
+                {service?.logoUrl && (
+                  <img
+                    src={service.logoUrl}
+                    className={styles.logo__icon}
+                    alt='Logo'
+                  />
+                )}
+                <span className={styles.logo__text}>{service?.name}</span>
+              </>
             </Link>
             {!user ? (
               <a className={styles.auth} onClick={handleClickLogin}>
