@@ -1,13 +1,8 @@
 name: Build Docker Container
 on:
   push:
-    branches:
-      - "main"
     tags:
       - "v*"
-  pull_request:
-    branches:
-      - "main"
 
 jobs:
   docker_build:
