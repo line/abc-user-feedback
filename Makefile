@@ -4,8 +4,8 @@
 SHELL:=/bin/bash
 
 BUILD_VERSION ?= dev
-DOCKER_REGISTRY ?= harbor.linecorp.com
-DOCKER_REPOSITORY := $(DOCKER_REGISTRY)/abc-studio/user-feedback
+DOCKER_REGISTRY ?= registry.hub.docker.com
+DOCKER_REPOSITORY := $(DOCKER_REGISTRY)/line/abc-user-feedback
 
 ##@ Helpers
 .PHONY: help
