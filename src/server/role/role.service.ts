@@ -116,7 +116,9 @@ export class RoleService {
     }
 
     const roleUserBindingCount = await this.roleUserBindingRepository.count({
-      roleId: role.id
+      where: {
+        roleId: role.id
+      }
     })
 
     if (roleUserBindingCount > 0) {

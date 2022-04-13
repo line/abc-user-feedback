@@ -17,12 +17,12 @@ export class AdminService {
   ) {}
 
   async getService() {
-    const service = await this.serviceRepository.findOne()
+    const [service] = await this.serviceRepository.find()
     return service
   }
 
   async updateService(data: UpdateServiceDto) {
-    const service = await this.serviceRepository.findOne()
+    const [service] = await this.serviceRepository.find()
 
     if (!service) {
       throw new BadRequestException('service not exist. create first')
@@ -54,7 +54,7 @@ export class AdminService {
   }
 
   async updateInvitation(data: UpdateServiceInvitationDto) {
-    const service = await this.serviceRepository.findOne()
+    const [service] = await this.serviceRepository.find()
 
     if (!service) {
       throw new BadRequestException('service not exist. create first')

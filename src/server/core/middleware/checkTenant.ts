@@ -15,7 +15,7 @@ export default class CheckTenantMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: any, res: Response, next: () => void): Promise<any> {
-    const service = await this.serviceRepository.findOne()
+    const [service] = await this.serviceRepository.find()
     req.service = service
     next()
   }

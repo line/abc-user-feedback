@@ -7,9 +7,11 @@ import {
 } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
-import { getConnection, getManager, Repository } from 'typeorm'
+import { Repository } from 'typeorm'
 import { nanoid } from 'nanoid'
+
 /* */
+import { AppDataSource } from '#/database/datasource'
 import { CreateFeedbackDto, UpdateFeedbackDto } from './dto'
 import {
   Feedback,
@@ -198,13 +200,13 @@ export class FeedbackService {
   ) {
     this.validateResponse(data, feedback.fields)
 
-    const queryRunner = await getConnection().createQueryRunner()
+    const queryRunner = AppDataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
 
     let response = null
     try {
-      await getManager().transaction(async (entityManager) => {
+      await AppDataSource.transaction(async (entityManager) => {
         const feedbackResponse = new FeedbackResponse()
         feedbackResponse.feedbackId = feedback.id
         feedbackResponse.userId = userId
@@ -294,12 +296,12 @@ export class FeedbackService {
   }
 
   async deleteFeedback(feedbackId: string) {
-    const queryRunner = await getConnection().createQueryRunner()
+    const queryRunner = AppDataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
 
     try {
-      await getManager().transaction(async (entityManager) => {
+      await AppDataSource.transaction(async (entityManager) => {
         await entityManager.delete(FeedbackResponse, { feedbackId })
         await entityManager.delete(FeedbackField, { feedbackId })
         await entityManager.delete(Feedback, feedbackId)
@@ -326,6 +328,8 @@ export class FeedbackService {
       throw new NotFoundException('response not exist')
     }
 
-    await this.feedbackResponseRepository.delete(response)
+    await this.feedbackResponseRepository.delete({
+      id: response.id
+    })
   }
 }

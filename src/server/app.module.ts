@@ -67,8 +67,8 @@ const modules = [
   TenantModule,
   RoleModule,
   TerminusModule,
-  CoreConfigModule,
-  ViewModule
+  ViewModule,
+  CoreConfigModule
 ]
 
 @Module({

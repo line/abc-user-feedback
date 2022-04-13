@@ -16,7 +16,9 @@ export class TenantService {
   ) {}
 
   async create(data: CreateServiceDto) {
-    if (await this.serviceRepository.findOne()) {
+    const [preSerivce] = await this.serviceRepository.find()
+
+    if (preSerivce) {
       throw new BadRequestException('service already created')
     }
 
