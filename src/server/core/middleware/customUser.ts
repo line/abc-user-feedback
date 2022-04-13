@@ -74,8 +74,13 @@ export default class CustomUserMiddleware implements NestMiddleware {
         ]
 
       if (customId) {
-        let auth = await this.customAuthRepository.findOne(customId, {
-          relations: ['user']
+        let auth = await this.customAuthRepository.findOne({
+          where: {
+            id: customId
+          },
+          relations: {
+            user: true
+          }
         })
 
         if (!auth) {

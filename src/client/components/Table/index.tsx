@@ -25,18 +25,13 @@ function Table<T extends any>(props: Props<T>) {
     useTable({ columns, data }, useSelect && useRowSelect, (hooks) => {
       if (useSelect) {
         hooks.visibleColumns.push((columns) => [
-          // Let's make a column for selection
           {
             id: 'selection',
-            // The header can use the table's getToggleAllRowsSelectedProps method
-            // to render a checkbox
             Header: ({ getToggleHideAllColumnsProps }) => (
               <div>
                 <Checkbox />
               </div>
             ),
-            // The cell can use the individual row's getToggleRowSelectedProps method
-            // to the render a checkbox
             Cell: ({ row }) => (
               <div>
                 <Checkbox />
@@ -71,7 +66,7 @@ function Table<T extends any>(props: Props<T>) {
         <tbody {...getTableBodyProps()}>
           {loading ? (
             <Loading />
-          ) : data.length ? (
+          ) : rows?.length ? (
             rows.map((row) => {
               prepareRow(row)
               return (
@@ -105,26 +100,6 @@ function Table<T extends any>(props: Props<T>) {
           )}
         </tbody>
       </table>
-      <div className='pagination'>
-        {/*<button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>*/}
-        {/*  {'<<'}*/}
-        {/*</button>{' '}*/}
-        {/*<button onClick={() => previousPage()} disabled={!canPreviousPage}>*/}
-        {/*  {'<'}*/}
-        {/*</button>{' '}*/}
-        {/*<button onClick={() => nextPage()} disabled={!canNextPage}>*/}
-        {/*  {'>'}*/}
-        {/*</button>{' '}*/}
-        {/*<button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>*/}
-        {/*  {'>>'}*/}
-        {/*</button>{' '}*/}
-        {/*<span>*/}
-        {/*  Page{' '}*/}
-        {/*  <strong>*/}
-        {/*    {pageIndex + 1} of {pageOptions.length}*/}
-        {/*  </strong>{' '}*/}
-        {/*</span>*/}
-      </div>
     </div>
   )
 }

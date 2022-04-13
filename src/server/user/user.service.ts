@@ -6,10 +6,11 @@ import {
 } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import * as bcrypt from 'bcrypt'
-import { Repository, getManager, Not, getConnection, In } from 'typeorm'
+import { Repository, Not } from 'typeorm'
 
 /* */
 import { CreateUserDto, UpdateUserDto } from './dto'
+import { AppDataSource } from '#/database/datasource'
 import { OWNER_KEY } from '@/constant'
 import {
   User,
@@ -45,7 +46,7 @@ export class UserService {
     data: CreateUserDto,
     options?: { password?: string; withVerify?: boolean; role?: string }
   ) {
-    const queryRunner = await getConnection().createQueryRunner()
+    const queryRunner = AppDataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
 
@@ -68,7 +69,7 @@ export class UserService {
         user.isVerified = true
       }
 
-      await getManager().transaction(async (entityManager) => {
+      await AppDataSource.transaction(async (entityManager) => {
         user.email = data.email
 
         await entityManager.save(User, user)
@@ -76,7 +77,9 @@ export class UserService {
         if (!userCount || options?.role) {
           const roleName = !userCount ? OWNER_KEY : options.role
           const role = await this.roleRepository.findOne({
-            name: roleName
+            where: {
+              name: roleName
+            }
           })
 
           if (!role) {
@@ -133,7 +136,10 @@ export class UserService {
   }
 
   async getUserById(userId: string) {
-    return this.userRepository.findOne(userId, {
+    return this.userRepository.findOne({
+      where: {
+        id: userId
+      },
       relations: ['profile']
     })
   }
@@ -171,18 +177,22 @@ export class UserService {
   }
 
   async deleteUser(userId: string) {
-    const user = await this.userRepository.findOne(userId)
+    const user = await this.userRepository.findOne({
+      where: {
+        id: userId
+      }
+    })
 
     if (!user) {
       throw new BadRequestException('cannot find user')
     }
 
-    const queryRunner = await getConnection().createQueryRunner()
+    const queryRunner = AppDataSource.createQueryRunner()
     await queryRunner.connect()
     await queryRunner.startTransaction()
 
     try {
-      await getManager().transaction(async (entityManager) => {
+      await AppDataSource.transaction(async (entityManager) => {
         user.email = null
         user.state = UserState.Left
 

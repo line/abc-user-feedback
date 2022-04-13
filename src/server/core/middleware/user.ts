@@ -38,7 +38,11 @@ export default class UserMiddleware implements NestMiddleware {
     if (accessToken) {
       try {
         const decoded = await this.authService.decodeToken<any>(accessToken)
-        const user = await this.userRepository.findOne(decoded.userId)
+        const user = await this.userRepository.findOne({
+          where: {
+            id: decoded.userId
+          }
+        })
 
         if (!user) {
           throw new BadRequestException('error fom access token')

@@ -25,7 +25,11 @@ export class PostService {
   }
 
   async findOne(id: string): Promise<Post> {
-    const post = await this.postRepository.findOne(id)
+    const post = await this.postRepository.findOne({
+      where: {
+        id
+      }
+    })
 
     return post
   }

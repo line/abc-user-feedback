@@ -67,7 +67,7 @@ const AdminFeedbackPage = () => {
           <Table
             data={data?.results ?? []}
             columns={tableColumns}
-            loading={isLoading}
+            // loading={isLoading}
             onRowClick={handleRowClick}
           />
           <Pagination

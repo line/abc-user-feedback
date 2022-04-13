@@ -97,7 +97,7 @@ export class AuthService {
   }
 
   async localRegisterUser(data: SignUpDto): Promise<any> {
-    const service = await this.serviceRepository.findOne()
+    const [service] = await this.serviceRepository.find()
 
     // if private service, only user can register from invitation
     if (service && service.isPrivate) {
@@ -199,7 +199,10 @@ export class AuthService {
       where: {
         id: userId
       },
-      select: ['id', 'hashPassword']
+      select: {
+        id: true,
+        hashPassword: true
+      }
     })
 
     if (!user) {
@@ -253,7 +256,12 @@ export class AuthService {
   async validateUser(email: string, password: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { email },
-      select: ['id', 'hashPassword', 'email', 'isVerified']
+      select: {
+        id: true,
+        hashPassword: true,
+        email: true,
+        isVerified: true
+      }
     })
 
     if (user) {
@@ -475,7 +483,7 @@ export class AuthService {
     } else {
       // if account not exist, register new account and user with provider
       // but reject create user when service is private
-      const serivce = await this.serviceRepository.findOne()
+      const [serivce] = await this.serviceRepository.find()
 
       if (serivce && serivce.isPrivate) {
         throw new BadRequestException('user is not invited')
@@ -541,7 +549,9 @@ export class AuthService {
       where: {
         email
       },
-      select: ['hashPassword']
+      select: {
+        hashPassword: true
+      }
     })
 
     if (!user) {
@@ -586,7 +596,7 @@ export class AuthService {
   async sendInvitationMail(data: InvitationMailDto) {
     const { email, roleName } = data
 
-    const service = await this.serviceRepository.findOne()
+    const [service] = await this.serviceRepository.find()
 
     if (service && service.isRestrictDomain) {
       const mailDomain = data.email.split('@')[1]

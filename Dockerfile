@@ -3,6 +3,9 @@ FROM node:16-alpine AS builder
 WORKDIR /pre
 
 ENV NODE_OPTIONS="–max_old_space_size=4096"
+ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN apk --no-cache add --virtual builds-deps build-base python3
 
 COPY . .
 RUN yarn --frozen-lockfile
@@ -24,9 +27,8 @@ COPY --from=builder /pre/template ./template
 COPY --from=builder /pre/.next ./.next
 COPY --from=builder /pre/node_modules ./node_modules
 COPY --from=builder /pre/package.json ./package.json
-COPY --from=builder /pre/ormconfig.js ./ormconfig.js
 
 EXPOSE 3000
 
-CMD yarn typeorm migration:run && yarn start
+CMD yarn start
 

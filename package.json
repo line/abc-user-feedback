@@ -79,7 +79,7 @@
     "styletron-engine-atomic": "^1.4.8",
     "styletron-react": "^6.0.2",
     "swagger-ui-express": "^4.3.0",
-    "typeorm": "^0.2.36",
+    "typeorm": "^0.3.5",
     "xlsx": "^0.18.5",
     "yup": "^0.32.11"
   },

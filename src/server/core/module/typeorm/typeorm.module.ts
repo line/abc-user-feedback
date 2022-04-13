@@ -3,11 +3,17 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ConfigService } from '@nestjs/config'
 
 /* */
-import mysqlTypeormConfig from './config'
+import mysqlTypeormDatasourceConfig from './config'
+import { AppDataSource } from '#/database/datasource'
 
 export default TypeOrmModule.forRootAsync({
-  useFactory: async (configService: ConfigService) => ({
-    ...mysqlTypeormConfig
-  }),
+  connectionFactory: async (options) => {
+    return AppDataSource
+  },
+  useFactory: async (configService: ConfigService) => {
+    return {
+      ...mysqlTypeormDatasourceConfig
+    }
+  },
   inject: [ConfigService]
 })

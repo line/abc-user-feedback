@@ -1,19 +1,24 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'
-import { resolve } from 'path'
+import { DataSourceOptions } from 'typeorm'
+import * as dotenv from 'dotenv'
 
-const mysqlTypeormConfig: TypeOrmModuleOptions = {
-  type: 'mysql',
-  url: process.env.DB_CONNECTION_STRING,
-  entities: [resolve(__dirname, '../../**/*.entity{.ts,.js}')],
-  synchronize: process.env.DB_SYNCHRONIZE === 'true',
-  logging: ['warn', 'error'],
-  migrations: [process.cwd() + '/migrations/*{.ts,.js}'],
-  migrationsTableName: 'migrations',
-  migrationsRun: true,
-  cli: {
-    entitiesDir: resolve(__dirname, '../../core/entity'),
-    migrationsDir: process.cwd() + '/migrations'
-  }
+const isProduction = process.env.NODE_ENV === 'production'
+
+if (!isProduction) {
+  dotenv.config({
+    path: '.env',
+    debug: true
+  })
 }
 
-export default mysqlTypeormConfig
+const mysqlTypeormDatasourceConfig: DataSourceOptions = {
+  type: 'mysql',
+  url: process.env.DB_CONNECTION_STRING,
+  entities: ['dist/**/*.entity.js'],
+  migrations: ['dist/server/database/migrations/*.js'],
+  synchronize: process.env.DB_SYNCHRONIZE === 'true',
+  logging: ['warn', 'error'],
+  migrationsTableName: 'migrations',
+  migrationsRun: true
+}
+
+export default mysqlTypeormDatasourceConfig
