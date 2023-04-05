@@ -1,0 +1,3 @@
+jest.config.*
+openapi.type.ts
+api.type.ts

@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  mysql:
+    hostname: mysql
+    image: mysql:8.0.19
+    platform: linux/amd64
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    # environment:
+    #   MYSQL_ROOT_PASSWORD: userfeedback
+    #   MYSQL_DATABASE: userfeedback
+    #   MYSQL_USER: userfeedback
+    #   MYSQL_PASSWORD: userfeedback
+    ports:
+      - 13306:3306
+    volumes:
+      - ./volumes/mysql:/var/lib/mysql
+    networks:
+      - app_network
+
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - 5080:80
+      - 25:25
+      - 143:143
+    volumes:
+      - ./volumes/smtp4dev:/smtp4dev
+    networks:
+      - app_network
+
+  elasticsearch:
+    hostname: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
+    platform: linux/amd64
+    restart: always
+    ports:
+      - 9200:9200
+      - 9300:9300
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - ./volumes/elasticsearch:/usr/share/elasticsearch/data
+    networks:
+      - app_network
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.5.2
+    platform: linux/amd64
+    restart: always
+    ports:
+      - 5601:5601
+    environment:
+      ELASTICSEARCH_HOSTS: 'http://elasticsearch:9200'
+    depends_on:
+      - elasticsearch
+    networks:
+      - app_network
+networks:
+  app_network:

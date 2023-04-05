@@ -1,0 +1,13 @@
+{
+  "displayName": "api-e2e",
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "^@/(.*)$": ["<rootDir>/../src/$1"]
+  },
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  }
+}

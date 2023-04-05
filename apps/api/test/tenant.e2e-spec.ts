@@ -1,0 +1,218 @@
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import { faker } from '@faker-js/faker';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
+import request from 'supertest';
+import { DataSource, Repository } from 'typeorm';
+
+import { AppModule } from '@/app.module';
+import { AuthService } from '@/domains/auth/auth.service';
+import { OWNER_ROLE_DEFAULT_ID } from '@/domains/role/role.constant';
+import {
+  SetupTenantRequestDto,
+  UpdateTenantRequestDto,
+} from '@/domains/tenant/dtos/requests';
+import { TenantEntity } from '@/domains/tenant/tenant.entity';
+import { HttpStatusCode } from '@/types/http-status';
+import { clearEntities, signInTestUser } from '@/utils/test-utils';
+
+describe('AppController (e2e)', () => {
+  let app: INestApplication;
+
+  let dataSource: DataSource;
+  let tenantRepo: Repository<TenantEntity>;
+  let authService: AuthService;
+  beforeAll(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = module.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({ transform: true, whitelist: true }),
+    );
+    await app.init();
+
+    dataSource = module.get(DataSource);
+    tenantRepo = dataSource.getRepository(TenantEntity);
+
+    authService = module.get(AuthService);
+  });
+
+  afterAll(async () => {
+    await dataSource.destroy();
+    await app.close();
+  });
+
+  beforeEach(async () => {
+    await clearEntities([tenantRepo]);
+  });
+
+  describe('/tenant (POST)', () => {
+    it('setup', async () => {
+      const dto = new SetupTenantRequestDto();
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+
+      return request(app.getHttpServer())
+        .post('/tenant')
+        .send(dto)
+        .expect(201)
+        .then(async () => {
+          const tenants = await tenantRepo.find();
+          expect(tenants).toHaveLength(1);
+          const [tenant] = tenants;
+          for (const key in dto) {
+            const value = dto[key];
+            expect(tenant[key]).toEqual(value);
+          }
+        });
+    });
+    it('already exists', async () => {
+      await tenantRepo.save({
+        siteName: faker.datatype.string(),
+        isPrivate: faker.datatype.boolean(),
+        isRestrictDomain: faker.datatype.boolean(),
+        allowDomains: [],
+      });
+      const dto = new SetupTenantRequestDto();
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+
+      return request(app.getHttpServer()).post('/tenant').send(dto).expect(400);
+    });
+  });
+  describe('/tenant (PUT)', () => {
+    let tenant: TenantEntity;
+    let accessToken: string;
+    beforeEach(async () => {
+      tenant = await tenantRepo.save({
+        siteName: faker.datatype.string(),
+        isPrivate: faker.datatype.boolean(),
+        isRestrictDomain: faker.datatype.boolean(),
+        allowDomains: [],
+        defaultRole: { id: OWNER_ROLE_DEFAULT_ID },
+      });
+      const { jwt } = await signInTestUser(dataSource, authService);
+      accessToken = jwt.accessToken;
+    });
+    it('update', async () => {
+      const dto = new UpdateTenantRequestDto();
+
+      dto.id = tenant.id;
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+      dto.defaultRole = { id: OWNER_ROLE_DEFAULT_ID };
+
+      return request(app.getHttpServer())
+        .put('/tenant')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(204)
+        .then(async () => {
+          const updatedTenant = await tenantRepo.findOne({
+            where: { id: tenant.id },
+            relations: { defaultRole: true },
+          });
+          expect(updatedTenant.siteName).toEqual(dto.siteName);
+          expect(updatedTenant.isPrivate).toEqual(dto.isPrivate);
+          expect(updatedTenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
+          expect(updatedTenant.allowDomains).toEqual(dto.allowDomains);
+          expect(updatedTenant.defaultRole.id).toEqual(dto.defaultRole.id);
+        });
+    });
+    it('not found tenant', async () => {
+      await tenantRepo.delete({ id: tenant.id });
+
+      const dto = new UpdateTenantRequestDto();
+
+      dto.id = tenant.id;
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+      dto.defaultRole = { id: OWNER_ROLE_DEFAULT_ID };
+
+      return request(app.getHttpServer())
+        .put('/tenant')
+        .set('Authorization', `Bearer ${accessToken}`)
+
+        .send(dto)
+        .expect(404);
+    });
+    it('not found role', async () => {
+      const dto = new UpdateTenantRequestDto();
+
+      dto.id = tenant.id;
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+      dto.defaultRole = { id: faker.datatype.uuid() };
+
+      return request(app.getHttpServer())
+        .put('/tenant')
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(404);
+    });
+    it('unauthorized', async () => {
+      const dto = new UpdateTenantRequestDto();
+
+      dto.id = tenant.id;
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+      dto.defaultRole = { id: faker.datatype.uuid() };
+
+      return request(app.getHttpServer())
+        .put('/tenant')
+        .send(dto)
+        .expect(HttpStatusCode.UNAUTHORIZED);
+    });
+  });
+  describe('/tenant (GET)', () => {
+    const dto = new SetupTenantRequestDto();
+    beforeEach(async () => {
+      dto.siteName = faker.datatype.string();
+      dto.isPrivate = faker.datatype.boolean();
+      dto.isRestrictDomain = faker.datatype.boolean();
+      dto.allowDomains = [];
+
+      await request(app.getHttpServer()).post('/tenant').send(dto);
+    });
+
+    it('find', async () => {
+      await request(app.getHttpServer())
+        .get('/tenant')
+        .expect(200)
+        .expect(({ body }) => {
+          expect(dto.siteName).toEqual(body.siteName);
+          expect(dto.isPrivate).toEqual(body.isPrivate);
+          expect(dto.isRestrictDomain).toEqual(body.isRestrictDomain);
+          expect(dto.allowDomains).toEqual(body.allowDomains);
+        });
+    });
+  });
+});

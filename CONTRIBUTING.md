@@ -1,16 +1,16 @@
-# How to contribute to user-feedback
+# How to contribute to ABC User Feedback
 
-First of all, thank you so much for taking your time to contribute! abc-notification-kmm is not very different from any other open source projects. It will be fantastic if you help us by doing any of the following:
+First of all, thank you so much for taking your time to contribute! ABC User Feedback is not very different from any other open source projects. It will be fantastic if you help us by doing any of the following:
 
-- File an issue in [the issue tracker](https://github.com/line/user-feedback/issues)
+- File an issue in [the issue tracker](https://github.com/line/abc-user-feedback/issues)
   to report bugs and propose new features and improvements.
-- Ask a question using [the issue tracker](https://github.com/line/user-feedback/issues).
-- Contribute your work by sending [a pull request](https://github.com/line/user-feedback/pulls).
+- Ask a question using [the issue tracker](https://github.com/line/abc-user-feedback/issues).
+- Contribute your work by sending [a pull request](https://github.com/line/abc-user-feedback/pulls).
 
 ## Contributor license agreement
 
 If you are sending a pull request and it's a non-trivial change beyond fixing
-typos, please make sure to sign the [ICLA (Individual Contributor License Agreement)](https://cla-assistant.io/line/user-feedback).
+typos, please make sure to sign the [ICLA (Individual Contributor License Agreement)](https://cla-assistant.io/line/abc-user-feedback).
 Please [contact us](mailto:dl_oss_dev@linecorp.com) if you need the CCLA (Corporate Contributor License Agreement).
 
 ## Code of conduct

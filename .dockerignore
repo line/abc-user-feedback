@@ -1,26 +1,6 @@
-# config
-.eslintrc.json
-.prettierrc
-.env
-
-# test, docs, pipeline
-.github
-coverage
-.storybook
-docs
-LICENSE
-*.md
-example
-
-# build
-dist
-.next
-
-# etc
-README.md
-.gitignore
-Dockerfile
-*.log
-node_modules
-docker-compose.yml
-app
+**/node_modules
+**/.next
+**/.turbo
+**/dist
+**/.env*
+!apps/web/.env.build

@@ -1,6 +1,0 @@
-{
-  "extends": "../../tsconfig.client.json",
-  "compilerOptions": {
-    "incremental": true
-  }
-}

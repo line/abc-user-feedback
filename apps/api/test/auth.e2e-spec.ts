@@ -1,0 +1,380 @@
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import { faker } from '@faker-js/faker';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { Test, TestingModule } from '@nestjs/testing';
+import request from 'supertest';
+import { DataSource, Repository } from 'typeorm';
+
+import { AppModule } from '@/app.module';
+import {
+  EmailUserSignInRequestDto,
+  EmailUserSignUpRequestDto,
+  EmailVerificationCodeRequestDto,
+  EmailVerificationMailingRequestDto,
+  InvitationUserSignUpRequestDto,
+} from '@/domains/auth/dtos/requests';
+import {
+  OWNER_ROLE,
+  OWNER_ROLE_DEFAULT_ID,
+} from '@/domains/role/role.constant';
+import { RoleEntity } from '@/domains/role/role.entity';
+import { TenantEntity } from '@/domains/tenant/tenant.entity';
+import { UserStateEnum } from '@/domains/user/entities/enums';
+import { UserEntity } from '@/domains/user/entities/user.entity';
+import { UserPasswordService } from '@/domains/user/user-password.service';
+import { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import { CodeEntity } from '@/shared/code/code.entity';
+import { CodeService } from '@/shared/code/code.service';
+import { clearEntities } from '@/utils/test-utils';
+
+describe('AppController (e2e)', () => {
+  let app: INestApplication;
+
+  let codeService: CodeService;
+  let userPasswordService: UserPasswordService;
+  let jwtService: JwtService;
+
+  let dataSource: DataSource;
+  let roleRepo: Repository<RoleEntity>;
+  let userRepo: Repository<UserEntity>;
+  let codeRepo: Repository<CodeEntity>;
+  let tenantRepo: Repository<TenantEntity>;
+  let ownerRole: RoleEntity;
+
+  beforeAll(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [AppModule],
+    }).compile();
+
+    app = module.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
+    await app.init();
+
+    dataSource = module.get(DataSource);
+    roleRepo = dataSource.getRepository(RoleEntity);
+    userRepo = dataSource.getRepository(UserEntity);
+    codeRepo = dataSource.getRepository(CodeEntity);
+    tenantRepo = dataSource.getRepository(TenantEntity);
+
+    codeService = module.get(CodeService);
+    userPasswordService = module.get(UserPasswordService);
+    jwtService = module.get(JwtService);
+  });
+
+  afterAll(async () => {
+    await dataSource.destroy();
+    await app.close();
+  });
+
+  beforeEach(async () => {
+    await clearEntities([userRepo, codeRepo, tenantRepo, roleRepo]);
+
+    ownerRole = await roleRepo.save(OWNER_ROLE);
+
+    await tenantRepo.save({
+      allowDomains: [],
+      defaultRole: ownerRole,
+      isPrivate: false,
+      isRestrictDomain: false,
+      siteName: faker.datatype.string(),
+    });
+  });
+
+  describe('/auth/email/code (POST)', () => {
+    it('positive case', async () => {
+      const dto = new EmailVerificationMailingRequestDto();
+      dto.email = faker.internet.email();
+
+      return request(app.getHttpServer())
+        .post('/auth/email/code')
+        .send(dto)
+        .expect(201)
+        .expect(({ body }) => {
+          expect(body).toHaveProperty('expiredAt');
+        });
+    });
+    it('same email user already exists', async () => {
+      const user = await userRepo.save({
+        email: faker.internet.email(),
+        hashPassword: faker.internet.password(),
+        state: UserStateEnum.Active,
+      });
+
+      const dto = new EmailVerificationMailingRequestDto();
+      dto.email = user.email;
+
+      return request(app.getHttpServer())
+        .post('/auth/email/code')
+        .send(dto)
+        .expect(400);
+    });
+  });
+  describe('/auth/email/code/verify (POST)', () => {
+    let email: string;
+    let code: string;
+    beforeEach(async () => {
+      email = faker.internet.email();
+
+      code = await codeService.setCode({
+        type: CodeTypeEnum.EMAIL_VEIRIFICATION,
+        key: email,
+      });
+    });
+    it('positive', async () => {
+      const dto = new EmailVerificationCodeRequestDto();
+      dto.email = email;
+      dto.code = code;
+
+      const originalCode = await codeRepo.findOneBy({ code });
+      expect(originalCode.isVerified).toEqual(false);
+
+      await request(app.getHttpServer())
+        .post('/auth/email/code/verify')
+        .send(dto)
+        .expect(200);
+
+      const updatedCode = await codeRepo.findOneBy({ code });
+      expect(updatedCode.isVerified).toEqual(true);
+    });
+    it('invalid code', async () => {
+      const dto = new EmailVerificationCodeRequestDto();
+      dto.email = email;
+      dto.code = faker.datatype.string();
+
+      const originalCode = await codeRepo.findOneBy({ code });
+      expect(originalCode.isVerified).toEqual(false);
+
+      return request(app.getHttpServer())
+        .post('/auth/email/code/verify')
+        .send(dto)
+        .expect(400)
+        .then(async () => {
+          const updatedCode = await codeRepo.findOneBy({ code });
+          expect(updatedCode.isVerified).toEqual(false);
+        });
+    });
+    it('invalid email', async () => {
+      const dto = new EmailVerificationCodeRequestDto();
+      dto.email = faker.internet.email();
+      dto.code = code;
+
+      return request(app.getHttpServer())
+        .post('/auth/email/code/verify')
+        .send(dto)
+        .expect(404);
+    });
+  });
+  describe('/auth/signUp/email', () => {
+    let email: string;
+    const setCode = async (email: string) =>
+      await codeService.setCode({
+        type: CodeTypeEnum.EMAIL_VEIRIFICATION,
+        key: email,
+      });
+
+    const verifyEmail = async (code: string, email: string) =>
+      await codeService.setCodeVerified({
+        type: CodeTypeEnum.EMAIL_VEIRIFICATION,
+        code,
+        key: email,
+      });
+
+    beforeEach(async () => {
+      email = faker.internet.email();
+    });
+
+    it('positive', async () => {
+      const code = await setCode(email);
+      await verifyEmail(code, email);
+
+      const dto = new EmailUserSignUpRequestDto();
+      dto.email = email;
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/email')
+        .send(dto)
+        .expect(201)
+        .then(async () => {
+          const user = await userRepo.findOneBy({ email });
+          expect(user).toBeDefined();
+        });
+    });
+
+    it('must verfy email', async () => {
+      const dto = new EmailUserSignUpRequestDto();
+      dto.email = faker.internet.email();
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/email')
+        .send(dto)
+        .expect(400);
+    });
+
+    it('not verified email', async () => {
+      await setCode(email);
+
+      const dto = new EmailUserSignUpRequestDto();
+      dto.email = faker.internet.email();
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/email')
+        .send(dto)
+        .expect(400);
+    });
+    it('same email', async () => {
+      await userRepo.save({
+        email,
+        hashPassword: faker.internet.password(),
+        state: UserStateEnum.Active,
+      });
+
+      const code = await setCode(email);
+      await verifyEmail(code, email);
+
+      const dto = new EmailUserSignUpRequestDto();
+      dto.email = email;
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/email')
+        .send(dto)
+        .expect(400);
+    });
+  });
+  describe('/auth/signUp/invitation (POST)', () => {
+    let email: string;
+    const setCode = async (email: string) =>
+      await codeService.setCode({
+        type: CodeTypeEnum.USER_INVITATION,
+        key: email,
+        data: { roleId: OWNER_ROLE_DEFAULT_ID },
+      });
+
+    beforeEach(() => {
+      email = faker.internet.email();
+    });
+
+    it('positive case', async () => {
+      const code = await setCode(email);
+      const dto = new InvitationUserSignUpRequestDto();
+      dto.code = code;
+      dto.email = email;
+      dto.password = faker.internet.password();
+      return request(app.getHttpServer())
+        .post('/auth/signUp/invitation')
+        .send(dto)
+        .expect(201);
+    });
+    it('no invitation', async () => {
+      const dto = new InvitationUserSignUpRequestDto();
+      dto.code = faker.datatype.string();
+      dto.email = email;
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/invitation')
+        .send(dto)
+        .expect(400);
+    });
+    it('invalid code', async () => {
+      await setCode(email);
+
+      const dto = new InvitationUserSignUpRequestDto();
+      dto.code = faker.datatype.string();
+      dto.email = email;
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/invitation')
+        .send(dto)
+        .expect(400);
+    });
+    it('invalid email', async () => {
+      const code = await setCode(email);
+
+      const dto = new InvitationUserSignUpRequestDto();
+      dto.code = code;
+      dto.email = faker.internet.email();
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signUp/invitation')
+        .send(dto)
+        .expect(400);
+    });
+  });
+  describe('/auth/signIn/email (POST)', () => {
+    let userEntity: UserEntity;
+    let password: string;
+    beforeEach(async () => {
+      password = faker.internet.password();
+
+      userEntity = await userRepo.save({
+        email: faker.internet.email(),
+        hashPassword: await userPasswordService.createHashPassword(password),
+        role: ownerRole,
+        state: UserStateEnum.Active,
+      });
+    });
+    it('positive case', () => {
+      const dto = new EmailUserSignInRequestDto();
+      dto.email = userEntity.email;
+      dto.password = password;
+
+      return request(app.getHttpServer())
+        .post('/auth/signIn/email')
+        .send(dto)
+        .expect(201)
+        .expect(({ body }) => {
+          expect(body).toHaveProperty('accessToken');
+          expect(body).toHaveProperty('refreshToken');
+
+          const payload = jwtService.verify(body.accessToken);
+          expect(payload.sub).toEqual(userEntity.id);
+          expect(payload).toHaveProperty('email');
+          expect(payload).toHaveProperty('permissions');
+          expect(payload).toHaveProperty('roleName');
+        });
+    });
+
+    it('invalid email', () => {
+      const dto = new EmailUserSignInRequestDto();
+      dto.email = faker.internet.email();
+      dto.password = password;
+
+      return request(app.getHttpServer())
+        .post('/auth/signIn/email')
+        .send(dto)
+        .expect(404);
+    });
+
+    it('invalid password', () => {
+      const dto = new EmailUserSignInRequestDto();
+      dto.email = userEntity.email;
+      dto.password = faker.internet.password();
+
+      return request(app.getHttpServer())
+        .post('/auth/signIn/email')
+        .send(dto)
+        .expect(401);
+    });
+  });
+});
