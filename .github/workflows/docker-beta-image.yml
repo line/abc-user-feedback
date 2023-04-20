@@ -1,10 +1,9 @@
-name: Docker Image CI
+name: Docker Beta Image CI
 
 on:
   push:
     tags:
-      - "*"
-      - "!**-beta"
+      - "**-beta"
       
 jobs:
   api-build:
