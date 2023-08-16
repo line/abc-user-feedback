@@ -13,5 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { SetCodeVerifiedDto } from './set-code-verified.dto';
+export { VerifyCodeDto } from './set-code-verified.dto';
 export { SetCodeDto } from './set-code.dto';

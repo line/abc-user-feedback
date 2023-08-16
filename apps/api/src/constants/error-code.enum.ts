@@ -27,6 +27,7 @@ const User = {
   PrivateServiceUserCreate: 'PrivateServiceUserCreate',
   NotAllowDomain: 'NotAllowDomain',
   InvalidCode: 'InvalidCode',
+  InvalidPassword: 'InvalidPassword',
 };
 const Auth = {
   PasswordNotMatch: 'PasswordNotMatch',
@@ -58,12 +59,19 @@ const Channel = {
   ChannelNotFound: 'ChannelNotFound',
   ChannelInvalidName: 'ChannelInvalidName',
 };
+const Issue = {
+  IssueNameDuplicated: 'IssueNameDuplicated',
+  IssueInvalidName: 'IssueInvalidName',
+  IssueNotFound: 'IssueNotFound',
+};
 
 const Field = {
   FieldNameDuplicated: 'FieldNameDuplicated',
+  FieldKeyDuplicated: 'FieldKeyDuplicated',
 };
 const Option = {
   OptionNameDuplicated: 'OptionNameDuplicated',
+  OptionKeyDuplicated: 'OptionKeyDuplicated',
 };
 const Feedback = {
   InvalidExpressionFormat: 'InvalidExpressionFormat',
@@ -71,7 +79,14 @@ const Feedback = {
   InvalidFieldRequest: 'InvalidFieldRequest',
   NotFoundAddressInfo: 'NotFoundAddressInfo',
 };
-
+const Member = {
+  MemberAlreadyExists: 'MemberAlreadyExists',
+  MemberNotFound: 'MemberNotFound',
+  MemberUpdateRoleNotMatchedProject: 'MemberUpdateRoleNotMatchedProject ',
+};
+const Opensearch = {
+  LargeWindow: 'LargeWindow',
+};
 export const ErrorCode = {
   Tenant,
   Role,
@@ -82,8 +97,11 @@ export const ErrorCode = {
   Feedback,
   Project,
   Channel,
+  Issue,
   Field,
   Option,
+  Member,
+  Opensearch,
 };
 
 export type ErrorCode = typeof ErrorCode;

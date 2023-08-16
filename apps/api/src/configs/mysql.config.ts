@@ -16,16 +16,26 @@
 import { registerAs } from '@nestjs/config';
 import * as yup from 'yup';
 
-export const mySqlConfigSchema = yup.object().shape({
+export const mySqlConfigSchema = yup.object({
   MYSQL_PRIMARY_URL: yup
     .string()
     .default('mysql://userfeedback:userfeedback@localhost:13306/userfeedback'),
-  MYSQL_SECONDARY_URL: yup
+  MYSQL_SECONDARY_URLS: yup
     .string()
-    .default('mysql://userfeedback:userfeedback@localhost:13306/userfeedback'),
+    .default(
+      '["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"]',
+    ),
 });
 
 export const mysqlConfig = registerAs('mysql', () => ({
   main_url: process.env.MYSQL_PRIMARY_URL,
-  sub_url: process.env.MYSQL_SECONDARY_URL,
+  sub_urls: toArray(process.env.MYSQL_SECONDARY_URLS),
 }));
+
+const toArray = (input: string) => {
+  try {
+    return JSON.parse(input);
+  } catch (error) {
+    return [];
+  }
+};

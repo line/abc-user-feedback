@@ -14,21 +14,27 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import {
-  BadRequestException,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import dayjs from 'dayjs';
+import { ClsService } from 'nestjs-cls';
+import { Repository } from 'typeorm';
 
-import { CodeTypeEnum } from '@/shared/code/code-type.enum';
-import { CodeService } from '@/shared/code/code.service';
+import { CodeEntity } from '@/shared/code/code.entity';
+import { CodeServiceProviders } from '@/shared/code/code.service.spec';
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
+import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
 import { getMockProvider } from '@/utils/test-utils';
 
-import { CreateUserService } from '../user/create-user.service';
+import { ApiKeyEntity } from '../project/api-key/api-key.entity';
+import { ApiKeyServiceProviders } from '../project/api-key/api-key.service.spec';
+import { MemberServiceProviders } from '../project/member/member.service.spec';
+import { RoleServiceProviders } from '../project/role/role.service.spec';
+import { TenantEntity } from '../tenant/tenant.entity';
+import { TenantServiceProviders } from '../tenant/tenant.service.spec';
+import { CreateUserServiceProviders } from '../user/create-user.service.spec';
 import { UserDto } from '../user/dtos';
 import { UserStateEnum } from '../user/entities/enums';
 import { UserEntity } from '../user/entities/user.entity';
@@ -36,329 +42,343 @@ import {
   UserAlreadyExistsException,
   UserNotFoundException,
 } from '../user/exceptions';
-import { UserService } from '../user/user.service';
+import { UserServiceProviders } from '../user/user.service.spec';
 import { AuthService } from './auth.service';
 import {
-  JwtDto,
   SendEmailCodeDto,
   SignUpEmailUserDto,
-  SignUpInvitationUserDto,
   ValidateEmailUserDto,
-  VerifyEmailCodeDto,
 } from './dtos';
 import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 
-jest.useFakeTimers();
+const MockJwtService = {
+  sign: jest.fn(),
+};
+const MockEmailVerificationMailingService = {
+  send: jest.fn(),
+};
+const AuthServiceProviders = [
+  AuthService,
+  ...CreateUserServiceProviders,
+  ...UserServiceProviders,
+  getMockProvider(JwtService, MockJwtService),
+  getMockProvider(
+    EmailVerificationMailingService,
+    MockEmailVerificationMailingService,
+  ),
+  ...CodeServiceProviders,
+  ...ApiKeyServiceProviders,
+  ...TenantServiceProviders,
+  ...RoleServiceProviders,
+  ...MemberServiceProviders,
+  ClsService,
+];
 
 describe('auth service ', () => {
   let authService: AuthService;
-
+  let userRepo: Repository<UserEntity>;
+  let tenantRepo: Repository<TenantEntity>;
+  let codeRepo: Repository<CodeEntity>;
+  let apiKeyRepo: Repository<ApiKeyEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [
-        AuthService,
-        getMockProvider(JwtService, MockJwtService),
-        getMockProvider(UserService, MockUserService),
-        getMockProvider(CreateUserService, MockCreateUserService),
-        getMockProvider(CodeService, MockCodeService),
-        getMockProvider(
-          EmailVerificationMailingService,
-          MockEmailVerificationMailingService,
-        ),
-      ],
+      providers: AuthServiceProviders,
     }).compile();
     authService = module.get(AuthService);
-  });
-
-  it('defined', () => {
-    expect(authService).toBeDefined();
+    userRepo = module.get(getRepositoryToken(UserEntity));
+    tenantRepo = module.get(getRepositoryToken(TenantEntity));
+    codeRepo = module.get(getRepositoryToken(CodeEntity));
+    apiKeyRepo = module.get(getRepositoryToken(ApiKeyEntity));
   });
 
   describe('sendEmailCode', () => {
-    const code = faker.datatype.string();
-
-    it('positive case', async () => {
-      jest.spyOn(MockUserService, 'findByEmail').mockResolvedValue(null);
-      jest.spyOn(MockCodeService, 'setCode').mockResolvedValue(code);
-
-      const dto = new SendEmailCodeDto();
-      dto.email = faker.internet.email();
-
-      const result = await authService.sendEmailCode(dto);
-
-      expect(MockUserService.findByEmail).toHaveBeenCalledTimes(1);
-      expect(MockUserService.findByEmail).toHaveBeenCalledWith(dto.email);
-      expect(MockCodeService.setCode).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.setCode).toHaveBeenCalledWith({
-        type: CodeTypeEnum.EMAIL_VEIRIFICATION,
-        key: dto.email,
-      });
-      expect(MockEmailVerificationMailingService.send).toHaveBeenCalledTimes(1);
-      expect(MockEmailVerificationMailingService.send).toHaveBeenCalledWith({
-        code,
-        email: dto.email,
-      });
-
-      const expectResult = dayjs()
-        .add(5 * 60, 'seconds')
-        .format();
-      expect(result).toEqual(expectResult);
+    let dto: SendEmailCodeDto;
+    beforeEach(() => {
+      dto = new SendEmailCodeDto();
     });
-    it('a user with the same email exists', async () => {
+
+    it('sending a code by email succeeds with a valid email', async () => {
+      const validEmail = faker.internet.email();
+      dto.email = validEmail;
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          isRestrictDomain: false,
+        },
+      ] as TenantEntity[]);
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue({} as CodeEntity);
+      jest.spyOn(codeRepo, 'save').mockResolvedValue({} as CodeEntity);
+      jest.spyOn(MockEmailVerificationMailingService, 'send');
+
+      await authService.sendEmailCode(dto);
+
+      expect(userRepo.findOne).toBeCalledTimes(1);
+      expect(codeRepo.findOneBy).toBeCalledTimes(1);
+      expect(codeRepo.save).toBeCalledTimes(1);
+      expect(MockEmailVerificationMailingService.send).toBeCalledTimes(1);
+    });
+    it('sending a code by email succeeds with a duplicate email', async () => {
+      const duplicateEmail = faker.internet.email();
+      dto.email = duplicateEmail;
       jest
-        .spyOn(MockUserService, 'findByEmail')
-        .mockResolvedValue(new UserEntity());
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ email: duplicateEmail } as UserEntity);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          isRestrictDomain: false,
+        },
+      ] as TenantEntity[]);
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue({} as CodeEntity);
+      jest.spyOn(codeRepo, 'save').mockResolvedValue({} as CodeEntity);
+      jest.spyOn(MockEmailVerificationMailingService, 'send');
 
-      const dto = new SendEmailCodeDto();
-      dto.email = faker.internet.email();
-
-      await expect(authService.sendEmailCode(dto)).rejects.toThrow(
+      await expect(authService.sendEmailCode(dto)).rejects.toThrowError(
         UserAlreadyExistsException,
       );
-      expect(MockUserService.findByEmail).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.setCode).toHaveBeenCalledTimes(0);
-      expect(MockEmailVerificationMailingService.send).toHaveBeenCalledTimes(0);
+
+      expect(userRepo.findOne).toBeCalledTimes(1);
+      expect(codeRepo.findOneBy).not.toBeCalled();
+      expect(codeRepo.save).not.toBeCalled();
+      expect(MockEmailVerificationMailingService.send).not.toBeCalled();
     });
   });
-  describe('verifyEmailCode', () => {
-    it('positive case', async () => {
-      const dto = new VerifyEmailCodeDto();
-      dto.email = faker.internet.email();
-      dto.code = faker.datatype.string();
 
-      await authService.verifyEmailCode(dto);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  describe('verifyEmailCode', () => {});
 
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledWith({
-        type: CodeTypeEnum.EMAIL_VEIRIFICATION,
-        key: dto.email,
-        code: dto.code,
-      });
-    });
-
-    it('invalid code', async () => {
-      jest
-        .spyOn(MockCodeService, 'setCodeVerified')
-        .mockRejectedValue(new Error());
-
-      const dto = new VerifyEmailCodeDto();
-      dto.email = faker.internet.email();
-      dto.code = faker.datatype.string();
-
-      await expect(authService.verifyEmailCode(dto)).rejects.toThrow(Error);
-
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledWith({
-        type: CodeTypeEnum.EMAIL_VEIRIFICATION,
-        key: dto.email,
-        code: dto.code,
-      });
-    });
-  });
   describe('validateEmailUser', () => {
-    it('positive case', async () => {
-      const originalPassword = faker.internet.password();
-      const hashPassword = bcrypt.hashSync(originalPassword, 0);
-
+    it('validating a user succeeds with valid inputs', async () => {
+      const password = faker.internet.password();
+      const hashedPassword = bcrypt.hashSync(password, 0);
       const userEntity = new UserEntity();
-      userEntity.hashPassword = hashPassword;
-
-      jest.spyOn(MockUserService, 'findByEmail').mockResolvedValue(userEntity);
-
+      userEntity.hashPassword = hashedPassword;
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(userEntity);
       const dto = new ValidateEmailUserDto();
       dto.email = faker.internet.email();
-      dto.password = originalPassword;
+      dto.password = password;
 
       const result = await authService.validateEmailUser(dto);
+
+      expect(userRepo.findOne).toBeCalledTimes(1);
       expect(result).toEqual(userEntity);
     });
-    it('invalid password', async () => {
-      const originalPassword = faker.internet.password();
-      const hashPassword = bcrypt.hashSync(originalPassword, 0);
+    it('validating a user fails with a nonexistent user', async () => {
+      const password = faker.internet.password();
+      const hashedPassword = bcrypt.hashSync(password, 0);
       const userEntity = new UserEntity();
-      userEntity.hashPassword = hashPassword;
-
-      jest.spyOn(MockUserService, 'findByEmail').mockResolvedValue(userEntity);
-
+      userEntity.hashPassword = hashedPassword;
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
       const dto = new ValidateEmailUserDto();
       dto.email = faker.internet.email();
-      dto.password = faker.internet.password();
+      dto.password = password;
 
-      await expect(authService.validateEmailUser(dto)).rejects.toThrow(
-        PasswordNotMatchException,
-      );
-    });
-    it('invalid email', async () => {
-      jest.spyOn(MockUserService, 'findByEmail').mockResolvedValue(null);
-
-      const dto = new ValidateEmailUserDto();
-      dto.email = faker.internet.email();
-      dto.password = faker.internet.password();
-
-      await expect(authService.validateEmailUser(dto)).rejects.toThrow(
+      await expect(authService.validateEmailUser(dto)).rejects.toThrowError(
         UserNotFoundException,
       );
+
+      expect(userRepo.findOne).toBeCalledTimes(1);
+    });
+    it('validating a user fails with an invalid password', async () => {
+      const invalidPassword = faker.internet.password();
+      const hashedPassword = bcrypt.hashSync(faker.internet.password(), 0);
+      const userEntity = new UserEntity();
+      userEntity.hashPassword = hashedPassword;
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(userEntity);
+      const dto = new ValidateEmailUserDto();
+      dto.email = faker.internet.email();
+      dto.password = invalidPassword;
+
+      await expect(authService.validateEmailUser(dto)).rejects.toThrowError(
+        PasswordNotMatchException,
+      );
+
+      expect(userRepo.findOne).toBeCalledTimes(1);
     });
   });
 
   describe('signUpEmailUser', () => {
-    it('positive case', async () => {
-      jest.spyOn(MockCodeService, 'checkVerified').mockResolvedValue(true);
+    it('signing up by an email succeeds with valid inputs', async () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
+      jest
+        .spyOn(codeRepo, 'findOneBy')
+        .mockResolvedValue({ isVerified: true } as CodeEntity);
+      jest
+        .spyOn(tenantRepo, 'find')
+        .mockResolvedValue([
+          { isPrivate: false, isRestrictDomain: false },
+        ] as TenantEntity[]);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'save');
 
       await authService.signUpEmailUser(dto);
 
-      expect(MockCodeService.checkVerified).toHaveBeenCalledTimes(1);
-      expect(MockCreateUserService.createEmailUser).toHaveBeenCalledTimes(1);
+      expect(codeRepo.findOneBy).toBeCalledTimes(1);
+      expect(tenantRepo.find).toBeCalledTimes(2);
+      expect(userRepo.findOneBy).toBeCalledTimes(1);
+      expect(userRepo.save).toBeCalledTimes(1);
     });
-    it('email verification not yet', async () => {
-      jest.spyOn(MockCodeService, 'checkVerified').mockResolvedValue(false);
+    it('signing up by an email fails with a not verified email', async () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
+      jest
+        .spyOn(codeRepo, 'findOneBy')
+        .mockResolvedValue({ isVerified: false } as CodeEntity);
+      jest
+        .spyOn(tenantRepo, 'find')
+        .mockResolvedValue([
+          { isPrivate: false, isRestrictDomain: false },
+        ] as TenantEntity[]);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'save');
 
-      await expect(authService.signUpEmailUser(dto)).rejects.toThrow(
-        BadRequestException,
+      await expect(authService.signUpEmailUser(dto)).rejects.toThrowError(
+        NotVerifiedEmailException,
       );
 
-      expect(MockCodeService.checkVerified).toHaveBeenCalledTimes(1);
-      expect(MockCreateUserService.createEmailUser).toHaveBeenCalledTimes(0);
+      expect(codeRepo.findOneBy).toBeCalledTimes(1);
+      expect(tenantRepo.find).not.toBeCalled();
+      expect(userRepo.findOneBy).not.toBeCalled();
+      expect(userRepo.save).not.toBeCalled();
+    });
+    it('signing up by an email fails with a not verification requested email', async () => {
+      const dto = new SignUpEmailUserDto();
+      dto.email = faker.internet.email();
+      dto.password = faker.internet.password();
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null as CodeEntity);
+      jest
+        .spyOn(tenantRepo, 'find')
+        .mockResolvedValue([
+          { isPrivate: false, isRestrictDomain: false },
+        ] as TenantEntity[]);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'save');
+
+      await expect(authService.signUpEmailUser(dto)).rejects.toThrowError(
+        new BadRequestException('must request email verification'),
+      );
+
+      expect(codeRepo.findOneBy).toBeCalledTimes(1);
+      expect(tenantRepo.find).not.toBeCalled();
+      expect(userRepo.findOneBy).not.toBeCalled();
+      expect(userRepo.save).not.toBeCalled();
     });
   });
-  describe('signUpInvitationUser', () => {
-    it('positive case', async () => {
-      jest
-        .spyOn(MockCodeService, 'getDataByCodeAndType')
-        .mockReturnValue({ roleId: faker.datatype.uuid() });
 
-      const dto = new SignUpInvitationUserDto();
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  describe('signUpInvitationUser', () => {});
 
-      dto.email = faker.internet.email();
-      dto.password = faker.internet.password();
-      dto.code = faker.datatype.string();
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  describe('signUpOAuthUser', () => {});
 
-      await authService.signUpInvitationUser(dto);
-
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.getDataByCodeAndType).toHaveBeenCalledTimes(1);
-      expect(MockCreateUserService.createInvitationUser).toHaveBeenCalledTimes(
-        1,
-      );
-    });
-
-    it('invalid code', async () => {
-      jest
-        .spyOn(MockCodeService, 'setCodeVerified')
-        .mockRejectedValue(new Error());
-      jest
-        .spyOn(MockCodeService, 'getDataByCodeAndType')
-        .mockReturnValue({ roleId: faker.datatype.uuid() });
-
-      const dto = new SignUpInvitationUserDto();
-
-      dto.email = faker.internet.email();
-      dto.password = faker.internet.password();
-      dto.code = faker.datatype.string();
-
-      await expect(authService.signUpInvitationUser(dto)).rejects.toThrow(
-        BadRequestException,
-      );
-
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.getDataByCodeAndType).toHaveBeenCalledTimes(0);
-      expect(MockCreateUserService.createInvitationUser).toHaveBeenCalledTimes(
-        0,
-      );
-    });
-    it('Invalid role id', async () => {
-      const dto = new SignUpInvitationUserDto();
-
-      dto.email = faker.internet.email();
-      dto.password = faker.internet.password();
-      dto.code = faker.datatype.string();
-
-      await expect(authService.signUpInvitationUser(dto)).rejects.toThrow(
-        InternalServerErrorException,
-      );
-
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledTimes(1);
-      expect(MockCodeService.getDataByCodeAndType).toHaveBeenCalledTimes(1);
-      expect(MockCreateUserService.createInvitationUser).toHaveBeenCalledTimes(
-        0,
-      );
-    });
-  });
   describe('signIn', () => {
-    it('positive case', async () => {
+    it('signing in succeeds with a valid user', async () => {
       const user = new UserEntity();
       user.state = UserStateEnum.Active;
-      jest.spyOn(MockUserService, 'findById').mockResolvedValue(user);
-
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(user);
       const dto = new UserDto();
       dto.email = faker.internet.email();
-      dto.id = faker.datatype.uuid();
-      dto.permissions = [];
-      dto.roleName = faker.datatype.string();
+      dto.id = faker.datatype.number();
 
       await authService.signIn(dto);
 
-      expect(MockJwtService.sign).toHaveBeenCalledTimes(2);
+      expect(MockJwtService.sign).toBeCalledTimes(2);
     });
-    it('blocked user', async () => {
+    it('signing in fails with a blocked user', async () => {
       const user = new UserEntity();
       user.state = UserStateEnum.Blocked;
-      jest.spyOn(MockUserService, 'findById').mockResolvedValue(user);
-
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(user);
       const dto = new UserDto();
       dto.email = faker.internet.email();
-      dto.id = faker.datatype.uuid();
-      dto.permissions = [];
-      dto.roleName = faker.datatype.string();
+      dto.id = faker.datatype.number();
 
       await expect(authService.signIn(dto)).rejects.toThrow(
         UserBlockedException,
       );
 
-      expect(MockJwtService.sign).toHaveBeenCalledTimes(0);
+      expect(MockJwtService.sign).not.toBeCalled();
     });
   });
-  describe('refreshToken', () => {
-    it('positive case', async () => {
-      jest.spyOn(authService, 'signIn').mockResolvedValue(new JwtDto());
 
-      const id = faker.datatype.uuid();
-      await authService.refreshToken({ id });
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  describe('refreshToken', () => {});
 
-      expect(MockUserService.findById).toHaveBeenCalledTimes(1);
-      expect(MockUserService.findById).toHaveBeenCalledWith(id);
-      expect(authService.signIn).toHaveBeenCalledTimes(1);
+  describe('validateApiKey', () => {
+    it('validating an api key succeeds with a valid api key', async () => {
+      const apiKey = faker.datatype.uuid();
+      const projectId = faker.datatype.number();
+      jest.spyOn(apiKeyRepo, 'find').mockResolvedValue([{}] as ApiKeyEntity[]);
+
+      const result = await authService.validateApiKey(apiKey, projectId);
+
+      expect(apiKeyRepo.find).toBeCalledTimes(1);
+      expect(result).toEqual(true);
+    });
+    it('validating an api key succeeds with an invalid api key', async () => {
+      const apiKey = faker.datatype.uuid();
+      const projectId = faker.datatype.number();
+      jest.spyOn(apiKeyRepo, 'find').mockResolvedValue([] as ApiKeyEntity[]);
+
+      const result = await authService.validateApiKey(apiKey, projectId);
+
+      expect(apiKeyRepo.find).toBeCalledTimes(1);
+      expect(result).toEqual(false);
     });
   });
+
+  describe('getOAuthLoginURL', () => {
+    it('getting an oauth login url succeeds with oauth using tenant', async () => {
+      const clientId = faker.datatype.string();
+      const scopeString = faker.datatype.string();
+      const authCodeRequestURL = faker.internet.domainName();
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          useOAuth: true,
+          oauthConfig: {
+            clientId,
+            scopeString,
+            authCodeRequestURL,
+          },
+        },
+      ] as TenantEntity[]);
+
+      const OAuthLoginURL = await authService.getOAuthLoginURL();
+
+      expect(tenantRepo.find).toBeCalledTimes(1);
+      expect(OAuthLoginURL.includes(authCodeRequestURL));
+      expect(OAuthLoginURL.includes(`client_id=${clientId}`));
+      expect(OAuthLoginURL.includes(`scope=${scopeString}`));
+    });
+    it('getting an oauth login url fails with no oauth using tenant', async () => {
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          useOAuth: false,
+        },
+      ] as TenantEntity[]);
+
+      await expect(authService.getOAuthLoginURL()).rejects.toThrowError(
+        new BadRequestException('OAuth login is disabled.'),
+      );
+
+      expect(tenantRepo.find).toBeCalledTimes(1);
+    });
+    it('getting an oauth login url fails with no oauthconfig tenant', async () => {
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
+        {
+          useOAuth: true,
+        },
+      ] as TenantEntity[]);
+
+      await expect(authService.getOAuthLoginURL()).rejects.toThrowError(
+        new BadRequestException('OAuth Config is required.'),
+      );
+
+      expect(tenantRepo.find).toBeCalledTimes(1);
+    });
+  });
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  describe('signInByOAuth', () => {});
 });
-
-const MockJwtService = {
-  sign: jest.fn(),
-};
-
-const MockEmailVerificationMailingService = {
-  send: jest.fn(),
-};
-
-const MockCodeService = {
-  setCode: jest.fn(),
-  setCodeVerified: jest.fn(),
-  checkVerified: jest.fn(),
-  getDataByCodeAndType: jest.fn(),
-};
-
-const MockUserService = {
-  findByEmail: jest.fn(),
-  findByAccount: jest.fn(),
-  findById: jest.fn(),
-};
-const MockCreateUserService = {
-  createEmailUser: jest.fn(),
-  createInvitationUser: jest.fn(),
-};

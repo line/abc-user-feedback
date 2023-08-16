@@ -16,14 +16,24 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { RoleEntity } from '../role/role.entity';
-import { RoleModule } from '../role/role.module';
+import { FeedbackEntity } from '../feedback/feedback.entity';
+import { RoleEntity } from '../project/role/role.entity';
+import { RoleModule } from '../project/role/role.module';
+import { UserEntity } from '../user/entities/user.entity';
 import { TenantController } from './tenant.controller';
 import { TenantEntity } from './tenant.entity';
 import { TenantService } from './tenant.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([TenantEntity, RoleEntity]), RoleModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      TenantEntity,
+      RoleEntity,
+      UserEntity,
+      FeedbackEntity,
+    ]),
+    RoleModule,
+  ],
   providers: [TenantService],
   controllers: [TenantController],
   exports: [TenantService],

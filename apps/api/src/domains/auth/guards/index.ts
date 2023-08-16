@@ -14,3 +14,4 @@
  * under the License.
  */
 export { JwtAuthGuard } from './jwt-auth.guard';
+export { ApiKeyAuthGuard } from './api-key.guard';

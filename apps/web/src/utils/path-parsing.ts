@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import { env } from '@/env.mjs';
 
 export const getRequestUrl = (
   path: string,
-  variables?: Record<string, unknown>,
+  variables?: Record<string | number, unknown>,
 ) => {
-  let url = `${BASE_URL}${path}`;
+  let url = `${env.NEXT_PUBLIC_API_BASE_URL}${path}`;
 
   variables = Object.fromEntries(
     Object.entries(variables ?? {}).filter(([_, v]) => v != null),

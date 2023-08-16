@@ -15,21 +15,21 @@
  */
 import { faker } from '@faker-js/faker';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { ElasticsearchService } from '@nestjs/elasticsearch';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Client } from '@opensearch-project/opensearch/.';
 import request from 'supertest';
 import { Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
+import { FieldFormatEnum } from '@/common/enums';
 import { HttpExceptionFilter } from '@/common/filters';
-import { ChannelEntity } from '@/domains/feedback/entities/channel.entity';
-import { FieldEntity } from '@/domains/feedback/entities/field.entity';
-import { ProjectEntity } from '@/domains/feedback/entities/project.entity';
-import { ChannelService } from '@/domains/feedback/services/channel.service';
-import { FieldTypeEnum } from '@/domains/feedback/services/dtos';
-import { FeedbackService } from '@/domains/feedback/services/feedback.service';
-import { ProjectService } from '@/domains/feedback/services/project.service';
+import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
+import { ChannelService } from '@/domains/channel/channel/channel.service';
+import { FieldEntity } from '@/domains/channel/field/field.entity';
+import { FeedbackService } from '@/domains/feedback/feedback.service';
+import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { ProjectService } from '@/domains/project/project/project.service';
 import { createFieldDto, getRandomValue } from '@/utils/test-util-fixture';
 import { clearEntities } from '@/utils/test-utils';
 
@@ -43,7 +43,7 @@ describe('AppController (e2e)', () => {
   let projectRepo: Repository<ProjectEntity>;
   let channelRepo: Repository<ChannelEntity>;
   let fieldRepo: Repository<FieldEntity>;
-  let esService: ElasticsearchService;
+  let osService: Client;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -66,7 +66,7 @@ describe('AppController (e2e)', () => {
     projectRepo = module.get(getRepositoryToken(ProjectEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
-    esService = module.get(ElasticsearchService);
+    osService = module.get(Client);
   });
 
   afterAll(async () => {
@@ -82,7 +82,7 @@ describe('AppController (e2e)', () => {
       description: faker.lorem.lines(1),
     });
 
-    channel = await channelService.create({
+    const { id: channelId } = await channelService.create({
       projectId,
       name: faker.random.alphaNumeric(20),
       description: faker.lorem.lines(1),
@@ -90,6 +90,8 @@ describe('AppController (e2e)', () => {
         length: faker.datatype.number({ min: 1, max: 10 }),
       }).map(createFieldDto),
     });
+
+    const channel = await channelService.findById({ channelId });
 
     fields = await fieldRepo.find({
       where: { channel: { id: channel.id } },
@@ -101,8 +103,8 @@ describe('AppController (e2e)', () => {
     const dto = {};
     fields
       .filter(({ name }) => name !== 'createdAt' && name !== 'updatedAt')
-      .forEach(({ name, type, options }) => {
-        dto[name] = getRandomValue(type, options);
+      .forEach(({ name, format, options }) => {
+        dto[name] = getRandomValue(format, options);
       });
 
     return request(app.getHttpServer())
@@ -111,9 +113,9 @@ describe('AppController (e2e)', () => {
       .expect(201)
       .then(async ({ body }) => {
         expect(body.id).toBeDefined();
-        const esResult = await esService.get({
+        const esResult = await osService.get({
           id: body.id,
-          index: channel.id,
+          index: channel.id.toString(),
         });
 
         delete esResult.body._source[
@@ -130,8 +132,8 @@ describe('AppController (e2e)', () => {
       const data = {};
       fields
         .filter(({ name }) => name !== 'createdAt' && name !== 'updatedAt')
-        .forEach(({ name, type, options }) => {
-          data[name] = getRandomValue(type, options);
+        .forEach(({ name, format, options }) => {
+          data[name] = getRandomValue(format, options);
         });
       await feedbackService.create({ channelId: channel.id, data });
       dataset.push(data);
@@ -152,8 +154,8 @@ describe('AppController (e2e)', () => {
       ({ name }) => name !== 'createdAt' && name !== 'updatedAt',
     );
 
-    targetFields.forEach(({ name, type, options }) => {
-      data[name] = getRandomValue(type, options);
+    targetFields.forEach(({ name, format, options }) => {
+      data[name] = getRandomValue(format, options);
     });
 
     const { id: feedbackId } = await feedbackService.create({
@@ -164,7 +166,7 @@ describe('AppController (e2e)', () => {
     const targetField =
       targetFields[faker.datatype.number(targetFields.length - 1)];
 
-    const newValue = getRandomValue(targetField.type, targetField.options);
+    const newValue = getRandomValue(targetField.format, targetField.options);
 
     return request(app.getHttpServer())
       .put(
@@ -173,13 +175,13 @@ describe('AppController (e2e)', () => {
       .send({ value: newValue })
       .expect(200)
       .then(async () => {
-        const { body } = await esService.get({
-          id: feedbackId,
-          index: channel.id,
+        const { body } = await osService.get({
+          id: feedbackId.toString(),
+          index: channel.id.toString(),
         });
 
         expect(body._source[targetField.id]).toEqual(
-          targetField.type === FieldTypeEnum.select
+          targetField.format === FieldFormatEnum.select
             ? targetField.options.find((v) => v.name === newValue).id
             : newValue,
         );
@@ -251,7 +253,7 @@ const toApi = (data: Record<string, any>, fields: FieldEntity[]) => {
     const field = fields.find((v) => v.name === key);
     return Object.assign(prev, {
       [field.id]:
-        field.type === FieldTypeEnum.select
+        field.format === FieldFormatEnum.select
           ? field.options?.find((v) => v.name === value).id
           : value,
     });

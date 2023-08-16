@@ -15,7 +15,18 @@
  */
 import { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
+import { SortMethodEnum } from '@/common/enums';
+
+import { UserTypeEnum } from '../entities/enums';
+
 export class FindAllUsersDto {
   options: IPaginationOptions;
-  keyword?: string;
+  query?: {
+    email?: string;
+    name?: string;
+    department?: string;
+    type?: UserTypeEnum;
+    projectId?: number;
+  };
+  order?: { createdAt?: SortMethodEnum };
 }

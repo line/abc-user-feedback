@@ -8,30 +8,47 @@ export interface paths {
   "/api/metrics": {
     get: operations["PrometheusController_index"];
   };
-  "/api/roles": {
-    get: operations["RoleController_getAllRole"];
-    post: operations["RoleController_createRole"];
+  "/api/auth/email/code": {
+    post: operations["AuthController_sendCode"];
   };
-  "/api/roles/{id}": {
-    get: operations["RoleController_getRoleById"];
-    put: operations["RoleController_updateRole"];
-    delete: operations["RoleController_deleteRole"];
+  "/api/auth/email/code/verify": {
+    post: operations["AuthController_verifyEmailCode"];
   };
-  "/api/tenant": {
-    get: operations["TenantController_get"];
-    put: operations["TenantController_update"];
-    post: operations["TenantController_setup"];
+  "/api/auth/signUp/email": {
+    post: operations["AuthController_signUpEmailUser"];
+  };
+  "/api/auth/signUp/invitation": {
+    post: operations["AuthController_signUpInvitationUser"];
+  };
+  "/api/auth/signUp/oauth": {
+    post: operations["AuthController_signUpOAuthUser"];
+  };
+  "/api/auth/signIn/email": {
+    post: operations["AuthController_signInEmail"];
+  };
+  "/api/auth/signIn/oauth/loginURL": {
+    get: operations["AuthController_redirectToLoginURL"];
+  };
+  "/api/auth/signIn/oauth": {
+    get: operations["AuthController_handleCallback"];
+  };
+  "/api/auth/refresh": {
+    get: operations["AuthController_refreshToken"];
   };
   "/api/users": {
     get: operations["UserController_getAllUsers"];
     delete: operations["UserController_deleteUsers"];
   };
+  "/api/users/search": {
+    post: operations["UserController_searchUsers"];
+  };
   "/api/users/{id}": {
     get: operations["UserController_getUser"];
+    put: operations["UserController_updateUser"];
     delete: operations["UserController_deleteUser"];
   };
-  "/api/users/{id}/role": {
-    put: operations["UserController_updateRole"];
+  "/api/users/{userId}/roles": {
+    get: operations["UserController_getRoles"];
   };
   "/api/users/invite": {
     post: operations["UserController_inviteUser"];
@@ -45,61 +62,115 @@ export interface paths {
   "/api/users/password/change": {
     post: operations["UserController_changePassword"];
   };
-  "/api/auth/email/code": {
-    post: operations["AuthController_sendCode"];
+  "/api/tenants": {
+    get: operations["TenantController_get"];
+    put: operations["TenantController_update"];
+    post: operations["TenantController_setup"];
   };
-  "/api/auth/email/code/verify": {
-    post: operations["AuthController_verifyEmailCode"];
+  "/api/tenants/{tenantId}/feedback-count": {
+    get: operations["TenantController_countFeedbacks"];
   };
-  "/api/auth/signUp/email": {
-    post: operations["AuthController_signUpEmailUser"];
+  "/api/projects/{projectId}/roles": {
+    get: operations["RoleController_getAllRolesByProjectId"];
+    post: operations["RoleController_createRole"];
   };
-  "/api/auth/signUp/invitation": {
-    post: operations["AuthController_signUpInvitationUser"];
+  "/api/projects/{projectId}/roles/{roleId}": {
+    put: operations["RoleController_updateRole"];
+    delete: operations["RoleController_deleteRole"];
   };
-  "/api/auth/signIn/email": {
-    post: operations["AuthController_signInEmail"];
+  "/api/projects/{projectId}/members": {
+    get: operations["MemberController_getAllRolesByProjectId"];
+    post: operations["MemberController_create"];
   };
-  "/api/auth/signIn/google": {
-    get: operations["AuthController_googleLogin"];
+  "/api/projects/{projectId}/members/{memberId}": {
+    put: operations["MemberController_update"];
+    delete: operations["MemberController_delete"];
   };
-  "/api/auth/refresh": {
-    get: operations["AuthController_refreshToken"];
+  "/api/projects/{projectId}/api-keys": {
+    get: operations["ApiKeyController_findAll"];
+    post: operations["ApiKeyController_create"];
+  };
+  "/api/projects/{projectId}/api-keys/{apiKeyId}/soft": {
+    delete: operations["ApiKeyController_softDelete"];
+  };
+  "/api/projects/{projectId}/api-keys/{apiKeyId}/recover": {
+    delete: operations["ApiKeyController_recover"];
+  };
+  "/api/projects/{projectId}/api-keys/{apiKeyId}": {
+    delete: operations["ApiKeyController_delete"];
   };
   "/api/projects": {
     get: operations["ProjectController_findAll"];
     post: operations["ProjectController_create"];
   };
-  "/api/projects/{id}": {
+  "/api/projects/{projectId}": {
     get: operations["ProjectController_findOne"];
     put: operations["ProjectController_updateOne"];
+    delete: operations["ProjectController_delete"];
+  };
+  "/api/projects/{projectId}/feedback-count": {
+    get: operations["ProjectController_countFeedbacks"];
+  };
+  "/api/projects/{projectId}/issue-count": {
+    get: operations["ProjectController_countIssues"];
   };
   "/api/projects/{projectId}/channels": {
     get: operations["ChannelController_findAllByProjectId"];
     post: operations["ChannelController_create"];
   };
-  "/api/channels/{id}": {
+  "/api/projects/{projectId}/channels/{channelId}": {
     get: operations["ChannelController_findOne"];
+    delete: operations["ChannelController_delete"];
+  };
+  "/api/projects/{projectId}/channels/channels/{channelId}": {
     put: operations["ChannelController_updateOne"];
   };
-  "/api/channels/{channelId}/fields": {
-    get: operations["FieldController_findByChannelId"];
-  };
-  "/api/channels/{channelId}/feedbacks": {
-    post: operations["FeedbackController_create"];
-  };
-  "/api/channels/{channelId}/feedbacks/search": {
-    post: operations["FeedbackController_findByChannelId"];
-  };
-  "/api/channels/{channelId}/feedbacks/export": {
-    post: operations["FeedbackController_exportFeedbacks"];
-  };
-  "/api/channels/{channelId}/feedbacks/{feedbackId}/field/{fieldId}": {
-    put: operations["FeedbackController_upsertFeedbackItem"];
+  "/api/projects/{projectId}/channels/channels/{channelId}/fields": {
+    put: operations["ChannelController_updateFields"];
   };
   "/api/field/{fieldId}/options": {
     get: operations["OptionController_getOptions"];
-    post: operations["OptionController_creaetOption"];
+    post: operations["OptionController_createOption"];
+  };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks": {
+    post: operations["FeedbackController_create"];
+    delete: operations["FeedbackController_deleteMany"];
+  };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+    post: operations["FeedbackController_findByChannelId"];
+  };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+    post: operations["FeedbackController_addIssue"];
+    delete: operations["FeedbackController_removeIssue"];
+  };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/export": {
+    post: operations["FeedbackController_exportFeedbacks"];
+  };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+    put: operations["FeedbackController_updateFeedback"];
+  };
+  "/api/projects/{projectId}/issues": {
+    post: operations["IssueController_create"];
+    delete: operations["IssueController_deleteMany"];
+  };
+  "/api/projects/{projectId}/issues/{issueId}": {
+    get: operations["IssueController_findById"];
+    put: operations["IssueController_update"];
+    delete: operations["IssueController_delete"];
+  };
+  "/api/projects/{projectId}/issues/search": {
+    post: operations["IssueController_findAllByProjectId"];
+  };
+  "/api/health": {
+    get: operations["HealthController_check"];
+  };
+  "/api/channels/{channelId}/migration": {
+    post: operations["MigrationController_createOption"];
+  };
+  "/api/projects/{projectId}/issue-tracker": {
+    get: operations["IssueTrackerController_findOne"];
+    put: operations["IssueTrackerController_updateOne"];
+    post: operations["IssueTrackerController_create"];
   };
 }
 
@@ -107,102 +178,6 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
-    GetAllRoleResponseRoleDto: {
-      id: string;
-      name: string;
-      permissions: ("service_management" | "role_management" | "user_management" | "project_management")[];
-    };
-    GetAllRoleResponseDto: {
-      roles: (components["schemas"]["GetAllRoleResponseRoleDto"])[];
-      total: number;
-    };
-    CreateRoleRequestDto: {
-      name: string;
-      permissions: ("service_management" | "role_management" | "user_management" | "project_management")[];
-    };
-    GetRoleByIdResponseDto: {
-      id: string;
-      name: string;
-      permissions: ("service_management" | "role_management" | "user_management" | "project_management")[];
-    };
-    UpdateRoleRequestDto: {
-      name: string;
-      permissions: ("service_management" | "role_management" | "user_management" | "project_management")[];
-    };
-    SetupTenantRequestDto: {
-      siteName: string;
-      isPrivate: boolean;
-      isRestrictDomain: boolean;
-      allowDomains: (string)[];
-    };
-    UpdateTenantRequestDefaultRoleDto: {
-      id: string;
-    };
-    UpdateTenantRequestDto: {
-      id: string;
-      siteName: string;
-      isPrivate: boolean;
-      isRestrictDomain: boolean;
-      allowDomains: (string)[];
-      defaultRole: components["schemas"]["UpdateTenantRequestDefaultRoleDto"];
-    };
-    GetTenantResponseRoleDto: {
-      id: string;
-      name: string;
-      permissions: ("service_management" | "role_management" | "user_management" | "project_management")[];
-    };
-    GetTenantResponseDto: {
-      id: string;
-      siteName: string;
-      isPrivate: boolean;
-      isRestrictDomain: boolean;
-      allowDomains: (string)[];
-      defaultRole: components["schemas"]["GetTenantResponseRoleDto"];
-    };
-    PaginationMetaDto: {
-      itemCount: number;
-      totalItems: number;
-      itemsPerPage: number;
-      totalPages: number;
-      currentPage: number;
-    };
-    GetAllUserResponse: {
-      id: string;
-      email: string;
-      roleName: string;
-    };
-    GetAllUserResponseDto: {
-      meta: components["schemas"]["PaginationMetaDto"];
-      items: (components["schemas"]["GetAllUserResponse"])[];
-    };
-    DeleteUsersRequestDto: {
-      ids: (string)[];
-    };
-    UserDto: {
-      id: string;
-      email: string;
-      roleName: string;
-      permissions: ("service_management" | "role_management" | "user_management" | "project_management")[];
-    };
-    UpdateUserRoleRequestDto: {
-      roleId: string;
-    };
-    UserInvitationRequestDto: {
-      email: string;
-      roleId: string;
-    };
-    ResetPasswordMailingRequestDto: {
-      email: string;
-    };
-    ResetPasswordRequestDto: {
-      email: string;
-      code: string;
-      password: string;
-    };
-    ChangePasswordRequestDto: {
-      password: string;
-      newPassword: string;
-    };
     EmailVerificationMailingRequestDto: {
       email: string;
     };
@@ -222,6 +197,11 @@ export interface components {
       code: string;
       email: string;
     };
+    OAuthUserSignUpRequestDto: {
+      email: string;
+      projectName: string;
+      roleName: string;
+    };
     EmailUserSignInRequestDto: {
       email: string;
       password: string;
@@ -230,15 +210,245 @@ export interface components {
       accessToken: string;
       refreshToken: string;
     };
-    CreateProjectRequestDto: {
+    OAuthLoginUrlResponseDto: {
+      url: string;
+    };
+    PaginationMetaDto: {
+      itemCount: number;
+      totalItems: number;
+      itemsPerPage: number;
+      totalPages: number;
+      currentPage: number;
+    };
+    ProjectDto: {
+      id: number;
+      name: string;
+    };
+    RoleDto: {
+      name: string;
+      project: components["schemas"]["ProjectDto"];
+    };
+    MemberDto: {
+      id: number;
+      role: components["schemas"]["RoleDto"];
+    };
+    GetAllUserResponse: {
+      id: number;
+      email: string;
+      name: string;
+      department: string | null;
+      /** @enum {string} */
+      type: "SUPER" | "GENERAL";
+      members: (components["schemas"]["MemberDto"])[];
+      /** Format: date-time */
+      createdAt: string;
+      /** @enum {string} */
+      signUpMethod: "EMAIL" | "OAUTH";
+    };
+    GetAllUserResponseDto: {
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: (components["schemas"]["GetAllUserResponse"])[];
+    };
+    TimeRange: {
+      gte: string;
+      lt: string;
+    };
+    UserSearchQuery: {
+      email?: string;
+      name?: string;
+      department?: string;
+      /** @enum {string} */
+      type?: "SUPER" | "GENERAL";
+      createdAt?: components["schemas"]["TimeRange"];
+      projectId?: number;
+    };
+    UserOrder: {
+      /** @enum {string} */
+      createdAt: "ASC" | "DESC";
+    };
+    GetAllUsersRequestDto: {
+      /** @default 10 */
+      limit?: number;
+      /** @default 1 */
+      page?: number;
+      query?: components["schemas"]["UserSearchQuery"];
+      order?: components["schemas"]["UserOrder"];
+    };
+    DeleteUsersRequestDto: {
+      ids: (number)[];
+    };
+    UserDto: {
+      id: number;
+      email: string;
+      name: string;
+      department: string | null;
+      /** @enum {string} */
+      type: "SUPER" | "GENERAL";
+      /** @enum {string} */
+      signUpMethod: "EMAIL" | "OAUTH";
+    };
+    RoleProjectDto: {
+      id: number;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string;
       name: string;
       description: string;
     };
+    RoleItemDto: {
+      id: number;
+      createdAt: string;
+      updatedAt: string;
+      deletedAt: string;
+      name: string;
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      project: components["schemas"]["RoleProjectDto"];
+    };
+    GetRolesByIdResponseDto: {
+      roles: (components["schemas"]["RoleItemDto"])[];
+    };
+    UpdateUserRequestDto: {
+      name: string | null;
+      department: string | null;
+      /** @enum {string} */
+      type?: "SUPER" | "GENERAL";
+    };
+    UserInvitationRequestDto: {
+      email: string;
+      /** @enum {string} */
+      userType: "SUPER" | "GENERAL";
+      roleId?: number;
+    };
+    ResetPasswordMailingRequestDto: {
+      email: string;
+    };
+    ResetPasswordRequestDto: {
+      email: string;
+      code: string;
+      password: string;
+    };
+    ChangePasswordRequestDto: {
+      password: string;
+      newPassword: string;
+    };
+    SetupTenantRequestDto: {
+      siteName: string;
+    };
+    OAuthConfigRequestDto: {
+      clientId: string;
+      clientSecret: string;
+      authCodeRequestURL: string;
+      scopeString: string;
+      accessTokenRequestURL: string;
+      userProfileRequestURL: string;
+      emailKey: string;
+    };
+    UpdateTenantRequestDto: {
+      siteName: string;
+      description: string | null;
+      useEmail: boolean;
+      isPrivate: boolean;
+      isRestrictDomain: boolean;
+      allowDomains: (string)[] | null;
+      useOAuth: boolean;
+      oauthConfig: components["schemas"]["OAuthConfigRequestDto"] | null;
+    };
+    OAuthConfigResponseDto: {
+      oauthUse: boolean;
+      clientId: string;
+      clientSecret: string;
+      authCodeRequestURL: string;
+      scopeString: string;
+      accessTokenRequestURL: string;
+      userProfileRequestURL: string;
+      emailKey: string;
+    };
+    GetTenantResponseDto: {
+      id: number;
+      siteName: string;
+      description: string;
+      useEmail: boolean;
+      useOAuth: boolean;
+      isPrivate: boolean;
+      isRestrictDomain: boolean;
+      allowDomains: (string)[];
+      oauthConfig: components["schemas"]["OAuthConfigResponseDto"] | null;
+    };
+    CountFeedbacksByTenantIdResponseDto: {
+      total: number;
+    };
+    GetAllRoleResponseRoleDto: {
+      id: number;
+      name: string;
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+    };
+    GetAllRoleResponseDto: {
+      roles: (components["schemas"]["GetAllRoleResponseRoleDto"])[];
+      total: number;
+    };
+    CreateRoleRequestDto: {
+      name: string;
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+    };
+    UpdateRoleRequestDto: {
+      name: string;
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+    };
+    MemberUserDto: {
+      id: number;
+      email: string;
+      name: string;
+      department: string;
+    };
+    MemberRoleDto: {
+      id: number;
+      name: string;
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+    };
+    GetAllMember: {
+      id: number;
+      user: components["schemas"]["MemberUserDto"];
+      role: components["schemas"]["MemberRoleDto"];
+      /** Format: date-time */
+      createdAt: string;
+    };
+    GetAllMemberResponseDto: {
+      members: (components["schemas"]["GetAllMember"])[];
+      total: number;
+    };
+    CreateMemberRequestDto: {
+      userId: number;
+      roleId: number;
+    };
+    UpdateMemberRequestDto: {
+      roleId: number;
+    };
+    CreateApiKeyResponseDto: {
+      id: number;
+      value: string;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    ApiKeyResponseDto: {
+      id: number;
+      value: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      deletedAt: string;
+    };
+    FindApiKeysResponseDto: {
+      items: (components["schemas"]["ApiKeyResponseDto"])[];
+    };
+    CreateProjectRequestDto: {
+      name: string;
+      description: string | null;
+    };
     CreateProjectResponseDto: {
-      id: string;
+      id: number;
     };
     FindProjectByIdResponseDto: {
-      id: string;
+      id: number;
       name: string;
       description: string;
       /** Format: date-time */
@@ -250,37 +460,49 @@ export interface components {
       meta: components["schemas"]["PaginationMetaDto"];
       items: (components["schemas"]["FindProjectByIdResponseDto"])[];
     };
+    CountFeedbacksByIdResponseDto: {
+      total: number;
+    };
+    CountIssuesByIdResponseDto: {
+      total: number;
+    };
     UpdateProjectRequestDto: {
       name: string;
-      description: string;
+      description: string | null;
     };
     UpdateProjectResponseDto: {
-      id: string;
+      id: number;
     };
     /** @enum {string} */
-    FieldTypeEnum: "text" | "keyword" | "number" | "boolean" | "select" | "date";
+    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
+    /** @enum {string} */
+    FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
+    /** @enum {string} */
+    FieldStatusEnum: "ACTIVE" | "INACTIVE";
     CreateChannelRequestFieldSelectOptionDto: {
+      id?: number;
       name: string;
+      key: string;
     };
     CreateChannelRequestFieldDto: {
-      type: components["schemas"]["FieldTypeEnum"];
       name: string;
-      description?: string;
-      isAdmin: boolean;
-      isDisabled: boolean;
-      order: number;
+      key: string;
+      description: string | null;
+      format: components["schemas"]["FieldFormatEnum"];
+      type: components["schemas"]["FieldTypeEnum"];
+      status: components["schemas"]["FieldStatusEnum"];
       options?: (components["schemas"]["CreateChannelRequestFieldSelectOptionDto"])[];
     };
     CreateChannelRequestDto: {
       name: string;
-      description?: string;
+      description: string | null;
       fields: (components["schemas"]["CreateChannelRequestFieldDto"])[];
     };
     CreateChannelResponseDto: {
-      id: string;
+      id: number;
     };
-    FindChannelByIdResponseDto: {
-      id: string;
+    FindChannelsByProjectDto: {
+      id: number;
       name: string;
       description: string;
       /** Format: date-time */
@@ -290,40 +512,68 @@ export interface components {
     };
     FindChannelsByProjectIdResponseDto: {
       meta: components["schemas"]["PaginationMetaDto"];
-      items: (components["schemas"]["FindChannelByIdResponseDto"])[];
+      items: (components["schemas"]["FindChannelsByProjectDto"])[];
     };
-    UpdateChannelRequestFieldDto: {
-      type: components["schemas"]["FieldTypeEnum"];
+    FindFieldsResponseSelectOptionDto: {
+      id: number;
       name: string;
-      description?: string;
-      isAdmin: boolean;
-      isDisabled: boolean;
-      order: number;
-      options?: (components["schemas"]["CreateChannelRequestFieldSelectOptionDto"])[];
-      id?: string;
+      key: string;
+    };
+    FindFieldsResponseDto: {
+      id: number;
+      /** @enum {string} */
+      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
+      /** @enum {string} */
+      type: "DEFAULT" | "ADMIN" | "API";
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      name: string;
+      key: string;
+      description: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      options: (components["schemas"]["FindFieldsResponseSelectOptionDto"])[];
+    };
+    FindChannelByIdResponseDto: {
+      id: number;
+      name: string;
+      description: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      fields: (components["schemas"]["FindFieldsResponseDto"])[];
     };
     UpdateChannelRequestDto: {
       name: string;
-      description?: string;
+      description: string | null;
+    };
+    UpdateChannelRequestFieldDto: {
+      name: string;
+      key: string;
+      description: string | null;
+      format: components["schemas"]["FieldFormatEnum"];
+      type: components["schemas"]["FieldTypeEnum"];
+      status: components["schemas"]["FieldStatusEnum"];
+      options?: (components["schemas"]["CreateChannelRequestFieldSelectOptionDto"])[];
+      id?: number;
+    };
+    UpdateChannelFieldsRequestDto: {
       fields: (components["schemas"]["UpdateChannelRequestFieldDto"])[];
     };
-    UpdateChannelResponseDto: {
-      id: string;
-    };
-    FindFieldsResponseSelectOptionDto: {
-      id: string;
+    FindOptionByFieldIdResponseDto: {
+      id: number;
       name: string;
+      key: string;
     };
-    FindFieldsResponseDto: {
-      id: string;
-      /** @enum {string} */
-      type: "text" | "keyword" | "number" | "boolean" | "select" | "date";
+    CreateOptionRequestDto: {
       name: string;
-      description: string;
-      isAdmin: boolean;
-      isDisabled: boolean;
-      order: number;
-      options: (components["schemas"]["FindFieldsResponseSelectOptionDto"])[];
+      key: string;
+    };
+    CreateOptionResponseDto: {
+      id: number;
     };
     FindFeedbacksByChannelIdRequestDto: {
       /** @default 10 */
@@ -331,10 +581,16 @@ export interface components {
       /** @default 1 */
       page?: number;
       query?: Record<string, never>;
+      sort?: Record<string, never>;
     };
+    Feedback: Record<string, never>;
     FindFeedbacksByChannelIdResponseDto: {
-      items: (Record<string, never>)[];
-      total: number;
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: (components["schemas"]["Feedback"])[];
+    };
+    AddIssueResponseDto: {
+      issueId: number;
+      feedbackId: number;
     };
     ExportFeedbacksRequestDto: {
       /** @default 10 */
@@ -342,20 +598,72 @@ export interface components {
       /** @default 1 */
       page?: number;
       query?: Record<string, never>;
+      sort?: Record<string, never>;
       type?: string;
     };
-    UpsertFeedbackItemRequestDto: {
-      value: Record<string, never>;
+    DeleteFeedbacksRequestDto: {
+      feedbackIds: (number)[];
     };
-    FindOptionByFieldIdResponseDto: {
-      id: string;
+    CreateIssueRequestDto: {
       name: string;
     };
-    CreateOptionRequestDto: {
-      name: string;
+    CreateIssueResponseDto: {
+      id: number;
     };
-    CreateOptionResponseDto: {
-      id: string;
+    FindIssueByIdResponseDto: {
+      id: number;
+      name: string;
+      description: string;
+      status: string;
+      externalIssueId: string;
+      feedbackCount: number;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    FindIssuesByProjectIdRequestDto: {
+      /** @default 10 */
+      limit?: number;
+      /** @default 1 */
+      page?: number;
+      query?: Record<string, never>;
+      sort?: Record<string, never>;
+    };
+    FindIssuesByProjectIdResponseDto: {
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: (components["schemas"]["FindIssueByIdResponseDto"])[];
+    };
+    UpdateIssueRequestDto: {
+      name: string;
+      description: string | null;
+      status?: string;
+      externalIssueId?: string;
+    };
+    DeleteIssuesRequestDto: {
+      issueIds: (number)[];
+    };
+    CreateIssueTrackerRequestDto: {
+      data: Record<string, never>;
+    };
+    CreateIssueTrackerResponseDto: {
+      id: number;
+      data: Record<string, never>;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    FindIssueTrackerResponseDto: {
+      id: number;
+      data: Record<string, never>;
+    };
+    UpdateIssueTrackerRequestDto: {
+      data: Record<string, never>;
+    };
+    UpdateIssueTrackerResponseDto: {
+      id: number;
+      data: Record<string, never>;
+      /** Format: date-time */
+      createdAt: string;
     };
   };
   responses: never;
@@ -372,198 +680,6 @@ export interface operations {
   PrometheusController_index: {
     responses: {
       200: never;
-    };
-  };
-  RoleController_getAllRole: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetAllRoleResponseDto"];
-        };
-      };
-    };
-  };
-  RoleController_createRole: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateRoleRequestDto"];
-      };
-    };
-    responses: {
-      201: never;
-    };
-  };
-  RoleController_getRoleById: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetRoleByIdResponseDto"];
-        };
-      };
-    };
-  };
-  RoleController_updateRole: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateRoleRequestDto"];
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  RoleController_deleteRole: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: never;
-    };
-  };
-  TenantController_get: {
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetTenantResponseDto"];
-        };
-      };
-    };
-  };
-  TenantController_update: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateTenantRequestDto"];
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  TenantController_setup: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["SetupTenantRequestDto"];
-      };
-    };
-    responses: {
-      201: never;
-    };
-  };
-  UserController_getAllUsers: {
-    parameters: {
-      query: {
-        limit?: number;
-        page?: number;
-        keyword?: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetAllUserResponseDto"];
-        };
-      };
-    };
-  };
-  UserController_deleteUsers: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["DeleteUsersRequestDto"];
-      };
-    };
-    responses: {
-      200: never;
-    };
-  };
-  UserController_getUser: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["UserDto"];
-        };
-      };
-    };
-  };
-  UserController_deleteUser: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    responses: {
-      200: never;
-    };
-  };
-  UserController_updateRole: {
-    parameters: {
-      path: {
-        id: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateUserRoleRequestDto"];
-      };
-    };
-    responses: {
-      204: never;
-    };
-  };
-  UserController_inviteUser: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UserInvitationRequestDto"];
-      };
-    };
-    responses: {
-      201: never;
-    };
-  };
-  UserController_requestResetPassword: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ResetPasswordMailingRequestDto"];
-      };
-    };
-    responses: {
-      201: never;
-    };
-  };
-  UserController_resetPassword: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ResetPasswordRequestDto"];
-      };
-    };
-    responses: {
-      201: never;
-    };
-  };
-  UserController_changePassword: {
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ChangePasswordRequestDto"];
-      };
-    };
-    responses: {
-      201: never;
     };
   };
   AuthController_sendCode: {
@@ -610,6 +726,16 @@ export interface operations {
       201: never;
     };
   };
+  AuthController_signUpOAuthUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["OAuthUserSignUpRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
   AuthController_signInEmail: {
     requestBody: {
       content: {
@@ -624,13 +750,18 @@ export interface operations {
       };
     };
   };
-  AuthController_googleLogin: {
+  AuthController_redirectToLoginURL: {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["SignInResponseDto"];
+          "application/json": components["schemas"]["OAuthLoginUrlResponseDto"];
         };
       };
+    };
+  };
+  AuthController_handleCallback: {
+    responses: {
+      200: never;
     };
   };
   AuthController_refreshToken: {
@@ -642,12 +773,360 @@ export interface operations {
       };
     };
   };
-  ProjectController_findAll: {
+  UserController_getAllUsers: {
     parameters: {
-      query: {
+      query?: {
         limit?: number;
         page?: number;
-        keyword?: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllUserResponseDto"];
+        };
+      };
+    };
+  };
+  UserController_deleteUsers: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteUsersRequestDto"];
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  UserController_searchUsers: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GetAllUsersRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllUserResponseDto"];
+        };
+      };
+    };
+  };
+  UserController_getUser: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UserDto"];
+        };
+      };
+    };
+  };
+  UserController_updateUser: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateUserRequestDto"];
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  UserController_deleteUser: {
+    parameters: {
+      path: {
+        id: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  UserController_getRoles: {
+    parameters: {
+      path: {
+        userId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetRolesByIdResponseDto"];
+        };
+      };
+    };
+  };
+  UserController_inviteUser: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UserInvitationRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  UserController_requestResetPassword: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResetPasswordMailingRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  UserController_resetPassword: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResetPasswordRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  UserController_changePassword: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ChangePasswordRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  TenantController_get: {
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetTenantResponseDto"];
+        };
+      };
+    };
+  };
+  TenantController_update: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateTenantRequestDto"];
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  TenantController_setup: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SetupTenantRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  TenantController_countFeedbacks: {
+    parameters: {
+      path: {
+        tenantId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CountFeedbacksByTenantIdResponseDto"];
+        };
+      };
+    };
+  };
+  RoleController_getAllRolesByProjectId: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllRoleResponseDto"];
+        };
+      };
+    };
+  };
+  RoleController_createRole: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateRoleRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  RoleController_updateRole: {
+    parameters: {
+      path: {
+        projectId: number;
+        roleId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateRoleRequestDto"];
+      };
+    };
+    responses: {
+      204: never;
+    };
+  };
+  RoleController_deleteRole: {
+    parameters: {
+      path: {
+        roleId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  MemberController_getAllRolesByProjectId: {
+    parameters: {
+      query: {
+        createdAt: string;
+      };
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetAllMemberResponseDto"];
+        };
+      };
+    };
+  };
+  MemberController_create: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateMemberRequestDto"];
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  MemberController_update: {
+    parameters: {
+      path: {
+        memberId: number;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateMemberRequestDto"];
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  MemberController_delete: {
+    parameters: {
+      path: {
+        memberId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  ApiKeyController_findAll: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindApiKeysResponseDto"];
+        };
+      };
+    };
+  };
+  ApiKeyController_create: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateApiKeyResponseDto"];
+        };
+      };
+    };
+  };
+  ApiKeyController_softDelete: {
+    parameters: {
+      path: {
+        apiKeyId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  ApiKeyController_recover: {
+    parameters: {
+      path: {
+        apiKeyId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  ApiKeyController_delete: {
+    parameters: {
+      path: {
+        apiKeyId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  ProjectController_findAll: {
+    parameters: {
+      query?: {
+        limit?: number;
+        page?: number;
+        searchText?: string;
       };
     };
     responses: {
@@ -675,7 +1154,7 @@ export interface operations {
   ProjectController_findOne: {
     parameters: {
       path: {
-        id: string;
+        projectId: number;
       };
     };
     responses: {
@@ -689,7 +1168,7 @@ export interface operations {
   ProjectController_updateOne: {
     parameters: {
       path: {
-        id: string;
+        projectId: number;
       };
     };
     requestBody: {
@@ -705,15 +1184,53 @@ export interface operations {
       };
     };
   };
+  ProjectController_delete: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  ProjectController_countFeedbacks: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CountFeedbacksByIdResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_countIssues: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CountIssuesByIdResponseDto"];
+        };
+      };
+    };
+  };
   ChannelController_findAllByProjectId: {
     parameters: {
-      query: {
+      query?: {
         limit?: number;
         page?: number;
-        keyword?: string;
+        searchText?: string;
       };
       path: {
-        projectId: string;
+        projectId: number;
       };
     };
     responses: {
@@ -727,7 +1244,7 @@ export interface operations {
   ChannelController_create: {
     parameters: {
       path: {
-        projectId: string;
+        projectId: number;
       };
     };
     requestBody: {
@@ -746,7 +1263,8 @@ export interface operations {
   ChannelController_findOne: {
     parameters: {
       path: {
-        id: string;
+        channelId: number;
+        projectId: number;
       };
     };
     responses: {
@@ -757,10 +1275,22 @@ export interface operations {
       };
     };
   };
+  ChannelController_delete: {
+    parameters: {
+      path: {
+        channelId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
   ChannelController_updateOne: {
     parameters: {
       path: {
-        id: string;
+        channelId: number;
+        projectId: number;
       };
     };
     requestBody: {
@@ -769,23 +1299,54 @@ export interface operations {
       };
     };
     responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["UpdateChannelResponseDto"];
-        };
-      };
+      200: never;
     };
   };
-  FieldController_findByChannelId: {
+  ChannelController_updateFields: {
     parameters: {
       path: {
-        channelId: string;
+        channelId: number;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateChannelFieldsRequestDto"];
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  OptionController_getOptions: {
+    parameters: {
+      path: {
+        fieldId: number;
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": (components["schemas"]["FindFieldsResponseDto"])[];
+          "application/json": (components["schemas"]["FindOptionByFieldIdResponseDto"])[];
+        };
+      };
+    };
+  };
+  OptionController_createOption: {
+    parameters: {
+      path: {
+        fieldId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateOptionRequestDto"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateOptionResponseDto"];
         };
       };
     };
@@ -793,17 +1354,35 @@ export interface operations {
   FeedbackController_create: {
     parameters: {
       path: {
-        channelId: string;
+        projectId: number;
+        channelId: number;
       };
     };
     responses: {
       201: never;
     };
   };
+  FeedbackController_deleteMany: {
+    parameters: {
+      path: {
+        channelId: number;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["DeleteFeedbacksRequestDto"];
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
   FeedbackController_findByChannelId: {
     parameters: {
       path: {
-        channelId: string;
+        channelId: number;
+        projectId: number;
       };
     };
     requestBody: {
@@ -819,10 +1398,45 @@ export interface operations {
       };
     };
   };
+  FeedbackController_addIssue: {
+    parameters: {
+      path: {
+        channelId: number;
+        feedbackId: number;
+        issueId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AddIssueResponseDto"];
+        };
+      };
+    };
+  };
+  FeedbackController_removeIssue: {
+    parameters: {
+      path: {
+        channelId: number;
+        feedbackId: number;
+        issueId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["AddIssueResponseDto"];
+        };
+      };
+    };
+  };
   FeedbackController_exportFeedbacks: {
     parameters: {
       path: {
-        channelId: string;
+        channelId: number;
+        projectId: number;
       };
     };
     requestBody: {
@@ -834,52 +1448,270 @@ export interface operations {
       201: never;
     };
   };
-  FeedbackController_upsertFeedbackItem: {
+  FeedbackController_updateFeedback: {
     parameters: {
       path: {
-        channelId: string;
-        feedbackId: string;
-        fieldId: string;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpsertFeedbackItemRequestDto"];
+        channelId: number;
+        feedbackId: number;
+        projectId: number;
       };
     };
     responses: {
       200: never;
     };
   };
-  OptionController_getOptions: {
+  IssueController_create: {
     parameters: {
       path: {
-        fieldId: string;
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateIssueRequestDto"];
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": (components["schemas"]["FindOptionByFieldIdResponseDto"])[];
+          "application/json": components["schemas"]["CreateIssueResponseDto"];
         };
       };
     };
   };
-  OptionController_creaetOption: {
+  IssueController_deleteMany: {
     parameters: {
       path: {
-        fieldId: string;
+        projectId: number;
       };
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["CreateOptionRequestDto"];
+        "application/json": components["schemas"]["DeleteIssuesRequestDto"];
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  IssueController_findById: {
+    parameters: {
+      path: {
+        issueId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": (components["schemas"]["FindIssueByIdResponseDto"])[];
+        };
+      };
+    };
+  };
+  IssueController_update: {
+    parameters: {
+      path: {
+        projectId: number;
+        issueId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateIssueRequestDto"];
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  IssueController_delete: {
+    parameters: {
+      path: {
+        issueId: number;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: never;
+    };
+  };
+  IssueController_findAllByProjectId: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["FindIssuesByProjectIdRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindIssuesByProjectIdResponseDto"];
+        };
+      };
+    };
+  };
+  HealthController_check: {
+    responses: {
+      /** @description The Health Check is successful */
+      200: {
+        content: {
+          "application/json": {
+            /** @example ok */
+            status?: string;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   }
+             * }
+             */
+            info?: ({
+              [key: string]: ({
+                status?: string;
+                [key: string]: string | undefined;
+              }) | undefined;
+            }) | null;
+            /** @example {} */
+            error?: ({
+              [key: string]: ({
+                status?: string;
+                [key: string]: string | undefined;
+              }) | undefined;
+            }) | null;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   }
+             * }
+             */
+            details?: {
+              [key: string]: ({
+                status?: string;
+                [key: string]: string | undefined;
+              }) | undefined;
+            };
+          };
+        };
+      };
+      /** @description The Health Check is not successful */
+      503: {
+        content: {
+          "application/json": {
+            /** @example error */
+            status?: string;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   }
+             * }
+             */
+            info?: ({
+              [key: string]: ({
+                status?: string;
+                [key: string]: string | undefined;
+              }) | undefined;
+            }) | null;
+            /**
+             * @example {
+             *   "redis": {
+             *     "status": "down",
+             *     "message": "Could not connect"
+             *   }
+             * }
+             */
+            error?: ({
+              [key: string]: ({
+                status?: string;
+                [key: string]: string | undefined;
+              }) | undefined;
+            }) | null;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   },
+             *   "redis": {
+             *     "status": "down",
+             *     "message": "Could not connect"
+             *   }
+             * }
+             */
+            details?: {
+              [key: string]: ({
+                status?: string;
+                [key: string]: string | undefined;
+              }) | undefined;
+            };
+          };
+        };
+      };
+    };
+  };
+  MigrationController_createOption: {
+    parameters: {
+      path: {
+        channelId: number;
+      };
+    };
+    responses: {
+      201: never;
+    };
+  };
+  IssueTrackerController_findOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_updateOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateIssueTrackerRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_create: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateIssueTrackerRequestDto"];
       };
     };
     responses: {
       201: {
         content: {
-          "application/json": components["schemas"]["CreateOptionResponseDto"];
+          "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
         };
       };
     };

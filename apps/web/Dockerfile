@@ -41,9 +41,15 @@ RUN yarn turbo run build --filter=web...
 FROM node:18-alpine AS runner
 WORKDIR /app
 
+# install usermod and change node user to 1001
+RUN echo http://dl-2.alpinelinux.org/alpine/edge/community/ >> /etc/apk/repositories
+RUN apk --no-cache add shadow
+RUN groupmod -g 1001 node \
+  && usermod -u 1001 -g 1001 node
+
 # Don't run production as root
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN addgroup --system --gid 3000 nodejs
+RUN adduser --system -G nodejs --uid 1000 nextjs -D
 USER nextjs
 
 COPY --from=installer /app/apps/web/next.config.js .

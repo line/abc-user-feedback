@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type {
-  OAIMethodPathKeys,
-  OAIParameters,
-  OAIResponse,
-} from '@/types/openapi.type';
 import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import type { O } from 'ts-toolbelt';
 
 import client from '@/libs/client';
 import { IFetchError } from '@/types/fetch-error.type';
+import type {
+  OAIMethodPathKeys,
+  OAIParameters,
+  OAIResponse,
+} from '@/types/openapi.type';
 import { getRequestUrl } from '@/utils/path-parsing';
 
 export default function useOAIQuery<

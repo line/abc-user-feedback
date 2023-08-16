@@ -1,0 +1,10 @@
+@import 'tailwindcss/utilities';
+
+@import './button.css';
+@import './icon-button.css';
+@import './checkbox.css';
+@import './input.css';
+@import './table.css';
+@import './typography.css';
+@import './radio.css';
+@import './toggle.css';

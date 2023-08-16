@@ -14,4 +14,4 @@
  * under the License.
  */
 export { SetupTenantRequestDto } from './setup-tenant-request.dto';
-export { UpdateTenantRequestDto } from './update-service-request.dto';
+export { UpdateTenantRequestDto } from './update-tenant-request.dto';

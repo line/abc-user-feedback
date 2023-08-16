@@ -16,57 +16,87 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { ClsModule } from 'nestjs-cls';
+import { LoggerModule } from 'nestjs-pino';
 
 import { appConfig, appConfigSchema } from './configs/app.config';
-import {
-  elasticsearchConfig,
-  elasticsearchSchema,
-} from './configs/elasticsearch.config';
 import { jwtConfig, jwtConfigSchema } from './configs/jwt.config';
 import {
-  ElasticsearchConfigModule,
   MailerConfigModule,
+  OpensearchConfigModule,
   TypeOrmConfigModule,
 } from './configs/modules';
 import { mySqlConfigSchema, mysqlConfig } from './configs/mysql.config';
+import {
+  opensearchConfig,
+  opensearchSchema,
+} from './configs/opensearch.config';
 import { smtpConfig, smtpConfigSchema } from './configs/smtp.config';
 import { AuthModule } from './domains/auth/auth.module';
+import { ChannelModule } from './domains/channel/channel/channel.module';
+import { FieldModule } from './domains/channel/field/field.module';
+import { OptionModule } from './domains/channel/option/option.module';
 import { FeedbackModule } from './domains/feedback/feedback.module';
-import { RoleModule } from './domains/role/role.module';
+import { HealthModule } from './domains/health/health.module';
+import { HistoryModule } from './domains/history/history.module';
+import { MigrationModule } from './domains/migration/migration.module';
+import { ApiKeyModule } from './domains/project/api-key/api-key.module';
+import { IssueTrackerModule } from './domains/project/issue-tracker/issue-tracker.module';
+import { IssueModule } from './domains/project/issue/issue.module';
+import { MemberModule } from './domains/project/member/member.module';
+import { ProjectModule } from './domains/project/project/project.module';
+import { RoleModule } from './domains/project/role/role.module';
 import { TenantModule } from './domains/tenant/tenant.module';
 import { UserModule } from './domains/user/user.module';
 
 const domainModules = [
+  AuthModule,
+  ChannelModule,
+  FieldModule,
+  OptionModule,
+  FeedbackModule,
+  HealthModule,
+  MigrationModule,
+  ApiKeyModule,
+  IssueTrackerModule,
+  IssueModule,
+  ProjectModule,
   RoleModule,
   TenantModule,
   UserModule,
-  AuthModule,
-  FeedbackModule,
+  MemberModule,
+  HistoryModule,
 ];
 
 @Module({
   imports: [
     TypeOrmConfigModule,
-    ElasticsearchConfigModule,
+    OpensearchConfigModule,
     MailerConfigModule,
     PrometheusModule.register(),
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        appConfig,
-        elasticsearchConfig,
-        smtpConfig,
-        jwtConfig,
-        mysqlConfig,
-      ],
+      load: [appConfig, opensearchConfig, smtpConfig, jwtConfig, mysqlConfig],
       validate: (config) => ({
         ...appConfigSchema.validateSync(config),
-        ...elasticsearchSchema.validateSync(config),
+        ...opensearchSchema.validateSync(config),
         ...smtpConfigSchema.validateSync(config),
         ...jwtConfigSchema.validateSync(config),
         ...mySqlConfigSchema.validateSync(config),
       }),
       validationOptions: { abortEarly: true },
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        transport: { target: 'pino-pretty', options: { singleLine: true } },
+        autoLogging: {
+          ignore: (req: any) => req.originalUrl === '/api/health',
+        },
+      },
+    }),
+    ClsModule.forRoot({
+      global: true,
+      middleware: { mount: true },
     }),
     ...domainModules,
   ],

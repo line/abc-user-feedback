@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -23,6 +22,10 @@ import { CodeModule } from '@/shared/code/code.module';
 import { MailingModule } from '@/shared/mailing/mailing.module';
 import { ConfigServiceType } from '@/types/config-service.type';
 
+import { ApiKeyModule } from '../project/api-key/api-key.module';
+import { MemberModule } from '../project/member/member.module';
+import { RoleModule } from '../project/role/role.module';
+import { TenantModule } from '../tenant/tenant.module';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -32,11 +35,15 @@ import { LocalStrategy } from './strategies/local.strategy';
 @Module({
   imports: [
     CodeModule,
-    HttpModule,
     UserModule,
     PassportModule,
     MailingModule,
+    ApiKeyModule,
+    TenantModule,
+    RoleModule,
+    MemberModule,
     JwtModule.registerAsync({
+      global: true,
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService<ConfigServiceType>) => {
@@ -47,5 +54,6 @@ import { LocalStrategy } from './strategies/local.strategy';
   ],
   providers: [AuthService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
+  exports: [AuthService],
 })
 export class AuthModule {}

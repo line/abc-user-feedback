@@ -13,28 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  Button,
-  Flex,
-  HStack,
-  Heading,
-  Input,
-  useToast,
-} from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { GetStaticProps, NextPage } from 'next';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Icon, TextInput, toast } from '@ufb/ui';
+import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { z } from 'zod';
 
-import { Card, CenterTemplate, Header } from '@/components';
+import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { PATH } from '@/constants/path';
-import { useToastDefaultOption } from '@/constants/toast-default-option';
-import { useOAIMuataion } from '@/hooks';
+import { Path } from '@/constants/path';
+import { useOAIMutation } from '@/hooks';
 
 import { NextPageWithLayout } from '../_app';
 
@@ -44,60 +36,88 @@ interface IForm {
 const defaultValues: IForm = {
   email: '',
 };
-const schema: yup.SchemaOf<IForm> = yup.object().shape({
-  email: yup.string().email().required(),
+
+const schema = z.object({
+  email: z.string().email(),
 });
 
 const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
   const router = useRouter();
-  const toast = useToast(useToastDefaultOption);
 
-  const { register, handleSubmit } = useForm({
-    resolver: yupResolver(schema),
+  const { register, handleSubmit, formState, setError } = useForm({
+    resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const { mutate, status } = useOAIMuataion({
+  const { mutate, isLoading } = useOAIMutation({
     method: 'post',
     path: '/api/users/password/reset/code',
+    queryOptions: {
+      async onSuccess() {
+        toast.positive({ title: 'Success' });
+        router.push(Path.SIGN_IN);
+      },
+      onError(error) {
+        toast.negative({ title: error.message });
+        setError('email', { message: error.message });
+      },
+    },
   });
 
-  useEffect(() => {
-    if (status === 'success') {
-      toast({ title: '이메일을 확인해주세요', status });
-      router.push(PATH.AUTH.SIGN_IN);
-    }
-  }, [status]);
-
+  const onSubmit = (data: IForm) => mutate(data);
   return (
-    <Card sx={{ width: '100%', maxWidth: '400px', p: 2 }}>
-      <Flex
-        flexDirection="column"
-        as="form"
-        gap={6}
-        onSubmit={handleSubmit((data) => mutate(data))}
-      >
-        <Heading size="lg">{t('title.resetPassword')}</Heading>
-        <Input
-          type="email"
-          placeholder={t('input.placeholder.email')}
-          {...register('email')}
-        />
-        <HStack justifyContent="space-between">
-          <Button variant="link" onClick={() => router.push(PATH.AUTH.SIGN_IN)}>
+    <div className="w-[360px] m-auto">
+      <div className="mb-12">
+        <div className="flex gap-0.5 mb-2">
+          <Image
+            src="/assets/images/logo.svg"
+            alt="logo"
+            width={12}
+            height={12}
+          />
+          <Icon name="Title" className="w-[62px] h-[12px]" />
+        </div>
+        <p className="font-24-bold">{t('auth.reset-password.title')}</p>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-4 mb-12">
+          <TextInput
+            type="email"
+            label="Email"
+            placeholder={t('input.placeholder.email')}
+            isSubmitted={formState.isSubmitted}
+            isSubmitting={formState.isSubmitting}
+            isValid={!formState.errors.email}
+            hint={formState.errors.email?.message}
+            {...register('email')}
+            required
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={!formState.isValid || isLoading}
+          >
+            {t('auth.reset-password.button.send-email')}
+          </button>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={router.back}
+          >
             {t('button.back')}
-          </Button>
-          <Button type="submit">{t('button.sendEmail')}</Button>
-        </HStack>
-      </Flex>
-    </Card>
+          </button>
+        </div>
+      </form>
+    </div>
   );
 };
 
-ResetPasswordPage.getLayout = function getLayout(page: ReactElement) {
-  return <CenterTemplate>{page}</CenterTemplate>;
+ResetPasswordPage.getLayout = function getLayout(page) {
+  return <AuthTemplate>{page}</AuthTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

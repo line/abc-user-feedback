@@ -14,14 +14,14 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance } from 'class-transformer';
 
-import { PermissionEnum } from '@/domains/role/permission.enum';
+import { SignUpMethodEnum, UserTypeEnum } from '../entities/enums';
 
 export class UserDto {
   @Expose()
   @ApiProperty()
-  id: string;
+  id: number;
 
   @Expose()
   @ApiProperty()
@@ -29,13 +29,19 @@ export class UserDto {
 
   @Expose()
   @ApiProperty()
-  @Transform(({ obj }) => obj.role?.name ?? '')
-  roleName: string;
+  name: string;
 
   @Expose()
-  @ApiProperty({ isArray: true, enum: PermissionEnum })
-  @Transform(({ obj }) => obj.role?.permissions ?? [])
-  permissions: PermissionEnum[];
+  @ApiProperty({ nullable: true })
+  department: string | null;
+
+  @Expose()
+  @ApiProperty({ enum: UserTypeEnum })
+  type: UserTypeEnum;
+
+  @Expose()
+  @ApiProperty({ enum: SignUpMethodEnum })
+  signUpMethod: SignUpMethodEnum;
 
   public static transform(params: Partial<UserDto>): UserDto {
     return plainToInstance(UserDto, params, {

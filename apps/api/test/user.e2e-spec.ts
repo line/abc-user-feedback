@@ -16,14 +16,14 @@
 import { faker } from '@faker-js/faker';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import request from 'supertest';
 import { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/auth/auth.service';
-import { OWNER_ROLE } from '@/domains/role/role.constant';
-import { RoleEntity } from '@/domains/role/role.entity';
+import { RoleEntity } from '@/domains/project/role/role.entity';
 import { UserStateEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';
 import { HttpStatusCode } from '@/types/http-status';
@@ -52,7 +52,7 @@ describe('AppController (e2e)', () => {
     );
     await app.init();
 
-    dataSource = module.get(DataSource);
+    dataSource = module.get(getDataSourceToken());
     userRepo = dataSource.getRepository(UserEntity);
     roleRepo = dataSource.getRepository(RoleEntity);
     authService = module.get(AuthService);
@@ -70,7 +70,6 @@ describe('AppController (e2e)', () => {
 
   beforeEach(async () => {
     await clearEntities([userRepo, roleRepo]);
-    const role = await roleRepo.save(OWNER_ROLE);
 
     const length = faker.datatype.number({ min: 20, max: 30 });
 
@@ -80,7 +79,6 @@ describe('AppController (e2e)', () => {
           email: faker.internet.email(),
           state: getRandomEnumValue(UserStateEnum),
           hashPassword: faker.internet.password(),
-          role,
         })),
       )
     ).sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
@@ -97,10 +95,9 @@ describe('AppController (e2e)', () => {
       const expectUsers = userEntities
         .concat(ownerUser)
         .sort((a, b) => dayjs(b.createdAt).diff(a.createdAt))
-        .map(({ id, email, role }) => ({
+        .map(({ id, email }) => ({
           id,
           email,
-          roleName: role.name,
         }))
         .slice(0, 10);
 
@@ -135,10 +132,9 @@ describe('AppController (e2e)', () => {
       const expectUsers = userEntities
         .concat(ownerUser)
         .sort((a, b) => dayjs(b.createdAt).diff(a.createdAt))
-        .map(({ id, email, role }) => ({
+        .map(({ id, email }) => ({
           id,
           email,
-          roleName: role.name,
         }))
         .slice((page - 1) * limit, page * limit);
 
@@ -160,9 +156,7 @@ describe('AppController (e2e)', () => {
 
   describe('/users (DELETE)', () => {
     it('positive case', async () => {
-      const ids = faker.helpers
-        .arrayElements(userEntities)
-        .map((v) => v.id.toString());
+      const ids = faker.helpers.arrayElements(userEntities).map((v) => v.id);
 
       await request(app.getHttpServer())
         .delete(`/users`)
@@ -193,7 +187,6 @@ describe('AppController (e2e)', () => {
         .expect(({ body }) => {
           expect(body.id).toEqual(ownerUser.id);
           expect(body.email).toEqual(ownerUser.email);
-          expect(body.roleName).toEqual(ownerUser.role.name);
         });
     });
     it('', async () => {
@@ -215,7 +208,7 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthorization', async () => {
       return request(app.getHttpServer())
-        .delete(`/users/${faker.datatype.uuid()}`)
+        .delete(`/users/${faker.datatype.number()}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -237,14 +230,7 @@ describe('AppController (e2e)', () => {
         .put(`/users/${ownerUser.id}/role`)
         .set('Authorization', `Bearer ${accessToken}`)
         .send({ roleId: role.id })
-        .expect(HttpStatusCode.NO_CONTENT)
-        .then(async () => {
-          const result = await userRepo.findOne({
-            where: { id: ownerUser.id },
-            relations: { role: true },
-          });
-          expect(result.role.id).toEqual(role.id);
-        });
+        .expect(HttpStatusCode.NO_CONTENT);
     });
     it('Unauthroized', async () => {
       const role = await roleRepo.save({

@@ -18,7 +18,7 @@ const path = require('path');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   i18n,
   output: 'standalone',
@@ -28,6 +28,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  transpilePackages: ['@ufb/ui'],
 };
 
 module.exports = nextConfig;

@@ -15,23 +15,18 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
-import {
-  TestConfigs,
-  clearEntities,
-  getMockProvider,
-} from '@/utils/test-utils';
+import { mockRepository } from '@/utils/test-utils';
 
+import { FeedbackEntity } from '../feedback/feedback.entity';
+import { UserEntity } from '../user/entities/user.entity';
 import {
-  GUEST_ROLE,
-  OWNER_ROLE,
-  OWNER_ROLE_DEFAULT_ID,
-} from '../role/role.constant';
-import { RoleEntity } from '../role/role.entity';
-import { RoleService } from '../role/role.service';
-import { SetupTenantDto, UpdateTenantDto } from './dtos';
+  FeedbackCountByTenantIdDto,
+  SetupTenantDto,
+  UpdateTenantDto,
+} from './dtos';
 import {
   TenantAlreadyExistsException,
   TenantNotFoundException,
@@ -39,162 +34,146 @@ import {
 import { TenantEntity } from './tenant.entity';
 import { TenantService } from './tenant.service';
 
-describe('tenant service', () => {
-  let tenantService: TenantService;
+export const TenantServiceProviders = [
+  TenantService,
+  {
+    provide: getRepositoryToken(TenantEntity),
+    useValue: mockRepository(),
+  },
+  {
+    provide: getRepositoryToken(UserEntity),
+    useValue: mockRepository(),
+  },
+  {
+    provide: getRepositoryToken(FeedbackEntity),
+    useValue: mockRepository(),
+  },
+];
 
-  let dataSource: DataSource;
+describe('TenantService', () => {
+  let tenantService: TenantService;
   let tenantRepo: Repository<TenantEntity>;
-  let roleRepo: Repository<RoleEntity>;
+  let userRepo: Repository<UserEntity>;
+  let feedbackRepo: Repository<FeedbackEntity>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-        ...TestConfigs,
-        TypeOrmModule.forFeature([TenantEntity, RoleEntity]),
-      ],
-      providers: [TenantService, getMockProvider(RoleService, MockRoleService)],
+      providers: TenantServiceProviders,
     }).compile();
     tenantService = module.get(TenantService);
-
-    dataSource = module.get(DataSource);
-    tenantRepo = dataSource.getRepository(TenantEntity);
-    roleRepo = dataSource.getRepository(RoleEntity);
+    tenantRepo = module.get(getRepositoryToken(TenantEntity));
+    userRepo = module.get(getRepositoryToken(UserEntity));
+    feedbackRepo = module.get(getRepositoryToken(FeedbackEntity));
   });
 
-  afterEach(async () => {
-    await dataSource.destroy();
-  });
-
-  beforeEach(async () => {
-    await clearEntities([tenantRepo]);
-    await roleRepo.save(OWNER_ROLE);
-    await roleRepo.save(GUEST_ROLE);
-  });
-
-  describe('create tenant', () => {
-    it('positive case', async () => {
+  describe('create', () => {
+    it('creation succeeds with valid data', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [];
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
 
       await tenantService.create(dto);
 
-      const tenants = await tenantRepo.find();
-      expect(tenants).toHaveLength(1);
-
-      const [tenant] = tenants;
-      expect(tenant.siteName).toEqual(dto.siteName);
-      expect(tenant.isPrivate).toEqual(dto.isPrivate);
-      expect(tenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
-      expect(tenant.allowDomains).toEqual(dto.allowDomains);
+      expect(tenantRepo.find).toHaveBeenCalledTimes(1);
+      expect(tenantRepo.save).toHaveBeenCalledTimes(1);
+      expect(tenantRepo.save).toHaveBeenCalledWith(dto);
+      expect(userRepo.save).toHaveBeenCalledTimes(1);
     });
-    it('already exists', async () => {
-      await tenantRepo.save({
-        siteName: faker.datatype.string(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
-        allowDomains: [],
-      });
-
+    it('creation fails with the duplicate site name', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [];
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{} as TenantEntity]);
 
       await expect(tenantService.create(dto)).rejects.toThrow(
         TenantAlreadyExistsException,
       );
     });
   });
-  describe('update tenant', () => {
-    let tenant: TenantEntity;
-    let role = new RoleEntity();
+  describe('update', () => {
+    const dto = new UpdateTenantDto();
+    dto.siteName = faker.datatype.string();
+    dto.useEmail = faker.datatype.boolean();
+    dto.isPrivate = faker.datatype.boolean();
+    dto.isRestrictDomain = faker.datatype.boolean();
+    dto.allowDomains = [faker.datatype.string()];
+    dto.useOAuth = faker.datatype.boolean();
+    dto.oauthConfig = {
+      clientId: faker.datatype.string(),
+      clientSecret: faker.datatype.string(),
+      authCodeRequestURL: faker.datatype.string(),
+      scopeString: faker.datatype.string(),
+      accessTokenRequestURL: faker.datatype.string(),
+      userProfileRequestURL: faker.datatype.string(),
+      emailKey: faker.datatype.string(),
+      defatulLoginEnable: faker.datatype.boolean(),
+    };
 
-    beforeEach(async () => {
-      role = await roleRepo.save({
-        name: faker.datatype.string(),
-        permissions: [],
-      });
-      jest.spyOn(MockRoleService, 'findById').mockResolvedValue(role);
-
-      tenant = await tenantRepo.save({
-        siteName: faker.datatype.string(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
-        allowDomains: [],
-      });
-    });
-
-    it('positive case', async () => {
-      const dto = new UpdateTenantDto();
-      dto.id = tenant.id;
-      dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [faker.datatype.string()];
-      dto.defaultRole = { id: role.id };
+    it('update succeeds with valid data', async () => {
+      const tenantId = faker.datatype.number();
+      jest
+        .spyOn(tenantRepo, 'find')
+        .mockResolvedValue([{ id: tenantId }] as TenantEntity[]);
 
       await tenantService.update(dto);
 
-      const updatedTenant = await tenantRepo.findOne({
-        where: { id: tenant.id },
-        relations: { defaultRole: true },
-      });
-
-      expect(updatedTenant.siteName).toEqual(dto.siteName);
-      expect(updatedTenant.isPrivate).toEqual(dto.isPrivate);
-      expect(updatedTenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
-      expect(updatedTenant.allowDomains).toEqual(dto.allowDomains);
-      expect(updatedTenant.allowDomains).toEqual(dto.allowDomains);
-      expect(updatedTenant.defaultRole.id).toEqual(dto.defaultRole.id);
+      expect(tenantRepo.find).toHaveBeenCalledTimes(1);
+      expect(tenantRepo.update).toHaveBeenCalledTimes(1);
+      expect(tenantRepo.update).toHaveBeenCalledWith(
+        { id: tenantId },
+        { ...dto, id: tenantId },
+      );
     });
-    it('invalid tenant id', async () => {
-      const dto = new UpdateTenantDto();
-      dto.id = faker.datatype.uuid();
-      dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [faker.datatype.string()];
-      dto.defaultRole = { id: role.id };
+    it('update fails when there is no tenant', async () => {
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([] as TenantEntity[]);
 
       await expect(tenantService.update(dto)).rejects.toThrow(
         TenantNotFoundException,
       );
     });
   });
-  describe('find tenant by id', () => {
-    it('positive case', async () => {
-      const tenant = await tenantRepo.save({
-        siteName: faker.datatype.string(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
-        allowDomains: [],
-        defaultRole: { id: OWNER_ROLE_DEFAULT_ID },
-      });
+  describe('findOne', () => {
+    it('finding a tenant succeeds when there is a tenant', async () => {
+      const tenantId = faker.datatype.number();
+      jest
+        .spyOn(tenantRepo, 'find')
+        .mockResolvedValue([{ id: tenantId }] as TenantEntity[]);
 
-      const res = await tenantService.findOne();
-      expect(res.id).toEqual(tenant.id);
-      expect(res.siteName).toEqual(tenant.siteName);
-      expect(res.isPrivate).toEqual(tenant.isPrivate);
-      expect(res.isRestrictDomain).toEqual(tenant.isRestrictDomain);
-      expect(res.allowDomains).toEqual(tenant.allowDomains);
+      const tenant = await tenantService.findOne();
 
-      expect(res.defaultRole).toBeDefined();
-      const role = await roleRepo.findOneBy({ id: OWNER_ROLE_DEFAULT_ID });
-      expect(res.defaultRole.id).toEqual(role.id);
-      expect(res.defaultRole.name).toEqual(role.name);
-      expect(res.defaultRole.permissions).toEqual(role.permissions);
+      expect(tenantRepo.find).toHaveBeenCalledTimes(1);
+      expect(tenant).toEqual({ id: tenantId });
     });
-    it('positive case', async () => {
+    it('finding a tenant fails when there is a tenant', async () => {
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([] as TenantEntity[]);
+
       await expect(tenantService.findOne()).rejects.toThrow(
         TenantNotFoundException,
       );
     });
   });
-});
+  describe('countByTenantId', () => {
+    it('counting feedbacks by tenant id', async () => {
+      const count = faker.datatype.number();
+      const tenantId = faker.datatype.number();
+      const dto = new FeedbackCountByTenantIdDto();
+      dto.tenantId = tenantId;
+      jest.spyOn(feedbackRepo, 'count').mockResolvedValue(count);
 
-const MockRoleService = {
-  findById: jest.fn(),
-};
+      const feedbackCounts = await tenantService.countByTenantId(dto);
+
+      expect(feedbackRepo.count).toHaveBeenCalledTimes(1);
+      expect(feedbackRepo.count).toHaveBeenCalledWith({
+        where: {
+          channel: {
+            project: {
+              tenant: {
+                id: dto.tenantId,
+              },
+            },
+          },
+        },
+      });
+      expect(feedbackCounts.total).toEqual(count);
+    });
+  });
+});

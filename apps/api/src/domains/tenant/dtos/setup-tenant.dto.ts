@@ -15,26 +15,11 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsBoolean, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class SetupTenantDto {
   @Expose()
   @ApiProperty()
   @IsString()
   siteName: string;
-
-  @Expose()
-  @ApiProperty()
-  @IsBoolean()
-  isPrivate: boolean;
-
-  @Expose()
-  @ApiProperty()
-  @IsBoolean()
-  isRestrictDomain: boolean;
-
-  @Expose()
-  @ApiProperty()
-  @IsString({ each: true })
-  allowDomains: string[];
 }

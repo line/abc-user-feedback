@@ -13,5 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ProjectTable } from './ProjectTable';
-export { default as ChannelTable } from './ChannelTable';
+export { default as IssueTable } from './IssueTable';
+export { default as FeedbackTable } from './FeedbackTable';

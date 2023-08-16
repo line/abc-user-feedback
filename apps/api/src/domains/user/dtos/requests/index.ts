@@ -17,6 +17,6 @@ export { DeleteUsersRequestDto } from './delete-users-request.dto';
 export { UserInvitationRequestDto } from './user-invitation-request.dto';
 export { ResetPasswordRequestDto } from './reset-password-request.dto';
 export { ChangePasswordRequestDto } from './change-password-request.dto';
-export { UpdateUserRoleRequestDto } from './update-user-role-request.dto';
 export { ResetPasswordMailingRequestDto } from './reset-password-mailing-request.dto';
-export { GetAllUserRequestDto } from './get-all-user.request.dto';
+export { GetAllUsersRequestDto } from './get-all-users-request.dto';
+export { UpdateUserRequestDto } from './update-user-request.dto';

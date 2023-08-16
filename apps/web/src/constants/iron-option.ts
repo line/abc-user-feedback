@@ -15,11 +15,11 @@
  */
 import { IronSessionOptions } from 'iron-session';
 
+import { env } from '@/env.mjs';
+
 export const ironOption: IronSessionOptions = {
   cookieName: 'user-feedback',
-  password:
-    process.env.SESSION_PASSWORD ??
-    'complex_password_at_least_32_characters_long',
+  password: env.SESSION_PASSWORD,
   cookieOptions: {
     sameSite: 'lax',
     httpOnly: true,

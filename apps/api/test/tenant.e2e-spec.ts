@@ -16,12 +16,12 @@
 import { faker } from '@faker-js/faker';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
 import { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/auth/auth.service';
-import { OWNER_ROLE_DEFAULT_ID } from '@/domains/role/role.constant';
 import {
   SetupTenantRequestDto,
   UpdateTenantRequestDto,
@@ -47,7 +47,7 @@ describe('AppController (e2e)', () => {
     );
     await app.init();
 
-    dataSource = module.get(DataSource);
+    dataSource = module.get(getDataSourceToken());
     tenantRepo = dataSource.getRepository(TenantEntity);
 
     authService = module.get(AuthService);
@@ -66,9 +66,6 @@ describe('AppController (e2e)', () => {
     it('setup', async () => {
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [];
 
       return request(app.getHttpServer())
         .post('/tenant')
@@ -93,9 +90,6 @@ describe('AppController (e2e)', () => {
       });
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [];
 
       return request(app.getHttpServer()).post('/tenant').send(dto).expect(400);
     });
@@ -109,7 +103,6 @@ describe('AppController (e2e)', () => {
         isPrivate: faker.datatype.boolean(),
         isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
-        defaultRole: { id: OWNER_ROLE_DEFAULT_ID },
       });
       const { jwt } = await signInTestUser(dataSource, authService);
       accessToken = jwt.accessToken;
@@ -117,12 +110,10 @@ describe('AppController (e2e)', () => {
     it('update', async () => {
       const dto = new UpdateTenantRequestDto();
 
-      dto.id = tenant.id;
       dto.siteName = faker.datatype.string();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
-      dto.defaultRole = { id: OWNER_ROLE_DEFAULT_ID };
 
       return request(app.getHttpServer())
         .put('/tenant')
@@ -132,13 +123,11 @@ describe('AppController (e2e)', () => {
         .then(async () => {
           const updatedTenant = await tenantRepo.findOne({
             where: { id: tenant.id },
-            relations: { defaultRole: true },
           });
           expect(updatedTenant.siteName).toEqual(dto.siteName);
           expect(updatedTenant.isPrivate).toEqual(dto.isPrivate);
           expect(updatedTenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
           expect(updatedTenant.allowDomains).toEqual(dto.allowDomains);
-          expect(updatedTenant.defaultRole.id).toEqual(dto.defaultRole.id);
         });
     });
     it('not found tenant', async () => {
@@ -146,12 +135,10 @@ describe('AppController (e2e)', () => {
 
       const dto = new UpdateTenantRequestDto();
 
-      dto.id = tenant.id;
       dto.siteName = faker.datatype.string();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
-      dto.defaultRole = { id: OWNER_ROLE_DEFAULT_ID };
 
       return request(app.getHttpServer())
         .put('/tenant')
@@ -163,12 +150,10 @@ describe('AppController (e2e)', () => {
     it('not found role', async () => {
       const dto = new UpdateTenantRequestDto();
 
-      dto.id = tenant.id;
       dto.siteName = faker.datatype.string();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
-      dto.defaultRole = { id: faker.datatype.uuid() };
 
       return request(app.getHttpServer())
         .put('/tenant')
@@ -179,12 +164,10 @@ describe('AppController (e2e)', () => {
     it('unauthorized', async () => {
       const dto = new UpdateTenantRequestDto();
 
-      dto.id = tenant.id;
       dto.siteName = faker.datatype.string();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
-      dto.defaultRole = { id: faker.datatype.uuid() };
 
       return request(app.getHttpServer())
         .put('/tenant')
@@ -196,9 +179,6 @@ describe('AppController (e2e)', () => {
     const dto = new SetupTenantRequestDto();
     beforeEach(async () => {
       dto.siteName = faker.datatype.string();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
-      dto.allowDomains = [];
 
       await request(app.getHttpServer()).post('/tenant').send(dto);
     });
@@ -209,9 +189,6 @@ describe('AppController (e2e)', () => {
         .expect(200)
         .expect(({ body }) => {
           expect(dto.siteName).toEqual(body.siteName);
-          expect(dto.isPrivate).toEqual(body.isPrivate);
-          expect(dto.isRestrictDomain).toEqual(body.isRestrictDomain);
-          expect(dto.allowDomains).toEqual(body.allowDomains);
         });
     });
   });

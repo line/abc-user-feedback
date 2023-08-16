@@ -13,34 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  Box,
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  HStack,
-  Heading,
-  Input,
-  VStack,
-  useToast,
-} from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { GetStaticProps, NextPage } from 'next';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Icon, TextInput, toast } from '@ufb/ui';
+import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { z } from 'zod';
 
-import { Card, CenterTemplate, Header } from '@/components';
+import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { PATH } from '@/constants/path';
-import { useToastDefaultOption } from '@/constants/toast-default-option';
-import { useOAIMuataion } from '@/hooks';
+import { Path } from '@/constants/path';
+import { useOAIMutation } from '@/hooks';
 
 import { NextPageWithLayout } from '../_app';
 
@@ -49,87 +36,101 @@ interface IForm {
   confirmPassword: string;
 }
 
-const schema: yup.SchemaOf<IForm> = yup.object().shape({
-  password: yup.string().required(),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Not equals to password ')
-    .required(),
-});
+const schema = z
+  .object({
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine(
+    (schema) => schema.password === schema.confirmPassword,
+    'Password not matched',
+  );
+
 const defaultValues = { password: '', confirmPassword: '' };
 
 const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const toast = useToast(useToastDefaultOption);
   const router = useRouter();
 
   const code = useMemo(() => router.query?.code as string, [router.query]);
   const email = useMemo(() => router.query?.email as string, [router.query]);
 
   const { handleSubmit, register, formState } = useForm({
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const { mutate, status } = useOAIMuataion({
+  const { mutate, isLoading } = useOAIMutation({
     method: 'post',
     path: '/api/users/password/reset',
+    queryOptions: {
+      async onSuccess() {
+        toast.positive({ title: 'Success' });
+        router.push(Path.SIGN_IN);
+      },
+      onError(error) {
+        toast.negative({ title: error.message });
+      },
+    },
   });
 
-  useEffect(() => {
-    if (status === 'success') {
-      toast({ title: 'Successfully reset password', status });
-      router.push(PATH.AUTH.SIGN_IN);
-    }
-  }, [status]);
-
-  const onSubmit = async (data: IForm) => {
-    const { password } = data;
+  const onSubmit = async ({ password }: IForm) =>
     mutate({ code, email, password });
-  };
 
   return (
-    <Card sx={{ width: '100%', maxWidth: '400px', p: 2 }}>
-      <Flex
-        flexDirection="column"
-        as="form"
-        gap={4}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Heading size="lg">{t('title.resetPassword')}</Heading>
-        <FormControl isRequired>
-          <FormLabel>{t('input.placeholder.email')}</FormLabel>
-
-          <Input type="email" value={email} disabled />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>{t('input.placeholder.password')}</FormLabel>
-          <Input type="password" isRequired {...register('password')} />
-        </FormControl>
-        <FormControl isRequired>
-          <FormLabel>{t('input.placeholder.confirmPassword')}</FormLabel>
-
-          <Input
-            type="password"
-            {...register('confirmPassword')}
-            isInvalid={!!formState.errors.confirmPassword}
-          />
-          {formState.errors.confirmPassword && (
-            <FormHelperText color="red.500">
-              {formState.errors.confirmPassword.message}
-            </FormHelperText>
-          )}
-        </FormControl>
-        <HStack justifyContent="flex-end" w="100%">
-          <Button type="submit">{t('button.setting')}</Button>
-        </HStack>
-      </Flex>
-    </Card>
+    <MainTemplate>
+      <div className="max-w-[440px] w-[100%] m-auto border border-fill-secondary rounded p-10">
+        <div className="mb-12">
+          <div className="flex gap-0.5 mb-2">
+            <Image
+              src="/assets/images/logo.svg"
+              alt="logo"
+              width={12}
+              height={12}
+            />
+            <Icon name="Title" className="w-[62px] h-[12px]" />
+          </div>
+          <p className="font-24-bold">{t('link.reset-password.title')}</p>
+        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="space-y-4 mb-12">
+            <TextInput type="email" label="Email" value={email} disabled />
+            <TextInput
+              type="password"
+              label={t('input.label.password')}
+              placeholder={t('input.placeholder.password')}
+              isSubmitted={formState.isSubmitted}
+              isSubmitting={formState.isSubmitting}
+              isValid={!formState.errors.password}
+              hint={formState.errors.password?.message}
+              {...register('password')}
+              required
+            />
+            <TextInput
+              type="password"
+              label={t('input.label.confirm-password')}
+              placeholder={t('input.placeholder.confirm-password')}
+              isSubmitted={formState.isSubmitted}
+              isSubmitting={formState.isSubmitting}
+              isValid={!formState.errors.confirmPassword}
+              hint={formState.errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+              required
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={!formState.isValid || isLoading}
+            >
+              {t('button.setting')}
+            </button>
+          </div>
+        </form>
+      </div>
+    </MainTemplate>
   );
-};
-
-ResetPasswordPage.getLayout = function getLayout(page: ReactElement) {
-  return <CenterTemplate>{page}</CenterTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

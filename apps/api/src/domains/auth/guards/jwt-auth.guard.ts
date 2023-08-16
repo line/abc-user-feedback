@@ -13,8 +13,34 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import {
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ClsService } from 'nestjs-cls';
+import { Observable } from 'rxjs';
+
+import { ClsServiceType } from '@/types/cls-service.type';
 
 @Injectable()
-export class JwtAuthGuard extends AuthGuard('jwt') {}
+export class JwtAuthGuard extends AuthGuard('jwt') {
+  constructor(private readonly clsService: ClsService<ClsServiceType>) {
+    super();
+  }
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    return super.canActivate(context);
+  }
+  handleRequest(err: any, user: any) {
+    // You can throw an exception based on either "info" or "err" arguments
+    if (err || !user) {
+      throw err || new UnauthorizedException('Invalid jwt');
+    }
+
+    this.clsService.set('userId', user.id);
+    return user;
+  }
+}

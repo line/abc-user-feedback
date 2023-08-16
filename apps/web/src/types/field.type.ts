@@ -13,28 +13,45 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const FormulaFieldTypeEnumList = ['text', 'boolean', 'number'] as const;
 
-export type FormulaFieldEnumType = (typeof FormulaFieldTypeEnumList)[number];
-
-export const FieldTypeEnumList = [
+export const PrimitiveFieldFormatEnumList = [
   'text',
   'keyword',
   'boolean',
   'number',
-  'select',
   'date',
 ] as const;
 
+export const FieldFormatEnumList = [
+  ...PrimitiveFieldFormatEnumList,
+  'select',
+  'multiSelect',
+] as const;
+
+export type PrimitiveFieldFormatEnumType =
+  (typeof PrimitiveFieldFormatEnumList)[number];
+export type FieldFormatEnumType = (typeof FieldFormatEnumList)[number];
+
+export const FieldTypeEnumList = ['DEFAULT', 'ADMIN', 'API'] as const;
 export type FieldTypeEnumType = (typeof FieldTypeEnumList)[number];
 
+export const FieldStatusEnumList = ['ACTIVE', 'INACTIVE'] as const;
+export type FieldStatusEnumType = (typeof FieldStatusEnumList)[number];
+
 export type FieldType = {
-  id: string;
+  id: number;
+  description: string | null;
+  format: FieldFormatEnumType;
   type: FieldTypeEnumType;
+  status: FieldStatusEnumType;
   name: string;
-  description: string;
-  isAdmin: boolean;
-  isDisabled: boolean;
-  order: number;
-  options?: { id?: string; name: string }[];
+  key: string;
+  createdAt: string;
+  updatedAt: string;
+  options?: OptionType[];
+};
+export type OptionType = {
+  id?: number;
+  name: string;
+  key: string;
 };

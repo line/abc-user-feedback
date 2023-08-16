@@ -1,0 +1,57 @@
+.input {
+  @apply px-[14px] rounded bg-fill-quaternary text-primary w-full box-border;
+
+  /* default size */
+  @apply py-[9.5px] font-14-regular h-10;
+
+  &-lg {
+    @apply py-3 font-16-regular h-12;
+  }
+
+  &-md {
+    @apply py-[9.5px] font-14-regular h-10;
+  }
+
+  &-sm {
+    @apply py-[7px] font-12-regular h-8;
+  }
+
+  &:focus,
+  &:active,
+  &:not(:placeholder-shown) {
+    @apply border border-fill-primary bg-fill-inverse;
+  }
+
+
+  &-error {
+    @apply border border-red-primary !important;
+  }
+
+  &-success {
+    @apply border border-blue-primary !important;
+  }
+
+  &:disabled,
+  &-disabled {
+    @apply cursor-not-allowed bg-fill-tertiary pointer-events-none border-none;
+  }
+
+
+  /* input-label */
+  &-label {
+    @apply font-12-regular text-primary inline-block;
+  }
+
+  /* input-hint */
+  &-hint {
+    @apply font-12-regular text-secondary inline-block;
+
+    &-error {
+      @apply text-red-primary;
+    }
+
+    &-success {
+      @apply text-blue-primary;
+    }
+  }
+}

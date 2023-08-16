@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeService } from '@/shared/code/code.service';
@@ -24,17 +25,18 @@ import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mai
 
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
-import { UserNotFoundException } from './exceptions';
+import { InvalidPasswordException, UserNotFoundException } from './exceptions';
 
 @Injectable()
 export class UserPasswordService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
-    private readonly resetPassworeMailingService: ResetPasswordMailingService,
+    private readonly resetPasswordMailingService: ResetPasswordMailingService,
     private readonly codeService: CodeService,
   ) {}
 
+  @Transactional()
   async sendResetPasswordMail(email: string) {
     const user = await this.userRepo.findOneBy({ email });
     if (!user) throw new UserNotFoundException();
@@ -44,14 +46,15 @@ export class UserPasswordService {
       key: email,
     });
 
-    await this.resetPassworeMailingService.send({ email, code });
+    await this.resetPasswordMailingService.send({ email, code });
   }
 
+  @Transactional()
   async resetPassword({ email, code, password }: ResetPasswordDto) {
     const user = await this.userRepo.findOneBy({ email });
     if (!user) throw new UserNotFoundException();
 
-    await this.codeService.setCodeVerified({
+    await this.codeService.verifyCode({
       type: CodeTypeEnum.RESET_PASSWORD,
       key: email,
       code,
@@ -59,10 +62,11 @@ export class UserPasswordService {
 
     await this.userRepo.update(
       { id: user.id },
-      { hashPassword: await this.createHashPassword(password) },
+      { id: user.id, hashPassword: await this.createHashPassword(password) },
     );
   }
 
+  @Transactional()
   async changePassword(dto: ChangePasswordDto) {
     const { newPassword, password, userId } = dto;
     const { hashPassword: originHashPassword } = await this.userRepo.findOneBy({
@@ -70,12 +74,12 @@ export class UserPasswordService {
     });
 
     if (!bcrypt.compareSync(password, originHashPassword)) {
-      throw new BadRequestException('Invalid original password');
+      throw new InvalidPasswordException();
     }
 
     await this.userRepo.update(
       { id: userId },
-      { hashPassword: await this.createHashPassword(newPassword) },
+      { id: userId, hashPassword: await this.createHashPassword(newPassword) },
     );
   }
 

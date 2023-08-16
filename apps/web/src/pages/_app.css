@@ -1,31 +1,71 @@
-th {
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .chip {
+    @apply font-14-bold rounded-full px-3 py-2 bg-fill-quaternary;
+
+  }
+
+  .chip-disabled {
+    @apply border text-fill-tertiary border-fill-tertiary bg-primary;
+  }
+
+  .chip-sm {
+    @apply font-10-bold rounded-full px-1.5 py-0.5 bg-fill-quaternary;
+  }
+
+
+  .loading {
     position: relative;
+    overflow: hidden;
+    @apply bg-blue-primary
+  }
+
+  .loading::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(90deg,
+        rgba(233, 233, 233, 1) 0,
+        rgba(233, 233, 233, 0.9) 50%,
+        rgba(233, 233, 233, 0.8) 100%);
+    animation: loading 1s ease-out infinite;
+    content: "";
+  }
+}
+
+@keyframes loading {
+  100% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+}
+
+body {
+  @apply font-12-regular text-primary bg-primary;
+}
+
+a {
+  cursor: pointer;
+}
+
+th {
+  position: relative;
 }
 
 /* Table resizing */
 .resizer {
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100%;
-    width: 5px;
-    background: rgba(0, 0, 0, 0.5);
-    cursor: col-resize;
-    user-select: none;
-    touch-action: none;
-}
-
-.resizer.isResizing {
-    background: blue;
-    opacity: 1;
-}
-
-@media (hover: hover) {
-    .resizer {
-        opacity: 0;
-    }
-
-    *:hover>.resizer {
-        opacity: 1;
-    }
+  position: absolute;
+  right: 0;
+  cursor: col-resize;
+  user-select: none;
+  touch-action: none;
+  width: 8px;
+  height: 100%;
+  top: 0;
 }

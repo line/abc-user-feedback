@@ -27,16 +27,18 @@ services:
     ports:
       - 4000:4000
     environment:
-      - JWT_SECRET= jwtsecretjwtsecretjwtsecret
-      - MYSQL_PRIMARY_URL= mysql://userfeedback:userfeedback@mysql:3306/userfeedback
-      - MYSQL_SECONDARY_URL= mysql://userfeedback:userfeedback@mysql:3306/userfeedback
+      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
+      - MYSQL_SECONDARY_URLS=["mysql://userfeedback:userfeedback@mysql:3306/userfeedback"]
       - SMTP_HOST=smtp4dev
       - SMTP_PORT=25
       - SMTP_SENDER=abc@feedback.user
       - SMTP_BASE_URL=http://localhost:3000
-      - ES_NODE=http://elasticsearch:9200
       - APP_PORT=4000
       - APP_ADDRESS=api
+      - AUTO_MIGRATION=true
+      - MASTER_API_KEY=MASTER_API_KEY
+      - NODE_OPTIONS="--max_old_space_size=3072"
     networks:
       - app_network
 

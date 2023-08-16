@@ -17,19 +17,29 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import axios from 'axios';
 import * as bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import dayjs from 'dayjs';
+import { ClsService } from 'nestjs-cls';
+import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+import { ClsServiceType } from '@/types/cls-service.type';
 
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
+import { ApiKeyService } from '../project/api-key/api-key.service';
+import { MemberService } from '../project/member/member.service';
+import { RoleService } from '../project/role/role.service';
+import { TenantService } from '../tenant/tenant.service';
 import { CreateUserService } from '../user/create-user.service';
 import { UserDto } from '../user/dtos';
-import { UserStateEnum } from '../user/entities/enums';
+import { SignUpMethodEnum, UserStateEnum } from '../user/entities/enums';
 import {
   UserAlreadyExistsException,
   UserNotFoundException,
@@ -40,6 +50,7 @@ import {
   SendEmailCodeDto,
   SignUpEmailUserDto,
   SignUpInvitationUserDto,
+  SignUpOauthUserDto,
   ValidateEmailUserDto,
   VerifyEmailCodeDto,
 } from './dtos';
@@ -47,17 +58,30 @@ import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 
 @Injectable()
 export class AuthService {
+  private logger = new Logger(AuthService.name);
+  private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
+  // private REDIRECT_URI =
+  //   'https://demaecan-account.line-apps-beta.com/auth/support/test/authorize-success';
   constructor(
     private readonly createUserService: CreateUserService,
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly emailVerificationMailingService: EmailVerificationMailingService,
     private readonly codeService: CodeService,
+    private readonly apiKeyService: ApiKeyService,
+    private readonly tenantService: TenantService,
+    private readonly roleService: RoleService,
+    private readonly memberService: MemberService,
+    private readonly cls: ClsService<ClsServiceType>,
   ) {}
 
   async sendEmailCode({ email }: SendEmailCodeDto) {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findByEmailAndSignUpMethod(
+      email,
+      SignUpMethodEnum.EMAIL,
+    );
     if (user) throw new UserAlreadyExistsException();
+    await this.userService.validateEmail(email);
 
     const code = await this.codeService.setCode({
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
@@ -71,7 +95,7 @@ export class AuthService {
   }
 
   async verifyEmailCode({ code, email }: VerifyEmailCodeDto) {
-    await this.codeService.setCodeVerified({
+    await this.codeService.verifyCode({
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
       key: email,
       code,
@@ -79,7 +103,10 @@ export class AuthService {
   }
 
   async validateEmailUser({ email, password }: ValidateEmailUserDto) {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.findByEmailAndSignUpMethod(
+      email,
+      SignUpMethodEnum.EMAIL,
+    );
     if (!user) throw new UserNotFoundException();
     if (!bcrypt.compareSync(password, user.hashPassword)) {
       throw new PasswordNotMatchException();
@@ -87,47 +114,62 @@ export class AuthService {
     return user;
   }
 
-  async signUpEmailUser({ email, password }: SignUpEmailUserDto) {
+  @Transactional()
+  async signUpEmailUser(dto: SignUpEmailUserDto) {
+    let isVerified: boolean;
     try {
-      const isVerified = await this.codeService.checkVerified(
+      isVerified = await this.codeService.checkVerified(
         CodeTypeEnum.EMAIL_VEIRIFICATION,
-        email,
+        dto.email,
       );
-      if (!isVerified) throw new NotVerifiedEmailException();
     } catch (error) {
       throw new BadRequestException('must request email verification');
     }
-    return await this.createUserService.createEmailUser({ email, password });
+    if (!isVerified) throw new NotVerifiedEmailException();
+
+    return await this.createUserService.createEmailUser(dto);
   }
 
+  @Transactional()
   async signUpInvitationUser(dto: SignUpInvitationUserDto) {
-    const { password, code, email } = dto;
+    const { code, ...rest } = dto;
 
-    try {
-      await this.codeService.setCodeVerified({
-        type: CodeTypeEnum.USER_INVITATION,
-        key: email,
-        code,
-      });
-    } catch (error) {
-      throw new BadRequestException('must request invitation');
-    }
+    await this.codeService.verifyCode({
+      type: CodeTypeEnum.USER_INVITATION,
+      key: dto.email,
+      code,
+    });
+
     const data = await this.codeService.getDataByCodeAndType(
       CodeTypeEnum.USER_INVITATION,
       code,
     );
-    if (!data?.roleId) {
-      throw new InternalServerErrorException('role id exception');
+
+    if (!data?.userType) {
+      throw new InternalServerErrorException('no user type');
     }
     return await this.createUserService.createInvitationUser({
-      email,
-      password,
+      ...rest,
+      type: data.userType,
       roleId: data.roleId,
     });
   }
 
+  @Transactional()
+  async signUpOAuthUser(dto: SignUpOauthUserDto) {
+    const { email, projectName, roleName } = dto;
+
+    const role = await this.roleService.findByProjectNameAndRoleName(
+      projectName,
+      roleName,
+    );
+    const user = await this.createUserService.createOAuthUser({ email });
+
+    await this.memberService.create({ roleId: role.id, userId: user.id });
+  }
+
   async signIn(user: UserDto): Promise<JwtDto> {
-    const { email, id, permissions, roleName } = user;
+    const { email, id, department, name, type } = user;
     const { state } = await this.userService.findById(id);
 
     if (state === UserStateEnum.Blocked) {
@@ -136,7 +178,7 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign(
-        { sub: id, email, permissions, roleName },
+        { sub: id, email, department, name, type },
         { expiresIn: '10m' },
       ),
       refreshToken: this.jwtService.sign(
@@ -146,8 +188,106 @@ export class AuthService {
     };
   }
 
-  async refreshToken({ id }: { id: string }): Promise<JwtDto> {
+  async refreshToken({ id }: { id: number }): Promise<JwtDto> {
     const user = await this.userService.findById(id);
     return this.signIn(UserDto.transform(user));
+  }
+
+  async validateApiKey(value: string, projectId: number) {
+    const apiKeys = await this.apiKeyService.findByProjectIdAndValue(
+      projectId,
+      value,
+    );
+
+    if (apiKeys.length === 1) return true;
+    return false;
+  }
+
+  async getOAuthLoginURL() {
+    const { useOAuth, oauthConfig } = await this.tenantService.findOne();
+
+    if (!useOAuth) {
+      throw new BadRequestException('OAuth login is disabled.');
+    }
+    if (!oauthConfig) {
+      throw new BadRequestException('OAuth Config is required.');
+    }
+
+    const params = new URLSearchParams({
+      redirect_uri: this.REDIRECT_URI,
+      client_id: oauthConfig.clientId,
+      response_type: 'code',
+      state: crypto.randomBytes(10).toString('hex'),
+      scope: oauthConfig.scopeString,
+    });
+
+    return `${oauthConfig.authCodeRequestURL}?${params}`;
+  }
+
+  private async getAccessToken(code: string) {
+    const { oauthConfig, useOAuth } = await this.tenantService.findOne();
+
+    if (!useOAuth) {
+      throw new BadRequestException('OAuth login is disabled.');
+    }
+    if (!oauthConfig) {
+      throw new BadRequestException('OAuth Config is required.');
+    }
+
+    const { accessTokenRequestURL, clientId, clientSecret } = oauthConfig;
+
+    try {
+      const { data } = await axios.post(
+        accessTokenRequestURL,
+        {
+          grant_type: 'authorization_code',
+          code,
+          redirect_uri: this.REDIRECT_URI,
+        },
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(
+              clientId + ':' + clientSecret,
+            ).toString('base64')}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+
+      return data.access_token;
+    } catch (e) {
+      this.logger.error(e);
+    }
+  }
+
+  private async getEmailByAccessToken(accessToken: string): Promise<string> {
+    const { oauthConfig } = await this.tenantService.findOne();
+
+    if (!oauthConfig) {
+      throw new BadRequestException('OAuth Config is required.');
+    }
+
+    const { data } = await axios.get(oauthConfig.userProfileRequestURL, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+    return data[oauthConfig.emailKey];
+  }
+
+  async signInByOAuth(code: string) {
+    const accessToken = await this.getAccessToken(code);
+    const email = await this.getEmailByAccessToken(accessToken);
+
+    const user = await this.userService.findByEmailAndSignUpMethod(
+      email,
+      SignUpMethodEnum.OAUTH,
+    );
+    if (user) {
+      return await this.signIn(user);
+    } else {
+      const user = await this.createUserService.createOAuthUser({ email });
+      return await this.signIn(user);
+    }
   }
 }

@@ -13,17 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column, Entity, ManyToOne, Relation } from 'typeorm';
+import { Column, Entity, OneToMany, Relation, Unique } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-import { RoleEntity } from '@/domains/role/role.entity';
+import { MemberEntity } from '@/domains/project/member/member.entity';
 
-import { UserStateEnum } from './enums';
+import { SignUpMethodEnum, UserStateEnum, UserTypeEnum } from './enums';
 
 @Entity('users')
+@Unique(['email', 'signUpMethod'])
 export class UserEntity extends CommonEntity {
-  @Column('varchar', { unique: true, nullable: true, length: 320 }) // username 64, domain 255 -> {64}@{255} = 320
+  @Column('varchar', { nullable: true, length: 320 }) // username 64, domain 255 -> {64}@{255} = 320
   email: string | null;
+
+  @Column('varchar', { nullable: true })
+  name: string;
+
+  @Column('varchar', { nullable: true })
+  department: string | null;
 
   @Column('enum', { enum: UserStateEnum, default: UserStateEnum.Active })
   state: UserStateEnum;
@@ -31,6 +38,12 @@ export class UserEntity extends CommonEntity {
   @Column('varchar', { nullable: true })
   hashPassword: string;
 
-  @ManyToOne(() => RoleEntity, (role) => role.users)
-  role: Relation<RoleEntity>;
+  @Column('enum', { enum: UserTypeEnum, default: UserTypeEnum.GENERAL })
+  type: UserTypeEnum;
+
+  @Column('enum', { enum: SignUpMethodEnum, default: SignUpMethodEnum.EMAIL })
+  signUpMethod: SignUpMethodEnum;
+
+  @OneToMany(() => MemberEntity, (member) => member.user, { cascade: true })
+  members: Relation<MemberEntity>[];
 }

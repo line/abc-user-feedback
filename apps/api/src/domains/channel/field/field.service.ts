@@ -1,0 +1,88 @@
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
+
+import { FieldFormatEnum } from '@/common/enums';
+import { OpensearchRepository } from '@/common/repositories';
+import { OS_USE } from '@/configs/opensearch.config';
+
+import { FieldEntity } from '../../channel/field/field.entity';
+import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
+import { FieldMySQLService } from './field.mysql.service';
+
+export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
+  text: 'text',
+  keyword: 'keyword',
+  number: 'integer',
+  boolean: 'boolean',
+  select: 'keyword',
+  multiSelect: 'keyword',
+  date: 'date',
+};
+
+@Injectable()
+export class FieldService {
+  constructor(
+    private readonly fieldMySQLService: FieldMySQLService,
+    private readonly osRepository: OpensearchRepository,
+  ) {}
+
+  fieldsToMapping(fields: FieldEntity[]) {
+    return fields.reduce(
+      (mapping: Record<string, { type: string }>, field) =>
+        Object.assign(mapping, {
+          [field.key]:
+            field.format === FieldFormatEnum.text
+              ? {
+                  type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+                  analyzer: 'ngram_analyzer',
+                  search_analyzer: 'ngram_analyzer',
+                }
+              : { type: FIELD_TYPES_TO_MAPPING_TYPES[field.format] },
+        }),
+      {},
+    );
+  }
+
+  @Transactional()
+  async createMany(dto: CreateManyFieldsDto) {
+    const fields = await this.fieldMySQLService.createMany(dto);
+
+    if (OS_USE) {
+      await this.osRepository.putMappings({
+        index: dto.channelId.toString(),
+        mappings: this.fieldsToMapping(fields),
+      });
+    }
+  }
+
+  async findByChannelId(dto: { channelId: number }) {
+    return this.fieldMySQLService.findByChannelId(dto);
+  }
+
+  @Transactional()
+  async replaceMany(dto: ReplaceManyFieldsDto) {
+    const createdFields = await this.fieldMySQLService.replaceMany(dto);
+
+    if (OS_USE) {
+      await this.osRepository.putMappings({
+        index: dto.channelId.toString(),
+        mappings: this.fieldsToMapping(createdFields),
+      });
+    }
+  }
+}

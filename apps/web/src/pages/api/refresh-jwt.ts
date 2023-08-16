@@ -13,27 +13,38 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import axios, { AxiosError } from 'axios';
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import { ironOption } from '@/constants/iron-option';
-import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
+import { env } from '@/env.mjs';
+import getLogger from '@/libs/logger';
 
 export default withIronSessionApiRoute(async (req, res) => {
   const { jwt } = req.session;
-  if (!jwt) res.status(400).end();
+  if (!jwt) return res.status(400).end();
 
-  const response = await fetch(`${process.env.API_BASE_URL}/api/auth/refresh`, {
-    method: 'get',
-    headers: { Authorization: `Bearer ${jwt?.refreshToken}` },
-  });
+  try {
+    const response = await axios.get(`${env.API_BASE_URL}/api/auth/refresh`, {
+      headers: { Authorization: `Bearer ${jwt?.refreshToken}` },
+    });
 
-  const data = await response.json();
-  if (response.status !== 200) {
-    return res.status(response.status).send(data);
+    const data = await response.data;
+    if (response.status !== 200) {
+      return res.status(response.status).send(data);
+    }
+
+    req.session.jwt = data;
+    await req.session.save();
+    return res.send({ jwt: data });
+  } catch (error) {
+    getLogger('/api/refrech-jwt').error(error);
+    if (error instanceof TypeError) {
+      return res.status(500).send({ message: error.message, code: error.name });
+    } else if (error instanceof AxiosError && error.response) {
+      const { status, data } = error.response;
+      return res.status(status).send(data);
+    }
+    return res.status(500).send({ message: 'Unknown Error' });
   }
-
-  req.session.jwt = data;
-  await req.session.save();
-  res.send({ jwt: data });
 }, ironOption);

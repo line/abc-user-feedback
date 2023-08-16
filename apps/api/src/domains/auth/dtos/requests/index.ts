@@ -18,3 +18,4 @@ export { EmailUserSignUpRequestDto } from './email-user-sign-up-request.dto';
 export { EmailVerificationMailingRequestDto } from './email-verification-mailing-request.dto';
 export { EmailVerificationCodeRequestDto } from './email-verification-code-request.dto';
 export { InvitationUserSignUpRequestDto } from './invitation-user-sign-up-request.dto';
+export { OAuthUserSignUpRequestDto } from './oauth-user-sign-up-request.dto';
