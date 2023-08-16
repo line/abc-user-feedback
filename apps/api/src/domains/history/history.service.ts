@@ -14,22 +14,22 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
-import { InjectDataSource } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
 import { CreateHistoryDto } from './create-history.dto';
 import { HistoryEntity } from './history.entity';
 
 @Injectable()
 export class HistoryService {
-  constructor(@InjectDataSource() private dataSource: DataSource) {}
+  constructor(
+    @InjectRepository(HistoryEntity)
+    private readonly historyRepo: Repository<HistoryEntity>,
+  ) {}
   async createHistory(dto: CreateHistoryDto) {
     if (!dto.entityId) return;
     const { userId, ...rest } = dto;
 
-    await this.dataSource.transaction(async (manager) => {
-      const repo = manager.getRepository(HistoryEntity);
-      await repo.save({ user: { id: userId }, ...rest });
-    });
+    await this.historyRepo.save({ user: { id: userId }, ...rest });
   }
 }
