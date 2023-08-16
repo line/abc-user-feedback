@@ -23,7 +23,15 @@ Alternatively you can set up a local development environment.
 
 ## 1. Official Docker Image Installation
 
-WIP
+### [web](https://hub.docker.com/r/line/abc-user-feedback-web)
+```
+docker pull line/abc-user-feedback-web
+```
+
+### [api](https://hub.docker.com/r/line/abc-user-feedback-api)
+```
+docker pull line/abc-user-feedback-api
+```
 
 ## 2. Development Environment (Local)
 
