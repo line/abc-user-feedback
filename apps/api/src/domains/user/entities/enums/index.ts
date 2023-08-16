@@ -14,3 +14,5 @@
  * under the License.
  */
 export { UserStateEnum } from './user-state.enum';
+export { UserTypeEnum } from './user-type.enum';
+export { SignUpMethodEnum } from './sign-up-method.enum';

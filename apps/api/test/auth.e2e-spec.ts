@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
 import { DataSource, Repository } from 'typeorm';
 
@@ -28,13 +29,9 @@ import {
   EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
 } from '@/domains/auth/dtos/requests';
-import {
-  OWNER_ROLE,
-  OWNER_ROLE_DEFAULT_ID,
-} from '@/domains/role/role.constant';
-import { RoleEntity } from '@/domains/role/role.entity';
+import { RoleEntity } from '@/domains/project/role/role.entity';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
-import { UserStateEnum } from '@/domains/user/entities/enums';
+import { UserStateEnum, UserTypeEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';
 import { UserPasswordService } from '@/domains/user/user-password.service';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
@@ -50,7 +47,6 @@ describe('AppController (e2e)', () => {
   let jwtService: JwtService;
 
   let dataSource: DataSource;
-  let roleRepo: Repository<RoleEntity>;
   let userRepo: Repository<UserEntity>;
   let codeRepo: Repository<CodeEntity>;
   let tenantRepo: Repository<TenantEntity>;
@@ -65,8 +61,7 @@ describe('AppController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe());
     await app.init();
 
-    dataSource = module.get(DataSource);
-    roleRepo = dataSource.getRepository(RoleEntity);
+    dataSource = module.get(getDataSourceToken());
     userRepo = dataSource.getRepository(UserEntity);
     codeRepo = dataSource.getRepository(CodeEntity);
     tenantRepo = dataSource.getRepository(TenantEntity);
@@ -82,13 +77,10 @@ describe('AppController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    await clearEntities([userRepo, codeRepo, tenantRepo, roleRepo]);
-
-    ownerRole = await roleRepo.save(OWNER_ROLE);
+    await clearEntities([userRepo, codeRepo, tenantRepo]);
 
     await tenantRepo.save({
       allowDomains: [],
-      defaultRole: ownerRole,
       isPrivate: false,
       isRestrictDomain: false,
       siteName: faker.datatype.string(),
@@ -188,7 +180,7 @@ describe('AppController (e2e)', () => {
       });
 
     const verifyEmail = async (code: string, email: string) =>
-      await codeService.setCodeVerified({
+      await codeService.verifyCode({
         type: CodeTypeEnum.EMAIL_VEIRIFICATION,
         code,
         key: email,
@@ -265,7 +257,7 @@ describe('AppController (e2e)', () => {
       await codeService.setCode({
         type: CodeTypeEnum.USER_INVITATION,
         key: email,
-        data: { roleId: OWNER_ROLE_DEFAULT_ID },
+        data: { roleId: 1, userType: UserTypeEnum.GENERAL },
       });
 
     beforeEach(() => {

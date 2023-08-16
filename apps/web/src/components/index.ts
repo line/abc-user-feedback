@@ -13,8 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './inputs';
+export * from './cards';
+export * from './etc';
 export * from './layouts';
-export * from './others';
-export * from './tables';
 export * from './templates';

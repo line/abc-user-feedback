@@ -16,18 +16,20 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
 import { join } from 'path';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { ConfigServiceType } from '@/types/config-service.type';
 
+dotenv.config();
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {}
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    const { main_url, sub_url } = this.configService.get('mysql', {
+    const { main_url, sub_urls } = this.configService.get('mysql', {
       infer: true,
     });
 
@@ -35,13 +37,13 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       type: 'mysql',
       replication: {
         master: { url: main_url },
-        slaves: [{ url: sub_url }],
+        slaves: sub_urls.map((url) => ({ url })),
       },
       entities: [join(__dirname, '../../../**/*.entity.{ts,js}')],
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
       migrationsTableName: 'migrations',
       logging: ['warn', 'error'],
-      migrationsRun: false,
+      migrationsRun: process.env.AUTO_MIGRATION === 'true',
       namingStrategy: new SnakeNamingStrategy(),
       timezone: process.env.TZ,
     };

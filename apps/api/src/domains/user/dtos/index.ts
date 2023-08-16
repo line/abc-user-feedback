@@ -15,7 +15,6 @@
  */
 export { UserDto } from './user.dto';
 export { InviteUserDto } from './invite-user.dto';
-export { UpdateUserRoleDto } from './update-user-role.dto';
 export { ChangePasswordDto } from './change-password.dto';
 export { ResetPasswordDto } from './reset-password.dto';
 export { FindAllUsersDto } from './find-all-users.dto';

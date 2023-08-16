@@ -2,10 +2,18 @@
   "name": "abc-user-feedback",
   "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/typeorm*/**",
+      "**/typeorm*",
+      "**/*nestjs*/**",
+      "**/*nestjs*"
+    ]
+  },
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
@@ -13,14 +21,13 @@
     "format": "prettier --write \"**/*.{ts,tsx}\""
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
+    "eslint-config-ufb": "*",
     "@trivago/prettier-plugin-sort-imports": "^4.1.0",
     "prettier": "latest",
     "turbo": "latest"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
-  "dependencies": {},
   "packageManager": "yarn@1.22.19"
 }

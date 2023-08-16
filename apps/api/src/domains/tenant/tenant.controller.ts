@@ -13,17 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Body, Controller, Get, HttpCode, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
-import { PermissionEnum } from '../role/permission.enum';
-import { RequirePermission } from '../role/require-permission.decorator';
 import { SetupTenantRequestDto, UpdateTenantRequestDto } from './dtos/requests';
-import { GetTenantResponseDto } from './dtos/responses';
+import {
+  CountFeedbacksByTenantIdResponseDto,
+  GetTenantResponseDto,
+} from './dtos/responses';
 import { TenantService } from './tenant.service';
 
 @ApiTags('tenant')
-@Controller('tenant')
+@Controller('tenants')
 export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
@@ -34,7 +44,6 @@ export class TenantController {
 
   @Put()
   @HttpCode(204)
-  @RequirePermission(PermissionEnum.ServiceManagement)
   async update(@Body() body: UpdateTenantRequestDto) {
     await this.tenantService.update(body);
   }
@@ -44,5 +53,13 @@ export class TenantController {
   async get() {
     const tenant = await this.tenantService.findOne();
     return GetTenantResponseDto.transform(tenant);
+  }
+
+  @ApiOkResponse({ type: CountFeedbacksByTenantIdResponseDto })
+  @Get('/:tenantId/feedback-count')
+  async countFeedbacks(@Param('tenantId', ParseIntPipe) tenantId: number) {
+    return CountFeedbacksByTenantIdResponseDto.transform(
+      await this.tenantService.countByTenantId({ tenantId }),
+    );
   }
 }

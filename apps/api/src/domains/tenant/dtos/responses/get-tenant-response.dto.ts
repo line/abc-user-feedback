@@ -16,30 +16,60 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type, plainToInstance } from 'class-transformer';
 
-import { PermissionEnum } from '@/domains/role/permission.enum';
-
-class GetTenantResponseRoleDto {
+export class OAuthConfigResponseDto {
   @Expose()
   @ApiProperty()
-  id: string;
+  oauthUse: boolean;
 
   @Expose()
   @ApiProperty()
-  name: string;
+  clientId: string;
 
   @Expose()
-  @ApiProperty({ type: [PermissionEnum], enum: PermissionEnum })
-  permissions: PermissionEnum[];
+  @ApiProperty()
+  clientSecret: string;
+
+  @Expose()
+  @ApiProperty()
+  authCodeRequestURL: string;
+
+  @Expose()
+  @ApiProperty()
+  scopeString: string;
+
+  @Expose()
+  @ApiProperty()
+  accessTokenRequestURL: string;
+
+  @Expose()
+  @ApiProperty()
+  userProfileRequestURL: string;
+
+  @Expose()
+  @ApiProperty()
+  emailKey: string;
 }
 
 export class GetTenantResponseDto {
   @Expose()
   @ApiProperty()
-  id: string;
+  id: number;
 
   @Expose()
   @ApiProperty()
   siteName: string;
+
+  @Expose()
+  @ApiProperty()
+  description: string | null;
+
+  @Expose()
+  @ApiProperty()
+  useEmail: boolean;
+
+  @Expose()
+  @ApiProperty()
+  useOAuth: boolean;
 
   @Expose()
   @ApiProperty()
@@ -51,12 +81,12 @@ export class GetTenantResponseDto {
 
   @Expose()
   @ApiProperty()
-  allowDomains: string[];
+  allowDomains: string[] | null;
 
   @Expose()
-  @ApiProperty()
-  @Type(() => GetTenantResponseRoleDto)
-  defaultRole: GetTenantResponseRoleDto;
+  @ApiProperty({ type: OAuthConfigResponseDto, nullable: true })
+  @Type(() => OAuthConfigResponseDto)
+  oauthConfig: OAuthConfigResponseDto | null;
 
   public static transform(params: any): GetTenantResponseDto {
     return plainToInstance(GetTenantResponseDto, params, {

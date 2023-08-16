@@ -21,8 +21,8 @@ import {
 } from 'typeorm';
 
 export abstract class CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
   @CreateDateColumn()
   createdAt: Date;

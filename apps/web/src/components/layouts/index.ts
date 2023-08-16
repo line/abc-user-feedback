@@ -13,6 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as Card } from './Card';
-export { default as Header } from './Header';
-export { default as SideNav } from './SideNav';
+export { Header } from './Header';
+export { SideNav } from './SideNav';

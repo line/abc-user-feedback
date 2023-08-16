@@ -1,0 +1,202 @@
+/* ------------------------------------------------------------------------------------ */
+
+@font-face {
+  font-family: 'LINESeedKR';
+
+  font-style: thin;
+
+  font-weight: 100;
+
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Th.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Th.woff2') format('woff2'),
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Th.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedKR';
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Rg.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Rg.woff2') format('woff2'),
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Rg.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedKR';
+
+  font-style: bold;
+
+  font-weight: 700;
+
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Bd.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Bd.woff2') format('woff2'),
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.woff') format('woff');
+}
+
+/* ------------------------------------------------------------------------------------ */
+
+@font-face {
+  font-family: 'LINESeedEN';
+
+  font-style: thin;
+
+  font-weight: 100;
+
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Th.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Th.woff2') format('woff2'),
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Th.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedEN';
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Rg.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Rg.woff2') format('woff2'),
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Rg.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedEN';
+
+  font-style: bold;
+
+  font-weight: 700;
+
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Bd.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Bd.woff2') format('woff2'),
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Bd.woff') format('woff');
+}
+
+/* ------------------------------------------------------------------------------------ */
+
+@font-face {
+  font-family: 'LINESeedJP';
+
+  font-style: thin;
+
+  font-weight: 100;
+
+  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Th.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Th.woff2') format('woff2'),
+    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Th.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedJP';
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Rg.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Rg.woff2') format('woff2'),
+    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Rg.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedJP';
+
+  font-style: bold;
+
+  font-weight: 700;
+
+  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Bd.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Bd.woff2') format('woff2'),
+    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Bd.woff') format('woff');
+}
+
+/* ------------------------------------------------------------------------------------ */
+
+@font-face {
+  font-family: 'LINESeedTH';
+
+  font-style: thin;
+
+  font-weight: 100;
+
+  src: url('/fonts/LINESeedTH/EOT/LINESeedTH-Th.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedTH/WOFF2/LINESeedTH-Th.woff2') format('woff2'),
+    url('/fonts/LINESeedTH/WOFF/LINESeedTH-Th.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedTH';
+
+  font-style: normal;
+
+  font-weight: 400;
+
+  src: url('/fonts/LINESeedTH/EOT/LINESeedTH-Rg.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedTH/WOFF2/LINESeedTH-Rg.woff2') format('woff2'),
+    url('/fonts/LINESeedTH/WOFF/LINESeedTH-Rg.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedTH';
+
+  font-style: bold;
+
+  font-weight: 700;
+
+  src: url('/fonts/LINESeedTH/EOT/LINESeedTH-Bd.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedTH/WOFF2/LINESeedTH-Bd.woff2') format('woff2'),
+    url('/fonts/LINESeedTH/WOFF/LINESeedTH-Bd.woff') format('woff');
+}
+
+textarea:focus,
+input:focus {
+  outline: none;
+}
+
+button {
+  display: inline-flex;
+}
+
+html {
+  --text-color-primary: #000000;
+  --text-color-secondary: #3C3C4399;
+  --text-color-tertiary: #3C3C434D;
+  --text-color-quaternary: #3C3C432E;
+  --text-color-inverse: #FFFFFF;
+  --text-above-color-primary: #ffffff;
+  --text-above-color-secondary: #ffffffa3;
+  --text-above-color-tertiary: #ffffff70;
+  --text-above-color-quaternary: #ffffff57;
+  --fill-color-primary: #000000;
+  --fill-color-secondary: #78788029;
+  --fill-color-tertiary: #7676801F;
+  --fill-color-quaternary: #74748014;
+  --fill-color-inverse: #ffffff;
+  --background-color-primary: #FFFFFF;
+  --background-color-secondary: #F2F2F7;
+  --background-color-tertiary: #FFFFFF;
+  --background-color-dim: #00000066;
+}
+
+html.dark {
+  --text-color-primary: #ffffff;
+  --text-color-secondary: #EBEBF599;
+  --text-color-tertiary: #EBEBF54D;
+  --text-color-quaternary: #EBEBF52E;
+  --text-color-inverse: #000000;
+  --text-above-color-primary: #ffffff;
+  --text-above-color-secondary: #ffffffa3;
+  --text-above-color-tertiary: #ffffff70;
+  --text-above-color-quaternary: #ffffff57;
+  --fill-color-primary: #ffffff;
+  --fill-color-secondary: #78788052;
+  --fill-color-tertiary: #7676803D;
+  --fill-color-quaternary: #7474802E;
+  --fill-color-inverse: #000000;
+  --background-color-primary: #000000;
+  --background-color-secondary: #18181A;
+  --background-color-tertiary: #2A2A2C;
+  --background-color-dim: #00000066;
+}

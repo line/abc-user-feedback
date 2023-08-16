@@ -14,7 +14,7 @@
  * under the License.
  */
 export class ChangePasswordDto {
-  userId: string;
+  userId: number;
   password: string;
   newPassword: string;
 }

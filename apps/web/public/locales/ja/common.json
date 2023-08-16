@@ -1,5 +1,272 @@
 {
-  "locale.ko": "한국어",
-  "locale.ja": "日本語",
-  "locale.en": "English"
+  "tenant": {
+    "create": {
+      "title": "基本設定",
+      "site-name": "サイト名"
+    }
+  },
+  "auth": {
+    "sign-in": {
+      "reset-password": "パスワードリセット"
+    },
+    "sign-up": {
+      "title": "アカウントの作成",
+      "label": {
+        "auth-code": "認証コード"
+      },
+      "placeholder": {
+        "auth-code": "認証コード入力"
+      },
+      "button": {
+        "request-auth-code": "要請する",
+        "verify-auth-code": "認証する"
+      }
+    },
+    "reset-password": {
+      "title": "パスワードリセット",
+      "button": { "send-email": "電子メールを送る" }
+    }
+  },
+  "link": {
+    "reset-password": {
+      "title": "パスワードリセット"
+    },
+    "user-invitation": {
+      "title": "アカウントの作成"
+    }
+  },
+  "main": {
+    "index": {
+      "total-project": "全体プロジェクト数",
+      "total-channel": "全チャンネル数",
+      "total-feedback": "全体フィードバック数"
+    },
+    "profile": {
+      "title": "プロフィール",
+      "profile-info": "Profile情報",
+      "change-password": "Password変更",
+      "label": {
+        "user-type": "Type",
+        "new-password": "新しいパスワード",
+        "confirm-new-password": "新しいパスワードの確認"
+      },
+      "placeholder": {
+        "name": "Nameを入力してください。",
+        "department": "Departmentを入力してください。",
+        "new-password": "新しいパスワードを入力してください。",
+        "confirm-new-password": "新しいパスワードの確認を入力してください。"
+      },
+      "button": {
+        "delete-account": "アカウント削除"
+      },
+      "dialog": {
+        "delete-account": {
+          "title": "アカウント削除",
+          "description1": "本当に削除するんですか？",
+          "description2": "アカウントを削除した後、サービスは利用できません。"
+        }
+      }
+    },
+    "feedback": {
+      "title": "フィードバック管理",
+      "column-setting": "カラムの設定",
+      "issue-cell": {
+        "issue-list": "イシューリスト",
+        "register-issue": "イシュー登録",
+        "create-issue": "イシュー作成",
+        "input-issue": "イシュー入力",
+        "delete-issue": "イシュー削除"
+      },
+      "download": {
+        "loading": "ダウンロード中...",
+        "success": "ダウンロードが完了しました。",
+        "error": "ダウンロードに失敗しました。",
+        "loading-description": "{{count, number}}個ダウンロード。",
+        "success-description": "{{count, number}}個ダウンロード。",
+        "error-description": "{{count, number}}個ダウンロード"
+      },
+      "button": {
+        "all-download": "すべてダウンロード",
+        "select-download": "{{count, number}}個ダウンロード",
+        "excel-download": "Excelダウンロード",
+        "csv-download": "CSVダウンロード"
+      },
+      "dialog": {
+        "delete-feedback": {
+          "title": "フィードバックの削除",
+          "description": "選択したフィードバックをすべて削除してよろしいですか？"
+        }
+      }
+    },
+    "issue": {
+      "title": "イシュー管理",
+      "setting": "イシュー設定",
+      "dialog": {
+        "delete-issue": {
+          "title": "イシュー削除",
+          "description": "選択したイシューをすべて削除しますか？"
+        }
+      }
+    },
+    "setting": {
+      "title": "設定",
+      "subtitle": {
+        "tenant-info": "Tenant情報",
+        "sign-up-mgmt": "Login &Signup管理",
+        "user-mgmt": "User管理",
+
+        "project-info": "Project情報",
+        "member-mgmt": "Member管理",
+        "role-mgmt": "Role管理",
+        "api-key-mgmt": "API Key管理",
+        "ticket-mgmt": "Issue Tracker管理",
+        "delete-project": "Project削除",
+
+        "channel-info": "Channel情報",
+        "field-mgmt": "Field管理",
+        "delete-channel": "Channel削除"
+      },
+      "button": {
+        "create-project": "Project生成",
+        "create-channel": "Channel生成",
+        "create-api-key": "Key生成"
+      },
+      "sign-up-mgmt": {
+        "ufb-login": "UFB ログイン",
+        "oauth-login": "OAuth2.0 ログイン",
+        "all-login": "すべて",
+        "possibility": "直接サインアップ可能",
+        "impossibility": "直接サインアップ不可",
+        "no-domain-restriction": "ドメイン制限なし",
+        "domain-restriction": "ドメインの制限",
+        "domain-restriction-tooltip": "ユーザとして登録できる電子メールのドメインを設定できます。"
+      },
+      "role-mgmt": {
+        "edit-role": "Role編集",
+        "delete-role": "Role削除"
+      },
+      "api-key-status": {
+        "active": "アクティブ",
+        "inactive": "非アクティブ"
+      },
+      "field-status": {
+        "active": "アクティブ",
+        "inactive": "非アクティブ"
+      },
+      "same-key": "Key と同様に入力",
+      "feedback-request-code": "フィードバック要求コード",
+      "ticket-mgmt.description": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
+      "option-info": "オプション情報",
+      "field-mgmt": {
+        "description": "保存するにはプレビューを先に押してください。",
+        "preview": "プレビュー",
+        "preview-caption": "プレビューは、理解を助けるためのサンプルデータです。",
+        "preview-description": "<preview>プレビュー</preview>を選択した後に確認することができます。"
+      },
+      "dialog": {
+        "edit-user": { "title": "User 編集" },
+        "delete-project": {
+          "title": "Project 削除",
+          "description": "Projectを削除すると、すべてのイシュー/フィードバックデータが削除されます。\n削除を続行するには、以下のテキストを入力してください。"
+        },
+        "delete-channel": {
+          "title": "Channel 削除",
+          "description": "Channelを削除すると、すべてのフィードバック データが削除されます。\n削除を続行するには、以下のテキストを入力してください。"
+        },
+        "create-role": {
+          "title": "Role 生成",
+          "description": "Roleを追加しますか？"
+        },
+        "edit-api-key": {
+          "title": "API KEY 編集",
+          "description": "API KEY を非アクティブに変更すると、その KEY の API は使用できなくなります。\nAPI KEY を使用しない場合のみ、ステータスを非アクティブに変更してください。"
+        },
+        "delete-option": {
+          "title": "オプションの削除",
+          "description": "以前のフィードバックのオプションには適用されません。"
+        },
+        "delete-role": {
+          "title": "Role 削除",
+          "description": "Roleを削除しますか？"
+        },
+        "edit-member": {
+          "title": "Member 編集",
+          "description": "Roleは、アクセス可能なメニューから使用可能な機能によって異なります。\nMemberを確認し、正しいRoleを選択してください。"
+        },
+        "register-member": { "title": "Member 登録" },
+        "delete-member": {
+          "title": "Member 削除",
+          "description": "Memberを削除してよろしいですか？"
+        },
+        "add-field": { "title": "Field 追加" },
+        "edit-field": { "title": "Field 修整" },
+        "invite-user": { "title": "User 招待" }
+      }
+    }
+  },
+  "header": {
+    "profile": "プロファイル",
+    "sign-out": "ログアウト"
+  },
+  "button": {
+    "setting": "設定する",
+    "back": "後ろへ行く",
+    "sign-in": "ログイン",
+    "sign-up": "会員加入",
+    "save": "保存",
+    "create": "生成",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "register": "登錄",
+    "select-cancel": "選択取り消し",
+    "reset": "リセット",
+    "confirm": "OK"
+  },
+  "input": {
+    "label": {
+      "password": "パスワード",
+      "confirm-password": "パスワード確認"
+    },
+    "placeholder": {
+      "input": "入力してください",
+      "email": "Emailを入力してください。",
+      "password": "パスワードを入力してください。",
+      "confirm-password": "パスワード確認を入力してください。"
+    }
+  },
+  "text": {
+    "search-result": "検索結果",
+    "number-count": "{{count, number}}個",
+    "no-data": "データなし",
+    "per-page": "ページあたり",
+    "select-option": "{{name}} 選択",
+    "select-count": "{{count,number}}個選択",
+    "search-filter": "検索フィルタ",
+    "all": "全体",
+    "issue": {
+      "init": "新規",
+      "onReview": "検討中",
+      "inProgress": "進行中",
+      "resolved": "完了",
+      "pending": "進行せず"
+    },
+    "date": {
+      "today": "今日",
+      "yesterday": "昨日",
+      "before-days": "{{day, number}}日前"
+    },
+    "equal-search": "完全一致",
+    "like-search": "部分一致"
+  },
+  "toast": {
+    "sign-in": "ログイン成功",
+    "register": "登録済み",
+    "delete": "削除済み",
+    "save": "貯蔵",
+    "invite": "招待完了",
+    "active": "活性化",
+    "inactive": "無効化",
+    "add": "追加完了",
+    "copy": "コピー完了"
+  }
 }

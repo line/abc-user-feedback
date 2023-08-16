@@ -16,232 +16,188 @@
 import { faker } from '@faker-js/faker';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import MockDate from 'mockdate';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
-import { TestConfigs, clearEntities } from '@/utils/test-utils';
+import { UserDto } from '@/domains/user/dtos';
+import { UserTypeEnum } from '@/domains/user/entities/enums';
+import { mockRepository } from '@/utils/test-utils';
 
 import { CodeTypeEnum } from './code-type.enum';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
 import {
-  SetCodeDto,
   SetCodeEmailVerificationDto,
   SetCodeResetPasswordDto,
   SetCodeUserInvitationDto,
 } from './dtos/set-code.dto';
 
-describe('code service', () => {
-  let codeService: CodeService;
+export const CodeServiceProviders = [
+  CodeService,
+  { provide: getRepositoryToken(CodeEntity), useValue: mockRepository() },
+];
 
-  let dataSource: DataSource;
+describe('CodeService', () => {
+  let codeService: CodeService;
   let codeRepo: Repository<CodeEntity>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs, TypeOrmModule.forFeature([CodeEntity])],
-      providers: [CodeService],
+      providers: CodeServiceProviders,
     }).compile();
     codeService = module.get(CodeService);
-
-    dataSource = module.get(DataSource);
-    codeRepo = dataSource.getRepository(CodeEntity);
-  });
-
-  beforeEach(async () => {
-    await clearEntities([codeRepo]);
-  });
-
-  afterEach(async () => {
-    await dataSource.destroy();
+    codeRepo = module.get(getRepositoryToken(CodeEntity));
   });
 
   describe('setCode', () => {
-    it('email verification type', async () => {
+    it('set email verification type', async () => {
       const dto = new SetCodeEmailVerificationDto();
       dto.key = faker.datatype.string();
       dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
 
       const code = await codeService.setCode(dto);
-      expect(code).toHaveLength(6);
 
-      const codeEntity = await codeRepo.findOneBy({
-        key: codeService.getHashKey(dto.key),
-      });
-      expect(codeEntity.code).toEqual(code);
-      expect(codeEntity.type).toEqual(dto.type);
-      expect(codeEntity.isVerified).toEqual(false);
+      expect(code).toHaveLength(6);
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+          data: undefined,
+        }),
+      );
     });
-    it('reset password type', async () => {
+    it('set reset password type', async () => {
       const dto = new SetCodeResetPasswordDto();
       dto.key = faker.datatype.string();
       dto.type = CodeTypeEnum.RESET_PASSWORD;
 
       const code = await codeService.setCode(dto);
-      expect(code).toHaveLength(6);
 
-      const codeEntity = await codeRepo.findOneBy({
-        key: codeService.getHashKey(dto.key),
-      });
-      expect(codeEntity.code).toEqual(code);
-      expect(codeEntity.type).toEqual(dto.type);
-      expect(codeEntity.isVerified).toEqual(false);
+      expect(code).toHaveLength(6);
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+          data: undefined,
+        }),
+      );
     });
-    it('user invitation type', async () => {
+    it('set user invitation type with SUPER user type', async () => {
       const dto = new SetCodeUserInvitationDto();
       dto.key = faker.datatype.string();
       dto.type = CodeTypeEnum.USER_INVITATION;
-      dto.data = { roleId: faker.datatype.string() };
+      dto.data = {
+        roleId: faker.datatype.number(),
+        userType: UserTypeEnum.SUPER,
+        invitedBy: new UserDto(),
+      };
 
       const code = await codeService.setCode(dto);
-      expect(code).toHaveLength(6);
 
-      const codeEntity = await codeRepo.findOneBy({
-        key: codeService.getHashKey(dto.key),
-      });
-      expect(codeEntity.code).toEqual(code);
-      expect(codeEntity.type).toEqual(dto.type);
-      expect(codeEntity.data).toEqual(dto.data);
-      expect(codeEntity.isVerified).toEqual(false);
+      expect(code).toHaveLength(6);
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+          data: dto.data,
+        }),
+      );
+    });
+    it('set user invitation type with GENERAL user type', async () => {
+      const dto = new SetCodeUserInvitationDto();
+      dto.key = faker.datatype.string();
+      dto.type = CodeTypeEnum.USER_INVITATION;
+      dto.data = {
+        roleId: faker.datatype.number(),
+        userType: UserTypeEnum.GENERAL,
+        invitedBy: new UserDto(),
+      };
+
+      const code = await codeService.setCode(dto);
+
+      expect(code).toHaveLength(6);
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        expect.objectContaining({
+          code,
+          type: dto.type,
+          key: dto.key,
+          isVerified: false,
+          data: dto.data,
+        }),
+      );
     });
   });
-  describe('setCodeVerified', () => {
-    let code: string;
-    let dto: SetCodeDto;
+  describe('verifyCode', () => {
+    const codeEntity: CodeEntity = new CodeEntity();
+    const key = faker.datatype.string();
     beforeEach(async () => {
-      const type = getRandomEnumValue(CodeTypeEnum);
-      if (type === CodeTypeEnum.EMAIL_VEIRIFICATION) {
-        dto = new SetCodeEmailVerificationDto();
-        dto.key = faker.datatype.string();
-        dto.type = type;
-      }
-      if (type === CodeTypeEnum.RESET_PASSWORD) {
-        dto = new SetCodeResetPasswordDto();
-        dto.key = faker.datatype.string();
-        dto.type = type;
-      }
-      if (type === CodeTypeEnum.USER_INVITATION) {
-        dto = new SetCodeUserInvitationDto();
-        dto.key = faker.datatype.string();
-        dto.type = type;
-        dto.data = { roleId: faker.datatype.string() };
-      }
-      code = await codeService.setCode(dto);
+      codeEntity.code = faker.datatype.string(6);
+      codeEntity.key = key;
+      codeEntity.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      codeEntity.isVerified = false;
+      codeEntity.id = faker.datatype.number();
+      codeEntity.expiredAt = dayjs().add(5, 'minutes').toDate();
     });
-    it('positive case', async () => {
-      const { key, type } = dto;
+    it('verify code with valid code, key, type', async () => {
+      const { code, type } = codeEntity;
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
 
-      const originCode = await codeRepo.findOneBy({
-        code,
-        key: codeService.getHashKey(key),
-        type,
+      await codeService.verifyCode({ code, key, type });
+
+      expect(codeRepo.findOneBy).toHaveBeenCalledWith({
+        key: codeEntity.key,
+        type: codeEntity.type,
       });
-
-      expect(originCode.isVerified).toEqual(false);
-      await codeService.setCodeVerified({ code, key, type });
-
-      const verifiedCode = await codeRepo.findOneBy({
-        code,
-        key: codeService.getHashKey(key),
-        type,
-      });
-
-      expect(verifiedCode.isVerified).toEqual(true);
+      expect(codeRepo.update).toHaveBeenCalledWith(
+        {
+          id: codeEntity.id,
+        },
+        { id: codeEntity.id, isVerified: true },
+      );
     });
-    it('invalid code', async () => {
-      const { key, type } = dto;
+    it('verify code with invalid code', async () => {
+      const { type } = codeEntity;
+      const invalidCode = faker.datatype.string(6);
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+
       await expect(
-        codeService.setCodeVerified({
-          code: faker.datatype.string(6),
+        codeService.verifyCode({
+          code: invalidCode,
           key,
           type,
         }),
       ).rejects.toThrow(BadRequestException);
     });
-    it('invalid key', async () => {
-      const { type } = dto;
+    it('verify code with invalid key', async () => {
+      const { code, type } = codeEntity;
+      const invalidKey = faker.datatype.string(6);
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null);
+
       await expect(
-        codeService.setCodeVerified({
+        codeService.verifyCode({
           code,
-          key: faker.datatype.string(6),
+          key: invalidKey,
           type,
         }),
       ).rejects.toThrow(NotFoundException);
     });
-    it('expired date', async () => {
+    it('verify code at expired date', async () => {
       MockDate.set(new Date(Date.now() + 5 * 60 * 1000 + 1000));
+      const { code, type } = codeEntity;
+      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
 
-      const { key, type } = dto;
-
-      await expect(
-        codeService.setCodeVerified({ code, key, type }),
-      ).rejects.toThrow(BadRequestException);
+      await expect(codeService.verifyCode({ code, key, type })).rejects.toThrow(
+        BadRequestException,
+      );
       MockDate.reset();
     });
   });
-  describe('getDataByCodeAndType', () => {
-    let code: string;
-    const dto = new SetCodeUserInvitationDto();
-    beforeEach(async () => {
-      dto.key = faker.datatype.string();
-      dto.type = CodeTypeEnum.USER_INVITATION;
-      dto.data = { roleId: faker.datatype.string() };
-      code = await codeService.setCode(dto);
-    });
-    it('', async () => {
-      const data = await codeService.getDataByCodeAndType(
-        CodeTypeEnum.USER_INVITATION,
-        code,
-      );
-      expect(data).toEqual(dto.data);
-    });
-    it('invalid code', async () => {
-      await expect(
-        codeService.getDataByCodeAndType(
-          CodeTypeEnum.USER_INVITATION,
-          faker.datatype.string(),
-        ),
-      ).rejects.toThrow(NotFoundException);
-    });
-  });
-  describe('checkVerified', () => {
-    let code: string;
-    let dto: SetCodeDto;
-    beforeEach(async () => {
-      const type = getRandomEnumValue(CodeTypeEnum);
-      if (type === CodeTypeEnum.EMAIL_VEIRIFICATION) {
-        dto = new SetCodeEmailVerificationDto();
-        dto.key = faker.datatype.string();
-        dto.type = type;
-      }
-      if (type === CodeTypeEnum.RESET_PASSWORD) {
-        dto = new SetCodeResetPasswordDto();
-        dto.key = faker.datatype.string();
-        dto.type = type;
-      }
-      if (type === CodeTypeEnum.USER_INVITATION) {
-        dto = new SetCodeUserInvitationDto();
-        dto.key = faker.datatype.string();
-        dto.type = type;
-        dto.data = { roleId: faker.datatype.string() };
-      }
-      code = await codeService.setCode(dto);
-    });
-    it('false', async () => {
-      const isVerified = await codeService.checkVerified(dto.type, dto.key);
-      expect(isVerified).toEqual(false);
-    });
-    it('true', async () => {
-      const { key, type } = dto;
-      await codeService.setCodeVerified({ code, type, key });
-      const isVerified = await codeService.checkVerified(dto.type, dto.key);
-      expect(isVerified).toEqual(true);
-    });
-  });
 });
-function getRandomEnumValue<T>(anEnum: T): T[keyof T] {
-  const enumValues = Object.keys(anEnum) as Array<keyof T>;
-  const randomIndex = Math.floor(Math.random() * enumValues.length);
-  const randomEnumKey = enumValues[randomIndex];
-  return anEnum[randomEnumKey];
-}

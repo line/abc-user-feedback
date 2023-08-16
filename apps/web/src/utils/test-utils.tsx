@@ -13,23 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RenderOptions, render } from '@testing-library/react';
-import React, { ReactElement } from 'react';
-import { RecoilRoot } from 'recoil';
+import { ReactElement } from 'react';
 
 const queryClient = new QueryClient();
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
-    <RecoilRoot>
-      <ChakraProvider>
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </ChakraProvider>
-    </RecoilRoot>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 };
 

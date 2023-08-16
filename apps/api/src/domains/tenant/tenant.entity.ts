@@ -13,27 +13,51 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column, Entity, JoinColumn, OneToOne, Relation } from 'typeorm';
+import { Column, Entity, OneToMany, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
 
-import { RoleEntity } from '../role/role.entity';
+import { ProjectEntity } from '../project/project/project.entity';
+
+export interface OAuthConfig {
+  clientId: string;
+  clientSecret: string;
+  authCodeRequestURL: string;
+  scopeString: string;
+  accessTokenRequestURL: string;
+  userProfileRequestURL: string;
+  emailKey: string;
+  defatulLoginEnable?: boolean;
+}
 
 @Entity('tenant')
 export class TenantEntity extends CommonEntity {
   @Column('varchar', { length: 50 })
   siteName: string;
 
-  @Column('boolean')
+  @Column('varchar', { nullable: true })
+  description: string;
+
+  @Column('boolean', { default: true })
+  useEmail: boolean;
+
+  @Column('boolean', { default: false })
   isPrivate: boolean;
 
-  @Column('boolean')
+  @Column('boolean', { default: false })
   isRestrictDomain: boolean;
 
-  @Column('simple-array')
-  allowDomains: Array<string>;
+  @Column('simple-array', { nullable: true })
+  allowDomains: Array<string> | null;
 
-  @OneToOne(() => RoleEntity)
-  @JoinColumn()
-  defaultRole: Relation<RoleEntity>;
+  @Column('boolean', { default: false })
+  useOAuth: boolean;
+
+  @Column({ type: 'json', nullable: true })
+  oauthConfig: OAuthConfig | null;
+
+  @OneToMany(() => ProjectEntity, (project) => project.tenant, {
+    cascade: true,
+  })
+  projects: Relation<ProjectEntity>[];
 }

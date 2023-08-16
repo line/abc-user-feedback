@@ -13,134 +13,127 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  Box,
-  Divider,
-  Flex,
-  IconButton,
-  List,
-  ListItem,
-  Text,
-} from '@chakra-ui/react';
-import { useTranslation } from 'next-i18next';
+import { Icon, IconNameType } from '@ufb/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo, useState } from 'react';
-import { AiOutlineMenuFold, AiOutlineMenuUnfold } from 'react-icons/ai';
+import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { UrlObject } from 'url';
 
-import { PATH } from '@/constants/path';
-import { useUser } from '@/hooks';
+import { Path } from '@/constants/path';
+import { useCurrentProjectId, usePermissions } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
 
 const SideNav: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { user } = useUser();
-  const { pathname } = useRouter();
+  const router = useRouter();
+  const { projectId } = useCurrentProjectId();
 
-  const [isExpanded, setIsExpanded] = useState(true);
+  const perms = usePermissions(projectId);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const menu = useMemo(() => {
-    const menu: { name: string; path: string }[] = [
-      {
-        name: t('menu.sideNav.projectManagement'),
-        path: PATH.PROJECT_MANAGEMENT.LIST,
-      },
-    ];
-
-    if (user?.permissions?.includes('user_management')) {
-      menu.push({
-        name: t('menu.sideNav.userManagement'),
-        path: PATH.SETTING.USER,
-      });
-    }
-
-    if (user?.permissions?.includes('role_management')) {
-      menu.push({
-        name: t('menu.sideNav.roleManamgenet'),
-        path: PATH.SETTING.ROLE.LIST,
-      });
-    }
-
-    if (user?.permissions?.includes('service_management')) {
-      menu.push({
-        name: t('menu.sideNav.serviceManagement'),
-        path: PATH.SETTING.TENANT,
-      });
-    }
-
-    return menu;
-  }, [user, t]);
+  const [isHover, setIsHover] = useState(false);
 
   return (
-    <Box
-      w={isExpanded ? '200px' : '40px'}
-      transition="width .5s ease-in-out"
-      flexShrink={0}
-      bg="white"
-      borderRightWidth={1}
-    >
-      <Flex justifyContent="flex-end">
-        <IconButton
-          m="4px"
-          aria-label="menu expand and compress"
-          variant="ghost"
-          size="sm"
-          onClick={() => setIsExpanded((v) => !v)}
-          icon={
-            isExpanded ? (
-              <AiOutlineMenuFold size={20} color="gray" />
-            ) : (
-              <AiOutlineMenuUnfold size={20} color="gray" />
-            )
-          }
-        />
-      </Flex>
-      <Box
-        opacity={isExpanded ? '1' : '0'}
-        transition="opacity .5s ease-in-out"
+    <nav className="relative" ref={ref}>
+      <div className="w-[72px] h-full" />
+      <ul
+        className="absolute left-0 top-0 bg-fill-inverse z-20 h-full p-4 space-y-1"
+        onMouseOver={() => setIsHover(true)}
+        onMouseOut={() => setIsHover(false)}
+        style={{
+          width: 'max-content',
+          boxShadow: isHover ? '4px 4px 8px 0px #0000000F' : '',
+        }}
       >
-        <Box sx={{ pb: '16px', px: '24px', borderBottomWidth: 1 }}>
-          <Text fontSize="sm">{user?.email}</Text>
-          <Divider my={4} />
-          <Flex justifyContent="space-between">
-            <Text fontSize="sm" color="gray.500">
-              {t('myRole')}
-            </Text>
-            <Text fontSize="sm">{user?.roleName}</Text>
-          </Flex>
-        </Box>
-        <List>
-          {menu.map(({ name, path }, idx) => (
-            <ListItem
-              key={idx}
-              sx={{
-                _hover: {
-                  bg: 'secondary',
-                  cursor: 'pointer',
-                  color: 'primary.400',
-                },
-                bg: pathname.includes(path) ? 'secondary' : 'transparent',
-                color: pathname.includes(path) ? 'primary' : 'inherit',
-              }}
+        <MenuItem
+          href={{ pathname: Path.FEEDBACK, query: router.query }}
+          iconName="BubbleDotsStroke"
+          activePathname={Path.FEEDBACK}
+          disabled={!perms.includes('feedback_read')}
+          isHover={isHover}
+          text={t('main.feedback.title')}
+        />
+        <MenuItem
+          href={{ pathname: Path.ISSUE, query: router.query }}
+          iconName="DocumentStroke"
+          activePathname={Path.ISSUE}
+          disabled={!perms.includes('issue_read')}
+          isHover={isHover}
+          text={t('main.issue.title')}
+        />
+        <hr />
+        <MenuItem
+          href={{ pathname: Path.SETTINGS, query: router.query }}
+          iconName="SettingStroke"
+          activePathname={Path.SETTINGS}
+          disabled={!perms.includes('issue_read')}
+          isHover={isHover}
+          text={t('main.setting.title')}
+        />
+      </ul>
+    </nav>
+  );
+};
+interface IMenuItemProps {
+  href: UrlObject;
+  iconName: IconNameType;
+  activePathname: string;
+  disabled?: boolean;
+  text: string;
+  isHover: boolean;
+}
+
+const MenuItem: React.FC<IMenuItemProps> = ({
+  href,
+  iconName,
+  activePathname,
+  disabled,
+  text,
+  isHover,
+}: IMenuItemProps) => {
+  const router = useRouter();
+  return (
+    <li>
+      {disabled ? (
+        <button
+          disabled
+          className={[
+            'icon-btn icon-btn-tertiary icon-btn-md w-full justify-start',
+            activePathname === router.pathname ? 'bg-fill-tertiary' : '',
+          ].join(' ')}
+        >
+          <Icon name={iconName} />
+          <span className={['ml-2', isHover ? 'visible' : 'hidden'].join(' ')}>
+            {text}
+          </span>
+        </button>
+      ) : (
+        <Link
+          href={href}
+          onClick={() => {
+            if (activePathname === router.pathname) router.reload();
+          }}
+        >
+          <button
+            className={[
+              'icon-btn icon-btn-tertiary icon-btn-md w-full justify-start flex-nowrap',
+              activePathname === router.pathname
+                ? 'bg-fill-tertiary font-bold'
+                : '',
+            ].join(' ')}
+          >
+            <Icon name={iconName} />
+            <span
+              className={['ml-2', isHover ? 'visible' : 'hidden'].join(' ')}
             >
-              <Link href={path}>
-                <Text
-                  display="block"
-                  sx={{
-                    fontSize: 'sm',
-                    fontWeight: pathname.includes(path) ? 'bold' : '500',
-                    p: '16px 24px',
-                  }}
-                >
-                  {name}
-                </Text>
-              </Link>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Box>
+              {text}
+            </span>
+          </button>
+        </Link>
+      )}
+    </li>
   );
 };
 

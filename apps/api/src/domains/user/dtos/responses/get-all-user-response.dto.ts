@@ -14,14 +14,45 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Transform, Type, plainToInstance } from 'class-transformer';
+import { Expose, Type, plainToInstance } from 'class-transformer';
 
 import { PaginationResponseDto } from '@/common/dtos/pagination-response.dto';
 
-export class GetAllUserResponse {
+import { SignUpMethodEnum, UserTypeEnum } from '../../entities/enums';
+
+class ProjectDto {
   @Expose()
   @ApiProperty()
-  id: string;
+  id: number;
+
+  @Expose()
+  @ApiProperty()
+  name: string;
+}
+class RoleDto {
+  @Expose()
+  @ApiProperty()
+  name: string;
+
+  @Expose()
+  @ApiProperty()
+  @Type(() => ProjectDto)
+  project: ProjectDto;
+}
+class MemberDto {
+  @Expose()
+  @ApiProperty()
+  id: number;
+
+  @Expose()
+  @ApiProperty()
+  @Type(() => RoleDto)
+  role: RoleDto;
+}
+class GetAllUserResponse {
+  @Expose()
+  @ApiProperty()
+  id: number;
 
   @Expose()
   @ApiProperty()
@@ -29,8 +60,27 @@ export class GetAllUserResponse {
 
   @Expose()
   @ApiProperty()
-  @Transform(({ obj }) => obj.role?.name)
-  roleName?: string;
+  name: string;
+
+  @Expose()
+  @ApiProperty({ nullable: true })
+  department: string | null;
+
+  @Expose()
+  @ApiProperty({ enum: UserTypeEnum })
+  type: UserTypeEnum;
+
+  @Expose()
+  @ApiProperty({ type: [MemberDto] })
+  @Type(() => MemberDto)
+  members: MemberDto[];
+
+  @Expose()
+  @ApiProperty()
+  createdAt: Date;
+  @ApiProperty({ enum: SignUpMethodEnum })
+  @Expose()
+  signUpMethod: SignUpMethodEnum;
 }
 
 export class GetAllUserResponseDto extends PaginationResponseDto<GetAllUserResponse> {

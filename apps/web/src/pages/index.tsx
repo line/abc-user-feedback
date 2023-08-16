@@ -15,7 +15,7 @@
  */
 import type { GetServerSideProps, NextPage } from 'next';
 
-import { INIT_PATH } from '@/constants/path';
+import { Path } from '@/constants/path';
 
 const IndexPage: NextPage = () => {
   return <></>;
@@ -23,8 +23,10 @@ const IndexPage: NextPage = () => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   return {
-    redirect: { permanent: true, destination: INIT_PATH },
+    redirect: {
+      destination: Path.SIGN_IN,
+      permanent: true,
+    },
   };
 };
-
 export default IndexPage;

@@ -13,156 +13,90 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormLabel,
-  HStack,
-  Heading,
-  Input,
-  Switch,
-  VStack,
-  useToast,
-} from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from '@ufb/ui';
 import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { z } from 'zod';
 
-import { Card, CenterTemplate } from '@/components';
+import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { PATH } from '@/constants/path';
-import { useToastDefaultOption } from '@/constants/toast-default-option';
-import { useOAIMuataion, useUser } from '@/hooks';
+import { Path } from '@/constants/path';
+import { useOAIMutation, useTenant } from '@/hooks';
 
 import { NextPageWithLayout } from '../_app';
 
 interface IForm {
   siteName: string;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[];
 }
 
-const schema: yup.SchemaOf<IForm> = yup.object().shape({
-  siteName: yup.string().required(),
-  isPrivate: yup.boolean().required(),
-  isRestrictDomain: yup.boolean().required(),
-  allowDomains: yup.array().required(),
+const schema: Zod.ZodType<IForm> = z.object({
+  siteName: z.string(),
 });
+
 const defaultValues: IForm = {
   siteName: '',
-  isPrivate: false,
-  isRestrictDomain: false,
-  allowDomains: [''],
 };
+
 const CreatePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const { userStatus } = useUser();
 
   const router = useRouter();
+  const { refetch } = useTenant();
 
-  const toast = useToast(useToastDefaultOption);
-
-  const { register, watch, setValue, getValues, handleSubmit } = useForm({
-    resolver: yupResolver(schema),
+  const { register, handleSubmit } = useForm({
+    resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const { mutate, status } = useOAIMuataion({
+  const { mutate, isLoading } = useOAIMutation({
     method: 'post',
-    path: '/api/tenant',
+    path: '/api/tenants',
+    queryOptions: {
+      async onSuccess() {
+        toast.positive({ title: 'Success' });
+        toast.positive({
+          title: 'create Default Super User',
+          description: 'email: user@feedback.com \n password: 12345678',
+        });
+        router.push(Path.SIGN_IN);
+        refetch();
+      },
+      onError(error) {
+        toast.negative({ title: error?.message ?? 'Error' });
+      },
+    },
   });
-
-  useEffect(() => {
-    if (userStatus === 'notLoggedIn') router.push(PATH.AUTH.SIGN_IN);
-  }, [userStatus]);
-
-  useEffect(() => {
-    if (status === 'success') {
-      toast({ title: 'success', status });
-      router.push(PATH.AUTH.SIGN_IN);
-    }
-  }, [status]);
-
-  const handleAddDomain = () => {
-    setValue('allowDomains', getValues('allowDomains').concat(['']));
-  };
-  const handleRemoveDomain = (index: number) => () => {
-    setValue(
-      'allowDomains',
-      getValues('allowDomains').filter((_, i) => i !== index),
-    );
-  };
-
-  const onSubmit = (data: IForm) => {
-    if (data.allowDomains) {
-      if (!data.isRestrictDomain) data.allowDomains = [];
-      else data.allowDomains = data.allowDomains.filter((v) => v !== '');
-    }
-    mutate(data);
-  };
+  const onSubmit = (data: IForm) => mutate(data);
 
   return (
-    <Center h="100vh">
-      <Card sx={{ width: '100%', maxWidth: '400px', p: 2 }}>
-        <Flex
-          as="form"
-          gap={4}
-          flexDir="column"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Heading mb="4" textAlign="center">
-            {t('title.serviceSetting')}
-          </Heading>
-          <FormControl isRequired>
-            <FormLabel>{t('input.placeholder.siteName')}</FormLabel>
-            <Input type="text" {...register('siteName')} />
-          </FormControl>
-          <Switch w="100%" id="isPrivate" {...register('isPrivate')}>
-            {t('input.caption.isPrivate')}
-          </Switch>
-          <Switch
-            w="100%"
-            id="isRestrictDomain"
-            {...register('isRestrictDomain')}
+    <AuthTemplate>
+      <div className="w-screen h-screen flex items-center justify-center">
+        <div className="w-full max-w-[400px] border shadow p-4 rounded">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
           >
-            {t('input.caption.isRestrictDomain')}
-          </Switch>
+            <h1 className="font-20-bold">{t('tenant.create.title')}</h1>
+            <label>
+              <span>{t('tenant.create.site-name')}</span>
+              <input className="input" type="text" {...register('siteName')} />
+            </label>
 
-          {watch('isRestrictDomain') && (
-            <Flex flexDirection="column">
-              <FormLabel>{t('input.caption.allowDomains')}</FormLabel>
-              <VStack alignItems="baseline">
-                {watch('allowDomains').map((_, i) => (
-                  <HStack key={i} w="100%">
-                    <Input {...register(`allowDomains.${i}`)} />
-                    {i === watch('allowDomains').length - 1 ? (
-                      <Button onClick={handleAddDomain}>
-                        {t('button.add')}
-                      </Button>
-                    ) : (
-                      <Button variant="outline" onClick={handleRemoveDomain(i)}>
-                        {t('button.delete')}
-                      </Button>
-                    )}
-                  </HStack>
-                ))}
-              </VStack>
-            </Flex>
-          )}
-          <Button type="submit" w="100%" disabled={status === 'loading'} mt={4}>
-            {t('button.setting')}
-          </Button>
-        </Flex>
-      </Card>
-    </Center>
+            <button
+              className="btn btn-primary"
+              type="submit"
+              disabled={isLoading}
+            >
+              {t('button.setting')}
+            </button>
+          </form>
+        </div>
+      </div>
+    </AuthTemplate>
   );
 };
 

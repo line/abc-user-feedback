@@ -14,3 +14,4 @@
  * under the License.
  */
 export { GetAllUserResponseDto } from './get-all-user-response.dto';
+export { GetRolesByIdResponseDto } from './get-roles-by-id.response.dto';

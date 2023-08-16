@@ -1,164 +1,272 @@
 {
-  "title.signIn": "로그인",
-  "title.signUp": "회원가입",
-  "title.userInvitation": "사용자 초대",
-  "title.resetPassword": "비밀번호 재설정",
-  "title.projectManagement": "프로젝트 관리",
-  "title.serviceSetting": "서비스 설정",
-  "title.createProject": "프로젝트 생성",
-  "title.createChannel": "채널 생성",
-  "title.manageChannel": "채널 관리",
-  "title.modifyChannel": "채널 수정",
-  "title.roleManagement": "역할 관리",
-  "title.changePassword": "비밀번호 변경",
-  "title.userSetting": "계정 정보 설정",
+  "tenant": {
+    "create": {
+      "title": "Tenant 설정",
+      "site-name": "사이트 이름"
+    }
+  },
+  "auth": {
+    "sign-in": {
+      "reset-password": "비밀번호 재설정"
+    },
+    "sign-up": {
+      "title": "계정 만들기",
+      "label": {
+        "auth-code": "인증코드"
+      },
+      "placeholder": {
+        "auth-code": "인증코드 입력"
+      },
+      "button": {
+        "request-auth-code": "인증 요청",
+        "verify-auth-code": "인증 확인"
+      }
+    },
+    "reset-password": {
+      "title": "비밀번호 재설정",
+      "button": { "send-email": "이메일 보내기" }
+    }
+  },
+  "link": {
+    "reset-password": {
+      "title": "비밀번호 재설정"
+    },
+    "user-invitation": {
+      "title": "계정 만들기"
+    }
+  },
+  "main": {
+    "index": {
+      "total-project": "전체 Project 수",
+      "total-channel": "전체 Channel 수",
+      "total-feedback": "전체 피드백 수"
+    },
+    "profile": {
+      "title": "프로필",
+      "profile-info": "Profile 정보",
+      "change-password": "Password 변경",
+      "label": {
+        "user-type": "Type",
+        "new-password": "새로운 비밀번호",
+        "confirm-new-password": "새로운 비밀번호 확인"
+      },
+      "placeholder": {
+        "name": "Name을 입력해주세요.",
+        "department": "Department를 입력해주세요.",
+        "new-password": "새로운 비밀번호를 입력해주세요.",
+        "confirm-new-password": "새로운 비밀번호를 한번 더 입력해주세요"
+      },
+      "button": {
+        "delete-account": "계정 삭제"
+      },
+      "dialog": {
+        "delete-account": {
+          "title": "계정 삭제",
+          "description1": "정말로 삭제하시나요?",
+          "description2": "계정 삭제 후 서비스를 이용할 수 없습니다."
+        }
+      }
+    },
+    "feedback": {
+      "title": "피드백 관리",
+      "column-setting": "컬럼설정",
+      "issue-cell": {
+        "issue-list": "이슈 목록",
+        "register-issue": "이슈 등록",
+        "create-issue": "이슈 생성",
+        "input-issue": "이슈 입력",
+        "delete-issue": "이슈 삭제"
+      },
+      "download": {
+        "loading": "다운로드 중입니다.",
+        "success": "다운로드가 완료되었습니다.",
+        "error": "다운로드에 실패하였습니다.",
+        "loading-description": "총 {{count, number}}개 다운로드 중입니다.",
+        "success-description": "총 {{count, number}}개 다운로드를 완료했습니다.",
+        "error-description": "총 {{count, number}}개 다운로드를 실패했하였습니다."
+      },
+      "button": {
+        "all-download": "전체 다운로드",
+        "select-download": "{{count, number}}개 다운로드",
+        "excel-download": "엑셀 다운로드",
+        "csv-download": "CSV 다운로드"
+      },
+      "dialog": {
+        "delete-feedback": {
+          "title": "피드백 삭제",
+          "description": "선택한 피드백을 모두 삭제 하시겠어요?"
+        }
+      }
+    },
+    "issue": {
+      "title": "이슈 관리",
+      "setting": "이슈 설정",
+      "dialog": {
+        "delete-issue": {
+          "title": "이슈 삭제",
+          "description": "선택한 이슈를 모두 삭제 하시겠어요?"
+        }
+      }
+    },
+    "setting": {
+      "title": "설정",
+      "subtitle": {
+        "tenant-info": "Tenant 정보",
+        "sign-up-mgmt": "Login & Signup 관리",
+        "user-mgmt": "User 관리",
 
-  "title.card.feedbackStatus": "피드백 현황",
-  "title.card.feedbackYesterdayCount": "어제 피드백 수",
-  "title.card.feedbackCountChange": "피드백 추이",
-  "title.card.userManagement": "사용자 관리",
-  "title.card.deletedUserManagement": "삭제된 사용자 관리",
-  "title.card.addField": "필드 추가",
+        "project-info": "Project 정보",
+        "member-mgmt": "Member 관리",
+        "role-mgmt": "Role 관리",
+        "api-key-mgmt": "API Key 관리",
+        "ticket-mgmt": "Issue Tracker 관리",
+        "delete-project": "Project 삭제",
 
-  "title.card.weeklyFeedbackCount": "일주일간 발생한 피드백 수",
-  "title.card.projectInfo": "프로젝트 정보",
-  "title.card.selectProject": "프로젝트 선택",
-  "title.card.inputProjectInfo": "프로젝트 정보 입력",
-  "title.card.inputChannelInfo": "채널 정보 입력",
-
-  "title.card.channelInfo": "채널 정보",
-  "title.card.feedbackTable": "피드백 테이블",
-
-  "subTitle.feedbackYesterdayStatus": "어제 발생한 피드백",
-  "subTitle.feedback28daysStatus": "최근 28일 발생한 피드백",
-
-  "input.label.siteName": "사이트 명",
-  "input.label.isPrivate": "회원가입 금지 (초대만 가능)",
-  "input.label.isRestrictDomain": "이메일 도메인 제한",
-  "input.label.allowDomains": "혀용 도메인 리스트",
-  "input.label.defaultRole": "사용자 기본 역할",
-
-  "input.label.expression": "수식",
-  "input.helper.invalidExpression": "올바르지 않는 수식",
-
-  "input.placeholder.email": "이메일",
-  "input.placeholder.code": "인증 번호",
-  "input.placeholder.password": "비밀번호",
-  "input.placeholder.confirmPassword": "비밀번호 확인",
-  "input.placeholder.projectTitle": "프로젝트 명을 입력해주세요.",
-  "input.placeholder.serviceName": "서비스 명을 입력해주세요.",
-  "input.placeholder.logoUrl": "로고 URL을 입력해주세요.",
-  "input.placeholder.channelTitle": "채널 명을 입력해주세요.",
-
-  "input.placeholder.siteName": "사이트 제목",
-
-  "input.caption.isPrivate": "사용자 초대로만 가입",
-  "input.caption.isRestrictDomain": "사용자 이메일 도메인 제한",
-  "input.caption.allowDomains": "허용 가능한 도메인",
-
-  "input.label.projectTitle": "프로젝트 명",
-  "input.label.channelTitle": "채널 명",
-  "input.label.description": "설명",
-  "input.label.feedbackField": "필드",
-
-  "input.label.fieldOption": "옵션",
-
-  "locale.ko": "한국어",
-  "locale.ja": "日本語",
-  "locale.en": "English",
-
-  "text.count": "개",
-
-  "text.users": "사용자",
-  "email": "이메일",
-  "text.authorization": "역할",
-  "text.emailVerified": "이메일 인증",
-  "text.deletedAt": "삭제일",
-  "text.selection": "선택",
-
-  "text.recent7days": "최근 7일",
-  "text.recent15days": "최근 15일",
-  "text.recent28days": "최근 28일",
-
-  "text.projectList": "프로젝트 목록",
-  "text.channeList": "채널 목록",
-
-  "text.perPage": "페이지 당",
-
-  "menu.sideNav.dashboard": "대쉬보드",
-  "menu.sideNav.projectManagement": "프로젝트 관리",
-  "menu.sideNav.userManagement": "사용자 관리",
-  "menu.sideNav.roleManamgenet": "역할 관리",
-  "menu.sideNav.serviceManagement": "서비스 관리",
-
-  "button.sendEmail": "이메일 보내기",
-  "button.setting": "설정",
-  "button.resetPassword": "비밀번호 재설정",
-  "button.signIn": "로그인",
-  "button.signUp": "회원가입",
-  "button.back": "뒤로",
-  "button.userInvitation": "초대하기",
-  "button.restore": "복원하기",
-  "button.requestAuth": "인증 요청",
-  "button.verifyAuth": "인증 확인",
-  "button.registerProject": "+ 프로젝트 등록",
-  "button.registerChannel": "+ 채널 등록",
-  "button.add": "추가",
-  "button.prev": "이전",
-  "button.next": "다음",
-  "button.delete": "제거",
-  "button.modify": "수정",
-  "button.create": "생성",
-  "button.close": "닫기",
-  "button.cancel": "취소",
-  "button.save": "저장",
-  "button.apply": "적용",
-  "button.downloadXLSX": "엑셀 다운로드",
-  "button.downloadCSV": "CSV 다운로드",
-  "button.addFilter": "+ 필터 추가",
-  "button.createRole": "역할 생성",
-  "button.deleteUser": "계정 삭제",
-  "button.invite": "초대하기",
-
-  "table.head.projectTitle": "프로젝트 명",
-  "table.head.channelCount": "채널 수",
-  "table.head.createAt": "생성일",
-  "table.head.createBy": "생성자",
-
-  "table.head.channelTitle": "채널 명",
-
-  "order": "순서",
-  "channelTitle": "채널 명",
-  "field": "필드",
-  "fieldName": "필드 명",
-  "fieldType": "필드 유형",
-  "isAdmin": "수정 가능한",
-  "isDisabled": "비활성화",
-  "fieldOption": "옵션",
-  "constraint": "제약 사항",
-  "description": "설명",
-  "managers": "매니저",
-  "statistics": "통계",
-
-  "role": "역할",
-  "myRole": "나의 역할",
-  "roles": "역할",
-  "roleName": "역할 명",
-  "userCount": "사용자 수",
-  "permission": "권한",
-
-  "currentPassword": "현재 비밀번호",
-  "newPassword": "새로운 비밀번호",
-  "confirmNewPassword": "새로운 확인 비밀번호",
-
-  "date.today": "오늘",
-  "date.yesterday": "어제",
-  "date.thisWeek": "이번주",
-  "date.lastWeek": "저번주",
-  "date.thisMonth": "이번달",
-
-  "toChange": "(으)로 변경",
-  "feedbackCodeSnippet": "피드백 요청 코드 조각",
-  "custom": "사용자 지정",
-  "logout": "로그아웃"
+        "channel-info": "Channel 정보",
+        "field-mgmt": "Field 관리",
+        "delete-channel": "Channel 삭제"
+      },
+      "button": {
+        "create-project": "Project 생성",
+        "create-channel": "Channel 생성",
+        "create-api-key": "Key 생성"
+      },
+      "sign-up-mgmt": {
+        "ufb-login": "UFB 로그인",
+        "oauth-login": "OAuth2.0 로그인",
+        "all-login": "모두",
+        "possibility": "직접 회원가입 가능",
+        "impossibility": "직접 회원가입 불가능",
+        "no-domain-restriction": "도메인 제한 없음",
+        "domain-restriction": "도메인 제한 있음",
+        "domain-restriction-tooltip": "회원가입 할 수 있는 이메일의 도메인을 설정할 수 있습니다."
+      },
+      "role-mgmt": {
+        "edit-role": "Role 수정",
+        "delete-role": "Role 삭제"
+      },
+      "api-key-status": {
+        "active": "활성",
+        "inactive": "비활성"
+      },
+      "field-status": {
+        "active": "활성",
+        "inactive": "비활성"
+      },
+      "same-key": "Key 정보와 동일하게 입력",
+      "feedback-request-code": "피드백 요청 코드",
+      "ticket-mgmt.description": "UserFeedback Issue와 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. \n 사용중인 Issue Tracking System URL을 입력해주세요.",
+      "option-info": "옵션 정보",
+      "field-mgmt": {
+        "description": "저장을 하려면 미리보기를 먼저 눌러주세요.",
+        "preview": "미리보기",
+        "preview-caption": "미리보기는 이해를 돕기 위한 예시 데이터입니다.",
+        "preview-description": "<preview>미리보기</preview> 선택 후 확인가능합니다."
+      },
+      "dialog": {
+        "edit-user": { "title": "User 편집" },
+        "delete-project": {
+          "title": "Project 삭제",
+          "description": "Project를 삭제하면 Issue/Feedback 데이터가 모두 삭제됩니다.\n삭제를 계속 진행하려면 아래 텍스트를 입력해주세요."
+        },
+        "delete-channel": {
+          "title": "Channel 삭제",
+          "description": "Channel을 삭제하면 피드백 데이터가 모두 삭제됩니다.\n삭제를 계속 진행하려면 아래 텍스트를 입력해주세요."
+        },
+        "create-role": {
+          "title": "Role 생성",
+          "description": "신규 Role의 명칭을 입력해주세요."
+        },
+        "edit-api-key": {
+          "title": "API KEY 편집",
+          "description": "API KEY를 비활성 상태로 변경하면\n해당 KEY 정보의 API를 이용할 수 없습니다.\nAPI KEY를 사용하지 않는 경우에만 비활성 상태로 변경 해주세요."
+        },
+        "delete-option": {
+          "title": "옵선 삭제",
+          "description": "옵션을 삭제하면 기존에 저장된 옵션에는 적용되지 않습니다."
+        },
+        "delete-role": {
+          "title": "Role 삭제",
+          "description": "Role을 삭제하시겠습니까?"
+        },
+        "edit-member": {
+          "title": "Member 편집",
+          "description": "Role 정보에 따라 접근 가능한 메뉴와\n사용할 수 있는 기능이 달라집니다.\nMember 정보를 확인하고 알맞은 Role 정보를 선택해주세요."
+        },
+        "register-member": { "title": "Member 등록" },
+        "delete-member": {
+          "title": "Member 삭제",
+          "description": "Member를 삭제하시겠습니까?"
+        },
+        "add-field": { "title": "Field 추가" },
+        "edit-field": { "title": "Field 수정" },
+        "invite-user": { "title": "User 초대" }
+      }
+    }
+  },
+  "header": {
+    "profile": "프로필",
+    "sign-out": "로그아웃"
+  },
+  "button": {
+    "setting": "설정",
+    "back": "뒤로가기",
+    "sign-in": "로그인",
+    "sign-up": "회원가입",
+    "save": "저장",
+    "create": "생성",
+    "cancel": "취소",
+    "delete": "삭제",
+    "register": "등록",
+    "select-cancel": "선택 취소",
+    "reset": "초기화",
+    "confirm": "확인"
+  },
+  "input": {
+    "label": {
+      "password": "비밀번호",
+      "confirm-password": "비밀번호 확인"
+    },
+    "placeholder": {
+      "input": "입력해주세요.",
+      "email": "Email 입력",
+      "password": "비밀번호 입력",
+      "confirm-password": "비밀번호 입력"
+    }
+  },
+  "text": {
+    "search-result": "검색 결과",
+    "number-count": "{{count, number}}개",
+    "no-data": "등록된 데이터가 없습니다.",
+    "per-page": "페이지 당",
+    "select-option": "{{name}} 선택",
+    "select-count": "{{count, number}}개 선택",
+    "search-filter": "필터 검색",
+    "all": "전체",
+    "issue": {
+      "init": "신규",
+      "onReview": "검토중",
+      "inProgress": "진행중",
+      "resolved": "완료",
+      "pending": "진행하지 않음"
+    },
+    "date": {
+      "today": "오늘",
+      "yesterday": "어제",
+      "before-days": "{{day, number}}일전"
+    },
+    "equal-search": "완전 일치",
+    "like-search": "부분 일치"
+  },
+  "toast": {
+    "sign-in": "로그인 성공",
+    "register": "등록 완료",
+    "delete": "삭제 완료",
+    "save": "저장 완료",
+    "invite": "초대 완료",
+    "active": "활성화",
+    "inactive": "비활성화",
+    "add": "추가 완료",
+    "copy": "복사 완료"
+  }
 }

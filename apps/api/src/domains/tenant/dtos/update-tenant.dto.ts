@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-class DefaultRole {
-  id: string;
-}
+import { OAuthConfig } from '../tenant.entity';
 
 export class UpdateTenantDto {
-  id: string;
   siteName: string;
+  useEmail: boolean;
   isPrivate: boolean;
   isRestrictDomain: boolean;
-  allowDomains: string[];
-  defaultRole: DefaultRole;
+  allowDomains: string[] | null;
+  useOAuth: boolean;
+  oauthConfig: OAuthConfig | null;
 }

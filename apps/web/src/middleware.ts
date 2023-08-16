@@ -14,60 +14,43 @@
  * under the License.
  */
 import { getIronSession } from 'iron-session/edge';
-import { NextRequest, NextResponse, URLPattern } from 'next/server';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-import { ironOption } from '@/constants/iron-option';
+import { DEFAULT_LOCALE } from './constants/i18n';
+import { ironOption } from './constants/iron-option';
+import { Path } from './constants/path';
 
-import { INIT_PATH, PATH } from './constants/path';
-
-const AUTHENTICATED_PAGES = [
-  '/dashboard',
-  '/project-management/:path*',
-  '/setting/:path*',
-];
-const SIGN_PAGES = ['/auth/:path*'];
-
-// Unsupported spread operator in the Array Expression at "config.matcher".
-// The default config will be used instead.
-// Read More - https://nextjs.org/docs/messages/invalid-page-config
-// export const config = { matcher: [...AUTHENTICATED_PAGES, ...SIGN_PAGES] };
-
-export const config = {
-  matcher: [
-    '/dashboard',
-    '/project-management/:path*',
-    '/setting/:path*',
-    '/auth/:path*',
-  ],
-};
-
-export const middleware = async (req: NextRequest) => {
+export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
-  const session = await getIronSession(req, res, ironOption);
-  // const { status } = await fetch(
-  //   new URL(`${process.env.API_BASE_URL}/api/tenant`).href,
-  // );
-  // if (status === 404) {
-  //   return NextResponse.redirect(new URL(PATH.TENANT_INITIAL_SETTING, req.url));
-  // }
 
-  if (isPage(AUTHENTICATED_PAGES, req.url) && !session.jwt) {
-    const redirectUrl = new URL(PATH.AUTH.SIGN_IN, req.url);
-    return NextResponse.redirect(redirectUrl);
+  if (Path.isErrorPage(req.nextUrl.pathname)) return res;
+
+  const session = await getIronSession(req, res, ironOption);
+
+  const isProtected = Path.isProtectPage(req.nextUrl.pathname);
+
+  if (session.jwt && !isProtected) {
+    return NextResponse.redirect(new URL(Path.MAIN, req.url));
   }
 
-  if (isPage(SIGN_PAGES, req.url) && session.jwt) {
-    const redirectUrl = new URL(INIT_PATH, req.url);
-    return NextResponse.redirect(redirectUrl);
+  if (!session.jwt && isProtected) {
+    return NextResponse.redirect(new URL(Path.SIGN_IN, req.url));
+  }
+
+  if (req.nextUrl.locale === 'default') {
+    const locale = req.cookies.get('NEXT_LOCALE')?.value || DEFAULT_LOCALE;
+    return NextResponse.redirect(
+      new URL(
+        `/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`,
+        req.url,
+      ),
+    );
   }
 
   return res;
-};
+}
 
-const isPage = (pages: string[], url: string) => {
-  for (const page of pages) {
-    const pattern = new URLPattern({ pathname: page });
-    if (pattern.test(url)) return true;
-  }
-  return false;
+export const config = {
+  matcher: '/((?!api|_next/static|_next/image|favicon.ico|fonts|assets).*)',
 };

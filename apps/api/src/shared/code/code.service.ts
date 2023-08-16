@@ -19,13 +19,14 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as crypto from 'crypto';
 import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
 import { CodeTypeEnum } from './code-type.enum';
 import { CodeEntity } from './code.entity';
-import { SetCodeDto, SetCodeVerifiedDto } from './dtos';
+import { SetCodeDto, VerifyCodeDto } from './dtos';
+import { SetCodeUserInvitationDataDto } from './dtos/set-code.dto';
 
 export const SECONDS = 60 * 5;
 
@@ -36,75 +37,72 @@ export class CodeService {
     private readonly codeRepo: Repository<CodeEntity>,
   ) {}
 
+  @Transactional()
   async setCode(dto: SetCodeDto) {
-    const { key, type } = dto;
+    const { key, type, durationSec } = dto;
 
     const code = this.createCode();
-    const hashedKey = this.getHashKey(key);
 
-    const codeEntity = await this.codeRepo.findOneBy({
-      key: hashedKey,
-      type,
-    });
+    const codeEntity = await this.codeRepo.findOneBy({ key, type });
+
     await this.codeRepo.save({
       ...codeEntity,
       type,
-      key: hashedKey,
+      key,
       code,
       isVerified: false,
-      expiredAt: dayjs().add(SECONDS, 'seconds').toDate(),
+      expiredAt: dayjs()
+        .add(durationSec ?? SECONDS, 'seconds')
+        .toDate(),
       data: type === CodeTypeEnum.USER_INVITATION ? dto.data : undefined,
     });
 
     return code;
   }
 
-  async setCodeVerified({ code, key, type }: SetCodeVerifiedDto) {
-    const hashedKey = this.getHashKey(key);
-
-    const codeEntity = await this.codeRepo.findOneBy({
-      key: hashedKey,
-      type,
-    });
+  @Transactional()
+  async verifyCode({ code, key, type }: VerifyCodeDto) {
+    const codeEntity = await this.codeRepo.findOneBy({ key, type });
 
     if (!codeEntity) throw new NotFoundException('not found code');
+    if (codeEntity.isVerified)
+      throw new BadRequestException('already verified');
 
     if (codeEntity.code !== code) {
       throw new BadRequestException('invalid code');
     }
 
-    if (dayjs(codeEntity.expiredAt).diff(dayjs()) < 0) {
+    if (dayjs().isAfter(codeEntity.expiredAt)) {
       throw new BadRequestException('code expired');
     }
 
-    await this.codeRepo.update({ id: codeEntity.id }, { isVerified: true });
+    await this.codeRepo.update(
+      { id: codeEntity.id },
+      { id: codeEntity.id, isVerified: true },
+    );
   }
 
-  async getDataByCodeAndType(type: CodeTypeEnum.USER_INVITATION, code: string) {
-    const codeDoc = await this.codeRepo.findOneBy({
+  async getDataByCodeAndType(
+    type: CodeTypeEnum.USER_INVITATION,
+    code: string,
+  ): Promise<SetCodeUserInvitationDataDto> {
+    const codeEntity = await this.codeRepo.findOneBy({
       type,
       code,
     });
-    if (!codeDoc) throw new NotFoundException('not found code');
-    return codeDoc.data;
+    if (!codeEntity) throw new NotFoundException('code not found');
+    return codeEntity.data;
   }
 
   async checkVerified(type: CodeTypeEnum, key: string) {
-    const codeEntity = await this.codeRepo.findOneBy({
-      key: this.getHashKey(key),
-      type,
-    });
+    const codeEntity = await this.codeRepo.findOneBy({ key, type });
 
-    if (!codeEntity) throw new NotFoundException('not found code');
+    if (!codeEntity) throw new NotFoundException('code not found');
 
     return codeEntity.isVerified;
   }
 
   private createCode() {
     return String(Math.floor(Math.random() * 999998 + 1)).padStart(6, '0');
-  }
-
-  getHashKey(key: string) {
-    return crypto.createHash('sha1').update(key).digest('hex');
   }
 }

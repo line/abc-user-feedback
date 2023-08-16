@@ -13,46 +13,52 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const PATH = {
-  DASHBOARD: '/dashboard',
-  AUTH: {
-    SIGN_IN: '/auth/signIn',
-    SIGN_UP: '/auth/signUp',
-    RESET_PASSWORD: '/auth/reset-password',
-  },
-  LINK: {
-    RESET_PASSWORD: '/link/reset-password',
-    USER_INVITATION: '/link/user-invitation',
-  },
-  PROJECT_MANAGEMENT: {
-    LIST: '/project-management',
-    PROJECT: {
-      CREATE: '/project-management/project/create',
-      DETAIL: '/project-management/project/[projectId]',
-      MODIFY: '/project-management/project/[projectId]/modify',
-    },
-    CHANNEL: {
-      CREATE: '/project-management/project/[projectId]/channel/create',
-      DETAIL: '/project-management/project/[projectId]/channel/[channelId]',
-      MODIFY:
-        '/project-management/project/[projectId]/channel/[channelId]/modify',
-      STATISTICS: '/project-management/channel/[channelId]/statistics',
-    },
-  },
-  SETTING: {
-    ROLE: {
-      CREATE: '/setting/role/create',
-      LIST: '/setting/role',
-      DETAIL: '/setting/role/[roleId]',
-    },
-    USER: '/setting/user',
-    TENANT: '/setting/tenant',
-    ACCOUNT: {
-      PROFILE: '/setting/account/profile',
-      PASSWORD: '/setting/account/password',
-    },
-  },
-  TENANT_INITIAL_SETTING: '/tenant/create',
-};
+class PathV3 {
+  private static instance: PathV3;
+  public static get Instance(): PathV3 {
+    return this.instance || (this.instance = new this());
+  }
 
-export const INIT_PATH = PATH.PROJECT_MANAGEMENT.LIST;
+  get CREATE_TENANT() {
+    return '/tenant/create';
+  }
+  get SIGN_IN() {
+    return '/auth/sign-in';
+  }
+
+  get SIGN_UP() {
+    return '/auth/sign-up';
+  }
+
+  get PASSWORD_RESET() {
+    return '/auth/reset-password';
+  }
+
+  get MAIN() {
+    return '/main';
+  }
+  get FEEDBACK() {
+    return '/main/[projectId]/feedback';
+  }
+
+  get ISSUE() {
+    return '/main/[projectId]/issue';
+  }
+
+  get SETTINGS() {
+    return '/main/[projectId]/setting';
+  }
+
+  isErrorPage(pathname: string) {
+    return pathname.startsWith('/error');
+  }
+  isProtectPage(pathname: string) {
+    return pathname.startsWith('/main');
+  }
+
+  hasSideNav(pathname: string) {
+    return pathname.startsWith('/main/[projectId]');
+  }
+}
+
+export const Path = PathV3.Instance;

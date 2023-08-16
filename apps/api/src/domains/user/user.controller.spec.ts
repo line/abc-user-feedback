@@ -23,12 +23,25 @@ import { UserDto } from './dtos';
 import {
   ChangePasswordRequestDto,
   ResetPasswordRequestDto,
-  UpdateUserRoleRequestDto,
   UserInvitationRequestDto,
 } from './dtos/requests';
 import { UserPasswordService } from './user-password.service';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
+
+const MockUserService = {
+  findAll: jest.fn(),
+  deleteUsers: jest.fn(),
+  sendInvitationCode: jest.fn(),
+  findById: jest.fn(),
+  updateUserRole: jest.fn(),
+  deleteById: jest.fn(),
+};
+const MockUserPasswordService = {
+  sendResetPasswordMail: jest.fn(),
+  resetPassword: jest.fn(),
+  changePassword: jest.fn(),
+};
 
 describe('user controller', () => {
   let userController: UserController;
@@ -53,7 +66,7 @@ describe('user controller', () => {
   });
 
   it('deleteUsers', () => {
-    userController.deleteUsers({ ids: ['1'] });
+    userController.deleteUsers({ ids: [1] });
     expect(MockUserService.deleteUsers).toHaveBeenCalledTimes(1);
   });
   it('inviteUser', () => {
@@ -80,7 +93,7 @@ describe('user controller', () => {
 
   it('getUser', () => {
     const userDto = new UserDto();
-    userDto.id = faker.datatype.uuid();
+    userDto.id = faker.datatype.number();
 
     userController.getUser(userDto.id, userDto);
 
@@ -91,40 +104,20 @@ describe('user controller', () => {
   describe('deleteUser', () => {
     it('positive', () => {
       const userDto = new UserDto();
-      userDto.id = faker.datatype.uuid();
+      userDto.id = faker.datatype.number();
 
-      userController.deleteUser(userDto, userDto.id);
+      userController.deleteUser(userDto.id, userDto);
 
       expect(MockUserService.deleteById).toHaveBeenCalledTimes(1);
       expect(MockUserService.deleteById).toHaveBeenCalledWith(userDto.id);
     });
     it('Unauthorization', () => {
       const userDto = new UserDto();
-      userDto.id = faker.datatype.uuid();
+      userDto.id = faker.datatype.number();
 
       expect(
-        userController.deleteUser(userDto, faker.datatype.uuid()),
+        userController.deleteUser(faker.datatype.number(), userDto),
       ).rejects.toThrow(UnauthorizedException);
     });
   });
-
-  it('updateRole', () => {
-    const dto = new UpdateUserRoleRequestDto();
-    userController.updateRole('id', dto);
-    expect(MockUserService.updateUserRole).toHaveBeenCalledTimes(1);
-  });
 });
-
-const MockUserService = {
-  findAll: jest.fn(),
-  deleteUsers: jest.fn(),
-  sendInvitationCode: jest.fn(),
-  findById: jest.fn(),
-  updateUserRole: jest.fn(),
-  deleteById: jest.fn(),
-};
-const MockUserPasswordService = {
-  sendResetPasswordMail: jest.fn(),
-  resetPassword: jest.fn(),
-  changePassword: jest.fn(),
-};

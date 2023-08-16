@@ -16,16 +16,20 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
-import { In, Like, Repository } from 'typeorm';
+import { In, Like, Raw, Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
-import { RoleService } from '../role/role.service';
-import { FindAllUsersDto, InviteUserDto, UpdateUserRoleDto } from './dtos';
+import { TenantService } from '../tenant/tenant.service';
+import { FindAllUsersDto, InviteUserDto } from './dtos';
+import { UpdateUserDto } from './dtos/update-user.dto';
+import { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
+  NotAllowedDomainException,
   UserAlreadyExistsException,
   UserNotFoundException,
 } from './exceptions';
@@ -35,57 +39,115 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
-    private readonly roleService: RoleService,
     private readonly userInvitationMailingService: UserInvitationMailingService,
     private readonly codeService: CodeService,
+    private readonly tenantService: TenantService,
   ) {}
 
-  async findAll({ options, keyword = '' }: FindAllUsersDto) {
-    return await paginate<UserEntity>(this.userRepo, options, {
-      where: { email: Like(`%${keyword}%`) },
-      relations: { role: true },
-      order: { createdAt: 'DESC' },
-    });
+  async findAll({ options, query, order }: FindAllUsersDto) {
+    const where = query
+      ? Object.entries(query).reduce((prev, [key, value]) => {
+          if (key === 'projectId') {
+            return { ...prev, members: { role: { project: { id: value } } } };
+          }
+          if (key === 'createdAt') {
+            const { lt, gte } = value as any;
+            return {
+              ...prev,
+              createdAt: Raw((alias) => `${alias} >= :gte AND ${alias} < :lt`, {
+                lt,
+                gte,
+              }),
+            };
+          }
+          return { ...prev, [key]: Like(`%${value}%`) };
+        }, {})
+      : {};
+
+    return await paginate(
+      this.userRepo.createQueryBuilder().setFindOptions({
+        where,
+        order,
+        relations: { members: { role: { project: true } } },
+      }),
+      options,
+    );
   }
 
-  async findByEmail(email: string) {
+  async findByEmailAndSignUpMethod(
+    email: string,
+    signUpMethod: SignUpMethodEnum,
+  ) {
     return await this.userRepo.findOne({
-      where: { email },
-      relations: { role: true },
+      where: { email, signUpMethod },
+      withDeleted: true,
     });
   }
 
-  async findById(id: string) {
+  async findById(id: number) {
     const user = await this.userRepo.findOne({
       where: { id },
-      relations: { role: true },
     });
     if (!user) throw new UserNotFoundException();
     return user;
   }
-  async deleteById(id: string) {
-    await this.userRepo.softDelete({ id });
+
+  @Transactional()
+  async deleteById(id: number) {
+    const user = new UserEntity();
+    user.id = id;
+    await this.userRepo.remove(user);
   }
 
-  async updateUserRole(dto: UpdateUserRoleDto) {
-    const { roleId, userId } = dto;
-    const role = await this.roleService.findById(roleId);
-    await this.userRepo.update({ id: userId }, { role });
+  @Transactional()
+  async updateUser(dto: UpdateUserDto) {
+    const { userId, ...user } = dto;
+    await this.userRepo.update({ id: userId }, { ...user, id: userId });
   }
 
-  async sendInvitationCode({ email, roleId }: InviteUserDto) {
+  @Transactional()
+  async sendInvitationCode({
+    email,
+    roleId,
+    userType,
+    invitedBy,
+  }: InviteUserDto) {
     const user = await this.userRepo.findOneBy({ email });
     if (user) throw new UserAlreadyExistsException();
 
     const code = await this.codeService.setCode({
       type: CodeTypeEnum.USER_INVITATION,
       key: email,
-      data: { roleId },
+      data: { roleId, userType, invitedBy },
+      durationSec: 60 * 60 * 24,
     });
     await this.userInvitationMailingService.send({ code, email });
   }
 
-  async deleteUsers(ids: string[]) {
-    await this.userRepo.delete({ id: In(ids) });
+  @Transactional()
+  async deleteUsers(ids: number[]) {
+    const users = await this.userRepo.find({
+      where: { id: In(ids) },
+      relations: { members: true },
+    });
+    await this.userRepo.remove(users);
+  }
+
+  async validateEmail(email: string) {
+    const tenant = await this.tenantService.findOne();
+    const domain = email.split('@')[1];
+    if (tenant.isRestrictDomain && !tenant.allowDomains.includes(domain)) {
+      throw new NotAllowedDomainException();
+    }
+    return true;
+  }
+
+  async findRolesById(id: number) {
+    const { members } = await this.userRepo.findOne({
+      where: { id },
+      select: { members: true },
+      relations: { members: { role: { project: true } } },
+    });
+    return members.map((v) => v.role);
   }
 }

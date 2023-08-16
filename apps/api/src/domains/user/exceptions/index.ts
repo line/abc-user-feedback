@@ -16,6 +16,7 @@
 export { UserAlreadyExistsException } from './user-already-exists.exception';
 export { UserNotFoundException } from './user-not-found.exception';
 export { EmailVerificationException } from './email-verification.exception';
-export { NotAllowDomainException } from './not-allow-domain.exception';
-export { NotAllowUserCreateException } from './not-allow-user-create.exception';
+export { NotAllowedDomainException } from './not-allowed-domain.exception';
+export { NotAllowedUserCreateException } from './not-allowed-user-create.exception';
 export { InvalidCodeException } from './invalid-code.exception';
+export { InvalidPasswordException } from './invalid-password.exception';

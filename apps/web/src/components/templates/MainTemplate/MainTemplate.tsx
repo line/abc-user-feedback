@@ -13,22 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Box, Container, Flex } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 
-import { Header, SideNav } from '@/components';
+import { Header, SideNav } from '@/components/layouts';
+import { Path } from '@/constants/path';
 
 interface IProps extends React.PropsWithChildren {}
 
 const MainTemplate: React.FC<IProps> = ({ children }) => {
+  const router = useRouter();
+
   return (
     <>
       <Header />
-      <Flex minH="calc(100vh - 70px)" alignItems="stretch">
-        <SideNav />
-        <Box flex={1} p="30px" overflow="auto">
+      <div className="flex items-stretch min-h-[calc(100vh-48px)]">
+        {Path.hasSideNav(router.pathname) && <SideNav />}
+        {/* <main className="flex flex-col mx-4 my-6 w-[calc(100vw-120px)]"> */}
+        <main
+          className={[
+            'flex flex-col mx-4 my-6',
+            Path.hasSideNav(router.pathname)
+              ? 'w-[calc(100%-104px)] '
+              : 'w-full',
+          ].join(' ')}
+        >
           {children}
-        </Box>
-      </Flex>
+        </main>
+      </div>
     </>
   );
 };

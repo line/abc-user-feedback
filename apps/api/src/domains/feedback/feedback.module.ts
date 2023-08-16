@@ -13,24 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ProjectController } from './controllers';
-import { ChannelController } from './controllers/channel.controller';
-import { FeedbackController } from './controllers/feedback.controller';
-import { FieldController } from './controllers/field.controller';
-import { OptionController } from './controllers/option.controller';
-import { ChannelEntity } from './entities/channel.entity';
-import { FieldEntity } from './entities/field.entity';
-import { OptionEntity } from './entities/option.entity';
-import { ProjectEntity } from './entities/project.entity';
-import { ElasticsearchRepository } from './repositories';
-import { ChannelService } from './services/channel.service';
-import { FeedbackService } from './services/feedback.service';
-import { FieldService } from './services/field.service';
-import { OptionService } from './services/option.service';
-import { ProjectService } from './services/project.service';
+import { OpensearchRepository } from '@/common/repositories';
+
+import { AuthModule } from '../auth/auth.module';
+import { ChannelEntity } from '../channel/channel/channel.entity';
+import { ChannelModule } from '../channel/channel/channel.module';
+import { FieldEntity } from '../channel/field/field.entity';
+import { FieldModule } from '../channel/field/field.module';
+import { OptionEntity } from '../channel/option/option.entity';
+import { OptionModule } from '../channel/option/option.module';
+import { HistoryModule } from '../history/history.module';
+import { IssueEntity } from '../project/issue/issue.entity';
+import { IssueModule } from '../project/issue/issue.module';
+import { ProjectEntity } from '../project/project/project.entity';
+import { ProjectModule } from '../project/project/project.module';
+import { FeedbackController } from './feedback.controller';
+import { FeedbackEntity } from './feedback.entity';
+import { FeedbackMySQLService } from './feedback.mysql.service';
+import { FeedbackOSService } from './feedback.os.service';
+import { FeedbackService } from './feedback.service';
 
 @Module({
   imports: [
@@ -38,23 +42,25 @@ import { ProjectService } from './services/project.service';
       ProjectEntity,
       ChannelEntity,
       FieldEntity,
+      FeedbackEntity,
+      IssueEntity,
       OptionEntity,
     ]),
+    forwardRef(() => AuthModule),
+    forwardRef(() => ChannelModule),
+    FieldModule,
+    OptionModule,
+    IssueModule,
+    forwardRef(() => ProjectModule),
+    HistoryModule,
   ],
   providers: [
-    ProjectService,
-    ChannelService,
-    FieldService,
-    OptionService,
     FeedbackService,
-    ElasticsearchRepository,
+    FeedbackMySQLService,
+    FeedbackOSService,
+    OpensearchRepository,
   ],
-  controllers: [
-    ProjectController,
-    ChannelController,
-    FieldController,
-    FeedbackController,
-    OptionController,
-  ],
+  controllers: [FeedbackController],
+  exports: [FeedbackService, FeedbackMySQLService, FeedbackOSService],
 })
 export class FeedbackModule {}

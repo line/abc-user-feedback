@@ -16,3 +16,4 @@
 export { PaginationDto } from './pagination.dto';
 export { PaginationRequestDto } from './pagination-request.dto';
 export { PaginationResponseDto } from './pagination-response.dto';
+export { TimeRange } from './time-range.dto';

@@ -1,0 +1,47 @@
+html {
+  --text-color-primary: #000000;
+  --text-color-secondary: #3C3C4399;
+  --text-color-tertiary: #3C3C434D;
+  --text-color-quaternary: #3C3C432E;
+  --text-color-inverse: #FFFFFF;
+
+  --text-above-color-primary: #ffffff;
+  --text-above-color-secondary: #ffffffa3;
+  --text-above-color-tertiary: #ffffff70;
+  --text-above-color-quaternary: #ffffff57;
+
+  --fill-color-primary: #000000;
+  --fill-color-secondary: #78788029;
+  --fill-color-tertiary: #7676801F;
+  --fill-color-quaternary: #74748014;
+  --fill-color-inverse: #ffffff;
+
+  --background-color-primary: #FFFFFF;
+  --background-color-secondary: #F2F2F7;
+  --background-color-tertiary: #FFFFFF;
+  --background-color-dim: #00000066;
+}
+
+html.dark {
+  --text-color-primary: #ffffff;
+  --text-color-secondary: #EBEBF599;
+  --text-color-tertiary: #EBEBF54D;
+  --text-color-quaternary: #EBEBF52E;
+  --text-color-inverse: #000000;
+
+  --text-above-color-primary: #ffffff;
+  --text-above-color-secondary: #ffffffa3;
+  --text-above-color-tertiary: #ffffff70;
+  --text-above-color-quaternary: #ffffff57;
+
+  --fill-color-primary: #ffffff;
+  --fill-color-secondary: #78788052;
+  --fill-color-tertiary: #7676803D;
+  --fill-color-quaternary: #7474802E;
+  --fill-color-inverse: #000000;
+
+  --background-color-primary: #000000;
+  --background-color-secondary: #18181A;
+  --background-color-tertiary: #2A2A2C;
+  --background-color-dim: #00000066;
+}

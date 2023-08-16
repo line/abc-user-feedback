@@ -32,11 +32,9 @@ export const ArrayDistinct = (
       options: validationOptions,
       validator: {
         validate(value: unknown): boolean {
-          if (Array.isArray(value)) {
-            const distinct = [...new Set(value)];
-            return distinct.length === value.length;
-          }
-          return false;
+          return Array.isArray(value)
+            ? [...new Set(value)].length === value.length
+            : false;
         },
         defaultMessage(args: ValidationArguments): string {
           return `must not contains duplicate entry for ${args.constraints[0]}`;
