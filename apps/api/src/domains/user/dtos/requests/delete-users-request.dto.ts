@@ -14,10 +14,10 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsUUID } from 'class-validator';
+import { IsNumber } from 'class-validator';
 
 export class DeleteUsersRequestDto {
-  @ApiProperty({ type: [String] })
-  @IsUUID(undefined, { each: true })
-  ids: string[];
+  @ApiProperty({ type: [Number] })
+  @IsNumber(undefined, { each: true })
+  ids: number[];
 }

@@ -16,13 +16,14 @@
 import { faker } from '@faker-js/faker';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
 import { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters';
-import { CreateProjectRequestDto } from '@/domains/feedback/controllers/dtos/requests';
-import { ProjectEntity } from '@/domains/feedback/entities/project.entity';
+import { CreateProjectRequestDto } from '@/domains/project/project/dtos/requests';
+import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { clearEntities } from '@/utils/test-utils';
 
 describe('AppController (e2e)', () => {
@@ -46,7 +47,7 @@ describe('AppController (e2e)', () => {
 
     await app.init();
 
-    dataSource = module.get(DataSource);
+    dataSource = module.get(getDataSourceToken());
     projectRepo = dataSource.getRepository(ProjectEntity);
   });
 

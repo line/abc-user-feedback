@@ -17,10 +17,6 @@ import { faker } from '@faker-js/faker';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { InjectionToken, Provider } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import {
-  ElasticsearchModule,
-  ElasticsearchModuleOptions,
-} from '@nestjs/elasticsearch';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { DataSource, Repository } from 'typeorm';
@@ -30,22 +26,14 @@ import {
   initializeTransactionalContext,
 } from 'typeorm-transactional';
 
-import {
-  elasticsearchConfig,
-  elasticsearchSchema,
-} from '@/configs/elasticsearch.config';
 import { jwtConfig, jwtConfigSchema } from '@/configs/jwt.config';
 import { mySqlConfigSchema, mysqlConfig } from '@/configs/mysql.config';
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import { AuthService } from '@/domains/auth/auth.service';
-import {
-  OWNER_ROLE,
-  OWNER_ROLE_DEFAULT_ID,
-} from '@/domains/role/role.constant';
-import { RoleEntity } from '@/domains/role/role.entity';
 import { UserDto } from '@/domains/user/dtos';
 import { UserStateEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';
+import { ConfigServiceType } from '@/types/config-service.type';
 
 initializeTransactionalContext();
 
@@ -55,10 +43,9 @@ export const getMockProvider = (
 ): Provider => ({ provide: injectToken, useFactory: () => factory });
 
 export const TestConfig = ConfigModule.forRoot({
-  load: [elasticsearchConfig, smtpConfig, jwtConfig, mysqlConfig],
+  load: [smtpConfig, jwtConfig, mysqlConfig],
   envFilePath: '.env.test',
   validate: (config) => ({
-    ...elasticsearchSchema.validateSync(config),
     ...smtpConfigSchema.validateSync(config),
     ...jwtConfigSchema.validateSync(config),
     ...mySqlConfigSchema.validateSync(config),
@@ -68,14 +55,6 @@ export const TestConfig = ConfigModule.forRoot({
 export const TestMailConfigModule = MailerModule.forRoot({
   transport: { url: '' },
 });
-export const TestElasticsearchConfigModule = ElasticsearchModule.registerAsync({
-  imports: [ConfigModule],
-  inject: [ConfigService],
-  useFactory: (configService: ConfigService): ElasticsearchModuleOptions => {
-    const { node, password, username } = configService.get('elasticsearch');
-    return { node, auth: { username, password } };
-  },
-});
 
 export const TestTypeOrmConfig = TypeOrmModule.forRootAsync({
   imports: [ConfigModule],
@@ -84,16 +63,20 @@ export const TestTypeOrmConfig = TypeOrmModule.forRootAsync({
     const datasource = await new DataSource(options).initialize();
     return addTransactionalDataSource(datasource);
   },
-  useFactory: (configService: ConfigService) => {
+  useFactory: (configService: ConfigService<ConfigServiceType>) => {
+    const { main_url, sub_urls } = configService.get('mysql', {
+      infer: true,
+    });
     return {
       type: 'mysql',
-      url: configService.get('mysql.url'),
       replication: {
-        master: { url: configService.get('mysql.main_url') },
-        slaves: [{ url: configService.get('mysql.sub_url') }],
+        master: { url: main_url },
+        slaves: sub_urls.map((url) => ({ url })),
       },
       entities: [join(__dirname, '../**/*.entity.{ts,js}')],
+      logging: ['warn', 'error'],
       namingStrategy: new SnakeNamingStrategy(),
+      timezone: process.env.TZ,
     };
   },
 });
@@ -102,7 +85,6 @@ export const TestConfigs = [
   TestConfig,
   TestMailConfigModule,
   TestTypeOrmConfig,
-  TestElasticsearchConfigModule,
 ];
 
 export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
@@ -128,19 +110,46 @@ export const signInTestUser = async (
   dataSource: DataSource,
   authService: AuthService,
 ) => {
-  const roleRepo = dataSource.getRepository(RoleEntity);
-  if (!(await roleRepo.findOneBy({ id: OWNER_ROLE_DEFAULT_ID }))) {
-    await roleRepo.save(OWNER_ROLE);
-  }
-
   const userRepo = dataSource.getRepository(UserEntity);
   const user = await userRepo.save({
     email: faker.internet.email(),
     state: UserStateEnum.Active,
     hashPassword: faker.internet.password(),
-    role: OWNER_ROLE,
   });
   return { jwt: await authService.signIn(UserDto.transform(user)), user };
 };
 
 export const DEFAULT_FIELD_COUNT = 2;
+
+export const createQueryBuilder: any = {
+  setFindOptions: () =>
+    jest.fn().mockImplementation(() => {
+      return createQueryBuilder;
+    }),
+};
+
+export const mockRepository = () => ({
+  findOneBy: jest.fn(),
+  findOne: jest.fn(),
+  find: jest.fn(),
+  findBy: jest.fn(),
+  findAndCount: jest.fn(),
+  findAndCountBy: jest.fn(),
+  save: jest.fn(),
+  create: jest.fn(),
+  update: jest.fn(),
+  upsert: jest.fn(),
+  count: jest.fn(),
+  remove: jest.fn(),
+  createQueryBuilder: jest.fn(() => createQueryBuilder),
+  query: jest.fn(),
+});
+
+export const MockOpensearchRepository = {
+  createIndex: jest.fn(),
+  deleteIndex: jest.fn(),
+  putMappings: jest.fn(),
+  createData: jest.fn(),
+  getData: jest.fn(),
+  updateData: jest.fn(),
+};

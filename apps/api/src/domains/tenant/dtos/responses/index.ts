@@ -14,3 +14,4 @@
  * under the License.
  */
 export { GetTenantResponseDto } from './get-tenant-response.dto';
+export { CountFeedbacksByTenantIdResponseDto } from './count-feedbacks-by-id-response.dto';

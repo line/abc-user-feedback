@@ -13,6 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as MainTemplate } from './MainTemplate';
-export { default as TitleTemplate } from './TitleTemplate';
-export { default as CenterTemplate } from './CenterTemplate';
+export { MainTemplate } from './MainTemplate';
+export { SettingMenuTemplate } from './SettingMenuTemplate';

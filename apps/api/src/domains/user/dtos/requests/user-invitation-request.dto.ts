@@ -14,14 +14,21 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsNumber, IsOptional } from 'class-validator';
+
+import { UserTypeEnum } from '../../entities/enums';
 
 export class UserInvitationRequestDto {
   @ApiProperty()
   @IsEmail()
   email: string;
 
-  @ApiProperty()
-  @IsString()
-  roleId: string;
+  @ApiProperty({ type: UserTypeEnum, required: true, enum: UserTypeEnum })
+  @IsEnum(UserTypeEnum)
+  userType: UserTypeEnum;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  roleId?: number;
 }

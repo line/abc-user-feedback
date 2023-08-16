@@ -1,5 +1,5 @@
 #!/bin/sh
-
+echo "NEXT_PUBLIC_API_BASE_URL: $NEXT_PUBLIC_API_BASE_URL"
 echo "Check that we have NEXT_PUBLIC_API_BASE_URL vars"
 test -n "$NEXT_PUBLIC_API_BASE_URL"
 

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ColorModeScript } from '@chakra-ui/react';
 import Document, {
   DocumentContext,
   DocumentInitialProps,
@@ -38,9 +37,19 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@100;300;400;500;700;900&display=swap"
             rel="stylesheet"
           />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark')
+              } else {
+                document.documentElement.classList.remove('dark')
+              }
+              `,
+            }}
+          />
         </Head>
         <body>
-          <ColorModeScript initialColorMode={'light'} />
           <Main />
           <NextScript />
         </body>

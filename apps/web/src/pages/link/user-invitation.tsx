@@ -13,31 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  Button,
-  Center,
-  Flex,
-  FormControl,
-  FormHelperText,
-  HStack,
-  Heading,
-  Input,
-  useToast,
-} from '@chakra-ui/react';
-import { yupResolver } from '@hookform/resolvers/yup';
-import type { GetStaticProps, NextPage } from 'next';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Icon, TextInput, toast } from '@ufb/ui';
+import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactElement, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import * as yup from 'yup';
+import { z } from 'zod';
 
-import { Card, CenterTemplate, Header } from '@/components';
+import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { PATH } from '@/constants/path';
-import { useToastDefaultOption } from '@/constants/toast-default-option';
-import { useOAIMuataion } from '@/hooks';
+import { Path } from '@/constants/path';
+import { useOAIMutation } from '@/hooks';
 
 import { NextPageWithLayout } from '../_app';
 
@@ -46,94 +36,110 @@ interface IForm {
   confirmPassword: string;
 }
 
-const schema: yup.SchemaOf<IForm> = yup.object().shape({
-  password: yup.string().required(),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref('password')], 'Not equals to password ')
-    .required(),
-});
+const schema: Zod.ZodType<IForm> = z
+  .object({
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine((schema) => schema.password === schema.confirmPassword, {
+    message: 'Password not matched',
+    path: ['confirmPassword'],
+  });
 
 const defaultValues: IForm = {
   password: '',
   confirmPassword: '',
 };
 
-interface IProps {}
-
-const UserInvitationPage: NextPageWithLayout<IProps> = () => {
+const UserInvitationPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const toast = useToast(useToastDefaultOption);
   const router = useRouter();
+
   const code = useMemo(() => router.query?.code as string, [router.query]);
   const email = useMemo(() => router.query?.email as string, [router.query]);
 
-  const { mutate, status } = useOAIMuataion({
-    method: 'post',
-    path: '/api/auth/signUp/invitation',
-  });
-
-  useEffect(() => {
-    if (status === 'success') {
-      toast({ title: 'Successfully sign up', status });
-      router.push(PATH.AUTH.SIGN_IN);
-    }
-  }, [status]);
-
-  const { handleSubmit, register, formState } = useForm({
-    resolver: yupResolver(schema),
+  const { handleSubmit, register, formState, setError } = useForm<IForm>({
+    resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const onSubmit = ({ password }: IForm) => mutate({ code, email, password });
+  const { mutate, isLoading } = useOAIMutation({
+    method: 'post',
+    path: '/api/auth/signUp/invitation',
+    queryOptions: {
+      async onSuccess() {
+        toast.positive({ title: 'Success' });
+        router.push(Path.SIGN_IN);
+      },
+      onError(error) {
+        setError('password', { message: error.message });
+        setError('confirmPassword', { message: error.message });
+        toast.negative({ title: error.message });
+      },
+    },
+  });
+
+  const onSubmit = async ({ password }: IForm) =>
+    mutate({ code, email, password });
 
   return (
-    <Card sx={{ width: '100%', maxWidth: '400px', p: 2 }}>
-      <Flex
-        flexDirection="column"
-        as="form"
-        gap={4}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Heading size="lg">{t('title.userInvitation')}</Heading>
-        <Input type="email" variant="flushed" value={email} disabled />
-        <FormControl>
-          <Input
+    <AuthTemplate>
+      <div className="mb-12">
+        <div className="flex gap-0.5 mb-2">
+          <Image
+            src="/assets/images/logo.svg"
+            alt="logo"
+            width={12}
+            height={12}
+          />
+          <Icon name="Title" className="w-[62px] h-[12px]" />
+        </div>
+        <h1 className="font-24-bold">{t('link.user-invitation.title')}</h1>
+      </div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="space-y-4 mb-6">
+          <TextInput
+            label="Email"
+            placeholder={t('input.placeholder.email')}
+            type="email"
+            value={email}
+            disabled
+          />
+          <TextInput
             type="password"
+            label={t('input.label.password')}
             placeholder={t('input.placeholder.password')}
-            variant="flushed"
-            isRequired
             {...register('password')}
+            isSubmitted={formState.isSubmitted}
+            isSubmitting={formState.isSubmitting}
+            isValid={!formState.errors.password}
+            hint={formState.errors.password?.message}
+            required
           />
-        </FormControl>
-        <FormControl>
-          <Input
-            placeholder={t('input.placeholder.confirmPassword')}
-            variant="flushed"
-            isRequired
+          <TextInput
             type="password"
+            label={t('input.label.password')}
+            placeholder={t('input.placeholder.password')}
             {...register('confirmPassword')}
-            isInvalid={!!formState.errors.confirmPassword}
+            isSubmitted={formState.isSubmitted}
+            isSubmitting={formState.isSubmitting}
+            isValid={!formState.errors.confirmPassword}
+            hint={formState.errors.confirmPassword?.message}
+            required
           />
-          {formState.errors.confirmPassword && (
-            <FormHelperText color="red.500">
-              {formState.errors.confirmPassword.message}
-            </FormHelperText>
-          )}
-        </FormControl>
-        <HStack justifyContent="space-between">
-          <Button variant="link" onClick={() => router.push(PATH.AUTH.SIGN_IN)}>
-            {t('button.back')}
-          </Button>
-          <Button type="submit">{t('button.signUp')}</Button>
-        </HStack>
-      </Flex>
-    </Card>
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            type="submit"
+            className="btn btn-primary"
+            disabled={isLoading}
+          >
+            {t('button.setting')}
+          </button>
+        </div>
+      </form>
+    </AuthTemplate>
   );
-};
-
-UserInvitationPage.getLayout = function getLayout(page: ReactElement) {
-  return <CenterTemplate>{page}</CenterTemplate>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

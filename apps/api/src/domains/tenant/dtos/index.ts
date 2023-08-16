@@ -15,3 +15,4 @@
  */
 export { SetupTenantDto } from './setup-tenant.dto';
 export { UpdateTenantDto } from './update-tenant.dto';
+export { FeedbackCountByTenantIdDto } from './feedback-count-by-tenant-id.dto';

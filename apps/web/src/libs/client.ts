@@ -13,6 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import axios, { AxiosRequestConfig } from 'axios';
+import createAuthRefreshInterceptor from 'axios-auth-refresh';
+
+import { Path } from '@/constants/path';
+import { env } from '@/env.mjs';
 import type {
   OAIMethodPathKeys,
   OAIMutationResponse,
@@ -21,30 +26,14 @@ import type {
   OAIRequestBody,
   OAIResponse,
 } from '@/types/openapi.type';
-import axios, { AxiosRequestConfig } from 'axios';
-import decodeJWT from 'jwt-decode';
-
-import isServer from '@/constants/is-server';
-import { PATH } from '@/constants/path';
-import { IJwtPaylod } from '@/types/jwt-payload.type';
 import { getRequestUrl } from '@/utils/path-parsing';
 
-import { AsyncQueue } from './async-queue';
 import sessionStorage from './session-storage';
-
-const isValidToken = (token: string) => {
-  const claims: IJwtPaylod = decodeJWT(token);
-  const expirationTimeInSeconds = claims.exp * 1000;
-  const now = new Date();
-  const isValid = expirationTimeInSeconds >= now.getTime();
-  return isValid;
-};
 
 class client {
   private axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.API_BASE_URL,
+    baseURL: env.NEXT_PUBLIC_API_BASE_URL,
   });
-  private requestQueue = new AsyncQueue();
 
   private static instance: client;
   public static get Instance(): client {
@@ -52,44 +41,7 @@ class client {
   }
 
   constructor() {
-    this.axiosInstance.interceptors.request.use(async (config) => {
-      await this.requestQueue.wait();
-
-      if (isServer) {
-        this.requestQueue.shift();
-        return config;
-      }
-
-      const jwt = sessionStorage.getItem('jwt');
-
-      if (!jwt) {
-        this.requestQueue.shift();
-        return config;
-      }
-
-      const { accessToken, refreshToken } = jwt;
-
-      if (!isValidToken(accessToken)) {
-        if (refreshToken && isValidToken(refreshToken)) {
-          try {
-            const { data } = await axios.get('/api/refresh-jwt');
-            sessionStorage.setItem('jwt', data.jwt);
-          } catch (error) {
-            await axios.get('/api/logout');
-            sessionStorage.removeItem('jwt');
-            this.requestQueue.abortAll();
-            window.location.assign(PATH.AUTH.SIGN_IN);
-          }
-        } else {
-          await axios.get('/api/logout');
-          sessionStorage.removeItem('jwt');
-          this.requestQueue.abortAll();
-          window.location.assign(PATH.AUTH.SIGN_IN);
-        }
-      }
-
-      this.requestQueue.shift();
-
+    this.axiosInstance.interceptors.request.use((config) => {
       const token = sessionStorage.getItem('jwt');
 
       if (token) {
@@ -98,7 +50,19 @@ class client {
 
       return config;
     });
-
+    createAuthRefreshInterceptor(this.axiosInstance, async (failedRequest) => {
+      try {
+        const { data } = await axios.get('/api/refresh-jwt');
+        sessionStorage.setItem('jwt', data.jwt);
+        failedRequest.response.config.headers.setAuthorization(
+          `Bearer ${data.jwt.accessToken}`,
+        );
+      } catch (error) {
+        await axios.get('/api/logout');
+        sessionStorage.removeItem('jwt');
+        window.location.assign(Path.SIGN_IN);
+      }
+    });
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => Promise.reject(error.response?.data ?? error),

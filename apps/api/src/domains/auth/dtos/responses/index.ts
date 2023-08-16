@@ -15,3 +15,4 @@
  */
 export { SendEmailCodeResponseDto } from './send-email-code-response.dto';
 export { SignInResponseDto } from './sign-in-response.dto';
+export { OAuthLoginUrlResponseDto } from './oauth-login-url.response.dto';

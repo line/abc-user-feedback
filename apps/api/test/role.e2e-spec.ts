@@ -16,14 +16,15 @@
 import { faker } from '@faker-js/faker';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
 import { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/auth/auth.service';
-import { UpdateRoleRequestDto } from '@/domains/role/dtos/requests';
-import { PermissionEnum } from '@/domains/role/permission.enum';
-import { RoleEntity } from '@/domains/role/role.entity';
+import { UpdateRoleRequestDto } from '@/domains/project/role/dtos/requests';
+import { PermissionEnum } from '@/domains/project/role/permission.enum';
+import { RoleEntity } from '@/domains/project/role/role.entity';
 import { HttpStatusCode } from '@/types/http-status';
 import {
   clearEntities,
@@ -49,7 +50,7 @@ describe('AppController (e2e)', () => {
     );
     await app.init();
 
-    dataSource = module.get(DataSource);
+    dataSource = module.get(getDataSourceToken());
     roleRepo = dataSource.getRepository(RoleEntity);
 
     authService = module.get(AuthService);
@@ -162,7 +163,7 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthrized', async () => {
       await request(app.getHttpServer())
-        .put(`/roles/${faker.datatype.uuid()}`)
+        .put(`/roles/${faker.datatype.number()}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
   });
@@ -183,7 +184,7 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthrized', async () => {
       await request(app.getHttpServer())
-        .delete(`/roles/${faker.datatype.uuid()}`)
+        .delete(`/roles/${faker.datatype.number()}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
   });

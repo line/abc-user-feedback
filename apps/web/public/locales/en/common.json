@@ -1,155 +1,272 @@
 {
-  "title.signIn": "en",
-  "title.signUp": "en",
-  "title.resetPassword": "en",
-  "title.projectManagement": "en",
-  "title.serviceSetting": "en",
-  "title.createProject": "en",
-  "title.createChannel": "en",
-  "title.manageChannel": "en",
-  "title.modifyChannel": "en",
-  "title.roleManagement": "en",
-  "title.changePassword": "en",
-  "title.userSetting": "en",
+  "tenant": {
+    "create": {
+      "title": "Tenant Setting",
+      "site-name": "Site name"
+    }
+  },
+  "auth": {
+    "sign-in": {
+      "reset-password": "Reset password"
+    },
+    "sign-up": {
+      "title": "Create a Account",
+      "label": {
+        "auth-code": "Authentication Code"
+      },
+      "placeholder": {
+        "auth-code": "Please input code"
+      },
+      "button": {
+        "request-auth-code": "Request",
+        "verify-auth-code": "Verify"
+      }
+    },
+    "reset-password": {
+      "title": "Resest Password",
+      "button": { "send-email": "Send email" }
+    }
+  },
+  "link": {
+    "reset-password": {
+      "title": "Reset Password"
+    },
+    "user-invitation": {
+      "title": "Create a Account"
+    }
+  },
+  "main": {
+    "index": {
+      "total-project": "Total Project",
+      "total-channel": "Total Channel",
+      "total-feedback": "Total Feedback"
+    },
+    "profile": {
+      "title": "Profile",
+      "profile-info": "Profile Information",
+      "change-password": "Change Password",
+      "label": {
+        "user-type": "Type",
+        "new-password": "New Password",
+        "confirm-new-password": "Confirm New Password"
+      },
+      "placeholder": {
+        "name": "Please input name.",
+        "department": "Please input department.",
+        "new-password": "Please input new password",
+        "confirm-new-password": "Please input confirm new password."
+      },
+      "button": {
+        "delete-account": "Delete a Account"
+      },
+      "dialog": {
+        "delete-account": {
+          "title": "Delete a Account",
+          "description1": "Are you sure you want to delete it?",
+          "description2": "The service is no longer available after you delete the account."
+        }
+      }
+    },
+    "feedback": {
+      "title": "Feedback Management",
+      "column-setting": "Column Setting",
+      "issue-cell": {
+        "issue-list": "Issue list",
+        "register-issue": "Reigster issue",
+        "create-issue": "Create issue",
+        "input-issue": "Input issue",
+        "delete-issue": "Delete issue"
+      },
+      "download": {
+        "loading": "Downloading...",
+        "success": "Download completed.",
+        "error": "Download failed.",
+        "loading-description": "Download a total of {{count, number}}",
+        "success-description": "Download a total of {{count, number}}",
+        "error-description": "Download a total of {{count, number}}"
+      },
+      "button": {
+        "all-download": "Download All",
+        "select-download": "Download {{count, number}} items",
+        "excel-download": "Excel Download",
+        "csv-download": "CSV Download"
+      },
+      "dialog": {
+        "delete-feedback": {
+          "title": "Delete feedbacks",
+          "description": "Are you sure you want to delete all selected feedbacks?"
+        }
+      }
+    },
+    "issue": {
+      "title": "Issue Management",
+      "setting": "Issue Setting",
+      "dialog": {
+        "delete-issue": {
+          "title": "Delete issues",
+          "description": "Are you sure you want to delete all selected issues?"
+        }
+      }
+    },
+    "setting": {
+      "title": "Setting",
+      "subtitle": {
+        "tenant-info": "Tenant Information",
+        "sign-up-mgmt": "Login & Signup Management",
+        "user-mgmt": "User Management",
 
-  "title.card.feedbackStatus": "en",
-  "title.card.feedbackYesterdayCount": "en",
-  "title.card.feedbackCountChange": "en",
-  "title.card.userManagement": "en",
-  "title.card.deletedUserManagement": "en",
-  "title.card.addField": "en",
+        "project-info": "Project Information",
+        "member-mgmt": "Member Management",
+        "role-mgmt": "Role Management",
+        "api-key-mgmt": "API Key Management",
+        "ticket-mgmt": "Issue Tracker Management",
+        "delete-project": "Delete Project",
 
-  "title.card.weeklyFeedbackCount": "en",
-  "title.card.projectInfo": "en",
-  "title.card.selectProject": "en",
-  "title.card.inputProjectInfo": "en",
-  "title.card.inputChannelInfo": "en",
-
-  "title.card.channelInfo": "en",
-  "title.card.feedbackTable": "en",
-
-  "subTitle.feedbackYesterdayStatus": "en",
-  "subTitle.feedback28daysStatus": "en",
-
-  "input.label.serviceName": "en",
-  "input.label.logoUrl": "en",
-  "input.label.isPrivate": "en",
-  "input.label.isRestrictDomain": "en",
-  "input.label.allowDomains": "en",
-  "input.label.defaultRole": "en",
-
-  "input.label.expression": "en",
-  "input.helper.invalidExpression": "en",
-
-  "input.placeholder.email": "en",
-  "input.placeholder.code": "en",
-  "input.placeholder.password": "en",
-  "input.placeholder.confirmPassword": "en",
-  "input.placeholder.projectTitle": "en",
-  "input.placeholder.serviceName": "en",
-  "input.placeholder.logoUrl": "en",
-  "input.placeholder.channelTitle": "en",
-
-  "input.caption.isPrivate": "en",
-  "input.caption.isRestrictDomain": "en",
-  "input.caption.allowDomains": "en",
-
-  "input.label.projectTitle": "en",
-  "input.label.channelTitle": "en",
-  "input.label.description": "en",
-  "input.label.feedbackField": "en",
-
-  "input.label.fieldOption": "en",
-
-  "locale.ko": "한국어",
-  "locale.ja": "日本語",
-  "locale.en": "English",
-
-  "text.count": "en",
-
-  "text.users": "en",
-  "email": "en",
-  "text.authorization": "en",
-  "text.emailVerified": "en",
-  "text.deletedAt": "en",
-  "text.selection": "en",
-
-  "text.recent7days": "en",
-  "text.recent15days": "en",
-  "text.recent28days": "en",
-
-  "text.projectList": "en",
-  "text.channeList": "en",
-
-  "text.perPage": "en",
-
-  "menu.sideNav.dashboard": "dashboard",
-  "menu.sideNav.projectManagement": "en",
-  "menu.sideNav.userManagement": "en",
-  "menu.sideNav.roleManamgenet": "en",
-  "menu.sideNav.serviceManagement": "en",
-
-  "button.sendEmail": "en",
-  "button.setting": "en",
-  "button.resetPassword": "en",
-  "button.signIn": "en",
-  "button.signUp": "en",
-  "button.back": "en",
-  "button.userInvitation": "en",
-  "button.restore": "en",
-  "button.requestAuth": "en",
-  "button.verifyAuth": "en",
-  "button.registerProject": "en",
-  "button.registerChannel": "en",
-  "button.add": "en",
-  "button.prev": "en",
-  "button.next": "en",
-  "button.delete": "en",
-  "button.modify": "en",
-  "button.create": "en",
-  "button.close": "en",
-  "button.cancel": "en",
-  "button.save": "en",
-  "button.apply": "en",
-  "button.downloadXLSX": "en",
-  "button.downloadCSV": "en",
-  "button.addFilter": "en",
-  "button.createRole": "en",
-  "button.deleteUser": "en",
-
-  "table.head.projectTitle": "en",
-  "table.head.channelCount": "en",
-  "table.head.createAt": "en",
-  "table.head.createBy": "en",
-
-  "table.head.channelTitle": "en",
-
-  "order": "en",
-  "channelTitle": "en",
-  "field": "en",
-  "fieldName": "en",
-  "fieldType": "en",
-  "required": "en",
-  "editable": "en",
-  "fieldOption": "en",
-  "constraint": "en",
-  "description": "en",
-  "managers": "en",
-  "statistics": "en",
-
-  "role": "en",
-  "roles": "en",
-  "roleName": "en",
-  "userCount": "en",
-  "permission": "en",
-
-  "currentPassword": "en",
-  "newPassword": "en",
-  "confirmNewPassword": "en",
-
-  "date.today": "en",
-  "date.yesterday": "en",
-  "date.thisWeek": "en",
-  "date.lastWeek": "en",
-  "date.thisMonth": "en"
+        "channel-info": "Channel Information",
+        "field-mgmt": "Field Management",
+        "delete-channel": "Delete Channel"
+      },
+      "button": {
+        "create-project": "Create Project",
+        "create-channel": "Create Channel",
+        "create-api-key": "Create Key"
+      },
+      "sign-up-mgmt": {
+        "ufb-login": "UFB Login",
+        "oauth-login": "OAuth2.0 Login",
+        "all-login": "All",
+        "possibility": "Direct sign up possible",
+        "impossibility": "Direct sign up not possible",
+        "no-domain-restriction": "No domain restrictions",
+        "domain-restriction": "Domain restrictions",
+        "domain-restriction-tooltip": "You can set up the domain of the email that can be registered as a user."
+      },
+      "role-mgmt": {
+        "edit-role": "Edit Role",
+        "delete-role": "Delete Role"
+      },
+      "api-key-status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "field-status": {
+        "active": "Active",
+        "inactive": "Inactive"
+      },
+      "same-key": "Input the same value as the key",
+      "feedback-request-code": "Feedback Request Code",
+      "ticket-mgmt.description": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
+      "option-info": "Option Information",
+      "field-mgmt": {
+        "description": "To save, click Preview first.",
+        "preview": "Preview",
+        "preview-caption": "Preview is an example data to help you understand.",
+        "preview-description": "You can check it after selecting <preview>Preview</preview>."
+      },
+      "dialog": {
+        "edit-user": { "title": "Edit User" },
+        "delete-project": {
+          "title": "Delete Project",
+          "description": "Deleting a project will delete all issue/feedback data.\nPlease enter the text below to proceed with the deletion."
+        },
+        "delete-channel": {
+          "title": "Delete Channel",
+          "description": "Deleting a channel deletes all feedback data.\nPlease enter the text below to proceed with the deletion."
+        },
+        "create-role": {
+          "title": "Create Role",
+          "description": "Do you want to create a Role?"
+        },
+        "edit-api-key": {
+          "title": "Edit API KEY",
+          "description": "If you change the API KEY to inactive, the API for that KEY will not be available.\nPlease change the status to inactive only if you don't use API KEY."
+        },
+        "delete-option": {
+          "title": "Delete Option",
+          "description": "It does not apply to options in previous feedback."
+        },
+        "delete-role": {
+          "title": "Delete Role",
+          "description": "Are you sure you want to delete the Role?"
+        },
+        "edit-member": {
+          "title": "Edit Member",
+          "description": "Role varies from the menu accessible to functions available.\nPlease check the member and select the correct Role."
+        },
+        "register-member": { "title": "Register Member" },
+        "delete-member": {
+          "title": "Delete Member",
+          "description": "Are you sure you want to delete the Member?"
+        },
+        "add-field": { "title": "Add Field" },
+        "edit-field": { "title": "Edit Field" },
+        "invite-user": { "title": "Invite User" }
+      }
+    }
+  },
+  "header": {
+    "profile": "Profile",
+    "sign-out": "Sign Out"
+  },
+  "button": {
+    "setting": "Setting",
+    "back": "Back",
+    "sign-in": "Sign In",
+    "sign-up": "Sign Up",
+    "save": "Save",
+    "create": "Create",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "register": "Register",
+    "select-cancel": "Cancel",
+    "reset": "Reset",
+    "confirm": "OK"
+  },
+  "input": {
+    "label": {
+      "password": "Password",
+      "confirm-password": "Confirm Password"
+    },
+    "placeholder": {
+      "input": "Please input",
+      "email": "Please input email",
+      "password": "Please input password",
+      "confirm-password": "Please input coonfirm password"
+    }
+  },
+  "text": {
+    "search-result": "Search Result",
+    "number-count": "{{count, number}} items",
+    "no-data": "No Data",
+    "per-page": "Per page",
+    "select-option": "Select '{{name}}'",
+    "select-count": "Select {{count,number}}",
+    "search-filter": "Search Field",
+    "all": "All",
+    "issue": {
+      "init": "New",
+      "onReview": "In Review",
+      "inProgress": "In Progress",
+      "resolved": "Done",
+      "pending": "Do not proceed"
+    },
+    "date": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "before-days": "Before {{day, number}} days"
+    },
+    "equal-search": "Equal",
+    "like-search": "Like"
+  },
+  "toast": {
+    "sign-in": "Login Successful",
+    "register": "Registration Completed",
+    "delete": "Deleted Completed",
+    "save": "Saved",
+    "invite": "Invitation Completed",
+    "active": "Activation",
+    "inactive": "Deactivation",
+    "add": "Addition Complete",
+    "copy": "Copy Complete"
+  }
 }

@@ -15,7 +15,7 @@
  */
 import { CodeTypeEnum } from '../code-type.enum';
 
-export class SetCodeVerifiedDto {
+export class VerifyCodeDto {
   type: CodeTypeEnum;
   key: string;
   code: string;

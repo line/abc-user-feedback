@@ -14,12 +14,14 @@
  * under the License.
  */
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   HttpCode,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -28,21 +30,24 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
+import { PaginationRequestDto } from '@/common/dtos';
+
 import { JwtAuthGuard } from '../auth/guards';
-import { PermissionEnum } from '../role/permission.enum';
-import { RequirePermission } from '../role/require-permission.decorator';
 import { CurrentUser } from './decorators';
 import { UserDto } from './dtos';
 import {
   ChangePasswordRequestDto,
   DeleteUsersRequestDto,
-  GetAllUserRequestDto,
+  GetAllUsersRequestDto,
   ResetPasswordMailingRequestDto,
   ResetPasswordRequestDto,
-  UpdateUserRoleRequestDto,
+  UpdateUserRequestDto,
   UserInvitationRequestDto,
 } from './dtos/requests';
+import { GetRolesByIdResponseDto } from './dtos/responses';
 import { GetAllUserResponseDto } from './dtos/responses/get-all-user-response.dto';
+import { UserTypeEnum } from './entities/enums';
+import { SuperUser } from './super-user.decorator';
 import { UserPasswordService } from './user-password.service';
 import { UserService } from './user.service';
 
@@ -56,16 +61,31 @@ export class UserController {
 
   @ApiOkResponse({ type: GetAllUserResponseDto })
   @Get()
-  @RequirePermission(PermissionEnum.UserManagement)
-  async getAllUsers(@Query() query: GetAllUserRequestDto) {
-    const { limit, page, keyword } = query;
-    return GetAllUserResponseDto.transform(
-      await this.userService.findAll({ options: { limit, page }, keyword }),
-    );
+  @UseGuards(JwtAuthGuard)
+  async getAllUsers(@Query() query: PaginationRequestDto) {
+    const { limit, page } = query;
+    const users = await this.userService.findAll({
+      options: { limit, page },
+    });
+    return GetAllUserResponseDto.transform(users);
+  }
+
+  @ApiOkResponse({ type: GetAllUserResponseDto })
+  @Post('/search')
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  async searchUsers(@Body() body: GetAllUsersRequestDto) {
+    const { limit, page, query, order } = body;
+    const users = await this.userService.findAll({
+      options: { limit, page },
+      query,
+      order,
+    });
+    return GetAllUserResponseDto.transform(users);
   }
 
   @Delete()
-  @RequirePermission(PermissionEnum.UserManagement)
+  @SuperUser()
   async deleteUsers(@Body() body: DeleteUsersRequestDto) {
     await this.userService.deleteUsers(body.ids);
   }
@@ -73,32 +93,61 @@ export class UserController {
   @ApiOkResponse({ type: UserDto })
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async getUser(@Param('id') id: string, @CurrentUser() user: UserDto) {
+  async getUser(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: UserDto,
+  ) {
     if (id !== user?.id) throw new UnauthorizedException('');
     return UserDto.transform(await this.userService.findById(id));
   }
 
+  @ApiOkResponse({ type: GetRolesByIdResponseDto })
+  @Get(':userId/roles')
+  @UseGuards(JwtAuthGuard)
+  async getRoles(@Param('userId', ParseIntPipe) userId: number) {
+    const roles = await this.userService.findRolesById(userId);
+    return { roles };
+  }
+
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  async deleteUser(@CurrentUser() user: UserDto, @Param('id') id: string) {
+  async deleteUser(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: UserDto,
+  ) {
     if (user.id !== id) throw new UnauthorizedException();
     await this.userService.deleteById(id);
   }
 
-  @Put(':id/role')
+  @Put('/:id')
   @HttpCode(204)
-  @RequirePermission(PermissionEnum.UserManagement)
-  async updateRole(
-    @Param('id') id: string,
-    @Body() { roleId }: UpdateUserRoleRequestDto,
+  @UseGuards(JwtAuthGuard)
+  async updateUser(
+    @Param('id', ParseIntPipe) userId: number,
+    @Body() dto: UpdateUserRequestDto,
+    @CurrentUser() user: UserDto,
   ) {
-    await this.userService.updateUserRole({ roleId, userId: id });
+    if (user.type === UserTypeEnum.GENERAL) {
+      if (dto.type)
+        throw new UnauthorizedException('GENERAL user cannot modify user type');
+      if (user.id !== userId)
+        throw new UnauthorizedException(
+          'GENERAL user cannot modify other user',
+        );
+    }
+    await this.userService.updateUser({ userId, ...dto });
   }
 
   @Post('invite')
-  @RequirePermission(PermissionEnum.UserManagement)
-  async inviteUser(@Body() body: UserInvitationRequestDto) {
-    await this.userService.sendInvitationCode(body);
+  @SuperUser()
+  async inviteUser(
+    @Body() body: UserInvitationRequestDto,
+    @CurrentUser() user: UserDto,
+  ) {
+    if (body.userType === UserTypeEnum.SUPER && body.roleId) {
+      throw new BadRequestException('SUPER user must not have role');
+    }
+    await this.userService.sendInvitationCode({ ...body, invitedBy: user });
   }
 
   @ApiBody({ type: ResetPasswordMailingRequestDto })
@@ -112,8 +161,8 @@ export class UserController {
     await this.userPasswordService.resetPassword(body);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('password/change')
+  @UseGuards(JwtAuthGuard)
   async changePassword(
     @CurrentUser() user: UserDto,
     @Body() { newPassword, password }: ChangePasswordRequestDto,

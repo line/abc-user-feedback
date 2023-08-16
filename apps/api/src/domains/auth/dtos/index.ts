@@ -18,4 +18,5 @@ export { VerifyEmailCodeDto } from './verify-email-code.dto';
 export { ValidateEmailUserDto } from './validate-email-user.dto';
 export { SignUpInvitationUserDto } from './sign-up-invitation-user.dto';
 export { SignUpEmailUserDto } from './sign-up-email-user.dto';
+export { SignUpOauthUserDto } from './sign-up-oauth-user.dto';
 export { JwtDto } from './jwt.dto';

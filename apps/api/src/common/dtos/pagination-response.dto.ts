@@ -45,5 +45,5 @@ export abstract class PaginationResponseDto<T> implements Pagination<T> {
   @Type(() => PaginationMetaDto)
   meta: PaginationMetaDto;
 
-  abstract items: any[];
+  abstract items: T[];
 }

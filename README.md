@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/20738369/138070075-d990fd46-971f-4eb3-87f2-2e36d8503ce0.png">
+    <img src="./assets/cover.png">
     <h1 align="center">ABC User Feedback</h1>
 </p>
 
@@ -49,7 +49,7 @@ cd abc-user-feedback
 yarn install
 ```
 
-2. Spin up all required infrastructure (Mysql, Elasticsearch, etc.) using Docker Compose:
+2. Spin up all required infrastructure (Mysql, Opensearch, etc.) using Docker Compose:
 
 ```bash
 docker-compose -f docker-compose.infra.yml up -d

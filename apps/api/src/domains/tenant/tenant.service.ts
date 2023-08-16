@@ -16,11 +16,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
-import { RoleNotFoundException } from '../role/exceptions';
-import { OWNER_ROLE_DEFAULT_ID } from '../role/role.constant';
-import { RoleService } from '../role/role.service';
-import { SetupTenantDto, UpdateTenantDto } from './dtos';
+import { FeedbackEntity } from '../feedback/feedback.entity';
+import { UserTypeEnum } from '../user/entities/enums';
+import { UserEntity } from '../user/entities/user.entity';
+import {
+  FeedbackCountByTenantIdDto,
+  SetupTenantDto,
+  UpdateTenantDto,
+} from './dtos';
 import {
   TenantAlreadyExistsException,
   TenantNotFoundException,
@@ -32,35 +37,43 @@ export class TenantService {
   constructor(
     @InjectRepository(TenantEntity)
     private readonly tenantRepo: Repository<TenantEntity>,
-    private readonly roleService: RoleService,
+    @InjectRepository(UserEntity)
+    private readonly userRepo: Repository<UserEntity>,
+    @InjectRepository(FeedbackEntity)
+    private readonly feedbackRepo: Repository<FeedbackEntity>,
   ) {}
 
+  @Transactional()
   async create(dto: SetupTenantDto) {
     const [tenant] = await this.tenantRepo.find({ take: 1 });
     if (tenant) throw new TenantAlreadyExistsException();
 
-    await this.tenantRepo.save({
-      ...dto,
-      defaultRole: { id: OWNER_ROLE_DEFAULT_ID },
+    await this.tenantRepo.save(dto);
+    await this.userRepo.save({
+      email: 'user@feedback.com',
+      hashPassword:
+        '$2b$10$87iuFh.Yty8esbdmuB4bz.NNVh0thMWtf0MPfajzqjvxHfRf6zR0C',
+      type: UserTypeEnum.SUPER,
     });
   }
 
+  @Transactional()
   async update(dto: UpdateTenantDto) {
-    const tenant = await this.tenantRepo.findOneBy({ id: dto.id });
-    if (!tenant) throw new TenantNotFoundException();
-
-    const defaultRole = await this.roleService.findById(dto.defaultRole.id);
-    if (!defaultRole) throw new RoleNotFoundException();
-
-    await this.tenantRepo.update({ id: dto.id }, { ...dto, defaultRole });
+    const tenant = await this.findOne();
+    await this.tenantRepo.update({ id: tenant.id }, { ...dto, id: tenant.id });
   }
+
   async findOne() {
-    const [tenant] = await this.tenantRepo.find({
-      relations: { defaultRole: true },
-    });
-
+    const [tenant] = await this.tenantRepo.find();
     if (!tenant) throw new TenantNotFoundException();
-
     return tenant;
+  }
+
+  async countByTenantId(dto: FeedbackCountByTenantIdDto) {
+    return {
+      total: await this.feedbackRepo.count({
+        where: { channel: { project: { tenant: { id: dto.tenantId } } } },
+      }),
+    };
   }
 }

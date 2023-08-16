@@ -18,14 +18,13 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { PermissionEnum } from '@/domains/role/permission.enum';
+import { UserTypeEnum } from '@/domains/user/entities/enums';
 import { ConfigServiceType } from '@/types/config-service.type';
 
 interface IPayload {
   sub: string;
   email: string;
-  permissions: PermissionEnum[];
-  roleName: string;
+  type: UserTypeEnum;
   iat: number;
   exp: number;
 }
@@ -43,7 +42,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: IPayload) {
-    const { email, sub, permissions, roleName } = payload;
-    return { id: sub, email, permissions, roleName };
+    const { email, sub, type } = payload;
+    return { id: sub, email, type };
   }
 }

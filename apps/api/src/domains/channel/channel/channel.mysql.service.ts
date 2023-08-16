@@ -1,0 +1,117 @@
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
+import { Like, Not, Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
+
+import { isSelectFieldFormat } from '@/common/enums';
+
+import { ChannelEntity } from './channel.entity';
+import {
+  CreateChannelDto,
+  FindAllChannelsByProjectIdDto,
+  FindByChannelIdDto,
+  UpdateChannelDto,
+} from './dtos';
+import {
+  ChannelAlreadyExistsException,
+  ChannelInvalidNameException,
+  ChannelNotFoundException,
+} from './exceptions';
+
+@Injectable()
+export class ChannelMySQLService {
+  constructor(
+    @InjectRepository(ChannelEntity)
+    private readonly repository: Repository<ChannelEntity>,
+  ) {}
+
+  @Transactional()
+  async create(dto: CreateChannelDto) {
+    const channel = CreateChannelDto.toChannelEntity(dto);
+
+    const duplicateChannel = await this.repository.findOneBy({
+      name: channel.name,
+      project: {
+        id: dto.projectId,
+      },
+    });
+
+    if (duplicateChannel) throw new ChannelAlreadyExistsException();
+
+    const savedChannel = await this.repository.save(channel);
+
+    return savedChannel;
+  }
+
+  async findAllByProjectId(dto: FindAllChannelsByProjectIdDto) {
+    const { options, projectId, searchText = '' } = dto;
+
+    return await paginate(
+      this.repository.createQueryBuilder().setFindOptions({
+        where: { project: { id: projectId }, name: Like(`%${searchText}%`) },
+        order: { createdAt: 'DESC' },
+      }),
+      options,
+    );
+  }
+
+  async findById({ channelId }: FindByChannelIdDto) {
+    const channel = await this.repository.findOne({
+      where: { id: channelId },
+      relations: { fields: { options: true }, project: true },
+    });
+    if (!channel) throw new ChannelNotFoundException();
+
+    channel.fields = channel.fields.map((field) => {
+      if (!isSelectFieldFormat(field.format)) {
+        delete field.options;
+      }
+
+      return field;
+    });
+
+    return channel;
+  }
+
+  @Transactional()
+  async update(channelId: number, { name, description }: UpdateChannelDto) {
+    await this.findById({ channelId });
+
+    if (
+      await this.repository.findOne({
+        where: { name, id: Not(channelId) },
+        select: ['id'],
+      })
+    ) {
+      throw new ChannelInvalidNameException('Duplicate name');
+    }
+    await this.repository.update(channelId, {
+      id: channelId,
+      name,
+      description,
+    });
+  }
+
+  @Transactional()
+  async delete(channelId: number) {
+    const channel = new ChannelEntity();
+    channel.id = channelId;
+    await this.repository.remove(channel);
+  }
+}

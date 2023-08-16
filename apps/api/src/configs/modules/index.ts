@@ -13,6 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { ElasticsearchConfigModule } from './elasticsearch-config/elasticsearch-config.module';
+export { OpensearchConfigModule } from './opensearch-config/opensearch-config.module';
 export { MailerConfigModule } from './mailer-config/mailer-config.module';
 export { TypeOrmConfigModule } from './typeorm-config/typeorm-config.module';

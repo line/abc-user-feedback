@@ -19,7 +19,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CodeModule } from '@/shared/code/code.module';
 import { MailingModule } from '@/shared/mailing/mailing.module';
 
-import { RoleModule } from '../role/role.module';
+import { MemberModule } from '../project/member/member.module';
 import { TenantModule } from '../tenant/tenant.module';
 import { CreateUserService } from './create-user.service';
 import { UserEntity } from './entities/user.entity';
@@ -30,9 +30,9 @@ import { UserService } from './user.service';
 @Module({
   imports: [
     TenantModule,
-    RoleModule,
     MailingModule,
     CodeModule,
+    MemberModule,
     TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [UserService, CreateUserService, UserPasswordService],

@@ -13,7 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { UserTypeEnum } from '../entities/enums';
+import { UserDto } from './user.dto';
+
 export class InviteUserDto {
   email: string;
-  roleId: string;
+  userType: UserTypeEnum;
+  roleId?: number;
+  invitedBy: UserDto;
 }

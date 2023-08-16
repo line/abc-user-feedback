@@ -19,6 +19,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
@@ -39,54 +40,71 @@ import {
   EmailVerificationCodeRequestDto,
   EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
+  OAuthUserSignUpRequestDto,
 } from './dtos/requests';
-import { SignInResponseDto } from './dtos/responses';
+import { OAuthLoginUrlResponseDto, SignInResponseDto } from './dtos/responses';
 import { SendEmailCodeResponseDto } from './dtos/responses';
 import { JwtAuthGuard } from './guards';
+import { UseEmailGuard } from './guards/use-email.guard';
+import { UseOAuthGuard } from './guards/use-oauth.guard';
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @UseGuards(UseEmailGuard)
   @ApiCreatedResponse({ type: SendEmailCodeResponseDto })
   @Post('email/code')
   async sendCode(@Body() body: EmailVerificationMailingRequestDto) {
     const expiredAt = await this.authService.sendEmailCode(body);
-
     return SendEmailCodeResponseDto.transform({ expiredAt });
   }
 
+  @UseGuards(UseEmailGuard)
   @HttpCode(200)
   @Post('email/code/verify')
   async verifyEmailCode(@Body() body: EmailVerificationCodeRequestDto) {
     await this.authService.verifyEmailCode(body);
   }
 
+  @UseGuards(UseEmailGuard)
   @Post('signUp/email')
   async signUpEmailUser(@Body() body: EmailUserSignUpRequestDto) {
     await this.authService.signUpEmailUser(body);
   }
 
+  @UseGuards(UseEmailGuard)
   @Post('signUp/invitation')
   async signUpInvitationUser(@Body() body: InvitationUserSignUpRequestDto) {
     await this.authService.signUpInvitationUser(body);
   }
 
+  @UseGuards(UseOAuthGuard)
+  @Post('signUp/oauth')
+  async signUpOAuthUser(@Body() body: OAuthUserSignUpRequestDto) {
+    await this.authService.signUpOAuthUser(body);
+  }
+
   @ApiBody({ type: EmailUserSignInRequestDto })
   @ApiCreatedResponse({ type: SignInResponseDto })
   @Post('signIn/email')
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(UseEmailGuard, AuthGuard('local'))
   signInEmail(@CurrentUser() user: UserDto) {
     return this.authService.signIn(user);
   }
 
-  @ApiBearerAuth()
-  @ApiOkResponse({ type: SignInResponseDto })
-  @Get('signIn/google')
-  @UseGuards(AuthGuard('google'))
-  googleLogin(@CurrentUser() user: UserDto) {
-    return this.authService.signIn(user);
+  @UseGuards(UseOAuthGuard)
+  @ApiOkResponse({ type: OAuthLoginUrlResponseDto })
+  @Get('signIn/oauth/loginURL')
+  async redirectToLoginURL() {
+    return { url: await this.authService.getOAuthLoginURL() };
+  }
+
+  @UseGuards(UseOAuthGuard)
+  @Get('signIn/oauth')
+  async handleCallback(@Query() query: { code: string }) {
+    return await this.authService.signInByOAuth(query.code);
   }
 
   @ApiBearerAuth()

@@ -13,31 +13,44 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import axios, { AxiosError } from 'axios';
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import { ironOption } from '@/constants/iron-option';
+import { env } from '@/env.mjs';
+import getLogger from '@/libs/logger';
 
 export default withIronSessionApiRoute(async (req, res) => {
   const { email, password } = req.body;
+  try {
+    const response = await axios.post(
+      `${env.API_BASE_URL}/api/auth/signIn/email`,
+      { email, password },
+    );
 
-  const response = await fetch(
-    `${process.env.API_BASE_URL}/api/auth/signIn/email`,
-    {
-      method: 'post',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    },
-  );
+    const data = response.data;
 
-  const data = await response.json();
+    if (response.status !== 201) {
+      return res.status(response.status).send(data);
+    }
+    req.session.jwt = data;
+    await req.session.save();
 
-  if (response.status !== 201) {
-    return res.status(response.status).send(data);
+    return res.send(data);
+  } catch (error) {
+    if (error instanceof TypeError) {
+      getLogger('/api/login').error(error);
+      return res.status(500).send({ message: error.message, code: error.name });
+    } else if (error instanceof AxiosError && error.response) {
+      const { status, data } = error.response;
+      getLogger('/api/login').error(error.response);
+      return res.status(status).send(data);
+    } else if (error instanceof Error) {
+      const { message, name, cause, stack } = error;
+      getLogger('/api/login').error({ message, name, cause, stack });
+    }
+    return res.status(500).send({ message: 'Unknown Error' });
   }
-  req.session.jwt = data;
-  await req.session.save();
-
-  res.send(data);
 }, ironOption);
 
 declare module 'iron-session' {

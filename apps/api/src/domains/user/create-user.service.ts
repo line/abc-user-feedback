@@ -16,16 +16,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
-import { RoleService } from '../role/role.service';
-import { TenantNotFoundException } from '../tenant/exceptions';
+import { MemberService } from '../project/member/member.service';
 import { TenantService } from '../tenant/tenant.service';
 import { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
+import { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
+import { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
-  NotAllowDomainException,
-  NotAllowUserCreateException,
+  NotAllowedDomainException,
+  NotAllowedUserCreateException,
   UserAlreadyExistsException,
 } from './exceptions';
 import { UserPasswordService } from './user-password.service';
@@ -37,56 +39,64 @@ export class CreateUserService {
     protected readonly userRepo: Repository<UserEntity>,
     protected readonly userPasswordService: UserPasswordService,
     protected readonly tenantService: TenantService,
-    protected readonly roleService: RoleService,
+    private readonly memberService: MemberService,
   ) {}
 
-  async createEmailUser({ email, password }: CreateEmailUserDto) {
+  async createOAuthUser({ email }: CreateOAuthUserDto) {
     return await this.createUser({
       email,
+      method: 'oauth',
+      hashPassword: '',
+      signUpMethod: SignUpMethodEnum.OAUTH,
+    });
+  }
+
+  async createEmailUser(dto: CreateEmailUserDto) {
+    const { password, ...rest } = dto;
+
+    const tenant = await this.tenantService.findOne();
+    if (tenant.isPrivate) throw new NotAllowedUserCreateException();
+
+    return await this.createUser({
+      ...rest,
+      method: 'email',
       hashPassword: await this.userPasswordService.createHashPassword(password),
-      type: 'email',
+      signUpMethod: SignUpMethodEnum.EMAIL,
     });
   }
 
   async createInvitationUser(dto: CreateInvitationUserDto) {
-    const { email, password, roleId } = dto;
+    const { password, ...rest } = dto;
     return await this.createUser({
-      email,
+      ...rest,
+      method: 'invitation',
       hashPassword: await this.userPasswordService.createHashPassword(password),
-      type: 'invitation',
-      roleId,
+      signUpMethod: SignUpMethodEnum.EMAIL,
     });
   }
 
+  @Transactional()
   protected async createUser(dto: CreateUserDto) {
-    const { type, email } = dto;
+    const { method, email } = dto;
 
     const user = await this.userRepo.findOneBy({ email });
     if (user) throw new UserAlreadyExistsException();
 
     const tenant = await this.tenantService.findOne();
-    if (!tenant) throw new TenantNotFoundException();
-
-    // check private
-    if (type !== 'invitation' && tenant.isPrivate) {
-      throw new NotAllowUserCreateException();
-    }
-
-    // check restric domain
+    // check restrict domain
     const domain = email.split('@')[1];
     if (tenant.isRestrictDomain && !tenant.allowDomains.includes(domain)) {
-      throw new NotAllowDomainException();
+      throw new NotAllowedDomainException();
     }
 
-    const role =
-      type === 'invitation' && dto.roleId
-        ? await this.roleService.findById(dto.roleId)
-        : tenant.defaultRole;
+    const newUser = await this.userRepo.save(dto);
 
-    const newUser = await this.userRepo.save({
-      ...dto,
-      role,
-    });
+    if (method === 'invitation' && dto.roleId) {
+      await this.memberService.create({
+        roleId: dto.roleId,
+        userId: newUser.id,
+      });
+    }
 
     return newUser;
   }

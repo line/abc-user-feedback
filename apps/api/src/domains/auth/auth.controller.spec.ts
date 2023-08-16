@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 
 import { getMockProvider } from '@/utils/test-utils';
 
+import { TenantService } from '../tenant/tenant.service';
 import { UserDto } from '../user/dtos';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
@@ -29,11 +30,26 @@ import {
   InvitationUserSignUpRequestDto,
 } from './dtos/requests';
 
+const MockAuthService = {
+  sendEmailCode: jest.fn(),
+  verifyEmailCode: jest.fn(),
+  signUpEmailUser: jest.fn(),
+  signUpInvitationUser: jest.fn(),
+  signIn: jest.fn(),
+  refreshToken: jest.fn(),
+};
+const MockTenantService = {
+  findOne: jest.fn(),
+};
+
 describe('AuthController', () => {
   let authController: AuthController;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      providers: [getMockProvider(AuthService, MockAuthService)],
+      providers: [
+        getMockProvider(AuthService, MockAuthService),
+        getMockProvider(TenantService, MockTenantService),
+      ],
       controllers: [AuthController],
     }).compile();
     authController = module.get(AuthController);
@@ -81,22 +97,9 @@ describe('AuthController', () => {
     authController.signInEmail(dto);
     expect(MockAuthService.signIn).toHaveBeenCalledTimes(1);
   });
-  it('googleLogin', () => {
-    const dto = new UserDto();
-    authController.googleLogin(dto);
-    expect(MockAuthService.signIn).toHaveBeenCalledTimes(1);
-  });
   it('refreshToken', () => {
     const dto = new UserDto();
     authController.refreshToken(dto);
     expect(MockAuthService.refreshToken).toHaveBeenCalledTimes(1);
   });
 });
-const MockAuthService = {
-  sendEmailCode: jest.fn(),
-  verifyEmailCode: jest.fn(),
-  signUpEmailUser: jest.fn(),
-  signUpInvitationUser: jest.fn(),
-  signIn: jest.fn(),
-  refreshToken: jest.fn(),
-};

@@ -13,48 +13,61 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Box, Flex, Heading, Image } from '@chakra-ui/react';
+import { Icon } from '@ufb/ui';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useStore } from 'zustand';
 
-import { INIT_PATH, PATH } from '@/constants/path';
-import { useOAIQuery } from '@/hooks';
+import { Path } from '@/constants/path';
+import themeStore from '@/zustand/theme.store';
 
-import UserMenu from './UserMenu';
+import HeaderName from './HeaderName';
+import LocaleSelectBox from './LocaleSelectBox';
+import ProfileBox from './ProfileBox';
 
-interface IProps {}
-
-const Header: React.FC<IProps> = () => {
+const Header: React.FC = () => {
   const router = useRouter();
-  const { data } = useOAIQuery({
-    path: '/api/tenant',
-    queryOptions: {
-      retry: false,
-      onError: () => router.replace(PATH.TENANT_INITIAL_SETTING),
-    },
-  });
+
+  const { theme, toggle } = useStore(themeStore);
+
+  useEffect(() => {
+    if (!theme) return;
+    document.documentElement.className = theme;
+  }, [theme]);
 
   return (
-    <Box h="60px" borderBottomWidth={1} bg="white">
-      <Flex justifyContent="space-between" h="100%" px="16px">
+    <header className="relative flex justify-between items-center h-[48px] px-4 bg-primary">
+      <div className="flex flex-1 items-center gap-6">
         <Link
-          href={INIT_PATH}
-          style={{ display: 'flex', alignItems: 'center' }}
+          className="flex items-center gap-1 cursor-pointer"
+          href={Path.isProtectPage(router.pathname) ? Path.MAIN : Path.SIGN_IN}
         >
           <Image
-            src="/assets/logo.svg"
-            sx={{ w: '36px', h: '36px', mr: 2 }}
+            src="/assets/images/logo.svg"
             alt="logo"
+            width={24}
+            height={24}
           />
-          <Heading>User Feedback - {data?.siteName}</Heading>
+          <Icon name="Title" className="w-[123px] h-[24px]" />
         </Link>
-        <Flex>
-          <UserMenu />
-          {/* <LocaleMenu /> */}
-        </Flex>
-      </Flex>
-    </Box>
+        <HeaderName />
+      </div>
+      <div className="flex items-center gap-2 self-stretch">
+        <ProfileBox />
+        <LocaleSelectBox />
+        <button
+          className="icon-btn icon-btn-sm icon-btn-secondary"
+          onClick={() => toggle()}
+        >
+          <Icon
+            name={theme === 'light' ? 'MoonStroke' : 'SunStroke'}
+            className="text-primary"
+          />
+        </button>
+      </div>
+    </header>
   );
 };
-
 export default Header;

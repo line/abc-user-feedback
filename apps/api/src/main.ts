@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Logger, ValidationPipe } from '@nestjs/common';
+import { Logger as DefaultLogger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
@@ -21,6 +21,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { Logger } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
@@ -33,7 +34,8 @@ async function bootstrap() {
   initializeTransactionalContext();
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
-    new FastifyAdapter(),
+    new FastifyAdapter({}),
+    { bufferLogs: true },
   );
 
   app.enableCors({ origin: '*', exposedHeaders: ['Content-Disposition'] });
@@ -42,6 +44,7 @@ async function bootstrap() {
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useLogger(app.get(Logger));
 
   const documentConfig = new DocumentBuilder()
     .setTitle('User feedback')
@@ -58,8 +61,7 @@ async function bootstrap() {
   const { port, address } = configService.get('app', { infer: true });
 
   await app.listen(port, address);
-
-  Logger.log(`🚀 Application is running on: ${await app.getUrl()}`);
+  DefaultLogger.log(`🚀 Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();

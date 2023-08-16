@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { UserDto } from '@/domains/user/dtos';
+import { UserTypeEnum } from '@/domains/user/entities/enums';
+
 import { CodeTypeEnum } from '../code-type.enum';
 
 export type SetCodeDto =
@@ -23,13 +26,21 @@ export type SetCodeDto =
 export class SetCodeEmailVerificationDto {
   type: CodeTypeEnum.EMAIL_VEIRIFICATION;
   key: string;
+  durationSec?: number;
 }
 export class SetCodeResetPasswordDto {
   type: CodeTypeEnum.RESET_PASSWORD;
   key: string;
+  durationSec?: number;
 }
 export class SetCodeUserInvitationDto {
   type: CodeTypeEnum.USER_INVITATION;
   key: string;
-  data: { roleId: string };
+  durationSec?: number;
+  data: SetCodeUserInvitationDataDto;
+}
+export class SetCodeUserInvitationDataDto {
+  roleId: number;
+  userType: UserTypeEnum;
+  invitedBy: UserDto;
 }

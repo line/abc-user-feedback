@@ -69,11 +69,11 @@ class sessionStorage {
 }
 
 const severSessionStorage: Storage = {
-  getItem: (key: string) => null,
+  getItem: (_: string) => null,
   setItem: () => {},
   removeItem: () => {},
   clear: () => {},
-  key: (index: number) => null,
+  key: (_: number) => null,
   length: 0,
 };
 

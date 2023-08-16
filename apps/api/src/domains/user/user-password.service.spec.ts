@@ -14,131 +14,173 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { BadRequestException } from '@nestjs/common';
+import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
-import { CodeService } from '@/shared/code/code.service';
+import { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import { CodeEntity } from '@/shared/code/code.entity';
+import { CodeServiceProviders } from '@/shared/code/code.service.spec';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
-import {
-  TestConfigs,
-  clearEntities,
-  getMockProvider,
-} from '@/utils/test-utils';
+import { getMockProvider, mockRepository } from '@/utils/test-utils';
 
-import { OWNER_ROLE } from '../role/role.constant';
-import { RoleEntity } from '../role/role.entity';
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
-import { UserStateEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
-import { UserNotFoundException } from './exceptions';
+import { InvalidPasswordException, UserNotFoundException } from './exceptions';
 import { UserPasswordService } from './user-password.service';
+
+const MockMailerService = {
+  sendMail: jest.fn(),
+};
+const MockResetPasswordMailingService = {
+  send: jest.fn(),
+};
+
+export const UserPasswordServiceProviders = [
+  UserPasswordService,
+  ...CodeServiceProviders,
+  getMockProvider(ResetPasswordMailingService, MockResetPasswordMailingService),
+  getMockProvider(MailerService, MockMailerService),
+  {
+    provide: getRepositoryToken(UserEntity),
+    useValue: mockRepository(),
+  },
+];
 
 describe('UserPasswordService', () => {
   let userPasswordService: UserPasswordService;
-
-  let dataSource: DataSource;
+  let resetPasswordMailingService: ResetPasswordMailingService;
   let userRepo: Repository<UserEntity>;
-  let roleRepo: Repository<RoleEntity>;
+  let codeRepo: Repository<CodeEntity>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [
-        ...TestConfigs,
-        TypeOrmModule.forFeature([UserEntity, RoleEntity]),
-      ],
-      providers: [
-        getMockProvider(
-          ResetPasswordMailingService,
-          MockResetPasswordMailingService,
-        ),
-        getMockProvider(CodeService, MockCodeService),
-        UserPasswordService,
-      ],
+      providers: UserPasswordServiceProviders,
     }).compile();
     userPasswordService = module.get(UserPasswordService);
-
-    dataSource = module.get(DataSource);
-    userRepo = dataSource.getRepository(UserEntity);
-    roleRepo = dataSource.getRepository(RoleEntity);
-  });
-  afterEach(async () => {
-    await dataSource.destroy();
-  });
-
-  let userEntity: UserEntity;
-  let originalPassword: string;
-  beforeEach(async () => {
-    await clearEntities([userRepo, roleRepo]);
-
-    originalPassword = faker.internet.password();
-
-    userEntity = await userRepo.save({
-      email: faker.internet.email(),
-      state: UserStateEnum.Active,
-      hashPassword: await userPasswordService.createHashPassword(
-        originalPassword,
-      ),
-      role: await roleRepo.save(OWNER_ROLE),
-    });
+    resetPasswordMailingService = module.get(ResetPasswordMailingService);
+    userRepo = module.get(getRepositoryToken(UserEntity));
+    codeRepo = module.get(getRepositoryToken(CodeEntity));
   });
 
   describe('sendResetPasswordMail', () => {
-    it('positive case', async () => {
-      await userPasswordService.sendResetPasswordMail(userEntity.email);
+    it('sending a reset password mail succeeds with valid inputs', async () => {
+      const userId = faker.datatype.number();
+      const email = faker.internet.email();
+      jest
+        .spyOn(userRepo, 'findOneBy')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
-      expect(MockCodeService.setCode).toHaveBeenCalledTimes(1);
-      expect(MockResetPasswordMailingService.send).toHaveBeenCalledTimes(1);
+      await userPasswordService.sendResetPasswordMail(email);
+
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email });
+      expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(1);
     });
-    it('invalid email', async () => {
+    it('sending a reset password mail fails with invalid email', async () => {
+      const email = faker.internet.email();
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+
       await expect(
-        userPasswordService.sendResetPasswordMail(faker.internet.email()),
+        userPasswordService.sendResetPasswordMail(email),
       ).rejects.toThrow(UserNotFoundException);
+
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email });
+      expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(0);
     });
   });
   describe('resetPassword', () => {
-    it('positive case', async () => {
+    it('resetting a password succeeds with valid inputs', async () => {
       const dto = new ResetPasswordDto();
-      dto.email = userEntity.email;
+      dto.email = faker.internet.email();
+      dto.code = faker.datatype.string();
       dto.password = faker.internet.password();
+      const userId = faker.datatype.number();
+      jest
+        .spyOn(userRepo, 'findOneBy')
+        .mockResolvedValue({ id: userId } as UserEntity);
+      jest
+        .spyOn(codeRepo, 'findOneBy')
+        .mockResolvedValue({ code: dto.code } as CodeEntity);
 
       await userPasswordService.resetPassword(dto);
 
-      expect(MockCodeService.setCodeVerified).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email: dto.email });
+      expect(codeRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(codeRepo.findOneBy).toHaveBeenCalledWith({
+        key: dto.email,
+        type: CodeTypeEnum.RESET_PASSWORD,
+      });
+      expect(userRepo.update).toHaveBeenCalledTimes(1);
+      expect(userRepo.update).toHaveBeenCalledWith(
+        { id: userId },
+        {
+          id: userId,
+          hashPassword: expect.any(String),
+        },
+      );
+    });
+    it('resetting a password fails with an invalid email', async () => {
+      const dto = new ResetPasswordDto();
+      dto.email = faker.internet.email();
+      dto.code = faker.datatype.string();
+      dto.password = faker.internet.password();
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
 
-      const updatedUser = await userRepo.findOneBy({ id: userEntity.id });
+      await expect(userPasswordService.resetPassword(dto)).rejects.toThrow(
+        UserNotFoundException,
+      );
 
-      expect(updatedUser.hashPassword).not.toEqual(userEntity.hashPassword);
-      expect(
-        bcrypt.compareSync(dto.password, updatedUser.hashPassword),
-      ).toEqual(true);
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email: dto.email });
     });
   });
   describe('changePassword', () => {
-    it('positive case', async () => {
+    it('changing the password succeeds with valid inputs', async () => {
       const dto = new ChangePasswordDto();
-      dto.userId = userEntity.id;
-      dto.password = originalPassword;
-      dto.newPassword = faker.datatype.string();
+      dto.userId = faker.datatype.number();
+      dto.password = faker.internet.password();
+      dto.newPassword = faker.internet.password();
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue({
+        hashPassword: await userPasswordService.createHashPassword(
+          dto.password,
+        ),
+      } as UserEntity);
 
       await userPasswordService.changePassword(dto);
 
-      const updatedUser = await userRepo.findOneBy({ id: userEntity.id });
-
-      expect(
-        bcrypt.compareSync(dto.newPassword, updatedUser.hashPassword),
-      ).toEqual(true);
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ id: dto.userId });
+      expect(userRepo.update).toHaveBeenCalledTimes(1);
+      expect(userRepo.update).toHaveBeenCalledWith(
+        { id: dto.userId },
+        {
+          id: dto.userId,
+          hashPassword: expect.any(String),
+        },
+      );
     });
-    it('invalid original password', async () => {
+    it('changing the password fails with the invalid original password', async () => {
       const dto = new ChangePasswordDto();
-      dto.userId = userEntity.id;
-      dto.password = faker.datatype.string();
-      dto.newPassword = faker.datatype.string();
+      dto.userId = faker.datatype.number();
+      dto.password = faker.internet.password();
+      dto.newPassword = faker.internet.password();
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue({
+        hashPassword: await userPasswordService.createHashPassword(
+          faker.internet.password(),
+        ),
+      } as UserEntity);
 
       await expect(userPasswordService.changePassword(dto)).rejects.toThrow(
-        BadRequestException,
+        InvalidPasswordException,
       );
+
+      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(userRepo.findOneBy).toHaveBeenCalledWith({ id: dto.userId });
     });
   });
   it('createHashPassword', async () => {
@@ -147,11 +189,3 @@ describe('UserPasswordService', () => {
     expect(bcrypt.compareSync(password, hashPassword)).toEqual(true);
   });
 });
-
-const MockResetPasswordMailingService = {
-  send: jest.fn(),
-};
-const MockCodeService = {
-  setCode: jest.fn(),
-  setCodeVerified: jest.fn(),
-};

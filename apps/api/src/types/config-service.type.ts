@@ -18,13 +18,12 @@ import { ConfigType } from '@nestjs/config';
 import { appConfig } from '@/configs/app.config';
 import { jwtConfig } from '@/configs/jwt.config';
 import { mysqlConfig } from '@/configs/mysql.config';
+import { opensearchConfig } from '@/configs/opensearch.config';
 import { smtpConfig } from '@/configs/smtp.config';
-
-import { elasticsearchConfig } from '../configs/elasticsearch.config';
 
 export type ConfigServiceType = {
   app: ConfigType<typeof appConfig>;
-  elasticsearch: ConfigType<typeof elasticsearchConfig>;
+  opensearch: ConfigType<typeof opensearchConfig>;
   smtp: ConfigType<typeof smtpConfig>;
   jwt: ConfigType<typeof jwtConfig>;
   mysql: ConfigType<typeof mysqlConfig>;

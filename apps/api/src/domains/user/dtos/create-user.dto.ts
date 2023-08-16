@@ -13,16 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface CreateEmailUserDto {
-  type: 'email';
-  email: string;
-  hashPassword: string;
-}
+import { SignUpMethodEnum } from '../entities/enums';
+import { CreateEmailUserDto } from './create-email-user.dto';
+import { CreateInvitationUserDto } from './create-invitation-user.dto';
+import { CreateOAuthUserDto } from './create-oauth-user.dto';
 
-interface CreateInvitationDto {
-  type: 'invitation';
-  email: string;
-  roleId: string;
-  hashPassword: string;
-}
-export type CreateUserDto = CreateEmailUserDto | CreateInvitationDto;
+export type CreateUserDto = (
+  | Omit<CreateEmailUserDto & { method: 'email' }, 'password'>
+  | Omit<CreateInvitationUserDto & { method: 'invitation' }, 'password'>
+  | (CreateOAuthUserDto & { method: 'oauth' })
+) & { hashPassword: string; signUpMethod: SignUpMethodEnum };

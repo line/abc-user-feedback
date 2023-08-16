@@ -7,11 +7,11 @@ services:
     platform: linux/amd64
     restart: always
     command: --default-authentication-plugin=mysql_native_password
-    # environment:
-    #   MYSQL_ROOT_PASSWORD: userfeedback
-    #   MYSQL_DATABASE: userfeedback
-    #   MYSQL_USER: userfeedback
-    #   MYSQL_PASSWORD: userfeedback
+    environment:
+      MYSQL_ROOT_PASSWORD: userfeedback
+      MYSQL_DATABASE: userfeedback
+      MYSQL_USER: userfeedback
+      MYSQL_PASSWORD: userfeedback
     ports:
       - 13306:3306
     volumes:
@@ -31,31 +31,45 @@ services:
     networks:
       - app_network
 
-  elasticsearch:
-    hostname: elasticsearch
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.5.2
-    platform: linux/amd64
+  opensearch-node:
+    image: opensearchproject/opensearch:2.4.1
     restart: always
+    container_name: opensearch-node
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+      - plugins.security.disabled=true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - ./volumes/opensearch:/usr/share/opensearch/data
     ports:
       - 9200:9200
-      - 9300:9300
-    environment:
-      - discovery.type=single-node
-    volumes:
-      - ./volumes/elasticsearch:/usr/share/elasticsearch/data
+      - 9600:9600
     networks:
       - app_network
-  kibana:
-    image: docker.elastic.co/kibana/kibana:7.5.2
-    platform: linux/amd64
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.4.1
     restart: always
+    container_name: opensearch-dashboards
     ports:
       - 5601:5601
     environment:
-      ELASTICSEARCH_HOSTS: 'http://elasticsearch:9200'
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
+      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
     depends_on:
-      - elasticsearch
+      - opensearch-node
     networks:
       - app_network
+
 networks:
   app_network:

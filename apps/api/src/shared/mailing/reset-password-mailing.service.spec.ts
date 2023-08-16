@@ -25,7 +25,7 @@ import {
 
 import { ResetPasswordMailingService } from './reset-password-mailing.service';
 
-describe('first', () => {
+describe('ResetPasswordMailingService', () => {
   let resetPasswordMailingService: ResetPasswordMailingService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -40,10 +40,12 @@ describe('first', () => {
   it('to be defined', () => {
     expect(resetPasswordMailingService).toBeDefined();
   });
-  it('send', async () => {
+  it('sends a mail', async () => {
     const code = faker.datatype.string();
     const email = faker.internet.email();
+
     await resetPasswordMailingService.send({ code, email });
+
     expect(MockMailerService.sendMail).toHaveBeenCalledTimes(1);
   });
 });

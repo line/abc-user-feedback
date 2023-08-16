@@ -18,7 +18,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 
-import seed from './seed';
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 @Module({
@@ -28,7 +27,6 @@ import { TypeOrmConfigService } from './typeorm-config.service';
       dataSourceFactory: async (options) => {
         Logger.log('start data source initalized');
         const datasource = await new DataSource(options).initialize();
-        await seed(datasource);
         Logger.log('end data source initalized');
 
         return addTransactionalDataSource(datasource);
