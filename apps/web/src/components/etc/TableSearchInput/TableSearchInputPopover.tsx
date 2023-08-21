@@ -49,18 +49,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
           alert('잠시후 다시 시도해주세요.');
           return;
         }
-        switch (column.format) {
-          case 'boolean':
-            query[key] = value;
-            break;
-          case 'select':
-          case 'issue':
-          case 'issue_status':
-            query[key] = value;
-            break;
-          default:
-            break;
-        }
+        query[key] = value;
       }
     });
 
@@ -129,7 +118,6 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
                 setCurrentQuery((prev) => ({ ...prev, [item.key]: v }));
               }}
               options={item.options}
-              isClearable
             />
           )}
           {item.format === 'boolean' && (
@@ -142,7 +130,6 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
                 setCurrentQuery((prev) => ({ ...prev, [item.key]: v?.key }));
               }}
               options={BooleanOptions}
-              isClearable
             />
           )}
         </div>

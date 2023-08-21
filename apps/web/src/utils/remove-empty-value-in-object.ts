@@ -18,7 +18,11 @@ import produce from 'immer';
 export const removeEmptyValueInObject = (input: Record<string, any>) =>
   produce(input, (draft) => {
     for (const key of Object.keys(draft)) {
-      if (typeof draft[key] === 'undefined' || draft[key] === null)
+      if (
+        typeof draft[key] === 'undefined' ||
+        draft[key] === null ||
+        draft[key] === ''
+      )
         delete draft[key];
     }
   });

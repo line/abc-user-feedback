@@ -241,15 +241,14 @@ const ComboboxOption: React.FC<IComboboxOption> = ({
 }) => {
   const { t } = useTranslation();
   const { format, key, name } = searchItem;
+
   return (
     <Combobox.Option
       key={key}
       className={({ active }) =>
         ['p-3 cursor-pointer', active ? 'bg-secondary' : 'bg-primary'].join(' ')
       }
-      value={{
-        [key]: strValueToObj(editingValue, searchItem),
-      }}
+      value={{ [key]: strValueToObj(editingValue, searchItem) }}
     >
       <div className="flex justify-between">
         <p className="text-secondary">
