@@ -99,8 +99,11 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
       { key: 'ids', format: 'number', name: 'ID' },
     ];
     return items
-      .concat(fieldData as SearchItemType[])
-      .filter((v) => v.key !== 'id' && v.key !== 'createdAt')
+      .concat(
+        fieldData.filter(
+          (v) => v.key !== 'id' && v.key !== 'createdAt' && v.key !== 'issues',
+        ) as SearchItemType[],
+      )
       .sort((a, b) => getSearchItemPriority(a) - getSearchItemPriority(b));
   }, [fieldData, issues, t]);
 
