@@ -45,6 +45,7 @@ export class UserService {
   ) {}
 
   async findAll({ options, query, order }: FindAllUsersDto) {
+    console.log('query', query);
     const where = query
       ? Object.entries(query).reduce((prev, [key, value]) => {
           if (key === 'projectId') {
@@ -54,10 +55,14 @@ export class UserService {
             const { lt, gte } = value as any;
             return {
               ...prev,
-              createdAt: Raw((alias) => `${alias} >= :gte AND ${alias} < :lt`, {
-                lt,
-                gte,
-              }),
+              createdAt: Raw(
+                (alias) =>
+                  `CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') >= :gte AND CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') < :lt`,
+                {
+                  lt,
+                  gte,
+                },
+              ),
             };
           }
           return { ...prev, [key]: Like(`%${value}%`) };
