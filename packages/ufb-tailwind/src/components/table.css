@@ -2,11 +2,15 @@
   @apply text-left border border-separate border-spacing-0 border-fill-tertiary rounded mb-2 overflow-hidden bg-tertiary;
 
   th {
-    @apply font-12-bold;
+    font-weight: bold;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 
   td {
-    @apply font-12-regular;
+    font-weight: normal;
+    font-size: 0.8125rem;
+    line-height: 1.5;
   }
 
   th,

@@ -69,3 +69,7 @@ th {
   height: 100%;
   top: 0;
 }
+
+.date_picker_container:hover:not(:has(.date_picker_clear_btn:hover)) {
+  @apply border-fill-primary;
+}

@@ -28,12 +28,14 @@ const BooleanOptions = [
   { name: 'True', key: true },
   { name: 'False', key: false },
 ];
+
 interface IProps extends React.PropsWithChildren {
   columns: SearchItemType[];
   onSubmit: (query: Record<string, any>) => void;
   close: () => void;
   query: Record<string, any>;
 }
+
 const TableSearchInputPopover: React.FC<IProps> = (props) => {
   const { columns, onSubmit, close, query } = props;
 
@@ -57,16 +59,17 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
     close();
   };
 
-  const onChangeDate = (key: string) => (date: DateRangeType | null) => {
+  const onChangeDate = (key: string) => (date: DateRangeType) => {
     setCurrentQuery((prev) =>
       produce(prev, (draft) => {
-        if (!date) delete draft[key];
-        else if (!date?.endDate) delete draft[key];
-        else if (!date?.startDate) delete draft[key];
+        if (!date) draft[key] = null;
+        else if (!date.endDate) delete draft[key];
+        else if (!date.startDate) delete draft[key];
         else draft[key] = { gte: date.startDate, lt: date.endDate };
       }),
     );
   };
+
   const getDateValue = useCallback(
     (key: string) => {
       return currentQuery[key]
@@ -103,6 +106,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
                   value={getDateValue(item.key)}
                   onChange={onChangeDate(item.key)}
                   maxDate={new Date()}
+                  isClearable
                 />
               </div>
             </div>
@@ -118,6 +122,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
                 setCurrentQuery((prev) => ({ ...prev, [item.key]: v }));
               }}
               options={item.options}
+              isClearable
             />
           )}
           {item.format === 'boolean' && (
@@ -130,6 +135,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
                 setCurrentQuery((prev) => ({ ...prev, [item.key]: v?.key }));
               }}
               options={BooleanOptions}
+              isClearable
             />
           )}
         </div>

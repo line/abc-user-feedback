@@ -28,15 +28,13 @@ export default withIronSessionApiRoute(async (req, res) => {
       { email, password },
     );
 
-    const data = response.data;
-
     if (response.status !== 201) {
-      return res.status(response.status).send(data);
+      return res.status(response.status).send(response.data);
     }
-    req.session.jwt = data;
+    req.session.jwt = response.data;
     await req.session.save();
 
-    return res.send(data);
+    return res.send(response.data);
   } catch (error) {
     if (error instanceof TypeError) {
       getLogger('/api/login').error(error);

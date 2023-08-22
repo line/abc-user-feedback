@@ -28,15 +28,16 @@ dayjs.extend(weekday);
 const DATE_FORMAT = 'YYYY-MM-DD';
 
 interface IProps extends React.PropsWithChildren {
-  onChange: (value: DateRangeType) => void;
+  onChange: (value: DateRangeType | null) => void;
   value: DateRangeType | null;
   minDate?: Date;
   maxDate?: Date;
   maxDays?: number;
+  isClearable?: boolean;
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
-  const { value, onChange, maxDate, minDate, maxDays } = props;
+  const { value, onChange, maxDate, minDate, maxDays, isClearable } = props;
 
   const { t, i18n } = useTranslation();
 
@@ -100,9 +101,9 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       <PopoverTrigger asChild>
         <div
           className={[
-            'btn btn-md btn-secondary gap-2 btn-full justify-between px-3.5',
+            'inline-flex cursor-pointer items-center justify-between px-3.5 rounded w-full bg-fill-inverse border py-[9.5px] h-10 hover:border-fill-primary',
             value ? 'text-primary' : 'text-tertiary',
-            isOpen ? 'border-fill-primary' : '',
+            isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
           ].join(' ')}
           onClick={() => setIsOpen(true)}
         >
@@ -113,7 +114,20 @@ const DateRangePicker: React.FC<IProps> = (props) => {
                 ).format(DATE_FORMAT)}`
               : 'YYYY-MM-DD ~ YYYY-MM-DD'}
           </p>
-          <Icon name="CalendarAStroke" size={20} className="text-tertiary" />
+          <div className="flex flex-row gap-2 items-center">
+            {isClearable && value && (
+              <Icon
+                name="CloseCircleFill"
+                size={20}
+                className="text-secondary opacity-50 hover:opacity-100"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange(null);
+                }}
+              />
+            )}
+            <Icon name="CalendarAStroke" size={20} className="text-tertiary" />
+          </div>
         </div>
       </PopoverTrigger>
       <PopoverContent isPortal>
