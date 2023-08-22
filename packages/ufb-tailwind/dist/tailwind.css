@@ -7,7 +7,8 @@
 
   font-weight: 100;
 
-  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Th.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Th.otf') format('opentype'),
+    url('/fonts/LINESeedKR/EOT/LINESeedKR-Th.eot') format('embedded-opentype'),
     url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Th.woff2') format('woff2'),
     url('/fonts/LINESeedKR/WOFF/LINESeedKR-Th.woff') format('woff');
 }
@@ -19,7 +20,8 @@
 
   font-weight: 400;
 
-  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Rg.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Rg.otf') format('opentype'),
+    url('/fonts/LINESeedKR/EOT/LINESeedKR-Rg.eot') format('embedded-opentype'),
     url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Rg.woff2') format('woff2'),
     url('/fonts/LINESeedKR/WOFF/LINESeedKR-Rg.woff') format('woff');
 }
@@ -31,7 +33,21 @@
 
   font-weight: 700;
 
-  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Bd.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Bd.otf') format('opentype'),
+    url('/fonts/LINESeedKR/EOT/LINESeedKR-Bd.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Bd.woff2') format('woff2'),
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedKR';
+
+  font-style: bold;
+
+  font-weight: 700;
+
+  src: url('/fonts/LINESeedKR/EOT/LINESeedKR-Bd.otf') format('opentype'),
+    url('/fonts/LINESeedKR/EOT/LINESeedKR-Bd.eot') format('embedded-opentype'),
     url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Bd.woff2') format('woff2'),
     url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.woff') format('woff');
 }
@@ -45,7 +61,8 @@
 
   font-weight: 100;
 
-  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Th.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Th.otf') format('opentype'),
+    url('/fonts/LINESeedEN/EOT/LINESeedEN-Th.eot') format('embedded-opentype'),
     url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Th.woff2') format('woff2'),
     url('/fonts/LINESeedEN/WOFF/LINESeedEN-Th.woff') format('woff');
 }
@@ -57,7 +74,8 @@
 
   font-weight: 400;
 
-  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Rg.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Rg.otf') format('opentype'),
+    url('/fonts/LINESeedEN/EOT/LINESeedEN-Rg.eot') format('embedded-opentype'),
     url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Rg.woff2') format('woff2'),
     url('/fonts/LINESeedEN/WOFF/LINESeedEN-Rg.woff') format('woff');
 }
@@ -69,7 +87,8 @@
 
   font-weight: 700;
 
-  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Bd.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Bd.otf') format('opentype'),
+    url('/fonts/LINESeedEN/EOT/LINESeedEN-Bd.eot') format('embedded-opentype'),
     url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Bd.woff2') format('woff2'),
     url('/fonts/LINESeedEN/WOFF/LINESeedEN-Bd.woff') format('woff');
 }
@@ -83,7 +102,8 @@
 
   font-weight: 100;
 
-  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Th.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Th.otf') format('opentype'),
+    url('/fonts/LINESeedJP/EOT/LINESeedJP-Th.eot') format('embedded-opentype'),
     url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Th.woff2') format('woff2'),
     url('/fonts/LINESeedJP/WOFF/LINESeedJP-Th.woff') format('woff');
 }
@@ -95,7 +115,8 @@
 
   font-weight: 400;
 
-  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Rg.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Rg.otf') format('opentype'),
+    url('/fonts/LINESeedJP/EOT/LINESeedJP-Rg.eot') format('embedded-opentype'),
     url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Rg.woff2') format('woff2'),
     url('/fonts/LINESeedJP/WOFF/LINESeedJP-Rg.woff') format('woff');
 }
@@ -107,47 +128,10 @@
 
   font-weight: 700;
 
-  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Bd.eot') format('embedded-opentype'),
+  src: url('/fonts/LINESeedJP/EOT/LINESeedJP-Bd.otf') format('opentype'),
+    url('/fonts/LINESeedJP/EOT/LINESeedJP-Bd.eot') format('embedded-opentype'),
     url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Bd.woff2') format('woff2'),
     url('/fonts/LINESeedJP/WOFF/LINESeedJP-Bd.woff') format('woff');
-}
-
-/* ------------------------------------------------------------------------------------ */
-
-@font-face {
-  font-family: 'LINESeedTH';
-
-  font-style: thin;
-
-  font-weight: 100;
-
-  src: url('/fonts/LINESeedTH/EOT/LINESeedTH-Th.eot') format('embedded-opentype'),
-    url('/fonts/LINESeedTH/WOFF2/LINESeedTH-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedTH/WOFF/LINESeedTH-Th.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'LINESeedTH';
-
-  font-style: normal;
-
-  font-weight: 400;
-
-  src: url('/fonts/LINESeedTH/EOT/LINESeedTH-Rg.eot') format('embedded-opentype'),
-    url('/fonts/LINESeedTH/WOFF2/LINESeedTH-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedTH/WOFF/LINESeedTH-Rg.woff') format('woff');
-}
-
-@font-face {
-  font-family: 'LINESeedTH';
-
-  font-style: bold;
-
-  font-weight: 700;
-
-  src: url('/fonts/LINESeedTH/EOT/LINESeedTH-Bd.eot') format('embedded-opentype'),
-    url('/fonts/LINESeedTH/WOFF2/LINESeedTH-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedTH/WOFF/LINESeedTH-Bd.woff') format('woff');
 }
 
 textarea:focus,
@@ -219,7 +203,7 @@ html.dark {
   padding-top: 9.5px;
   padding-bottom: 9.5px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -236,7 +220,7 @@ html.dark {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -245,7 +229,7 @@ html.dark {
   padding-top: 9.5px;
   padding-bottom: 9.5px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -254,7 +238,7 @@ html.dark {
   padding-top: 7px;
   padding-bottom: 7px;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -262,7 +246,7 @@ html.dark {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
   font-weight: bold;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -765,7 +749,7 @@ html.dark {
   padding-top: 9.5px;
   padding-bottom: 9.5px;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -774,7 +758,7 @@ html.dark {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   font-weight: normal;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
@@ -783,7 +767,7 @@ html.dark {
   padding-top: 9.5px;
   padding-bottom: 9.5px;
   font-weight: normal;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
@@ -792,7 +776,7 @@ html.dark {
   padding-top: 7px;
   padding-bottom: 7px;
   font-weight: normal;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -836,7 +820,7 @@ html.dark {
   display: inline-block;
   color: var(--text-color-primary);
   font-weight: normal;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -846,7 +830,7 @@ html.dark {
   display: inline-block;
   color: var(--text-color-secondary);
   font-weight: normal;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -876,13 +860,13 @@ html.dark {
 
 .table th {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 0.8125rem;
   line-height: 1.5;
 }
 
 .table td {
-  font-weight: normal;
-  font-size: 12px;
+  font-weight: regular;
+  font-size: 0.8125rem;
   line-height: 1.5;
 }
 
@@ -902,97 +886,97 @@ html.dark {
 
 .font-40-bold {
   font-weight: bold;
-  font-size: 40px;
+  font-size: 2.5rem;
   line-height: 1.3;
 }
 
 .font-32-bold {
   font-weight: bold;
-  font-size: 32px;
+  font-size: 2rem;
   line-height: 1.3;
 }
 
 .font-24-bold {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 1.3;
 }
 
 .font-20-bold {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.4;
 }
 
 .font-18-bold {
   font-weight: bold;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1.4;
 }
 
 .font-16-bold {
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
 .font-14-bold {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
 .font-12-bold {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
 .font-10-bold {
   font-weight: bold;
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.5;
 }
 
 .font-24-regular {
   font-weight: normal;
-  font-size: 24px;
+  font-size: 1.5rem;
   line-height: 1.3;
 }
 
 .font-20-regular {
   font-weight: normal;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.4;
 }
 
 .font-18-regular {
   font-weight: normal;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1.4;
 }
 
 .font-16-regular {
   font-weight: normal;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.5;
 }
 
 .font-14-regular {
   font-weight: normal;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 
 .font-12-regular {
   font-weight: normal;
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
 .font-10-regular {
   font-weight: normal;
-  font-size: 10px;
+  font-size: 0.625rem;
   line-height: 1.5;
 }
 

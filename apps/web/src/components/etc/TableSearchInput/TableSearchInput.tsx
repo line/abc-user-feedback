@@ -112,10 +112,7 @@ const TableSearchInput: React.FC<IProps> = ({
 
   const onInputChangeQuery = (inputObject?: Record<string, any>) => {
     const currentQuery = inputObject
-      ? removeEmptyValueInObject({
-          ...currentObj,
-          ...inputObject,
-        })
+      ? removeEmptyValueInObject({ ...currentObj, ...inputObject })
       : {};
 
     setInputValue(objToStr(currentQuery, searchItems));
