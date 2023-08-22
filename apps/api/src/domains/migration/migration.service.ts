@@ -17,6 +17,7 @@ import { Inject, Logger } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch';
+import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
@@ -63,8 +64,8 @@ export class MigrationService {
         id: feedback.id,
         ...feedback.rawData,
         ...feedback.additionalData,
-        createdAt: feedback.createdAt,
-        updatedAt: feedback.updatedAt,
+        createdAt: dayjs(feedback.createdAt).format('YYYY-MM-DD HH:mm:ssZ'),
+        updatedAt: dayjs(feedback.updatedAt).format('YYYY-MM-DD HH:mm:ssZ'),
       };
     });
     this.logger.log('documents.length: ' + documents.length);
@@ -76,12 +77,13 @@ export class MigrationService {
           refresh: true,
           body: chunk.flatMap((doc) => {
             const _id = doc.id;
-            return [{ index: { _index: index, _id } }, doc];
+            return [{ index: { _index: 'channel_' + index, _id } }, doc];
           }),
         });
 
         if (res.body.errors) {
           this.logger.error('migration error', index);
+          this.logger.error(res.body);
         }
       }
     }
