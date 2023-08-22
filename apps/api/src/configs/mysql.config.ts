@@ -25,6 +25,7 @@ export const mySqlConfigSchema = yup.object({
     .default(
       '["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"]',
     ),
+  TZ: yup.string().default('+00:00'),
 });
 
 export const mysqlConfig = registerAs('mysql', () => ({

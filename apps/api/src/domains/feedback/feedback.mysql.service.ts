@@ -139,12 +139,30 @@ export class FeedbackMySQLService {
         );
       } else if (fieldKey === 'createdAt') {
         const { gte, lt } = value as TimeRange;
-        queryBuilder.andWhere('feedbacks.created_at >= :gte', { gte });
-        queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
+        queryBuilder.andWhere(
+          'CONVERT_TZ(feedbacks.created_at, :timezone, "+00:00") >= :gte',
+          { timezone: process.env.TZ, gte },
+        );
+        queryBuilder.andWhere(
+          'CONVERT_TZ(feedbacks.created_at, :timezone, "+00:00") < :lt',
+          { timezone: process.env.TZ, lt },
+        );
       } else if (fieldKey === 'updatedAt') {
         const { gte, lt } = value as TimeRange;
-        queryBuilder.andWhere('feedbacks.updated_at >= :gte', { gte });
-        queryBuilder.andWhere('feedbacks.updated_at < :lt', { lt });
+        queryBuilder.andWhere(
+          'CONVERT_TZ(feedbacks.updated_at, :timezone, "+00:00") >= :gte',
+          {
+            timezone: process.env.TZ,
+            gte,
+          },
+        );
+        queryBuilder.andWhere(
+          'CONVERT_TZ(feedbacks.updated_at, :timezone, "+00:00") < :lt',
+          {
+            timezone: process.env.TZ,
+            lt,
+          },
+        );
       } else {
         const { id, format, type } = fields.find((v) => v.key === fieldKey);
 
