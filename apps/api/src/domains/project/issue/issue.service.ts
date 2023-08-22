@@ -56,6 +56,7 @@ export class IssueService {
 
     const duplicateIssue = await this.repository.findOneBy({
       name: issue.name,
+      project: { id: issue.project.id },
     });
 
     if (duplicateIssue) throw new IssueNameDuplicatedException();
