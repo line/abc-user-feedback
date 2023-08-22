@@ -21,7 +21,6 @@ import { Like, Repository } from 'typeorm';
 import { TimeRange } from '@/common/dtos';
 import { createQueryBuilder, mockRepository } from '@/utils/test-utils';
 
-// import { ProjectEntity } from '../project/project.entity';
 import {
   CreateIssueDto,
   FindIssuesByProjectIdDto,
