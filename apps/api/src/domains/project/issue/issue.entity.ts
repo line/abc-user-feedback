@@ -20,6 +20,7 @@ import {
   ManyToMany,
   ManyToOne,
   Relation,
+  Unique,
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
@@ -30,8 +31,9 @@ import { ProjectEntity } from '../project/project.entity';
 
 @Entity('issues')
 @Index(['project.id', 'createdAt'])
+@Unique('issue-name-unique', ['name', 'project'])
 export class IssueEntity extends CommonEntity {
-  @Column('varchar', { length: 255, unique: true })
+  @Column('varchar', { length: 255 })
   name: string;
 
   @Column('varchar', { nullable: true })
