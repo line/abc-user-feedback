@@ -89,7 +89,6 @@ npm run migration:run
 | AUTO_MIGRATION       | set 'true' if you want to make the database migration automatically              |                                                                    |
 | MASTER_API_KEY       | set a key if you want to make a master key for creating feedback                 |                                                                    |
 | NODE_OPTIONS         | set some options if you want to add for node execution (e.g. max_old_space_size) |                                                                    |
-| TZ                   | set timezone of the mysql database server if it is not UTC (e.g. +09:00)         | +00:00                                                             |
 
 ## Learn More
 

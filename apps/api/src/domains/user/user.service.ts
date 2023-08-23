@@ -54,14 +54,10 @@ export class UserService {
             const { lt, gte } = value as any;
             return {
               ...prev,
-              createdAt: Raw(
-                (alias) =>
-                  `CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') >= :gte AND CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') < :lt`,
-                {
-                  lt,
-                  gte,
-                },
-              ),
+              createdAt: Raw((alias) => `${alias} >= :gte AND ${alias} < :lt`, {
+                lt,
+                gte,
+              }),
             };
           }
           return { ...prev, [key]: Like(`%${value}%`) };
