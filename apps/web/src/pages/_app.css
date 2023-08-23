@@ -3,20 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  .chip {
-    @apply font-14-bold rounded-full px-3 py-2 bg-fill-quaternary;
-
-  }
-
-  .chip-disabled {
-    @apply border text-fill-tertiary border-fill-tertiary bg-primary;
-  }
-
-  .chip-sm {
-    @apply font-10-bold rounded-full px-1.5 py-0.5 bg-fill-quaternary;
-  }
-
-
   .loading {
     position: relative;
     overflow: hidden;
@@ -68,8 +54,4 @@ th {
   width: 8px;
   height: 100%;
   top: 0;
-}
-
-.date_picker_container:hover:not(:has(.date_picker_clear_btn:hover)) {
-  @apply border-fill-primary;
 }
