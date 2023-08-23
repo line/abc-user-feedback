@@ -29,14 +29,13 @@ export default withIronSessionApiRoute(async (req, res) => {
       headers: { Authorization: `Bearer ${jwt?.refreshToken}` },
     });
 
-    const data = await response.data;
     if (response.status !== 200) {
-      return res.status(response.status).send(data);
+      return res.status(response.status).send(response.data);
     }
 
-    req.session.jwt = data;
+    req.session.jwt = response.data;
     await req.session.save();
-    return res.send({ jwt: data });
+    return res.send({ jwt: response.data });
   } catch (error) {
     getLogger('/api/refrech-jwt').error(error);
     if (error instanceof TypeError) {

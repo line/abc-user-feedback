@@ -33,15 +33,16 @@ export const strToObj = (input: string, searchItems: SearchItemType[]) => {
 
     const column = searchItems.find((column) => column.name === name);
 
-    if (!column) result[name] = value;
-    else {
-      const { key } = column;
-      result[key] = strValueToObj(value, column);
+    if (!column) {
+      result[name] = value;
+    } else {
+      result[column.key] = strValueToObj(value, column);
     }
   }
 
   return result;
 };
+
 export const strValueToObj = (value: string, searchItems: SearchItemType) => {
   switch (searchItems.format) {
     case 'boolean':
@@ -50,11 +51,9 @@ export const strValueToObj = (value: string, searchItems: SearchItemType) => {
       const [gte, lt] = value
         .split('~')
         .map((v) => dayjs(v, { format: DATE_FORMAT }).toDate());
-
       return { gte, lt };
     case 'issue':
     case 'issue_status':
-    case 'issue':
     case 'select':
     case 'multiSelect':
       return searchItems.options?.find((v) => v.name === value) ?? value;
@@ -88,9 +87,12 @@ export const objToStr = (
             return '';
           }
         case 'issue':
+          const issueName = Array.isArray(value)
+            ? column.options?.find((v) => v.id === value[0])?.name
+            : value?.name ?? value;
+          return `${name}:${issueName}`;
         case 'issue_status':
         case 'select':
-          return `${name}:${value?.name ?? value}`;
         case 'multiSelect':
           return `${name}:${value?.name ?? value}`;
         default:
@@ -140,6 +142,11 @@ export const objToQuery = (
               value?.id ?? column.options?.find((v) => v.name === value)?.key;
             result[key] = statusId;
             break;
+          case 'issue':
+            const issueId =
+              value?.id ?? column.options?.find((v) => v.name === value)?.id;
+            result[key] = [issueId];
+            break;
           case 'multiSelect':
             const optionKey1 =
               value?.key ?? column.options?.find((v) => v.name === value)?.key;
@@ -152,11 +159,7 @@ export const objToQuery = (
             if (!optionKey2) break;
             result[key] = optionKey2;
             break;
-          case 'issue':
-            const issueId =
-              value?.id ?? column.options?.find((v) => v.name === value)?.id;
-            result[key] = issueId;
-            break;
+
           default:
             result[key] = value;
             break;

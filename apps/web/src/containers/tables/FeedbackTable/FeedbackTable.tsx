@@ -108,7 +108,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
           draft['issueIds'] = [...(draft['issueIds'] ?? []), issueId];
         }
         if (query.ids) draft['ids'] = [draft['ids']];
-        if (!sub) {
+        if (!sub && createdAtRange) {
           draft['createdAt'] = {
             gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
             lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),

@@ -76,7 +76,7 @@ export const TestTypeOrmConfig = TypeOrmModule.forRootAsync({
       entities: [join(__dirname, '../**/*.entity.{ts,js}')],
       logging: ['warn', 'error'],
       namingStrategy: new SnakeNamingStrategy(),
-      timezone: process.env.TZ,
+      timezone: '+00:00',
     };
   },
 });

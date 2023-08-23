@@ -23,11 +23,9 @@ import { NextPage } from 'next';
 import { appWithTranslation } from 'next-i18next';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { ReactElement, ReactNode, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import { LOCALE_FONT_FAMILY } from '@/constants/font-family';
 import { TenantProvider } from '@/contexts/tenant.context';
 import { UserProvider } from '@/contexts/user.context';
 import '@/styles/react-datepicker.css';
@@ -46,20 +44,12 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(() => new QueryClient());
 
   const getLayout = Component.getLayout ?? ((page) => page);
-  const { locale } = useRouter();
 
   return (
     <>
       <Head>
         <title>User Feedback</title>
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
-        <style>{`
-          html {
-            font-family: ${
-              LOCALE_FONT_FAMILY[locale ?? 'ko']
-            }, LineSeedEN  !important;
-          }
-        `}</style>
       </Head>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>

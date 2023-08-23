@@ -24,7 +24,7 @@ import {
 } from '@/components';
 import { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
 import { env } from '@/env.mjs';
-import { useIssueSearch, usePermissions } from '@/hooks';
+import { useIssueSearch } from '@/hooks';
 import { FieldType } from '@/types/field.type';
 
 import AllExpandButton from '../AllExpandButton';
@@ -77,8 +77,6 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
     setCreatedAtRange,
   } = useFeedbackTable();
 
-  const perms = usePermissions(projectId);
-
   const { t } = useTranslation();
 
   const { data: issues } = useIssueSearch(projectId, { limit: 1000 });
@@ -99,8 +97,11 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
       { key: 'ids', format: 'number', name: 'ID' },
     ];
     return items
-      .concat(fieldData as SearchItemType[])
-      .filter((v) => v.key !== 'id' && v.key !== 'createdAt')
+      .concat(
+        fieldData.filter(
+          (v) => v.key !== 'id' && v.key !== 'createdAt' && v.key !== 'issues',
+        ) as SearchItemType[],
+      )
       .sort((a, b) => getSearchItemPriority(a) - getSearchItemPriority(b));
   }, [fieldData, issues, t]);
 
@@ -123,11 +124,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             toggleAllRowsExpanded={table.toggleAllRowsExpanded}
           />
           <div className="w-[1px] bg-fill-tertiary h-4" />
-          <DownloadButton
-            count={count}
-            query={query}
-            disabled={!perms.includes('feedback_download_read')}
-          />
+          <DownloadButton count={count} query={query} />
         </div>
       </div>
     );
@@ -151,11 +148,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             isAllExpanded={table.getIsAllRowsExpanded()}
             toggleAllRowsExpanded={table.toggleAllRowsExpanded}
           />
-          <DownloadButton
-            count={count}
-            query={query}
-            disabled={!perms.includes('feedback_download_read')}
-          />
+          <DownloadButton count={count} query={query} />
         </div>
       </div>
       <div className="flex justify-between">

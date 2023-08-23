@@ -45,7 +45,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       logging: ['warn', 'error'],
       migrationsRun: process.env.AUTO_MIGRATION === 'true',
       namingStrategy: new SnakeNamingStrategy(),
-      timezone: process.env.TZ,
+      timezone: '+00:00',
     };
   }
 }

@@ -68,8 +68,14 @@ export class FeedbackService {
     );
 
     for (const fieldKey of Object.keys(query)) {
-      if (['ids', 'issueIds', 'searchText'].includes(fieldKey)) {
-        return;
+      if (['ids', 'issueIds'].includes(fieldKey)) {
+        if (!Array.isArray(query[fieldKey])) {
+          throw new BadRequestException(`${fieldKey} must be array`);
+        }
+        continue;
+      }
+      if ('searchText' === fieldKey) {
+        continue;
       }
       if (!fieldsByKey[fieldKey]) {
         throw new BadRequestException(`invalid key in query: ${fieldKey}`);
@@ -79,11 +85,11 @@ export class FeedbackService {
         case FieldFormatEnum.boolean:
           if (typeof query[fieldKey] !== 'boolean')
             throw new BadRequestException(`${fieldKey} must be boolean`);
-          return;
+          break;
         case FieldFormatEnum.keyword:
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
-          return;
+          break;
         case FieldFormatEnum.date:
           if (
             typeof query[fieldKey] !== 'object' ||
@@ -93,25 +99,25 @@ export class FeedbackService {
             )
           )
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
-          return;
+          break;
         case FieldFormatEnum.multiSelect:
           if (!Array.isArray(query[fieldKey]))
             throw new BadRequestException(
               `${fieldKey} must be array of string`,
             );
-          return;
+          break;
         case FieldFormatEnum.number:
           if (typeof query[fieldKey] !== 'number')
             throw new BadRequestException(`${fieldKey} must be number`);
-          return;
+          break;
         case FieldFormatEnum.select:
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
-          return;
+          break;
         case FieldFormatEnum.text:
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
-          return;
+          break;
       }
     }
   }
