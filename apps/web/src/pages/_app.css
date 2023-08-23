@@ -34,6 +34,7 @@
 
 body {
   @apply font-12-regular text-primary bg-primary;
+  font-family: "LINESeedEN", sans-serif;
 }
 
 a {
@@ -54,4 +55,34 @@ th {
   width: 8px;
   height: 100%;
   top: 0;
+}
+
+@font-face {
+  font-family: 'LINESeedEN';
+  font-style: thin;
+  font-weight: 100;
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Th.otf') format('opentype'),
+    url('/fonts/LINESeedEN/EOT/LINESeedEN-Th.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Th.woff2') format('woff2'),
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Th.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedEN';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Rg.otf') format('opentype'),
+    url('/fonts/LINESeedEN/EOT/LINESeedEN-Rg.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Rg.woff2') format('woff2'),
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Rg.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'LINESeedEN';
+  font-style: bold;
+  font-weight: 700;
+  src: url('/fonts/LINESeedEN/EOT/LINESeedEN-Bd.otf') format('opentype'),
+    url('/fonts/LINESeedEN/EOT/LINESeedEN-Bd.eot') format('embedded-opentype'),
+    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Bd.woff2') format('woff2'),
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Bd.woff') format('woff');
 }
