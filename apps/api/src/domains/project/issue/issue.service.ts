@@ -77,16 +77,14 @@ export class IssueService {
 
     if (query.createdAt) {
       andWhere.createdAt = Raw(
-        (alias) =>
-          `CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') >= :gte AND CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') < :lt`,
+        (alias) => `${alias} >= :gte AND ${alias} < :lt`,
         query.createdAt as TimeRange,
       );
     }
 
     if (query.updatedAt) {
       andWhere.updatedAt = Raw(
-        (alias) =>
-          `CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') >= :gte AND CONVERT_TZ(${alias}, '${process.env.TZ}', '+00:00') < :lt`,
+        (alias) => `${alias} >= :gte AND ${alias} < :lt`,
         query.updatedAt as TimeRange,
       );
     }
