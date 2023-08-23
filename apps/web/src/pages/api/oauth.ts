@@ -28,16 +28,14 @@ export default withIronSessionApiRoute(async (req, res) => {
       `${env.API_BASE_URL}/api/auth/signIn/oauth?code=${code}`,
     );
 
-    const data = await response.data;
-
     if (response.status !== 200) {
-      return res.status(response.status).send(data);
+      return res.status(response.status).send(response.data);
     }
 
-    req.session.jwt = data;
+    req.session.jwt = response.data;
     await req.session.save();
 
-    return res.send(data);
+    return res.send(response.data);
   } catch (error) {
     getLogger('/api/oauth').error(error);
     if (error instanceof TypeError) {

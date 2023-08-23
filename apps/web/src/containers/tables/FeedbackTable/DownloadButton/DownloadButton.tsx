@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
 
-import { useDownload } from '@/hooks';
+import { useDownload, usePermissions } from '@/hooks';
 import { IFetchError } from '@/types/fetch-error.type';
 import themeStore from '@/zustand/theme.store';
 
@@ -28,18 +28,18 @@ export interface IDownloadButtonProps {
   query: any;
   count?: number;
   isHead?: boolean;
-  disabled?: boolean;
 }
 
 const DownloadButton: React.FC<IDownloadButtonProps> = ({
   count,
   query,
   isHead = false,
-  disabled = false,
 }) => {
   const [open, setOpen] = useState(false);
   const { theme } = useStore(themeStore);
   const { channelId, projectId } = useFeedbackTable();
+  const perms = usePermissions(projectId);
+
   const { t } = useTranslation();
   const [isClicked, setIsClicked] = useState(false);
   useEffect(() => {
@@ -89,7 +89,7 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         className={['btn btn-sm gap-2', btnCls].join(' ')}
-        disabled={disabled}
+        disabled={!perms.includes('feedback_download_read')}
         onClick={() => setOpen((prev) => !prev)}
       >
         <Icon name="Download" size={16} />

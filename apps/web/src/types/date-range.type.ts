@@ -14,4 +14,4 @@
  * under the License.
  */
 export type DateType = Date | null;
-export type DateRangeType = { startDate: DateType; endDate: DateType };
+export type DateRangeType = { startDate: DateType; endDate: DateType } | null;

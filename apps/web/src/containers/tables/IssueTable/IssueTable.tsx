@@ -198,8 +198,8 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     query: {
       ...query,
       createdAt: {
-        gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
-        lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
+        gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
+        lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
       },
     },
     sort: sort as Record<string, never>,

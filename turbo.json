@@ -2,11 +2,16 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": ["dist/**", ".next/**", "public/dist/**"],
-      "dependsOn": ["^build"],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "public/dist/**"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
       "env": [
         "NODE_ENV",
-        "TZ",
         "SESSION_PASSWORD",
         "API_BASE_URL",
         "NEXT_PUBLIC_API_BASE_URL",
