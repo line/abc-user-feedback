@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import dayjs from 'dayjs';
 import {
+  BeforeInsert,
+  BeforeUpdate,
   CreateDateColumn,
   DeleteDateColumn,
   PrimaryGeneratedColumn,
@@ -32,4 +35,15 @@ export abstract class CommonEntity {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @BeforeInsert()
+  beforeInsertHook() {
+    this.createdAt = dayjs().toDate();
+    this.updatedAt = dayjs().toDate();
+  }
+
+  @BeforeUpdate()
+  beforeUpdateHook() {
+    this.updatedAt = dayjs().toDate();
+  }
 }

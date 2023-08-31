@@ -16,6 +16,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomBytes } from 'crypto';
+import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -66,11 +67,25 @@ export class ApiKeyService {
 
   @Transactional()
   async softDeleteById(id: number) {
-    await this.repository.softRemove({ id });
+    const apiKey = await this.repository.findOne({
+      where: {
+        id,
+      },
+    });
+    apiKey.deletedAt = dayjs().toDate();
+
+    await this.repository.save(apiKey);
   }
 
   @Transactional()
   async recoverById(id: number) {
-    await this.repository.recover({ id });
+    const apiKey = await this.repository.findOne({
+      where: {
+        id,
+      },
+      withDeleted: true,
+    });
+
+    await this.repository.save(Object.assign(apiKey, { deletedAt: null }));
   }
 }

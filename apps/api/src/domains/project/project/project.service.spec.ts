@@ -213,14 +213,14 @@ describe('ProjectService Test suite', () => {
         .spyOn(projectRepo, 'findOne')
         .mockResolvedValue(null as ProjectEntity);
       jest
-        .spyOn(projectRepo, 'update')
+        .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
 
       await projectService.update(dto);
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(projectRepo.findOne).toBeCalledTimes(1);
-      expect(projectRepo.update).toBeCalledTimes(1);
+      expect(projectRepo.save).toBeCalledTimes(1);
     });
     it('updating a project fails with a duplicate name', async () => {
       const projectId = faker.datatype.number();
@@ -233,7 +233,7 @@ describe('ProjectService Test suite', () => {
         .spyOn(projectRepo, 'findOne')
         .mockResolvedValue({ name } as ProjectEntity);
       jest
-        .spyOn(projectRepo, 'update')
+        .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
 
       await expect(projectService.update(dto)).rejects.toThrowError(
@@ -242,7 +242,7 @@ describe('ProjectService Test suite', () => {
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(projectRepo.findOne).toBeCalledTimes(1);
-      expect(projectRepo.update).not.toBeCalled();
+      expect(projectRepo.save).not.toBeCalled();
     });
   });
   describe('deleteById', () => {

@@ -32,4 +32,22 @@ export class OptionEntity extends CommonEntity {
 
   @Column('varchar')
   key: string;
+
+  static from({
+    fieldId,
+    name,
+    key,
+  }: {
+    fieldId: number;
+    name: string;
+    key: string;
+  }) {
+    const option = new OptionEntity();
+    option.field = new FieldEntity();
+    option.field.id = fieldId;
+    option.name = name;
+    option.key = key;
+
+    return option;
+  }
 }

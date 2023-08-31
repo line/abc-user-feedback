@@ -37,4 +37,22 @@ export class RoleEntity extends CommonEntity {
     onDelete: 'CASCADE',
   })
   project: Relation<ProjectEntity>;
+
+  static from({
+    projectId,
+    name,
+    permissions,
+  }: {
+    projectId: number;
+    name: string;
+    permissions: PermissionEnum[];
+  }) {
+    const role = new RoleEntity();
+    role.project = new ProjectEntity();
+    role.project.id = projectId;
+    role.name = name;
+    role.permissions = permissions;
+
+    return role;
+  }
 }

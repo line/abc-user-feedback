@@ -101,8 +101,9 @@ export class UserService {
 
   @Transactional()
   async updateUser(dto: UpdateUserDto) {
-    const { userId, ...user } = dto;
-    await this.userRepo.update({ id: userId }, { ...user, id: userId });
+    const { userId } = dto;
+    const user = await this.findById(userId);
+    await this.userRepo.save(Object.assign(user, dto));
   }
 
   @Transactional()

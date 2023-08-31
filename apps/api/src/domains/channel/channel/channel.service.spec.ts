@@ -164,9 +164,9 @@ describe('ChannelService', () => {
 
       await channelService.updateInfo(channelId, dto);
 
-      expect(channelRepo.update).toBeCalledTimes(1);
-      expect(channelRepo.update).toHaveBeenCalledWith(channelId, {
-        id: channelId,
+      expect(channelRepo.save).toBeCalledTimes(1);
+      expect(channelRepo.save).toHaveBeenCalledWith({
+        ...channelFixture,
         ...dto,
       });
     });
@@ -178,9 +178,10 @@ describe('ChannelService', () => {
       jest
         .spyOn(ChannelMySQLService.prototype, 'findById')
         .mockResolvedValue(channelFixture);
-      jest
-        .spyOn(channelRepo, 'findOne')
-        .mockResolvedValue({ ...channelFixture, id: faker.datatype.number() });
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
+        ...channelFixture,
+        id: faker.datatype.number(),
+      } as ChannelEntity);
 
       await expect(channelService.updateInfo(channelId, dto)).rejects.toThrow(
         ChannelInvalidNameException,

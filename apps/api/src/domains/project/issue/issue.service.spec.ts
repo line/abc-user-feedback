@@ -299,7 +299,9 @@ describe('IssueService test suite', () => {
 
     it('updating an issue succeeds with valid inputs', async () => {
       dto.name = faker.datatype.string();
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue({} as IssueEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue({
+        id: issueId,
+      } as IssueEntity);
       jest.spyOn(issueRepo, 'findOne').mockResolvedValue(null as IssueEntity);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({} as IssueEntity);
 
@@ -307,11 +309,11 @@ describe('IssueService test suite', () => {
 
       expect(issueRepo.findOneBy).toBeCalledTimes(1);
       expect(issueRepo.findOne).toBeCalledTimes(1);
-      expect(issueRepo.update).toBeCalledTimes(1);
-      expect(issueRepo.update).toBeCalledWith(
-        { id: issueId },
-        { id: issueId, name: dto.name, description: dto.description },
-      );
+      expect(issueRepo.save).toBeCalledTimes(1);
+      expect(issueRepo.save).toBeCalledWith({
+        id: issueId,
+        ...dto,
+      });
     });
     it('updating an issue fails with a duplicate name', async () => {
       const duplicateName = 'duplicateName';
@@ -326,7 +328,7 @@ describe('IssueService test suite', () => {
 
       expect(issueRepo.findOneBy).toBeCalledTimes(1);
       expect(issueRepo.findOne).toBeCalledTimes(1);
-      expect(issueRepo.update).not.toBeCalled();
+      expect(issueRepo.save).not.toBeCalled();
     });
   });
 });
