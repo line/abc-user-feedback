@@ -5,6 +5,10 @@
 
 ABC User Feedback is an open-source platform. It helps to collect and organize user feedback. It consists of a backend built with NestJS and a client built with NextJS.
 
+<p align="center">
+    <img src="./assets/sample.png">
+</p>
+
 # Features
 
 ABC User Feedback provides the following features:
@@ -24,11 +28,13 @@ Alternatively you can set up a local development environment.
 ## 1. Official Docker Image Installation
 
 ### [web](https://hub.docker.com/r/line/abc-user-feedback-web)
+
 ```
 docker pull line/abc-user-feedback-web
 ```
 
 ### [api](https://hub.docker.com/r/line/abc-user-feedback-api)
+
 ```
 docker pull line/abc-user-feedback-api
 ```
@@ -39,9 +45,18 @@ docker pull line/abc-user-feedback-api
 
 :bulb: Before you begin, make sure you have the following installed:
 
+#### Required
+
 - [Node.js v16 or above](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
-- [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/)
+- [MySQL v8](https://www.mysql.com/downloads/)
+
+#### Optional
+
+- SMTP - for mail verification during making accounts
+- [OpenSearch v7](https://opensearch.org/) - for performance on searching feedbacks
+
+You can use [docker-compose.infra.yml](./docker-compose.infra.yml) file for requirements.
 
 ### Getting Started With Local Development
 
