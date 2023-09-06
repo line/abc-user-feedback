@@ -36,6 +36,7 @@ export class HistoryService {
       });
     } catch (error) {
       this.logger.error(error);
+      this.logger.error(dto);
     }
   }
 }
