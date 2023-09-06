@@ -20,5 +20,10 @@ jobs:
       - name: Install Dependencies
         run: yarn install
 
+      - name: setup environment variables
+        run: |
+          echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> .env.test
+          echo "OS_USE=${{ vars.TEST_OS_USE }}" >> .env.test
+
       - name: Run Tests
         run: yarn test
