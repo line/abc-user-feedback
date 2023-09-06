@@ -18,6 +18,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { SMTP_USE } from '@/configs/smtp.config';
+
 import { FeedbackEntity } from '../feedback/feedback.entity';
 import { UserTypeEnum } from '../user/entities/enums';
 import { UserEntity } from '../user/entities/user.entity';
@@ -66,6 +68,9 @@ export class TenantService {
   async findOne() {
     const [tenant] = await this.tenantRepo.find();
     if (!tenant) throw new TenantNotFoundException();
+
+    tenant.useEmailVerification = SMTP_USE;
+
     return tenant;
   }
 

@@ -60,4 +60,6 @@ export class TenantEntity extends CommonEntity {
     cascade: true,
   })
   projects: Relation<ProjectEntity>[];
+
+  useEmailVerification?: boolean;
 }
