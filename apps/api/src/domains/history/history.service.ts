@@ -24,12 +24,14 @@ import { HistoryEntity } from './history.entity';
 export class HistoryService {
   constructor(@InjectDataSource() private dataSource: DataSource) {}
   async createHistory(dto: CreateHistoryDto) {
-    if (!dto.entityId) return;
-    const { userId, ...rest } = dto;
+    try {
+      if (!dto.entityId) return;
+      const { userId, ...rest } = dto;
 
-    await this.dataSource.transaction(async (manager) => {
-      const repo = manager.getRepository(HistoryEntity);
-      await repo.save({ user: { id: userId }, ...rest });
-    });
+      await this.dataSource.transaction(async (manager) => {
+        const repo = manager.getRepository(HistoryEntity);
+        await repo.save({ user: { id: userId }, ...rest });
+      });
+    } catch (e) {}
   }
 }
