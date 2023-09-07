@@ -128,6 +128,13 @@ export class IssueService {
   async findById({ issueId }: FindByIssueIdDto) {
     const issue = await this.repository.findOneBy({ id: issueId });
     if (!issue) throw new IssueNotFoundException();
+
+    return issue;
+  }
+
+  async findByName({ name }: { name: string }) {
+    const issue = await this.repository.findOneBy({ name });
+
     return issue;
   }
 

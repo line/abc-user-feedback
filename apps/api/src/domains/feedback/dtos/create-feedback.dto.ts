@@ -17,7 +17,7 @@ import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 
 export class CreateFeedbackDto {
   channelId: number;
-  data: Record<string, any>;
+  data: Record<string, any> & { issueNames?: string[] };
 }
 
 export class CreateFeedbackMySQLDto {

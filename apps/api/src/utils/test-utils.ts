@@ -152,4 +152,5 @@ export const MockOpensearchRepository = {
   createData: jest.fn(),
   getData: jest.fn(),
   updateData: jest.fn(),
+  getTotal: jest.fn(),
 };

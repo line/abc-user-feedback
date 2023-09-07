@@ -24,6 +24,7 @@ import {
 } from '@/common/enums';
 import { OS_USE } from '@/configs/opensearch.config';
 
+import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
@@ -53,6 +54,7 @@ export class FeedbackService {
     private readonly fieldService: FieldService,
     private readonly issueService: IssueService,
     private readonly optionService: OptionService,
+    private readonly channelService: ChannelService,
   ) {}
 
   private validateQuery(
@@ -128,12 +130,17 @@ export class FeedbackService {
     const fields = await this.fieldService.findByChannelId({
       channelId,
     });
-
     if (fields.length === 0) {
       throw new BadRequestException('invalid channel');
     }
 
-    for (const fieldKey of Object.keys(data)) {
+    const { issueNames, ...feedbackData } = data;
+
+    if (issueNames && !Array.isArray(issueNames)) {
+      throw new BadRequestException('issueNames must be array');
+    }
+
+    for (const fieldKey of Object.keys(feedbackData)) {
       if (RESERVED_FIELD_KEYS.includes(fieldKey)) {
         throw new BadRequestException(
           'reserved field key is unavailable: ' + fieldKey,
@@ -164,7 +171,30 @@ export class FeedbackService {
       }
     }
 
-    const feedback = await this.feedbackMySQLService.create(dto);
+    const feedback = await this.feedbackMySQLService.create({
+      channelId,
+      data: feedbackData,
+    });
+
+    if (issueNames) {
+      for (const issueName of issueNames) {
+        let issue = await this.issueService.findByName({ name: issueName });
+        if (!issue) {
+          const channel = await this.channelService.findById({ channelId });
+
+          issue = await this.issueService.create({
+            name: issueName,
+            projectId: channel.project.id,
+          });
+        }
+
+        await this.feedbackMySQLService.addIssue({
+          channelId,
+          feedbackId: feedback.id,
+          issueId: issue.id,
+        });
+      }
+    }
 
     if (OS_USE) {
       await this.feedbackOSService.create({ channelId, feedback });
@@ -184,7 +214,7 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    this.validateQuery(dto.query, fields);
+    this.validateQuery(dto.query || {}, fields);
 
     const feedbacksByPagination = OS_USE
       ? await this.feedbackOSService.findByChannelId(dto)
