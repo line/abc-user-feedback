@@ -15,10 +15,11 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
 import { FeedbackService } from '@/domains/feedback/feedback.service';
 import { UserDto } from '@/domains/user/dtos';
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { IssueService } from '../issue/issue.service';
 import {
@@ -45,12 +46,12 @@ describe('ProjectController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [ProjectController],
       providers: [
         getMockProvider(ProjectService, MockProjectService),
         getMockProvider(FeedbackService, MockFeedbackService),
         getMockProvider(IssueService, MockIssueService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 

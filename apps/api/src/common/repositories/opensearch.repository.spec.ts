@@ -21,7 +21,7 @@ import {
 import { Test } from '@nestjs/testing';
 import { Client } from '@opensearch-project/opensearch';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { getMockProvider } from '@/utils/test-utils';
 
 import { CreateDataDto, PutMappingsDto } from './dtos';
 import { OpensearchRepository } from './opensearch.repository';
@@ -53,7 +53,6 @@ describe('Opensearch Repository Test suite', () => {
   let osClient: Client;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       providers: OpensearchRepositoryProviders,
     }).compile();
     osRepo = module.get(OpensearchRepository);

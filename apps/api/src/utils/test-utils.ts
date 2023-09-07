@@ -14,26 +14,16 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { MailerModule } from '@nestjs-modules/mailer';
 import { InjectionToken, Provider } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
 import { DataSource, Repository } from 'typeorm';
-import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import {
-  addTransactionalDataSource,
-  initializeTransactionalContext,
-} from 'typeorm-transactional';
+import { initializeTransactionalContext } from 'typeorm-transactional';
 
-import { jwtConfig, jwtConfigSchema } from '@/configs/jwt.config';
-import { mySqlConfigSchema, mysqlConfig } from '@/configs/mysql.config';
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import { AuthService } from '@/domains/auth/auth.service';
 import { UserDto } from '@/domains/user/dtos';
 import { UserStateEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';
-import { ConfigServiceType } from '@/types/config-service.type';
 
 initializeTransactionalContext();
 
@@ -43,49 +33,16 @@ export const getMockProvider = (
 ): Provider => ({ provide: injectToken, useFactory: () => factory });
 
 export const TestConfig = ConfigModule.forRoot({
-  load: [smtpConfig, jwtConfig, mysqlConfig],
+  load: [smtpConfig],
   envFilePath: '.env.test',
   validate: (config) => ({
     ...smtpConfigSchema.validateSync(config),
-    ...jwtConfigSchema.validateSync(config),
-    ...mySqlConfigSchema.validateSync(config),
   }),
 });
 
-export const TestMailConfigModule = MailerModule.forRoot({
-  transport: { url: '' },
-});
-
-export const TestTypeOrmConfig = TypeOrmModule.forRootAsync({
-  imports: [ConfigModule],
-  inject: [ConfigService],
-  dataSourceFactory: async (options) => {
-    const datasource = await new DataSource(options).initialize();
-    return addTransactionalDataSource(datasource);
-  },
-  useFactory: (configService: ConfigService<ConfigServiceType>) => {
-    const { main_url, sub_urls } = configService.get('mysql', {
-      infer: true,
-    });
-    return {
-      type: 'mysql',
-      replication: {
-        master: { url: main_url },
-        slaves: sub_urls.map((url) => ({ url })),
-      },
-      entities: [join(__dirname, '../**/*.entity.{ts,js}')],
-      logging: ['warn', 'error'],
-      namingStrategy: new SnakeNamingStrategy(),
-      timezone: '+00:00',
-    };
-  },
-});
-
-export const TestConfigs = [
-  TestConfig,
-  TestMailConfigModule,
-  TestTypeOrmConfig,
-];
+export const MockDataSource = {
+  initialize: jest.fn(),
+};
 
 export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
   const enumValues = Object.keys(anEnum) as Array<keyof T>;

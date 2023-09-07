@@ -15,8 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { ApiKeyController } from './api-key.controller';
 import { ApiKeyService } from './api-key.service';
@@ -35,9 +36,11 @@ describe('ApiKeyController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [ApiKeyController],
-      providers: [getMockProvider(ApiKeyService, MockApiKeyService)],
+      providers: [
+        getMockProvider(ApiKeyService, MockApiKeyService),
+        getMockProvider(DataSource, MockDataSource),
+      ],
     }).compile();
 
     apiKeyController = module.get(ApiKeyController);
