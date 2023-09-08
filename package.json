@@ -15,14 +15,17 @@
     ]
   },
   "scripts": {
+    "postinstall": "husky install",
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx}\""
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "test": "turbo run test"
   },
   "devDependencies": {
-    "eslint-config-ufb": "*",
     "@trivago/prettier-plugin-sort-imports": "^4.1.0",
+    "eslint-config-ufb": "*",
+    "husky": "^8.0.3",
     "prettier": "latest",
     "turbo": "latest"
   },

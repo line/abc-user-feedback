@@ -15,8 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { ChannelController } from './channel.controller';
 import { ChannelService } from './channel.service';
@@ -36,9 +37,11 @@ describe('ChannelController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [ChannelController],
-      providers: [getMockProvider(ChannelService, MockChannelService)],
+      providers: [
+        getMockProvider(ChannelService, MockChannelService),
+        getMockProvider(DataSource, MockDataSource),
+      ],
     }).compile();
 
     channelController = module.get<ChannelController>(ChannelController);
