@@ -16,9 +16,10 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { FastifyReply } from 'fastify';
+import { DataSource } from 'typeorm';
 import * as XLSX from 'xlsx';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { AuthService } from '../auth/auth.service';
 import { ChannelEntity } from '../channel/channel/channel.entity';
@@ -61,13 +62,13 @@ describe('FeedbackController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [FeedbackController],
       providers: [
         getMockProvider(FeedbackService, MockFeedbackService),
         getMockProvider(AuthService, MockAuthService),
         getMockProvider(ChannelService, MockChannelService),
         getMockProvider(HistoryService, MockHistoryService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 

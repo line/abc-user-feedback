@@ -15,8 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { CreateOptionRequestDto } from './dtos/requests';
 import { OptionController } from './option.controller';
@@ -33,9 +34,11 @@ describe('SelectOptionController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [OptionController],
-      providers: [getMockProvider(OptionService, MockSelectOptionService)],
+      providers: [
+        getMockProvider(OptionService, MockSelectOptionService),
+        getMockProvider(DataSource, MockDataSource),
+      ],
     }).compile();
 
     optionController = module.get<OptionController>(OptionController);

@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "jest",
-    "test:dev": "jest --watch",
-    "test:ci": "jest --ci",
+    "test": "jest --passWithNoTests",
+    "test:dev": "jest --watch --passWithNoTests",
+    "test:ci": "jest --ci --passWithNoTests",
     "generate-api-type": "openapi-typescript http://0.0.0.0:4000/docs-json --output src/types/api.type.ts"
   },
   "dependencies": {

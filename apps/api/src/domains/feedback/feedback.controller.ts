@@ -65,7 +65,7 @@ export class FeedbackController {
   async create(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('channelId', ParseIntPipe) channelId: number,
-    @Body() body: Record<string, any>,
+    @Body() body: Record<string, any> & { issueNames?: string[] },
   ) {
     const channel = await this.channelService.findById({ channelId });
     if (channel.project.id !== projectId) {

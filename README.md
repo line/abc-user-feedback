@@ -47,7 +47,7 @@ docker pull line/abc-user-feedback-api
 
 #### Required
 
-- [Node.js v16 or above](https://nodejs.org/en/download/)
+- [Node.js v18 or above](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
 - [MySQL v8](https://www.mysql.com/downloads/)
 

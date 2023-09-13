@@ -15,9 +15,10 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
 import {
-  TestConfigs,
+  MockDataSource,
   getMockProvider,
   getRandomEnumValue,
 } from '@/utils/test-utils';
@@ -40,8 +41,10 @@ describe('Role Controller', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
-      providers: [getMockProvider(RoleService, MockRoleService)],
+      providers: [
+        getMockProvider(RoleService, MockRoleService),
+        getMockProvider(DataSource, MockDataSource),
+      ],
       controllers: [RoleController],
     }).compile();
     controller = module.get(RoleController);
