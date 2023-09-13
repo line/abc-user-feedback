@@ -69,9 +69,7 @@ export class TenantService {
     const [tenant] = await this.tenantRepo.find();
     if (!tenant) throw new TenantNotFoundException();
 
-    tenant.useEmailVerification = SMTP_USE;
-
-    return tenant;
+    return { ...tenant, useEmailVerification: SMTP_USE };
   }
 
   async countByTenantId(dto: FeedbackCountByTenantIdDto) {
