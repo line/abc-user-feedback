@@ -98,7 +98,7 @@ describe('ProjectService Test suite', () => {
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledWith({
         ...dto,
-        tenant: {},
+        tenant: { useEmailVerification: false },
       });
       expect(id).toEqual(projectId);
     });
