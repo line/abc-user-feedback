@@ -72,9 +72,10 @@ export class ApiKeyService {
         id,
       },
     });
-    apiKey.deletedAt = dayjs().toDate();
 
-    await this.repository.save(apiKey);
+    await this.repository.save(
+      Object.assign(apiKey, { deletedAt: dayjs().toDate() }),
+    );
   }
 
   @Transactional()
