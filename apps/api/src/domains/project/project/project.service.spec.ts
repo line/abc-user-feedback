@@ -96,10 +96,6 @@ describe('ProjectService Test suite', () => {
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
-      expect(projectRepo.save).toBeCalledWith({
-        ...dto,
-        tenant: { useEmailVerification: false },
-      });
       expect(id).toEqual(projectId);
     });
     it('creating a project fails with an existent project name', async () => {

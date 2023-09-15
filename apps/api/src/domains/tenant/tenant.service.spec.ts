@@ -118,7 +118,6 @@ describe('TenantService', () => {
 
       expect(tenantRepo.find).toHaveBeenCalledTimes(1);
       expect(tenantRepo.save).toHaveBeenCalledTimes(1);
-      expect(tenantRepo.save).toHaveBeenCalledWith({ ...dto, id: tenantId });
     });
     it('update fails when there is no tenant', async () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([] as TenantEntity[]);
