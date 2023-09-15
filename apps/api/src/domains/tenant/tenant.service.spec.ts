@@ -138,7 +138,7 @@ describe('TenantService', () => {
       const tenant = await tenantService.findOne();
 
       expect(tenantRepo.find).toHaveBeenCalledTimes(1);
-      expect(tenant).toEqual({ id: tenantId });
+      expect(tenant).toEqual({ id: tenantId, useEmailVerification: false });
     });
     it('finding a tenant fails when there is a tenant', async () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([] as TenantEntity[]);

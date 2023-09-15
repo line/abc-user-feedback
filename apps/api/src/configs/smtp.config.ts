@@ -14,7 +14,11 @@
  * under the License.
  */
 import { registerAs } from '@nestjs/config';
+import * as dotenv from 'dotenv';
 import * as yup from 'yup';
+
+dotenv.config();
+export const SMTP_USE = process.env.SMTP_USE === 'true';
 
 export const smtpConfigSchema = yup.object({
   SMTP_HOST: yup.string().default('localhost'),
