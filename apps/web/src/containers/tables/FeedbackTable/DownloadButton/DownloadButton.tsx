@@ -14,6 +14,7 @@
  * under the License.
  */
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
+import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
@@ -37,7 +38,7 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
 }) => {
   const [open, setOpen] = useState(false);
   const { theme } = useStore(themeStore);
-  const { channelId, projectId } = useFeedbackTable();
+  const { channelId, projectId, createdAtRange } = useFeedbackTable();
   const perms = usePermissions(projectId);
 
   const { t } = useTranslation();
@@ -47,7 +48,10 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
   }, [query]);
 
   const { mutateAsync } = useDownload({
-    params: { channelId, projectId },
+    params: {
+      channelId,
+      projectId,
+    },
     options: {
       onSuccess: async () => {
         setIsClicked(false);
@@ -64,7 +68,18 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
     setIsClicked(true);
     setOpen(false);
     toast.promise(
-      mutateAsync({ type, limit: count, page: 1, query }),
+      mutateAsync({
+        type,
+        limit: count,
+        page: 1,
+        query: {
+          ...query,
+          createdAt: {
+            gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
+            lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
+          },
+        },
+      }),
       {
         title: {
           loading: t('main.feedback.download.loading'),
