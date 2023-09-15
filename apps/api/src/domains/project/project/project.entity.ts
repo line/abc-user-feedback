@@ -68,4 +68,22 @@ export class ProjectEntity extends CommonEntity {
     onDelete: 'CASCADE',
   })
   tenant: Relation<TenantEntity>;
+
+  static from({
+    tenantId,
+    name,
+    description,
+  }: {
+    tenantId: number;
+    name: string;
+    description: string;
+  }) {
+    const project = new ProjectEntity();
+    project.tenant = new TenantEntity();
+    project.tenant.id = tenantId;
+    project.name = name;
+    project.description = description;
+
+    return project;
+  }
 }

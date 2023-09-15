@@ -67,4 +67,34 @@ export class FieldEntity extends CommonEntity {
     cascade: true,
   })
   options: Relation<OptionEntity>[];
+
+  static from({
+    channelId,
+    name,
+    key,
+    description,
+    format,
+    type,
+    status,
+  }: {
+    channelId: number;
+    name: string;
+    key: string;
+    description: string;
+    format: FieldFormatEnum;
+    type: FieldTypeEnum;
+    status: FieldStatusEnum;
+  }) {
+    const field = new FieldEntity();
+    field.channel = new ChannelEntity();
+    field.channel.id = channelId;
+    field.name = name;
+    field.key = key;
+    field.description = description;
+    field.format = format;
+    field.type = type;
+    field.status = status;
+
+    return field;
+  }
 }

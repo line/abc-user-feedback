@@ -43,19 +43,21 @@ export class CodeService {
 
     const code = this.createCode();
 
-    const codeEntity = await this.codeRepo.findOneBy({ key, type });
+    const codeEntity =
+      (await this.codeRepo.findOneBy({ key, type })) || new CodeEntity();
 
-    await this.codeRepo.save({
-      ...codeEntity,
-      type,
-      key,
-      code,
-      isVerified: false,
-      expiredAt: dayjs()
-        .add(durationSec ?? SECONDS, 'seconds')
-        .toDate(),
-      data: type === CodeTypeEnum.USER_INVITATION ? dto.data : undefined,
-    });
+    await this.codeRepo.save(
+      Object.assign(codeEntity, {
+        type,
+        key,
+        code,
+        isVerified: false,
+        expiredAt: dayjs()
+          .add(durationSec ?? SECONDS, 'seconds')
+          .toDate(),
+        data: type === CodeTypeEnum.USER_INVITATION ? dto.data : undefined,
+      }),
+    );
 
     return code;
   }
@@ -76,10 +78,7 @@ export class CodeService {
       throw new BadRequestException('code expired');
     }
 
-    await this.codeRepo.update(
-      { id: codeEntity.id },
-      { id: codeEntity.id, isVerified: true },
-    );
+    await this.codeRepo.save(Object.assign(codeEntity, { isVerified: true }));
   }
 
   async getDataByCodeAndType(

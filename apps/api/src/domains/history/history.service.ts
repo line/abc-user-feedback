@@ -29,10 +29,12 @@ export class HistoryService {
     try {
       if (!dto.entityId) return;
       const { userId, ...rest } = dto;
+      const entityId = dto.entityId;
 
       await this.dataSource.transaction(async (manager) => {
         const repo = manager.getRepository(HistoryEntity);
-        await repo.save({ user: { id: userId }, ...rest });
+        const history = HistoryEntity.from({ userId, entityId, ...rest });
+        await repo.insert(history);
       });
     } catch (error) {
       this.logger.error(error);

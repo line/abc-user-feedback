@@ -60,26 +60,29 @@ export class UserPasswordService {
       code,
     });
 
-    await this.userRepo.update(
-      { id: user.id },
-      { id: user.id, hashPassword: await this.createHashPassword(password) },
+    await this.userRepo.save(
+      Object.assign(user, {
+        hashPassword: await this.createHashPassword(password),
+      }),
     );
   }
 
   @Transactional()
   async changePassword(dto: ChangePasswordDto) {
     const { newPassword, password, userId } = dto;
-    const { hashPassword: originHashPassword } = await this.userRepo.findOneBy({
+    const user = await this.userRepo.findOneBy({
       id: userId,
     });
+    const originHashPassword = user.hashPassword;
 
     if (!bcrypt.compareSync(password, originHashPassword)) {
       throw new InvalidPasswordException();
     }
 
-    await this.userRepo.update(
-      { id: userId },
-      { id: userId, hashPassword: await this.createHashPassword(newPassword) },
+    await this.userRepo.save(
+      Object.assign(user, {
+        hashPassword: await this.createHashPassword(newPassword),
+      }),
     );
   }
 

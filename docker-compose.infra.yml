@@ -12,6 +12,7 @@ services:
       MYSQL_DATABASE: userfeedback
       MYSQL_USER: userfeedback
       MYSQL_PASSWORD: userfeedback
+      TZ: UTC
     ports:
       - 13306:3306
     volumes:

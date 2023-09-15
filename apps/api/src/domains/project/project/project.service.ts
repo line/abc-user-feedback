@@ -54,12 +54,12 @@ export class ProjectService {
     if (project) throw new ProjectAlreadyExistsException();
 
     const tenant = await this.tenantService.findOne();
-
-    const newProject = await this.projectRepo.save({ ...dto, tenant });
+    const newProject = ProjectEntity.from({ ...dto, tenantId: tenant.id });
+    const savedProject = await this.projectRepo.save(newProject);
     await this.roleService.create({
       name: 'Admin',
       permissions: AllPermissionList,
-      projectId: newProject.id,
+      projectId: savedProject.id,
     });
     await this.roleService.create({
       name: 'Editor',
@@ -71,17 +71,17 @@ export class ProjectService {
             v.includes('issue') ||
             v.includes('member_create')),
       ),
-      projectId: newProject.id,
+      projectId: savedProject.id,
     });
     await this.roleService.create({
       name: 'Viewer',
       permissions: AllPermissionList.filter(
         (v) => v.includes('read') && !v.includes('download'),
       ),
-      projectId: newProject.id,
+      projectId: savedProject.id,
     });
 
-    return newProject;
+    return savedProject;
   }
 
   async findAll({ options, user, searchText = '' }: FindAllProjectsDto) {
@@ -117,7 +117,7 @@ export class ProjectService {
   async update(dto: UpdateProjectDto) {
     const { projectId, name, description } = dto;
 
-    await this.findById({ projectId });
+    const project = await this.findById({ projectId });
     if (
       await this.projectRepo.findOne({
         where: { name, id: Not(projectId) },
@@ -127,11 +127,7 @@ export class ProjectService {
       throw new ProjectInvalidNameException('Duplicated name');
     }
 
-    await this.projectRepo.update(projectId, {
-      id: projectId,
-      name,
-      description,
-    });
+    await this.projectRepo.save(Object.assign(project, { name, description }));
   }
 
   @Transactional()
