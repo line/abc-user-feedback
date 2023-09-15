@@ -27,7 +27,7 @@ import { FieldEntity } from '../channel/field/field.entity';
 import {
   DeleteByIdsDto,
   FindFeedbacksByChannelIdDto,
-  FindFeedbacksForDownloadInOSDto,
+  ScrollFeedbacksDto,
   UpdateFeedbackESDto,
 } from './dtos';
 import { CreateFeedbackOSDto } from './dtos';
@@ -267,8 +267,15 @@ export class FeedbackOSService {
     };
   }
 
-  async findForDownload(dto: FindFeedbacksForDownloadInOSDto) {
-    const { channelId, size, query, sort, fields } = dto;
+  async scroll(dto: ScrollFeedbacksDto) {
+    const {
+      channelId,
+      size,
+      query,
+      sort,
+      fields,
+      scrollId: currentScrollId,
+    } = dto;
 
     if (query && query.issueIds) {
       const feedbackIds = await this.issueIdsToFeedbackIds(
@@ -282,20 +289,12 @@ export class FeedbackOSService {
 
     const osQuery = this.osQueryBulider(query, sort, fields);
     this.logger.log(osQuery);
-    const results: Record<string, any>[] = [];
-    let currentScrollId = null;
-    while (true) {
-      const { data, scrollId } = await this.osRepository.scroll({
-        index: channelId.toString(),
-        size,
-        scrollId: currentScrollId,
-        ...osQuery,
-      });
-      if (data.length === 0) break;
-      results.push(...data);
-      currentScrollId = scrollId;
-    }
-    return results;
+    return await this.osRepository.scroll({
+      index: channelId.toString(),
+      size,
+      scrollId: currentScrollId,
+      ...osQuery,
+    });
   }
 
   async upsertFeedbackItem(dto: UpdateFeedbackESDto) {

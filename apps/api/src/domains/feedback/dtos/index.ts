@@ -19,7 +19,6 @@ export {
   CreateFeedbackOSDto,
 } from './create-feedback.dto';
 export { FindFeedbacksByChannelIdDto } from './find-feedbacks-by-channel-id.dto';
-export { FindFeedbacksForDownloadDto } from './find-feedbacks-for-download.dto';
 export {
   UpdateFeedbackDto,
   UpdateFeedbackMySQLDto,
@@ -30,6 +29,6 @@ export { AddIssueDto } from './add-issue.dto';
 export { CountByProjectIdDto } from './count-by-project-id.dto';
 export { DeleteByIdsDto } from './delete-by-ids.dto';
 
-export { FindFeedbacksForDownloadInMysqlDto } from './find-feedbacks-for-download-in-mysql.dto';
-export { FindFeedbacksForDownloadInOSDto } from './find-feedbacks-for-download-in-os.dto';
+export { ScrollFeedbacksDto } from './scroll-feedbacks.dto';
+export { GenerateExcelDto } from './generate-excel.dto';
 export { OsQueryDto, MustItem } from './os-query.dto';

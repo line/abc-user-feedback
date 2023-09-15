@@ -28,7 +28,6 @@ import {
 import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import dayjs from 'dayjs';
 import { FastifyReply } from 'fastify';
-import * as XLSX from 'xlsx';
 
 import { ApiKeyAuthGuard } from '@/domains/auth/guards';
 
@@ -127,45 +126,17 @@ export class FeedbackController {
   async exportFeedbacks(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: ExportFeedbacksRequestDto,
-    @Body('type') type: string,
+    @Body('type') type: 'xlsx' | 'csv',
     @Res() res: FastifyReply,
     @CurrentUser() user: UserDto,
   ) {
-    const { query } = body;
-
-    const { feedbacks, fields } = await this.feedbackService.findForDownload({
-      query,
-      channelId,
-      size: 1000,
-    });
-
-    const headerOrderForType = ['DEFAULT', 'API', 'ADMIN'];
-    const header = fields
-      .sort((a, b) => {
-        const typeA = headerOrderForType.indexOf(a.type);
-        const typeB = headerOrderForType.indexOf(b.type);
-
-        if (typeA !== typeB) return typeA - typeB;
-
-        if (a.type === 'DEFAULT' && b.type === 'DEFAULT') {
-          const nameOrder = ['ID', 'Created', 'Updated', 'Issue'];
-          const nameA = nameOrder.indexOf(a.name);
-          const nameB = nameOrder.indexOf(b.name);
-          return nameA - nameB;
-        }
-
-        return 0;
-      })
-      .map((field) => field.name);
-
+    const { query, sort } = body;
     const channel = await this.channelService.findById({ channelId });
     const projectName = channel.project.name;
     const channelName = channel.name;
-
     const filename = `UFB_${projectName}_${channelName}_Feedback_${dayjs().format(
       'YYYY-MM-DD',
     )}.${type}`;
-
     res.header('Content-Disposition', `attachment; filename="${filename}"`);
 
     if (type === 'xlsx') {
@@ -176,26 +147,24 @@ export class FeedbackController {
       res.type('text/csv');
     }
 
-    const workbook = XLSX.utils.book_new();
-    const newWorksheet = XLSX.utils.json_to_sheet(feedbacks, { header });
+    const { streamableFile, feedbackIds } =
+      await this.feedbackService.generateFile({
+        channelId,
+        query,
+        sort,
+        type,
+      });
+    const stream = streamableFile.getStream();
 
-    XLSX.utils.book_append_sheet(workbook, newWorksheet, 'feedback');
-
-    const buffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'buffer',
-      compression: true,
-    });
+    res.send(stream);
 
     this.historyService.createHistory({
       action: HistoryActionEnum.Download,
-      entity: { feedbackIds: feedbacks.map((v) => v['ID']) },
+      entity: { feedbackIds },
       entityName: EntityNameEnum.Channel,
       userId: user.id,
       entityId: channelId,
     });
-
-    return res.send(buffer);
   }
 
   @RequirePermission(PermissionEnum.feedback_update)
