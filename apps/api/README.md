@@ -92,6 +92,10 @@ npm run migration:run
 | MASTER_API_KEY       | set a key if you want to make a master key for creating feedback                 |                                                                    |
 | NODE_OPTIONS         | set some options if you want to add for node execution (e.g. max_old_space_size) |                                                                    |
 
+## Swagger
+
+The swagger documentation can be found on the `/docs` endpoint.
+
 ## Learn More
 
 To learn NestJS, check out the [NestJS documentation](https://nestjs.com/).
