@@ -20,7 +20,7 @@ import {
 } from '@nestjs/common';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
-import { createReadStream } from 'fs';
+import { createReadStream, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import path from 'path';
@@ -150,7 +150,10 @@ export class FeedbackService {
   }
 
   private async generateXLSXFile(channelId, query, sort, fields, fieldsByKey) {
-    const tempFilePath = path.join(process.cwd(), `temp_${new Date()}.xlsx`);
+    if (!existsSync('/tmp')) {
+      await fs.mkdir('/tmp');
+    }
+    const tempFilePath = path.join('/tmp', `temp_${new Date()}.xlsx`);
     const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({
       filename: tempFilePath,
     });
