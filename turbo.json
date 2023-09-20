@@ -24,6 +24,7 @@
         "JWT_SECRET",
         "MYSQL_PRIMARY_URL",
         "MYSQL_SECONDARY_URLS",
+        "SMTP_USE",
         "SMTP_HOST",
         "SMTP_PORT",
         "SMTP_USERNAME",
@@ -41,6 +42,7 @@
     },
     "dev": {
       "cache": false
-    }
+    },
+    "test": {}
   }
 }

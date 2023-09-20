@@ -16,7 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { getRandomEnumValues, mockRepository } from '@/utils/test-utils';
 
@@ -99,30 +99,33 @@ describe('RoleService', () => {
       const dto = new UpdateRoleDto();
       dto.name = faker.datatype.string();
       dto.permissions = getRandomEnumValues(PermissionEnum);
-      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue({
+        id: roleId,
+        name: dto.name,
+      } as RoleEntity);
+      jest.spyOn(roleRepo, 'findOne').mockResolvedValue(null);
 
       await roleService.update(roleId, projectId, dto);
 
-      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOneBy).toHaveBeenCalledWith({
-        name: dto.name,
-        project: { id: projectId },
-        id: Not(roleId),
-      });
-      expect(roleRepo.update).toHaveBeenCalledTimes(1);
-      expect(roleRepo.update).toHaveBeenCalledWith(roleId, {
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).toHaveBeenCalledWith({
         id: roleId,
         name: dto.name,
         permissions: dto.permissions,
       });
     });
-    it('updating a role succeeds with a duplicate name', async () => {
+    it('updating a role fails with a duplicate name', async () => {
       const roleId = faker.datatype.number();
       const projectId = faker.datatype.number();
       const dto = new UpdateRoleDto();
       dto.name = faker.datatype.string();
       dto.permissions = getRandomEnumValues(PermissionEnum);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue({
+        id: roleId,
+        name: dto.name,
+      } as RoleEntity);
+      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         id: faker.datatype.number(),
         name: dto.name,
       } as RoleEntity);
@@ -131,12 +134,8 @@ describe('RoleService', () => {
         RoleAlreadyExistsException,
       );
 
-      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOneBy).toHaveBeenCalledWith({
-        name: dto.name,
-        project: { id: projectId },
-        id: Not(roleId),
-      });
+      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).not.toHaveBeenCalled();
     });
   });
 

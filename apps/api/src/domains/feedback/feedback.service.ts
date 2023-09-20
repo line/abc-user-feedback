@@ -13,8 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  StreamableFile,
+} from '@nestjs/common';
+import * as ExcelJS from 'exceljs';
+import * as fastcsv from 'fast-csv';
+import { createReadStream, existsSync } from 'fs';
+import * as fs from 'fs/promises';
 import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
+import path from 'path';
+import { PassThrough } from 'stream';
 import { Transactional } from 'typeorm-transactional';
 
 import {
@@ -24,6 +34,7 @@ import {
 } from '@/common/enums';
 import { OS_USE } from '@/configs/opensearch.config';
 
+import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
@@ -35,8 +46,7 @@ import {
   CreateFeedbackDto,
   DeleteByIdsDto,
   FindFeedbacksByChannelIdDto,
-  FindFeedbacksForDownloadDto,
-  FindFeedbacksForDownloadInMysqlDto,
+  GenerateExcelDto,
   RemoveIssueDto,
   UpdateFeedbackDto,
 } from './dtos';
@@ -53,6 +63,7 @@ export class FeedbackService {
     private readonly fieldService: FieldService,
     private readonly issueService: IssueService,
     private readonly optionService: OptionService,
+    private readonly channelService: ChannelService,
   ) {}
 
   private validateQuery(
@@ -122,18 +133,180 @@ export class FeedbackService {
     }
   }
 
+  private convertFeedback(
+    feedback: any,
+    fieldsByKey: Record<string, FieldEntity>,
+  ) {
+    const convertedFeedback: Record<string, any> = {};
+    for (const key of Object.keys(feedback)) {
+      convertedFeedback[fieldsByKey[key].name] = Array.isArray(feedback[key])
+        ? key === 'issues'
+          ? feedback[key].map((issue) => issue.name).join(', ')
+          : feedback[key].join(', ')
+        : feedback[key];
+    }
+
+    return convertedFeedback;
+  }
+
+  private async generateXLSXFile(channelId, query, sort, fields, fieldsByKey) {
+    if (!existsSync('/tmp')) {
+      await fs.mkdir('/tmp');
+    }
+    const tempFilePath = path.join('/tmp', `temp_${new Date()}.xlsx`);
+    const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({
+      filename: tempFilePath,
+    });
+    const worksheet = workbook.addWorksheet('Sheet 1');
+
+    const headerOrderForType = ['DEFAULT', 'API', 'ADMIN'];
+    const headers = fields
+      .sort((a, b) => {
+        const typeA = headerOrderForType.indexOf(a.type);
+        const typeB = headerOrderForType.indexOf(b.type);
+
+        if (typeA !== typeB) return typeA - typeB;
+
+        if (a.type === 'DEFAULT' && b.type === 'DEFAULT') {
+          const nameOrder = ['ID', 'Created', 'Updated', 'Issue'];
+          const nameA = nameOrder.indexOf(a.name);
+          const nameB = nameOrder.indexOf(b.name);
+          return nameA - nameB;
+        }
+
+        return 0;
+      })
+      .map((field) => ({
+        header: field.name,
+        key: field.name,
+      }));
+    worksheet.columns = headers;
+
+    const pageSize = 1000;
+    let feedbacks = [];
+    let currentScrollId = null;
+    let page = 1;
+    const feedbackIds = [];
+
+    do {
+      if (OS_USE) {
+        const { data, scrollId } = await this.feedbackOSService.scroll({
+          channelId,
+          query,
+          sort,
+          fields,
+          size: pageSize,
+          scrollId: currentScrollId,
+        });
+        feedbacks = data;
+        currentScrollId = scrollId;
+      } else {
+        const { items } = await this.feedbackMySQLService.findByChannelId({
+          channelId,
+          query,
+          sort,
+          fields,
+          limit: pageSize,
+          page,
+        });
+        feedbacks = items;
+        page++;
+      }
+      const issuesByFeedbackIds =
+        await this.issueService.findIssuesByFeedbackIds(
+          feedbacks.map((feedback) => feedback.id),
+        );
+
+      for (const feedback of feedbacks) {
+        feedback.issues = issuesByFeedbackIds[feedback.id];
+        const convertedFeedback = this.convertFeedback(feedback, fieldsByKey);
+        worksheet.addRow(convertedFeedback).commit();
+        feedbackIds.push(feedback.id);
+      }
+    } while (feedbacks.length === pageSize);
+    worksheet.commit();
+    await workbook.commit();
+
+    const fileStream = createReadStream(tempFilePath);
+
+    fileStream.on('end', async () => {
+      await fs.unlink(tempFilePath);
+    });
+
+    return { streamableFile: new StreamableFile(fileStream), feedbackIds };
+  }
+
+  private async generateCSVFile(channelId, query, sort, fields, fieldsByKey) {
+    const stream = new PassThrough();
+    const csvStream = fastcsv.format({ headers: true });
+
+    csvStream.pipe(stream);
+
+    const pageSize = 1000;
+    let feedbacks = [];
+    let currentScrollId = null;
+    let page = 1;
+    const feedbackIds = [];
+
+    do {
+      if (OS_USE) {
+        const { data, scrollId } = await this.feedbackOSService.scroll({
+          channelId,
+          query,
+          sort,
+          fields,
+          size: pageSize,
+          scrollId: currentScrollId,
+        });
+        feedbacks = data;
+        currentScrollId = scrollId;
+      } else {
+        const { items } = await this.feedbackMySQLService.findByChannelId({
+          channelId,
+          query,
+          sort,
+          fields,
+          limit: pageSize,
+          page,
+        });
+        feedbacks = items;
+        page++;
+      }
+      const issuesByFeedbackIds =
+        await this.issueService.findIssuesByFeedbackIds(
+          feedbacks.map((feedback) => feedback.id),
+        );
+
+      for (const feedback of feedbacks) {
+        feedback.issues = issuesByFeedbackIds[feedback.id];
+        const convertedFeedback = this.convertFeedback(feedback, fieldsByKey);
+        csvStream.write(convertedFeedback);
+        feedbackIds.push(feedback.id);
+      }
+    } while (feedbacks.length === pageSize);
+
+    csvStream.end();
+
+    return { streamableFile: new StreamableFile(stream), feedbackIds };
+  }
+
   @Transactional()
   async create(dto: CreateFeedbackDto) {
     const { channelId, data } = dto;
     const fields = await this.fieldService.findByChannelId({
       channelId,
     });
-
     if (fields.length === 0) {
       throw new BadRequestException('invalid channel');
     }
 
-    for (const fieldKey of Object.keys(data)) {
+    const { issueNames, ...feedbackData } = data;
+
+    if (issueNames && !Array.isArray(issueNames)) {
+      throw new BadRequestException('issueNames must be array');
+    }
+
+    for (const fieldKey of Object.keys(feedbackData)) {
       if (RESERVED_FIELD_KEYS.includes(fieldKey)) {
         throw new BadRequestException(
           'reserved field key is unavailable: ' + fieldKey,
@@ -164,7 +337,30 @@ export class FeedbackService {
       }
     }
 
-    const feedback = await this.feedbackMySQLService.create(dto);
+    const feedback = await this.feedbackMySQLService.create({
+      channelId,
+      data: feedbackData,
+    });
+
+    if (issueNames) {
+      for (const issueName of issueNames) {
+        let issue = await this.issueService.findByName({ name: issueName });
+        if (!issue) {
+          const channel = await this.channelService.findById({ channelId });
+
+          issue = await this.issueService.create({
+            name: issueName,
+            projectId: channel.project.id,
+          });
+        }
+
+        await this.feedbackMySQLService.addIssue({
+          channelId,
+          feedbackId: feedback.id,
+          issueId: issue.id,
+        });
+      }
+    }
 
     if (OS_USE) {
       await this.feedbackOSService.create({ channelId, feedback });
@@ -184,7 +380,7 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    this.validateQuery(dto.query, fields);
+    this.validateQuery(dto.query || {}, fields);
 
     const feedbacksByPagination = OS_USE
       ? await this.feedbackOSService.findByChannelId(dto)
@@ -199,70 +395,6 @@ export class FeedbackService {
     });
 
     return feedbacksByPagination;
-  }
-
-  async findForDownload(dto: FindFeedbacksForDownloadDto) {
-    const fields = await this.fieldService.findByChannelId({
-      channelId: dto.channelId,
-    });
-    if (fields.length === 0) throw new BadRequestException('invalid channel');
-
-    this.validateQuery(dto.query, fields);
-
-    const feedbacks = OS_USE
-      ? await this.feedbackOSService.findForDownload({ ...dto, fields })
-      : await this.getAllFeedbacksInMySql({ ...dto, fields });
-
-    const issuesByFeedbackIds = await this.issueService.findIssuesByFeedbackIds(
-      feedbacks.map((feedback) => feedback.id),
-    );
-
-    feedbacks.forEach((feedback) => {
-      feedback.issues = issuesByFeedbackIds[feedback.id];
-    });
-
-    const fieldsByKey = fields.reduce(
-      (prev: Record<string, FieldEntity>, field) => {
-        prev[field.key] = field;
-        return prev;
-      },
-      {},
-    );
-
-    return {
-      feedbacks: feedbacks.map((feedback) => {
-        const convertedFeedback: Record<string, any> = {};
-        for (const key of Object.keys(feedback)) {
-          convertedFeedback[fieldsByKey[key].name] = Array.isArray(
-            feedback[key],
-          )
-            ? key === 'issues'
-              ? feedback[key].map((issue) => issue.name).join(', ')
-              : feedback[key].join(', ')
-            : feedback[key];
-        }
-        return convertedFeedback;
-      }),
-      fields,
-    };
-  }
-
-  private async getAllFeedbacksInMySql(
-    dto: FindFeedbacksForDownloadInMysqlDto,
-  ) {
-    const results = [];
-    let page = 1;
-    while (true) {
-      const { items } = await this.feedbackMySQLService.findByChannelId({
-        ...dto,
-        limit: dto.size,
-        page: page++,
-      });
-      if (items.length === 0) break;
-      results.push(...items);
-    }
-
-    return results;
   }
 
   @Transactional()
@@ -361,6 +493,31 @@ export class FeedbackService {
 
     if (OS_USE) {
       await this.feedbackOSService.deleteByIds(dto);
+    }
+  }
+
+  async generateFile(dto: GenerateExcelDto): Promise<{
+    streamableFile: StreamableFile;
+    feedbackIds: number[];
+  }> {
+    const { channelId, query, sort, type } = dto;
+    const fields = await this.fieldService.findByChannelId({
+      channelId: channelId,
+    });
+    if (fields.length === 0) throw new BadRequestException('invalid channel');
+    this.validateQuery(query, fields);
+    const fieldsByKey = fields.reduce(
+      (prev: Record<string, FieldEntity>, field) => {
+        prev[field.key] = field;
+        return prev;
+      },
+      {},
+    );
+
+    if (type === 'xlsx') {
+      return this.generateXLSXFile(channelId, query, sort, fields, fieldsByKey);
+    } else if (type === 'csv') {
+      return this.generateCSVFile(channelId, query, sort, fields, fieldsByKey);
     }
   }
 }

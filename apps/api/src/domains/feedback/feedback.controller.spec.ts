@@ -16,9 +16,9 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { FastifyReply } from 'fastify';
-import * as XLSX from 'xlsx';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { AuthService } from '../auth/auth.service';
 import { ChannelEntity } from '../channel/channel/channel.entity';
@@ -33,18 +33,13 @@ import {
 import { FeedbackController } from './feedback.controller';
 import { FeedbackService } from './feedback.service';
 
-jest.spyOn(XLSX.utils, 'book_new');
-jest.spyOn(XLSX.utils, 'json_to_sheet');
-jest.spyOn(XLSX.utils, 'book_append_sheet');
-jest.spyOn(XLSX, 'write');
-
 const MockFeedbackService = {
   create: jest.fn(),
   findByChannelId: jest.fn(),
   upsertFeedbackItem: jest.fn(),
-  deleteByIds: jest.fn(),
-  findForDownload: jest.fn(),
   updateFeedback: jest.fn(),
+  deleteByIds: jest.fn(),
+  generateFile: jest.fn(),
 };
 const MockAuthService = {
   validateApiKey: jest.fn(),
@@ -61,13 +56,13 @@ describe('FeedbackController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [FeedbackController],
       providers: [
         getMockProvider(FeedbackService, MockFeedbackService),
         getMockProvider(AuthService, MockAuthService),
         getMockProvider(ChannelService, MockChannelService),
         getMockProvider(HistoryService, MockHistoryService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
@@ -112,9 +107,10 @@ describe('FeedbackController', () => {
       'csv',
     );
     const userDto = new UserDto();
-    jest
-      .spyOn(MockFeedbackService, 'findForDownload')
-      .mockResolvedValue({ feedbacks: [], fields: [] });
+    jest.spyOn(MockFeedbackService, 'generateFile').mockResolvedValue({
+      streamableFile: { getStream: jest.fn() },
+      feedbackIds: [],
+    });
     jest.spyOn(MockChannelService, 'findById').mockResolvedValue({
       project: { name: faker.datatype.string() },
     } as ChannelEntity);
@@ -127,7 +123,7 @@ describe('FeedbackController', () => {
       userDto,
     );
 
-    expect(MockFeedbackService.findForDownload).toBeCalledTimes(1);
+    expect(MockFeedbackService.generateFile).toBeCalledTimes(1);
   });
   it('updateFeedback', async () => {
     const channelId = faker.datatype.number();

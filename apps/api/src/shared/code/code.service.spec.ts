@@ -156,11 +156,8 @@ describe('CodeService', () => {
         key: codeEntity.key,
         type: codeEntity.type,
       });
-      expect(codeRepo.update).toHaveBeenCalledWith(
-        {
-          id: codeEntity.id,
-        },
-        { id: codeEntity.id, isVerified: true },
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        Object.assign(codeEntity, { isVerified: true }),
       );
     });
     it('verify code with invalid code', async () => {

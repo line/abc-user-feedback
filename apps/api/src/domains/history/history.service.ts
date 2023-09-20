@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
@@ -22,14 +22,23 @@ import { HistoryEntity } from './history.entity';
 
 @Injectable()
 export class HistoryService {
+  private readonly logger = new Logger(HistoryService.name);
+
   constructor(@InjectDataSource() private dataSource: DataSource) {}
   async createHistory(dto: CreateHistoryDto) {
-    if (!dto.entityId) return;
-    const { userId, ...rest } = dto;
+    try {
+      if (!dto.entityId) return;
+      const { userId, ...rest } = dto;
+      const entityId = dto.entityId;
 
-    await this.dataSource.transaction(async (manager) => {
-      const repo = manager.getRepository(HistoryEntity);
-      await repo.save({ user: { id: userId }, ...rest });
-    });
+      await this.dataSource.transaction(async (manager) => {
+        const repo = manager.getRepository(HistoryEntity);
+        const history = HistoryEntity.from({ userId, entityId, ...rest });
+        await repo.insert(history);
+      });
+    } catch (error) {
+      this.logger.error(error);
+      this.logger.error(dto);
+    }
   }
 }

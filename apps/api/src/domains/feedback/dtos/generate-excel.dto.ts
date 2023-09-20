@@ -16,7 +16,7 @@
 import { TimeRange } from '@/common/dtos';
 import { SortMethodEnum } from '@/common/enums';
 
-export class FindFeedbacksForDownloadDto {
+export class GenerateExcelDto {
   channelId: number;
   query?: {
     searchText?: string;
@@ -28,5 +28,5 @@ export class FindFeedbacksForDownloadDto {
   sort?: {
     [key: string]: SortMethodEnum;
   };
-  size: number;
+  type: 'xlsx' | 'csv';
 }

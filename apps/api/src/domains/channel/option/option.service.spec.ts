@@ -40,7 +40,7 @@ export const OptionServiceProviders = [
   },
 ];
 
-describe('SelectOption Test suite', () => {
+describe('Option Test suite', () => {
   let optionService: OptionService;
   let optionRepo: Repository<OptionEntity>;
 
@@ -95,7 +95,7 @@ describe('SelectOption Test suite', () => {
           name: dto.name,
         },
       ] as OptionEntity[]);
-      jest.spyOn(optionRepo, 'update');
+      jest.spyOn(optionRepo, 'save');
 
       await optionService.create(dto);
 
@@ -103,18 +103,13 @@ describe('SelectOption Test suite', () => {
       expect(optionRepo.findBy).toBeCalledWith({
         field: { id: fieldId },
       });
-      expect(optionRepo.update).toBeCalledTimes(1);
-      expect(optionRepo.update).toBeCalledWith(
-        {
-          id: optionId,
-        },
-        {
-          id: optionId,
-          deletedAt: null,
-          key: dto.key,
-        },
-      );
-      expect(optionRepo.save).not.toBeCalled();
+      expect(optionRepo.save).toBeCalledTimes(1);
+      expect(optionRepo.save).toBeCalledWith({
+        id: optionId,
+        deletedAt: null,
+        key: dto.key,
+        name: dto.name,
+      });
     });
     it('creating an option fais with a duplicate name', async () => {
       const fieldId = faker.datatype.number();
@@ -251,7 +246,7 @@ describe('SelectOption Test suite', () => {
         })) as OptionEntity[],
       );
       jest.spyOn(optionRepo, 'query');
-      jest.spyOn(optionRepo, 'upsert');
+      jest.spyOn(optionRepo, 'save');
 
       await optionService.replaceMany(dto);
 
@@ -261,7 +256,7 @@ describe('SelectOption Test suite', () => {
         withDeleted: true,
       });
       expect(optionRepo.query).toBeCalledTimes(1);
-      expect(optionRepo.upsert).toBeCalledTimes(length);
+      expect(optionRepo.save).toBeCalledTimes(length);
     });
   });
 });

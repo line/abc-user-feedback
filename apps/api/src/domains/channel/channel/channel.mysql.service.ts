@@ -91,7 +91,7 @@ export class ChannelMySQLService {
 
   @Transactional()
   async update(channelId: number, { name, description }: UpdateChannelDto) {
-    await this.findById({ channelId });
+    const channel = await this.findById({ channelId });
 
     if (
       await this.repository.findOne({
@@ -101,11 +101,10 @@ export class ChannelMySQLService {
     ) {
       throw new ChannelInvalidNameException('Duplicate name');
     }
-    await this.repository.update(channelId, {
-      id: channelId,
-      name,
-      description,
-    });
+
+    channel.name = name;
+    channel.description = description;
+    await this.repository.save(channel);
   }
 
   @Transactional()

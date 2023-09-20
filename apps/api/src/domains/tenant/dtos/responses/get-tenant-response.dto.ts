@@ -84,6 +84,10 @@ export class GetTenantResponseDto {
   allowDomains: string[] | null;
 
   @Expose()
+  @ApiProperty()
+  useEmailVerification: boolean;
+
+  @Expose()
   @ApiProperty({ type: OAuthConfigResponseDto, nullable: true })
   @Type(() => OAuthConfigResponseDto)
   oauthConfig: OAuthConfigResponseDto | null;

@@ -128,6 +128,13 @@ export class IssueService {
   async findById({ issueId }: FindByIssueIdDto) {
     const issue = await this.repository.findOneBy({ id: issueId });
     if (!issue) throw new IssueNotFoundException();
+
+    return issue;
+  }
+
+  async findByName({ name }: { name: string }) {
+    const issue = await this.repository.findOneBy({ name });
+
     return issue;
   }
 
@@ -160,14 +167,9 @@ export class IssueService {
   }
 
   @Transactional()
-  async update({
-    issueId,
-    name,
-    description,
-    status,
-    externalIssueId,
-  }: UpdateIssueDto) {
-    await this.findById({ issueId });
+  async update(dto: UpdateIssueDto) {
+    const { issueId, name } = dto;
+    const issue = await this.findById({ issueId });
 
     if (
       await this.repository.findOne({
@@ -177,10 +179,7 @@ export class IssueService {
     ) {
       throw new IssueInvalidNameException('Duplicated name');
     }
-    await this.repository.update(
-      { id: issueId },
-      { id: issueId, name, description, status, externalIssueId },
-    );
+    await this.repository.save(Object.assign(issue, dto));
   }
 
   @Transactional()

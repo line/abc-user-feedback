@@ -17,9 +17,8 @@ import { TimeRange } from '@/common/dtos';
 import { SortMethodEnum } from '@/common/enums';
 import { FieldEntity } from '@/domains/channel/field/field.entity';
 
-export class FindFeedbacksForDownloadInMysqlDto {
+export class ScrollFeedbacksDto {
   channelId: number;
-  issueId?: number;
   query?: {
     searchText?: string;
     createdAt?: TimeRange;
@@ -32,4 +31,5 @@ export class FindFeedbacksForDownloadInMysqlDto {
   };
   fields: FieldEntity[];
   size: number;
+  scrollId: string | null;
 }

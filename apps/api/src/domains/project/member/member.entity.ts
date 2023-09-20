@@ -32,4 +32,19 @@ export class MemberEntity extends CommonEntity {
     onDelete: 'CASCADE',
   })
   user: Relation<UserEntity>;
+
+  static from({
+    roleId,
+    userId,
+  }: {
+    roleId: number;
+    userId: number;
+  }): MemberEntity {
+    const member = new MemberEntity();
+    member.role = new RoleEntity();
+    member.role.id = roleId;
+    member.user = new UserEntity();
+    member.user.id = userId;
+    return member;
+  }
 }

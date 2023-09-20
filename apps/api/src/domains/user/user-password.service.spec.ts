@@ -115,14 +115,11 @@ describe('UserPasswordService', () => {
         key: dto.email,
         type: CodeTypeEnum.RESET_PASSWORD,
       });
-      expect(userRepo.update).toHaveBeenCalledTimes(1);
-      expect(userRepo.update).toHaveBeenCalledWith(
-        { id: userId },
-        {
-          id: userId,
-          hashPassword: expect.any(String),
-        },
-      );
+      expect(userRepo.save).toHaveBeenCalledTimes(1);
+      expect(userRepo.save).toHaveBeenCalledWith({
+        id: userId,
+        hashPassword: expect.any(String),
+      });
     });
     it('resetting a password fails with an invalid email', async () => {
       const dto = new ResetPasswordDto();
@@ -146,6 +143,7 @@ describe('UserPasswordService', () => {
       dto.password = faker.internet.password();
       dto.newPassword = faker.internet.password();
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue({
+        id: dto.userId,
         hashPassword: await userPasswordService.createHashPassword(
           dto.password,
         ),
@@ -155,14 +153,11 @@ describe('UserPasswordService', () => {
 
       expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
       expect(userRepo.findOneBy).toHaveBeenCalledWith({ id: dto.userId });
-      expect(userRepo.update).toHaveBeenCalledTimes(1);
-      expect(userRepo.update).toHaveBeenCalledWith(
-        { id: dto.userId },
-        {
-          id: dto.userId,
-          hashPassword: expect.any(String),
-        },
-      );
+      expect(userRepo.save).toHaveBeenCalledTimes(1);
+      expect(userRepo.save).toHaveBeenCalledWith({
+        id: dto.userId,
+        hashPassword: expect.any(String),
+      });
     });
     it('changing the password fails with the invalid original password', async () => {
       const dto = new ChangePasswordDto();

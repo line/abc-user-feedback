@@ -15,8 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
+import { MockDataSource, getMockProvider } from '@/utils/test-utils';
 
 import { IssueTrackerController } from './issue-tracker.controller';
 import { IssueTrackerService } from './issue-tracker.service';
@@ -32,10 +33,10 @@ describe('IssueTrackerController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [IssueTrackerController],
       providers: [
         getMockProvider(IssueTrackerService, MockIssueTrackerService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
