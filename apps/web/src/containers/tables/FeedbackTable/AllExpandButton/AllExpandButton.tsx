@@ -35,20 +35,16 @@ const AllExpandButton: React.FC<IProps> = ({
           !isAllExpanded ? 'left-0.5' : 'right-0.5',
         ].join(' ')}
       />
-      <button
-        className={'w-[28px] h-[28px] flex items-center justify-center z-20'}
-      >
+      <button className="w-[28px] h-[28px] flex items-center justify-center z-20">
         <Icon
           name="List"
           size={16}
           className={!isAllExpanded ? 'text-primary' : 'text-tertiary'}
         />
       </button>
-      <button
-        className={'w-[28px] h-[28px] flex items-center justify-center z-20'}
-      >
+      <button className="w-[28px] h-[28px] flex items-center justify-center z-20">
         <Icon
-          name={'ViewRowsFill'}
+          name="ViewRowsFill"
           size={16}
           className={isAllExpanded ? 'text-primary' : 'text-tertiary'}
         />

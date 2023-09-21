@@ -36,9 +36,10 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
   query,
   isHead = false,
 }) => {
+  const { channelId, projectId, createdAtRange } = useFeedbackTable();
+
   const [open, setOpen] = useState(false);
   const { theme } = useStore(themeStore);
-  const { channelId, projectId, createdAtRange } = useFeedbackTable();
   const perms = usePermissions(projectId);
 
   const { t } = useTranslation();

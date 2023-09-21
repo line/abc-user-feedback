@@ -32,7 +32,6 @@ const DraggableColumnItem: React.FC<IProps> = ({
 }: IProps) => {
   return (
     <Draggable
-      key={name}
       draggableId={name}
       index={index}
       isDragDisabled={isDisabled}

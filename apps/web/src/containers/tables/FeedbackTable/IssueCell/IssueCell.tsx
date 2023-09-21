@@ -27,12 +27,11 @@ import client from '@/libs/client';
 import { IFetchError } from '@/types/fetch-error.type';
 import { IssueType } from '@/types/issue.type';
 
+import useFeedbackTable from '../feedback-table.context';
 import IssueSetting from './IssueSetting';
 
 interface IProps extends React.PropsWithChildren {
   issues?: IssueType[];
-  projectId: number;
-  channelId: number;
   feedbackId: number;
   refetch: () => Promise<any>;
   isExpanded: boolean;
@@ -40,15 +39,9 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const {
-    issues,
-    projectId,
-    channelId,
-    feedbackId,
-    refetch,
-    isExpanded,
-    cellWidth,
-  } = props;
+  const { issues, feedbackId, refetch, isExpanded, cellWidth } = props;
+
+  const { projectId, channelId } = useFeedbackTable();
   const { t } = useTranslation();
 
   const perms = usePermissions(projectId);
@@ -314,7 +307,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                       <span className="text-secondary">
                         {t('main.feedback.issue-cell.create-issue')}
                       </span>
-                      <Badge color={'red'} type="secondary">
+                      <Badge color="red" type="secondary">
                         {inputValue}
                       </Badge>
                     </div>
