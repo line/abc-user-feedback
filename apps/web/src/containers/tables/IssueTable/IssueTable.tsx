@@ -175,20 +175,19 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(50);
   const [createdAtRange, setCreatedAtRange] = useState(DEFAULT_DATE_RANGE);
 
   const [query, setQuery] = useState<Record<string, any>>({});
   const sort = useSort(sorting);
 
   useEffect(() => {
-    if (router.query.id) {
-      setQuery({ id: router.query.id });
-    }
+    if (!router.query.id) return;
+    setQuery({ id: router.query.id });
   }, [router.query]);
 
   const rowSelectionIds = useMemo(
-    () => Object.keys(rowSelection),
+    () => Object.keys(rowSelection).map((v) => parseInt(v)),
     [rowSelection],
   );
 
@@ -252,7 +251,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   }, [data]);
 
   const onClickDelete = () => {
-    deleteIssues({ issueIds: rowSelectionIds.map((v) => +v) });
+    deleteIssues({ issueIds: rowSelectionIds });
   };
 
   const onClickTableRow = (row: Row<IssueType>) => () => {
@@ -385,7 +384,10 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                             size={16}
                           />
                         </button>
-                        <ShareButton id={row.original.id} />
+                        <ShareButton
+                          id={row.original.id}
+                          pathname={`/main/${projectId}/issue`}
+                        />
                         <IssueSettingPopover
                           issue={row.original}
                           refetch={refetch}
