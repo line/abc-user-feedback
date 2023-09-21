@@ -19,20 +19,23 @@ import { useTranslation } from 'react-i18next';
 
 interface IProps {
   id: number;
+  pathname: string;
 }
 
-const ShareButton: React.FC<IProps> = ({ id: id }) => {
+const ShareButton: React.FC<IProps> = ({ id, pathname }) => {
   const { t } = useTranslation();
+
   const onClickLinkCopy: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     try {
-      const { origin, pathname } = window.location;
+      const { origin } = window.location;
       navigator.clipboard.writeText(`${origin}${pathname}?id=${id}`);
       toast.positive({ title: t('toast.copy'), iconName: 'CopyFill' });
     } catch (error) {
       toast.negative({ title: 'fail' });
     }
   };
+
   return (
     <button
       className="icon-btn icon-btn-tertiary icon-btn-sm"

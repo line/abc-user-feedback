@@ -106,7 +106,10 @@ const FeedbackTableRow: React.FC<IProps> = ({
               >
                 <Icon name="EditStroke" size={16} />
               </button>
-              <ShareButton id={row.original.id} />
+              <ShareButton
+                id={row.original.id}
+                pathname={`/main/${projectId}/feedback`}
+              />
             </>
           ) : (
             <>

@@ -31,25 +31,23 @@ const FeedbackCell: React.FC<IProps> = (props) => {
 
   return (
     <ExpandableText isExpanded={isExpanded}>
-      <>
-        {typeof value === 'undefined'
-          ? undefined
-          : field.format === 'date'
-          ? dayjs(value as string).format(DATE_TIME_FORMAT)
-          : field.format === 'multiSelect'
-          ? (value as string[])
-              .map(
-                (key) =>
-                  field.options?.find((option) => option.key === key)?.name ??
-                  value,
-              )
-              .join(', ')
-          : field.format === 'select'
-          ? field.options?.find((option) => option.key === value)?.name ?? value
-          : field.format === 'text'
-          ? (value as string)
-          : String(value)}
-      </>
+      {typeof value === 'undefined'
+        ? undefined
+        : field.format === 'date'
+        ? dayjs(value as string).format(DATE_TIME_FORMAT)
+        : field.format === 'multiSelect'
+        ? (value as string[])
+            .map(
+              (key) =>
+                field.options?.find((option) => option.key === key)?.name ??
+                value,
+            )
+            .join(', ')
+        : field.format === 'select'
+        ? field.options?.find((option) => option.key === value)?.name ?? value
+        : field.format === 'text'
+        ? (value as string)
+        : String(value)}
     </ExpandableText>
   );
 };

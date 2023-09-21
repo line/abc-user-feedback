@@ -278,7 +278,7 @@ const SignUpSetting: React.FC<IProps> = () => {
                   rightChildren={
                     <button
                       type="button"
-                      className={'btn btn-xs btn-rounded btn-primary'}
+                      className="btn btn-xs btn-rounded btn-primary"
                       onClick={onClickAdd}
                     >
                       {t('button.register')}

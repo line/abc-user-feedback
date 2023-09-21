@@ -62,7 +62,6 @@ const SignInPage: NextPageWithLayout = () => {
   const onSubmit = async (data: IForm) => {
     try {
       await signIn(data);
-      toast.positive({ title: t('toast.sign-in') });
     } catch (error) {
       const { message } = error as IFetchError;
       setError('email', { message: 'invalid email' });
