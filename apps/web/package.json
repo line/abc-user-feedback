@@ -22,7 +22,7 @@
     "@hookform/resolvers": "^2.9.11",
     "@mui/base": "^5.0.0-beta.4",
     "@tanstack/react-query": "^4.29.12",
-    "@tanstack/react-table": "^8.9.1",
+    "@tanstack/react-table": "^8.10.0",
     "@ufb/tailwind": "*",
     "@ufb/ui": "*",
     "axios": "^1.4.0",
