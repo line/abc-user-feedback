@@ -186,6 +186,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     setQuery({ id: router.query.id });
   }, [router.query]);
 
+  useEffect(() => {
+    setPage(1);
+    setRowSelection({});
+  }, [limit, query]);
+
   const rowSelectionIds = useMemo(
     () => Object.keys(rowSelection).map((v) => parseInt(v)),
     [rowSelection],
