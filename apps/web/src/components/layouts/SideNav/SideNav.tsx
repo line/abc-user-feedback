@@ -48,7 +48,10 @@ const SideNav: React.FC<IProps> = () => {
         }}
       >
         <MenuItem
-          href={{ pathname: Path.FEEDBACK, query: router.query }}
+          href={{
+            pathname: Path.FEEDBACK,
+            query: { projectId: router.query.projectId },
+          }}
           iconName="BubbleDotsStroke"
           activePathname={Path.FEEDBACK}
           disabled={!perms.includes('feedback_read')}
@@ -56,7 +59,10 @@ const SideNav: React.FC<IProps> = () => {
           text={t('main.feedback.title')}
         />
         <MenuItem
-          href={{ pathname: Path.ISSUE, query: router.query }}
+          href={{
+            pathname: Path.ISSUE,
+            query: { projectId: router.query.projectId },
+          }}
           iconName="DocumentStroke"
           activePathname={Path.ISSUE}
           disabled={!perms.includes('issue_read')}
@@ -65,7 +71,10 @@ const SideNav: React.FC<IProps> = () => {
         />
         <hr />
         <MenuItem
-          href={{ pathname: Path.SETTINGS, query: router.query }}
+          href={{
+            pathname: Path.SETTINGS,
+            query: { projectId: router.query.projectId },
+          }}
           iconName="SettingStroke"
           activePathname={Path.SETTINGS}
           disabled={!perms.includes('issue_read')}

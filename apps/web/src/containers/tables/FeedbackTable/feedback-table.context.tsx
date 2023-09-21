@@ -55,7 +55,7 @@ export const FeedbackTableContext = createContext<IFeedbackTableContext>({
   setQuery: DEFAULT_FN,
   page: 1,
   setPage: DEFAULT_FN,
-  limit: 20,
+  limit: 50,
   setLimit: DEFAULT_FN,
   columnOrder: [],
   setColumnOrder: DEFAULT_FN,
@@ -87,7 +87,8 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
   const [createdAtRange, setCreatedAtRange] =
     useState<DateRangeType>(DEFAULT_DATE_RANGE);
 
-  const [limit, setLimit] = useLocalStorage<number>(`limit`, 20);
+  const [limit, setLimit] = useLocalStorage<number>(`limit`, 50);
+
   const [sorting, setSorting] = useLocalColumnSetting<SortingState>({
     channelId,
     key: 'sort',
@@ -110,6 +111,7 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
       projectId,
       initialValue: [],
     });
+
   return (
     <FeedbackTableContext.Provider
       value={{
