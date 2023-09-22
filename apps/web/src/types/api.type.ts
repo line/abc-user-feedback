@@ -165,7 +165,7 @@ export interface paths {
     get: operations["HealthController_check"];
   };
   "/api/channels/{channelId}/migration": {
-    post: operations["MigrationController_createOption"];
+    post: operations["MigrationController_migrate"];
   };
   "/api/projects/{projectId}/issue-tracker": {
     get: operations["IssueTrackerController_findOne"];
@@ -372,6 +372,7 @@ export interface components {
       isPrivate: boolean;
       isRestrictDomain: boolean;
       allowDomains: (string)[];
+      useEmailVerification: boolean;
       oauthConfig: components["schemas"]["OAuthConfigResponseDto"] | null;
     };
     CountFeedbacksByTenantIdResponseDto: {
@@ -751,6 +752,11 @@ export interface operations {
     };
   };
   AuthController_redirectToLoginURL: {
+    parameters: {
+      query?: {
+        callback_url?: string;
+      };
+    };
     responses: {
       200: {
         content: {
@@ -1654,7 +1660,7 @@ export interface operations {
       };
     };
   };
-  MigrationController_createOption: {
+  MigrationController_migrate: {
     parameters: {
       path: {
         channelId: number;

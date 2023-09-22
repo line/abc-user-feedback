@@ -203,7 +203,7 @@ export class AuthService {
     return false;
   }
 
-  async getOAuthLoginURL() {
+  async getOAuthLoginURL(callback_url?: string) {
     const { useOAuth, oauthConfig } = await this.tenantService.findOne();
 
     if (!useOAuth) {
@@ -214,7 +214,8 @@ export class AuthService {
     }
 
     const params = new URLSearchParams({
-      redirect_uri: this.REDIRECT_URI,
+      redirect_uri:
+        this.REDIRECT_URI + callback_url ? '?callback_url=' + callback_url : '',
       client_id: oauthConfig.clientId,
       response_type: 'code',
       state: crypto.randomBytes(10).toString('hex'),

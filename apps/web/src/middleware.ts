@@ -34,18 +34,16 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(Path.MAIN, req.url));
   }
 
+  const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
   if (!session.jwt && isProtected) {
-    return NextResponse.redirect(new URL(Path.SIGN_IN, req.url));
+    return NextResponse.redirect(
+      new URL(Path.SIGN_IN + '?callback_url=' + requestPath, req.url),
+    );
   }
 
   if (req.nextUrl.locale === 'default') {
     const locale = req.cookies.get('NEXT_LOCALE')?.value || DEFAULT_LOCALE;
-    return NextResponse.redirect(
-      new URL(
-        `/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`,
-        req.url,
-      ),
-    );
+    return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
   }
 
   return res;
