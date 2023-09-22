@@ -128,7 +128,9 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
     try {
       const { data } = await axios.post('/api/login', body);
       setJwt(data);
-      router.push({ pathname: Path.MAIN });
+      if (router.query.callback_url) {
+        router.push(router.query.callback_url as string);
+      } else router.push({ pathname: Path.MAIN });
     } catch (error) {
       throw (error as AxiosError).response?.data as IFetchError;
     }
@@ -137,7 +139,9 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
     try {
       const { data } = await axios.post('/api/oauth', { code });
       setJwt(data);
-      router.push({ pathname: Path.MAIN });
+      if (router.query.callback_url) {
+        router.push(router.query.callback_url as string);
+      } else router.push({ pathname: Path.MAIN });
     } catch (error) {
       throw (error as AxiosError).response?.data as IFetchError;
     }

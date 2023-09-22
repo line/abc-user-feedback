@@ -28,7 +28,6 @@ const MainTemplate: React.FC<IProps> = ({ children }) => {
       <Header />
       <div className="flex items-stretch min-h-[calc(100vh-48px)]">
         {Path.hasSideNav(router.pathname) && <SideNav />}
-        {/* <main className="flex flex-col mx-4 my-6 w-[calc(100vw-120px)]"> */}
         <main
           className={[
             'flex flex-col mx-4 my-6',

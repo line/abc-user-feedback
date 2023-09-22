@@ -72,6 +72,7 @@ const SignInPage: NextPageWithLayout = () => {
   const { data } = useOAIQuery({
     path: '/api/auth/signIn/oauth/loginURL',
     queryOptions: { enabled: tenant?.useOAuth ?? false },
+    variables: { callback_url: router.query.callback_url as string },
   });
 
   return (
