@@ -31,16 +31,10 @@ import {
 } from 'react-beautiful-dnd';
 
 import { FieldType } from '@/types/field.type';
+import { reorder } from '@/utils/reorder';
 
 import DraggableColumnItem from './DraggableColumnItem';
 
-const reorder = (list: string[], startIndex: number, endIndex: number) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
 interface IProps extends React.PropsWithChildren {
   columns: ColumnDef<any, any>[];
   fieldData: FieldType[];
@@ -68,14 +62,16 @@ const ColumnSettingPopover: React.FC<IProps> = ({
   );
 
   const onDragEnd: OnDragEndResponder = (result) => {
-    if (!result.destination) return;
-    if (result.destination.index === result.source.index) return;
-    if (result.destination.index < 2) result.destination.index = 2;
+    const { destination, source } = result;
+
+    if (!destination) return;
+    if (destination.index === source.index) return;
+    if (destination.index < 2) destination.index = 2;
 
     const newFields: string[] = reorder(
       columnOrder.length === 0 ? columnKeys : columnOrder,
-      result.source.index,
-      result.destination.index,
+      source.index,
+      destination.index,
     );
     onChangeColumnOrder(['select'].concat(newFields));
   };

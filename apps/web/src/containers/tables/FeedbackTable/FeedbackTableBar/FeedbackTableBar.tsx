@@ -83,6 +83,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
 
   const searchItems = useMemo(() => {
     if (!fieldData) return [];
+
     const items: SearchItemType[] = [
       {
         key: 'issueIds',

@@ -24,7 +24,7 @@ const RoleTitleRow: React.FC<IProps> = ({ colspan, depth, title }) => {
     <tr>
       <td colSpan={colspan}>
         <p
-          className={'font-12-bold'}
+          className="font-12-bold"
           style={{ marginLeft: depth ? depth * 10 * 4 : 0 }}
         >
           {title}

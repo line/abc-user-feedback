@@ -13,20 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface IProps extends React.PropsWithChildren {
-  colSpan: number;
-}
+export const reorder = (
+  list: string[],
+  startIndex: number,
+  endIndex: number,
+) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
 
-const TableLoadingRow: React.FC<IProps> = ({ colSpan }) => {
-  return (
-    <tr>
-      <td colSpan={colSpan} style={{ padding: 0, height: 0 }}>
-        <div className="relative w-full bg-gray-200 rounded">
-          <div className="top-0 h-1 rounded w-full relative loading" />
-        </div>
-      </td>
-    </tr>
-  );
+  return result;
 };
-
-export default TableLoadingRow;

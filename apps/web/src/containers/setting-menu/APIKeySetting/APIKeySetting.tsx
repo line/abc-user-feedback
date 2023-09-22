@@ -78,18 +78,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
                 }
               }}
             >
-              <Icon
-                name="Clips"
-                size={16}
-                className="cursor-pointer"
-                onClick={() => {
-                  navigator.clipboard.writeText(getValue());
-                  toast.positive({
-                    title: t('toast.copy'),
-                    iconName: 'CopyFill',
-                  });
-                }}
-              />
+              <Icon name="Clips" size={16} className="cursor-pointer" />
             </button>
           </div>
         ),

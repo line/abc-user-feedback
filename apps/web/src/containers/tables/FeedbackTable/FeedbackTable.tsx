@@ -14,7 +14,6 @@
  * under the License.
  */
 import {
-  createColumnHelper,
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
@@ -27,25 +26,15 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
-import {
-  CheckedTableHead,
-  Dialog,
-  ExpandableText,
-  TableCheckbox,
-  TableLoadingRow,
-  TableSortIcon,
-} from '@/components';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
+import { CheckedTableHead, TableLoadingRow, TableSortIcon } from '@/components';
+import { useOAIQuery, usePermissions } from '@/hooks';
 import { useFeedbackSearch, useSort } from '@/hooks';
 
-import EditableCell from './EditableCell/EditableCell';
-import FeedbackCell from './FeedbackCell';
+import FeedbackDeleteDialog from './FeedbackDeleteDialog';
 import FeedbackTableBar from './FeedbackTableBar';
 import FeedbackTableRow from './FeedbackTableRow';
-import IssueCell from './IssueCell';
+import { getColumns } from './feedback-table-columns';
 import useFeedbackTable from './feedback-table.context';
-
-const columnHelper = createColumnHelper<any>();
 
 export interface IFeedbackTableProps {
   issueId?: number;
@@ -72,17 +61,15 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     createdAtRange,
   } = useFeedbackTable();
 
-  const perms = usePermissions();
-
-  const router = useRouter();
   const { t } = useTranslation();
+  const perms = usePermissions();
+  const router = useRouter();
 
   const [rows, setRows] = useState<Record<string, any>[]>([]);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
   const [rowSelection, setRowSelection] = useState({});
-
   const sort = useSort(sorting);
+
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
 
   useEffect(() => {
     setPage(1);
@@ -93,12 +80,11 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   useEffect(() => {
     setPage(1);
     setRowSelection({});
-  }, [limit]);
+  }, [limit, query]);
 
   useEffect(() => {
-    if (router.query.id) {
-      setQuery((prev) => ({ ...prev, ids: [router.query.id] }));
-    }
+    if (!router.query.id || sub) return;
+    setQuery((prev) => ({ ...prev, ids: [router.query.id] }));
   }, [router.query]);
 
   const q = useMemo(
@@ -125,9 +111,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     variables: { channelId, projectId },
   });
 
-  const fieldData = useMemo(() => {
-    return channelData?.fields;
-  }, [channelData]);
+  const fieldData = channelData?.fields ?? [];
 
   const {
     data,
@@ -140,6 +124,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     { page, limit, sort: sort as Record<string, never>, query: q },
     { enabled: channelId !== -1 },
   );
+
   useEffect(() => {
     if (!feedbackError) return;
     if (feedbackError.code === 'LargeWindow') {
@@ -150,121 +135,12 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     }
   }, [feedbackError]);
 
-  const { mutate: deleteFeedback, isLoading: deleteFeedbackLoading } =
-    useOAIMutation({
-      method: 'delete',
-      path: '/api/projects/{projectId}/channels/{channelId}/feedbacks',
-      pathParams: { projectId, channelId },
-      queryOptions: {
-        async onSuccess() {
-          await refetchFeedbackData();
-          toast.negative({ title: t('toast.delete') });
-          table.resetRowSelection();
-          setOpenDeleteDialog(false);
-        },
-        onError(error) {
-          toast.negative({ title: error?.message ?? 'Error' });
-        },
-      },
-    });
-
   useEffect(() => {
     if (!data) setRows([]);
     else setRows(data.items);
   }, [data]);
 
-  const columns = useMemo(
-    () =>
-      fieldData
-        ? [
-            columnHelper.display({
-              id: 'select',
-              header: ({ table }) => (
-                <TableCheckbox
-                  {...{
-                    checked: table.getIsAllRowsSelected(),
-                    indeterminate: table.getIsSomeRowsSelected(),
-                    onChange: table.getToggleAllRowsSelectedHandler(),
-                  }}
-                />
-              ),
-              cell: ({ row }) => (
-                <TableCheckbox
-                  {...{
-                    checked: row.getIsSelected(),
-                    disabled: !row.getCanSelect(),
-                    indeterminate: row.getIsSomeSelected(),
-                    onChange: row.getToggleSelectedHandler(),
-                  }}
-                />
-              ),
-              size: 50,
-              enableResizing: false,
-            }),
-            columnHelper.accessor('id', {
-              id: 'id',
-              size: 100,
-              minSize: 100,
-              header: fieldData?.find((v) => v.key === 'id')?.name,
-              cell: (info) => (
-                <ExpandableText isExpanded={info.row.getIsExpanded()}>
-                  {info.getValue()}
-                </ExpandableText>
-              ),
-              enableSorting: false,
-            }),
-            columnHelper.accessor('issues', {
-              id: 'issues',
-              size: 150,
-              minSize: 150,
-              header: 'Issue',
-              cell: (info) => (
-                <IssueCell
-                  refetch={refetchFeedbackData}
-                  issues={info.getValue()}
-                  projectId={projectId}
-                  channelId={channelId}
-                  feedbackId={info.row.original.id}
-                  isExpanded={info.row.getIsExpanded()}
-                  cellWidth={info.column.getSize()}
-                />
-              ),
-              enableSorting: false,
-            }),
-          ].concat(
-            fieldData
-              .filter((v) => v.key !== 'id' && v.key !== 'issues')
-              .filter((v) => v.status === 'ACTIVE')
-              .map((field) =>
-                columnHelper.accessor(field.key, {
-                  id: field.key,
-                  size: field.format === 'text' ? 200 : 150,
-                  minSize: 75,
-                  header: field.name,
-                  cell: (info) =>
-                    field.type === 'ADMIN' ? (
-                      <EditableCell
-                        field={field}
-                        value={info.getValue()}
-                        isExpanded={info.row.getIsExpanded()}
-                        feedbackId={info.row.original.id}
-                      />
-                    ) : (
-                      <FeedbackCell
-                        field={field}
-                        isExpanded={info.row.getIsExpanded()}
-                        value={info.getValue()}
-                      />
-                    ),
-                  enableSorting:
-                    field.format === 'date' &&
-                    (field.name === 'Created' || field.name === 'Updated'),
-                }),
-              ),
-          )
-        : [],
-    [fieldData],
-  );
+  const columns = useMemo(() => getColumns(fieldData), [fieldData]);
 
   const table = useReactTable({
     data: rows,
@@ -282,20 +158,12 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     getRowId: (row) => row.id,
   });
 
-  const columnLength = useMemo(
-    () => table.getVisibleFlatColumns().length,
-    [table.getVisibleFlatColumns()],
-  );
+  const columnLength = table.getVisibleFlatColumns().length;
 
   const rowSelectionIds = useMemo(
     () => Object.keys(rowSelection).map((id) => parseInt(id)),
     [rowSelection],
   );
-
-  const onClickDelete = () => {
-    if (!data) return;
-    deleteFeedback({ feedbackIds: rowSelectionIds });
-  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -310,7 +178,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       {fieldData && (
         <div className="overflow-x-auto">
           <table
-            className={'table table-fixed mb-2'}
+            className="table table-fixed mb-2"
             style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
           >
             <colgroup>
@@ -366,9 +234,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                         >
                           <Icon
                             name="Handle"
-                            className={
-                              'rotate-90 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'
-                            }
+                            className="rotate-90 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
                             size={16}
                           />
                         </div>
@@ -381,31 +247,9 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
             </thead>
             <tbody>
               {data?.meta.itemCount === 0 ? (
-                <tr>
-                  <td colSpan={columnLength}>
-                    <div className="flex flex-col justify-center items-center gap-3 my-60">
-                      <Icon
-                        name="WarningTriangleFill"
-                        className="text-tertiary"
-                        size={56}
-                      />
-                      <p>{t('text.no-data')}</p>
-                    </div>
-                  </td>
-                </tr>
+                <NoData columnLength={columnLength} />
               ) : feedbackError ? (
-                <tr>
-                  <td colSpan={columnLength}>
-                    <div className="flex flex-col justify-center items-center gap-3 my-60">
-                      <Icon
-                        name="WarningTriangleFill"
-                        className="text-tertiary"
-                        size={56}
-                      />
-                      <p>Failed to query data.</p>
-                    </div>
-                  </td>
-                </tr>
+                <FailedToQueryData columnLength={columnLength} />
               ) : (
                 table.getRowModel().rows.map((row) => (
                   <FeedbackTableRow
@@ -424,24 +268,59 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
           </table>
         </div>
       )}
-      <div className="flex justify-end"></div>
-      <Dialog
+      <FeedbackDeleteDialog
         open={openDeleteDialog}
         close={() => setOpenDeleteDialog(false)}
-        title={t('main.feedback.dialog.delete-feedback.title')}
-        description={t('main.feedback.dialog.delete-feedback.description')}
-        submitButton={{
-          onClick: onClickDelete,
-          children: t('button.delete'),
-          disabled: deleteFeedbackLoading,
+        channelId={channelId}
+        handleSuccess={async () => {
+          await refetchFeedbackData();
+          toast.negative({ title: t('toast.delete') });
+          table.resetRowSelection();
         }}
-        icon={{
-          name: 'WarningCircleFill',
-          className: 'text-red-primary',
-          size: 56,
-        }}
+        projectId={projectId}
+        rowSelectionIds={rowSelectionIds}
       />
     </div>
+  );
+};
+
+interface IFailedToQueryData {
+  columnLength: number;
+}
+const FailedToQueryData: React.FC<IFailedToQueryData> = ({ columnLength }) => {
+  return (
+    <tr>
+      <td colSpan={columnLength}>
+        <div className="flex flex-col justify-center items-center gap-3 my-60">
+          <Icon
+            name="WarningTriangleFill"
+            className="text-tertiary"
+            size={56}
+          />
+          <p>Failed to query data.</p>
+        </div>
+      </td>
+    </tr>
+  );
+};
+interface INoData {
+  columnLength: number;
+}
+const NoData: React.FC<INoData> = ({ columnLength }) => {
+  const { t } = useTranslation();
+  return (
+    <tr>
+      <td colSpan={columnLength}>
+        <div className="flex flex-col justify-center items-center gap-3 my-60">
+          <Icon
+            name="WarningTriangleFill"
+            className="text-tertiary"
+            size={56}
+          />
+          <p>{t('text.no-data')}</p>
+        </div>
+      </td>
+    </tr>
   );
 };
 
