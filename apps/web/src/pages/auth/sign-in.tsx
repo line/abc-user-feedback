@@ -20,6 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
@@ -49,6 +50,11 @@ const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { signIn } = useUser();
   const { tenant } = useTenant();
+  const callback_url = useMemo(() => {
+    return router.query.callback_url
+      ? (router.query.callback_url as string)
+      : undefined;
+  }, [router.query]);
 
   const { handleSubmit, register, formState, setError } = useForm({
     resolver: zodResolver(schema),
@@ -72,7 +78,7 @@ const SignInPage: NextPageWithLayout = () => {
   const { data } = useOAIQuery({
     path: '/api/auth/signIn/oauth/loginURL',
     queryOptions: { enabled: tenant?.useOAuth ?? false },
-    variables: { callback_url: router.query.callback_url as string },
+    variables: { callback_url },
   });
 
   return (

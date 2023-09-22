@@ -124,28 +124,33 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
     })();
   }, []);
 
-  const signIn = useCallback(async (body: ISignInInput) => {
+  const signIn = async (body: ISignInInput) => {
     try {
       const { data } = await axios.post('/api/login', body);
       setJwt(data);
       if (router.query.callback_url) {
         router.push(router.query.callback_url as string);
-      } else router.push({ pathname: Path.MAIN });
+      } else {
+        router.push({ pathname: Path.MAIN });
+      }
     } catch (error) {
       throw (error as AxiosError).response?.data as IFetchError;
     }
-  }, []);
-  const signInOAuth = useCallback(async ({ code }: ISignInOAuthInput) => {
+  };
+
+  const signInOAuth = async ({ code }: ISignInOAuthInput) => {
     try {
       const { data } = await axios.post('/api/oauth', { code });
       setJwt(data);
       if (router.query.callback_url) {
         router.push(router.query.callback_url as string);
-      } else router.push({ pathname: Path.MAIN });
+      } else {
+        router.push({ pathname: Path.MAIN });
+      }
     } catch (error) {
       throw (error as AxiosError).response?.data as IFetchError;
     }
-  }, []);
+  };
 
   const signUp = useCallback(async ({ email, password }: ISignUpInput) => {
     await client.post({

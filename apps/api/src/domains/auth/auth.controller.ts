@@ -28,6 +28,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -95,6 +96,7 @@ export class AuthController {
   }
 
   @UseGuards(UseOAuthGuard)
+  @ApiQuery({ name: 'callback_url', type: String, required: false })
   @ApiOkResponse({ type: OAuthLoginUrlResponseDto })
   @Get('signIn/oauth/loginURL')
   async redirectToLoginURL(@Query('callback_url') callback_url?: string) {

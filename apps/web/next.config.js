@@ -29,6 +29,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   transpilePackages: ['@ufb/ui'],
+  compiler: { removeConsole: true },
 };
 
 module.exports = nextConfig;

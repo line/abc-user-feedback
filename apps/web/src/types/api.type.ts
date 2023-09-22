@@ -753,8 +753,8 @@ export interface operations {
   };
   AuthController_redirectToLoginURL: {
     parameters: {
-      query: {
-        callback_url: string;
+      query?: {
+        callback_url?: string;
       };
     };
     responses: {

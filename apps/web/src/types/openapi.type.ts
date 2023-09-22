@@ -12,25 +12,15 @@ export type OAIMethodPathKeys<TMethod extends OAIMethods> = O.SelectKeys<
 
 
 export type OAIPathParameters<
-  TPath extends OAIPathKeys,
-  TMethod extends OAIMethods,
-> = O.Path<paths, [TPath, TMethod, 'parameters', 'path']> extends Record<
-  string,
-  unknown
->
-  ? O.Path<paths, [TPath, TMethod, 'parameters', 'path']>
-  : undefined;
+TPath extends OAIPathKeys,
+TMethod extends OAIMethods,
+> = O.Path<paths, [TPath, TMethod, 'parameters', 'path']>;
 
 
 export type OAIQueryParameters<
   TPath extends OAIPathKeys,
   TMethod extends OAIMethods,
-> = O.Path<paths, [TPath, TMethod, 'parameters', 'query']> extends Record<
-  string,
-  unknown
->
-  ? O.Path<paths, [TPath, TMethod, 'parameters', 'query']>
-  : undefined;
+> = O.Path<paths, [TPath, TMethod, 'parameters', 'query']>;
 
 
 export type OAIRequestBody<
@@ -52,10 +42,11 @@ export type OAIParameters<
         OAIQueryParameters<TPath, TMethod>
       >
     : OAIPathParameters<TPath, TMethod>
-  : OAIQueryParameters<TPath, TMethod> extends Record<string, unknown>
+  : OAIQueryParameters<TPath, TMethod> extends Record<string, unknown> | undefined
   ? OAIQueryParameters<TPath, TMethod>
   : undefined;
 
+  const a: OAIQueryParameters<'/api/auth/signIn/oauth/loginURL', 'get'> = {}
 
 export type OAIResponse<TPath extends keyof paths, TMethod extends OAIMethods> =
   O.Path<
