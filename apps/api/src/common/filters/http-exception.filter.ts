@@ -45,12 +45,5 @@ export class HttpExceptionFilter implements ExceptionFilter {
         path: request.url,
       });
     }
-
-    this.logger.error(
-      JSON.stringify({
-        request: { method: request.method, url: request.url },
-        exception,
-      }),
-    );
   }
 }
