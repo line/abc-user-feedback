@@ -28,7 +28,12 @@ export type OAIMethodPathKeys<TMethod extends OAIMethods> = O.SelectKeys<
 export type OAIPathParameters<
   TPath extends OAIPathKeys,
   TMethod extends OAIMethods,
-> = O.Path<paths, [TPath, TMethod, 'parameters', 'path']>;
+> = O.Path<paths, [TPath, TMethod, 'parameters', 'path']> extends Record<
+  string,
+  unknown
+>
+  ? O.Path<paths, [TPath, TMethod, 'parameters', 'path']>
+  : undefined;
 
 export type OAIQueryParameters<
   TPath extends OAIPathKeys,
