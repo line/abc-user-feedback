@@ -92,6 +92,17 @@ const domainModules = [
         autoLogging: {
           ignore: (req: any) => req.originalUrl === '/api/health',
         },
+        customLogLevel: (req, res, err) => {
+          if (res.statusCode === 401) {
+            return 'silent';
+          }
+          if (res.statusCode >= 400 && res.statusCode < 500) {
+            return 'warn';
+          } else if (res.statusCode >= 500 || err) {
+            return 'error';
+          }
+          return 'info';
+        },
       },
     }),
     ClsModule.forRoot({
