@@ -26,7 +26,6 @@
   },
   "peerDependencies": {},
   "scripts": {
-    "dev": "rollup --watch --config --bundleConfigAsCjs",
     "build": "rollup --config --bundleConfigAsCjs",
     "lint": "eslint \"src/**/*.{ts,tsx}\""
   },
