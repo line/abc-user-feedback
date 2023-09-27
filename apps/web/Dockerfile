@@ -15,6 +15,7 @@ RUN turbo prune --scope=web --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM base AS installer
+
 RUN apk add --no-cache libc6-compat
 RUN apk --no-cache add --virtual .builds-deps build-base python3
 
@@ -25,21 +26,20 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/yarn.lock ./yarn.lock
+RUN yarn global add node-gyp
 RUN yarn install
 
 # Build the project
 COPY --from=builder /app/out/full/ .
-
-ARG TURBO_API
-ENV TURBO_API=${TURBO_API}
-ARG TURBO_TOKEN
-ENV TURBO_TOKEN=${TURBO_TOKEN}
-ARG TURBO_TEAM
-ENV TURBO_TEAM=${TURBO_TEAM}
-
 COPY turbo.json ./
 COPY .turbo/config.json ./.turbo/
 COPY .git/ ./.git/
+
+ARG TURBO_TOKEN
+ENV TURBO_TOKEN=${TURBO_TOKEN}
+
+ARG TURBO_TEAM
+ENV TURBO_TEAM=${TURBO_TEAM}
 
 COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
 RUN yarn turbo run build --filter=web...
