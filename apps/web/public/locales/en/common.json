@@ -70,7 +70,7 @@
       }
     },
     "feedback": {
-      "title": "Feedback Management",
+      "title": "Feedback",
       "column-setting": "Column Setting",
       "issue-cell": {
         "issue-list": "Issue list",
@@ -101,7 +101,7 @@
       }
     },
     "issue": {
-      "title": "Issue Management",
+      "title": "Issue",
       "setting": "Issue Setting",
       "dialog": {
         "delete-issue": {

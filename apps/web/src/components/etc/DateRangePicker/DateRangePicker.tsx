@@ -109,9 +109,15 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         >
           <p className="font-14-regular">
             {value
-              ? `${dayjs(value?.startDate).format(DATE_FORMAT)} ~ ${dayjs(
-                  value?.endDate,
-                ).format(DATE_FORMAT)}`
+              ? `${
+                  currentValue?.startDate
+                    ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
+                    : ''
+                } ~ ${
+                  currentValue?.endDate
+                    ? dayjs(currentValue.endDate).format(DATE_FORMAT)
+                    : ''
+                }`
               : 'YYYY-MM-DD ~ YYYY-MM-DD'}
           </p>
           <div className="flex flex-row gap-2 items-center">

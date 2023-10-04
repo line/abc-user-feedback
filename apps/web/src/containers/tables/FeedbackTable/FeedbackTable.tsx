@@ -26,7 +26,12 @@ import { useTranslation } from 'next-i18next';
 import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
-import { CheckedTableHead, TableLoadingRow, TableSortIcon } from '@/components';
+import {
+  CheckedTableHead,
+  TableLoadingRow,
+  TableResizer,
+  TableSortIcon,
+} from '@/components';
 import { useOAIQuery, usePermissions } from '@/hooks';
 import { useFeedbackSearch, useSort } from '@/hooks';
 
@@ -215,29 +220,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                         )}
                       </div>
                       {header.column.getCanResize() && (
-                        <div
-                          onMouseDown={header.getResizeHandler()}
-                          onTouchStart={header.getResizeHandler()}
-                          className={[
-                            'resizer hover:text-primary z-auto',
-                            header.column.getIsResizing()
-                              ? 'text-primary bg-secondary'
-                              : 'text-tertiary',
-                          ].join(' ')}
-                          style={{
-                            transform: header.column.getIsResizing()
-                              ? `translateX(${
-                                  table.getState().columnSizingInfo.deltaOffset
-                                }px)`
-                              : 'translateX(0px)',
-                          }}
-                        >
-                          <Icon
-                            name="Handle"
-                            className="rotate-90 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-                            size={16}
-                          />
-                        </div>
+                        <TableResizer header={header} table={table} />
                       )}
                     </th>
                   ))

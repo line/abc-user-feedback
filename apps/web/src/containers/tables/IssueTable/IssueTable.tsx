@@ -38,6 +38,7 @@ import {
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
+  TableResizer,
   TableSearchInput,
   TableSortIcon,
 } from '@/components';
@@ -83,6 +84,7 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       />
     ),
     size: 40,
+    enableResizing: false,
   }),
   columnHelper.accessor('id', {
     header: 'ID',
@@ -91,23 +93,22 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
         {getValue()}
       </ExpandableText>
     ),
-    size: 100,
+    size: 50,
+    minSize: 50,
     enableSorting: false,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
     cell: ({ getValue, row }) => (
-      <Badge color={getStatusColor(row.original.status)} type="secondary">
-        {getValue()}
-      </Badge>
+      <div className="overflow-hidden">
+        <Badge color={getStatusColor(row.original.status)} type="secondary">
+          {getValue()}
+        </Badge>
+      </div>
     ),
-    size: 100,
+    size: 150,
+    minSize: 50,
     enableSorting: false,
-  }),
-  columnHelper.accessor('feedbackCount', {
-    header: 'Feedback Count',
-    cell: ({ getValue }) => getValue().toLocaleString(),
-    size: 100,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -117,7 +118,13 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       </ExpandableText>
     ),
     enableSorting: false,
-    size: 250,
+    size: 300,
+  }),
+  columnHelper.accessor('feedbackCount', {
+    header: 'Feedback Count',
+    cell: ({ getValue }) => getValue().toLocaleString(),
+    size: 100,
+    minSize: 100,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
@@ -128,7 +135,8 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
         {ISSUES(t).find((v) => v.key === getValue())?.name}
       </div>
     ),
-    size: 70,
+    size: 100,
+    minSize: 100,
   }),
   columnHelper.accessor('externalIssueId', {
     header: 'Ticket',
@@ -144,16 +152,19 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       ),
     enableSorting: false,
     size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
     size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('updatedAt', {
     header: 'Updated',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
     size: 100,
+    minSize: 50,
   }),
 ];
 
@@ -346,6 +357,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                     )}
                     {header.column.getCanSort() && (
                       <TableSortIcon column={header.column} />
+                    )}
+                    {header.column.getCanResize() && (
+                      <TableResizer header={header} table={table} />
                     )}
                   </th>
                 ))

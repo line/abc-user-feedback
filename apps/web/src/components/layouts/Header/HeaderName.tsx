@@ -39,7 +39,7 @@ const HeaderName: React.FC<IProps> = () => {
   });
 
   return (
-    <>
+    <div className="flex items-center gap-2">
       <div className="flex items-center gap-2">
         <div className="bg-fill-tertiary rounded-sm p-1.5 inline-flex">
           <Icon name="OfficeFill" size={12} className="text-secondary" />
@@ -47,14 +47,21 @@ const HeaderName: React.FC<IProps> = () => {
         <span className="font-12-regular">{tenant?.siteName}</span>
       </div>
       {data && (
-        <div className="flex items-center gap-2">
-          <div className="bg-fill-tertiary rounded-sm p-1.5 inline-flex">
-            <Icon name="CollectionFill" size={12} className="text-secondary" />
+        <>
+          <Icon name="ChevronRight" size={12} className="text-secondary" />
+          <div className="flex items-center gap-2">
+            <div className="bg-fill-tertiary rounded-sm p-1.5 inline-flex">
+              <Icon
+                name="CollectionFill"
+                size={12}
+                className="text-secondary"
+              />
+            </div>
+            <span className="font-12-regular">{data?.name}</span>
           </div>
-          <span className="font-12-regular">{data?.name}</span>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 };
 

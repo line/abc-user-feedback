@@ -43,7 +43,7 @@ const SideNav: React.FC<IProps> = () => {
         onMouseOver={() => setIsHover(true)}
         onMouseOut={() => setIsHover(false)}
         style={{
-          width: 'max-content',
+          width: isHover ? 150 : 'max-content',
           boxShadow: isHover ? '4px 4px 8px 0px #0000000F' : '',
         }}
       >

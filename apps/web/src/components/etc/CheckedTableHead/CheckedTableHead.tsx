@@ -53,13 +53,9 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
       </th>
       <th colSpan={headerLength - 1}>
         <div className="flex gap-5 items-center">
-          <button
-            className="btn btn-tertiary btn-sm min-w-0"
-            onClick={onClickDelete}
-            disabled={disabled}
-          >
-            {t('button.delete')}
-          </button>
+          <span className="font-12-bold text-blue-primary">
+            {t('text.select-count', { count })}
+          </span>
           <button
             className="btn btn-tertiary btn-sm min-w-0"
             onClick={onClickCancle}
@@ -77,9 +73,13 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
               <div className="border-r-fill-secondary border-r-[1px] h-4" />
             </>
           )}
-          <span className="font-12-bold text-blue-primary">
-            {t('text.select-count', { count })}
-          </span>
+          <button
+            className="btn btn-tertiary btn-sm min-w-0 text-red-primary"
+            onClick={onClickDelete}
+            disabled={disabled}
+          >
+            {t('button.delete')}
+          </button>
         </div>
       </th>
     </>
