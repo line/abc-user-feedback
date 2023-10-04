@@ -17,6 +17,7 @@
   "scripts": {
     "postinstall": "husky install",
     "build": "turbo run build",
+    "build:ui": "turbo run @ufb/ui#build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",

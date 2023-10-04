@@ -26,7 +26,7 @@ RUN yarn install
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
-COPY .turbo/config.json ./.turbo/
+COPY .turbo/ ./.turbo/
 COPY .git/ ./.git/
 
 ARG TURBO_TOKEN
