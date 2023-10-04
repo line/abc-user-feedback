@@ -19,6 +19,8 @@
     "build": "turbo run build",
     "build:ui": "turbo run @ufb/ui#build",
     "dev": "turbo run dev --parallel",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:api": "turbo run dev --filter=api",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "test": "turbo run test"
