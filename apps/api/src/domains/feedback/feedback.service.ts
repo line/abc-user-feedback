@@ -18,6 +18,7 @@ import {
   Injectable,
   StreamableFile,
 } from '@nestjs/common';
+import dayjs from 'dayjs';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
 import { createReadStream, existsSync } from 'fs';
@@ -475,12 +476,28 @@ export class FeedbackService {
 
   @Transactional()
   async addIssue(dto: AddIssueDto) {
-    return this.feedbackMySQLService.addIssue(dto);
+    await this.feedbackMySQLService.addIssue(dto);
+
+    if (OS_USE) {
+      await this.feedbackOSService.upsertFeedbackItem({
+        channelId: dto.channelId,
+        feedbackId: dto.feedbackId,
+        data: { updatedAt: dayjs().toISOString() },
+      });
+    }
   }
 
   @Transactional()
   async removeIssue(dto: RemoveIssueDto) {
-    return this.feedbackMySQLService.removeIssue(dto);
+    await this.feedbackMySQLService.removeIssue(dto);
+
+    if (OS_USE) {
+      await this.feedbackOSService.upsertFeedbackItem({
+        channelId: dto.channelId,
+        feedbackId: dto.feedbackId,
+        data: { updatedAt: dayjs().toISOString() },
+      });
+    }
   }
 
   async countByProjectId(dto: CountByProjectIdDto) {

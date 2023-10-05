@@ -311,7 +311,10 @@ export class FeedbackMySQLService {
 
       this.cls.set('addIssueInFeedback', { feedbackId, issueId });
 
-      await this.feedbackRepository.save(feedback);
+      await this.feedbackRepository.save({
+        ...feedback,
+        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      });
 
       await this.issueRepository.update(dto.issueId, {
         feedbackCount: () => 'feedback_count + 1',
@@ -345,7 +348,10 @@ export class FeedbackMySQLService {
       feedback.issues = feedback.issues.filter((issue) => issue.id !== issueId);
       this.cls.set('removeIssueInFeedback', { feedbackId, issueId });
 
-      await this.feedbackRepository.save(feedback);
+      await this.feedbackRepository.save({
+        ...feedback,
+        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      });
 
       await this.issueRepository.update(dto.issueId, {
         feedbackCount: () => 'feedback_count - 1',
