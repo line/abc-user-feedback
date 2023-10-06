@@ -92,7 +92,6 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   };
   const handleApply = () => {
     if (!currentValue?.startDate || !currentValue?.endDate) return;
-    console.log('maxDays: ', maxDays);
     if (
       maxDays &&
       isOverMaxDays(currentValue.startDate, currentValue.endDate, maxDays)
