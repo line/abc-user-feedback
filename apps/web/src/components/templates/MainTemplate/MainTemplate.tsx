@@ -24,13 +24,13 @@ const MainTemplate: React.FC<IProps> = ({ children }) => {
   const router = useRouter();
 
   return (
-    <>
+    <div className="min-w-[960px]">
       <Header />
       <div className="flex items-stretch min-h-[calc(100vh-48px)]">
         {Path.hasSideNav(router.pathname) && <SideNav />}
         <main
           className={[
-            'flex flex-col mx-4 my-6',
+            'flex flex-col mx-4 my-6 overflow-x-auto',
             Path.hasSideNav(router.pathname)
               ? 'w-[calc(100%-104px)] '
               : 'w-full',
@@ -39,7 +39,7 @@ const MainTemplate: React.FC<IProps> = ({ children }) => {
           {children}
         </main>
       </div>
-    </>
+    </div>
   );
 };
 

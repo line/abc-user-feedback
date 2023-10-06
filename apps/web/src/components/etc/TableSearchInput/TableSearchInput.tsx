@@ -45,14 +45,14 @@ export type SearchItemType = {
 interface IProps {
   onChangeQuery: (query: Record<string, any>) => void;
   searchItems: SearchItemType[];
-  initialQuery?: Record<string, any>;
+  query?: Record<string, any>;
   defaultQuery?: Record<string, any>;
 }
 
 const TableSearchInput: React.FC<IProps> = ({
   onChangeQuery,
   searchItems,
-  initialQuery,
+  query,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -98,9 +98,10 @@ const TableSearchInput: React.FC<IProps> = ({
   );
 
   useEffect(() => {
-    if (!initialQuery) return;
-    setInputValue(objToStr(initialQuery, searchItems));
-  }, [searchItems]);
+    if (!query) return;
+    const inputValue = objToStr(query, searchItems);
+    setInputValue(inputValue);
+  }, [searchItems, query]);
 
   const filterIconCN = useMemo(
     () => (isOpenPopover ? 'text-primary' : 'text-tertiary'),
@@ -115,10 +116,14 @@ const TableSearchInput: React.FC<IProps> = ({
       ? removeEmptyValueInObject({ ...currentObj, ...inputObject })
       : {};
 
-    setInputValue(objToStr(currentQuery, searchItems));
-    onChangeQuery(
-      removeEmptyValueInObject(objToQuery(currentQuery, searchItems)),
+    const inputText = objToStr(currentQuery, searchItems);
+    setInputValue(inputText);
+
+    const newQUery = removeEmptyValueInObject(
+      objToQuery(currentQuery, searchItems),
     );
+
+    onChangeQuery(newQUery);
   };
 
   const reset = () => {

@@ -25,7 +25,6 @@ import {
 import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
 import { TFunction, useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -43,9 +42,9 @@ import {
   TableSortIcon,
 } from '@/components';
 import { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { ISSUES, getStatusColor } from '@/constants/issues';
+import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import {
   useIssueSearch,
@@ -54,6 +53,7 @@ import {
   usePermissions,
   useSort,
 } from '@/hooks';
+import useQueryParamsState from '@/hooks/useQueryParamsState';
 import { IssueTrackerType } from '@/types/issue-tracker.type';
 import { IssueType } from '@/types/issue.type';
 
@@ -173,7 +173,6 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const IssueTable: React.FC<IProps> = ({ projectId }) => {
-  const router = useRouter();
   const perms = usePermissions();
 
   const { t } = useTranslation();
@@ -187,15 +186,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
-  const [createdAtRange, setCreatedAtRange] = useState(DEFAULT_DATE_RANGE);
-
-  const [query, setQuery] = useState<Record<string, any>>({});
+  const { createdAtRange, query, setCreatedAtRange, setQuery } =
+    useQueryParamsState(Path.ISSUE, { projectId });
   const sort = useSort(sorting);
-
-  useEffect(() => {
-    if (!router.query.id) return;
-    setQuery({ id: router.query.id });
-  }, [router.query]);
 
   useEffect(() => {
     setPage(1);
@@ -324,6 +317,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           <TableSearchInput
             searchItems={columnInfo}
             onChangeQuery={(input) => setQuery(input)}
+            query={query}
           />
         </div>
       </div>
@@ -404,8 +398,13 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           />
                         </button>
                         <ShareButton
-                          id={row.original.id}
-                          pathname={`/main/${projectId}/issue`}
+                          pathname={`/main/${projectId}/issue?id=${
+                            row.original.id
+                          }&createdAt=${dayjs(row.original.createdAt).format(
+                            DATE_FORMAT,
+                          )}~${dayjs(row.original.createdAt).format(
+                            DATE_FORMAT,
+                          )}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}

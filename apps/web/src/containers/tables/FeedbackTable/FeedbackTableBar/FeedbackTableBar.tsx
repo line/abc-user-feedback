@@ -180,7 +180,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             <TableSearchInput
               searchItems={searchItems}
               onChangeQuery={setQuery}
-              initialQuery={query}
+              query={query}
             />
           )}
         </div>

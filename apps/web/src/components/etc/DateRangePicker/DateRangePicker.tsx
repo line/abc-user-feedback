@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
+import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 import { enUS, ja, ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
@@ -92,6 +92,16 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   };
   const handleApply = () => {
     if (!currentValue?.startDate || !currentValue?.endDate) return;
+    console.log('maxDays: ', maxDays);
+    if (
+      maxDays &&
+      isOverMaxDays(currentValue.startDate, currentValue.endDate, maxDays)
+    ) {
+      toast.negative({
+        title: t('text.date.date-range-over-max-days', { maxDays }),
+      });
+      return;
+    }
     onChange(currentValue);
     setIsOpen(false);
   };
@@ -102,13 +112,13 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         <div
           className={[
             'inline-flex cursor-pointer items-center justify-between px-3.5 rounded w-full bg-fill-inverse border py-[9.5px] h-10 hover:border-fill-primary',
-            value ? 'text-primary' : 'text-tertiary',
+            currentValue ? 'text-primary' : 'text-tertiary',
             isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
           ].join(' ')}
           onClick={() => setIsOpen(true)}
         >
           <p className="font-14-regular">
-            {value
+            {currentValue
               ? `${
                   currentValue?.startDate
                     ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
@@ -164,14 +174,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             endDate={currentValue?.endDate}
             monthsShown={2}
             minDate={minDate}
-            maxDate={
-              maxDays && currentValue?.startDate
-                ? getMinDate(
-                    dayjs(currentValue.startDate).add(maxDays, 'days').toDate(),
-                    maxDate,
-                  )
-                : maxDate
-            }
+            maxDate={currentValue?.startDate ? maxDate : undefined}
             disabledKeyboardNavigation
             selectsRange
             inline
@@ -194,10 +197,13 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     </Popover>
   );
 };
-const getMinDate = (a?: Date, b?: Date) => {
-  if (!a) return b;
-  if (!b) return a;
-  return a < b ? a : b;
+const isOverMaxDays = (startDate: Date, endDate: Date, maxDays: number) => {
+  return dayjs(startDate).add(maxDays, 'days').toDate() < endDate;
 };
+// const getMinDate = (a?: Date, b?: Date) => {
+//   if (!a) return b;
+//   if (!b) return a;
+//   return a < b ? a : b;
+// };
 
 export default DateRangePicker;

@@ -15,10 +15,12 @@
  */
 import { Row, flexRender } from '@tanstack/react-table';
 import { Icon, toast } from '@ufb/ui';
+import dayjs from 'dayjs';
 import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ShareButton, TableCheckbox } from '@/components';
+import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
 
@@ -107,8 +109,13 @@ const FeedbackTableRow: React.FC<IProps> = ({
                 <Icon name="EditStroke" size={16} />
               </button>
               <ShareButton
-                id={row.original.id}
-                pathname={`/main/${projectId}/feedback`}
+                pathname={`/main/${projectId}/feedback?ids=${
+                  row.original.id
+                }&channelId=${channelId}&createdAt=${dayjs(
+                  row.original.createdAt,
+                ).format(DATE_FORMAT)}~${dayjs(row.original.createdAt).format(
+                  DATE_FORMAT,
+                )}`}
               />
             </>
           ) : (

@@ -87,10 +87,20 @@ export const objToStr = (
             return '';
           }
         case 'issue':
-          const issueName = Array.isArray(value)
-            ? column.options?.find((v) => v.id === value[0])?.name
-            : value?.name ?? value;
-          return `${name}:${issueName}`;
+          if (Array.isArray(value)) {
+            const issueName = column.options?.find(
+              (v) => v.id === value[0],
+            )?.name;
+            return `${name}:${issueName}`;
+          } else if (value?.name) {
+            const issueName = value?.name;
+            return `${name}:${issueName}`;
+          } else {
+            const issueName =
+              column.options?.find((v) => v.id === parseInt(value))?.name ??
+              value;
+            return `${name}:${issueName}`;
+          }
         case 'issue_status':
         case 'select':
         case 'multiSelect':
