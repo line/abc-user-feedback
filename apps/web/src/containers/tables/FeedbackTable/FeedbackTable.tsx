@@ -189,7 +189,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       {fieldData && (
         <div className="overflow-x-auto">
           <table
-            className="table table-fixed mb-2 break-all"
+            className="table table-fixed mb-2"
             style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
           >
             <colgroup>
