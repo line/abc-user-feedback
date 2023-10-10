@@ -12,8 +12,7 @@
     "utilities": "tailwindcss --config src/utilities/tailwind.config.js -i src/utilities/utilities.css -o dist/layer/utilities.css --postcss",
     "postutilities": "prejss-cli dist/layer/utilities.css --format commonjs",
     "merge": "cat dist/layer/*.css > dist/tailwind.css",
-    "build": "yarn base && yarn utilities && yarn components && yarn merge",
-    "dev": "yarn npm-watch"
+    "build": "yarn base && yarn utilities && yarn components && yarn merge"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.14",

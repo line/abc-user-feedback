@@ -2,14 +2,8 @@
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
     "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "public/dist/**"
-      ],
-      "dependsOn": [
-        "^build"
-      ],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "dependsOn": ["^build"],
       "env": [
         "NODE_ENV",
         "SESSION_PASSWORD",
@@ -41,8 +35,17 @@
       "outputs": []
     },
     "dev": {
-      "cache": false
+      "dependsOn": ["@ufb/ui#build"],
+      "cache": false,
+      "persistent": true
     },
-    "test": {}
+    "test": {},
+    "@ufb/tailwind#build": {
+      "outputs": ["dist/**"]
+    },
+    "@ufb/ui#build": {
+      "outputs": ["dist/**"],
+      "dependsOn": ["@ufb/tailwind#build"]
+    }
   }
 }

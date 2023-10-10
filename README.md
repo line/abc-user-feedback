@@ -93,6 +93,16 @@ npm run migration:run
 yarn dev
 ```
 
+6. Also, you can run the `dev` target of one of apps in root directory:
+
+```bash
+# web
+yarn turbo run dev --filter=web
+
+# api
+yarn turbo run dev --filter=api
+```
+
 You can always find more information in each app/library's respective README.md file.
 
 ### Setting Up ABC User Feedback Manually
@@ -110,7 +120,7 @@ The client is based on React, React Hook Form, React Query, Tailwind css, MUI, a
 
 ### Build Docker Image
 
-For your code build, you can buile docker image using docker-compose
+For your code build, you can buile docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using turborepo
 
 ```
 docker-compose build
