@@ -57,9 +57,25 @@ const ColumnSettingPopover: React.FC<IProps> = ({
   const { t } = useTranslation();
 
   const columnKeys = useMemo(
-    () => columns.map((v) => v.id) as string[],
-    [columns],
+    () =>
+      columnOrder.length === 0
+        ? (columns.map((v) => v.id) as string[])
+        : columnOrder,
+    [columns, columnOrder],
   );
+
+  const checkedNum = useMemo(() => {
+    return columnKeys.reduce((acc, key) => {
+      return (
+        acc +
+        (typeof columnVisibility[key] === 'undefined'
+          ? 1
+          : columnVisibility[key]
+          ? 1
+          : 0)
+      );
+    }, 0);
+  }, [columnKeys, columnVisibility]);
 
   const onDragEnd: OnDragEndResponder = (result) => {
     const { destination, source } = result;
@@ -69,7 +85,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
     if (destination.index < 2) destination.index = 2;
 
     const newFields: string[] = reorder(
-      columnOrder.length === 0 ? columnKeys : columnOrder,
+      columnKeys,
       source.index,
       destination.index,
     );
@@ -81,7 +97,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
       <Popover>
         <PopoverTrigger className="btn btn-secondary btn-sm gap-2">
           <Icon name="ViewColumnsStroke" size={16} />
-          {t('main.feedback.column-setting')}
+          {t('main.feedback.column-setting')} ({checkedNum}/{columnKeys.length})
         </PopoverTrigger>
         <PopoverContent disabledFloatingStyle className="mt-1.5">
           <PopoverHeading>{t('main.feedback.column-setting')}</PopoverHeading>
@@ -94,29 +110,25 @@ const ColumnSettingPopover: React.FC<IProps> = ({
                     {...provided.droppableProps}
                     className="space-y-1 min-w-[200px]"
                   >
-                    {(columnOrder.length === 0 ? columnKeys : columnOrder)?.map(
-                      (key, index) => (
-                        <DraggableColumnItem
-                          name={
-                            fieldData.find((v) => v.key === key)?.name ?? ''
-                          }
-                          index={index}
-                          key={key}
-                          isChecked={
-                            typeof columnVisibility[key] === 'undefined'
-                              ? true
-                              : columnVisibility[key]
-                          }
-                          onChange={(isChecked) =>
-                            onChangeColumnVisibility((prev) => ({
-                              ...prev,
-                              [key]: isChecked,
-                            }))
-                          }
-                          isDisabled={key === 'id' || key === 'issues'}
-                        />
-                      ),
-                    )}
+                    {columnKeys?.map((key, index) => (
+                      <DraggableColumnItem
+                        name={fieldData.find((v) => v.key === key)?.name ?? ''}
+                        index={index}
+                        key={key}
+                        isChecked={
+                          typeof columnVisibility[key] === 'undefined'
+                            ? true
+                            : columnVisibility[key]
+                        }
+                        onChange={(isChecked) =>
+                          onChangeColumnVisibility((prev) => ({
+                            ...prev,
+                            [key]: isChecked,
+                          }))
+                        }
+                        isDisabled={key === 'id' || key === 'issues'}
+                      />
+                    ))}
                     {provided.placeholder}
                   </div>
                 )}

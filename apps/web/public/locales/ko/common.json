@@ -68,7 +68,7 @@
       }
     },
     "feedback": {
-      "title": "피드백 관리",
+      "title": "피드백",
       "column-setting": "컬럼설정",
       "issue-cell": {
         "issue-list": "이슈 목록",
@@ -99,7 +99,7 @@
       }
     },
     "issue": {
-      "title": "이슈 관리",
+      "title": "이슈",
       "setting": "이슈 설정",
       "dialog": {
         "delete-issue": {
@@ -253,7 +253,8 @@
     "date": {
       "today": "오늘",
       "yesterday": "어제",
-      "before-days": "{{day, number}}일전"
+      "before-days": "{{day, number}}일전",
+      "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
     "equal-search": "완전 일치",
     "like-search": "부분 일치"

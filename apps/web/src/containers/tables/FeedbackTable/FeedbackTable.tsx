@@ -23,10 +23,14 @@ import { Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
 import produce from 'immer';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
 
-import { CheckedTableHead, TableLoadingRow, TableSortIcon } from '@/components';
+import {
+  CheckedTableHead,
+  TableLoadingRow,
+  TableResizer,
+  TableSortIcon,
+} from '@/components';
 import { useOAIQuery, usePermissions } from '@/hooks';
 import { useFeedbackSearch, useSort } from '@/hooks';
 
@@ -57,13 +61,11 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     page,
     setPage,
     query,
-    setQuery,
     createdAtRange,
   } = useFeedbackTable();
 
   const { t } = useTranslation();
   const perms = usePermissions();
-  const router = useRouter();
 
   const [rows, setRows] = useState<Record<string, any>[]>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -73,34 +75,39 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
 
   useEffect(() => {
     setPage(1);
-    setQuery({});
-    setRowSelection({});
-  }, [channelId]);
-
-  useEffect(() => {
-    setPage(1);
     setRowSelection({});
   }, [limit, query]);
-
-  useEffect(() => {
-    if (!router.query.id || sub) return;
-    setQuery((prev) => ({ ...prev, ids: [router.query.id] }));
-  }, [router.query]);
 
   const q = useMemo(
     () =>
       produce(query, (draft) => {
-        if (issueId) {
-          draft['issueIds'] = [...(draft['issueIds'] ?? []), issueId];
-        }
-        if (query.ids) draft['ids'] = [draft['ids']];
-        if (!sub && createdAtRange) {
-          draft['createdAt'] = {
-            gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
-            lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
-          };
+        if (sub) {
+          if (issueId) {
+            draft['issueIds'] = [...(draft['issueIds'] ?? []), issueId];
+          }
+          Object.keys(draft).forEach((key) => {
+            if (key === 'issueIds') return;
+            delete draft[key];
+          });
         } else {
-          delete draft['createdAt'];
+          if (draft['ids']) draft['ids'] = [draft['ids']];
+          Object.entries(draft).forEach(([key, value]) => {
+            if (typeof value === 'string' && value.split('~').length === 2) {
+              const [gte, lt] = value.split('~');
+              draft[key] = {
+                gte: dayjs(gte).startOf('day').toISOString(),
+                lt: dayjs(lt).endOf('day').toISOString(),
+              };
+            }
+          });
+          if (createdAtRange) {
+            draft['createdAt'] = {
+              gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
+              lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
+            };
+          } else {
+            delete draft['createdAt'];
+          }
         }
       }),
     [issueId, query, createdAtRange, sub],
@@ -169,7 +176,11 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     <div className="flex flex-col gap-2">
       <FeedbackTableBar
         columns={columns}
-        onChangeChannel={onChangeChannel}
+        onChangeChannel={(channelId) => {
+          setPage(1);
+          setRowSelection({});
+          onChangeChannel(channelId);
+        }}
         table={table}
         fieldData={fieldData}
         meta={data?.meta}
@@ -215,29 +226,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                         )}
                       </div>
                       {header.column.getCanResize() && (
-                        <div
-                          onMouseDown={header.getResizeHandler()}
-                          onTouchStart={header.getResizeHandler()}
-                          className={[
-                            'resizer hover:text-primary z-auto',
-                            header.column.getIsResizing()
-                              ? 'text-primary bg-secondary'
-                              : 'text-tertiary',
-                          ].join(' ')}
-                          style={{
-                            transform: header.column.getIsResizing()
-                              ? `translateX(${
-                                  table.getState().columnSizingInfo.deltaOffset
-                                }px)`
-                              : 'translateX(0px)',
-                          }}
-                        >
-                          <Icon
-                            name="Handle"
-                            className="rotate-90 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-                            size={16}
-                          />
-                        </div>
+                        <TableResizer header={header} table={table} />
                       )}
                     </th>
                   ))

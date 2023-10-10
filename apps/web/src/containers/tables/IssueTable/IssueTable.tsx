@@ -25,7 +25,6 @@ import {
 import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
 import { TFunction, useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -38,13 +37,14 @@ import {
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
+  TableResizer,
   TableSearchInput,
   TableSortIcon,
 } from '@/components';
 import { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { ISSUES, getStatusColor } from '@/constants/issues';
+import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import {
   useIssueSearch,
@@ -53,6 +53,7 @@ import {
   usePermissions,
   useSort,
 } from '@/hooks';
+import useQueryParamsState from '@/hooks/useQueryParamsState';
 import { IssueTrackerType } from '@/types/issue-tracker.type';
 import { IssueType } from '@/types/issue.type';
 
@@ -83,6 +84,7 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       />
     ),
     size: 40,
+    enableResizing: false,
   }),
   columnHelper.accessor('id', {
     header: 'ID',
@@ -91,23 +93,22 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
         {getValue()}
       </ExpandableText>
     ),
-    size: 100,
+    size: 50,
+    minSize: 50,
     enableSorting: false,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
     cell: ({ getValue, row }) => (
-      <Badge color={getStatusColor(row.original.status)} type="secondary">
-        {getValue()}
-      </Badge>
+      <div className="overflow-hidden">
+        <Badge color={getStatusColor(row.original.status)} type="secondary">
+          {getValue()}
+        </Badge>
+      </div>
     ),
-    size: 100,
+    size: 150,
+    minSize: 50,
     enableSorting: false,
-  }),
-  columnHelper.accessor('feedbackCount', {
-    header: 'Feedback Count',
-    cell: ({ getValue }) => getValue().toLocaleString(),
-    size: 100,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -117,7 +118,13 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       </ExpandableText>
     ),
     enableSorting: false,
-    size: 250,
+    size: 300,
+  }),
+  columnHelper.accessor('feedbackCount', {
+    header: 'Feedback Count',
+    cell: ({ getValue }) => getValue().toLocaleString(),
+    size: 100,
+    minSize: 100,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
@@ -128,7 +135,8 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
         {ISSUES(t).find((v) => v.key === getValue())?.name}
       </div>
     ),
-    size: 70,
+    size: 100,
+    minSize: 100,
   }),
   columnHelper.accessor('externalIssueId', {
     header: 'Ticket',
@@ -144,16 +152,19 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       ),
     enableSorting: false,
     size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
     size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('updatedAt', {
     header: 'Updated',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
     size: 100,
+    minSize: 50,
   }),
 ];
 
@@ -162,7 +173,6 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const IssueTable: React.FC<IProps> = ({ projectId }) => {
-  const router = useRouter();
   const perms = usePermissions();
 
   const { t } = useTranslation();
@@ -176,15 +186,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
-  const [createdAtRange, setCreatedAtRange] = useState(DEFAULT_DATE_RANGE);
-
-  const [query, setQuery] = useState<Record<string, any>>({});
+  const { createdAtRange, query, setCreatedAtRange, setQuery } =
+    useQueryParamsState(Path.ISSUE, { projectId });
   const sort = useSort(sorting);
-
-  useEffect(() => {
-    if (!router.query.id) return;
-    setQuery({ id: router.query.id });
-  }, [router.query]);
 
   useEffect(() => {
     setPage(1);
@@ -313,6 +317,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           <TableSearchInput
             searchItems={columnInfo}
             onChangeQuery={(input) => setQuery(input)}
+            query={query}
           />
         </div>
       </div>
@@ -346,6 +351,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                     )}
                     {header.column.getCanSort() && (
                       <TableSortIcon column={header.column} />
+                    )}
+                    {header.column.getCanResize() && (
+                      <TableResizer header={header} table={table} />
                     )}
                   </th>
                 ))
@@ -390,8 +398,13 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           />
                         </button>
                         <ShareButton
-                          id={row.original.id}
-                          pathname={`/main/${projectId}/issue`}
+                          pathname={`/main/${projectId}/issue?id=${
+                            row.original.id
+                          }&createdAt=${dayjs(row.original.createdAt).format(
+                            DATE_FORMAT,
+                          )}~${dayjs(row.original.createdAt).format(
+                            DATE_FORMAT,
+                          )}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}

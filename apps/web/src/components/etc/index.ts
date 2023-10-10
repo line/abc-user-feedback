@@ -29,3 +29,4 @@ export { default as TableLoadingRow } from './TableLoadingRow';
 export { default as IssueCircle } from './IssueCircle';
 export { default as Dialog } from './Dialog';
 export { default as PopoverModalContent } from './PopoverModalContent';
+export { default as TableResizer } from './TableResizer';

@@ -27,7 +27,6 @@ interface IProps extends React.PropsWithChildren {}
 
 const SideNav: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const router = useRouter();
   const { projectId } = useCurrentProjectId();
 
   const perms = usePermissions(projectId);
@@ -43,14 +42,14 @@ const SideNav: React.FC<IProps> = () => {
         onMouseOver={() => setIsHover(true)}
         onMouseOut={() => setIsHover(false)}
         style={{
-          width: 'max-content',
+          width: isHover ? 200 : 'max-content',
           boxShadow: isHover ? '4px 4px 8px 0px #0000000F' : '',
         }}
       >
         <MenuItem
           href={{
             pathname: Path.FEEDBACK,
-            query: { projectId: router.query.projectId },
+            query: { projectId },
           }}
           iconName="BubbleDotsStroke"
           activePathname={Path.FEEDBACK}
@@ -61,7 +60,7 @@ const SideNav: React.FC<IProps> = () => {
         <MenuItem
           href={{
             pathname: Path.ISSUE,
-            query: { projectId: router.query.projectId },
+            query: { projectId },
           }}
           iconName="DocumentStroke"
           activePathname={Path.ISSUE}
@@ -73,7 +72,7 @@ const SideNav: React.FC<IProps> = () => {
         <MenuItem
           href={{
             pathname: Path.SETTINGS,
-            query: { projectId: router.query.projectId },
+            query: { projectId },
           }}
           iconName="SettingStroke"
           activePathname={Path.SETTINGS}
