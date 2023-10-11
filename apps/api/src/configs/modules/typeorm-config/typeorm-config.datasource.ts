@@ -17,12 +17,12 @@ import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-import { mySqlConfigSchema, mysqlConfig } from '@/configs/mysql.config';
+import { mysqlConfig, mysqlConfigSchema } from '@/configs/mysql.config';
 
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 dotenv.config();
-process.env = mySqlConfigSchema.validateSync(process.env) as any;
+process.env = mysqlConfigSchema.validateSync(process.env) as any;
 
 const env = mysqlConfig();
 console.log('env: ', env);

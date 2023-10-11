@@ -26,7 +26,7 @@ import {
   OpensearchConfigModule,
   TypeOrmConfigModule,
 } from './configs/modules';
-import { mySqlConfigSchema, mysqlConfig } from './configs/mysql.config';
+import { mysqlConfig, mysqlConfigSchema } from './configs/mysql.config';
 import {
   opensearchConfig,
   opensearchSchema,
@@ -82,7 +82,7 @@ const domainModules = [
         ...opensearchSchema.validateSync(config),
         ...smtpConfigSchema.validateSync(config),
         ...jwtConfigSchema.validateSync(config),
-        ...mySqlConfigSchema.validateSync(config),
+        ...mysqlConfigSchema.validateSync(config),
       }),
       validationOptions: { abortEarly: true },
     }),
