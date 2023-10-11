@@ -79,7 +79,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     setCurrentValue(value);
-  }, [value]);
+  }, [value, isOpen]);
 
   const handleChangeDateRange =
     (index: number, startDate: Date, endDate: Date) => () => {

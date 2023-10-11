@@ -13,32 +13,85 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
-import { useState } from 'react';
+import {
+  FloatingArrow,
+  FloatingPortal,
+  Placement,
+  arrow,
+  autoUpdate,
+  flip,
+  offset,
+  shift,
+  useDismiss,
+  useFloating,
+  useFocus,
+  useHover,
+  useInteractions,
+  useRole,
+} from '@floating-ui/react';
+import { Icon } from '@ufb/ui';
+import { useRef, useState } from 'react';
 
 interface IProps {
-  title: string;
-  iconSize?: number;
+  placement?: Placement;
+  description?: string;
 }
 
-const Tooltip: React.FC<IProps> = ({ title, iconSize = 14 }) => {
-  const [open, setOpen] = useState(false);
+const Tooltip: React.FC<IProps> = ({ placement, description }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const arrowRef = useRef(null);
+
+  const { refs, floatingStyles, context } = useFloating({
+    open: isOpen,
+    onOpenChange: setIsOpen,
+    placement: placement ?? 'right',
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      offset(5),
+      flip({ fallbackAxisSideDirection: 'start' }),
+      shift(),
+      arrow({ element: arrowRef }),
+    ],
+  });
+
+  // Event listeners to change the open state
+  const hover = useHover(context, { move: false });
+  const focus = useFocus(context);
+  const dismiss = useDismiss(context);
+  // Role props for screen readers
+  const role = useRole(context, { role: 'tooltip' });
+
+  // Merge all the interactions into prop getters
+  const { getReferenceProps, getFloatingProps } = useInteractions([
+    hover,
+    focus,
+    dismiss,
+    role,
+  ]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
+    <>
+      <button ref={refs.setReference} {...getReferenceProps()} className="ml-1">
         <Icon
           name="InfoCircleFill"
-          size={iconSize}
+          size={16}
           className="text-tertiary cursor-pointer"
-          onMouseOver={() => setOpen(true)}
-          onMouseOut={() => setOpen(false)}
         />
-      </PopoverTrigger>
-      <PopoverContent>
-        <p className="bg-secondary p-2 rounded whitespace-pre-line">{title}</p>
-      </PopoverContent>
-    </Popover>
+      </button>
+      <FloatingPortal>
+        {isOpen && (
+          <div
+            className="bg-fill-primary p-2 rounded whitespace-pre-line"
+            ref={refs.setFloating}
+            style={floatingStyles}
+            {...getFloatingProps()}
+          >
+            <p className="text-fill-inverse font-12-regular">{description}</p>
+            <FloatingArrow ref={arrowRef} context={context} />
+          </div>
+        )}
+      </FloatingPortal>
+    </>
   );
 };
 

@@ -105,6 +105,7 @@ const SignInPage: NextPageWithLayout = () => {
               isSubmitted={isSubmitted}
               isSubmitting={isSubmitting}
               isValid={!errors.email}
+              size="lg"
             />
             <TextInput
               placeholder="Password"
@@ -114,28 +115,21 @@ const SignInPage: NextPageWithLayout = () => {
               isSubmitted={isSubmitted}
               isSubmitting={isSubmitting}
               isValid={!errors.password}
+              size="lg"
             />
-          </div>
-          <div className="flex justify-end mb-6">
-            <Link
-              href={Path.PASSWORD_RESET}
-              className="text-blue-primary font-14-regular"
-            >
-              {t('auth.sign-in.reset-password')}
-            </Link>
           </div>
         </>
       )}
       <div className="flex flex-col gap-1">
         {tenant?.useEmail && (
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-lg btn-primary">
             {t('button.sign-in')}
           </button>
         )}
         {tenant?.useEmail && !tenant?.isPrivate && (
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-lg btn-secondary"
             onClick={() => router.push(Path.SIGN_UP)}
           >
             {t('button.sign-up')}
@@ -152,7 +146,7 @@ const SignInPage: NextPageWithLayout = () => {
         {tenant?.useOAuth && (
           <button
             type="button"
-            className="btn btn-blue"
+            className="btn btn-lg btn-blue"
             onClick={() => (data ? router.push(data.url) : {})}
           >
             OAuth2.0 {t('button.sign-in')}
@@ -162,10 +156,32 @@ const SignInPage: NextPageWithLayout = () => {
     </form>
   );
 };
-
-SignInPage.getLayout = function getLayout(page) {
-  return <AuthTemplate>{page}</AuthTemplate>;
+const ResetPassword: React.FC = () => {
+  const { tenant } = useTenant();
+  const { t } = useTranslation();
+  if (!tenant?.useEmail || tenant.isPrivate) return <></>;
+  return (
+    <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 flex justify-end mb-6">
+      <Link
+        href={Path.PASSWORD_RESET}
+        className="text-blue-primary font-14-regular"
+      >
+        {t('auth.sign-in.reset-password')}
+      </Link>
+    </div>
+  );
 };
+
+function Layout(page: React.ReactNode) {
+  return (
+    <AuthTemplate>
+      {page}
+      <ResetPassword />
+    </AuthTemplate>
+  );
+}
+
+SignInPage.getLayout = Layout;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

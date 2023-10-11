@@ -33,7 +33,7 @@
 }
 
 body {
-  @apply font-12-regular text-primary bg-primary;
+  @apply font-14-regular text-primary bg-primary;
   font-family: LINESeedJP, LINESeedKR, LINESeedEN, sans-serif;
 }
 

@@ -236,7 +236,7 @@ const SignUpSetting: React.FC<IProps> = () => {
             <p className="input-label mb-2 flex items-center gap-1">
               Email domain WhiteList
               <Tooltip
-                title={t(
+                description={t(
                   'main.setting.sign-up-mgmt.domain-restriction-tooltip',
                 )}
               />

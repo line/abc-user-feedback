@@ -19,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate } from '@/components';
+import { MainTemplate, Tooltip } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
 import MyProfileForm from '@/containers/my-profile/MyProfileForm';
@@ -42,7 +42,10 @@ const ProfilePage: NextPageWithLayout = () => {
 
   return (
     <>
-      <h1 className="font-24-bold mb-4">{t('main.profile.title')}</h1>
+      <h1 className="font-24-bold mb-4">
+        {t('main.profile.title')}
+        <Tooltip description="Profile Description" />
+      </h1>
       <div className="flex gap-4 items-stretch h-[calc(100vh-144px)]">
         <div className="border border-fill-tertiary rounded w-[400px] p-6">
           <ul className="space-y-2">

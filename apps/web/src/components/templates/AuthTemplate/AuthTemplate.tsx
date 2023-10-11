@@ -25,7 +25,7 @@ const AuthTemplate: React.FC<IProps> = ({ children }) => {
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-primary border border-fill-secondary rounded p-10 min-w-[440px]">
           {children}
         </div>
-        <p className="absolute left-1/2 -translate-x-1/2 bottom-[7%] z-10 font-14-bold text-secondary">
+        <p className="absolute left-1/2 -translate-x-1/2 bottom-[7%] z-10 font-14-regular text-secondary">
           © ABC Studio All rights reserved
         </p>
       </main>

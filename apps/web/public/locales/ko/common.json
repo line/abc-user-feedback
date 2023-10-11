@@ -23,7 +23,7 @@
       }
     },
     "reset-password": {
-      "title": "비밀번호 재설정",
+      "title": "비밀번호 재설정하기",
       "button": { "send-email": "이메일 보내기" }
     }
   },
@@ -57,13 +57,13 @@
         "confirm-new-password": "새로운 비밀번호를 한번 더 입력해주세요"
       },
       "button": {
-        "delete-account": "계정 삭제"
+        "delete-account": "회원 탈퇴"
       },
       "dialog": {
         "delete-account": {
-          "title": "계정 삭제",
-          "description1": "정말로 삭제하시나요?",
-          "description2": "계정 삭제 후 서비스를 이용할 수 없습니다."
+          "title": "회원 탈퇴",
+          "description1": "정말로 탈퇴하시나요?",
+          "description2": "회원 탈퇴 후 서비스를 이용할 수 없습니다."
         }
       }
     },

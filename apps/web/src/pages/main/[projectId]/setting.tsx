@@ -92,7 +92,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
   return (
     <>
-      <h1 className="font-24-bold mb-6">{t('main.setting.title')}</h1>
+      <h1 className="font-20-bold mb-6">{t('main.setting.title')}</h1>
       <div className="flex">
         <SettingMenuBox show={showList.includes(0)}>
           <TenantSettingMenu
