@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { getIronSession } from 'iron-session/edge';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getIronSession } from 'iron-session/edge';
 
 import { DEFAULT_LOCALE } from './constants/i18n';
 import { ironOption } from './constants/iron-option';

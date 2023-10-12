@@ -13,14 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+/* eslint-disable no-useless-escape */
+
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   Popover,
   PopoverContent,
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { env } from '@/env.mjs';
 import { useOAIQuery } from '@/hooks';
@@ -97,7 +100,7 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
             No API KEY with Active status. Please create API KEY.
           </p>
         )}
-        <pre className="whitespace-pre-wrap m-5 bg-fill-quaternary rounded p-4 font-10-regular">
+        <pre className="bg-fill-quaternary font-10-regular m-5 whitespace-pre-wrap rounded p-4">
           {`curl --request POST ${
             env.NEXT_PUBLIC_API_BASE_URL
           }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${

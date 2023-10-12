@@ -18,7 +18,6 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 
 import { UserDto } from '@/domains/user/dtos';
-
 import { AuthService } from '../auth.service';
 
 @Injectable()

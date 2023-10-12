@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { FieldType } from './field.type';
+import type { FieldType } from './field.type';
 
 export type ChannelType = {
   createdAt: string;

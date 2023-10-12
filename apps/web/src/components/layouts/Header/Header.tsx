@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
+import { useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { useStore } from 'zustand';
+
+import { Icon } from '@ufb/ui';
 
 import { Path } from '@/constants/path';
 import themeStore from '@/zustand/theme.store';
-
 import HeaderName from './HeaderName';
 import LocaleSelectBox from './LocaleSelectBox';
 import ProfileBox from './ProfileBox';
@@ -38,10 +38,10 @@ const Header: React.FC = () => {
   }, [theme]);
 
   return (
-    <header className="relative flex justify-between items-center h-[48px] px-4 bg-primary">
+    <header className="bg-primary relative flex h-[48px] items-center justify-between px-4">
       <div className="flex flex-1 items-center gap-6">
         <Link
-          className="flex items-center gap-1 cursor-pointer"
+          className="flex cursor-pointer items-center gap-1"
           href={Path.isProtectPage(router.pathname) ? Path.MAIN : Path.SIGN_IN}
         >
           <Image
@@ -50,7 +50,7 @@ const Header: React.FC = () => {
             width={24}
             height={24}
           />
-          <Icon name="Title" className="w-[123px] h-[24px]" />
+          <Icon name="Title" className="h-[24px] w-[123px]" />
         </Link>
         <HeaderName />
       </div>

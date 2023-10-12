@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ClsStore } from 'nestjs-cls';
+import type { ClsStore } from 'nestjs-cls';
 
 export interface ClsServiceType extends ClsStore {
   userId?: number;

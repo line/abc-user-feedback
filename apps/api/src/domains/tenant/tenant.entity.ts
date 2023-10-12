@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column, Entity, OneToMany, Relation } from 'typeorm';
+import type { Relation } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { ProjectEntity } from '../project/project/project.entity';
 
 export interface OAuthConfig {

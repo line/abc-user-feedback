@@ -15,14 +15,10 @@
  */
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
-import {
-  DataSource,
-  EntitySubscriberInterface,
-  EventSubscriber,
-} from 'typeorm';
+import type { EntitySubscriberInterface } from 'typeorm';
+import { DataSource, EventSubscriber } from 'typeorm';
 
-import { ClsServiceType } from '@/types/cls-service.type';
-
+import type { ClsServiceType } from '@/types/cls-service.type';
 import { HistoryActionEnum } from '../history-action.enum';
 import { EntityNameEnum } from '../history-entity.enum';
 import { HistoryService } from '../history.service';

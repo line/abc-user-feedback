@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { TimeRange } from '@/common/dtos';
-import { SortMethodEnum } from '@/common/enums';
+import type { TimeRange } from '@/common/dtos';
+import type { SortMethodEnum } from '@/common/enums';
 
 export class GenerateExcelDto {
   channelId: number;

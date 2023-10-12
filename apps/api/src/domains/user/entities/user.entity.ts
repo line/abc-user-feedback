@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column, Entity, OneToMany, Relation, Unique } from 'typeorm';
+import type { Relation } from 'typeorm';
+import { Column, Entity, OneToMany, Unique } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
 import { MemberEntity } from '@/domains/project/member/member.entity';
-
 import { SignUpMethodEnum, UserStateEnum, UserTypeEnum } from './enums';
 
 @Entity('users')

@@ -13,19 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import type {
   Row,
   RowSelectionState,
   SortingState,
+} from '@tanstack/react-table';
+import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
-import { TFunction, useTranslation } from 'next-i18next';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import type { TFunction } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
+
+import { Badge, Icon, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
@@ -41,9 +45,9 @@ import {
   TableSearchInput,
   TableSortIcon,
 } from '@/components';
-import { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
+import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
 import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { ISSUES, getStatusColor } from '@/constants/issues';
+import { getStatusColor, ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import {
@@ -54,9 +58,8 @@ import {
   useSort,
 } from '@/hooks';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
-import { IssueTrackerType } from '@/types/issue-tracker.type';
-import { IssueType } from '@/types/issue.type';
-
+import type { IssueTrackerType } from '@/types/issue-tracker.type';
+import type { IssueType } from '@/types/issue.type';
 import { FeedbackTableInIssue } from '../FeedbackTable';
 import IssueSettingPopover from './IssueSettingPopover';
 import IssueTabelSelectBox from './IssueTabelSelectBox';
@@ -130,7 +133,7 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
     header: 'Status',
     enableSorting: false,
     cell: ({ getValue }) => (
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <IssueCircle issueKey={getValue()} />
         {ISSUES(t).find((v) => v.key === getValue())?.name}
       </div>
@@ -206,8 +209,12 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     query: {
       ...query,
       createdAt: {
-        gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
-        lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
+        gte: dayjs(createdAtRange?.startDate)
+          .startOf('day')
+          .toISOString(),
+        lt: dayjs(createdAtRange?.endDate)
+          .endOf('day')
+          .toISOString(),
       },
     },
     sort: sort as Record<string, never>,
@@ -290,7 +297,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             : setQuery({})
         }
       />
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h2 className="font-18-regular">
           {t('text.search-result')}{' '}
           <span className="font-18-bold">
@@ -365,7 +372,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             {table.getRowModel().rows.length === 0 ? (
               <tr>
                 <td colSpan={columns.length}>
-                  <div className="flex flex-col justify-center items-center gap-3 my-60">
+                  <div className="my-60 flex flex-col items-center justify-center gap-3">
                     <Icon
                       name="WarningTriangleFill"
                       className="text-tertiary"
@@ -435,7 +442,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                         colSpan={row.getVisibleCells().length}
                         className="bg-fill-quaternary p-4"
                       >
-                        <div className="bg-primary p-4 rounded">
+                        <div className="bg-primary rounded p-4">
                           <FeedbackTableInIssue
                             projectId={projectId}
                             issueId={row.original.id}

@@ -13,27 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, TextInput, toast } from '@ufb/ui';
-import dayjs from 'dayjs';
+import { useState } from 'react';
 import type { GetStaticProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import dayjs from 'dayjs';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { useInterval } from 'react-use';
 import { z } from 'zod';
+
+import { Icon, TextInput, toast } from '@ufb/ui';
 
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useUser } from '@/hooks';
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
-
-import { NextPageWithLayout } from '../_app';
+import type { IFetchError } from '@/types/fetch-error.type';
+import type { NextPageWithLayout } from '../_app';
 
 type EmailState = 'NOT_VERIFIED' | 'VERIFING' | 'EXPIRED' | 'VERIFIED';
 
@@ -175,21 +175,21 @@ const SignUpPage: NextPageWithLayout = () => {
   };
 
   return (
-    <div className="w-[360px] m-auto">
+    <div className="m-auto w-[360px]">
       <div className="mb-12">
-        <div className="flex gap-0.5 mb-2">
+        <div className="mb-2 flex gap-0.5">
           <Image
             src="/assets/images/logo.svg"
             alt="logo"
             width={12}
             height={12}
           />
-          <Icon name="Title" className="w-[62px] h-[12px]" />
+          <Icon name="Title" className="h-[12px] w-[62px]" />
         </div>
         <p className="font-24-bold">{t('auth.sign-up.title')}</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4 mb-12">
+        <div className="mb-12 space-y-4">
           <TextInput
             type="email"
             {...register('email')}
@@ -224,7 +224,7 @@ const SignUpPage: NextPageWithLayout = () => {
               isSubmitting={codeStatus === 'isSubmitting'}
               hint={formState.errors.code?.message}
               rightChildren={
-                <div className="flex gap-2 items-center">
+                <div className="flex items-center gap-2">
                   {(watch('emailState') === 'VERIFING' ||
                     watch('emailState') === 'EXPIRED') && (
                     <p className="font-16-regular">{leftTime}</p>

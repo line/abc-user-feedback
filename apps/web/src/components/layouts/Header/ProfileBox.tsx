@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
-import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
+
+import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
 import { useUser } from '@/hooks';
 
@@ -34,7 +35,7 @@ const ProfileBox: React.FC<IProps> = () => {
         <PopoverTrigger className="h-full" onClick={() => setOpen((v) => !v)}>
           <div
             className={[
-              'flex items-center gap-3 px-3 cursor-pointer h-full',
+              'flex h-full cursor-pointer items-center gap-3 px-3',
               open ? 'bg-fill-quaternary' : '',
             ].join(' ')}
           >
@@ -47,7 +48,7 @@ const ProfileBox: React.FC<IProps> = () => {
         <PopoverContent className="w-full">
           <ul>
             <li
-              className="p-3 cursor-pointer hover:bg-fill-quaternary hover:cursor-pointer"
+              className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
               onClick={() => {
                 router.push('/main/profile');
                 setOpen(false);
@@ -56,7 +57,7 @@ const ProfileBox: React.FC<IProps> = () => {
               {t('header.profile')}
             </li>
             <li
-              className="p-3 cursor-pointer hover:bg-fill-quaternary hover:cursor-pointer"
+              className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
               onClick={() => {
                 signOut();
                 setOpen(false);

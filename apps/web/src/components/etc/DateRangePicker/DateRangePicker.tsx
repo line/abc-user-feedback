@@ -13,15 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
+import { useEffect, useMemo, useState } from 'react';
 import { enUS, ja, ko } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
-import { useEffect, useMemo, useState } from 'react';
 import ReactDatePicker from 'react-datepicker';
 import { useTranslation } from 'react-i18next';
 
-import { DateRangeType } from '@/types/date-range.type';
+import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
+
+import type { DateRangeType } from '@/types/date-range.type';
 
 dayjs.extend(weekday);
 
@@ -110,7 +111,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       <PopoverTrigger asChild>
         <div
           className={[
-            'inline-flex cursor-pointer items-center justify-between px-3.5 rounded w-full bg-fill-inverse border py-[9.5px] h-10 hover:border-fill-primary',
+            'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between rounded border px-3.5 py-[9.5px]',
             currentValue ? 'text-primary' : 'text-tertiary',
             isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
           ].join(' ')}
@@ -129,7 +130,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
                 }`
               : 'YYYY-MM-DD ~ YYYY-MM-DD'}
           </p>
-          <div className="flex flex-row gap-2 items-center">
+          <div className="flex flex-row items-center gap-2">
             {isClearable && value && (
               <Icon
                 name="CloseCircleFill"
@@ -151,7 +152,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             {items.map(({ label, startDate, endDate }, index) => (
               <li
                 className={[
-                  'w-[184px] m-1 py-2 px-2 font-14-regular rounded-sm hover:bg-fill-secondary hover:cursor-pointer',
+                  'font-14-regular hover:bg-fill-secondary m-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
                   activeIdx === index ? 'bg-fill-tertiary' : '',
                 ].join(' ')}
                 key={index}
@@ -180,7 +181,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             focusSelectedMonth={false}
           />
         </div>
-        <div className="flex gap-2 float-right p-2">
+        <div className="float-right flex gap-2 p-2">
           <button className="btn btn-md btn-secondary" onClick={handleCancel}>
             {t('button.cancel')}
           </button>

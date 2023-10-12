@@ -13,20 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useState } from 'react';
 import { Listbox } from '@headlessui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, Input, toast } from '@ufb/ui';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { Icon, Input, toast } from '@ufb/ui';
 
 import { Popper } from '@/components';
 import { ISSUES } from '@/constants/issues';
 import { useOAIMutation } from '@/hooks';
 import useCurrentProjectId from '@/hooks/useCurrentProjectId';
-import { IssueTrackerType } from '@/types/issue-tracker.type';
-import { IssueType } from '@/types/issue.type';
+import type { IssueTrackerType } from '@/types/issue-tracker.type';
+import type { IssueType } from '@/types/issue.type';
 
 type UpdateIssueType = {
   name: string;
@@ -114,7 +115,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
         </button>
       }
     >
-      <div className="flex justify-between m-5 w-[392px]">
+      <div className="m-5 flex w-[392px] justify-between">
         <h1 className="font-16-bold">{t('main.issue.setting')}</h1>
         <button
           className="icon-btn icon-btn-tertiary icon-btn-xs"
@@ -128,7 +129,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
         onSubmit={handleSubmit(onSubmit)}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="space-y-[10px] mb-4">
+        <div className="mb-4 space-y-[10px]">
           <Input
             label="Issue Id"
             placeholder="Issue Id"
@@ -148,13 +149,13 @@ const IssueSettingPopover: React.FC<IProps> = ({
             required={false}
           />
           <div className="relative">
-            <span className="block font-12-regular mb-[6px]">Status</span>
+            <span className="font-12-regular mb-[6px] block">Status</span>
             <Controller
               control={control}
               name="status"
               render={({ field }) => (
                 <Listbox value={field.value} onChange={field.onChange}>
-                  <Listbox.Button className="input text-left relative">
+                  <Listbox.Button className="input relative text-left">
                     <span className="block truncate">
                       {ISSUES(t).find((v) => v.key === field.value)?.name}
                     </span>
@@ -165,13 +166,13 @@ const IssueSettingPopover: React.FC<IProps> = ({
                       />
                     </span>
                   </Listbox.Button>
-                  <Listbox.Options className="absolute bg-primary border shadow w-full mt-1 z-10">
+                  <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full border shadow">
                     {ISSUES(t).map(({ key, name }) => (
                       <Listbox.Option
                         key={key}
                         value={key}
                         className={({ selected }) =>
-                          'select-none p-3 cursor-pointer hover:bg-secondary ' +
+                          'hover:bg-secondary cursor-pointer select-none p-3 ' +
                           (selected ? 'bg-secondary' : 'bg-primary')
                         }
                       >
@@ -184,7 +185,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
             />
           </div>
           <label className="block">
-            <span className="block font-12-regular mb-[6px]">Ticket</span>
+            <span className="font-12-regular mb-[6px] block">Ticket</span>
             <div className="flex items-center gap-2">
               <input
                 className="input w-[120px]"

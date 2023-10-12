@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Header, flexRender } from '@tanstack/react-table';
+import type { Header } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next';
 
 import DownloadButton from '@/containers/tables/FeedbackTable/DownloadButton';
@@ -52,7 +53,7 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
           flexRender(header?.column.columnDef.header, header.getContext())}
       </th>
       <th colSpan={headerLength - 1}>
-        <div className="flex gap-5 items-center">
+        <div className="flex items-center gap-5">
           <span className="font-12-bold text-blue-primary">
             {t('text.select-count', { count })}
           </span>
@@ -62,7 +63,7 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
           >
             {t('button.select-cancel')}
           </button>
-          <div className="border-r-fill-secondary border-r-[1px] h-4" />
+          <div className="border-r-fill-secondary h-4 border-r-[1px]" />
           {download && (
             <>
               <DownloadButton
@@ -70,11 +71,11 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
                 count={download.ids.length}
                 isHead
               />
-              <div className="border-r-fill-secondary border-r-[1px] h-4" />
+              <div className="border-r-fill-secondary h-4 border-r-[1px]" />
             </>
           )}
           <button
-            className="btn btn-tertiary btn-sm min-w-0 text-red-primary"
+            className="btn btn-tertiary btn-sm text-red-primary min-w-0"
             onClick={onClickDelete}
             disabled={disabled}
           >

@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useId } from 'react';
 import {
   FloatingFocusManager,
   FloatingOverlay,
@@ -23,9 +24,10 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { IIconProps, Icon } from '@ufb/ui';
-import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import type { IIconProps } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
 
 export interface IDialogProps extends React.PropsWithChildren {
   title: string;
@@ -80,13 +82,13 @@ const Dialog: React.FC<IDialogProps> = (props) => {
                 aria-labelledby={labelId}
                 aria-describedby={descriptionId}
                 {...getFloatingProps()}
-                className="bg-primary rounded p-5 min-w-[480px] border"
+                className="bg-primary min-w-[480px] rounded border p-5"
               >
                 <h1 id={labelId} className="font-20-bold mb-4">
                   {title}
                 </h1>
                 {icon && (
-                  <div className="text-center mb-6">
+                  <div className="mb-6 text-center">
                     <Icon {...icon} />
                   </div>
                 )}

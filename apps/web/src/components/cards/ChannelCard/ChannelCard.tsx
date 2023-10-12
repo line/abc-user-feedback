@@ -13,14 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, IconNameType } from '@ufb/ui';
 import { useMemo } from 'react';
 
-import { ColorType } from '@/types/color.type';
+import type { IconNameType } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
+
+import type { ColorType } from '@/types/color.type';
 
 interface IProps extends React.PropsWithChildren {
   isChecked?: boolean;
-  onClick?: () => void;
   value?: React.ReactNode;
   rightChildren?: React.ReactNode;
   color: ColorType;
@@ -29,10 +30,7 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const ChannelCard: React.FC<IProps> = (props) => {
-  const { isChecked, onClick, value, rightChildren, color, iconName, name } =
-    props;
-
-  const isBtn = useMemo(() => typeof onClick !== 'undefined', [isChecked]);
+  const { isChecked, value, rightChildren, color, iconName, name } = props;
 
   const { bg, icon } = useMemo(() => {
     switch (color) {
@@ -48,16 +46,12 @@ const ChannelCard: React.FC<IProps> = (props) => {
   return (
     <div
       className={[
-        'border flex rounded w-[360px] gap-4 p-2 items-center',
-        isBtn && !isChecked ? 'opacity-50' : '',
-        isBtn
-          ? 'hover:bg-fill-tertiary hover:text-tertiary cursor-pointer'
-          : '',
+        'flex w-[360px] items-center gap-4 rounded border p-2',
+        !isChecked ? 'opacity-50' : '',
       ].join(' ')}
-      onClick={onClick}
     >
       <div
-        className={bg + ' w-14 h-14 flex justify-center items-center rounded'}
+        className={bg + ' flex h-14 w-14 items-center justify-center rounded'}
       >
         <Icon name={iconName} className={icon} size={24} />
       </div>

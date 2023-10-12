@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { HistoryActionEnum } from './history-action.enum';
-import { EntityNameEnum } from './history-entity.enum';
+import type { HistoryActionEnum } from './history-action.enum';
+import type { EntityNameEnum } from './history-entity.enum';
 
 export class CreateHistoryDto {
   userId?: number | null;

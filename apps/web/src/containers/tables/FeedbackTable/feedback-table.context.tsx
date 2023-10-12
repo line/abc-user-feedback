@@ -13,24 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
+import type { Dispatch, SetStateAction } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type {
   ColumnOrderState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table';
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
 
 import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
 import { Path } from '@/constants/path';
 import { useLocalColumnSetting, useLocalStorage } from '@/hooks';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
-import { DateRangeType } from '@/types/date-range.type';
+import type { DateRangeType } from '@/types/date-range.type';
 
 const DEFAULT_FN = () => {};
 interface IFeedbackTableContext {

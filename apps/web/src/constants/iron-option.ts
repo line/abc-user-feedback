@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { IronSessionOptions } from 'iron-session';
+import type { IronSessionOptions } from 'iron-session';
 
 import { env } from '@/env.mjs';
 

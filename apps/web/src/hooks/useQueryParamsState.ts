@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import dayjs from 'dayjs';
-import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/router';
+import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
-import { DateRangeType } from '@/types/date-range.type';
+import type { DateRangeType } from '@/types/date-range.type';
 import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
 
 const useQueryParamsState = (
@@ -75,14 +75,17 @@ const useQueryParamsState = (
 
   const setQuery = useCallback(
     (input: Record<string, any>) => {
-      const newQuery = Object.entries(input).reduce((acc, [key, value]) => {
-        if (typeof value === 'object' && isDate(value)) {
-          value = `${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
-            value.lt,
-          ).format(DATE_FORMAT)}`;
-        }
-        return { ...acc, [key]: value };
-      }, {} as Record<string, any>);
+      const newQuery = Object.entries(input).reduce(
+        (acc, [key, value]) => {
+          if (typeof value === 'object' && isDate(value)) {
+            value = `${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
+              value.lt,
+            ).format(DATE_FORMAT)}`;
+          }
+          return { ...acc, [key]: value };
+        },
+        {} as Record<string, any>,
+      );
       if (createdAtRange) {
         const { startDate, endDate } = createdAtRange;
         newQuery['createdAt'] = `${dayjs(startDate).format(

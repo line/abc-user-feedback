@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
+import { useTranslation } from 'next-i18next';
 
 import { SelectBox, SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useChannels, usePermissions } from '@/hooks';
-import { SettingMenuType } from '@/types/setting-menu.type';
+import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;

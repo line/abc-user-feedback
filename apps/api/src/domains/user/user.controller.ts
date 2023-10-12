@@ -31,7 +31,6 @@ import {
 import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 
 import { PaginationRequestDto } from '@/common/dtos';
-
 import { JwtAuthGuard } from '../auth/guards';
 import { CurrentUser } from './decorators';
 import { UserDto } from './dtos';

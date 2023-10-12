@@ -15,10 +15,8 @@
  */
 import { components } from 'react-select';
 
-import SelectBox, {
-  ISelectBoxProps,
-  SelectOptionType,
-} from '../SelectBox/SelectBox';
+import type { ISelectBoxProps, SelectOptionType } from '../SelectBox/SelectBox';
+import SelectBox from '../SelectBox/SelectBox';
 
 interface IProps<IsMulti extends boolean> extends ISelectBoxProps<IsMulti> {
   SingleValue?: {

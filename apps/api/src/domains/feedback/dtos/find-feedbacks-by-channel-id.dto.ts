@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { PaginationDto, TimeRange } from '@/common/dtos';
-import { SortMethodEnum } from '@/common/enums';
-import { FieldEntity } from '@/domains/channel/field/field.entity';
+import type { TimeRange } from '@/common/dtos';
+import { PaginationDto } from '@/common/dtos';
+import type { SortMethodEnum } from '@/common/enums';
+import type { FieldEntity } from '@/domains/channel/field/field.entity';
 
 export class FindFeedbacksByChannelIdDto extends PaginationDto {
   channelId: number;

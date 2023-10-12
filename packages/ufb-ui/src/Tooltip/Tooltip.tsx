@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import React, { useRef, useState } from 'react';
+import type { Side } from '@floating-ui/react';
 import {
-  FloatingArrow,
-  Side,
   arrow,
   autoUpdate,
   flip,
+  FloatingArrow,
   offset,
   shift,
   useDismiss,
@@ -28,7 +29,6 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import React, { useRef, useState } from 'react';
 
 export interface ITooltipProps {
   children: React.ReactElement;
@@ -74,7 +74,7 @@ export const Tooltip: React.FC<ITooltipProps> = ({
         <div
           ref={refs.setFloating}
           style={floatingStyles}
-          className="bg-fill-primary px-4 py-2.5 font-12-regular text-inverse rounded"
+          className="bg-fill-primary font-12-regular text-inverse rounded px-4 py-2.5"
           {...getFloatingProps()}
         >
           {title}

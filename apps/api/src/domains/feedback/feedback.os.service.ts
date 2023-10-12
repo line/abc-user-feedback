@@ -16,23 +16,22 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
-import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
+import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { In, Repository } from 'typeorm';
 
-import { TimeRange } from '@/common/dtos';
+import type { TimeRange } from '@/common/dtos';
 import { FieldFormatEnum, SortMethodEnum } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
-
-import { FieldEntity } from '../channel/field/field.entity';
-import {
+import type { FieldEntity } from '../channel/field/field.entity';
+import type {
+  CreateFeedbackOSDto,
   DeleteByIdsDto,
   FindFeedbacksByChannelIdDto,
   ScrollFeedbacksDto,
   UpdateFeedbackESDto,
 } from './dtos';
-import { CreateFeedbackOSDto } from './dtos';
-import { OsQueryDto } from './dtos/os-query.dto';
-import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import type { OsQueryDto } from './dtos/os-query.dto';
+import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
 
@@ -138,7 +137,9 @@ export class FeedbackOSService {
                 return osQuery;
               }
 
-              if (!fieldsByKey.hasOwnProperty(fieldKey)) {
+              if (
+                !Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)
+              ) {
                 throw new BadRequestException('bad key in query');
               }
 
@@ -188,7 +189,9 @@ export class FeedbackOSService {
       sort:
         Object.keys(sort).length !== 0
           ? Object.keys(sort).map((fieldKey) => {
-              if (!fieldsByKey.hasOwnProperty(fieldKey)) {
+              if (
+                !Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)
+              ) {
                 throw new BadRequestException('bad key in sort');
               }
               const { key, format } = fieldsByKey[fieldKey];

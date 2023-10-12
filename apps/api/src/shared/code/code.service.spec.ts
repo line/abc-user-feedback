@@ -19,12 +19,11 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import MockDate from 'mockdate';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import { mockRepository } from '@/utils/test-utils';
-
 import { CodeTypeEnum } from './code-type.enum';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';

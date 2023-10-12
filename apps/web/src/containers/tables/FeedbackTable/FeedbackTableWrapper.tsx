@@ -13,14 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 import { Path } from '@/constants/path';
 import { useChannels } from '@/hooks';
-
-import FeedbackTable from './FeedbackTable';
 import { FeedbackTableProvider } from './feedback-table.context';
+import FeedbackTable from './FeedbackTable';
 
 interface IProps {
   issueId?: number;

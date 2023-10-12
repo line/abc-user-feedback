@@ -13,23 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, TextInput, toast } from '@ufb/ui';
+import { useMemo } from 'react';
 import type { GetStaticProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { Icon, TextInput, toast } from '@ufb/ui';
 
 import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
-
-import { NextPageWithLayout } from '../_app';
+import type { NextPageWithLayout } from '../_app';
 
 interface IForm {
   password: string;
@@ -79,21 +79,21 @@ const ResetPasswordPage: NextPageWithLayout = () => {
 
   return (
     <MainTemplate>
-      <div className="max-w-[440px] w-[100%] m-auto border border-fill-secondary rounded p-10">
+      <div className="border-fill-secondary m-auto w-[100%] max-w-[440px] rounded border p-10">
         <div className="mb-12">
-          <div className="flex gap-0.5 mb-2">
+          <div className="mb-2 flex gap-0.5">
             <Image
               src="/assets/images/logo.svg"
               alt="logo"
               width={12}
               height={12}
             />
-            <Icon name="Title" className="w-[62px] h-[12px]" />
+            <Icon name="Title" className="h-[12px] w-[62px]" />
           </div>
           <p className="font-24-bold">{t('link.reset-password.title')}</p>
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-4 mb-12">
+          <div className="mb-12 space-y-4">
             <TextInput type="email" label="Email" value={email} disabled />
             <TextInput
               type="password"

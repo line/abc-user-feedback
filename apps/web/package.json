@@ -3,14 +3,29 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
+    "clean": "git clean -xdf .next .turbo node_modules",
+    "dev": "next dev",
+    "format": "prettier --check \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
+    "generate-api-type": "openapi-typescript http://0.0.0.0:4000/docs-json --output src/types/api.type.ts",
+    "lint": "SKIP_ENV_VALIDATION=1 next lint",
     "start": "next start",
-    "lint": "next lint",
     "test": "jest --passWithNoTests",
-    "test:dev": "jest --watch --passWithNoTests",
     "test:ci": "jest --ci --passWithNoTests",
-    "generate-api-type": "openapi-typescript http://0.0.0.0:4000/docs-json --output src/types/api.type.ts"
+    "test:dev": "jest --watch --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@ufb/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@ufb/eslint-config/base",
+      "@ufb/eslint-config/react",
+      "@ufb/eslint-config/nextjs"
+    ],
+    "ignorePatterns": [
+      "api.type.ts"
+    ],
+    "root": true
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",
@@ -23,7 +38,7 @@
     "@mui/base": "^5.0.0-beta.4",
     "@tanstack/react-query": "^4.29.12",
     "@tanstack/react-table": "^8.10.0",
-    "@ufb/tailwind": "*",
+    "@ufb/tailwind": "^0.1.0",
     "@ufb/ui": "*",
     "axios": "^1.4.0",
     "axios-auth-refresh": "^3.3.6",
@@ -64,25 +79,22 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.5.2",
-    "@types/node": "^17.0.45",
+    "@types/node": "18.11.18",
     "@types/react": "^18.2.8",
     "@types/react-beautiful-dnd": "^13.1.4",
     "@types/react-datepicker": "^4.11.2",
     "@types/react-dom": "^18.2.4",
-    "@typescript-eslint/parser": "^5.59.9",
+    "@ufb/eslint-config": "^0.1.0",
+    "@ufb/prettier-config": "^0.1.0",
     "@ufb/tsconfig": "*",
     "autoprefixer": "^10.4.14",
-    "eslint": "^8.42.0",
-    "eslint-config-next": "^13.4.4",
-    "eslint-config-ufb": "*",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-testing-library": "^5.11.0",
+    "eslint": "^8.50.0",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "openapi-typescript": "^6.2.6",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "^4.9.5"
+    "typescript": "^5.2.2"
   }
 }

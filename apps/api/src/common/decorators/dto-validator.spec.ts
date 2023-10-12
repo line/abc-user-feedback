@@ -14,9 +14,6 @@
  * under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
-/* eslint-disable @typescript-eslint/no-empty-function */
 import { IsString } from 'class-validator';
 
 import DtoValidator from './dto-validator';

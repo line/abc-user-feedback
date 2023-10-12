@@ -19,10 +19,9 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
-import { Client } from '@opensearch-project/opensearch';
+import type { Client } from '@opensearch-project/opensearch';
 
 import { getMockProvider } from '@/utils/test-utils';
-
 import { CreateDataDto, PutMappingsDto } from './dtos';
 import { OpensearchRepository } from './opensearch.repository';
 
@@ -248,21 +247,15 @@ describe('Opensearch Repository Test suite', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('getData', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('scroll', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('updateData', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('deleteBulkData', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('deleteIndex', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('getTotal', () => {});
 });

@@ -13,7 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+
 import {
   Icon,
   Input,
@@ -23,16 +28,11 @@ import {
   PopoverTrigger,
   toast,
 } from '@ufb/ui';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import { SelectBox } from '@/components';
-import { UserTypeEnum } from '@/contexts/user.context';
+import type { UserTypeEnum } from '@/contexts/user.context';
 import { useOAIMutation } from '@/hooks';
-
-import { UserDataType } from './UserSetting';
+import type { UserDataType } from './UserSetting';
 
 interface IProps {
   data: UserDataType;

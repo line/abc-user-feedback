@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 import { useState } from 'react';
+
+import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
 interface IProps {
   title: string;
@@ -36,7 +37,7 @@ const Tooltip: React.FC<IProps> = ({ title, iconSize = 14 }) => {
         />
       </PopoverTrigger>
       <PopoverContent>
-        <p className="bg-secondary p-2 rounded whitespace-pre-line">{title}</p>
+        <p className="bg-secondary whitespace-pre-line rounded p-2">{title}</p>
       </PopoverContent>
     </Popover>
   );

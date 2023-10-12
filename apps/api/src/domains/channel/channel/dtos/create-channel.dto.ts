@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, Type, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { CreateFieldDto } from '../../field/dtos/create-field.dto';
 import { ChannelEntity } from '../channel.entity';

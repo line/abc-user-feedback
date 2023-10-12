@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { TextInput, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
 import {

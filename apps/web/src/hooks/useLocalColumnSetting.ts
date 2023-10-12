@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { OnChangeFn } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import type { OnChangeFn } from '@tanstack/react-table';
 import { useLocalStorage } from 'react-use';
 
 export default function useLocalColumnSetting<T extends object>({

@@ -13,7 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ColumnDef, Updater, VisibilityState } from '@tanstack/react-table';
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  ColumnDef,
+  Updater,
+  VisibilityState,
+} from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
+import type { DroppableProps, OnDragEndResponder } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
 import {
   Icon,
   Popover,
@@ -21,18 +30,9 @@ import {
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
-import {
-  DragDropContext,
-  Droppable,
-  DroppableProps,
-  OnDragEndResponder,
-} from 'react-beautiful-dnd';
 
-import { FieldType } from '@/types/field.type';
+import type { FieldType } from '@/types/field.type';
 import { reorder } from '@/utils/reorder';
-
 import DraggableColumnItem from './DraggableColumnItem';
 
 interface IProps extends React.PropsWithChildren {
@@ -108,7 +108,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="space-y-1 min-w-[200px]"
+                    className="min-w-[200px] space-y-1"
                   >
                     {columnKeys?.map((key, index) => (
                       <DraggableColumnItem
@@ -136,7 +136,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
             </DragDropContext>
             <div className="flex justify-end">
               <button
-                className="mt-2 btn btn-sm btn-secondary"
+                className="btn btn-sm btn-secondary mt-2"
                 onClick={onClickReset}
               >
                 {t('button.reset')}

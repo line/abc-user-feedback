@@ -23,10 +23,9 @@ import {
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-import { ApiKeyEntity } from '@/domains/project/api-key/api-key.entity';
-import { IssueTrackerEntity } from '@/domains/project/issue-tracker/issue-tracker.entity';
+import type { ApiKeyEntity } from '@/domains/project/api-key/api-key.entity';
+import type { IssueTrackerEntity } from '@/domains/project/issue-tracker/issue-tracker.entity';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
-
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { IssueEntity } from '../issue/issue.entity';
 import { RoleEntity } from '../role/role.entity';

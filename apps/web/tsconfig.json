@@ -1,5 +1,5 @@
 {
-  "extends": "@ufb/tsconfig/nextjs.json",
+  "extends": "@ufb/tsconfig/base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
@@ -7,11 +7,16 @@
         "./src/*"
       ]
     },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },
   "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
+    ".",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

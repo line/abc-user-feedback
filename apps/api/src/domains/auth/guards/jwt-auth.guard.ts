@@ -13,16 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import type { ExecutionContext } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ClsService } from 'nestjs-cls';
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 
-import { ClsServiceType } from '@/types/cls-service.type';
+import type { ClsServiceType } from '@/types/cls-service.type';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {

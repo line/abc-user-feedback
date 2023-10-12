@@ -18,7 +18,7 @@ import { useTranslation } from 'next-i18next';
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useTenant, useUser } from '@/hooks';
-import { SettingMenuType } from '@/types/setting-menu.type';
+import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
   onClickSettingMenu: (input: SettingMenuType) => () => void;

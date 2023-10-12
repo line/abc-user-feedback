@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+
+import { Badge, Icon, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
-import { ApiKeyType } from '@/types/api-key.type';
-
+import type { ApiKeyType } from '@/types/api-key.type';
 import APIKeyDeleteButton from './APIKeyDeleteButton';
 import APIKeyEditButton from './APIKeyEditButton';
 
@@ -186,7 +186,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
           {rows.length === 0 ? (
             <tr className="h-[240px]">
               <td colSpan={5} className="border-none">
-                <div className="flex flex-col justify-center items-center h-full gap-2">
+                <div className="flex h-full flex-col items-center justify-center gap-2">
                   <Icon
                     name="WarningTriangleFill"
                     className="text-quaternary"

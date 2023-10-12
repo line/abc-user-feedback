@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { HTMLProps, useEffect, useRef } from 'react';
+import type { HTMLProps } from 'react';
+import { useEffect, useRef } from 'react';
 
 interface IProps extends HTMLProps<HTMLInputElement> {
   indeterminate?: boolean;

@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 
 import { PopoverModalContent } from '@/components';
 import { useOAIMutation } from '@/hooks';
