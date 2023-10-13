@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { toast } from '@ufb/ui';
 import { useTranslation } from 'react-i18next';
+
+import { toast } from '@ufb/ui';
 
 import { Dialog } from '@/components';
 import { useOAIMutation } from '@/hooks';

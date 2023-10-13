@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { CodeTypeEnum } from '../code-type.enum';
+import type { CodeTypeEnum } from '../code-type.enum';
 
 export class VerifyCodeDto {
   type: CodeTypeEnum;

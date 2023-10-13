@@ -18,7 +18,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import {
   FieldFormatEnum,
@@ -28,11 +28,10 @@ import {
 import { OpensearchRepository } from '@/common/repositories';
 import { createFieldDto, getRandomValue } from '@/utils/test-util-fixture';
 import {
-  MockOpensearchRepository,
   getMockProvider,
+  MockOpensearchRepository,
   mockRepository,
 } from '@/utils/test-utils';
-
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { ChannelServiceProviders } from '../channel/channel/channel.service.spec';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';

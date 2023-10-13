@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
-import { UserDto } from '@/domains/user/dtos';
+import type { UserDto } from '@/domains/user/dtos';
 
 export class FindAllProjectsDto {
   user: UserDto;

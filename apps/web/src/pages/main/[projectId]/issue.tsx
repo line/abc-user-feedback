@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { getIronSession } from 'iron-session';
 import type { GetServerSideProps } from 'next';
+import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
@@ -23,8 +23,7 @@ import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import { IssueTable } from '@/containers/tables';
 import { env } from '@/env.mjs';
-
-import { NextPageWithLayout } from '../../_app';
+import type { NextPageWithLayout } from '../../_app';
 
 interface IProps {
   projectId: number;

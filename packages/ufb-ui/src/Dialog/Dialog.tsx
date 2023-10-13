@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useId } from 'react';
 import {
   FloatingFocusManager,
   FloatingOverlay,
@@ -23,9 +24,9 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import { useId } from 'react';
 
-import { IIconProps, Icon } from '../Icon';
+import type { IIconProps } from '../Icon';
+import { Icon } from '../Icon';
 
 export interface IDialogProps extends React.PropsWithChildren {
   title: string;
@@ -79,13 +80,13 @@ export const Dialog: React.FC<IDialogProps> = (props) => {
                 aria-labelledby={labelId}
                 aria-describedby={descriptionId}
                 {...getFloatingProps()}
-                className="bg-primary rounded p-5 min-w-[480px] border"
+                className="bg-primary min-w-[480px] rounded border p-5"
               >
                 <h1 id={labelId} className="font-20-bold mb-4">
                   {title}
                 </h1>
                 {icon && (
-                  <div className="text-center mb-6">
+                  <div className="mb-6 text-center">
                     <Icon {...icon} />
                   </div>
                 )}
@@ -103,8 +104,8 @@ export const Dialog: React.FC<IDialogProps> = (props) => {
                 <div className="mb-5">{children}</div>
                 {bottomButtons && (
                   <div className="flex justify-end gap-2">
-                    {bottomButtons.map((button) => (
-                      <button {...button} />
+                    {bottomButtons.map((button, i) => (
+                      <button key={i} {...button} />
                     ))}
                   </div>
                 )}

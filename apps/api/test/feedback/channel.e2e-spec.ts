@@ -14,12 +14,14 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch/.';
 import request from 'supertest';
-import { DataSource, Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import {
@@ -39,7 +41,7 @@ import { FIELD_TYPES_TO_MAPPING_TYPES } from '@/domains/channel/field/field.mysq
 import { OptionEntity } from '@/domains/channel/option/option.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { createFieldDto, optionSort } from '@/utils/test-util-fixture';
-import { DEFAULT_FIELD_COUNT, clearEntities } from '@/utils/test-utils';
+import { clearEntities, DEFAULT_FIELD_COUNT } from '@/utils/test-utils';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

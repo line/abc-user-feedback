@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { SetMetadata, UseGuards, applyDecorators } from '@nestjs/common';
+import { applyDecorators, SetMetadata, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../../auth/guards';
-import { PermissionEnum } from './permission.enum';
+import type { PermissionEnum } from './permission.enum';
 import { PermissionGuard } from './permission.guard';
 
 export const PERMISSIONS_KEY = 'permissions';

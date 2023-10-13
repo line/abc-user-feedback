@@ -14,12 +14,14 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch/.';
 import request from 'supertest';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { FieldFormatEnum } from '@/common/enums';

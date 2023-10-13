@@ -14,13 +14,13 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { InjectionToken, Provider } from '@nestjs/common';
+import type { InjectionToken, Provider } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { DataSource, Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
-import { AuthService } from '@/domains/auth/auth.service';
+import type { AuthService } from '@/domains/auth/auth.service';
 import { UserDto } from '@/domains/user/dtos';
 import { UserStateEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';

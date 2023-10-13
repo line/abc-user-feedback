@@ -26,7 +26,7 @@ import {
   OpensearchConfigModule,
   TypeOrmConfigModule,
 } from './configs/modules';
-import { mySqlConfigSchema, mysqlConfig } from './configs/mysql.config';
+import { mysqlConfig, mySqlConfigSchema } from './configs/mysql.config';
 import {
   opensearchConfig,
   opensearchSchema,

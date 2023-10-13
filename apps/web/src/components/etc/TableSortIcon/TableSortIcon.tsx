@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column } from '@tanstack/react-table';
+import type { Column } from '@tanstack/react-table';
+
 import { Icon } from '@ufb/ui';
 
 interface IProps extends React.PropsWithChildren {

@@ -15,10 +15,10 @@ IMAGE="user-feedback/${APP}"
 TAG="${IMAGE}:${VER}"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-DOCKER_DIR="$( cd "${DIR}/../apps/${APP}/" >/dev/null 2>&1 && pwd )"
+DOCKER_DIR="$( cd "${DIR}" >/dev/null 2>&1 && pwd )"
 APP_DIR="$( cd "${DIR}/../" >/dev/null 2>&1 && pwd )"
 
-DOCKER_FILE=${DOCKER_DIR}/Dockerfile
+DOCKER_FILE=${DOCKER_DIR}/${1}.dockerfile
 
 echo ""
 echo "DOCKER_FILE:${DOCKER_FILE}"

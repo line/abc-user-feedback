@@ -13,12 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import dayjs from 'dayjs';
 import { memo } from 'react';
+import dayjs from 'dayjs';
 
 import { ExpandableText } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { FieldType } from '@/types/field.type';
+import type { FieldType } from '@/types/field.type';
 
 interface IProps extends React.PropsWithChildren {
   isExpanded: boolean;

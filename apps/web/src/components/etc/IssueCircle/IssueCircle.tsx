@@ -46,7 +46,7 @@ const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
   return (
     <div
       className={[
-        'w-1.5 h-1.5 rounded-full border border-fill-secondary mr-1.5 bg-',
+        'border-fill-secondary bg- mr-1.5 h-1.5 w-1.5 rounded-full border',
         circleColor,
       ].join(' ')}
     />

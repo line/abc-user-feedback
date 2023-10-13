@@ -17,7 +17,6 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsString } from 'class-validator';
 
 import { ArrayDistinct } from '@/common/validators';
-
 import { PermissionEnum } from '../../permission.enum';
 
 export class CreateRoleRequestDto {

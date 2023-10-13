@@ -13,11 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
-import { SortMethodEnum } from '@/common/enums';
-
-import { UserTypeEnum } from '../entities/enums';
+import type { SortMethodEnum } from '@/common/enums';
+import type { UserTypeEnum } from '../entities/enums';
 
 export class FindAllUsersDto {
   options: IPaginationOptions;

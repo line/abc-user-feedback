@@ -15,7 +15,7 @@
  */
 import { useMemo } from 'react';
 
-import { IssueTrackerType } from '@/types/issue-tracker.type';
+import type { IssueTrackerType } from '@/types/issue-tracker.type';
 
 interface IProps extends React.PropsWithChildren {
   value?: string;
@@ -35,7 +35,12 @@ const TicketLink: React.FC<IProps> = ({ value, issueTracker }) => {
   }, [issueTracker, value]);
 
   return value ? (
-    <a className="text-blue-primary" href={link} target="_blank">
+    <a
+      className="text-blue-primary"
+      href={link}
+      target="_blank"
+      rel="noreferrer"
+    >
       {`${issueTracker?.ticketKey}-${value}`}
     </a>
   ) : (

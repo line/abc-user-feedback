@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Badge, Input, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { SettingMenuTemplate, Tooltip } from '@/components';
-import { useOAIMutation, useTenant } from '@/hooks';
-import { OAuthConfigType } from '@/types/tenant.type';
+import { Badge, Input, toast, Tooltip } from '@ufb/ui';
 
+import { SettingMenuTemplate } from '@/components';
+import { useOAIMutation, useTenant } from '@/hooks';
+import type { OAuthConfigType } from '@/types/tenant.type';
 import OAuthInput from './OAuthInput';
 import RadioGroup from './RadioGroup';
 
@@ -286,7 +286,7 @@ const SignUpSetting: React.FC<IProps> = () => {
                   }
                   {...domainState}
                 />
-                <div className="flex flex-row gap-2 flex-wrap">
+                <div className="flex flex-row flex-wrap gap-2">
                   {(watch('allowDomains') ?? []).map((domain, i) => (
                     <Badge
                       key={i}

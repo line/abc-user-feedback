@@ -24,7 +24,6 @@ import {
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
 

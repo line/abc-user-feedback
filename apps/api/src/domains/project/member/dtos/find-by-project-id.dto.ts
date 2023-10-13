@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { SortMethodEnum } from '@/common/enums';
+import type { SortMethodEnum } from '@/common/enums';
 
 export class FindByProjectIdDto {
   projectId: number;

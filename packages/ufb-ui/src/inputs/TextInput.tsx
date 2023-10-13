@@ -22,8 +22,10 @@ import {
   useState,
 } from 'react';
 
-import { Icon, IconNameType } from '../Icon';
-import { IInputProps, Input } from './Input';
+import type { IconNameType } from '../Icon';
+import { Icon } from '../Icon';
+import type { IInputProps } from './Input';
+import { Input } from './Input';
 
 export interface ITextInputProps extends Omit<IInputProps, 'leftChildren'> {
   isValid?: boolean;

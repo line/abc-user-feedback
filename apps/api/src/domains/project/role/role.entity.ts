@@ -16,10 +16,9 @@
 import { Column, Entity, Index, ManyToOne, OneToMany, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { MemberEntity } from '../member/member.entity';
 import { ProjectEntity } from '../project/project.entity';
-import { PermissionEnum } from './permission.enum';
+import type { PermissionEnum } from './permission.enum';
 
 @Entity('roles')
 @Index(['name', 'project'])

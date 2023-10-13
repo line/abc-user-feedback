@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ConfigType } from '@nestjs/config';
+import type { ConfigType } from '@nestjs/config';
 
-import { appConfig } from '@/configs/app.config';
-import { jwtConfig } from '@/configs/jwt.config';
-import { mysqlConfig } from '@/configs/mysql.config';
-import { opensearchConfig } from '@/configs/opensearch.config';
-import { smtpConfig } from '@/configs/smtp.config';
+import type { appConfig } from '@/configs/app.config';
+import type { jwtConfig } from '@/configs/jwt.config';
+import type { mysqlConfig } from '@/configs/mysql.config';
+import type { opensearchConfig } from '@/configs/opensearch.config';
+import type { smtpConfig } from '@/configs/smtp.config';
 
 export type ConfigServiceType = {
   app: ConfigType<typeof appConfig>;

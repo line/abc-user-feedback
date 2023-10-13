@@ -18,7 +18,6 @@ import { Test } from '@nestjs/testing';
 import dayjs from 'dayjs';
 
 import { getMockProvider } from '@/utils/test-utils';
-
 import { TenantService } from '../tenant/tenant.service';
 import { UserDto } from '../user/dtos';
 import { AuthController } from './auth.controller';

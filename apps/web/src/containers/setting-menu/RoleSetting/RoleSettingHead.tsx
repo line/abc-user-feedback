@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   Icon,
   Input,
@@ -21,8 +24,6 @@ import {
   PopoverTrigger,
   toast,
 } from '@ufb/ui';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
 import { PopoverModalContent } from '@/components';
 import { useOAIMutation, usePermissions } from '@/hooks';
@@ -70,7 +71,7 @@ const RoleSettingHead: React.FC<IProps> = ({
 
   return (
     <>
-      <div className="flex justify-center items-center gap-1">
+      <div className="flex items-center justify-center gap-1">
         {isEdit ? (
           <Input
             size="sm"
@@ -102,10 +103,10 @@ const RoleSettingHead: React.FC<IProps> = ({
               <Icon name="Dots" className="rotate-90" />
             </PopoverTrigger>
             <PopoverContent>
-              <ul className="p-1 w-[160px]">
+              <ul className="w-[160px] p-1">
                 <li
                   className={[
-                    'flex items-center gap-2 p-2 rounded mb-1',
+                    'mb-1 flex items-center gap-2 rounded p-2',
                     !perms.includes('project_role_update')
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',
@@ -122,7 +123,7 @@ const RoleSettingHead: React.FC<IProps> = ({
                 </li>
                 <li
                   className={[
-                    'flex items-center gap-2 p-2 rounded',
+                    'flex items-center gap-2 rounded p-2',
                     !perms.includes('project_role_delete')
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',

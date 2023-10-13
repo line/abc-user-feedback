@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Popover, PopoverTrigger, toast } from '@ufb/ui';
 
 import { PopoverModalContent } from '@/components';
 import { useOAIMutation, useUser } from '@/hooks';
@@ -64,10 +65,10 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
           disabled: isLoading,
         }}
       >
-        <h2 className="text-center font-20-bold mb-3">
+        <h2 className="font-20-bold mb-3 text-center">
           {t('main.profile.dialog.delete-account.description1')}
         </h2>
-        <p className="text-center font-14-regular mb-10">
+        <p className="font-14-regular mb-10 text-center">
           {t('main.profile.dialog.delete-account.description2')}
         </p>
       </PopoverModalContent>

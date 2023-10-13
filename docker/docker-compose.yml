@@ -4,8 +4,8 @@ services:
   web:
     hostname: web
     build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
+      context: ..
+      dockerfile: web.dockerfile
       args:
         - TURBO_TOKEN=TURBO_TOKEN
         - TURBO_TEAM=TURBO_TEAM
@@ -25,8 +25,8 @@ services:
   api:
     hostname: api
     build:
-      context: .
-      dockerfile: ./apps/api/Dockerfile
+      context: ..
+      dockerfile: api.dockerfile
       args:
         - TURBO_TOKEN=TURBO_TOKEN
         - TURBO_TEAM=TURBO_TEAM

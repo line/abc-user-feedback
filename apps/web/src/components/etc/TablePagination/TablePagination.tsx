@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
 import { useTranslation } from 'next-i18next';
+
+import { Icon } from '@ufb/ui';
 
 interface IProps extends React.PropsWithChildren {
   limit?: number;

@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Popper as MUIPopper, PopperPlacementType } from '@mui/base';
-import React, { Dispatch, SetStateAction, useRef } from 'react';
+import type { Dispatch, SetStateAction } from 'react';
+import React, { useRef } from 'react';
+import type { PopperPlacementType } from '@mui/base';
+import { Popper as MUIPopper } from '@mui/base';
 import { useClickAway } from 'react-use';
 
 interface IProps {
@@ -50,7 +52,7 @@ const Popper: React.FC<IProps> = (props) => {
           placement: placement ?? 'bottom-end',
           modifiers: [{ name: 'offset', options: { offset: [0, offset] } }],
         }}
-        className="border rounded bg-primary z-20"
+        className="bg-primary z-20 rounded border"
         ref={containerRef}
       >
         {children}

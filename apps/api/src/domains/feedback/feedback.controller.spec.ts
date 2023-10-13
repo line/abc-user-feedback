@@ -15,13 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
-import { FastifyReply } from 'fastify';
+import type { FastifyReply } from 'fastify';
 import { DataSource } from 'typeorm';
 
-import { MockDataSource, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/utils/test-utils';
 import { AuthService } from '../auth/auth.service';
-import { ChannelEntity } from '../channel/channel/channel.entity';
+import type { ChannelEntity } from '../channel/channel/channel.entity';
 import { ChannelService } from '../channel/channel/channel.service';
 import { HistoryService } from '../history/history.service';
 import { UserDto } from '../user/dtos';

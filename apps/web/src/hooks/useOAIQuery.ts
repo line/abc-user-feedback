@@ -18,7 +18,7 @@ import { useQuery } from '@tanstack/react-query';
 import type { O } from 'ts-toolbelt';
 
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
+import type { IFetchError } from '@/types/fetch-error.type';
 import type {
   OAIMethodPathKeys,
   OAIParameters,

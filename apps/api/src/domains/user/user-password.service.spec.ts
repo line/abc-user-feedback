@@ -18,14 +18,13 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { CodeServiceProviders } from '@/shared/code/code.service.spec';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
 import { getMockProvider, mockRepository } from '@/utils/test-utils';
-
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
 import { InvalidPasswordException, UserNotFoundException } from './exceptions';

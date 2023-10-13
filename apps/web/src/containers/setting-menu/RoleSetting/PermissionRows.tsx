@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { PermissionType } from '@/types/permission.type';
-import { RoleType } from '@/types/role.type';
+import type { PermissionType } from '@/types/permission.type';
+import type { RoleType } from '@/types/role.type';
 
 interface IProps<T extends PermissionType> {
   permissions: readonly T[];

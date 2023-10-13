@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
 import { Draggable } from 'react-beautiful-dnd';
+
+import { Icon } from '@ufb/ui';
 
 interface IProps {
   name: string;
@@ -41,7 +42,7 @@ const DraggableColumnItem: React.FC<IProps> = ({
         <label
           ref={provided.innerRef}
           className={[
-            'flex py-1 gap-2 items-center',
+            'flex items-center gap-2 py-1',
             isDisabled ? 'cursor-not-allowed' : '',
           ].join(' ')}
           {...provided.draggableProps}

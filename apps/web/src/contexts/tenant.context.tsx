@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { createContext, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { createContext, useEffect, useState } from 'react';
 
 import { Path } from '@/constants/path';
 import client from '@/libs/client';
-import { TenantType } from '@/types/tenant.type';
+import type { TenantType } from '@/types/tenant.type';
 
 export interface ITenantContext {
   tenant: TenantType | null;
@@ -60,7 +60,7 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
   return (
     <TenantContext.Provider value={{ tenant, refetch: fetch }}>
       {isLoading ? (
-        <p className="flex justify-center items-center h-screen font-32-bold">
+        <p className="font-32-bold flex h-screen items-center justify-center">
           Loading...
         </p>
       ) : (

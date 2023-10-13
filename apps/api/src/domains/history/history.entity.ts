@@ -16,7 +16,6 @@
 import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { UserEntity } from '../user/entities/user.entity';
 import { HistoryActionEnum } from './history-action.enum';
 import { EntityNameEnum } from './history-entity.enum';

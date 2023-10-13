@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['ufb'],
+  extends: ['@ufb/eslint-config/base'],
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,

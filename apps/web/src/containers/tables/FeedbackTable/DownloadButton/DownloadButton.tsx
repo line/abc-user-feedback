@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
+import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
 import { useStore } from 'zustand';
 
-import { useDownload, usePermissions } from '@/hooks';
-import { IFetchError } from '@/types/fetch-error.type';
-import themeStore from '@/zustand/theme.store';
+import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
+import { useDownload, usePermissions } from '@/hooks';
+import type { IFetchError } from '@/types/fetch-error.type';
+import themeStore from '@/zustand/theme.store';
 import useFeedbackTable from '../feedback-table.context';
 
 export interface IDownloadButtonProps {
@@ -76,8 +76,12 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
         query: {
           ...query,
           createdAt: {
-            gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
-            lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
+            gte: dayjs(createdAtRange?.startDate)
+              .startOf('day')
+              .toISOString(),
+            lt: dayjs(createdAtRange?.endDate)
+              .endOf('day')
+              .toISOString(),
           },
         },
       }),
@@ -114,30 +118,30 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
           : t('main.feedback.button.all-download')}
       </PopoverTrigger>
       <PopoverContent>
-        <p className="px-3 py-3 font-12-bold">
+        <p className="font-12-bold px-3 py-3">
           {t('text.number-count', { count })}
         </p>
         <ul>
           <li>
             <button
-              className="flex items-center justify-start px-3 py-2 gap-2 w-full hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="hover:bg-secondary flex w-full items-center justify-start gap-2 px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={exportFeedbackResponse('xlsx')}
               disabled={isClicked}
             >
               <Icon name="Download" size={16} />
-              <p className="whitespace-nowrap font-12-regular">
+              <p className="font-12-regular whitespace-nowrap">
                 {t('main.feedback.button.excel-download')}
               </p>
             </button>
           </li>
           <li>
             <button
-              className="flex items-center justify-start px-3 py-2 gap-2 w-full hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="hover:bg-secondary flex w-full items-center justify-start gap-2 px-3 py-2 disabled:cursor-not-allowed disabled:opacity-50"
               onClick={exportFeedbackResponse('csv')}
               disabled={isClicked}
             >
               <Icon name="Download" size={16} />
-              <p className="whitespace-nowrap font-12-regular">
+              <p className="font-12-regular whitespace-nowrap">
                 {t('main.feedback.button.csv-download')}
               </p>
             </button>
