@@ -13,18 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const env = {
-  NEXT_PUBLIC_API_BASE_URL:
-    process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:4000',
-  API_BASE_URL: process.env.API_BASE_URL || 'http://127.0.0.1:4000',
-  SESSION_PASSWORD:
-    process.env.SESSION_PASSWORD ||
-    'complex_password_at_least_32_characters_long',
-  NEXT_PUBLIC_MAX_DAYS: parseNumEnv(process.env.NEXT_PUBLIC_MAX_DAYS, 90),
-};
+import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
-function parseNumEnv(env, defaultvalue) {
-  const result = parseInt(env, 10);
-  if (isNaN(result)) return defaultvalue;
-  return result;
-}
+export const env = createEnv({
+  server: {
+    API_BASE_URL: z.string().url().default('http://127.0.0.1:4000'),
+    SESSION_PASSWORD: z
+      .string()
+      .min(32)
+      .default('complex_password_at_least_32_characters_long'),
+  },
+  client: {
+    NEXT_PUBLIC_MAX_DAYS: z.coerce.number().default(90),
+    NEXT_PUBLIC_API_BASE_URL: z.string().url().default('http://localhost:4000'),
+  },
+  runtimeEnv: {
+    API_BASE_URL: process.env.API_BASE_URL,
+    SESSION_PASSWORD: process.env.SESSION_PASSWORD,
+    NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  },
+  skipValidation:
+    !!process.env.CI ||
+    !!process.env.SKIP_ENV_VALIDATION ||
+    process.env.npm_lifecycle_event === 'lint',
+});

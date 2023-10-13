@@ -44,7 +44,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     if (!channelData || channelData.items.length === 0) return;
-    setChannelId(channelData.items[0].id);
+    setChannelId(channelData.items?.[0]?.id ?? 0);
   }, [channelData]);
 
   return (

@@ -118,7 +118,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
                         isChecked={
                           typeof columnVisibility[key] === 'undefined'
                             ? true
-                            : columnVisibility[key]
+                            : !!columnVisibility[key]
                         }
                         onChange={(isChecked) =>
                           onChangeColumnVisibility((prev) => ({

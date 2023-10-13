@@ -13,23 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const { i18n } = require('./next-i18next.config');
-const path = require('path');
+declare module '*.svg' {
+  import type * as React from 'react';
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true,
-  i18n,
-  output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: path.join(__dirname, '../../'),
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  transpilePackages: ['@ufb/ui'],
-  compiler: { removeConsole: process.env.NODE_ENV === 'production' },
-};
-
-module.exports = nextConfig;
+  export const ReactComponent: React.FunctionComponent<
+    React.ComponentProps<'svg'> & { title?: string }
+  >;
+}

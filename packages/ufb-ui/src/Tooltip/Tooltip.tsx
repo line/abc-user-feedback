@@ -13,74 +13,32 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useRef, useState } from 'react';
-import type { Side } from '@floating-ui/react';
-import {
-  arrow,
-  autoUpdate,
-  flip,
-  FloatingArrow,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useFocus,
-  useHover,
-  useInteractions,
-  useRole,
-} from '@floating-ui/react';
+import { useState } from 'react';
+
+import { Icon, Popover, PopoverContent, PopoverTrigger } from '..';
 
 export interface ITooltipProps {
-  children: React.ReactElement;
   title: string;
-  place?: Side;
+  iconSize?: number;
 }
 
-export const Tooltip: React.FC<ITooltipProps> = ({
-  children,
-  title,
-  place = 'bottom',
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const arrowRef = useRef(null);
-
-  const { refs, floatingStyles, context } = useFloating({
-    open: isOpen,
-    onOpenChange: setIsOpen,
-    middleware: [offset(10), flip(), shift(), arrow({ element: arrowRef })],
-    whileElementsMounted: autoUpdate,
-    placement: place,
-  });
-
-  const hover = useHover(context, { move: false });
-  const focus = useFocus(context);
-  const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'tooltip' });
-
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    focus,
-    dismiss,
-    role,
-  ]);
+export const Tooltip: React.FC<ITooltipProps> = ({ title, iconSize = 14 }) => {
+  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      {React.cloneElement(children, {
-        ref: refs.setReference,
-        ...getReferenceProps(),
-      })}
-      {isOpen && (
-        <div
-          ref={refs.setFloating}
-          style={floatingStyles}
-          className="bg-fill-primary font-12-regular text-inverse rounded px-4 py-2.5"
-          {...getFloatingProps()}
-        >
-          {title}
-          <FloatingArrow ref={arrowRef} context={context} />
-        </div>
-      )}
-    </>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger>
+        <Icon
+          name="InfoCircleFill"
+          size={iconSize}
+          className="text-tertiary cursor-pointer"
+          onMouseOver={() => setOpen(true)}
+          onMouseOut={() => setOpen(false)}
+        />
+      </PopoverTrigger>
+      <PopoverContent>
+        <p className="bg-secondary whitespace-pre-line rounded p-2">{title}</p>
+      </PopoverContent>
+    </Popover>
   );
 };

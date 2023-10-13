@@ -63,6 +63,7 @@ module.exports = {
   ignorePatterns: [
     '**/*.config.js',
     '**/*.config.cjs',
+    '**/*.config.mjs',
     '.next',
     'dist',
     'yarn.lock',

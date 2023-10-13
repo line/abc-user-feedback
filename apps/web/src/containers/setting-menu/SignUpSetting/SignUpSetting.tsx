@@ -19,9 +19,9 @@ import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Badge, Input, toast } from '@ufb/ui';
+import { Badge, Input, toast, Tooltip } from '@ufb/ui';
 
-import { SettingMenuTemplate, Tooltip } from '@/components';
+import { SettingMenuTemplate } from '@/components';
 import { useOAIMutation, useTenant } from '@/hooks';
 import type { OAuthConfigType } from '@/types/tenant.type';
 import OAuthInput from './OAuthInput';
