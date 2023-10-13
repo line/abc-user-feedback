@@ -2,17 +2,20 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Nest.js",
   "compilerOptions": {
+    "target": "es2017",
     "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2019",
-    "sourceMap": true,
-    "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
-    "skipLibCheck": true
-  }
+    "strictNullChecks": false,
+    "noImplicitAny": false,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": false,
+    "noFallthroughCasesInSwitch": false,
+    "isolatedModules": false,
+    "esModuleInterop": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }
