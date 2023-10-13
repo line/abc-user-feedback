@@ -19,15 +19,11 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { SMTP_USE } from '@/configs/smtp.config';
-
 import { FeedbackEntity } from '../feedback/feedback.entity';
 import { UserTypeEnum } from '../user/entities/enums';
 import { UserEntity } from '../user/entities/user.entity';
-import {
-  FeedbackCountByTenantIdDto,
-  SetupTenantDto,
-  UpdateTenantDto,
-} from './dtos';
+import type { FeedbackCountByTenantIdDto } from './dtos';
+import { SetupTenantDto, UpdateTenantDto } from './dtos';
 import {
   TenantAlreadyExistsException,
   TenantNotFoundException,

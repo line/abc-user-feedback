@@ -13,13 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import * as React from 'react';
+import type { Placement } from '@floating-ui/react';
 import {
+  autoUpdate,
+  flip,
   FloatingFocusManager,
   FloatingOverlay,
   FloatingPortal,
-  Placement,
-  autoUpdate,
-  flip,
   offset,
   shift,
   useClick,
@@ -30,7 +31,6 @@ import {
   useMergeRefs,
   useRole,
 } from '@floating-ui/react';
-import * as React from 'react';
 
 import { Icon } from '../Icon';
 
@@ -207,7 +207,7 @@ export const PopoverContent = React.forwardRef<
         aria-describedby={context.descriptionId}
         {...context.getFloatingProps(props)}
         className={[
-          'border rounded bg-primary border-fill-secondary shadow-sm',
+          'bg-primary border-fill-secondary rounded border shadow-sm',
           context.getFloatingProps(props).className,
         ].join(' ')}
       >
@@ -245,7 +245,7 @@ export const PopoverHeading = React.forwardRef<
   }, [id, setLabelId]);
 
   return (
-    <div className="flex justify-between m-5" {...props} ref={ref} id={id}>
+    <div className="m-5 flex justify-between" {...props} ref={ref} id={id}>
       <h1 className="font-16-bold">{props.children}</h1>
       <button
         className="icon-btn icon-btn-tertiary icon-btn-xs"

@@ -24,7 +24,6 @@ import {
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import {
   FieldFormatEnum,
   FieldStatusEnum,

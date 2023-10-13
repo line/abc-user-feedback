@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module, forwardRef } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
@@ -25,7 +25,6 @@ import { OptionModule } from '@/domains/channel/option/option.module';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { FeedbackModule } from '@/domains/feedback/feedback.module';
 import { TenantModule } from '@/domains/tenant/tenant.module';
-
 import { IssueEntity } from '../issue/issue.entity';
 import { IssueModule } from '../issue/issue.module';
 import { RoleModule } from '../role/role.module';

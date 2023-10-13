@@ -13,17 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Row, flexRender } from '@tanstack/react-table';
-import { Icon, toast } from '@ufb/ui';
-import dayjs from 'dayjs';
 import { useCallback, useEffect } from 'react';
+import type { Row } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
+
+import { Icon, toast } from '@ufb/ui';
 
 import { ShareButton, TableCheckbox } from '@/components';
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
-
 import { TableRow } from '../../IssueTable/TableRow';
 
 interface IProps {

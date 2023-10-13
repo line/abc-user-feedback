@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   Badge,
   Popover,
@@ -20,10 +23,8 @@ import {
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
-import { OptionType } from '@/types/field.type';
+import type { OptionType } from '@/types/field.type';
 
 interface IProps {
   removeOption: (index: number) => void;

@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SelectBox } from '@/components';
-import { PopoverModalContent } from '@/components';
+import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
+
+import { PopoverModalContent, SelectBox } from '@/components';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
-import { RoleType } from '@/types/role.type';
+import type { RoleType } from '@/types/role.type';
 
 interface IProps {
   projectId: number;

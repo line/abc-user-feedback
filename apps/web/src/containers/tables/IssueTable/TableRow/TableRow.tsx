@@ -62,7 +62,7 @@ const TableRow: React.FC<IProps> = (props) => {
           className={[isHover ? 'visible' : 'hidden'].join(' ')}
         >
           <td
-            className="flex items-center p-3 gap-3 absolute left-30 -translate-y-[102%]"
+            className="left-30 absolute flex -translate-y-[102%] items-center gap-3 p-3"
             style={{
               background:
                 theme === 'light'

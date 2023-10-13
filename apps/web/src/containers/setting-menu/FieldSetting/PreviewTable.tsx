@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
@@ -21,14 +22,12 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import { ExpandableText } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
-import { FieldType } from '@/types/field.type';
-
-import { FieldRowType } from './FieldSetting';
+import type { FieldType } from '@/types/field.type';
+import type { FieldRowType } from './FieldSetting';
 
 const columnHelper = createColumnHelper<any>();
 

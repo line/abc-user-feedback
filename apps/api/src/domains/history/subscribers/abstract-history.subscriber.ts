@@ -15,8 +15,7 @@
  */
 import { InjectDataSource } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
-import {
-  DataSource,
+import type {
   EntitySubscriberInterface,
   InsertEvent,
   ObjectLiteral,
@@ -25,9 +24,9 @@ import {
   SoftRemoveEvent,
   UpdateEvent,
 } from 'typeorm';
+import { DataSource } from 'typeorm';
 
-import { CommonEntity } from '@/common/entities';
-
+import type { CommonEntity } from '@/common/entities';
 import { HistoryActionEnum } from '../history-action.enum';
 import { EntityNameEnum } from '../history-entity.enum';
 import { HistoryService } from '../history.service';

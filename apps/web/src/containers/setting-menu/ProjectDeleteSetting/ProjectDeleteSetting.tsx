@@ -13,15 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Input, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 
-import { ChannelCard, SettingMenuTemplate } from '@/components';
-import { PopoverModalContent } from '@/components';
+import { Input, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
+
+import {
+  ChannelCard,
+  PopoverModalContent,
+  SettingMenuTemplate,
+} from '@/components';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
-
 import ChannelCardList from './ChannelCardList';
 
 interface IProps extends React.PropsWithChildren {
@@ -90,7 +93,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
               onClick: () => mutate(undefined),
             }}
           >
-            <p className="font-16-bold text-center mb-3">{data?.name}</p>
+            <p className="font-16-bold mb-3 text-center">{data?.name}</p>
             <Input
               placeholder={t('input.placeholder.input')}
               onChange={(e) => setInputChannelName(e.target.value)}

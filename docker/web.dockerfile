@@ -42,7 +42,7 @@ ARG TURBO_TEAM
 ENV TURBO_TEAM=${TURBO_TEAM}
 
 COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
-RUN yarn turbo run build --filter=web...
+RUN SKIP_ENV_VALIDATION=1 yarn turbo run build --filter=web...
 
 FROM base AS runner
 WORKDIR /app
@@ -58,7 +58,8 @@ RUN addgroup --system --gid 3000 nodejs
 RUN adduser --system -G nodejs --uid 1000 nextjs -D
 USER nextjs
 
-COPY --from=installer /app/apps/web/next.config.js .
+COPY --from=installer /app/apps/web/next-i18next.config.js .
+COPY --from=installer /app/apps/web/next.config.mjs .
 COPY --from=installer /app/apps/web/package.json .
 COPY --from=installer /app/apps/web/.env.production ./apps/web/.env.production
 

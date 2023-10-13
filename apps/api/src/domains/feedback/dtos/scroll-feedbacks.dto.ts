@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { TimeRange } from '@/common/dtos';
-import { SortMethodEnum } from '@/common/enums';
-import { FieldEntity } from '@/domains/channel/field/field.entity';
+import type { TimeRange } from '@/common/dtos';
+import type { SortMethodEnum } from '@/common/enums';
+import type { FieldEntity } from '@/domains/channel/field/field.entity';
 
 export class ScrollFeedbacksDto {
   channelId: number;

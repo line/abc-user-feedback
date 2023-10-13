@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Header, Table } from '@tanstack/react-table';
+import type { Header, Table } from '@tanstack/react-table';
+
 import { Icon } from '@ufb/ui';
 
 interface IProps {
@@ -40,7 +41,7 @@ const TableResizer: React.FC<IProps> = ({ table, header }) => {
     >
       <Icon
         name="Handle"
-        className="rotate-90 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
         size={16}
       />
     </div>

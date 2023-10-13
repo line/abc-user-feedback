@@ -13,23 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const { i18n } = require('./next-i18next.config');
-const path = require('path');
-
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: false,
-  swcMinify: true,
-  i18n,
-  output: 'standalone',
-  experimental: {
-    outputFileTracingRoot: path.join(__dirname, '../../'),
+module.exports = {
+  env: { node: true, jest: true },
+  ignorePatterns: ['.eslintrc.js'],
+  rules: {
+    '@typescript-eslint/interface-name-prefix': 'off',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'off',
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  transpilePackages: ['@ufb/ui'],
-  compiler: { removeConsole: process.env.NODE_ENV === 'production' },
 };
-
-module.exports = nextConfig;

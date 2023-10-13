@@ -13,14 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { randomBytes } from 'crypto';
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { randomBytes } from 'crypto';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { mockRepository } from '@/utils/test-utils';
-
 import { ProjectNotFoundException } from '../project/exceptions';
 import { ProjectEntity } from '../project/project.entity';
 import { ProjectServiceProviders } from '../project/project.service.spec';

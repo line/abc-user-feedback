@@ -17,9 +17,8 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
-import { ConfigServiceType } from '@/types/config-service.type';
-
-import { SendMailDto } from './send-mail.dto';
+import type { ConfigServiceType } from '@/types/config-service.type';
+import type { SendMailDto } from './send-mail.dto';
 
 @Injectable()
 export class ResetPasswordMailingService {

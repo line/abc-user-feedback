@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import crypto from 'crypto';
 import {
   BadRequestException,
   Injectable,
@@ -22,15 +23,13 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import axios from 'axios';
 import * as bcrypt from 'bcrypt';
-import crypto from 'crypto';
 import dayjs from 'dayjs';
 import { ClsService } from 'nestjs-cls';
 import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
-import { ClsServiceType } from '@/types/cls-service.type';
-
+import type { ClsServiceType } from '@/types/cls-service.type';
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
 import { ApiKeyService } from '../project/api-key/api-key.service';
@@ -45,14 +44,16 @@ import {
   UserNotFoundException,
 } from '../user/exceptions';
 import { UserService } from '../user/user.service';
-import {
+import type {
   JwtDto,
   SendEmailCodeDto,
+  ValidateEmailUserDto,
+  VerifyEmailCodeDto,
+} from './dtos';
+import {
   SignUpEmailUserDto,
   SignUpInvitationUserDto,
   SignUpOauthUserDto,
-  ValidateEmailUserDto,
-  VerifyEmailCodeDto,
 } from './dtos';
 import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 

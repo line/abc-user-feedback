@@ -14,7 +14,7 @@
  * under the License.
  */
 import { MainTemplate } from '@/components';
-import { NextPageWithLayout } from '@/pages/_app';
+import type { NextPageWithLayout } from '@/pages/_app';
 
 const NotPermissionPage: NextPageWithLayout = () => {
   return <div>Not Permissions</div>;

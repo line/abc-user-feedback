@@ -15,10 +15,10 @@
  */
 import { ConfigService } from '@nestjs/config';
 import * as dotenv from 'dotenv';
-import { DataSource, DataSourceOptions } from 'typeorm';
+import type { DataSourceOptions } from 'typeorm';
+import { DataSource } from 'typeorm';
 
 import { mysqlConfig, mysqlConfigSchema } from '@/configs/mysql.config';
-
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 dotenv.config();

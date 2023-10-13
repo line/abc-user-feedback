@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { useRouter } from 'next/router';
+
+import { Icon } from '@ufb/ui';
 
 import { useOAIQuery, useTenant } from '@/hooks';
 
@@ -41,7 +42,7 @@ const HeaderName: React.FC<IProps> = () => {
   return (
     <div className="flex items-center gap-2">
       <div className="flex items-center gap-2">
-        <div className="bg-fill-tertiary rounded-sm p-1.5 inline-flex">
+        <div className="bg-fill-tertiary inline-flex rounded-sm p-1.5">
           <Icon name="OfficeFill" size={12} className="text-secondary" />
         </div>
         <span className="font-12-regular">{tenant?.siteName}</span>
@@ -50,7 +51,7 @@ const HeaderName: React.FC<IProps> = () => {
         <>
           <Icon name="ChevronRight" size={12} className="text-secondary" />
           <div className="flex items-center gap-2">
-            <div className="bg-fill-tertiary rounded-sm p-1.5 inline-flex">
+            <div className="bg-fill-tertiary inline-flex rounded-sm p-1.5">
               <Icon
                 name="CollectionFill"
                 size={12}

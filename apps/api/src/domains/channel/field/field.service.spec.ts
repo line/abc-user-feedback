@@ -17,17 +17,16 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { FieldFormatEnum, isSelectFieldFormat } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import { createFieldDto, updateFieldDto } from '@/utils/test-util-fixture';
 import {
-  MockOpensearchRepository,
   getMockProvider,
+  MockOpensearchRepository,
   mockRepository,
 } from '@/utils/test-utils';
-
 import { FieldEntity } from '../../channel/field/field.entity';
 import { OptionEntity } from '../option/option.entity';
 import { OptionServiceProviders } from '../option/option.service.spec';

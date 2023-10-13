@@ -13,23 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { ReactElement, ReactNode } from 'react';
+import { useState } from 'react';
+import type { NextPage } from 'next';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import {
   Hydrate,
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { Toaster } from '@ufb/ui';
-import { NextPage } from 'next';
 import { appWithTranslation } from 'next-i18next';
-import { AppProps } from 'next/app';
-import Head from 'next/head';
-import { ReactElement, ReactNode, useState } from 'react';
+
+import { Toaster } from '@ufb/ui';
+
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { TenantProvider } from '@/contexts/tenant.context';
 import { UserProvider } from '@/contexts/user.context';
-import '@/styles/react-datepicker.css';
 
+import '@/styles/react-datepicker.css';
 import './_app.css';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {

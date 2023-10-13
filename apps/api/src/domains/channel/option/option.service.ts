@@ -19,7 +19,6 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { validateUnique } from '@/utils/validate-unique';
-
 import { OptionEntity } from '../../channel/option/option.entity';
 import {
   CreateManyOptionsDto,

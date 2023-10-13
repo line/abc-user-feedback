@@ -18,7 +18,6 @@ import { ClsService } from 'nestjs-cls';
 import { DataSource, EventSubscriber } from 'typeorm';
 
 import { ApiKeyEntity } from '@/domains/project/api-key/api-key.entity';
-
 import { EntityNameEnum } from '../history-entity.enum';
 import { HistoryService } from '../history.service';
 import { AbstractHistorySubscriber } from './abstract-history.subscriber';

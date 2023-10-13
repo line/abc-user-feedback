@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { NextApiHandler } from 'next';
+import type { NextApiHandler } from 'next';
 
 const handler: NextApiHandler = (req, res) => {
   res.status(200).json({ status: 'ok' });

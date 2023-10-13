@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { CreateFieldDto } from './create-field.dto';
+import type { CreateFieldDto } from './create-field.dto';
 
 export class CreateManyFieldsDto {
   channelId: number;

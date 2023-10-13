@@ -13,17 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useMemo, useState } from 'react';
 import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
 import produce from 'immer';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
+
+import { Icon, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
@@ -31,14 +32,17 @@ import {
   TableResizer,
   TableSortIcon,
 } from '@/components';
-import { useOAIQuery, usePermissions } from '@/hooks';
-import { useFeedbackSearch, useSort } from '@/hooks';
-
+import {
+  useFeedbackSearch,
+  useOAIQuery,
+  usePermissions,
+  useSort,
+} from '@/hooks';
+import { getColumns } from './feedback-table-columns';
+import useFeedbackTable from './feedback-table.context';
 import FeedbackDeleteDialog from './FeedbackDeleteDialog';
 import FeedbackTableBar from './FeedbackTableBar';
 import FeedbackTableRow from './FeedbackTableRow';
-import { getColumns } from './feedback-table-columns';
-import useFeedbackTable from './feedback-table.context';
 
 export interface IFeedbackTableProps {
   issueId?: number;
@@ -189,7 +193,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       {fieldData && (
         <div className="overflow-x-auto">
           <table
-            className="table table-fixed mb-2"
+            className="mb-2 table table-fixed"
             style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
           >
             <colgroup>
@@ -214,7 +218,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                 ) : (
                   table.getFlatHeaders().map((header) => (
                     <th key={header.index} style={{ width: header.getSize() }}>
-                      <div className="flex items-center flex-nowrap">
+                      <div className="flex flex-nowrap items-center">
                         <span className="overflow-hidden text-ellipsis">
                           {flexRender(
                             header.column.columnDef.header,
@@ -280,7 +284,7 @@ const FailedToQueryData: React.FC<IFailedToQueryData> = ({ columnLength }) => {
   return (
     <tr>
       <td colSpan={columnLength}>
-        <div className="flex flex-col justify-center items-center gap-3 my-60">
+        <div className="my-60 flex flex-col items-center justify-center gap-3">
           <Icon
             name="WarningTriangleFill"
             className="text-tertiary"
@@ -300,7 +304,7 @@ const NoData: React.FC<INoData> = ({ columnLength }) => {
   return (
     <tr>
       <td colSpan={columnLength}>
-        <div className="flex flex-col justify-center items-center gap-3 my-60">
+        <div className="my-60 flex flex-col items-center justify-center gap-3">
           <Icon
             name="WarningTriangleFill"
             className="text-tertiary"

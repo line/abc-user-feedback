@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRouter } from 'next/router';
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 
-import { PermissionList, PermissionType } from '@/types/permission.type';
-
+import type { PermissionType } from '@/types/permission.type';
+import { PermissionList } from '@/types/permission.type';
 import useOAIQuery from './useOAIQuery';
 import useUser from './useUser';
 

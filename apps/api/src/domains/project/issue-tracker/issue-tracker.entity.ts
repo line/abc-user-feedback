@@ -16,9 +16,8 @@
 import { Column, Entity, JoinColumn, OneToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { ProjectEntity } from '../project/project.entity';
-import { CreateIssueTrackerDto } from './dtos';
+import type { CreateIssueTrackerDto } from './dtos';
 
 @Entity('issue_trackers')
 export class IssueTrackerEntity extends CommonEntity {

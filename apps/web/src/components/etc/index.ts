@@ -23,7 +23,6 @@ export { default as SelectBox } from './SelectBox';
 export { default as ShareButton } from './ShareButton';
 export { default as Popper } from './Popper';
 export { default as DateRangePicker } from './DateRangePicker';
-export { default as Tooltip } from './Tooltip';
 export { default as SelectBoxWithIcon } from './SelectBoxWithIcon';
 export { default as TableLoadingRow } from './TableLoadingRow';
 export { default as IssueCircle } from './IssueCircle';

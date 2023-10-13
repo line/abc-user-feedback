@@ -16,10 +16,9 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { mockRepository } from '@/utils/test-utils';
-
 import { RoleEntity } from '../role/role.entity';
 import { RoleServiceProviders } from '../role/role.service.spec';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';

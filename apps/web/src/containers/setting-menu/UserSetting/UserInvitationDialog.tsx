@@ -14,17 +14,16 @@
  * under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
 import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { SelectBox } from '@/components';
-import { PopoverModalContent } from '@/components';
-import { UserTypeEnum } from '@/contexts/user.context';
+import { Icon, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
+
+import { PopoverModalContent, SelectBox } from '@/components';
+import type { UserTypeEnum } from '@/contexts/user.context';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
 
 interface IProps {}

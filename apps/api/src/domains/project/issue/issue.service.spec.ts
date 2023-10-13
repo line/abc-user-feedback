@@ -16,11 +16,11 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
+import { Like } from 'typeorm';
 
-import { TimeRange } from '@/common/dtos';
+import type { TimeRange } from '@/common/dtos';
 import { createQueryBuilder, mockRepository } from '@/utils/test-utils';
-
 import {
   CreateIssueDto,
   FindIssuesByProjectIdDto,

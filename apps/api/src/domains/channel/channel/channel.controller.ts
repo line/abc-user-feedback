@@ -33,7 +33,6 @@ import {
 
 import { PermissionEnum } from '@/domains/project/role/permission.enum';
 import { RequirePermission } from '@/domains/project/role/require-permission.decorator';
-
 import { ChannelService } from './channel.service';
 import { CreateChannelDto } from './dtos';
 import {

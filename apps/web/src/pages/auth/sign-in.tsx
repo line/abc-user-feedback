@@ -13,24 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput, toast } from '@ufb/ui';
+import { useMemo } from 'react';
 import type { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import { TextInput, toast } from '@ufb/ui';
 
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIQuery, useTenant, useUser } from '@/hooks';
-import { NextPageWithLayout } from '@/pages/_app';
-import { IFetchError } from '@/types/fetch-error.type';
+import type { NextPageWithLayout } from '@/pages/_app';
+import type { IFetchError } from '@/types/fetch-error.type';
 
 interface IForm {
   email: string;
@@ -82,8 +83,8 @@ const SignInPage: NextPageWithLayout = () => {
   });
 
   return (
-    <form className="w-[360px] m-auto" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col items-center gap-1 mb-8">
+    <form className="m-auto w-[360px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-8 flex flex-col items-center gap-1">
         <Image
           src="/assets/images/logo-horizontal.svg"
           alt="logo"
@@ -96,7 +97,7 @@ const SignInPage: NextPageWithLayout = () => {
       </div>
       {tenant?.useEmail && (
         <>
-          <div className="space-y-3 mb-6">
+          <div className="mb-6 space-y-3">
             <TextInput
               placeholder="ID"
               leftIconName="ProfileCircleFill"
@@ -116,7 +117,7 @@ const SignInPage: NextPageWithLayout = () => {
               isValid={!errors.password}
             />
           </div>
-          <div className="flex justify-end mb-6">
+          <div className="mb-6 flex justify-end">
             <Link
               href={Path.PASSWORD_RESET}
               className="text-blue-primary font-14-regular"
@@ -143,7 +144,7 @@ const SignInPage: NextPageWithLayout = () => {
         )}
         {tenant?.useEmail && tenant?.useOAuth && (
           <div className="relative my-5">
-            <span className="absolute absolute-center text-secondary bg-primary py-1 px-2">
+            <span className="absolute-center text-secondary bg-primary absolute px-2 py-1">
               OR
             </span>
             <hr />

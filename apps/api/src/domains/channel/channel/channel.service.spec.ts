@@ -16,17 +16,16 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { ProjectServiceProviders } from '@/domains/project/project/project.service.spec';
 import { createFieldDto } from '@/utils/test-util-fixture';
 import {
-  MockOpensearchRepository,
   getMockProvider,
+  MockOpensearchRepository,
   mockRepository,
 } from '@/utils/test-utils';
-
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';

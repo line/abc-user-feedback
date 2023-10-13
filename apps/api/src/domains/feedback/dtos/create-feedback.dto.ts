@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
+import type { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 
 export class CreateFeedbackDto {
   channelId: number;

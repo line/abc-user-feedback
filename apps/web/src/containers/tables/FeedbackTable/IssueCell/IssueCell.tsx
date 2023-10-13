@@ -13,20 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Combobox } from '@headlessui/react';
 import { useMutation } from '@tanstack/react-query';
-import { Badge, Icon, toast } from '@ufb/ui';
 import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useRef, useState } from 'react';
 import { useClickAway } from 'react-use';
+
+import { Badge, Icon, toast } from '@ufb/ui';
 
 import { Popper } from '@/components';
 import { getStatusColor } from '@/constants/issues';
 import { useIssueSearch, useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
-import { IssueType } from '@/types/issue.type';
-
+import type { IFetchError } from '@/types/fetch-error.type';
+import type { IssueType } from '@/types/issue.type';
 import useFeedbackTable from '../feedback-table.context';
 import IssueSetting from './IssueSetting';
 
@@ -171,14 +171,14 @@ const IssueCell: React.FC<IProps> = (props) => {
           ) : (
             <div
               className={[
-                'flex gap-1 items-center content-start py-2',
+                'flex content-start items-center gap-1 py-2',
                 !isExpanded ? 'flex-nowrap' : 'flex-wrap',
               ].join(' ')}
             >
               <div
                 ref={ref}
                 className={[
-                  'flex gap-1 items-center scrollbar-hide',
+                  'scrollbar-hide flex items-center gap-1',
                   !isExpanded ? 'overflow-x-hidden' : 'flex-wrap',
                 ].join(' ')}
               >
@@ -207,7 +207,7 @@ const IssueCell: React.FC<IProps> = (props) => {
         }
       >
         <Combobox onChange={addIssue} as="div" className="w-[300px]">
-          <label className="flex flex-wrap gap-1 px-3 py-2 bg-primary cursor-text rounded items-center">
+          <label className="bg-primary flex cursor-text flex-wrap items-center gap-1 rounded px-3 py-2">
             {issues?.map(({ id, name, status }) => (
               <Badge
                 key={id}
@@ -234,8 +234,8 @@ const IssueCell: React.FC<IProps> = (props) => {
             />
           </label>
           <Combobox.Options className="border-t-[1px]" static>
-            <div className="p-1 flex items-center h-[42px]">
-              <span className="px-2 py-1 text-secondary">
+            <div className="flex h-[42px] items-center p-1">
+              <span className="text-secondary px-2 py-1">
                 {t('main.feedback.issue-cell.issue-list')}
               </span>
             </div>
@@ -250,10 +250,10 @@ const IssueCell: React.FC<IProps> = (props) => {
                   {({ active, disabled }) => (
                     <div
                       className={[
-                        'h-[34px] flex items-center justify-between pl-2 py-1 rounded cursor-pointer',
+                        'flex h-[34px] cursor-pointer items-center justify-between rounded py-1 pl-2',
                         active ? 'bg-fill-secondary' : '',
                         disabled
-                          ? 'cursor-auto bg-fill-tertiary'
+                          ? 'bg-fill-tertiary cursor-auto'
                           : 'cursor-pointer',
                       ].join(' ')}
                     >
@@ -300,7 +300,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   {({ active }) => (
                     <div
                       className={
-                        'gap-2 h-[34px] flex items-center px-2 py-1 rounded cursor-pointer ' +
+                        'flex h-[34px] cursor-pointer items-center gap-2 rounded px-2 py-1 ' +
                         (active ? 'bg-fill-secondary' : 'bg-primary')
                       }
                     >

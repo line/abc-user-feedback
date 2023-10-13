@@ -26,23 +26,23 @@ const AllExpandButton: React.FC<IProps> = ({
 }) => {
   return (
     <div
-      className="flex bg-fill-quaternary p-0.5 rounded relative z-0"
+      className="bg-fill-quaternary relative z-0 flex rounded p-0.5"
       onClick={() => toggleAllRowsExpanded()}
     >
       <div
         className={[
-          'absolute w-[28px] h-[28px] bg-primary rounded',
+          'bg-primary absolute h-[28px] w-[28px] rounded',
           !isAllExpanded ? 'left-0.5' : 'right-0.5',
         ].join(' ')}
       />
-      <button className="w-[28px] h-[28px] flex items-center justify-center z-20">
+      <button className="z-20 flex h-[28px] w-[28px] items-center justify-center">
         <Icon
           name="List"
           size={16}
           className={!isAllExpanded ? 'text-primary' : 'text-tertiary'}
         />
       </button>
-      <button className="w-[28px] h-[28px] flex items-center justify-center z-20">
+      <button className="z-20 flex h-[28px] w-[28px] items-center justify-center">
         <Icon
           name="ViewRowsFill"
           size={16}

@@ -15,7 +15,7 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, Type } from 'class-transformer';
-import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
+import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 
 class PaginationMetaDto implements IPaginationMeta {
   @ApiProperty()

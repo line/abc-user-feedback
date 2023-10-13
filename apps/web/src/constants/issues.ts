@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { TFunction } from 'next-i18next';
+import type { TFunction } from 'next-i18next';
 
-import { ColorType } from '@/types/color.type';
+import type { ColorType } from '@/types/color.type';
 
 type Issue = {
   key: string;

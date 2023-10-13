@@ -13,17 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import type { SortingState } from '@tanstack/react-table';
 import {
-  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Icon } from '@ufb/ui';
 import dayjs from 'dayjs';
-import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Icon } from '@ufb/ui';
 
 import {
   SettingMenuTemplate,
@@ -32,8 +33,7 @@ import {
 } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIQuery, usePermissions, useSort } from '@/hooks';
-import { PermissionType } from '@/types/permission.type';
-
+import type { PermissionType } from '@/types/permission.type';
 import MemberDeleteDialog from './MemberDeleteDialog';
 import MemberInvitationDialog from './MemberInvitationDialog';
 import MemberUpdatePopover from './MemberUpdatePopover';
@@ -176,7 +176,7 @@ const MemberSetting: React.FC<IProps> = ({ projectId }) => {
           {table.getRowModel().rows.length === 0 ? (
             <tr>
               <td colSpan={columns.length}>
-                <div className="flex flex-col justify-center items-center gap-3 my-32">
+                <div className="my-32 flex flex-col items-center justify-center gap-3">
                   <Icon
                     name="WarningTriangleFill"
                     className="text-tertiary"

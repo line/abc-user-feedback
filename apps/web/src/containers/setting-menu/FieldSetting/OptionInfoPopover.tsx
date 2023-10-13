@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'react-i18next';
+
 import {
   Badge,
   Popover,
@@ -20,9 +22,8 @@ import {
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useTranslation } from 'react-i18next';
 
-import { OptionType } from '@/types/field.type';
+import type { OptionType } from '@/types/field.type';
 
 interface IProps extends React.PropsWithChildren {
   options: OptionType[];
@@ -34,13 +35,13 @@ const OptionInfoPopover: React.FC<IProps> = ({ options }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <span className="text-blue-primary font-12-regular underline cursor-pointer">
+        <span className="text-blue-primary font-12-regular cursor-pointer underline">
           {t('main.setting.option-info')}
         </span>
       </PopoverTrigger>
       <PopoverContent>
         <PopoverHeading>{t('main.setting.option-info')}</PopoverHeading>
-        <div className="m-4 flex flex-wrap gap-2 min-w-[200px] max-w-[340px]">
+        <div className="m-4 flex min-w-[200px] max-w-[340px] flex-wrap gap-2">
           {options.map((v) => (
             <Badge key={v.key} type="secondary">
               {v.name}
