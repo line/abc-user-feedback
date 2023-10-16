@@ -18,11 +18,11 @@ import * as dotenv from 'dotenv';
 import type { DataSourceOptions } from 'typeorm';
 import { DataSource } from 'typeorm';
 
-import { mysqlConfig, mySqlConfigSchema } from '@/configs/mysql.config';
+import { mysqlConfig, mysqlConfigSchema } from '@/configs/mysql.config';
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 dotenv.config();
-process.env = mySqlConfigSchema.validateSync(process.env) as any;
+process.env = mysqlConfigSchema.validateSync(process.env) as any;
 
 const env = mysqlConfig();
 console.log('env: ', env);
