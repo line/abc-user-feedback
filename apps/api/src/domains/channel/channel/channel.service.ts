@@ -19,13 +19,11 @@ import { Transactional } from 'typeorm-transactional';
 import { OpensearchRepository } from '@/common/repositories';
 import { OS_USE } from '@/configs/opensearch.config';
 import { ProjectService } from '@/domains/project/project/project.service';
-
 import { FieldService } from '../field/field.service';
 import { ChannelMySQLService } from './channel.mysql.service';
+import type { FindAllChannelsByProjectIdDto, FindByChannelIdDto } from './dtos';
 import {
   CreateChannelDto,
-  FindAllChannelsByProjectIdDto,
-  FindByChannelIdDto,
   UpdateChannelDto,
   UpdateChannelFieldsDto,
 } from './dtos';

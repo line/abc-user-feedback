@@ -16,18 +16,17 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { mockRepository } from '@/utils/test-utils';
-
 import { MemberEntity } from '../project/member/member.entity';
 import { MemberServiceProviders } from '../project/member/member.service.spec';
 import { RoleEntity } from '../project/role/role.entity';
 import { TenantEntity } from '../tenant/tenant.entity';
 import { TenantServiceProviders } from '../tenant/tenant.service.spec';
 import { CreateUserService } from './create-user.service';
-import { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
-import { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
+import type { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
+import type { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
 import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {

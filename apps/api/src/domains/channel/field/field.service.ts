@@ -19,8 +19,7 @@ import { Transactional } from 'typeorm-transactional';
 import { FieldFormatEnum } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import { OS_USE } from '@/configs/opensearch.config';
-
-import { FieldEntity } from '../../channel/field/field.entity';
+import type { FieldEntity } from '../../channel/field/field.entity';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
 import { FieldMySQLService } from './field.mysql.service';
 

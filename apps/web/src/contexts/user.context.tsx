@@ -13,18 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
-import dayjs from 'dayjs';
-import jwtDecode, { JwtPayload } from 'jwt-decode';
-import { useRouter } from 'next/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import type { JwtPayload } from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { useSessionStorage } from 'react-use';
 
 import isServer from '@/constants/is-server';
 import { Path } from '@/constants/path';
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
+import type { IFetchError } from '@/types/fetch-error.type';
 
 export type UserTypeEnum = 'SUPER' | 'GENERAL';
 

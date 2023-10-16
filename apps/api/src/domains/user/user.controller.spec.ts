@@ -18,7 +18,6 @@ import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
 import { getMockProvider } from '@/utils/test-utils';
-
 import { UserDto } from './dtos';
 import {
   ChangePasswordRequestDto,

@@ -17,8 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
-import { MockDataSource, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/utils/test-utils';
 import { ApiKeyController } from './api-key.controller';
 import { ApiKeyService } from './api-key.service';
 

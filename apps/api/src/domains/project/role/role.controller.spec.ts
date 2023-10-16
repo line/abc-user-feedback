@@ -18,11 +18,10 @@ import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
 import {
-  MockDataSource,
   getMockProvider,
   getRandomEnumValue,
+  MockDataSource,
 } from '@/utils/test-utils';
-
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import { PermissionEnum } from './permission.enum';
 import { RoleController } from './role.controller';

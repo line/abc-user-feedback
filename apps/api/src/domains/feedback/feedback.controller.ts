@@ -30,7 +30,6 @@ import dayjs from 'dayjs';
 import { FastifyReply } from 'fastify';
 
 import { ApiKeyAuthGuard } from '@/domains/auth/guards';
-
 import { ChannelService } from '../channel/channel/channel.service';
 import { HistoryActionEnum } from '../history/history-action.enum';
 import { EntityNameEnum } from '../history/history-entity.enum';

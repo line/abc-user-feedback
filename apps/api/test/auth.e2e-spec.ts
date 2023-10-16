@@ -14,12 +14,14 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
-import { DataSource, Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import {
@@ -29,7 +31,7 @@ import {
   EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
 } from '@/domains/auth/dtos/requests';
-import { RoleEntity } from '@/domains/project/role/role.entity';
+import type { RoleEntity } from '@/domains/project/role/role.entity';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
 import { UserStateEnum, UserTypeEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';

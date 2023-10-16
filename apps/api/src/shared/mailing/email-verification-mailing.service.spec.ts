@@ -18,7 +18,6 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 
 import { getMockProvider } from '@/utils/test-utils';
-
 import { EmailVerificationMailingService } from './email-verification-mailing.service';
 
 describe('first', () => {

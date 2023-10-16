@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { FeedbackTable } from '@/containers';
-import { NextPageWithLayout } from '@/pages/_app';
+import type { NextPageWithLayout } from '@/pages/_app';
 
 interface IProps {
   projectId: number;

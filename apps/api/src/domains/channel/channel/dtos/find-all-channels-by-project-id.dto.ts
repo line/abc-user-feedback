@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { IPaginationOptions } from 'nestjs-typeorm-paginate';
+import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 export class FindAllChannelsByProjectIdDto {
   options: IPaginationOptions;

@@ -16,7 +16,6 @@
 import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { FieldEntity } from '../field/field.entity';
 
 @Entity('options')

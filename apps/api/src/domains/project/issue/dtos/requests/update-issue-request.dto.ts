@@ -18,7 +18,6 @@ import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { IssueStatusEnum } from '@/common/enums';
 import { IsNullable } from '@/domains/user/decorators';
-
 import { CreateIssueRequestDto } from './create-issue-request.dto';
 
 export class UpdateIssueRequestDto extends CreateIssueRequestDto {

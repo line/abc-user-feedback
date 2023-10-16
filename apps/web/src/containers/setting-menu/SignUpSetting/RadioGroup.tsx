@@ -24,7 +24,7 @@ interface IProps {
 
 const RadioGroup: React.FC<IProps> = ({ name, radios }) => {
   return (
-    <div className="flex gap-10 mb-4">
+    <div className="mb-4 flex gap-10">
       {radios.map((radio, index) => (
         <label key={index} className="radio-label">
           <input

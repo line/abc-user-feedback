@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import {
   createColumnHelper,
   flexRender,
@@ -20,20 +21,19 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
 import produce from 'immer';
 import { Trans, useTranslation } from 'next-i18next';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+
+import { Badge, Icon, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
-import { ChannelType } from '@/types/channel.type';
-import { FieldType } from '@/types/field.type';
+import type { ChannelType } from '@/types/channel.type';
+import type { FieldType } from '@/types/field.type';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-
 import FeedbackRequestPopover from './FeedbackRequestPopover';
 import FieldSettingPopover from './FieldSettingPopover';
 import OptionInfoPopover from './OptionInfoPopover';
@@ -277,12 +277,12 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       }
     >
       <div className="h-[calc(100%-120px)]">
-        <div className="flex flex-col gap-3 mb-4 h-1/2">
+        <div className="mb-4 flex h-1/2 flex-col gap-3">
           <div className="flex justify-between">
             <div className="flex gap-2">
               <button
                 className={[
-                  'btn btn-sm btn-rounded border min-w-[64px]',
+                  'btn btn-sm btn-rounded min-w-[64px] border',
                   status !== 'ACTIVE'
                     ? 'text-tertiary bg-fill-inverse'
                     : 'text-primary bg-fill-quaternary',
@@ -293,7 +293,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               </button>
               <button
                 className={[
-                  'btn btn-sm btn-rounded border min-w-[64px]',
+                  'btn btn-sm btn-rounded min-w-[64px] border',
                   status !== 'INACTIVE'
                     ? 'text-tertiary bg-fill-inverse'
                     : 'text-primary bg-fill-quaternary',
@@ -309,8 +309,8 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               disabled={!canUpdateField}
             />
           </div>
-          <div className="border rounded overflow-auto">
-            <table className="table table-fixed w-full border-hidden">
+          <div className="overflow-auto rounded border">
+            <table className="table w-full table-fixed border-hidden">
               <thead>
                 <tr>
                   {table.getFlatHeaders().map((header, i) => (
@@ -346,7 +346,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
             </table>
           </div>
         </div>
-        <div className="flex flex-col gap-3 h-1/2">
+        <div className="flex h-1/2 flex-col gap-3">
           <div>
             <h1 className="font-20-bold">
               {t('main.setting.field-mgmt.preview')}
@@ -359,7 +359,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               />
             </div>
           ) : (
-            <div className="h-full border rounded flex flex-col justify-center items-center">
+            <div className="flex h-full flex-col items-center justify-center rounded border">
               <Icon name="Search" className="text-quaternary mb-2" size={32} />
               <p>
                 <Trans
@@ -367,7 +367,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
                   components={{
                     preview: (
                       <span
-                        className="text-blue-primary underline cursor-pointer"
+                        className="text-blue-primary cursor-pointer underline"
                         onClick={() => setShowPreview(true)}
                       />
                     ),

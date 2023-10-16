@@ -16,7 +16,6 @@
 import { Entity, ManyToOne, Relation, Unique } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { UserEntity } from '../../user/entities/user.entity';
 import { RoleEntity } from '../role/role.entity';
 

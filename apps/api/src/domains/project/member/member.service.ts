@@ -19,7 +19,8 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { RoleService } from '../role/role.service';
-import { CreateMemberDto, FindByProjectIdDto, UpdateMemberDto } from './dtos';
+import type { FindByProjectIdDto } from './dtos';
+import { CreateMemberDto, UpdateMemberDto } from './dtos';
 import {
   MemberAlreadyExistsException,
   MemberNotFoundException,

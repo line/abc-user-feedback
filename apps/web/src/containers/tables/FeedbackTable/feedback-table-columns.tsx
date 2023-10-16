@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import type { ColumnDef } from '@tanstack/react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 
 import { ExpandableText, TableCheckbox } from '@/components';
-import { FieldType } from '@/types/field.type';
-
+import type { FieldType } from '@/types/field.type';
 import EditableCell from './EditableCell';
 import FeedbackCell from './FeedbackCell';
 import IssueCell from './IssueCell';

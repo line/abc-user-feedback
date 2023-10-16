@@ -14,10 +14,11 @@
  * under the License.
  */
 import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput, toast } from '@ufb/ui';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
+
+import { TextInput, toast } from '@ufb/ui';
 
 import { useOAIMutation } from '@/hooks';
 
@@ -78,7 +79,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h1 className="font-20-bold">{t('main.profile.change-password')}</h1>
         <button
           form="reset_password"

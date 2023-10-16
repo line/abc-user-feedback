@@ -14,10 +14,9 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { PaginationResponseDto } from '@/common/dtos';
-
 import { FindIssueByIdResponseDto } from './find-issue-by-id-response.dto';
 
 export class FindIssuesByProjectIdResponseDto extends PaginationResponseDto<FindIssueByIdResponseDto> {

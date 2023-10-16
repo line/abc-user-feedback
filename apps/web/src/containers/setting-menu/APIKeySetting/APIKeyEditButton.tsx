@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 
 import { PopoverModalContent } from '@/components';
 import { useOAIMutation } from '@/hooks';
@@ -102,7 +103,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
       >
         <p className="input-label">Status</p>
         <div className="flex">
-          <label className="radio-label w-[120px] h-[36px]v">
+          <label className="radio-label h-[36px]v w-[120px]">
             <input
               type="radio"
               name="radio-type"
@@ -112,7 +113,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
             />{' '}
             {t('main.setting.api-key-status.active')}
           </label>
-          <label className="radio-label w-[120px] h-[36px]">
+          <label className="radio-label h-[36px] w-[120px]">
             <input
               type="radio"
               name="radio-type"

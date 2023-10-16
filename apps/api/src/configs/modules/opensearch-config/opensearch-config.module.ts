@@ -18,7 +18,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Client } from '@opensearch-project/opensearch';
 import * as dotenv from 'dotenv';
 
-import { ConfigServiceType } from '@/types/config-service.type';
+import type { ConfigServiceType } from '@/types/config-service.type';
 
 dotenv.config();
 

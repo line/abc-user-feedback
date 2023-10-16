@@ -16,7 +16,8 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
+import { Like } from 'typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
@@ -24,12 +25,11 @@ import { TenantServiceProviders } from '@/domains/tenant/tenant.service.spec';
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import {
-  MockOpensearchRepository,
   createQueryBuilder,
   getMockProvider,
+  MockOpensearchRepository,
   mockRepository,
 } from '@/utils/test-utils';
-
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { RoleServiceProviders } from '../role/role.service.spec';

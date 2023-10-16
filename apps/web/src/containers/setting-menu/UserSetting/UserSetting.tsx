@@ -13,18 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import {
-  RowSelectionState,
-  SortingState,
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
-import { Fragment, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+
+import { Badge, Icon, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
@@ -35,11 +35,10 @@ import {
   TableSearchInput,
   TableSortIcon,
 } from '@/components';
-import { SearchItemType } from '@/components/etc/TableSearchInput';
+import type { SearchItemType } from '@/components/etc/TableSearchInput';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, useOAIQuery, useSort, useUserSearch } from '@/hooks';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-
 import UserEditPopover from './UserEditPopover';
 import UserInvitationDialog from './UserInvitationDialog';
 
@@ -213,7 +212,7 @@ const UserSetting: React.FC<IProps> = () => {
       action={<UserInvitationDialog />}
     >
       <div>
-        <div className="flex justify-between items-center mb-3">
+        <div className="mb-3 flex items-center justify-between">
           <p className="font-16-regular text-secondary">
             {t('text.search-result')}
             <span className="text-primary ml-2">
@@ -266,7 +265,7 @@ const UserSetting: React.FC<IProps> = () => {
             {table.getRowModel().rows.length === 0 ? (
               <tr>
                 <td colSpan={columns.length}>
-                  <div className="flex flex-col justify-center items-center gap-3 my-32">
+                  <div className="my-32 flex flex-col items-center justify-center gap-3">
                     <Icon
                       name="WarningTriangleFill"
                       className="text-tertiary"

@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { IssueCircle } from '@/components';
@@ -63,12 +63,12 @@ const IssueTabelSelectBox: React.FC<IProps> = ({
   }, [issueCountData]);
 
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex flex-wrap gap-2">
       {issueCountData?.map((issue) => (
         <div
           key={issue.key}
           className={[
-            'border rounded flex justify-between py-2.5 px-3 items-center min-w-[136px] cursor-pointer',
+            'flex min-w-[136px] cursor-pointer items-center justify-between rounded border px-3 py-2.5',
             currentIssue?.key === issue.key
               ? 'border-fill-primary'
               : 'opacity-50',
@@ -78,7 +78,7 @@ const IssueTabelSelectBox: React.FC<IProps> = ({
             onChangeOption(issue);
           }}
         >
-          <div className="flex gap-2 items-center flex-1">
+          <div className="flex flex-1 items-center gap-2">
             <IssueCircle issueKey={issue.key} />
             <span className="whitespace-nowrap">
               {ISSUES(t).find((v) => v.key === issue.key)?.name ??

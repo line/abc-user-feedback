@@ -15,9 +15,10 @@
  */
 import { Toaster as HotToaster, toast as reactToast } from 'react-hot-toast';
 
-import { IconNameType } from '../Icon';
+import type { IconNameType } from '../Icon';
 import { ToastBox } from './ToastBox';
-import { IToastInfoBoxProps, ToastPromiseBox } from './ToastPromiseBox';
+import type { IToastInfoBoxProps } from './ToastPromiseBox';
+import { ToastPromiseBox } from './ToastPromiseBox';
 
 interface IToastProps {
   title?: string;

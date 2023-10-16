@@ -18,7 +18,6 @@ import { ClsService } from 'nestjs-cls';
 import { DataSource, EventSubscriber } from 'typeorm';
 
 import { FieldEntity } from '@/domains/channel/field/field.entity';
-
 import { EntityNameEnum } from '../history-entity.enum';
 import { HistoryService } from '../history.service';
 import { AbstractHistorySubscriber } from './abstract-history.subscriber';

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { PermissionEnum } from '../permission.enum';
+import type { PermissionEnum } from '../permission.enum';
 
 export class CreateRoleDto {
   projectId: number;

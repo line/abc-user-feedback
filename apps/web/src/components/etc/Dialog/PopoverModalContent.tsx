@@ -13,14 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'react-i18next';
+
+import type { IIconProps } from '@ufb/ui';
 import {
-  IIconProps,
   Icon,
   PopoverContent,
   PopoverHeading,
   usePopoverContext,
 } from '@ufb/ui';
-import { useTranslation } from 'react-i18next';
 
 export interface IDialogProps extends React.PropsWithChildren {
   title: string;
@@ -45,7 +46,7 @@ const PopoverModalContent: React.FC<IDialogProps> = (props) => {
       <PopoverHeading>{title}</PopoverHeading>
       <div className="m-5 min-w-[480px]">
         {icon && (
-          <div className="text-center mb-6">
+          <div className="mb-6 text-center">
             <Icon {...icon} />
           </div>
         )}

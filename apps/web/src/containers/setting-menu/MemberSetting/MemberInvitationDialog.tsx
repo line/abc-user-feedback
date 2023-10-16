@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Dispatch, SetStateAction } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input, Popover, toast } from '@ufb/ui';
-import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { SelectBox } from '@/components';
-import { PopoverModalContent } from '@/components';
+import { Input, Popover, toast } from '@ufb/ui';
+
+import { PopoverModalContent, SelectBox } from '@/components';
 import { useOAIMutation, useOAIQuery, useUserSearch } from '@/hooks';
 
 interface IForm {
@@ -91,7 +91,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
       >
         <form
           id="inviteMember"
-          className="flex flex-col gap-5 my-8"
+          className="my-8 flex flex-col gap-5"
           onSubmit={handleSubmit((data) => mutate(data))}
         >
           <Input label="Project" value={projectData?.name} disabled />

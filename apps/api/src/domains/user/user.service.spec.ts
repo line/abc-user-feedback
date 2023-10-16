@@ -17,7 +17,8 @@ import { faker } from '@faker-js/faker';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
+import { Like } from 'typeorm';
 
 import { SortMethodEnum } from '@/common/enums';
 import { CodeServiceProviders } from '@/shared/code/code.service.spec';
@@ -28,7 +29,6 @@ import {
   getRandomEnumValue,
   mockRepository,
 } from '@/utils/test-utils';
-
 import { TenantServiceProviders } from '../tenant/tenant.service.spec';
 import { FindAllUsersDto, UserDto } from './dtos';
 import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';

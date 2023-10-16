@@ -22,7 +22,6 @@ import { Transactional } from 'typeorm-transactional';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeService } from '@/shared/code/code.service';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
-
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
 import { InvalidPasswordException, UserNotFoundException } from './exceptions';

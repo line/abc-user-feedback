@@ -20,14 +20,13 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { ClsService } from 'nestjs-cls';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
 import { CodeServiceProviders } from '@/shared/code/code.service.spec';
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
 import { getMockProvider } from '@/utils/test-utils';
-
 import { ApiKeyEntity } from '../project/api-key/api-key.entity';
 import { ApiKeyServiceProviders } from '../project/api-key/api-key.service.spec';
 import { MemberServiceProviders } from '../project/member/member.service.spec';
@@ -143,7 +142,6 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('verifyEmailCode', () => {});
 
   describe('validateEmailUser', () => {
@@ -267,10 +265,8 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('signUpInvitationUser', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('signUpOAuthUser', () => {});
 
   describe('signIn', () => {
@@ -302,7 +298,6 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('refreshToken', () => {});
 
   describe('validateApiKey', () => {
@@ -379,6 +374,5 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('signInByOAuth', () => {});
 });

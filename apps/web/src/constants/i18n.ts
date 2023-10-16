@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { i18n } from '../../next-i18next.config.js';
+import i18nConfig from '../../next-i18next.config.js';
 
 export const DEFAULT_LOCALE = 'en';
-export const LOCALES = i18n?.locales;
+export const LOCALES = i18nConfig.i18n?.locales;

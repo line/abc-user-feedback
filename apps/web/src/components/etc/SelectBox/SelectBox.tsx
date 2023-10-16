@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Props } from 'react-select';
+import ReactSelect from 'react-select';
+
 import { Badge, Icon } from '@ufb/ui';
-import ReactSelect, { Props } from 'react-select';
 
 export type SelectOptionType =
   | { id?: number; key: any; name: string; [key: string]: any }
@@ -68,7 +70,7 @@ function SelectBox<IsMulti extends boolean = false>(
           <div {...innerProps}>
             <Icon
               name="CloseCircleFill"
-              className="cursor-pointer text-tertiary hover:text-primary"
+              className="text-tertiary hover:text-primary cursor-pointer"
               size={20}
             />
           </div>

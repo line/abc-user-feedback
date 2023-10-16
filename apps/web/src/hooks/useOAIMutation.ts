@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { UseMutationOptions, useMutation } from '@tanstack/react-query';
+import type { UseMutationOptions } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
-import {
+import type { IFetchError } from '@/types/fetch-error.type';
+import type {
   OAIMethodPathKeys,
   OAIMutationResponse,
   OAIPathParameters,

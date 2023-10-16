@@ -13,32 +13,31 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, IconNameType } from '@ufb/ui';
-import { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useState } from 'react';
+import type { GetStaticProps } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate, Tooltip } from '@/components';
+import { Icon, Tooltip } from '@ufb/ui';
+
+import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
 import MyProfileForm from '@/containers/my-profile/MyProfileForm';
 import { useUser } from '@/hooks';
-
 import type { NextPageWithLayout } from '../_app';
 
-const menuItems: {
-  key: 'profile-info' | 'change-password';
-  iconName: IconNameType;
-}[] = [
+const menuItems = [
   { key: 'profile-info', iconName: 'InfoCircleFill' },
   { key: 'change-password', iconName: 'LockFill' },
-];
+] as const;
 
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const { user } = useUser();
-  const [tabIndex, setTabIndex] = useState(menuItems[0].key);
+  const [tabIndex, setTabIndex] = useState<'profile-info' | 'change-password'>(
+    menuItems[0].key,
+  );
 
   return (
     <>
@@ -46,8 +45,8 @@ const ProfilePage: NextPageWithLayout = () => {
         {t('main.profile.title')}
         <Tooltip description="Profile Description" />
       </h1>
-      <div className="flex gap-4 items-stretch h-[calc(100vh-144px)]">
-        <div className="border border-fill-tertiary rounded w-[400px] p-6">
+      <div className="flex h-[calc(100vh-144px)] items-stretch gap-4">
+        <div className="border-fill-tertiary w-[400px] rounded border p-6">
           <ul className="space-y-2">
             {menuItems.map(({ key, iconName }) => {
               const isDisabled =
@@ -57,7 +56,7 @@ const ProfilePage: NextPageWithLayout = () => {
                   key={key}
                   onClick={() => !isDisabled && setTabIndex(key)}
                   className={[
-                    'p-2 mx-1 rounded flex items-center gap-2',
+                    'mx-1 flex items-center gap-2 rounded p-2',
                     tabIndex === key ? 'bg-fill-tertiary' : '',
                     isDisabled
                       ? 'text-tertiary cursor-not-allowed'
@@ -73,7 +72,7 @@ const ProfilePage: NextPageWithLayout = () => {
             })}
           </ul>
         </div>
-        <div className="border border-fill-tertiary rounded flex-1 p-6">
+        <div className="border-fill-tertiary flex-1 rounded border p-6">
           {tabIndex === menuItems[0].key && <MyProfileForm />}
           {tabIndex === menuItems[1].key && <ChangePasswordForm />}
         </div>

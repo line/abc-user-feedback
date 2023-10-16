@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { UseQueryOptions, useQuery } from '@tanstack/react-query';
+import type { UseQueryOptions } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
-import { OAIMutationResponse, OAIRequestBody } from '@/types/openapi.type';
+import type { IFetchError } from '@/types/fetch-error.type';
+import type { OAIMutationResponse, OAIRequestBody } from '@/types/openapi.type';
 
 type TData = OAIMutationResponse<
   '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',

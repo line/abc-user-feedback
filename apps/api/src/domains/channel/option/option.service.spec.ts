@@ -16,10 +16,9 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { mockRepository } from '@/utils/test-utils';
-
 import { OptionEntity } from '../../channel/option/option.entity';
 import {
   CreateManyOptionsDto,

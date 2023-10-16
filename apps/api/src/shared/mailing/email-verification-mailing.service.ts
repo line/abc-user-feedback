@@ -16,7 +16,7 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 
-import { SendMailDto } from './send-mail.dto';
+import type { SendMailDto } from './send-mail.dto';
 
 @Injectable()
 export class EmailVerificationMailingService {
