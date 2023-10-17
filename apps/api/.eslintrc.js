@@ -1,6 +1,6 @@
 module.exports = {
   root: true,
-  extends: ['@ufb/eslint-config/base'],
+  extends: ['@ufb/eslint-config/base', '@ufb/eslint-config/nestjs'],
   parserOptions: {
     project: 'tsconfig.json',
     tsconfigRootDir: __dirname,
