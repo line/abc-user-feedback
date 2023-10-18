@@ -38,11 +38,11 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
   const query = useMemo(() => {
     if (!router.query) return;
     const { code, callback_url } = router.query;
+
     if (!code) return;
     return { code, callback_url } as IQuery;
   }, [router.query]);
 
-  console.log('query: ', query);
   useEffect(() => {
     if (!query) return;
     signInOAuth(query).catch(() => {

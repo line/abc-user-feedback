@@ -24,7 +24,10 @@ import IssueCell from './IssueCell';
 
 const columnHelper = createColumnHelper<any>();
 
-export const getColumns = (fieldData: FieldType[]): ColumnDef<any, any>[] =>
+export const getColumns = (
+  fieldData: FieldType[],
+  refetch: () => Promise<any>,
+): ColumnDef<any, any>[] =>
   fieldData
     ? [
         columnHelper.display({
@@ -70,7 +73,7 @@ export const getColumns = (fieldData: FieldType[]): ColumnDef<any, any>[] =>
           header: 'Issue',
           cell: (info) => (
             <IssueCell
-              refetch={async () => {}}
+              refetch={refetch}
               issues={info.getValue()}
               feedbackId={info.row.original.id}
               isExpanded={info.row.getIsExpanded()}

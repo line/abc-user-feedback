@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "nest build",
-    "clean": "git clean -xdf .next .turbo node_modules",
+    "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "nest start --watch",
     "format": "prettier --check \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "lint": "eslint \"src/**/*.ts\"",

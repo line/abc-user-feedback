@@ -200,7 +200,7 @@ export class AuthService {
     return false;
   }
 
-  async getOAuthLoginURL() {
+  async getOAuthLoginURL(callback_url?: string) {
     const { useOAuth, oauthConfig } = await this.tenantService.findOne();
 
     if (!useOAuth) {
@@ -216,6 +216,7 @@ export class AuthService {
       response_type: 'code',
       state: crypto.randomBytes(10).toString('hex'),
       scope: oauthConfig.scopeString,
+      callback_url: encodeURIComponent(callback_url),
     });
 
     return `${oauthConfig.authCodeRequestURL}?${params}`;

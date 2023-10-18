@@ -9,7 +9,7 @@
     "base": "tailwindcss --config src/base/tailwind.config.js -i src/base/base.css -o dist/layer/base.css --postcss",
     "postbase": "prejss-cli dist/layer/base.css --format commonjs",
     "build": "yarn base && yarn utilities && yarn components && yarn merge",
-    "clean": "rm -rf .turbo node_modules",
+    "clean": "rm -rf .turbo node_modules dist",
     "components": "tailwindcss --config src/components/tailwind.config.js -i src/components/components.css -o dist/layer/components.css --postcss",
     "postcomponents": "prejss-cli dist/layer/components.css --format commonjs",
     "format": "prettier --check \"**/*.{tsx,ts,md,json}\"",

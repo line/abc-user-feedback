@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import type { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -26,10 +25,11 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { OAuthLoginButton } from '@/components';
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useOAIQuery, useTenant, useUser } from '@/hooks';
+import { useTenant, useUser } from '@/hooks';
 import type { NextPageWithLayout } from '@/pages/_app';
 import type { IFetchError } from '@/types/fetch-error.type';
 
@@ -52,12 +52,6 @@ const SignInPage: NextPageWithLayout = () => {
   const { signIn } = useUser();
   const { tenant } = useTenant();
 
-  const callback_url = useMemo(() => {
-    return router.query.callback_url
-      ? (router.query.callback_url as string)
-      : undefined;
-  }, [router.query]);
-
   const { handleSubmit, register, formState, setError } = useForm({
     resolver: zodResolver(schema),
     defaultValues,
@@ -77,18 +71,6 @@ const SignInPage: NextPageWithLayout = () => {
       toast.negative({ title: message, description: message });
     }
   };
-  const { data } = useOAIQuery({
-    path: '/api/auth/signIn/oauth/loginURL',
-    queryOptions: { enabled: tenant?.useOAuth ?? false },
-    variables: { callback_url },
-  });
-  const url = useMemo(() => {
-    const url = data?.url ?? '';
-    const q = callback_url
-      ? `&callback_url=${encodeURIComponent(encodeURIComponent(callback_url))}`
-      : '';
-    return url + q;
-  }, [data, callback_url]);
 
   return (
     <form className="m-auto w-[360px]" onSubmit={handleSubmit(onSubmit)}>
@@ -152,15 +134,7 @@ const SignInPage: NextPageWithLayout = () => {
             <hr />
           </div>
         )}
-        {tenant?.useOAuth && (
-          <button
-            type="button"
-            className="btn btn-lg btn-blue"
-            onClick={() => router.push(url)}
-          >
-            OAuth2.0 {t('button.sign-in')}
-          </button>
-        )}
+        {tenant?.useOAuth && <OAuthLoginButton />}
       </div>
     </form>
   );

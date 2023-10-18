@@ -18,13 +18,13 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/constants/dayjs-format';
-import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
 import type { DateRangeType } from '@/types/date-range.type';
 import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
 
 const useQueryParamsState = (
   pathname: string,
   defaultQuery: Record<string, any>,
+  defaultDateRange?: DateRangeType,
 ) => {
   const router = useRouter();
 
@@ -41,7 +41,7 @@ const useQueryParamsState = (
   }, [router.query]);
 
   const createdAtRange = useMemo(() => {
-    if (!query.createdAt) return DEFAULT_DATE_RANGE;
+    if (!query.createdAt) return defaultDateRange ?? null;
 
     const [startDate, endDate] = query.createdAt.split('~');
 
@@ -53,17 +53,17 @@ const useQueryParamsState = (
 
   const setCreatedAtRange = useCallback(
     (dateRange: DateRangeType) => {
-      if (!dateRange) return;
-      const { startDate, endDate } = dateRange;
       router.push(
         {
           pathname,
           query: {
             ...defaultQuery,
             ...query,
-            createdAt: `${dayjs(startDate).format(DATE_FORMAT)}~${dayjs(
-              endDate,
-            ).format(DATE_FORMAT)}`,
+            createdAt: dateRange
+              ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
+                  dateRange.endDate,
+                ).format(DATE_FORMAT)}`
+              : undefined,
           },
         },
         undefined,

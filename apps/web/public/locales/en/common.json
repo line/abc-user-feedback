@@ -264,7 +264,8 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "before-days": "Before {{day, number}} days",
-      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days"
+      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days",
+      "all-dates": "The entire period"
     },
     "equal-search": "Equal",
     "like-search": "Like"

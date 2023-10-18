@@ -81,7 +81,11 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
   const [page, setPage] = useState(1);
 
   const { createdAtRange, query, setCreatedAtRange, setQuery } =
-    useQueryParamsState(Path.FEEDBACK, { projectId, channelId });
+    useQueryParamsState(
+      Path.FEEDBACK,
+      { projectId, channelId },
+      DEFAULT_DATE_RANGE,
+    );
 
   const [limit, setLimit] = useLocalStorage<number>(`limit`, 50);
 
