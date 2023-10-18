@@ -24,7 +24,7 @@ import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIQuery, useProjects, useTenant } from '@/hooks';
-import isNotEmptyStr from '@/utils/is-not-empty-string';
+import { getDescriptionStr } from '@/utils/description-string';
 import type { NextPageWithLayout } from '../_app';
 
 const MainIndexPage: NextPageWithLayout = () => {
@@ -136,8 +136,8 @@ const CardItem: React.FC<IProps> = ({
         </div>
         <div>
           <p className="font-16-bold mb-1">{name}</p>
-          <p className="font-12-regular text-secondary w-[250px]">
-            {isNotEmptyStr(description) ? description : '-'}
+          <p className="font-12-regular text-secondary w-[250px] break-words">
+            {getDescriptionStr(description)}
           </p>
         </div>
       </div>

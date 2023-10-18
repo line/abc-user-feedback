@@ -22,25 +22,35 @@ import { toast } from '@ufb/ui';
 import { Path } from '@/constants/path';
 import { useUser } from '@/hooks';
 
+interface IQuery {
+  code: string;
+  callback_url?: string;
+}
+
 interface IProps {}
+
 const OAuthCallbackPage: NextPage<IProps> = () => {
   const { signInOAuth } = useUser();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const router = useRouter();
-  const code = useMemo(
-    () => router.query?.code as string | undefined,
-    [router.query],
-  );
 
-  useEffect(() => {
+  const query = useMemo(() => {
+    if (!router.query) return;
+    const { code, callback_url } = router.query;
     if (!code) return;
-    signInOAuth({ code }).catch(() => {
+    return { code, callback_url } as IQuery;
+  }, [router.query]);
+
+  console.log('query: ', query);
+  useEffect(() => {
+    if (!query) return;
+    signInOAuth(query).catch(() => {
       toast.negative({ title: 'OAuth2.0 Login Error' });
       router.replace(Path.SIGN_IN);
       setStatus('error');
     });
-  }, [code]);
+  }, [query]);
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">

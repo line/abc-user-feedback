@@ -88,7 +88,7 @@
     "@types/react-dom": "^18.2.4",
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
-    "@ufb/tsconfig": "*",
+    "@ufb/tsconfig": "^0.1.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.50.0",
     "jest": "^29.5.0",

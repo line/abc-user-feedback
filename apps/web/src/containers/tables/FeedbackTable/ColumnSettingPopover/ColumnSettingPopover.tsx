@@ -97,10 +97,13 @@ const ColumnSettingPopover: React.FC<IProps> = ({
       <Popover>
         <PopoverTrigger className="btn btn-secondary btn-sm gap-2">
           <Icon name="ViewColumnsStroke" size={16} />
-          {t('main.feedback.column-setting')} ({checkedNum}/{columnKeys.length})
+          {t('main.feedback.column-setting')}
         </PopoverTrigger>
         <PopoverContent disabledFloatingStyle className="mt-1.5">
-          <PopoverHeading>{t('main.feedback.column-setting')}</PopoverHeading>
+          <PopoverHeading className="whitespace-nowrap">
+            {t('main.feedback.column-setting')} {checkedNum}
+            <span className="text-tertiary">/{columnKeys.length}</span>
+          </PopoverHeading>
           <div className="m-5">
             <DragDropContext onDragEnd={onDragEnd}>
               <StrictModeDroppable droppableId="list">

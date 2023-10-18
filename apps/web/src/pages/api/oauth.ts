@@ -24,8 +24,10 @@ export default withIronSessionApiRoute(async (req, res) => {
   const { code } = req.body;
 
   try {
+    const params = new URLSearchParams({ code });
+
     const response = await axios.get(
-      `${env.API_BASE_URL}/api/auth/signIn/oauth?code=${code}`,
+      `${env.API_BASE_URL}/api/auth/signIn/oauth?${params}`,
     );
 
     if (response.status !== 200) {

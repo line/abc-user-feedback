@@ -28,6 +28,7 @@
   "devDependencies": {
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
+    "@ufb/tsconfig": "^0.1.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.50.0",
     "nodemon": "^2.0.22",

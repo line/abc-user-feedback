@@ -13,16 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import { registerAs } from '@nestjs/config';
-import * as yup from 'yup';
-
-export const appConfigSchema = yup.object({
-  APP_PORT: yup.number().default(4000),
-  APP_ADDRESS: yup.string().default('0.0.0.0'),
-});
-
-export const appConfig = registerAs('app', () => ({
-  port: process.env.APP_PORT,
-  address: process.env.APP_ADDRESS,
-}));
+export const getDescriptionStr = (str?: string | null) => {
+  if (!str) return '-';
+  str = str.trim();
+  return str.length === 0 ? str : '-';
+};

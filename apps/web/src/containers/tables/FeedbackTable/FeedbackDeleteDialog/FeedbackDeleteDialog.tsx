@@ -42,8 +42,8 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
       pathParams: { projectId, channelId },
       queryOptions: {
         async onSuccess() {
-          await handleSuccess();
           close();
+          await handleSuccess();
         },
         onError(error) {
           toast.negative({ title: error?.message ?? 'Error' });

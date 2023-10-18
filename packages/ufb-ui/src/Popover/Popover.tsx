@@ -234,19 +234,25 @@ export const PopoverHeading = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLProps<HTMLHeadingElement>
 >(function PopoverHeading(props, ref) {
+  const { className, ...otherProps } = props;
   const { setLabelId, setOpen } = usePopoverContext();
   const id = useId();
 
-  // Only sets `aria-labelledby` on the Popover root element
-  // if this component is mounted inside it.
   React.useLayoutEffect(() => {
     setLabelId(id);
     return () => setLabelId(undefined);
   }, [id, setLabelId]);
 
   return (
-    <div className="m-5 flex justify-between" {...props} ref={ref} id={id}>
-      <h1 className="font-16-bold">{props.children}</h1>
+    <div
+      className="m-5 flex justify-between gap-5"
+      {...otherProps}
+      ref={ref}
+      id={id}
+    >
+      <h1 className={['font-16-bold', className].join(' ')}>
+        {props.children}
+      </h1>
       <button
         className="icon-btn icon-btn-tertiary icon-btn-xs"
         onClick={() => setOpen(false)}

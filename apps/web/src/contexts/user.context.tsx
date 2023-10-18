@@ -45,6 +45,7 @@ export type JwtType = {
 
 interface ISignInOAuthInput {
   code: string;
+  callback_url?: string;
 }
 interface ISignInInput {
   email: string;
@@ -140,9 +141,9 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
     }
   };
 
-  const signInOAuth = async ({ code }: ISignInOAuthInput) => {
+  const signInOAuth = async ({ code, callback_url }: ISignInOAuthInput) => {
     try {
-      const { data } = await axios.post('/api/oauth', { code });
+      const { data } = await axios.post('/api/oauth', { code, callback_url });
       setJwt(data);
       if (router.query.callback_url) {
         router.push(router.query.callback_url as string);

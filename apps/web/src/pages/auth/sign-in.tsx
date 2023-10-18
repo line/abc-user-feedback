@@ -51,6 +51,7 @@ const SignInPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { signIn } = useUser();
   const { tenant } = useTenant();
+
   const callback_url = useMemo(() => {
     return router.query.callback_url
       ? (router.query.callback_url as string)
@@ -81,6 +82,13 @@ const SignInPage: NextPageWithLayout = () => {
     queryOptions: { enabled: tenant?.useOAuth ?? false },
     variables: { callback_url },
   });
+  const url = useMemo(() => {
+    const url = data?.url ?? '';
+    const q = callback_url
+      ? `&callback_url=${encodeURIComponent(encodeURIComponent(callback_url))}`
+      : '';
+    return url + q;
+  }, [data, callback_url]);
 
   return (
     <form className="m-auto w-[360px]" onSubmit={handleSubmit(onSubmit)}>
@@ -148,7 +156,7 @@ const SignInPage: NextPageWithLayout = () => {
           <button
             type="button"
             className="btn btn-lg btn-blue"
-            onClick={() => (data ? router.push(data.url) : {})}
+            onClick={() => router.push(url)}
           >
             OAuth2.0 {t('button.sign-in')}
           </button>

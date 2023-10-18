@@ -6,19 +6,14 @@
       "dependsOn": ["^topo"]
     },
     "build": {
-      "outputs": ["dist/**", ".next/**", "next-env.d.ts", "!.next/cache/**"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "next-env.d.ts", "!.next/cache/**"]
     },
     "dev": {
-      "dependsOn": ["@ufb/ui#build"],
       "cache": false,
       "persistent": true
     },
-    "@ufb/tailwind#build": {
-      "outputs": ["dist/**"]
-    },
-    "@ufb/ui#build": {
-      "outputs": ["dist/**"],
+    "web#dev": {
       "dependsOn": ["@ufb/tailwind#build"]
     },
     "format": {
@@ -26,15 +21,15 @@
       "outputMode": "new-only"
     },
     "lint": {
-      "dependsOn": ["^topo"],
+      "dependsOn": ["topo"],
       "outputs": ["node_modules/.cache/.eslintcache"]
     },
     "typecheck": {
-      "dependsOn": ["^topo"],
+      "dependsOn": ["topo"],
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test": {
-      "dependsOn": ["^topo"]
+      "dependsOn": ["topo"]
     },
     "clean": {
       "cache": false
