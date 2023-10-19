@@ -48,14 +48,14 @@ describe('SelectOptionController', () => {
     jest
       .spyOn(MockSelectOptionService, 'findByFieldId')
       .mockReturnValue(options);
-    const fieldId = faker.datatype.number();
+    const fieldId = faker.number.int();
     await optionController.getOptions(fieldId);
     expect(MockSelectOptionService.findByFieldId).toBeCalledTimes(1);
   });
   it('creaetOption', async () => {
-    const fieldId = faker.datatype.number();
+    const fieldId = faker.number.int();
     const dto = new CreateOptionRequestDto();
-    dto.name = faker.datatype.string();
+    dto.name = faker.string.sample();
     await optionController.createOption(fieldId, dto);
     expect(MockSelectOptionService.create).toBeCalledTimes(1);
   });

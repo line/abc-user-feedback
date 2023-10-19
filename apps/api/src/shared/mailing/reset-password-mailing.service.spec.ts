@@ -36,7 +36,7 @@ describe('ResetPasswordMailingService', () => {
     expect(resetPasswordMailingService).toBeDefined();
   });
   it('sends a mail', async () => {
-    const code = faker.datatype.string();
+    const code = faker.string.sample();
     const email = faker.internet.email();
 
     await resetPasswordMailingService.send({ code, email });

@@ -46,7 +46,7 @@ export const MockDataSource = {
 
 export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
   const enumValues = Object.keys(anEnum) as Array<keyof T>;
-  const randomIndex = faker.datatype.number(enumValues.length - 1);
+  const randomIndex = faker.number.int(enumValues.length - 1);
   const randomEnumKey = enumValues[randomIndex];
   return anEnum[randomEnumKey];
 };

@@ -45,7 +45,7 @@ describe('IssueTrackerController', () => {
   describe('create', () => {
     it('', async () => {
       jest.spyOn(MockIssueTrackerService, 'create');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await issueTrackerController.create(projectId, { data: {} });
       expect(MockIssueTrackerService.create).toBeCalledTimes(1);
@@ -54,7 +54,7 @@ describe('IssueTrackerController', () => {
   describe('findOne', () => {
     it('', async () => {
       jest.spyOn(MockIssueTrackerService, 'findByProjectId');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await issueTrackerController.findOne(projectId);
       expect(MockIssueTrackerService.findByProjectId).toBeCalledTimes(1);
@@ -63,7 +63,7 @@ describe('IssueTrackerController', () => {
   describe('updateOne', () => {
     it('', async () => {
       jest.spyOn(MockIssueTrackerService, 'update');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await issueTrackerController.updateOne(projectId, { data: {} });
       expect(MockIssueTrackerService.update).toBeCalledTimes(1);

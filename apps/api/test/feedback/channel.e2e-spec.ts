@@ -90,17 +90,17 @@ describe('AppController (e2e)', () => {
     await clearEntities([projectRepo, channelRepo, fieldRepo, optionRepo]);
 
     project = await projectRepo.save({
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
     });
   });
 
   it('/projects/:projectId/channels (POST)', () => {
-    const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+    const fieldCount = faker.number.int({ min: 1, max: 10 });
 
     const dto = new CreateChannelRequestDto();
-    dto.name = faker.datatype.string();
-    dto.description = faker.datatype.string();
+    dto.name = faker.string.sample();
+    dto.description = faker.string.sample();
     dto.fields = Array.from({ length: fieldCount }).map((_) =>
       createFieldDto({}),
     );
@@ -160,7 +160,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/projects/:projectId/channels (GET)', async () => {
-    const total = faker.datatype.number(10);
+    const total = faker.number.int(10);
 
     await channelRepo.save(
       Array.from({ length: total }).map(() => ({
@@ -189,8 +189,8 @@ describe('AppController (e2e)', () => {
 
   it('/channels/:id (GET)', async () => {
     const channel = await channelRepo.save({
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
     });
 
     return request(app.getHttpServer())
@@ -203,12 +203,12 @@ describe('AppController (e2e)', () => {
       });
   });
   it('/channels/:id (PUT)', async () => {
-    const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+    const fieldCount = faker.number.int({ min: 1, max: 10 });
 
     const { id: channelId } = await channelService.create({
       projectId: project.id,
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
       fields: Array.from({ length: fieldCount }).map((_) => createFieldDto({})),
     });
 
@@ -226,8 +226,8 @@ describe('AppController (e2e)', () => {
     );
 
     const dto = new UpdateChannelRequestDto();
-    dto.name = faker.datatype.string();
-    dto.description = faker.datatype.string();
+    dto.name = faker.string.sample();
+    dto.description = faker.string.sample();
     // dto.fields = [...existingFields, ...newfields];
 
     return request(app.getHttpServer())

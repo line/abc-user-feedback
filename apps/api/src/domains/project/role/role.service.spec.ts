@@ -18,7 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { getRandomEnumValues, mockRepository } from '@/utils/test-utils';
+import { getRandomEnumValues } from '@/utils/test-utils';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import {
   RoleAlreadyExistsException,
@@ -27,14 +27,7 @@ import {
 import { PermissionEnum } from './permission.enum';
 import { RoleEntity } from './role.entity';
 import { RoleService } from './role.service';
-
-export const RoleServiceProviders = [
-  RoleService,
-  {
-    provide: getRepositoryToken(RoleEntity),
-    useValue: mockRepository(),
-  },
-];
+import { RoleServiceProviders } from './role.service.providers';
 
 describe('RoleService', () => {
   let roleService: RoleService;
@@ -51,9 +44,9 @@ describe('RoleService', () => {
   describe('create', () => {
     it('creating a role succeeds with valid inputs', async () => {
       const dto = new CreateRoleDto();
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
       dto.permissions = getRandomEnumValues(PermissionEnum);
-      dto.projectId = faker.datatype.number();
+      dto.projectId = faker.number.int();
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
 
       await roleService.create(dto);
@@ -72,12 +65,12 @@ describe('RoleService', () => {
     });
     it('creating a role fails with duplicate inputs', async () => {
       const dto = new CreateRoleDto();
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
       dto.permissions = getRandomEnumValues(PermissionEnum);
-      dto.projectId = faker.datatype.number();
+      dto.projectId = faker.number.int();
       jest
         .spyOn(roleRepo, 'findOneBy')
-        .mockResolvedValue({ id: faker.datatype.number() } as RoleEntity);
+        .mockResolvedValue({ id: faker.number.int() } as RoleEntity);
 
       await expect(roleService.create(dto)).rejects.toThrow(
         RoleAlreadyExistsException,
@@ -93,10 +86,10 @@ describe('RoleService', () => {
 
   describe('update', () => {
     it('updating a role succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const projectId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const projectId = faker.number.int();
       const dto = new UpdateRoleDto();
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
       dto.permissions = getRandomEnumValues(PermissionEnum);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue({
         id: roleId,
@@ -115,17 +108,17 @@ describe('RoleService', () => {
       });
     });
     it('updating a role fails with a duplicate name', async () => {
-      const roleId = faker.datatype.number();
-      const projectId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const projectId = faker.number.int();
       const dto = new UpdateRoleDto();
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
       dto.permissions = getRandomEnumValues(PermissionEnum);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue({
         id: roleId,
         name: dto.name,
       } as RoleEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         name: dto.name,
       } as RoleEntity);
 
@@ -140,7 +133,7 @@ describe('RoleService', () => {
 
   describe('findById', () => {
     it('finding a role succeeds with a valid role id', async () => {
-      const roleId = faker.datatype.number();
+      const roleId = faker.number.int();
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ id: roleId } as RoleEntity);
@@ -155,7 +148,7 @@ describe('RoleService', () => {
       expect(result.id).toEqual(roleId);
     });
     it('finding a role fails with a nonexistent role id', async () => {
-      const nonexistentRoleId = faker.datatype.number();
+      const nonexistentRoleId = faker.number.int();
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue(null);
 
       await expect(roleService.findById(nonexistentRoleId)).rejects.toThrow(
@@ -172,9 +165,9 @@ describe('RoleService', () => {
 
   describe('findByProjectNameAndRoleName', () => {
     it('finding a role succeeds with a valid project name and a role name', async () => {
-      const roleId = faker.datatype.number();
-      const projectName = faker.datatype.string();
-      const roleName = faker.datatype.string();
+      const roleId = faker.number.int();
+      const projectName = faker.string.sample();
+      const roleName = faker.string.sample();
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ id: roleId } as RoleEntity);
@@ -192,8 +185,8 @@ describe('RoleService', () => {
       expect(result.id).toEqual(roleId);
     });
     it('finding a role fails with an invalid project name and an invalid role name', async () => {
-      const projectName = faker.datatype.string();
-      const roleName = faker.datatype.string();
+      const projectName = faker.string.sample();
+      const roleName = faker.string.sample();
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue(null);
 
       await expect(

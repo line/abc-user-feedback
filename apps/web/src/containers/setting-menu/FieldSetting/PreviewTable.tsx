@@ -55,7 +55,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             field.format === 'boolean'
               ? faker.datatype.boolean()
               : field.format === 'date'
-              ? faker.datatype.datetime()
+              ? faker.date.anytime()
               : field.format === 'keyword'
               ? faker.word.noun()
               : field.format === 'multiSelect'
@@ -67,7 +67,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   (field.options ?? []).map((v) => v.name),
                 )
               : field.format === 'number'
-              ? faker.datatype.number()
+              ? faker.number.int()
               : field.format === 'text'
               ? faker.lorem.text()
               : null;

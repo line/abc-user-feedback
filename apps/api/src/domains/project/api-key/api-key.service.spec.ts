@@ -19,21 +19,11 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
 import { ProjectNotFoundException } from '../project/exceptions';
 import { ProjectEntity } from '../project/project.entity';
-import { ProjectServiceProviders } from '../project/project.service.spec';
 import { ApiKeyEntity } from './api-key.entity';
 import { ApiKeyService } from './api-key.service';
-
-export const ApiKeyServiceProviders = [
-  ApiKeyService,
-  {
-    provide: getRepositoryToken(ApiKeyEntity),
-    useValue: mockRepository(),
-  },
-  ...ProjectServiceProviders,
-];
+import { ApiKeyServiceProviders } from './api-key.service.providers';
 
 describe('ApiKeyService', () => {
   let apiKeyService: ApiKeyService;
@@ -52,7 +42,7 @@ describe('ApiKeyService', () => {
 
   describe('create', () => {
     it('creating an api key succeeds with a valid project id', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValueOnce({ id: projectId } as ProjectEntity);
@@ -68,7 +58,7 @@ describe('ApiKeyService', () => {
       expect(apiKey.value).toHaveLength(20);
     });
     it('creating an api key fails with an invalid project id', async () => {
-      const invalidProjectId = faker.datatype.number();
+      const invalidProjectId = faker.number.int();
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValueOnce(null as ProjectEntity);

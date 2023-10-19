@@ -30,7 +30,7 @@ export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const type = input?.type ?? getRandomEnumValue(FieldTypeEnum);
   const status = input?.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
-    name: faker.random.alphaNumeric(20),
+    name: faker.string.alphanumeric(20),
     description: faker.lorem.lines(2),
     format,
     type,
@@ -47,8 +47,8 @@ export const createFieldDto = (input: Partial<CreateFieldDto>) => {
   const type = input?.type ?? getRandomEnumValue(FieldTypeEnum);
   const status = input?.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
-    name: faker.random.alphaNumeric(20),
-    key: faker.random.alphaNumeric(20),
+    name: faker.string.alphanumeric(20),
+    key: faker.string.alphanumeric(20),
     description: faker.lorem.lines(2),
     format,
     type,
@@ -61,14 +61,14 @@ export const createFieldDto = (input: Partial<CreateFieldDto>) => {
 };
 export const updateFieldDto = (input: Partial<ReplaceFieldDto>) => {
   return {
-    id: faker.datatype.number(),
+    id: faker.number.int(),
     ...createFieldDto(input),
   };
 };
 
 export const createIssueDto = (input: Partial<CreateIssueDto>) => {
   return {
-    name: faker.random.alphaNumeric(20),
+    name: faker.string.alphanumeric(20),
     ...input,
   };
 };
@@ -79,48 +79,44 @@ export const getRandomValue = (
 ) => {
   switch (format) {
     case FieldFormatEnum.text:
-      return faker.datatype.string();
+      return faker.string.sample();
     case FieldFormatEnum.keyword:
-      return faker.datatype.string();
+      return faker.string.sample();
     case FieldFormatEnum.number:
-      return faker.datatype.number();
+      return faker.number.int();
     case FieldFormatEnum.boolean:
       return faker.datatype.boolean();
     case FieldFormatEnum.select:
       return options.length === 0
         ? undefined
-        : options[faker.datatype.number({ min: 0, max: options.length - 1 })]
-            .key;
+        : options[faker.number.int({ min: 0, max: options.length - 1 })].key;
     case FieldFormatEnum.multiSelect:
       return options.length === 0
         ? []
         : faker.helpers
             .shuffle(options)
-            .slice(
-              0,
-              faker.datatype.number({ min: 0, max: options.length - 1 }),
-            )
+            .slice(0, faker.number.int({ min: 0, max: options.length - 1 }))
             .map((option) => option.key);
     case FieldFormatEnum.date:
-      return faker.datatype.datetime().toISOString();
+      return faker.date.anytime().toISOString();
     default:
       throw new Error('Invalid field type ');
   }
 };
 
 const getRandomOptionEntities = () => {
-  const length = faker.datatype.number(10);
+  const length = faker.number.int(10);
   return Array.from({ length }).map(() => ({
-    id: faker.datatype.number(),
-    name: faker.datatype.string(),
+    id: faker.number.int(),
+    name: faker.string.sample(),
   }));
 };
 const getRandomOptionDtos = () => {
-  const length = faker.datatype.number(10);
+  const length = faker.number.int(10);
   return Array.from({ length }).map(() => {
-    const randomValue = faker.datatype.string();
+    const randomValue = faker.string.sample();
     return {
-      id: faker.datatype.number(),
+      id: faker.number.int(),
       name: randomValue,
       key: randomValue,
     };
@@ -129,7 +125,7 @@ const getRandomOptionDtos = () => {
 
 export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
   const enumValues = Object.keys(anEnum) as Array<keyof T>;
-  const randomIndex = faker.datatype.number(enumValues.length - 1);
+  const randomIndex = faker.number.int(enumValues.length - 1);
   const randomEnumKey = enumValues[randomIndex];
   return anEnum[randomEnumKey];
 };

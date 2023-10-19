@@ -70,7 +70,7 @@ describe('AuthController', () => {
   });
   it('verifyEmailCode', () => {
     const dto = new EmailVerificationCodeRequestDto();
-    dto.code = faker.datatype.string();
+    dto.code = faker.string.sample();
     dto.email = faker.internet.email();
     authController.verifyEmailCode(dto);
 
@@ -85,7 +85,7 @@ describe('AuthController', () => {
   });
   it('signUpInvitationUser', () => {
     const dto = new InvitationUserSignUpRequestDto();
-    dto.code = faker.datatype.string();
+    dto.code = faker.string.sample();
     dto.email = faker.internet.email();
     dto.password = faker.internet.password();
     authController.signUpInvitationUser(dto);

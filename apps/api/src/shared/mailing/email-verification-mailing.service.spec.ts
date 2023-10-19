@@ -37,7 +37,7 @@ describe('first', () => {
     expect(emailVerificationMailingService).toBeDefined();
   });
   it('send', async () => {
-    const code = faker.datatype.string();
+    const code = faker.string.sample();
     const email = faker.internet.email();
     await emailVerificationMailingService.send({ code, email });
     expect(MockMailerService.sendMail).toHaveBeenCalledTimes(1);

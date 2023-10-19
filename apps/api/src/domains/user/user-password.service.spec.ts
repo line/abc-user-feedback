@@ -14,7 +14,6 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
@@ -22,31 +21,12 @@ import type { Repository } from 'typeorm';
 
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
-import { CodeServiceProviders } from '@/shared/code/code.service.spec';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
-import { getMockProvider, mockRepository } from '@/utils/test-utils';
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
 import { InvalidPasswordException, UserNotFoundException } from './exceptions';
 import { UserPasswordService } from './user-password.service';
-
-const MockMailerService = {
-  sendMail: jest.fn(),
-};
-const MockResetPasswordMailingService = {
-  send: jest.fn(),
-};
-
-export const UserPasswordServiceProviders = [
-  UserPasswordService,
-  ...CodeServiceProviders,
-  getMockProvider(ResetPasswordMailingService, MockResetPasswordMailingService),
-  getMockProvider(MailerService, MockMailerService),
-  {
-    provide: getRepositoryToken(UserEntity),
-    useValue: mockRepository(),
-  },
-];
+import { UserPasswordServiceProviders } from './user-password.service.providers';
 
 describe('UserPasswordService', () => {
   let userPasswordService: UserPasswordService;
@@ -66,7 +46,7 @@ describe('UserPasswordService', () => {
 
   describe('sendResetPasswordMail', () => {
     it('sending a reset password mail succeeds with valid inputs', async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.number.int();
       const email = faker.internet.email();
       jest
         .spyOn(userRepo, 'findOneBy')
@@ -95,9 +75,9 @@ describe('UserPasswordService', () => {
     it('resetting a password succeeds with valid inputs', async () => {
       const dto = new ResetPasswordDto();
       dto.email = faker.internet.email();
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
       dto.password = faker.internet.password();
-      const userId = faker.datatype.number();
+      const userId = faker.number.int();
       jest
         .spyOn(userRepo, 'findOneBy')
         .mockResolvedValue({ id: userId } as UserEntity);
@@ -123,7 +103,7 @@ describe('UserPasswordService', () => {
     it('resetting a password fails with an invalid email', async () => {
       const dto = new ResetPasswordDto();
       dto.email = faker.internet.email();
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
       dto.password = faker.internet.password();
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
 
@@ -138,7 +118,7 @@ describe('UserPasswordService', () => {
   describe('changePassword', () => {
     it('changing the password succeeds with valid inputs', async () => {
       const dto = new ChangePasswordDto();
-      dto.userId = faker.datatype.number();
+      dto.userId = faker.number.int();
       dto.password = faker.internet.password();
       dto.newPassword = faker.internet.password();
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue({
@@ -160,7 +140,7 @@ describe('UserPasswordService', () => {
     });
     it('changing the password fails with the invalid original password', async () => {
       const dto = new ChangePasswordDto();
-      dto.userId = faker.datatype.number();
+      dto.userId = faker.number.int();
       dto.password = faker.internet.password();
       dto.newPassword = faker.internet.password();
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue({

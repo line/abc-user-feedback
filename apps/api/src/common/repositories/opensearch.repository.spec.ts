@@ -47,6 +47,13 @@ const OpensearchRepositoryProviders = [
   getMockProvider('OPENSEARCH_CLIENT', MockClient),
 ];
 
+const COMPLICATE_JSON = JSON.stringify({
+  KEY1: 'VALUE1',
+  KEY2: 'VALUE2',
+  KEY3: true,
+  KEY4: 123,
+});
+
 describe('Opensearch Repository Test suite', () => {
   let osRepo: OpensearchRepository;
   let osClient: Client;
@@ -60,7 +67,7 @@ describe('Opensearch Repository Test suite', () => {
 
   describe('create index', () => {
     it('positive case', async () => {
-      const index = faker.datatype.number().toString();
+      const index = faker.number.int().toString();
       const indexName = 'channel_' + index;
       jest.spyOn(osClient.indices, 'create');
       jest.spyOn(osClient.indices, 'putAlias');
@@ -103,8 +110,8 @@ describe('Opensearch Repository Test suite', () => {
   describe('putMappings', () => {
     it('putting mappings succeeds with an existent index', async () => {
       const dto = new PutMappingsDto();
-      dto.index = faker.datatype.number().toString();
-      dto.mappings = JSON.parse(faker.datatype.json());
+      dto.index = faker.number.int().toString();
+      dto.mappings = JSON.parse(COMPLICATE_JSON);
       jest
         .spyOn(osClient.indices, 'exists')
         .mockResolvedValue({ body: true } as never);
@@ -121,8 +128,8 @@ describe('Opensearch Repository Test suite', () => {
     });
     it('putting mappings fails with a nonexistent index', async () => {
       const dto = new PutMappingsDto();
-      dto.index = faker.datatype.number().toString();
-      dto.mappings = JSON.parse(faker.datatype.json());
+      dto.index = faker.number.int().toString();
+      dto.mappings = JSON.parse(COMPLICATE_JSON);
       jest
         .spyOn(osClient.indices, 'exists')
         .mockResolvedValue({ body: false } as never);
@@ -139,12 +146,12 @@ describe('Opensearch Repository Test suite', () => {
 
   describe('createData', () => {
     it('creating data succeeds with valid inputs', async () => {
-      const index = faker.datatype.number().toString();
-      const id = faker.datatype.number().toString();
+      const index = faker.number.int().toString();
+      const id = faker.number.int().toString();
       const dto = new CreateDataDto();
       dto.id = id;
       dto.index = index;
-      dto.data = JSON.parse(faker.datatype.json());
+      dto.data = JSON.parse(COMPLICATE_JSON);
       jest
         .spyOn(osClient.indices, 'exists')
         .mockResolvedValue({ body: true } as never);
@@ -176,18 +183,18 @@ describe('Opensearch Repository Test suite', () => {
       });
     });
     it('creating data fails with an invalid index', async () => {
-      const invalidIndex = faker.datatype.number().toString();
-      const id = faker.datatype.number().toString();
+      const invalidIndex = faker.number.int().toString();
+      const id = faker.number.int().toString();
       const dto = new CreateDataDto();
       dto.id = id;
       dto.index = invalidIndex;
-      dto.data = JSON.parse(faker.datatype.json());
+      dto.data = JSON.parse(COMPLICATE_JSON);
       jest
         .spyOn(osClient.indices, 'exists')
         .mockResolvedValue({ body: false } as never);
       jest.spyOn(osClient.indices, 'getMapping').mockResolvedValue({
         body: {
-          ['channel_' + faker.datatype.number().toString()]: {
+          ['channel_' + faker.number.int().toString()]: {
             mappings: {
               properties: dto.data,
             },
@@ -209,9 +216,9 @@ describe('Opensearch Repository Test suite', () => {
       expect(osClient.index).not.toBeCalled();
     });
     it('creating data fails with invalid data', async () => {
-      const index = faker.datatype.number().toString();
-      const id = faker.datatype.number().toString();
-      const data = JSON.parse(faker.datatype.json());
+      const index = faker.number.int().toString();
+      const id = faker.number.int().toString();
+      const data = JSON.parse(COMPLICATE_JSON);
       const dto = new CreateDataDto();
       dto.id = id;
       dto.index = index;

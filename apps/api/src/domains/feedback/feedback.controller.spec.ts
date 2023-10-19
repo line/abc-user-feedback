@@ -69,11 +69,11 @@ describe('FeedbackController', () => {
   });
 
   it('create', async () => {
-    const projectId = faker.datatype.number();
-    const channelId = faker.datatype.number();
+    const projectId = faker.number.int();
+    const channelId = faker.number.int();
     jest
       .spyOn(MockFeedbackService, 'create')
-      .mockResolvedValue({ id: faker.datatype.number() });
+      .mockResolvedValue({ id: faker.number.int() });
     jest.spyOn(MockChannelService, 'findById').mockResolvedValue({
       project: { id: projectId },
     } as ChannelEntity);
@@ -82,11 +82,11 @@ describe('FeedbackController', () => {
     expect(MockFeedbackService.create).toBeCalledTimes(1);
   });
   it('findByChannelId', async () => {
-    const channelId = faker.datatype.number();
+    const channelId = faker.number.int();
 
     const dto = new FindFeedbacksByChannelIdRequestDto(
-      faker.datatype.number(),
-      faker.datatype.number(),
+      faker.number.int(),
+      faker.number.int(),
       {},
     );
 
@@ -94,15 +94,15 @@ describe('FeedbackController', () => {
     expect(MockFeedbackService.findByChannelId).toBeCalledTimes(1);
   });
   it('exportFeedbacks', async () => {
-    const channelId = faker.datatype.number();
+    const channelId = faker.number.int();
     const response = {
       type: jest.fn(),
       header: jest.fn(),
       send: jest.fn(),
     } as unknown as FastifyReply;
     const dto = new ExportFeedbacksRequestDto(
-      faker.datatype.number(),
-      faker.datatype.number(),
+      faker.number.int(),
+      faker.number.int(),
       'csv',
     );
     const userDto = new UserDto();
@@ -111,7 +111,7 @@ describe('FeedbackController', () => {
       feedbackIds: [],
     });
     jest.spyOn(MockChannelService, 'findById').mockResolvedValue({
-      project: { name: faker.datatype.string() },
+      project: { name: faker.string.sample() },
     } as ChannelEntity);
 
     await feedbackController.exportFeedbacks(
@@ -125,17 +125,17 @@ describe('FeedbackController', () => {
     expect(MockFeedbackService.generateFile).toBeCalledTimes(1);
   });
   it('updateFeedback', async () => {
-    const channelId = faker.datatype.number();
-    const feedbackId = faker.datatype.number();
-    const body = { [faker.datatype.string()]: faker.datatype.string() };
+    const channelId = faker.number.int();
+    const feedbackId = faker.number.int();
+    const body = { [faker.string.sample()]: faker.string.sample() };
 
     await feedbackController.updateFeedback(channelId, feedbackId, body);
     expect(MockFeedbackService.updateFeedback).toBeCalledTimes(1);
   });
 
   it('delete Feedback', async () => {
-    const channelId = faker.datatype.number();
-    const feedbackIds = [faker.datatype.number()];
+    const channelId = faker.number.int();
+    const feedbackIds = [faker.number.int()];
 
     const dto = new DeleteFeedbacksRequestDto();
     dto.feedbackIds = feedbackIds;
