@@ -29,12 +29,11 @@ import dayjs from 'dayjs';
 import type { TFunction } from 'next-i18next';
 import { useTranslation } from 'next-i18next';
 
-import { Badge, Icon, toast } from '@ufb/ui';
+import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
   DateRangePicker,
-  Dialog,
   ExpandableText,
   IssueCircle,
   ShareButton,
@@ -46,7 +45,7 @@ import {
   TableSortIcon,
 } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
 import {
@@ -205,8 +204,8 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   );
   const q = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
-      if (key === 'status') {
-        if (value !== 'total') return { ...prev, [key]: value };
+      if (key === 'status' && value !== 'total') {
+        return { ...prev, [key]: value };
       }
       if (createdAtRange) {
         return {
@@ -217,7 +216,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           },
         };
       }
-      return prev;
+      return { ...prev, [key]: value };
     }, {});
   }, [query, createdAtRange]);
 
@@ -410,13 +409,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           />
                         </button>
                         <ShareButton
-                          pathname={`/main/${projectId}/issue?id=${
-                            row.original.id
-                          }&createdAt=${dayjs(row.original.createdAt).format(
-                            DATE_FORMAT,
-                          )}~${dayjs(row.original.createdAt).format(
-                            DATE_FORMAT,
-                          )}`}
+                          pathname={`/main/${projectId}/issue?id=${row.original.id}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}
@@ -462,22 +455,27 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           </tbody>
         </table>
       </div>
-      <Dialog
+      <Popover
         open={openDeleteDialog}
-        close={() => setOpenDeleteDialog(false)}
-        title={t('main.issue.dialog.delete-issue.title')}
-        description={t('main.issue.dialog.delete-issue.description')}
-        submitButton={{
-          children: t('button.delete'),
-          onClick: onClickDelete,
-          disabled: deleteIssuesLoading,
-        }}
-        icon={{
-          name: 'WarningCircleFill',
-          className: 'text-red-primary',
-          size: 56,
-        }}
-      />
+        onOpenChange={() => setOpenDeleteDialog(false)}
+        modal
+      >
+        <PopoverModalContent
+          title={t('main.issue.dialog.delete-issue.title')}
+          description={t('main.issue.dialog.delete-issue.description')}
+          cancelText={t('button.cancel')}
+          submitButton={{
+            children: t('button.delete'),
+            onClick: onClickDelete,
+            disabled: deleteIssuesLoading,
+          }}
+          icon={{
+            name: 'WarningCircleFill',
+            className: 'text-red-primary',
+            size: 56,
+          }}
+        />
+      </Popover>
     </div>
   );
 };

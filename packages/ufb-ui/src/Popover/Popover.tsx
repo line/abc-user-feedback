@@ -32,6 +32,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 
+import type { IIconProps } from '../Icon';
 import { Icon } from '../Icon';
 
 interface PopoverOptions {
@@ -262,3 +263,60 @@ export const PopoverHeading = React.forwardRef<
     </div>
   );
 });
+
+export interface IPopoverModalContentProps extends React.PropsWithChildren {
+  title: string;
+  description?: string;
+  icon?: IIconProps;
+  submitButton: {
+    children: React.ReactNode;
+    disabled?: boolean;
+    className?: string;
+    onClick?: () => void;
+    form?: string;
+    type?: 'submit' | 'reset' | 'button' | undefined;
+  };
+  cancelText: string;
+}
+
+export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
+  props,
+) => {
+  const { title, description, children, submitButton, icon, cancelText } =
+    props;
+  const { setOpen } = usePopoverContext();
+
+  return (
+    <PopoverContent isPortal>
+      <PopoverHeading>{title}</PopoverHeading>
+      <div className="m-5 w-[400px]">
+        {icon && (
+          <div className="mb-6 text-center">
+            <Icon {...icon} />
+          </div>
+        )}
+        {description && (
+          <p
+            className={[
+              'font-14-regular mb-10 whitespace-pre-line',
+              icon ? 'text-center' : '',
+            ].join(' ')}
+          >
+            {description}
+          </p>
+        )}
+        <div className="mb-5">{children}</div>
+        <div className="flex justify-end gap-2">
+          <button className="btn btn-secondary" onClick={() => setOpen(false)}>
+            {cancelText}
+          </button>
+          <button
+            {...submitButton}
+            className={['btn btn-primary', submitButton.className].join(' ')}
+            type={submitButton.type || 'button'}
+          />
+        </div>
+      </div>
+    </PopoverContent>
+  );
+};

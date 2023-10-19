@@ -17,13 +17,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
-import { Input, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
-
 import {
-  ChannelCard,
+  Input,
+  Popover,
   PopoverModalContent,
-  SettingMenuTemplate,
-} from '@/components';
+  PopoverTrigger,
+  TextInput,
+  toast,
+} from '@ufb/ui';
+
+import { ChannelCard, SettingMenuTemplate } from '@/components';
 import {
   useFeedbackSearch,
   useOAIMutation,
@@ -83,6 +86,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
           <PopoverModalContent
             title={t('main.setting.dialog.delete-channel.title')}
             description={t('main.setting.dialog.delete-channel.description')}
+            cancelText={t('button.cancel')}
             icon={{
               name: 'WarningTriangleFill',
               className: 'text-red-primary',

@@ -16,9 +16,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
 
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation } from '@/hooks';
 
 interface IProps {
@@ -65,6 +70,7 @@ const MemberDeleteDialog: React.FC<IProps> = ({
       <PopoverModalContent
         title={t('main.setting.dialog.delete-member.title')}
         description={t('main.setting.dialog.delete-member.description')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'WarningTriangleFill',
           className: 'text-red-primary',

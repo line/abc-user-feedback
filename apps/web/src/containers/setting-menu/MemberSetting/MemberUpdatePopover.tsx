@@ -16,9 +16,15 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
 
-import { PopoverModalContent, SelectBox } from '@/components';
+import { SelectBox } from '@/components';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
 import type { RoleType } from '@/types/role.type';
 
@@ -73,6 +79,7 @@ const MemberUpdatePopover: React.FC<IProps> = ({
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.edit-member.title')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'ProfileSettingFill',
           className: 'text-orange-primary',
