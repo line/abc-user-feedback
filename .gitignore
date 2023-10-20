@@ -30,7 +30,7 @@ yarn-error.log*
 .env.production.local
 
 # turbo
-!.turbo
+!.turbo/.gitkeep
 **/.turbo
 
 # .env

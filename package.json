@@ -9,8 +9,10 @@
       "tooling/*"
     ],
     "nohoist": [
-      "**/nestjs-typeorm-paginate",
-      "**/typeorm"
+      "**/typeorm*/**",
+      "**/typeorm*",
+      "**/*nestjs*/**",
+      "**/*nestjs*"
     ]
   },
   "scripts": {
