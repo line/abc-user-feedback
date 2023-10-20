@@ -49,7 +49,7 @@ const HeaderName: React.FC<IProps> = () => {
       </div>
       {data && (
         <>
-          <Icon name="ChevronRight" size={12} className="text-secondary" />
+          <Icon name="ChevronRight" size={12} />
           <div className="flex items-center gap-2">
             <div className="bg-fill-tertiary inline-flex rounded-sm p-1.5">
               <Icon

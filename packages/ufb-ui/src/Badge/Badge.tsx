@@ -152,7 +152,7 @@ export const Badge: React.FC<IProps> = (props) => {
   return (
     <div
       className={[
-        'inline-flex items-center gap-1 overflow-hidden rounded-full',
+        'inline-flex items-center gap-1 rounded-full',
         bgCN,
         fontSize,
         padding,

@@ -13,5 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './Dialog_back';
-export { default as PopoverModalContent } from './PopoverModalContent';
+export { default } from './OAuthLoginButton';

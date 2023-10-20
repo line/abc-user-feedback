@@ -13,4 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './Dialog';
+export const getDescriptionStr = (str?: string | null) => {
+  if (!str) return '-';
+  str = str.trim();
+  return str.length === 0 ? str : '-';
+};

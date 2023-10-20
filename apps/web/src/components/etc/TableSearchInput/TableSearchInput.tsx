@@ -154,8 +154,9 @@ const TableSearchInput: React.FC<IProps> = ({
         displayValue={() => inputValue}
         onFocus={() => close()}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && (e.target as any).value.length === 0)
+          if (e.key === 'Enter' && (e.target as any).value.length === 0) {
             onInputChangeQuery({});
+          }
         }}
         placeholder=" "
       />

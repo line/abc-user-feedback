@@ -13,4 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './PopoverModalContent';
+module.exports = require('tailwindcss/plugin')(({
+  addBase,
+  addComponents,
+  addUtilities,
+}) => {
+  addBase(require('./dist/layer/base'));
+  addComponents(require('./dist/layer/components'));
+  addUtilities(require('./dist/layer/utilities'));
+});

@@ -36,6 +36,14 @@ interface IProps extends React.PropsWithChildren {
   maxDays?: number;
   isClearable?: boolean;
 }
+const isTotalDateRange = (date: DateRangeType) => {
+  if (!date) return false;
+  if (!date.startDate || !date.endDate) return false;
+  return (
+    dayjs(date.startDate).format(DATE_FORMAT) === '1900-01-01' &&
+    dayjs(date.endDate).format(DATE_FORMAT) === '2999-12-31'
+  );
+};
 
 const DateRangePicker: React.FC<IProps> = (props) => {
   const { value, onChange, maxDate, minDate, maxDays, isClearable } = props;
@@ -74,29 +82,34 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         startDate: dayjs().subtract(90, 'days').toDate(),
         endDate: dayjs().toDate(),
       },
+      {
+        label: t('text.date.all-dates'),
+        startDate: dayjs('1900.01.01').toDate(),
+        endDate: dayjs('2999.12.31').toDate(),
+      },
     ],
     [t],
   );
 
   useEffect(() => {
+    setActiveIdx(-1);
     setCurrentValue(value);
-  }, [value]);
+  }, [value, isOpen]);
 
   const handleChangeDateRange =
     (index: number, startDate: Date, endDate: Date) => () => {
       setActiveIdx(index);
       setCurrentValue({ startDate, endDate });
     };
+
   const handleCancel = () => {
     setCurrentValue(value);
     setIsOpen(false);
   };
+
   const handleApply = () => {
     if (!currentValue?.startDate || !currentValue?.endDate) return;
-    if (
-      maxDays &&
-      isOverMaxDays(currentValue.startDate, currentValue.endDate, maxDays)
-    ) {
+    if (maxDays && isOverMaxDays(currentValue, maxDays)) {
       toast.negative({
         title: t('text.date.date-range-over-max-days', { maxDays }),
       });
@@ -119,15 +132,17 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         >
           <p className="font-14-regular">
             {currentValue
-              ? `${
-                  currentValue?.startDate
-                    ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
-                    : ''
-                } ~ ${
-                  currentValue?.endDate
-                    ? dayjs(currentValue.endDate).format(DATE_FORMAT)
-                    : ''
-                }`
+              ? isTotalDateRange(currentValue)
+                ? t('text.date.all-dates')
+                : `${
+                    currentValue?.startDate
+                      ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
+                      : ''
+                  } ~ ${
+                    currentValue?.endDate
+                      ? dayjs(currentValue.endDate).format(DATE_FORMAT)
+                      : ''
+                  }`
               : 'YYYY-MM-DD ~ YYYY-MM-DD'}
           </p>
           <div className="flex flex-row items-center gap-2">
@@ -174,7 +189,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             endDate={currentValue?.endDate}
             monthsShown={2}
             minDate={minDate}
-            maxDate={currentValue?.startDate ? maxDate : undefined}
+            maxDate={maxDate}
             disabledKeyboardNavigation
             selectsRange
             inline
@@ -197,8 +212,11 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     </Popover>
   );
 };
-const isOverMaxDays = (startDate: Date, endDate: Date, maxDays: number) => {
-  return dayjs(startDate).add(maxDays, 'days').toDate() < endDate;
+
+const isOverMaxDays = (date: DateRangeType, maxDays: number) => {
+  if (!date) return false;
+  if (!date.startDate || !date.endDate) return false;
+  return dayjs(date.startDate).add(maxDays, 'days').toDate() < date.endDate;
 };
 
 export default DateRangePicker;

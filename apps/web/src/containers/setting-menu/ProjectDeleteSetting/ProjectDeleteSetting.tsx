@@ -17,13 +17,16 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
-import { Input, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
-
 import {
-  ChannelCard,
+  Input,
+  Popover,
   PopoverModalContent,
-  SettingMenuTemplate,
-} from '@/components';
+  PopoverTrigger,
+  TextInput,
+  toast,
+} from '@ufb/ui';
+
+import { ChannelCard, SettingMenuTemplate } from '@/components';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 import ChannelCardList from './ChannelCardList';
 
@@ -80,6 +83,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
           </PopoverTrigger>
           <PopoverModalContent
             title={t('main.setting.dialog.delete-project.title')}
+            cancelText={t('button.cancel')}
             description={t('main.setting.dialog.delete-project.description')}
             icon={{
               name: 'WarningTriangleFill',

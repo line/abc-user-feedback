@@ -34,14 +34,27 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(Path.MAIN, req.url));
   }
 
-  const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
   if (!session.jwt && isProtected) {
-    return NextResponse.redirect(
-      new URL(Path.SIGN_IN + '?callback_url=' + requestPath, req.url),
-    );
+    const parmas = new URLSearchParams(req.nextUrl.search);
+    if (parmas.get('callback_url')) {
+      return NextResponse.redirect(
+        new URL(
+          Path.SIGN_IN + '?callback_url=' + parmas.get('callback_url'),
+          req.url,
+        ),
+      );
+    } else {
+      const requestPath = `${req.nextUrl.pathname}${encodeURIComponent(
+        req.nextUrl.search,
+      )}`;
+      return NextResponse.redirect(
+        new URL(Path.SIGN_IN + '?callback_url=' + requestPath, req.url),
+      );
+    }
   }
 
   if (req.nextUrl.locale === 'default') {
+    const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
     const locale = req.cookies.get('NEXT_LOCALE')?.value || DEFAULT_LOCALE;
     return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
   }

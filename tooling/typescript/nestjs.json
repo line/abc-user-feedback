@@ -10,6 +10,7 @@
     "incremental": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
+    "strictBindCallApply": false,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,

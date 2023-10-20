@@ -28,7 +28,7 @@
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
     "@ufb/tailwind": "^0.1.0",
-    "@ufb/tsconfig": "*",
+    "@ufb/tsconfig": "^0.1.0",
     "eslint": "^8.50.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -2,21 +2,21 @@
   "name": "@ufb/tailwind",
   "version": "0.1.0",
   "private": true,
-  "main": "src/index.js",
-  "types": "src/index.d.ts",
-  "typings": "src/index.d.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "typings": "index.d.ts",
   "scripts": {
     "base": "tailwindcss --config src/base/tailwind.config.js -i src/base/base.css -o dist/layer/base.css --postcss",
     "postbase": "prejss-cli dist/layer/base.css --format commonjs",
-    "build": "yarn base && yarn utilities && yarn components && yarn merge",
-    "clean": "rm -rf .turbo node_modules",
+    "utilities": "tailwindcss --config src/utilities/tailwind.config.js -i src/utilities/utilities.css -o dist/layer/utilities.css --postcss",
+    "postutilities": "prejss-cli dist/layer/utilities.css --format commonjs",
     "components": "tailwindcss --config src/components/tailwind.config.js -i src/components/components.css -o dist/layer/components.css --postcss",
     "postcomponents": "prejss-cli dist/layer/components.css --format commonjs",
+    "build": "yarn base && yarn utilities && yarn components && yarn merge",
+    "merge": "cat dist/layer/*.css > dist/tailwind.css",
     "format": "prettier --check \"**/*.{tsx,ts,md,json}\"",
     "lint": "eslint .",
-    "merge": "cat dist/layer/*.css > dist/tailwind.css",
-    "utilities": "tailwindcss --config src/utilities/tailwind.config.js -i src/utilities/utilities.css -o dist/layer/utilities.css --postcss",
-    "postutilities": "prejss-cli dist/layer/utilities.css --format commonjs"
+    "clean": "rm -rf .turbo node_modules dist"
   },
   "prettier": "@ufb/prettier-config",
   "eslintConfig": {
@@ -28,6 +28,7 @@
   "devDependencies": {
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
+    "@ufb/tsconfig": "^0.1.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.50.0",
     "nodemon": "^2.0.22",

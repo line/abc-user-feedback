@@ -16,9 +16,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Input, Popover, PopoverTrigger, toast } from '@ufb/ui';
+import {
+  Input,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
 
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation, usePermissions } from '@/hooks';
 
 interface IProps {
@@ -66,6 +71,7 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.create-role.title')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'ShieldPrivacyFill',
           className: 'text-blue-primary',

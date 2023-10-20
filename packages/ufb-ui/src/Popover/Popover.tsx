@@ -32,6 +32,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 
+import type { IIconProps } from '../Icon';
 import { Icon } from '../Icon';
 
 interface PopoverOptions {
@@ -234,19 +235,25 @@ export const PopoverHeading = React.forwardRef<
   HTMLHeadingElement,
   React.HTMLProps<HTMLHeadingElement>
 >(function PopoverHeading(props, ref) {
+  const { className, ...otherProps } = props;
   const { setLabelId, setOpen } = usePopoverContext();
   const id = useId();
 
-  // Only sets `aria-labelledby` on the Popover root element
-  // if this component is mounted inside it.
   React.useLayoutEffect(() => {
     setLabelId(id);
     return () => setLabelId(undefined);
   }, [id, setLabelId]);
 
   return (
-    <div className="m-5 flex justify-between" {...props} ref={ref} id={id}>
-      <h1 className="font-16-bold">{props.children}</h1>
+    <div
+      className="m-5 flex justify-between gap-5"
+      {...otherProps}
+      ref={ref}
+      id={id}
+    >
+      <h1 className={['font-16-bold', className].join(' ')}>
+        {props.children}
+      </h1>
       <button
         className="icon-btn icon-btn-tertiary icon-btn-xs"
         onClick={() => setOpen(false)}
@@ -256,3 +263,60 @@ export const PopoverHeading = React.forwardRef<
     </div>
   );
 });
+
+export interface IPopoverModalContentProps extends React.PropsWithChildren {
+  title: string;
+  description?: string;
+  icon?: IIconProps;
+  submitButton: {
+    children: React.ReactNode;
+    disabled?: boolean;
+    className?: string;
+    onClick?: () => void;
+    form?: string;
+    type?: 'submit' | 'reset' | 'button' | undefined;
+  };
+  cancelText: string;
+}
+
+export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
+  props,
+) => {
+  const { title, description, children, submitButton, icon, cancelText } =
+    props;
+  const { setOpen } = usePopoverContext();
+
+  return (
+    <PopoverContent isPortal>
+      <PopoverHeading>{title}</PopoverHeading>
+      <div className="m-5 w-[400px]">
+        {icon && (
+          <div className="mb-6 text-center">
+            <Icon {...icon} />
+          </div>
+        )}
+        {description && (
+          <p
+            className={[
+              'font-14-regular mb-10 whitespace-pre-line',
+              icon ? 'text-center' : '',
+            ].join(' ')}
+          >
+            {description}
+          </p>
+        )}
+        <div className="mb-5">{children}</div>
+        <div className="flex justify-end gap-2">
+          <button className="btn btn-secondary" onClick={() => setOpen(false)}>
+            {cancelText}
+          </button>
+          <button
+            {...submitButton}
+            className={['btn btn-primary', submitButton.className].join(' ')}
+            type={submitButton.type || 'button'}
+          />
+        </div>
+      </div>
+    </PopoverContent>
+  );
+};

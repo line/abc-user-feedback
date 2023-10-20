@@ -151,7 +151,10 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     else setRows(data.items);
   }, [data]);
 
-  const columns = useMemo(() => getColumns(fieldData), [fieldData]);
+  const columns = useMemo(
+    () => getColumns(fieldData, refetchFeedbackData),
+    [fieldData, refetchFeedbackData],
+  );
 
   const table = useReactTable({
     data: rows,

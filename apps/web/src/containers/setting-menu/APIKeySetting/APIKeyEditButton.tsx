@@ -16,9 +16,14 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
 
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation } from '@/hooks';
 
 interface IProps {
@@ -88,6 +93,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
       <PopoverModalContent
         title={t('main.setting.dialog.edit-api-key.title')}
         description={t('main.setting.dialog.edit-api-key.description')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'WarningCircleFill',
           className: 'text-orange-primary',

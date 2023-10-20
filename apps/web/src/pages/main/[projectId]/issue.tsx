@@ -32,7 +32,7 @@ const IssueMangementPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   return (
     <>
-      <h1 className="font-24-bold mb-3">{t('main.issue.title')}</h1>
+      <h1 className="font-20-bold mb-3">{t('main.issue.title')}</h1>
       <IssueTable projectId={projectId} />
     </>
   );

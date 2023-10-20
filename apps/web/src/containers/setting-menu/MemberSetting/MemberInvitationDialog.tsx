@@ -19,9 +19,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Input, Popover, toast } from '@ufb/ui';
+import { Input, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { PopoverModalContent, SelectBox } from '@/components';
+import { SelectBox } from '@/components';
 import { useOAIMutation, useOAIQuery, useUserSearch } from '@/hooks';
 
 interface IForm {
@@ -82,6 +82,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
     <Popover onOpenChange={setOpen} open={open} modal>
       <PopoverModalContent
         title={t('main.setting.dialog.register-member.title')}
+        cancelText={t('button.cancel')}
         submitButton={{
           type: 'submit',
           form: 'inviteMember',

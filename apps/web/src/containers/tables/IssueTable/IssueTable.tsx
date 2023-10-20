@@ -29,12 +29,11 @@ import dayjs from 'dayjs';
 import type { TFunction } from 'next-i18next';
 import { useTranslation } from 'next-i18next';
 
-import { Badge, Icon, toast } from '@ufb/ui';
+import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
   DateRangePicker,
-  Dialog,
   ExpandableText,
   IssueCircle,
   ShareButton,
@@ -46,10 +45,9 @@ import {
   TableSortIcon,
 } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
-import { env } from '@/env.mjs';
 import {
   useIssueSearch,
   useOAIMutation,
@@ -113,6 +111,12 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
     minSize: 50,
     enableSorting: false,
   }),
+  columnHelper.accessor('feedbackCount', {
+    header: 'Feedback Count',
+    cell: ({ getValue }) => getValue().toLocaleString(),
+    size: 100,
+    minSize: 100,
+  }),
   columnHelper.accessor('description', {
     header: 'Description',
     cell: ({ getValue, row }) => (
@@ -122,12 +126,6 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
     ),
     enableSorting: false,
     size: 300,
-  }),
-  columnHelper.accessor('feedbackCount', {
-    header: 'Feedback Count',
-    cell: ({ getValue }) => getValue().toLocaleString(),
-    size: 100,
-    minSize: 100,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
@@ -191,7 +189,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const [limit, setLimit] = useState(50);
   const { createdAtRange, query, setCreatedAtRange, setQuery } =
     useQueryParamsState(Path.ISSUE, { projectId });
+
   const sort = useSort(sorting);
+  const currentIssueKey = useMemo(() => query.status, [query]);
 
   useEffect(() => {
     setPage(1);
@@ -202,21 +202,28 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     () => Object.keys(rowSelection).map((v) => parseInt(v)),
     [rowSelection],
   );
+  const q = useMemo(() => {
+    return Object.entries(query).reduce((prev, [key, value]) => {
+      if (key === 'status' && value !== 'total') {
+        return { ...prev, [key]: value };
+      }
+      if (createdAtRange) {
+        return {
+          ...prev,
+          createdAt: {
+            gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
+            lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
+          },
+        };
+      }
+      return { ...prev, [key]: value };
+    }, {});
+  }, [query, createdAtRange]);
 
   const { data, refetch, isLoading } = useIssueSearch(projectId, {
     page,
     limit,
-    query: {
-      ...query,
-      createdAt: {
-        gte: dayjs(createdAtRange?.startDate)
-          .startOf('day')
-          .toISOString(),
-        lt: dayjs(createdAtRange?.endDate)
-          .endOf('day')
-          .toISOString(),
-      },
-    },
+    query: q,
     sort: sort as Record<string, never>,
   });
   const { data: issueTracker } = useOAIQuery({
@@ -290,12 +297,10 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   return (
     <div className="flex flex-col gap-2">
       <IssueTabelSelectBox
+        currentIssueKey={currentIssueKey}
         projectId={projectId}
-        onChangeOption={(option) =>
-          option.key !== 'total'
-            ? setQuery({ status: option.key })
-            : setQuery({})
-        }
+        createdAtRange={createdAtRange}
+        onChangeOption={(option) => setQuery({ status: option.key })}
       />
       <div className="flex items-center justify-between">
         <h2 className="font-18-regular">
@@ -313,11 +318,10 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             disabledNextPage={page >= (data?.meta.totalPages ?? 1)}
             disabledPrevPage={page <= 1}
           />
-          <div className="w-[272px]">
+          <div className="w-[300px]">
             <DateRangePicker
               value={createdAtRange}
               onChange={setCreatedAtRange}
-              maxDays={env.NEXT_PUBLIC_MAX_DAYS}
               maxDate={new Date()}
             />
           </div>
@@ -405,13 +409,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           />
                         </button>
                         <ShareButton
-                          pathname={`/main/${projectId}/issue?id=${
-                            row.original.id
-                          }&createdAt=${dayjs(row.original.createdAt).format(
-                            DATE_FORMAT,
-                          )}~${dayjs(row.original.createdAt).format(
-                            DATE_FORMAT,
-                          )}`}
+                          pathname={`/main/${projectId}/issue?id=${row.original.id}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}
@@ -457,22 +455,27 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           </tbody>
         </table>
       </div>
-      <Dialog
+      <Popover
         open={openDeleteDialog}
-        close={() => setOpenDeleteDialog(false)}
-        title={t('main.issue.dialog.delete-issue.title')}
-        description={t('main.issue.dialog.delete-issue.description')}
-        submitButton={{
-          children: t('button.delete'),
-          onClick: onClickDelete,
-          disabled: deleteIssuesLoading,
-        }}
-        icon={{
-          name: 'WarningCircleFill',
-          className: 'text-red-primary',
-          size: 56,
-        }}
-      />
+        onOpenChange={() => setOpenDeleteDialog(false)}
+        modal
+      >
+        <PopoverModalContent
+          title={t('main.issue.dialog.delete-issue.title')}
+          description={t('main.issue.dialog.delete-issue.description')}
+          cancelText={t('button.cancel')}
+          submitButton={{
+            children: t('button.delete'),
+            onClick: onClickDelete,
+            disabled: deleteIssuesLoading,
+          }}
+          icon={{
+            name: 'WarningCircleFill',
+            className: 'text-red-primary',
+            size: 56,
+          }}
+        />
+      </Popover>
     </div>
   );
 };

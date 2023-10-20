@@ -99,11 +99,11 @@ export class AuthController {
   }
 
   @UseGuards(UseOAuthGuard)
-  @ApiQuery({ name: 'callback_url', type: String, required: false })
+  @ApiQuery({ name: 'callback_url', required: false })
   @ApiOkResponse({ type: OAuthLoginUrlResponseDto })
   @Get('signIn/oauth/loginURL')
-  async redirectToLoginURL(@Query('callback_url') callback_url?: string) {
-    return { url: await this.authService.getOAuthLoginURL(callback_url) };
+  async redirectToLoginURL(@Query('callback_url') callbackUrl: string) {
+    return { url: await this.authService.getOAuthLoginURL(callbackUrl) };
   }
 
   @UseGuards(UseOAuthGuard)

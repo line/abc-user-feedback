@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
+import { Icon, Tooltip } from '@ufb/ui';
 
 import { useChannels } from '@/hooks';
+import { getDescriptionStr } from '@/utils/description-string';
 import useFeedbackTable from '../feedback-table.context';
 
 interface IProps extends React.PropsWithChildren {
@@ -37,10 +38,13 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
             channel.id === channelId ? 'border-fill-primary' : 'opacity-50',
           ].join(' ')}
         >
-          <div className="bg-fill-tertiary inline-flex rounded-sm p-1">
-            <Icon name="ChannelFill" size={12} className="text-secondary" />
+          <div className="flex items-center gap-2">
+            <div className="bg-fill-tertiary inline-flex rounded-sm p-1">
+              <Icon name="ChannelFill" size={12} className="text-secondary" />
+            </div>
+            <span>{channel.name}</span>
           </div>
-          <span>{channel.name}</span>
+          <Tooltip description={getDescriptionStr(channel.description)} />
         </div>
       ))}
     </div>

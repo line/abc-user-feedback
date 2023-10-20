@@ -71,7 +71,7 @@ export const objToStr = (
     .map(([key, value]) => {
       const column = searchItems.find((column) => column.key === key);
 
-      if (!column) return ``;
+      if (!column) return;
       const { name } = column;
 
       switch (column.format) {
@@ -109,6 +109,7 @@ export const objToStr = (
           return `${name}:${value}`;
       }
     })
+    .filter((v) => !!v)
     .join(',');
 };
 

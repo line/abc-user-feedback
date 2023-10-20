@@ -191,6 +191,7 @@ const SignUpPage: NextPageWithLayout = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-12 space-y-4">
           <TextInput
+            size="lg"
             type="email"
             {...register('email')}
             label="Email"
@@ -214,6 +215,7 @@ const SignUpPage: NextPageWithLayout = () => {
           />
           {watch('emailState') !== 'NOT_VERIFIED' && (
             <TextInput
+              size="lg"
               type="code"
               label={t('auth.sign-up.label.auth-code')}
               {...register('code')}
@@ -246,6 +248,7 @@ const SignUpPage: NextPageWithLayout = () => {
             />
           )}
           <TextInput
+            size="lg"
             type="password"
             label={t('input.label.password')}
             placeholder={t('input.placeholder.password')}
@@ -257,6 +260,7 @@ const SignUpPage: NextPageWithLayout = () => {
             required
           />
           <TextInput
+            size="lg"
             type="password"
             label={t('input.label.confirm-password')}
             placeholder={t('input.placeholder.confirm-password')}
@@ -269,12 +273,16 @@ const SignUpPage: NextPageWithLayout = () => {
           />
         </div>
         <div className="flex flex-col gap-2">
-          <button type="submit" className="btn btn-primary" disabled={!isValid}>
+          <button
+            type="submit"
+            className="btn btn-lg btn-primary"
+            disabled={!isValid}
+          >
             {t('button.sign-up')}
           </button>
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-lg btn-secondary"
             onClick={router.back}
           >
             {t('button.back')}

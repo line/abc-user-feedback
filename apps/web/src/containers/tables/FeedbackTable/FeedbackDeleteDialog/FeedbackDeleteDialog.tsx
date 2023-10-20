@@ -15,9 +15,8 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { toast } from '@ufb/ui';
+import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { Dialog } from '@/components';
 import { useOAIMutation } from '@/hooks';
 
 interface IProps {
@@ -42,8 +41,8 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
       pathParams: { projectId, channelId },
       queryOptions: {
         async onSuccess() {
-          await handleSuccess();
           close();
+          await handleSuccess();
         },
         onError(error) {
           toast.negative({ title: error?.message ?? 'Error' });
@@ -56,22 +55,23 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      close={close}
-      title={t('main.feedback.dialog.delete-feedback.title')}
-      description={t('main.feedback.dialog.delete-feedback.description')}
-      submitButton={{
-        onClick: onClickDelete,
-        children: t('button.delete'),
-        disabled: deleteFeedbackLoading,
-      }}
-      icon={{
-        name: 'WarningCircleFill',
-        className: 'text-red-primary',
-        size: 56,
-      }}
-    />
+    <Popover open={open} onOpenChange={close} modal>
+      <PopoverModalContent
+        title={t('main.feedback.dialog.delete-feedback.title')}
+        description={t('main.feedback.dialog.delete-feedback.description')}
+        cancelText={t('button.cancel')}
+        submitButton={{
+          onClick: onClickDelete,
+          children: t('button.delete'),
+          disabled: deleteFeedbackLoading,
+        }}
+        icon={{
+          name: 'WarningCircleFill',
+          className: 'text-red-primary',
+          size: 56,
+        }}
+      />
+    </Popover>
   );
 };
 

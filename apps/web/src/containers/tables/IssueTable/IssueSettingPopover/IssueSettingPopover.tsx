@@ -20,9 +20,15 @@ import { useTranslation } from 'next-i18next';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Icon, Input, toast } from '@ufb/ui';
+import {
+  Icon,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
 
-import { Popper } from '@/components';
 import { ISSUES } from '@/constants/issues';
 import { useOAIMutation } from '@/hooks';
 import useCurrentProjectId from '@/hooks/useCurrentProjectId';
@@ -102,10 +108,8 @@ const IssueSettingPopover: React.FC<IProps> = ({
   const onSubmit = async (data: UpdateIssueType) => mutate(data);
 
   return (
-    <Popper
-      open={open}
-      setOpen={setOpen}
-      buttonChildren={
+    <Popover open={open} onOpenChange={setOpen} placement="right-start">
+      <PopoverTrigger asChild>
         <button
           className="icon-btn icon-btn-sm icon-btn-tertiary"
           onClick={() => setOpen(true)}
@@ -113,111 +117,112 @@ const IssueSettingPopover: React.FC<IProps> = ({
         >
           <Icon name="DocumentStroke" />
         </button>
-      }
-    >
-      <div className="m-5 flex w-[392px] justify-between">
-        <h1 className="font-16-bold">{t('main.issue.setting')}</h1>
-        <button
-          className="icon-btn icon-btn-tertiary icon-btn-xs"
-          onClick={close}
+      </PopoverTrigger>
+      <PopoverContent className="z-50">
+        <div className="m-5 flex w-[392px] justify-between">
+          <h1 className="font-16-bold">{t('main.issue.setting')}</h1>
+          <button
+            className="icon-btn icon-btn-tertiary icon-btn-xs"
+            onClick={close}
+          >
+            <Icon name="Close" />
+          </button>
+        </div>
+        <form
+          className="m-5"
+          onSubmit={handleSubmit(onSubmit)}
+          onClick={(e) => e.stopPropagation()}
         >
-          <Icon name="Close" />
-        </button>
-      </div>
-      <form
-        className="m-5"
-        onSubmit={handleSubmit(onSubmit)}
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="mb-4 space-y-[10px]">
-          <Input
-            label="Issue Id"
-            placeholder="Issue Id"
-            value={issue.id}
-            disabled
-          />
-          <Input
-            label="Issue"
-            placeholder="Issue Name"
-            {...register('name')}
-            required
-          />
-          <Input
-            label="Description"
-            placeholder="Issue Description"
-            {...register('description')}
-            required={false}
-          />
-          <div className="relative">
-            <span className="font-12-regular mb-[6px] block">Status</span>
-            <Controller
-              control={control}
-              name="status"
-              render={({ field }) => (
-                <Listbox value={field.value} onChange={field.onChange}>
-                  <Listbox.Button className="input relative text-left">
-                    <span className="block truncate">
-                      {ISSUES(t).find((v) => v.key === field.value)?.name}
-                    </span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <Icon
-                        className="h-5 w-5 text-gray-400"
-                        name="TriangleDown"
-                      />
-                    </span>
-                  </Listbox.Button>
-                  <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full border shadow">
-                    {ISSUES(t).map(({ key, name }) => (
-                      <Listbox.Option
-                        key={key}
-                        value={key}
-                        className={({ selected }) =>
-                          'hover:bg-secondary cursor-pointer select-none p-3 ' +
-                          (selected ? 'bg-secondary' : 'bg-primary')
-                        }
-                      >
-                        {name}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </Listbox>
-              )}
+          <div className="mb-4 space-y-[10px]">
+            <Input
+              label="Issue Id"
+              placeholder="Issue Id"
+              value={issue.id}
+              disabled
             />
-          </div>
-          <label className="block">
-            <span className="font-12-regular mb-[6px] block">Ticket</span>
-            <div className="flex items-center gap-2">
-              <input
-                className="input w-[120px]"
-                value={issueTracker?.ticketKey}
-                disabled
-              />
-              -
-              <input
-                className="input"
-                placeholder="Ticket ID"
-                {...register('externalIssueId')}
+            <Input
+              label="Issue"
+              placeholder="Issue Name"
+              {...register('name')}
+              required
+            />
+            <Input
+              label="Description"
+              placeholder="Issue Description"
+              {...register('description')}
+              required={false}
+            />
+            <div className="relative">
+              <span className="font-12-regular mb-[6px] block">Status</span>
+              <Controller
+                control={control}
+                name="status"
+                render={({ field }) => (
+                  <Listbox value={field.value} onChange={field.onChange}>
+                    <Listbox.Button className="input relative text-left">
+                      <span className="block truncate">
+                        {ISSUES(t).find((v) => v.key === field.value)?.name}
+                      </span>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <Icon
+                          className="h-5 w-5 text-gray-400"
+                          name="TriangleDown"
+                        />
+                      </span>
+                    </Listbox.Button>
+                    <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full border shadow">
+                      {ISSUES(t).map(({ key, name }) => (
+                        <Listbox.Option
+                          key={key}
+                          value={key}
+                          className={({ selected }) =>
+                            'hover:bg-secondary cursor-pointer select-none p-3 ' +
+                            (selected ? 'bg-secondary' : 'bg-primary')
+                          }
+                        >
+                          {name}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Listbox>
+                )}
               />
             </div>
-          </label>
-        </div>
-        <div className="flex justify-end gap-2">
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => setOpen(false)}
-          >
-            {t('button.cancel')}
-          </button>
-          <button
-            className="btn btn-primary"
-            disabled={!formState.isDirty || isLoading}
-          >
-            {t('button.save')}
-          </button>
-        </div>
-      </form>
-    </Popper>
+            <label className="block">
+              <span className="font-12-regular mb-[6px] block">Ticket</span>
+              <div className="flex items-center gap-2">
+                <input
+                  className="input w-[120px]"
+                  value={issueTracker?.ticketKey}
+                  disabled
+                />
+                -
+                <input
+                  className="input"
+                  placeholder="Ticket ID"
+                  {...register('externalIssueId')}
+                />
+              </div>
+            </label>
+          </div>
+          <div className="flex justify-end gap-2">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={() => setOpen(false)}
+            >
+              {t('button.cancel')}
+            </button>
+            <button
+              className="btn btn-primary"
+              disabled={!formState.isDirty || isLoading}
+            >
+              {t('button.save')}
+            </button>
+          </div>
+        </form>
+      </PopoverContent>
+    </Popover>
   );
 };
 

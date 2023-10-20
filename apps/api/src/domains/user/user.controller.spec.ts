@@ -69,7 +69,9 @@ describe('user controller', () => {
     expect(MockUserService.deleteUsers).toHaveBeenCalledTimes(1);
   });
   it('inviteUser', () => {
-    userController.inviteUser(new UserInvitationRequestDto());
+    const userDto = new UserDto();
+    userDto.id = faker.datatype.number();
+    userController.inviteUser(new UserInvitationRequestDto(), userDto);
     expect(MockUserService.sendInvitationCode).toHaveBeenCalledTimes(1);
   });
   it('requestResetPassword', () => {

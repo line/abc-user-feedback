@@ -18,7 +18,7 @@ import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
+import { Icon, Tooltip } from '@ufb/ui';
 
 import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
@@ -41,7 +41,10 @@ const ProfilePage: NextPageWithLayout = () => {
 
   return (
     <>
-      <h1 className="font-24-bold mb-4">{t('main.profile.title')}</h1>
+      <h1 className="font-24-bold mb-4">
+        {t('main.profile.title')}
+        <Tooltip description="Profile Description" />
+      </h1>
       <div className="flex h-[calc(100vh-144px)] items-stretch gap-4">
         <div className="border-fill-tertiary w-[400px] rounded border p-6">
           <ul className="space-y-2">

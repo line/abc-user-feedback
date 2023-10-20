@@ -21,11 +21,11 @@ import {
   Input,
   Popover,
   PopoverContent,
+  PopoverModalContent,
   PopoverTrigger,
   toast,
 } from '@ufb/ui';
 
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation, usePermissions } from '@/hooks';
 
 interface IProps {
@@ -147,6 +147,7 @@ const RoleSettingHead: React.FC<IProps> = ({
         <PopoverModalContent
           title={t('main.setting.dialog.delete-role.title')}
           description={t('main.setting.dialog.delete-role.description')}
+          cancelText={t('button.cancel')}
           icon={{
             name: 'WarningCircleFill',
             className: 'text-red-primary',

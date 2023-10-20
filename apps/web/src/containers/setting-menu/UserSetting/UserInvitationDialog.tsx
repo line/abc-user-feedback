@@ -20,9 +20,16 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Icon, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  TextInput,
+  toast,
+} from '@ufb/ui';
 
-import { PopoverModalContent, SelectBox } from '@/components';
+import { SelectBox } from '@/components';
 import type { UserTypeEnum } from '@/contexts/user.context';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
 
@@ -97,6 +104,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.invite-user.title')}
+        cancelText={t('button.cancel')}
         submitButton={{
           children: t('button.confirm'),
           type: 'submit',
