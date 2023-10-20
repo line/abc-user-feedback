@@ -37,9 +37,9 @@ const useIssueSearch = (
   body: IBody = { limit: 10, page: 1, query: {}, sort: {} },
   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'>,
 ) => {
-  return useQuery<TData>(
-    ['/api/projects/{projectId}/issues/search', projectId, body],
-    async () => {
+  return useQuery<TData>({
+    queryKey: ['/api/projects/{projectId}/issues/search', projectId, body],
+    queryFn: async () => {
       const { data: result } = await client.post({
         path: '/api/projects/{projectId}/issues/search',
         pathParams: { projectId },
@@ -47,8 +47,8 @@ const useIssueSearch = (
       });
       return result;
     },
-    options,
-  );
+    ...options,
+  });
 };
 
 export default useIssueSearch;

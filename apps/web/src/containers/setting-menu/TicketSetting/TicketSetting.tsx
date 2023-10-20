@@ -56,7 +56,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
     reset({ ...data.data });
   }, [data]);
 
-  const { mutate: modify, isLoading: modifyLoading } = useOAIMutation({
+  const { mutate: modify, isPending: modifyPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/issue-tracker',
     pathParams: { projectId },
@@ -71,7 +71,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
-  const { mutate: create, isLoading: createLoading } = useOAIMutation({
+  const { mutate: create, isPending: createPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/issue-tracker',
     pathParams: { projectId },
@@ -97,8 +97,8 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
         disabled:
           !perms.includes('project_tracker_update') ||
           !formState.isDirty ||
-          modifyLoading ||
-          createLoading,
+          modifyPending ||
+          createPending,
         onClick: handleSubmit(onSubmit),
         form: 'form',
       }}

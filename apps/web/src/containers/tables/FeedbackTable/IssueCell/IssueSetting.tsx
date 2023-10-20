@@ -37,7 +37,7 @@ const IssueSetting: React.FC<IProps> = ({
   const { t } = useTranslation();
   const perms = usePermissions();
 
-  const { mutate: update, isLoading: updateLoading } = useOAIMutation({
+  const { mutate: update, isPending: updatePending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/issues/{issueId}',
     pathParams: { issueId: issue.id, projectId },
@@ -52,7 +52,7 @@ const IssueSetting: React.FC<IProps> = ({
     },
   });
 
-  const { mutate: deleteIssue, isLoading: deleteIssueLoading } = useOAIMutation(
+  const { mutate: deleteIssue, isPending: deleteIssuePending } = useOAIMutation(
     {
       method: 'delete',
       path: '/api/projects/{projectId}/issues/{issueId}',
@@ -82,18 +82,18 @@ const IssueSetting: React.FC<IProps> = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') update({ ...issue, name: inputIssueName });
             }}
-            disabled={!perms.includes('issue_update') || updateLoading}
+            disabled={!perms.includes('issue_update') || updatePending}
           />
         </li>
         <li
           className={[
             'hover:bg-fill-quaternary m-1 flex cursor-pointer items-center gap-2 rounded-sm p-2',
-            !perms.includes('issue_delete') || deleteIssueLoading
+            !perms.includes('issue_delete') || deleteIssuePending
               ? 'text-tertiary cursor-not-allowed'
               : 'text-primary cursor-pointer',
           ].join(' ')}
           onClick={() => {
-            if (!perms.includes('issue_delete') || deleteIssueLoading) return;
+            if (!perms.includes('issue_delete') || deleteIssuePending) return;
             deleteIssue(undefined);
           }}
         >

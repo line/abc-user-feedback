@@ -62,7 +62,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
     query: { type: 'GENERAL' },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/members',
     pathParams: { projectId },
@@ -87,7 +87,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
           type: 'submit',
           form: 'inviteMember',
           children: t('button.confirm'),
-          disabled: isLoading,
+          disabled: isPending,
         }}
       >
         <form

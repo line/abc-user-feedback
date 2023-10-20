@@ -62,7 +62,7 @@ const UserEditPopover: React.FC<IProps> = ({ data, refetch }) => {
     },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/users/{id}',
     pathParams: { id: data.id },
@@ -85,7 +85,7 @@ const UserEditPopover: React.FC<IProps> = ({ data, refetch }) => {
         <button
           className="icon-btn icon-btn-sm icon-btn-tertiary"
           onClick={() => setOpen(true)}
-          disabled={isLoading}
+          disabled={isPending}
         >
           <Icon name="EditFill" />
         </button>

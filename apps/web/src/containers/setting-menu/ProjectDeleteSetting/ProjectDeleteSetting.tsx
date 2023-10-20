@@ -54,7 +54,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
     path: '/api/projects/{projectId}/issue-count',
     variables: { projectId },
   });
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}',
     pathParams: { projectId },
@@ -92,7 +92,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
             }}
             submitButton={{
               children: t('button.delete'),
-              disabled: inputChannelName !== data?.name || isLoading,
+              disabled: inputChannelName !== data?.name || isPending,
               className: 'btn-red',
               onClick: () => mutate(undefined),
             }}

@@ -61,7 +61,7 @@ const TableSearchInput: React.FC<IProps> = ({
   const [inputValue, setInputValue] = useState('');
 
   const editingName = useMemo(() => {
-    if (!inputRef.current || !inputRef.current.selectionEnd) return;
+    if (!inputRef.current || !inputRef.current.selectionEnd) return '';
     const { selectionEnd } = inputRef.current;
 
     const targetInput = inputValue.slice(0, selectionEnd);
@@ -73,7 +73,7 @@ const TableSearchInput: React.FC<IProps> = ({
       startIndex === endIndex ? inputValue.length : endIndex,
     );
     return value.indexOf(':') === -1
-      ? null
+      ? ''
       : value.slice(0, value.indexOf(':')).trim();
   }, [inputValue, inputRef]);
 
@@ -183,7 +183,7 @@ const TableSearchInput: React.FC<IProps> = ({
         />
       </button>
       <Combobox.Options className="bg-primary absolute left-0 top-full z-10 mt-2 w-full rounded border">
-        {!editingName
+        {editingName === ''
           ? searchItems
               .filter(
                 (v) =>

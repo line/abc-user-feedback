@@ -42,7 +42,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
     resolver: zodResolver(scheme),
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/tenants',
     queryOptions: {
@@ -73,7 +73,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
         onClick: handleSubmit(onSubmit),
         form: 'form',
         type: 'submit',
-        disabled: !formState.isDirty || isLoading,
+        disabled: !formState.isDirty || isPending,
       }}
     >
       <form id="form" className="flex flex-col gap-6">

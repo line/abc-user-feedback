@@ -23,12 +23,12 @@ import type { TenantType } from '@/types/tenant.type';
 
 export interface ITenantContext {
   tenant: TenantType | null;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 }
 
 export const TenantContext = createContext<ITenantContext>({
   tenant: null,
-  refetch() {},
+  async refetch() {},
 });
 
 export const TenantProvider: React.FC<React.PropsWithChildren> = ({
@@ -39,17 +39,20 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
   const router = useRouter();
   const [isInitialFetch, setIsInitialFetch] = useState(true);
 
-  const fetch = () => {
+  const fetch = async () => {
     if (isInitialFetch) {
       setIsLoading(true);
       setIsInitialFetch(false);
     }
 
-    client
-      .get({ path: '/api/tenants' })
-      .then(({ data }) => setTenant(data))
-      .catch(() => router.push(Path.CREATE_TENANT))
-      .finally(() => setIsLoading(false));
+    try {
+      const { data } = await client.get({ path: '/api/tenants' });
+      setTenant(data);
+    } catch (error) {
+      router.push(Path.CREATE_TENANT);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {

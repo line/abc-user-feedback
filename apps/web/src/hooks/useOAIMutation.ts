@@ -57,9 +57,9 @@ export default function useOAIMutation<
     IFetchError,
     TBody,
     (Record<string, unknown> | TPath | undefined)[]
-  >(
-    [method, path, pathParams],
-    async (body: TBody) => {
+  >({
+    mutationKey: [method, path, pathParams],
+    mutationFn: async (body: TBody) => {
       const { data } = await client.request({
         method,
         url: getRequestUrl(path, pathParams),
@@ -68,6 +68,6 @@ export default function useOAIMutation<
 
       return data as TResponse;
     },
-    queryOptions,
-  );
+    ...queryOptions,
+  });
 }

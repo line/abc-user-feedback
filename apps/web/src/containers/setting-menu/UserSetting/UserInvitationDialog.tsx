@@ -82,7 +82,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
     },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/users/invite',
     queryOptions: {
@@ -109,7 +109,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
           children: t('button.confirm'),
           type: 'submit',
           form: 'inviteUser',
-          disabled: isLoading,
+          disabled: isPending,
         }}
       >
         <form

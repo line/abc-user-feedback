@@ -18,11 +18,7 @@ import { useState } from 'react';
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import {
-  Hydrate,
-  QueryClient,
-  QueryClientProvider,
-} from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
@@ -55,14 +51,12 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <TenantProvider>
-            <UserProvider>
-              {getLayout(<Component {...pageProps} />)}
-              <Toaster />
-            </UserProvider>
-          </TenantProvider>
-        </Hydrate>
+        <TenantProvider>
+          <UserProvider>
+            {getLayout(<Component {...pageProps} />)}
+            <Toaster />
+          </UserProvider>
+        </TenantProvider>
       </QueryClientProvider>
     </>
   );

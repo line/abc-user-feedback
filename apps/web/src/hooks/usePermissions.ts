@@ -35,7 +35,7 @@ const usePermissions = (inputProjectId?: number | null) => {
 
   const projectId = useMemo(() => {
     if (inputProjectId) return inputProjectId;
-    if (!router.query.projectId) return;
+    if (!router.query.projectId) return null;
     return +router.query.projectId as number;
   }, [router, inputProjectId]);
 

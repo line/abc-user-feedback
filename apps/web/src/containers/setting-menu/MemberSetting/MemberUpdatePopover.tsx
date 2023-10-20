@@ -52,7 +52,7 @@ const MemberUpdatePopover: React.FC<IProps> = ({
     variables: { projectId },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/members/{memberId}',
     pathParams: { memberId, projectId },
@@ -73,7 +73,7 @@ const MemberUpdatePopover: React.FC<IProps> = ({
       <PopoverTrigger
         className="icon-btn icon-btn-sm icon-btn-tertiary"
         onClick={() => setOpen((prev) => !prev)}
-        disabled={disabled || isLoading}
+        disabled={disabled || isPending}
       >
         <Icon name="EditFill" />
       </PopoverTrigger>

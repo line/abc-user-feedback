@@ -88,9 +88,9 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
   const router = useRouter();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const { refetch } = useQuery(
-    ['/api/users/{id}', jwt],
-    async () => {
+  const { refetch } = useQuery({
+    queryKey: ['/api/users/{id}', jwt],
+    queryFn: async () => {
       if (!jwt) return;
       const { accessToken } = jwt;
       const { sub, exp } = jwtDecode<JwtPayload>(accessToken);
@@ -113,8 +113,8 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
         setJwt(null);
       }
     },
-    { enabled: !!jwt },
-  );
+    enabled: !!jwt,
+  });
 
   useEffect(() => {
     (async () => {

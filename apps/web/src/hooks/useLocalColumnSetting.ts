@@ -13,11 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
-import type { OnChangeFn } from '@tanstack/react-table';
+import type {
+  ColumnOrderState,
+  OnChangeFn,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table';
 import { useLocalStorage } from 'react-use';
 
-export default function useLocalColumnSetting<T extends object>({
+export default function useLocalColumnSetting<
+  T extends SortingState | VisibilityState | ColumnOrderState,
+>({
   channelId,
   projectId,
   key,
@@ -32,9 +38,8 @@ export default function useLocalColumnSetting<T extends object>({
     Record<number, Record<number, T>>
   >(key, {});
 
-  const columnSetting: T = useMemo(() => {
-    return (localColumnSetting?.[projectId]?.[channelId] ?? initialValue) as T;
-  }, [localColumnSetting, projectId, channelId]);
+  const columnSetting =
+    localColumnSetting?.[projectId]?.[channelId] ?? initialValue;
 
   const onColumnSettingChange: OnChangeFn<T> = (
     updaterOrValue: ((old: T) => T) | T,

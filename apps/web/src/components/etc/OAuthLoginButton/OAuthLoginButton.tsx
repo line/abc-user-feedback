@@ -30,7 +30,7 @@ const OAuthLoginButton: React.FC<IProps> = () => {
   const callback_url = useMemo(() => {
     return router.query.callback_url
       ? (router.query.callback_url as string)
-      : undefined;
+      : '';
   }, [router.query]);
 
   const { data } = useOAIQuery({

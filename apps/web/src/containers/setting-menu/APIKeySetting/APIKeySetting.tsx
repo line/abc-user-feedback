@@ -145,7 +145,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
     data: rows,
   });
 
-  const { mutate: createApiKey, isLoading } = useOAIMutation({
+  const { mutate: createApiKey, status } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/api-keys',
     pathParams: { projectId },
@@ -166,7 +166,8 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
       actionBtn={{
         children: t('main.setting.button.create-api-key'),
         onClick: () => createApiKey(undefined),
-        disabled: !perms.includes('project_apikey_create') || isLoading,
+        disabled:
+          !perms.includes('project_apikey_create') || status === 'pending',
       }}
     >
       <table className="table ">

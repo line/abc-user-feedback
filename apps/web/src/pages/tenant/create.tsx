@@ -52,7 +52,7 @@ const CreatePage: NextPageWithLayout = () => {
     defaultValues,
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/tenants',
     queryOptions: {
@@ -89,7 +89,7 @@ const CreatePage: NextPageWithLayout = () => {
             <button
               className="btn btn-primary"
               type="submit"
-              disabled={isLoading}
+              disabled={isPending}
             >
               {t('button.setting')}
             </button>

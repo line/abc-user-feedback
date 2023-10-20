@@ -36,10 +36,10 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
   const router = useRouter();
 
   const query = useMemo(() => {
-    if (!router.query) return;
+    if (!router.query) return null;
     const { code, callback_url } = router.query;
 
-    if (!code) return;
+    if (!code) return null;
     return { code, callback_url } as IQuery;
   }, [router.query]);
 

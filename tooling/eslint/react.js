@@ -16,7 +16,11 @@
 const config = {
   extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
   parserOptions: { project: true },
-  rules: { 'react/prop-types': 'off', 'react-hooks/exhaustive-deps': 'off' },
+  rules: {
+    'react/prop-types': 'off',
+    'react-hooks/exhaustive-deps': 'off',
+    'react/display-name': 'off',
+  },
   globals: { React: 'writable' },
   settings: { react: { version: 'detect' } },
   env: { browser: true },

@@ -60,7 +60,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
     defaultValues,
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/users/password/reset',
     queryOptions: {
@@ -122,7 +122,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
             <button
               type="submit"
               className="btn btn-primary"
-              disabled={!formState.isValid || isLoading}
+              disabled={!formState.isValid || isPending}
             >
               {t('button.setting')}
             </button>
