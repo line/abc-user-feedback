@@ -15,14 +15,24 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-import { RoleEntity } from './role.entity';
-import { RoleService } from './role.service';
+import { mockRepository } from '@/test-utils/util-functions';
+import { FeedbackEntity } from '../../domains/feedback/feedback.entity';
+import { TenantEntity } from '../../domains/tenant/tenant.entity';
+import { TenantService } from '../../domains/tenant/tenant.service';
+import { UserEntity } from '../../domains/user/entities/user.entity';
 
-export const RoleServiceProviders = [
-  RoleService,
+export const TenantServiceProviders = [
+  TenantService,
   {
-    provide: getRepositoryToken(RoleEntity),
+    provide: getRepositoryToken(TenantEntity),
+    useValue: mockRepository(),
+  },
+  {
+    provide: getRepositoryToken(UserEntity),
+    useValue: mockRepository(),
+  },
+  {
+    provide: getRepositoryToken(FeedbackEntity),
     useValue: mockRepository(),
   },
 ];

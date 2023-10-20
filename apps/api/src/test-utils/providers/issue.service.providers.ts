@@ -15,24 +15,14 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { OpensearchRepository } from '@/common/repositories';
-import {
-  getMockProvider,
-  MockOpensearchRepository,
-  mockRepository,
-} from '@/utils/test-utils';
-import { OptionServiceProviders } from '../option/option.service.providers';
-import { FieldEntity } from './field.entity';
-import { FieldMySQLService } from './field.mysql.service';
-import { FieldService } from './field.service';
+import { mockRepository } from '@/test-utils/util-functions';
+import { IssueEntity } from '../../domains/project/issue/issue.entity';
+import { IssueService } from '../../domains/project/issue/issue.service';
 
-export const FieldServiceProviders = [
-  FieldService,
-  FieldMySQLService,
-  getMockProvider(OpensearchRepository, MockOpensearchRepository),
+export const IssueServiceProviders = [
+  IssueService,
   {
-    provide: getRepositoryToken(FieldEntity),
+    provide: getRepositoryToken(IssueEntity),
     useValue: mockRepository(),
   },
-  ...OptionServiceProviders,
 ];

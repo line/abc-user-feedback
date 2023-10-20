@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { getMockProvider } from '@/utils/test-utils';
+import { getMockProvider } from '@/test-utils/util-functions';
 import { UserDto } from './dtos';
 import {
   ChangePasswordRequestDto,

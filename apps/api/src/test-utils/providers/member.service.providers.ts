@@ -15,14 +15,16 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-import { IssueTrackerEntity } from './issue-tracker.entity';
-import { IssueTrackerService } from './issue-tracker.service';
+import { mockRepository } from '@/test-utils/util-functions';
+import { MemberEntity } from '../../domains/project/member/member.entity';
+import { MemberService } from '../../domains/project/member/member.service';
+import { RoleServiceProviders } from './role.service.providers';
 
-export const IssueTrackerServiceProviders = [
-  IssueTrackerService,
+export const MemberServiceProviders = [
+  MemberService,
   {
-    provide: getRepositoryToken(IssueTrackerEntity),
+    provide: getRepositoryToken(MemberEntity),
     useValue: mockRepository(),
   },
+  ...RoleServiceProviders,
 ];

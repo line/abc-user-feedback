@@ -25,7 +25,8 @@ import { UserTypeEnum } from '@/domains/user/entities/enums';
 import {
   createQueryBuilder,
   MockOpensearchRepository,
-} from '@/utils/test-utils';
+} from '@/test-utils/util-functions';
+import { ProjectServiceProviders } from '../../../test-utils/providers/project.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { CreateProjectDto, FindAllProjectsDto, UpdateProjectDto } from './dtos';
@@ -36,7 +37,6 @@ import {
   ProjectNotFoundException,
 } from './exceptions';
 import { ProjectService } from './project.service';
-import { ProjectServiceProviders } from './project.service.providers';
 
 describe('ProjectService Test suite', () => {
   let projectService: ProjectService;

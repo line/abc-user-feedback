@@ -20,7 +20,14 @@ import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
 import { SortMethodEnum } from '@/common/enums';
-import { createQueryBuilder, getRandomEnumValue } from '@/utils/test-utils';
+import {
+  createQueryBuilder,
+  getRandomEnumValue,
+} from '@/test-utils/util-functions';
+import {
+  MockUserInvitationMailingService,
+  UserServiceProviders,
+} from '../../test-utils/providers/user.service.providers';
 import { FindAllUsersDto, UserDto } from './dtos';
 import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
@@ -29,10 +36,6 @@ import {
   UserNotFoundException,
 } from './exceptions';
 import { UserService } from './user.service';
-import {
-  MockUserInvitationMailingService,
-  UserServiceProviders,
-} from './user.service.providers';
 
 const MockCodeService = {
   setCode: jest.fn(),

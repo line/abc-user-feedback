@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { OptionServiceProviders } from '../../../test-utils/providers/option.service.providers';
 import { OptionEntity } from '../../channel/option/option.entity';
 import {
   CreateManyOptionsDto,
@@ -29,7 +30,6 @@ import {
   OptionNameDuplicatedException,
 } from './exceptions';
 import { OptionService } from './option.service';
-import { OptionServiceProviders } from './option.service.providers';
 
 describe('Option Test suite', () => {
   let optionService: OptionService;

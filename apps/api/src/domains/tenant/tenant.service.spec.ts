@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TenantServiceProviders } from '../../test-utils/providers/tenant.service.providers';
 import { FeedbackEntity } from '../feedback/feedback.entity';
 import { UserEntity } from '../user/entities/user.entity';
 import {
@@ -31,7 +32,6 @@ import {
 } from './exceptions';
 import { TenantEntity } from './tenant.entity';
 import { TenantService } from './tenant.service';
-import { TenantServiceProviders } from './tenant.service.providers';
 
 describe('TenantService', () => {
   let tenantService: TenantService;

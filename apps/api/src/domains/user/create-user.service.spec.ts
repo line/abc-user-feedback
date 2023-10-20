@@ -18,11 +18,11 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { CreateUserServiceProviders } from '../../test-utils/providers/create-user.service.providers';
 import { MemberEntity } from '../project/member/member.entity';
 import { RoleEntity } from '../project/role/role.entity';
 import { TenantEntity } from '../tenant/tenant.entity';
 import { CreateUserService } from './create-user.service';
-import { CreateUserServiceProviders } from './create-user.service.providers';
 import type { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
 import type { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
 import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';

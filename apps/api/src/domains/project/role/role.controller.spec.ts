@@ -21,7 +21,7 @@ import {
   getMockProvider,
   getRandomEnumValue,
   MockDataSource,
-} from '@/utils/test-utils';
+} from '@/test-utils/util-functions';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import { PermissionEnum } from './permission.enum';
 import { RoleController } from './role.controller';

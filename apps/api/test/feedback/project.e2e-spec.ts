@@ -26,7 +26,7 @@ import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters';
 import { CreateProjectRequestDto } from '@/domains/project/project/dtos/requests';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { clearEntities } from '@/utils/test-utils';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

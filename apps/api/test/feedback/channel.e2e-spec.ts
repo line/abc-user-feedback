@@ -40,8 +40,11 @@ import { FieldEntity } from '@/domains/channel/field/field.entity';
 import { FIELD_TYPES_TO_MAPPING_TYPES } from '@/domains/channel/field/field.mysql.service';
 import { OptionEntity } from '@/domains/channel/option/option.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { createFieldDto, optionSort } from '@/utils/test-util-fixture';
-import { clearEntities, DEFAULT_FIELD_COUNT } from '@/utils/test-utils';
+import { createFieldDto, optionSort } from '@/test-utils/fixtures';
+import {
+  clearEntities,
+  DEFAULT_FIELD_COUNT,
+} from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

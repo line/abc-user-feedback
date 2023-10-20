@@ -22,6 +22,11 @@ import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+import {
+  AuthServiceProviders,
+  MockEmailVerificationMailingService,
+  MockJwtService,
+} from '../../test-utils/providers/auth.service.providers';
 import { ApiKeyEntity } from '../project/api-key/api-key.entity';
 import { TenantEntity } from '../tenant/tenant.entity';
 import { UserDto } from '../user/dtos';
@@ -32,11 +37,6 @@ import {
   UserNotFoundException,
 } from '../user/exceptions';
 import { AuthService } from './auth.service';
-import {
-  AuthServiceProviders,
-  MockEmailVerificationMailingService,
-  MockJwtService,
-} from './auth.service.providers';
 import {
   SendEmailCodeDto,
   SignUpEmailUserDto,

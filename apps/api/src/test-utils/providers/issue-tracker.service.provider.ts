@@ -15,16 +15,14 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-import { ProjectServiceProviders } from '../project/project.service.providers';
-import { ApiKeyEntity } from './api-key.entity';
-import { ApiKeyService } from './api-key.service';
+import { mockRepository } from '@/test-utils/util-functions';
+import { IssueTrackerEntity } from '../../domains/project/issue-tracker/issue-tracker.entity';
+import { IssueTrackerService } from '../../domains/project/issue-tracker/issue-tracker.service';
 
-export const ApiKeyServiceProviders = [
-  ApiKeyService,
+export const IssueTrackerServiceProviders = [
+  IssueTrackerService,
   {
-    provide: getRepositoryToken(ApiKeyEntity),
+    provide: getRepositoryToken(IssueTrackerEntity),
     useValue: mockRepository(),
   },
-  ...ProjectServiceProviders,
 ];

@@ -15,24 +15,20 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-import { FeedbackEntity } from '../feedback/feedback.entity';
-import { UserEntity } from '../user/entities/user.entity';
-import { TenantEntity } from './tenant.entity';
-import { TenantService } from './tenant.service';
+import { mockRepository } from '@/test-utils/util-functions';
+import { CreateUserService } from '../../domains/user/create-user.service';
+import { UserEntity } from '../../domains/user/entities/user.entity';
+import { MemberServiceProviders } from './member.service.providers';
+import { TenantServiceProviders } from './tenant.service.providers';
+import { UserPasswordServiceProviders } from './user-password.service.providers';
 
-export const TenantServiceProviders = [
-  TenantService,
-  {
-    provide: getRepositoryToken(TenantEntity),
-    useValue: mockRepository(),
-  },
+export const CreateUserServiceProviders = [
+  CreateUserService,
+  ...UserPasswordServiceProviders,
+  ...TenantServiceProviders,
+  ...MemberServiceProviders,
   {
     provide: getRepositoryToken(UserEntity),
-    useValue: mockRepository(),
-  },
-  {
-    provide: getRepositoryToken(FeedbackEntity),
     useValue: mockRepository(),
   },
 ];

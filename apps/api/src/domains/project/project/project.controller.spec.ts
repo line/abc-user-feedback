@@ -19,7 +19,7 @@ import { DataSource } from 'typeorm';
 
 import { FeedbackService } from '@/domains/feedback/feedback.service';
 import { UserDto } from '@/domains/user/dtos';
-import { getMockProvider, MockDataSource } from '@/utils/test-utils';
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { IssueService } from '../issue/issue.service';
 import {
   CreateProjectRequestDto,

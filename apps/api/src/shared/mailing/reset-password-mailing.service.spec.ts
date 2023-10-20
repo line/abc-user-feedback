@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 
-import { getMockProvider, TestConfig } from '@/utils/test-utils';
+import { getMockProvider, TestConfig } from '@/test-utils/util-functions';
 import { ResetPasswordMailingService } from './reset-password-mailing.service';
 
 describe('ResetPasswordMailingService', () => {

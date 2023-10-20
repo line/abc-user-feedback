@@ -20,8 +20,9 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import { FieldFormatEnum, isSelectFieldFormat } from '@/common/enums';
-import { createFieldDto, updateFieldDto } from '@/utils/test-util-fixture';
-import { MockOpensearchRepository } from '@/utils/test-utils';
+import { createFieldDto, updateFieldDto } from '@/test-utils/fixtures';
+import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import { FieldServiceProviders } from '../../../test-utils/providers/field.service.providers';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { OptionEntity } from '../option/option.entity';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
@@ -30,7 +31,6 @@ import {
   FieldNameDuplicatedException,
 } from './exceptions';
 import { FieldService } from './field.service';
-import { FieldServiceProviders } from './field.service.providers';
 
 const countSelect = (prev, curr) => {
   return isSelectFieldFormat(curr.format) && curr.options.length > 0

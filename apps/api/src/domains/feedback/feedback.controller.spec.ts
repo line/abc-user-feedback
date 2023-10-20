@@ -18,7 +18,7 @@ import { Test } from '@nestjs/testing';
 import type { FastifyReply } from 'fastify';
 import { DataSource } from 'typeorm';
 
-import { getMockProvider, MockDataSource } from '@/utils/test-utils';
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { AuthService } from '../auth/auth.service';
 import type { ChannelEntity } from '../channel/channel/channel.entity';
 import { ChannelService } from '../channel/channel/channel.service';

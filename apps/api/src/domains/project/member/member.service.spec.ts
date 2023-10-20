@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
 import {
@@ -27,7 +28,6 @@ import {
 } from './exceptions';
 import { MemberEntity } from './member.entity';
 import { MemberService } from './member.service';
-import { MemberServiceProviders } from './member.service.providers';
 
 describe('MemberService test suite', () => {
   let memberService: MemberService;

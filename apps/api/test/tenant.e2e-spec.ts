@@ -29,8 +29,8 @@ import {
   UpdateTenantRequestDto,
 } from '@/domains/tenant/dtos/requests';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
+import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
-import { clearEntities, signInTestUser } from '@/utils/test-utils';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

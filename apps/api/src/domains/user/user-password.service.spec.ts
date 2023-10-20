@@ -22,11 +22,11 @@ import type { Repository } from 'typeorm';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
+import { UserPasswordServiceProviders } from '../../test-utils/providers/user-password.service.providers';
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
 import { InvalidPasswordException, UserNotFoundException } from './exceptions';
 import { UserPasswordService } from './user-password.service';
-import { UserPasswordServiceProviders } from './user-password.service.providers';
 
 describe('UserPasswordService', () => {
   let userPasswordService: UserPasswordService;

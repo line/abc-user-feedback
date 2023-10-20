@@ -14,35 +14,30 @@
  * under the License.
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ClsService } from 'nestjs-cls';
 
 import { OpensearchRepository } from '@/common/repositories';
+import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
+import { TenantServiceProviders } from '@/test-utils/providers/tenant.service.providers';
 import {
   getMockProvider,
   MockOpensearchRepository,
   mockRepository,
-} from '@/utils/test-utils';
-import { ChannelServiceProviders } from '../channel/channel/channel.service.providers';
-import { FieldServiceProviders } from '../channel/field/field.service.providers';
-import { OptionServiceProviders } from '../channel/option/option.service.providers';
-import { IssueServiceProviders } from '../project/issue/issue.service.providers';
-import { FeedbackEntity } from './feedback.entity';
-import { FeedbackMySQLService } from './feedback.mysql.service';
-import { FeedbackOSService } from './feedback.os.service';
-import { FeedbackService } from './feedback.service';
+} from '@/test-utils/util-functions';
+import { ProjectEntity } from '../../domains/project/project/project.entity';
+import { ProjectService } from '../../domains/project/project/project.service';
+import { RoleServiceProviders } from './role.service.providers';
 
-export const FeedbackServiceProviders = [
-  FeedbackService,
-  FeedbackMySQLService,
+export const ProjectServiceProviders = [
+  ProjectService,
   {
-    provide: getRepositoryToken(FeedbackEntity),
+    provide: getRepositoryToken(ProjectEntity),
     useValue: mockRepository(),
   },
-  ClsService,
-  ...FieldServiceProviders,
-  ...IssueServiceProviders,
-  ...OptionServiceProviders,
-  ...ChannelServiceProviders,
+  {
+    provide: getRepositoryToken(ChannelEntity),
+    useValue: mockRepository(),
+  },
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
-  FeedbackOSService,
+  ...TenantServiceProviders,
+  ...RoleServiceProviders,
 ];

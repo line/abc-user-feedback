@@ -32,8 +32,8 @@ import { FieldEntity } from '@/domains/channel/field/field.entity';
 import { FeedbackService } from '@/domains/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { ProjectService } from '@/domains/project/project/project.service';
-import { createFieldDto, getRandomValue } from '@/utils/test-util-fixture';
-import { clearEntities } from '@/utils/test-utils';
+import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

@@ -16,16 +16,16 @@
 import { JwtService } from '@nestjs/jwt';
 import { ClsService } from 'nestjs-cls';
 
-import { CodeServiceProviders } from '@/shared/code/code.service.providers';
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
-import { getMockProvider } from '@/utils/test-utils';
-import { ApiKeyServiceProviders } from '../project/api-key/api-key.service.providers';
-import { MemberServiceProviders } from '../project/member/member.service.providers';
-import { RoleServiceProviders } from '../project/role/role.service.providers';
-import { TenantServiceProviders } from '../tenant/tenant.service.providers';
-import { CreateUserServiceProviders } from '../user/create-user.service.providers';
-import { UserServiceProviders } from '../user/user.service.providers';
-import { AuthService } from './auth.service';
+import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
+import { getMockProvider } from '@/test-utils/util-functions';
+import { AuthService } from '../../domains/auth/auth.service';
+import { ApiKeyServiceProviders } from './api-key.service.providers';
+import { CreateUserServiceProviders } from './create-user.service.providers';
+import { MemberServiceProviders } from './member.service.providers';
+import { RoleServiceProviders } from './role.service.providers';
+import { TenantServiceProviders } from './tenant.service.providers';
+import { UserServiceProviders } from './user.service.providers';
 
 export const MockJwtService = {
   sign: jest.fn(),

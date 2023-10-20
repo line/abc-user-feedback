@@ -16,12 +16,12 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { CodeServiceProviders } from '@/shared/code/code.service.providers';
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
-import { getMockProvider, mockRepository } from '@/utils/test-utils';
-import { TenantServiceProviders } from '../tenant/tenant.service.providers';
-import { UserEntity } from './entities/user.entity';
-import { UserService } from './user.service';
+import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
+import { getMockProvider, mockRepository } from '@/test-utils/util-functions';
+import { UserEntity } from '../../domains/user/entities/user.entity';
+import { UserService } from '../../domains/user/user.service';
+import { TenantServiceProviders } from './tenant.service.providers';
 
 export const MockUserInvitationMailingService = {
   send: jest.fn(),

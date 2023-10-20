@@ -27,12 +27,12 @@ import { AuthService } from '@/domains/auth/auth.service';
 import { UpdateRoleRequestDto } from '@/domains/project/role/dtos/requests';
 import { PermissionEnum } from '@/domains/project/role/permission.enum';
 import { RoleEntity } from '@/domains/project/role/role.entity';
-import { HttpStatusCode } from '@/types/http-status';
 import {
   clearEntities,
   getRandomEnumValues,
   signInTestUser,
-} from '@/utils/test-utils';
+} from '@/test-utils/util-functions';
+import { HttpStatusCode } from '@/types/http-status';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

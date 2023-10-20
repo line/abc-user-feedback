@@ -19,11 +19,11 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { ApiKeyServiceProviders } from '../../../test-utils/providers/api-key.service.providers';
 import { ProjectNotFoundException } from '../project/exceptions';
 import { ProjectEntity } from '../project/project.entity';
 import { ApiKeyEntity } from './api-key.entity';
 import { ApiKeyService } from './api-key.service';
-import { ApiKeyServiceProviders } from './api-key.service.providers';
 
 describe('ApiKeyService', () => {
   let apiKeyService: ApiKeyService;

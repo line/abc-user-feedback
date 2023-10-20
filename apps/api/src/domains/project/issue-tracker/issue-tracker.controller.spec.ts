@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
-import { getMockProvider, MockDataSource } from '@/utils/test-utils';
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { IssueTrackerController } from './issue-tracker.controller';
 import { IssueTrackerService } from './issue-tracker.service';
 

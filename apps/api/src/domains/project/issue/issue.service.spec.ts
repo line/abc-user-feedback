@@ -20,7 +20,8 @@ import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
 import type { TimeRange } from '@/common/dtos';
-import { createQueryBuilder } from '@/utils/test-utils';
+import { createQueryBuilder } from '@/test-utils/util-functions';
+import { IssueServiceProviders } from '../../../test-utils/providers/issue.service.providers';
 import {
   CreateIssueDto,
   FindIssuesByProjectIdDto,
@@ -32,7 +33,6 @@ import {
 } from './exceptions';
 import { IssueEntity } from './issue.entity';
 import { IssueService } from './issue.service';
-import { IssueServiceProviders } from './issue.service.providers';
 
 describe('IssueService test suite', () => {
   let issueService: IssueService;

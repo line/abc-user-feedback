@@ -26,8 +26,9 @@ import {
   FieldTypeEnum,
 } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
-import { createFieldDto, getRandomValue } from '@/utils/test-util-fixture';
-import { MockOpensearchRepository } from '@/utils/test-utils';
+import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
+import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import { FeedbackServiceProviders } from '../../test-utils/providers/feedback.service.providers';
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
@@ -35,7 +36,6 @@ import { IssueEntity } from '../project/issue/issue.entity';
 import { CreateFeedbackDto, FindFeedbacksByChannelIdDto } from './dtos';
 import { FeedbackEntity } from './feedback.entity';
 import { FeedbackService } from './feedback.service';
-import { FeedbackServiceProviders } from './feedback.service.providers';
 
 const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
   Object.values(FieldTypeEnum).flatMap((type) =>

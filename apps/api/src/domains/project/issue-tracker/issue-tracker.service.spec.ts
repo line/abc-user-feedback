@@ -18,10 +18,10 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { IssueTrackerServiceProviders } from '../../../test-utils/providers/issue-tracker.service.provider';
 import { UpdateIssueTrackerDto } from './dtos';
 import { IssueTrackerEntity } from './issue-tracker.entity';
 import { IssueTrackerService } from './issue-tracker.service';
-import { IssueTrackerServiceProviders } from './issue-tracker.service.provider';
 
 describe('issue-tracker service', () => {
   let issueTrackerService: IssueTrackerService;

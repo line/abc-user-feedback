@@ -16,11 +16,11 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { CodeServiceProviders } from '@/shared/code/code.service.providers';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
-import { getMockProvider, mockRepository } from '@/utils/test-utils';
-import { UserEntity } from './entities/user.entity';
-import { UserPasswordService } from './user-password.service';
+import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
+import { getMockProvider, mockRepository } from '@/test-utils/util-functions';
+import { UserEntity } from '../../domains/user/entities/user.entity';
+import { UserPasswordService } from '../../domains/user/user-password.service';
 
 const MockMailerService = {
   sendMail: jest.fn(),

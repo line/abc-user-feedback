@@ -18,7 +18,8 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { getRandomEnumValues } from '@/utils/test-utils';
+import { getRandomEnumValues } from '@/test-utils/util-functions';
+import { RoleServiceProviders } from '../../../test-utils/providers/role.service.providers';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import {
   RoleAlreadyExistsException,
@@ -27,7 +28,6 @@ import {
 import { PermissionEnum } from './permission.enum';
 import { RoleEntity } from './role.entity';
 import { RoleService } from './role.service';
-import { RoleServiceProviders } from './role.service.providers';
 
 describe('RoleService', () => {
   let roleService: RoleService;

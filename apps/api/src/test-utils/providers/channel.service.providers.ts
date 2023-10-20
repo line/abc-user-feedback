@@ -16,28 +16,25 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
-import { TenantServiceProviders } from '@/domains/tenant/tenant.service.providers';
+import { ProjectServiceProviders } from '@/test-utils/providers/project.service.providers';
 import {
   getMockProvider,
   MockOpensearchRepository,
   mockRepository,
-} from '@/utils/test-utils';
-import { RoleServiceProviders } from '../role/role.service.providers';
-import { ProjectEntity } from './project.entity';
-import { ProjectService } from './project.service';
+} from '@/test-utils/util-functions';
+import { ChannelEntity } from '../../domains/channel/channel/channel.entity';
+import { ChannelMySQLService } from '../../domains/channel/channel/channel.mysql.service';
+import { ChannelService } from '../../domains/channel/channel/channel.service';
+import { FieldServiceProviders } from './field.service.providers';
 
-export const ProjectServiceProviders = [
-  ProjectService,
-  {
-    provide: getRepositoryToken(ProjectEntity),
-    useValue: mockRepository(),
-  },
+export const ChannelServiceProviders = [
+  ChannelService,
+  ChannelMySQLService,
   {
     provide: getRepositoryToken(ChannelEntity),
     useValue: mockRepository(),
   },
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
-  ...TenantServiceProviders,
-  ...RoleServiceProviders,
+  ...ProjectServiceProviders,
+  ...FieldServiceProviders,
 ];

@@ -23,10 +23,10 @@ import type { Repository } from 'typeorm';
 
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
+import { CodeServiceProviders } from '../../test-utils/providers/code.service.providers';
 import { CodeTypeEnum } from './code-type.enum';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
-import { CodeServiceProviders } from './code.service.providers';
 import {
   SetCodeEmailVerificationDto,
   SetCodeResetPasswordDto,

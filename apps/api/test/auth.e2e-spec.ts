@@ -39,7 +39,7 @@ import { UserPasswordService } from '@/domains/user/user-password.service';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { CodeService } from '@/shared/code/code.service';
-import { clearEntities } from '@/utils/test-utils';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
