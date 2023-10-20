@@ -34,8 +34,8 @@ const FeedbackTableWrapper: React.FC<IProps> = (props) => {
 
   const currentChannelId = useMemo(() => {
     if (channelId) return channelId;
-    if (!channels) return undefined;
-    return channels.items?.[0]?.id;
+    if (!channels) return null;
+    return channels.items?.[0]?.id ?? null;
   }, [channelId, channels]);
 
   if (!currentChannelId) return <div>No Channel</div>;

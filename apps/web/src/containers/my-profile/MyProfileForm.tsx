@@ -56,9 +56,9 @@ const MyProfileForm: React.FC<IProps> = () => {
     reset(user);
   }, [user]);
 
-  const { mutate } = useMutation(
-    ['put', '/api/users/{id}', user],
-    async (input: IForm & { userId: number }) => {
+  const { mutate } = useMutation({
+    mutationKey: ['put', '/api/users/{id}', user],
+    mutationFn: async (input: IForm & { userId: number }) => {
       const { userId, ...body } = input;
       await client.put({
         path: '/api/users/{id}',
@@ -66,13 +66,11 @@ const MyProfileForm: React.FC<IProps> = () => {
         pathParams: { id: userId },
       });
     },
-    {
-      async onSuccess() {
-        await refetch();
-        toast.positive({ title: t('toast.save') });
-      },
+    async onSuccess() {
+      await refetch();
+      toast.positive({ title: t('toast.save') });
     },
-  );
+  });
 
   return (
     <div className="flex flex-col gap-6">

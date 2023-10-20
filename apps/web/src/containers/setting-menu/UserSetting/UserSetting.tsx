@@ -70,10 +70,12 @@ const UserSetting: React.FC<IProps> = () => {
 
   const [limit, setLimit] = useState<number>(10);
 
-  const { data, refetch, isLoading } = useUserSearch(
-    { limit, page, query, order: sort },
-    { keepPreviousData: true },
-  );
+  const { data, refetch, isLoading } = useUserSearch({
+    limit,
+    page,
+    query,
+    order: sort,
+  });
 
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 

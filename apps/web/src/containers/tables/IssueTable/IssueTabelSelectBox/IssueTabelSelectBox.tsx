@@ -36,9 +36,9 @@ const IssueTabelSelectBox: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { data: issueCountData } = useQuery(
-    ['all_issues', createdAtRange, projectId],
-    async () => {
+  const { data: issueCountData } = useQuery({
+    queryKey: ['all_issues', createdAtRange, projectId],
+    queryFn: async () => {
       const result: { count: number; key: string }[] = [];
       const issues = ISSUES(t);
       for (const issue of issues) {
@@ -68,7 +68,7 @@ const IssueTabelSelectBox: React.FC<IProps> = (props) => {
       const total = result?.reduce((prev, curr) => prev + curr.count, 0);
       return [{ key: 'total', count: total }].concat(result);
     },
-  );
+  });
 
   return (
     <div className="flex flex-wrap gap-2">

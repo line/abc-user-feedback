@@ -46,12 +46,12 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
     variables: { projectId },
   });
   const apiKey = useMemo(
-    () => apiKeysData?.items.find((v) => !v.deletedAt),
+    () => apiKeysData?.items.find((v) => !v.deletedAt) ?? null,
     [apiKeysData],
   );
 
   const snippetBody = useMemo(() => {
-    if (!channelData?.fields) return;
+    if (!channelData?.fields) return null;
     const body: Record<string, any> = {};
     for (const field of channelData.fields) {
       if (field.type !== 'API' || field.status === 'INACTIVE') continue;

@@ -33,12 +33,12 @@ const SettingMenuSubtitle: React.FC<IProps> = (props) => {
   const { data: channelData } = useChannels(projectId);
 
   const projectName = useMemo(
-    () => projectData?.items.find((v) => v.id === projectId)?.name,
+    () => projectData?.items.find((v) => v.id === projectId)?.name ?? '',
     [projectData, projectId],
   );
 
   const channelName = useMemo(
-    () => channelData?.items.find((v) => v.id === channelId)?.name,
+    () => channelData?.items.find((v) => v.id === channelId)?.name ?? '',
     [channelData, channelId],
   );
 

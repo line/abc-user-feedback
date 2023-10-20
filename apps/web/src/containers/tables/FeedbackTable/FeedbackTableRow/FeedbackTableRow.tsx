@@ -48,7 +48,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
     disableEditState();
   }, [channelId]);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
     pathParams: { projectId, channelId, feedbackId: row.original.id },
@@ -130,7 +130,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
               <button
                 className="icon-btn icon-btn-sm icon-btn-tertiary"
                 onClick={onSubmit}
-                disabled={isLoading}
+                disabled={isPending}
               >
                 <Icon name="Check" size={16} className="text-blue-primary" />
               </button>

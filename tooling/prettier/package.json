@@ -10,9 +10,9 @@
   },
   "prettier": "@ufb/prettier-config",
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
     "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.4"
+    "prettier-plugin-tailwindcss": "^0.5.6"
   },
   "devDependencies": {
     "@ufb/tsconfig": "^0.1.0",

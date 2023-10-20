@@ -88,7 +88,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
     });
   }, [errors]);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/issues/{issueId}',
     pathParams: { projectId, issueId: issue.id },
@@ -215,7 +215,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
             </button>
             <button
               className="btn btn-primary"
-              disabled={!formState.isDirty || isLoading}
+              disabled={!formState.isDirty || isPending}
             >
               {t('button.save')}
             </button>

@@ -52,7 +52,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
     variables: { channelId, projectId },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
@@ -94,7 +94,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
             }}
             submitButton={{
               children: t('button.delete'),
-              disabled: inputChannelName !== data?.name || isLoading,
+              disabled: inputChannelName !== data?.name || isPending,
               className: 'btn-red',
               onClick: () => mutate(undefined),
             }}

@@ -231,7 +231,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId },
   });
 
-  const { mutate: deleteIssues, isLoading: deleteIssuesLoading } =
+  const { mutate: deleteIssues, isPending: deleteIssuesPending } =
     useOAIMutation({
       method: 'delete',
       path: '/api/projects/{projectId}/issues',
@@ -467,7 +467,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           submitButton={{
             children: t('button.delete'),
             onClick: onClickDelete,
-            disabled: deleteIssuesLoading,
+            disabled: deleteIssuesPending,
           }}
           icon={{
             name: 'WarningCircleFill',

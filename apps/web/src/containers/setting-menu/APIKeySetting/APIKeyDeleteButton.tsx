@@ -30,7 +30,7 @@ const APIKeyDeleteButton: React.FC<IProps> = (props) => {
   const { projectId, refetch, apiKeyId, disabled } = props;
   const { t } = useTranslation();
 
-  const { mutate: deleteAPiKey, isLoading } = useOAIMutation({
+  const { mutate: deleteAPiKey, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/api-keys/{apiKeyId}',
     pathParams: { projectId, apiKeyId },
@@ -48,7 +48,7 @@ const APIKeyDeleteButton: React.FC<IProps> = (props) => {
     <button
       className="icon-btn icon-btn-tertiary icon-btn-sm"
       onClick={() => deleteAPiKey(undefined)}
-      disabled={disabled || isLoading}
+      disabled={disabled || isPending}
     >
       <Icon name="TrashFill" />
     </button>

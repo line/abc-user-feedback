@@ -53,7 +53,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
     { resolver: zodResolver(schema) },
   );
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/users/password/change',
     queryOptions: {
@@ -84,7 +84,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
         <button
           form="reset_password"
           className="btn btn-md btn-primary min-w-[120px]"
-          disabled={isLoading}
+          disabled={isPending}
         >
           {t('button.save')}
         </button>

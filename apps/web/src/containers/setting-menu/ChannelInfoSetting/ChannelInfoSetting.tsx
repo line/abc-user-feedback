@@ -56,7 +56,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   });
   const { refetch: refetchChannelList } = useChannels(projectId);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/channels/channels/{channelId}',
     pathParams: { channelId, projectId },
@@ -91,7 +91,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
         form: 'form',
         type: 'submit',
         disabled:
-          !perms.includes('channel_update') || !formState.isDirty || isLoading,
+          !perms.includes('channel_update') || !formState.isDirty || isPending,
       }}
     >
       <form id="form" className="flex flex-col gap-6">

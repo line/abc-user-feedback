@@ -82,55 +82,51 @@ const IssueCell: React.FC<IProps> = (props) => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const { mutateAsync: attatchIssue } = useMutation(
-    [
+  const { mutateAsync: attatchIssue } = useMutation({
+    mutationKey: [
       'post',
       '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
       projectId,
       channelId,
       feedbackId,
     ],
-    async ({ issueId }: { issueId: number }) => {
+    mutationFn: async ({ issueId }: { issueId: number }) => {
       const { data } = await client.post({
         path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
         pathParams: { projectId, channelId, feedbackId, issueId },
       });
       return data;
     },
-    {
-      onSuccess: async () => {
-        await refetch();
-        toast.positive({ title: t('toast.save') });
-      },
+    onSuccess: async () => {
+      await refetch();
+      toast.positive({ title: t('toast.save') });
     },
-  );
+  });
 
-  const { mutateAsync: detecthIssue } = useMutation(
-    [
+  const { mutateAsync: detecthIssue } = useMutation({
+    mutationKey: [
       'delete',
       '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
       projectId,
       channelId,
       feedbackId,
     ],
-    async ({ issueId }: { issueId: number }) => {
+    mutationFn: async ({ issueId }: { issueId: number }) => {
       const { data } = await client.delete({
         path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
         pathParams: { projectId, channelId, feedbackId, issueId },
       });
       return data;
     },
-    {
-      onSuccess: async () => {
-        await refetch();
-        setInputValue('');
-        toast.positive({ title: t('toast.save') });
-      },
-      onError: (error: IFetchError) => {
-        toast.negative({ title: error.message });
-      },
+    onSuccess: async () => {
+      await refetch();
+      setInputValue('');
+      toast.positive({ title: t('toast.save') });
     },
-  );
+    onError: (error: IFetchError) => {
+      toast.negative({ title: error.message });
+    },
+  });
 
   const { mutateAsync: createIssue } = useOAIMutation({
     method: 'post',

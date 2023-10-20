@@ -19,17 +19,17 @@
     "root": true
   },
   "dependencies": {
-    "@floating-ui/react": "^0.24.6",
+    "@floating-ui/react": "^0.26.1",
     "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
-    "@types/react": "^18.2.8",
-    "@types/react-dom": "^18.2.4",
+    "@types/react": "^18.2.30",
+    "@types/react-dom": "^18.2.14",
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
     "@ufb/tailwind": "^0.1.0",
     "@ufb/tsconfig": "^0.1.0",
-    "eslint": "^8.50.0",
+    "eslint": "^8.51.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "typescript": "^5.2.2"

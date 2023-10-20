@@ -14,7 +14,7 @@
  * under the License.
  */
 import { useCallback, useState } from 'react';
-import produce from 'immer';
+import { produce } from 'immer';
 import { useTranslation } from 'next-i18next';
 
 import { Icon } from '@ufb/ui';

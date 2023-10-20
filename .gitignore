@@ -30,13 +30,13 @@ yarn-error.log*
 .env.production.local
 
 # turbo
-.turbo
+!.turbo
+**/.turbo
 
 # .env
 .env*
 !.env.example
 !.env.build
-
 
 volumes
 

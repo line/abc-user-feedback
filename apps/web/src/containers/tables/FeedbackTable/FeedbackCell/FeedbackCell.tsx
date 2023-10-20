@@ -26,7 +26,7 @@ interface IProps extends React.PropsWithChildren {
   value: any;
 }
 
-const FeedbackCell: React.FC<IProps> = (props) => {
+const FeedbackCell: React.FC<IProps> = memo((props) => {
   const { isExpanded, field, value } = props;
 
   return (
@@ -50,6 +50,6 @@ const FeedbackCell: React.FC<IProps> = (props) => {
         : String(value)}
     </ExpandableText>
   );
-};
+});
 
-export default memo(FeedbackCell);
+export default FeedbackCell;

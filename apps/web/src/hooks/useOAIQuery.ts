@@ -55,9 +55,9 @@ export default function useOAIQuery<
     IFetchError,
     TData,
     (TPath | Record<string, unknown> | undefined)[]
-  >(
-    [path, variables],
-    async ({ signal }) => {
+  >({
+    queryKey: [path, variables],
+    queryFn: async ({ signal }) => {
       const { data } = await client.request({
         method: 'get',
         url: getRequestUrl(path, variables),
@@ -65,6 +65,6 @@ export default function useOAIQuery<
       });
       return data as TData;
     },
-    queryOptions,
-  );
+    ...queryOptions,
+  });
 }

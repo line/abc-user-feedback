@@ -27,17 +27,17 @@ const useUserSearch = (
   body: IBody = { limit: 10, page: 1 },
   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'>,
 ) => {
-  return useQuery<TData>(
-    ['/api/users/search', body],
-    async () => {
+  return useQuery<TData>({
+    queryKey: ['/api/users/search', body],
+    queryFn: async () => {
       const { data: result } = await client.post({
         path: '/api/users/search',
         body,
       });
       return result;
     },
-    options,
-  );
+    ...options,
+  });
 };
 
 export default useUserSearch;

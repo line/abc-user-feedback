@@ -42,14 +42,14 @@ const useFeedbackSearch = (
   body: IBody,
   options?: Omit<UseQueryOptions<TData, IFetchError>, 'queryKey' | 'queryFn'>,
 ) => {
-  return useQuery<TData, IFetchError>(
-    [
+  return useQuery<TData, IFetchError>({
+    queryKey: [
       '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',
       projectId,
       channelId,
       body,
     ],
-    async () => {
+    queryFn: async () => {
       const { data: result } = await client.post({
         path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',
         pathParams: { projectId, channelId },
@@ -57,8 +57,8 @@ const useFeedbackSearch = (
       });
       return result;
     },
-    { enabled: options?.enabled, ...options },
-  );
+    ...options,
+  });
 };
 
 export default useFeedbackSearch;

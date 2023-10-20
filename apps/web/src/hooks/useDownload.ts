@@ -36,9 +36,12 @@ interface IInput {
   >;
 }
 const useDownload = ({ params, options }: IInput) => {
-  return useMutation(
-    ['/api/projects/{projectId}/channels/{channelId}/feedbacks/export', params],
-    async (body: IBody) => {
+  return useMutation({
+    mutationKey: [
+      '/api/projects/{projectId}/channels/{channelId}/feedbacks/export',
+      params,
+    ],
+    mutationFn: async (body: IBody) => {
       const { data, headers } = await client.post({
         path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/export',
         pathParams: params,
@@ -59,8 +62,8 @@ const useDownload = ({ params, options }: IInput) => {
       link.click();
       link.remove();
     },
-    options,
-  );
+    ...options,
+  });
 };
 
 export default useDownload;

@@ -43,7 +43,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
 
   const [isUsed, setIsUsed] = useState(!deletedAt);
 
-  const { mutate: softDelete, isLoading: softDeleteLoading } = useOAIMutation({
+  const { mutate: softDelete, isPending: softDeletePending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/api-keys/{apiKeyId}/soft',
     pathParams: { apiKeyId, projectId },
@@ -58,7 +58,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
       },
     },
   });
-  const { mutate: recover, isLoading: recoverLoading } = useOAIMutation({
+  const { mutate: recover, isPending: recoverPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/api-keys/{apiKeyId}/recover',
     pathParams: { apiKeyId, projectId },
@@ -102,7 +102,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
         submitButton={{
           children: t('button.save'),
           disabled:
-            isUsed === !deletedAt || softDeleteLoading || recoverLoading,
+            isUsed === !deletedAt || softDeletePending || recoverPending,
           className: 'btn-primary',
           onClick: () => handleSave(),
         }}

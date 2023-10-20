@@ -39,7 +39,7 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
   const [newRoleName, setNewRoleName] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { mutate: createRole, isLoading } = useOAIMutation({
+  const { mutate: createRole, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/roles',
     pathParams: { projectId },
@@ -64,7 +64,7 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
     <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger
         onClick={() => setOpen(true)}
-        disabled={!perms.includes('project_role_create') || isLoading}
+        disabled={!perms.includes('project_role_create') || isPending}
         className="btn-primary btn min-w-[120px]"
       >
         {t('main.setting.dialog.create-role.title')}

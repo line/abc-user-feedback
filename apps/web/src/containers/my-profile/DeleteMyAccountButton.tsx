@@ -28,7 +28,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
 
   const { user, signOut } = useUser();
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/users/{id}',
     pathParams: { id: user?.id ?? -1 },
@@ -62,7 +62,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
           children: t('button.delete'),
           onClick: () => mutate(undefined),
           className: 'bg-red-primary',
-          disabled: isLoading,
+          disabled: isPending,
         }}
       >
         <h2 className="font-20-bold mb-3 text-center">

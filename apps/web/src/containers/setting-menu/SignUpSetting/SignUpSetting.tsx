@@ -83,7 +83,7 @@ const SignUpSetting: React.FC<IProps> = () => {
 
   const [currentDomain, setCurrentDomain] = useState('');
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/tenants',
     queryOptions: {
@@ -163,7 +163,7 @@ const SignUpSetting: React.FC<IProps> = () => {
         onClick: handleSubmit(onSubmit),
         form: 'form',
         type: 'submit',
-        disabled: !formState.isDirty || isLoading,
+        disabled: !formState.isDirty || isPending,
       }}
     >
       <FormProvider {...methods}>

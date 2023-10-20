@@ -28,7 +28,7 @@ interface IProps extends React.PropsWithChildren {
   feedbackId: number;
 }
 
-const EditableCell: React.FC<IProps> = (props) => {
+const EditableCell: React.FC<IProps> = memo((props) => {
   const { field, value, isExpanded, feedbackId } = props;
 
   const { editableState, onChangeEditInput } = useTableStore(
@@ -152,6 +152,6 @@ const EditableCell: React.FC<IProps> = (props) => {
       )}
     </div>
   );
-};
+});
 
-export default memo(EditableCell);
+export default EditableCell;

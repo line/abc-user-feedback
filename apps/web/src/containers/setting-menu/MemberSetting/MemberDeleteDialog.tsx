@@ -42,7 +42,7 @@ const MemberDeleteDialog: React.FC<IProps> = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/members/{memberId}',
     pathParams: { memberId, projectId },
@@ -63,7 +63,7 @@ const MemberDeleteDialog: React.FC<IProps> = ({
       <PopoverTrigger
         onClick={() => setOpen((prev) => !prev)}
         className="icon-btn icon-btn-sm icon-btn-tertiary"
-        disabled={disabled || isLoading}
+        disabled={disabled || isPending}
       >
         <Icon name="TrashFill" />
       </PopoverTrigger>

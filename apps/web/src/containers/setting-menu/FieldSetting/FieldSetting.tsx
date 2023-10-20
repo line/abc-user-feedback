@@ -22,7 +22,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import produce from 'immer';
+import { produce } from 'immer';
 import { Trans, useTranslation } from 'next-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
@@ -225,7 +225,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
     setRows((v) => v.concat(input).sort(fieldSortType));
   };
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/channels/channels/{channelId}/fields',
     pathParams: { channelId, projectId },
@@ -266,7 +266,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
                 : true) ||
               !showPreview ||
               !canUpdateField ||
-              isLoading ||
+              isPending ||
               channelDataLoading
             }
             onClick={onSave}

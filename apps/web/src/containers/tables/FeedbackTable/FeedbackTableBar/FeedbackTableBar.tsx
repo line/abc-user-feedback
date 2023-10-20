@@ -60,7 +60,7 @@ interface IProps {
 const FeedbackTableBar: React.FC<IProps> = (props) => {
   const { onChangeChannel, columns, fieldData, table, sub, meta } = props;
 
-  const count = useMemo(() => meta?.totalItems, [meta]);
+  const count = useMemo(() => meta?.totalItems ?? 0, [meta]);
   const {
     columnOrder,
     columnVisibility,

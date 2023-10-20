@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import produce from 'immer';
+import { produce } from 'immer';
 import { useTranslation } from 'next-i18next';
 
 import { Icon, toast } from '@ufb/ui';

@@ -34,7 +34,7 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { mutate: deleteFeedback, isLoading: deleteFeedbackLoading } =
+  const { mutate: deleteFeedback, isPending: deleteFeedbackPending } =
     useOAIMutation({
       method: 'delete',
       path: '/api/projects/{projectId}/channels/{channelId}/feedbacks',
@@ -63,7 +63,7 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
         submitButton={{
           onClick: onClickDelete,
           children: t('button.delete'),
-          disabled: deleteFeedbackLoading,
+          disabled: deleteFeedbackPending,
         }}
         icon={{
           name: 'WarningCircleFill',

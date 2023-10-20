@@ -63,7 +63,7 @@ const UserInvitationPage: NextPageWithLayout = () => {
     defaultValues,
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/auth/signUp/invitation',
     queryOptions: {
@@ -132,7 +132,7 @@ const UserInvitationPage: NextPageWithLayout = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={isLoading}
+            disabled={isPending}
           >
             {t('button.setting')}
           </button>
