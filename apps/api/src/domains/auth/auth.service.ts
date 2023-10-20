@@ -21,7 +21,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
 import { Transactional } from 'typeorm-transactional';
@@ -233,23 +233,35 @@ export class AuthService {
     }
 
     const { accessTokenRequestURL, clientId, clientSecret } = oauthConfig;
-    const { data } = await axios.post(
-      accessTokenRequestURL,
-      {
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: this.REDIRECT_URI,
-      },
-      {
-        headers: {
-          Authorization: `Basic ${Buffer.from(
-            clientId + ':' + clientSecret,
-          ).toString('base64')}`,
-          'Content-Type': 'application/x-www-form-urlencoded',
+    try {
+      const { data } = await axios.post(
+        accessTokenRequestURL,
+        {
+          grant_type: 'authorization_code',
+          code,
+          redirect_uri: this.REDIRECT_URI,
         },
-      },
-    );
-    return data.access_token;
+        {
+          headers: {
+            Authorization: `Basic ${Buffer.from(
+              clientId + ':' + clientSecret,
+            ).toString('base64')}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      );
+      return data.access_token;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new InternalServerErrorException({
+          axiosError: {
+            ...error.response.data,
+            status: error.response.status,
+          },
+        });
+      }
+      throw error;
+    }
   }
 
   private async getEmailByAccessToken(accessToken: string): Promise<string> {
@@ -258,10 +270,22 @@ export class AuthService {
     if (!oauthConfig) {
       throw new BadRequestException('OAuth Config is required.');
     }
-    const { data } = await axios.get(oauthConfig.userProfileRequestURL, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    return data[oauthConfig.emailKey];
+    try {
+      const { data } = await axios.get(oauthConfig.userProfileRequestURL, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      return data[oauthConfig.emailKey];
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new InternalServerErrorException({
+          axiosError: {
+            ...error.response.data,
+            status: error.response.status,
+          },
+        });
+      }
+      throw error;
+    }
   }
 
   async signInByOAuth(code: string) {

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import axios, { AxiosError } from 'axios';
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import { ironOption } from '@/constants/iron-option';
@@ -25,26 +24,24 @@ export default withIronSessionApiRoute(async (req, res) => {
 
   try {
     const params = new URLSearchParams({ code });
-
-    const response = await axios.get(
+    const response = await fetch(
       `${env.API_BASE_URL}/api/auth/signIn/oauth?${params}`,
     );
 
+    const data = await response.json();
+
     if (response.status !== 200) {
-      return res.status(response.status).send(response.data);
+      return res.status(response.status).send(data);
     }
 
-    req.session.jwt = response.data;
+    req.session.jwt = data;
     await req.session.save();
 
-    return res.send(response.data);
+    return res.send(data);
   } catch (error) {
     getLogger('/api/oauth').error(error);
     if (error instanceof TypeError) {
       return res.status(500).send({ message: error.message, code: error.name });
-    } else if (error instanceof AxiosError && error.response) {
-      const { status, data } = error.response;
-      return res.status(status).send(data);
     }
     return res.status(500).send({ message: 'Unknown Error' });
   }
