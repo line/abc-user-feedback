@@ -18,18 +18,10 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
+import { IssueTrackerServiceProviders } from '../../../test-utils/providers/issue-tracker.service.provider';
 import { UpdateIssueTrackerDto } from './dtos';
 import { IssueTrackerEntity } from './issue-tracker.entity';
 import { IssueTrackerService } from './issue-tracker.service';
-
-const IssueTrackerServiceProviders = [
-  IssueTrackerService,
-  {
-    provide: getRepositoryToken(IssueTrackerEntity),
-    useValue: mockRepository(),
-  },
-];
 
 describe('issue-tracker service', () => {
   let issueTrackerService: IssueTrackerService;
@@ -45,11 +37,11 @@ describe('issue-tracker service', () => {
 
   describe('update', () => {
     it('updating a issue tracker succeeds with a valid project id', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const dto = new UpdateIssueTrackerDto();
       dto.projectId = projectId;
       dto.data = {
-        ticketKey: faker.datatype.string(),
+        ticketKey: faker.string.sample(),
         ticketDomain: faker.internet.domainName(),
       };
       jest

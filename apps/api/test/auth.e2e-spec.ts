@@ -39,7 +39,7 @@ import { UserPasswordService } from '@/domains/user/user-password.service';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { CodeService } from '@/shared/code/code.service';
-import { clearEntities } from '@/utils/test-utils';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -85,7 +85,7 @@ describe('AppController (e2e)', () => {
       allowDomains: [],
       isPrivate: false,
       isRestrictDomain: false,
-      siteName: faker.datatype.string(),
+      siteName: faker.string.sample(),
     });
   });
 
@@ -148,7 +148,7 @@ describe('AppController (e2e)', () => {
     it('invalid code', async () => {
       const dto = new EmailVerificationCodeRequestDto();
       dto.email = email;
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
 
       const originalCode = await codeRepo.findOneBy({ code });
       expect(originalCode.isVerified).toEqual(false);
@@ -279,7 +279,7 @@ describe('AppController (e2e)', () => {
     });
     it('no invitation', async () => {
       const dto = new InvitationUserSignUpRequestDto();
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
       dto.email = email;
       dto.password = faker.internet.password();
 
@@ -292,7 +292,7 @@ describe('AppController (e2e)', () => {
       await setCode(email);
 
       const dto = new InvitationUserSignUpRequestDto();
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
       dto.email = email;
       dto.password = faker.internet.password();
 

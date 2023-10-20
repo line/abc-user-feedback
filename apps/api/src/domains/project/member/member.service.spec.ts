@@ -18,9 +18,8 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
+import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
-import { RoleServiceProviders } from '../role/role.service.spec';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
 import {
   MemberAlreadyExistsException,
@@ -29,15 +28,6 @@ import {
 } from './exceptions';
 import { MemberEntity } from './member.entity';
 import { MemberService } from './member.service';
-
-export const MemberServiceProviders = [
-  MemberService,
-  {
-    provide: getRepositoryToken(MemberEntity),
-    useValue: mockRepository(),
-  },
-  ...RoleServiceProviders,
-];
 
 describe('MemberService test suite', () => {
   let memberService: MemberService;
@@ -55,9 +45,9 @@ describe('MemberService test suite', () => {
   });
 
   describe('create', () => {
-    const projectId = faker.datatype.number();
-    const roleId = faker.datatype.number();
-    const userId = faker.datatype.number();
+    const projectId = faker.number.int();
+    const roleId = faker.number.int();
+    const userId = faker.number.int();
     let dto: CreateMemberDto;
     beforeEach(() => {
       dto = new CreateMemberDto();
@@ -100,9 +90,9 @@ describe('MemberService test suite', () => {
   });
 
   describe('update', () => {
-    const projectId = faker.datatype.number();
-    const roleId = faker.datatype.number();
-    const memberId = faker.datatype.number();
+    const projectId = faker.number.int();
+    const roleId = faker.number.int();
+    const memberId = faker.number.int();
     let dto: UpdateMemberDto;
     beforeEach(() => {
       dto = new UpdateMemberDto();
@@ -111,7 +101,7 @@ describe('MemberService test suite', () => {
     });
 
     it('updating a member succeeds with valid inputs', async () => {
-      const newRoleId = faker.datatype.number();
+      const newRoleId = faker.number.int();
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: projectId },
         id: newRoleId,
@@ -152,7 +142,7 @@ describe('MemberService test suite', () => {
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({
-        role: { id: roleId, project: { id: faker.datatype.number() } },
+        role: { id: roleId, project: { id: faker.number.int() } },
       } as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 

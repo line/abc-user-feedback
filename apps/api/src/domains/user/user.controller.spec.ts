@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { getMockProvider } from '@/utils/test-utils';
+import { getMockProvider } from '@/test-utils/util-functions';
 import { UserDto } from './dtos';
 import {
   ChangePasswordRequestDto,
@@ -94,7 +94,7 @@ describe('user controller', () => {
 
   it('getUser', () => {
     const userDto = new UserDto();
-    userDto.id = faker.datatype.number();
+    userDto.id = faker.number.int();
 
     userController.getUser(userDto.id, userDto);
 
@@ -105,7 +105,7 @@ describe('user controller', () => {
   describe('deleteUser', () => {
     it('positive', () => {
       const userDto = new UserDto();
-      userDto.id = faker.datatype.number();
+      userDto.id = faker.number.int();
 
       userController.deleteUser(userDto.id, userDto);
 
@@ -114,10 +114,10 @@ describe('user controller', () => {
     });
     it('Unauthorization', () => {
       const userDto = new UserDto();
-      userDto.id = faker.datatype.number();
+      userDto.id = faker.number.int();
 
       expect(
-        userController.deleteUser(faker.datatype.number(), userDto),
+        userController.deleteUser(faker.number.int(), userDto),
       ).rejects.toThrow(UnauthorizedException);
     });
   });

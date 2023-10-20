@@ -14,22 +14,20 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
 import { SortMethodEnum } from '@/common/enums';
-import { CodeServiceProviders } from '@/shared/code/code.service.spec';
-import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 import {
   createQueryBuilder,
-  getMockProvider,
   getRandomEnumValue,
-  mockRepository,
-} from '@/utils/test-utils';
-import { TenantServiceProviders } from '../tenant/tenant.service.spec';
+} from '@/test-utils/util-functions';
+import {
+  MockUserInvitationMailingService,
+  UserServiceProviders,
+} from '../../test-utils/providers/user.service.providers';
 import { FindAllUsersDto, UserDto } from './dtos';
 import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
@@ -39,27 +37,9 @@ import {
 } from './exceptions';
 import { UserService } from './user.service';
 
-const MockUserInvitationMailingService = {
-  send: jest.fn(),
-};
 const MockCodeService = {
   setCode: jest.fn(),
 };
-const MockMailerService = {
-  sendMail: jest.fn(),
-};
-
-export const UserServiceProviders = [
-  UserService,
-  { provide: getRepositoryToken(UserEntity), useValue: mockRepository() },
-  getMockProvider(
-    UserInvitationMailingService,
-    MockUserInvitationMailingService,
-  ),
-  getMockProvider(MailerService, MockMailerService),
-  ...CodeServiceProviders,
-  ...TenantServiceProviders,
-];
 
 describe('UserService', () => {
   let userService: UserService;
@@ -77,14 +57,14 @@ describe('UserService', () => {
     it('finding succeeds with valid inputs', async () => {
       const dto = new FindAllUsersDto();
       dto.options = {
-        limit: faker.datatype.number({ min: 10, max: 20 }),
-        page: faker.datatype.number({ min: 1, max: 2 }),
+        limit: faker.number.int({ min: 10, max: 20 }),
+        page: faker.number.int({ min: 1, max: 2 }),
       };
       dto.order = {
         createdAt: SortMethodEnum.DESC,
       };
       dto.query = {
-        projectId: faker.datatype.number(),
+        projectId: faker.number.int(),
         email: faker.internet.email(),
       };
       jest
@@ -130,7 +110,7 @@ describe('UserService', () => {
   });
   describe('findById', () => {
     it('finding by an id succeeds with an existent id', async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.number.int();
       jest
         .spyOn(userRepo, 'findOne')
         .mockResolvedValue({ id: userId } as UserEntity);
@@ -142,7 +122,7 @@ describe('UserService', () => {
       expect(result).toMatchObject({ id: userId });
     });
     it('finding by an id fails with a nonexistent id', async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.number.int();
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
 
       await expect(userService.findById(userId)).rejects.toThrow(
@@ -155,7 +135,7 @@ describe('UserService', () => {
   });
   describe('sendInvitationCode', () => {
     it('sending an invatiation code fails with an existent user', async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.number.int();
       const email = faker.internet.email();
       const userType = getRandomEnumValue(UserTypeEnum);
       jest
@@ -165,7 +145,7 @@ describe('UserService', () => {
       await expect(
         userService.sendInvitationCode({
           email,
-          roleId: faker.datatype.number(),
+          roleId: faker.number.int(),
           userType,
           invitedBy: new UserDto(),
         }),

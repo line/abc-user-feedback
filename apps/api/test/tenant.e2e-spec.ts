@@ -29,8 +29,8 @@ import {
   UpdateTenantRequestDto,
 } from '@/domains/tenant/dtos/requests';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
+import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
-import { clearEntities, signInTestUser } from '@/utils/test-utils';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -67,7 +67,7 @@ describe('AppController (e2e)', () => {
   describe('/tenant (POST)', () => {
     it('setup', async () => {
       const dto = new SetupTenantRequestDto();
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
 
       return request(app.getHttpServer())
         .post('/tenant')
@@ -85,13 +85,13 @@ describe('AppController (e2e)', () => {
     });
     it('already exists', async () => {
       await tenantRepo.save({
-        siteName: faker.datatype.string(),
+        siteName: faker.string.sample(),
         isPrivate: faker.datatype.boolean(),
         isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const dto = new SetupTenantRequestDto();
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
 
       return request(app.getHttpServer()).post('/tenant').send(dto).expect(400);
     });
@@ -101,7 +101,7 @@ describe('AppController (e2e)', () => {
     let accessToken: string;
     beforeEach(async () => {
       tenant = await tenantRepo.save({
-        siteName: faker.datatype.string(),
+        siteName: faker.string.sample(),
         isPrivate: faker.datatype.boolean(),
         isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
@@ -112,7 +112,7 @@ describe('AppController (e2e)', () => {
     it('update', async () => {
       const dto = new UpdateTenantRequestDto();
 
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
@@ -137,7 +137,7 @@ describe('AppController (e2e)', () => {
 
       const dto = new UpdateTenantRequestDto();
 
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
@@ -152,7 +152,7 @@ describe('AppController (e2e)', () => {
     it('not found role', async () => {
       const dto = new UpdateTenantRequestDto();
 
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
@@ -166,7 +166,7 @@ describe('AppController (e2e)', () => {
     it('unauthorized', async () => {
       const dto = new UpdateTenantRequestDto();
 
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
       dto.isPrivate = faker.datatype.boolean();
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
@@ -180,7 +180,7 @@ describe('AppController (e2e)', () => {
   describe('/tenant (GET)', () => {
     const dto = new SetupTenantRequestDto();
     beforeEach(async () => {
-      dto.siteName = faker.datatype.string();
+      dto.siteName = faker.string.sample();
 
       await request(app.getHttpServer()).post('/tenant').send(dto);
     });

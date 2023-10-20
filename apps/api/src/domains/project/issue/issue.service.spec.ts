@@ -20,7 +20,8 @@ import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
 import type { TimeRange } from '@/common/dtos';
-import { createQueryBuilder, mockRepository } from '@/utils/test-utils';
+import { createQueryBuilder } from '@/test-utils/util-functions';
+import { IssueServiceProviders } from '../../../test-utils/providers/issue.service.providers';
 import {
   CreateIssueDto,
   FindIssuesByProjectIdDto,
@@ -32,14 +33,6 @@ import {
 } from './exceptions';
 import { IssueEntity } from './issue.entity';
 import { IssueService } from './issue.service';
-
-export const IssueServiceProviders = [
-  IssueService,
-  {
-    provide: getRepositoryToken(IssueEntity),
-    useValue: mockRepository(),
-  },
-];
 
 describe('IssueService test suite', () => {
   let issueService: IssueService;
@@ -55,7 +48,7 @@ describe('IssueService test suite', () => {
   });
 
   describe('create', () => {
-    const projectId = faker.datatype.number();
+    const projectId = faker.number.int();
     let dto: CreateIssueDto;
     beforeEach(() => {
       dto = new CreateIssueDto();
@@ -63,7 +56,7 @@ describe('IssueService test suite', () => {
     });
 
     it('creating an issue succeeds with valid inputs', async () => {
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null as IssueEntity);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({} as IssueEntity);
 
@@ -90,7 +83,7 @@ describe('IssueService test suite', () => {
   });
 
   describe('findIssuesByProjectId', () => {
-    const projectId = faker.datatype.number();
+    const projectId = faker.number.int();
     let dto: FindIssuesByProjectIdDto;
     beforeEach(() => {
       dto = new FindIssuesByProjectIdDto();
@@ -160,7 +153,7 @@ describe('IssueService test suite', () => {
       });
     });
     it('finding issues succeeds with the id query', async () => {
-      const id = faker.datatype.number();
+      const id = faker.number.int();
       dto.query = {
         id,
       };
@@ -289,16 +282,16 @@ describe('IssueService test suite', () => {
   });
 
   describe('update', () => {
-    const issueId = faker.datatype.number();
+    const issueId = faker.number.int();
     let dto: UpdateIssueDto;
     beforeEach(() => {
       dto = new UpdateIssueDto();
       dto.issueId = issueId;
-      dto.description = faker.datatype.string();
+      dto.description = faker.string.sample();
     });
 
     it('updating an issue succeeds with valid inputs', async () => {
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue({
         id: issueId,
       } as IssueEntity);

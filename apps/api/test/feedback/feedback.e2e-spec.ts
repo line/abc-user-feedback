@@ -32,8 +32,8 @@ import { FieldEntity } from '@/domains/channel/field/field.entity';
 import { FeedbackService } from '@/domains/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { ProjectService } from '@/domains/project/project/project.service';
-import { createFieldDto, getRandomValue } from '@/utils/test-util-fixture';
-import { clearEntities } from '@/utils/test-utils';
+import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -86,10 +86,10 @@ describe('AppController (e2e)', () => {
 
     const { id: channelId } = await channelService.create({
       projectId,
-      name: faker.random.alphaNumeric(20),
+      name: faker.string.alphanumeric(20),
       description: faker.lorem.lines(1),
       fields: Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(createFieldDto),
     });
 
@@ -128,7 +128,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/channels/:channelId/feedbacks (GET)', async () => {
-    const feedbackCount = faker.datatype.number({ min: 1, max: 10 });
+    const feedbackCount = faker.number.int({ min: 1, max: 10 });
     const dataset = [];
     for (let i = 0; i < feedbackCount; i++) {
       const data = {};
@@ -165,8 +165,7 @@ describe('AppController (e2e)', () => {
       data,
     });
 
-    const targetField =
-      targetFields[faker.datatype.number(targetFields.length - 1)];
+    const targetField = targetFields[faker.number.int(targetFields.length - 1)];
 
     const newValue = getRandomValue(targetField.format, targetField.options);
 
@@ -191,8 +190,8 @@ describe('AppController (e2e)', () => {
   });
 
   //   const channel = await channelModel.create({
-  //     name: faker.datatype.string(),
-  //     description: faker.datatype.string(),
+  //     name: faker.string.sample(),
+  //     description: faker.string.sample(),
   //   });
 
   //   return request(app.getHttpServer())
@@ -206,19 +205,19 @@ describe('AppController (e2e)', () => {
   // });
   // it('/channels/:id (PUT)', async () => {
   //   const channel = await channelModel.create({
-  //     name: faker.datatype.string(),
-  //     description: faker.datatype.string(),
+  //     name: faker.string.sample(),
+  //     description: faker.string.sample(),
   //   });
 
   //   await fieldModel.create(
-  //     Array.from({ length: faker.datatype.number({ min: 1, max: 5 }) })
+  //     Array.from({ length: faker.number.int({ min: 1, max: 5 }) })
   //       .map(createField)
   //       .map((v) => ({ ...v, channel: { _id: channel.id } })),
   //   );
 
   //   const dto = new UpdateChannelRequestDto();
-  //   dto.name = faker.datatype.string();
-  //   dto.description = faker.datatype.string();
+  //   dto.name = faker.string.sample();
+  //   dto.description = faker.string.sample();
   //   dto.fields = [];
 
   //   return request(app.getHttpServer())
@@ -236,8 +235,8 @@ describe('AppController (e2e)', () => {
   // });
   // it('/channels/:id (DELETE)', async () => {
   //   const channel = await channelModel.create({
-  //     name: faker.datatype.string(),
-  //     description: faker.datatype.string(),
+  //     name: faker.string.sample(),
+  //     description: faker.string.sample(),
   //   });
 
   //   await request(app.getHttpServer())

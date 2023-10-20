@@ -28,12 +28,12 @@ import { AuthService } from '@/domains/auth/auth.service';
 import { RoleEntity } from '@/domains/project/role/role.entity';
 import { UserStateEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';
-import { HttpStatusCode } from '@/types/http-status';
 import {
   clearEntities,
   getRandomEnumValue,
   signInTestUser,
-} from '@/utils/test-utils';
+} from '@/test-utils/util-functions';
+import { HttpStatusCode } from '@/types/http-status';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -73,7 +73,7 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     await clearEntities([userRepo, roleRepo]);
 
-    const length = faker.datatype.number({ min: 20, max: 30 });
+    const length = faker.number.int({ min: 20, max: 30 });
 
     userEntities = (
       await userRepo.save(
@@ -125,8 +125,8 @@ describe('AppController (e2e)', () => {
     });
 
     it('page and limit', async () => {
-      const limit = faker.datatype.number({ min: 1, max: 10 });
-      const page = faker.datatype.number({
+      const limit = faker.number.int({ min: 1, max: 10 });
+      const page = faker.number.int({
         min: 1,
         max: Math.floor(total / limit),
       });
@@ -210,7 +210,7 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthorization', async () => {
       return request(app.getHttpServer())
-        .delete(`/users/${faker.datatype.number()}`)
+        .delete(`/users/${faker.number.int()}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -224,7 +224,7 @@ describe('AppController (e2e)', () => {
   describe('/users/:id/role (PUT)', () => {
     it('positive case', async () => {
       const role = await roleRepo.save({
-        name: faker.datatype.string(),
+        name: faker.string.sample(),
         permissions: [],
       });
 
@@ -236,7 +236,7 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthroized', async () => {
       const role = await roleRepo.save({
-        name: faker.datatype.string(),
+        name: faker.string.sample(),
         permissions: [],
       });
 

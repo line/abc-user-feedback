@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 
-import { getMockProvider } from '@/utils/test-utils';
+import { getMockProvider } from '@/test-utils/util-functions';
 import { EmailVerificationMailingService } from './email-verification-mailing.service';
 
 describe('first', () => {
@@ -37,7 +37,7 @@ describe('first', () => {
     expect(emailVerificationMailingService).toBeDefined();
   });
   it('send', async () => {
-    const code = faker.datatype.string();
+    const code = faker.string.sample();
     const email = faker.internet.email();
     await emailVerificationMailingService.send({ code, email });
     expect(MockMailerService.sendMail).toHaveBeenCalledTimes(1);

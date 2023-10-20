@@ -26,7 +26,7 @@ import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters';
 import { CreateProjectRequestDto } from '@/domains/project/project/dtos/requests';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { clearEntities } from '@/utils/test-utils';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -63,12 +63,12 @@ describe('AppController (e2e)', () => {
   });
 
   it('/projects (GET)', async () => {
-    const total = faker.datatype.number(10);
+    const total = faker.number.int(10);
 
     await projectRepo.save(
       Array.from({ length: total }).map(() => ({
-        name: faker.datatype.string(),
-        description: faker.datatype.string(),
+        name: faker.string.sample(),
+        description: faker.string.sample(),
       })),
     );
 
@@ -91,16 +91,16 @@ describe('AppController (e2e)', () => {
 
   it('/projects (POST)', () => {
     const dto = new CreateProjectRequestDto();
-    dto.name = faker.datatype.string();
-    dto.description = faker.datatype.string();
+    dto.name = faker.string.sample();
+    dto.description = faker.string.sample();
 
     return request(app.getHttpServer()).post('/projects').send(dto).expect(201);
   });
 
   it('/projects/:id (GET)', async () => {
     const project = await projectRepo.save({
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
     });
 
     return request(app.getHttpServer())
@@ -114,12 +114,12 @@ describe('AppController (e2e)', () => {
   });
   it('/projects/:id (PUT)', async () => {
     const project = await projectRepo.save({
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
     });
 
-    const name = faker.datatype.string();
-    const description = faker.datatype.string();
+    const name = faker.string.sample();
+    const description = faker.string.sample();
 
     return request(app.getHttpServer())
       .put(`/projects/${project.id}`)
@@ -133,8 +133,8 @@ describe('AppController (e2e)', () => {
   });
   // it('/projects/:id (DELETE)', async () => {
   //   const project = await projectModel.create({
-  //     name: faker.datatype.string(),
-  //     description: faker.datatype.string(),
+  //     name: faker.string.sample(),
+  //     description: faker.string.sample(),
   //   });
 
   //   await request(app.getHttpServer())

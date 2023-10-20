@@ -53,11 +53,11 @@ export class ChannelService {
   }
 
   async findAllByProjectId(dto: FindAllChannelsByProjectIdDto) {
-    return this.channelMySQLService.findAllByProjectId(dto);
+    return await this.channelMySQLService.findAllByProjectId(dto);
   }
 
   async findById(dto: FindByChannelIdDto) {
-    return this.channelMySQLService.findById(dto);
+    return await this.channelMySQLService.findById(dto);
   }
 
   @Transactional()
