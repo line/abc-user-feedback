@@ -26,7 +26,7 @@ import { Transactional } from 'typeorm-transactional';
 import { CodeTypeEnum } from './code-type.enum';
 import { CodeEntity } from './code.entity';
 import { SetCodeDto, VerifyCodeDto } from './dtos';
-import { SetCodeUserInvitationDataDto } from './dtos/set-code.dto';
+import type { SetCodeUserInvitationDataDto } from './dtos/set-code.dto';
 
 export const SECONDS = 60 * 5;
 

@@ -13,12 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module, OnModuleInit } from '@nestjs/common';
+import type { OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { OS_USE } from '@/configs/opensearch.config';
-
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { FieldEntity } from '../channel/field/field.entity';
 import { FieldModule } from '../channel/field/field.module';

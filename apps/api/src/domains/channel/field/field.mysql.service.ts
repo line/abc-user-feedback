@@ -25,15 +25,10 @@ import {
   isSelectFieldFormat,
 } from '@/common/enums';
 import { validateUnique } from '@/utils/validate-unique';
-
 import { FieldEntity } from '../../channel/field/field.entity';
 import { OptionService } from '../option/option.service';
-import {
-  CreateFieldDto,
-  CreateManyFieldsDto,
-  ReplaceFieldDto,
-  ReplaceManyFieldsDto,
-} from './dtos';
+import type { CreateFieldDto, ReplaceFieldDto } from './dtos';
+import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
 import {
   FieldKeyDuplicatedException,
   FieldNameDuplicatedException,

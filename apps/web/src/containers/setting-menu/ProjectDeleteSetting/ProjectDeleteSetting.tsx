@@ -13,15 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Input, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+
+import {
+  Input,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  TextInput,
+  toast,
+} from '@ufb/ui';
 
 import { ChannelCard, SettingMenuTemplate } from '@/components';
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
-
 import ChannelCardList from './ChannelCardList';
 
 interface IProps extends React.PropsWithChildren {
@@ -48,7 +54,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
     path: '/api/projects/{projectId}/issue-count',
     variables: { projectId },
   });
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}',
     pathParams: { projectId },
@@ -77,6 +83,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
           </PopoverTrigger>
           <PopoverModalContent
             title={t('main.setting.dialog.delete-project.title')}
+            cancelText={t('button.cancel')}
             description={t('main.setting.dialog.delete-project.description')}
             icon={{
               name: 'WarningTriangleFill',
@@ -85,12 +92,12 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
             }}
             submitButton={{
               children: t('button.delete'),
-              disabled: inputChannelName !== data?.name || isLoading,
+              disabled: inputChannelName !== data?.name || isPending,
               className: 'btn-red',
               onClick: () => mutate(undefined),
             }}
           >
-            <p className="font-16-bold text-center mb-3">{data?.name}</p>
+            <p className="font-16-bold mb-3 text-center">{data?.name}</p>
             <Input
               placeholder={t('input.placeholder.input')}
               onChange={(e) => setInputChannelName(e.target.value)}

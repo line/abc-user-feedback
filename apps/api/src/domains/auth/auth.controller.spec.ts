@@ -17,8 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import dayjs from 'dayjs';
 
-import { getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider } from '@/test-utils/util-functions';
 import { TenantService } from '../tenant/tenant.service';
 import { UserDto } from '../user/dtos';
 import { AuthController } from './auth.controller';
@@ -71,7 +70,7 @@ describe('AuthController', () => {
   });
   it('verifyEmailCode', () => {
     const dto = new EmailVerificationCodeRequestDto();
-    dto.code = faker.datatype.string();
+    dto.code = faker.string.sample();
     dto.email = faker.internet.email();
     authController.verifyEmailCode(dto);
 
@@ -86,7 +85,7 @@ describe('AuthController', () => {
   });
   it('signUpInvitationUser', () => {
     const dto = new InvitationUserSignUpRequestDto();
-    dto.code = faker.datatype.string();
+    dto.code = faker.string.sample();
     dto.email = faker.internet.email();
     dto.password = faker.internet.password();
     authController.signUpInvitationUser(dto);

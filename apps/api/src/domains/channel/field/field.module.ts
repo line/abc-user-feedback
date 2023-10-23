@@ -17,7 +17,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
-
 import { FieldEntity } from '../field/field.entity';
 import { FieldMySQLService } from '../field/field.mysql.service';
 import { FieldService } from '../field/field.service';

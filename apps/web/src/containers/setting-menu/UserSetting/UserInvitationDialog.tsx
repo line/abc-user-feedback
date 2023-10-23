@@ -14,17 +14,23 @@
  * under the License.
  */
 
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
 import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  TextInput,
+  toast,
+} from '@ufb/ui';
+
 import { SelectBox } from '@/components';
-import { PopoverModalContent } from '@/components';
-import { UserTypeEnum } from '@/contexts/user.context';
+import type { UserTypeEnum } from '@/contexts/user.context';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
 
 interface IProps {}
@@ -76,7 +82,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
     },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/users/invite',
     queryOptions: {
@@ -98,11 +104,12 @@ const UserInvitationDialog: React.FC<IProps> = () => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.invite-user.title')}
+        cancelText={t('button.cancel')}
         submitButton={{
           children: t('button.confirm'),
           type: 'submit',
           form: 'inviteUser',
-          disabled: isLoading,
+          disabled: isPending,
         }}
       >
         <form

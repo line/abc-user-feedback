@@ -27,7 +27,6 @@ import {
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { SortMethodEnum } from '@/common/enums';
-
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
 import {

@@ -13,12 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+import { useRef, useState } from 'react';
+import type { Placement } from '@floating-ui/react';
 import {
-  FloatingArrow,
-  Side,
   arrow,
   autoUpdate,
   flip,
+  FloatingArrow,
+  FloatingPortal,
   offset,
   shift,
   useDismiss,
@@ -28,18 +31,17 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
-import React, { useRef, useState } from 'react';
+
+import { Icon } from '@ufb/ui';
 
 export interface ITooltipProps {
-  children: React.ReactElement;
-  title: string;
-  place?: Side;
+  placement?: Placement;
+  description?: string;
 }
 
 export const Tooltip: React.FC<ITooltipProps> = ({
-  children,
-  title,
-  place = 'bottom',
+  placement,
+  description,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const arrowRef = useRef(null);
@@ -47,16 +49,24 @@ export const Tooltip: React.FC<ITooltipProps> = ({
   const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
-    middleware: [offset(10), flip(), shift(), arrow({ element: arrowRef })],
+    placement: placement ?? 'right',
     whileElementsMounted: autoUpdate,
-    placement: place,
+    middleware: [
+      offset(5),
+      flip({ fallbackAxisSideDirection: 'start' }),
+      shift(),
+      arrow({ element: arrowRef }),
+    ],
   });
 
+  // Event listeners to change the open state
   const hover = useHover(context, { move: false });
   const focus = useFocus(context);
   const dismiss = useDismiss(context);
+  // Role props for screen readers
   const role = useRole(context, { role: 'tooltip' });
 
+  // Merge all the interactions into prop getters
   const { getReferenceProps, getFloatingProps } = useInteractions([
     hover,
     focus,
@@ -66,21 +76,26 @@ export const Tooltip: React.FC<ITooltipProps> = ({
 
   return (
     <>
-      {React.cloneElement(children, {
-        ref: refs.setReference,
-        ...getReferenceProps(),
-      })}
-      {isOpen && (
-        <div
-          ref={refs.setFloating}
-          style={floatingStyles}
-          className="bg-fill-primary px-4 py-2.5 font-12-regular text-inverse rounded"
-          {...getFloatingProps()}
-        >
-          {title}
-          <FloatingArrow ref={arrowRef} context={context} />
-        </div>
-      )}
+      <button ref={refs.setReference} {...getReferenceProps()} className="ml-1">
+        <Icon
+          name="InfoCircleFill"
+          size={16}
+          className="text-tertiary cursor-pointer"
+        />
+      </button>
+      <FloatingPortal>
+        {isOpen && (
+          <div
+            className="bg-fill-primary whitespace-pre-line rounded p-2"
+            ref={refs.setFloating}
+            style={floatingStyles}
+            {...getFloatingProps()}
+          >
+            <p className="text-fill-inverse font-12-regular">{description}</p>
+            <FloatingArrow ref={arrowRef} context={context} />
+          </div>
+        )}
+      </FloatingPortal>
     </>
   );
 };

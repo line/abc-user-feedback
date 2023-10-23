@@ -17,8 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
-import { MockDataSource, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { ChannelController } from './channel.controller';
 import { ChannelService } from './channel.service';
 import {
@@ -51,10 +50,10 @@ describe('ChannelController', () => {
     it('should return an array of users', async () => {
       jest.spyOn(MockChannelService, 'create');
 
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const dto = new CreateChannelRequestDto();
-      dto.name = faker.datatype.string();
-      dto.description = faker.datatype.string();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
       dto.fields = [];
 
       await channelController.create(projectId, dto);
@@ -65,10 +64,10 @@ describe('ChannelController', () => {
     it('should return an array of users', async () => {
       jest.spyOn(MockChannelService, 'findAllByProjectId');
 
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const dto = new FindChannelsByProjectIdRequestDto();
-      dto.limit = faker.datatype.number();
-      dto.page = faker.datatype.number();
+      dto.limit = faker.number.int();
+      dto.page = faker.number.int();
 
       await channelController.findAllByProjectId(projectId, dto);
       expect(MockChannelService.findAllByProjectId).toBeCalledTimes(1);
@@ -77,7 +76,7 @@ describe('ChannelController', () => {
   describe('delete', () => {
     it('', async () => {
       jest.spyOn(MockChannelService, 'deleteById');
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
 
       await channelController.delete(channelId);
       expect(MockChannelService.deleteById).toBeCalledTimes(1);

@@ -13,14 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  ArgumentsHost,
-  Catch,
-  ExceptionFilter,
-  HttpException,
-  Logger,
-} from '@nestjs/common';
-import { FastifyReply, FastifyRequest } from 'fastify';
+import type { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
+import { Catch, HttpException, Logger } from '@nestjs/common';
+import type { FastifyReply, FastifyRequest } from 'fastify';
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -45,12 +40,5 @@ export class HttpExceptionFilter implements ExceptionFilter {
         path: request.url,
       });
     }
-
-    this.logger.error(
-      JSON.stringify({
-        request: { method: request.method, url: request.url },
-        exception,
-      }),
-    );
   }
 }

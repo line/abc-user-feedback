@@ -17,8 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
-import { MockDataSource, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { ApiKeyController } from './api-key.controller';
 import { ApiKeyService } from './api-key.service';
 
@@ -49,7 +48,7 @@ describe('ApiKeyController', () => {
   describe('create', () => {
     it('', async () => {
       jest.spyOn(MockApiKeyService, 'create');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await apiKeyController.create(projectId);
 
@@ -59,7 +58,7 @@ describe('ApiKeyController', () => {
   describe('findAll', () => {
     it('', async () => {
       jest.spyOn(MockApiKeyService, 'findAllByProjectId');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await apiKeyController.findAll(projectId);
 
@@ -69,7 +68,7 @@ describe('ApiKeyController', () => {
   describe('softDelete', () => {
     it('', async () => {
       jest.spyOn(MockApiKeyService, 'softDeleteById');
-      const apiKeyId = faker.datatype.number();
+      const apiKeyId = faker.number.int();
 
       await apiKeyController.softDelete(apiKeyId);
 
@@ -79,7 +78,7 @@ describe('ApiKeyController', () => {
   describe('recover', () => {
     it('', async () => {
       jest.spyOn(MockApiKeyService, 'recoverById');
-      const apiKeyId = faker.datatype.number();
+      const apiKeyId = faker.number.int();
 
       await apiKeyController.recover(apiKeyId);
 
@@ -89,7 +88,7 @@ describe('ApiKeyController', () => {
   describe('delete', () => {
     it('', async () => {
       jest.spyOn(MockApiKeyService, 'deleteById');
-      const apiKeyId = faker.datatype.number();
+      const apiKeyId = faker.number.int();
 
       await apiKeyController.delete(apiKeyId);
 

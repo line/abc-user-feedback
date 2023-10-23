@@ -13,36 +13,47 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { toast } from '@ufb/ui';
+import { useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+
+import { toast } from '@ufb/ui';
 
 import { Path } from '@/constants/path';
 import { useUser } from '@/hooks';
 
+interface IQuery {
+  code: string;
+  callback_url?: string;
+}
+
 interface IProps {}
-const OAuthCallbackPage: NextPage<IProps> = ({}) => {
+
+const OAuthCallbackPage: NextPage<IProps> = () => {
   const { signInOAuth } = useUser();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const router = useRouter();
-  const code = useMemo(
-    () => router.query?.code as string | undefined,
-    [router.query],
-  );
+
+  const query = useMemo(() => {
+    if (!router.query) return null;
+    const { code, callback_url } = router.query;
+
+    if (!code) return null;
+    return { code, callback_url } as IQuery;
+  }, [router.query]);
 
   useEffect(() => {
-    if (!code) return;
-    signInOAuth({ code }).catch(() => {
+    if (!query) return;
+    signInOAuth(query).catch(() => {
       toast.negative({ title: 'OAuth2.0 Login Error' });
       router.replace(Path.SIGN_IN);
       setStatus('error');
     });
-  }, [code]);
+  }, [query]);
 
   return (
-    <div className="w-screen h-screen flex justify-center items-center">
+    <div className="flex h-screen w-screen items-center justify-center">
       <h1 className="font-32-bold animate-bounce">
         {status === 'loading'
           ? 'Loading...'

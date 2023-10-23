@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ReplaceFieldDto } from './replace-field.dto';
+import type { ReplaceFieldDto } from './replace-field.dto';
 
 export class ReplaceManyFieldsDto {
   channelId: number;

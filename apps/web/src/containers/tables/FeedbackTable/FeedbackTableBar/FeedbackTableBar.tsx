@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ColumnDef, Table } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import type { ColumnDef, Table } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -22,11 +22,10 @@ import {
   TablePagination,
   TableSearchInput,
 } from '@/components';
-import { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
+import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
 import { env } from '@/env.mjs';
 import { useIssueSearch } from '@/hooks';
-import { FieldType } from '@/types/field.type';
-
+import type { FieldType } from '@/types/field.type';
 import AllExpandButton from '../AllExpandButton';
 import ChannelSelectBox from '../ChannelSelectBox';
 import ColumnSettingPopover from '../ColumnSettingPopover';
@@ -61,7 +60,7 @@ interface IProps {
 const FeedbackTableBar: React.FC<IProps> = (props) => {
   const { onChangeChannel, columns, fieldData, table, sub, meta } = props;
 
-  const count = useMemo(() => meta?.totalItems, [meta]);
+  const count = useMemo(() => meta?.totalItems ?? 0, [meta]);
   const {
     columnOrder,
     columnVisibility,
@@ -110,7 +109,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
     return (
       <div className="flex justify-between">
         <ChannelSelectBox onChangeChannel={onChangeChannel} />
-        <div className="h-10 flex justify-end items-center gap-3">
+        <div className="flex h-10 items-center justify-end gap-3">
           <TablePagination
             limit={limit}
             nextPage={() => setPage((prev) => prev + 1)}
@@ -119,12 +118,12 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             disabledPrevPage={page <= 1}
             short
           />
-          <div className="w-[1px] bg-fill-tertiary h-4" />
+          <div className="bg-fill-tertiary h-4 w-[1px]" />
           <AllExpandButton
             isAllExpanded={table.getIsAllRowsExpanded()}
             toggleAllRowsExpanded={table.toggleAllRowsExpanded}
           />
-          <div className="w-[1px] bg-fill-tertiary h-4" />
+          <div className="bg-fill-tertiary h-4 w-[1px]" />
           <DownloadButton count={count} query={query} />
         </div>
       </div>
@@ -135,7 +134,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
     <div className="space-y-2">
       <div className="flex justify-between">
         <ChannelSelectBox onChangeChannel={onChangeChannel} />
-        <div className="flex gap-2 justify-end h-10 items-center">
+        <div className="flex h-10 items-center justify-end gap-2">
           <ColumnSettingPopover
             columns={columns.filter((v) => v.id !== 'select')}
             fieldData={fieldData ?? []}
@@ -153,13 +152,13 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
         </div>
       </div>
       <div className="flex justify-between">
-        <h2 className="font-18-regular h-10 flex items-center gap-2">
+        <h2 className="font-18-regular flex h-10 items-center gap-2">
           {t('text.search-result')}
           <span className="font-18-bold">
             {t('text.number-count', { count: count ?? 0 })}
           </span>
         </h2>
-        <div className="h-10 flex justify-end items-center gap-4">
+        <div className="flex h-10 items-center justify-end gap-4">
           <TablePagination
             limit={limit}
             nextPage={() => setPage((prev) => prev + 1)}
@@ -180,7 +179,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             <TableSearchInput
               searchItems={searchItems}
               onChangeQuery={setQuery}
-              initialQuery={query}
+              query={query}
             />
           )}
         </div>

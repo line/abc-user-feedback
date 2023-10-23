@@ -13,13 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Input, Popover, PopoverTrigger, TextInput, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+
+import {
+  Input,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  TextInput,
+  toast,
+} from '@ufb/ui';
 
 import { ChannelCard, SettingMenuTemplate } from '@/components';
-import { PopoverModalContent } from '@/components';
 import {
   useFeedbackSearch,
   useOAIMutation,
@@ -45,7 +52,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
     variables: { channelId, projectId },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
@@ -79,6 +86,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
           <PopoverModalContent
             title={t('main.setting.dialog.delete-channel.title')}
             description={t('main.setting.dialog.delete-channel.description')}
+            cancelText={t('button.cancel')}
             icon={{
               name: 'WarningTriangleFill',
               className: 'text-red-primary',
@@ -86,12 +94,12 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
             }}
             submitButton={{
               children: t('button.delete'),
-              disabled: inputChannelName !== data?.name || isLoading,
+              disabled: inputChannelName !== data?.name || isPending,
               className: 'btn-red',
               onClick: () => mutate(undefined),
             }}
           >
-            <p className="font-16-bold text-center mb-3">{data?.name}</p>
+            <p className="font-16-bold mb-3 text-center">{data?.name}</p>
             <Input
               placeholder={t('input.placeholder.input')}
               onChange={(e) => setInputChannelName(e.target.value)}

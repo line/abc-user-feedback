@@ -23,13 +23,13 @@ import { OpensearchRepository } from '@/common/repositories';
 import { OS_USE } from '@/configs/opensearch.config';
 import { TenantService } from '@/domains/tenant/tenant.service';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
-
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { AllPermissionList } from '../role/permission.enum';
 import { RoleService } from '../role/role.service';
-import { CreateProjectDto, FindAllProjectsDto, UpdateProjectDto } from './dtos';
-import { FindByProjectIdDto } from './dtos/find-by-project-id.dto';
+import type { FindAllProjectsDto } from './dtos';
+import { CreateProjectDto, UpdateProjectDto } from './dtos';
+import type { FindByProjectIdDto } from './dtos/find-by-project-id.dto';
 import {
   ProjectAlreadyExistsException,
   ProjectInvalidNameException,

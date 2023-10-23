@@ -17,8 +17,7 @@ import { faker } from '@faker-js/faker';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 
-import { TestConfig, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, TestConfig } from '@/test-utils/util-functions';
 import { ResetPasswordMailingService } from './reset-password-mailing.service';
 
 describe('ResetPasswordMailingService', () => {
@@ -37,7 +36,7 @@ describe('ResetPasswordMailingService', () => {
     expect(resetPasswordMailingService).toBeDefined();
   });
   it('sends a mail', async () => {
-    const code = faker.datatype.string();
+    const code = faker.string.sample();
     const email = faker.internet.email();
 
     await resetPasswordMailingService.send({ code, email });

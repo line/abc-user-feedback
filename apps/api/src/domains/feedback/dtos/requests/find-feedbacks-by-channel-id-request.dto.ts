@@ -16,8 +16,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 
-import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import { SortMethodEnum } from '@/common/enums';
+import type { TimeRange } from '@/common/dtos';
+import { PaginationRequestDto } from '@/common/dtos';
+import type { SortMethodEnum } from '@/common/enums';
 
 export class FindFeedbacksByChannelIdRequestDto extends PaginationRequestDto {
   @ApiProperty({ required: false })

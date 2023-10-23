@@ -16,18 +16,15 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-
+import { CreateUserServiceProviders } from '../../test-utils/providers/create-user.service.providers';
 import { MemberEntity } from '../project/member/member.entity';
-import { MemberServiceProviders } from '../project/member/member.service.spec';
 import { RoleEntity } from '../project/role/role.entity';
 import { TenantEntity } from '../tenant/tenant.entity';
-import { TenantServiceProviders } from '../tenant/tenant.service.spec';
 import { CreateUserService } from './create-user.service';
-import { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
-import { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
+import type { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
+import type { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
 import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
@@ -35,18 +32,6 @@ import {
   NotAllowedUserCreateException,
   UserAlreadyExistsException,
 } from './exceptions';
-import { UserPasswordServiceProviders } from './user-password.service.spec';
-
-export const CreateUserServiceProviders = [
-  CreateUserService,
-  ...UserPasswordServiceProviders,
-  ...TenantServiceProviders,
-  ...MemberServiceProviders,
-  {
-    provide: getRepositoryToken(UserEntity),
-    useValue: mockRepository(),
-  },
-];
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
@@ -216,8 +201,8 @@ describe('CreateUserService', () => {
       expect(userRepo.save).toHaveBeenCalledTimes(0);
     });
     it('creating a general user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const userId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const userId = faker.number.int();
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
         password: faker.internet.password(),
@@ -229,7 +214,7 @@ describe('CreateUserService', () => {
         .spyOn(userRepo, 'save')
         .mockResolvedValue({ id: userId } as UserEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.datatype.number() },
+        project: { id: faker.number.int() },
       } as RoleEntity);
 
       await createUserService.createInvitationUser(dto);
@@ -254,8 +239,8 @@ describe('CreateUserService', () => {
       });
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const userId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const userId = faker.number.int();
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
         password: faker.internet.password(),
@@ -267,7 +252,7 @@ describe('CreateUserService', () => {
         .spyOn(userRepo, 'save')
         .mockResolvedValue({ id: userId } as UserEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.datatype.number() },
+        project: { id: faker.number.int() },
       } as RoleEntity);
 
       await createUserService.createInvitationUser(dto);
@@ -358,8 +343,8 @@ describe('CreateUserService', () => {
       });
     });
     it('creating a general user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const userId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const userId = faker.number.int();
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -371,7 +356,7 @@ describe('CreateUserService', () => {
         .spyOn(userRepo, 'save')
         .mockResolvedValue({ id: userId } as UserEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.datatype.number() },
+        project: { id: faker.number.int() },
       } as RoleEntity);
 
       await createUserService.createInvitationUser(dto);
@@ -396,8 +381,8 @@ describe('CreateUserService', () => {
       });
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const userId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const userId = faker.number.int();
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email(),
         password: faker.internet.password(),
@@ -409,7 +394,7 @@ describe('CreateUserService', () => {
         .spyOn(userRepo, 'save')
         .mockResolvedValue({ id: userId } as UserEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.datatype.number() },
+        project: { id: faker.number.int() },
       } as RoleEntity);
 
       await createUserService.createInvitationUser(dto);
@@ -556,8 +541,8 @@ describe('CreateUserService', () => {
       expect(userRepo.save).toHaveBeenCalledTimes(0);
     });
     it('creating a general user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const userId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const userId = faker.number.int();
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
         password: faker.internet.password(),
@@ -569,7 +554,7 @@ describe('CreateUserService', () => {
         .spyOn(userRepo, 'save')
         .mockResolvedValue({ id: userId } as UserEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.datatype.number() },
+        project: { id: faker.number.int() },
       } as RoleEntity);
 
       await createUserService.createInvitationUser(dto);
@@ -594,8 +579,8 @@ describe('CreateUserService', () => {
       });
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.datatype.number();
-      const userId = faker.datatype.number();
+      const roleId = faker.number.int();
+      const userId = faker.number.int();
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
         password: faker.internet.password(),
@@ -607,7 +592,7 @@ describe('CreateUserService', () => {
         .spyOn(userRepo, 'save')
         .mockResolvedValue({ id: userId } as UserEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.datatype.number() },
+        project: { id: faker.number.int() },
       } as RoleEntity);
 
       await createUserService.createInvitationUser(dto);

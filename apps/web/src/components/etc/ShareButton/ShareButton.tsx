@@ -13,23 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, toast } from '@ufb/ui';
-import { MouseEventHandler } from 'react';
+import type { MouseEventHandler } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, toast } from '@ufb/ui';
+
 interface IProps {
-  id: number;
   pathname: string;
 }
 
-const ShareButton: React.FC<IProps> = ({ id, pathname }) => {
+const ShareButton: React.FC<IProps> = ({ pathname }) => {
   const { t } = useTranslation();
 
   const onClickLinkCopy: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     try {
       const { origin } = window.location;
-      navigator.clipboard.writeText(`${origin}${pathname}?id=${id}`);
+      navigator.clipboard.writeText(`${origin}${pathname}`);
       toast.positive({ title: t('toast.copy'), iconName: 'CopyFill' });
     } catch (error) {
       toast.negative({ title: 'fail' });

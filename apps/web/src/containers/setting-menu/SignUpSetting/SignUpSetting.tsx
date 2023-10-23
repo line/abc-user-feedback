@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Badge, Input, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
 import { useEffect, useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { SettingMenuTemplate, Tooltip } from '@/components';
-import { useOAIMutation, useTenant } from '@/hooks';
-import { OAuthConfigType } from '@/types/tenant.type';
+import { Badge, Input, toast, Tooltip } from '@ufb/ui';
 
+import { SettingMenuTemplate } from '@/components';
+import { useOAIMutation, useTenant } from '@/hooks';
+import type { OAuthConfigType } from '@/types/tenant.type';
 import OAuthInput from './OAuthInput';
 import RadioGroup from './RadioGroup';
 
@@ -83,7 +83,7 @@ const SignUpSetting: React.FC<IProps> = () => {
 
   const [currentDomain, setCurrentDomain] = useState('');
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/tenants',
     queryOptions: {
@@ -163,7 +163,7 @@ const SignUpSetting: React.FC<IProps> = () => {
         onClick: handleSubmit(onSubmit),
         form: 'form',
         type: 'submit',
-        disabled: !formState.isDirty || isLoading,
+        disabled: !formState.isDirty || isPending,
       }}
     >
       <FormProvider {...methods}>
@@ -236,7 +236,7 @@ const SignUpSetting: React.FC<IProps> = () => {
             <p className="input-label mb-2 flex items-center gap-1">
               Email domain WhiteList
               <Tooltip
-                title={t(
+                description={t(
                   'main.setting.sign-up-mgmt.domain-restriction-tooltip',
                 )}
               />
@@ -286,7 +286,7 @@ const SignUpSetting: React.FC<IProps> = () => {
                   }
                   {...domainState}
                 />
-                <div className="flex flex-row gap-2 flex-wrap">
+                <div className="flex flex-row flex-wrap gap-2">
                   {(watch('allowDomains') ?? []).map((domain, i) => (
                     <Badge
                       key={i}

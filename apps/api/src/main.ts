@@ -16,17 +16,15 @@
 import { Logger as DefaultLogger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import {
-  FastifyAdapter,
-  NestFastifyApplication,
-} from '@nestjs/platform-fastify';
+import type { NestFastifyApplication } from '@nestjs/platform-fastify';
+import { FastifyAdapter } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
-import { ConfigServiceType } from './types/config-service.type';
+import type { ConfigServiceType } from './types/config-service.type';
 
 const globalPrefix = 'api';
 
@@ -64,4 +62,4 @@ async function bootstrap() {
   DefaultLogger.log(`🚀 Application is running on: ${await app.getUrl()}`);
 }
 
-bootstrap();
+void bootstrap();

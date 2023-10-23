@@ -16,15 +16,9 @@
 import { registerAs } from '@nestjs/config';
 import * as yup from 'yup';
 
-export const mySqlConfigSchema = yup.object({
-  MYSQL_PRIMARY_URL: yup
-    .string()
-    .default('mysql://userfeedback:userfeedback@localhost:13306/userfeedback'),
-  MYSQL_SECONDARY_URLS: yup
-    .string()
-    .default(
-      '["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"]',
-    ),
+export const mysqlConfigSchema = yup.object({
+  MYSQL_PRIMARY_URL: yup.string().required(),
+  MYSQL_SECONDARY_URLS: yup.array().required(),
 });
 
 export const mysqlConfig = registerAs('mysql', () => ({

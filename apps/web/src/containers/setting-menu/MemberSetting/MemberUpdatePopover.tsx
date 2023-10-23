@@ -13,14 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
+
 import { SelectBox } from '@/components';
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
-import { RoleType } from '@/types/role.type';
+import type { RoleType } from '@/types/role.type';
 
 interface IProps {
   projectId: number;
@@ -46,7 +52,7 @@ const MemberUpdatePopover: React.FC<IProps> = ({
     variables: { projectId },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/members/{memberId}',
     pathParams: { memberId, projectId },
@@ -67,12 +73,13 @@ const MemberUpdatePopover: React.FC<IProps> = ({
       <PopoverTrigger
         className="icon-btn icon-btn-sm icon-btn-tertiary"
         onClick={() => setOpen((prev) => !prev)}
-        disabled={disabled || isLoading}
+        disabled={disabled || isPending}
       >
         <Icon name="EditFill" />
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.edit-member.title')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'ProfileSettingFill',
           className: 'text-orange-primary',

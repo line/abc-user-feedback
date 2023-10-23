@@ -17,8 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
-import { MockDataSource, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import {
   CreateIssueRequestDto,
   DeleteIssuesRequestDto,
@@ -56,9 +55,9 @@ describe('IssueController', () => {
     it('should return a saved id', async () => {
       jest.spyOn(MockIssueService, 'create');
 
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const dto = new CreateIssueRequestDto();
-      dto.name = faker.datatype.string();
+      dto.name = faker.string.sample();
 
       await issueController.create(projectId, dto);
 
@@ -67,7 +66,7 @@ describe('IssueController', () => {
   });
   describe('findById', () => {
     it('should return an issue', async () => {
-      const issueId = faker.datatype.number();
+      const issueId = faker.number.int();
       const issue = new IssueEntity();
       jest.spyOn(MockIssueService, 'findById').mockReturnValue(issue);
 
@@ -78,7 +77,7 @@ describe('IssueController', () => {
   });
   describe('findAllByProjectId', () => {
     it('should return issues', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const issues = [new IssueEntity()];
       jest
         .spyOn(MockIssueService, 'findIssuesByProjectId')
@@ -94,11 +93,11 @@ describe('IssueController', () => {
   });
   describe('update', () => {
     it('', async () => {
-      const projectId = faker.datatype.number();
-      const issueId = faker.datatype.number();
+      const projectId = faker.number.int();
+      const issueId = faker.number.int();
       const dto = new UpdateIssueRequestDto();
-      dto.name = faker.datatype.string();
-      dto.description = faker.datatype.string();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
       jest.spyOn(MockIssueService, 'update');
 
       await issueController.update(projectId, issueId, dto);
@@ -108,7 +107,7 @@ describe('IssueController', () => {
   });
   describe('delete', () => {
     it('', async () => {
-      const issueId = faker.datatype.number();
+      const issueId = faker.number.int();
       jest.spyOn(MockIssueService, 'deleteById');
 
       await issueController.delete(issueId);
@@ -118,9 +117,9 @@ describe('IssueController', () => {
   });
   describe('deleteMany', () => {
     it('', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const dto = new DeleteIssuesRequestDto();
-      dto.issueIds = [faker.datatype.number()];
+      dto.issueIds = [faker.number.int()];
       jest.spyOn(MockIssueService, 'deleteByIds');
 
       await issueController.deleteMany(projectId, dto);

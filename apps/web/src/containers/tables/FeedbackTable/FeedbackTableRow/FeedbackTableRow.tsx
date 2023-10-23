@@ -13,15 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Row, flexRender } from '@tanstack/react-table';
-import { Icon, toast } from '@ufb/ui';
 import { useCallback, useEffect } from 'react';
+import type { Row } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, toast } from '@ufb/ui';
+
 import { ShareButton, TableCheckbox } from '@/components';
+import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
-
 import { TableRow } from '../../IssueTable/TableRow';
 
 interface IProps {
@@ -45,7 +48,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
     disableEditState();
   }, [channelId]);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
     pathParams: { projectId, channelId, feedbackId: row.original.id },
@@ -107,8 +110,13 @@ const FeedbackTableRow: React.FC<IProps> = ({
                 <Icon name="EditStroke" size={16} />
               </button>
               <ShareButton
-                id={row.original.id}
-                pathname={`/main/${projectId}/feedback`}
+                pathname={`/main/${projectId}/feedback?ids=${
+                  row.original.id
+                }&channelId=${channelId}&createdAt=${dayjs(
+                  row.original.createdAt,
+                ).format(DATE_FORMAT)}~${dayjs(row.original.createdAt).format(
+                  DATE_FORMAT,
+                )}`}
               />
             </>
           ) : (
@@ -122,7 +130,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
               <button
                 className="icon-btn icon-btn-sm icon-btn-tertiary"
                 onClick={onSubmit}
-                disabled={isLoading}
+                disabled={isPending}
               >
                 <Icon name="Check" size={16} className="text-blue-primary" />
               </button>

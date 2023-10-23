@@ -1,0 +1,43 @@
+{
+  "name": "@ufb/eslint-config",
+  "version": "0.1.0",
+  "private": true,
+  "files": [
+    "./base.js",
+    "./nestjs.js",
+    "./nextjs.js",
+    "./react.js"
+  ],
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check \"**/*.{js,json}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "prettier": "@ufb/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "./base.js"
+    ],
+    "root": true
+  },
+  "dependencies": {
+    "@next/eslint-plugin-next": "^13.5.4",
+    "@types/eslint": "^8.44.3",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-config-turbo": "^1.10.15",
+    "eslint-plugin-header": "^3.1.1",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0"
+  },
+  "devDependencies": {
+    "@ufb/prettier-config": "^0.1.0",
+    "@ufb/tsconfig": "^0.1.0",
+    "eslint": "^8.51.0",
+    "typescript": "^5.2.2"
+  }
+}

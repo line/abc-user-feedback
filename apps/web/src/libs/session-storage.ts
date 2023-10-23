@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { O } from 'ts-toolbelt';
+import type { O } from 'ts-toolbelt';
 
 interface IData {
   jwt: {

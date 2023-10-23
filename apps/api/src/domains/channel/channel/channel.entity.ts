@@ -24,7 +24,6 @@ import {
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';

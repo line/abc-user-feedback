@@ -25,7 +25,6 @@ import {
 
 import { CommonEntity } from '@/common/entities';
 import { IssueStatusEnum } from '@/common/enums';
-
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { ProjectEntity } from '../project/project.entity';
 

@@ -13,39 +13,41 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
+import { Fragment, useEffect, useMemo, useState } from 'react';
+import type {
   Row,
   RowSelectionState,
   SortingState,
+} from '@tanstack/react-table';
+import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Badge, Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
-import { TFunction, useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import type { TFunction } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
+
+import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
   DateRangePicker,
-  Dialog,
   ExpandableText,
   IssueCircle,
   ShareButton,
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
+  TableResizer,
   TableSearchInput,
   TableSortIcon,
 } from '@/components';
-import { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
+import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
-import { ISSUES, getStatusColor } from '@/constants/issues';
-import { env } from '@/env.mjs';
+import { getStatusColor, ISSUES } from '@/constants/issues';
+import { Path } from '@/constants/path';
 import {
   useIssueSearch,
   useOAIMutation,
@@ -53,9 +55,9 @@ import {
   usePermissions,
   useSort,
 } from '@/hooks';
-import { IssueTrackerType } from '@/types/issue-tracker.type';
-import { IssueType } from '@/types/issue.type';
-
+import useQueryParamsState from '@/hooks/useQueryParamsState';
+import type { IssueTrackerType } from '@/types/issue-tracker.type';
+import type { IssueType } from '@/types/issue.type';
 import { FeedbackTableInIssue } from '../FeedbackTable';
 import IssueSettingPopover from './IssueSettingPopover';
 import IssueTabelSelectBox from './IssueTabelSelectBox';
@@ -83,6 +85,7 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       />
     ),
     size: 40,
+    enableResizing: false,
   }),
   columnHelper.accessor('id', {
     header: 'ID',
@@ -91,23 +94,28 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
         {getValue()}
       </ExpandableText>
     ),
-    size: 100,
+    size: 50,
+    minSize: 50,
     enableSorting: false,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
     cell: ({ getValue, row }) => (
-      <Badge color={getStatusColor(row.original.status)} type="secondary">
-        {getValue()}
-      </Badge>
+      <div className="overflow-hidden">
+        <Badge color={getStatusColor(row.original.status)} type="secondary">
+          {getValue()}
+        </Badge>
+      </div>
     ),
-    size: 100,
+    size: 150,
+    minSize: 50,
     enableSorting: false,
   }),
   columnHelper.accessor('feedbackCount', {
     header: 'Feedback Count',
     cell: ({ getValue }) => getValue().toLocaleString(),
     size: 100,
+    minSize: 100,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -117,18 +125,19 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       </ExpandableText>
     ),
     enableSorting: false,
-    size: 250,
+    size: 300,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
     enableSorting: false,
     cell: ({ getValue }) => (
-      <div className="flex gap-1 items-center">
+      <div className="flex items-center gap-1">
         <IssueCircle issueKey={getValue()} />
         {ISSUES(t).find((v) => v.key === getValue())?.name}
       </div>
     ),
-    size: 70,
+    size: 100,
+    minSize: 100,
   }),
   columnHelper.accessor('externalIssueId', {
     header: 'Ticket',
@@ -144,16 +153,19 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
       ),
     enableSorting: false,
     size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
     size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('updatedAt', {
     header: 'Updated',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
     size: 100,
+    minSize: 50,
   }),
 ];
 
@@ -162,7 +174,6 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const IssueTable: React.FC<IProps> = ({ projectId }) => {
-  const router = useRouter();
   const perms = usePermissions();
 
   const { t } = useTranslation();
@@ -176,15 +187,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
-  const [createdAtRange, setCreatedAtRange] = useState(DEFAULT_DATE_RANGE);
+  const { createdAtRange, query, setCreatedAtRange, setQuery } =
+    useQueryParamsState(Path.ISSUE, { projectId });
 
-  const [query, setQuery] = useState<Record<string, any>>({});
   const sort = useSort(sorting);
-
-  useEffect(() => {
-    if (!router.query.id) return;
-    setQuery({ id: router.query.id });
-  }, [router.query]);
+  const currentIssueKey = useMemo(() => query.status, [query]);
 
   useEffect(() => {
     setPage(1);
@@ -195,17 +202,28 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     () => Object.keys(rowSelection).map((v) => parseInt(v)),
     [rowSelection],
   );
+  const q = useMemo(() => {
+    return Object.entries(query).reduce((prev, [key, value]) => {
+      if (key === 'status' && value !== 'total') {
+        return { ...prev, [key]: value };
+      }
+      if (createdAtRange) {
+        return {
+          ...prev,
+          createdAt: {
+            gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
+            lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
+          },
+        };
+      }
+      return { ...prev, [key]: value };
+    }, {});
+  }, [query, createdAtRange]);
 
   const { data, refetch, isLoading } = useIssueSearch(projectId, {
     page,
     limit,
-    query: {
-      ...query,
-      createdAt: {
-        gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
-        lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
-      },
-    },
+    query: q,
     sort: sort as Record<string, never>,
   });
   const { data: issueTracker } = useOAIQuery({
@@ -213,7 +231,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId },
   });
 
-  const { mutate: deleteIssues, isLoading: deleteIssuesLoading } =
+  const { mutate: deleteIssues, isPending: deleteIssuesPending } =
     useOAIMutation({
       method: 'delete',
       path: '/api/projects/{projectId}/issues',
@@ -279,14 +297,12 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   return (
     <div className="flex flex-col gap-2">
       <IssueTabelSelectBox
+        currentIssueKey={currentIssueKey}
         projectId={projectId}
-        onChangeOption={(option) =>
-          option.key !== 'total'
-            ? setQuery({ status: option.key })
-            : setQuery({})
-        }
+        createdAtRange={createdAtRange}
+        onChangeOption={(option) => setQuery({ status: option.key })}
       />
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h2 className="font-18-regular">
           {t('text.search-result')}{' '}
           <span className="font-18-bold">
@@ -302,17 +318,17 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             disabledNextPage={page >= (data?.meta.totalPages ?? 1)}
             disabledPrevPage={page <= 1}
           />
-          <div className="w-[272px]">
+          <div className="w-[300px]">
             <DateRangePicker
               value={createdAtRange}
               onChange={setCreatedAtRange}
-              maxDays={env.NEXT_PUBLIC_MAX_DAYS}
               maxDate={new Date()}
             />
           </div>
           <TableSearchInput
             searchItems={columnInfo}
             onChangeQuery={(input) => setQuery(input)}
+            query={query}
           />
         </div>
       </div>
@@ -347,6 +363,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                     {header.column.getCanSort() && (
                       <TableSortIcon column={header.column} />
                     )}
+                    {header.column.getCanResize() && (
+                      <TableResizer header={header} table={table} />
+                    )}
                   </th>
                 ))
               )}
@@ -357,7 +376,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             {table.getRowModel().rows.length === 0 ? (
               <tr>
                 <td colSpan={columns.length}>
-                  <div className="flex flex-col justify-center items-center gap-3 my-60">
+                  <div className="my-60 flex flex-col items-center justify-center gap-3">
                     <Icon
                       name="WarningTriangleFill"
                       className="text-tertiary"
@@ -390,8 +409,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           />
                         </button>
                         <ShareButton
-                          id={row.original.id}
-                          pathname={`/main/${projectId}/issue`}
+                          pathname={`/main/${projectId}/issue?id=${row.original.id}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}
@@ -422,7 +440,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                         colSpan={row.getVisibleCells().length}
                         className="bg-fill-quaternary p-4"
                       >
-                        <div className="bg-primary p-4 rounded">
+                        <div className="bg-primary rounded p-4">
                           <FeedbackTableInIssue
                             projectId={projectId}
                             issueId={row.original.id}
@@ -437,22 +455,27 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           </tbody>
         </table>
       </div>
-      <Dialog
+      <Popover
         open={openDeleteDialog}
-        close={() => setOpenDeleteDialog(false)}
-        title={t('main.issue.dialog.delete-issue.title')}
-        description={t('main.issue.dialog.delete-issue.description')}
-        submitButton={{
-          children: t('button.delete'),
-          onClick: onClickDelete,
-          disabled: deleteIssuesLoading,
-        }}
-        icon={{
-          name: 'WarningCircleFill',
-          className: 'text-red-primary',
-          size: 56,
-        }}
-      />
+        onOpenChange={() => setOpenDeleteDialog(false)}
+        modal
+      >
+        <PopoverModalContent
+          title={t('main.issue.dialog.delete-issue.title')}
+          description={t('main.issue.dialog.delete-issue.description')}
+          cancelText={t('button.cancel')}
+          submitButton={{
+            children: t('button.delete'),
+            onClick: onClickDelete,
+            disabled: deleteIssuesPending,
+          }}
+          icon={{
+            name: 'WarningCircleFill',
+            className: 'text-red-primary',
+            size: 56,
+          }}
+        />
+      </Popover>
     </div>
   );
 };

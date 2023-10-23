@@ -13,14 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { join } from 'path';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
+import type {
+  TypeOrmModuleOptions,
+  TypeOrmOptionsFactory,
+} from '@nestjs/typeorm';
 import * as dotenv from 'dotenv';
-import { join } from 'path';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
-import { ConfigServiceType } from '@/types/config-service.type';
+import type { ConfigServiceType } from '@/types/config-service.type';
 
 dotenv.config();
 @Injectable()

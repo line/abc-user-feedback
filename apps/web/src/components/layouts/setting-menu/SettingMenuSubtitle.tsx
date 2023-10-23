@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
 import { Fragment, useMemo } from 'react';
 
+import { Icon } from '@ufb/ui';
+
 import { useChannels, useProjects, useTenant } from '@/hooks';
-import { SettingMenuType } from '@/types/setting-menu.type';
+import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
   settingMenu?: SettingMenuType;
@@ -32,12 +33,12 @@ const SettingMenuSubtitle: React.FC<IProps> = (props) => {
   const { data: channelData } = useChannels(projectId);
 
   const projectName = useMemo(
-    () => projectData?.items.find((v) => v.id === projectId)?.name,
+    () => projectData?.items.find((v) => v.id === projectId)?.name ?? '',
     [projectData, projectId],
   );
 
   const channelName = useMemo(
-    () => channelData?.items.find((v) => v.id === channelId)?.name,
+    () => channelData?.items.find((v) => v.id === channelId)?.name ?? '',
     [channelData, channelId],
   );
 
@@ -61,7 +62,7 @@ const SettingMenuSubtitle: React.FC<IProps> = (props) => {
   }, [settingMenu, tenantData, projectName, channelName]);
 
   return (
-    <h2 className="flex gap-1 items-center">
+    <h2 className="flex items-center gap-1">
       {titleList.map((v, i) => (
         <Fragment key={i}>
           <span>{v}</span>

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { OAuthConfig } from '../tenant.entity';
+import type { OAuthConfig } from '../tenant.entity';
 
 export class UpdateTenantDto {
   siteName: string;

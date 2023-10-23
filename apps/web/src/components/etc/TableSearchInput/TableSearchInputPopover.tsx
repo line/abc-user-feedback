@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
-import produce from 'immer';
-import { useTranslation } from 'next-i18next';
 import { useCallback, useState } from 'react';
+import { produce } from 'immer';
+import { useTranslation } from 'next-i18next';
 
-import { DateRangeType } from '@/types/date-range.type';
+import { Icon } from '@ufb/ui';
 
+import type { DateRangeType } from '@/types/date-range.type';
 import DateRangePicker from '../DateRangePicker';
 import SelectBox from '../SelectBox';
-import { SearchItemType } from './TableSearchInput';
+import type { SearchItemType } from './TableSearchInput';
 
 const BooleanOptions = [
   { name: 'True', key: true },
@@ -84,7 +84,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
 
   return (
     <div className="p-5">
-      <div className="flex justify-between mb-4">
+      <div className="mb-4 flex justify-between">
         <h1 className="font-16-bold">{t('text.search-filter')}</h1>
         <button
           className="icon-btn icon-btn-xs icon-btn-tertiary"
@@ -94,7 +94,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
         </button>
       </div>
       {columns.map((item) => (
-        <div className="space-y-[10px] mb-4" key={item.key}>
+        <div className="mb-4 space-y-[10px]" key={item.key}>
           {item.format === 'date' && (
             <div>
               <p className="font-12-regular mb-[6px]">{item.name}</p>

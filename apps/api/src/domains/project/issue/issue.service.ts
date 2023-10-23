@@ -16,26 +16,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
-import {
-  FindManyOptions,
-  FindOptionsWhere,
-  In,
-  Like,
-  Not,
-  Raw,
-  Repository,
-} from 'typeorm';
+import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { In, Like, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { TimeRange } from '@/common/dtos';
-import { CountByProjectIdDto } from '@/domains/feedback/dtos';
-
-import {
-  CreateIssueDto,
-  FindByIssueIdDto,
-  FindIssuesByProjectIdDto,
-  UpdateIssueDto,
-} from './dtos';
+import type { TimeRange } from '@/common/dtos';
+import type { CountByProjectIdDto } from '@/domains/feedback/dtos';
+import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
+import { CreateIssueDto, UpdateIssueDto } from './dtos';
 import {
   IssueInvalidNameException,
   IssueNameDuplicatedException,

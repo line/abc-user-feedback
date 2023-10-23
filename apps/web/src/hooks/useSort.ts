@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { SortingState } from '@tanstack/react-table';
 import { useMemo } from 'react';
+import type { SortingState } from '@tanstack/react-table';
 
 const useSort = (sorting: SortingState) => {
   return useMemo(() => {

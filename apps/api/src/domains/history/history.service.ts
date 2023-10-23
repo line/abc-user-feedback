@@ -17,7 +17,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
-import { CreateHistoryDto } from './create-history.dto';
+import type { CreateHistoryDto } from './create-history.dto';
 import { HistoryEntity } from './history.entity';
 
 @Injectable()

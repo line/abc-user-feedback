@@ -13,28 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useMemo, useState } from 'react';
 import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { Icon, toast } from '@ufb/ui';
 import dayjs from 'dayjs';
-import produce from 'immer';
+import { produce } from 'immer';
 import { useTranslation } from 'next-i18next';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
 
-import { CheckedTableHead, TableLoadingRow, TableSortIcon } from '@/components';
-import { useOAIQuery, usePermissions } from '@/hooks';
-import { useFeedbackSearch, useSort } from '@/hooks';
+import { Icon, toast } from '@ufb/ui';
 
+import {
+  CheckedTableHead,
+  TableLoadingRow,
+  TableResizer,
+  TableSortIcon,
+} from '@/components';
+import {
+  useFeedbackSearch,
+  useOAIQuery,
+  usePermissions,
+  useSort,
+} from '@/hooks';
+import { getColumns } from './feedback-table-columns';
+import useFeedbackTable from './feedback-table.context';
 import FeedbackDeleteDialog from './FeedbackDeleteDialog';
 import FeedbackTableBar from './FeedbackTableBar';
 import FeedbackTableRow from './FeedbackTableRow';
-import { getColumns } from './feedback-table-columns';
-import useFeedbackTable from './feedback-table.context';
 
 export interface IFeedbackTableProps {
   issueId?: number;
@@ -57,13 +65,11 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     page,
     setPage,
     query,
-    setQuery,
     createdAtRange,
   } = useFeedbackTable();
 
   const { t } = useTranslation();
   const perms = usePermissions();
-  const router = useRouter();
 
   const [rows, setRows] = useState<Record<string, any>[]>([]);
   const [rowSelection, setRowSelection] = useState({});
@@ -73,34 +79,39 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
 
   useEffect(() => {
     setPage(1);
-    setQuery({});
-    setRowSelection({});
-  }, [channelId]);
-
-  useEffect(() => {
-    setPage(1);
     setRowSelection({});
   }, [limit, query]);
-
-  useEffect(() => {
-    if (!router.query.id || sub) return;
-    setQuery((prev) => ({ ...prev, ids: [router.query.id] }));
-  }, [router.query]);
 
   const q = useMemo(
     () =>
       produce(query, (draft) => {
-        if (issueId) {
-          draft['issueIds'] = [...(draft['issueIds'] ?? []), issueId];
-        }
-        if (query.ids) draft['ids'] = [draft['ids']];
-        if (!sub && createdAtRange) {
-          draft['createdAt'] = {
-            gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
-            lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
-          };
+        if (sub) {
+          if (issueId) {
+            draft['issueIds'] = [...(draft['issueIds'] ?? []), issueId];
+          }
+          Object.keys(draft).forEach((key) => {
+            if (key === 'issueIds') return;
+            delete draft[key];
+          });
         } else {
-          delete draft['createdAt'];
+          if (draft['ids']) draft['ids'] = [draft['ids']];
+          Object.entries(draft).forEach(([key, value]) => {
+            if (typeof value === 'string' && value.split('~').length === 2) {
+              const [gte, lt] = value.split('~');
+              draft[key] = {
+                gte: dayjs(gte).startOf('day').toISOString(),
+                lt: dayjs(lt).endOf('day').toISOString(),
+              };
+            }
+          });
+          if (createdAtRange) {
+            draft['createdAt'] = {
+              gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
+              lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
+            };
+          } else {
+            delete draft['createdAt'];
+          }
         }
       }),
     [issueId, query, createdAtRange, sub],
@@ -140,7 +151,10 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     else setRows(data.items);
   }, [data]);
 
-  const columns = useMemo(() => getColumns(fieldData), [fieldData]);
+  const columns = useMemo(
+    () => getColumns(fieldData, refetchFeedbackData),
+    [fieldData, refetchFeedbackData],
+  );
 
   const table = useReactTable({
     data: rows,
@@ -169,7 +183,11 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     <div className="flex flex-col gap-2">
       <FeedbackTableBar
         columns={columns}
-        onChangeChannel={onChangeChannel}
+        onChangeChannel={(channelId) => {
+          setPage(1);
+          setRowSelection({});
+          onChangeChannel(channelId);
+        }}
         table={table}
         fieldData={fieldData}
         meta={data?.meta}
@@ -178,7 +196,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       {fieldData && (
         <div className="overflow-x-auto">
           <table
-            className="table table-fixed mb-2"
+            className="mb-2 table table-fixed"
             style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
           >
             <colgroup>
@@ -203,7 +221,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                 ) : (
                   table.getFlatHeaders().map((header) => (
                     <th key={header.index} style={{ width: header.getSize() }}>
-                      <div className="flex items-center flex-nowrap">
+                      <div className="flex flex-nowrap items-center">
                         <span className="overflow-hidden text-ellipsis">
                           {flexRender(
                             header.column.columnDef.header,
@@ -215,29 +233,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                         )}
                       </div>
                       {header.column.getCanResize() && (
-                        <div
-                          onMouseDown={header.getResizeHandler()}
-                          onTouchStart={header.getResizeHandler()}
-                          className={[
-                            'resizer hover:text-primary z-auto',
-                            header.column.getIsResizing()
-                              ? 'text-primary bg-secondary'
-                              : 'text-tertiary',
-                          ].join(' ')}
-                          style={{
-                            transform: header.column.getIsResizing()
-                              ? `translateX(${
-                                  table.getState().columnSizingInfo.deltaOffset
-                                }px)`
-                              : 'translateX(0px)',
-                          }}
-                        >
-                          <Icon
-                            name="Handle"
-                            className="rotate-90 absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
-                            size={16}
-                          />
-                        </div>
+                        <TableResizer header={header} table={table} />
                       )}
                     </th>
                   ))
@@ -291,7 +287,7 @@ const FailedToQueryData: React.FC<IFailedToQueryData> = ({ columnLength }) => {
   return (
     <tr>
       <td colSpan={columnLength}>
-        <div className="flex flex-col justify-center items-center gap-3 my-60">
+        <div className="my-60 flex flex-col items-center justify-center gap-3">
           <Icon
             name="WarningTriangleFill"
             className="text-tertiary"
@@ -311,7 +307,7 @@ const NoData: React.FC<INoData> = ({ columnLength }) => {
   return (
     <tr>
       <td colSpan={columnLength}>
-        <div className="flex flex-col justify-center items-center gap-3 my-60">
+        <div className="my-60 flex flex-col items-center justify-center gap-3">
           <Icon
             name="WarningTriangleFill"
             className="text-tertiary"

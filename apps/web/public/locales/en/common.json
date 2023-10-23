@@ -70,11 +70,11 @@
       }
     },
     "feedback": {
-      "title": "Feedback Management",
+      "title": "Feedback",
       "column-setting": "Column Setting",
       "issue-cell": {
         "issue-list": "Issue list",
-        "register-issue": "Reigster issue",
+        "register-issue": "Register issue",
         "create-issue": "Create issue",
         "input-issue": "Input issue",
         "delete-issue": "Delete issue"
@@ -101,7 +101,7 @@
       }
     },
     "issue": {
-      "title": "Issue Management",
+      "title": "Issue",
       "setting": "Issue Setting",
       "dialog": {
         "delete-issue": {
@@ -263,7 +263,9 @@
     "date": {
       "today": "Today",
       "yesterday": "Yesterday",
-      "before-days": "Before {{day, number}} days"
+      "before-days": "Before {{day, number}} days",
+      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days",
+      "all-dates": "The entire period"
     },
     "equal-search": "Equal",
     "like-search": "Like"

@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { toast } from '@ufb/ui';
 import { useTranslation } from 'react-i18next';
 
-import { Dialog } from '@/components';
+import { Popover, PopoverModalContent, toast } from '@ufb/ui';
+
 import { useOAIMutation } from '@/hooks';
 
 interface IProps {
@@ -34,15 +34,15 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { mutate: deleteFeedback, isLoading: deleteFeedbackLoading } =
+  const { mutate: deleteFeedback, isPending: deleteFeedbackPending } =
     useOAIMutation({
       method: 'delete',
       path: '/api/projects/{projectId}/channels/{channelId}/feedbacks',
       pathParams: { projectId, channelId },
       queryOptions: {
         async onSuccess() {
-          await handleSuccess();
           close();
+          await handleSuccess();
         },
         onError(error) {
           toast.negative({ title: error?.message ?? 'Error' });
@@ -55,22 +55,23 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      close={close}
-      title={t('main.feedback.dialog.delete-feedback.title')}
-      description={t('main.feedback.dialog.delete-feedback.description')}
-      submitButton={{
-        onClick: onClickDelete,
-        children: t('button.delete'),
-        disabled: deleteFeedbackLoading,
-      }}
-      icon={{
-        name: 'WarningCircleFill',
-        className: 'text-red-primary',
-        size: 56,
-      }}
-    />
+    <Popover open={open} onOpenChange={close} modal>
+      <PopoverModalContent
+        title={t('main.feedback.dialog.delete-feedback.title')}
+        description={t('main.feedback.dialog.delete-feedback.description')}
+        cancelText={t('button.cancel')}
+        submitButton={{
+          onClick: onClickDelete,
+          children: t('button.delete'),
+          disabled: deleteFeedbackPending,
+        }}
+        icon={{
+          name: 'WarningCircleFill',
+          className: 'text-red-primary',
+          size: 56,
+        }}
+      />
+    </Popover>
   );
 };
 

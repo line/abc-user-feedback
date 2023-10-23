@@ -15,26 +15,20 @@
  */
 import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { ClsService } from 'nestjs-cls';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
-import { CodeServiceProviders } from '@/shared/code/code.service.spec';
-import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
-import { getMockProvider } from '@/utils/test-utils';
-
+import {
+  AuthServiceProviders,
+  MockEmailVerificationMailingService,
+  MockJwtService,
+} from '../../test-utils/providers/auth.service.providers';
 import { ApiKeyEntity } from '../project/api-key/api-key.entity';
-import { ApiKeyServiceProviders } from '../project/api-key/api-key.service.spec';
-import { MemberServiceProviders } from '../project/member/member.service.spec';
-import { RoleServiceProviders } from '../project/role/role.service.spec';
 import { TenantEntity } from '../tenant/tenant.entity';
-import { TenantServiceProviders } from '../tenant/tenant.service.spec';
-import { CreateUserServiceProviders } from '../user/create-user.service.spec';
 import { UserDto } from '../user/dtos';
 import { UserStateEnum } from '../user/entities/enums';
 import { UserEntity } from '../user/entities/user.entity';
@@ -42,7 +36,6 @@ import {
   UserAlreadyExistsException,
   UserNotFoundException,
 } from '../user/exceptions';
-import { UserServiceProviders } from '../user/user.service.spec';
 import { AuthService } from './auth.service';
 import {
   SendEmailCodeDto,
@@ -50,29 +43,6 @@ import {
   ValidateEmailUserDto,
 } from './dtos';
 import { PasswordNotMatchException, UserBlockedException } from './exceptions';
-
-const MockJwtService = {
-  sign: jest.fn(),
-};
-const MockEmailVerificationMailingService = {
-  send: jest.fn(),
-};
-const AuthServiceProviders = [
-  AuthService,
-  ...CreateUserServiceProviders,
-  ...UserServiceProviders,
-  getMockProvider(JwtService, MockJwtService),
-  getMockProvider(
-    EmailVerificationMailingService,
-    MockEmailVerificationMailingService,
-  ),
-  ...CodeServiceProviders,
-  ...ApiKeyServiceProviders,
-  ...TenantServiceProviders,
-  ...RoleServiceProviders,
-  ...MemberServiceProviders,
-  ClsService,
-];
 
 describe('auth service ', () => {
   let authService: AuthService;
@@ -143,7 +113,6 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('verifyEmailCode', () => {});
 
   describe('validateEmailUser', () => {
@@ -267,10 +236,8 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('signUpInvitationUser', () => {});
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('signUpOAuthUser', () => {});
 
   describe('signIn', () => {
@@ -280,7 +247,7 @@ describe('auth service ', () => {
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(user);
       const dto = new UserDto();
       dto.email = faker.internet.email();
-      dto.id = faker.datatype.number();
+      dto.id = faker.number.int();
 
       await authService.signIn(dto);
 
@@ -292,7 +259,7 @@ describe('auth service ', () => {
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(user);
       const dto = new UserDto();
       dto.email = faker.internet.email();
-      dto.id = faker.datatype.number();
+      dto.id = faker.number.int();
 
       await expect(authService.signIn(dto)).rejects.toThrow(
         UserBlockedException,
@@ -302,13 +269,12 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('refreshToken', () => {});
 
   describe('validateApiKey', () => {
     it('validating an api key succeeds with a valid api key', async () => {
-      const apiKey = faker.datatype.uuid();
-      const projectId = faker.datatype.number();
+      const apiKey = faker.string.uuid();
+      const projectId = faker.number.int();
       jest.spyOn(apiKeyRepo, 'find').mockResolvedValue([{}] as ApiKeyEntity[]);
 
       const result = await authService.validateApiKey(apiKey, projectId);
@@ -317,8 +283,8 @@ describe('auth service ', () => {
       expect(result).toEqual(true);
     });
     it('validating an api key succeeds with an invalid api key', async () => {
-      const apiKey = faker.datatype.uuid();
-      const projectId = faker.datatype.number();
+      const apiKey = faker.string.uuid();
+      const projectId = faker.number.int();
       jest.spyOn(apiKeyRepo, 'find').mockResolvedValue([] as ApiKeyEntity[]);
 
       const result = await authService.validateApiKey(apiKey, projectId);
@@ -330,8 +296,8 @@ describe('auth service ', () => {
 
   describe('getOAuthLoginURL', () => {
     it('getting an oauth login url succeeds with oauth using tenant', async () => {
-      const clientId = faker.datatype.string();
-      const scopeString = faker.datatype.string();
+      const clientId = faker.string.sample();
+      const scopeString = faker.string.sample();
       const authCodeRequestURL = faker.internet.domainName();
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([
         {
@@ -379,6 +345,5 @@ describe('auth service ', () => {
     });
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   describe('signInByOAuth', () => {});
 });

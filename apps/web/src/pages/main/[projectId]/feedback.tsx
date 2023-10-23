@@ -20,10 +20,10 @@ import { useTranslation } from 'react-i18next';
 import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { FeedbackTable } from '@/containers';
-import { NextPageWithLayout } from '@/pages/_app';
+import type { NextPageWithLayout } from '@/pages/_app';
 
 interface IProps {
-  projectId: number | null;
+  projectId: number;
   channelId?: number | null;
 }
 
@@ -31,13 +31,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId, channelId } = props;
 
   const { t } = useTranslation();
-  if (!projectId) return <div>Project Id is Bad Request</div>;
+
   if (channelId && isNaN(channelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
+
   return (
     <>
-      <h1 className="font-24-bold mb-3">{t('main.feedback.title')}</h1>
+      <h1 className="font-20-bold mb-3">{t('main.feedback.title')}</h1>
       <FeedbackTable projectId={projectId} channelId={channelId} />
     </>
   );

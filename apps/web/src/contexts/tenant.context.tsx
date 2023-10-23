@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { createContext, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { createContext, useEffect, useState } from 'react';
 
 import { Path } from '@/constants/path';
 import client from '@/libs/client';
-import { TenantType } from '@/types/tenant.type';
+import type { TenantType } from '@/types/tenant.type';
 
 export interface ITenantContext {
   tenant: TenantType | null;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 }
 
 export const TenantContext = createContext<ITenantContext>({
   tenant: null,
-  refetch() {},
+  async refetch() {},
 });
 
 export const TenantProvider: React.FC<React.PropsWithChildren> = ({
@@ -39,17 +39,20 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
   const router = useRouter();
   const [isInitialFetch, setIsInitialFetch] = useState(true);
 
-  const fetch = () => {
+  const fetch = async () => {
     if (isInitialFetch) {
       setIsLoading(true);
       setIsInitialFetch(false);
     }
 
-    client
-      .get({ path: '/api/tenants' })
-      .then(({ data }) => setTenant(data))
-      .catch(() => router.push(Path.CREATE_TENANT))
-      .finally(() => setIsLoading(false));
+    try {
+      const { data } = await client.get({ path: '/api/tenants' });
+      setTenant(data);
+    } catch (error) {
+      router.push(Path.CREATE_TENANT);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -60,7 +63,7 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
   return (
     <TenantContext.Provider value={{ tenant, refetch: fetch }}>
       {isLoading ? (
-        <p className="flex justify-center items-center h-screen font-32-bold">
+        <p className="font-32-bold flex h-screen items-center justify-center">
           Loading...
         </p>
       ) : (

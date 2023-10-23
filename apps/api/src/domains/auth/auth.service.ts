@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import crypto from 'crypto';
 import {
   BadRequestException,
   Injectable,
@@ -20,17 +21,13 @@ import {
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import * as bcrypt from 'bcrypt';
-import crypto from 'crypto';
 import dayjs from 'dayjs';
-import { ClsService } from 'nestjs-cls';
 import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
-import { ClsServiceType } from '@/types/cls-service.type';
-
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
 import { ApiKeyService } from '../project/api-key/api-key.service';
@@ -45,14 +42,16 @@ import {
   UserNotFoundException,
 } from '../user/exceptions';
 import { UserService } from '../user/user.service';
-import {
+import type {
   JwtDto,
   SendEmailCodeDto,
+  ValidateEmailUserDto,
+  VerifyEmailCodeDto,
+} from './dtos';
+import {
   SignUpEmailUserDto,
   SignUpInvitationUserDto,
   SignUpOauthUserDto,
-  ValidateEmailUserDto,
-  VerifyEmailCodeDto,
 } from './dtos';
 import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 
@@ -60,8 +59,7 @@ import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 export class AuthService {
   private logger = new Logger(AuthService.name);
   private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
-  // private REDIRECT_URI =
-  //   'https://demaecan-account.line-apps-beta.com/auth/support/test/authorize-success';
+
   constructor(
     private readonly createUserService: CreateUserService,
     private readonly userService: UserService,
@@ -72,7 +70,6 @@ export class AuthService {
     private readonly tenantService: TenantService,
     private readonly roleService: RoleService,
     private readonly memberService: MemberService,
-    private readonly cls: ClsService<ClsServiceType>,
   ) {}
 
   async sendEmailCode({ email }: SendEmailCodeDto) {
@@ -203,7 +200,7 @@ export class AuthService {
     return false;
   }
 
-  async getOAuthLoginURL() {
+  async getOAuthLoginURL(callback_url?: string) {
     const { useOAuth, oauthConfig } = await this.tenantService.findOne();
 
     if (!useOAuth) {
@@ -219,6 +216,7 @@ export class AuthService {
       response_type: 'code',
       state: crypto.randomBytes(10).toString('hex'),
       scope: oauthConfig.scopeString,
+      callback_url: encodeURIComponent(callback_url),
     });
 
     return `${oauthConfig.authCodeRequestURL}?${params}`;
@@ -235,7 +233,6 @@ export class AuthService {
     }
 
     const { accessTokenRequestURL, clientId, clientSecret } = oauthConfig;
-
     try {
       const { data } = await axios.post(
         accessTokenRequestURL,
@@ -253,10 +250,17 @@ export class AuthService {
           },
         },
       );
-
       return data.access_token;
-    } catch (e) {
-      this.logger.error(e);
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new InternalServerErrorException({
+          axiosError: {
+            ...error.response.data,
+            status: error.response.status,
+          },
+        });
+      }
+      throw error;
     }
   }
 
@@ -266,17 +270,27 @@ export class AuthService {
     if (!oauthConfig) {
       throw new BadRequestException('OAuth Config is required.');
     }
-
-    const { data } = await axios.get(oauthConfig.userProfileRequestURL, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    return data[oauthConfig.emailKey];
+    try {
+      const { data } = await axios.get(oauthConfig.userProfileRequestURL, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      return data[oauthConfig.emailKey];
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new InternalServerErrorException({
+          axiosError: {
+            ...error.response.data,
+            status: error.response.status,
+          },
+        });
+      }
+      throw error;
+    }
   }
 
   async signInByOAuth(code: string) {
     const accessToken = await this.getAccessToken(code);
+
     const email = await this.getEmailByAccessToken(accessToken);
 
     const user = await this.userService.findByEmailAndSignUpMethod(

@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Combobox } from '@headlessui/react';
-import { Badge, Icon } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { Combobox } from '@headlessui/react';
+import { useTranslation } from 'next-i18next';
 
-import { PrimitiveFieldFormatEnumType } from '@/types/field.type';
+import { Badge, Icon } from '@ufb/ui';
+
+import type { PrimitiveFieldFormatEnumType } from '@/types/field.type';
 import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
-
-import TableSearchInputPopover from './TableSearchInputPopover';
 import {
   objToQuery,
   objToStr,
   strToObj,
   strValueToObj,
 } from './table-search-input.service';
+import TableSearchInputPopover from './TableSearchInputPopover';
 
 export type SearchItemType = {
   key: string;
@@ -45,14 +45,14 @@ export type SearchItemType = {
 interface IProps {
   onChangeQuery: (query: Record<string, any>) => void;
   searchItems: SearchItemType[];
-  initialQuery?: Record<string, any>;
+  query?: Record<string, any>;
   defaultQuery?: Record<string, any>;
 }
 
 const TableSearchInput: React.FC<IProps> = ({
   onChangeQuery,
   searchItems,
-  initialQuery,
+  query,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
@@ -61,7 +61,7 @@ const TableSearchInput: React.FC<IProps> = ({
   const [inputValue, setInputValue] = useState('');
 
   const editingName = useMemo(() => {
-    if (!inputRef.current || !inputRef.current.selectionEnd) return;
+    if (!inputRef.current || !inputRef.current.selectionEnd) return '';
     const { selectionEnd } = inputRef.current;
 
     const targetInput = inputValue.slice(0, selectionEnd);
@@ -73,7 +73,7 @@ const TableSearchInput: React.FC<IProps> = ({
       startIndex === endIndex ? inputValue.length : endIndex,
     );
     return value.indexOf(':') === -1
-      ? null
+      ? ''
       : value.slice(0, value.indexOf(':')).trim();
   }, [inputValue, inputRef]);
 
@@ -98,9 +98,10 @@ const TableSearchInput: React.FC<IProps> = ({
   );
 
   useEffect(() => {
-    if (!initialQuery) return;
-    setInputValue(objToStr(initialQuery, searchItems));
-  }, [searchItems]);
+    if (!query) return;
+    const inputValue = objToStr(query, searchItems);
+    setInputValue(inputValue);
+  }, [searchItems, query]);
 
   const filterIconCN = useMemo(
     () => (isOpenPopover ? 'text-primary' : 'text-tertiary'),
@@ -115,10 +116,14 @@ const TableSearchInput: React.FC<IProps> = ({
       ? removeEmptyValueInObject({ ...currentObj, ...inputObject })
       : {};
 
-    setInputValue(objToStr(currentQuery, searchItems));
-    onChangeQuery(
-      removeEmptyValueInObject(objToQuery(currentQuery, searchItems)),
+    const inputText = objToStr(currentQuery, searchItems);
+    setInputValue(inputText);
+
+    const newQUery = removeEmptyValueInObject(
+      objToQuery(currentQuery, searchItems),
     );
+
+    onChangeQuery(newQUery);
   };
 
   const reset = () => {
@@ -129,7 +134,7 @@ const TableSearchInput: React.FC<IProps> = ({
   return (
     <Combobox
       as="div"
-      className="relative w-[400px] h-10"
+      className="relative h-10 w-[400px]"
       onChange={onInputChangeQuery}
     >
       <Icon
@@ -143,20 +148,21 @@ const TableSearchInput: React.FC<IProps> = ({
       />
       <Combobox.Input
         ref={inputRef}
-        className="input pl-9 pr-16 bg-fill-inverse border border-fill-tertiary"
+        className="input bg-fill-inverse border-fill-tertiary border pl-9 pr-16"
         onChange={(e) => setInputValue(e.currentTarget.value)}
         value={inputValue}
         displayValue={() => inputValue}
         onFocus={() => close()}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && (e.target as any).value.length === 0)
+          if (e.key === 'Enter' && (e.target as any).value.length === 0) {
             onInputChangeQuery({});
+          }
         }}
         placeholder=" "
       />
       {inputValue.length > 0 && (
         <button
-          className="absolute p-0 icon-btn right-9 top-0 translate-y-1/2"
+          className="icon-btn absolute right-9 top-0 translate-y-1/2 p-0"
           onClick={reset}
         >
           <Icon
@@ -167,7 +173,7 @@ const TableSearchInput: React.FC<IProps> = ({
         </button>
       )}
       <button
-        className="absolute p-0 icon-btn right-3 top-0 translate-y-1/2"
+        className="icon-btn absolute right-3 top-0 translate-y-1/2 p-0"
         onClick={openPopover}
       >
         <Icon
@@ -176,8 +182,8 @@ const TableSearchInput: React.FC<IProps> = ({
           className={filterIconCN + ' flex-shrink-0'}
         />
       </button>
-      <Combobox.Options className="absolute z-10 bg-primary rounded w-full mt-2 border top-full left-0">
-        {!editingName
+      <Combobox.Options className="bg-primary absolute left-0 top-full z-10 mt-2 w-full rounded border">
+        {editingName === ''
           ? searchItems
               .filter(
                 (v) =>
@@ -205,7 +211,7 @@ const TableSearchInput: React.FC<IProps> = ({
       </Combobox.Options>
       {isOpenPopover && (
         <div
-          className="absolute z-10 bg-primary rounded w-full mt-2 border top-full left-0"
+          className="bg-primary absolute left-0 top-full z-10 mt-2 w-full rounded border"
           ref={popoverRef}
         >
           <TableSearchInputPopover
@@ -243,7 +249,7 @@ const ComboboxOption: React.FC<IComboboxOption> = ({
     <Combobox.Option
       key={key}
       className={({ active }) =>
-        ['p-3 cursor-pointer', active ? 'bg-secondary' : 'bg-primary'].join(' ')
+        ['cursor-pointer p-3', active ? 'bg-secondary' : 'bg-primary'].join(' ')
       }
       value={{ [key]: strValueToObj(editingValue, searchItem) }}
     >

@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PopoverModalContent } from '@/components';
+import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
+
 import { useOAIMutation, useUser } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
@@ -28,13 +28,14 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
 
   const { user, signOut } = useUser();
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/users/{id}',
     pathParams: { id: user?.id ?? -1 },
     queryOptions: {
       async onSuccess() {
-        signOut();
+        await signOut();
+        setOpen(false);
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });
@@ -45,13 +46,13 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
     <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         className="btn btn-md btn-secondary text-red-primary min-w-[120px]"
-        onClick={() => setOpen(true)}
         disabled={user?.signUpMethod === 'OAUTH'}
       >
         {t('main.profile.button.delete-account')}
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.profile.dialog.delete-account.title')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'WarningTriangleFill',
           className: 'text-red-primary',
@@ -61,13 +62,13 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
           children: t('button.delete'),
           onClick: () => mutate(undefined),
           className: 'bg-red-primary',
-          disabled: isLoading,
+          disabled: isPending,
         }}
       >
-        <h2 className="text-center font-20-bold mb-3">
+        <h2 className="font-20-bold mb-3 text-center">
           {t('main.profile.dialog.delete-account.description1')}
         </h2>
-        <p className="text-center font-14-regular mb-10">
+        <p className="font-14-regular mb-10 text-center">
           {t('main.profile.dialog.delete-account.description2')}
         </p>
       </PopoverModalContent>

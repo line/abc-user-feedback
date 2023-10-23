@@ -20,14 +20,9 @@ import { Like, Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { isSelectFieldFormat } from '@/common/enums';
-
 import { ChannelEntity } from './channel.entity';
-import {
-  CreateChannelDto,
-  FindAllChannelsByProjectIdDto,
-  FindByChannelIdDto,
-  UpdateChannelDto,
-} from './dtos';
+import type { FindAllChannelsByProjectIdDto, FindByChannelIdDto } from './dtos';
+import { CreateChannelDto, UpdateChannelDto } from './dtos';
 import {
   ChannelAlreadyExistsException,
   ChannelInvalidNameException,

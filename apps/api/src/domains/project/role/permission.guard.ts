@@ -13,19 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  BadRequestException,
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-} from '@nestjs/common';
+import type { CanActivate, ExecutionContext } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { UserTypeEnum } from '@/domains/user/entities/enums';
-
-import { PermissionEnum } from './permission.enum';
+import type { PermissionEnum } from './permission.enum';
 import { PERMISSIONS_KEY } from './require-permission.decorator';
 import { RoleEntity } from './role.entity';
 

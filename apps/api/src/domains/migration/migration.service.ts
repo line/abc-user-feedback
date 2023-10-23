@@ -13,15 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Inject, Logger } from '@nestjs/common';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch';
 import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
-
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { FieldService } from '../channel/field/field.service';
 import { FeedbackEntity } from '../feedback/feedback.entity';

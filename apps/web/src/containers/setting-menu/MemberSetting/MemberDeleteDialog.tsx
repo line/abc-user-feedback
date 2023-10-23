@@ -13,11 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PopoverModalContent } from '@/components';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
+
 import { useOAIMutation } from '@/hooks';
 
 interface IProps {
@@ -36,7 +42,7 @@ const MemberDeleteDialog: React.FC<IProps> = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/members/{memberId}',
     pathParams: { memberId, projectId },
@@ -57,13 +63,14 @@ const MemberDeleteDialog: React.FC<IProps> = ({
       <PopoverTrigger
         onClick={() => setOpen((prev) => !prev)}
         className="icon-btn icon-btn-sm icon-btn-tertiary"
-        disabled={disabled || isLoading}
+        disabled={disabled || isPending}
       >
         <Icon name="TrashFill" />
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.delete-member.title')}
         description={t('main.setting.dialog.delete-member.description')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'WarningTriangleFill',
           className: 'text-red-primary',

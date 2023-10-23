@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { UseGuards, applyDecorators } from '@nestjs/common';
+import { applyDecorators, UseGuards } from '@nestjs/common';
 
 import { JwtAuthGuard } from '../auth/guards';
 import { SuperUserGuard } from './super-user.guard';

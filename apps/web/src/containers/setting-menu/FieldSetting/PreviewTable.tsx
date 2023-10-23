@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
@@ -21,14 +22,12 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { Fragment, useEffect, useMemo, useState } from 'react';
 
 import { ExpandableText } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
-import { FieldType } from '@/types/field.type';
-
-import { FieldRowType } from './FieldSetting';
+import type { FieldType } from '@/types/field.type';
+import type { FieldRowType } from './FieldSetting';
 
 const columnHelper = createColumnHelper<any>();
 
@@ -56,7 +55,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             field.format === 'boolean'
               ? faker.datatype.boolean()
               : field.format === 'date'
-              ? faker.datatype.datetime()
+              ? faker.date.anytime()
               : field.format === 'keyword'
               ? faker.word.noun()
               : field.format === 'multiSelect'
@@ -68,7 +67,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   (field.options ?? []).map((v) => v.name),
                 )
               : field.format === 'number'
-              ? faker.datatype.number()
+              ? faker.number.int()
               : field.format === 'text'
               ? faker.lorem.text()
               : null;

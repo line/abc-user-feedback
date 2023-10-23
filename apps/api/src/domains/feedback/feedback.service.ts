@@ -13,18 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { createReadStream, existsSync } from 'fs';
+import * as fs from 'fs/promises';
+import path from 'path';
+import { PassThrough } from 'stream';
 import {
   BadRequestException,
   Injectable,
   StreamableFile,
 } from '@nestjs/common';
+import dayjs from 'dayjs';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
-import { createReadStream, existsSync } from 'fs';
-import * as fs from 'fs/promises';
-import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
-import path from 'path';
-import { PassThrough } from 'stream';
+import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
 import {
@@ -33,24 +34,25 @@ import {
   FieldTypeEnum,
 } from '@/common/enums';
 import { OS_USE } from '@/configs/opensearch.config';
-
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
-import { FieldEntity } from '../channel/field/field.entity';
+import type { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
 import { OptionService } from '../channel/option/option.service';
 import { IssueService } from '../project/issue/issue.service';
-import {
-  AddIssueDto,
+import type {
   CountByProjectIdDto,
-  CreateFeedbackDto,
-  DeleteByIdsDto,
   FindFeedbacksByChannelIdDto,
   GenerateExcelDto,
+} from './dtos';
+import {
+  AddIssueDto,
+  CreateFeedbackDto,
+  DeleteByIdsDto,
   RemoveIssueDto,
   UpdateFeedbackDto,
 } from './dtos';
-import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { validateValue } from './feedback.common';
 import { FeedbackMySQLService } from './feedback.mysql.service';
 import { FeedbackOSService } from './feedback.os.service';
@@ -105,8 +107,8 @@ export class FeedbackService {
           if (
             typeof query[fieldKey] !== 'object' ||
             !(
-              query[fieldKey].hasOwnProperty('gte') &&
-              query[fieldKey].hasOwnProperty('lt')
+              Object.prototype.hasOwnProperty.call(query[fieldKey], 'gte') &&
+              Object.prototype.hasOwnProperty.call(query[fieldKey], 'lt')
             )
           )
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
@@ -475,12 +477,28 @@ export class FeedbackService {
 
   @Transactional()
   async addIssue(dto: AddIssueDto) {
-    return this.feedbackMySQLService.addIssue(dto);
+    await this.feedbackMySQLService.addIssue(dto);
+
+    if (OS_USE) {
+      await this.feedbackOSService.upsertFeedbackItem({
+        channelId: dto.channelId,
+        feedbackId: dto.feedbackId,
+        data: { updatedAt: dayjs().toISOString() },
+      });
+    }
   }
 
   @Transactional()
   async removeIssue(dto: RemoveIssueDto) {
-    return this.feedbackMySQLService.removeIssue(dto);
+    await this.feedbackMySQLService.removeIssue(dto);
+
+    if (OS_USE) {
+      await this.feedbackOSService.upsertFeedbackItem({
+        channelId: dto.channelId,
+        feedbackId: dto.feedbackId,
+        data: { updatedAt: dayjs().toISOString() },
+      });
+    }
   }
 
   async countByProjectId(dto: CountByProjectIdDto) {

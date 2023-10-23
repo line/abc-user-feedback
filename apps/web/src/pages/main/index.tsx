@@ -13,19 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
-import { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
+
+import { Icon } from '@ufb/ui';
 
 import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIQuery, useProjects, useTenant } from '@/hooks';
-import isNotEmptyStr from '@/utils/is-not-empty-string';
-
-import { NextPageWithLayout } from '../_app';
+import { getDescriptionStr } from '@/utils/description-string';
+import type { NextPageWithLayout } from '../_app';
 
 const MainIndexPage: NextPageWithLayout = () => {
   const { tenant } = useTenant();
@@ -35,14 +35,12 @@ const MainIndexPage: NextPageWithLayout = () => {
   return (
     <div className="mx-4 my-2">
       <h1 className="font-20-bold mb-4">Tenant</h1>
-      <ul className="flex gap-2 flex-wrap">
+      <ul className="flex flex-wrap gap-2">
         {tenant && <TenantList tenantId={tenant.id} />}
       </ul>
       <h1 className="font-20-bold my-6 mb-4">Project</h1>
-      <ul className="flex gap-2 flex-wrap">
-        {data?.items.map(({ id }) => (
-          <ProjectList key={id} projectId={id} />
-        ))}
+      <ul className="flex flex-wrap gap-2">
+        {data?.items.map(({ id }) => <ProjectList key={id} projectId={id} />)}
       </ul>
     </div>
   );
@@ -118,15 +116,15 @@ const CardItem: React.FC<IProps> = ({
   return (
     <li
       className={[
-        'border rounded p-8 border-fill-tertiary',
-        type === 'project' ? 'hover:opacity-50 hover:cursor-pointer' : '',
+        'border-fill-tertiary rounded border p-8',
+        type === 'project' ? 'hover:cursor-pointer hover:opacity-50' : '',
       ].join(' ')}
       onClick={onClick}
     >
-      <div className="flex gap-5 mb-10">
+      <div className="mb-10 flex gap-5">
         <div
           className={[
-            'w-10 h-10 rounded flex justify-center items-center',
+            'flex h-10 w-10 items-center justify-center rounded',
             type === 'tenant' ? 'bg-[#5D7BE7]' : 'bg-[#48DECC]',
           ].join(' ')}
         >
@@ -138,8 +136,8 @@ const CardItem: React.FC<IProps> = ({
         </div>
         <div>
           <p className="font-16-bold mb-1">{name}</p>
-          <p className="font-12-regular text-secondary w-[250px]">
-            {isNotEmptyStr(description) ? description : '-'}
+          <p className="font-12-regular text-secondary w-[250px] break-words">
+            {getDescriptionStr(description)}
           </p>
         </div>
       </div>
@@ -154,7 +152,7 @@ const CardItem: React.FC<IProps> = ({
             className={[
               'font-24-bold',
               typeof total === 'undefined'
-                ? 'animate-pulse bg-secondary w-15 h-7 rounded-sm'
+                ? 'bg-secondary w-15 h-7 animate-pulse rounded-sm'
                 : '',
             ].join(' ')}
           >
@@ -169,7 +167,7 @@ const CardItem: React.FC<IProps> = ({
             className={[
               'font-24-bold',
               typeof feedbackCount === 'undefined'
-                ? 'animate-pulse bg-secondary w-15 h-7 rounded-sm'
+                ? 'bg-secondary w-15 h-7 animate-pulse rounded-sm'
                 : '',
             ].join(' ')}
           >

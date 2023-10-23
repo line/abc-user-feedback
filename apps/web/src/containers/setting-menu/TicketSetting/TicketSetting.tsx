@@ -13,13 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
-import Image from 'next/image';
 import { useEffect } from 'react';
+import Image from 'next/image';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { TextInput, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
 import { SelectBox } from '@/components/etc';
@@ -55,7 +56,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
     reset({ ...data.data });
   }, [data]);
 
-  const { mutate: modify, isLoading: modifyLoading } = useOAIMutation({
+  const { mutate: modify, isPending: modifyPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/issue-tracker',
     pathParams: { projectId },
@@ -70,7 +71,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
-  const { mutate: create, isLoading: createLoading } = useOAIMutation({
+  const { mutate: create, isPending: createPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/issue-tracker',
     pathParams: { projectId },
@@ -96,14 +97,14 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
         disabled:
           !perms.includes('project_tracker_update') ||
           !formState.isDirty ||
-          modifyLoading ||
-          createLoading,
+          modifyPending ||
+          createPending,
         onClick: handleSubmit(onSubmit),
         form: 'form',
       }}
     >
-      <div className="border rounded flex items-center px-6 py-2">
-        <p className="flex-1 py-5 whitespace-pre-line">
+      <div className="flex items-center rounded border px-6 py-2">
+        <p className="flex-1 whitespace-pre-line py-5">
           {t('main.setting.ticket-mgmt.description')}
         </p>
         <div className="relative h-full w-[160px]">

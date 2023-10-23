@@ -18,8 +18,8 @@ import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
-import { UserTypeEnum } from '@/domains/user/entities/enums';
-import { ConfigServiceType } from '@/types/config-service.type';
+import type { UserTypeEnum } from '@/domains/user/entities/enums';
+import type { ConfigServiceType } from '@/types/config-service.type';
 
 interface IPayload {
   sub: string;

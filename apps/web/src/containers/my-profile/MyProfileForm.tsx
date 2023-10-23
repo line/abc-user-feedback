@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { Input, toast } from '@ufb/ui';
-import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { Input, toast } from '@ufb/ui';
+
 import { useUser } from '@/hooks';
 import client from '@/libs/client';
-
 import DeleteMyAccountButton from './DeleteMyAccountButton';
 
 type IForm = {
@@ -56,9 +56,9 @@ const MyProfileForm: React.FC<IProps> = () => {
     reset(user);
   }, [user]);
 
-  const { mutate } = useMutation(
-    ['put', '/api/users/{id}', user],
-    async (input: IForm & { userId: number }) => {
+  const { mutate } = useMutation({
+    mutationKey: ['put', '/api/users/{id}', user],
+    mutationFn: async (input: IForm & { userId: number }) => {
       const { userId, ...body } = input;
       await client.put({
         path: '/api/users/{id}',
@@ -66,17 +66,15 @@ const MyProfileForm: React.FC<IProps> = () => {
         pathParams: { id: userId },
       });
     },
-    {
-      async onSuccess() {
-        await refetch();
-        toast.positive({ title: t('toast.save') });
-      },
+    async onSuccess() {
+      await refetch();
+      toast.positive({ title: t('toast.save') });
     },
-  );
+  });
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <h1 className="font-20-bold">{t('main.profile.profile-info')}</h1>
         <button
           form="profileInfo"

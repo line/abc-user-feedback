@@ -13,7 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ColumnDef, Updater, VisibilityState } from '@tanstack/react-table';
+import { useEffect, useMemo, useState } from 'react';
+import type {
+  ColumnDef,
+  Updater,
+  VisibilityState,
+} from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
+import type { DroppableProps, OnDragEndResponder } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+
 import {
   Icon,
   Popover,
@@ -21,18 +30,9 @@ import {
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
-import { useEffect, useMemo, useState } from 'react';
-import {
-  DragDropContext,
-  Droppable,
-  DroppableProps,
-  OnDragEndResponder,
-} from 'react-beautiful-dnd';
 
-import { FieldType } from '@/types/field.type';
+import type { FieldType } from '@/types/field.type';
 import { reorder } from '@/utils/reorder';
-
 import DraggableColumnItem from './DraggableColumnItem';
 
 interface IProps extends React.PropsWithChildren {
@@ -57,9 +57,25 @@ const ColumnSettingPopover: React.FC<IProps> = ({
   const { t } = useTranslation();
 
   const columnKeys = useMemo(
-    () => columns.map((v) => v.id) as string[],
-    [columns],
+    () =>
+      columnOrder.length === 0
+        ? (columns.map((v) => v.id) as string[])
+        : columnOrder,
+    [columns, columnOrder],
   );
+
+  const checkedNum = useMemo(() => {
+    return columnKeys.reduce((acc, key) => {
+      return (
+        acc +
+        (typeof columnVisibility[key] === 'undefined'
+          ? 1
+          : columnVisibility[key]
+          ? 1
+          : 0)
+      );
+    }, 0);
+  }, [columnKeys, columnVisibility]);
 
   const onDragEnd: OnDragEndResponder = (result) => {
     const { destination, source } = result;
@@ -69,7 +85,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
     if (destination.index < 2) destination.index = 2;
 
     const newFields: string[] = reorder(
-      columnOrder.length === 0 ? columnKeys : columnOrder,
+      columnKeys,
       source.index,
       destination.index,
     );
@@ -84,7 +100,10 @@ const ColumnSettingPopover: React.FC<IProps> = ({
           {t('main.feedback.column-setting')}
         </PopoverTrigger>
         <PopoverContent disabledFloatingStyle className="mt-1.5">
-          <PopoverHeading>{t('main.feedback.column-setting')}</PopoverHeading>
+          <PopoverHeading className="whitespace-nowrap">
+            {t('main.feedback.column-setting')} {checkedNum}
+            <span className="text-tertiary">/{columnKeys.length}</span>
+          </PopoverHeading>
           <div className="m-5">
             <DragDropContext onDragEnd={onDragEnd}>
               <StrictModeDroppable droppableId="list">
@@ -92,31 +111,27 @@ const ColumnSettingPopover: React.FC<IProps> = ({
                   <div
                     ref={provided.innerRef}
                     {...provided.droppableProps}
-                    className="space-y-1 min-w-[200px]"
+                    className="min-w-[200px] space-y-1"
                   >
-                    {(columnOrder.length === 0 ? columnKeys : columnOrder)?.map(
-                      (key, index) => (
-                        <DraggableColumnItem
-                          name={
-                            fieldData.find((v) => v.key === key)?.name ?? ''
-                          }
-                          index={index}
-                          key={key}
-                          isChecked={
-                            typeof columnVisibility[key] === 'undefined'
-                              ? true
-                              : columnVisibility[key]
-                          }
-                          onChange={(isChecked) =>
-                            onChangeColumnVisibility((prev) => ({
-                              ...prev,
-                              [key]: isChecked,
-                            }))
-                          }
-                          isDisabled={key === 'id' || key === 'issues'}
-                        />
-                      ),
-                    )}
+                    {columnKeys?.map((key, index) => (
+                      <DraggableColumnItem
+                        name={fieldData.find((v) => v.key === key)?.name ?? ''}
+                        index={index}
+                        key={key}
+                        isChecked={
+                          typeof columnVisibility[key] === 'undefined'
+                            ? true
+                            : !!columnVisibility[key]
+                        }
+                        onChange={(isChecked) =>
+                          onChangeColumnVisibility((prev) => ({
+                            ...prev,
+                            [key]: isChecked,
+                          }))
+                        }
+                        isDisabled={key === 'id' || key === 'issues'}
+                      />
+                    ))}
                     {provided.placeholder}
                   </div>
                 )}
@@ -124,7 +139,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
             </DragDropContext>
             <div className="flex justify-end">
               <button
-                className="mt-2 btn btn-sm btn-secondary"
+                className="btn btn-sm btn-secondary mt-2"
                 onClick={onClickReset}
               >
                 {t('button.reset')}

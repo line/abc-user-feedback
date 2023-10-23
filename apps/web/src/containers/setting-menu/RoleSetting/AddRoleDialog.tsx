@@ -13,11 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Input, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PopoverModalContent } from '@/components';
+import {
+  Input,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
+
 import { useOAIMutation, usePermissions } from '@/hooks';
 
 interface IProps {
@@ -33,7 +39,7 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
   const [newRoleName, setNewRoleName] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const { mutate: createRole, isLoading } = useOAIMutation({
+  const { mutate: createRole, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/roles',
     pathParams: { projectId },
@@ -58,13 +64,14 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
     <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger
         onClick={() => setOpen(true)}
-        disabled={!perms.includes('project_role_create') || isLoading}
+        disabled={!perms.includes('project_role_create') || isPending}
         className="btn-primary btn min-w-[120px]"
       >
         {t('main.setting.dialog.create-role.title')}
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.create-role.title')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'ShieldPrivacyFill',
           className: 'text-blue-primary',

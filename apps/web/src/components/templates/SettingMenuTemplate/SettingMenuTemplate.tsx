@@ -22,8 +22,8 @@ interface IProps extends React.PropsWithChildren {
 const SettingMenuTemplate: React.FC<IProps> = (props) => {
   const { title, actionBtn, children, action } = props;
   return (
-    <div className="relative p-6 border border-fill-tertiary rounded h-[calc(100vh-152px)] flex flex-col gap-6 min-w-[300px] overflow-auto">
-      <div className="flex justify-between items-center h-10">
+    <div className="border-fill-tertiary relative flex h-[calc(100vh-152px)] min-w-[300px] flex-col gap-6 overflow-auto rounded border p-6">
+      <div className="flex h-10 items-center justify-between">
         {typeof title === 'string' ? (
           <h1 className="font-20-bold">{title}</h1>
         ) : (

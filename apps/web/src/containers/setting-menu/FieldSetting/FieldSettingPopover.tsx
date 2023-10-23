@@ -13,7 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { z } from 'zod';
+
 import {
   Icon,
   Input,
@@ -22,10 +27,6 @@ import {
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
 
 import { SelectBox } from '@/components/etc';
 import {
@@ -33,8 +34,7 @@ import {
   FieldStatusEnumList,
   FieldTypeEnumList,
 } from '@/types/field.type';
-
-import { FieldRowType } from './FieldSetting';
+import type { FieldRowType } from './FieldSetting';
 import OptionDeletePopover from './OptionBadge';
 
 const schema = (otherFields: FieldRowType[]): Zod.ZodType<FieldRowType> =>
@@ -217,7 +217,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               : t('main.setting.dialog.add-field.title')}
           </PopoverHeading>
           <form
-            className="space-y-5 m-5 w-[520px]"
+            className="m-5 w-[520px] space-y-5"
             onSubmit={handleSubmit(onSubmit)}
           >
             <Input
@@ -241,7 +241,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 disabled={isSameKey}
                 required
               />
-              <label className="gap-1 flex items-center">
+              <label className="flex items-center gap-1">
                 <input
                   type="checkbox"
                   className="checkbox my-2 mr-2 "
@@ -291,7 +291,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   hint={formState.errors.options?.message}
                 />
                 {(watch('options') ?? []).length > 0 && (
-                  <div className="flex flex-wrap gap-2 mt-4">
+                  <div className="mt-4 flex flex-wrap gap-2">
                     {watch('options')?.map((v, i) => (
                       <OptionDeletePopover
                         key={i}
@@ -306,9 +306,9 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             )}
             <div>
               <p className="input-label">Field Property</p>
-              <div className="flex items-center mt-2">
+              <div className="mt-2 flex items-center">
                 <span className="font-10-regular w-[120px] ">Field Type</span>
-                <label className="radio-label w-[120px] h-[36px]">
+                <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-type"
@@ -321,7 +321,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   />
                   API
                 </label>
-                <label className="radio-label w-[120px] h-[36px]">
+                <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-type"
@@ -337,7 +337,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               </div>
               <div className="flex items-center">
                 <span className="font-10-regular w-[120px] ">Field Status</span>
-                <label className="radio-label w-[120px] h-[36px]">
+                <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-status"
@@ -349,7 +349,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   />
                   {t('main.setting.field-status.active')}
                 </label>
-                <label className="radio-label w-[120px] h-[36px]">
+                <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-status"
