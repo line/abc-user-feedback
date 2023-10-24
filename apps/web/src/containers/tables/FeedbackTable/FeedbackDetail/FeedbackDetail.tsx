@@ -17,14 +17,22 @@ import {
   autoUpdate,
   FloatingFocusManager,
   FloatingOverlay,
+  FloatingPortal,
   useClick,
   useDismiss,
   useFloating,
   useInteractions,
   useRole,
 } from '@floating-ui/react';
+import dayjs from 'dayjs';
 
-import { useFeedbackSearch } from '@/hooks';
+import { Badge, Icon } from '@ufb/ui';
+
+import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { getStatusColor } from '@/constants/issues';
+import { useFeedbackSearch, useOAIQuery } from '@/hooks';
+import type { FieldType } from '@/types/field.type';
+import type { IssueType } from '@/types/issue.type';
 
 interface IProps {
   id: number;
@@ -39,6 +47,12 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
   const { data } = useFeedbackSearch(projectId, channelId, {
     query: { ids: [id] },
   });
+  const feedbackData = data?.items?.[0] ?? {};
+
+  const { data: channelData } = useOAIQuery({
+    path: '/api/projects/{projectId}/channels/{channelId}',
+    variables: { channelId, projectId },
+  });
 
   const { refs, context } = useFloating({
     open,
@@ -52,24 +66,81 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
   const { getFloatingProps } = useInteractions([click, dismiss, role]);
 
   return (
-    <FloatingFocusManager context={context} modal>
-      <FloatingOverlay
-        lockScroll={true}
-        className="bg-dim"
-        style={{ display: 'grid', placeItems: 'center', zIndex: 20 }}
-      >
-        <div
-          className="bg-primary fixed right-0 top-0 h-screen w-1/3 min-w-[200px]"
-          ref={refs.setFloating}
-          {...getFloatingProps()}
+    <FloatingPortal>
+      <FloatingFocusManager context={context} modal>
+        <FloatingOverlay
+          lockScroll={true}
+          className="bg-dim"
+          style={{ display: 'grid', placeItems: 'center', zIndex: 20 }}
         >
-          <div className="p-2">
-            {data ? JSON.stringify(data.items?.[0]) : null}
+          <div
+            className="bg-primary fixed right-0 top-0 h-screen w-[760px] overflow-auto"
+            ref={refs.setFloating}
+            {...getFloatingProps()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="overflow-y-auto p-10">
+              <div className="flex items-center">
+                <h1 className="font-20-bold flex-1">피드백 상세</h1>
+                <button
+                  className="icon-btn icon-btn-tertiary icon-btn-md"
+                  onClick={() => context.onOpenChange(false)}
+                >
+                  <Icon name="CloseCircleFill" size={20} />
+                </button>
+              </div>
+              <table className="border-separate border-spacing-y-5">
+                <colgroup>
+                  <col style={{ minWidth: 80 }} />
+                </colgroup>
+                <tbody>
+                  {channelData?.fields.sort(fieldSortType).map((field) => (
+                    <tr key={field.name}>
+                      <th className="font-14-regular text-secondary mr-2 text-left align-text-top">
+                        {field.name}
+                      </th>
+                      <td className="font-14-regular text-primary">
+                        {field.key === 'issues' ? (
+                          <div className="flex gap-2">
+                            {(
+                              feedbackData[field.key] ?? ([] as IssueType[])
+                            ).map((v) => (
+                              <Badge
+                                key={v.id}
+                                color={getStatusColor(v.status)}
+                                type="secondary"
+                              >
+                                {v.name}
+                              </Badge>
+                            ))}
+                          </div>
+                        ) : field.format === 'multiSelect' ? (
+                          (feedbackData[field.key] ?? ([] as string[])).join(
+                            ', ',
+                          )
+                        ) : field.format === 'date' ? (
+                          dayjs(feedbackData[field.key]).format(
+                            DATE_TIME_FORMAT,
+                          )
+                        ) : (
+                          feedbackData[field.key]
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      </FloatingOverlay>
-    </FloatingFocusManager>
+        </FloatingOverlay>
+      </FloatingFocusManager>
+    </FloatingPortal>
   );
+};
+const fieldSortType = (a: FieldType, b: FieldType) => {
+  const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
+  const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
+  return aNum - bNum;
 };
 
 export default FeedbackDetail;
