@@ -19,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
 import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
+import { jwtConfig } from '@/configs/jwt.config';
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import type { AuthService } from '@/domains/auth/auth.service';
 import { UserDto } from '@/domains/user/dtos';
@@ -33,7 +34,7 @@ export const getMockProvider = (
 ): Provider => ({ provide: injectToken, useFactory: () => factory });
 
 export const TestConfig = ConfigModule.forRoot({
-  load: [smtpConfig],
+  load: [smtpConfig, jwtConfig],
   envFilePath: '.env.test',
   validate: (config) => ({
     ...smtpConfigSchema.validateSync(config),
