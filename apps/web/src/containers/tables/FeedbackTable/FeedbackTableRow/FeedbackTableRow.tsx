@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { Row } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 import dayjs from 'dayjs';
@@ -26,6 +26,7 @@ import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
 import { TableRow } from '../../IssueTable/TableRow';
+import FeedbackDetail from '../FeedbackDetail';
 
 interface IProps {
   row: Row<any>;
@@ -41,6 +42,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
   refetch,
 }) => {
   const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
   const { disableEditState, enableEditState, editableState, editInput } =
     useTableStore();
   const perms = usePermissions();
@@ -83,6 +85,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
   return (
     <TableRow
       isSelected={row.getIsExpanded()}
+      onClick={() => setOpen(true)}
       hoverElement={
         <>
           <TableCheckbox
@@ -144,6 +147,15 @@ const FeedbackTableRow: React.FC<IProps> = ({
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </td>
       ))}
+      {open && (
+        <FeedbackDetail
+          id={row.original.id}
+          channelId={channelId}
+          projectId={projectId}
+          open={open}
+          onOpenChange={setOpen}
+        />
+      )}
     </TableRow>
   );
 };
