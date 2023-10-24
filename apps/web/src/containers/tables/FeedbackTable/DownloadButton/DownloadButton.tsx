@@ -112,10 +112,13 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
         disabled={!perms.includes('feedback_download_read')}
         onClick={() => setOpen((prev) => !prev)}
       >
-        <Icon name="Download" size={16} />
-        {isHead
-          ? t('main.feedback.button.select-download', { count })
-          : t('main.feedback.button.all-download')}
+        <div className="flex gap-1">
+          <Icon name="Download" size={16} />
+          {isHead
+            ? t('main.feedback.button.select-download', { count })
+            : t('main.feedback.button.all-download')}
+        </div>
+        <Icon name="ChevronDown" size={12} />
       </PopoverTrigger>
       <PopoverContent>
         <p className="font-12-bold px-3 py-3">
