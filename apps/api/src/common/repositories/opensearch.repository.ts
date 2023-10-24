@@ -186,6 +186,7 @@ export class OpensearchRepository {
     await this.opensearchClient.deleteByQuery({
       index,
       body: { query: { terms: { _id: ids } } },
+      refresh: true,
     });
   }
 
