@@ -19,8 +19,8 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  Logger,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AxiosError } from 'axios';
 import * as bcrypt from 'bcrypt';
@@ -30,6 +30,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+import type { ConfigServiceType } from '@/types/config-service.type';
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
 import { ApiKeyService } from '../project/api-key/api-key.service';
@@ -59,7 +60,6 @@ import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 
 @Injectable()
 export class AuthService {
-  private logger = new Logger(AuthService.name);
   private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
 
   constructor(
@@ -72,6 +72,7 @@ export class AuthService {
     private readonly tenantService: TenantService,
     private readonly roleService: RoleService,
     private readonly memberService: MemberService,
+    private readonly configService: ConfigService<ConfigServiceType>,
     private readonly httpService: HttpService,
   ) {}
 
@@ -172,18 +173,18 @@ export class AuthService {
     const { email, id, department, name, type } = user;
     const { state } = await this.userService.findById(id);
 
-    if (state === UserStateEnum.Blocked) {
-      throw new UserBlockedException();
-    }
+    if (state === UserStateEnum.Blocked) throw new UserBlockedException();
+    const { accessTokenExpiredTime, refreshTokenExpiredTime } =
+      this.configService.get('jwt', { infer: true });
 
     return {
       accessToken: this.jwtService.sign(
         { sub: id, email, department, name, type },
-        { expiresIn: '10m' },
+        { expiresIn: accessTokenExpiredTime },
       ),
       refreshToken: this.jwtService.sign(
         { sub: id, email },
-        { expiresIn: '1h' },
+        { expiresIn: refreshTokenExpiredTime },
       ),
     };
   }

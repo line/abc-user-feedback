@@ -50,6 +50,7 @@ const TableRow: React.FC<IProps> = (props) => {
         className={[
           'hover:bg-fill-quaternary',
           isSelected ? 'bg-fill-quaternary' : '',
+          otherProps.onClick ? 'cursor-pointer' : '',
         ].join(' ')}
         {...otherProps}
       >
