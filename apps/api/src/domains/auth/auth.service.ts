@@ -25,7 +25,7 @@ import { JwtService } from '@nestjs/jwt';
 import { AxiosError } from 'axios';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
-import { catchError, firstValueFrom, map } from 'rxjs';
+import { catchError, lastValueFrom, map } from 'rxjs';
 import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
@@ -236,7 +236,7 @@ export class AuthService {
     }
 
     const { accessTokenRequestURL, clientId, clientSecret } = oauthConfig;
-    return await firstValueFrom(
+    return await lastValueFrom(
       this.httpService
         .post(
           accessTokenRequestURL,
@@ -277,7 +277,7 @@ export class AuthService {
     if (!oauthConfig) {
       throw new BadRequestException('OAuth Config is required.');
     }
-    return await firstValueFrom(
+    return await lastValueFrom(
       this.httpService
         .get(oauthConfig.userProfileRequestURL, {
           headers: { Authorization: `Bearer ${accessToken}` },
