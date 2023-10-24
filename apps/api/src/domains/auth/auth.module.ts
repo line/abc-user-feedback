@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
@@ -41,6 +42,10 @@ import { LocalStrategy } from './strategies/local.strategy';
     TenantModule,
     RoleModule,
     MemberModule,
+    HttpModule.register({
+      timeout: 5000,
+      maxRedirects: 5,
+    }),
     JwtModule.registerAsync({
       global: true,
       imports: [ConfigModule],
