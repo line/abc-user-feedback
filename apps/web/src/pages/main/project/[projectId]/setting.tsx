@@ -44,7 +44,7 @@ import {
 } from '@/containers/setting-menu';
 import { env } from '@/env.mjs';
 import type { SettingMenuType } from '@/types/setting-menu.type';
-import type { NextPageWithLayout } from '../../_app';
+import type { NextPageWithLayout } from '../../../_app';
 
 interface IProps {
   projectId: number;

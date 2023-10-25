@@ -23,7 +23,7 @@ import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import { IssueTable } from '@/containers/tables';
 import { env } from '@/env.mjs';
-import type { NextPageWithLayout } from '../../_app';
+import type { NextPageWithLayout } from '../../../_app';
 
 interface IProps {
   projectId: number;

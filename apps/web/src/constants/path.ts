@@ -37,27 +37,36 @@ class PathV3 {
   get MAIN() {
     return '/main';
   }
+
+  get CREATE_PROJECT() {
+    return '/main/project/create';
+  }
+  get CREATE_CHANNEL() {
+    return '/main/project/[projectId]/channel/create';
+  }
+
   get FEEDBACK() {
-    return '/main/[projectId]/feedback';
+    return '/main/project/[projectId]/feedback';
   }
 
   get ISSUE() {
-    return '/main/[projectId]/issue';
+    return '/main/project/[projectId]/issue';
   }
 
   get SETTINGS() {
-    return '/main/[projectId]/setting';
+    return '/main/project/[projectId]/setting';
   }
 
   isErrorPage(pathname: string) {
     return pathname.startsWith('/error');
   }
+
   isProtectPage(pathname: string) {
     return pathname.startsWith('/main');
   }
 
   hasSideNav(pathname: string) {
-    return pathname.startsWith('/main/[projectId]');
+    return pathname.startsWith('/main/project/[projectId]');
   }
 }
 

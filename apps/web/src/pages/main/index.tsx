@@ -27,10 +27,14 @@ import { useOAIQuery, useProjects, useTenant } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
 import type { NextPageWithLayout } from '../_app';
 
+const CARD_BORDER_CSS =
+  'border-fill-tertiary h-[204px] w-[452px] rounded border';
+
 const MainIndexPage: NextPageWithLayout = () => {
   const { tenant } = useTenant();
-
+  const router = useRouter();
   const { data } = useProjects();
+  const routeCreateProjectPage = () => router.push(Path.CREATE_PROJECT);
 
   return (
     <div className="mx-4 my-2">
@@ -41,6 +45,48 @@ const MainIndexPage: NextPageWithLayout = () => {
       <h1 className="font-20-bold my-6 mb-4">Project</h1>
       <ul className="flex flex-wrap gap-2">
         {data?.items.map(({ id }) => <ProjectList key={id} projectId={id} />)}
+
+        {data?.meta.totalItems === 0 ? (
+          <div
+            className={[
+              CARD_BORDER_CSS,
+              'flex flex-col items-center gap-6 p-8',
+            ].join(' ')}
+          >
+            <div className="flex flex-col items-center gap-2">
+              <Icon
+                name="WarningTriangleFill"
+                className="text-tertiary"
+                size={40}
+              />
+              <p className="text-secondary font-14-regular text-center">
+                등록된 Project가 없습니다.
+              </p>
+            </div>
+            <button
+              className="btn btn-lg btn-blue w-[200px] gap-2"
+              onClick={routeCreateProjectPage}
+            >
+              <Icon name="Plus" className="text-above-white" />
+              Project 생성
+            </button>
+          </div>
+        ) : (
+          <div
+            className={[
+              CARD_BORDER_CSS,
+              'flex flex-col items-center justify-center',
+            ].join(' ')}
+          >
+            <button
+              className="btn btn-lg btn-primary w-[200px] gap-2"
+              onClick={routeCreateProjectPage}
+            >
+              <Icon name="Plus" className="text-above-white" />
+              Project 생성
+            </button>
+          </div>
+        )}
       </ul>
     </div>
   );
@@ -116,7 +162,8 @@ const CardItem: React.FC<IProps> = ({
   return (
     <li
       className={[
-        'border-fill-tertiary rounded border p-8',
+        CARD_BORDER_CSS,
+        'p-8',
         type === 'project' ? 'hover:cursor-pointer hover:opacity-50' : '',
       ].join(' ')}
       onClick={onClick}
@@ -134,9 +181,9 @@ const CardItem: React.FC<IProps> = ({
             size={20}
           />
         </div>
-        <div>
+        <div className="flex-1">
           <p className="font-16-bold mb-1">{name}</p>
-          <p className="font-12-regular text-secondary w-[250px] break-words">
+          <p className="font-12-regular text-secondary line-clamp-1 break-all">
             {getDescriptionStr(description)}
           </p>
         </div>
