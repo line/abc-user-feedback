@@ -96,10 +96,10 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                 <tbody>
                   {channelData?.fields.sort(fieldSortType).map((field) => (
                     <tr key={field.name}>
-                      <th className="font-14-regular text-secondary mr-2 text-left align-text-top">
+                      <th className="font-14-regular text-secondary text-left align-text-top">
                         {field.name}
                       </th>
-                      <td className="font-14-regular text-primary">
+                      <td className="font-14-regular text-primary break-all pl-2 ">
                         {field.key === 'issues' ? (
                           <div className="flex gap-2">
                             {(

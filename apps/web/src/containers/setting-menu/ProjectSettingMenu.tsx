@@ -23,7 +23,7 @@ import type { SettingMenuType } from '@/types/setting-menu.type';
 interface IProps extends React.PropsWithChildren {
   projectId: number;
   onClickSettingMenu: (input: SettingMenuType) => () => void;
-  settingMenu?: SettingMenuType;
+  settingMenu: SettingMenuType | null;
 }
 
 const ProjectSettingMenu: React.FC<IProps> = (props) => {

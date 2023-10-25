@@ -323,6 +323,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
               value={createdAtRange}
               onChange={setCreatedAtRange}
               maxDate={new Date()}
+              isClearable
             />
           </div>
           <TableSearchInput

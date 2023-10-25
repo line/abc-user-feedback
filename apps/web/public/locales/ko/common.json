@@ -254,8 +254,7 @@
       "today": "오늘",
       "yesterday": "어제",
       "before-days": "{{day, number}}일전",
-      "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다.",
-      "all-dates": "전체 기간"
+      "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
     "equal-search": "완전 일치",
     "like-search": "부분 일치"
