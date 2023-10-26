@@ -15,11 +15,11 @@
  */
 
 import { registerAs } from '@nestjs/config';
-import * as yup from 'yup';
+import Joi from 'joi';
 
-export const appConfigSchema = yup.object({
-  APP_PORT: yup.number().default(4000),
-  APP_ADDRESS: yup.string().default('0.0.0.0'),
+export const appConfigSchema = Joi.object({
+  APP_PORT: Joi.number().default(4000),
+  APP_ADDRESS: Joi.string().default('0.0.0.0'),
 });
 
 export const appConfig = registerAs('app', () => ({

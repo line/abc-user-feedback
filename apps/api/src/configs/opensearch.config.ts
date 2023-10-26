@@ -14,20 +14,30 @@
  * under the License.
  */
 import { registerAs } from '@nestjs/config';
-import * as dotenv from 'dotenv';
-import * as yup from 'yup';
+import Joi from 'joi';
 
-export const opensearchSchema = yup.object({
-  OS_NODE: yup.string().default('http://localhost:9200'),
-  OS_USERNAME: yup.string().default(''),
-  OS_PASSWORD: yup.string().default(''),
+export const opensearchConfigSchema = Joi.object({
+  OS_USE: Joi.boolean().default(false),
+  OS_NODE: Joi.string().when('OS_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  OS_USERNAME: Joi.string().allow('').when('OS_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  OS_PASSWORD: Joi.string().allow('').when('OS_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
 });
 
 export const opensearchConfig = registerAs('opensearch', () => ({
+  use: process.env.OS_USE === 'true',
   node: process.env.OS_NODE,
   username: process.env.OS_USERNAME,
   password: process.env.OS_PASSWORD,
 }));
-
-dotenv.config();
-export const OS_USE = process.env.OS_USE === 'true';

@@ -14,22 +14,20 @@
  * under the License.
  */
 import { registerAs } from '@nestjs/config';
-import * as dotenv from 'dotenv';
-import * as yup from 'yup';
+import Joi from 'joi';
 
-dotenv.config();
-export const SMTP_USE = process.env.SMTP_USE === 'true';
-
-export const smtpConfigSchema = yup.object({
-  SMTP_HOST: yup.string().default('localhost'),
-  SMTP_PORT: yup.number().default(25),
-  SMTP_USERNAME: yup.string().default(''),
-  SMTP_PASSWORD: yup.string().default(''),
-  SMTP_SENDER: yup.string().default('noreplay@linecorp.com'),
-  SMTP_BASE_URL: yup.string().default('http://localhost:3000'),
+export const smtpConfigSchema = Joi.object({
+  SMTP_USE: Joi.boolean().default(false),
+  SMTP_HOST: Joi.string().default('localhost'),
+  SMTP_PORT: Joi.number().default(25),
+  SMTP_USERNAME: Joi.string().default(''),
+  SMTP_PASSWORD: Joi.string().default(''),
+  SMTP_SENDER: Joi.string().default('noreplay@linecorp.com'),
+  SMTP_BASE_URL: Joi.string().default('http://localhost:3000'),
 });
 
 export const smtpConfig = registerAs('smtp', () => ({
+  use: process.env.SMTP_USE === 'true',
   host: process.env.SMTP_HOST,
   port: +process.env.SMTP_PORT,
   password: process.env.SMTP_USERNAME,

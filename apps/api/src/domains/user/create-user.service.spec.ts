@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { CreateUserServiceProviders } from '../../test-utils/providers/create-user.service.providers';
 import { MemberEntity } from '../project/member/member.entity';
 import { RoleEntity } from '../project/role/role.entity';
@@ -42,6 +43,7 @@ describe('CreateUserService', () => {
   let roleRepo: Repository<RoleEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: CreateUserServiceProviders,
     }).compile();
 

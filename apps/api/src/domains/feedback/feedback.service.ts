@@ -22,6 +22,7 @@ import {
   Injectable,
   StreamableFile,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import dayjs from 'dayjs';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
@@ -33,7 +34,6 @@ import {
   FieldStatusEnum,
   FieldTypeEnum,
 } from '@/common/enums';
-import { OS_USE } from '@/configs/opensearch.config';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import type { FieldEntity } from '../channel/field/field.entity';
@@ -66,6 +66,7 @@ export class FeedbackService {
     private readonly issueService: IssueService,
     private readonly optionService: OptionService,
     private readonly channelService: ChannelService,
+    private readonly configService: ConfigService,
   ) {}
 
   private validateQuery(
@@ -191,7 +192,7 @@ export class FeedbackService {
     const feedbackIds = [];
 
     do {
-      if (OS_USE) {
+      if (this.configService.get('opensearch.use')) {
         const { data, scrollId } = await this.feedbackOSService.scroll({
           channelId,
           query,
@@ -251,7 +252,7 @@ export class FeedbackService {
     const feedbackIds = [];
 
     do {
-      if (OS_USE) {
+      if (this.configService.get('opensearch.use')) {
         const { data, scrollId } = await this.feedbackOSService.scroll({
           channelId,
           query,
@@ -364,7 +365,7 @@ export class FeedbackService {
       }
     }
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.create({ channelId, feedback });
     }
 
@@ -384,7 +385,7 @@ export class FeedbackService {
 
     this.validateQuery(dto.query || {}, fields);
 
-    const feedbacksByPagination = OS_USE
+    const feedbacksByPagination = this.configService.get('opensearch.use')
       ? await this.feedbackOSService.findByChannelId(dto)
       : await this.feedbackMySQLService.findByChannelId(dto);
 
@@ -466,7 +467,7 @@ export class FeedbackService {
       data,
     });
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.upsertFeedbackItem({
         feedbackId,
         data,
@@ -479,7 +480,7 @@ export class FeedbackService {
   async addIssue(dto: AddIssueDto) {
     await this.feedbackMySQLService.addIssue(dto);
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.upsertFeedbackItem({
         channelId: dto.channelId,
         feedbackId: dto.feedbackId,
@@ -492,7 +493,7 @@ export class FeedbackService {
   async removeIssue(dto: RemoveIssueDto) {
     await this.feedbackMySQLService.removeIssue(dto);
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.upsertFeedbackItem({
         channelId: dto.channelId,
         feedbackId: dto.feedbackId,
@@ -509,7 +510,7 @@ export class FeedbackService {
   async deleteByIds(dto: DeleteByIdsDto) {
     await this.feedbackMySQLService.deleteByIds(dto);
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.deleteByIds(dto);
     }
   }
