@@ -18,45 +18,29 @@ import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import {
   FieldFormatEnum,
   FieldStatusEnum,
   FieldTypeEnum,
 } from '@/common/enums';
-import { createFieldDto, getRandomValue } from '@/utils/test-util-fixture';
-import { MockOpensearchRepository, mockRepository } from '@/utils/test-utils';
-
+import { OpensearchRepository } from '@/common/repositories';
+import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
+import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import { FeedbackServiceProviders } from '../../test-utils/providers/feedback.service.providers';
+import { ChannelEntity } from '../channel/channel/channel.entity';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
-import { FieldServiceProviders } from '../channel/field/field.service.spec';
-import { OptionServiceProviders } from '../channel/option/option.service.spec';
-import { IssueServiceProviders } from '../project/issue/issue.service.spec';
-import { CreateFeedbackDto } from './dtos';
+import { IssueEntity } from '../project/issue/issue.entity';
+import { CreateFeedbackDto, FindFeedbacksByChannelIdDto } from './dtos';
 import { FeedbackEntity } from './feedback.entity';
-import { FeedbackMySQLService } from './feedback.mysql.service';
-import { FeedbackOSService } from './feedback.os.service';
 import { FeedbackService } from './feedback.service';
-
-const FeedbackServiceProviders = [
-  FeedbackService,
-  FeedbackMySQLService,
-  {
-    provide: getRepositoryToken(FeedbackEntity),
-    useValue: mockRepository(),
-  },
-  ClsService,
-  ...FieldServiceProviders,
-  ...IssueServiceProviders,
-  ...OptionServiceProviders,
-  FeedbackOSService,
-];
 
 const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
   Object.values(FieldTypeEnum).flatMap((type) =>
     Object.values(FieldStatusEnum).flatMap((status) => ({
-      id: faker.datatype.number(),
+      id: faker.number.int(),
       ...createFieldDto({
         format,
         type,
@@ -75,28 +59,36 @@ const feedbackFixture = fieldsFixture.reduce((prev, curr) => {
   };
 }, {});
 
-describe('FeedbackService', () => {
+describe('FeedbackService Test Suite', () => {
   let feedbackService: FeedbackService;
+  let clsService: ClsService;
   let feedbackRepo: Repository<FeedbackEntity>;
   let fieldRepo: Repository<FieldEntity>;
+  let issueRepo: Repository<IssueEntity>;
+  let channelRepo: Repository<ChannelEntity>;
+  let osRepo: OpensearchRepository;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: FeedbackServiceProviders,
     }).compile();
 
     feedbackService = module.get<FeedbackService>(FeedbackService);
+    clsService = module.get<ClsService>(ClsService);
     feedbackRepo = module.get(getRepositoryToken(FeedbackEntity));
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
+    issueRepo = module.get(getRepositoryToken(IssueEntity));
+    channelRepo = module.get(getRepositoryToken(ChannelEntity));
+    osRepo = module.get(OpensearchRepository);
   });
 
   describe('create', () => {
     it('creating a feedback succeeds with valid inputs', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
 
@@ -114,11 +106,11 @@ describe('FeedbackService', () => {
     });
     it('creating a feedback fails with an invalid channel', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([]);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
 
@@ -132,13 +124,13 @@ describe('FeedbackService', () => {
     });
     it('creating a feedback fails with a reserved field key', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       const reservedFieldKey = faker.helpers.arrayElement(RESERVED_FIELD_KEYS);
-      dto.data[reservedFieldKey] = faker.datatype.string();
+      dto.data[reservedFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
 
@@ -154,13 +146,13 @@ describe('FeedbackService', () => {
     });
     it('creating a feedback fails with an invalid field key', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       const invalidFieldKey = 'invalidFieldKey';
-      dto.data[invalidFieldKey] = faker.datatype.string();
+      dto.data[invalidFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
 
@@ -174,10 +166,10 @@ describe('FeedbackService', () => {
     });
     it('creating a feedback fails with an admin field', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       const adminFieldKey = 'adminFieldKey';
-      dto.data[adminFieldKey] = faker.datatype.string();
+      dto.data[adminFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([
         ...fieldsFixture,
         createFieldDto({
@@ -186,7 +178,7 @@ describe('FeedbackService', () => {
         }) as FieldEntity,
       ]);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
 
@@ -200,10 +192,10 @@ describe('FeedbackService', () => {
     });
     it('creating a feedback fails with an inactive field', async () => {
       const dto = new CreateFeedbackDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       const inactiveFieldKey = 'inactiveFieldKey';
-      dto.data[inactiveFieldKey] = faker.datatype.string();
+      dto.data[inactiveFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([
         ...fieldsFixture,
         createFieldDto({
@@ -213,7 +205,7 @@ describe('FeedbackService', () => {
         }) as FieldEntity,
       ]);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-        id: faker.datatype.number(),
+        id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
 
@@ -264,7 +256,7 @@ describe('FeedbackService', () => {
             status: FieldStatusEnum.ACTIVE,
           });
           const dto = new CreateFeedbackDto();
-          dto.channelId = faker.datatype.number();
+          dto.channelId = faker.number.int();
           dto.data = {
             [field.key]: invalidValue,
           };
@@ -272,7 +264,7 @@ describe('FeedbackService', () => {
             .spyOn(fieldRepo, 'find')
             .mockResolvedValue([field] as FieldEntity[]);
           jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
-            id: faker.datatype.number(),
+            id: faker.number.int(),
             rawData: dto.data,
           } as FeedbackEntity);
 
@@ -290,6 +282,144 @@ describe('FeedbackService', () => {
           spy.mockClear();
         }
       }
+    });
+    it('creating a feedback succeeds with valid inputs and issue names', async () => {
+      const dto = new CreateFeedbackDto();
+      dto.channelId = faker.number.int();
+      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      const issueNames = Array.from({
+        length: faker.number.int({ min: 1, max: 1 }),
+      }).map(() => faker.string.sample());
+      dto.data.issueNames = [...issueNames, faker.string.sample()];
+      const feedbackId = faker.number.int();
+      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
+      jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
+        id: feedbackId,
+        rawData: dto.data,
+      } as FeedbackEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce({
+        id: faker.number.int(),
+        name: issueNames[0],
+      } as IssueEntity);
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
+        id: dto.channelId,
+        fields: [],
+        project: {
+          id: faker.number.int(),
+        },
+      } as ChannelEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(issueRepo, 'save').mockResolvedValue({
+        id: faker.number.int(),
+      } as IssueEntity);
+      jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
+        id: feedbackId,
+        issues: [],
+      } as FeedbackEntity);
+      clsService.set = jest.fn();
+
+      await feedbackService.create(dto);
+
+      expect(fieldRepo.find).toBeCalledTimes(1);
+      expect(issueRepo.findOneBy).toBeCalledTimes(3);
+      expect(channelRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackRepo.save).toBeCalledTimes(3);
+      expect(issueRepo.save).toBeCalledTimes(1);
+      expect(MockOpensearchRepository.createData).toBeCalledTimes(1);
+    });
+    it('creating a feedback succeeds with valid inputs and an existent issue name', async () => {
+      const dto = new CreateFeedbackDto();
+      dto.channelId = faker.number.int();
+      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      const issueNames = Array.from({
+        length: faker.number.int({ min: 1, max: 1 }),
+      }).map(() => faker.string.sample());
+      dto.data.issueNames = [...issueNames];
+      const feedbackId = faker.number.int();
+      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
+      jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
+        id: feedbackId,
+        rawData: dto.data,
+      } as FeedbackEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce({
+        id: faker.number.int(),
+        name: issueNames[0],
+      } as IssueEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
+        id: feedbackId,
+        issues: [],
+      } as FeedbackEntity);
+      clsService.set = jest.fn();
+
+      await feedbackService.create(dto);
+
+      expect(fieldRepo.find).toBeCalledTimes(1);
+      expect(issueRepo.findOneBy).toBeCalledTimes(1);
+      expect(feedbackRepo.save).toBeCalledTimes(2);
+      expect(MockOpensearchRepository.createData).toBeCalledTimes(1);
+    });
+    it('creating a feedback succeeds with valid inputs and a nonexistent issue name', async () => {
+      const dto = new CreateFeedbackDto();
+      dto.channelId = faker.number.int();
+      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data.issueNames = [faker.string.sample()];
+      const feedbackId = faker.number.int();
+      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
+      jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
+        id: feedbackId,
+        rawData: dto.data,
+      } as FeedbackEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
+        id: dto.channelId,
+        fields: [],
+        project: {
+          id: faker.number.int(),
+        },
+      } as ChannelEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(issueRepo, 'save').mockResolvedValue({
+        id: faker.number.int(),
+      } as IssueEntity);
+      jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
+        id: feedbackId,
+        issues: [],
+      } as FeedbackEntity);
+      clsService.set = jest.fn();
+
+      await feedbackService.create(dto);
+
+      expect(fieldRepo.find).toBeCalledTimes(1);
+      expect(issueRepo.findOneBy).toBeCalledTimes(2);
+      expect(channelRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackRepo.save).toBeCalledTimes(2);
+      expect(issueRepo.save).toBeCalledTimes(1);
+      expect(MockOpensearchRepository.createData).toBeCalledTimes(1);
+    });
+  });
+
+  describe('findByChannelId', () => {
+    describe('with os use', () => {
+      it('finding feedbacks succeeds with valid inputs', async () => {
+        const channelId = faker.number.int();
+        const dto = new FindFeedbacksByChannelIdDto();
+        dto.channelId = channelId;
+        dto.limit = 10;
+        dto.page = 1;
+        jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
+        jest.spyOn(osRepo, 'getData').mockResolvedValue({
+          items: [],
+          total: 0,
+        });
+        jest.spyOn(osRepo, 'getTotal').mockResolvedValue(0);
+
+        await feedbackService.findByChannelId(dto);
+
+        expect(fieldRepo.find).toBeCalledTimes(1);
+        expect(osRepo.getData).toBeCalledTimes(1);
+        expect(osRepo.getTotal).toBeCalledTimes(1);
+      });
     });
   });
 });

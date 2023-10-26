@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { getIronSession } from 'iron-session/edge';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { getIronSession } from 'iron-session/edge';
 
 import { DEFAULT_LOCALE } from './constants/i18n';
 import { ironOption } from './constants/iron-option';
@@ -35,17 +35,28 @@ export async function middleware(req: NextRequest) {
   }
 
   if (!session.jwt && isProtected) {
-    return NextResponse.redirect(new URL(Path.SIGN_IN, req.url));
+    const parmas = new URLSearchParams(req.nextUrl.search);
+    if (parmas.get('callback_url')) {
+      return NextResponse.redirect(
+        new URL(
+          Path.SIGN_IN + '?callback_url=' + parmas.get('callback_url'),
+          req.url,
+        ),
+      );
+    } else {
+      const requestPath = `${req.nextUrl.pathname}${encodeURIComponent(
+        req.nextUrl.search,
+      )}`;
+      return NextResponse.redirect(
+        new URL(Path.SIGN_IN + '?callback_url=' + requestPath, req.url),
+      );
+    }
   }
 
   if (req.nextUrl.locale === 'default') {
+    const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
     const locale = req.cookies.get('NEXT_LOCALE')?.value || DEFAULT_LOCALE;
-    return NextResponse.redirect(
-      new URL(
-        `/${locale}${req.nextUrl.pathname}${req.nextUrl.search}`,
-        req.url,
-      ),
-    );
+    return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
   }
 
   return res;

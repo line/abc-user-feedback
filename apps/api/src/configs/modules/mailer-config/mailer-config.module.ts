@@ -18,7 +18,7 @@ import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handleba
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
-import { ConfigServiceType } from '@/types/config-service.type';
+import type { ConfigServiceType } from '@/types/config-service.type';
 
 @Module({
   imports: [

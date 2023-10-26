@@ -14,10 +14,11 @@
  * under the License.
  */
 import { useMemo } from 'react';
-import { Toast } from 'react-hot-toast';
+import type { Toast } from 'react-hot-toast';
 import { toast as reactToast } from 'react-hot-toast';
 
-import { Icon, IconNameType } from '../Icon';
+import type { IconNameType } from '../Icon';
+import { Icon } from '../Icon';
 
 interface IProps {
   type: 'positive' | 'negative';
@@ -58,10 +59,10 @@ export const ToastBox: React.FC<IProps> = ({
 
   return (
     <div
-      className={`rounded ${bg} px-5 py-4 flex items-center text-white gap-4`}
+      className={`rounded ${bg} flex items-center gap-4 px-5 py-4 text-white`}
     >
       <Icon name={icon} size={24} />
-      <div className="flex-1 min-w-[300px]">
+      <div className="min-w-[300px] flex-1">
         {title && <p className="font-16-bold">{title}</p>}
         {description && <p className="font-14-regular mt-1">{description}</p>}
       </div>

@@ -24,6 +24,10 @@ You will also see any lint errors in the console.
 yarn dev
 ```
 
+> **Note**
+> In order to run web properly, ui packages need to be built by the
+> `yarn build:ui` command in root directory or `yarn turbo run @ufb/ui#build` command in any directory.
+
 ### `generate-api-type`
 
 Generate api type using open api specification. This command can run after running on server. The type file is generated in `src/types/api.type.ts`

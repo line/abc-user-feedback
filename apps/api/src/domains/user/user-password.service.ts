@@ -22,7 +22,6 @@ import { Transactional } from 'typeorm-transactional';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeService } from '@/shared/code/code.service';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
-
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
 import { InvalidPasswordException, UserNotFoundException } from './exceptions';
@@ -60,26 +59,29 @@ export class UserPasswordService {
       code,
     });
 
-    await this.userRepo.update(
-      { id: user.id },
-      { id: user.id, hashPassword: await this.createHashPassword(password) },
+    await this.userRepo.save(
+      Object.assign(user, {
+        hashPassword: await this.createHashPassword(password),
+      }),
     );
   }
 
   @Transactional()
   async changePassword(dto: ChangePasswordDto) {
     const { newPassword, password, userId } = dto;
-    const { hashPassword: originHashPassword } = await this.userRepo.findOneBy({
+    const user = await this.userRepo.findOneBy({
       id: userId,
     });
+    const originHashPassword = user.hashPassword;
 
     if (!bcrypt.compareSync(password, originHashPassword)) {
       throw new InvalidPasswordException();
     }
 
-    await this.userRepo.update(
-      { id: userId },
-      { id: userId, hashPassword: await this.createHashPassword(newPassword) },
+    await this.userRepo.save(
+      Object.assign(user, {
+        hashPassword: await this.createHashPassword(newPassword),
+      }),
     );
   }
 

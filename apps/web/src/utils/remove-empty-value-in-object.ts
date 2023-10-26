@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import produce from 'immer';
+import { produce } from 'immer';
 
 export const removeEmptyValueInObject = (input: Record<string, any>) =>
   produce(input, (draft) => {

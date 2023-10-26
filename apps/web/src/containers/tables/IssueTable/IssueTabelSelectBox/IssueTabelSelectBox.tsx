@@ -14,30 +14,31 @@
  * under the License.
  */
 import { useQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { IssueCircle } from '@/components';
 import { ISSUES } from '@/constants/issues';
 import client from '@/libs/client';
+import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
   onChangeOption: (issue: IssueCountOption) => void;
+  createdAtRange: DateRangeType;
+  currentIssueKey: string;
 }
 
 type IssueCountOption = { count: number; key: string };
 
-const IssueTabelSelectBox: React.FC<IProps> = ({
-  projectId,
-  onChangeOption,
-}) => {
-  const { t } = useTranslation();
-  const [currentIssue, setCurrentIssue] = useState<IssueCountOption>();
+const IssueTabelSelectBox: React.FC<IProps> = (props) => {
+  const { projectId, currentIssueKey, onChangeOption, createdAtRange } = props;
 
-  const { data: issueCountData } = useQuery(
-    ['all_issues', projectId],
-    async () => {
+  const { t } = useTranslation();
+
+  const { data: issueCountData } = useQuery({
+    queryKey: ['all_issues', createdAtRange, projectId],
+    queryFn: async () => {
       const result: { count: number; key: string }[] = [];
       const issues = ISSUES(t);
       for (const issue of issues) {
@@ -47,7 +48,19 @@ const IssueTabelSelectBox: React.FC<IProps> = ({
           body: {
             limit: 1,
             page: 1,
-            query: { status: issue.key } as any,
+            query: {
+              status: issue.key,
+              createdAt: createdAtRange
+                ? {
+                    gte: dayjs(createdAtRange?.startDate)
+                      .startOf('day')
+                      .toISOString(),
+                    lt: dayjs(createdAtRange?.endDate)
+                      .endOf('day')
+                      .toISOString(),
+                  }
+                : undefined,
+            } as any,
           },
         });
         result.push({ ...issue, count: data?.meta.totalItems ?? 0 });
@@ -55,30 +68,22 @@ const IssueTabelSelectBox: React.FC<IProps> = ({
       const total = result?.reduce((prev, curr) => prev + curr.count, 0);
       return [{ key: 'total', count: total }].concat(result);
     },
-  );
-
-  useEffect(() => {
-    if (!issueCountData) return;
-    setCurrentIssue(issueCountData[0]);
-  }, [issueCountData]);
+  });
 
   return (
-    <div className="flex gap-2 flex-wrap">
+    <div className="flex flex-wrap gap-2">
       {issueCountData?.map((issue) => (
         <div
           key={issue.key}
           className={[
-            'border rounded flex justify-between py-2.5 px-3 items-center min-w-[136px] cursor-pointer',
-            currentIssue?.key === issue.key
+            'flex min-w-[136px] cursor-pointer items-center justify-between rounded border px-3 py-2.5',
+            currentIssueKey === issue.key
               ? 'border-fill-primary'
               : 'opacity-50',
           ].join(' ')}
-          onClick={() => {
-            setCurrentIssue(issue);
-            onChangeOption(issue);
-          }}
+          onClick={() => onChangeOption(issue)}
         >
-          <div className="flex gap-2 items-center flex-1">
+          <div className="flex flex-1 items-center gap-2">
             <IssueCircle issueKey={issue.key} />
             <span className="whitespace-nowrap">
               {ISSUES(t).find((v) => v.key === issue.key)?.name ??

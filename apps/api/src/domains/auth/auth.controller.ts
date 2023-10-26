@@ -28,6 +28,7 @@ import {
   ApiBody,
   ApiCreatedResponse,
   ApiOkResponse,
+  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
 
@@ -42,8 +43,11 @@ import {
   InvitationUserSignUpRequestDto,
   OAuthUserSignUpRequestDto,
 } from './dtos/requests';
-import { OAuthLoginUrlResponseDto, SignInResponseDto } from './dtos/responses';
-import { SendEmailCodeResponseDto } from './dtos/responses';
+import {
+  OAuthLoginUrlResponseDto,
+  SendEmailCodeResponseDto,
+  SignInResponseDto,
+} from './dtos/responses';
 import { JwtAuthGuard } from './guards';
 import { UseEmailGuard } from './guards/use-email.guard';
 import { UseOAuthGuard } from './guards/use-oauth.guard';
@@ -95,10 +99,11 @@ export class AuthController {
   }
 
   @UseGuards(UseOAuthGuard)
+  @ApiQuery({ name: 'callback_url', required: false })
   @ApiOkResponse({ type: OAuthLoginUrlResponseDto })
   @Get('signIn/oauth/loginURL')
-  async redirectToLoginURL() {
-    return { url: await this.authService.getOAuthLoginURL() };
+  async redirectToLoginURL(@Query('callback_url') callbackUrl: string) {
+    return { url: await this.authService.getOAuthLoginURL(callbackUrl) };
   }
 
   @UseGuards(UseOAuthGuard)

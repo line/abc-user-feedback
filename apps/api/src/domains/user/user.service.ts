@@ -20,13 +20,13 @@ import { In, Like, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
-
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
 import { TenantService } from '../tenant/tenant.service';
-import { FindAllUsersDto, InviteUserDto } from './dtos';
+import type { FindAllUsersDto } from './dtos';
+import { InviteUserDto } from './dtos';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { SignUpMethodEnum } from './entities/enums';
+import type { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
   NotAllowedDomainException,
@@ -101,8 +101,9 @@ export class UserService {
 
   @Transactional()
   async updateUser(dto: UpdateUserDto) {
-    const { userId, ...user } = dto;
-    await this.userRepo.update({ id: userId }, { ...user, id: userId });
+    const { userId } = dto;
+    const user = await this.findById(userId);
+    await this.userRepo.save(Object.assign(user, dto));
   }
 
   @Transactional()

@@ -20,8 +20,8 @@ import { Transactional } from 'typeorm-transactional';
 
 import { MemberService } from '../project/member/member.service';
 import { TenantService } from '../tenant/tenant.service';
-import { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
-import { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
+import type { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
+import type { CreateOAuthUserDto } from './dtos/create-oauth-user.dto';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';

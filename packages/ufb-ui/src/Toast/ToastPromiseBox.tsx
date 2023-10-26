@@ -14,10 +14,11 @@
  * under the License.
  */
 import { useMemo } from 'react';
-import { Toast } from 'react-hot-toast';
+import type { Toast } from 'react-hot-toast';
 import { toast as reactToast } from 'react-hot-toast';
 
-import { Icon, IconNameType } from '../Icon';
+import type { IconNameType } from '../Icon';
+import { Icon } from '../Icon';
 
 export interface IToastInfoBoxProps {
   t: Toast;
@@ -56,7 +57,7 @@ export const ToastPromiseBox: React.FC<IToastInfoBoxProps> = ({
   }, [status]);
 
   return (
-    <div className="rounded px-5 py-4 flex items-center gap-4 bg-tertiary border border-fill-secondary ">
+    <div className="bg-tertiary border-fill-secondary flex items-center gap-4 rounded border px-5 py-4 ">
       <Icon
         name={iconName}
         size={24}
@@ -64,7 +65,7 @@ export const ToastPromiseBox: React.FC<IToastInfoBoxProps> = ({
           ' ',
         )}
       />
-      <div className="flex-1 min-w-[300px]">
+      <div className="min-w-[300px] flex-1">
         <p className="font-16-bold">{title}</p>
         {description && <p className="font-14-regular mt-1">{description}</p>}
       </div>

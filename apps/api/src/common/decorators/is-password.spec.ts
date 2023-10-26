@@ -26,8 +26,8 @@ class IsPasswordTest {
 describe('IsPassword decorator', () => {
   it('', () => {
     const instance = new IsPasswordTest();
-    instance.password = faker.datatype.string(
-      faker.datatype.number({ min: 8, max: 15 }),
+    instance.password = faker.string.sample(
+      faker.number.int({ min: 8, max: 15 }),
     );
     const validator = new Validator();
     validator.validate(instance).then((errors) => {
@@ -36,8 +36,8 @@ describe('IsPassword decorator', () => {
   });
   it('minLength', () => {
     const instance = new IsPasswordTest();
-    instance.password = faker.datatype.string(
-      faker.datatype.number({ min: 0, max: 7 }),
+    instance.password = faker.string.sample(
+      faker.number.int({ min: 0, max: 7 }),
     );
     const validator = new Validator();
     validator.validate(instance).then((errors) => {
@@ -48,7 +48,7 @@ describe('IsPassword decorator', () => {
 
   it('isString', () => {
     const instance = new IsPasswordTest();
-    instance.password = faker.datatype.number({ min: 10000000, max: 99999999 });
+    instance.password = faker.number.int({ min: 10000000, max: 99999999 });
 
     const validator = new Validator();
     validator.validate(instance).then((errors) => {
@@ -59,7 +59,7 @@ describe('IsPassword decorator', () => {
 
   it('isString, minLength', () => {
     const instance = new IsPasswordTest();
-    instance.password = faker.datatype.number({ min: 0, max: 9999999 });
+    instance.password = faker.number.int({ min: 0, max: 9999999 });
     const validator = new Validator();
     validator.validate(instance).then((errors) => {
       expect(errors.length).toEqual(1);

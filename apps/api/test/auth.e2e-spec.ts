@@ -14,12 +14,14 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
-import { DataSource, Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import {
@@ -29,7 +31,7 @@ import {
   EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
 } from '@/domains/auth/dtos/requests';
-import { RoleEntity } from '@/domains/project/role/role.entity';
+import type { RoleEntity } from '@/domains/project/role/role.entity';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
 import { UserStateEnum, UserTypeEnum } from '@/domains/user/entities/enums';
 import { UserEntity } from '@/domains/user/entities/user.entity';
@@ -37,7 +39,7 @@ import { UserPasswordService } from '@/domains/user/user-password.service';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { CodeService } from '@/shared/code/code.service';
-import { clearEntities } from '@/utils/test-utils';
+import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -83,7 +85,7 @@ describe('AppController (e2e)', () => {
       allowDomains: [],
       isPrivate: false,
       isRestrictDomain: false,
-      siteName: faker.datatype.string(),
+      siteName: faker.string.sample(),
     });
   });
 
@@ -146,7 +148,7 @@ describe('AppController (e2e)', () => {
     it('invalid code', async () => {
       const dto = new EmailVerificationCodeRequestDto();
       dto.email = email;
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
 
       const originalCode = await codeRepo.findOneBy({ code });
       expect(originalCode.isVerified).toEqual(false);
@@ -277,7 +279,7 @@ describe('AppController (e2e)', () => {
     });
     it('no invitation', async () => {
       const dto = new InvitationUserSignUpRequestDto();
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
       dto.email = email;
       dto.password = faker.internet.password();
 
@@ -290,7 +292,7 @@ describe('AppController (e2e)', () => {
       await setCode(email);
 
       const dto = new InvitationUserSignUpRequestDto();
-      dto.code = faker.datatype.string();
+      dto.code = faker.string.sample();
       dto.email = email;
       dto.password = faker.internet.password();
 

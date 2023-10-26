@@ -13,23 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput, toast } from '@ufb/ui';
 import type { GetStaticProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { TextInput, toast } from '@ufb/ui';
+
+import { OAuthLoginButton } from '@/components';
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useOAIQuery, useTenant, useUser } from '@/hooks';
-import { NextPageWithLayout } from '@/pages/_app';
-import { IFetchError } from '@/types/fetch-error.type';
+import { useTenant, useUser } from '@/hooks';
+import type { NextPageWithLayout } from '@/pages/_app';
+import type { IFetchError } from '@/types/fetch-error.type';
 
 interface IForm {
   email: string;
@@ -62,7 +64,6 @@ const SignInPage: NextPageWithLayout = () => {
   const onSubmit = async (data: IForm) => {
     try {
       await signIn(data);
-      toast.positive({ title: t('toast.sign-in') });
     } catch (error) {
       const { message } = error as IFetchError;
       setError('email', { message: 'invalid email' });
@@ -70,14 +71,10 @@ const SignInPage: NextPageWithLayout = () => {
       toast.negative({ title: message, description: message });
     }
   };
-  const { data } = useOAIQuery({
-    path: '/api/auth/signIn/oauth/loginURL',
-    queryOptions: { enabled: tenant?.useOAuth ?? false },
-  });
 
   return (
-    <form className="w-[360px] m-auto" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col items-center gap-1 mb-8">
+    <form className="m-auto w-[360px]" onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-8 flex flex-col items-center gap-1">
         <Image
           src="/assets/images/logo-horizontal.svg"
           alt="logo"
@@ -90,7 +87,7 @@ const SignInPage: NextPageWithLayout = () => {
       </div>
       {tenant?.useEmail && (
         <>
-          <div className="space-y-3 mb-6">
+          <div className="mb-6 space-y-3">
             <TextInput
               placeholder="ID"
               leftIconName="ProfileCircleFill"
@@ -99,6 +96,7 @@ const SignInPage: NextPageWithLayout = () => {
               isSubmitted={isSubmitted}
               isSubmitting={isSubmitting}
               isValid={!errors.email}
+              size="lg"
             />
             <TextInput
               placeholder="Password"
@@ -108,28 +106,21 @@ const SignInPage: NextPageWithLayout = () => {
               isSubmitted={isSubmitted}
               isSubmitting={isSubmitting}
               isValid={!errors.password}
+              size="lg"
             />
-          </div>
-          <div className="flex justify-end mb-6">
-            <Link
-              href={Path.PASSWORD_RESET}
-              className="text-blue-primary font-14-regular"
-            >
-              {t('auth.sign-in.reset-password')}
-            </Link>
           </div>
         </>
       )}
       <div className="flex flex-col gap-1">
         {tenant?.useEmail && (
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-lg btn-primary">
             {t('button.sign-in')}
           </button>
         )}
         {tenant?.useEmail && !tenant?.isPrivate && (
           <button
             type="button"
-            className="btn btn-secondary"
+            className="btn btn-lg btn-secondary"
             onClick={() => router.push(Path.SIGN_UP)}
           >
             {t('button.sign-up')}
@@ -137,29 +128,44 @@ const SignInPage: NextPageWithLayout = () => {
         )}
         {tenant?.useEmail && tenant?.useOAuth && (
           <div className="relative my-5">
-            <span className="absolute absolute-center text-secondary bg-primary py-1 px-2">
+            <span className="absolute-center text-secondary bg-primary absolute px-2 py-1">
               OR
             </span>
             <hr />
           </div>
         )}
-        {tenant?.useOAuth && (
-          <button
-            type="button"
-            className="btn btn-blue"
-            onClick={() => (data ? router.push(data.url) : {})}
-          >
-            OAuth2.0 {t('button.sign-in')}
-          </button>
-        )}
+        {tenant?.useOAuth && <OAuthLoginButton />}
       </div>
     </form>
   );
 };
 
-SignInPage.getLayout = function getLayout(page) {
-  return <AuthTemplate>{page}</AuthTemplate>;
+const ResetPassword: React.FC = () => {
+  const { tenant } = useTenant();
+  const { t } = useTranslation();
+  if (!tenant?.useEmail || tenant.isPrivate) return <></>;
+  return (
+    <div className="absolute -bottom-16 left-1/2 mb-6 flex -translate-x-1/2 justify-end">
+      <Link
+        href={Path.PASSWORD_RESET}
+        className="text-blue-primary font-14-regular"
+      >
+        {t('auth.sign-in.reset-password')}
+      </Link>
+    </div>
+  );
 };
+
+function Layout(page: React.ReactNode) {
+  return (
+    <AuthTemplate>
+      {page}
+      <ResetPassword />
+    </AuthTemplate>
+  );
+}
+
+SignInPage.getLayout = Layout;
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

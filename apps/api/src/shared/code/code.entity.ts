@@ -16,7 +16,6 @@
 import { Column, Entity } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { CodeTypeEnum } from './code-type.enum';
 
 @Entity('codes')

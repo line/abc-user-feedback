@@ -14,23 +14,25 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
-import { DataSource, Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/auth/auth.service';
 import { UpdateRoleRequestDto } from '@/domains/project/role/dtos/requests';
 import { PermissionEnum } from '@/domains/project/role/permission.enum';
 import { RoleEntity } from '@/domains/project/role/role.entity';
-import { HttpStatusCode } from '@/types/http-status';
 import {
   clearEntities,
   getRandomEnumValues,
   signInTestUser,
-} from '@/utils/test-utils';
+} from '@/test-utils/util-functions';
+import { HttpStatusCode } from '@/types/http-status';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -70,10 +72,10 @@ describe('AppController (e2e)', () => {
 
   describe('/roles (GET)', () => {
     it('positive case', async () => {
-      const total = faker.datatype.number(20);
+      const total = faker.number.int(20);
       for (let i = 0; i < total; i++) {
         await roleRepo.save({
-          name: faker.datatype.string(),
+          name: faker.string.sample(),
           permissions: getRandomEnumValues(PermissionEnum),
         });
       }
@@ -108,7 +110,7 @@ describe('AppController (e2e)', () => {
         .post('/roles')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          name: faker.datatype.string(),
+          name: faker.string.sample(),
           permissions: getRandomEnumValues(PermissionEnum),
         })
         .expect(201);
@@ -117,7 +119,7 @@ describe('AppController (e2e)', () => {
       return request(app.getHttpServer())
         .post('/roles')
         .send({
-          name: faker.datatype.string(),
+          name: faker.string.sample(),
           permissions: getRandomEnumValues(PermissionEnum),
         })
         .expect(HttpStatusCode.UNAUTHORIZED);
@@ -126,7 +128,7 @@ describe('AppController (e2e)', () => {
 
   it('/roles/:id (GET)', async () => {
     const role = await roleRepo.save({
-      name: faker.datatype.string(),
+      name: faker.string.sample(),
       permissions: getRandomEnumValues(PermissionEnum),
     });
 
@@ -142,7 +144,7 @@ describe('AppController (e2e)', () => {
   describe('/roles/:id (PUT)', () => {
     it('positive case', async () => {
       const role = await roleRepo.save({
-        name: faker.datatype.string(),
+        name: faker.string.sample(),
         permissions: getRandomEnumValues(PermissionEnum),
       });
 
@@ -163,14 +165,14 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthrized', async () => {
       await request(app.getHttpServer())
-        .put(`/roles/${faker.datatype.number()}`)
+        .put(`/roles/${faker.number.int()}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
   });
   describe('/roles/:id (DELETE)', () => {
     it('positive case', async () => {
       const role = await roleRepo.save({
-        name: faker.datatype.string(),
+        name: faker.string.sample(),
         permissions: getRandomEnumValues(PermissionEnum),
       });
 
@@ -184,7 +186,7 @@ describe('AppController (e2e)', () => {
     });
     it('Unauthrized', async () => {
       await request(app.getHttpServer())
-        .delete(`/roles/${faker.datatype.number()}`)
+        .delete(`/roles/${faker.number.int()}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
   });

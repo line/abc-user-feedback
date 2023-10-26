@@ -21,7 +21,7 @@ import {
 } from '@nestjs/common';
 import { Client, errors } from '@opensearch-project/opensearch';
 
-import {
+import type {
   CreateDataDto,
   CreateIndexDto,
   DeleteBulkDataDto,
@@ -186,6 +186,7 @@ export class OpensearchRepository {
     await this.opensearchClient.deleteByQuery({
       index,
       body: { query: { terms: { _id: ids } } },
+      refresh: true,
     });
   }
 

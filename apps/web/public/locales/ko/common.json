@@ -23,7 +23,7 @@
       }
     },
     "reset-password": {
-      "title": "비밀번호 재설정",
+      "title": "비밀번호 재설정하기",
       "button": { "send-email": "이메일 보내기" }
     }
   },
@@ -57,18 +57,18 @@
         "confirm-new-password": "새로운 비밀번호를 한번 더 입력해주세요"
       },
       "button": {
-        "delete-account": "계정 삭제"
+        "delete-account": "회원 탈퇴"
       },
       "dialog": {
         "delete-account": {
-          "title": "계정 삭제",
-          "description1": "정말로 삭제하시나요?",
-          "description2": "계정 삭제 후 서비스를 이용할 수 없습니다."
+          "title": "회원 탈퇴",
+          "description1": "정말로 탈퇴하시나요?",
+          "description2": "회원 탈퇴 후 서비스를 이용할 수 없습니다."
         }
       }
     },
     "feedback": {
-      "title": "피드백 관리",
+      "title": "피드백",
       "column-setting": "컬럼설정",
       "issue-cell": {
         "issue-list": "이슈 목록",
@@ -99,7 +99,7 @@
       }
     },
     "issue": {
-      "title": "이슈 관리",
+      "title": "이슈",
       "setting": "이슈 설정",
       "dialog": {
         "delete-issue": {
@@ -253,7 +253,9 @@
     "date": {
       "today": "오늘",
       "yesterday": "어제",
-      "before-days": "{{day, number}}일전"
+      "before-days": "{{day, number}}일전",
+      "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다.",
+      "all-dates": "전체 기간"
     },
     "equal-search": "완전 일치",
     "like-search": "부분 일치"

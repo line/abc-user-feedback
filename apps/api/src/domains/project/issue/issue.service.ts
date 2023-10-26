@@ -16,26 +16,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
-import {
-  FindManyOptions,
-  FindOptionsWhere,
-  In,
-  Like,
-  Not,
-  Raw,
-  Repository,
-} from 'typeorm';
+import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
+import { In, Like, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { TimeRange } from '@/common/dtos';
-import { CountByProjectIdDto } from '@/domains/feedback/dtos';
-
-import {
-  CreateIssueDto,
-  FindByIssueIdDto,
-  FindIssuesByProjectIdDto,
-  UpdateIssueDto,
-} from './dtos';
+import type { TimeRange } from '@/common/dtos';
+import type { CountByProjectIdDto } from '@/domains/feedback/dtos';
+import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
+import { CreateIssueDto, UpdateIssueDto } from './dtos';
 import {
   IssueInvalidNameException,
   IssueNameDuplicatedException,
@@ -128,6 +116,13 @@ export class IssueService {
   async findById({ issueId }: FindByIssueIdDto) {
     const issue = await this.repository.findOneBy({ id: issueId });
     if (!issue) throw new IssueNotFoundException();
+
+    return issue;
+  }
+
+  async findByName({ name }: { name: string }) {
+    const issue = await this.repository.findOneBy({ name });
+
     return issue;
   }
 
@@ -160,14 +155,9 @@ export class IssueService {
   }
 
   @Transactional()
-  async update({
-    issueId,
-    name,
-    description,
-    status,
-    externalIssueId,
-  }: UpdateIssueDto) {
-    await this.findById({ issueId });
+  async update(dto: UpdateIssueDto) {
+    const { issueId, name } = dto;
+    const issue = await this.findById({ issueId });
 
     if (
       await this.repository.findOne({
@@ -177,10 +167,7 @@ export class IssueService {
     ) {
       throw new IssueInvalidNameException('Duplicated name');
     }
-    await this.repository.update(
-      { id: issueId },
-      { id: issueId, name, description, status, externalIssueId },
-    );
+    await this.repository.save(Object.assign(issue, dto));
   }
 
   @Transactional()

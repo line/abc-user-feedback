@@ -32,7 +32,6 @@ import { FeedbackService } from '@/domains/feedback/feedback.service';
 import { CurrentUser } from '@/domains/user/decorators';
 import { UserDto } from '@/domains/user/dtos';
 import { SuperUser } from '@/domains/user/super-user.decorator';
-
 import { IssueService } from '../issue/issue.service';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';

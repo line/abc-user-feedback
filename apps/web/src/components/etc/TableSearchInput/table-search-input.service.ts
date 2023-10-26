@@ -16,8 +16,7 @@
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/constants/dayjs-format';
-
-import { SearchItemType } from './TableSearchInput';
+import type { SearchItemType } from './TableSearchInput';
 
 export const strToObj = (input: string, searchItems: SearchItemType[]) => {
   const splitValues = input.split(',');
@@ -30,6 +29,7 @@ export const strToObj = (input: string, searchItems: SearchItemType[]) => {
 
   for (const mergedValue of mergedValues) {
     const [name, value] = mergedValue.split(':').map((v) => v.trim());
+    if (!name || !value) continue;
 
     const column = searchItems.find((column) => column.name === name);
 
@@ -47,11 +47,12 @@ export const strValueToObj = (value: string, searchItems: SearchItemType) => {
   switch (searchItems.format) {
     case 'boolean':
       return strToBoolean(value);
-    case 'date':
+    case 'date': {
       const [gte, lt] = value
         .split('~')
         .map((v) => dayjs(v, { format: DATE_FORMAT }).toDate());
       return { gte, lt };
+    }
     case 'issue':
     case 'issue_status':
     case 'select':
@@ -70,7 +71,7 @@ export const objToStr = (
     .map(([key, value]) => {
       const column = searchItems.find((column) => column.key === key);
 
-      if (!column) return ``;
+      if (!column) return;
       const { name } = column;
 
       switch (column.format) {
@@ -87,10 +88,19 @@ export const objToStr = (
             return '';
           }
         case 'issue':
-          const issueName = Array.isArray(value)
-            ? column.options?.find((v) => v.id === value[0])?.name
-            : value?.name ?? value;
-          return `${name}:${issueName}`;
+          if (Array.isArray(value)) {
+            const issueName = column.options?.find((v) => v.id === value[0])
+              ?.name;
+            return `${name}:${issueName}`;
+          } else if (value?.name) {
+            const issueName = value?.name;
+            return `${name}:${issueName}`;
+          } else {
+            const issueName =
+              column.options?.find((v) => v.id === parseInt(value))?.name ??
+              value;
+            return `${name}:${issueName}`;
+          }
         case 'issue_status':
         case 'select':
         case 'multiSelect':
@@ -99,6 +109,7 @@ export const objToStr = (
           return `${name}:${value}`;
       }
     })
+    .filter((v) => !!v)
     .join(',');
 };
 
@@ -137,29 +148,32 @@ export const objToQuery = (
               };
             }
             break;
-          case 'issue_status':
+          case 'issue_status': {
             const statusId =
               value?.id ?? column.options?.find((v) => v.name === value)?.key;
             result[key] = statusId;
             break;
-          case 'issue':
+          }
+          case 'issue': {
             const issueId =
               value?.id ?? column.options?.find((v) => v.name === value)?.id;
             result[key] = [issueId];
             break;
-          case 'multiSelect':
+          }
+          case 'multiSelect': {
             const optionKey1 =
               value?.key ?? column.options?.find((v) => v.name === value)?.key;
             if (!optionKey1) break;
             result[key] = [optionKey1];
             break;
-          case 'select':
+          }
+          case 'select': {
             const optionKey2 =
               value?.key ?? column.options?.find((v) => v.name === value)?.key;
             if (!optionKey2) break;
             result[key] = optionKey2;
             break;
-
+          }
           default:
             result[key] = value;
             break;

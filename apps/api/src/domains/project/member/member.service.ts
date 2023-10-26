@@ -19,7 +19,8 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { RoleService } from '../role/role.service';
-import { CreateMemberDto, FindByProjectIdDto, UpdateMemberDto } from './dtos';
+import type { FindByProjectIdDto } from './dtos';
+import { CreateMemberDto, UpdateMemberDto } from './dtos';
 import {
   MemberAlreadyExistsException,
   MemberNotFoundException,
@@ -57,10 +58,9 @@ export class MemberService {
     });
     if (member) throw new MemberAlreadyExistsException();
 
-    return await this.repository.save({
-      role: { id: roleId },
-      user: { id: userId },
-    });
+    const newMember = MemberEntity.from({ roleId, userId });
+
+    return await this.repository.save(newMember);
   }
 
   @Transactional()
@@ -75,7 +75,7 @@ export class MemberService {
     if (member.role.project.id !== role.project.id) {
       throw new MemberUpdateRoleNotMatchedProjectException();
     }
-    await this.repository.update(member.id, { id: member.id, role });
+    await this.repository.save(Object.assign(member, { role }));
   }
 
   @Transactional()

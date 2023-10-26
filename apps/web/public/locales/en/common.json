@@ -24,7 +24,9 @@
     },
     "reset-password": {
       "title": "Resest Password",
-      "button": { "send-email": "Send email" }
+      "button": {
+        "send-email": "Send email"
+      }
     }
   },
   "link": {
@@ -68,11 +70,11 @@
       }
     },
     "feedback": {
-      "title": "Feedback Management",
+      "title": "Feedback",
       "column-setting": "Column Setting",
       "issue-cell": {
         "issue-list": "Issue list",
-        "register-issue": "Reigster issue",
+        "register-issue": "Register issue",
         "create-issue": "Create issue",
         "input-issue": "Input issue",
         "delete-issue": "Delete issue"
@@ -99,7 +101,7 @@
       }
     },
     "issue": {
-      "title": "Issue Management",
+      "title": "Issue",
       "setting": "Issue Setting",
       "dialog": {
         "delete-issue": {
@@ -114,14 +116,12 @@
         "tenant-info": "Tenant Information",
         "sign-up-mgmt": "Login & Signup Management",
         "user-mgmt": "User Management",
-
         "project-info": "Project Information",
         "member-mgmt": "Member Management",
         "role-mgmt": "Role Management",
         "api-key-mgmt": "API Key Management",
         "ticket-mgmt": "Issue Tracker Management",
         "delete-project": "Delete Project",
-
         "channel-info": "Channel Information",
         "field-mgmt": "Field Management",
         "delete-channel": "Delete Channel"
@@ -164,7 +164,9 @@
         "preview-description": "You can check it after selecting <preview>Preview</preview>."
       },
       "dialog": {
-        "edit-user": { "title": "Edit User" },
+        "edit-user": {
+          "title": "Edit User"
+        },
         "delete-project": {
           "title": "Delete Project",
           "description": "Deleting a project will delete all issue/feedback data.\nPlease enter the text below to proceed with the deletion."
@@ -193,14 +195,22 @@
           "title": "Edit Member",
           "description": "Role varies from the menu accessible to functions available.\nPlease check the member and select the correct Role."
         },
-        "register-member": { "title": "Register Member" },
+        "register-member": {
+          "title": "Register Member"
+        },
         "delete-member": {
           "title": "Delete Member",
           "description": "Are you sure you want to delete the Member?"
         },
-        "add-field": { "title": "Add Field" },
-        "edit-field": { "title": "Edit Field" },
-        "invite-user": { "title": "Invite User" }
+        "add-field": {
+          "title": "Add Field"
+        },
+        "edit-field": {
+          "title": "Edit Field"
+        },
+        "invite-user": {
+          "title": "Invite User"
+        }
       }
     }
   },
@@ -253,7 +263,9 @@
     "date": {
       "today": "Today",
       "yesterday": "Yesterday",
-      "before-days": "Before {{day, number}} days"
+      "before-days": "Before {{day, number}} days",
+      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days",
+      "all-dates": "The entire period"
     },
     "equal-search": "Equal",
     "like-search": "Like"
@@ -261,7 +273,7 @@
   "toast": {
     "sign-in": "Login Successful",
     "register": "Registration Completed",
-    "delete": "Deleted Completed",
+    "delete": "Deletion Completed",
     "save": "Saved",
     "invite": "Invitation Completed",
     "active": "Activation",

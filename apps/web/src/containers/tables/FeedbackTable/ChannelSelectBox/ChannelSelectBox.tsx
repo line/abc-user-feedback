@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
+import { Icon, Tooltip } from '@ufb/ui';
 
 import { useChannels } from '@/hooks';
-
+import { getDescriptionStr } from '@/utils/description-string';
 import useFeedbackTable from '../feedback-table.context';
 
 interface IProps extends React.PropsWithChildren {
@@ -28,20 +28,23 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
 
   const { data: channels } = useChannels(projectId);
   return (
-    <div className="flex items-center gap-2 flex-wrap">
+    <div className="flex flex-wrap items-center gap-2">
       {channels?.items.map((channel) => (
         <div
           key={channel.id}
           onClick={() => onChangeChannel(channel.id)}
           className={[
-            'flex items-center gap-2 min-w-[136px] border rounded px-3 py-2.5 cursor-pointer h-10',
+            'flex h-10 min-w-[136px] cursor-pointer items-center justify-between gap-2 rounded border px-3 py-2.5',
             channel.id === channelId ? 'border-fill-primary' : 'opacity-50',
           ].join(' ')}
         >
-          <div className="bg-fill-tertiary rounded-sm p-1 inline-flex">
-            <Icon name="ChannelFill" size={12} className="text-secondary" />
+          <div className="flex items-center gap-2">
+            <div className="bg-fill-tertiary inline-flex rounded-sm p-1">
+              <Icon name="ChannelFill" size={12} className="text-secondary" />
+            </div>
+            <span>{channel.name}</span>
           </div>
-          <span>{channel.name}</span>
+          <Tooltip description={getDescriptionStr(channel.description)} />
         </div>
       ))}
     </div>

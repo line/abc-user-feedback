@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Dispatch, SetStateAction } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Input, Popover, toast } from '@ufb/ui';
-import { Dispatch, SetStateAction } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { Input, Popover, PopoverModalContent, toast } from '@ufb/ui';
+
 import { SelectBox } from '@/components';
-import { PopoverModalContent } from '@/components';
 import { useOAIMutation, useOAIQuery, useUserSearch } from '@/hooks';
 
 interface IForm {
@@ -62,7 +62,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
     query: { type: 'GENERAL' },
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects/{projectId}/members',
     pathParams: { projectId },
@@ -82,16 +82,17 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
     <Popover onOpenChange={setOpen} open={open} modal>
       <PopoverModalContent
         title={t('main.setting.dialog.register-member.title')}
+        cancelText={t('button.cancel')}
         submitButton={{
           type: 'submit',
           form: 'inviteMember',
           children: t('button.confirm'),
-          disabled: isLoading,
+          disabled: isPending,
         }}
       >
         <form
           id="inviteMember"
-          className="flex flex-col gap-5 my-8"
+          className="my-8 flex flex-col gap-5"
           onSubmit={handleSubmit((data) => mutate(data))}
         >
           <Input label="Project" value={projectData?.name} disabled />

@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, IconNameType } from '@ufb/ui';
+import type { IconNameType } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
 
 interface IItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
   iconName: IconNameType;
@@ -32,11 +33,11 @@ const SettingMenuItem: React.FC<IItemProps> = ({
   return (
     <li
       className={[
-        'flex gap-2 items-center px-2 py-1.5 mx-1 my-2 rounded',
+        'mx-1 my-2 flex items-center gap-2 rounded px-2 py-1.5',
         active ? 'bg-fill-tertiary' : '',
         disabled
           ? 'text-tertiary cursor-not-allowed'
-          : 'cursor-pointer hover:bg-fill-secondary',
+          : 'hover:bg-fill-secondary cursor-pointer',
       ].join(' ')}
       {...props}
       onClick={(e) => (!disabled && props.onClick ? props.onClick(e) : {})}

@@ -13,14 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRouter } from 'next/router';
 import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 import { Path } from '@/constants/path';
 import { useChannels } from '@/hooks';
-
-import FeedbackTable from './FeedbackTable';
 import { FeedbackTableProvider } from './feedback-table.context';
+import FeedbackTable from './FeedbackTable';
 
 interface IProps {
   issueId?: number;
@@ -35,8 +34,8 @@ const FeedbackTableWrapper: React.FC<IProps> = (props) => {
 
   const currentChannelId = useMemo(() => {
     if (channelId) return channelId;
-    if (!channels) return undefined;
-    return channels.items?.[0]?.id;
+    if (!channels) return null;
+    return channels.items?.[0]?.id ?? null;
   }, [channelId, channels]);
 
   if (!currentChannelId) return <div>No Channel</div>;

@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ReactNode, forwardRef, useMemo } from 'react';
+import type { ReactNode } from 'react';
+import { forwardRef, useMemo } from 'react';
 
 export interface IInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
@@ -79,12 +80,12 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
           {...rest}
         />
         {leftChildren && (
-          <div className="absolute absolute-y-center left-[14px] flex gap-2 items-center">
+          <div className="absolute-y-center absolute left-[14px] flex items-center gap-2">
             {leftChildren}
           </div>
         )}
         {rightChildren && (
-          <div className="absolute absolute-y-center right-[14px] flex gap-2 items-center">
+          <div className="absolute-y-center absolute right-[14px] flex items-center gap-2">
             {rightChildren}
           </div>
         )}

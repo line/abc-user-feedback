@@ -25,15 +25,10 @@ import {
   isSelectFieldFormat,
 } from '@/common/enums';
 import { validateUnique } from '@/utils/validate-unique';
-
 import { FieldEntity } from '../../channel/field/field.entity';
 import { OptionService } from '../option/option.service';
-import {
-  CreateFieldDto,
-  CreateManyFieldsDto,
-  ReplaceFieldDto,
-  ReplaceManyFieldsDto,
-} from './dtos';
+import type { CreateFieldDto, ReplaceFieldDto } from './dtos';
+import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
 import {
   FieldKeyDuplicatedException,
   FieldNameDuplicatedException,
@@ -143,18 +138,14 @@ export class FieldMySQLService {
 
     const fieldEntities = [];
     for (const field of fieldsToCreate) {
-      const { format, options, ...rest } = field;
-
-      const fieldEntity = await this.repository.save({
-        ...rest,
-        format,
-        channel: { id: channelId },
-      });
-      fieldEntities.push(fieldEntity);
+      const { format, options } = field;
+      const newField = FieldEntity.from({ channelId, ...field });
+      const { id } = await this.repository.save(newField);
+      fieldEntities.push(newField);
 
       if (isSelectFieldFormat(format) && options?.length > 0) {
         await this.optionService.createMany({
-          fieldId: fieldEntity.id,
+          fieldId: id,
           options,
         });
       }
@@ -199,19 +190,17 @@ export class FieldMySQLService {
       if (key !== fieldEntity.key) {
         throw new BadRequestException('field key cannot be changed');
       }
-      await this.repository.update(id, { id, ...rest });
+      await this.repository.save(Object.assign(fieldEntity, rest));
       if (isSelectFieldFormat(format)) {
         await this.optionService.replaceMany({ fieldId: id, options });
       }
     }
 
     const createdFields = [];
-    for (const { format, options, ...rest } of creatingFieldDtos) {
-      const createdField = await this.repository.save({
-        ...rest,
-        format,
-        channel: { id: channelId },
-      });
+    for (const field of creatingFieldDtos) {
+      const { format, options } = field;
+      const newField = FieldEntity.from({ channelId, ...field });
+      const createdField = await this.repository.save(newField);
       createdFields.push(createdField);
 
       if (isSelectFieldFormat(format) && options.length > 0) {

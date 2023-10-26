@@ -1,6 +1,7 @@
 **/node_modules
 **/.next
-**/.turbo
 **/dist
 **/.env*
 !apps/web/.env.build
+docker
+volumes

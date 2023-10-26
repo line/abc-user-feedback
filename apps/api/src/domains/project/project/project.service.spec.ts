@@ -16,23 +16,19 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Like, Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
+import { Like } from 'typeorm';
 
-import { OpensearchRepository } from '@/common/repositories';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
-import { TenantServiceProviders } from '@/domains/tenant/tenant.service.spec';
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import {
-  MockOpensearchRepository,
   createQueryBuilder,
-  getMockProvider,
-  mockRepository,
-} from '@/utils/test-utils';
-
+  MockOpensearchRepository,
+} from '@/test-utils/util-functions';
+import { ProjectServiceProviders } from '../../../test-utils/providers/project.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
-import { RoleServiceProviders } from '../role/role.service.spec';
 import { CreateProjectDto, FindAllProjectsDto, UpdateProjectDto } from './dtos';
 import { FindByProjectIdDto } from './dtos/find-by-project-id.dto';
 import {
@@ -41,21 +37,6 @@ import {
   ProjectNotFoundException,
 } from './exceptions';
 import { ProjectService } from './project.service';
-
-export const ProjectServiceProviders = [
-  ProjectService,
-  {
-    provide: getRepositoryToken(ProjectEntity),
-    useValue: mockRepository(),
-  },
-  {
-    provide: getRepositoryToken(ChannelEntity),
-    useValue: mockRepository(),
-  },
-  getMockProvider(OpensearchRepository, MockOpensearchRepository),
-  ...TenantServiceProviders,
-  ...RoleServiceProviders,
-];
 
 describe('ProjectService Test suite', () => {
   let projectService: ProjectService;
@@ -74,8 +55,8 @@ describe('ProjectService Test suite', () => {
   });
 
   describe('create', () => {
-    const name = faker.datatype.string();
-    const description = faker.datatype.string();
+    const name = faker.string.sample();
+    const description = faker.string.sample();
     let dto: CreateProjectDto;
     beforeEach(() => {
       dto = new CreateProjectDto();
@@ -84,7 +65,7 @@ describe('ProjectService Test suite', () => {
     });
 
     it('creating a project succeeds with valid inputs', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
@@ -96,14 +77,10 @@ describe('ProjectService Test suite', () => {
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
-      expect(projectRepo.save).toBeCalledWith({
-        ...dto,
-        tenant: {},
-      });
       expect(id).toEqual(projectId);
     });
     it('creating a project fails with an existent project name', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValue({ name: dto.name } as ProjectEntity);
@@ -130,7 +107,7 @@ describe('ProjectService Test suite', () => {
     it('finding all projects succeds as a SUPER user', async () => {
       dto.user = new UserDto();
       dto.user.type = UserTypeEnum.SUPER;
-      dto.searchText = faker.datatype.string();
+      dto.searchText = faker.string.sample();
       jest
         .spyOn(projectRepo, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilder);
@@ -145,11 +122,11 @@ describe('ProjectService Test suite', () => {
       });
     });
     it('finding all projects succeds as a GENERAL user', async () => {
-      const userId = faker.datatype.number();
+      const userId = faker.number.int();
       dto.user = new UserDto();
       dto.user.type = UserTypeEnum.GENERAL;
       dto.user.id = userId;
-      dto.searchText = faker.datatype.string();
+      dto.searchText = faker.string.sample();
       jest
         .spyOn(projectRepo, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilder);
@@ -173,7 +150,7 @@ describe('ProjectService Test suite', () => {
       dto = new FindByProjectIdDto();
     });
     it('finding a project by an id succeeds with a valid id', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue({
         id: projectId,
       } as ProjectEntity);
@@ -196,15 +173,15 @@ describe('ProjectService Test suite', () => {
     });
   });
   describe('update ', () => {
-    const description = faker.datatype.string();
+    const description = faker.string.sample();
     let dto: UpdateProjectDto;
     beforeEach(() => {
       dto = new UpdateProjectDto();
       dto.description = description;
     });
     it('updating a project succeeds with valid inputs', async () => {
-      const projectId = faker.datatype.number();
-      const name = faker.datatype.string();
+      const projectId = faker.number.int();
+      const name = faker.string.sample();
       dto.name = name;
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue({
         id: projectId,
@@ -213,17 +190,17 @@ describe('ProjectService Test suite', () => {
         .spyOn(projectRepo, 'findOne')
         .mockResolvedValue(null as ProjectEntity);
       jest
-        .spyOn(projectRepo, 'update')
+        .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
 
       await projectService.update(dto);
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(projectRepo.findOne).toBeCalledTimes(1);
-      expect(projectRepo.update).toBeCalledTimes(1);
+      expect(projectRepo.save).toBeCalledTimes(1);
     });
     it('updating a project fails with a duplicate name', async () => {
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
       const name = 'DUPLICATE_NAME';
       dto.name = name;
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue({
@@ -233,7 +210,7 @@ describe('ProjectService Test suite', () => {
         .spyOn(projectRepo, 'findOne')
         .mockResolvedValue({ name } as ProjectEntity);
       jest
-        .spyOn(projectRepo, 'update')
+        .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
 
       await expect(projectService.update(dto)).rejects.toThrowError(
@@ -242,16 +219,16 @@ describe('ProjectService Test suite', () => {
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(projectRepo.findOne).toBeCalledTimes(1);
-      expect(projectRepo.update).not.toBeCalled();
+      expect(projectRepo.save).not.toBeCalled();
     });
   });
   describe('deleteById', () => {
     it('deleting a project succeeds with a valid id', async () => {
-      const projectId = faker.datatype.number();
-      const channelCount = faker.datatype.number({ min: 1, max: 10 });
+      const projectId = faker.number.int();
+      const channelCount = faker.number.int({ min: 1, max: 10 });
       jest.spyOn(channelRepo, 'find').mockResolvedValue(
         Array(channelCount).fill({
-          id: faker.datatype.number(),
+          id: faker.number.int(),
         }) as ChannelEntity[],
       );
       jest.spyOn(projectRepo, 'remove');

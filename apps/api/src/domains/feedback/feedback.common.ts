@@ -14,8 +14,7 @@
  * under the License.
  */
 import { FieldFormatEnum, SortMethodEnum } from '@/common/enums';
-
-import { FieldEntity } from '../channel/field/field.entity';
+import type { FieldEntity } from '../channel/field/field.entity';
 
 export function isInvalidSortMethod(method: SortMethodEnum) {
   return ![SortMethodEnum.ASC, SortMethodEnum.DESC].includes(method);

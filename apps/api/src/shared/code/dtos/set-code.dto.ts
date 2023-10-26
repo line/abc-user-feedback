@@ -13,10 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { UserDto } from '@/domains/user/dtos';
-import { UserTypeEnum } from '@/domains/user/entities/enums';
-
-import { CodeTypeEnum } from '../code-type.enum';
+import type { UserDto } from '@/domains/user/dtos';
+import type { UserTypeEnum } from '@/domains/user/entities/enums';
+import type { CodeTypeEnum } from '../code-type.enum';
 
 export type SetCodeDto =
   | SetCodeEmailVerificationDto

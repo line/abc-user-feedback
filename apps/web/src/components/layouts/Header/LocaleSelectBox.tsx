@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Listbox } from '@headlessui/react';
-import { Icon } from '@ufb/ui';
-import { setCookie } from 'cookies-next';
-import { useRouter } from 'next/router';
 import { useCallback } from 'react';
+import { useRouter } from 'next/router';
+import { Listbox } from '@headlessui/react';
+import { setCookie } from 'cookies-next';
+
+import { Icon } from '@ufb/ui';
 
 interface IProps extends React.PropsWithChildren {}
 
@@ -39,7 +40,7 @@ const LocaleSelectBox: React.FC<IProps> = () => {
       value={router.locale}
       onChange={(v) => onToggleLanguageClick(v)}
     >
-      <Listbox.Button className="btn btn-sm btn-secondary px-2 min-w-0">
+      <Listbox.Button className="btn btn-sm btn-secondary min-w-0 px-2">
         {({ value }) => (
           <>
             <Icon name="GlobeStroke" size={16} className="mr-1" />
@@ -47,7 +48,7 @@ const LocaleSelectBox: React.FC<IProps> = () => {
           </>
         )}
       </Listbox.Button>
-      <Listbox.Options className="absolute bg-primary w-full mt-1 z-10 rounded border">
+      <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full rounded border">
         {router.locales
           ?.filter((v) => v !== 'default')
           .map((v) => (
@@ -56,7 +57,7 @@ const LocaleSelectBox: React.FC<IProps> = () => {
               value={v}
               className={({ selected }) =>
                 [
-                  'select-none p-2 cursor-pointer hover:bg-secondary uppercase text-center font-extrabold',
+                  'hover:bg-secondary cursor-pointer select-none p-2 text-center font-extrabold uppercase',
                   selected ? 'font-bold' : 'font-normal',
                 ].join(' ')
               }

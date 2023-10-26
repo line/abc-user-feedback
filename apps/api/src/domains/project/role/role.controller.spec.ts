@@ -15,13 +15,13 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
 import {
-  TestConfigs,
   getMockProvider,
   getRandomEnumValue,
-} from '@/utils/test-utils';
-
+  MockDataSource,
+} from '@/test-utils/util-functions';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import { PermissionEnum } from './permission.enum';
 import { RoleController } from './role.controller';
@@ -40,8 +40,10 @@ describe('Role Controller', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
-      providers: [getMockProvider(RoleService, MockRoleService)],
+      providers: [
+        getMockProvider(RoleService, MockRoleService),
+        getMockProvider(DataSource, MockDataSource),
+      ],
       controllers: [RoleController],
     }).compile();
     controller = module.get(RoleController);
@@ -55,16 +57,16 @@ describe('Role Controller', () => {
   });
 
   it('getAllRolesByProjectId', async () => {
-    const total = faker.datatype.number({ min: 0, max: 10 });
+    const total = faker.number.int({ min: 0, max: 10 });
     const roles = Array.from({ length: total }).map(() => ({
-      _id: faker.datatype.number(),
-      id: faker.datatype.number(),
-      name: faker.datatype.string(),
+      _id: faker.number.int(),
+      id: faker.number.int(),
+      name: faker.string.sample(),
       permissions: [getRandomEnumValue(PermissionEnum)],
-      __v: faker.datatype.number({ max: 100, min: 0 }),
-      [faker.datatype.string()]: faker.datatype.string(),
+      __v: faker.number.int({ max: 100, min: 0 }),
+      [faker.string.sample()]: faker.string.sample(),
     }));
-    const projectId = faker.datatype.number();
+    const projectId = faker.number.int();
     jest.spyOn(MockRoleService, 'findByProjectId').mockResolvedValue({
       roles,
       total,
@@ -85,7 +87,7 @@ describe('Role Controller', () => {
 
   it('createRole', async () => {
     const dto = new CreateRoleDto();
-    const projectId = faker.datatype.number();
+    const projectId = faker.number.int();
 
     await controller.createRole(projectId, dto);
 
@@ -95,8 +97,8 @@ describe('Role Controller', () => {
 
   it('updateRole', async () => {
     const dto = new UpdateRoleDto();
-    const id = faker.datatype.number();
-    const projectId = faker.datatype.number();
+    const id = faker.number.int();
+    const projectId = faker.number.int();
 
     await controller.updateRole(projectId, id, dto);
 
@@ -105,7 +107,7 @@ describe('Role Controller', () => {
   });
 
   it('deleteRole', async () => {
-    const id = faker.datatype.number();
+    const id = faker.number.int();
 
     await controller.deleteRole(id);
 

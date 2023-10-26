@@ -21,8 +21,8 @@ const TableLoadingRow: React.FC<IProps> = ({ colSpan }) => {
   return (
     <tr>
       <td colSpan={colSpan} style={{ padding: 0, height: 0 }}>
-        <div className="relative w-full bg-gray-200 rounded">
-          <div className={'top-0 h-1 rounded w-full relative loading'} />
+        <div className="relative w-full rounded bg-gray-200">
+          <div className="loading relative top-0 h-1 w-full rounded" />
         </div>
       </td>
     </tr>

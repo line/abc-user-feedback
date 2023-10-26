@@ -11,7 +11,6 @@ module.exports = {
   },
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
-    '../../node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
     require('path').join(__dirname, '../../packages/ufb-ui/src/**/*.{ts,tsx}'),
   ],
   plugins: [

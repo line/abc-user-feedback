@@ -20,14 +20,9 @@ import { Like, Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { isSelectFieldFormat } from '@/common/enums';
-
 import { ChannelEntity } from './channel.entity';
-import {
-  CreateChannelDto,
-  FindAllChannelsByProjectIdDto,
-  FindByChannelIdDto,
-  UpdateChannelDto,
-} from './dtos';
+import type { FindAllChannelsByProjectIdDto, FindByChannelIdDto } from './dtos';
+import { CreateChannelDto, UpdateChannelDto } from './dtos';
 import {
   ChannelAlreadyExistsException,
   ChannelInvalidNameException,
@@ -91,7 +86,7 @@ export class ChannelMySQLService {
 
   @Transactional()
   async update(channelId: number, { name, description }: UpdateChannelDto) {
-    await this.findById({ channelId });
+    const channel = await this.findById({ channelId });
 
     if (
       await this.repository.findOne({
@@ -101,11 +96,10 @@ export class ChannelMySQLService {
     ) {
       throw new ChannelInvalidNameException('Duplicate name');
     }
-    await this.repository.update(channelId, {
-      id: channelId,
-      name,
-      description,
-    });
+
+    channel.name = name;
+    channel.description = description;
+    await this.repository.save(channel);
   }
 
   @Transactional()

@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { randomBytes } from 'crypto';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { randomBytes } from 'crypto';
+import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -66,11 +67,26 @@ export class ApiKeyService {
 
   @Transactional()
   async softDeleteById(id: number) {
-    await this.repository.softRemove({ id });
+    const apiKey = await this.repository.findOne({
+      where: {
+        id,
+      },
+    });
+
+    await this.repository.save(
+      Object.assign(apiKey, { deletedAt: dayjs().toDate() }),
+    );
   }
 
   @Transactional()
   async recoverById(id: number) {
-    await this.repository.recover({ id });
+    const apiKey = await this.repository.findOne({
+      where: {
+        id,
+      },
+      withDeleted: true,
+    });
+
+    await this.repository.save(Object.assign(apiKey, { deletedAt: null }));
   }
 }

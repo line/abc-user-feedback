@@ -13,18 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useQuery } from '@tanstack/react-query';
-import axios, { AxiosError } from 'axios';
-import dayjs from 'dayjs';
-import jwtDecode, { JwtPayload } from 'jwt-decode';
-import { useRouter } from 'next/router';
 import { createContext, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { useQuery } from '@tanstack/react-query';
+import type { AxiosError } from 'axios';
+import axios from 'axios';
+import dayjs from 'dayjs';
+import type { JwtPayload } from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import { useSessionStorage } from 'react-use';
 
 import isServer from '@/constants/is-server';
 import { Path } from '@/constants/path';
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
+import type { IFetchError } from '@/types/fetch-error.type';
 
 export type UserTypeEnum = 'SUPER' | 'GENERAL';
 
@@ -43,6 +45,7 @@ export type JwtType = {
 
 interface ISignInOAuthInput {
   code: string;
+  callback_url?: string;
 }
 interface ISignInInput {
   email: string;
@@ -85,9 +88,9 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
   const router = useRouter();
   const [isInitialized, setIsInitialized] = useState(false);
 
-  const { refetch } = useQuery(
-    ['/api/users/{id}', jwt],
-    async () => {
+  const { refetch } = useQuery({
+    queryKey: ['/api/users/{id}', jwt],
+    queryFn: async () => {
       if (!jwt) return;
       const { accessToken } = jwt;
       const { sub, exp } = jwtDecode<JwtPayload>(accessToken);
@@ -110,8 +113,8 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
         setJwt(null);
       }
     },
-    { enabled: !!jwt },
-  );
+    enabled: !!jwt,
+  });
 
   useEffect(() => {
     (async () => {
@@ -124,24 +127,33 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
     })();
   }, []);
 
-  const signIn = useCallback(async (body: ISignInInput) => {
+  const signIn = async (body: ISignInInput) => {
     try {
       const { data } = await axios.post('/api/login', body);
       setJwt(data);
-      router.push({ pathname: Path.MAIN });
+      if (router.query.callback_url) {
+        router.push(router.query.callback_url as string);
+      } else {
+        router.push({ pathname: Path.MAIN });
+      }
     } catch (error) {
       throw (error as AxiosError).response?.data as IFetchError;
     }
-  }, []);
-  const signInOAuth = useCallback(async ({ code }: ISignInOAuthInput) => {
+  };
+
+  const signInOAuth = async ({ code, callback_url }: ISignInOAuthInput) => {
     try {
-      const { data } = await axios.post('/api/oauth', { code });
+      const { data } = await axios.post('/api/oauth', { code, callback_url });
       setJwt(data);
-      router.push({ pathname: Path.MAIN });
+      if (router.query.callback_url) {
+        router.push(router.query.callback_url as string);
+      } else {
+        router.push({ pathname: Path.MAIN });
+      }
     } catch (error) {
       throw (error as AxiosError).response?.data as IFetchError;
     }
-  }, []);
+  };
 
   const signUp = useCallback(async ({ email, password }: ISignUpInput) => {
     await client.post({

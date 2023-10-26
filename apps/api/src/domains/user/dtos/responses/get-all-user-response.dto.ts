@@ -14,10 +14,9 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { PaginationResponseDto } from '@/common/dtos/pagination-response.dto';
-
 import { SignUpMethodEnum, UserTypeEnum } from '../../entities/enums';
 
 class ProjectDto {

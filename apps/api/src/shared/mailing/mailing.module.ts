@@ -16,7 +16,6 @@
 import { Module } from '@nestjs/common';
 
 import { MailerConfigModule } from '@/configs/modules';
-
 import { EmailVerificationMailingService } from './email-verification-mailing.service';
 import { ResetPasswordMailingService } from './reset-password-mailing.service';
 import { UserInvitationMailingService } from './user-invitation-mailing.service';

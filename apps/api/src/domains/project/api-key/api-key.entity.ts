@@ -16,7 +16,6 @@
 import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { ProjectEntity } from '../project/project.entity';
 
 @Entity('api_keys')

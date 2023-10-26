@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import {
   Badge,
   Popover,
@@ -20,10 +23,8 @@ import {
   PopoverHeading,
   PopoverTrigger,
 } from '@ufb/ui';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
-import { OptionType } from '@/types/field.type';
+import type { OptionType } from '@/types/field.type';
 
 interface IProps {
   removeOption: (index: number) => void;
@@ -66,7 +67,7 @@ const OptionDeletePopover: React.FC<IProps> = ({
           {t('main.setting.dialog.delete-option.title')}
         </PopoverHeading>
         <div className="m-5">
-          <p className={'font-14-regular mb-10 whitespace-pre-line'}>
+          <p className="font-14-regular mb-10 whitespace-pre-line">
             {t('main.setting.dialog.delete-option.description')}
           </p>
           <div className="flex justify-end gap-2">
@@ -74,8 +75,8 @@ const OptionDeletePopover: React.FC<IProps> = ({
               {t('button.cancel')}
             </button>
             <button
-              className={'btn btn-primary'}
-              type={'button'}
+              className="btn btn-primary"
+              type="button"
               onClick={() => {
                 if (typeof targetOptionIndex !== 'undefined') {
                   removeOption(targetOptionIndex);

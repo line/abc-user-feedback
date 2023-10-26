@@ -18,7 +18,6 @@ import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { SortMethodEnum } from '@/common/enums';
-
 import { UserTypeEnum } from '../../entities/enums';
 
 class UserOrder {

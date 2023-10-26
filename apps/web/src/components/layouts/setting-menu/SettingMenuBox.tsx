@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Transition } from '@headlessui/react';
 import { useMemo } from 'react';
+import { Transition } from '@headlessui/react';
 
 const boxCN = 'px-3 relative first:pl-0 last:pr-0 ';
 
@@ -39,10 +39,12 @@ const SettingMenuBox: React.FC<IBoxProps> = ({
       show={show}
       className={`${boxCN} ${flexCN}`}
       enter="transition-all duration-500"
-      enterTo={'px-3 opacity-100 overflow-hidden ' + transitionFlexCN}
+      enterTo={['px-3 opacity-100 overflow-hidden', transitionFlexCN].join(' ')}
       enterFrom="flex-[0] px-0 opacity-0 overflow-hidden"
       leave="transition-all duration-500"
-      leaveFrom={'px-3 opacity-100 overflow-hidden ' + transitionFlexCN}
+      leaveFrom={['px-3 opacity-100 overflow-hidden', transitionFlexCN].join(
+        ' ',
+      )}
       leaveTo="flex-[0] px-0 opacity-0 overflow-hidden"
     >
       {children}

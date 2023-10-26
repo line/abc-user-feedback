@@ -15,29 +15,31 @@
  */
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import dayjs from 'dayjs';
 import { ClsService } from 'nestjs-cls';
-import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
+import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Brackets, QueryFailedError, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { TimeRange } from '@/common/dtos';
+import type { TimeRange } from '@/common/dtos';
 import { FieldFormatEnum, FieldTypeEnum, SortMethodEnum } from '@/common/enums';
-import { ClsServiceType } from '@/types/cls-service.type';
-
+import type { ClsServiceType } from '@/types/cls-service.type';
 import { ChannelEntity } from '../channel/channel/channel.entity';
-import { FieldEntity } from '../channel/field/field.entity';
+import type { FieldEntity } from '../channel/field/field.entity';
 import { OptionEntity } from '../channel/option/option.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
-import {
-  AddIssueDto,
+import type {
   CountByProjectIdDto,
-  CreateFeedbackMySQLDto,
   DeleteByIdsDto,
   FindFeedbacksByChannelIdDto,
+} from './dtos';
+import {
+  AddIssueDto,
+  CreateFeedbackMySQLDto,
   RemoveIssueDto,
   UpdateFeedbackMySQLDto,
 } from './dtos';
-import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
 
@@ -287,6 +289,7 @@ export class FeedbackMySQLService {
 
           return query;
         },
+        updatedAt: () => `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
       })
       .where('id = :feedbackId', { feedbackId })
       .execute();
@@ -309,10 +312,14 @@ export class FeedbackMySQLService {
 
       this.cls.set('addIssueInFeedback', { feedbackId, issueId });
 
-      await this.feedbackRepository.save(feedback);
+      await this.feedbackRepository.save({
+        ...feedback,
+        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      });
 
       await this.issueRepository.update(dto.issueId, {
         feedbackCount: () => 'feedback_count + 1',
+        updatedAt: () => `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
       });
     } catch (e) {
       if (e instanceof QueryFailedError) {
@@ -342,10 +349,14 @@ export class FeedbackMySQLService {
       feedback.issues = feedback.issues.filter((issue) => issue.id !== issueId);
       this.cls.set('removeIssueInFeedback', { feedbackId, issueId });
 
-      await this.feedbackRepository.save(feedback);
+      await this.feedbackRepository.save({
+        ...feedback,
+        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+      });
 
       await this.issueRepository.update(dto.issueId, {
         feedbackCount: () => 'feedback_count - 1',
+        updatedAt: () => `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
       });
     } catch (e) {
       if (e instanceof QueryFailedError) {

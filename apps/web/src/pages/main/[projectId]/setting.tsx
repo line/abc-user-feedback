@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
-import { getIronSession } from 'iron-session';
+import { useState } from 'react';
 import type { GetServerSideProps } from 'next';
+import { getIronSession } from 'iron-session';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useState } from 'react';
+
+import { Icon } from '@ufb/ui';
 
 import { MainTemplate } from '@/components';
 import { SettingMenuBox } from '@/components/layouts/setting-menu';
@@ -42,9 +43,8 @@ import {
   UserSetting,
 } from '@/containers/setting-menu';
 import { env } from '@/env.mjs';
-import { SettingMenuType } from '@/types/setting-menu.type';
-
-import { NextPageWithLayout } from '../../_app';
+import type { SettingMenuType } from '@/types/setting-menu.type';
+import type { NextPageWithLayout } from '../../_app';
 
 interface IProps {
   projectId: number;
@@ -92,7 +92,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
   return (
     <>
-      <h1 className="font-24-bold mb-6">{t('main.setting.title')}</h1>
+      <h1 className="font-20-bold mb-6">{t('main.setting.title')}</h1>
       <div className="flex">
         <SettingMenuBox show={showList.includes(0)}>
           <TenantSettingMenu
@@ -121,7 +121,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         {projectId && (
           <SettingMenuBox show={showList.includes(3)} last>
             <button
-              className="icon-btn icon-btn-secondary icon-btn-xs icon-btn-rounded absolute top-[40px] -translate-y-1/2 left-[0.1rem] z-10 border shadow"
+              className="icon-btn icon-btn-secondary icon-btn-xs icon-btn-rounded absolute left-[0.1rem] top-[40px] z-10 -translate-y-1/2 border shadow"
               onClick={onClickReset}
             >
               <Icon name="ArrowRight" />

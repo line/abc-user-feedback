@@ -13,12 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { toast } from '@ufb/ui';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { toast } from '@ufb/ui';
+
 import { SettingMenuTemplate } from '@/components';
 import { useOAIMutation, useOAIQuery } from '@/hooks';
+import type { PermissionType } from '@/types/permission.type';
 import {
   ChannelFieldPermissionList,
   ChannelInfoPermissionList,
@@ -27,7 +29,6 @@ import {
   FeedbackPermissionText,
   IssuePermissionList,
   IssuePermissionText,
-  PermissionType,
   ProjectApiKeyPermissionList,
   ProjectInfoPermissionList,
   ProjectMemberPermissionList,
@@ -35,7 +36,6 @@ import {
   ProjectRolePermissionList,
   ProjectTrackerPermissionList,
 } from '@/types/permission.type';
-
 import AddRoleDialog from './AddRoleDialog';
 import PermissionRows from './PermissionRows';
 import RoleSettingHead from './RoleSettingHead';

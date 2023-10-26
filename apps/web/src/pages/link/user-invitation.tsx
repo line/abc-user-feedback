@@ -13,23 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, TextInput, toast } from '@ufb/ui';
+import { useMemo } from 'react';
 import type { GetStaticProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { Icon, TextInput, toast } from '@ufb/ui';
 
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
-
-import { NextPageWithLayout } from '../_app';
+import type { NextPageWithLayout } from '../_app';
 
 interface IForm {
   password: string;
@@ -63,7 +63,7 @@ const UserInvitationPage: NextPageWithLayout = () => {
     defaultValues,
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/auth/signUp/invitation',
     queryOptions: {
@@ -85,19 +85,19 @@ const UserInvitationPage: NextPageWithLayout = () => {
   return (
     <AuthTemplate>
       <div className="mb-12">
-        <div className="flex gap-0.5 mb-2">
+        <div className="mb-2 flex gap-0.5">
           <Image
             src="/assets/images/logo.svg"
             alt="logo"
             width={12}
             height={12}
           />
-          <Icon name="Title" className="w-[62px] h-[12px]" />
+          <Icon name="Title" className="h-[12px] w-[62px]" />
         </div>
         <h1 className="font-24-bold">{t('link.user-invitation.title')}</h1>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4 mb-6">
+        <div className="mb-6 space-y-4">
           <TextInput
             label="Email"
             placeholder={t('input.placeholder.email')}
@@ -132,7 +132,7 @@ const UserInvitationPage: NextPageWithLayout = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={isLoading}
+            disabled={isPending}
           >
             {t('button.setting')}
           </button>

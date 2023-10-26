@@ -13,9 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { MouseEventHandler, useMemo } from 'react';
+import type { MouseEventHandler } from 'react';
+import { useMemo } from 'react';
 
-import { Icon, IconNameType } from '../Icon';
+import type { IconNameType } from '../Icon';
+import { Icon } from '../Icon';
 
 type ColorType =
   | 'red'
@@ -150,7 +152,7 @@ export const Badge: React.FC<IProps> = (props) => {
   return (
     <div
       className={[
-        'inline-flex items-center rounded-full gap-1',
+        'inline-flex items-center gap-1 rounded-full',
         bgCN,
         fontSize,
         padding,

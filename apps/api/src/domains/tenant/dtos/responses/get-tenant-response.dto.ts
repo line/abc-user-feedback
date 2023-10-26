@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, Type, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 
 export class OAuthConfigResponseDto {
   @Expose()
@@ -82,6 +82,10 @@ export class GetTenantResponseDto {
   @Expose()
   @ApiProperty()
   allowDomains: string[] | null;
+
+  @Expose()
+  @ApiProperty()
+  useEmailVerification: boolean;
 
   @Expose()
   @ApiProperty({ type: OAuthConfigResponseDto, nullable: true })

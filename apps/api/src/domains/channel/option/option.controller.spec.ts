@@ -15,9 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { CreateOptionRequestDto } from './dtos/requests';
 import { OptionController } from './option.controller';
 import { OptionEntity } from './option.entity';
@@ -33,9 +33,11 @@ describe('SelectOptionController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [OptionController],
-      providers: [getMockProvider(OptionService, MockSelectOptionService)],
+      providers: [
+        getMockProvider(OptionService, MockSelectOptionService),
+        getMockProvider(DataSource, MockDataSource),
+      ],
     }).compile();
 
     optionController = module.get<OptionController>(OptionController);
@@ -46,14 +48,14 @@ describe('SelectOptionController', () => {
     jest
       .spyOn(MockSelectOptionService, 'findByFieldId')
       .mockReturnValue(options);
-    const fieldId = faker.datatype.number();
+    const fieldId = faker.number.int();
     await optionController.getOptions(fieldId);
     expect(MockSelectOptionService.findByFieldId).toBeCalledTimes(1);
   });
   it('creaetOption', async () => {
-    const fieldId = faker.datatype.number();
+    const fieldId = faker.number.int();
     const dto = new CreateOptionRequestDto();
-    dto.name = faker.datatype.string();
+    dto.name = faker.string.sample();
     await optionController.createOption(fieldId, dto);
     expect(MockSelectOptionService.create).toBeCalledTimes(1);
   });

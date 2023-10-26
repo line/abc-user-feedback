@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, toast } from '@ufb/ui';
+
 import { useOAIMutation, usePermissions } from '@/hooks';
-import { IssueType } from '@/types/issue.type';
+import type { IssueType } from '@/types/issue.type';
 
 interface IProps {
   issue: IssueType;
@@ -36,7 +37,7 @@ const IssueSetting: React.FC<IProps> = ({
   const { t } = useTranslation();
   const perms = usePermissions();
 
-  const { mutate: update, isLoading: updateLoading } = useOAIMutation({
+  const { mutate: update, isPending: updatePending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/issues/{issueId}',
     pathParams: { issueId: issue.id, projectId },
@@ -51,7 +52,7 @@ const IssueSetting: React.FC<IProps> = ({
     },
   });
 
-  const { mutate: deleteIssue, isLoading: deleteIssueLoading } = useOAIMutation(
+  const { mutate: deleteIssue, isPending: deleteIssuePending } = useOAIMutation(
     {
       method: 'delete',
       path: '/api/projects/{projectId}/issues/{issueId}',
@@ -72,7 +73,7 @@ const IssueSetting: React.FC<IProps> = ({
   return (
     <div className="absolute cursor-default">
       <div className="fixed inset-0" onClick={onClose} />
-      <ul className="absolute bg-primary w-[200px] border rounded">
+      <ul className="bg-primary absolute w-[200px] rounded border">
         <li className="px-3 py-1.5">
           <input
             className="input input-sm"
@@ -81,18 +82,18 @@ const IssueSetting: React.FC<IProps> = ({
             onKeyDown={(e) => {
               if (e.key === 'Enter') update({ ...issue, name: inputIssueName });
             }}
-            disabled={!perms.includes('issue_update') || updateLoading}
+            disabled={!perms.includes('issue_update') || updatePending}
           />
         </li>
         <li
           className={[
-            'm-1 p-2 flex items-center gap-2 rounded-sm hover:bg-fill-quaternary cursor-pointer',
-            !perms.includes('issue_delete') || deleteIssueLoading
-              ? 'cursor-not-allowed text-tertiary'
-              : 'cursor-pointer text-primary',
+            'hover:bg-fill-quaternary m-1 flex cursor-pointer items-center gap-2 rounded-sm p-2',
+            !perms.includes('issue_delete') || deleteIssuePending
+              ? 'text-tertiary cursor-not-allowed'
+              : 'text-primary cursor-pointer',
           ].join(' ')}
           onClick={() => {
-            if (!perms.includes('issue_delete') || deleteIssueLoading) return;
+            if (!perms.includes('issue_delete') || deleteIssuePending) return;
             deleteIssue(undefined);
           }}
         >

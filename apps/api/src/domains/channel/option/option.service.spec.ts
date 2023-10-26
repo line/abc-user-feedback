@@ -16,10 +16,9 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-
+import { OptionServiceProviders } from '../../../test-utils/providers/option.service.providers';
 import { OptionEntity } from '../../channel/option/option.entity';
 import {
   CreateManyOptionsDto,
@@ -32,15 +31,7 @@ import {
 } from './exceptions';
 import { OptionService } from './option.service';
 
-export const OptionServiceProviders = [
-  OptionService,
-  {
-    provide: getRepositoryToken(OptionEntity),
-    useValue: mockRepository(),
-  },
-];
-
-describe('SelectOption Test suite', () => {
+describe('Option Test suite', () => {
   let optionService: OptionService;
   let optionRepo: Repository<OptionEntity>;
 
@@ -55,15 +46,15 @@ describe('SelectOption Test suite', () => {
 
   describe('create', () => {
     it('creating an option succeeds with a new valid input', async () => {
-      const fieldId = faker.datatype.number();
+      const fieldId = faker.number.int();
       const dto = new CreateOptionDto();
       dto.fieldId = fieldId;
-      dto.key = faker.datatype.string();
-      dto.name = faker.datatype.string();
+      dto.key = faker.string.sample();
+      dto.name = faker.string.sample();
       jest.spyOn(optionRepo, 'findBy').mockResolvedValue([
         {
-          key: faker.datatype.string(),
-          name: faker.datatype.string(),
+          key: faker.string.sample(),
+          name: faker.string.sample(),
         },
       ] as OptionEntity[]);
       jest.spyOn(optionRepo, 'save');
@@ -82,12 +73,12 @@ describe('SelectOption Test suite', () => {
       });
     });
     it('creating an option succeeds with an inactive input', async () => {
-      const fieldId = faker.datatype.number();
-      const optionId = faker.datatype.number();
+      const fieldId = faker.number.int();
+      const optionId = faker.number.int();
       const dto = new CreateOptionDto();
       dto.fieldId = fieldId;
-      dto.key = faker.datatype.string();
-      dto.name = faker.datatype.string();
+      dto.key = faker.string.sample();
+      dto.name = faker.string.sample();
       jest.spyOn(optionRepo, 'findBy').mockResolvedValue([
         {
           id: optionId,
@@ -95,7 +86,7 @@ describe('SelectOption Test suite', () => {
           name: dto.name,
         },
       ] as OptionEntity[]);
-      jest.spyOn(optionRepo, 'update');
+      jest.spyOn(optionRepo, 'save');
 
       await optionService.create(dto);
 
@@ -103,28 +94,23 @@ describe('SelectOption Test suite', () => {
       expect(optionRepo.findBy).toBeCalledWith({
         field: { id: fieldId },
       });
-      expect(optionRepo.update).toBeCalledTimes(1);
-      expect(optionRepo.update).toBeCalledWith(
-        {
-          id: optionId,
-        },
-        {
-          id: optionId,
-          deletedAt: null,
-          key: dto.key,
-        },
-      );
-      expect(optionRepo.save).not.toBeCalled();
+      expect(optionRepo.save).toBeCalledTimes(1);
+      expect(optionRepo.save).toBeCalledWith({
+        id: optionId,
+        deletedAt: null,
+        key: dto.key,
+        name: dto.name,
+      });
     });
     it('creating an option fais with a duplicate name', async () => {
-      const fieldId = faker.datatype.number();
+      const fieldId = faker.number.int();
       const dto = new CreateOptionDto();
       dto.fieldId = fieldId;
-      dto.key = faker.datatype.string();
-      dto.name = faker.datatype.string();
+      dto.key = faker.string.sample();
+      dto.name = faker.string.sample();
       jest.spyOn(optionRepo, 'findBy').mockResolvedValue([
         {
-          key: faker.datatype.string(),
+          key: faker.string.sample(),
           name: dto.name,
         },
       ] as OptionEntity[]);
@@ -141,15 +127,15 @@ describe('SelectOption Test suite', () => {
       expect(optionRepo.save).not.toBeCalled();
     });
     it('creating an option fais with a duplicate key', async () => {
-      const fieldId = faker.datatype.number();
+      const fieldId = faker.number.int();
       const dto = new CreateOptionDto();
       dto.fieldId = fieldId;
-      dto.key = faker.datatype.string();
-      dto.name = faker.datatype.string();
+      dto.key = faker.string.sample();
+      dto.name = faker.string.sample();
       jest.spyOn(optionRepo, 'findBy').mockResolvedValue([
         {
           key: dto.key,
-          name: faker.datatype.string(),
+          name: faker.string.sample(),
         },
       ] as OptionEntity[]);
       jest.spyOn(optionRepo, 'save');
@@ -168,14 +154,14 @@ describe('SelectOption Test suite', () => {
 
   describe('createMany', () => {
     it('creating many options succeeds with valid inputs', async () => {
-      const fieldId = faker.datatype.number();
+      const fieldId = faker.number.int();
       const dto = new CreateManyOptionsDto();
       dto.fieldId = fieldId;
       dto.options = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(() => ({
-        key: faker.datatype.string(),
-        name: faker.datatype.string(),
+        key: faker.string.sample(),
+        name: faker.string.sample(),
       }));
       jest.spyOn(optionRepo, 'save');
 
@@ -191,13 +177,13 @@ describe('SelectOption Test suite', () => {
       );
     });
     it('creating many options fails with duplicate names', async () => {
-      const fieldId = faker.datatype.number();
+      const fieldId = faker.number.int();
       const dto = new CreateManyOptionsDto();
       dto.fieldId = fieldId;
       dto.options = Array.from({
-        length: faker.datatype.number({ min: 2, max: 10 }),
+        length: faker.number.int({ min: 2, max: 10 }),
       }).map(() => ({
-        key: faker.datatype.string(),
+        key: faker.string.sample(),
         name: 'duplicateName',
       }));
       jest.spyOn(optionRepo, 'save');
@@ -209,14 +195,14 @@ describe('SelectOption Test suite', () => {
       expect(optionRepo.save).not.toBeCalled();
     });
     it('creating many options fails with duplicate keys', async () => {
-      const fieldId = faker.datatype.number();
+      const fieldId = faker.number.int();
       const dto = new CreateManyOptionsDto();
       dto.fieldId = fieldId;
       dto.options = Array.from({
-        length: faker.datatype.number({ min: 2, max: 10 }),
+        length: faker.number.int({ min: 2, max: 10 }),
       }).map(() => ({
         key: 'duplicateKey',
-        name: faker.datatype.string(),
+        name: faker.string.sample(),
       }));
       jest.spyOn(optionRepo, 'save');
 
@@ -229,29 +215,29 @@ describe('SelectOption Test suite', () => {
   });
   describe('replaceMany', () => {
     it('replacing many options succeeds with valid inputs', async () => {
-      const fieldId = faker.datatype.number();
-      const length = faker.datatype.number({ min: 1, max: 10 });
+      const fieldId = faker.number.int();
+      const length = faker.number.int({ min: 1, max: 10 });
       const dto = new ReplaceManyOptionsDto();
       dto.fieldId = fieldId;
       dto.options = Array.from({
         length,
       }).map(() => ({
-        id: faker.datatype.number(),
-        key: faker.datatype.string(),
-        name: faker.datatype.string(),
+        id: faker.number.int(),
+        key: faker.string.sample(),
+        name: faker.string.sample(),
       }));
       jest.spyOn(optionRepo, 'find').mockResolvedValue(
         Array.from({
-          length: faker.datatype.number({ min: 1, max: 10 }),
+          length: faker.number.int({ min: 1, max: 10 }),
         }).map(() => ({
-          id: faker.datatype.number(),
-          key: faker.datatype.string(),
-          name: faker.datatype.string(),
+          id: faker.number.int(),
+          key: faker.string.sample(),
+          name: faker.string.sample(),
           deletedAt: null,
         })) as OptionEntity[],
       );
       jest.spyOn(optionRepo, 'query');
-      jest.spyOn(optionRepo, 'upsert');
+      jest.spyOn(optionRepo, 'save');
 
       await optionService.replaceMany(dto);
 
@@ -261,7 +247,7 @@ describe('SelectOption Test suite', () => {
         withDeleted: true,
       });
       expect(optionRepo.query).toBeCalledTimes(1);
-      expect(optionRepo.upsert).toBeCalledTimes(length);
+      expect(optionRepo.save).toBeCalledTimes(length);
     });
   });
 });

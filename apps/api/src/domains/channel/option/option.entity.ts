@@ -16,7 +16,6 @@
 import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { FieldEntity } from '../field/field.entity';
 
 @Entity('options')
@@ -32,4 +31,22 @@ export class OptionEntity extends CommonEntity {
 
   @Column('varchar')
   key: string;
+
+  static from({
+    fieldId,
+    name,
+    key,
+  }: {
+    fieldId: number;
+    name: string;
+    key: string;
+  }) {
+    const option = new OptionEntity();
+    option.field = new FieldEntity();
+    option.field.id = fieldId;
+    option.name = name;
+    option.key = key;
+
+    return option;
+  }
 }

@@ -13,11 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverTrigger, toast } from '@ufb/ui';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { PopoverModalContent } from '@/components';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/ui';
+
 import { useOAIMutation } from '@/hooks';
 
 interface IProps {
@@ -37,7 +43,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
 
   const [isUsed, setIsUsed] = useState(!deletedAt);
 
-  const { mutate: softDelete, isLoading: softDeleteLoading } = useOAIMutation({
+  const { mutate: softDelete, isPending: softDeletePending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/api-keys/{apiKeyId}/soft',
     pathParams: { apiKeyId, projectId },
@@ -52,7 +58,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
       },
     },
   });
-  const { mutate: recover, isLoading: recoverLoading } = useOAIMutation({
+  const { mutate: recover, isPending: recoverPending } = useOAIMutation({
     method: 'delete',
     path: '/api/projects/{projectId}/api-keys/{apiKeyId}/recover',
     pathParams: { apiKeyId, projectId },
@@ -87,6 +93,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
       <PopoverModalContent
         title={t('main.setting.dialog.edit-api-key.title')}
         description={t('main.setting.dialog.edit-api-key.description')}
+        cancelText={t('button.cancel')}
         icon={{
           name: 'WarningCircleFill',
           className: 'text-orange-primary',
@@ -95,14 +102,14 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
         submitButton={{
           children: t('button.save'),
           disabled:
-            isUsed === !deletedAt || softDeleteLoading || recoverLoading,
+            isUsed === !deletedAt || softDeletePending || recoverPending,
           className: 'btn-primary',
           onClick: () => handleSave(),
         }}
       >
         <p className="input-label">Status</p>
         <div className="flex">
-          <label className="radio-label w-[120px] h-[36px]v">
+          <label className="radio-label h-[36px]v w-[120px]">
             <input
               type="radio"
               name="radio-type"
@@ -112,7 +119,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
             />{' '}
             {t('main.setting.api-key-status.active')}
           </label>
-          <label className="radio-label w-[120px] h-[36px]">
+          <label className="radio-label h-[36px] w-[120px]">
             <input
               type="radio"
               name="radio-type"

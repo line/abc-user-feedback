@@ -15,9 +15,9 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { IssueTrackerController } from './issue-tracker.controller';
 import { IssueTrackerService } from './issue-tracker.service';
 
@@ -32,10 +32,10 @@ describe('IssueTrackerController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [IssueTrackerController],
       providers: [
         getMockProvider(IssueTrackerService, MockIssueTrackerService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
@@ -45,7 +45,7 @@ describe('IssueTrackerController', () => {
   describe('create', () => {
     it('', async () => {
       jest.spyOn(MockIssueTrackerService, 'create');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await issueTrackerController.create(projectId, { data: {} });
       expect(MockIssueTrackerService.create).toBeCalledTimes(1);
@@ -54,7 +54,7 @@ describe('IssueTrackerController', () => {
   describe('findOne', () => {
     it('', async () => {
       jest.spyOn(MockIssueTrackerService, 'findByProjectId');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await issueTrackerController.findOne(projectId);
       expect(MockIssueTrackerService.findByProjectId).toBeCalledTimes(1);
@@ -63,7 +63,7 @@ describe('IssueTrackerController', () => {
   describe('updateOne', () => {
     it('', async () => {
       jest.spyOn(MockIssueTrackerService, 'update');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await issueTrackerController.updateOne(projectId, { data: {} });
       expect(MockIssueTrackerService.update).toBeCalledTimes(1);

@@ -19,12 +19,11 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import MockDate from 'mockdate';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
-import { mockRepository } from '@/utils/test-utils';
-
+import { CodeServiceProviders } from '../../test-utils/providers/code.service.providers';
 import { CodeTypeEnum } from './code-type.enum';
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
@@ -33,11 +32,6 @@ import {
   SetCodeResetPasswordDto,
   SetCodeUserInvitationDto,
 } from './dtos/set-code.dto';
-
-export const CodeServiceProviders = [
-  CodeService,
-  { provide: getRepositoryToken(CodeEntity), useValue: mockRepository() },
-];
 
 describe('CodeService', () => {
   let codeService: CodeService;
@@ -54,7 +48,7 @@ describe('CodeService', () => {
   describe('setCode', () => {
     it('set email verification type', async () => {
       const dto = new SetCodeEmailVerificationDto();
-      dto.key = faker.datatype.string();
+      dto.key = faker.string.sample();
       dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
 
       const code = await codeService.setCode(dto);
@@ -72,7 +66,7 @@ describe('CodeService', () => {
     });
     it('set reset password type', async () => {
       const dto = new SetCodeResetPasswordDto();
-      dto.key = faker.datatype.string();
+      dto.key = faker.string.sample();
       dto.type = CodeTypeEnum.RESET_PASSWORD;
 
       const code = await codeService.setCode(dto);
@@ -90,10 +84,10 @@ describe('CodeService', () => {
     });
     it('set user invitation type with SUPER user type', async () => {
       const dto = new SetCodeUserInvitationDto();
-      dto.key = faker.datatype.string();
+      dto.key = faker.string.sample();
       dto.type = CodeTypeEnum.USER_INVITATION;
       dto.data = {
-        roleId: faker.datatype.number(),
+        roleId: faker.number.int(),
         userType: UserTypeEnum.SUPER,
         invitedBy: new UserDto(),
       };
@@ -113,10 +107,10 @@ describe('CodeService', () => {
     });
     it('set user invitation type with GENERAL user type', async () => {
       const dto = new SetCodeUserInvitationDto();
-      dto.key = faker.datatype.string();
+      dto.key = faker.string.sample();
       dto.type = CodeTypeEnum.USER_INVITATION;
       dto.data = {
-        roleId: faker.datatype.number(),
+        roleId: faker.number.int(),
         userType: UserTypeEnum.GENERAL,
         invitedBy: new UserDto(),
       };
@@ -137,13 +131,13 @@ describe('CodeService', () => {
   });
   describe('verifyCode', () => {
     const codeEntity: CodeEntity = new CodeEntity();
-    const key = faker.datatype.string();
+    const key = faker.string.sample();
     beforeEach(async () => {
-      codeEntity.code = faker.datatype.string(6);
+      codeEntity.code = faker.string.sample(6);
       codeEntity.key = key;
       codeEntity.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
       codeEntity.isVerified = false;
-      codeEntity.id = faker.datatype.number();
+      codeEntity.id = faker.number.int();
       codeEntity.expiredAt = dayjs().add(5, 'minutes').toDate();
     });
     it('verify code with valid code, key, type', async () => {
@@ -156,16 +150,13 @@ describe('CodeService', () => {
         key: codeEntity.key,
         type: codeEntity.type,
       });
-      expect(codeRepo.update).toHaveBeenCalledWith(
-        {
-          id: codeEntity.id,
-        },
-        { id: codeEntity.id, isVerified: true },
+      expect(codeRepo.save).toHaveBeenCalledWith(
+        Object.assign(codeEntity, { isVerified: true }),
       );
     });
     it('verify code with invalid code', async () => {
       const { type } = codeEntity;
-      const invalidCode = faker.datatype.string(6);
+      const invalidCode = faker.string.sample(6);
       jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
 
       await expect(
@@ -178,7 +169,7 @@ describe('CodeService', () => {
     });
     it('verify code with invalid key', async () => {
       const { code, type } = codeEntity;
-      const invalidKey = faker.datatype.string(6);
+      const invalidKey = faker.string.sample(6);
       jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(

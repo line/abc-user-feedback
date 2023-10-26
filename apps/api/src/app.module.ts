@@ -26,7 +26,7 @@ import {
   OpensearchConfigModule,
   TypeOrmConfigModule,
 } from './configs/modules';
-import { mySqlConfigSchema, mysqlConfig } from './configs/mysql.config';
+import { mysqlConfig, mysqlConfigSchema } from './configs/mysql.config';
 import {
   opensearchConfig,
   opensearchSchema,
@@ -82,7 +82,7 @@ const domainModules = [
         ...opensearchSchema.validateSync(config),
         ...smtpConfigSchema.validateSync(config),
         ...jwtConfigSchema.validateSync(config),
-        ...mySqlConfigSchema.validateSync(config),
+        ...mysqlConfigSchema.validateSync(config),
       }),
       validationOptions: { abortEarly: true },
     }),
@@ -91,6 +91,17 @@ const domainModules = [
         transport: { target: 'pino-pretty', options: { singleLine: true } },
         autoLogging: {
           ignore: (req: any) => req.originalUrl === '/api/health',
+        },
+        customLogLevel: (req, res, err) => {
+          if (res.statusCode === 401) {
+            return 'silent';
+          }
+          if (res.statusCode >= 400 && res.statusCode < 500) {
+            return 'warn';
+          } else if (res.statusCode >= 500 || err) {
+            return 'error';
+          }
+          return 'info';
         },
       },
     }),

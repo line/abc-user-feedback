@@ -15,13 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
-import { FastifyReply } from 'fastify';
-import * as XLSX from 'xlsx';
+import type { FastifyReply } from 'fastify';
+import { DataSource } from 'typeorm';
 
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { AuthService } from '../auth/auth.service';
-import { ChannelEntity } from '../channel/channel/channel.entity';
+import type { ChannelEntity } from '../channel/channel/channel.entity';
 import { ChannelService } from '../channel/channel/channel.service';
 import { HistoryService } from '../history/history.service';
 import { UserDto } from '../user/dtos';
@@ -33,18 +32,13 @@ import {
 import { FeedbackController } from './feedback.controller';
 import { FeedbackService } from './feedback.service';
 
-jest.spyOn(XLSX.utils, 'book_new');
-jest.spyOn(XLSX.utils, 'json_to_sheet');
-jest.spyOn(XLSX.utils, 'book_append_sheet');
-jest.spyOn(XLSX, 'write');
-
 const MockFeedbackService = {
   create: jest.fn(),
   findByChannelId: jest.fn(),
   upsertFeedbackItem: jest.fn(),
-  deleteByIds: jest.fn(),
-  findForDownload: jest.fn(),
   updateFeedback: jest.fn(),
+  deleteByIds: jest.fn(),
+  generateFile: jest.fn(),
 };
 const MockAuthService = {
   validateApiKey: jest.fn(),
@@ -61,13 +55,13 @@ describe('FeedbackController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [FeedbackController],
       providers: [
         getMockProvider(FeedbackService, MockFeedbackService),
         getMockProvider(AuthService, MockAuthService),
         getMockProvider(ChannelService, MockChannelService),
         getMockProvider(HistoryService, MockHistoryService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
@@ -75,11 +69,11 @@ describe('FeedbackController', () => {
   });
 
   it('create', async () => {
-    const projectId = faker.datatype.number();
-    const channelId = faker.datatype.number();
+    const projectId = faker.number.int();
+    const channelId = faker.number.int();
     jest
       .spyOn(MockFeedbackService, 'create')
-      .mockResolvedValue({ id: faker.datatype.number() });
+      .mockResolvedValue({ id: faker.number.int() });
     jest.spyOn(MockChannelService, 'findById').mockResolvedValue({
       project: { id: projectId },
     } as ChannelEntity);
@@ -88,11 +82,11 @@ describe('FeedbackController', () => {
     expect(MockFeedbackService.create).toBeCalledTimes(1);
   });
   it('findByChannelId', async () => {
-    const channelId = faker.datatype.number();
+    const channelId = faker.number.int();
 
     const dto = new FindFeedbacksByChannelIdRequestDto(
-      faker.datatype.number(),
-      faker.datatype.number(),
+      faker.number.int(),
+      faker.number.int(),
       {},
     );
 
@@ -100,23 +94,24 @@ describe('FeedbackController', () => {
     expect(MockFeedbackService.findByChannelId).toBeCalledTimes(1);
   });
   it('exportFeedbacks', async () => {
-    const channelId = faker.datatype.number();
+    const channelId = faker.number.int();
     const response = {
       type: jest.fn(),
       header: jest.fn(),
       send: jest.fn(),
     } as unknown as FastifyReply;
     const dto = new ExportFeedbacksRequestDto(
-      faker.datatype.number(),
-      faker.datatype.number(),
+      faker.number.int(),
+      faker.number.int(),
       'csv',
     );
     const userDto = new UserDto();
-    jest
-      .spyOn(MockFeedbackService, 'findForDownload')
-      .mockResolvedValue({ feedbacks: [], fields: [] });
+    jest.spyOn(MockFeedbackService, 'generateFile').mockResolvedValue({
+      streamableFile: { getStream: jest.fn() },
+      feedbackIds: [],
+    });
     jest.spyOn(MockChannelService, 'findById').mockResolvedValue({
-      project: { name: faker.datatype.string() },
+      project: { name: faker.string.sample() },
     } as ChannelEntity);
 
     await feedbackController.exportFeedbacks(
@@ -127,20 +122,20 @@ describe('FeedbackController', () => {
       userDto,
     );
 
-    expect(MockFeedbackService.findForDownload).toBeCalledTimes(1);
+    expect(MockFeedbackService.generateFile).toBeCalledTimes(1);
   });
   it('updateFeedback', async () => {
-    const channelId = faker.datatype.number();
-    const feedbackId = faker.datatype.number();
-    const body = { [faker.datatype.string()]: faker.datatype.string() };
+    const channelId = faker.number.int();
+    const feedbackId = faker.number.int();
+    const body = { [faker.string.sample()]: faker.string.sample() };
 
     await feedbackController.updateFeedback(channelId, feedbackId, body);
     expect(MockFeedbackService.updateFeedback).toBeCalledTimes(1);
   });
 
   it('delete Feedback', async () => {
-    const channelId = faker.datatype.number();
-    const feedbackIds = [faker.datatype.number()];
+    const channelId = faker.number.int();
+    const feedbackIds = [faker.number.int()];
 
     const dto = new DeleteFeedbacksRequestDto();
     dto.feedbackIds = feedbackIds;

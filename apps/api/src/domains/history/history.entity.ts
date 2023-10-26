@@ -16,7 +16,6 @@
 import { Column, Entity, ManyToOne, Relation } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
-
 import { UserEntity } from '../user/entities/user.entity';
 import { HistoryActionEnum } from './history-action.enum';
 import { EntityNameEnum } from './history-entity.enum';
@@ -37,4 +36,28 @@ export class HistoryEntity extends CommonEntity {
 
   @Column('json')
   entity: object;
+
+  static from({
+    userId,
+    entityName,
+    entityId,
+    action,
+    entity,
+  }: {
+    userId: number;
+    entityName: EntityNameEnum;
+    entityId: number;
+    action: HistoryActionEnum;
+    entity: object;
+  }) {
+    const history = new HistoryEntity();
+    history.user = new UserEntity();
+    history.user.id = userId;
+    history.entityName = entityName;
+    history.entityId = entityId;
+    history.action = action;
+    history.entity = entity;
+
+    return history;
+  }
 }

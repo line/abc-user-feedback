@@ -16,12 +16,10 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
-import { mockRepository } from '@/utils/test-utils';
-
+import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
-import { RoleServiceProviders } from '../role/role.service.spec';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
 import {
   MemberAlreadyExistsException,
@@ -30,15 +28,6 @@ import {
 } from './exceptions';
 import { MemberEntity } from './member.entity';
 import { MemberService } from './member.service';
-
-export const MemberServiceProviders = [
-  MemberService,
-  {
-    provide: getRepositoryToken(MemberEntity),
-    useValue: mockRepository(),
-  },
-  ...RoleServiceProviders,
-];
 
 describe('MemberService test suite', () => {
   let memberService: MemberService;
@@ -56,9 +45,9 @@ describe('MemberService test suite', () => {
   });
 
   describe('create', () => {
-    const projectId = faker.datatype.number();
-    const roleId = faker.datatype.number();
-    const userId = faker.datatype.number();
+    const projectId = faker.number.int();
+    const roleId = faker.number.int();
+    const userId = faker.number.int();
     let dto: CreateMemberDto;
     beforeEach(() => {
       dto = new CreateMemberDto();
@@ -101,9 +90,9 @@ describe('MemberService test suite', () => {
   });
 
   describe('update', () => {
-    const projectId = faker.datatype.number();
-    const roleId = faker.datatype.number();
-    const memberId = faker.datatype.number();
+    const projectId = faker.number.int();
+    const roleId = faker.number.int();
+    const memberId = faker.number.int();
     let dto: UpdateMemberDto;
     beforeEach(() => {
       dto = new UpdateMemberDto();
@@ -112,23 +101,25 @@ describe('MemberService test suite', () => {
     });
 
     it('updating a member succeeds with valid inputs', async () => {
-      jest
-        .spyOn(roleRepo, 'findOne')
-        .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      const newRoleId = faker.number.int();
+      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
+        project: { id: projectId },
+        id: newRoleId,
+      } as RoleEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({
         id: memberId,
         role: { id: roleId, project: { id: projectId } },
       } as MemberEntity);
-      jest.spyOn(memberRepo, 'update');
+      jest.spyOn(memberRepo, 'save');
 
       await memberService.update(dto);
 
       expect(roleRepo.findOne).toBeCalledTimes(1);
       expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.update).toBeCalledTimes(1);
-      expect(memberRepo.update).toBeCalledWith(memberId, {
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledWith({
         id: memberId,
-        role: { project: { id: projectId } },
+        role: { id: newRoleId, project: { id: projectId } },
       });
     });
     it('updating a member fails with a nonexistent member', async () => {
@@ -136,7 +127,7 @@ describe('MemberService test suite', () => {
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
-      jest.spyOn(memberRepo, 'update');
+      jest.spyOn(memberRepo, 'save');
 
       await expect(memberService.update(dto)).rejects.toThrowError(
         MemberNotFoundException,
@@ -144,16 +135,16 @@ describe('MemberService test suite', () => {
 
       expect(roleRepo.findOne).toBeCalledTimes(1);
       expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.update).not.toBeCalled();
+      expect(memberRepo.save).not.toBeCalled();
     });
     it('updating a member fails with not matching inputs', async () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({
-        role: { id: roleId, project: { id: faker.datatype.number() } },
+        role: { id: roleId, project: { id: faker.number.int() } },
       } as MemberEntity);
-      jest.spyOn(memberRepo, 'update');
+      jest.spyOn(memberRepo, 'save');
 
       await expect(memberService.update(dto)).rejects.toThrowError(
         MemberUpdateRoleNotMatchedProjectException,
@@ -161,7 +152,7 @@ describe('MemberService test suite', () => {
 
       expect(roleRepo.findOne).toBeCalledTimes(1);
       expect(memberRepo.findOne).toBeCalledTimes(1);
-      expect(memberRepo.update).not.toBeCalled();
+      expect(memberRepo.save).not.toBeCalled();
     });
   });
 });

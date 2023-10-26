@@ -17,7 +17,6 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { MailingModule } from '@/shared/mailing/mailing.module';
-
 import { CodeEntity } from './code.entity';
 import { CodeService } from './code.service';
 

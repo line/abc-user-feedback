@@ -16,21 +16,14 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
-import { OpensearchRepository } from '@/common/repositories';
-import { ProjectServiceProviders } from '@/domains/project/project/project.service.spec';
-import { createFieldDto } from '@/utils/test-util-fixture';
-import {
-  MockOpensearchRepository,
-  getMockProvider,
-  mockRepository,
-} from '@/utils/test-utils';
-
+import { createFieldDto } from '@/test-utils/fixtures';
+import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import { ChannelServiceProviders } from '../../../test-utils/providers/channel.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';
-import { FieldServiceProviders } from '../field/field.service.spec';
 import { ChannelMySQLService } from './channel.mysql.service';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto, FindByChannelIdDto, UpdateChannelDto } from './dtos';
@@ -40,24 +33,12 @@ import {
   ChannelNotFoundException,
 } from './exceptions';
 
-export const ChannelServiceProviders = [
-  ChannelService,
-  ChannelMySQLService,
-  {
-    provide: getRepositoryToken(ChannelEntity),
-    useValue: mockRepository(),
-  },
-  getMockProvider(OpensearchRepository, MockOpensearchRepository),
-  ...ProjectServiceProviders,
-  ...FieldServiceProviders,
-];
-
 const channelFixture = new ChannelEntity();
-channelFixture.id = faker.datatype.number();
-channelFixture.name = faker.datatype.string();
-channelFixture.description = faker.datatype.string();
+channelFixture.id = faker.number.int();
+channelFixture.name = faker.string.sample();
+channelFixture.description = faker.string.sample();
 channelFixture.project = new ProjectEntity();
-channelFixture.project.id = faker.datatype.number();
+channelFixture.project.id = faker.number.int();
 channelFixture.fields = [];
 
 describe('ChannelService', () => {
@@ -79,7 +60,7 @@ describe('ChannelService', () => {
 
   describe('create', () => {
     it('creating a channel succeeds with valid inputs', async () => {
-      const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+      const fieldCount = faker.number.int({ min: 1, max: 10 });
       const dto = new CreateChannelDto();
       dto.name = channelFixture.name;
       dto.description = channelFixture.description;
@@ -92,7 +73,7 @@ describe('ChannelService', () => {
       jest.spyOn(channelRepo, 'save').mockResolvedValue(channelFixture);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
 
       const channel = await channelService.create(dto);
 
@@ -107,11 +88,11 @@ describe('ChannelService', () => {
       });
     });
     it('creating a channel fails with a duplicate name', async () => {
-      const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+      const fieldCount = faker.number.int({ min: 1, max: 10 });
       const dto = new CreateChannelDto();
-      dto.name = faker.datatype.string();
-      dto.description = faker.datatype.string();
-      dto.projectId = faker.datatype.number();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
+      dto.projectId = faker.number.int();
       dto.fields = Array.from({ length: fieldCount }).map(createFieldDto);
       jest
         .spyOn(projectRepo, 'findOneBy')
@@ -140,7 +121,7 @@ describe('ChannelService', () => {
     });
     it('finding by an id fails with a nonexistent id', async () => {
       const dto = new FindByChannelIdDto();
-      dto.channelId = faker.datatype.number();
+      dto.channelId = faker.number.int();
       jest
         .spyOn(channelRepo, 'findOne')
         .mockResolvedValue(null as ChannelEntity);
@@ -155,8 +136,8 @@ describe('ChannelService', () => {
     it('updating succeeds with valid inputs', async () => {
       const channelId = channelFixture.id;
       const dto = new UpdateChannelDto();
-      dto.name = faker.datatype.string();
-      dto.description = faker.datatype.string();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
       jest
         .spyOn(ChannelMySQLService.prototype, 'findById')
         .mockResolvedValue(channelFixture);
@@ -164,9 +145,9 @@ describe('ChannelService', () => {
 
       await channelService.updateInfo(channelId, dto);
 
-      expect(channelRepo.update).toBeCalledTimes(1);
-      expect(channelRepo.update).toHaveBeenCalledWith(channelId, {
-        id: channelId,
+      expect(channelRepo.save).toBeCalledTimes(1);
+      expect(channelRepo.save).toHaveBeenCalledWith({
+        ...channelFixture,
         ...dto,
       });
     });
@@ -174,13 +155,14 @@ describe('ChannelService', () => {
       const channelId = channelFixture.id;
       const dto = new UpdateChannelDto();
       dto.name = channelFixture.name;
-      dto.description = faker.datatype.string();
+      dto.description = faker.string.sample();
       jest
         .spyOn(ChannelMySQLService.prototype, 'findById')
         .mockResolvedValue(channelFixture);
-      jest
-        .spyOn(channelRepo, 'findOne')
-        .mockResolvedValue({ ...channelFixture, id: faker.datatype.number() });
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
+        ...channelFixture,
+        id: faker.number.int(),
+      } as ChannelEntity);
 
       await expect(channelService.updateInfo(channelId, dto)).rejects.toThrow(
         ChannelInvalidNameException,
@@ -190,7 +172,7 @@ describe('ChannelService', () => {
 
   describe('deleteById', () => {
     it('deleting by an id succeeds with a valid id', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const channel = new ChannelEntity();
       channel.id = channelId;
 

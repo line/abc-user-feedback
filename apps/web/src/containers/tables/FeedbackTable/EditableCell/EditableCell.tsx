@@ -13,12 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import dayjs from 'dayjs';
 import { memo, useEffect, useMemo, useState } from 'react';
+import dayjs from 'dayjs';
 import ReactDatePicker from 'react-datepicker';
 
 import { SelectBoxCreatable } from '@/components/etc/SelectBox';
-import { FieldType } from '@/types/field.type';
+import type { FieldType } from '@/types/field.type';
 import useTableStore from '@/zustand/table.store';
 
 interface IProps extends React.PropsWithChildren {
@@ -28,7 +28,7 @@ interface IProps extends React.PropsWithChildren {
   feedbackId: number;
 }
 
-const EditableCell: React.FC<IProps> = (props) => {
+const EditableCell: React.FC<IProps> = memo((props) => {
   const { field, value, isExpanded, feedbackId } = props;
 
   const { editableState, onChangeEditInput } = useTableStore(
@@ -51,8 +51,9 @@ const EditableCell: React.FC<IProps> = (props) => {
       field.format === 'select'
         ? field.options?.find((v) => v.key === value) ?? null
         : field.format === 'multiSelect'
-        ? (value ?? []).map((optionKey: string) =>
-            field.options?.find((v) => v.key === optionKey),
+        ? (value ?? []).map(
+            (optionKey: string) =>
+              field.options?.find((v) => v.key === optionKey),
           )
         : field.format === 'number'
         ? value
@@ -151,6 +152,6 @@ const EditableCell: React.FC<IProps> = (props) => {
       )}
     </div>
   );
-};
+});
 
-export default memo(EditableCell);
+export default EditableCell;

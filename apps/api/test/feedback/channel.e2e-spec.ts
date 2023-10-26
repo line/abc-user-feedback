@@ -14,12 +14,14 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-import { Test, TestingModule } from '@nestjs/testing';
+import type { INestApplication } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
+import type { TestingModule } from '@nestjs/testing';
+import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch/.';
 import request from 'supertest';
-import { DataSource, Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import {
@@ -38,8 +40,11 @@ import { FieldEntity } from '@/domains/channel/field/field.entity';
 import { FIELD_TYPES_TO_MAPPING_TYPES } from '@/domains/channel/field/field.mysql.service';
 import { OptionEntity } from '@/domains/channel/option/option.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { createFieldDto, optionSort } from '@/utils/test-util-fixture';
-import { DEFAULT_FIELD_COUNT, clearEntities } from '@/utils/test-utils';
+import { createFieldDto, optionSort } from '@/test-utils/fixtures';
+import {
+  clearEntities,
+  DEFAULT_FIELD_COUNT,
+} from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -88,17 +93,17 @@ describe('AppController (e2e)', () => {
     await clearEntities([projectRepo, channelRepo, fieldRepo, optionRepo]);
 
     project = await projectRepo.save({
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
     });
   });
 
   it('/projects/:projectId/channels (POST)', () => {
-    const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+    const fieldCount = faker.number.int({ min: 1, max: 10 });
 
     const dto = new CreateChannelRequestDto();
-    dto.name = faker.datatype.string();
-    dto.description = faker.datatype.string();
+    dto.name = faker.string.sample();
+    dto.description = faker.string.sample();
     dto.fields = Array.from({ length: fieldCount }).map((_) =>
       createFieldDto({}),
     );
@@ -158,7 +163,7 @@ describe('AppController (e2e)', () => {
   });
 
   it('/projects/:projectId/channels (GET)', async () => {
-    const total = faker.datatype.number(10);
+    const total = faker.number.int(10);
 
     await channelRepo.save(
       Array.from({ length: total }).map(() => ({
@@ -187,8 +192,8 @@ describe('AppController (e2e)', () => {
 
   it('/channels/:id (GET)', async () => {
     const channel = await channelRepo.save({
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
     });
 
     return request(app.getHttpServer())
@@ -201,12 +206,12 @@ describe('AppController (e2e)', () => {
       });
   });
   it('/channels/:id (PUT)', async () => {
-    const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+    const fieldCount = faker.number.int({ min: 1, max: 10 });
 
     const { id: channelId } = await channelService.create({
       projectId: project.id,
-      name: faker.datatype.string(),
-      description: faker.datatype.string(),
+      name: faker.string.sample(),
+      description: faker.string.sample(),
       fields: Array.from({ length: fieldCount }).map((_) => createFieldDto({})),
     });
 
@@ -224,8 +229,8 @@ describe('AppController (e2e)', () => {
     );
 
     const dto = new UpdateChannelRequestDto();
-    dto.name = faker.datatype.string();
-    dto.description = faker.datatype.string();
+    dto.name = faker.string.sample();
+    dto.description = faker.string.sample();
     // dto.fields = [...existingFields, ...newfields];
 
     return request(app.getHttpServer())

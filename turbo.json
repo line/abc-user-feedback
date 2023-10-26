@@ -1,46 +1,67 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env"],
   "pipeline": {
-    "build": {
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "public/dist/**"
-      ],
-      "dependsOn": [
-        "^build"
-      ],
-      "env": [
-        "NODE_ENV",
-        "SESSION_PASSWORD",
-        "API_BASE_URL",
-        "NEXT_PUBLIC_API_BASE_URL",
-        "OS_USE",
-        "OS_NODE",
-        "OS_USERNAME",
-        "OS_PASSWORD",
-        "APP_PORT",
-        "APP_ADDRESS",
-        "JWT_SECRET",
-        "MYSQL_PRIMARY_URL",
-        "MYSQL_SECONDARY_URLS",
-        "SMTP_HOST",
-        "SMTP_PORT",
-        "SMTP_USERNAME",
-        "SMTP_PASSWORD",
-        "SMTP_SENDER",
-        "SMTP_BASE_URL",
-        "AUTO_MIGRATION",
-        "MASTER_API_KEY",
-        "BASE_URL",
-        "NEXT_PUBLIC_MAX_DAYS"
-      ]
+    "topo": {
+      "dependsOn": ["^topo"]
     },
-    "lint": {
-      "outputs": []
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "next-env.d.ts", "!.next/cache/**"]
     },
     "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "web#dev": {
+      "dependsOn": ["@ufb/tailwind#build"]
+    },
+    "format": {
+      "outputs": ["node_modules/.cache/.prettiercache"],
+      "outputMode": "new-only"
+    },
+    "lint": {
+      "dependsOn": ["topo"],
+      "outputs": ["node_modules/.cache/.eslintcache"]
+    },
+    "typecheck": {
+      "dependsOn": ["topo"],
+      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+    },
+    "test": {
+      "dependsOn": ["topo"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
       "cache": false
     }
-  }
+  },
+  "globalEnv": [
+    "NODE_ENV",
+    "SESSION_PASSWORD",
+    "API_BASE_URL",
+    "NEXT_PUBLIC_API_BASE_URL",
+    "OS_USE",
+    "OS_NODE",
+    "OS_USERNAME",
+    "OS_PASSWORD",
+    "APP_PORT",
+    "APP_ADDRESS",
+    "JWT_SECRET",
+    "MYSQL_PRIMARY_URL",
+    "MYSQL_SECONDARY_URLS",
+    "SMTP_USE",
+    "SMTP_HOST",
+    "SMTP_PORT",
+    "SMTP_USERNAME",
+    "SMTP_PASSWORD",
+    "SMTP_SENDER",
+    "SMTP_BASE_URL",
+    "AUTO_MIGRATION",
+    "MASTER_API_KEY",
+    "BASE_URL",
+    "NEXT_PUBLIC_MAX_DAYS"
+  ]
 }

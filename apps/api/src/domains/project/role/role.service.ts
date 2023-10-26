@@ -38,33 +38,33 @@ export class RoleService {
       name,
       project: { id: projectId },
     });
-
     if (role) throw new RoleAlreadyExistsException();
 
-    return await this.roleRepo.save({
-      name,
-      permissions,
-      project: { id: projectId },
-    });
+    const newRole = RoleEntity.from({ name, permissions, projectId });
+
+    return await this.roleRepo.save(newRole);
   }
 
   @Transactional()
   async update(id: number, projectId: number, dto: UpdateRoleDto) {
     const { name, permissions } = dto;
 
-    const role = await this.roleRepo.findOneBy({
-      name,
-      project: { id: projectId },
-      id: Not(id),
-    });
+    const role = await this.roleRepo.findOneBy({ id });
 
-    if (role) throw new RoleAlreadyExistsException();
+    if (
+      await this.roleRepo.findOne({
+        where: {
+          name,
+          project: { id: projectId },
+          id: Not(id),
+        },
+      })
+    )
+      throw new RoleAlreadyExistsException();
 
-    await this.roleRepo.update(id, {
-      id,
-      name,
-      permissions: [...new Set(permissions)],
-    });
+    await this.roleRepo.save(
+      Object.assign(role, { name, permissions: [...new Set(permissions)] }),
+    );
   }
 
   async findById(id: number) {

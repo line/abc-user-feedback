@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { TextInput, toast } from '@ufb/ui';
-import { useTranslation } from 'next-i18next';
 import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { TextInput, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
 import {
@@ -53,7 +54,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     resolver: zodResolver(scheme),
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}',
     pathParams: { projectId },
@@ -88,7 +89,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         form: 'form',
         type: 'submit',
         disabled:
-          !perms.includes('project_update') || !formState.isDirty || isLoading,
+          !perms.includes('project_update') || !formState.isDirty || isPending,
       }}
     >
       <form id="form" className="flex flex-col gap-6">

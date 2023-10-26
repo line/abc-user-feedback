@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Icon, TextInput, toast } from '@ufb/ui';
 import type { GetStaticProps } from 'next';
-import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { Icon, TextInput, toast } from '@ufb/ui';
 
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
-
-import { NextPageWithLayout } from '../_app';
+import type { NextPageWithLayout } from '../_app';
 
 interface IForm {
   email: string;
@@ -51,7 +51,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
     defaultValues,
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/users/password/reset/code',
     queryOptions: {
@@ -68,21 +68,21 @@ const ResetPasswordPage: NextPageWithLayout = () => {
 
   const onSubmit = (data: IForm) => mutate(data);
   return (
-    <div className="w-[360px] m-auto">
+    <div className="m-auto w-[360px]">
       <div className="mb-12">
-        <div className="flex gap-0.5 mb-2">
+        <div className="mb-2 flex gap-0.5">
           <Image
             src="/assets/images/logo.svg"
             alt="logo"
             width={12}
             height={12}
           />
-          <Icon name="Title" className="w-[62px] h-[12px]" />
+          <Icon name="Title" className="h-[12px] w-[62px]" />
         </div>
         <p className="font-24-bold">{t('auth.reset-password.title')}</p>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-4 mb-12">
+        <div className="mb-12 space-y-4">
           <TextInput
             type="email"
             label="Email"
@@ -99,7 +99,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
           <button
             type="submit"
             className="btn btn-primary"
-            disabled={!formState.isValid || isLoading}
+            disabled={!formState.isValid || isPending}
           >
             {t('auth.reset-password.button.send-email')}
           </button>

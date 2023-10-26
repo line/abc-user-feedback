@@ -19,7 +19,6 @@ import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { validateUnique } from '@/utils/validate-unique';
-
 import { OptionEntity } from '../../channel/option/option.entity';
 import {
   CreateManyOptionsDto,
@@ -56,9 +55,8 @@ export class OptionService {
 
     const inactiveOption = this.getInactiveOption(options, key, name);
     if (inactiveOption) {
-      await this.repository.update(
-        { id: inactiveOption.id },
-        { id: inactiveOption.id, deletedAt: null, key },
+      await this.repository.save(
+        Object.assign(inactiveOption, { deletedAt: null, key }),
       );
       return inactiveOption;
     }
@@ -69,8 +67,9 @@ export class OptionService {
     if (options.map((v) => v.key).includes(key)) {
       throw new OptionKeyDuplicatedException();
     }
+    const option = OptionEntity.from({ fieldId, name, key });
 
-    return await this.repository.save({ key, name, field: { id: fieldId } });
+    return await this.repository.save(option);
   }
 
   @Transactional()
@@ -78,14 +77,15 @@ export class OptionService {
     if (!validateUnique(options, 'name')) {
       throw new OptionNameDuplicatedException();
     }
-
     if (!validateUnique(options, 'key')) {
       throw new OptionKeyDuplicatedException();
     }
 
-    return await this.repository.save(
-      options.map(({ name, key }) => ({ name, key, field: { id: fieldId } })),
+    const newOptions = options.map((option) =>
+      OptionEntity.from({ fieldId, ...option }),
     );
+
+    return await this.repository.save(newOptions);
   }
 
   async findByFieldId({ fieldId }: { fieldId: number }) {
@@ -136,17 +136,16 @@ export class OptionService {
         option.name,
       );
       if (inactiveOption) {
-        await this.repository.update(
-          { id: inactiveOption.id },
-          { id: inactiveOption.id, deletedAt: null, key: option.key },
+        await this.repository.save(
+          Object.assign(inactiveOption, { deletedAt: null, key: option.key }),
         );
         continue;
       }
 
-      await this.repository.upsert(
-        { ...option, field: { id: fieldId } },
-        { conflictPaths: { id: true } },
-      );
+      const optionEntity = OptionEntity.from({ fieldId, ...option });
+      if (option.id) optionEntity.id = option.id;
+
+      await this.repository.save(optionEntity);
     }
   }
 }

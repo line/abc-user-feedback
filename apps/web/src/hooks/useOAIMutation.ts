@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { UseMutationOptions, useMutation } from '@tanstack/react-query';
+import type { UseMutationOptions } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import client from '@/libs/client';
-import { IFetchError } from '@/types/fetch-error.type';
-import {
+import type { IFetchError } from '@/types/fetch-error.type';
+import type {
   OAIMethodPathKeys,
   OAIMutationResponse,
   OAIPathParameters,
@@ -56,9 +57,9 @@ export default function useOAIMutation<
     IFetchError,
     TBody,
     (Record<string, unknown> | TPath | undefined)[]
-  >(
-    [method, path, pathParams],
-    async (body: TBody) => {
+  >({
+    mutationKey: [method, path, pathParams],
+    mutationFn: async (body: TBody) => {
       const { data } = await client.request({
         method,
         url: getRequestUrl(path, pathParams),
@@ -67,6 +68,6 @@ export default function useOAIMutation<
 
       return data as TResponse;
     },
-    queryOptions,
-  );
+    ...queryOptions,
+  });
 }

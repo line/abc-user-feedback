@@ -18,8 +18,12 @@ import * as yup from 'yup';
 
 export const jwtConfigSchema = yup.object({
   JWT_SECRET: yup.string().required(),
+  ACCESS_TOKEN_EXPIRED_TIME: yup.string().default('10m'),
+  REFESH_TOKEN_EXPIRED_TIME: yup.string().default('1h'),
 });
 
 export const jwtConfig = registerAs('jwt', () => ({
   secret: process.env.JWT_SECRET,
+  accessTokenExpiredTime: process.env.ACCESS_TOKEN_EXPIRED_TIME,
+  refreshTokenExpiredTime: process.env.REFESH_TOKEN_EXPIRED_TIME,
 }));

@@ -13,17 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Input } from '@ufb/ui';
 import { useFormContext } from 'react-hook-form';
 
-import { ISignUpInfoForm } from './SignUpSetting';
+import { Input } from '@ufb/ui';
+
+import type { ISignUpInfoForm } from './SignUpSetting';
 
 interface IProps {}
 
 const OAuthInput: React.FC<IProps> = () => {
   const { register } = useFormContext<ISignUpInfoForm>();
   return (
-    <div className="flex flex-col gap-3 border rounded p-3">
+    <div className="flex flex-col gap-3 rounded border p-3">
       <Input
         {...register('oauthConfig.clientId')}
         label="Client ID"

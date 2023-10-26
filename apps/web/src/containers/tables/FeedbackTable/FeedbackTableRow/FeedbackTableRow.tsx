@@ -13,21 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Row, flexRender } from '@tanstack/react-table';
-import { Icon, toast } from '@ufb/ui';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import type { Row } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
+import { Icon, toast } from '@ufb/ui';
+
 import { ShareButton, TableCheckbox } from '@/components';
+import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
-
 import { TableRow } from '../../IssueTable/TableRow';
+import FeedbackDetail from '../FeedbackDetail';
 
 interface IProps {
   row: Row<any>;
   channelId: number;
-  refetch: () => void;
+  refetch: () => Promise<any>;
   projectId: number;
 }
 
@@ -38,21 +42,24 @@ const FeedbackTableRow: React.FC<IProps> = ({
   refetch,
 }) => {
   const { t } = useTranslation();
+  const [openId, setOpenId] = useState<number>();
+
   const { disableEditState, enableEditState, editableState, editInput } =
     useTableStore();
+
   const perms = usePermissions();
   useEffect(() => {
     disableEditState();
   }, [channelId]);
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
     pathParams: { projectId, channelId, feedbackId: row.original.id },
     queryOptions: {
       async onSuccess() {
+        await refetch();
         toast.positive({ title: t('toast.save') });
-        refetch();
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });
@@ -76,10 +83,15 @@ const FeedbackTableRow: React.FC<IProps> = ({
     mutate(editInput as any);
     disableEditState();
   };
+  const onOpenChange = (open: boolean) =>
+    setOpenId(open ? row.original.id : undefined);
+
+  const open = openId === row.original.id;
 
   return (
     <TableRow
-      isSelected={row.getIsExpanded()}
+      isSelected={row.getIsExpanded() || open}
+      onClick={!editableState ? () => onOpenChange(true) : undefined}
       hoverElement={
         <>
           <TableCheckbox
@@ -92,34 +104,39 @@ const FeedbackTableRow: React.FC<IProps> = ({
             <>
               <button
                 className="icon-btn icon-btn-sm icon-btn-tertiary"
-                onClick={() => toggleRow()}
-              >
-                <Icon
-                  name={row.getIsExpanded() ? 'Compress' : 'Expand'}
-                  size={16}
-                />
-              </button>
-              <button
-                className="icon-btn icon-btn-sm icon-btn-tertiary"
                 onClick={editRow}
                 disabled={!perms.includes('feedback_update')}
               >
                 <Icon name="EditStroke" size={16} />
               </button>
-              <ShareButton id={row.original.id} />
+              <ShareButton
+                pathname={`/main/${projectId}/feedback?ids=${
+                  row.original.id
+                }&channelId=${channelId}&createdAt=${dayjs(
+                  row.original.createdAt,
+                ).format(DATE_FORMAT)}~${dayjs(row.original.createdAt).format(
+                  DATE_FORMAT,
+                )}`}
+              />
             </>
           ) : (
             <>
               <button
                 className="icon-btn icon-btn-sm icon-btn-tertiary"
-                onClick={disableEditState}
+                onClick={() => {
+                  toggleRow(false);
+                  disableEditState();
+                }}
               >
                 <Icon name="Close" size={16} className="text-red-primary" />
               </button>
               <button
                 className="icon-btn icon-btn-sm icon-btn-tertiary"
-                onClick={onSubmit}
-                disabled={isLoading}
+                onClick={() => {
+                  onSubmit();
+                  toggleRow(false);
+                }}
+                disabled={isPending}
               >
                 <Icon name="Check" size={16} className="text-blue-primary" />
               </button>
@@ -133,6 +150,16 @@ const FeedbackTableRow: React.FC<IProps> = ({
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </td>
       ))}
+      {open && (
+        <FeedbackDetail
+          id={row.original.id}
+          key={row.original.id}
+          channelId={channelId}
+          projectId={projectId}
+          open={open}
+          onOpenChange={onOpenChange}
+        />
+      )}
     </TableRow>
   );
 };

@@ -5,7 +5,8 @@
   "workspaces": {
     "packages": [
       "apps/*",
-      "packages/*"
+      "packages/*",
+      "tooling/*"
     ],
     "nohoist": [
       "**/typeorm*/**",
@@ -16,18 +17,31 @@
   },
   "scripts": {
     "build": "turbo run build",
+    "build:ui": "turbo run @ufb/ui#build",
+    "clean": "git clean -xdf node_modules",
+    "clean:workspaces": "turbo clean",
     "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx}\""
+    "dev:api": "turbo run dev --filter=api",
+    "dev:web": "turbo run dev --filter=web",
+    "format": "turbo format --continue -- --cache --cache-location='node_modules/.cache/.prettiercache'",
+    "format:fix": "turbo format --continue -- --write --cache --cache-location='node_modules/.cache/.prettiercache'",
+    "postinstall": "husky install",
+    "lint": "turbo lint --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache'",
+    "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
+    "test": "turbo run test",
+    "typecheck": "turbo typecheck"
   },
-  "devDependencies": {
-    "eslint-config-ufb": "*",
-    "@trivago/prettier-plugin-sort-imports": "^4.1.0",
-    "prettier": "latest",
-    "turbo": "latest"
+  "prettier": "@ufb/prettier-config",
+  "dependencies": {
+    "@manypkg/cli": "^0.21.0",
+    "@ufb/prettier-config": "^0.1.0",
+    "husky": "^8.0.3",
+    "prettier": "^3.0.3",
+    "turbo": "^1.10.16",
+    "typescript": "^5.2.2"
   },
+  "packageManager": "yarn@1.22.19",
   "engines": {
-    "node": ">=18.0.0"
-  },
-  "packageManager": "yarn@1.22.19"
+    "node": ">=v18.0.0"
+  }
 }

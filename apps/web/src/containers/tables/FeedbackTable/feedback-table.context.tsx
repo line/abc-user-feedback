@@ -13,27 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
+import type { Dispatch, SetStateAction } from 'react';
+import { createContext, useContext, useState } from 'react';
+import type {
   ColumnOrderState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table';
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from 'react';
 
 import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
+import { Path } from '@/constants/path';
 import { useLocalColumnSetting, useLocalStorage } from '@/hooks';
-import { DateRangeType } from '@/types/date-range.type';
+import useQueryParamsState from '@/hooks/useQueryParamsState';
+import type { DateRangeType } from '@/types/date-range.type';
 
 const DEFAULT_FN = () => {};
 interface IFeedbackTableContext {
   query: Record<string, any>;
-  setQuery: Dispatch<SetStateAction<Record<string, any>>>;
+  setQuery: (_: Record<string, any>) => void;
   page: number;
   setPage: Dispatch<SetStateAction<number>>;
   limit: number;
@@ -48,14 +45,14 @@ interface IFeedbackTableContext {
   projectId: number;
   channelId: number;
   createdAtRange: DateRangeType;
-  setCreatedAtRange: Dispatch<SetStateAction<DateRangeType>>;
+  setCreatedAtRange: (_: DateRangeType) => void;
 }
 export const FeedbackTableContext = createContext<IFeedbackTableContext>({
   query: {},
   setQuery: DEFAULT_FN,
   page: 1,
   setPage: DEFAULT_FN,
-  limit: 20,
+  limit: 50,
   setLimit: DEFAULT_FN,
   columnOrder: [],
   setColumnOrder: DEFAULT_FN,
@@ -82,12 +79,16 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
   fixedLimit,
 }) => {
   const [page, setPage] = useState(1);
-  const [query, setQuery] = useState<Record<string, any>>({});
 
-  const [createdAtRange, setCreatedAtRange] =
-    useState<DateRangeType>(DEFAULT_DATE_RANGE);
+  const { createdAtRange, query, setCreatedAtRange, setQuery } =
+    useQueryParamsState(
+      Path.FEEDBACK,
+      { projectId, channelId },
+      DEFAULT_DATE_RANGE,
+    );
 
-  const [limit, setLimit] = useLocalStorage<number>(`limit`, 20);
+  const [limit, setLimit] = useLocalStorage<number>(`limit`, 50);
+
   const [sorting, setSorting] = useLocalColumnSetting<SortingState>({
     channelId,
     key: 'sort',
@@ -110,6 +111,7 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
       projectId,
       initialValue: [],
     });
+
   return (
     <FeedbackTableContext.Provider
       value={{

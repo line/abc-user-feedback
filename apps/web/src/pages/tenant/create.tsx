@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { zodResolver } from '@hookform/resolvers/zod';
-import { toast } from '@ufb/ui';
 import type { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { toast } from '@ufb/ui';
 
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIMutation, useTenant } from '@/hooks';
-
-import { NextPageWithLayout } from '../_app';
+import type { NextPageWithLayout } from '../_app';
 
 interface IForm {
   siteName: string;
@@ -52,7 +52,7 @@ const CreatePage: NextPageWithLayout = () => {
     defaultValues,
   });
 
-  const { mutate, isLoading } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/tenants',
     queryOptions: {
@@ -74,8 +74,8 @@ const CreatePage: NextPageWithLayout = () => {
 
   return (
     <AuthTemplate>
-      <div className="w-screen h-screen flex items-center justify-center">
-        <div className="w-full max-w-[400px] border shadow p-4 rounded">
+      <div className="flex h-screen w-screen items-center justify-center">
+        <div className="w-full max-w-[400px] rounded border p-4 shadow">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="flex flex-col gap-4"
@@ -89,7 +89,7 @@ const CreatePage: NextPageWithLayout = () => {
             <button
               className="btn btn-primary"
               type="submit"
-              disabled={isLoading}
+              disabled={isPending}
             >
               {t('button.setting')}
             </button>

@@ -25,7 +25,6 @@ import { ApiCreatedResponse, ApiOkResponse } from '@nestjs/swagger';
 
 import { PermissionEnum } from '@/domains/project/role/permission.enum';
 import { RequirePermission } from '@/domains/project/role/require-permission.decorator';
-
 import { CreateOptionRequestDto } from './dtos/requests';
 import {
   CreateOptionResponseDto,

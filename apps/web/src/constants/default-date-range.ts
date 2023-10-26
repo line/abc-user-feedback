@@ -16,7 +16,7 @@
 import dayjs from 'dayjs';
 
 import { env } from '@/env.mjs';
-import { DateRangeType } from '@/types/date-range.type';
+import type { DateRangeType } from '@/types/date-range.type';
 
 export const DEFAULT_DATE_RANGE: DateRangeType = {
   startDate: dayjs().subtract(env.NEXT_PUBLIC_MAX_DAYS, 'day').toDate(),

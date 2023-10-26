@@ -17,38 +17,20 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import type { Repository } from 'typeorm';
 
 import { FieldFormatEnum, isSelectFieldFormat } from '@/common/enums';
-import { OpensearchRepository } from '@/common/repositories';
-import { createFieldDto, updateFieldDto } from '@/utils/test-util-fixture';
-import {
-  MockOpensearchRepository,
-  getMockProvider,
-  mockRepository,
-} from '@/utils/test-utils';
-
+import { createFieldDto, updateFieldDto } from '@/test-utils/fixtures';
+import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import { FieldServiceProviders } from '../../../test-utils/providers/field.service.providers';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { OptionEntity } from '../option/option.entity';
-import { OptionServiceProviders } from '../option/option.service.spec';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
 import {
   FieldKeyDuplicatedException,
   FieldNameDuplicatedException,
 } from './exceptions';
-import { FieldMySQLService } from './field.mysql.service';
 import { FieldService } from './field.service';
-
-export const FieldServiceProviders = [
-  FieldService,
-  FieldMySQLService,
-  getMockProvider(OpensearchRepository, MockOpensearchRepository),
-  {
-    provide: getRepositoryToken(FieldEntity),
-    useValue: mockRepository(),
-  },
-  ...OptionServiceProviders,
-];
 
 const countSelect = (prev, curr) => {
   return isSelectFieldFormat(curr.format) && curr.options.length > 0
@@ -73,15 +55,15 @@ describe('FieldService suite', () => {
 
   describe('createMany', () => {
     it('creating many fields succeeds with valid inputs', async () => {
-      const channelId = faker.datatype.number();
-      const fieldCount = faker.datatype.number({ min: 1, max: 10 });
+      const channelId = faker.number.int();
+      const fieldCount = faker.number.int({ min: 1, max: 10 });
       const dto = new CreateManyFieldsDto();
       dto.channelId = channelId;
       dto.fields = Array.from({ length: fieldCount }).map(createFieldDto);
       const selectFieldCount = dto.fields.reduce(countSelect, 0);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
       jest.spyOn(optionRepo, 'save');
 
       await fieldService.createMany(dto);
@@ -91,7 +73,7 @@ describe('FieldService suite', () => {
       expect(MockOpensearchRepository.putMappings).toBeCalledTimes(1);
     });
     it('creating many fields fails with duplicate names', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const dto = new CreateManyFieldsDto();
       dto.channelId = channelId;
       dto.fields = Array.from({ length: 2 }).map(() =>
@@ -105,7 +87,7 @@ describe('FieldService suite', () => {
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('creating many fields fails with duplicate keys', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const dto = new CreateManyFieldsDto();
       dto.channelId = channelId;
       dto.fields = Array.from({ length: 2 }).map(() =>
@@ -119,14 +101,14 @@ describe('FieldService suite', () => {
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('creating many fields fails with options in non-select format field', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const dto = new CreateManyFieldsDto();
       dto.channelId = channelId;
       dto.fields = Array.from({ length: 1 }).map(() =>
         createFieldDto({
           format: FieldFormatEnum.text,
           options: [
-            { key: faker.datatype.string(), name: faker.datatype.string() },
+            { key: faker.string.sample(), name: faker.string.sample() },
           ],
         }),
       );
@@ -140,12 +122,12 @@ describe('FieldService suite', () => {
   });
   describe('replaceMany', () => {
     it('replacing many fields succeeds with valid inputs', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(updateFieldDto);
       const creatingFieldDtos = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(createFieldDto);
       const dto = new ReplaceManyFieldsDto();
       dto.channelId = channelId;
@@ -153,20 +135,21 @@ describe('FieldService suite', () => {
       jest
         .spyOn(fieldRepo, 'findBy')
         .mockResolvedValue(updatingFieldDtos as FieldEntity[]);
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await fieldService.replaceMany(dto);
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
-      expect(fieldRepo.update).toBeCalledTimes(updatingFieldDtos.length);
+      expect(fieldRepo.save).toBeCalledTimes(
+        updatingFieldDtos.length + creatingFieldDtos.length,
+      );
       expect(MockOpensearchRepository.putMappings).toBeCalledTimes(1);
     });
     it('replacing many fields fails with duplicate names', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
         length: 2,
       }).map(() => updateFieldDto({ name: 'duplicateName' }));
@@ -176,22 +159,21 @@ describe('FieldService suite', () => {
       jest
         .spyOn(fieldRepo, 'findBy')
         .mockResolvedValue(updatingFieldDtos as FieldEntity[]);
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await expect(fieldService.replaceMany(dto)).rejects.toThrow(
         FieldNameDuplicatedException,
       );
 
       expect(fieldRepo.findBy).not.toBeCalled();
-      expect(fieldRepo.update).not.toBeCalled();
+      expect(fieldRepo.save).not.toBeCalled();
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with duplicate keys', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
         length: 2,
       }).map(() => updateFieldDto({ key: 'duplicateKey' }));
@@ -201,29 +183,28 @@ describe('FieldService suite', () => {
       jest
         .spyOn(fieldRepo, 'findBy')
         .mockResolvedValue(updatingFieldDtos as FieldEntity[]);
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await expect(fieldService.replaceMany(dto)).rejects.toThrow(
         FieldKeyDuplicatedException,
       );
 
       expect(fieldRepo.findBy).not.toBeCalled();
-      expect(fieldRepo.update).not.toBeCalled();
+      expect(fieldRepo.save).not.toBeCalled();
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with options in non-select format field', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
         length: 1,
       }).map(() =>
         updateFieldDto({
           format: FieldFormatEnum.text,
           options: [
-            { key: faker.datatype.string(), name: faker.datatype.string() },
+            { key: faker.string.sample(), name: faker.string.sample() },
           ],
         }),
       );
@@ -233,27 +214,26 @@ describe('FieldService suite', () => {
       jest
         .spyOn(fieldRepo, 'findBy')
         .mockResolvedValue(updatingFieldDtos as FieldEntity[]);
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await expect(fieldService.replaceMany(dto)).rejects.toThrow(
         new BadRequestException('only select format field has options'),
       );
 
       expect(fieldRepo.findBy).not.toBeCalled();
-      expect(fieldRepo.update).not.toBeCalled();
+      expect(fieldRepo.save).not.toBeCalled();
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with a nonexistent field', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(updateFieldDto);
       const creatingFieldDtos = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(createFieldDto);
       const dto = new ReplaceManyFieldsDto();
       dto.channelId = channelId;
@@ -261,24 +241,23 @@ describe('FieldService suite', () => {
       jest
         .spyOn(fieldRepo, 'findBy')
         .mockResolvedValue(updatingFieldDtos.splice(1) as FieldEntity[]);
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await expect(fieldService.replaceMany(dto)).rejects.toThrow(
         new BadRequestException('field must be included'),
       );
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
-      expect(fieldRepo.update).not.toBeCalled();
+      expect(fieldRepo.save).not.toBeCalled();
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with a format change', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(() => updateFieldDto({ format: FieldFormatEnum.keyword }));
       const dto = new ReplaceManyFieldsDto();
       dto.channelId = channelId;
@@ -289,46 +268,44 @@ describe('FieldService suite', () => {
           return field;
         }) as FieldEntity[],
       );
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await expect(fieldService.replaceMany(dto)).rejects.toThrow(
         new BadRequestException('field format cannot be changed'),
       );
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
-      expect(fieldRepo.update).not.toBeCalled();
+      expect(fieldRepo.save).not.toBeCalled();
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with a key change', async () => {
-      const channelId = faker.datatype.number();
+      const channelId = faker.number.int();
       const updatingFieldDtos = Array.from({
-        length: faker.datatype.number({ min: 1, max: 10 }),
+        length: faker.number.int({ min: 1, max: 10 }),
       }).map(updateFieldDto);
       const dto = new ReplaceManyFieldsDto();
       dto.channelId = channelId;
       dto.fields = JSON.parse(JSON.stringify(updatingFieldDtos));
       jest.spyOn(fieldRepo, 'findBy').mockResolvedValue(
         updatingFieldDtos.map((field) => {
-          field.key = faker.datatype.string();
+          field.key = faker.string.sample();
           return field;
         }) as FieldEntity[],
       );
-      jest.spyOn(fieldRepo, 'update');
-      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
       jest
         .spyOn(fieldRepo, 'save')
-        .mockResolvedValue({ id: faker.datatype.number() } as FieldEntity);
+        .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
+      jest.spyOn(optionRepo, 'find').mockResolvedValue([]);
 
       await expect(fieldService.replaceMany(dto)).rejects.toThrow(
         new BadRequestException('field key cannot be changed'),
       );
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
-      expect(fieldRepo.update).not.toBeCalled();
+      expect(fieldRepo.save).not.toBeCalled();
       expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
   });

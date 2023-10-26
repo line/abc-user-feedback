@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { CanActivate, Injectable } from '@nestjs/common';
+import type { CanActivate } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 import { TenantService } from '@/domains/tenant/tenant.service';
 

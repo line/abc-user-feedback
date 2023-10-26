@@ -15,11 +15,11 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
+import { DataSource } from 'typeorm';
 
 import { FeedbackService } from '@/domains/feedback/feedback.service';
 import { UserDto } from '@/domains/user/dtos';
-import { TestConfigs, getMockProvider } from '@/utils/test-utils';
-
+import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
 import { IssueService } from '../issue/issue.service';
 import {
   CreateProjectRequestDto,
@@ -45,12 +45,12 @@ describe('ProjectController', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [...TestConfigs],
       controllers: [ProjectController],
       providers: [
         getMockProvider(ProjectService, MockProjectService),
         getMockProvider(FeedbackService, MockFeedbackService),
         getMockProvider(IssueService, MockIssueService),
+        getMockProvider(DataSource, MockDataSource),
       ],
     }).compile();
 
@@ -61,8 +61,8 @@ describe('ProjectController', () => {
     it('should return an array of users', async () => {
       jest.spyOn(MockProjectService, 'create');
       const dto = new CreateProjectRequestDto();
-      dto.name = faker.datatype.string();
-      dto.description = faker.datatype.string();
+      dto.name = faker.string.sample();
+      dto.description = faker.string.sample();
 
       await projectController.create(dto);
       expect(MockProjectService.create).toBeCalledTimes(1);
@@ -72,8 +72,8 @@ describe('ProjectController', () => {
     it('should return an array of users', async () => {
       jest.spyOn(MockProjectService, 'findAll');
       const dto = new FindProjectsRequestDto();
-      dto.limit = faker.datatype.number();
-      dto.page = faker.datatype.number();
+      dto.limit = faker.number.int();
+      dto.page = faker.number.int();
       const userDto = new UserDto();
 
       await projectController.findAll(dto, userDto);
@@ -83,7 +83,7 @@ describe('ProjectController', () => {
   describe('countFeedbacks', () => {
     it('should return a number of total feedbacks by project id', async () => {
       jest.spyOn(MockFeedbackService, 'countByProjectId');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await projectController.countFeedbacks(projectId);
       expect(MockFeedbackService.countByProjectId).toBeCalledTimes(1);
@@ -93,7 +93,7 @@ describe('ProjectController', () => {
   describe('countIssues', () => {
     it('should return a number of total issues by project id', async () => {
       jest.spyOn(MockIssueService, 'countByProjectId');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await projectController.countIssues(projectId);
       expect(MockIssueService.countByProjectId).toBeCalledTimes(1);
@@ -103,7 +103,7 @@ describe('ProjectController', () => {
   describe('delete', () => {
     it('', async () => {
       jest.spyOn(MockProjectService, 'deleteById');
-      const projectId = faker.datatype.number();
+      const projectId = faker.number.int();
 
       await projectController.delete(projectId);
       expect(MockProjectService.deleteById).toBeCalledTimes(1);
