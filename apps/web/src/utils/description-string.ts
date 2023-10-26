@@ -16,5 +16,5 @@
 export const getDescriptionStr = (str?: string | null) => {
   if (!str) return '-';
   str = str.trim();
-  return str.length === 0 ? str : '-';
+  return str.length !== 0 ? str : '-';
 };
