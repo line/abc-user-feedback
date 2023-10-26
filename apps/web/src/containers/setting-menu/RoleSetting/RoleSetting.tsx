@@ -13,33 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
-import { useOAIMutation, useOAIQuery } from '@/hooks';
+import { useOAIQuery } from '@/hooks';
+import client from '@/libs/client';
 import type { PermissionType } from '@/types/permission.type';
-import {
-  ChannelFieldPermissionList,
-  ChannelInfoPermissionList,
-  ChannelPermissionText,
-  FeedbackPermissionList,
-  FeedbackPermissionText,
-  IssuePermissionList,
-  IssuePermissionText,
-  ProjectApiKeyPermissionList,
-  ProjectInfoPermissionList,
-  ProjectMemberPermissionList,
-  ProjectPermissionText,
-  ProjectRolePermissionList,
-  ProjectTrackerPermissionList,
-} from '@/types/permission.type';
 import AddRoleDialog from './AddRoleDialog';
-import PermissionRows from './PermissionRows';
-import RoleSettingHead from './RoleSettingHead';
-import RoleTitleRow from './RoleTitleRow';
+import RoleSettingTable from './RoleSettingTable';
 
 interface IProps {
   projectId: number;
@@ -51,53 +35,36 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
     path: '/api/projects/{projectId}/roles',
     variables: { projectId },
   });
-  const [editRoleId, setEditRoleId] = useState<number>();
 
-  const [editPermissions, setEditPermissions] = useState<
-    Partial<Record<PermissionType, boolean>>
-  >({});
-
-  const [editName, setEditName] = useState<string>();
-  useEffect(() => {
-    setEditName(undefined);
-    setEditPermissions({});
-  }, [editRoleId]);
-
-  const { mutate } = useOAIMutation({
-    method: 'put',
-    path: '/api/projects/{projectId}/roles/{roleId}',
-    pathParams: { projectId, roleId: editRoleId ?? -1 },
-    queryOptions: {
-      async onSuccess() {
-        setEditRoleId(undefined);
-        refetch();
-        toast.positive({ title: t('toast.save') });
-      },
-      onError(error) {
-        if (!error) return;
-        toast.negative({ title: error.message });
-      },
+  const { mutate: deleteRole } = useMutation({
+    mutationKey: [
+      'delete',
+      '/api/projects/{projectId}/roles/{roleId}',
+      projectId,
+    ],
+    mutationFn: async (input: { roleId: number }) => {
+      return client.delete({
+        path: '/api/projects/{projectId}/roles/{roleId}',
+        pathParams: { projectId, roleId: input.roleId },
+      });
     },
   });
 
-  const newRole = (roleId: number) => {
-    const targetRole = data?.roles.find((v) => v.id === roleId);
-    if (!targetRole) return;
-    const endtires = Object.entries(editPermissions) as [
-      PermissionType,
-      boolean,
-    ][];
-    const permissions = endtires.reduce<PermissionType[]>(
-      (prev, [perm, checked]) => {
-        if (checked) return prev.includes(perm) ? prev : prev.concat(perm);
-        else return prev.includes(perm) ? prev.filter((v) => v !== perm) : prev;
-      },
-      targetRole.permissions,
-    );
-
-    return { permissions, name: editName ?? targetRole.name };
-  };
-  const colSpan = useMemo(() => (data?.roles.length ?? 0) + 2, [data]);
+  const { mutateAsync: updateRole } = useMutation({
+    mutationKey: ['put', '/api/projects/{projectId}/roles/{roleId}', projectId],
+    mutationFn: async (input: {
+      roleId: number;
+      name: string;
+      permissions: PermissionType[];
+    }) => {
+      const { name, permissions, roleId } = input;
+      return client.put({
+        path: '/api/projects/{projectId}/roles/{roleId}',
+        pathParams: { projectId, roleId },
+        body: { name, permissions },
+      });
+    },
+  });
 
   return (
     <SettingMenuTemplate
@@ -105,174 +72,41 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
       action={<AddRoleDialog projectId={projectId} refetch={refetch} />}
     >
       <div className="overflow-auto">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Permissions</th>
-              {data?.roles.map((v) => (
-                <th key={v.id}>
-                  <RoleSettingHead
-                    name={v.name}
-                    roleId={v.id}
-                    isEdit={editRoleId === v.id}
-                    projectId={projectId}
-                    onChangeEditRole={setEditRoleId}
-                    onChangeEditName={setEditName}
-                    refetch={refetch}
-                    onSubmitEdit={() => {
-                      const role = newRole(v.id);
-                      if (!role) return;
-                      mutate(role);
-                    }}
-                  />
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            <RoleTitleRow colspan={colSpan} title="Feedback" depth={0} />
+        <RoleSettingTable
+          roles={data?.roles ?? []}
+          onDelete={(roleId) => deleteRole({ roleId })}
+          updateRole={async (input) => {
+            const { name, permissions, roleId } = input;
+            const targetRole = data?.roles.find((v) => v.id === roleId);
+            if (!targetRole) return;
 
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={FeedbackPermissionText}
-              permissions={FeedbackPermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={1}
-            />
-            <RoleTitleRow colspan={colSpan} title="Issue" depth={0} />
+            const endtires = Object.entries(permissions) as [
+              PermissionType,
+              boolean,
+            ][];
 
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={IssuePermissionText}
-              permissions={IssuePermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={1}
-            />
-            <RoleTitleRow colspan={colSpan} title="Setting" depth={0} />
-            <RoleTitleRow colspan={colSpan} title="Project" depth={1} />
-            <RoleTitleRow colspan={colSpan} title="Project Info" depth={2} />
-
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ProjectPermissionText}
-              permissions={ProjectInfoPermissionList.filter(
-                (v) => v !== 'project_delete',
-              )}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <RoleTitleRow title="Member" colspan={colSpan} depth={2} />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ProjectPermissionText}
-              permissions={ProjectMemberPermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <RoleTitleRow title="Role" colspan={colSpan} depth={2} />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ProjectPermissionText}
-              permissions={ProjectRolePermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <RoleTitleRow title="Api Key" colspan={colSpan} depth={2} />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ProjectPermissionText}
-              permissions={ProjectApiKeyPermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <RoleTitleRow title="Issue Tracker" colspan={colSpan} depth={2} />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ProjectPermissionText}
-              permissions={ProjectTrackerPermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ProjectPermissionText}
-              permissions={['project_delete']}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={2}
-            />
-            <RoleTitleRow title="Channel" colspan={colSpan} depth={1} />
-            <RoleTitleRow title="Channel Info" colspan={colSpan} depth={2} />
-
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ChannelPermissionText}
-              permissions={ChannelInfoPermissionList.filter(
-                (v) => v !== 'channel_create' && v !== 'channel_delete',
-              )}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <RoleTitleRow title="Channel Field" colspan={colSpan} depth={2} />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ChannelPermissionText}
-              permissions={ChannelFieldPermissionList}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={3}
-            />
-            <PermissionRows
-              editRoleId={editRoleId}
-              editPermissions={editPermissions}
-              permText={ChannelPermissionText}
-              permissions={['channel_create', 'channel_delete']}
-              onChecked={(perm, checked) => {
-                setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
-              }}
-              roles={data?.roles ?? []}
-              depth={2}
-            />
-          </tbody>
-        </table>
+            const newPermissions = endtires.reduce<PermissionType[]>(
+              (prev, [perm, checked]) => {
+                if (checked)
+                  return prev.includes(perm) ? prev : prev.concat(perm);
+                else
+                  return prev.includes(perm)
+                    ? prev.filter((v) => v !== perm)
+                    : prev;
+              },
+              targetRole.permissions,
+            );
+            try {
+              await updateRole({ name, permissions: newPermissions, roleId });
+              toast.positive({ title: t('toast.save') });
+            } catch (error: any) {
+              toast.negative({ title: error.message });
+            } finally {
+              await refetch();
+            }
+          }}
+          projectId={projectId}
+        />
       </div>
     </SettingMenuTemplate>
   );

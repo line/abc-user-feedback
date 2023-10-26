@@ -23,10 +23,9 @@ import {
   PopoverContent,
   PopoverModalContent,
   PopoverTrigger,
-  toast,
 } from '@ufb/ui';
 
-import { useOAIMutation, usePermissions } from '@/hooks';
+import { usePermissions } from '@/hooks';
 
 interface IProps {
   name: string;
@@ -36,7 +35,7 @@ interface IProps {
   onChangeEditRole: (roleId?: number) => void;
   onChangeEditName: (name: string) => void;
   onSubmitEdit: () => void;
-  refetch: () => void;
+  onClickDelete: (roleId: number) => void;
 }
 
 const RoleSettingHead: React.FC<IProps> = ({
@@ -47,27 +46,11 @@ const RoleSettingHead: React.FC<IProps> = ({
   onChangeEditRole,
   onChangeEditName,
   onSubmitEdit,
-  refetch,
+  onClickDelete,
 }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
   const [dialogOpen, setDialogOpen] = useState(false);
-
-  const { mutate } = useOAIMutation({
-    method: 'delete',
-    path: '/api/projects/{projectId}/roles/{roleId}',
-    pathParams: { roleId, projectId },
-    queryOptions: {
-      async onSuccess() {
-        await refetch();
-        setDialogOpen(false);
-        toast.negative({ title: t('toast.delete') });
-      },
-      onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
-      },
-    },
-  });
 
   return (
     <>
@@ -114,6 +97,7 @@ const RoleSettingHead: React.FC<IProps> = ({
                   onClick={() => {
                     if (!perms.includes('project_role_update')) return;
                     onChangeEditRole(roleId);
+                    onChangeEditName(name);
                   }}
                 >
                   <Icon name="EditFill" size={16} />
@@ -156,7 +140,7 @@ const RoleSettingHead: React.FC<IProps> = ({
           submitButton={{
             children: t('button.delete'),
             className: 'bg-red-primary',
-            onClick: () => mutate(undefined),
+            onClick: () => onClickDelete(roleId),
           }}
         />
       </Popover>
