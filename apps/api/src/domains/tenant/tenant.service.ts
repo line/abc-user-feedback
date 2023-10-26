@@ -14,11 +14,11 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { SMTP_USE } from '@/configs/smtp.config';
 import { FeedbackEntity } from '../feedback/feedback.entity';
 import { UserTypeEnum } from '../user/entities/enums';
 import { UserEntity } from '../user/entities/user.entity';
@@ -39,6 +39,7 @@ export class TenantService {
     private readonly userRepo: Repository<UserEntity>,
     @InjectRepository(FeedbackEntity)
     private readonly feedbackRepo: Repository<FeedbackEntity>,
+    private readonly configService: ConfigService,
   ) {}
 
   @Transactional()
@@ -66,7 +67,10 @@ export class TenantService {
     const [tenant] = await this.tenantRepo.find();
     if (!tenant) throw new TenantNotFoundException();
 
-    return { ...tenant, useEmailVerification: SMTP_USE };
+    return {
+      ...tenant,
+      useEmailVerification: this.configService.get('smtp.use'),
+    };
   }
 
   async countByTenantId(dto: FeedbackCountByTenantIdDto) {

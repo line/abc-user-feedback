@@ -24,6 +24,9 @@ jobs:
         run: |
           echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
           echo "OS_USE=${{ vars.TEST_OS_USE }}" >> ./apps/api/.env.test
+          echo "OS_NODE=http://localhost:9200" >> ./apps/api/.env.test
+          echo "OS_USERNAME=''" >> ./apps/api/.env.test
+          echo "OS_PASSWORD=''" >> ./apps/api/.env.test
 
       - name: Run Tests
         run: yarn test

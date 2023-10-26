@@ -14,22 +14,26 @@
  * under the License.
  */
 import { registerAs } from '@nestjs/config';
-import * as yup from 'yup';
+import Joi from 'joi';
 
-export const mysqlConfigSchema = yup.object({
-  MYSQL_PRIMARY_URL: yup.string().required(),
-  MYSQL_SECONDARY_URLS: yup.array().required(),
+export const mysqlConfigSchema = Joi.object({
+  MYSQL_PRIMARY_URL: Joi.string().required(),
+  MYSQL_SECONDARY_URLS: Joi.string()
+    .custom((value, helpers) => {
+      const urls = JSON.parse(value);
+      for (const url of urls) {
+        if (!url.startsWith('mysql://')) {
+          return helpers.error('any.invalid');
+        }
+      }
+      return value;
+    }, 'custom validation')
+    .required(),
+  AUTO_MIGRATION: Joi.boolean().default(false),
 });
 
 export const mysqlConfig = registerAs('mysql', () => ({
   main_url: process.env.MYSQL_PRIMARY_URL,
-  sub_urls: toArray(process.env.MYSQL_SECONDARY_URLS),
+  sub_urls: JSON.parse(process.env.MYSQL_SECONDARY_URLS),
+  auto_migration: process.env.AUTO_MIGRATION === 'true',
 }));
-
-const toArray = (input: string) => {
-  try {
-    return JSON.parse(input);
-  } catch (error) {
-    return [];
-  }
-};

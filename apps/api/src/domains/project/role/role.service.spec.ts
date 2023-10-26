@@ -18,7 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { getRandomEnumValues } from '@/test-utils/util-functions';
+import { getRandomEnumValues, TestConfig } from '@/test-utils/util-functions';
 import { RoleServiceProviders } from '../../../test-utils/providers/role.service.providers';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import {
@@ -35,6 +35,7 @@ describe('RoleService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: RoleServiceProviders,
     }).compile();
     roleService = module.get(RoleService);

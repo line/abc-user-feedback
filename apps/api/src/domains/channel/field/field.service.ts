@@ -14,11 +14,11 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Transactional } from 'typeorm-transactional';
 
 import { FieldFormatEnum } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
-import { OS_USE } from '@/configs/opensearch.config';
 import type { FieldEntity } from '../../channel/field/field.entity';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
 import { FieldMySQLService } from './field.mysql.service';
@@ -38,6 +38,7 @@ export class FieldService {
   constructor(
     private readonly fieldMySQLService: FieldMySQLService,
     private readonly osRepository: OpensearchRepository,
+    private readonly configService: ConfigService,
   ) {}
 
   fieldsToMapping(fields: FieldEntity[]) {
@@ -66,7 +67,7 @@ export class FieldService {
   async createMany(dto: CreateManyFieldsDto) {
     const fields = await this.fieldMySQLService.createMany(dto);
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.osRepository.putMappings({
         index: dto.channelId.toString(),
         mappings: this.fieldsToMapping(fields),
@@ -82,7 +83,7 @@ export class FieldService {
   async replaceMany(dto: ReplaceManyFieldsDto) {
     const createdFields = await this.fieldMySQLService.replaceMany(dto);
 
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.osRepository.putMappings({
         index: dto.channelId.toString(),
         mappings: this.fieldsToMapping(createdFields),

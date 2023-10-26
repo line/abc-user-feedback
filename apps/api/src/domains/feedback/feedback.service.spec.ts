@@ -27,7 +27,10 @@ import {
 } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
-import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import {
+  MockOpensearchRepository,
+  TestConfig,
+} from '@/test-utils/util-functions';
 import { FeedbackServiceProviders } from '../../test-utils/providers/feedback.service.providers';
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
@@ -69,6 +72,7 @@ describe('FeedbackService Test Suite', () => {
   let osRepo: OpensearchRepository;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: FeedbackServiceProviders,
     }).compile();
 

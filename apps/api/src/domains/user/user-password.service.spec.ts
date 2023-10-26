@@ -22,6 +22,7 @@ import type { Repository } from 'typeorm';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
+import { TestConfig } from '@/test-utils/util-functions';
 import { UserPasswordServiceProviders } from '../../test-utils/providers/user-password.service.providers';
 import { ChangePasswordDto, ResetPasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
@@ -36,6 +37,7 @@ describe('UserPasswordService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: UserPasswordServiceProviders,
     }).compile();
     userPasswordService = module.get(UserPasswordService);

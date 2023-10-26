@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { UnauthorizedException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 
-import { getMockProvider } from '@/test-utils/util-functions';
+import { getMockProvider, TestConfig } from '@/test-utils/util-functions';
 import { UserDto } from './dtos';
 import {
   ChangePasswordRequestDto,
@@ -47,6 +47,7 @@ describe('user controller', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: [
         getMockProvider(UserService, MockUserService),
         getMockProvider(UserPasswordService, MockUserPasswordService),
@@ -70,7 +71,7 @@ describe('user controller', () => {
   });
   it('inviteUser', () => {
     const userDto = new UserDto();
-    userDto.id = faker.datatype.number();
+    userDto.id = faker.number.int();
     userController.inviteUser(new UserInvitationRequestDto(), userDto);
     expect(MockUserService.sendInvitationCode).toHaveBeenCalledTimes(1);
   });
