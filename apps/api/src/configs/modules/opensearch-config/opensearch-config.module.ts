@@ -14,25 +14,24 @@
  * under the License.
  */
 import { Global, Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 import { Client } from '@opensearch-project/opensearch';
-import * as dotenv from 'dotenv';
 
 import type { ConfigServiceType } from '@/types/config-service.type';
 
-dotenv.config();
-
 @Global()
 @Module({
-  imports: [ConfigModule],
   providers: [
     {
       provide: 'OPENSEARCH_CLIENT',
       useFactory: (configService: ConfigService<ConfigServiceType>): Client => {
-        const { node, password, username } = configService.get('opensearch', {
-          infer: true,
-        });
-        return process.env.OS_USE === 'true'
+        const { use, node, password, username } = configService.get(
+          'opensearch',
+          {
+            infer: true,
+          },
+        );
+        return use
           ? new Client({ node, auth: { username, password } })
           : undefined;
       },

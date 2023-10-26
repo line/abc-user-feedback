@@ -19,6 +19,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { ApiKeyServiceProviders } from '../../../test-utils/providers/api-key.service.providers';
 import { ProjectNotFoundException } from '../project/exceptions';
 import { ProjectEntity } from '../project/project.entity';
@@ -32,6 +33,7 @@ describe('ApiKeyService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: ApiKeyServiceProviders,
     }).compile();
 

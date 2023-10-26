@@ -29,7 +29,7 @@ import {
 import { mysqlConfig, mysqlConfigSchema } from './configs/mysql.config';
 import {
   opensearchConfig,
-  opensearchSchema,
+  opensearchConfigSchema,
 } from './configs/opensearch.config';
 import { smtpConfig, smtpConfigSchema } from './configs/smtp.config';
 import { AuthModule } from './domains/auth/auth.module';
@@ -77,13 +77,11 @@ const domainModules = [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [appConfig, opensearchConfig, smtpConfig, jwtConfig, mysqlConfig],
-      validate: (config) => ({
-        ...appConfigSchema.validateSync(config),
-        ...opensearchSchema.validateSync(config),
-        ...smtpConfigSchema.validateSync(config),
-        ...jwtConfigSchema.validateSync(config),
-        ...mysqlConfigSchema.validateSync(config),
-      }),
+      validationSchema: appConfigSchema
+        .concat(jwtConfigSchema)
+        .concat(mysqlConfigSchema)
+        .concat(smtpConfigSchema)
+        .concat(opensearchConfigSchema),
       validationOptions: { abortEarly: true },
     }),
     LoggerModule.forRoot({

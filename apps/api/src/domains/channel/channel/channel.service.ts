@@ -14,10 +14,10 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Transactional } from 'typeorm-transactional';
 
 import { OpensearchRepository } from '@/common/repositories';
-import { OS_USE } from '@/configs/opensearch.config';
 import { ProjectService } from '@/domains/project/project/project.service';
 import { FieldService } from '../field/field.service';
 import { ChannelMySQLService } from './channel.mysql.service';
@@ -35,6 +35,7 @@ export class ChannelService {
     private readonly osRepository: OpensearchRepository,
     private readonly projectService: ProjectService,
     private readonly fieldService: FieldService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Transactional()
@@ -42,7 +43,7 @@ export class ChannelService {
     await this.projectService.findById({ projectId: dto.projectId });
 
     const { id } = await this.channelMySQLService.create(dto);
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.osRepository.createIndex({ index: id.toString() });
     }
 
@@ -75,7 +76,7 @@ export class ChannelService {
 
   @Transactional()
   async deleteById(channelId: number) {
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.osRepository.deleteIndex(channelId.toString());
     }
 

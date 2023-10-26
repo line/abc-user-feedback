@@ -21,7 +21,10 @@ import type { Repository } from 'typeorm';
 
 import { FieldFormatEnum, isSelectFieldFormat } from '@/common/enums';
 import { createFieldDto, updateFieldDto } from '@/test-utils/fixtures';
-import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import {
+  MockOpensearchRepository,
+  TestConfig,
+} from '@/test-utils/util-functions';
 import { FieldServiceProviders } from '../../../test-utils/providers/field.service.providers';
 import { FieldEntity } from '../../channel/field/field.entity';
 import { OptionEntity } from '../option/option.entity';
@@ -45,6 +48,7 @@ describe('FieldService suite', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: FieldServiceProviders,
     }).compile();
 
