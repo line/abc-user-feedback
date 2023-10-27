@@ -101,7 +101,6 @@ export class FieldMySQLService {
     this.checkReservedFieldKey(fields);
 
     const fieldsToCreate: CreateFieldDto[] = [
-      ...fields,
       {
         name: 'ID',
         key: 'id',
@@ -134,6 +133,7 @@ export class FieldMySQLService {
         status: FieldStatusEnum.ACTIVE,
         description: '',
       },
+      ...fields,
     ];
 
     const fieldEntities = [];
@@ -158,7 +158,7 @@ export class FieldMySQLService {
     return await this.repository.find({
       where: { channel: { id: channelId } },
       relations: { options: true },
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'ASC' },
     });
   }
 
