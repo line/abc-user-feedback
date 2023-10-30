@@ -162,27 +162,10 @@ export class FeedbackService {
     });
     const worksheet = workbook.addWorksheet('Sheet 1');
 
-    const headerOrderForType = ['DEFAULT', 'API', 'ADMIN'];
-    const headers = fields
-      .sort((a, b) => {
-        const typeA = headerOrderForType.indexOf(a.type);
-        const typeB = headerOrderForType.indexOf(b.type);
-
-        if (typeA !== typeB) return typeA - typeB;
-
-        if (a.type === 'DEFAULT' && b.type === 'DEFAULT') {
-          const nameOrder = ['ID', 'Created', 'Updated', 'Issue'];
-          const nameA = nameOrder.indexOf(a.name);
-          const nameB = nameOrder.indexOf(b.name);
-          return nameA - nameB;
-        }
-
-        return 0;
-      })
-      .map((field) => ({
-        header: field.name,
-        key: field.name,
-      }));
+    const headers = fields.map((field) => ({
+      header: field.name,
+      key: field.name,
+    }));
     worksheet.columns = headers;
 
     const pageSize = 1000;
