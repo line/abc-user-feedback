@@ -22,6 +22,7 @@ import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+import { TestConfig } from '@/test-utils/util-functions';
 import {
   AuthServiceProviders,
   MockEmailVerificationMailingService,
@@ -52,6 +53,7 @@ describe('auth service ', () => {
   let apiKeyRepo: Repository<ApiKeyEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: AuthServiceProviders,
     }).compile();
     authService = module.get(AuthService);

@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { getIronSession } from 'iron-session';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -25,6 +26,7 @@ import { MainTemplate } from '@/components';
 import { SettingMenuBox } from '@/components/layouts/setting-menu';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
+import { Path } from '@/constants/path';
 import {
   APIKeySetting,
   ChannelDeleteSetting,
@@ -52,19 +54,29 @@ interface IProps {
 
 const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const router = useRouter();
 
   const [showList, setShowList] = useState<number[]>([0, 1, 2]);
   const [channelId, setChannelId] = useState<number | null>(null);
+  const settingMenu = useMemo(() => {
+    if (router.query?.menu) return router.query.menu as SettingMenuType;
+    else return null;
+  }, [router.query]);
 
-  const [settingMenu, setSettingMenu] = useState<SettingMenuType>();
+  console.log('settingMenu: ', settingMenu);
+
+  const setSettingMenu = (input: SettingMenuType | null) =>
+    router.push({
+      pathname: Path.SETTINGS,
+      query: { menu: input ?? undefined, projectId },
+    });
 
   const onClickReset = () => {
     setShowList([0, 1, 2]);
-    setSettingMenu(undefined);
+    setSettingMenu(null);
   };
-
-  const onClickTarget = (target?: SettingMenuType) => () => {
-    switch (target) {
+  useEffect(() => {
+    switch (settingMenu) {
       case 'TENANT_INFO':
       case 'SIGNUP_SETTING':
       case 'USER_MANAGEMENT':
@@ -87,6 +99,9 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         setShowList([0, 1, 2]);
         break;
     }
+  }, [router.query]);
+
+  const onClickTarget = (target: SettingMenuType | null) => () => {
     setSettingMenu(target);
   };
 

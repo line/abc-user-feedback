@@ -20,7 +20,7 @@ import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
 import type { TimeRange } from '@/common/dtos';
-import { createQueryBuilder } from '@/test-utils/util-functions';
+import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { IssueServiceProviders } from '../../../test-utils/providers/issue.service.providers';
 import {
   CreateIssueDto,
@@ -40,6 +40,7 @@ describe('IssueService test suite', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: IssueServiceProviders,
     }).compile();
 

@@ -91,7 +91,9 @@ export const Tooltip: React.FC<ITooltipProps> = ({
             style={floatingStyles}
             {...getFloatingProps()}
           >
-            <p className="text-fill-inverse font-12-regular">{description}</p>
+            <p className="text-fill-inverse font-12-regular max-w-[200px] break-words">
+              {description}
+            </p>
             <FloatingArrow ref={arrowRef} context={context} />
           </div>
         )}

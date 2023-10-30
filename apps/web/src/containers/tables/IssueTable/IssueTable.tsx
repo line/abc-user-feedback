@@ -323,6 +323,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
               value={createdAtRange}
               onChange={setCreatedAtRange}
               maxDate={new Date()}
+              isClearable
             />
           </div>
           <TableSearchInput
@@ -391,6 +392,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                 <Fragment key={row.id}>
                   <TableRow
                     isSelected={row.getIsExpanded()}
+                    onClick={onClickTableRow(row)}
                     hoverElement={
                       <>
                         <TableCheckbox
@@ -399,15 +401,6 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           indeterminate={row.getIsSomeSelected()}
                           onChange={row.getToggleSelectedHandler()}
                         />
-                        <button
-                          className="icon-btn icon-btn-sm icon-btn-tertiary"
-                          onClick={onClickTableRow(row)}
-                        >
-                          <Icon
-                            name={row.getIsExpanded() ? 'Compress' : 'Expand'}
-                            size={16}
-                          />
-                        </button>
                         <ShareButton
                           pathname={`/main/${projectId}/issue?id=${row.original.id}`}
                         />

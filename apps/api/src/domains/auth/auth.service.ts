@@ -14,20 +14,23 @@
  * under the License.
  */
 import crypto from 'crypto';
+import { HttpService } from '@nestjs/axios';
 import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
-  Logger,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import * as bcrypt from 'bcrypt';
 import dayjs from 'dayjs';
+import { catchError, lastValueFrom, map } from 'rxjs';
 import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+import type { ConfigServiceType } from '@/types/config-service.type';
 import { CodeTypeEnum } from '../../shared/code/code-type.enum';
 import { CodeService } from '../../shared/code/code.service';
 import { ApiKeyService } from '../project/api-key/api-key.service';
@@ -57,7 +60,6 @@ import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 
 @Injectable()
 export class AuthService {
-  private logger = new Logger(AuthService.name);
   private REDIRECT_URI = `${process.env.BASE_URL}/auth/oauth-callback`;
 
   constructor(
@@ -70,6 +72,8 @@ export class AuthService {
     private readonly tenantService: TenantService,
     private readonly roleService: RoleService,
     private readonly memberService: MemberService,
+    private readonly configService: ConfigService<ConfigServiceType>,
+    private readonly httpService: HttpService,
   ) {}
 
   async sendEmailCode({ email }: SendEmailCodeDto) {
@@ -169,18 +173,18 @@ export class AuthService {
     const { email, id, department, name, type } = user;
     const { state } = await this.userService.findById(id);
 
-    if (state === UserStateEnum.Blocked) {
-      throw new UserBlockedException();
-    }
+    if (state === UserStateEnum.Blocked) throw new UserBlockedException();
+    const { accessTokenExpiredTime, refreshTokenExpiredTime } =
+      this.configService.get('jwt', { infer: true });
 
     return {
       accessToken: this.jwtService.sign(
         { sub: id, email, department, name, type },
-        { expiresIn: '10m' },
+        { expiresIn: accessTokenExpiredTime },
       ),
       refreshToken: this.jwtService.sign(
         { sub: id, email },
-        { expiresIn: '1h' },
+        { expiresIn: refreshTokenExpiredTime },
       ),
     };
   }
@@ -222,7 +226,7 @@ export class AuthService {
     return `${oauthConfig.authCodeRequestURL}?${params}`;
   }
 
-  private async getAccessToken(code: string) {
+  private async getAccessToken(code: string): Promise<string> {
     const { oauthConfig, useOAuth } = await this.tenantService.findOne();
 
     if (!useOAuth) {
@@ -233,35 +237,39 @@ export class AuthService {
     }
 
     const { accessTokenRequestURL, clientId, clientSecret } = oauthConfig;
-    try {
-      const { data } = await axios.post(
-        accessTokenRequestURL,
-        {
-          grant_type: 'authorization_code',
-          code,
-          redirect_uri: this.REDIRECT_URI,
-        },
-        {
-          headers: {
-            Authorization: `Basic ${Buffer.from(
-              clientId + ':' + clientSecret,
-            ).toString('base64')}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
+    return await lastValueFrom(
+      this.httpService
+        .post(
+          accessTokenRequestURL,
+          {
+            grant_type: 'authorization_code',
+            code,
+            redirect_uri: this.REDIRECT_URI,
           },
-        },
-      );
-      return data.access_token;
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        throw new InternalServerErrorException({
-          axiosError: {
-            ...error.response.data,
-            status: error.response.status,
+          {
+            headers: {
+              Authorization: `Basic ${Buffer.from(
+                clientId + ':' + clientSecret,
+              ).toString('base64')}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
-        });
-      }
-      throw error;
-    }
+        )
+        .pipe(map((res) => res.data?.access_token))
+        .pipe(
+          catchError((error) => {
+            if (error instanceof AxiosError) {
+              throw new InternalServerErrorException({
+                axiosError: {
+                  ...error.response.data,
+                  status: error.response.status,
+                },
+              });
+            }
+            throw error;
+          }),
+        ),
+    );
   }
 
   private async getEmailByAccessToken(accessToken: string): Promise<string> {
@@ -270,22 +278,26 @@ export class AuthService {
     if (!oauthConfig) {
       throw new BadRequestException('OAuth Config is required.');
     }
-    try {
-      const { data } = await axios.get(oauthConfig.userProfileRequestURL, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      });
-      return data[oauthConfig.emailKey];
-    } catch (error) {
-      if (error instanceof AxiosError) {
-        throw new InternalServerErrorException({
-          axiosError: {
-            ...error.response.data,
-            status: error.response.status,
-          },
-        });
-      }
-      throw error;
-    }
+    return await lastValueFrom(
+      this.httpService
+        .get(oauthConfig.userProfileRequestURL, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .pipe(map((res) => res.data?.[oauthConfig.emailKey]))
+        .pipe(
+          catchError((error) => {
+            if (error instanceof AxiosError) {
+              throw new InternalServerErrorException({
+                axiosError: {
+                  ...error.response.data,
+                  status: error.response.status,
+                },
+              });
+            }
+            throw error;
+          }),
+        ),
+    );
   }
 
   async signInByOAuth(code: string) {

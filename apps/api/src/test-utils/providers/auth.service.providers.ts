@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
 import { ClsService } from 'nestjs-cls';
 
@@ -49,4 +50,11 @@ export const AuthServiceProviders = [
   ...RoleServiceProviders,
   ...MemberServiceProviders,
   ClsService,
+  {
+    provide: HttpService,
+    useValue: {
+      get: jest.fn(),
+      post: jest.fn(),
+    },
+  },
 ];
