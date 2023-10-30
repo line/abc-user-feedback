@@ -120,12 +120,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
           </span>
         </button>
       ) : (
-        <Link
-          href={href}
-          onClick={() => {
-            if (activePathname === router.pathname) router.reload();
-          }}
-        >
+        <Link href={href}>
           <button
             className={[
               'icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start',
