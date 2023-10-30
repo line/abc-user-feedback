@@ -13,10 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useContext } from 'react';
 
-import { UserContext } from '@/contexts/user.context';
+import type { InputRoleType, RoleType } from './role.type';
 
-export default function useUser() {
-  return useContext(UserContext);
-}
+export type MemberType = {
+  id: number;
+  user: { id: number; email: string; name: string; department: string };
+  role: RoleType;
+  createdAt: string;
+};
+
+export type InputMemberType = Omit<
+  MemberType & { role: InputRoleType },
+  'id' | 'createdAt'
+>;

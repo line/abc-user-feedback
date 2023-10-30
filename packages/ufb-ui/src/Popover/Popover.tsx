@@ -272,7 +272,7 @@ export interface IPopoverModalContentProps extends React.PropsWithChildren {
     children: React.ReactNode;
     disabled?: boolean;
     className?: string;
-    onClick?: () => void;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
     form?: string;
     type?: 'submit' | 'reset' | 'button' | undefined;
   };

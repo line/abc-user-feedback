@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
-import { useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
 
 interface IProps {}
 

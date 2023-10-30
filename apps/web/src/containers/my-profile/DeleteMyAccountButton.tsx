@@ -18,7 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
-import { useOAIMutation, useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
+import { useOAIMutation } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
 

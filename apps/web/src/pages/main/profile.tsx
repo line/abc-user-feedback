@@ -24,7 +24,7 @@ import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
 import MyProfileForm from '@/containers/my-profile/MyProfileForm';
-import { useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
 import type { NextPageWithLayout } from '../_app';
 
 const menuItems = [
