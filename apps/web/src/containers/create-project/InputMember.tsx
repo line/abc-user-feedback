@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import {
   Icon,
@@ -30,11 +30,15 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { TableSortIcon } from '@/components';
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import type { MemberType } from '../setting-menu/MemberSetting/MemberSetting';
+import { SelectBox, TableSortIcon } from '@/components';
+import { useCreateProject } from '@/contexts/create-project.context';
+import { useUserSearch } from '@/hooks';
+import type { InputMemberType } from '@/types/member.type';
+import type { InputRoleType } from '@/types/role.type';
+import type { UserType } from '@/types/user.type';
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
-const columnHelper = createColumnHelper<MemberType>();
+const columnHelper = createColumnHelper<InputMemberType>();
 const columns = [
   columnHelper.accessor('user.email', {
     header: 'Email',
@@ -49,11 +53,6 @@ const columns = [
     header: 'Department',
     enableSorting: false,
     cell: ({ getValue }) => ((getValue() ?? '').length > 0 ? getValue() : '-'),
-  }),
-  columnHelper.accessor('createdAt', {
-    header: 'Joined',
-    cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
-    enableSorting: true,
   }),
   columnHelper.accessor('role.name', {
     header: 'Role',
@@ -75,84 +74,160 @@ const columns = [
 ];
 
 const InputMember: React.FC = () => {
+  const { onChangeInput, input } = useCreateProject();
+
+  const members = useMemo(() => input.members, [input.members]);
+  const setMembers = useCallback(
+    (members: InputMemberType[]) => onChangeInput('members', members),
+    [],
+  );
+
   const table = useReactTable({
     columns,
-    data: [],
+    data: members,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          {table.getFlatHeaders().map((header, i) => (
-            <th key={i} style={{ width: header.getSize() }}>
-              {flexRender(header.column.columnDef.header, header.getContext())}
-              {header.column.getCanSort() && (
-                <TableSortIcon column={header.column} />
-              )}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.length === 0 ? (
+    <CreateProjectInputTemplate
+      actionButton={
+        <CreateMemberButton
+          members={members}
+          onCreate={(input) => setMembers(members.concat(input))}
+        />
+      }
+    >
+      <table className="table">
+        <thead>
           <tr>
-            <td colSpan={columns.length}>
-              <div className="my-32 flex flex-col items-center justify-center gap-3">
-                <Icon
-                  name="DriverRegisterFill"
-                  className="text-tertiary"
-                  size={56}
-                />
-                <p>Member를 등록해주세요.</p>
-              </div>
-            </td>
+            {table.getFlatHeaders().map((header, i) => (
+              <th key={i} style={{ width: header.getSize() }}>
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+                {header.column.getCanSort() && (
+                  <TableSortIcon column={header.column} />
+                )}
+              </th>
+            ))}
           </tr>
-        ) : (
-          table.getRowModel().rows.map((row) => (
-            <Fragment key={row.index}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={`${cell.id} ${cell.row.index}`}
-                    className="border-none"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
-          ))
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.length === 0 ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <div className="my-32 flex flex-col items-center justify-center gap-3">
+                  <Icon
+                    name="DriverRegisterFill"
+                    className="text-tertiary"
+                    size={56}
+                  />
+                  <p>Member를 등록해주세요.</p>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            table.getRowModel().rows.map((row) => (
+              <Fragment key={row.index}>
+                <tr>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={`${cell.id} ${cell.row.index}`}
+                      className="border-none"
+                      style={{ width: cell.column.getSize() }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              </Fragment>
+            ))
+          )}
+        </tbody>
+      </table>
+    </CreateProjectInputTemplate>
   );
 };
 
-export const CreateMemberButton: React.FC = () => {
+const CreateMemberButton: React.FC<{
+  members: InputMemberType[];
+  onCreate: (input: { role: InputRoleType; user: UserType }) => void;
+}> = ({ members, onCreate }) => {
+  const { input } = useCreateProject();
+  const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
+
+  const { data: userData } = useUserSearch({
+    limit: 1000,
+    query: { type: 'GENERAL' },
+  });
+
+  const [user, setUser] = useState<UserType>();
+  const [role, setRole] = useState<InputRoleType>();
+
   return (
-    <Popover modal>
+    <Popover onOpenChange={setOpen} open={open} modal>
       <PopoverTrigger asChild>
-        <button className="btn btn-primary btn-md w-[120px]">
+        <button
+          className="btn btn-primary btn-md w-[120px]"
+          onClick={() => setOpen(true)}
+        >
           Member 생성
         </button>
       </PopoverTrigger>
       <PopoverModalContent
-        cancelText="취소"
+        title={t('main.setting.dialog.register-member.title')}
+        cancelText={t('button.cancel')}
         submitButton={{
-          children: '확인',
-          onClick: () => {},
-        }}
-        title="Member 생성"
-        description="신규 Member의 명칭을 입력해주세요."
-        icon={{
-          name: 'ShieldPrivacyFill',
-          size: 56,
-          className: 'text-blue-primary',
+          type: 'submit',
+          form: 'inviteMember',
+          children: t('button.confirm'),
+          onClick: () => {
+            if (!user || !role) return;
+            onCreate({ user, role });
+            setOpen(false);
+          },
         }}
       >
-        <Input label="Role Name" placeholder="입력" />
+        <div className="my-8 flex flex-col gap-5">
+          <Input label="Project" value={input?.projectInfo?.name} disabled />
+          <SelectBox
+            label="User"
+            required
+            isSearchable
+            options={
+              userData?.items
+                .filter(
+                  (v) => !members.find((member) => member.user.id === v.id),
+                )
+                .map((v) => ({
+                  name: v.name ? `${v.email} (${v.name})` : v.email,
+                  id: v.id,
+                })) ?? []
+            }
+            onChange={(v) => {
+              const newUser = userData?.items.find((user) => user.id === v?.id);
+              if (!newUser) return;
+              setUser(newUser);
+            }}
+          />
+          <SelectBox
+            label="Role"
+            required
+            options={input?.roles?.map((v, id) => ({ id, ...v })) ?? []}
+            onChange={(v) => {
+              const newRole = input?.roles?.find(
+                (role) => role.name === v?.name,
+              );
+              if (!newRole) return;
+              setRole(newRole);
+            }}
+          />
+        </div>
       </PopoverModalContent>
     </Popover>
   );

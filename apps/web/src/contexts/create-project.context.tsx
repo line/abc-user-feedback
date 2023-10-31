@@ -13,53 +13,127 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useRouter } from 'next/router';
 
 import type { InputApiKeyType } from '@/types/api-key.type';
-import type { IssueTrackerType } from '@/types/issue-tracker.type';
+import type { InputIssueTrackerType } from '@/types/issue-tracker.type';
 import type { InputMemberType } from '@/types/member.type';
+import { PermissionList } from '@/types/permission.type';
 import type { InputProjectType } from '@/types/project.type';
 import type { InputRoleType } from '@/types/role.type';
 
+const DEFAULT_ROLES: InputRoleType[] = [
+  { name: 'Admin', permissions: [...PermissionList] },
+  {
+    name: 'Editor',
+    permissions: [...PermissionList].filter(
+      (v) =>
+        !v.includes('role') &&
+        (v.includes('read') ||
+          v.includes('feedback') ||
+          v.includes('issue') ||
+          v.includes('member_create')),
+    ),
+  },
+  {
+    name: 'Viewer',
+    permissions: [...PermissionList].filter(
+      (v) => v.includes('read') && !v.includes('download'),
+    ),
+  },
+];
+const DEFAULT_INPUT = {
+  apiKeys: [],
+  members: [],
+  roles: DEFAULT_ROLES,
+  issueTracker: { ticketDomain: '', ticketKey: '' },
+  projectInfo: { description: '', name: '' },
+};
+
 interface InputType {
-  projectInfo?: InputProjectType;
-  roles?: InputRoleType[];
-  members?: InputMemberType[];
-  apiKeys?: InputApiKeyType[];
-  issueTracker?: IssueTrackerType;
+  projectInfo: InputProjectType;
+  roles: InputRoleType[];
+  members: InputMemberType[];
+  apiKeys: InputApiKeyType[];
+  issueTracker: InputIssueTrackerType;
 }
+
+export type StepType = keyof InputType;
+
+export const STEPS: StepType[] = [
+  'projectInfo',
+  'roles',
+  'members',
+  'apiKeys',
+  'issueTracker',
+];
+
 type OnChangeInputType = <T extends keyof InputType>(
   key: T,
   value: InputType[T],
 ) => void;
 
 interface CreateProjectContextType {
-  input: InputType | null;
+  input: InputType;
+  currentStep: StepType;
+  currentStepIndex: number;
+  completeStepIndex: number;
   onChangeInput: OnChangeInputType;
-  currentStep: number;
+  onPrev: () => void;
+  onNext: () => void;
+  goto: (step: StepType) => void;
 }
 
 export const CreateProjectContext = createContext<CreateProjectContextType>({
-  currentStep: 0,
-  input: null,
+  currentStep: 'projectInfo',
+  completeStepIndex: 0,
+  currentStepIndex: 0,
+  input: DEFAULT_INPUT,
   onChangeInput: () => {},
+  onPrev: () => {},
+  onNext: () => {},
+  goto: () => {},
 });
 
 export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [input, setInput] = useState<InputType | null>(null);
-  const router = useRouter();
+  const [input, setInput] = useState<InputType>(DEFAULT_INPUT);
+  const [currentStep, setCurrentStep] = useState<StepType>('projectInfo');
+  const [completeStepIndex, setCompleteStepIndex] = useState(0);
 
-  const currentStep = useMemo(() => {
-    if (input?.issueTracker) return 5;
-    if (input?.apiKeys) return 4;
-    if (input?.members) return 3;
-    if (input?.roles) return 2;
-    if (input?.projectInfo) return 1;
-    return 0;
-  }, [input]);
+  const currentStepIndex = useMemo(
+    () => STEPS.indexOf(currentStep),
+    [currentStep],
+  );
+
+  const onPrev = useCallback(() => {
+    setCurrentStep(STEPS[STEPS.indexOf(currentStep) - 1] ?? 'projectInfo');
+  }, [currentStep]);
+
+  const onNext = useCallback(() => {
+    const index = STEPS.indexOf(currentStep) + 1;
+    const nextStep = STEPS[index] ?? 'projectInfo';
+
+    setCurrentStep(nextStep);
+    if (completeStepIndex < index) setCompleteStepIndex(index);
+  }, [currentStep, input]);
+
+  const goto = useCallback(
+    (step: StepType) =>
+      setCurrentStep(STEPS[STEPS.indexOf(step)] ?? 'projectInfo'),
+    [currentStep],
+  );
+
+  const router = useRouter();
 
   const onChangeInput: OnChangeInputType = (key, value) => {
     setInput((prev) => ({ ...prev, [key]: value }));
@@ -94,7 +168,16 @@ export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
 
   return (
     <CreateProjectContext.Provider
-      value={{ input, currentStep, onChangeInput }}
+      value={{
+        input,
+        completeStepIndex,
+        currentStep,
+        currentStepIndex,
+        onChangeInput,
+        onPrev,
+        onNext,
+        goto,
+      }}
     >
       {children}
     </CreateProjectContext.Provider>

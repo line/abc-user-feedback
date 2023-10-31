@@ -14,6 +14,7 @@
  * under the License.
  */
 export { default as InputProjectInfo } from './InputProjectInfo';
-export { default as InputRole, CreateRoleButton } from './InputRole';
-export { default as InputMember, CreateMemberButton } from './InputMember';
-export { default as InputApiKey, CreateApiKeyButton } from './InputApiKey';
+export { default as InputRole } from './InputRole';
+export { default as InputMember } from './InputMember';
+export { default as InputApiKey } from './InputApiKey';
+export { default as InputIssueTracker } from './InputIssueTracker';

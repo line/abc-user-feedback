@@ -13,62 +13,60 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { Fragment, useMemo, useState } from 'react';
-import type { NextPage } from 'next';
+import React, { Fragment } from 'react';
+import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Icon } from '@ufb/ui';
 
+import { DEFAULT_LOCALE } from '@/constants/i18n';
 import {
-  CreateApiKeyButton,
-  CreateMemberButton,
-  CreateRoleButton,
   InputApiKey,
+  InputIssueTracker,
   InputMember,
   InputProjectInfo,
   InputRole,
 } from '@/containers/create-project';
+import type { StepType } from '@/contexts/create-project.context';
+import {
+  CreateProjectProvider,
+  STEPS,
+  useCreateProject,
+} from '@/contexts/create-project.context';
 
-const ITEMS = ['info', 'role', 'member', 'apiKey', 'issueTracker'] as const;
-
-type ItemType = (typeof ITEMS)[number];
-
-const STEPPER_TEXT: Record<ItemType, string> = {
-  info: 'Project 설정',
-  role: 'Role 관리',
-  member: 'Member 관리',
-  apiKey: 'API Key',
+const STEPPER_TEXT: Record<StepType, string> = {
+  projectInfo: 'Project 설정',
+  roles: 'Role 관리',
+  members: 'Member 관리',
+  apiKeys: 'API Key',
   issueTracker: 'Issue Tracker',
 };
 
-const HELP_TEXT: Record<ItemType, string> = {
-  info: 'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
-  role: 'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
-  apiKey:
+const HELP_TEXT: Record<StepType, string> = {
+  projectInfo:
     'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
-  member:
+  roles:
+    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
+  apiKeys:
+    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
+  members:
     'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
   issueTracker:
     'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
 };
 
 const CreatePage: NextPage = () => {
-  const [currentStep, setCurrentStep] =
-    useState<(typeof ITEMS)[number]>('info');
-
-  const currentIndex = useMemo(
-    () => ITEMS.indexOf(currentStep) + 1,
-    [currentStep],
-  );
-
   return (
-    <div className="m-auto flex h-screen w-[1040px] flex-col gap-4 pb-6">
-      <Header />
-      <Title />
-      <Stepper currentIndex={currentIndex} />
-      <Helper currentStep={currentStep} />
-      <Contents currentStep={currentStep} setCurrentStep={setCurrentStep} />
-    </div>
+    <CreateProjectProvider>
+      <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
+        <Header />
+        <Title />
+        <Stepper />
+        <Helper />
+        <Contents />
+      </div>
+    </CreateProjectProvider>
   );
 };
 
@@ -96,29 +94,36 @@ const Title = () => {
   return <h1 className="font-24-bold text-center">Project 생성</h1>;
 };
 
-const Stepper: React.FC<{ currentIndex: number }> = ({ currentIndex }) => {
+const Stepper: React.FC = () => {
+  const { currentStepIndex, goto, completeStepIndex } = useCreateProject();
+
   return (
     <div className="border-fill-secondary relative flex rounded border px-10 py-4">
-      {ITEMS.map((item, i) => (
+      {STEPS.map((item, i) => (
         <Fragment key={i}>
           <div className="flex flex-col items-center gap-3">
             <div
               className={[
-                i < currentIndex
+                'font-16-bold flex h-10 w-10 items-center justify-center rounded-full',
+                i <= completeStepIndex
                   ? 'bg-blue-primary text-above-primary'
                   : 'bg-fill-secondary text-secondary',
-                'font-16-bold flex h-10 w-10 items-center justify-center rounded-full',
+                i <= completeStepIndex && 'cursor-pointer',
+                i === currentStepIndex && 'ring-fill-primary ring-2',
               ].join(' ')}
+              onClick={() => {
+                if (i <= completeStepIndex) goto(item);
+              }}
             >
-              {i + 1}
+              {i > completeStepIndex - 1 ? i + 1 : 'v'}
             </div>
             <div className="font-14-bold">{STEPPER_TEXT[item]}</div>
           </div>
-          {ITEMS.length - 1 !== i && (
+          {STEPS.length - 1 !== i && (
             <div
               className={[
                 'mt-5 flex-1 border-t-2',
-                i < currentIndex - 1
+                i < completeStepIndex
                   ? 'border-blue-primary'
                   : 'border-fill-secondary',
               ].join(' ')}
@@ -130,7 +135,8 @@ const Stepper: React.FC<{ currentIndex: number }> = ({ currentIndex }) => {
   );
 };
 
-const Helper: React.FC<{ currentStep: ItemType }> = ({ currentStep }) => {
+const Helper: React.FC = () => {
+  const { currentStep } = useCreateProject();
   return (
     <div className="border-fill-secondary rounded border px-6 py-4">
       <h2 className="font-14-bold mb-1">도움말</h2>
@@ -139,49 +145,25 @@ const Helper: React.FC<{ currentStep: ItemType }> = ({ currentStep }) => {
   );
 };
 
-const Contents: React.FC<{
-  currentStep: ItemType;
-  setCurrentStep: React.Dispatch<React.SetStateAction<ItemType>>;
-}> = ({ currentStep, setCurrentStep }) => {
+const Contents: React.FC = () => {
+  const { currentStep } = useCreateProject();
+
   return (
-    <div className="border-fill-secondary flex flex-1 flex-col gap-6 overflow-auto rounded border p-6">
-      <div className="flex flex-1 flex-col gap-5">
-        <div className="flex justify-between">
-          <h1 className="font-20-bold">{STEPPER_TEXT[currentStep]}</h1>
-          {currentStep === 'role' && <CreateRoleButton />}
-          {currentStep === 'member' && <CreateMemberButton />}
-          {currentStep === 'apiKey' && <CreateApiKeyButton />}
-        </div>
-        <hr className="border-fill-secondary" />
-        <div className="flex flex-1 flex-col gap-5">
-          {currentStep === 'info' && <InputProjectInfo />}
-          {currentStep === 'role' && <InputRole />}
-          {currentStep === 'member' && <InputMember />}
-          {currentStep === 'apiKey' && <InputApiKey />}
-        </div>
-      </div>
-      <div className="flex justify-end gap-2">
-        {currentStep !== 'info' && (
-          <button
-            className="btn btn-lg btn-secondary w-[120px]"
-            onClick={() =>
-              setCurrentStep(ITEMS[ITEMS.indexOf(currentStep) - 1] ?? 'info')
-            }
-          >
-            이전
-          </button>
-        )}
-        <button
-          className="btn btn-lg btn-secondary w-[120px]"
-          onClick={() =>
-            setCurrentStep(ITEMS[ITEMS.indexOf(currentStep) + 1] ?? 'info')
-          }
-        >
-          다음
-        </button>
-      </div>
-    </div>
+    <>
+      {currentStep === 'projectInfo' && <InputProjectInfo />}
+      {currentStep === 'roles' && <InputRole />}
+      {currentStep === 'members' && <InputMember />}
+      {currentStep === 'apiKeys' && <InputApiKey />}
+      {currentStep === 'issueTracker' && <InputIssueTracker />}
+    </>
   );
+};
+export const getStaticProps: GetStaticProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+    },
+  };
 };
 
 export default CreatePage;

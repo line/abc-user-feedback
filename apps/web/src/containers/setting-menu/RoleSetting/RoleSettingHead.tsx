@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -31,7 +31,7 @@ interface IProps {
   name: string;
   roleId: number;
   isEdit: boolean;
-  projectId: number;
+  projectId?: number;
   onChangeEditRole: (roleId?: number) => void;
   onChangeEditName: (name: string) => void;
   onSubmitEdit: () => void;
@@ -51,6 +51,14 @@ const RoleSettingHead: React.FC<IProps> = ({
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const hasUpdateRolePerm = useMemo(
+    () => !projectId || perms.includes('project_role_update'),
+    [perms, projectId],
+  );
+  const hasDeleteRolePerm = useMemo(
+    () => !projectId || perms.includes('project_role_delete'),
+    [perms, projectId],
+  );
 
   return (
     <>
@@ -90,12 +98,12 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'mb-1 flex items-center gap-2 rounded p-2',
-                    !perms.includes('project_role_update')
+                    !hasUpdateRolePerm
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
-                    if (!perms.includes('project_role_update')) return;
+                    if (!hasUpdateRolePerm) return;
                     onChangeEditRole(roleId);
                     onChangeEditName(name);
                   }}
@@ -108,12 +116,12 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'flex items-center gap-2 rounded p-2',
-                    !perms.includes('project_role_delete')
+                    !hasDeleteRolePerm
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
-                    if (!perms.includes('project_role_delete')) return;
+                    if (!hasDeleteRolePerm) return;
                     setDialogOpen(true);
                   }}
                 >

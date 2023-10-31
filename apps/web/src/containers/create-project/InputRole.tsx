@@ -13,34 +13,77 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useCallback, useMemo, useState } from 'react';
+
 import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
+import { useCreateProject } from '@/contexts/create-project.context';
+import type { RoleType } from '@/types/role.type';
 import RoleSettingTable from '../setting-menu/RoleSetting/RoleSettingTable';
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 interface IProps {}
 
 const InputRole: React.FC<IProps> = () => {
+  const { onChangeInput, input } = useCreateProject();
+
+  const roles = useMemo(
+    () => input?.roles?.map((v, id) => ({ id, ...v })),
+    [input?.roles],
+  );
+
+  const setRoles = useCallback(
+    (input: RoleType[]) => onChangeInput('roles', input),
+    [],
+  );
+
+  const onCreateRole = (name: string) => {
+    setRoles(roles.concat({ id: roles.length + 1, name, permissions: [] }));
+  };
+  const onUpdateRole = (input: RoleType) => {
+    setRoles(roles.map((v) => (v.id === input.id ? input : v)));
+  };
+  const onDeleteRole = (roleId: number) => {
+    setRoles(roles.filter((v) => v.id !== roleId));
+  };
+
   return (
-    <RoleSettingTable
-      onDelete={() => {}}
-      updateRole={() => {}}
-      projectId={1}
-      roles={[]}
-    />
+    <CreateProjectInputTemplate
+      actionButton={<CreateRoleButton onCreate={onCreateRole} />}
+    >
+      <RoleSettingTable
+        onDelete={onDeleteRole}
+        updateRole={onUpdateRole}
+        roles={roles}
+      />
+    </CreateProjectInputTemplate>
   );
 };
 
-export const CreateRoleButton: React.FC = () => {
+const CreateRoleButton: React.FC<{
+  onCreate: (name: string) => void;
+}> = ({ onCreate }) => {
+  const [roleName, setRoleName] = useState('');
+  const [open, setOpen] = useState(false);
+
   return (
-    <Popover modal>
+    <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <button className="btn btn-primary btn-md w-[120px]">Role 생성</button>
+        <button
+          className="btn btn-primary btn-md w-[120px]"
+          onClick={() => setOpen(true)}
+        >
+          Role 생성
+        </button>
       </PopoverTrigger>
       <PopoverModalContent
         cancelText="취소"
         submitButton={{
           children: '확인',
-          onClick: () => {},
+          onClick: () => {
+            onCreate(roleName);
+            setOpen(false);
+          },
         }}
         title="Role 생성"
         description="신규 Role의 명칭을 입력해주세요."
@@ -50,7 +93,12 @@ export const CreateRoleButton: React.FC = () => {
           className: 'text-blue-primary',
         }}
       >
-        <Input label="Role Name" placeholder="입력" />
+        <Input
+          label="Role Name"
+          placeholder="입력"
+          value={roleName}
+          onChange={(e) => setRoleName(e.target.value)}
+        />
       </PopoverModalContent>
     </Popover>
   );

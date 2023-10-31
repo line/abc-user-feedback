@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type IssueTrackerType = {
-  ticketKey: string;
-  ticketDomain: string;
+export type UserType = {
+  id: number;
+  email: string;
+  name: string;
+  department: string | null;
 };
-export type InputIssueTrackerType = IssueTrackerType;

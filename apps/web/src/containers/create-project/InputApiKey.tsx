@@ -27,19 +27,15 @@ import { useTranslation } from 'react-i18next';
 import { Badge, Icon, toast } from '@ufb/ui';
 
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import type { ApiKeyType } from '@/types/api-key.type';
+import type { InputApiKeyType } from '@/types/api-key.type';
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
-const columnHelper = createColumnHelper<ApiKeyType>();
+const columnHelper = createColumnHelper<InputApiKeyType>();
 const columns = (t: TFunction) => [
   columnHelper.accessor('value', {
     header: 'API KEY',
-    cell: ({ getValue, row }) => (
-      <div
-        className={[
-          'flex items-center gap-1',
-          row.original.deletedAt !== null ? 'text-tertiary' : '',
-        ].join(' ')}
-      >
+    cell: ({ getValue }) => (
+      <div className="flex items-center gap-1">
         {getValue()}
         <button
           className="icon-btn icon-btn-sm icon-btn-tertiary"
@@ -62,23 +58,18 @@ const columns = (t: TFunction) => [
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
-    cell: ({ getValue, row }) => (
-      <p className={row.original.deletedAt !== null ? 'text-tertiary' : ''}>
+    cell: ({ getValue }) => (
+      <p className="text-tertiary">
         {dayjs(getValue()).format(DATE_TIME_FORMAT)}
       </p>
     ),
     size: 100,
   }),
-  columnHelper.accessor('deletedAt', {
+  columnHelper.display({
     header: 'Status',
-    cell: ({ getValue }) => (
-      <Badge
-        color={getValue() ? 'black' : 'blue'}
-        type={getValue() ? 'secondary' : 'primary'}
-      >
-        {getValue()
-          ? t('main.setting.api-key-status.inactive')
-          : t('main.setting.api-key-status.active')}
+    cell: () => (
+      <Badge color="blue" type="primary">
+        {t('main.setting.api-key-status.active')}
       </Badge>
     ),
     size: 50,
@@ -98,56 +89,64 @@ const columns = (t: TFunction) => [
 // API
 const InputApiKey: React.FC = () => {
   const { t } = useTranslation();
-  const [rows] = useState([]);
+  const [rows] = useState<InputApiKeyType[]>([]);
   const table = useReactTable({
     columns: columns(t),
     data: [],
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <table className="table">
-      <thead>
-        <tr>
-          {table.getFlatHeaders().map((header, i) => (
-            <th key={i} style={{ width: header.getSize() }}>
-              {flexRender(header.column.columnDef.header, header.getContext())}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {rows.length === 0 ? (
-          <tr className="h-[240px]">
-            <td colSpan={5} className="border-none">
-              <div className="flex h-full flex-col items-center justify-center gap-2">
-                <Icon
-                  name="WarningTriangleFill"
-                  className="text-quaternary"
-                  size={32}
-                />
-                <p className="text-secondary">{t('text.no-data')}</p>
-              </div>
-            </td>
+    <CreateProjectInputTemplate actionButton={<CreateApiKeyButton />}>
+      <table className="table">
+        <thead>
+          <tr>
+            {table.getFlatHeaders().map((header, i) => (
+              <th key={i} style={{ width: header.getSize() }}>
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
+              </th>
+            ))}
           </tr>
-        ) : (
-          table.getRowModel().rows.map((row) => (
-            <Fragment key={row.id}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    className="border-none"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
-          ))
-        )}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {rows.length === 0 ? (
+            <tr>
+              <td colSpan={columns(t).length}>
+                <div className="my-32 flex flex-col items-center justify-center gap-3">
+                  <Icon
+                    name="WarningTriangleFill"
+                    className="text-quaternary"
+                    size={32}
+                  />
+                  <p className="text-secondary">{t('text.no-data')}</p>
+                </div>
+              </td>
+            </tr>
+          ) : (
+            table.getRowModel().rows.map((row) => (
+              <Fragment key={row.id}>
+                <tr>
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="border-none"
+                      style={{ width: cell.column.getSize() }}
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              </Fragment>
+            ))
+          )}
+        </tbody>
+      </table>
+    </CreateProjectInputTemplate>
   );
 };
 

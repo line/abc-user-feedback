@@ -76,28 +76,12 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
           roles={data?.roles ?? []}
           onDelete={(roleId) => deleteRole({ roleId })}
           updateRole={async (input) => {
-            const { name, permissions, roleId } = input;
+            const { name, permissions, id: roleId } = input;
             const targetRole = data?.roles.find((v) => v.id === roleId);
             if (!targetRole) return;
 
-            const endtires = Object.entries(permissions) as [
-              PermissionType,
-              boolean,
-            ][];
-
-            const newPermissions = endtires.reduce<PermissionType[]>(
-              (prev, [perm, checked]) => {
-                if (checked)
-                  return prev.includes(perm) ? prev : prev.concat(perm);
-                else
-                  return prev.includes(perm)
-                    ? prev.filter((v) => v !== perm)
-                    : prev;
-              },
-              targetRole.permissions,
-            );
             try {
-              await updateRole({ name, permissions: newPermissions, roleId });
+              await updateRole({ name, permissions, roleId });
               toast.positive({ title: t('toast.save') });
             } catch (error: any) {
               toast.negative({ title: error.message });

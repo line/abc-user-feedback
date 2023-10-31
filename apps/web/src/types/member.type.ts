@@ -15,15 +15,15 @@
  */
 
 import type { InputRoleType, RoleType } from './role.type';
+import type { UserType } from './user.type';
 
 export type MemberType = {
   id: number;
-  user: { id: number; email: string; name: string; department: string };
+  user: UserType;
   role: RoleType;
   createdAt: string;
 };
 
-export type InputMemberType = Omit<
-  MemberType & { role: InputRoleType },
-  'id' | 'createdAt'
->;
+export type InputMemberType = Omit<MemberType, 'id' | 'createdAt' | 'role'> & {
+  role: InputRoleType;
+};

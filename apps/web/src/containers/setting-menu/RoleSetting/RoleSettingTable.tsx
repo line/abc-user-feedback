@@ -38,11 +38,11 @@ import RoleSettingHead from './RoleSettingHead';
 import RoleTitleRow from './RoleTitleRow';
 
 interface IProps {
-  projectId: number;
+  projectId?: number;
   roles: RoleType[];
   updateRole: (input: {
-    permissions: Partial<Record<PermissionType, boolean>>;
-    roleId: number;
+    id: number;
+    permissions: PermissionType[];
     name: string;
   }) => Promise<void> | void;
   onDelete: (roleId: number) => void;
@@ -65,11 +65,26 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
   const colSpan = useMemo(() => (roles.length ?? 0) + 2, [roles]);
   const onSubmitEdit = async () => {
     if (!editName || !editRoleId) return;
+    const newRole = roles.find((v) => v.id === editRoleId);
+    if (!newRole) return;
+
+    const permEntires = Object.entries(editPermissions) as [
+      PermissionType,
+      boolean,
+    ][];
+
+    const newPermissions = permEntires.reduce<PermissionType[]>(
+      (prev, [perm, checked]) => {
+        if (checked) return prev.includes(perm) ? prev : prev.concat(perm);
+        else return prev.includes(perm) ? prev.filter((v) => v !== perm) : prev;
+      },
+      newRole.permissions,
+    );
 
     await updateRole({
       name: editName,
-      permissions: editPermissions,
-      roleId: editRoleId,
+      permissions: newPermissions,
+      id: editRoleId,
     });
     setEditRoleId(undefined);
   };
