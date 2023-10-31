@@ -13,4 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { CreateApiKeyDto } from './create-api-key.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString, Length } from 'class-validator';
+
+export class CreateApiKeyRequestDto {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  @Length(20)
+  value?: string;
+}

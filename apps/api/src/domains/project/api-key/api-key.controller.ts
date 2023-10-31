@@ -14,6 +14,7 @@
  * under the License.
  */
 import {
+  Body,
   Controller,
   Delete,
   Get,
@@ -26,6 +27,8 @@ import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
 import { ApiKeyService } from './api-key.service';
+import { CreateApiKeyDto } from './dtos';
+import { CreateApiKeyRequestDto } from './dtos/requests';
 import {
   CreateApiKeyResponseDto,
   FindApiKeysResponseDto,
@@ -39,9 +42,14 @@ export class ApiKeyController {
   @RequirePermission(PermissionEnum.project_apikey_create)
   @ApiCreatedResponse({ type: CreateApiKeyResponseDto })
   @Post()
-  async create(@Param('projectId', ParseIntPipe) projectId: number) {
+  async create(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Body() body: CreateApiKeyRequestDto,
+  ) {
     return CreateApiKeyResponseDto.transform(
-      await this.apiKeyService.create(projectId),
+      await this.apiKeyService.create(
+        CreateApiKeyDto.from({ ...body, projectId }),
+      ),
     );
   }
 
