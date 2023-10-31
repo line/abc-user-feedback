@@ -22,6 +22,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { ProjectService } from '../project/project.service';
 import { ApiKeyEntity } from './api-key.entity';
+import { CreateApiKeyDto } from './dtos';
 
 @Injectable()
 export class ApiKeyService {
@@ -32,10 +33,13 @@ export class ApiKeyService {
   ) {}
 
   @Transactional()
-  async create(projectId: number) {
+  async create(dto: CreateApiKeyDto) {
+    if (!dto.value) {
+      dto.value = randomBytes(10).toString('hex').toUpperCase();
+    }
+    const { projectId, value } = dto;
     await this.projectService.findById({ projectId });
 
-    const value = randomBytes(10).toString('hex').toUpperCase();
     const apiKey = ApiKeyEntity.from({ projectId, value });
 
     return await this.repository.save(apiKey);
