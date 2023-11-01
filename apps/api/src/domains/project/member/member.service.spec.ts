@@ -91,6 +91,53 @@ describe('MemberService test suite', () => {
     });
   });
 
+  describe('createMany', () => {
+    const projectId = faker.number.int();
+    const memberCount = faker.number.int({ min: 2, max: 10 });
+    const members = Array.from({ length: memberCount }).map(() => ({
+      roleId: faker.number.int(),
+      userId: faker.number.int(),
+    }));
+    let dtos: CreateMemberDto[];
+    beforeEach(() => {
+      dtos = members;
+    });
+
+    it('creating members succeeds with valid inputs', async () => {
+      jest
+        .spyOn(roleRepo, 'findOne')
+        .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
+
+      await memberService.createMany(dtos);
+
+      expect(roleRepo.findOne).toBeCalledTimes(memberCount);
+      expect(memberRepo.findOne).toBeCalledTimes(memberCount);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledWith(
+        members.map(({ roleId, userId }) =>
+          MemberEntity.from({ roleId, userId }),
+        ),
+      );
+    });
+    it('creating members fails with an existent member', async () => {
+      jest
+        .spyOn(roleRepo, 'findOne')
+        .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue({} as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
+
+      await expect(memberService.createMany(dtos)).rejects.toThrowError(
+        MemberAlreadyExistsException,
+      );
+
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).not.toBeCalled();
+    });
+  });
+
   describe('update', () => {
     const projectId = faker.number.int();
     const roleId = faker.number.int();

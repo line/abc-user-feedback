@@ -14,13 +14,14 @@
  * under the License.
  */
 import { randomBytes } from 'crypto';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { ProjectService } from '../project/project.service';
+import { ProjectNotFoundException } from '../project/exceptions';
+import { ProjectEntity } from '../project/project.entity';
 import { ApiKeyEntity } from './api-key.entity';
 import { CreateApiKeyDto } from './dtos';
 
@@ -29,20 +30,46 @@ export class ApiKeyService {
   constructor(
     @InjectRepository(ApiKeyEntity)
     private readonly repository: Repository<ApiKeyEntity>,
-    private readonly projectService: ProjectService,
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepo: Repository<ProjectEntity>,
   ) {}
 
-  @Transactional()
-  async create(dto: CreateApiKeyDto) {
+  private async validateBeforeCreation(dto: CreateApiKeyDto) {
     if (!dto.value) {
       dto.value = randomBytes(10).toString('hex').toUpperCase();
     }
     const { projectId, value } = dto;
-    await this.projectService.findById({ projectId });
+    if (value.length !== 20)
+      throw new BadRequestException('Invalid Api Key value');
 
-    const apiKey = ApiKeyEntity.from({ projectId, value });
+    const project = await this.projectRepo.findOneBy({ id: projectId });
+    if (!project) throw new ProjectNotFoundException();
 
-    return await this.repository.save(apiKey);
+    const apiKey = await this.repository.findOneBy({ value });
+    if (apiKey) throw new BadRequestException('Api Key already exists');
+  }
+
+  @Transactional()
+  async create(dto: CreateApiKeyDto) {
+    await this.validateBeforeCreation(dto);
+    const { projectId, value } = dto;
+
+    const newApiKey = ApiKeyEntity.from({ projectId, value });
+
+    return await this.repository.save(newApiKey);
+  }
+
+  @Transactional()
+  async createMany(dtos: CreateApiKeyDto[]) {
+    for (const dto of dtos) {
+      await this.validateBeforeCreation(dto);
+    }
+
+    const apiKeys = dtos.map(({ projectId, value }) =>
+      ApiKeyEntity.from({ projectId, value }),
+    );
+
+    return await this.repository.save(apiKeys);
   }
 
   async findAllByProjectId(projectId: number) {

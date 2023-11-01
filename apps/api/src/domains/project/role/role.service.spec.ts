@@ -85,6 +85,44 @@ describe('RoleService', () => {
     });
   });
 
+  describe('createMany', () => {
+    const projectId = faker.number.int();
+    const roleCount = faker.number.int({ min: 2, max: 10 });
+    const roles = Array.from({ length: roleCount }).map(() => ({
+      name: faker.string.sample(),
+      permissions: getRandomEnumValues(PermissionEnum),
+      projectId,
+    }));
+    let dtos: CreateRoleDto[];
+    beforeEach(() => {
+      dtos = roles;
+    });
+
+    it('creating roles succeeds with valid inputs', async () => {
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+
+      await roleService.createMany(dtos);
+
+      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(roleCount);
+      expect(roleRepo.save).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).toHaveBeenCalledWith(
+        dtos.map((role) => RoleEntity.from(role)),
+      );
+    });
+    it('creating roles fails with duplicate inputs', async () => {
+      jest
+        .spyOn(roleRepo, 'findOneBy')
+        .mockResolvedValue({ id: faker.number.int() } as RoleEntity);
+
+      await expect(roleService.createMany(dtos)).rejects.toThrow(
+        RoleAlreadyExistsException,
+      );
+
+      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).not.toHaveBeenCalled();
+    });
+  });
+
   describe('update', () => {
     it('updating a role succeeds with valid inputs', async () => {
       const roleId = faker.number.int();

@@ -14,9 +14,35 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MinLength } from 'class-validator';
+import {
+  IsArray,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Length,
+  MinLength,
+} from 'class-validator';
 
+import { CreateIssueTrackerRequestDto } from '@/domains/project/issue-tracker/dtos/requests';
+import { CreateRoleRequestDto } from '@/domains/project/role/dtos/requests';
 import { IsNullable } from '@/domains/user/decorators';
+
+class CreateMemberByNameDto {
+  @ApiProperty()
+  @IsString()
+  roleName: string;
+
+  @ApiProperty()
+  @IsNumber()
+  userId: number;
+}
+
+class CreateApiKeyByValueDto {
+  @ApiProperty()
+  @IsString()
+  @Length(20)
+  value: string;
+}
 
 export class CreateProjectRequestDto {
   @ApiProperty()
@@ -28,4 +54,23 @@ export class CreateProjectRequestDto {
   @IsString()
   @IsNullable()
   description: string | null;
+
+  @ApiProperty({ type: [CreateRoleRequestDto], required: false })
+  @IsArray()
+  @IsOptional()
+  roles?: CreateRoleRequestDto[];
+
+  @ApiProperty({ type: [CreateMemberByNameDto], required: false })
+  @IsArray()
+  @IsOptional()
+  members?: CreateMemberByNameDto[];
+
+  @ApiProperty({ type: [CreateApiKeyByValueDto], required: false })
+  @IsArray()
+  @IsOptional()
+  apiKeys?: CreateApiKeyByValueDto[];
+
+  @ApiProperty({ type: CreateIssueTrackerRequestDto, required: false })
+  @IsOptional()
+  issueTracker?: CreateIssueTrackerRequestDto;
 }

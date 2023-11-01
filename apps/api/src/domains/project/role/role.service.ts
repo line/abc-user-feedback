@@ -32,17 +32,32 @@ export class RoleService {
     private readonly roleRepo: Repository<RoleEntity>,
   ) {}
 
-  @Transactional()
-  async create({ name, permissions, projectId }: CreateRoleDto) {
+  private async validateRoleName(name: string, projectId: number) {
     const role = await this.roleRepo.findOneBy({
       name,
       project: { id: projectId },
     });
     if (role) throw new RoleAlreadyExistsException();
+  }
+
+  @Transactional()
+  async create({ name, permissions, projectId }: CreateRoleDto) {
+    await this.validateRoleName(name, projectId);
 
     const newRole = RoleEntity.from({ name, permissions, projectId });
 
     return await this.roleRepo.save(newRole);
+  }
+
+  @Transactional()
+  async createMany(roles: CreateRoleDto[]) {
+    for (const { name, projectId } of roles) {
+      await this.validateRoleName(name, projectId);
+    }
+
+    const newRoles = roles.map((role) => RoleEntity.from(role));
+
+    return await this.roleRepo.save(newRoles);
   }
 
   @Transactional()

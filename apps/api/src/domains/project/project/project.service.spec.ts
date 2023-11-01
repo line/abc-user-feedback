@@ -24,12 +24,18 @@ import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import {
   createQueryBuilder,
+  getRandomEnumValues,
   MockOpensearchRepository,
   TestConfig,
 } from '@/test-utils/util-functions';
 import { ProjectServiceProviders } from '../../../test-utils/providers/project.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
+import { ApiKeyEntity } from '../api-key/api-key.entity';
+import { IssueTrackerEntity } from '../issue-tracker/issue-tracker.entity';
+import { MemberEntity } from '../member/member.entity';
+import { PermissionEnum } from '../role/permission.enum';
+import { RoleEntity } from '../role/role.entity';
 import { CreateProjectDto, FindAllProjectsDto, UpdateProjectDto } from './dtos';
 import { FindByProjectIdDto } from './dtos/find-by-project-id.dto';
 import {
@@ -44,6 +50,10 @@ describe('ProjectService Test suite', () => {
   let projectRepo: Repository<ProjectEntity>;
   let tenantRepo: Repository<TenantEntity>;
   let channelRepo: Repository<ChannelEntity>;
+  let roleRepo: Repository<RoleEntity>;
+  let memberRepo: Repository<MemberEntity>;
+  let apiKeyRepo: Repository<ApiKeyEntity>;
+  let issueRepo: Repository<IssueTrackerEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -54,6 +64,10 @@ describe('ProjectService Test suite', () => {
     projectRepo = module.get(getRepositoryToken(ProjectEntity));
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
+    roleRepo = module.get(getRepositoryToken(RoleEntity));
+    memberRepo = module.get(getRepositoryToken(MemberEntity));
+    apiKeyRepo = module.get(getRepositoryToken(ApiKeyEntity));
+    issueRepo = module.get(getRepositoryToken(IssueTrackerEntity));
   });
 
   describe('create', () => {
@@ -66,7 +80,7 @@ describe('ProjectService Test suite', () => {
       dto.description = description;
     });
 
-    it('creating a project succeeds with valid inputs', async () => {
+    it('creating a project succeeds with project data', async () => {
       const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
@@ -81,6 +95,187 @@ describe('ProjectService Test suite', () => {
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(id).toEqual(projectId);
     });
+    it('creating a project succeeds with project data and role data', async () => {
+      const projectId = faker.number.int();
+      dto.roles = [
+        {
+          name: faker.string.sample(),
+          permissions: getRandomEnumValues(PermissionEnum),
+        },
+      ];
+      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
+      jest
+        .spyOn(projectRepo, 'save')
+        .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+
+      const { id } = await projectService.create(dto);
+
+      expect(projectRepo.findOneBy).toBeCalledTimes(1);
+      expect(tenantRepo.find).toBeCalledTimes(1);
+      expect(projectRepo.save).toBeCalledTimes(1);
+      expect(id).toEqual(projectId);
+    });
+    it('creating a project succeeds with project data and role data and member data', async () => {
+      const projectId = faker.number.int();
+      dto.roles = [
+        {
+          name: faker.string.sample(),
+          permissions: getRandomEnumValues(PermissionEnum),
+        },
+      ];
+      dto.members = [
+        {
+          roleName: dto.roles[0].name,
+          userId: faker.number.int(),
+        },
+      ];
+      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
+      jest
+        .spyOn(projectRepo, 'save')
+        .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(roleRepo, 'save').mockResolvedValue(
+        dto.roles.map((role) => ({
+          project: { id: projectId },
+          id: faker.number.int(),
+          ...role,
+        })) as any,
+      );
+      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
+        project: { id: projectId },
+      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'save').mockResolvedValue(
+        dto.members.map(({ userId }) => ({
+          ...MemberEntity.from({ roleId: faker.number.int(), userId }),
+        })) as any,
+      );
+
+      const { id } = await projectService.create(dto);
+
+      expect(projectRepo.findOneBy).toBeCalledTimes(1);
+      expect(tenantRepo.find).toBeCalledTimes(1);
+      expect(projectRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(id).toEqual(projectId);
+    });
+    it('creating a project succeeds with project data and role data and member data and api key data', async () => {
+      const projectId = faker.number.int();
+      dto.roles = [
+        {
+          name: faker.string.sample(),
+          permissions: getRandomEnumValues(PermissionEnum),
+        },
+      ];
+      dto.members = [
+        {
+          roleName: dto.roles[0].name,
+          userId: faker.number.int(),
+        },
+      ];
+      dto.apiKeys = [
+        {
+          value: faker.string.alphanumeric(20),
+        },
+      ];
+      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
+      jest
+        .spyOn(projectRepo, 'save')
+        .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(roleRepo, 'save').mockResolvedValue(
+        dto.roles.map((role) => ({
+          project: { id: projectId },
+          id: faker.number.int(),
+          ...role,
+        })) as any,
+      );
+      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
+        project: { id: projectId },
+      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'save').mockResolvedValue(
+        dto.members.map(({ userId }) => ({
+          ...MemberEntity.from({ roleId: faker.number.int(), userId }),
+        })) as any,
+      );
+      jest
+        .spyOn(projectRepo, 'findOneBy')
+        .mockResolvedValueOnce({} as ProjectEntity);
+
+      const { id } = await projectService.create(dto);
+
+      expect(tenantRepo.find).toBeCalledTimes(1);
+      expect(projectRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(apiKeyRepo.save).toBeCalledTimes(1);
+      expect(id).toEqual(projectId);
+    });
+    it('creating a project succeeds with project data and role data and member data and api key data and issue tracker data', async () => {
+      const projectId = faker.number.int();
+      dto.roles = [
+        {
+          name: faker.string.sample(),
+          permissions: getRandomEnumValues(PermissionEnum),
+        },
+      ];
+      dto.members = [
+        {
+          roleName: dto.roles[0].name,
+          userId: faker.number.int(),
+        },
+      ];
+      dto.apiKeys = [
+        {
+          value: faker.string.alphanumeric(20),
+        },
+      ];
+      dto.issueTracker = {
+        data: {
+          ticketKey: faker.string.sample(),
+          ticketDomain: faker.internet.url(),
+        },
+      };
+      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
+      jest
+        .spyOn(projectRepo, 'save')
+        .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(roleRepo, 'save').mockResolvedValue(
+        dto.roles.map((role) => ({
+          project: { id: projectId },
+          id: faker.number.int(),
+          ...role,
+        })) as any,
+      );
+      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
+        project: { id: projectId },
+      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'save').mockResolvedValue(
+        dto.members.map(({ userId }) => ({
+          ...MemberEntity.from({ roleId: faker.number.int(), userId }),
+        })) as any,
+      );
+      jest
+        .spyOn(projectRepo, 'findOneBy')
+        .mockResolvedValueOnce({} as ProjectEntity);
+
+      const { id } = await projectService.create(dto);
+
+      expect(tenantRepo.find).toBeCalledTimes(1);
+      expect(projectRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(apiKeyRepo.save).toBeCalledTimes(1);
+      expect(issueRepo.save).toBeCalledTimes(1);
+      expect(id).toEqual(projectId);
+    });
+
     it('creating a project fails with an existent project name', async () => {
       const projectId = faker.number.int();
       jest
