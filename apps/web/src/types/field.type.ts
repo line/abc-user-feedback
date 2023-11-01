@@ -40,18 +40,21 @@ export type FieldStatusEnumType = (typeof FieldStatusEnumList)[number];
 
 export type FieldType = {
   id: number;
+  key: string;
+  name: string;
   description: string | null;
   format: FieldFormatEnumType;
   type: FieldTypeEnumType;
   status: FieldStatusEnumType;
-  name: string;
-  key: string;
+  options?: OptionType[];
   createdAt: string;
   updatedAt: string;
-  options?: OptionType[];
 };
+
 export type OptionType = {
   id?: number;
   name: string;
   key: string;
 };
+
+export type InputFieldType = Omit<FieldType, 'id' | 'createdAt' | 'updatedAt'>;

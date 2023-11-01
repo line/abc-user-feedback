@@ -63,8 +63,6 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     else return null;
   }, [router.query]);
 
-  console.log('settingMenu: ', settingMenu);
-
   const setSettingMenu = (input: SettingMenuType | null) =>
     router.push({
       pathname: Path.SETTINGS,

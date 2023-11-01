@@ -23,65 +23,68 @@ import {
 } from 'react';
 import { useRouter } from 'next/router';
 
-import type { InputApiKeyType } from '@/types/api-key.type';
-import type { InputIssueTrackerType } from '@/types/issue-tracker.type';
-import type { InputMemberType } from '@/types/member.type';
-import { PermissionList } from '@/types/permission.type';
-import type { InputProjectType } from '@/types/project.type';
-import type { InputRoleType } from '@/types/role.type';
+import type { InputChannelInfoType } from '@/types/channel.type';
+import type { InputFieldType } from '@/types/field.type';
 
-const DEFAULT_ROLES: InputRoleType[] = [
-  { name: 'Admin', permissions: [...PermissionList] },
+const DEFAULT_FIELDS: InputFieldType[] = [
   {
-    name: 'Editor',
-    permissions: [...PermissionList].filter(
-      (v) =>
-        !v.includes('role') &&
-        (v.includes('read') ||
-          v.includes('feedback') ||
-          v.includes('issue') ||
-          v.includes('member_create')),
-    ),
+    format: 'number',
+    type: 'DEFAULT',
+    status: 'ACTIVE',
+    name: 'ID',
+    key: 'id',
+    description: '',
   },
   {
-    name: 'Viewer',
-    permissions: [...PermissionList].filter(
-      (v) => v.includes('read') && !v.includes('download'),
-    ),
+    format: 'date',
+    type: 'DEFAULT',
+    status: 'ACTIVE',
+    name: 'Created',
+    key: 'createdAt',
+    description: '',
+  },
+  {
+    format: 'date',
+    type: 'DEFAULT',
+    status: 'ACTIVE',
+    name: 'Updated',
+    key: 'updatedAt',
+    description: '',
+  },
+  {
+    format: 'multiSelect',
+    type: 'DEFAULT',
+    status: 'ACTIVE',
+    name: 'Issue',
+    key: 'issues',
+    description: '',
+    options: [],
   },
 ];
-const DEFAULT_INPUT = {
-  apiKeys: [],
-  members: [],
-  roles: DEFAULT_ROLES,
-  issueTracker: { ticketDomain: '', ticketKey: '' },
-  projectInfo: { description: '', name: '' },
-};
 
-export const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = {
-  projectInfo: 'Project 설정',
-  roles: 'Role 관리',
-  members: 'Member 관리',
-  apiKeys: 'API Key',
-  issueTracker: 'Issue Tracker',
+export const CHANNEL_STEPPER_TEXT: Record<ChannelStepType, string> = {
+  channelInfo: 'Channel 정보',
+  fields: 'Field 관리',
+  fieldPreview: 'Field 미리보기',
 };
 
 interface InputType {
-  projectInfo: InputProjectType;
-  roles: InputRoleType[];
-  members: InputMemberType[];
-  apiKeys: InputApiKeyType[];
-  issueTracker: InputIssueTrackerType;
+  channelInfo: InputChannelInfoType;
+  fields: InputFieldType[];
+  fieldPreview: null;
 }
+const DEFAULT_INPUT: InputType = {
+  channelInfo: { name: '', description: '' },
+  fields: DEFAULT_FIELDS,
+  fieldPreview: null,
+};
 
-export type ProjectStepType = keyof InputType;
+export type ChannelStepType = keyof InputType;
 
-export const PROJECT_STEPS: ProjectStepType[] = [
-  'projectInfo',
-  'roles',
-  'members',
-  'apiKeys',
-  'issueTracker',
+export const CHANNEL_STEPS: ChannelStepType[] = [
+  'channelInfo',
+  'fields',
+  'fieldPreview',
 ];
 
 type OnChangeInputType = <T extends keyof InputType>(
@@ -89,9 +92,9 @@ type OnChangeInputType = <T extends keyof InputType>(
   value: InputType[T],
 ) => void;
 
-interface CreateProjectContextType {
+interface CreateChannelContextType {
   input: InputType;
-  currentStep: ProjectStepType;
+  currentStep: ChannelStepType;
   currentStepIndex: number;
   completeStepIndex: number;
   onChangeInput: OnChangeInputType;
@@ -99,8 +102,8 @@ interface CreateProjectContextType {
   onNext: () => void;
 }
 
-export const CreateProjectContext = createContext<CreateProjectContextType>({
-  currentStep: 'projectInfo',
+export const CreateChannelContext = createContext<CreateChannelContextType>({
+  currentStep: 'channelInfo',
   completeStepIndex: 0,
   currentStepIndex: 0,
   input: DEFAULT_INPUT,
@@ -109,30 +112,30 @@ export const CreateProjectContext = createContext<CreateProjectContextType>({
   onNext: () => {},
 });
 
-export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
+export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const [input, setInput] = useState<InputType>(DEFAULT_INPUT);
   const [currentStep, setCurrentStep] =
-    useState<ProjectStepType>('projectInfo');
+    useState<ChannelStepType>('channelInfo');
   const [completeStepIndex, setCompleteStepIndex] = useState(0);
 
   const currentStepIndex = useMemo(
-    () => PROJECT_STEPS.indexOf(currentStep),
+    () => CHANNEL_STEPS.indexOf(currentStep),
     [currentStep],
   );
 
   const onPrev = useCallback(() => {
     setCurrentStep(
-      PROJECT_STEPS[PROJECT_STEPS.indexOf(currentStep) - 1] ?? 'projectInfo',
+      CHANNEL_STEPS[CHANNEL_STEPS.indexOf(currentStep) - 1] ?? 'channelInfo',
     );
   }, [currentStep]);
 
   const onNext = useCallback(() => {
-    const nextStepIndex = PROJECT_STEPS.indexOf(currentStep) + 1;
-    const nextStep = PROJECT_STEPS[nextStepIndex] ?? 'projectInfo';
+    const nextStepIndex = CHANNEL_STEPS.indexOf(currentStep) + 1;
+    const nextStep = CHANNEL_STEPS[nextStepIndex] ?? 'channelInfo';
 
-    if (nextStepIndex === PROJECT_STEPS.length) {
+    if (nextStepIndex === CHANNEL_STEPS.length) {
       alert('완료');
       return;
     }
@@ -176,7 +179,7 @@ export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
   }, []);
 
   return (
-    <CreateProjectContext.Provider
+    <CreateChannelContext.Provider
       value={{
         input,
         completeStepIndex,
@@ -188,10 +191,10 @@ export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
       }}
     >
       {children}
-    </CreateProjectContext.Provider>
+    </CreateChannelContext.Provider>
   );
 };
 
-export const useCreateProject = () => {
-  return useContext(CreateProjectContext);
+export const useCreateChannel = () => {
+  return useContext(CreateChannelContext);
 };

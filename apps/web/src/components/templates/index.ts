@@ -15,3 +15,4 @@
  */
 export { MainTemplate } from './MainTemplate';
 export { SettingMenuTemplate } from './SettingMenuTemplate';
+export { default as CreateProjectChannelTemplate } from './CreateProjectChannelTemplate';

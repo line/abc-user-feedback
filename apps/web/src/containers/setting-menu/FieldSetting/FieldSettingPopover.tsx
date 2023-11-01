@@ -88,10 +88,11 @@ interface IProps extends React.PropsWithChildren {
   data?: FieldRowType;
   disabled?: boolean;
   fieldRows: FieldRowType[];
+  isInput?: boolean;
 }
 
 const FieldSettingPopover: React.FC<IProps> = (props) => {
-  const { onSave, data, disabled, fieldRows } = props;
+  const { onSave, data, disabled, fieldRows, isInput } = props;
 
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -223,7 +224,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             <Input
               label="Key"
               {...register('key')}
-              disabled={data?.type === 'API'}
+              disabled={isInput && data?.type === 'API'}
               isSubmitted={formState.isSubmitted}
               isSubmitting={formState.isSubmitting}
               isValid={!formState.errors.key}

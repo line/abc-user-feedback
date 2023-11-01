@@ -18,45 +18,46 @@ import { useCallback, useMemo } from 'react';
 
 import { Input } from '@ufb/ui';
 
-import { useCreateProject } from '@/contexts/create-project.context';
+import { useCreateChannel } from '@/contexts/create-channel.context';
 import type { InputProjectType } from '@/types/project.type';
-import CreateProjectInputTemplate from './CreateProjectInputTemplate';
+import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 interface IProps {}
 
-const InputProjectInfo: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateProject();
+const InputChannelInfo: React.FC<IProps> = () => {
+  const { input, onChangeInput } = useCreateChannel();
 
-  const name = useMemo(() => input.projectInfo.name, [input.projectInfo.name]);
+  const name = useMemo(() => input.channelInfo.name, [input.channelInfo.name]);
+
   const description = useMemo(
-    () => input.projectInfo.description,
-    [input.projectInfo.description],
+    () => input.channelInfo.description,
+    [input.channelInfo.description],
   );
 
   const onChangeProjectInfo = useCallback(
     <T extends keyof InputProjectType>(key: T, value: InputProjectType[T]) => {
-      onChangeInput('projectInfo', { name, description, [key]: value });
+      onChangeInput('channelInfo', { name, description, [key]: value });
     },
-    [input?.projectInfo],
+    [input.channelInfo],
   );
 
   return (
-    <CreateProjectInputTemplate validate={() => name.length >= 4}>
+    <CreateChannelInputTemplate validate={() => name.length >= 4}>
       <Input
-        label="Project Name"
-        placeholder="프로젝트 이름을 입력해주세요."
+        label="Channel Name"
+        placeholder="채널 이름을 입력해주세요."
         value={name}
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
       />
       <Input
-        label="Project Description"
-        placeholder="프로젝트 설명을 입력해주세요."
+        label="Channel Description"
+        placeholder="채널 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
       />
-    </CreateProjectInputTemplate>
+    </CreateChannelInputTemplate>
   );
 };
 
-export default InputProjectInfo;
+export default InputChannelInfo;

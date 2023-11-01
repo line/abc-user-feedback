@@ -23,7 +23,7 @@ import {
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
-import { ExpandableText } from '@/components/etc';
+import { ExpandableText, TableResizer } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
 import type { FieldType } from '@/types/field.type';
@@ -112,42 +112,57 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
     columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
+    columnResizeMode: 'onEnd',
   });
 
   return (
-    <table
-      className="table table-fixed"
-      style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
-    >
-      <thead>
-        <tr>
-          {table.getFlatHeaders().map((header, i) => (
-            <th key={i} style={{ width: header.getSize() }}>
-              {flexRender(header.column.columnDef.header, header.getContext())}
-            </th>
+    <div className="overflow-x-auto">
+      <table
+        className="mb-2 table table-fixed"
+        style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
+      >
+        <colgroup>
+          {table.getFlatHeaders().map((header) => (
+            <col key={header.index} width={header.getSize()} />
           ))}
-        </tr>
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map((row) => (
-          <Fragment key={row.id}>
-            <tr>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  style={{
-                    width: cell.column.getSize(),
-                    border: 'none',
-                  }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          </Fragment>
-        ))}
-      </tbody>
-    </table>
+        </colgroup>
+        <thead>
+          <tr>
+            {table.getFlatHeaders().map((header) => (
+              <th key={header.index} style={{ width: header.getSize() }}>
+                <div className="flex flex-nowrap items-center">
+                  <span className="overflow-hidden text-ellipsis">
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </span>
+                </div>
+                {header.column.getCanResize() && (
+                  <TableResizer header={header} table={table} />
+                )}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map((row) => (
+            <Fragment key={row.id}>
+              <tr>
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={cell.id}
+                    style={{ width: cell.column.getSize(), border: 'none' }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            </Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

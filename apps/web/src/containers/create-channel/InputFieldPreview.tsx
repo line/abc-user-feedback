@@ -13,17 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { FieldType } from './field.type';
+import { useMemo } from 'react';
 
-export type ChannelType = {
-  id: number;
-  name: string;
-  description: string;
-  fields: FieldType[];
-  createdAt: string;
-  updatedAt: string;
+import { useCreateChannel } from '@/contexts/create-channel.context';
+import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
+import CreateChannelInputTemplate from './CreateChannelInputTemplate';
+
+interface IProps {}
+
+const InputFieldPreview: React.FC<IProps> = () => {
+  const { input } = useCreateChannel();
+  const fields = useMemo(() => input.fields, [input.fields]);
+
+  return (
+    <CreateChannelInputTemplate>
+      <PreviewTable fields={fields.filter((v) => v.status === 'ACTIVE')} />
+    </CreateChannelInputTemplate>
+  );
 };
-export type InputChannelInfoType = Omit<
-  ChannelType,
-  'id' | 'fields' | 'updatedAt' | 'createdAt'
->;
+
+export default InputFieldPreview;

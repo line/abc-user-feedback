@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useState } from 'react';
+import { Fragment, useMemo } from 'react';
 import {
   createColumnHelper,
   flexRender,
@@ -27,11 +27,12 @@ import { useTranslation } from 'react-i18next';
 import { Badge, Icon, toast } from '@ufb/ui';
 
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { useCreateProject } from '@/contexts/create-project.context';
 import type { InputApiKeyType } from '@/types/api-key.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 const columnHelper = createColumnHelper<InputApiKeyType>();
-const columns = (t: TFunction) => [
+const getColumns = (t: TFunction, onDelete: (index: number) => void) => [
   columnHelper.accessor('value', {
     header: 'API KEY',
     cell: ({ getValue }) => (
@@ -56,12 +57,10 @@ const columns = (t: TFunction) => [
       </div>
     ),
   }),
-  columnHelper.accessor('createdAt', {
+  columnHelper.display({
     header: 'Created',
-    cell: ({ getValue }) => (
-      <p className="text-tertiary">
-        {dayjs(getValue()).format(DATE_TIME_FORMAT)}
-      </p>
+    cell: () => (
+      <p className="text-primary">{dayjs().format(DATE_TIME_FORMAT)}</p>
     ),
     size: 100,
   }),
@@ -77,8 +76,11 @@ const columns = (t: TFunction) => [
   columnHelper.display({
     id: 'delete',
     header: 'Delete',
-    cell: () => (
-      <button className="icon-btn icon-btn-tertiary icon-btn-sm">
+    cell: ({ row }) => (
+      <button
+        className="icon-btn icon-btn-tertiary icon-btn-sm"
+        onClick={() => onDelete(row.index)}
+      >
         <Icon name="TrashFill" />
       </button>
     ),
@@ -88,15 +90,31 @@ const columns = (t: TFunction) => [
 
 // API
 const InputApiKey: React.FC = () => {
+  const { input, onChangeInput } = useCreateProject();
   const { t } = useTranslation();
-  const [rows] = useState<InputApiKeyType[]>([]);
+  const apiKeys = useMemo(() => input.apiKeys, [input.apiKeys]);
+
+  const onDelete = (index: number) => {
+    onChangeInput(
+      'apiKeys',
+      apiKeys.filter((_, i) => i !== index),
+    );
+  };
+
   const table = useReactTable({
-    columns: columns(t),
-    data: [],
+    columns: getColumns(t, onDelete),
+    data: apiKeys,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const onCreate = () => {
+    onChangeInput('apiKeys', [...apiKeys, { value: '1234' }]);
+  };
+
   return (
-    <CreateProjectInputTemplate actionButton={<CreateApiKeyButton />}>
+    <CreateProjectInputTemplate
+      actionButton={<CreateApiKeyButton onCreate={onCreate} />}
+    >
       <table className="table">
         <thead>
           <tr>
@@ -111,9 +129,9 @@ const InputApiKey: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {rows.length === 0 ? (
+          {apiKeys.length === 0 ? (
             <tr>
-              <td colSpan={columns(t).length}>
+              <td colSpan={getColumns(t, onDelete).length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
                   <Icon
                     name="WarningTriangleFill"
@@ -150,8 +168,14 @@ const InputApiKey: React.FC = () => {
   );
 };
 
-export const CreateApiKeyButton: React.FC = () => {
-  return <button className="btn btn-primary btn-md w-[120px]">Key 생성</button>;
+export const CreateApiKeyButton: React.FC<{ onCreate: () => void }> = ({
+  onCreate,
+}) => {
+  return (
+    <button className="btn btn-primary btn-md w-[120px]" onClick={onCreate}>
+      Key 생성
+    </button>
+  );
 };
 
 export default InputApiKey;

@@ -19,7 +19,8 @@ export type ApiKeyType = {
   createdAt: string;
   deletedAt: string | null;
 };
+
 export type InputApiKeyType = Omit<
   ApiKeyType,
-  'id' | 'CreatedAt' | 'deletedAt'
+  'id' | 'createdAt' | 'deletedAt'
 >;

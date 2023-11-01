@@ -14,31 +14,31 @@
  * under the License.
  */
 
-import { CreateProjectChannelInputTemplate } from '@/components/templates/CreateProjectChannelInputTemplate';
+import { CreateProjectChannelInputTemplate } from '@/components/templates/CreateProjectChannelInputTemplate/';
 import {
-  PROJECT_STEPPER_TEXT,
-  PROJECT_STEPS,
-  useCreateProject,
-} from '@/contexts/create-project.context';
+  CHANNEL_STEPPER_TEXT,
+  CHANNEL_STEPS,
+  useCreateChannel,
+} from '@/contexts/create-channel.context';
 
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   validate?: () => boolean;
 }
 
-const CreateProjectInputTemplate: React.FC<IProps> = ({
+const CreateChannelInputTemplate: React.FC<IProps> = ({
   children,
   actionButton,
 }) => {
-  const { currentStep, onNext, onPrev, currentStepIndex } = useCreateProject();
+  const { currentStep, onNext, onPrev, currentStepIndex } = useCreateChannel();
 
   return (
     <CreateProjectChannelInputTemplate
       currentStepIndex={currentStepIndex}
-      lastStepIndex={PROJECT_STEPS.length - 1}
+      lastStepIndex={CHANNEL_STEPS.length - 1}
       onNext={onNext}
       onPrev={onPrev}
-      title={PROJECT_STEPPER_TEXT[currentStep]}
+      title={CHANNEL_STEPPER_TEXT[currentStep]}
       actionButton={actionButton}
     >
       {children}
@@ -46,4 +46,4 @@ const CreateProjectInputTemplate: React.FC<IProps> = ({
   );
 };
 
-export default CreateProjectInputTemplate;
+export default CreateChannelInputTemplate;

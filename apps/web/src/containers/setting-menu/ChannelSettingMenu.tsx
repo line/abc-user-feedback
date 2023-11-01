@@ -14,10 +14,14 @@
  * under the License.
  */
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
+
+import { Icon } from '@ufb/ui';
 
 import { SelectBox, SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
+import { Path } from '@/constants/path';
 import { useChannels, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
@@ -37,6 +41,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     channelId,
     setChannelId,
   } = props;
+  const router = useRouter();
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
@@ -46,6 +51,35 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     if (!channelData || channelData.items.length === 0) return;
     setChannelId(channelData.items?.[0]?.id ?? 0);
   }, [channelData]);
+
+  if (!channelId) {
+    return (
+      <SettingMenuTemplate title="Channel">
+        <div className="flex flex-1 flex-col items-center justify-center gap-8">
+          <div className="flex flex-col items-center gap-3">
+            <Icon
+              name="WarningTriangleFill"
+              size={56}
+              className="text-tertiary"
+            />
+            <p>등록된 Channel이 없습니다.</p>
+          </div>
+          <button
+            className="btn btn-blue btn-lg w-[200px] gap-2"
+            onClick={() =>
+              router.push({
+                pathname: Path.CREATE_CHANNEL,
+                query: { projectId },
+              })
+            }
+          >
+            <Icon name="Plus" size={24} className="text-above-primary" />
+            Channel 생성
+          </button>
+        </div>
+      </SettingMenuTemplate>
+    );
+  }
 
   return (
     <SettingMenuTemplate title="Channel">
