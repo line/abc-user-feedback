@@ -178,7 +178,7 @@ describe('ProjectService Test suite', () => {
       ];
       dto.apiKeys = [
         {
-          value: faker.string.sample(),
+          value: faker.string.alphanumeric(20),
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
@@ -231,7 +231,7 @@ describe('ProjectService Test suite', () => {
       ];
       dto.apiKeys = [
         {
-          value: faker.string.sample(),
+          value: faker.string.alphanumeric(20),
         },
       ];
       dto.issueTracker = {
