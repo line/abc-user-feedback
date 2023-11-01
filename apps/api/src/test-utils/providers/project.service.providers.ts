@@ -25,6 +25,8 @@ import {
 } from '@/test-utils/util-functions';
 import { ProjectEntity } from '../../domains/project/project/project.entity';
 import { ProjectService } from '../../domains/project/project/project.service';
+import { ApiKeyServiceProviders } from './api-key.service.providers';
+import { MemberServiceProviders } from './member.service.providers';
 import { RoleServiceProviders } from './role.service.providers';
 
 export const ProjectServiceProviders = [
@@ -40,4 +42,6 @@ export const ProjectServiceProviders = [
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
   ...TenantServiceProviders,
   ...RoleServiceProviders,
+  ...MemberServiceProviders,
+  ...ApiKeyServiceProviders,
 ];

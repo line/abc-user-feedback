@@ -25,7 +25,9 @@ import { TenantService } from '@/domains/tenant/tenant.service';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
-import { AllPermissionList } from '../role/permission.enum';
+import { ApiKeyService } from '../api-key/api-key.service';
+import { MemberService } from '../member/member.service';
+import { AllPermissions } from '../role/permission.enum';
 import { RoleService } from '../role/role.service';
 import type { FindAllProjectsDto } from './dtos';
 import { CreateProjectDto, UpdateProjectDto } from './dtos';
@@ -46,6 +48,8 @@ export class ProjectService {
     private readonly osRepository: OpensearchRepository,
     private readonly tenantService: TenantService,
     private readonly roleService: RoleService,
+    private readonly memberService: MemberService,
+    private readonly apiKeyService: ApiKeyService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -57,30 +61,64 @@ export class ProjectService {
     const tenant = await this.tenantService.findOne();
     const newProject = ProjectEntity.from({ ...dto, tenantId: tenant.id });
     const savedProject = await this.projectRepo.save(newProject);
-    await this.roleService.create({
-      name: 'Admin',
-      permissions: AllPermissionList,
-      projectId: savedProject.id,
-    });
-    await this.roleService.create({
-      name: 'Editor',
-      permissions: AllPermissionList.filter(
-        (v) =>
-          !v.includes('role') &&
-          (v.includes('read') ||
-            v.includes('feedback') ||
-            v.includes('issue') ||
-            v.includes('member_create')),
-      ),
-      projectId: savedProject.id,
-    });
-    await this.roleService.create({
-      name: 'Viewer',
-      permissions: AllPermissionList.filter(
-        (v) => v.includes('read') && !v.includes('download'),
-      ),
-      projectId: savedProject.id,
-    });
+
+    if (dto.roles) {
+      const savedRoles = await this.roleService.createMany(
+        dto.roles.map((role) => ({ ...role, projectId: savedProject.id })),
+      );
+      savedProject.roles = savedRoles;
+
+      if (dto.members) {
+        const members = dto.members.map((member) => ({
+          userId: member.userId,
+          roleId: savedRoles.find((role) => role.name === member.roleName).id,
+        }));
+        const savedMembers = await this.memberService.createMany(members);
+        savedProject.roles.forEach((role) => {
+          role.members = savedMembers.filter(
+            (member) => member.role.id === role.id,
+          );
+        });
+      }
+    } else {
+      const savedRoles = await this.roleService.createMany([
+        {
+          name: 'Admin',
+          permissions: AllPermissions,
+          projectId: savedProject.id,
+        },
+        {
+          name: 'Editor',
+          permissions: AllPermissions.filter(
+            (v) =>
+              !v.includes('role') &&
+              (v.includes('read') ||
+                v.includes('feedback') ||
+                v.includes('issue') ||
+                v.includes('member_create')),
+          ),
+          projectId: savedProject.id,
+        },
+        {
+          name: 'Viewer',
+          permissions: AllPermissions.filter(
+            (v) => v.includes('read') && !v.includes('download'),
+          ),
+          projectId: savedProject.id,
+        },
+      ]);
+      savedProject.roles = savedRoles;
+    }
+
+    if (dto.apiKeys) {
+      const savedApiKeys = await this.apiKeyService.createMany(
+        dto.apiKeys.map((apiKey) => ({
+          value: apiKey.value,
+          projectId: savedProject.id,
+        })),
+      );
+      savedProject.apiKeys = savedApiKeys;
+    }
 
     return savedProject;
   }
