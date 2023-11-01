@@ -128,7 +128,7 @@ export class ProjectService {
     if (dto.issueTracker) {
       const savedIssueTracker = await this.issueTrackerService.create({
         projectId: savedProject.id,
-        data: dto.issueTracker,
+        data: dto.issueTracker.data,
       });
       savedProject.issueTracker = savedIssueTracker;
     }
