@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
@@ -26,6 +26,7 @@ import { UserTypeEnum } from '@/domains/user/entities/enums';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { ApiKeyService } from '../api-key/api-key.service';
+import { IssueTrackerService } from '../issue-tracker/issue-tracker.service';
 import { MemberService } from '../member/member.service';
 import { AllPermissions } from '../role/permission.enum';
 import { RoleService } from '../role/role.service';
@@ -50,6 +51,7 @@ export class ProjectService {
     private readonly roleService: RoleService,
     private readonly memberService: MemberService,
     private readonly apiKeyService: ApiKeyService,
+    private readonly issueTrackerService: IssueTrackerService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -71,7 +73,10 @@ export class ProjectService {
       if (dto.members) {
         const members = dto.members.map((member) => ({
           userId: member.userId,
-          roleId: savedRoles.find((role) => role.name === member.roleName).id,
+          roleId: savedRoles.find((role) => {
+            if (role.name === member.roleName) return true;
+            else throw new BadRequestException('Invalid role name');
+          }).id,
         }));
         const savedMembers = await this.memberService.createMany(members);
         savedProject.roles.forEach((role) => {
@@ -118,6 +123,14 @@ export class ProjectService {
         })),
       );
       savedProject.apiKeys = savedApiKeys;
+    }
+
+    if (dto.issueTracker) {
+      const savedIssueTracker = await this.issueTrackerService.create({
+        projectId: savedProject.id,
+        data: dto.issueTracker,
+      });
+      savedProject.issueTracker = savedIssueTracker;
     }
 
     return savedProject;

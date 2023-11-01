@@ -23,6 +23,7 @@ import {
   MinLength,
 } from 'class-validator';
 
+import { CreateIssueTrackerRequestDto } from '@/domains/project/issue-tracker/dtos/requests';
 import { CreateRoleRequestDto } from '@/domains/project/role/dtos/requests';
 import { IsNullable } from '@/domains/user/decorators';
 
@@ -68,4 +69,8 @@ export class CreateProjectRequestDto {
   @IsArray()
   @IsOptional()
   apiKeys?: CreateApiKeyByValueDto[];
+
+  @ApiProperty({ type: CreateIssueTrackerRequestDto, required: false })
+  @IsOptional()
+  issueTracker?: CreateIssueTrackerRequestDto;
 }

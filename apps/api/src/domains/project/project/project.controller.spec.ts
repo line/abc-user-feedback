@@ -58,7 +58,7 @@ describe('ProjectController', () => {
   });
 
   describe('create', () => {
-    it('should return an array of users', async () => {
+    it('', async () => {
       jest.spyOn(MockProjectService, 'create');
       const dto = new CreateProjectRequestDto();
       dto.name = faker.string.sample();
@@ -69,7 +69,7 @@ describe('ProjectController', () => {
     });
   });
   describe('findAll', () => {
-    it('should return an array of users', async () => {
+    it('', async () => {
       jest.spyOn(MockProjectService, 'findAll');
       const dto = new FindProjectsRequestDto();
       dto.limit = faker.number.int();

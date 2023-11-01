@@ -26,4 +26,7 @@ export class CreateProjectDto {
   apiKeys?: {
     value: string;
   }[];
+  issueTracker?: {
+    data: Record<string, any>;
+  };
 }
