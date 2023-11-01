@@ -16,13 +16,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { ProjectModule } from '../project/project.module';
+import { ProjectEntity } from '../project/project.entity';
 import { ApiKeyController } from './api-key.controller';
 import { ApiKeyEntity } from './api-key.entity';
 import { ApiKeyService } from './api-key.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ApiKeyEntity]), ProjectModule],
+  imports: [TypeOrmModule.forFeature([ApiKeyEntity, ProjectEntity])],
   providers: [ApiKeyService],
   controllers: [ApiKeyController],
   exports: [ApiKeyService],

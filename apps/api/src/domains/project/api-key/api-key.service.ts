@@ -20,7 +20,8 @@ import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { ProjectService } from '../project/project.service';
+import { ProjectNotFoundException } from '../project/exceptions';
+import { ProjectEntity } from '../project/project.entity';
 import { ApiKeyEntity } from './api-key.entity';
 import { CreateApiKeyDto } from './dtos';
 
@@ -29,7 +30,8 @@ export class ApiKeyService {
   constructor(
     @InjectRepository(ApiKeyEntity)
     private readonly repository: Repository<ApiKeyEntity>,
-    private readonly projectService: ProjectService,
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepo: Repository<ProjectEntity>,
   ) {}
 
   @Transactional()
@@ -38,11 +40,30 @@ export class ApiKeyService {
       dto.value = randomBytes(10).toString('hex').toUpperCase();
     }
     const { projectId, value } = dto;
-    await this.projectService.findById({ projectId });
+    const project = await this.projectRepo.findOneBy({ id: projectId });
+    if (!project) throw new ProjectNotFoundException();
 
     const apiKey = ApiKeyEntity.from({ projectId, value });
 
     return await this.repository.save(apiKey);
+  }
+
+  @Transactional()
+  async createMany(dtos: CreateApiKeyDto[]) {
+    for (const dto of dtos) {
+      if (!dto.value) {
+        dto.value = randomBytes(10).toString('hex').toUpperCase();
+      }
+      const { projectId } = dto;
+      const project = await this.projectRepo.findOneBy({ id: projectId });
+      if (!project) throw new ProjectNotFoundException();
+    }
+
+    const apiKeys = dtos.map(({ projectId, value }) =>
+      ApiKeyEntity.from({ projectId, value }),
+    );
+
+    return await this.repository.save(apiKeys);
   }
 
   async findAllByProjectId(projectId: number) {
