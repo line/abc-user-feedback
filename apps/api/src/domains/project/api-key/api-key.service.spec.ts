@@ -15,6 +15,7 @@
  */
 import { randomBytes } from 'crypto';
 import { faker } from '@faker-js/faker';
+import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
@@ -92,6 +93,34 @@ describe('ApiKeyService', () => {
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
       expect(projectRepo.findOneBy).toBeCalledWith({ id: invalidProjectId });
+      expect(apiKeyRepo.save).toBeCalledTimes(0);
+    });
+    it('creating an api key fails with an invalid api key', async () => {
+      const projectId = faker.number.int();
+      const value = faker.string.alphanumeric(
+        faker.number.int({ min: 1, max: 19 }),
+      );
+
+      await expect(apiKeyService.create({ projectId, value })).rejects.toThrow(
+        new BadRequestException('Invalid Api Key value'),
+      );
+
+      expect(apiKeyRepo.save).toBeCalledTimes(0);
+    });
+    it('creating an api key fails with an existent api key', async () => {
+      const projectId = faker.number.int();
+      const value = faker.string.alphanumeric(20);
+      jest
+        .spyOn(projectRepo, 'findOneBy')
+        .mockResolvedValueOnce({ id: projectId } as ProjectEntity);
+      jest
+        .spyOn(apiKeyRepo, 'findOneBy')
+        .mockResolvedValue({ value } as ApiKeyEntity);
+
+      await expect(apiKeyService.create({ projectId, value })).rejects.toThrow(
+        new BadRequestException('Api Key already exists'),
+      );
+
       expect(apiKeyRepo.save).toBeCalledTimes(0);
     });
   });

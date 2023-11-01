@@ -14,7 +14,7 @@
  * under the License.
  */
 import { randomBytes } from 'crypto';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
 import { Repository } from 'typeorm';
@@ -34,29 +34,35 @@ export class ApiKeyService {
     private readonly projectRepo: Repository<ProjectEntity>,
   ) {}
 
-  @Transactional()
-  async create(dto: CreateApiKeyDto) {
+  private async validateBeforeCreation(dto: CreateApiKeyDto) {
     if (!dto.value) {
       dto.value = randomBytes(10).toString('hex').toUpperCase();
     }
     const { projectId, value } = dto;
+    if (value.length !== 20)
+      throw new BadRequestException('Invalid Api Key value');
+
     const project = await this.projectRepo.findOneBy({ id: projectId });
     if (!project) throw new ProjectNotFoundException();
 
-    const apiKey = ApiKeyEntity.from({ projectId, value });
+    const apiKey = await this.repository.findOneBy({ value });
+    if (apiKey) throw new BadRequestException('Api Key already exists');
+  }
 
-    return await this.repository.save(apiKey);
+  @Transactional()
+  async create(dto: CreateApiKeyDto) {
+    await this.validateBeforeCreation(dto);
+    const { projectId, value } = dto;
+
+    const newApiKey = ApiKeyEntity.from({ projectId, value });
+
+    return await this.repository.save(newApiKey);
   }
 
   @Transactional()
   async createMany(dtos: CreateApiKeyDto[]) {
     for (const dto of dtos) {
-      if (!dto.value) {
-        dto.value = randomBytes(10).toString('hex').toUpperCase();
-      }
-      const { projectId } = dto;
-      const project = await this.projectRepo.findOneBy({ id: projectId });
-      if (!project) throw new ProjectNotFoundException();
+      await this.validateBeforeCreation(dto);
     }
 
     const apiKeys = dtos.map(({ projectId, value }) =>
