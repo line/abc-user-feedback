@@ -53,4 +53,4 @@ export enum PermissionEnum {
   channel_field_update = 'channel_field_update',
 }
 
-export const AllPermissionList = Object.values(PermissionEnum);
+export const AllPermissions = Object.values(PermissionEnum);

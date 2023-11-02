@@ -15,10 +15,10 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { mockRepository } from '@/test-utils/util-functions';
 import { ApiKeyEntity } from '../../domains/project/api-key/api-key.entity';
 import { ApiKeyService } from '../../domains/project/api-key/api-key.service';
-import { ProjectServiceProviders } from './project.service.providers';
 
 export const ApiKeyServiceProviders = [
   ApiKeyService,
@@ -26,5 +26,8 @@ export const ApiKeyServiceProviders = [
     provide: getRepositoryToken(ApiKeyEntity),
     useValue: mockRepository(),
   },
-  ...ProjectServiceProviders,
+  {
+    provide: getRepositoryToken(ProjectEntity),
+    useValue: mockRepository(),
+  },
 ];
