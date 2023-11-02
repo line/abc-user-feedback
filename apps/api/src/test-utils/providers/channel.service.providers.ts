@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ConfigService } from '@nestjs/config';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
@@ -37,4 +38,5 @@ export const ChannelServiceProviders = [
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
   ...ProjectServiceProviders,
   ...FieldServiceProviders,
+  ConfigService,
 ];

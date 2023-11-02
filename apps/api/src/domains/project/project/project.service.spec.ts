@@ -25,6 +25,7 @@ import { UserTypeEnum } from '@/domains/user/entities/enums';
 import {
   createQueryBuilder,
   MockOpensearchRepository,
+  TestConfig,
 } from '@/test-utils/util-functions';
 import { ProjectServiceProviders } from '../../../test-utils/providers/project.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
@@ -45,6 +46,7 @@ describe('ProjectService Test suite', () => {
   let channelRepo: Repository<ChannelEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: ProjectServiceProviders,
     }).compile();
 

@@ -35,18 +35,19 @@ interface IProps extends React.PropsWithChildren {
   maxDate?: Date;
   maxDays?: number;
   isClearable?: boolean;
+  disableTotalDateRange?: boolean;
 }
-const isTotalDateRange = (date: DateRangeType) => {
-  if (!date) return false;
-  if (!date.startDate || !date.endDate) return false;
-  return (
-    dayjs(date.startDate).format(DATE_FORMAT) === '1900-01-01' &&
-    dayjs(date.endDate).format(DATE_FORMAT) === '2999-12-31'
-  );
-};
 
 const DateRangePicker: React.FC<IProps> = (props) => {
-  const { value, onChange, maxDate, minDate, maxDays, isClearable } = props;
+  const {
+    value,
+    onChange,
+    maxDate,
+    minDate,
+    maxDays,
+    isClearable,
+    disableTotalDateRange,
+  } = props;
 
   const { t, i18n } = useTranslation();
 
@@ -55,8 +56,8 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
 
-  const items = useMemo(
-    () => [
+  const items = useMemo(() => {
+    return [
       {
         label: t('text.date.today'),
         startDate: dayjs().toDate(),
@@ -82,14 +83,8 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         startDate: dayjs().subtract(90, 'days').toDate(),
         endDate: dayjs().toDate(),
       },
-      {
-        label: t('text.date.all-dates'),
-        startDate: dayjs('1900.01.01').toDate(),
-        endDate: dayjs('2999.12.31').toDate(),
-      },
-    ],
-    [t],
-  );
+    ];
+  }, [t, disableTotalDateRange]);
 
   useEffect(() => {
     setActiveIdx(-1);
@@ -132,17 +127,15 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         >
           <p className="font-14-regular">
             {currentValue
-              ? isTotalDateRange(currentValue)
-                ? t('text.date.all-dates')
-                : `${
-                    currentValue?.startDate
-                      ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
-                      : ''
-                  } ~ ${
-                    currentValue?.endDate
-                      ? dayjs(currentValue.endDate).format(DATE_FORMAT)
-                      : ''
-                  }`
+              ? `${
+                  currentValue?.startDate
+                    ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
+                    : ''
+                } ~ ${
+                  currentValue?.endDate
+                    ? dayjs(currentValue.endDate).format(DATE_FORMAT)
+                    : ''
+                }`
               : 'YYYY-MM-DD ~ YYYY-MM-DD'}
           </p>
           <div className="flex flex-row items-center gap-2">
@@ -193,7 +186,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             disabledKeyboardNavigation
             selectsRange
             inline
-            focusSelectedMonth={false}
+            autoFocus
           />
         </div>
         <div className="float-right flex gap-2 p-2">

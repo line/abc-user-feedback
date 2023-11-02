@@ -14,13 +14,13 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
 import { Like, Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { OpensearchRepository } from '@/common/repositories';
-import { OS_USE } from '@/configs/opensearch.config';
 import { TenantService } from '@/domains/tenant/tenant.service';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
@@ -46,6 +46,7 @@ export class ProjectService {
     private readonly osRepository: OpensearchRepository,
     private readonly tenantService: TenantService,
     private readonly roleService: RoleService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Transactional()
@@ -132,7 +133,7 @@ export class ProjectService {
 
   @Transactional()
   async deleteById(projectId: number) {
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       const channels = await this.channelRepo.find({
         where: { project: { id: projectId } },
       });

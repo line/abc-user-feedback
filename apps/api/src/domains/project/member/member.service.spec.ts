@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
@@ -36,6 +37,7 @@ describe('MemberService test suite', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: MemberServiceProviders,
     }).compile();
 

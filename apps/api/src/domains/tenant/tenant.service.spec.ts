@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { TenantServiceProviders } from '../../test-utils/providers/tenant.service.providers';
 import { FeedbackEntity } from '../feedback/feedback.entity';
 import { UserEntity } from '../user/entities/user.entity';
@@ -41,6 +42,7 @@ describe('TenantService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: TenantServiceProviders,
     }).compile();
     tenantService = module.get(TenantService);

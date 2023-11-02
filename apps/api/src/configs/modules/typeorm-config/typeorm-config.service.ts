@@ -20,21 +20,22 @@ import type {
   TypeOrmModuleOptions,
   TypeOrmOptionsFactory,
 } from '@nestjs/typeorm';
-import * as dotenv from 'dotenv';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import type { ConfigServiceType } from '@/types/config-service.type';
 
-dotenv.config();
 @Injectable()
 export class TypeOrmConfigService implements TypeOrmOptionsFactory {
   constructor(
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {}
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    const { main_url, sub_urls } = this.configService.get('mysql', {
-      infer: true,
-    });
+    const { main_url, sub_urls, auto_migration } = this.configService.get(
+      'mysql',
+      {
+        infer: true,
+      },
+    );
 
     return {
       type: 'mysql',
@@ -46,7 +47,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       migrations: [join(__dirname, 'migrations/*.{ts,js}')],
       migrationsTableName: 'migrations',
       logging: ['warn', 'error'],
-      migrationsRun: process.env.AUTO_MIGRATION === 'true',
+      migrationsRun: auto_migration,
       namingStrategy: new SnakeNamingStrategy(),
       timezone: '+00:00',
     };
