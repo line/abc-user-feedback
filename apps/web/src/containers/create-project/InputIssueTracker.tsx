@@ -14,18 +14,23 @@
  * under the License.
  */
 import { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/router';
 
-import { TextInput } from '@ufb/ui';
+import { TextInput, toast } from '@ufb/ui';
 
 import { SelectBox } from '@/components';
+import { Path } from '@/constants/path';
 import { useCreateProject } from '@/contexts/create-project.context';
+import { useOAIMutation } from '@/hooks';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 interface IProps {}
 
 const InputIssueTracker: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateProject();
+  const router = useRouter();
+
+  const { input, onChangeInput, clearLocalStorage } = useCreateProject();
 
   const ticketDomain = useMemo(
     () => input.issueTracker.ticketDomain,
@@ -41,9 +46,38 @@ const InputIssueTracker: React.FC<IProps> = () => {
     },
     [input?.issueTracker],
   );
+  const { mutate } = useOAIMutation({
+    method: 'post',
+    path: '/api/projects',
+    queryOptions: {
+      onError(error) {
+        toast.negative({ title: error?.message ?? 'Error' });
+      },
+      onSuccess(data) {
+        clearLocalStorage();
+        router.replace({
+          pathname: Path.CREATE_PROJECT_COMPLETE,
+          query: { projectId: data?.id },
+        });
+      },
+    },
+  });
+  const onComplete = () => {
+    mutate({
+      name: input.projectInfo.name,
+      description: input.projectInfo.description,
+      apiKeys: input.apiKeys,
+      issueTracker: { data: input.issueTracker as any },
+      members: input.members.map((v) => ({
+        roleName: v.role.name,
+        userId: v.user.id,
+      })),
+      roles: input.roles,
+    });
+  };
 
   return (
-    <CreateProjectInputTemplate>
+    <CreateProjectInputTemplate onComplete={onComplete}>
       <SelectBox
         options={[{ key: 'jira', name: 'JIRA' }]}
         value={{ key: 'jira', name: 'JIRA' }}

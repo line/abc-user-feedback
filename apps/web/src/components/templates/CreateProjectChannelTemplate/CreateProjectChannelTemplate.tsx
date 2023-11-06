@@ -19,6 +19,8 @@ import { useRouter } from 'next/router';
 
 import { Icon } from '@ufb/ui';
 
+import { Path } from '@/constants/path';
+
 interface IProps<T extends string> extends React.PropsWithChildren {
   type: 'project' | 'channel';
   helpText: Record<T, string>;
@@ -41,7 +43,7 @@ function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
 
   return (
     <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
-      <Header />
+      <Header type={type} />
       <Title type={type} />
       <Stepper
         completeStepIndex={completeStepIndex}
@@ -54,10 +56,11 @@ function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
   );
 }
 
-const Header: React.FC = () => {
+const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
   const router = useRouter();
+
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex h-12 items-center justify-between">
       <div className="flex items-center gap-1">
         <Image
           src="/assets/images/logo.svg"
@@ -69,7 +72,17 @@ const Header: React.FC = () => {
       </div>
       <button
         className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
-        onClick={() => router.back()}
+        onClick={() => {
+          console.log('type: ', type);
+          if (type === 'channel') {
+            router.push({
+              pathname: Path.FEEDBACK,
+              query: { projectId: router.query.projectId },
+            });
+          } else if (type === 'project') {
+            router.push({ pathname: Path.MAIN });
+          }
+        }}
       >
         <Icon name="Out" size={16} />
         <span className="font-12-bold uppercase">나가기</span>

@@ -13,8 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import { Fragment, useCallback, useMemo } from 'react';
+import { Fragment } from 'react';
 import {
   createColumnHelper,
   flexRender,
@@ -22,22 +21,16 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { Badge, Icon } from '@ufb/ui';
+import { Badge } from '@ufb/ui';
 
-import { useCreateChannel } from '@/contexts/create-channel.context';
-import type { InputFieldType } from '@/types/field.type';
+import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
+import type { FieldType } from '@/types/field.type';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-import FieldSettingPopover from '../setting-menu/FieldSetting/FieldSettingPopover';
 import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
-import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
-const columnHelper = createColumnHelper<InputFieldType>();
+const columnHelper = createColumnHelper<FieldType>();
 
-const getColumns = (
-  deleteField: (index: number) => void,
-  modifyField: (input: InputFieldType, index: number) => void,
-  fieldRows: InputFieldType[],
-) => [
+const columns = [
   columnHelper.accessor('key', {
     header: 'Key',
     cell: ({ getValue }) => (isNotEmptyStr(getValue()) ? getValue() : '-'),
@@ -88,73 +81,27 @@ const getColumns = (
     },
     size: 100,
   }),
-  columnHelper.display({
-    id: 'delete',
-    header: () => <p className="text-center">Delete</p>,
-    cell: ({ row }) => (
-      <div className="text-center">
-        <button
-          className="icon-btn icon-btn-sm icon-btn-tertiary"
-          disabled={row.original.type === 'DEFAULT'}
-          onClick={() => deleteField(row.index)}
-        >
-          <Icon name="TrashFill" />
-        </button>
-      </div>
-    ),
-    size: 125,
-  }),
-  columnHelper.display({
-    id: 'edit',
-    header: () => <p className="text-center">Edit</p>,
-    cell: ({ row }) => (
-      <div className="text-center">
-        <FieldSettingPopover
-          onSave={(input) => modifyField(input, row.index)}
-          data={row.original}
-          disabled={row.original.type === 'DEFAULT'}
-          fieldRows={fieldRows}
-        />
-      </div>
-    ),
-    size: 125,
-  }),
 ];
 
-interface IProps {}
+const fieldSort = (a: FieldType, b: FieldType) => {
+  const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
+  const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
+  return aNum - bNum;
+};
 
-const InputField: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateChannel();
-  const fields = useMemo(() => input.fields, [input.fields]);
-  const setFields = useCallback(
-    (input: InputFieldType[]) => onChangeInput('fields', input),
-    [],
-  );
+interface IProps {
+  fields: FieldType[];
+}
 
-  const deleteField = (index: number) => {
-    setFields(fields.filter((_, i) => i !== index));
-  };
-  const modifyField = (input: InputFieldType, index: number) => {
-    setFields(fields.map((v, i) => (i === index ? input : v)));
-  };
-
+const FieldSection: React.FC<IProps> = ({ fields }) => {
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
-    columns: getColumns(deleteField, modifyField, fields),
-    data: fields,
-    enableGlobalFilter: true,
+    columns,
+    data: fields.sort(fieldSort),
   });
 
   return (
-    <CreateChannelInputTemplate>
-      <div className="flex justify-end">
-        <button>
-          <FieldSettingPopover
-            onSave={(input) => setFields(fields.concat(input))}
-            fieldRows={fields}
-          />
-        </button>
-      </div>
+    <CreateSectionTemplate title="Field 정보">
       <table className="table rounded border">
         <thead>
           <tr>
@@ -186,8 +133,8 @@ const InputField: React.FC<IProps> = () => {
           ))}
         </tbody>
       </table>
-    </CreateChannelInputTemplate>
+    </CreateSectionTemplate>
   );
 };
 
-export default InputField;
+export default FieldSection;

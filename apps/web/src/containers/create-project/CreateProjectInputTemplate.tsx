@@ -23,12 +23,19 @@ import {
 
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
-  validate?: () => boolean;
+  validate?: () => Promise<boolean> | boolean;
+  onComplete?: () => void;
+  disableNextBtn?: boolean;
+  isLoading?: boolean;
 }
 
 const CreateProjectInputTemplate: React.FC<IProps> = ({
   children,
   actionButton,
+  onComplete,
+  validate,
+  disableNextBtn,
+  isLoading,
 }) => {
   const { currentStep, onNext, onPrev, currentStepIndex } = useCreateProject();
 
@@ -40,6 +47,9 @@ const CreateProjectInputTemplate: React.FC<IProps> = ({
       onPrev={onPrev}
       title={PROJECT_STEPPER_TEXT[currentStep]}
       actionButton={actionButton}
+      onComplete={onComplete}
+      validate={validate}
+      disableNextBtn={disableNextBtn || isLoading}
     >
       {children}
     </CreateProjectChannelInputTemplate>

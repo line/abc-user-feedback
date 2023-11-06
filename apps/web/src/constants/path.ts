@@ -41,8 +41,14 @@ class PathV3 {
   get CREATE_PROJECT() {
     return '/main/project/create';
   }
+  get CREATE_PROJECT_COMPLETE() {
+    return '/main/project/create-complete';
+  }
   get CREATE_CHANNEL() {
     return '/main/project/[projectId]/channel/create';
+  }
+  get CREATE_CHANNEL_COMPLETE() {
+    return '/main/project/[projectId]/channel/create-complete';
   }
 
   get FEEDBACK() {

@@ -46,10 +46,11 @@ interface IProps {
     name: string;
   }) => Promise<void> | void;
   onDelete: (roleId: number) => void;
+  viewOnly?: boolean;
 }
 
 const RoleSettingTable: React.FC<IProps> = (props) => {
-  const { projectId, roles, onDelete, updateRole } = props;
+  const { projectId, roles, onDelete, updateRole, viewOnly } = props;
   const [editRoleId, setEditRoleId] = useState<number>();
 
   const [editPermissions, setEditPermissions] = useState<
@@ -108,6 +109,7 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
                 onChangeEditName={setEditName}
                 onSubmitEdit={onSubmitEdit}
                 onClickDelete={onDelete}
+                viewOnly={viewOnly}
               />
             </th>
           ))}

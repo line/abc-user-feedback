@@ -13,7 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { MainTemplate } from './MainTemplate';
-export { SettingMenuTemplate } from './SettingMenuTemplate';
-export { default as CreateProjectChannelTemplate } from './CreateProjectChannelTemplate';
-export { CreateSectionTemplate } from './CreateSectionTemplate';
+
+import { Input } from '@ufb/ui';
+
+import { CreateSectionTemplate } from '@/components/templates';
+
+interface IProps {
+  name: string;
+  description: string;
+}
+
+const ProjectInfoSection: React.FC<IProps> = ({ description, name }) => {
+  return (
+    <CreateSectionTemplate title="Project 정보" defaultOpen>
+      <Input label="Project Name" value={name} required disabled />
+      <Input label="Project Description" value={description} disabled />
+    </CreateSectionTemplate>
+  );
+};
+
+export default ProjectInfoSection;

@@ -13,22 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useRouter } from 'next/router';
+import { useContext } from 'react';
 
 import type { InputApiKeyType } from '@/types/api-key.type';
 import type { InputIssueTrackerType } from '@/types/issue-tracker.type';
 import type { InputMemberType } from '@/types/member.type';
 import { PermissionList } from '@/types/permission.type';
-import type { InputProjectType } from '@/types/project.type';
+import type { InputProjectInfoType } from '@/types/project.type';
 import type { InputRoleType } from '@/types/role.type';
+import {
+  CreateContext,
+  CreateProvider,
+} from './create-project-channel.context';
 
 const DEFAULT_ROLES: InputRoleType[] = [
   { name: 'Admin', permissions: [...PermissionList] },
@@ -50,13 +46,6 @@ const DEFAULT_ROLES: InputRoleType[] = [
     ),
   },
 ];
-const DEFAULT_INPUT = {
-  apiKeys: [],
-  members: [],
-  roles: DEFAULT_ROLES,
-  issueTracker: { ticketDomain: '', ticketKey: '' },
-  projectInfo: { description: '', name: '' },
-};
 
 export const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = {
   projectInfo: 'Project 설정',
@@ -66,132 +55,58 @@ export const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = {
   issueTracker: 'Issue Tracker',
 };
 
-interface InputType {
-  projectInfo: InputProjectType;
+const PROJECT_DEFAULT_INPUT: ProjectInputType = {
+  apiKeys: [],
+  members: [],
+  roles: DEFAULT_ROLES,
+  issueTracker: { ticketDomain: '', ticketKey: '' },
+  projectInfo: { description: '', name: '' },
+};
+
+interface ProjectInputType {
+  projectInfo: InputProjectInfoType;
   roles: InputRoleType[];
   members: InputMemberType[];
   apiKeys: InputApiKeyType[];
   issueTracker: InputIssueTrackerType;
 }
 
-export type ProjectStepType = keyof InputType;
-
-export const PROJECT_STEPS: ProjectStepType[] = [
+export const PROJECT_STEPS = [
   'projectInfo',
   'roles',
   'members',
   'apiKeys',
   'issueTracker',
-];
+] as const;
 
-type OnChangeInputType = <T extends keyof InputType>(
-  key: T,
-  value: InputType[T],
-) => void;
+export type ProjectStepType = (typeof PROJECT_STEPS)[number];
 
-interface CreateProjectContextType {
-  input: InputType;
-  currentStep: ProjectStepType;
-  currentStepIndex: number;
-  completeStepIndex: number;
-  onChangeInput: OnChangeInputType;
-  onPrev: () => void;
-  onNext: () => void;
-}
-
-export const CreateProjectContext = createContext<CreateProjectContextType>({
+const CreateProjectContext = CreateContext<ProjectStepType, ProjectInputType>({
   currentStep: 'projectInfo',
   completeStepIndex: 0,
   currentStepIndex: 0,
-  input: DEFAULT_INPUT,
+  input: PROJECT_DEFAULT_INPUT,
   onChangeInput: () => {},
   onPrev: () => {},
   onNext: () => {},
+  clearLocalStorage: () => {},
 });
 
 export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [input, setInput] = useState<InputType>(DEFAULT_INPUT);
-  const [currentStep, setCurrentStep] =
-    useState<ProjectStepType>('projectInfo');
-  const [completeStepIndex, setCompleteStepIndex] = useState(0);
-
-  const currentStepIndex = useMemo(
-    () => PROJECT_STEPS.indexOf(currentStep),
-    [currentStep],
-  );
-
-  const onPrev = useCallback(() => {
-    setCurrentStep(
-      PROJECT_STEPS[PROJECT_STEPS.indexOf(currentStep) - 1] ?? 'projectInfo',
-    );
-  }, [currentStep]);
-
-  const onNext = useCallback(() => {
-    const nextStepIndex = PROJECT_STEPS.indexOf(currentStep) + 1;
-    const nextStep = PROJECT_STEPS[nextStepIndex] ?? 'projectInfo';
-
-    if (nextStepIndex === PROJECT_STEPS.length) {
-      alert('완료');
-      return;
-    }
-    setCurrentStep(nextStep);
-    if (completeStepIndex < nextStepIndex) {
-      setCompleteStepIndex(nextStepIndex);
-    }
-  }, [currentStep, input]);
-
-  const router = useRouter();
-
-  const onChangeInput: OnChangeInputType = (key, value) => {
-    setInput((prev) => ({ ...prev, [key]: value }));
-  };
-
-  useEffect(() => {
-    const confirmMsg =
-      'Project 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.';
-
-    // 리로드 전에 메세지 띄워주기
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.returnValue = confirmMsg;
-      return confirmMsg; // Gecko + Webkit, Safari, Chrome
-    };
-
-    //라우터 바뀌기 전 이벤트(취소했을경우 넘어가지않음)
-    const handleBeforeChangeRoute = (url: string) => {
-      if (router.pathname !== url && !confirm(confirmMsg)) {
-        router.events.emit('routeChangeError');
-        throw `사이트 변경 취소`;
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    router.events.on('routeChangeStart', handleBeforeChangeRoute);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      router.events.off('routeChangeStart', handleBeforeChangeRoute);
-    };
-  }, []);
-
   return (
     <CreateProjectContext.Provider
-      value={{
-        input,
-        completeStepIndex,
-        currentStep,
-        currentStepIndex,
-        onChangeInput,
-        onPrev,
-        onNext,
-      }}
+      value={CreateProvider({
+        type: 'project',
+        defaultInput: PROJECT_DEFAULT_INPUT,
+        steps: PROJECT_STEPS,
+      })}
     >
       {children}
     </CreateProjectContext.Provider>
   );
 };
-
 export const useCreateProject = () => {
   return useContext(CreateProjectContext);
 };

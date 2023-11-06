@@ -14,18 +14,20 @@
  * under the License.
  */
 
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { Input } from '@ufb/ui';
+import { TextInput } from '@ufb/ui';
 
 import { useCreateChannel } from '@/contexts/create-channel.context';
-import type { InputProjectType } from '@/types/project.type';
+import type { InputProjectInfoType } from '@/types/project.type';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 interface IProps {}
 
 const InputChannelInfo: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannel();
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isValid, setIsValid] = useState(true);
 
   const name = useMemo(() => input.channelInfo.name, [input.channelInfo.name]);
 
@@ -35,26 +37,46 @@ const InputChannelInfo: React.FC<IProps> = () => {
   );
 
   const onChangeProjectInfo = useCallback(
-    <T extends keyof InputProjectType>(key: T, value: InputProjectType[T]) => {
+    <T extends keyof InputProjectInfoType>(
+      key: T,
+      value: InputProjectInfoType[T],
+    ) => {
+      setIsSubmitted(false);
       onChangeInput('channelInfo', { name, description, [key]: value });
     },
     [input.channelInfo],
   );
+  const validate = () => {
+    setIsSubmitted(true);
+    if (name.length < 2) {
+      setIsValid(false);
+      return false;
+    }
+    setIsValid(true);
+    return true;
+  };
 
   return (
-    <CreateChannelInputTemplate validate={() => name.length >= 4}>
-      <Input
+    <CreateChannelInputTemplate
+      validate={validate}
+      disableNextBtn={name.length === 0}
+    >
+      <TextInput
         label="Channel Name"
         placeholder="채널 이름을 입력해주세요."
         value={name}
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
+        isSubmitted={isSubmitted}
+        isValid={isValid}
+        maxLength={20}
       />
-      <Input
+      <TextInput
         label="Channel Description"
         placeholder="채널 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
+        maxLength={50}
       />
     </CreateChannelInputTemplate>
   );

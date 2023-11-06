@@ -13,18 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
-import { useRouter } from 'next/router';
+import { useContext } from 'react';
 
 import type { InputChannelInfoType } from '@/types/channel.type';
 import type { InputFieldType } from '@/types/field.type';
+import {
+  CreateContext,
+  CreateProvider,
+} from './create-project-channel.context';
 
 const DEFAULT_FIELDS: InputFieldType[] = [
   {
@@ -68,133 +64,47 @@ export const CHANNEL_STEPPER_TEXT: Record<ChannelStepType, string> = {
   fieldPreview: 'Field 미리보기',
 };
 
-interface InputType {
+interface ChannelInputType {
   channelInfo: InputChannelInfoType;
   fields: InputFieldType[];
   fieldPreview: null;
 }
-const DEFAULT_INPUT: InputType = {
+const CHANNEL_DEFAULT_INPUT: ChannelInputType = {
   channelInfo: { name: '', description: '' },
   fields: DEFAULT_FIELDS,
   fieldPreview: null,
 };
 
-export type ChannelStepType = keyof InputType;
+export const CHANNEL_STEPS = ['channelInfo', 'fields', 'fieldPreview'] as const;
 
-export const CHANNEL_STEPS: ChannelStepType[] = [
-  'channelInfo',
-  'fields',
-  'fieldPreview',
-];
+export type ChannelStepsType = typeof CHANNEL_STEPS;
+export type ChannelStepType = (typeof CHANNEL_STEPS)[number];
 
-type OnChangeInputType = <T extends keyof InputType>(
-  key: T,
-  value: InputType[T],
-) => void;
-
-interface CreateChannelContextType {
-  input: InputType;
-  currentStep: ChannelStepType;
-  currentStepIndex: number;
-  completeStepIndex: number;
-  onChangeInput: OnChangeInputType;
-  onPrev: () => void;
-  onNext: () => void;
-}
-
-export const CreateChannelContext = createContext<CreateChannelContextType>({
+const CreateChannelContext = CreateContext<ChannelStepType, ChannelInputType>({
   currentStep: 'channelInfo',
   completeStepIndex: 0,
   currentStepIndex: 0,
-  input: DEFAULT_INPUT,
+  input: CHANNEL_DEFAULT_INPUT,
   onChangeInput: () => {},
   onPrev: () => {},
   onNext: () => {},
+  clearLocalStorage: () => {},
 });
-
 export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
-  const [input, setInput] = useState<InputType>(DEFAULT_INPUT);
-  const [currentStep, setCurrentStep] =
-    useState<ChannelStepType>('channelInfo');
-  const [completeStepIndex, setCompleteStepIndex] = useState(0);
-
-  const currentStepIndex = useMemo(
-    () => CHANNEL_STEPS.indexOf(currentStep),
-    [currentStep],
-  );
-
-  const onPrev = useCallback(() => {
-    setCurrentStep(
-      CHANNEL_STEPS[CHANNEL_STEPS.indexOf(currentStep) - 1] ?? 'channelInfo',
-    );
-  }, [currentStep]);
-
-  const onNext = useCallback(() => {
-    const nextStepIndex = CHANNEL_STEPS.indexOf(currentStep) + 1;
-    const nextStep = CHANNEL_STEPS[nextStepIndex] ?? 'channelInfo';
-
-    if (nextStepIndex === CHANNEL_STEPS.length) {
-      alert('완료');
-      return;
-    }
-    setCurrentStep(nextStep);
-    if (completeStepIndex < nextStepIndex) {
-      setCompleteStepIndex(nextStepIndex);
-    }
-  }, [currentStep, input]);
-
-  const router = useRouter();
-
-  const onChangeInput: OnChangeInputType = (key, value) => {
-    setInput((prev) => ({ ...prev, [key]: value }));
-  };
-
-  useEffect(() => {
-    const confirmMsg =
-      'Project 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.';
-
-    // 리로드 전에 메세지 띄워주기
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.returnValue = confirmMsg;
-      return confirmMsg; // Gecko + Webkit, Safari, Chrome
-    };
-
-    //라우터 바뀌기 전 이벤트(취소했을경우 넘어가지않음)
-    const handleBeforeChangeRoute = (url: string) => {
-      if (router.pathname !== url && !confirm(confirmMsg)) {
-        router.events.emit('routeChangeError');
-        throw `사이트 변경 취소`;
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    router.events.on('routeChangeStart', handleBeforeChangeRoute);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      router.events.off('routeChangeStart', handleBeforeChangeRoute);
-    };
-  }, []);
-
   return (
     <CreateChannelContext.Provider
-      value={{
-        input,
-        completeStepIndex,
-        currentStep,
-        currentStepIndex,
-        onChangeInput,
-        onPrev,
-        onNext,
-      }}
+      value={CreateProvider({
+        type: 'channel',
+        defaultInput: CHANNEL_DEFAULT_INPUT,
+        steps: CHANNEL_STEPS,
+      })}
     >
       {children}
     </CreateChannelContext.Provider>
   );
 };
-
 export const useCreateChannel = () => {
   return useContext(CreateChannelContext);
 };

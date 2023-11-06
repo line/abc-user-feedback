@@ -24,11 +24,16 @@ import {
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   validate?: () => boolean;
+  onComplete?: () => void;
+  disableNextBtn?: boolean;
 }
 
 const CreateChannelInputTemplate: React.FC<IProps> = ({
   children,
   actionButton,
+  onComplete,
+  validate,
+  disableNextBtn,
 }) => {
   const { currentStep, onNext, onPrev, currentStepIndex } = useCreateChannel();
 
@@ -40,6 +45,9 @@ const CreateChannelInputTemplate: React.FC<IProps> = ({
       onPrev={onPrev}
       title={CHANNEL_STEPPER_TEXT[currentStep]}
       actionButton={actionButton}
+      onComplete={onComplete}
+      validate={validate}
+      disableNextBtn={disableNextBtn}
     >
       {children}
     </CreateProjectChannelInputTemplate>

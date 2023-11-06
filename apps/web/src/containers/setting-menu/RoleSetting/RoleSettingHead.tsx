@@ -36,6 +36,7 @@ interface IProps {
   onChangeEditName: (name: string) => void;
   onSubmitEdit: () => void;
   onClickDelete: (roleId: number) => void;
+  viewOnly?: boolean;
 }
 
 const RoleSettingHead: React.FC<IProps> = ({
@@ -47,18 +48,24 @@ const RoleSettingHead: React.FC<IProps> = ({
   onChangeEditName,
   onSubmitEdit,
   onClickDelete,
+  viewOnly,
 }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
+
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const hasUpdateRolePerm = useMemo(
     () => !projectId || perms.includes('project_role_update'),
     [perms, projectId],
   );
+
   const hasDeleteRolePerm = useMemo(
     () => !projectId || perms.includes('project_role_delete'),
     [perms, projectId],
   );
+
+  if (viewOnly) return <p className="text-center">{name}</p>;
 
   return (
     <>

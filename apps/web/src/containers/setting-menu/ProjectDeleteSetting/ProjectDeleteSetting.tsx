@@ -27,6 +27,7 @@ import {
 } from '@ufb/ui';
 
 import { ChannelCard, SettingMenuTemplate } from '@/components';
+import { Path } from '@/constants/path';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 import ChannelCardList from './ChannelCardList';
 
@@ -61,7 +62,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       async onSuccess() {
         toast.negative({ title: t('toast.delete') });
-        router.reload();
+        router.push(Path.MAIN);
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });

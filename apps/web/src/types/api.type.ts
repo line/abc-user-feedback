@@ -98,21 +98,6 @@ export interface paths {
   '/api/projects/{projectId}/api-keys/{apiKeyId}': {
     delete: operations['ApiKeyController_delete'];
   };
-  '/api/projects': {
-    get: operations['ProjectController_findAll'];
-    post: operations['ProjectController_create'];
-  };
-  '/api/projects/{projectId}': {
-    get: operations['ProjectController_findOne'];
-    put: operations['ProjectController_updateOne'];
-    delete: operations['ProjectController_delete'];
-  };
-  '/api/projects/{projectId}/feedback-count': {
-    get: operations['ProjectController_countFeedbacks'];
-  };
-  '/api/projects/{projectId}/issue-count': {
-    get: operations['ProjectController_countIssues'];
-  };
   '/api/projects/{projectId}/channels': {
     get: operations['ChannelController_findAllByProjectId'];
     post: operations['ChannelController_create'];
@@ -130,6 +115,24 @@ export interface paths {
   '/api/field/{fieldId}/options': {
     get: operations['OptionController_getOptions'];
     post: operations['OptionController_createOption'];
+  };
+  '/api/projects': {
+    get: operations['ProjectController_findAll'];
+    post: operations['ProjectController_create'];
+  };
+  '/api/projects/name-check': {
+    get: operations['ProjectController_checkName'];
+  };
+  '/api/projects/{projectId}': {
+    get: operations['ProjectController_findOne'];
+    put: operations['ProjectController_updateOne'];
+    delete: operations['ProjectController_delete'];
+  };
+  '/api/projects/{projectId}/feedback-count': {
+    get: operations['ProjectController_countFeedbacks'];
+  };
+  '/api/projects/{projectId}/issue-count': {
+    get: operations['ProjectController_countIssues'];
   };
   '/api/projects/{projectId}/channels/{channelId}/feedbacks': {
     post: operations['FeedbackController_create'];
@@ -160,16 +163,16 @@ export interface paths {
   '/api/projects/{projectId}/issues/search': {
     post: operations['IssueController_findAllByProjectId'];
   };
+  '/api/projects/{projectId}/issue-tracker': {
+    get: operations['IssueTrackerController_findOne'];
+    put: operations['IssueTrackerController_updateOne'];
+    post: operations['IssueTrackerController_create'];
+  };
   '/api/health': {
     get: operations['HealthController_check'];
   };
   '/api/channels/{channelId}/migration': {
     post: operations['MigrationController_migrate'];
-  };
-  '/api/projects/{projectId}/issue-tracker': {
-    get: operations['IssueTrackerController_findOne'];
-    put: operations['IssueTrackerController_updateOne'];
-    post: operations['IssueTrackerController_create'];
   };
 }
 
@@ -588,6 +591,9 @@ export interface components {
     UpdateMemberRequestDto: {
       roleId: number;
     };
+    CreateApiKeyRequestDto: {
+      value: string;
+    };
     CreateApiKeyResponseDto: {
       id: number;
       value: string;
@@ -604,39 +610,6 @@ export interface components {
     };
     FindApiKeysResponseDto: {
       items: components['schemas']['ApiKeyResponseDto'][];
-    };
-    CreateProjectRequestDto: {
-      name: string;
-      description: string | null;
-    };
-    CreateProjectResponseDto: {
-      id: number;
-    };
-    FindProjectByIdResponseDto: {
-      id: number;
-      name: string;
-      description: string;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-    FindProjectsResponseDto: {
-      meta: components['schemas']['PaginationMetaDto'];
-      items: components['schemas']['FindProjectByIdResponseDto'][];
-    };
-    CountFeedbacksByIdResponseDto: {
-      total: number;
-    };
-    CountIssuesByIdResponseDto: {
-      total: number;
-    };
-    UpdateProjectRequestDto: {
-      name: string;
-      description: string | null;
-    };
-    UpdateProjectResponseDto: {
-      id: number;
     };
     /** @enum {string} */
     FieldFormatEnum:
@@ -754,6 +727,57 @@ export interface components {
     CreateOptionResponseDto: {
       id: number;
     };
+    CreateMemberByNameDto: {
+      roleName: string;
+      userId: number;
+    };
+    CreateApiKeyByValueDto: {
+      value: string;
+    };
+    CreateIssueTrackerRequestDto: {
+      data: Record<string, never>;
+    };
+    CreateProjectRequestDto: {
+      name: string;
+      description: string | null;
+      roles?: components['schemas']['CreateRoleRequestDto'][];
+      members?: components['schemas']['CreateMemberByNameDto'][];
+      apiKeys?: components['schemas']['CreateApiKeyByValueDto'][];
+      issueTracker?: components['schemas']['CreateIssueTrackerRequestDto'];
+    };
+    CreateProjectResponseDto: {
+      id: number;
+    };
+    FindProjectByIdResponseDto: {
+      id: number;
+      name: string;
+      description: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    FindProjectsResponseDto: {
+      meta: components['schemas']['PaginationMetaDto'];
+      items: components['schemas']['FindProjectByIdResponseDto'][];
+    };
+    CountFeedbacksByIdResponseDto: {
+      total: number;
+    };
+    CountIssuesByIdResponseDto: {
+      total: number;
+    };
+    UpdateProjectRequestDto: {
+      name: string;
+      description: string | null;
+      roles?: components['schemas']['CreateRoleRequestDto'][];
+      members?: components['schemas']['CreateMemberByNameDto'][];
+      apiKeys?: components['schemas']['CreateApiKeyByValueDto'][];
+      issueTracker?: components['schemas']['CreateIssueTrackerRequestDto'];
+    };
+    UpdateProjectResponseDto: {
+      id: number;
+    };
     FindFeedbacksByChannelIdRequestDto: {
       /** @default 10 */
       limit?: number;
@@ -822,9 +846,6 @@ export interface components {
     DeleteIssuesRequestDto: {
       issueIds: number[];
     };
-    CreateIssueTrackerRequestDto: {
-      data: Record<string, never>;
-    };
     CreateIssueTrackerResponseDto: {
       id: number;
       data: Record<string, never>;
@@ -852,12 +873,16 @@ export interface components {
   pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
 export type external = Record<string, never>;
 
 export interface operations {
   PrometheusController_index: {
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   AuthController_sendCode: {
@@ -881,7 +906,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   AuthController_signUpEmailUser: {
@@ -891,7 +918,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   AuthController_signUpInvitationUser: {
@@ -901,7 +930,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   AuthController_signUpOAuthUser: {
@@ -911,7 +942,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   AuthController_signInEmail: {
@@ -944,7 +977,9 @@ export interface operations {
   };
   AuthController_handleCallback: {
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   AuthController_refreshToken: {
@@ -978,7 +1013,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   UserController_searchUsers: {
@@ -1021,7 +1058,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   UserController_deleteUser: {
@@ -1031,7 +1070,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   UserController_getRoles: {
@@ -1055,7 +1096,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   UserController_requestResetPassword: {
@@ -1065,7 +1108,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   UserController_resetPassword: {
@@ -1075,7 +1120,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   UserController_changePassword: {
@@ -1085,7 +1132,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   TenantController_get: {
@@ -1104,7 +1153,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   TenantController_setup: {
@@ -1114,7 +1165,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   TenantController_countFeedbacks: {
@@ -1157,7 +1210,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   RoleController_updateRole: {
@@ -1173,7 +1228,9 @@ export interface operations {
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   RoleController_deleteRole: {
@@ -1184,7 +1241,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   MemberController_getAllRolesByProjectId: {
@@ -1216,7 +1275,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   MemberController_update: {
@@ -1232,7 +1293,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   MemberController_delete: {
@@ -1243,7 +1306,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ApiKeyController_findAll: {
@@ -1266,6 +1331,11 @@ export interface operations {
         projectId: number;
       };
     };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateApiKeyRequestDto'];
+      };
+    };
     responses: {
       201: {
         content: {
@@ -1281,7 +1351,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ApiKeyController_recover: {
@@ -1291,7 +1363,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ApiKeyController_delete: {
@@ -1301,107 +1375,8 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
-    };
-  };
-  ProjectController_findAll: {
-    parameters: {
-      query?: {
-        limit?: number;
-        page?: number;
-        searchText?: string;
-      };
-    };
-    responses: {
       200: {
-        content: {
-          'application/json': components['schemas']['FindProjectsResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_create: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateProjectRequestDto'];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          'application/json': components['schemas']['CreateProjectResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_findOne: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['FindProjectByIdResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_updateOne: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateProjectRequestDto'];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['UpdateProjectResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_delete: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: never;
-    };
-  };
-  ProjectController_countFeedbacks: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['CountFeedbacksByIdResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_countIssues: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['CountIssuesByIdResponseDto'];
-        };
+        content: never;
       };
     };
   };
@@ -1466,7 +1441,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ChannelController_updateOne: {
@@ -1482,7 +1459,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ChannelController_updateFields: {
@@ -1498,7 +1477,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   OptionController_getOptions: {
@@ -1534,6 +1515,121 @@ export interface operations {
       };
     };
   };
+  ProjectController_findAll: {
+    parameters: {
+      query?: {
+        limit?: number;
+        page?: number;
+        searchText?: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['FindProjectsResponseDto'];
+        };
+      };
+    };
+  };
+  ProjectController_create: {
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['CreateProjectRequestDto'];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          'application/json': components['schemas']['CreateProjectResponseDto'];
+        };
+      };
+    };
+  };
+  ProjectController_checkName: {
+    parameters: {
+      query: {
+        name: string;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ProjectController_findOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['FindProjectByIdResponseDto'];
+        };
+      };
+    };
+  };
+  ProjectController_updateOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['UpdateProjectRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['UpdateProjectResponseDto'];
+        };
+      };
+    };
+  };
+  ProjectController_delete: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ProjectController_countFeedbacks: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['CountFeedbacksByIdResponseDto'];
+        };
+      };
+    };
+  };
+  ProjectController_countIssues: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          'application/json': components['schemas']['CountIssuesByIdResponseDto'];
+        };
+      };
+    };
+  };
   FeedbackController_create: {
     parameters: {
       path: {
@@ -1542,7 +1638,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   FeedbackController_deleteMany: {
@@ -1558,7 +1656,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   FeedbackController_findByChannelId: {
@@ -1628,7 +1728,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   FeedbackController_updateFeedback: {
@@ -1640,7 +1742,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_create: {
@@ -1674,7 +1778,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_findById: {
@@ -1705,7 +1811,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_delete: {
@@ -1716,7 +1824,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_findAllByProjectId: {
@@ -1736,127 +1846,6 @@ export interface operations {
           'application/json': components['schemas']['FindIssuesByProjectIdResponseDto'];
         };
       };
-    };
-  };
-  HealthController_check: {
-    responses: {
-      /** @description The Health Check is successful */
-      200: {
-        content: {
-          'application/json': {
-            /** @example ok */
-            status?: string;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   }
-             * }
-             */
-            info?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
-            /** @example {} */
-            error?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   }
-             * }
-             */
-            details?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            };
-          };
-        };
-      };
-      /** @description The Health Check is not successful */
-      503: {
-        content: {
-          'application/json': {
-            /** @example error */
-            status?: string;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   }
-             * }
-             */
-            info?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
-            /**
-             * @example {
-             *   "redis": {
-             *     "status": "down",
-             *     "message": "Could not connect"
-             *   }
-             * }
-             */
-            error?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   },
-             *   "redis": {
-             *     "status": "down",
-             *     "message": "Could not connect"
-             *   }
-             * }
-             */
-            details?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            };
-          };
-        };
-      };
-    };
-  };
-  MigrationController_migrate: {
-    parameters: {
-      path: {
-        channelId: number;
-      };
-    };
-    responses: {
-      201: never;
     };
   };
   IssueTrackerController_findOne: {
@@ -1908,6 +1897,117 @@ export interface operations {
         content: {
           'application/json': components['schemas']['CreateIssueTrackerResponseDto'];
         };
+      };
+    };
+  };
+  HealthController_check: {
+    responses: {
+      /** @description The Health Check is successful */
+      200: {
+        content: {
+          'application/json': {
+            /** @example ok */
+            status?: string;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   }
+             * }
+             */
+            info?: {
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            } | null;
+            /** @example {} */
+            error?: {
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            } | null;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   }
+             * }
+             */
+            details?: {
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            };
+          };
+        };
+      };
+      /** @description The Health Check is not successful */
+      503: {
+        content: {
+          'application/json': {
+            /** @example error */
+            status?: string;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   }
+             * }
+             */
+            info?: {
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            } | null;
+            /**
+             * @example {
+             *   "redis": {
+             *     "status": "down",
+             *     "message": "Could not connect"
+             *   }
+             * }
+             */
+            error?: {
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            } | null;
+            /**
+             * @example {
+             *   "database": {
+             *     "status": "up"
+             *   },
+             *   "redis": {
+             *     "status": "down",
+             *     "message": "Could not connect"
+             *   }
+             * }
+             */
+            details?: {
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            };
+          };
+        };
+      };
+    };
+  };
+  MigrationController_migrate: {
+    parameters: {
+      path: {
+        channelId: number;
+      };
+    };
+    responses: {
+      201: {
+        content: never;
       };
     };
   };

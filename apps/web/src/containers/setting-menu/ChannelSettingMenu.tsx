@@ -52,6 +52,11 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     setChannelId(channelData.items?.[0]?.id ?? 0);
   }, [channelData]);
 
+  const gotoCreateChannel = () =>
+    router.push({
+      pathname: Path.CREATE_CHANNEL,
+      query: { projectId },
+    });
   if (!channelId) {
     return (
       <SettingMenuTemplate title="Channel">
@@ -66,12 +71,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
           </div>
           <button
             className="btn btn-blue btn-lg w-[200px] gap-2"
-            onClick={() =>
-              router.push({
-                pathname: Path.CREATE_CHANNEL,
-                query: { projectId },
-              })
-            }
+            onClick={gotoCreateChannel}
           >
             <Icon name="Plus" size={24} className="text-above-primary" />
             Channel 생성
@@ -114,7 +114,8 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
       </ul>
       <button
         className="btn btn-primary"
-        disabled={true || !perms.includes('channel_create')}
+        disabled={!perms.includes('channel_create')}
+        onClick={gotoCreateChannel}
       >
         + {t('main.setting.button.create-channel')}
       </button>

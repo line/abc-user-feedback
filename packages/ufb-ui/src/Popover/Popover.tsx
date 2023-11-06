@@ -276,7 +276,7 @@ export interface IPopoverModalContentProps extends React.PropsWithChildren {
     form?: string;
     type?: 'submit' | 'reset' | 'button' | undefined;
   };
-  cancelText: string;
+  cancelText?: string;
 }
 
 export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
@@ -307,9 +307,14 @@ export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
         )}
         <div className="mb-5">{children}</div>
         <div className="flex justify-end gap-2">
-          <button className="btn btn-secondary" onClick={() => setOpen(false)}>
-            {cancelText}
-          </button>
+          {cancelText && (
+            <button
+              className="btn btn-secondary"
+              onClick={() => setOpen(false)}
+            >
+              {cancelText}
+            </button>
+          )}
           <button
             {...submitButton}
             className={['btn btn-primary', submitButton.className].join(' ')}

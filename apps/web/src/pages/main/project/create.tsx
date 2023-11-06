@@ -56,6 +56,7 @@ const CreatePage: NextPage = () => {
 const CreateProject: React.FC = () => {
   const { completeStepIndex, currentStepIndex, currentStep } =
     useCreateProject();
+
   return (
     <CreateProjectChannelTemplate
       completeStepIndex={completeStepIndex}

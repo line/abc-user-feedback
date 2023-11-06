@@ -96,7 +96,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                       <th className="font-14-regular text-secondary min-w-[80px] max-w-[80px] break-words text-left align-text-top">
                         {field.name}
                       </th>
-                      <td className="font-14-regular text-primary break-words pl-2 align-top">
+                      <td className="font-14-regular text-primary break-words break-all pl-2 align-top">
                         {field.key === 'issues' ? (
                           <div className="flex gap-2">
                             {(

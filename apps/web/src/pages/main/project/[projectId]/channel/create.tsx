@@ -53,7 +53,7 @@ const CreateChannel: NextPage = () => {
       currentStepIndex={currentStepIndex}
       helpText={HELP_TEXT}
       stepObj={CHANNEL_STEPPER_TEXT}
-      type="project"
+      type="channel"
       currentStep={currentStep}
     >
       <Contents />

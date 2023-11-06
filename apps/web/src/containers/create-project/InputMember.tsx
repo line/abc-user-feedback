@@ -39,7 +39,7 @@ import type { UserType } from '@/types/user.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 const columnHelper = createColumnHelper<InputMemberType>();
-const columns = [
+const columns = (deleteMember: (index: number) => void) => [
   columnHelper.accessor('user.email', {
     header: 'Email',
     enableSorting: false,
@@ -62,13 +62,15 @@ const columns = [
   columnHelper.display({
     id: 'edit',
     header: 'Edit',
-    cell: () => <div></div>,
+    cell: ({ row }) => <MemberUpdatePopover member={row.original} />,
     size: 75,
   }),
   columnHelper.display({
     id: 'delete',
     header: 'Delete',
-    cell: () => <div></div>,
+    cell: ({ row }) => (
+      <MemberDeleteDialog deleteMember={() => deleteMember(row.index)} />
+    ),
     size: 75,
   }),
 ];
@@ -81,15 +83,35 @@ const InputMember: React.FC = () => {
     (members: InputMemberType[]) => onChangeInput('members', members),
     [],
   );
+  const deleteMember = useCallback(
+    (index: number) => setMembers(members.filter((_, i) => i !== index)),
+    [members],
+  );
 
   const table = useReactTable({
-    columns,
+    columns: columns(deleteMember),
     data: members,
     getCoreRowModel: getCoreRowModel(),
   });
+  const { data: userData } = useUserSearch({
+    limit: 1000,
+    query: { type: 'GENERAL' },
+  });
+  const validate = () => {
+    if (!userData) return false;
+    if (
+      !members.every(
+        (member) => !!userData.items.find((user) => user.id === member.user.id),
+      )
+    ) {
+      return false;
+    }
+    return true;
+  };
 
   return (
     <CreateProjectInputTemplate
+      validate={validate}
       actionButton={
         <CreateMemberButton
           members={members}
@@ -116,7 +138,7 @@ const InputMember: React.FC = () => {
         <tbody>
           {table.getRowModel().rows.length === 0 ? (
             <tr>
-              <td colSpan={columns.length}>
+              <td colSpan={table.getFlatHeaders().length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
                   <Icon
                     name="DriverRegisterFill"
@@ -218,16 +240,109 @@ const CreateMemberButton: React.FC<{
           <SelectBox
             label="Role"
             required
-            options={input?.roles?.map((v, id) => ({ id, ...v })) ?? []}
+            options={input.roles.map((v, id) => ({ id, ...v })) ?? []}
             onChange={(v) => {
-              const newRole = input?.roles?.find(
-                (role) => role.name === v?.name,
-              );
+              const newRole = input.roles.find((role) => role.name === v?.name);
               if (!newRole) return;
               setRole(newRole);
             }}
           />
         </div>
+      </PopoverModalContent>
+    </Popover>
+  );
+};
+
+const MemberDeleteDialog: React.FC<{
+  deleteMember: () => void;
+}> = ({ deleteMember }) => {
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Popover open={open} onOpenChange={setOpen} modal>
+      <PopoverTrigger
+        onClick={() => setOpen((prev) => !prev)}
+        className="icon-btn icon-btn-sm icon-btn-tertiary"
+      >
+        <Icon name="TrashFill" />
+      </PopoverTrigger>
+      <PopoverModalContent
+        title={t('main.setting.dialog.delete-member.title')}
+        description={t('main.setting.dialog.delete-member.description')}
+        cancelText={t('button.cancel')}
+        icon={{
+          name: 'WarningTriangleFill',
+          className: 'text-red-primary',
+          size: 56,
+        }}
+        submitButton={{
+          className: 'bg-red-primary',
+          children: t('button.delete'),
+          onClick: deleteMember,
+        }}
+      />
+    </Popover>
+  );
+};
+
+const MemberUpdatePopover: React.FC<{ member: InputMemberType }> = ({
+  member,
+}) => {
+  const { input, onChangeInput } = useCreateProject();
+  const roles = useMemo(
+    () => input.roles.map((v, id) => ({ id, ...v })),
+    [input.roles],
+  );
+  const { t } = useTranslation();
+  const [open, setOpen] = useState(false);
+  const [role, setRole] = useState<(InputRoleType & { id: number }) | null>(
+    roles.find((v) => v.name === member.role.name) ?? null,
+  );
+
+  return (
+    <Popover onOpenChange={setOpen} open={open} modal>
+      <PopoverTrigger
+        className="icon-btn icon-btn-sm icon-btn-tertiary"
+        onClick={() => setOpen((prev) => !prev)}
+      >
+        <Icon name="EditFill" />
+      </PopoverTrigger>
+      <PopoverModalContent
+        title={t('main.setting.dialog.edit-member.title')}
+        cancelText={t('button.cancel')}
+        icon={{
+          name: 'ProfileSettingFill',
+          className: 'text-orange-primary',
+          size: 56,
+        }}
+        description={t('main.setting.dialog.edit-member.description')}
+        submitButton={{
+          children: t('button.save'),
+          onClick: () => {
+            if (!role) return;
+            onChangeInput(
+              'members',
+              input.members.map((v) =>
+                v.user.id === member.user.id ? { ...v, role } : v,
+              ),
+            );
+            member.role = role;
+            setOpen(false);
+          },
+        }}
+      >
+        <SelectBox
+          label="Role"
+          options={input.roles.map((v, id) => ({ id, ...v })) ?? []}
+          onChange={(v) => {
+            const newRole = roles.find((role) => role.name === v?.name);
+            if (!newRole) return;
+            setRole(newRole);
+          }}
+          defaultValue={role}
+          isSearchable={false}
+        />
       </PopoverModalContent>
     </Popover>
   );

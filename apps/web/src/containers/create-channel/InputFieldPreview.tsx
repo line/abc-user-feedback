@@ -14,8 +14,13 @@
  * under the License.
  */
 import { useMemo } from 'react';
+import { useRouter } from 'next/router';
 
+import { toast } from '@ufb/ui';
+
+import { Path } from '@/constants/path';
 import { useCreateChannel } from '@/contexts/create-channel.context';
+import { useOAIMutation } from '@/hooks';
 import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
@@ -24,9 +29,38 @@ interface IProps {}
 const InputFieldPreview: React.FC<IProps> = () => {
   const { input } = useCreateChannel();
   const fields = useMemo(() => input.fields, [input.fields]);
+  const router = useRouter();
+  const projectId = useMemo(
+    () => Number(router.query.projectId),
+    [router.query.projectId],
+  );
+
+  const { mutate } = useOAIMutation({
+    method: 'post',
+    path: '/api/projects/{projectId}/channels',
+    pathParams: { projectId },
+    queryOptions: {
+      onError(error) {
+        toast.negative({ title: error?.message ?? 'Error' });
+      },
+      onSuccess(data) {
+        router.replace({
+          pathname: Path.CREATE_CHANNEL_COMPLETE,
+          query: { projectId, channelId: data?.id },
+        });
+      },
+    },
+  });
 
   return (
-    <CreateChannelInputTemplate>
+    <CreateChannelInputTemplate
+      onComplete={() => {
+        mutate({
+          ...input.channelInfo,
+          fields: input.fields.filter((v) => v.type !== 'DEFAULT'),
+        });
+      }}
+    >
       <PreviewTable fields={fields.filter((v) => v.status === 'ACTIVE')} />
     </CreateChannelInputTemplate>
   );

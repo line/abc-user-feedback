@@ -22,9 +22,13 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
+
+import { Badge } from '@ufb/ui';
 
 import { ExpandableText, TableResizer } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { getStatusColor, ISSUES } from '@/constants/issues';
 import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
 import type { FieldType } from '@/types/field.type';
 import type { FieldRowType } from './FieldSetting';
@@ -37,19 +41,34 @@ interface IProps extends React.PropsWithChildren {
 
 const PreviewTable: React.FC<IProps> = ({ fields }) => {
   const [rows, setRows] = useState<Record<string, any>[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fakeRows: Record<string, any>[] = [];
+    const issues = faker.helpers
+      .uniqueArray(faker.word.sample, 10)
+      .map((v) => ({
+        name: v,
+        status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
+      }));
+
+    console.log('issues: ', issues);
     for (let i = 1; i <= 8; i++) {
       const fakeData: Record<string, any> = {};
       for (const field of fields) {
         if (field.type === 'DEFAULT') {
-          fakeData[field.name] =
-            field.key === 'id'
-              ? i
-              : field.key === 'createdAt' || field.key === 'updatedAt'
-              ? dayjs()
-              : null;
+          if (field.key === 'id') {
+            fakeData[field.name] = i;
+          } else if (field.key === 'createdAt' || field.key === 'updatedAt') {
+            fakeData[field.name] = dayjs().add(i, 'hour');
+          } else if (field.key === 'issues') {
+            fakeData[field.name] = faker.helpers.arrayElements(issues, {
+              min: 0,
+              max: 4,
+            });
+          } else {
+            fakeData[field.name] = null;
+          }
         } else if (field.type === 'API') {
           fakeData[field.name] =
             field.format === 'boolean'
@@ -94,6 +113,20 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             ) : typeof info.getValue() ===
               'undefined' ? undefined : field.format === 'date' ? (
               dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
+            ) : field.key === 'issues' ? (
+              <div className="scrollbar-hide flex items-center gap-1">
+                {(info.getValue() as { status: string; name: string }[])?.map(
+                  (v, i) => (
+                    <Badge
+                      key={i}
+                      color={getStatusColor(v.status)}
+                      type="secondary"
+                    >
+                      {v.name}
+                    </Badge>
+                  ),
+                )}
+              </div>
             ) : field.format === 'multiSelect' ? (
               ((info.getValue() ?? []) as string[]).join(', ')
             ) : field.format === 'text' ? (

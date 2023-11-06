@@ -26,15 +26,18 @@ interface IProps {}
 
 const InputRole: React.FC<IProps> = () => {
   const { onChangeInput, input } = useCreateProject();
+  const [open, setOpen] = useState(false);
 
   const roles = useMemo(
-    () => input?.roles?.map((v, id) => ({ id, ...v })),
-    [input?.roles],
+    () => input.roles.map((v, id) => ({ id, ...v })),
+    [input.roles],
   );
 
   const setRoles = useCallback(
-    (input: RoleType[]) => onChangeInput('roles', input),
-    [],
+    (inputRole: RoleType[]) => {
+      onChangeInput('roles', inputRole);
+    },
+    [onChangeInput, input.members],
   );
 
   const onCreateRole = (name: string) => {
@@ -50,12 +53,25 @@ const InputRole: React.FC<IProps> = () => {
   return (
     <CreateProjectInputTemplate
       actionButton={<CreateRoleButton onCreate={onCreateRole} />}
+      disableNextBtn={roles.length === 0}
     >
       <RoleSettingTable
         onDelete={onDeleteRole}
         updateRole={onUpdateRole}
         roles={roles}
       />
+      {open && (
+        <Popover modal open={open} onOpenChange={setOpen}>
+          <PopoverModalContent
+            title="안내"
+            description="최소 1개 이상의 Role이 등록되어 있어야 합니다."
+            submitButton={{
+              children: '확인',
+              onClick: () => setOpen(false),
+            }}
+          ></PopoverModalContent>
+        </Popover>
+      )}
     </CreateProjectInputTemplate>
   );
 };

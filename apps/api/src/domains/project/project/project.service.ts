@@ -55,6 +55,11 @@ export class ProjectService {
     private readonly configService: ConfigService,
   ) {}
 
+  async checkName(name: string) {
+    const res = await this.projectRepo.findOneBy({ name });
+    return !!res;
+  }
+
   @Transactional()
   async create(dto: CreateProjectDto) {
     const project = await this.projectRepo.findOneBy({ name: dto.name });
@@ -68,17 +73,20 @@ export class ProjectService {
       const savedRoles = await this.roleService.createMany(
         dto.roles.map((role) => ({ ...role, projectId: savedProject.id })),
       );
+
       savedProject.roles = savedRoles;
 
       if (dto.members) {
+        for (const member of dto.members) {
+          const role = savedRoles.find((role) => role.name === member.roleName);
+          if (!role) throw new BadRequestException('Invalid role name');
+        }
         const members = dto.members.map((member) => ({
           userId: member.userId,
-          roleId: savedRoles.find((role) => {
-            if (role.name === member.roleName) return true;
-            else throw new BadRequestException('Invalid role name');
-          }).id,
+          roleId: savedRoles.find((role) => role.name === member.roleName).id,
         }));
         const savedMembers = await this.memberService.createMany(members);
+
         savedProject.roles.forEach((role) => {
           role.members = savedMembers.filter(
             (member) => member.role.id === role.id,

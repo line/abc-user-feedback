@@ -17,13 +17,13 @@ import type { TFunction } from 'next-i18next';
 
 import type { ColorType } from '@/types/color.type';
 
-type Issue = {
+export type IssuesItemType = {
   key: string;
   name: string;
   color: ColorType;
 };
 
-export const ISSUES: (t: TFunction) => Issue[] = (t) => [
+export const ISSUES: (t: TFunction) => IssuesItemType[] = (t) => [
   { key: 'INIT', name: t('text.issue.init'), color: 'red' },
   { key: 'ON_REVIEW', name: t('text.issue.onReview'), color: 'blue' },
   { key: 'IN_PROGRESS', name: t('text.issue.inProgress'), color: 'yellow' },

@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { MainTemplate } from './MainTemplate';
-export { SettingMenuTemplate } from './SettingMenuTemplate';
-export { default as CreateProjectChannelTemplate } from './CreateProjectChannelTemplate';
-export { CreateSectionTemplate } from './CreateSectionTemplate';
+export { default as ProjectInfoSection } from './ProjectInfoSection';
+export { default as RoleSection } from './RoleSection';
+export { default as MemberSection } from './MemberSection';
+export { default as ApiKeySection } from './ApiKeySection';
+export { default as IssueTrackerSection } from './IssueTrackerSection';

@@ -17,20 +17,26 @@ interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   onNext: () => void;
   onPrev: () => void;
+  onComplete?: () => void;
   title: string;
   currentStepIndex: number;
   lastStepIndex: number;
+  validate?: () => Promise<boolean> | boolean;
+  disableNextBtn?: boolean;
 }
 
 const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
   const {
     onNext,
     onPrev,
+    onComplete,
     actionButton,
     title,
     children,
     currentStepIndex,
     lastStepIndex,
+    validate,
+    disableNextBtn,
   } = props;
 
   return (
@@ -52,7 +58,18 @@ const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
             이전
           </button>
         )}
-        <button className="btn btn-lg btn-secondary w-[120px]" onClick={onNext}>
+        <button
+          className={[
+            'btn btn-lg w-[120px]',
+            currentStepIndex === lastStepIndex ? 'btn-blue' : 'btn-secondary',
+          ].join(' ')}
+          onClick={async () => {
+            if (onComplete) return onComplete();
+            if (validate && !(await validate())) return;
+            onNext();
+          }}
+          disabled={disableNextBtn}
+        >
           {currentStepIndex === lastStepIndex ? '완료' : '다음'}
         </button>
       </div>
