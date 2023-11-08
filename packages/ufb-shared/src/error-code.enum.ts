@@ -71,6 +71,7 @@ const Field = {
   FieldNameDuplicated: 'FieldNameDuplicated',
   FieldKeyDuplicated: 'FieldKeyDuplicated',
 };
+
 const Option = {
   OptionNameDuplicated: 'OptionNameDuplicated',
   OptionKeyDuplicated: 'OptionKeyDuplicated',
@@ -80,13 +81,13 @@ const Feedback = {
   InvalidExpressionFormat: 'InvalidExpressionFormat',
   InvalidFieldType: 'InvalidFieldType',
   InvalidFieldRequest: 'InvalidFieldRequest',
-  NotFoundAddressInfo: 'NotFoundAddressInfo',
 };
 
 const Member = {
   MemberAlreadyExists: 'MemberAlreadyExists',
   MemberNotFound: 'MemberNotFound',
-  MemberUpdateRoleNotMatchedProject: 'MemberUpdateRoleNotMatchedProject ',
+  MemberUpdateRoleNotMatchedProject: 'MemberUpdateRoleNotMatchedProject',
+  MemberInvalidUser: 'MemberInvalidUser',
 };
 
 const Opensearch = {

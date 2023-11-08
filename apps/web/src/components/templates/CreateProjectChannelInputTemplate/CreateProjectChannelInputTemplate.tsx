@@ -61,7 +61,7 @@ const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
         <button
           className={[
             'btn btn-lg w-[120px]',
-            currentStepIndex === lastStepIndex ? 'btn-blue' : 'btn-secondary',
+            currentStepIndex === lastStepIndex ? 'btn-blue' : 'btn-primary',
           ].join(' ')}
           onClick={async () => {
             if (onComplete) return onComplete();

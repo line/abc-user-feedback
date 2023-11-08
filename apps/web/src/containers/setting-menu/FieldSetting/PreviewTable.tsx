@@ -52,7 +52,6 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
-    console.log('issues: ', issues);
     for (let i = 1; i <= 8; i++) {
       const fakeData: Record<string, any> = {};
       for (const field of fields) {

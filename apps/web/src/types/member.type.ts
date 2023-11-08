@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import type { InputRoleType, RoleType } from './role.type';
+import type { RoleType } from './role.type';
 import type { UserType } from './user.type';
 
 export type MemberType = {
@@ -25,5 +25,5 @@ export type MemberType = {
 };
 
 export type InputMemberType = Omit<MemberType, 'id' | 'createdAt' | 'role'> & {
-  role: InputRoleType;
+  roleId: number;
 };

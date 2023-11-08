@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { TextInput, toast } from '@ufb/ui';
+import { ErrorCode } from '@ufb/shared';
+import { Popover, PopoverModalContent, TextInput, toast } from '@ufb/ui';
 
 import { SelectBox } from '@/components';
 import { Path } from '@/constants/path';
@@ -30,28 +31,39 @@ interface IProps {}
 const InputIssueTracker: React.FC<IProps> = () => {
   const router = useRouter();
 
-  const { input, onChangeInput, clearLocalStorage } = useCreateProject();
+  const { input, onChangeInput, clearLocalStorage, gotoStep } =
+    useCreateProject();
+  const [openRoleError, setOpenRoleError] = useState(false);
+  const [openMemberError, setOpenMemberError] = useState(false);
+  const [openProjectError, setOpenProjectError] = useState(false);
 
   const ticketDomain = useMemo(
     () => input.issueTracker.ticketDomain,
     [input.issueTracker.ticketDomain],
   );
+
   const ticketKey = useMemo(
     () => input.issueTracker.ticketKey,
     [input.issueTracker.ticketKey],
   );
+
   const onChangeIssueTracker = useCallback(
     <T extends keyof IssueTrackerType>(key: T, value: IssueTrackerType[T]) => {
       onChangeInput('issueTracker', { ticketDomain, ticketKey, [key]: value });
     },
     [input?.issueTracker],
   );
-  const { mutate } = useOAIMutation({
+
+  const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/projects',
     queryOptions: {
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        if (error.code === ErrorCode.Member.MemberInvalidUser)
+          setOpenMemberError(true);
+        else if (error.code === ErrorCode.Project.ProjectAlreadyExists)
+          setOpenProjectError(true);
+        else toast.negative({ title: error?.message ?? 'Error' });
       },
       onSuccess(data) {
         clearLocalStorage();
@@ -62,22 +74,28 @@ const InputIssueTracker: React.FC<IProps> = () => {
       },
     },
   });
+
   const onComplete = () => {
+    if (input.roles.length === 0) {
+      setOpenRoleError(true);
+      return;
+    }
     mutate({
       name: input.projectInfo.name,
       description: input.projectInfo.description,
       apiKeys: input.apiKeys,
       issueTracker: { data: input.issueTracker as any },
-      members: input.members.map((v) => ({
-        roleName: v.role.name,
-        userId: v.user.id,
+      members: input.members.map((member) => ({
+        roleName:
+          input.roles.find((role) => role.id === member.roleId)?.name ?? '',
+        userId: member.user.id,
       })),
       roles: input.roles,
     });
   };
 
   return (
-    <CreateProjectInputTemplate onComplete={onComplete}>
+    <CreateProjectInputTemplate onComplete={onComplete} isLoading={isPending}>
       <SelectBox
         options={[{ key: 'jira', name: 'JIRA' }]}
         value={{ key: 'jira', name: 'JIRA' }}
@@ -100,6 +118,55 @@ const InputIssueTracker: React.FC<IProps> = () => {
         value={`${input.issueTracker.ticketDomain}/browse/${input.issueTracker.ticketKey}-{Number}`}
         disabled
       />
+      {openMemberError && (
+        <Popover modal open={openMemberError} onOpenChange={setOpenMemberError}>
+          <PopoverModalContent
+            title="안내"
+            description="유효하지 않은 Member 목록이 존재합니다."
+            submitButton={{
+              children: '확인',
+              onClick: () => {
+                setOpenMemberError(false);
+                gotoStep('members');
+              },
+            }}
+          />
+        </Popover>
+      )}
+      {openProjectError && (
+        <Popover
+          modal
+          open={openProjectError}
+          onOpenChange={setOpenProjectError}
+        >
+          <PopoverModalContent
+            title="안내"
+            description="유효하지 않는 Project 정보가 존재합니다."
+            submitButton={{
+              children: '확인',
+              onClick: () => {
+                setOpenProjectError(false);
+                gotoStep('projectInfo');
+              },
+            }}
+          />
+        </Popover>
+      )}
+      {openRoleError && (
+        <Popover modal open={openRoleError} onOpenChange={setOpenRoleError}>
+          <PopoverModalContent
+            title="안내"
+            description="유효하지 않는 Role 정보가 존재합니다."
+            submitButton={{
+              children: '확인',
+              onClick: () => {
+                setOpenRoleError(false);
+                gotoStep('roles');
+              },
+            }}
+          />
+        </Popover>
+      )}
     </CreateProjectInputTemplate>
   );
 };

@@ -31,6 +31,7 @@ interface CreateContextType<StepType extends string, InputType extends object> {
   onChangeInput: OnChangeInputType<InputType>;
   onPrev: () => void;
   onNext: () => void;
+  gotoStep: (step: StepType) => void;
   clearLocalStorage: () => void;
 }
 
@@ -71,6 +72,7 @@ export const CreateProvider = <
     `${type} completeStepIndex`,
     0,
   );
+
   const clearLocalStorage = useCallback(() => {
     localStorage.removeItem(`${type} input`);
     localStorage.removeItem(`${type} currentStep`);
@@ -85,6 +87,10 @@ export const CreateProvider = <
   const onPrev = useCallback(() => {
     setCurrentStep(steps[steps.indexOf(currentStep!) - 1] ?? FIRST_STEP);
   }, [currentStep]);
+  const gotoStep = useCallback(
+    (step: StepType) => setCurrentStep(step),
+    [currentStep],
+  );
 
   const onNext = useCallback(() => {
     const nextStepIndex = steps.indexOf(currentStep) + 1;
@@ -118,7 +124,6 @@ export const CreateProvider = <
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     const handleBeforeChangeRoute = (url: string) => {
-      console.log('url: ', url);
       if (url.includes('create-complete')) return;
       if (router.pathname !== url && !confirm(confirmMsg)) {
         router.events.emit('routeChangeError');
@@ -143,5 +148,6 @@ export const CreateProvider = <
     onPrev,
     onNext,
     clearLocalStorage,
+    gotoStep,
   };
 };

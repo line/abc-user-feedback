@@ -20,4 +20,4 @@ export type RoleType = {
   name: string;
   permissions: PermissionType[];
 };
-export type InputRoleType = Omit<RoleType, 'id'>;
+export type InputRoleType = RoleType;

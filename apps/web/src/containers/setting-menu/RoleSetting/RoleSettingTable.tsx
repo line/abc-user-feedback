@@ -98,17 +98,18 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
       <thead>
         <tr>
           <th>Permissions</th>
-          {roles.map((v) => (
-            <th key={v.id}>
+          {roles.map((role) => (
+            <th key={role.id}>
               <RoleSettingHead
-                name={v.name}
-                roleId={v.id}
-                isEdit={editRoleId === v.id}
+                role={role}
+                roles={roles}
+                isEdit={editRoleId === role.id}
                 projectId={projectId}
                 onChangeEditRole={setEditRoleId}
                 onChangeEditName={setEditName}
                 onSubmitEdit={onSubmitEdit}
                 onClickDelete={onDelete}
+                onClickUpdate={updateRole}
                 viewOnly={viewOnly}
               />
             </th>

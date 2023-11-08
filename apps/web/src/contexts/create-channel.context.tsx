@@ -88,6 +88,7 @@ const CreateChannelContext = CreateContext<ChannelStepType, ChannelInputType>({
   onChangeInput: () => {},
   onPrev: () => {},
   onNext: () => {},
+  gotoStep: () => {},
   clearLocalStorage: () => {},
 });
 export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({

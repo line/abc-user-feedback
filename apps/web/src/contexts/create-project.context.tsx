@@ -27,8 +27,9 @@ import {
 } from './create-project-channel.context';
 
 const DEFAULT_ROLES: InputRoleType[] = [
-  { name: 'Admin', permissions: [...PermissionList] },
+  { id: 1, name: 'Admin', permissions: [...PermissionList] },
   {
+    id: 2,
     name: 'Editor',
     permissions: [...PermissionList].filter(
       (v) =>
@@ -40,6 +41,7 @@ const DEFAULT_ROLES: InputRoleType[] = [
     ),
   },
   {
+    id: 3,
     name: 'Viewer',
     permissions: [...PermissionList].filter(
       (v) => v.includes('read') && !v.includes('download'),
@@ -89,6 +91,7 @@ const CreateProjectContext = CreateContext<ProjectStepType, ProjectInputType>({
   onChangeInput: () => {},
   onPrev: () => {},
   onNext: () => {},
+  gotoStep: () => {},
   clearLocalStorage: () => {},
 });
 

@@ -24,12 +24,15 @@ import type { InputProjectInfoType } from '@/types/project.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 interface IProps {}
-
+const defaultInputError = { name: '', description: '' };
 const InputProjectInfo: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateProject();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isValid, setIsValid] = useState(true);
-  const [nameError, setNameError] = useState('');
+  const [inputError, setInputError] = useState<{
+    name: string;
+    description: string;
+  }>(defaultInputError);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const name = useMemo(() => input.projectInfo.name, [input.projectInfo.name]);
@@ -37,14 +40,17 @@ const InputProjectInfo: React.FC<IProps> = () => {
     () => input.projectInfo.description,
     [input.projectInfo.description],
   );
+  const resetError = useCallback(() => {
+    setInputError(defaultInputError);
+    setIsSubmitted(false);
+  }, [defaultInputError]);
 
   const onChangeProjectInfo = useCallback(
     <T extends keyof InputProjectInfoType>(
       key: T,
       value: InputProjectInfoType[T],
     ) => {
-      setIsSubmitted(false);
-      setNameError('');
+      resetError();
       onChangeInput('projectInfo', { name, description, [key]: value });
     },
     [input?.projectInfo],
@@ -53,15 +59,18 @@ const InputProjectInfo: React.FC<IProps> = () => {
   const validate = async () => {
     setIsLoading(true);
 
-    setIsSubmitted(true);
-    setIsValid(false);
+    resetError();
 
     const { data: isDuplicated } = await client.get({
       path: '/api/projects/name-check',
       query: { name },
     });
+    setIsSubmitted(true);
     if (isDuplicated) {
-      setNameError('이미 존재하는 이름입니다.');
+      setInputError((prev) => ({
+        ...prev,
+        name: '이미 존재하는 프로젝트 이름입니다.',
+      }));
       setIsLoading(false);
       return false;
     }
@@ -80,14 +89,18 @@ const InputProjectInfo: React.FC<IProps> = () => {
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
         isSubmitted={isSubmitted}
-        isValid={isValid}
-        hint={nameError}
+        isValid={!inputError.name}
+        hint={inputError.name}
+        maxLength={20}
       />
       <Input
         label="Project Description"
         placeholder="프로젝트 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
+        isSubmitted={isSubmitted}
+        isValid={!inputError.description}
+        hint={inputError.description}
         maxLength={50}
       />
     </CreateProjectInputTemplate>

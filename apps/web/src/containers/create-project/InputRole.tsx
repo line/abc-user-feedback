@@ -28,20 +28,21 @@ const InputRole: React.FC<IProps> = () => {
   const { onChangeInput, input } = useCreateProject();
   const [open, setOpen] = useState(false);
 
-  const roles = useMemo(
-    () => input.roles.map((v, id) => ({ id, ...v })),
-    [input.roles],
-  );
+  const roles = useMemo(() => input.roles, [input.roles]);
 
   const setRoles = useCallback(
-    (inputRole: RoleType[]) => {
-      onChangeInput('roles', inputRole);
-    },
+    (inputRole: RoleType[]) => onChangeInput('roles', inputRole),
     [onChangeInput, input.members],
   );
 
   const onCreateRole = (name: string) => {
-    setRoles(roles.concat({ id: roles.length + 1, name, permissions: [] }));
+    setRoles(
+      roles.concat({
+        id: (roles[roles.length - 1]?.id ?? 0) + 1,
+        name,
+        permissions: [],
+      }),
+    );
   };
   const onUpdateRole = (input: RoleType) => {
     setRoles(roles.map((v) => (v.id === input.id ? input : v)));
@@ -69,18 +70,30 @@ const InputRole: React.FC<IProps> = () => {
               children: '확인',
               onClick: () => setOpen(false),
             }}
-          ></PopoverModalContent>
+          />
         </Popover>
       )}
     </CreateProjectInputTemplate>
   );
 };
 
+const defaultInputError = { roleName: '' };
+
 const CreateRoleButton: React.FC<{
   onCreate: (name: string) => void;
 }> = ({ onCreate }) => {
+  const { input } = useCreateProject();
   const [roleName, setRoleName] = useState('');
+  const [inputError, setInputError] = useState(defaultInputError);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [open, setOpen] = useState(false);
+
+  const roles = useMemo(() => input.roles, [input.roles]);
+
+  const resetError = useCallback(() => {
+    setInputError(defaultInputError);
+    setIsSubmitted(false);
+  }, [defaultInputError]);
 
   return (
     <Popover modal open={open} onOpenChange={setOpen}>
@@ -97,6 +110,11 @@ const CreateRoleButton: React.FC<{
         submitButton={{
           children: '확인',
           onClick: () => {
+            if (roles.find((v) => v.name === roleName)) {
+              setInputError({ roleName: '이미 존재하는 이름입니다.' });
+              setIsSubmitted(true);
+              return;
+            }
             onCreate(roleName);
             setOpen(false);
           },
@@ -113,7 +131,14 @@ const CreateRoleButton: React.FC<{
           label="Role Name"
           placeholder="입력"
           value={roleName}
-          onChange={(e) => setRoleName(e.target.value)}
+          onChange={(e) => {
+            resetError();
+            setRoleName(e.target.value);
+          }}
+          isSubmitted={isSubmitted}
+          isValid={!inputError.roleName}
+          hint={inputError.roleName}
+          maxLength={20}
         />
       </PopoverModalContent>
     </Popover>

@@ -230,6 +230,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               isValid={!formState.errors.key}
               hint={formState.errors.key?.message}
               required={!data}
+              maxLength={20}
             />
             <div>
               <Input
@@ -241,6 +242,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 hint={formState.errors.name?.message}
                 disabled={isSameKey}
                 required
+                maxLength={20}
               />
               <label className="flex items-center gap-1">
                 <input
@@ -269,9 +271,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 <Input
                   label="Select Option"
                   value={optionInput}
-                  onChange={(e) => {
-                    setOptionInput(e.target.value);
-                  }}
+                  onChange={(e) => setOptionInput(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -368,6 +368,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               label="Description"
               {...register('description')}
               required={false}
+              maxLength={50}
             />
             <div className="flex justify-end gap-2">
               <button

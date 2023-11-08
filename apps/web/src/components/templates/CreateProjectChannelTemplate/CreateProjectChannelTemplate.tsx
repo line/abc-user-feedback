@@ -73,7 +73,6 @@ const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
       <button
         className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
         onClick={() => {
-          console.log('type: ', type);
           if (type === 'channel') {
             router.push({
               pathname: Path.FEEDBACK,

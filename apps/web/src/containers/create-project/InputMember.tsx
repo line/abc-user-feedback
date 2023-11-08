@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useEffect, useMemo, useState } from 'react';
 import {
   createColumnHelper,
   flexRender,
@@ -39,10 +39,29 @@ import type { UserType } from '@/types/user.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 const columnHelper = createColumnHelper<InputMemberType>();
-const columns = (deleteMember: (index: number) => void) => [
+
+const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
   columnHelper.accessor('user.email', {
     header: 'Email',
     enableSorting: false,
+    cell: ({ getValue }) => {
+      return (
+        <>
+          {users.some((v) => v.email === getValue()) ? (
+            getValue()
+          ) : (
+            <div className="flex items-center gap-1">
+              <span className="text-red-primary">{getValue()}</span>
+              <Icon
+                name="WarningCircleFill"
+                className="text-red-primary"
+                size={16}
+              />
+            </div>
+          )}
+        </>
+      );
+    },
   }),
   columnHelper.accessor('user.name', {
     header: 'Name',
@@ -54,9 +73,14 @@ const columns = (deleteMember: (index: number) => void) => [
     enableSorting: false,
     cell: ({ getValue }) => ((getValue() ?? '').length > 0 ? getValue() : '-'),
   }),
-  columnHelper.accessor('role.name', {
+  columnHelper.accessor('roleId', {
     header: 'Role',
-    cell: ({ getValue }) => getValue(),
+    cell: ({ getValue }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { input } = useCreateProject();
+      const role = input.roles.find((role) => role.id === getValue());
+      return <>{role?.name}</>;
+    },
     enableSorting: false,
   }),
   columnHelper.display({
@@ -77,6 +101,16 @@ const columns = (deleteMember: (index: number) => void) => [
 
 const InputMember: React.FC = () => {
   const { onChangeInput, input } = useCreateProject();
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    onChangeInput(
+      'members',
+      input.members.filter((member) =>
+        input.roles.some((role) => member.roleId === role.id),
+      ),
+    );
+  }, []);
 
   const members = useMemo(() => input.members, [input.members]);
   const setMembers = useCallback(
@@ -88,11 +122,6 @@ const InputMember: React.FC = () => {
     [members],
   );
 
-  const table = useReactTable({
-    columns: columns(deleteMember),
-    data: members,
-    getCoreRowModel: getCoreRowModel(),
-  });
   const { data: userData } = useUserSearch({
     limit: 1000,
     query: { type: 'GENERAL' },
@@ -100,14 +129,21 @@ const InputMember: React.FC = () => {
   const validate = () => {
     if (!userData) return false;
     if (
-      !members.every(
-        (member) => !!userData.items.find((user) => user.id === member.user.id),
+      !members.every((member) =>
+        userData.items.some((user) => user.id === member.user.id),
       )
     ) {
+      setOpen(true);
       return false;
     }
     return true;
   };
+
+  const table = useReactTable({
+    columns: columns(deleteMember, userData?.items ?? []),
+    data: members,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   return (
     <CreateProjectInputTemplate
@@ -171,13 +207,25 @@ const InputMember: React.FC = () => {
           )}
         </tbody>
       </table>
+      {open && (
+        <Popover modal open={open} onOpenChange={setOpen}>
+          <PopoverModalContent
+            title="안내"
+            description="유효하지 않은 Member 목록이 존재합니다."
+            submitButton={{
+              children: '확인',
+              onClick: () => setOpen(false),
+            }}
+          />
+        </Popover>
+      )}
     </CreateProjectInputTemplate>
   );
 };
 
 const CreateMemberButton: React.FC<{
   members: InputMemberType[];
-  onCreate: (input: { role: InputRoleType; user: UserType }) => void;
+  onCreate: (input: { roleId: number; user: UserType }) => void;
 }> = ({ members, onCreate }) => {
   const { input } = useCreateProject();
   const [open, setOpen] = useState(false);
@@ -210,7 +258,7 @@ const CreateMemberButton: React.FC<{
           children: t('button.confirm'),
           onClick: () => {
             if (!user || !role) return;
-            onCreate({ user, role });
+            onCreate({ user, roleId: role.id });
             setOpen(false);
           },
         }}
@@ -240,7 +288,7 @@ const CreateMemberButton: React.FC<{
           <SelectBox
             label="Role"
             required
-            options={input.roles.map((v, id) => ({ id, ...v })) ?? []}
+            options={input.roles}
             onChange={(v) => {
               const newRole = input.roles.find((role) => role.name === v?.name);
               if (!newRole) return;
@@ -279,7 +327,10 @@ const MemberDeleteDialog: React.FC<{
         submitButton={{
           className: 'bg-red-primary',
           children: t('button.delete'),
-          onClick: deleteMember,
+          onClick: () => {
+            deleteMember();
+            setOpen(false);
+          },
         }}
       />
     </Popover>
@@ -290,14 +341,11 @@ const MemberUpdatePopover: React.FC<{ member: InputMemberType }> = ({
   member,
 }) => {
   const { input, onChangeInput } = useCreateProject();
-  const roles = useMemo(
-    () => input.roles.map((v, id) => ({ id, ...v })),
-    [input.roles],
-  );
+  const roles = useMemo(() => input.roles, [input.roles]);
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [role, setRole] = useState<(InputRoleType & { id: number }) | null>(
-    roles.find((v) => v.name === member.role.name) ?? null,
+  const [role, setRole] = useState<InputRoleType | null>(
+    roles.find((v) => v.id === member.roleId) ?? null,
   );
 
   return (
@@ -324,17 +372,17 @@ const MemberUpdatePopover: React.FC<{ member: InputMemberType }> = ({
             onChangeInput(
               'members',
               input.members.map((v) =>
-                v.user.id === member.user.id ? { ...v, role } : v,
+                v.user.id === member.user.id ? { ...v, roleId: role.id } : v,
               ),
             );
-            member.role = role;
+            member.roleId = role.id;
             setOpen(false);
           },
         }}
       >
         <SelectBox
           label="Role"
-          options={input.roles.map((v, id) => ({ id, ...v })) ?? []}
+          options={input.roles}
           onChange={(v) => {
             const newRole = roles.find((role) => role.name === v?.name);
             if (!newRole) return;

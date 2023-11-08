@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
-import { ErrorCode } from '@/constants/error-code.enum';
+import { ErrorCode } from '@ufb/shared';
 
-export class GoogleMapApiException extends InternalServerErrorException {
-  constructor(message?: string) {
+export class MemberInvalidUserException extends BadRequestException {
+  constructor() {
     super({
-      code: ErrorCode.Feedback.NotFoundAddressInfo,
-      message: message,
+      code: ErrorCode.Member.MemberInvalidUser,
+      message: '',
     });
   }
 }

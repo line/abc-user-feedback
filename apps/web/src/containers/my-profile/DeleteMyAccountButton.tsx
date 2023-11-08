@@ -48,6 +48,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
       <PopoverTrigger
         className="btn btn-md btn-secondary text-red-primary min-w-[120px]"
         disabled={user?.signUpMethod === 'OAUTH'}
+        onClick={() => setOpen(true)}
       >
         {t('main.profile.button.delete-account')}
       </PopoverTrigger>

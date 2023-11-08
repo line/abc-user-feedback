@@ -13,7 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { InvalidExpressionFormatException } from './invalid-expression-format.exception';
-export { InvalidFieldTypeException } from './invalid-field-type.exception';
-export { InvalidFieldRequestException } from './invalid-field-request.exception';
-export { GoogleMapApiException } from './google-map-api.exception';
+export * from './error-code.enum';

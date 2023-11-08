@@ -35,6 +35,7 @@
     "@t3-oss/env-nextjs": "^0.7.1",
     "@tanstack/react-query": "^5.0.0",
     "@tanstack/react-table": "^8.10.7",
+    "@ufb/shared": "^0.1.0",
     "@ufb/tailwind": "^0.1.0",
     "@ufb/ui": "^0.1.0",
     "axios": "^1.5.1",
