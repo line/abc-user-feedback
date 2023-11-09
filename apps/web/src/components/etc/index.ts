@@ -29,3 +29,4 @@ export { default as IssueCircle } from './IssueCircle';
 export { default as OAuthLoginButton } from './OAuthLoginButton';
 
 export { default as SelectBox } from './SelectBox';
+export { default as Popper } from './Popper';

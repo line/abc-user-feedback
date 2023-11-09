@@ -28,3 +28,4 @@ export { default as usePermissions } from './usePermissions';
 export { default as useUserSearch } from './useUserSearch';
 export { default as useCurrentProjectId } from './useCurrentProjectId';
 export { default as useDownload } from './useDownload';
+export { default as useTruncatedElement } from './useTruncatedElement';
