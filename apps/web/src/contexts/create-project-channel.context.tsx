@@ -46,6 +46,7 @@ interface IProps<StepType, InputType> {
   steps: readonly StepType[];
   defaultInput: InputType;
   type: 'project' | 'channel';
+  projectId?: number;
 }
 
 export const CreateProvider = <
@@ -55,21 +56,22 @@ export const CreateProvider = <
   type,
   steps,
   defaultInput,
+  projectId,
 }: IProps<StepType, InputType>) => {
   const FIRST_STEP = steps[0] as StepType;
 
   const [input, setInput] = useLocalStorage<InputType>(
-    `${type} input`,
+    (type === 'project' ? type : `${type} ${projectId}`) + ' input',
     defaultInput,
   );
 
   const [currentStep, setCurrentStep] = useLocalStorage<StepType>(
-    `${type} currentStep`,
+    (type === 'project' ? type : `${type} ${projectId}`) + ' currentStep',
     FIRST_STEP,
   );
 
   const [completeStepIndex, setCompleteStepIndex] = useLocalStorage(
-    `${type} completeStepIndex`,
+    (type === 'project' ? type : `${type} ${projectId}`) + ' completeStepIndex',
     0,
   );
 
@@ -87,6 +89,7 @@ export const CreateProvider = <
   const onPrev = useCallback(() => {
     setCurrentStep(steps[steps.indexOf(currentStep!) - 1] ?? FIRST_STEP);
   }, [currentStep]);
+
   const gotoStep = useCallback(
     (step: StepType) => setCurrentStep(step),
     [currentStep],
@@ -96,10 +99,8 @@ export const CreateProvider = <
     const nextStepIndex = steps.indexOf(currentStep) + 1;
     const nextStep = steps[nextStepIndex] ?? FIRST_STEP;
 
-    if (nextStepIndex === steps.length) {
-      alert('완료');
-      return;
-    }
+    if (nextStepIndex === steps.length) return;
+
     setCurrentStep(nextStep);
     if (completeStepIndex < nextStepIndex) {
       setCompleteStepIndex(nextStepIndex);

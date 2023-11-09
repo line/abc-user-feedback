@@ -35,15 +35,13 @@ import {
 
 const HELP_TEXT: Record<ProjectStepType, string> = {
   projectInfo:
-    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
-  roles:
-    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
+    'Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)',
+  roles: 'Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.',
+  members: 'Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ',
   apiKeys:
-    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
-  members:
-    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
+    '피드백 수집 API의 API Key 정보를 관리합니다. API를 활용해 피드백을 수집한다면 Key 정보를 생성해 주세요.',
   issueTracker:
-    'UserFeedback 라벨과 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. 사용중인 Issue Tracking System URL을 입력해주세요.',
+    'UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다. 사용 중인 Issue Tracking System 정보를 입력해 주세요.',
 };
 
 const CreatePage: NextPage = () => {

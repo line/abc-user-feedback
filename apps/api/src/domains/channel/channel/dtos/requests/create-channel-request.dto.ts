@@ -88,7 +88,7 @@ export class CreateChannelRequestFieldDto {
 export class CreateChannelRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(2)
+  @MinLength(1)
   name: string;
 
   @ApiProperty({ nullable: true })

@@ -185,6 +185,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   <td
                     key={cell.id}
                     style={{ width: cell.column.getSize(), border: 'none' }}
+                    className="overflow-hidden"
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>

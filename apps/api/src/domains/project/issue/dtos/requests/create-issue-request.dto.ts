@@ -19,6 +19,6 @@ import { IsString, MinLength } from 'class-validator';
 export class CreateIssueRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(2)
+  @MinLength(1)
   name: string;
 }

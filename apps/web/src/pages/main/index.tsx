@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { MainTemplate } from '@/components';
+import { CreateProjectButton, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIQuery, useProjects, useTenant } from '@/hooks';
@@ -32,9 +32,7 @@ const CARD_BORDER_CSS =
 
 const MainIndexPage: NextPageWithLayout = () => {
   const { tenant } = useTenant();
-  const router = useRouter();
   const { data } = useProjects();
-  const routeCreateProjectPage = () => router.push(Path.CREATE_PROJECT);
 
   return (
     <div className="mx-4 my-2">
@@ -45,48 +43,14 @@ const MainIndexPage: NextPageWithLayout = () => {
       <h1 className="font-20-bold my-6 mb-4">Project</h1>
       <ul className="flex flex-wrap gap-2">
         {data?.items.map(({ id }) => <ProjectList key={id} projectId={id} />)}
-
-        {data?.meta.totalItems === 0 ? (
-          <div
-            className={[
-              CARD_BORDER_CSS,
-              'flex flex-col items-center gap-6 p-8',
-            ].join(' ')}
-          >
-            <div className="flex flex-col items-center gap-2">
-              <Icon
-                name="WarningTriangleFill"
-                className="text-tertiary"
-                size={40}
-              />
-              <p className="text-secondary font-14-regular text-center">
-                등록된 Project가 없습니다.
-              </p>
-            </div>
-            <button
-              className="btn btn-lg btn-blue w-[200px] gap-2"
-              onClick={routeCreateProjectPage}
-            >
-              <Icon name="Plus" className="text-above-white" />
-              Project 생성
-            </button>
-          </div>
-        ) : (
-          <div
-            className={[
-              CARD_BORDER_CSS,
-              'flex flex-col items-center justify-center',
-            ].join(' ')}
-          >
-            <button
-              className="btn btn-lg btn-primary w-[200px] gap-2"
-              onClick={routeCreateProjectPage}
-            >
-              <Icon name="Plus" className="text-above-white" />
-              Project 생성
-            </button>
-          </div>
-        )}
+        <div
+          className={[
+            CARD_BORDER_CSS,
+            'flex flex-col items-center justify-center',
+          ].join(' ')}
+        >
+          <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
+        </div>
       </ul>
     </div>
   );

@@ -59,7 +59,7 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
       <PopoverModalContent
         title={t('main.feedback.dialog.delete-feedback.title')}
         description={t('main.feedback.dialog.delete-feedback.description')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           onClick: onClickDelete,
           children: t('button.delete'),

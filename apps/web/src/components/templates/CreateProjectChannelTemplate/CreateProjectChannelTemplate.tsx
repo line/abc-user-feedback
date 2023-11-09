@@ -125,7 +125,9 @@ const Stepper: React.FC<IStepperProps> = (props) => {
                 i <= completeStepIndex
                   ? 'bg-blue-primary text-above-primary'
                   : 'bg-fill-secondary text-secondary',
-                i === currentStepIndex ? 'h-10 w-10' : 'h-8 w-8',
+                i === currentStepIndex
+                  ? 'border-text-secondary h-10 w-10 border-2'
+                  : 'h-8 w-8',
               ].join(' ')}
             >
               {i > completeStepIndex - 1 ? (

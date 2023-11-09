@@ -102,6 +102,9 @@ export interface paths {
     get: operations['ChannelController_findAllByProjectId'];
     post: operations['ChannelController_create'];
   };
+  '/api/projects/{projectId}/channels/name-check': {
+    get: operations['ChannelController_checkName'];
+  };
   '/api/projects/{projectId}/channels/{channelId}': {
     get: operations['ChannelController_findOne'];
     delete: operations['ChannelController_delete'];
@@ -1415,6 +1418,21 @@ export interface operations {
         content: {
           'application/json': components['schemas']['CreateChannelResponseDto'];
         };
+      };
+    };
+  };
+  ChannelController_checkName: {
+    parameters: {
+      query: {
+        name: string;
+      };
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
       };
     };
   };

@@ -276,13 +276,16 @@ export interface IPopoverModalContentProps extends React.PropsWithChildren {
     form?: string;
     type?: 'submit' | 'reset' | 'button' | undefined;
   };
-  cancelText?: string;
+  cancelButton?: {
+    children?: React.ReactNode;
+    onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  };
 }
 
 export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
   props,
 ) => {
-  const { title, description, children, submitButton, icon, cancelText } =
+  const { title, description, children, submitButton, icon, cancelButton } =
     props;
   const { setOpen } = usePopoverContext();
 
@@ -307,13 +310,12 @@ export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
         )}
         <div className="mb-5">{children}</div>
         <div className="flex justify-end gap-2">
-          {cancelText && (
+          {cancelButton && (
             <button
+              {...cancelButton}
               className="btn btn-secondary"
-              onClick={() => setOpen(false)}
-            >
-              {cancelText}
-            </button>
+              onClick={cancelButton.onClick ?? (() => setOpen(false))}
+            />
           )}
           <button
             {...submitButton}

@@ -82,7 +82,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
     <Popover onOpenChange={setOpen} open={open} modal>
       <PopoverModalContent
         title={t('main.setting.dialog.register-member.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           type: 'submit',
           form: 'inviteMember',

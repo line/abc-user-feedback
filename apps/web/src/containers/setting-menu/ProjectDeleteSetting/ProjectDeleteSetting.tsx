@@ -84,7 +84,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
           </PopoverTrigger>
           <PopoverModalContent
             title={t('main.setting.dialog.delete-project.title')}
-            cancelText={t('button.cancel')}
+            cancelButton={{ children: t('button.cancel') }}
             description={t('main.setting.dialog.delete-project.description')}
             icon={{
               name: 'WarningTriangleFill',

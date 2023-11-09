@@ -74,10 +74,9 @@ const CreateCompletePage: NextPage = () => {
             className="text-green-primary"
           />
           <p className="font-12-regular">
-            Project를 성공적으로 생성했습니다.
+            Channel까지 생성해야 UserFeedback을 사용할 수 있습니다.
             <br />
-            Channel 까지 생성하고 나면 UserFeedback 사용을 위한 준비가 모두
-            완료됩니다.
+            Channel 생성을 이어서 하시겠어요?
           </p>
         </div>
         <div className="flex gap-2">

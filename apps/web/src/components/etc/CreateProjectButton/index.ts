@@ -13,9 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { FindAllChannelsByProjectIdDto } from './find-all-channels-by-project-id.dto';
-export { CreateChannelDto } from './create-channel.dto';
-export { UpdateChannelDto } from './update-channel.dto';
-export { FindByChannelIdDto } from './find-by-channel-id.dto';
-export { UpdateChannelFieldsDto } from './update-channel-fields.dto';
-export { FindOneByNameAndProjectIdDto } from './find-one-by-name-and-project-id.dto';
+export { default } from './CreateProjectButton';

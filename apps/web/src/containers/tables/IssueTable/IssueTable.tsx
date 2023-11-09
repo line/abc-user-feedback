@@ -456,7 +456,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         <PopoverModalContent
           title={t('main.issue.dialog.delete-issue.title')}
           description={t('main.issue.dialog.delete-issue.description')}
-          cancelText={t('button.cancel')}
+          cancelButton={{ children: t('button.cancel') }}
           submitButton={{
             children: t('button.delete'),
             onClick: onClickDelete,

@@ -54,7 +54,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.profile.dialog.delete-account.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'WarningTriangleFill',
           className: 'text-red-primary',

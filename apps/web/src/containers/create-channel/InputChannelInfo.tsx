@@ -15,19 +15,32 @@
  */
 
 import { useCallback, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 
 import { TextInput } from '@ufb/ui';
 
 import { useCreateChannel } from '@/contexts/create-channel.context';
+import client from '@/libs/client';
 import type { InputProjectInfoType } from '@/types/project.type';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
+
+const defaultInputError = { name: '', description: '' };
 
 interface IProps {}
 
 const InputChannelInfo: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannel();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isValid, setIsValid] = useState(true);
+  const [inputError, setInputError] = useState<{
+    name: string;
+    description: string;
+  }>(defaultInputError);
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
+  const projectId = useMemo(
+    () => Number(router.query.projectId),
+    [router.query.projectId],
+  );
 
   const name = useMemo(() => input.channelInfo.name, [input.channelInfo.name]);
 
@@ -46,20 +59,35 @@ const InputChannelInfo: React.FC<IProps> = () => {
     },
     [input.channelInfo],
   );
-  const validate = () => {
+  const resetError = useCallback(() => {
+    setInputError(defaultInputError);
+    setIsSubmitted(false);
+  }, [defaultInputError]);
+  const validate = async () => {
+    setIsLoading(true);
+
+    resetError();
+
+    const { data: isDuplicated } = await client.get({
+      path: '/api/projects/{projectId}/channels/name-check',
+      pathParams: { projectId },
+      query: { name },
+    });
     setIsSubmitted(true);
-    if (name.length < 2) {
-      setIsValid(false);
+    if (isDuplicated) {
+      setInputError((prev) => ({
+        ...prev,
+        name: '이미 존재하는 프로젝트 이름입니다.',
+      }));
+      setIsLoading(false);
       return false;
     }
-    setIsValid(true);
     return true;
   };
-
   return (
     <CreateChannelInputTemplate
       validate={validate}
-      disableNextBtn={name.length === 0}
+      disableNextBtn={name.length === 0 || isLoading}
     >
       <TextInput
         label="Channel Name"
@@ -68,7 +96,8 @@ const InputChannelInfo: React.FC<IProps> = () => {
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
         isSubmitted={isSubmitted}
-        isValid={isValid}
+        isValid={!inputError.name}
+        hint={inputError.name}
         maxLength={20}
       />
       <TextInput
@@ -76,6 +105,9 @@ const InputChannelInfo: React.FC<IProps> = () => {
         placeholder="채널 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
+        isSubmitted={isSubmitted}
+        isValid={!inputError.description}
+        hint={inputError.description}
         maxLength={50}
       />
     </CreateChannelInputTemplate>

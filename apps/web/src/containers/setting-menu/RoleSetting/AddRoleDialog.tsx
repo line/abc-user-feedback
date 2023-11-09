@@ -71,7 +71,7 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.create-role.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'ShieldPrivacyFill',
           className: 'text-blue-primary',

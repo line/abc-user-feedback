@@ -76,7 +76,7 @@ const CreateCompletePage: NextPage = () => {
             height={24}
           />
           <p className="font-12-regular">
-            Channel을 성공적으로 생성했습니다.
+            모든 준비가 완료됐습니다.
             <br />
             UserFeedback 이용을 시작해보세요!
           </p>

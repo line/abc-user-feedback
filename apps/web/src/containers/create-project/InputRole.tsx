@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
@@ -61,18 +62,16 @@ const InputRole: React.FC<IProps> = () => {
         updateRole={onUpdateRole}
         roles={roles}
       />
-      {open && (
-        <Popover modal open={open} onOpenChange={setOpen}>
-          <PopoverModalContent
-            title="안내"
-            description="최소 1개 이상의 Role이 등록되어 있어야 합니다."
-            submitButton={{
-              children: '확인',
-              onClick: () => setOpen(false),
-            }}
-          />
-        </Popover>
-      )}
+      <Popover modal open={open} onOpenChange={setOpen}>
+        <PopoverModalContent
+          title="안내"
+          description="최소 1개 이상의 Role이 등록되어 있어야 합니다."
+          submitButton={{
+            children: '확인',
+            onClick: () => setOpen(false),
+          }}
+        />
+      </Popover>
     </CreateProjectInputTemplate>
   );
 };
@@ -82,6 +81,7 @@ const defaultInputError = { roleName: '' };
 const CreateRoleButton: React.FC<{
   onCreate: (name: string) => void;
 }> = ({ onCreate }) => {
+  const { t } = useTranslation();
   const { input } = useCreateProject();
   const [roleName, setRoleName] = useState('');
   const [inputError, setInputError] = useState(defaultInputError);
@@ -106,7 +106,7 @@ const CreateRoleButton: React.FC<{
         </button>
       </PopoverTrigger>
       <PopoverModalContent
-        cancelText="취소"
+        cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           children: '확인',
           onClick: () => {

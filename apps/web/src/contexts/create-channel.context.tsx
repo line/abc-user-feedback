@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
+import { useRouter } from 'next/router';
 
 import type { InputChannelInfoType } from '@/types/channel.type';
 import type { InputFieldType } from '@/types/field.type';
@@ -94,12 +95,19 @@ const CreateChannelContext = CreateContext<ChannelStepType, ChannelInputType>({
 export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const router = useRouter();
+  const projectId = useMemo(
+    () => Number(router.query.projectId),
+    [router.query.projectId],
+  );
+
   return (
     <CreateChannelContext.Provider
       value={CreateProvider({
         type: 'channel',
         defaultInput: CHANNEL_DEFAULT_INPUT,
         steps: CHANNEL_STEPS,
+        projectId,
       })}
     >
       {children}

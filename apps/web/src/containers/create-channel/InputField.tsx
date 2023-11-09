@@ -125,6 +125,7 @@ interface IProps {}
 
 const InputField: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannel();
+
   const fields = useMemo(() => input.fields, [input.fields]);
   const setFields = useCallback(
     (input: InputFieldType[]) => onChangeInput('fields', input),
@@ -146,7 +147,7 @@ const InputField: React.FC<IProps> = () => {
   });
 
   return (
-    <CreateChannelInputTemplate>
+    <CreateChannelInputTemplate disableNextBtn={fields.length === 4}>
       <div className="flex justify-end">
         <button>
           <FieldSettingPopover

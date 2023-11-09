@@ -185,7 +185,7 @@ const DeleteRolePopup: React.FC<IDeleteRolePopupProps> = ({
       <PopoverModalContent
         title={t('main.setting.dialog.delete-role.title')}
         description={t('main.setting.dialog.delete-role.description')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'WarningCircleFill',
           className: 'text-red-primary',
@@ -220,6 +220,7 @@ const UpdateRoleNamePopup: React.FC<IUpdateRoleNamePopupProps> = ({
   roles,
   onClickUpdate,
 }) => {
+  const { t } = useTranslation();
   const [currentRoleName, setCurrentRoleName] = useState(role.name);
 
   const [inputError, setInputError] = useState(defaultInputError);
@@ -233,7 +234,7 @@ const UpdateRoleNamePopup: React.FC<IUpdateRoleNamePopupProps> = ({
   return (
     <Popover open={open} onOpenChange={onOpenChange} modal>
       <PopoverModalContent
-        cancelText="취소"
+        cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           children: '확인',
           onClick: () => {

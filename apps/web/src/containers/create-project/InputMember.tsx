@@ -207,18 +207,16 @@ const InputMember: React.FC = () => {
           )}
         </tbody>
       </table>
-      {open && (
-        <Popover modal open={open} onOpenChange={setOpen}>
-          <PopoverModalContent
-            title="안내"
-            description="유효하지 않은 Member 목록이 존재합니다."
-            submitButton={{
-              children: '확인',
-              onClick: () => setOpen(false),
-            }}
-          />
-        </Popover>
-      )}
+      <Popover modal open={open} onOpenChange={setOpen}>
+        <PopoverModalContent
+          title="안내"
+          description="유효하지 않은 Member 목록이 존재합니다."
+          submitButton={{
+            children: '확인',
+            onClick: () => setOpen(false),
+          }}
+        />
+      </Popover>
     </CreateProjectInputTemplate>
   );
 };
@@ -251,7 +249,7 @@ const CreateMemberButton: React.FC<{
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.register-member.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           type: 'submit',
           form: 'inviteMember',
@@ -318,7 +316,7 @@ const MemberDeleteDialog: React.FC<{
       <PopoverModalContent
         title={t('main.setting.dialog.delete-member.title')}
         description={t('main.setting.dialog.delete-member.description')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'WarningTriangleFill',
           className: 'text-red-primary',
@@ -358,7 +356,7 @@ const MemberUpdatePopover: React.FC<{ member: InputMemberType }> = ({
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.edit-member.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'ProfileSettingFill',
           className: 'text-orange-primary',
