@@ -103,7 +103,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
                 <>
                   생성중인 Project가 있습니다.{' '}
                   <b>
-                    {state + 1}/{PROJECT_STEPS.length}
+                    ({state + 1}/{PROJECT_STEPS.length})
                   </b>
                 </>
               )}

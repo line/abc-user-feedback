@@ -14,10 +14,10 @@
  * under the License.
  */
 import { useCallback, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 
-import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
+import { Popover, PopoverModalContent } from '@ufb/ui';
 
+import { CreateRolePopover } from '@/components/popovers';
 import { useCreateProject } from '@/contexts/create-project.context';
 import type { RoleType } from '@/types/role.type';
 import RoleSettingTable from '../setting-menu/RoleSetting/RoleSettingTable';
@@ -54,7 +54,7 @@ const InputRole: React.FC<IProps> = () => {
 
   return (
     <CreateProjectInputTemplate
-      actionButton={<CreateRoleButton onCreate={onCreateRole} />}
+      actionButton={<CreateRolePopover onSubmit={onCreateRole} roles={roles} />}
       disableNextBtn={roles.length === 0}
     >
       <RoleSettingTable
@@ -73,75 +73,6 @@ const InputRole: React.FC<IProps> = () => {
         />
       </Popover>
     </CreateProjectInputTemplate>
-  );
-};
-
-const defaultInputError = { roleName: '' };
-
-const CreateRoleButton: React.FC<{
-  onCreate: (name: string) => void;
-}> = ({ onCreate }) => {
-  const { t } = useTranslation();
-  const { input } = useCreateProject();
-  const [roleName, setRoleName] = useState('');
-  const [inputError, setInputError] = useState(defaultInputError);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  const roles = useMemo(() => input.roles, [input.roles]);
-
-  const resetError = useCallback(() => {
-    setInputError(defaultInputError);
-    setIsSubmitted(false);
-  }, [defaultInputError]);
-
-  return (
-    <Popover modal open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <button
-          className="btn btn-primary btn-md w-[120px]"
-          onClick={() => setOpen(true)}
-        >
-          Role 생성
-        </button>
-      </PopoverTrigger>
-      <PopoverModalContent
-        cancelButton={{ children: t('button.cancel') }}
-        submitButton={{
-          children: '확인',
-          onClick: () => {
-            if (roles.find((v) => v.name === roleName)) {
-              setInputError({ roleName: '이미 존재하는 이름입니다.' });
-              setIsSubmitted(true);
-              return;
-            }
-            onCreate(roleName);
-            setOpen(false);
-          },
-        }}
-        title="Role 생성"
-        description="신규 Role의 명칭을 입력해주세요."
-        icon={{
-          name: 'ShieldPrivacyFill',
-          size: 56,
-          className: 'text-blue-primary',
-        }}
-      >
-        <Input
-          label="Role Name"
-          placeholder="입력"
-          value={roleName}
-          onChange={(e) => {
-            resetError();
-            setRoleName(e.target.value);
-          }}
-          isSubmitted={isSubmitted}
-          isValid={!inputError.roleName}
-          hint={inputError.roleName}
-          maxLength={20}
-        />
-      </PopoverModalContent>
-    </Popover>
   );
 };
 

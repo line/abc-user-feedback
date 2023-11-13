@@ -19,10 +19,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
-import { useOAIQuery } from '@/hooks';
+import { CreateRolePopover } from '@/components/popovers';
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { PermissionType } from '@/types/permission.type';
-import AddRoleDialog from './AddRoleDialog';
 import RoleSettingTable from './RoleSettingTable';
 
 interface IProps {
@@ -31,9 +31,27 @@ interface IProps {
 
 const RoleSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const perms = usePermissions(projectId);
+
   const { data, refetch } = useOAIQuery({
     path: '/api/projects/{projectId}/roles',
     variables: { projectId },
+  });
+
+  const { mutateAsync: createRole } = useOAIMutation({
+    method: 'post',
+    path: '/api/projects/{projectId}/roles',
+    pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        refetch();
+        toast.positive({ title: t('toast.add') });
+      },
+      onError(error) {
+        if (!error) return;
+        toast.negative({ title: error.message });
+      },
+    },
   });
 
   const { mutate: deleteRole } = useMutation({
@@ -69,7 +87,13 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
   return (
     <SettingMenuTemplate
       title={t('main.setting.subtitle.role-mgmt')}
-      action={<AddRoleDialog projectId={projectId} refetch={refetch} />}
+      action={
+        <CreateRolePopover
+          onSubmit={(name) => createRole({ name, permissions: [] })}
+          roles={data?.roles ?? []}
+          disabled={!perms.includes('project_role_create')}
+        />
+      }
     >
       <div className="overflow-auto">
         <RoleSettingTable

@@ -13,58 +13,50 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Input,
-  Popover,
-  PopoverModalContent,
-  PopoverTrigger,
-  toast,
-} from '@ufb/ui';
+import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
-import { useOAIMutation, usePermissions } from '@/hooks';
+import type { RoleType } from '@/types/role.type';
 
 interface IProps {
-  projectId: number;
-  refetch: () => void;
+  roles: RoleType[];
+  disabled?: boolean;
+  onSubmit: (name: string) => Promise<void> | void;
 }
 
-const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
-  const { t } = useTranslation();
+const CreateRolePopover: React.FC<IProps> = ({ disabled, onSubmit, roles }) => {
   const [open, setOpen] = useState(false);
-  const perms = usePermissions(projectId);
-  const [isValid, setIsValid] = useState<boolean>();
-  const [newRoleName, setNewRoleName] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const { t } = useTranslation();
+  const [roleName, setRoleName] = useState('');
 
-  const { mutate: createRole, isPending } = useOAIMutation({
-    method: 'post',
-    path: '/api/projects/{projectId}/roles',
-    pathParams: { projectId },
-    queryOptions: {
-      async onSuccess() {
-        setNewRoleName('');
-        setOpen(false);
-        refetch();
-        setIsValid(undefined);
-        setIsSubmitted(false);
-        toast.positive({ title: t('toast.add') });
-      },
-      onError(error) {
-        if (!error) return;
-        setIsValid(false);
-        toast.negative({ title: error.message });
-      },
-    },
-  });
+  const [isSubmitted, setIsSubmitted] = useState(true);
+  const [isValid, setIsValid] = useState(false);
+  const [error, setError] = useState("Role name can't be empty");
+
+  useEffect(() => {
+    setIsSubmitted(true);
+    if (roleName.length === 0) {
+      setIsValid(false);
+      setError("Role name can't be empty");
+    } else if (roleName.length > 20) {
+      setIsValid(false);
+      setError("Role name can't be longer than 20 characters");
+    } else if (roles.some((v) => v.name === roleName)) {
+      setIsValid(false);
+      setError('Role name already exists');
+    } else {
+      setIsValid(true);
+      setError('');
+    }
+  }, [roleName]);
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger
         onClick={() => setOpen(true)}
-        disabled={!perms.includes('project_role_create') || isPending}
+        disabled={disabled}
         className="btn-primary btn min-w-[120px]"
       >
         {t('main.setting.dialog.create-role.title')}
@@ -79,22 +71,24 @@ const AddRoleDialog: React.FC<IProps> = ({ projectId, refetch }) => {
         }}
         description={t('main.setting.dialog.create-role.description')}
         submitButton={{
-          onClick: () => {
-            createRole({ name: newRoleName, permissions: [] });
-            setIsSubmitted(true);
+          onClick: async () => {
+            await onSubmit(roleName);
+            setOpen(false);
           },
           children: t('button.confirm'),
+          disabled: !isValid,
         }}
       >
         <Input
           label="Role Name"
-          onChange={(e) => setNewRoleName(e.target.value)}
-          isValid={isValid}
+          onChange={(e) => setRoleName(e.target.value)}
           isSubmitted={isSubmitted}
+          isValid={isValid}
+          hint={error}
         />
       </PopoverModalContent>
     </Popover>
   );
 };
 
-export default AddRoleDialog;
+export default CreateRolePopover;

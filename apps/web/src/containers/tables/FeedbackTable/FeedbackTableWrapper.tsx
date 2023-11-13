@@ -16,8 +16,6 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { Icon } from '@ufb/ui';
-
 import { Path } from '@/constants/path';
 import { useChannels } from '@/hooks';
 import { FeedbackTableProvider } from './feedback-table.context';
@@ -40,31 +38,7 @@ const FeedbackTableWrapper: React.FC<IProps> = (props) => {
     return channels.items?.[0]?.id ?? null;
   }, [channelId, channels]);
 
-  if (!currentChannelId)
-    return (
-      <div className="flex flex-1 flex-col items-center justify-center gap-8">
-        <div className="flex flex-col items-center gap-3">
-          <Icon
-            name="WarningTriangleFill"
-            size={56}
-            className="text-tertiary"
-          />
-          <p>등록된 Channel이 없습니다.</p>
-        </div>
-        <button
-          className="btn btn-blue btn-lg w-[200px] gap-2"
-          onClick={() =>
-            router.push({
-              pathname: Path.CREATE_CHANNEL,
-              query: { projectId },
-            })
-          }
-        >
-          <Icon name="Plus" size={24} className="text-above-primary" />
-          Channel 생성
-        </button>
-      </div>
-    );
+  if (!currentChannelId) return <div>Invalid Channel Id</div>;
 
   return (
     <FeedbackTableProvider projectId={projectId} channelId={currentChannelId}>

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { TextInput } from '@ufb/ui';
@@ -25,16 +25,13 @@ import type { InputProjectInfoType } from '@/types/project.type';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 const defaultInputError = { name: '', description: '' };
+const defaultIsSubmitted = { name: false, description: false };
 
 interface IProps {}
 
 const InputChannelInfo: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannel();
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [inputError, setInputError] = useState<{
-    name: string;
-    description: string;
-  }>(defaultInputError);
+
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const projectId = useMemo(
@@ -42,26 +39,61 @@ const InputChannelInfo: React.FC<IProps> = () => {
     [router.query.projectId],
   );
 
-  const name = useMemo(() => input.channelInfo.name, [input.channelInfo.name]);
+  const [inputError, setInputError] = useState<{
+    name: string;
+    description: string;
+  }>(defaultInputError);
 
+  const [isSubmitted, setIsSubmitted] = useState<{
+    name: boolean;
+    description: boolean;
+  }>(defaultIsSubmitted);
+
+  const name = useMemo(() => input.channelInfo.name, [input.channelInfo.name]);
   const description = useMemo(
     () => input.channelInfo.description,
     [input.channelInfo.description],
   );
+  useEffect(() => {
+    if (name.length > 20) {
+      setIsSubmitted((prev) => ({ ...prev, name: true }));
+      setInputError((prev) => ({
+        ...prev,
+        name: '프로젝트 이름은 20자 이하로 입력해주세요.',
+      }));
+    } else if (name.length === 0) {
+      setIsSubmitted((prev) => ({ ...prev, name: true }));
+      setInputError((prev) => ({
+        ...prev,
+        name: '프로젝트 이름은 1자 이상 입력해주세요.',
+      }));
+    } else {
+      setInputError((prev) => ({ ...prev, name: '' }));
+    }
+
+    if (description.length > 50) {
+      setIsSubmitted((prev) => ({ ...prev, description: true }));
+      setInputError((prev) => ({
+        ...prev,
+        description: '프로젝트 설명은 50자 이하로 입력해주세요.',
+      }));
+    } else {
+      setInputError((prev) => ({ ...prev, description: '' }));
+    }
+  }, [input.channelInfo]);
 
   const onChangeProjectInfo = useCallback(
     <T extends keyof InputProjectInfoType>(
       key: T,
       value: InputProjectInfoType[T],
     ) => {
-      setIsSubmitted(false);
       onChangeInput('channelInfo', { name, description, [key]: value });
     },
     [input.channelInfo],
   );
   const resetError = useCallback(() => {
     setInputError(defaultInputError);
-    setIsSubmitted(false);
+    setIsSubmitted(defaultIsSubmitted);
   }, [defaultInputError]);
   const validate = async () => {
     setIsLoading(true);
@@ -73,7 +105,7 @@ const InputChannelInfo: React.FC<IProps> = () => {
       pathParams: { projectId },
       query: { name },
     });
-    setIsSubmitted(true);
+    setIsSubmitted({ name: true, description: true });
     if (isDuplicated) {
       setInputError((prev) => ({
         ...prev,
@@ -84,6 +116,7 @@ const InputChannelInfo: React.FC<IProps> = () => {
     }
     return true;
   };
+
   return (
     <CreateChannelInputTemplate
       validate={validate}
@@ -95,20 +128,18 @@ const InputChannelInfo: React.FC<IProps> = () => {
         value={name}
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
-        isSubmitted={isSubmitted}
+        isSubmitted={isSubmitted.name}
         isValid={!inputError.name}
         hint={inputError.name}
-        maxLength={20}
       />
       <TextInput
         label="Channel Description"
         placeholder="채널 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
-        isSubmitted={isSubmitted}
+        isSubmitted={isSubmitted.description}
         isValid={!inputError.description}
         hint={inputError.description}
-        maxLength={50}
       />
     </CreateChannelInputTemplate>
   );

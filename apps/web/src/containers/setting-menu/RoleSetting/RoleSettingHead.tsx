@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -133,12 +133,12 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'flex items-center gap-2 rounded p-2',
-                    !hasDeleteRolePerm
+                    !hasDeleteRolePerm || roles.length === 1
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
-                    if (!hasDeleteRolePerm) return;
+                    if (!hasDeleteRolePerm || roles.length === 1) return;
                     setDeletePopupOpen(true);
                   }}
                 >
@@ -211,7 +211,6 @@ interface IUpdateRoleNamePopupProps {
   role: RoleType;
   roles: RoleType[];
 }
-const defaultInputError = { roleName: '' };
 
 const UpdateRoleNamePopup: React.FC<IUpdateRoleNamePopupProps> = ({
   open,
@@ -221,15 +220,30 @@ const UpdateRoleNamePopup: React.FC<IUpdateRoleNamePopupProps> = ({
   onClickUpdate,
 }) => {
   const { t } = useTranslation();
-  const [currentRoleName, setCurrentRoleName] = useState(role.name);
+  const [roleName, setRoleName] = useState(role.name);
 
-  const [inputError, setInputError] = useState(defaultInputError);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState('');
 
-  const resetError = useCallback(() => {
-    setInputError(defaultInputError);
-    setIsSubmitted(false);
-  }, [defaultInputError]);
+  const [isSubmitted, setIsSubmitted] = useState(true);
+
+  const [isValid, setIsValid] = useState(false);
+
+  useEffect(() => {
+    setIsSubmitted(true);
+    if (roleName.length === 0) {
+      setIsValid(false);
+      setError("Role name can't be empty");
+    } else if (roleName.length > 20) {
+      setIsValid(false);
+      setError("Role name can't be longer than 20 characters");
+    } else if (roles.some((v) => v.id !== role.id && v.name === roleName)) {
+      setIsValid(false);
+      setError('Role name already exists');
+    } else {
+      setIsValid(true);
+      setError('');
+    }
+  }, [roleName]);
 
   return (
     <Popover open={open} onOpenChange={onOpenChange} modal>
@@ -237,27 +251,14 @@ const UpdateRoleNamePopup: React.FC<IUpdateRoleNamePopupProps> = ({
         cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           children: '확인',
-          onClick: () => {
-            if (currentRoleName.length === 0) {
-              setInputError({ roleName: '최소 1자 이상 입력해야합니다.' });
-              setIsSubmitted(true);
-              return;
-            }
-            if (
-              roles
-                .filter((v) => v.id !== role.id)
-                .find((v) => v.name === currentRoleName)
-            ) {
-              setInputError({ roleName: '이미 존재하는 이름입니다.' });
-              setIsSubmitted(true);
-              return;
-            }
-            onClickUpdate({ ...role, name: currentRoleName });
+          onClick: async () => {
+            onClickUpdate({ ...role, name: roleName });
             onOpenChange(false);
           },
+          disabled: !isValid,
         }}
-        title="Role 생성"
-        description="신규 Role의 명칭을 입력해주세요."
+        title="Role 이름 수정"
+        description="Role의 명칭을 수정해주세요."
         icon={{
           name: 'ShieldPrivacyFill',
           size: 56,
@@ -267,15 +268,11 @@ const UpdateRoleNamePopup: React.FC<IUpdateRoleNamePopupProps> = ({
         <Input
           label="Role Name"
           placeholder="입력"
-          value={currentRoleName}
-          onChange={(e) => {
-            resetError();
-            setCurrentRoleName(e.target.value);
-          }}
+          value={roleName}
+          onChange={(e) => setRoleName(e.target.value)}
           isSubmitted={isSubmitted}
-          isValid={!inputError.roleName}
-          hint={inputError.roleName}
-          maxLength={20}
+          isValid={isValid}
+          hint={error}
         />
       </PopoverModalContent>
     </Popover>

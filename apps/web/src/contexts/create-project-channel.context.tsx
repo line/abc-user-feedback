@@ -82,12 +82,12 @@ export const CreateProvider = <
   }, []);
 
   const currentStepIndex = useMemo(
-    () => steps.indexOf(currentStep!),
+    () => steps.indexOf(currentStep),
     [currentStep],
   );
 
   const onPrev = useCallback(() => {
-    setCurrentStep(steps[steps.indexOf(currentStep!) - 1] ?? FIRST_STEP);
+    setCurrentStep(steps[steps.indexOf(currentStep) - 1] ?? FIRST_STEP);
   }, [currentStep]);
 
   const gotoStep = useCallback(
@@ -112,6 +112,11 @@ export const CreateProvider = <
   const onChangeInput: OnChangeInputType<InputType> = (key, value) => {
     setInput({ ...input, [key]: value });
   };
+
+  useEffect(() => {
+    console.log('completeStepIndex: ', completeStepIndex);
+    setCurrentStep(steps[completeStepIndex] ?? FIRST_STEP);
+  }, []);
 
   useEffect(() => {
     if (completeStepIndex === 0) return;

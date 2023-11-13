@@ -30,3 +30,4 @@ export { default as OAuthLoginButton } from './OAuthLoginButton';
 
 export { default as SelectBox } from './SelectBox';
 export { default as CreateProjectButton } from './CreateProjectButton';
+export { default as NoChannel } from './NoChannel';

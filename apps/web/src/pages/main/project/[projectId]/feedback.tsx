@@ -14,21 +14,25 @@
  * under the License.
  */
 import type { GetServerSideProps } from 'next';
+import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate } from '@/components';
+import { MainTemplate, NoChannel } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
+import { ironOption } from '@/constants/iron-option';
 import { FeedbackTable } from '@/containers';
+import { env } from '@/env.mjs';
 import type { NextPageWithLayout } from '@/pages/_app';
 
 interface IProps {
   projectId: number;
   channelId?: number | null;
+  noChannel?: boolean;
 }
 
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
-  const { projectId, channelId } = props;
+  const { projectId, channelId, noChannel } = props;
 
   const { t } = useTranslation();
 
@@ -39,7 +43,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   return (
     <>
       <h1 className="font-20-bold mb-3">{t('main.feedback.title')}</h1>
-      <FeedbackTable projectId={projectId} channelId={channelId} />
+      {noChannel ? (
+        <NoChannel projectId={projectId} />
+      ) : (
+        <FeedbackTable projectId={projectId} channelId={channelId} />
+      )}
     </>
   );
 };
@@ -51,12 +59,41 @@ FeedbackManagementPage.getLayout = function getLayout(page) {
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   locale,
+  req,
+  res,
 }) => {
+  const session = await getIronSession(req, res, ironOption);
+  const projectId = parseInt(query.projectId as string);
+
+  const response = await fetch(
+    `${env.API_BASE_URL}/api/projects/${projectId}/channels`,
+    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
+  );
+  if (response.status === 401) {
+    return {
+      redirect: {
+        destination: `/main/${projectId}/not-permission`,
+        permanent: true,
+      },
+    };
+  }
+  const data = await response.json();
+  if (data.meta.totalItems === 0) {
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+        projectId,
+        noChannel: true,
+      },
+    };
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
-      projectId: parseInt(query.projectId as string),
+      projectId,
       channelId: query.channelId ? +query.channelId : null,
+      noChannel: false,
     },
   };
 };

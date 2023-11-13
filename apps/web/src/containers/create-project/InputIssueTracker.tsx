@@ -15,13 +15,17 @@
  */
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { ZodError } from 'zod';
 
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, TextInput, toast } from '@ufb/ui';
 
 import { SelectBox } from '@/components';
 import { Path } from '@/constants/path';
-import { useCreateProject } from '@/contexts/create-project.context';
+import {
+  projectInputScheme,
+  useCreateProject,
+} from '@/contexts/create-project.context';
 import { useOAIMutation } from '@/hooks';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
@@ -76,9 +80,16 @@ const InputIssueTracker: React.FC<IProps> = () => {
   });
 
   const onComplete = () => {
-    if (input.roles.length === 0) {
-      setOpenRoleError(true);
-      return;
+    try {
+      projectInputScheme.parse(input);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        error.errors.forEach((err) => {
+          if (err.path[0] === 'members') setOpenMemberError(true);
+          else if (err.path[0] === 'projectInfo') setOpenProjectError(true);
+          else if (err.path[0] === 'roles') setOpenRoleError(true);
+        });
+      }
     }
     mutate({
       name: input.projectInfo.name,

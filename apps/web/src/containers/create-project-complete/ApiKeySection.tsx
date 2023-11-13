@@ -99,7 +99,7 @@ const ApiKeySection: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <CreateSectionTemplate title="Member 관리">
+    <CreateSectionTemplate title="Api Key 관리">
       <table className="table">
         <thead>
           <tr>

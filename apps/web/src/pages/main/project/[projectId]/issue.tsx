@@ -18,7 +18,7 @@ import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate } from '@/components';
+import { MainTemplate, NoChannel } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import { IssueTable } from '@/containers/tables';
@@ -27,13 +27,19 @@ import type { NextPageWithLayout } from '../../../_app';
 
 interface IProps {
   projectId: number;
+  noChannel?: boolean;
 }
-const IssueMangementPage: NextPageWithLayout<IProps> = ({ projectId }) => {
+const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
+  const { projectId, noChannel } = props;
   const { t } = useTranslation();
   return (
     <>
       <h1 className="font-20-bold mb-3">{t('main.issue.title')}</h1>
-      <IssueTable projectId={projectId} />
+      {noChannel ? (
+        <NoChannel projectId={projectId} />
+      ) : (
+        <IssueTable projectId={projectId} />
+      )}
     </>
   );
 };
@@ -51,21 +57,13 @@ export const getServerSideProps: GetServerSideProps<IProps> = async ({
   const session = await getIronSession(req, res, ironOption);
 
   const projectId = parseInt(query.projectId as string);
-  try {
-    const data = await (
-      await fetch(`${env.API_BASE_URL}/api/projects/${projectId}`, {
-        headers: { Authorization: 'Bearer ' + session.jwt?.accessToken },
-      })
-    ).json();
-    if (data?.statusCode === 401) {
-      return {
-        redirect: {
-          destination: `/main/${projectId}/not-permission`,
-          permanent: true,
-        },
-      };
-    }
-  } catch (error) {
+
+  const response1 = await fetch(
+    `${env.API_BASE_URL}/api/projects/${projectId}`,
+    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
+  );
+
+  if (response1.status === 401) {
     return {
       redirect: {
         destination: `/main/${projectId}/not-permission`,
@@ -73,10 +71,35 @@ export const getServerSideProps: GetServerSideProps<IProps> = async ({
       },
     };
   }
+
+  const response2 = await fetch(
+    `${env.API_BASE_URL}/api/projects/${projectId}/channels`,
+    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
+  );
+  if (response2.status === 401) {
+    return {
+      redirect: {
+        destination: `/main/${projectId}/not-permission`,
+        permanent: true,
+      },
+    };
+  }
+  const data = await response2.json();
+  if (data.meta.totalItems === 0) {
+    return {
+      props: {
+        ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+        projectId,
+        noChannel: true,
+      },
+    };
+  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
       projectId,
+      noChannel: false,
     },
   };
 };

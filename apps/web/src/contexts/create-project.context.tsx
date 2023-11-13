@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useContext } from 'react';
+import { z } from 'zod';
 
 import type { InputApiKeyType } from '@/types/api-key.type';
 import type { InputIssueTrackerType } from '@/types/issue-tracker.type';
@@ -53,7 +54,7 @@ export const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = {
   projectInfo: 'Project 설정',
   roles: 'Role 관리',
   members: 'Member 관리',
-  apiKeys: 'API Key',
+  apiKeys: 'Api Key 관리',
   issueTracker: 'Issue Tracker',
 };
 
@@ -72,6 +73,40 @@ interface ProjectInputType {
   apiKeys: InputApiKeyType[];
   issueTracker: InputIssueTrackerType;
 }
+
+export const projectInputScheme: Zod.ZodType<ProjectInputType> = z.object({
+  projectInfo: z.object({
+    name: z.string().min(1).max(20),
+    description: z.string().max(50),
+  }),
+  roles: z.array(
+    z.object({
+      id: z.number(),
+      name: z.string().min(1).max(20),
+      permissions: z.array(z.enum(PermissionList)),
+    }),
+  ),
+  members: z.array(
+    z.object({
+      roleId: z.number(),
+      user: z.object({
+        id: z.number(),
+        name: z.string(),
+        email: z.string().email(),
+        department: z.string(),
+      }),
+    }),
+  ),
+  apiKeys: z.array(
+    z.object({
+      value: z.string().length(20),
+    }),
+  ),
+  issueTracker: z.object({
+    ticketDomain: z.string(),
+    ticketKey: z.string(),
+  }),
+});
 
 export const PROJECT_STEPS = [
   'projectInfo',
