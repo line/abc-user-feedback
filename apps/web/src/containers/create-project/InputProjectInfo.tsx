@@ -23,22 +23,18 @@ import client from '@/libs/client';
 import type { InputProjectInfoType } from '@/types/project.type';
 import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
-const defaultInputError = { name: '', description: '' };
-const defaultIsSubmitted = { name: false, description: false };
+const defaultInputError = {};
 
 interface IProps {}
 const InputProjectInfo: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateProject();
 
   const [inputError, setInputError] = useState<{
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
   }>(defaultInputError);
 
-  const [isSubmitted, setIsSubmitted] = useState<{
-    name: boolean;
-    description: boolean;
-  }>(defaultIsSubmitted);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,37 +44,10 @@ const InputProjectInfo: React.FC<IProps> = () => {
     [input.projectInfo.description],
   );
 
-  useEffect(() => {
-    if (name.length > 20) {
-      setIsSubmitted((prev) => ({ ...prev, name: true }));
-      setInputError((prev) => ({
-        ...prev,
-        name: '프로젝트 이름은 20자 이하로 입력해주세요.',
-      }));
-    } else if (name.length === 0) {
-      setIsSubmitted((prev) => ({ ...prev, name: true }));
-      setInputError((prev) => ({
-        ...prev,
-        name: '프로젝트 이름은 1자 이상 입력해주세요.',
-      }));
-    } else {
-      setInputError((prev) => ({ ...prev, name: '' }));
-    }
-
-    if (description.length > 50) {
-      setIsSubmitted((prev) => ({ ...prev, description: true }));
-      setInputError((prev) => ({
-        ...prev,
-        description: '프로젝트 설명은 50자 이하로 입력해주세요.',
-      }));
-    } else {
-      setInputError((prev) => ({ ...prev, description: '' }));
-    }
-  }, [input.projectInfo]);
-
   const resetError = useCallback(() => {
     setInputError(defaultInputError);
-    setIsSubmitted(defaultIsSubmitted);
+    setIsSubmitted(false);
+    setIsLoading(false);
   }, [defaultInputError]);
 
   const onChangeProjectInfo = useCallback(
@@ -91,16 +60,38 @@ const InputProjectInfo: React.FC<IProps> = () => {
     [input?.projectInfo],
   );
 
-  const validate = async () => {
-    setIsLoading(true);
-
+  useEffect(() => {
     resetError();
+  }, [input.projectInfo]);
 
+  const validate = async () => {
+    setIsSubmitted(true);
+    if (name.length > 20) {
+      setInputError((prev) => ({
+        ...prev,
+        name: '프로젝트 이름은 20자 이하로 입력해주세요.',
+      }));
+      return false;
+    } else if (name.length === 0) {
+      setInputError((prev) => ({
+        ...prev,
+        name: '필수 입력 대상입니다.',
+      }));
+      return false;
+    }
+    if (description.length > 50) {
+      setInputError((prev) => ({
+        ...prev,
+        description: '프로젝트 설명은 50자 이하로 입력해주세요.',
+      }));
+      return false;
+    }
+
+    setIsLoading(true);
     const { data: isDuplicated } = await client.get({
       path: '/api/projects/name-check',
       query: { name },
     });
-    setIsSubmitted({ name: true, description: true });
     if (isDuplicated) {
       setInputError((prev) => ({
         ...prev,
@@ -125,7 +116,7 @@ const InputProjectInfo: React.FC<IProps> = () => {
         value={name}
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
-        isSubmitted={isSubmitted.name}
+        isSubmitted={isSubmitted}
         isValid={!inputError.name}
         hint={inputError.name}
       />
@@ -134,7 +125,7 @@ const InputProjectInfo: React.FC<IProps> = () => {
         placeholder="프로젝트 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
-        isSubmitted={isSubmitted.description}
+        isSubmitted={isSubmitted}
         isValid={!inputError.description}
         hint={inputError.description}
       />

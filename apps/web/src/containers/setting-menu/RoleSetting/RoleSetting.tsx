@@ -89,7 +89,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
       title={t('main.setting.subtitle.role-mgmt')}
       action={
         <CreateRolePopover
-          onSubmit={(name) => createRole({ name, permissions: [] })}
+          onCreate={(name) => createRole({ name, permissions: [] })}
           roles={data?.roles ?? []}
           disabled={!perms.includes('project_role_create')}
         />

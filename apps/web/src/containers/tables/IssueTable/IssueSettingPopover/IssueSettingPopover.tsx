@@ -118,7 +118,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
           <Icon name="DocumentStroke" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="z-50">
+      <PopoverContent>
         <div className="m-5 flex w-[392px] justify-between">
           <h1 className="font-16-bold">{t('main.issue.setting')}</h1>
           <button

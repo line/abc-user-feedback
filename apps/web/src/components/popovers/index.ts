@@ -14,3 +14,5 @@
  * under the License.
  */
 export { default as CreateRolePopover } from './CreateRolePopover';
+export { default as UpdateRolePopover } from './UpdateRolePopover';
+export { default as DeleteRolePopover } from './DeleteRolePopover';

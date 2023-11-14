@@ -13,13 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
+import { Input, Popover, PopoverModalContent } from '@ufb/ui';
 
 import type { RoleType } from '@/types/role.type';
 
@@ -32,59 +32,60 @@ const scheme: Zod.ZodType<IForm> = z.object({
 });
 
 interface IProps {
+  open: boolean;
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onClickUpdate: (newRole: RoleType) => void;
+  role: RoleType;
   roles: RoleType[];
-  disabled?: boolean;
-  onCreate: (name: string) => Promise<void> | void;
 }
 
-const CreateRolePopover: React.FC<IProps> = ({ disabled, onCreate, roles }) => {
-  const [open, setOpen] = useState(false);
+const UpdateRolePopover: React.FC<IProps> = ({
+  open,
+  onOpenChange,
+  role,
+  roles,
+  onClickUpdate,
+}) => {
   const { t } = useTranslation();
 
   const { register, handleSubmit, formState, setError, reset } = useForm<IForm>(
-    { resolver: zodResolver(scheme) },
+    { resolver: zodResolver(scheme), defaultValues: { roleName: role.name } },
   );
 
   useEffect(() => {
-    reset();
+    reset({ roleName: role.name });
   }, [open]);
 
-  const onSubmit = async (data: IForm) => {
-    if (roles.some((v) => v.name === data.roleName)) {
+  const onSubmit = (data: IForm) => {
+    if (roles.some((v) => v.id !== role.id && v.name === data.roleName)) {
       setError('roleName', { message: 'Role name already exists' });
       return;
     }
-    await onCreate(data.roleName);
-    setOpen(false);
+    onClickUpdate({ ...role, name: data.roleName });
+    onOpenChange(false);
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen} modal>
-      <PopoverTrigger
-        onClick={() => setOpen(true)}
-        disabled={disabled}
-        className="btn-primary btn min-w-[120px]"
-      >
-        {t('main.setting.dialog.create-role.title')}
-      </PopoverTrigger>
+    <Popover open={open} onOpenChange={onOpenChange} modal>
       <PopoverModalContent
-        title={t('main.setting.dialog.create-role.title')}
         cancelButton={{ children: t('button.cancel') }}
-        icon={{
-          name: 'ShieldPrivacyFill',
-          className: 'text-blue-primary',
-          size: 56,
-        }}
-        description={t('main.setting.dialog.create-role.description')}
         submitButton={{
           children: t('button.confirm'),
           form: 'form',
           type: 'submit',
         }}
+        title="Role 이름 수정"
+        description="Role의 명칭을 수정해주세요."
+        icon={{
+          name: 'ShieldPrivacyFill',
+          size: 56,
+          className: 'text-blue-primary',
+        }}
       >
         <form onSubmit={handleSubmit(onSubmit)} id="form">
           <Input
             label="Role Name"
+            placeholder="입력"
             {...register('roleName')}
             isSubmitted={formState.isSubmitted}
             isSubmitting={formState.isSubmitting}
@@ -96,5 +97,4 @@ const CreateRolePopover: React.FC<IProps> = ({ disabled, onCreate, roles }) => {
     </Popover>
   );
 };
-
-export default CreateRolePopover;
+export default UpdateRolePopover;

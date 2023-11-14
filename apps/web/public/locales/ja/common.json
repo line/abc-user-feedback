@@ -187,7 +187,7 @@
         },
         "delete-role": {
           "title": "Role 削除",
-          "description": "Roleを削除しますか？"
+          "description": "Roleを削除しますか？\n該当Roleを持つ会員も一緒にいなくなります。"
         },
         "edit-member": {
           "title": "Member 編集",

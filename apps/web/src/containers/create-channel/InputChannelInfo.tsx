@@ -17,22 +17,20 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { TextInput } from '@ufb/ui';
+import { Input } from '@ufb/ui';
 
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import client from '@/libs/client';
 import type { InputProjectInfoType } from '@/types/project.type';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
-const defaultInputError = { name: '', description: '' };
-const defaultIsSubmitted = { name: false, description: false };
+const defaultInputError = {};
 
 interface IProps {}
 
 const InputChannelInfo: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannel();
 
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const projectId = useMemo(
     () => Number(router.query.projectId),
@@ -40,46 +38,28 @@ const InputChannelInfo: React.FC<IProps> = () => {
   );
 
   const [inputError, setInputError] = useState<{
-    name: string;
-    description: string;
+    name?: string;
+    description?: string;
   }>(defaultInputError);
 
-  const [isSubmitted, setIsSubmitted] = useState<{
-    name: boolean;
-    description: boolean;
-  }>(defaultIsSubmitted);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const name = useMemo(() => input.channelInfo.name, [input.channelInfo.name]);
   const description = useMemo(
     () => input.channelInfo.description,
     [input.channelInfo.description],
   );
-  useEffect(() => {
-    if (name.length > 20) {
-      setIsSubmitted((prev) => ({ ...prev, name: true }));
-      setInputError((prev) => ({
-        ...prev,
-        name: '프로젝트 이름은 20자 이하로 입력해주세요.',
-      }));
-    } else if (name.length === 0) {
-      setIsSubmitted((prev) => ({ ...prev, name: true }));
-      setInputError((prev) => ({
-        ...prev,
-        name: '프로젝트 이름은 1자 이상 입력해주세요.',
-      }));
-    } else {
-      setInputError((prev) => ({ ...prev, name: '' }));
-    }
 
-    if (description.length > 50) {
-      setIsSubmitted((prev) => ({ ...prev, description: true }));
-      setInputError((prev) => ({
-        ...prev,
-        description: '프로젝트 설명은 50자 이하로 입력해주세요.',
-      }));
-    } else {
-      setInputError((prev) => ({ ...prev, description: '' }));
-    }
+  const resetError = useCallback(() => {
+    setInputError(defaultInputError);
+    setIsSubmitted(false);
+    setIsLoading(false);
+  }, [defaultInputError]);
+
+  useEffect(() => {
+    resetError();
   }, [input.channelInfo]);
 
   const onChangeProjectInfo = useCallback(
@@ -91,21 +71,37 @@ const InputChannelInfo: React.FC<IProps> = () => {
     },
     [input.channelInfo],
   );
-  const resetError = useCallback(() => {
-    setInputError(defaultInputError);
-    setIsSubmitted(defaultIsSubmitted);
-  }, [defaultInputError]);
+
   const validate = async () => {
+    setIsSubmitted(true);
+
+    if (name.length > 20) {
+      setInputError((prev) => ({
+        ...prev,
+        name: '프로젝트 이름은 20자 이하로 입력해주세요.',
+      }));
+      return false;
+    } else if (name.length === 0) {
+      setInputError((prev) => ({
+        ...prev,
+        name: '프로젝트 이름은 1자 이상 입력해주세요.',
+      }));
+      return false;
+    }
+    if (description.length > 50) {
+      setInputError((prev) => ({
+        ...prev,
+        description: '프로젝트 설명은 50자 이하로 입력해주세요.',
+      }));
+      return false;
+    }
+
     setIsLoading(true);
-
-    resetError();
-
     const { data: isDuplicated } = await client.get({
       path: '/api/projects/{projectId}/channels/name-check',
       pathParams: { projectId },
       query: { name },
     });
-    setIsSubmitted({ name: true, description: true });
     if (isDuplicated) {
       setInputError((prev) => ({
         ...prev,
@@ -120,24 +116,26 @@ const InputChannelInfo: React.FC<IProps> = () => {
   return (
     <CreateChannelInputTemplate
       validate={validate}
-      disableNextBtn={name.length === 0 || isLoading}
+      disableNextBtn={
+        !!inputError.name || !!inputError.description || isLoading
+      }
     >
-      <TextInput
+      <Input
         label="Channel Name"
         placeholder="채널 이름을 입력해주세요."
         value={name}
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
-        isSubmitted={isSubmitted.name}
+        isSubmitted={isSubmitted}
         isValid={!inputError.name}
         hint={inputError.name}
       />
-      <TextInput
+      <Input
         label="Channel Description"
         placeholder="채널 설명을 입력해주세요."
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
-        isSubmitted={isSubmitted.description}
+        isSubmitted={isSubmitted}
         isValid={!inputError.description}
         hint={inputError.description}
       />

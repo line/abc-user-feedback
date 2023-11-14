@@ -54,7 +54,7 @@ const InputRole: React.FC<IProps> = () => {
 
   return (
     <CreateProjectInputTemplate
-      actionButton={<CreateRolePopover onSubmit={onCreateRole} roles={roles} />}
+      actionButton={<CreateRolePopover onCreate={onCreateRole} roles={roles} />}
       disableNextBtn={roles.length === 0}
     >
       <RoleSettingTable

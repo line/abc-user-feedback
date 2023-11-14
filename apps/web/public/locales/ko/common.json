@@ -187,7 +187,7 @@
         },
         "delete-role": {
           "title": "Role 삭제",
-          "description": "Role을 삭제하시겠습니까?"
+          "description": "Role을 삭제하시겠어요?\n해당 Role을 가진 Member도 같이 없어집니다."
         },
         "edit-member": {
           "title": "Member 편집",

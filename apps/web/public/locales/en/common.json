@@ -189,7 +189,7 @@
         },
         "delete-role": {
           "title": "Delete Role",
-          "description": "Are you sure you want to delete the Role?"
+          "description": "Are you sure you want to delete Role?\nMembers with that Role will also disappear."
         },
         "edit-member": {
           "title": "Edit Member",
