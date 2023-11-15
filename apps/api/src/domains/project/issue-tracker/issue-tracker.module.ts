@@ -24,5 +24,6 @@ import { IssueTrackerService } from './issue-tracker.service';
   imports: [TypeOrmModule.forFeature([IssueTrackerEntity])],
   providers: [IssueTrackerService],
   controllers: [IssueTrackerController],
+  exports: [IssueTrackerService],
 })
 export class IssueTrackerModule {}

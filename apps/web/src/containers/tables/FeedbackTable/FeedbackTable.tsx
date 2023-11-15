@@ -87,14 +87,19 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       produce(query, (draft) => {
         if (sub) {
           if (issueId) {
-            draft['issueIds'] = [...(draft['issueIds'] ?? []), issueId];
+            draft['issueIds'] = [issueId];
           }
           Object.keys(draft).forEach((key) => {
             if (key === 'issueIds') return;
             delete draft[key];
           });
         } else {
-          if (draft['ids']) draft['ids'] = [draft['ids']];
+          if (draft['ids']) {
+            draft['ids'] = [draft['ids']].map((v) => +v);
+          }
+          if (draft['issueIds']) {
+            draft['issueIds'] = [draft['issueIds']].map((v) => +v);
+          }
           Object.entries(draft).forEach(([key, value]) => {
             if (typeof value === 'string' && value.split('~').length === 2) {
               const [gte, lt] = value.split('~');

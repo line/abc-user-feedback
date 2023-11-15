@@ -13,7 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { CreateRoleDto } from '../../role/dtos';
+
 export class CreateProjectDto {
   name: string;
   description: string;
+  roles?: Omit<CreateRoleDto, 'projectId'>[];
+  members?: {
+    roleName: string;
+    userId: number;
+  }[];
+  apiKeys?: {
+    value: string;
+  }[];
+  issueTracker?: {
+    data: Record<string, any>;
+  };
 }

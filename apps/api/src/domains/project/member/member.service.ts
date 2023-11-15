@@ -36,6 +36,19 @@ export class MemberService {
     private readonly roleService: RoleService,
   ) {}
 
+  private async validateMember(userId: number, roleId: number) {
+    const role = await this.roleService.findById(roleId);
+
+    const member = await this.repository.findOne({
+      where: {
+        user: { id: userId },
+        role: { project: { id: role.project.id } },
+      },
+      select: { id: true },
+    });
+    if (member) throw new MemberAlreadyExistsException();
+  }
+
   async findByProjectId({ projectId, sort }: FindByProjectIdDto) {
     const [members, total] = await this.repository.findAndCount({
       where: { role: { project: { id: projectId } } },
@@ -47,20 +60,24 @@ export class MemberService {
 
   @Transactional()
   async create({ roleId, userId }: CreateMemberDto) {
-    const role = await this.roleService.findById(roleId);
-
-    const member = await this.repository.findOne({
-      where: {
-        user: { id: userId },
-        role: { project: { id: role.project.id } },
-      },
-      select: { id: true },
-    });
-    if (member) throw new MemberAlreadyExistsException();
+    await this.validateMember(userId, roleId);
 
     const newMember = MemberEntity.from({ roleId, userId });
 
     return await this.repository.save(newMember);
+  }
+
+  @Transactional()
+  async createMany(members: CreateMemberDto[]) {
+    for (const { roleId, userId } of members) {
+      await this.validateMember(userId, roleId);
+    }
+
+    const newMembers = members.map(({ roleId, userId }) =>
+      MemberEntity.from({ roleId, userId }),
+    );
+
+    return await this.repository.save(newMembers);
   }
 
   @Transactional()
