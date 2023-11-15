@@ -114,14 +114,12 @@
         "tenant-info": "Tenant 정보",
         "sign-up-mgmt": "Login & Signup 관리",
         "user-mgmt": "User 관리",
-
         "project-info": "Project 정보",
         "member-mgmt": "Member 관리",
         "role-mgmt": "Role 관리",
         "api-key-mgmt": "API Key 관리",
         "ticket-mgmt": "Issue Tracker 관리",
         "delete-project": "Project 삭제",
-
         "channel-info": "Channel 정보",
         "field-mgmt": "Field 관리",
         "delete-channel": "Channel 삭제"
@@ -257,7 +255,9 @@
       "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
     "equal-search": "완전 일치",
-    "like-search": "부분 일치"
+    "like-search": "부분 일치",
+    "more": "더보기",
+    "shrink": "줄이기"
   },
   "toast": {
     "sign-in": "로그인 성공",
