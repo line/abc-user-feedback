@@ -256,8 +256,8 @@
     },
     "equal-search": "Equal",
     "like-search": "Like",
-    "more": "더보기",
-    "shrink": "줄이기"
+    "more": "more",
+    "shrink": "shrink"
   },
   "toast": {
     "sign-in": "Login Successful",
