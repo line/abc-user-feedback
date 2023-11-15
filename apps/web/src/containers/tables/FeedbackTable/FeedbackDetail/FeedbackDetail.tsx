@@ -33,6 +33,7 @@ import { getStatusColor } from '@/constants/issues';
 import { useFeedbackSearch, useOAIQuery } from '@/hooks';
 import type { FieldType } from '@/types/field.type';
 import type { IssueType } from '@/types/issue.type';
+import FeedbackDetailCell from './FeedbackDetailCell';
 
 interface IProps {
   id: number;
@@ -47,6 +48,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
   const { data } = useFeedbackSearch(projectId, channelId, {
     query: { ids: [id] },
   });
+
   const feedbackData = data?.items?.[0] ?? {};
 
   const { data: channelData } = useOAIQuery({
@@ -96,9 +98,9 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                       <th className="font-14-regular text-secondary min-w-[80px] max-w-[80px] break-words text-left align-text-top">
                         {field.name}
                       </th>
-                      <td className="font-14-regular text-primary break-words pl-2 align-top">
+                      <FeedbackDetailCell>
                         {field.key === 'issues' ? (
-                          <div className="flex gap-2">
+                          <div className="flex flex-wrap gap-2">
                             {(
                               feedbackData[field.key] ?? ([] as IssueType[])
                             ).map((v) => (
@@ -122,7 +124,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                         ) : (
                           feedbackData[field.key]
                         )}
-                      </td>
+                      </FeedbackDetailCell>
                     </tr>
                   ))}
                 </tbody>

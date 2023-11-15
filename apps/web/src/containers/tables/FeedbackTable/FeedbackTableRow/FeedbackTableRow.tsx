@@ -89,67 +89,69 @@ const FeedbackTableRow: React.FC<IProps> = ({
   const open = openId === row.original.id;
 
   return (
-    <TableRow
-      isSelected={row.getIsExpanded() || open}
-      onClick={!editableState ? () => onOpenChange(true) : undefined}
-      hoverElement={
-        <>
-          <TableCheckbox
-            checked={row.getIsSelected()}
-            disabled={!row.getCanSelect()}
-            indeterminate={row.getIsSomeSelected()}
-            onChange={row.getToggleSelectedHandler()}
-          />
-          {editableState !== row.original.id ? (
-            <>
-              <button
-                className="icon-btn icon-btn-sm icon-btn-tertiary"
-                onClick={editRow}
-                disabled={!perms.includes('feedback_update')}
-              >
-                <Icon name="EditStroke" size={16} />
-              </button>
-              <ShareButton
-                pathname={`/main/${projectId}/feedback?ids=${
-                  row.original.id
-                }&channelId=${channelId}&createdAt=${dayjs(
-                  row.original.createdAt,
-                ).format(DATE_FORMAT)}~${dayjs(row.original.createdAt).format(
-                  DATE_FORMAT,
-                )}`}
-              />
-            </>
-          ) : (
-            <>
-              <button
-                className="icon-btn icon-btn-sm icon-btn-tertiary"
-                onClick={() => {
-                  toggleRow(false);
-                  disableEditState();
-                }}
-              >
-                <Icon name="Close" size={16} className="text-red-primary" />
-              </button>
-              <button
-                className="icon-btn icon-btn-sm icon-btn-tertiary"
-                onClick={() => {
-                  onSubmit();
-                  toggleRow(false);
-                }}
-                disabled={isPending}
-              >
-                <Icon name="Check" size={16} className="text-blue-primary" />
-              </button>
-            </>
-          )}
-        </>
-      }
-    >
-      {row.getVisibleCells().map((cell) => (
-        <td key={cell.id} style={{ width: cell.column.getSize() }}>
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </td>
-      ))}
+    <>
+      <TableRow
+        isSelected={row.getIsExpanded() || open}
+        onClick={!editableState ? () => onOpenChange(true) : undefined}
+        hoverElement={
+          <>
+            <TableCheckbox
+              checked={row.getIsSelected()}
+              disabled={!row.getCanSelect()}
+              indeterminate={row.getIsSomeSelected()}
+              onChange={row.getToggleSelectedHandler()}
+            />
+            {editableState !== row.original.id ? (
+              <>
+                <button
+                  className="icon-btn icon-btn-sm icon-btn-tertiary"
+                  onClick={editRow}
+                  disabled={!perms.includes('feedback_update')}
+                >
+                  <Icon name="EditStroke" size={16} />
+                </button>
+                <ShareButton
+                  pathname={`/main/${projectId}/feedback?ids=${
+                    row.original.id
+                  }&channelId=${channelId}&createdAt=${dayjs(
+                    row.original.createdAt,
+                  ).format(DATE_FORMAT)}~${dayjs(row.original.createdAt).format(
+                    DATE_FORMAT,
+                  )}`}
+                />
+              </>
+            ) : (
+              <>
+                <button
+                  className="icon-btn icon-btn-sm icon-btn-tertiary"
+                  onClick={() => {
+                    toggleRow(false);
+                    disableEditState();
+                  }}
+                >
+                  <Icon name="Close" size={16} className="text-red-primary" />
+                </button>
+                <button
+                  className="icon-btn icon-btn-sm icon-btn-tertiary"
+                  onClick={() => {
+                    onSubmit();
+                    toggleRow(false);
+                  }}
+                  disabled={isPending}
+                >
+                  <Icon name="Check" size={16} className="text-blue-primary" />
+                </button>
+              </>
+            )}
+          </>
+        }
+      >
+        {row.getVisibleCells().map((cell) => (
+          <td key={cell.id} style={{ width: cell.column.getSize() }}>
+            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          </td>
+        ))}
+      </TableRow>
       {open && (
         <FeedbackDetail
           id={row.original.id}
@@ -160,7 +162,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
           onOpenChange={onOpenChange}
         />
       )}
-    </TableRow>
+    </>
   );
 };
 
