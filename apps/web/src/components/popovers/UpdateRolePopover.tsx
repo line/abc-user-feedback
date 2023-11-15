@@ -27,10 +27,6 @@ interface IForm {
   roleName: string;
 }
 
-const scheme: Zod.ZodType<IForm> = z.object({
-  roleName: z.string().min(1, '필수 입력대상 입니다.').max(20),
-});
-
 interface IProps {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
@@ -49,7 +45,12 @@ const UpdateRolePopover: React.FC<IProps> = ({
   const { t } = useTranslation();
 
   const { register, handleSubmit, formState, setError, reset } = useForm<IForm>(
-    { resolver: zodResolver(scheme), defaultValues: { roleName: role.name } },
+    {
+      resolver: zodResolver(
+        z.object({ roleName: z.string().min(1, t('hint.required')).max(20) }),
+      ),
+      defaultValues: { roleName: role.name },
+    },
   );
 
   useEffect(() => {
@@ -58,7 +59,9 @@ const UpdateRolePopover: React.FC<IProps> = ({
 
   const onSubmit = (data: IForm) => {
     if (roles.some((v) => v.id !== role.id && v.name === data.roleName)) {
-      setError('roleName', { message: 'Role name already exists' });
+      setError('roleName', {
+        message: t('hint.name-already-exists', { name: 'Role Name' }),
+      });
       return;
     }
     onClickUpdate({ ...role, name: data.roleName });
@@ -74,8 +77,8 @@ const UpdateRolePopover: React.FC<IProps> = ({
           form: 'form',
           type: 'submit',
         }}
-        title="Role 이름 수정"
-        description="Role의 명칭을 수정해주세요."
+        title={t('main.setting.dialog.update-role-name.title')}
+        description={t('main.setting.dialog.update-role-name.description')}
         icon={{
           name: 'ShieldPrivacyFill',
           size: 56,
@@ -85,7 +88,7 @@ const UpdateRolePopover: React.FC<IProps> = ({
         <form onSubmit={handleSubmit(onSubmit)} id="form">
           <Input
             label="Role Name"
-            placeholder="입력"
+            placeholder={t('placeholder', { name: 'Role Name' })}
             {...register('roleName')}
             isSubmitted={formState.isSubmitted}
             isSubmitting={formState.isSubmitting}

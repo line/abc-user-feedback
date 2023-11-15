@@ -41,7 +41,20 @@
     "index": {
       "total-project": "Total Project",
       "total-channel": "Total Channel",
-      "total-feedback": "Total Feedback"
+      "total-feedback": "Total Feedback",
+      "create-project": "Create Project",
+      "no-project": "There are no registered projects.",
+      "in-progress": "There is a project being created.",
+      "dialog": {
+        "continue": {
+          "title": "Do you want to continue?",
+          "description": "There is a project currently being created. Do you want to continue? (If you do it from scratch, the existing information disappears.)",
+          "button": {
+            "continue": "Continue",
+            "restart": "Restart"
+          }
+        }
+      }
     },
     "profile": {
       "title": "Profile",
@@ -120,7 +133,7 @@
         "member-mgmt": "Member Management",
         "role-mgmt": "Role Management",
         "api-key-mgmt": "API Key Management",
-        "ticket-mgmt": "Issue Tracker Management",
+        "issue-tracker-mgmt": "Issue Tracker Management",
         "delete-project": "Delete Project",
         "channel-info": "Channel Information",
         "field-mgmt": "Field Management",
@@ -143,6 +156,7 @@
       },
       "role-mgmt": {
         "edit-role": "Edit Role",
+        "update-role-name": "Update Role Name",
         "delete-role": "Delete Role"
       },
       "api-key-status": {
@@ -153,9 +167,10 @@
         "active": "Active",
         "inactive": "Inactive"
       },
+      "register-member": "Please register a member.",
       "same-key": "Input the same value as the key",
       "feedback-request-code": "Feedback Request Code",
-      "ticket-mgmt.description": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
+      "issue-tracker-mgmt.description": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
       "option-info": "Option Information",
       "field-mgmt": {
         "description": "To save, click Preview first.",
@@ -164,9 +179,7 @@
         "preview-description": "You can check it after selecting <preview>Preview</preview>."
       },
       "dialog": {
-        "edit-user": {
-          "title": "Edit User"
-        },
+        "edit-user": { "title": "Edit User" },
         "delete-project": {
           "title": "Delete Project",
           "description": "Deleting a project will delete all issue/feedback data.\nPlease enter the text below to proceed with the deletion."
@@ -177,7 +190,11 @@
         },
         "create-role": {
           "title": "Create Role",
-          "description": "Do you want to create a Role?"
+          "description": "Please enter a new Role Name."
+        },
+        "update-role-name": {
+          "title": "Update Role Name",
+          "description": "Please enter Role Name."
         },
         "edit-api-key": {
           "title": "Edit API KEY",
@@ -195,23 +212,42 @@
           "title": "Edit Member",
           "description": "Role varies from the menu accessible to functions available.\nPlease check the member and select the correct Role."
         },
-        "register-member": {
-          "title": "Register Member"
-        },
+        "register-member": { "title": "Register Member" },
         "delete-member": {
           "title": "Delete Member",
           "description": "Are you sure you want to delete the Member?"
         },
-        "add-field": {
-          "title": "Add Field"
-        },
-        "edit-field": {
-          "title": "Edit Field"
-        },
-        "invite-user": {
-          "title": "Invite User"
-        }
+        "add-field": { "title": "Add Field" },
+        "edit-field": { "title": "Edit Field" },
+        "invite-user": { "title": "Invite User" }
       }
+    },
+    "create-project": {
+      "title": "Create Project",
+      "complete-title": "Project creation is complete.",
+      "help": {
+        "projectInfo": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
+        "roles": "You can set permissions to access and use the Project.",
+        "members": "You can register or manage members to participate in the Project.",
+        "apiKeys": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
+        "issueTracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information."
+      },
+      "continue-channel-creation": "UserFeedback must be created up to the Channel before UserFeedback is available.\nWould you like to continue creating a channel?"
+    },
+    "create-channel": {
+      "title": "Create Channel",
+      "complete-title": "Channel creation is complete.",
+      "help": {
+        "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
+        "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
+        "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
+      },
+      "stepper-text": {
+        "channel-info": "Channel Infomation",
+        "fields": "Field Management",
+        "field-preview": "Field Preview"
+      },
+      "finish-channel-creation": "Everything is ready.\nStart Using UserFeedback!"
     }
   },
   "header": {
@@ -230,7 +266,13 @@
     "register": "Register",
     "select-cancel": "Cancel",
     "reset": "Reset",
-    "confirm": "OK"
+    "confirm": "OK",
+    "get-out": "Get out",
+    "previous": "Previous",
+    "next": "Next",
+    "complete": "Complete",
+    "next-time": "Next time",
+    "start": "Start"
   },
   "input": {
     "label": {
@@ -267,7 +309,8 @@
       "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days"
     },
     "equal-search": "Equal",
-    "like-search": "Like"
+    "like-search": "Like",
+    "helper": "Help"
   },
   "toast": {
     "sign-in": "Login Successful",
@@ -279,5 +322,11 @@
     "inactive": "Deactivation",
     "add": "Addition Complete",
     "copy": "Copy Complete"
+  },
+  "placeholder": "Please enter {{name}}.",
+  "hint": {
+    "required": "Required",
+    "max-length": "Please enter {{length}} characters or less.",
+    "name-already-exists": "{{name}} already exists."
   }
 }

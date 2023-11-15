@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'react-i18next';
+
 import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
 import type { FieldType } from '@/types/field.type';
 import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
@@ -22,8 +24,11 @@ interface IProps {
 }
 
 const FieldPreviewSection: React.FC<IProps> = ({ fields }) => {
+  const { t } = useTranslation();
   return (
-    <CreateSectionTemplate title="Field 미리보기">
+    <CreateSectionTemplate
+      title={t('main.create-channel.stepper-text.field-preview')}
+    >
       <PreviewTable fields={fields} />
     </CreateSectionTemplate>
   );

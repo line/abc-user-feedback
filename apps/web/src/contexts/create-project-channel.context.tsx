@@ -33,6 +33,7 @@ interface CreateContextType<StepType extends string, InputType extends object> {
   onNext: () => void;
   gotoStep: (step: StepType) => void;
   clearLocalStorage: () => void;
+  stepperText: Record<StepType, string>;
 }
 
 export const CreateContext = <
@@ -42,11 +43,12 @@ export const CreateContext = <
   defaultInput: CreateContextType<StepType, InputType>,
 ) => createContext<CreateContextType<StepType, InputType>>(defaultInput);
 
-interface IProps<StepType, InputType> {
+interface IProps<StepType extends string, InputType> {
   steps: readonly StepType[];
   defaultInput: InputType;
   type: 'project' | 'channel';
   projectId?: number;
+  stepperText: Record<StepType, string>;
 }
 
 export const CreateProvider = <
@@ -57,6 +59,7 @@ export const CreateProvider = <
   steps,
   defaultInput,
   projectId,
+  stepperText,
 }: IProps<StepType, InputType>) => {
   const FIRST_STEP = steps[0] as StepType;
 
@@ -150,6 +153,7 @@ export const CreateProvider = <
     completeStepIndex,
     currentStep,
     currentStepIndex,
+    stepperText,
     onChangeInput,
     onPrev,
     onNext,

@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { InputApiKeyType } from '@/types/api-key.type';
@@ -49,14 +50,6 @@ const DEFAULT_ROLES: InputRoleType[] = [
     ),
   },
 ];
-
-export const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = {
-  projectInfo: 'Project 설정',
-  roles: 'Role 관리',
-  members: 'Member 관리',
-  apiKeys: 'Api Key 관리',
-  issueTracker: 'Issue Tracker',
-};
 
 const PROJECT_DEFAULT_INPUT: ProjectInputType = {
   apiKeys: [],
@@ -128,17 +121,35 @@ const CreateProjectContext = CreateContext<ProjectStepType, ProjectInputType>({
   onNext: () => {},
   gotoStep: () => {},
   clearLocalStorage: () => {},
+  stepperText: {
+    projectInfo: 'Project 설정',
+    roles: 'Role 관리',
+    members: 'Member 관리',
+    apiKeys: 'Api Key 관리',
+    issueTracker: 'Issue Tracker',
+  },
 });
 
 export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const { t } = useTranslation();
+  const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = useMemo(() => {
+    return {
+      projectInfo: t('main.setting.subtitle.project-info'),
+      roles: t('main.setting.subtitle.role-mgmt'),
+      members: t('main.setting.subtitle.member-mgmt'),
+      apiKeys: t('main.setting.subtitle.api-key-mgmt'),
+      issueTracker: t('main.setting.subtitle.issue-tracker-mgmt'),
+    };
+  }, []);
   return (
     <CreateProjectContext.Provider
       value={CreateProvider({
         type: 'project',
         defaultInput: PROJECT_DEFAULT_INPUT,
         steps: PROJECT_STEPS,
+        stepperText: PROJECT_STEPPER_TEXT,
       })}
     >
       {children}

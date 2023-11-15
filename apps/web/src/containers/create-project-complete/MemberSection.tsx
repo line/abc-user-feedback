@@ -22,6 +22,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
@@ -64,6 +65,7 @@ interface IProps {
 }
 
 const MemberSection: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
   const [rows, setRows] = useState<MemberType[]>([]);
   const { data } = useOAIQuery({
     path: '/api/projects/{projectId}/members',
@@ -80,7 +82,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <CreateSectionTemplate title="Member 관리">
+    <CreateSectionTemplate title={t('main.setting.subtitle.member-mgmt')}>
       <table className="table">
         <thead>
           <tr>
@@ -107,7 +109,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
                     className="text-tertiary"
                     size={56}
                   />
-                  <p>Member를 등록해주세요.</p>
+                  <p>{t('main.setting.register-member')}</p>
                 </div>
               </td>
             </tr>

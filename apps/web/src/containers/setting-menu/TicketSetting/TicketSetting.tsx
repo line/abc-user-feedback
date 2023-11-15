@@ -91,7 +91,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.ticket-mgmt')}
+      title={t('main.setting.subtitle.issue-tracker-mgmt')}
       actionBtn={{
         children: t('button.save'),
         disabled:
@@ -105,7 +105,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          {t('main.setting.ticket-mgmt.description')}
+          {t('main.setting.issue-tracker-mgmt.description')}
         </p>
         <div className="relative h-full w-[160px]">
           <Image

@@ -18,6 +18,7 @@ import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
@@ -33,6 +34,7 @@ import {
 import { useOAIQuery } from '@/hooks';
 
 const CreateCompletePage: NextPage = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { projectId } = useMemo(
     () => ({
@@ -55,7 +57,9 @@ const CreateCompletePage: NextPage = () => {
           size={48}
           className="bg-blue-primary text-above-primary rounded-full"
         />
-        <p className="font-20-bold">프로젝트 생성이 완료되었습니다.</p>
+        <p className="font-20-bold">
+          {t('main.create-project.complete-title')}
+        </p>
       </div>
       {data && (
         <>
@@ -73,10 +77,8 @@ const CreateCompletePage: NextPage = () => {
             size={24}
             className="text-green-primary"
           />
-          <p className="font-12-regular">
-            Channel까지 생성해야 UserFeedback을 사용할 수 있습니다.
-            <br />
-            Channel 생성을 이어서 하시겠어요?
+          <p className="font-12-regular whitespace-pre-line">
+            {t('main.create-project.continue-channel-creation')}
           </p>
         </div>
         <div className="flex gap-2">
@@ -86,7 +88,7 @@ const CreateCompletePage: NextPage = () => {
               router.push({ pathname: Path.MAIN });
             }}
           >
-            다음에
+            {t('button.next-time')}
           </button>
           <button
             className="btn btn-lg btn-blue w-[160px]"
@@ -97,7 +99,7 @@ const CreateCompletePage: NextPage = () => {
               });
             }}
           >
-            Channel 생성
+            {t('main.setting.button.create-channel')}
           </button>
         </div>
       </div>

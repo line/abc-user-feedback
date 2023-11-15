@@ -17,6 +17,7 @@ import React, { useMemo } from 'react';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
@@ -29,6 +30,7 @@ import {
 import { useOAIQuery } from '@/hooks';
 
 const CreateCompletePage: NextPage = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   const { channelId, projectId } = useMemo(
     () => ({
@@ -58,7 +60,9 @@ const CreateCompletePage: NextPage = () => {
           size={48}
           className="bg-blue-primary text-above-primary rounded-full"
         />
-        <p className="font-20-bold">Channel 생성완료</p>
+        <p className="font-20-bold">
+          {t('main.create-channel.complete-title')}
+        </p>
       </div>
       {data && (
         <>
@@ -75,17 +79,15 @@ const CreateCompletePage: NextPage = () => {
             width={24}
             height={24}
           />
-          <p className="font-12-regular">
-            모든 준비가 완료됐습니다.
-            <br />
-            UserFeedback 이용을 시작해보세요!
+          <p className="font-12-regular whitespace-pre-line">
+            {t('main.create-channel.finish-channel-creation')}
           </p>
         </div>
         <button
           className="btn btn-lg btn-blue w-[160px]"
           onClick={gotoFeedback}
         >
-          시작하기
+          {t('button.start')}
         </button>
       </div>
     </div>
@@ -93,6 +95,7 @@ const CreateCompletePage: NextPage = () => {
 };
 
 const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
+  const { t } = useTranslation();
   return (
     <div className="flex h-12 items-center justify-between">
       <div className="flex items-center gap-1">
@@ -109,7 +112,7 @@ const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
         onClick={goOut}
       >
         <Icon name="Out" size={16} />
-        <span className="font-12-bold uppercase">나가기</span>
+        <span className="font-12-bold uppercase">{t('button.get-out')}</span>
       </button>
     </div>
   );

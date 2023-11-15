@@ -15,6 +15,7 @@
  */
 import { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import type { InputChannelInfoType } from '@/types/channel.type';
 import type { InputFieldType } from '@/types/field.type';
@@ -59,12 +60,6 @@ const DEFAULT_FIELDS: InputFieldType[] = [
   },
 ];
 
-export const CHANNEL_STEPPER_TEXT: Record<ChannelStepType, string> = {
-  channelInfo: 'Channel 정보',
-  fields: 'Field 관리',
-  fieldPreview: 'Field 미리보기',
-};
-
 interface ChannelInputType {
   channelInfo: InputChannelInfoType;
   fields: InputFieldType[];
@@ -91,15 +86,28 @@ const CreateChannelContext = CreateContext<ChannelStepType, ChannelInputType>({
   onNext: () => {},
   gotoStep: () => {},
   clearLocalStorage: () => {},
+  stepperText: {
+    channelInfo: 'Channel 정보',
+    fields: 'Field 관리',
+    fieldPreview: 'Field 미리보기',
+  },
 });
 export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
+  const { t } = useTranslation();
   const router = useRouter();
   const projectId = useMemo(
     () => Number(router.query.projectId),
     [router.query.projectId],
   );
+  const CHANNEL_STEPPER_TEXT: Record<ChannelStepType, string> = useMemo(() => {
+    return {
+      channelInfo: t('main.create-channel.stepper-text.channel-info'),
+      fields: t('main.create-channel.stepper-text.fields'),
+      fieldPreview: t('main.create-channel.stepper-text.field-preview'),
+    };
+  }, [t]);
 
   return (
     <CreateChannelContext.Provider
@@ -108,6 +116,7 @@ export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
         defaultInput: CHANNEL_DEFAULT_INPUT,
         steps: CHANNEL_STEPS,
         projectId,
+        stepperText: CHANNEL_STEPPER_TEXT,
       })}
     >
       {children}

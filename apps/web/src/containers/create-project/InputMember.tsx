@@ -100,6 +100,7 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
 ];
 
 const InputMember: React.FC = () => {
+  const { t } = useTranslation();
   const { onChangeInput, input } = useCreateProject();
   const [open, setOpen] = useState(false);
 
@@ -181,7 +182,7 @@ const InputMember: React.FC = () => {
                     className="text-tertiary"
                     size={56}
                   />
-                  <p>Member를 등록해주세요.</p>
+                  <p>{t('main.setting.register-member')}</p>
                 </div>
               </td>
             </tr>
@@ -244,7 +245,7 @@ const CreateMemberButton: React.FC<{
           className="btn btn-primary btn-md w-[120px]"
           onClick={() => setOpen(true)}
         >
-          Member 생성
+          {t('main.setting.button.register-member')}
         </button>
       </PopoverTrigger>
       <PopoverModalContent

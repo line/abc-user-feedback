@@ -122,7 +122,9 @@ const RoleSettingHead: React.FC<IProps> = ({
                   }}
                 >
                   <Icon name="DriverRegisterFill" size={16} />
-                  <span className="font-12-regular">Role 이름 수정</span>
+                  <span className="font-12-regular">
+                    {t('main.setting.role-mgmt.update-role-name')}
+                  </span>
                 </li>
                 <li
                   className={[

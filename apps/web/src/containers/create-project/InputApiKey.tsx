@@ -117,7 +117,11 @@ const InputApiKey: React.FC = () => {
 
   return (
     <CreateProjectInputTemplate
-      actionButton={<CreateApiKeyButton onCreate={onCreate} />}
+      actionButton={
+        <button className="btn btn-primary btn-md w-[120px]" onClick={onCreate}>
+          {t('main.setting.button.create-api-key')}
+        </button>
+      }
     >
       <table className="table">
         <thead>
@@ -169,16 +173,6 @@ const InputApiKey: React.FC = () => {
         </tbody>
       </table>
     </CreateProjectInputTemplate>
-  );
-};
-
-export const CreateApiKeyButton: React.FC<{ onCreate: () => void }> = ({
-  onCreate,
-}) => {
-  return (
-    <button className="btn btn-primary btn-md w-[120px]" onClick={onCreate}>
-      Key 생성
-    </button>
   );
 };
 

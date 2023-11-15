@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { useTranslation } from 'react-i18next';
+
 import { Input } from '@ufb/ui';
 
 import { CreateSectionTemplate } from '@/components/templates';
@@ -24,8 +26,12 @@ interface IProps {
 }
 
 const ProjectInfoSection: React.FC<IProps> = ({ description, name }) => {
+  const { t } = useTranslation();
   return (
-    <CreateSectionTemplate title="Project 정보" defaultOpen>
+    <CreateSectionTemplate
+      title={t('main.setting.subtitle.project-info')}
+      defaultOpen
+    >
       <Input label="Project Name" value={name} required disabled />
       <Input label="Project Description" value={description} disabled />
     </CreateSectionTemplate>

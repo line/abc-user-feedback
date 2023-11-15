@@ -30,6 +30,7 @@ import {
   useInteractions,
   useRole,
 } from '@floating-ui/react';
+import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverModalContent } from '@ufb/ui';
 
@@ -42,6 +43,8 @@ interface IProps {
 }
 
 const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
+  const { t } = useTranslation();
+
   const arrowRef = useRef(null);
   const [state] = useLocalStorage(`project completeStepIndex`, 0);
   const router = useRouter();
@@ -81,7 +84,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
         }}
       >
         <Icon name="Plus" className="text-above-white" />
-        Project 생성
+        {t('main.index.create-project')}
       </button>
       {(!hasProject || (hasProject && state > 0)) && (
         <FloatingPortal>
@@ -98,10 +101,10 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
                 !hasProject ? 'text-blue-primary' : 'text-red-primary'
               } font-12-regular`}
             >
-              {!hasProject && '등록된 프로젝트가 없습니다.'}
+              {!hasProject && t('main.index.no-project')}
               {hasProject && state > 0 && (
                 <>
-                  생성중인 Project가 있습니다.{' '}
+                  {t('main.index.in-progress')}{' '}
                   <b>
                     ({state + 1}/{PROJECT_STEPS.length})
                   </b>
@@ -118,15 +121,15 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
       )}
       <Popover modal open={open} onOpenChange={setOpen}>
         <PopoverModalContent
-          title="이어서 생성하시겠어요?"
-          description="현재 생성중인 Project가 있습니다. 이어서 생성하시겠어요? (처음부터 하면 기존 정보는 사라집니다.)"
+          title={t('main.index.dialog.continue.title')}
+          description={t('main.index.dialog.continue.description')}
           submitButton={{
-            children: '이어서하기',
+            children: t('main.index.dialog.continue.button.continue'),
             className: 'btn-red',
             onClick: () => router.push(Path.CREATE_PROJECT),
           }}
           cancelButton={{
-            children: '처음부터',
+            children: t('main.index.dialog.continue.button.restart'),
             onClick: () => {
               localStorage.removeItem('project input');
               localStorage.removeItem('project currentStep');

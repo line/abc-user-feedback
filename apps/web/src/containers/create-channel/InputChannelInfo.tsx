@@ -16,6 +16,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { Input } from '@ufb/ui';
 
@@ -29,6 +30,7 @@ const defaultInputError = {};
 interface IProps {}
 
 const InputChannelInfo: React.FC<IProps> = () => {
+  const { t } = useTranslation();
   const { input, onChangeInput } = useCreateChannel();
 
   const router = useRouter();
@@ -74,26 +76,24 @@ const InputChannelInfo: React.FC<IProps> = () => {
 
   const validate = async () => {
     setIsSubmitted(true);
+    let isValid = true;
 
     if (name.length > 20) {
       setInputError((prev) => ({
         ...prev,
-        name: '프로젝트 이름은 20자 이하로 입력해주세요.',
+        name: t('hint.max-length', { length: 20 }),
       }));
-      return false;
+      isValid = false;
     } else if (name.length === 0) {
-      setInputError((prev) => ({
-        ...prev,
-        name: '프로젝트 이름은 1자 이상 입력해주세요.',
-      }));
-      return false;
+      setInputError((prev) => ({ ...prev, name: t('hint.required') }));
+      isValid = false;
     }
     if (description.length > 50) {
       setInputError((prev) => ({
         ...prev,
-        description: '프로젝트 설명은 50자 이하로 입력해주세요.',
+        description: t('hint.max-length', { length: 50 }),
       }));
-      return false;
+      isValid = false;
     }
 
     setIsLoading(true);
@@ -105,12 +105,12 @@ const InputChannelInfo: React.FC<IProps> = () => {
     if (isDuplicated) {
       setInputError((prev) => ({
         ...prev,
-        name: '이미 존재하는 프로젝트 이름입니다.',
+        name: t('hint.name-already-exists', { name: 'Channel Name' }),
       }));
       setIsLoading(false);
-      return false;
+      isValid = false;
     }
-    return true;
+    return isValid;
   };
 
   return (
@@ -122,7 +122,7 @@ const InputChannelInfo: React.FC<IProps> = () => {
     >
       <Input
         label="Channel Name"
-        placeholder="채널 이름을 입력해주세요."
+        placeholder={t('placeholder', { name: 'Channel Name' })}
         value={name}
         onChange={(e) => onChangeProjectInfo('name', e.target.value)}
         required
@@ -132,7 +132,7 @@ const InputChannelInfo: React.FC<IProps> = () => {
       />
       <Input
         label="Channel Description"
-        placeholder="채널 설명을 입력해주세요."
+        placeholder={t('placeholder', { name: 'Channel Description' })}
         value={description}
         onChange={(e) => onChangeProjectInfo('description', e.target.value)}
         isSubmitted={isSubmitted}

@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { useTranslation } from 'react-i18next';
+
 import { TextInput } from '@ufb/ui';
 
 import { SelectBox } from '@/components';
@@ -25,12 +27,15 @@ interface IProps {
 }
 
 const IssueTrackerSection: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
   const { data } = useOAIQuery({
     path: '/api/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
   return (
-    <CreateSectionTemplate title="Issue Tracker 관리">
+    <CreateSectionTemplate
+      title={t('main.setting.subtitle.issue-tracker-mgmt')}
+    >
       <SelectBox
         options={[{ key: 'jira', name: 'JIRA' }]}
         value={{ key: 'jira', name: 'JIRA' }}

@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { useTranslation } from 'react-i18next';
+
 import { CreateSectionTemplate } from '@/components/templates';
 import { useOAIQuery } from '@/hooks';
 import { RoleSettingTable } from '../setting-menu/RoleSetting/';
@@ -23,13 +25,14 @@ interface IProps {
 }
 
 const RoleSection: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
   const { data } = useOAIQuery({
     path: '/api/projects/{projectId}/roles',
     variables: { projectId },
   });
 
   return (
-    <CreateSectionTemplate title="Role 관리">
+    <CreateSectionTemplate title={t('main.setting.subtitle.role-mgmt')}>
       <RoleSettingTable
         roles={data?.roles ?? []}
         onDelete={() => {}}

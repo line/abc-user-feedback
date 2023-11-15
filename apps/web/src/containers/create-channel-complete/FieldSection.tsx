@@ -20,6 +20,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
@@ -94,6 +95,7 @@ interface IProps {
 }
 
 const FieldSection: React.FC<IProps> = ({ fields }) => {
+  const { t } = useTranslation();
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
     columns,
@@ -101,7 +103,7 @@ const FieldSection: React.FC<IProps> = ({ fields }) => {
   });
 
   return (
-    <CreateSectionTemplate title="Field 정보">
+    <CreateSectionTemplate title={t('main.create-channel.stepper-text.fields')}>
       <table className="table rounded border">
         <thead>
           <tr>

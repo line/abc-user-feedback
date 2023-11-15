@@ -16,6 +16,7 @@
 import { Fragment } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
@@ -57,6 +58,7 @@ function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
 }
 
 const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   return (
@@ -84,17 +86,18 @@ const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
         }}
       >
         <Icon name="Out" size={16} />
-        <span className="font-12-bold uppercase">나가기</span>
+        <span className="font-12-bold uppercase">{t('button.get-out')}</span>
       </button>
     </div>
   );
 };
 
 const Title: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
+  const { t } = useTranslation();
   return (
     <h1 className="font-24-bold text-center">
-      {type === 'project' && 'Project 생성'}
-      {type === 'channel' && 'Channel 생성'}
+      {type === 'project' && t('main.create-project.title')}
+      {type === 'channel' && t('main.create-channel.title')}
     </h1>
   );
 };
@@ -155,9 +158,13 @@ const Stepper: React.FC<IStepperProps> = (props) => {
 };
 
 const Helper: React.FC<{ text: string }> = ({ text }) => {
+  const { t } = useTranslation();
   return (
     <div className="border-fill-secondary rounded border px-6 py-4">
-      <h2 className="font-14-bold mb-1">도움말</h2>
+      <div className="mb-1 flex items-center  gap-2">
+        <Icon name="IdeaColor" size={16} />
+        <h2 className="font-14-bold">{t('text.helper')}</h2>
+      </div>
       <p className="font-12-regular">{text}</p>
     </div>
   );

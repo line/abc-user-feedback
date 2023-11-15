@@ -16,7 +16,6 @@
 
 import { CreateProjectChannelInputTemplate } from '@/components/templates/CreateProjectChannelInputTemplate';
 import {
-  PROJECT_STEPPER_TEXT,
   PROJECT_STEPS,
   useCreateProject,
 } from '@/contexts/create-project.context';
@@ -37,7 +36,8 @@ const CreateProjectInputTemplate: React.FC<IProps> = ({
   disableNextBtn,
   isLoading,
 }) => {
-  const { currentStep, onNext, onPrev, currentStepIndex } = useCreateProject();
+  const { currentStep, onNext, onPrev, currentStepIndex, stepperText } =
+    useCreateProject();
 
   return (
     <CreateProjectChannelInputTemplate
@@ -45,7 +45,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = ({
       lastStepIndex={PROJECT_STEPS.length - 1}
       onNext={onNext}
       onPrev={onPrev}
-      title={PROJECT_STEPPER_TEXT[currentStep]}
+      title={stepperText[currentStep]}
       actionButton={actionButton}
       onComplete={onComplete}
       validate={validate}

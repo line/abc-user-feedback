@@ -39,7 +39,20 @@
     "index": {
       "total-project": "全体プロジェクト数",
       "total-channel": "全チャンネル数",
-      "total-feedback": "全体フィードバック数"
+      "total-feedback": "全体フィードバック数",
+      "create-project": "Project生成",
+      "no-project": "登録されたプロジェクトがありません。",
+      "in-progress": "作成中のProjectがあります。",
+      "dialog": {
+        "continue": {
+          "title": "続いて作成しますか？",
+          "description": "現在作成中のProjectがあります。 続いて作成しますか？ (最初からすると既存情報は消えます。)",
+          "button": {
+            "continue": "続行",
+            "restart": "再起動"
+          }
+        }
+      }
     },
     "profile": {
       "title": "プロフィール",
@@ -119,7 +132,7 @@
         "member-mgmt": "Member管理",
         "role-mgmt": "Role管理",
         "api-key-mgmt": "API Key管理",
-        "ticket-mgmt": "Issue Tracker管理",
+        "issue-tracker-mgmt": "Issue Tracker管理",
         "delete-project": "Project削除",
 
         "channel-info": "Channel情報",
@@ -143,6 +156,7 @@
       },
       "role-mgmt": {
         "edit-role": "Role編集",
+        "update-role-name": "Role Name修正",
         "delete-role": "Role削除"
       },
       "api-key-status": {
@@ -153,9 +167,10 @@
         "active": "アクティブ",
         "inactive": "非アクティブ"
       },
+      "register-member": "会員を登録してください。",
       "same-key": "Key と同様に入力",
       "feedback-request-code": "フィードバック要求コード",
-      "ticket-mgmt.description": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
+      "issue-tracker-mgmt.description": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
       "option-info": "オプション情報",
       "field-mgmt": {
         "description": "保存するにはプレビューを先に押してください。",
@@ -175,7 +190,11 @@
         },
         "create-role": {
           "title": "Role 生成",
-          "description": "Roleを追加しますか？"
+          "description": "新規Role Nameを入力してください。"
+        },
+        "update-role-name": {
+          "title": "Role Name修正",
+          "description": "Role Name을 입력해주세요."
         },
         "edit-api-key": {
           "title": "API KEY 編集",
@@ -202,6 +221,33 @@
         "edit-field": { "title": "Field 修整" },
         "invite-user": { "title": "User 招待" }
       }
+    },
+    "create-project": {
+      "title": "Project生成",
+      "complete-title": "Projectの作成が完了しました。",
+      "help": {
+        "projectInfo": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
+        "roles": "Projectにfアクセスして使用する権限を設定できます。",
+        "members": "Projectに参加する Memberを登録または管理することができます。",
+        "apiKeys": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
+        "issueTracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。 使用中のIssue Tracking System情報を入力してください。"
+      },
+      "continue-channel-creation": "Channelまで生成しないとUser Feedbackを使用できません。\nChannel生成を続けますか？"
+    },
+    "create-channel": {
+      "title": "Channel生成",
+      "complete-title": "Channelの作成が完了しました。",
+      "help": {
+        "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
+        "fields": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
+        "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
+      },
+      "stepper-text": {
+        "channel-info": "Channel Infomation",
+        "fields": "Field 管理",
+        "field-preview": "Field プレビュー"
+      },
+      "finish-channel-creation": "すべての準備が完了しました。\nUser Feedbackの利用を始めてみてください！"
     }
   },
   "header": {
@@ -220,7 +266,13 @@
     "register": "登錄",
     "select-cancel": "選択取り消し",
     "reset": "リセット",
-    "confirm": "OK"
+    "confirm": "OK",
+    "get-out": "出掛ける",
+    "previous": "移転へ",
+    "next": "次へ",
+    "complete": "完了",
+    "next-time": "次回",
+    "start": "はじまり"
   },
   "input": {
     "label": {
@@ -257,7 +309,8 @@
       "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
     },
     "equal-search": "完全一致",
-    "like-search": "部分一致"
+    "like-search": "部分一致",
+    "helper": "ヘルプ"
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -269,5 +322,11 @@
     "inactive": "無効化",
     "add": "追加完了",
     "copy": "コピー完了"
+  },
+  "placeholder": "{{name}}を入力してください。",
+  "hint": {
+    "required": "必須入力対象です。",
+    "max-length": "{{length}}字以下で入力してください。",
+    "name-already-exists": "既に存在する{{name}}です。"
   }
 }

@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'react-i18next';
+
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   onNext: () => void;
@@ -38,6 +40,7 @@ const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
     validate,
     disableNextBtn,
   } = props;
+  const { t } = useTranslation();
 
   return (
     <div className="border-fill-secondary flex flex-1 flex-col gap-6 overflow-auto rounded border p-6">
@@ -55,7 +58,7 @@ const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
             className="btn btn-lg btn-secondary w-[120px]"
             onClick={onPrev}
           >
-            이전
+            {t('button.previous')}
           </button>
         )}
         <button
@@ -70,7 +73,9 @@ const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
           }}
           disabled={disableNextBtn}
         >
-          {currentStepIndex === lastStepIndex ? '완료' : '다음'}
+          {currentStepIndex === lastStepIndex
+            ? t('button.complete')
+            : t('button.next')}
         </button>
       </div>
     </div>

@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { useTranslation } from 'react-i18next';
+
 import { Input } from '@ufb/ui';
 
 import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
@@ -24,8 +26,12 @@ interface IProps {
 }
 
 const ChannelInfoSection: React.FC<IProps> = ({ description, name }) => {
+  const { t } = useTranslation();
   return (
-    <CreateSectionTemplate title="Channel 정보" defaultOpen>
+    <CreateSectionTemplate
+      title={t('main.create-channel.stepper-text.channel-info')}
+      defaultOpen
+    >
       <Input label="Channel Name" value={name} required disabled />
       <Input label="Channel Description" value={description} disabled />
     </CreateSectionTemplate>

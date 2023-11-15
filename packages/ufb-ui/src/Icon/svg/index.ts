@@ -15,6 +15,7 @@
  */
 
 export { ReactComponent as Title } from './title.svg';
+export { ReactComponent as IdeaColor } from './color/idea-color.svg';
 
 export { ReactComponent as BagFill } from './fill/bag-fill.svg';
 export { ReactComponent as BellFill } from './fill/bell-fill.svg';
