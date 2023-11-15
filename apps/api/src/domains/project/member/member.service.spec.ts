@@ -18,6 +18,8 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import type { UserEntity } from '@/domains/user/entities/user.entity';
+import type { UserService } from '@/domains/user/user.service';
 import { TestConfig } from '@/test-utils/util-functions';
 import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
@@ -35,6 +37,8 @@ describe('MemberService test suite', () => {
   let memberRepo: Repository<MemberEntity>;
   let roleRepo: Repository<RoleEntity>;
 
+  let userSerivce: UserService;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -44,6 +48,8 @@ describe('MemberService test suite', () => {
     memberService = module.get<MemberService>(MemberService);
     memberRepo = module.get(getRepositoryToken(MemberEntity));
     roleRepo = module.get(getRepositoryToken(RoleEntity));
+
+    jest.spyOn(userSerivce, 'findById').mockResolvedValue({} as UserEntity);
   });
 
   describe('create', () => {
