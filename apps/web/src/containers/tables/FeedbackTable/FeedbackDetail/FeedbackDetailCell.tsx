@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
@@ -22,6 +23,7 @@ import { useTruncatedElement } from '@/hooks';
 interface IProps extends React.PropsWithChildren {}
 
 const FeedbackDetailCell: React.FC<IProps> = ({ children }) => {
+  const { t } = useTranslation();
   const ref = useRef<HTMLTableCellElement>(null);
   const { isTruncated, isShowingMore, toggleIsShowingMore } =
     useTruncatedElement({ ref });
@@ -41,7 +43,7 @@ const FeedbackDetailCell: React.FC<IProps> = ({ children }) => {
           onClick={toggleIsShowingMore}
           className="text-blue-primary flex items-center gap-1"
         >
-          {isShowingMore ? '줄이기' : '더보기'}
+          {isShowingMore ? t('text.shrink') : t('text.more')}
           <Icon
             name="ChevronDown"
             size={12}
