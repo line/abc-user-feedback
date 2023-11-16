@@ -44,17 +44,7 @@
       "total-feedback": "Total Feedback",
       "create-project": "Create Project",
       "no-project": "There are no registered projects.",
-      "in-progress": "There is a project being created.",
-      "dialog": {
-        "continue": {
-          "title": "Do you want to continue?",
-          "description": "There is a project currently being created. Do you want to continue? (If you do it from scratch, the existing information disappears.)",
-          "button": {
-            "continue": "Continue",
-            "restart": "Restart"
-          }
-        }
-      }
+      "in-progress": "There is a project being created."
     },
     "profile": {
       "title": "Profile",
@@ -340,5 +330,15 @@
     "max-length": "Please enter {{length}} characters or less.",
     "name-already-exists": "{{name}} already exists.",
     "invalid-domain": "Not in domain format."
+  },
+  "dialog": {
+    "continue": {
+      "title": "Do you want to continue?",
+      "description": "There is a {{type}} currently being created. Do you want to continue? (If you do it from scratch, the existing information disappears.)",
+      "button": {
+        "continue": "Continue",
+        "restart": "Restart"
+      }
+    }
   }
 }

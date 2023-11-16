@@ -20,8 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { MainTemplate } from '@/components';
-import { DescriptionTootip } from '@/components/etc/DescriptionTootip/DescriptionTootip';
+import { DescriptionTooltip, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
 import MyProfileForm from '@/containers/my-profile/MyProfileForm';
@@ -44,7 +43,7 @@ const ProfilePage: NextPageWithLayout = () => {
     <>
       <h1 className="font-24-bold mb-4">
         {t('main.profile.title')}
-        <DescriptionTootip description="Profile Description" />
+        <DescriptionTooltip description="Profile Description" />
       </h1>
       <div className="flex h-[calc(100vh-144px)] items-stretch gap-4">
         <div className="border-fill-tertiary w-[400px] rounded border p-6">

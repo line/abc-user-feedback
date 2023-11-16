@@ -17,6 +17,14 @@ import { createContext, useCallback, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import {
+  CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY,
+  CREATE_CHANNEL_CURRENT_STEP_KEY,
+  CREATE_CHANNEL_INPUT_KEY,
+  CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
+  CREATE_PROJECT_CURRENT_STEP_KEY,
+  CREATE_PROJECT_INPUT_KEY,
+} from '@/constants/local-storage-key';
 import { useLocalStorage } from '@/hooks';
 
 type OnChangeInputType<InputType> = (
@@ -66,25 +74,43 @@ export const CreateProvider = <
   const FIRST_STEP = steps[0] as StepType;
 
   const [input, setInput] = useLocalStorage<InputType>(
-    (type === 'project' ? type : `${type} ${projectId}`) + ' input',
+    type === 'project'
+      ? CREATE_PROJECT_INPUT_KEY
+      : CREATE_CHANNEL_INPUT_KEY(projectId),
     defaultInput,
   );
 
   const [currentStep, setCurrentStep] = useLocalStorage<StepType>(
-    (type === 'project' ? type : `${type} ${projectId}`) + ' currentStep',
+    type === 'project'
+      ? CREATE_PROJECT_CURRENT_STEP_KEY
+      : CREATE_CHANNEL_CURRENT_STEP_KEY(projectId),
     FIRST_STEP,
   );
 
   const [completeStepIndex, setCompleteStepIndex] = useLocalStorage(
-    (type === 'project' ? type : `${type} ${projectId}`) + ' completeStepIndex',
+    type === 'project'
+      ? CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY
+      : CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
     0,
   );
 
   const clearLocalStorage = useCallback(() => {
-    localStorage.removeItem(`${type} input`);
-    localStorage.removeItem(`${type} currentStep`);
-    localStorage.removeItem(`${type} completeStepIndex`);
-  }, []);
+    localStorage.removeItem(
+      type === 'project'
+        ? CREATE_PROJECT_INPUT_KEY
+        : CREATE_CHANNEL_INPUT_KEY(projectId),
+    );
+    localStorage.removeItem(
+      type === 'project'
+        ? CREATE_PROJECT_CURRENT_STEP_KEY
+        : CREATE_CHANNEL_CURRENT_STEP_KEY(projectId),
+    );
+    localStorage.removeItem(
+      type === 'project'
+        ? CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY
+        : CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
+    );
+  }, [type, projectId]);
 
   const currentStepIndex = useMemo(
     () => steps.indexOf(currentStep),
@@ -119,7 +145,7 @@ export const CreateProvider = <
   };
 
   useEffect(() => {
-    console.log('completeStepIndex: ', completeStepIndex);
+    if (completeStepIndex === 0) setInput(defaultInput);
     setCurrentStep(steps[completeStepIndex] ?? FIRST_STEP);
   }, []);
 

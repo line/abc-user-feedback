@@ -32,4 +32,4 @@ export { default as SelectBox } from './SelectBox';
 export { default as CreateProjectButton } from './CreateProjectButton';
 export { default as NoChannel } from './NoChannel';
 
-export { default as InProgressTootip } from './InProgressTootip';
+export { default as DescriptionTooltip } from './DescriptionTooltip';

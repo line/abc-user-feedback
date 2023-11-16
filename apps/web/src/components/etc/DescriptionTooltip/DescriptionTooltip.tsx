@@ -23,7 +23,7 @@ export interface ITooltipProps {
   placement?: Placement;
 }
 
-export const DescriptionTootip: React.FC<ITooltipProps> = ({
+const DescriptionTooltip: React.FC<ITooltipProps> = ({
   description,
   placement,
 }) => {
@@ -32,9 +32,9 @@ export const DescriptionTootip: React.FC<ITooltipProps> = ({
       <TooltipTrigger>
         <Icon name="InfoCircleFill" size={16} className="text-tertiary ml-1" />
       </TooltipTrigger>
-      <TooltipContent>
-        <p className="text-fill-inverse font-12-regular">{description}</p>
-      </TooltipContent>
+      <TooltipContent>{description}</TooltipContent>
     </Tooltip>
   );
 };
+
+export default DescriptionTooltip;

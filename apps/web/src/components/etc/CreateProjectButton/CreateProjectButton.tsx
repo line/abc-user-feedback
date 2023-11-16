@@ -13,29 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-  arrow,
-  autoUpdate,
-  flip,
-  FloatingArrow,
-  FloatingPortal,
-  offset,
-  shift,
-  useDismiss,
-  useFloating,
-  useFocus,
-  useHover,
-  useInteractions,
-  useRole,
-} from '@floating-ui/react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverModalContent } from '@ufb/ui';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@ufb/ui';
 
+import {
+  CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
+  CREATE_PROJECT_CURRENT_STEP_KEY,
+  CREATE_PROJECT_INPUT_KEY,
+} from '@/constants/local-storage-key';
 import { Path } from '@/constants/path';
 import { PROJECT_STEPS } from '@/contexts/create-project.context';
+import { useUser } from '@/contexts/user.context';
 import { useLocalStorage } from '@/hooks';
 
 interface IProps {
@@ -45,101 +43,61 @@ interface IProps {
 const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
   const { t } = useTranslation();
 
-  const [state] = useLocalStorage(`project completeStepIndex`, 0);
+  const [step] = useLocalStorage(CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY, 0);
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const arrowRef = useRef(null);
-  const { refs, floatingStyles, context } = useFloating({
-    placement: 'bottom',
-    whileElementsMounted: autoUpdate,
-    middleware: [
-      offset(16),
-      flip({ fallbackAxisSideDirection: 'start' }),
-      shift(),
-      arrow({ element: arrowRef }),
-    ],
-  });
+  const { user } = useUser();
 
-  const hover = useHover(context, { move: false });
-  const focus = useFocus(context);
-  const dismiss = useDismiss(context);
-  const role = useRole(context, { role: 'tooltip' });
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-    focus,
-    dismiss,
-    role,
-  ]);
+  const goToCreateProjectPage = () => router.push(Path.CREATE_PROJECT);
 
   return (
-    <>
-      <button
-        className="btn btn-lg btn-primary w-[200px] gap-2"
-        ref={refs.setReference}
-        {...getReferenceProps()}
-        onClick={() => {
-          if (state > 0) setOpen(true);
-          else router.push(Path.CREATE_PROJECT);
-        }}
-      >
-        <Icon name="Plus" className="text-above-white" />
-        {t('main.index.create-project')}
-      </button>
-      {(!hasProject || (hasProject && state > 0)) && (
-        <FloatingPortal>
-          <div
-            className={`${
-              !hasProject ? 'bg-blue-quaternary' : 'bg-red-quaternary'
-            } rounded px-3 py-2`}
-            ref={refs.setFloating}
-            style={floatingStyles}
-            {...getFloatingProps()}
-          >
-            <p
-              className={`${
-                !hasProject ? 'text-blue-primary' : 'text-red-primary'
-              } font-12-regular`}
-            >
-              {!hasProject && t('main.index.no-project')}
-              {hasProject && state > 0 && (
-                <>
-                  {t('main.index.in-progress')}{' '}
-                  <b>
-                    ({state + 1}/{PROJECT_STEPS.length})
-                  </b>
-                </>
-              )}
-            </p>
-            <FloatingArrow
-              ref={arrowRef}
-              context={context}
-              fill={!hasProject ? '#007AFF1A' : '#F429001A'}
-            />
-          </div>
-        </FloatingPortal>
-      )}
+    <Tooltip open={!hasProject || (hasProject && step > 0)} placement="bottom">
+      <TooltipTrigger asChild>
+        <button
+          className="btn btn-lg btn-primary w-[200px] gap-2"
+          onClick={() => {
+            if (step > 0) setOpen(true);
+            else goToCreateProjectPage();
+          }}
+          disabled={user?.type !== 'SUPER'}
+        >
+          <Icon name="Plus" className="text-above-white" />
+          {t('main.index.create-project')}
+        </button>
+      </TooltipTrigger>
+      <TooltipContent color={!hasProject ? 'blue' : 'red'}>
+        {!hasProject && t('main.index.no-project')}
+        {hasProject && step > 0 && (
+          <>
+            {t('main.index.in-progress')}{' '}
+            <b>
+              ({step + 1}/{PROJECT_STEPS.length})
+            </b>
+          </>
+        )}
+      </TooltipContent>
       <Popover modal open={open} onOpenChange={setOpen}>
         <PopoverModalContent
-          title={t('main.index.dialog.continue.title')}
-          description={t('main.index.dialog.continue.description')}
+          title={t('dialog.continue.title')}
+          description={t('dialog.continue.description', { type: 'Project' })}
           submitButton={{
-            children: t('main.index.dialog.continue.button.continue'),
+            children: t('dialog.continue.button.continue'),
             className: 'btn-red',
-            onClick: () => router.push(Path.CREATE_PROJECT),
+            onClick: () => goToCreateProjectPage(),
           }}
           cancelButton={{
-            children: t('main.index.dialog.continue.button.restart'),
+            children: t('dialog.continue.button.restart'),
             onClick: () => {
-              localStorage.removeItem('project input');
-              localStorage.removeItem('project currentStep');
-              localStorage.removeItem('project completeStepIndex');
-              router.push(Path.CREATE_PROJECT);
+              localStorage.removeItem(CREATE_PROJECT_INPUT_KEY);
+              localStorage.removeItem(CREATE_PROJECT_CURRENT_STEP_KEY);
+              localStorage.removeItem(CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY);
+              goToCreateProjectPage();
             },
           }}
         />
       </Popover>
-    </>
+    </Tooltip>
   );
 };
 

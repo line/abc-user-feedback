@@ -15,7 +15,7 @@
  */
 import { Icon } from '@ufb/ui';
 
-import { DescriptionTootip } from '@/components/etc/DescriptionTootip/DescriptionTootip';
+import { DescriptionTooltip } from '@/components';
 import { useChannels } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
 import useFeedbackTable from '../feedback-table.context';
@@ -45,7 +45,7 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
             </div>
             <span>{channel.name}</span>
           </div>
-          <DescriptionTootip
+          <DescriptionTooltip
             description={getDescriptionStr(channel.description)}
           />
         </div>

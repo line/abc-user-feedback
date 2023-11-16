@@ -42,17 +42,7 @@
       "total-feedback": "全体フィードバック数",
       "create-project": "Project生成",
       "no-project": "登録されたプロジェクトがありません。",
-      "in-progress": "作成中のProjectがあります。",
-      "dialog": {
-        "continue": {
-          "title": "続いて作成しますか？",
-          "description": "現在作成中のProjectがあります。 続いて作成しますか？ (最初からすると既存情報は消えます。)",
-          "button": {
-            "continue": "続行",
-            "restart": "再起動"
-          }
-        }
-      }
+      "in-progress": "作成中のProjectがあります。"
     },
     "profile": {
       "title": "プロフィール",
@@ -340,5 +330,15 @@
     "max-length": "{{length}}字以下で入力してください。",
     "name-already-exists": "既に存在する{{name}}です。",
     "invalid-domain": "ドメイン形式ではありません。"
+  },
+  "dialog": {
+    "continue": {
+      "title": "続いて作成しますか？",
+      "description": "現在作成中の{{type}}があります。 続いて作成しますか？ (最初からすると既存情報は消えます。)",
+      "button": {
+        "continue": "続行",
+        "restart": "再起動"
+      }
+    }
   }
 }

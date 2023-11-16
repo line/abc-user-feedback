@@ -30,7 +30,7 @@ interface IProps {}
 
 const InputFieldPreview: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { input, gotoStep } = useCreateChannel();
+  const { input, gotoStep, clearLocalStorage } = useCreateChannel();
 
   const [openChannelInfoError, setOpenChannelInfoError] = useState(false);
 
@@ -56,6 +56,7 @@ const InputFieldPreview: React.FC<IProps> = () => {
           });
       },
       onSuccess(data) {
+        clearLocalStorage();
         router.replace({
           pathname: Path.CREATE_CHANNEL_COMPLETE,
           query: { projectId, channelId: data?.id },

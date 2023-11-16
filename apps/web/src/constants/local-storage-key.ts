@@ -13,10 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface IProps {}
+export const CREATE_PROJECT_INPUT_KEY = 'project input';
+export const CREATE_PROJECT_CURRENT_STEP_KEY = 'project currentStep';
+export const CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY =
+  'project completeStepIndex';
 
-const InProgressTootip: React.FC<IProps> = () => {
-  return <div></div>;
-};
-
-export default InProgressTootip;
+export const CREATE_CHANNEL_INPUT_KEY = (projectId?: number) =>
+  `channel ${projectId} input`;
+export const CREATE_CHANNEL_CURRENT_STEP_KEY = (projectId?: number) =>
+  `channel ${projectId} currentStep`;
+export const CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY = (projectId?: number) =>
+  `channel ${projectId} completeStepIndex`;

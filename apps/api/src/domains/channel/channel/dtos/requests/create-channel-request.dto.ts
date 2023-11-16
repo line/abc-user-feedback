@@ -16,7 +16,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  ArrayNotEmpty,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -99,6 +98,5 @@ export class CreateChannelRequestDto {
   @ApiProperty({ type: [CreateChannelRequestFieldDto] })
   @Type(() => CreateChannelRequestFieldDto)
   @ValidateNested({ each: true })
-  @ArrayNotEmpty()
   fields: CreateChannelRequestFieldDto[];
 }

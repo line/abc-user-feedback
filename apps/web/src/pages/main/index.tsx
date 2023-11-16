@@ -23,7 +23,6 @@ import { Icon } from '@ufb/ui';
 import { CreateProjectButton, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useUser } from '@/contexts/user.context';
 import { useOAIQuery, useProjects, useTenant } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
 import type { NextPageWithLayout } from '../_app';
@@ -34,7 +33,6 @@ const CARD_BORDER_CSS =
 const MainIndexPage: NextPageWithLayout = () => {
   const { tenant } = useTenant();
   const { data } = useProjects();
-  const { user } = useUser();
 
   return (
     <div className="mx-4 my-2">
@@ -45,16 +43,14 @@ const MainIndexPage: NextPageWithLayout = () => {
       <h1 className="font-20-bold my-6 mb-4">Project</h1>
       <ul className="flex flex-wrap gap-2">
         {data?.items.map(({ id }) => <ProjectList key={id} projectId={id} />)}
-        {user?.type === 'SUPER' && (
-          <div
-            className={[
-              CARD_BORDER_CSS,
-              'flex flex-col items-center justify-center',
-            ].join(' ')}
-          >
-            <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
-          </div>
-        )}
+        <div
+          className={[
+            CARD_BORDER_CSS,
+            'flex flex-col items-center justify-center',
+          ].join(' ')}
+        >
+          <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
+        </div>
       </ul>
     </div>
   );

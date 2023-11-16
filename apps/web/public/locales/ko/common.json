@@ -42,17 +42,7 @@
       "total-feedback": "전체 피드백 수",
       "create-project": "Project 생성",
       "no-project": "등록된 프로젝트가 없습니다.",
-      "in-progress": "생성중인 Project가 있습니다.",
-      "dialog": {
-        "continue": {
-          "title": "이어서 생성하시겠어요?",
-          "description": "현재 생성중인 Project가 있습니다. 이어서 생성하시겠어요? (처음부터 하면 기존 정보는 사라집니다.)",
-          "button": {
-            "continue": "이어서하기",
-            "restart": "처음부터"
-          }
-        }
-      }
+      "in-progress": "생성중인 Project가 있습니다."
     },
     "profile": {
       "title": "프로필",
@@ -341,5 +331,15 @@
     "max-length": "{{length}}자 이하로 입력해주세요.",
     "name-already-exists": "이미 존재하는 {{name}}입니다.",
     "invalid-domain": "도메인 형식이 아닙니다."
+  },
+  "dialog": {
+    "continue": {
+      "title": "이어서 생성하시겠어요?",
+      "description": "현재 생성중인 {{type}} 있습니다. 이어서 생성하시겠어요? (처음부터 하면 기존 정보는 사라집니다.)",
+      "button": {
+        "continue": "이어서하기",
+        "restart": "처음부터"
+      }
+    }
   }
 }

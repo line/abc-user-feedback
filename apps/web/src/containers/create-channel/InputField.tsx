@@ -147,7 +147,7 @@ const InputField: React.FC<IProps> = () => {
   });
 
   return (
-    <CreateChannelInputTemplate disableNextBtn={fields.length === 4}>
+    <CreateChannelInputTemplate>
       <div className="flex justify-end">
         <button>
           <FieldSettingPopover
