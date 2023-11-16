@@ -59,6 +59,7 @@ export { ReactComponent as MarkerFill } from './fill/marker-fill.svg';
 export { ReactComponent as MinusCircleFill } from './fill/minus-circle-fill.svg';
 export { ReactComponent as NarrowFill } from './fill/narrow-fill.svg';
 export { ReactComponent as NewCircleFill } from './fill/new-circle-fill.svg';
+export { ReactComponent as NoChannelFill } from './fill/no-channel-fill.svg';
 export { ReactComponent as OfficeFill } from './fill/office-fill.svg';
 export { ReactComponent as PlusCircleFill } from './fill/plus-circle-fill.svg';
 export { ReactComponent as PrinterFill } from './fill/printer-fill.svg';

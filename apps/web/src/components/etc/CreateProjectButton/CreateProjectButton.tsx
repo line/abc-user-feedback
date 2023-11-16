@@ -45,11 +45,11 @@ interface IProps {
 const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
   const { t } = useTranslation();
 
-  const arrowRef = useRef(null);
   const [state] = useLocalStorage(`project completeStepIndex`, 0);
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  const arrowRef = useRef(null);
   const { refs, floatingStyles, context } = useFloating({
     placement: 'bottom',
     whileElementsMounted: autoUpdate,

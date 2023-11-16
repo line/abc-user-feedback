@@ -18,7 +18,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { UserService } from '@/domains/user/user.service';
 import { RoleService } from '../role/role.service';
 import type { FindByProjectIdDto } from './dtos';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
@@ -35,7 +34,6 @@ export class MemberService {
     @InjectRepository(MemberEntity)
     private readonly repository: Repository<MemberEntity>,
     private readonly roleService: RoleService,
-    private readonly userService: UserService,
   ) {}
 
   private async validateMember(userId: number, roleId: number) {

@@ -91,10 +91,12 @@ const ProjectList: React.FC<{ projectId: number }> = ({ projectId }) => {
     path: '/api/projects/{projectId}/feedback-count',
     variables: { projectId },
   });
+
   const { data: channels } = useOAIQuery({
     path: '/api/projects/{projectId}/channels',
     variables: { projectId, limit: 1000 },
   });
+
   return (
     <CardItem
       type="project"

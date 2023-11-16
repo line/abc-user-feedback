@@ -32,7 +32,7 @@ const NoChannel: React.FC<IProps> = ({ projectId }) => {
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-8">
       <div className="flex flex-col items-center gap-3">
-        <Icon name="WarningTriangleFill" size={56} className="text-tertiary" />
+        <Icon name="NoChannelFill" size={56} className="text-tertiary" />
         <p>{t('text.no-channel')}.</p>
       </div>
       {perms.includes('channel_create') && (

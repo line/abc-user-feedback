@@ -19,9 +19,10 @@ import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Badge, Input, toast, Tooltip } from '@ufb/ui';
+import { Badge, Input, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
+import { DescriptionTootip } from '@/components/etc/DescriptionTootip/DescriptionTootip';
 import { useOAIMutation, useTenant } from '@/hooks';
 import type { OAuthConfigType } from '@/types/tenant.type';
 import OAuthInput from './OAuthInput';
@@ -235,7 +236,7 @@ const SignUpSetting: React.FC<IProps> = () => {
           <div>
             <p className="input-label mb-2 flex items-center gap-1">
               Email domain WhiteList
-              <Tooltip
+              <DescriptionTootip
                 description={t(
                   'main.setting.sign-up-mgmt.domain-restriction-tooltip',
                 )}
