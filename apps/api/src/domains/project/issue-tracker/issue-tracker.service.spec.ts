@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { IssueTrackerServiceProviders } from '../../../test-utils/providers/issue-tracker.service.provider';
 import { UpdateIssueTrackerDto } from './dtos';
 import { IssueTrackerEntity } from './issue-tracker.entity';
@@ -28,6 +29,7 @@ describe('issue-tracker service', () => {
   let issueTrackerRepo: Repository<IssueTrackerEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: IssueTrackerServiceProviders,
     }).compile();
     issueTrackerService = module.get(IssueTrackerService);

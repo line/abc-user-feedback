@@ -173,6 +173,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
               value={createdAtRange}
               maxDate={new Date()}
               maxDays={env.NEXT_PUBLIC_MAX_DAYS}
+              disableTotalDateRange
             />
           </div>
           {fieldData && (

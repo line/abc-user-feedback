@@ -18,7 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { getRandomEnumValues } from '@/test-utils/util-functions';
+import { getRandomEnumValues, TestConfig } from '@/test-utils/util-functions';
 import { RoleServiceProviders } from '../../../test-utils/providers/role.service.providers';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
 import {
@@ -35,6 +35,7 @@ describe('RoleService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: RoleServiceProviders,
     }).compile();
     roleService = module.get(RoleService);
@@ -81,6 +82,44 @@ describe('RoleService', () => {
         name: dto.name,
         project: { id: dto.projectId },
       });
+    });
+  });
+
+  describe('createMany', () => {
+    const projectId = faker.number.int();
+    const roleCount = faker.number.int({ min: 2, max: 10 });
+    const roles = Array.from({ length: roleCount }).map(() => ({
+      name: faker.string.sample(),
+      permissions: getRandomEnumValues(PermissionEnum),
+      projectId,
+    }));
+    let dtos: CreateRoleDto[];
+    beforeEach(() => {
+      dtos = roles;
+    });
+
+    it('creating roles succeeds with valid inputs', async () => {
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+
+      await roleService.createMany(dtos);
+
+      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(roleCount);
+      expect(roleRepo.save).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).toHaveBeenCalledWith(
+        dtos.map((role) => RoleEntity.from(role)),
+      );
+    });
+    it('creating roles fails with duplicate inputs', async () => {
+      jest
+        .spyOn(roleRepo, 'findOneBy')
+        .mockResolvedValue({ id: faker.number.int() } as RoleEntity);
+
+      await expect(roleService.createMany(dtos)).rejects.toThrow(
+        RoleAlreadyExistsException,
+      );
+
+      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(roleRepo.save).not.toHaveBeenCalled();
     });
   });
 

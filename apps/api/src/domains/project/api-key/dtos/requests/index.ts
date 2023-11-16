@@ -13,3 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+export { CreateApiKeyRequestDto } from './create-api-key-request.dto';

@@ -47,10 +47,7 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
     const result = produce(currentQuery, (query) => {
       for (const [key, value] of Object.entries(query)) {
         const column = columns.find((v) => v.key === key);
-        if (!column) {
-          alert('잠시후 다시 시도해주세요.');
-          return;
-        }
+        if (!column) return;
         query[key] = value;
       }
     });

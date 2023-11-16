@@ -17,13 +17,14 @@ import { faker } from '@faker-js/faker';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Test } from '@nestjs/testing';
 
-import { getMockProvider } from '@/test-utils/util-functions';
+import { getMockProvider, TestConfig } from '@/test-utils/util-functions';
 import { EmailVerificationMailingService } from './email-verification-mailing.service';
 
 describe('first', () => {
   let emailVerificationMailingService: EmailVerificationMailingService;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: [
         EmailVerificationMailingService,
         getMockProvider(MailerService, MockMailerService),

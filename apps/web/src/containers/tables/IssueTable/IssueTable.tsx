@@ -204,9 +204,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   );
   const q = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
-      if (key === 'status' && value !== 'total') {
-        return { ...prev, [key]: value };
-      }
+      if (key === 'status' && value === 'total') return prev;
       if (createdAtRange) {
         return {
           ...prev,
@@ -323,6 +321,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
               value={createdAtRange}
               onChange={setCreatedAtRange}
               maxDate={new Date()}
+              isClearable
             />
           </div>
           <TableSearchInput

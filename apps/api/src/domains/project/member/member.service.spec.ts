@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
@@ -36,6 +37,7 @@ describe('MemberService test suite', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: MemberServiceProviders,
     }).compile();
 
@@ -80,6 +82,53 @@ describe('MemberService test suite', () => {
       jest.spyOn(memberRepo, 'save');
 
       await expect(memberService.create(dto)).rejects.toThrowError(
+        MemberAlreadyExistsException,
+      );
+
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).not.toBeCalled();
+    });
+  });
+
+  describe('createMany', () => {
+    const projectId = faker.number.int();
+    const memberCount = faker.number.int({ min: 2, max: 10 });
+    const members = Array.from({ length: memberCount }).map(() => ({
+      roleId: faker.number.int(),
+      userId: faker.number.int(),
+    }));
+    let dtos: CreateMemberDto[];
+    beforeEach(() => {
+      dtos = members;
+    });
+
+    it('creating members succeeds with valid inputs', async () => {
+      jest
+        .spyOn(roleRepo, 'findOne')
+        .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
+
+      await memberService.createMany(dtos);
+
+      expect(roleRepo.findOne).toBeCalledTimes(memberCount);
+      expect(memberRepo.findOne).toBeCalledTimes(memberCount);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledWith(
+        members.map(({ roleId, userId }) =>
+          MemberEntity.from({ roleId, userId }),
+        ),
+      );
+    });
+    it('creating members fails with an existent member', async () => {
+      jest
+        .spyOn(roleRepo, 'findOne')
+        .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue({} as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
+
+      await expect(memberService.createMany(dtos)).rejects.toThrowError(
         MemberAlreadyExistsException,
       );
 

@@ -19,7 +19,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import { createFieldDto } from '@/test-utils/fixtures';
-import { MockOpensearchRepository } from '@/test-utils/util-functions';
+import {
+  MockOpensearchRepository,
+  TestConfig,
+} from '@/test-utils/util-functions';
 import { ChannelServiceProviders } from '../../../test-utils/providers/channel.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
@@ -49,6 +52,7 @@ describe('ChannelService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: ChannelServiceProviders,
     }).compile();
 

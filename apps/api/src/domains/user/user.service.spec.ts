@@ -23,6 +23,7 @@ import { SortMethodEnum } from '@/common/enums';
 import {
   createQueryBuilder,
   getRandomEnumValue,
+  TestConfig,
 } from '@/test-utils/util-functions';
 import {
   MockUserInvitationMailingService,
@@ -46,6 +47,7 @@ describe('UserService', () => {
   let userRepo: Repository<UserEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: UserServiceProviders,
     }).compile();
 

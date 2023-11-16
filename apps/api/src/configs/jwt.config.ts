@@ -14,12 +14,12 @@
  * under the License.
  */
 import { registerAs } from '@nestjs/config';
-import * as yup from 'yup';
+import Joi from 'joi';
 
-export const jwtConfigSchema = yup.object({
-  JWT_SECRET: yup.string().required(),
-  ACCESS_TOKEN_EXPIRED_TIME: yup.string().default('10m'),
-  REFESH_TOKEN_EXPIRED_TIME: yup.string().default('1h'),
+export const jwtConfigSchema = Joi.object({
+  JWT_SECRET: Joi.string().required(),
+  ACCESS_TOKEN_EXPIRED_TIME: Joi.string().default('10m'),
+  REFESH_TOKEN_EXPIRED_TIME: Joi.string().default('1h'),
 });
 
 export const jwtConfig = registerAs('jwt', () => ({

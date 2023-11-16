@@ -19,5 +19,5 @@ import { IsObject } from 'class-validator';
 export class CreateIssueTrackerRequestDto {
   @ApiProperty()
   @IsObject()
-  data: object;
+  data: Record<string, any>;
 }

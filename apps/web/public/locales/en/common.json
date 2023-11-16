@@ -24,9 +24,7 @@
     },
     "reset-password": {
       "title": "Resest Password",
-      "button": {
-        "send-email": "Send email"
-      }
+      "button": { "send-email": "Send email" }
     }
   },
   "link": {
@@ -164,9 +162,7 @@
         "preview-description": "You can check it after selecting <preview>Preview</preview>."
       },
       "dialog": {
-        "edit-user": {
-          "title": "Edit User"
-        },
+        "edit-user": { "title": "Edit User" },
         "delete-project": {
           "title": "Delete Project",
           "description": "Deleting a project will delete all issue/feedback data.\nPlease enter the text below to proceed with the deletion."
@@ -195,22 +191,14 @@
           "title": "Edit Member",
           "description": "Role varies from the menu accessible to functions available.\nPlease check the member and select the correct Role."
         },
-        "register-member": {
-          "title": "Register Member"
-        },
+        "register-member": { "title": "Register Member" },
         "delete-member": {
           "title": "Delete Member",
           "description": "Are you sure you want to delete the Member?"
         },
-        "add-field": {
-          "title": "Add Field"
-        },
-        "edit-field": {
-          "title": "Edit Field"
-        },
-        "invite-user": {
-          "title": "Invite User"
-        }
+        "add-field": { "title": "Add Field" },
+        "edit-field": { "title": "Edit Field" },
+        "invite-user": { "title": "Invite User" }
       }
     }
   },
@@ -264,11 +252,12 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "before-days": "Before {{day, number}} days",
-      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days",
-      "all-dates": "The entire period"
+      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days"
     },
     "equal-search": "Equal",
-    "like-search": "Like"
+    "like-search": "Like",
+    "more": "more",
+    "shrink": "shrink"
   },
   "toast": {
     "sign-in": "Login Successful",

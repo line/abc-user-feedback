@@ -33,6 +33,7 @@ import { getStatusColor } from '@/constants/issues';
 import { useFeedbackSearch, useOAIQuery } from '@/hooks';
 import type { FieldType } from '@/types/field.type';
 import type { IssueType } from '@/types/issue.type';
+import FeedbackDetailCell from './FeedbackDetailCell';
 
 interface IProps {
   id: number;
@@ -47,6 +48,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
   const { data } = useFeedbackSearch(projectId, channelId, {
     query: { ids: [id] },
   });
+
   const feedbackData = data?.items?.[0] ?? {};
 
   const { data: channelData } = useOAIQuery({
@@ -89,19 +91,16 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                   <Icon name="CloseCircleFill" size={20} />
                 </button>
               </div>
-              <table className="border-separate border-spacing-y-5">
-                <colgroup>
-                  <col style={{ minWidth: 80 }} />
-                </colgroup>
+              <table className="table-fixed border-separate border-spacing-y-5">
                 <tbody>
                   {channelData?.fields.sort(fieldSortType).map((field) => (
                     <tr key={field.name}>
-                      <th className="font-14-regular text-secondary mr-2 text-left align-text-top">
+                      <th className="font-14-regular text-secondary min-w-[80px] max-w-[80px] break-words text-left align-text-top">
                         {field.name}
                       </th>
-                      <td className="font-14-regular text-primary">
+                      <FeedbackDetailCell>
                         {field.key === 'issues' ? (
-                          <div className="flex gap-2">
+                          <div className="flex flex-wrap gap-2">
                             {(
                               feedbackData[field.key] ?? ([] as IssueType[])
                             ).map((v) => (
@@ -125,7 +124,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                         ) : (
                           feedbackData[field.key]
                         )}
-                      </td>
+                      </FeedbackDetailCell>
                     </tr>
                   ))}
                 </tbody>

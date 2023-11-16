@@ -13,8 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const getDescriptionStr = (str?: string | null) => {
-  if (!str) return '-';
-  str = str.trim();
-  return str.length !== 0 ? str : '-';
-};
+import { Expose, plainToInstance } from 'class-transformer';
+
+import { ApiKeyEntity } from '../api-key.entity';
+
+export class CreateApiKeyDto {
+  @Expose()
+  projectId: number;
+
+  @Expose()
+  value?: string;
+
+  public static from(params: any): CreateApiKeyDto {
+    return plainToInstance(CreateApiKeyDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
+
+  static toApiKeyEntity(params: CreateApiKeyDto) {
+    return ApiKeyEntity.from({
+      projectId: params.projectId,
+      value: params.value,
+    });
+  }
+}

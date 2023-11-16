@@ -15,10 +15,10 @@
  */
 import type { OnModuleInit } from '@nestjs/common';
 import { Module } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
-import { OS_USE } from '@/configs/opensearch.config';
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { FieldEntity } from '../channel/field/field.entity';
 import { FieldModule } from '../channel/field/field.module';
@@ -43,9 +43,12 @@ import { MigrationService } from './migration.service';
   controllers: [MigrationController],
 })
 export class MigrationModule implements OnModuleInit {
-  constructor(private readonly migrtaionService: MigrationService) {}
+  constructor(
+    private readonly migrtaionService: MigrationService,
+    private readonly configService: ConfigService,
+  ) {}
   async onModuleInit() {
-    if (OS_USE) {
+    if (this.configService.get('opensearch.use')) {
       await this.migrtaionService.migrateToES();
     }
   }

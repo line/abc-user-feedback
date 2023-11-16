@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { TestConfig } from '@/test-utils/util-functions';
 import { OptionServiceProviders } from '../../../test-utils/providers/option.service.providers';
 import { OptionEntity } from '../../channel/option/option.entity';
 import {
@@ -37,6 +38,7 @@ describe('Option Test suite', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
+      imports: [TestConfig],
       providers: OptionServiceProviders,
     }).compile();
 

@@ -13,8 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const getDescriptionStr = (str?: string | null) => {
-  if (!str) return '-';
-  str = str.trim();
-  return str.length !== 0 ? str : '-';
-};
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString, Length } from 'class-validator';
+
+export class CreateApiKeyRequestDto {
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  @Length(20)
+  value?: string;
+}

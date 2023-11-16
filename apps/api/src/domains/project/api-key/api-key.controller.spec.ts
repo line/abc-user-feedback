@@ -45,12 +45,21 @@ describe('ApiKeyController', () => {
     apiKeyController = module.get(ApiKeyController);
   });
 
-  describe('create', () => {
-    it('', async () => {
+  describe('create ', () => {
+    it('creating succeeds without an api key', async () => {
       jest.spyOn(MockApiKeyService, 'create');
       const projectId = faker.number.int();
 
-      await apiKeyController.create(projectId);
+      await apiKeyController.create(projectId, {});
+
+      expect(MockApiKeyService.create).toBeCalledTimes(1);
+    });
+    it('creating succeeds with an api key', async () => {
+      jest.spyOn(MockApiKeyService, 'create');
+      const projectId = faker.number.int();
+      const value = faker.string.alphanumeric(20);
+
+      await apiKeyController.create(projectId, { value });
 
       expect(MockApiKeyService.create).toBeCalledTimes(1);
     });
