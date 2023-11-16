@@ -21,14 +21,12 @@ const useTruncatedElement = ({ ref }: { ref: RefObject<HTMLElement> }) => {
   const [isShowingMore, setIsShowingMore] = useState(false);
 
   useLayoutEffect(() => {
-    const { offsetHeight, scrollHeight } = ref.current || {};
+    if (!ref.current) return;
+    const { offsetHeight, scrollHeight } = ref.current;
 
-    if (offsetHeight && scrollHeight && offsetHeight + 1 < scrollHeight) {
-      setIsTruncated(true);
-    } else {
-      setIsTruncated(false);
-    }
-  }, [ref]);
+    if (offsetHeight + 1 < scrollHeight) setIsTruncated(true);
+    else setIsTruncated(false);
+  }, [ref.current?.innerHTML]);
 
   const toggleIsShowingMore = () => setIsShowingMore((prev) => !prev);
 
