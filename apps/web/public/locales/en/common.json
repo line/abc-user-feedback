@@ -24,9 +24,7 @@
     },
     "reset-password": {
       "title": "Resest Password",
-      "button": {
-        "send-email": "Send email"
-      }
+      "button": { "send-email": "Send email" }
     }
   },
   "link": {
@@ -311,7 +309,9 @@
     "helper": "Help",
     "warning-get-out": "Will you leave the process of creating a {{type}}?\nEven if you leave, you can proceed later.",
     "no-channel": "There is no registered channel.",
-    "guide": "Guide"
+    "guide": "Guide",
+    "more": "more",
+    "shrink": "shrink"
   },
   "toast": {
     "sign-in": "Login Successful",

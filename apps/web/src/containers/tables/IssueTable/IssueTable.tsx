@@ -204,9 +204,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   );
   const q = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
-      console.log('value: ', value);
       if (key === 'status' && value === 'total') return prev;
-
       if (createdAtRange) {
         return {
           ...prev,

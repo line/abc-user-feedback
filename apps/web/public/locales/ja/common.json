@@ -117,14 +117,12 @@
         "tenant-info": "Tenant情報",
         "sign-up-mgmt": "Login &Signup管理",
         "user-mgmt": "User管理",
-
         "project-info": "Project情報",
         "member-mgmt": "Member管理",
         "role-mgmt": "Role管理",
         "api-key-mgmt": "API Key管理",
         "issue-tracker-mgmt": "Issue Tracker管理",
         "delete-project": "Project削除",
-
         "channel-info": "Channel情報",
         "field-mgmt": "Field管理",
         "delete-channel": "Channel削除"
@@ -311,7 +309,9 @@
     "helper": "ヘルプ",
     "warning-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
     "no-channel": "登録されたチャンネルがありません。",
-    "guide": "案内"
+    "guide": "案内",
+    "more": "もっと",
+    "shrink": "縮む"
   },
   "toast": {
     "sign-in": "ログイン成功",

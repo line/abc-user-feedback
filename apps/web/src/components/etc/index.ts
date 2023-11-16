@@ -33,3 +33,4 @@ export { default as CreateProjectButton } from './CreateProjectButton';
 export { default as NoChannel } from './NoChannel';
 
 export { default as DescriptionTooltip } from './DescriptionTooltip';
+export { default as Popper } from './Popper';
