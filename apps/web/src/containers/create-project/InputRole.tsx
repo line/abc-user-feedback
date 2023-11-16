@@ -13,9 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useCallback, useMemo, useState } from 'react';
-
-import { Popover, PopoverModalContent } from '@ufb/ui';
+import { useCallback, useMemo } from 'react';
 
 import { CreateRolePopover } from '@/components/popovers';
 import { useCreateProject } from '@/contexts/create-project.context';
@@ -27,7 +25,6 @@ interface IProps {}
 
 const InputRole: React.FC<IProps> = () => {
   const { onChangeInput, input } = useCreateProject();
-  const [open, setOpen] = useState(false);
 
   const roles = useMemo(() => input.roles, [input.roles]);
 
@@ -62,16 +59,6 @@ const InputRole: React.FC<IProps> = () => {
         updateRole={onUpdateRole}
         roles={roles}
       />
-      <Popover modal open={open} onOpenChange={setOpen}>
-        <PopoverModalContent
-          title="안내"
-          description="최소 1개 이상의 Role이 등록되어 있어야 합니다."
-          submitButton={{
-            children: '확인',
-            onClick: () => setOpen(false),
-          }}
-        />
-      </Popover>
     </CreateProjectInputTemplate>
   );
 };

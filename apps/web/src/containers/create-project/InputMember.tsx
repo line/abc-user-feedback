@@ -210,10 +210,10 @@ const InputMember: React.FC = () => {
       </table>
       <Popover modal open={open} onOpenChange={setOpen}>
         <PopoverModalContent
-          title="안내"
-          description="유효하지 않은 Member 목록이 존재합니다."
+          title={t('text.guide')}
+          description={t('main.create-project.guide.invalid-member')}
           submitButton={{
-            children: '확인',
+            children: t('button.confirm'),
             onClick: () => setOpen(false),
           }}
         />

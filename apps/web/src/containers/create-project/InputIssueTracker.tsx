@@ -15,6 +15,7 @@
  */
 import { useCallback, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 import { ZodError } from 'zod';
 
 import { ErrorCode } from '@ufb/shared';
@@ -33,6 +34,7 @@ import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 interface IProps {}
 
 const InputIssueTracker: React.FC<IProps> = () => {
+  const { t } = useTranslation();
   const router = useRouter();
 
   const { input, onChangeInput, clearLocalStorage, gotoStep } =
@@ -132,10 +134,10 @@ const InputIssueTracker: React.FC<IProps> = () => {
       {openMemberError && (
         <Popover modal open={openMemberError} onOpenChange={setOpenMemberError}>
           <PopoverModalContent
-            title="안내"
-            description="유효하지 않은 Member 목록이 존재합니다."
+            title={t('text.guide')}
+            description={t('main.create-project.guide.invalid-member')}
             submitButton={{
-              children: '확인',
+              children: t('button.confirm'),
               onClick: () => {
                 setOpenMemberError(false);
                 gotoStep('members');
@@ -151,10 +153,10 @@ const InputIssueTracker: React.FC<IProps> = () => {
           onOpenChange={setOpenProjectError}
         >
           <PopoverModalContent
-            title="안내"
-            description="유효하지 않는 Project 정보가 존재합니다."
+            title={t('text.guide')}
+            description={t('main.create-project.guide.invalid-project')}
             submitButton={{
-              children: '확인',
+              children: t('button.confirm'),
               onClick: () => {
                 setOpenProjectError(false);
                 gotoStep('projectInfo');
@@ -166,10 +168,10 @@ const InputIssueTracker: React.FC<IProps> = () => {
       {openRoleError && (
         <Popover modal open={openRoleError} onOpenChange={setOpenRoleError}>
           <PopoverModalContent
-            title="안내"
-            description="유효하지 않는 Role 정보가 존재합니다."
+            title={t('text.guide')}
+            description={t('main.create-project.guide.invalid-role')}
             submitButton={{
-              children: '확인',
+              children: t('button.confirm'),
               onClick: () => {
                 setOpenRoleError(false);
                 gotoStep('roles');

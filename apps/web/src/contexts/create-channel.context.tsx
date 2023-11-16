@@ -92,6 +92,7 @@ const CreateChannelContext = CreateContext<ChannelStepType, ChannelInputType>({
     fieldPreview: 'Field 미리보기',
   },
 });
+
 export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {

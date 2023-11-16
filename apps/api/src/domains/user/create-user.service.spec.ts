@@ -33,7 +33,6 @@ import {
   NotAllowedUserCreateException,
   UserAlreadyExistsException,
 } from './exceptions';
-import { UserService } from './user.service';
 
 describe('CreateUserService', () => {
   let createUserService: CreateUserService;
@@ -43,8 +42,6 @@ describe('CreateUserService', () => {
   let memberRepo: Repository<MemberEntity>;
   let roleRepo: Repository<RoleEntity>;
 
-  let userSerivce: UserService;
-
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -53,13 +50,10 @@ describe('CreateUserService', () => {
 
     createUserService = module.get(CreateUserService);
 
-    userSerivce = module.get(UserService);
-
     userRepo = module.get(getRepositoryToken(UserEntity));
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     memberRepo = module.get(getRepositoryToken(MemberEntity));
     roleRepo = module.get(getRepositoryToken(RoleEntity));
-    jest.spyOn(userSerivce, 'findById').mockResolvedValue({} as UserEntity);
   });
 
   describe('createOAuthUser', () => {

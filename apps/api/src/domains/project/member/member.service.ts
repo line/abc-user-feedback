@@ -27,7 +27,6 @@ import {
   MemberNotFoundException,
   MemberUpdateRoleNotMatchedProjectException,
 } from './exceptions';
-import { MemberInvalidUserException } from './exceptions/member-invalid-user.exception';
 import { MemberEntity } from './member.entity';
 
 @Injectable()
@@ -41,11 +40,6 @@ export class MemberService {
 
   private async validateMember(userId: number, roleId: number) {
     const role = await this.roleService.findById(roleId);
-    try {
-      await this.userService.findById(userId);
-    } catch (error) {
-      throw new MemberInvalidUserException();
-    }
 
     const member = await this.repository.findOne({
       where: {

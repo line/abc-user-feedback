@@ -117,7 +117,7 @@ const SignUpSetting: React.FC<IProps> = () => {
       setDomainState((prev) => ({
         ...prev,
         isValid: false,
-        hint: '1글자 이상 입력해주세요.',
+        hint: t('hint.required'),
       }));
       return;
     }
@@ -128,7 +128,7 @@ const SignUpSetting: React.FC<IProps> = () => {
       setDomainState((prev) => ({
         ...prev,
         isValid: false,
-        hint: '도메인 형식이 아닙니다.',
+        hint: t('hint.invalid-domain'),
       }));
       return;
     }

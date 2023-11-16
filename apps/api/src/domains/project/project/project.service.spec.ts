@@ -22,8 +22,6 @@ import { Like } from 'typeorm';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
-import type { UserEntity } from '@/domains/user/entities/user.entity';
-import type { UserService } from '@/domains/user/user.service';
 import {
   createQueryBuilder,
   getRandomEnumValues,
@@ -57,8 +55,6 @@ describe('ProjectService Test suite', () => {
   let apiKeyRepo: Repository<ApiKeyEntity>;
   let issueRepo: Repository<IssueTrackerEntity>;
 
-  let userSerivce: UserService;
-
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -73,7 +69,6 @@ describe('ProjectService Test suite', () => {
     memberRepo = module.get(getRepositoryToken(MemberEntity));
     apiKeyRepo = module.get(getRepositoryToken(ApiKeyEntity));
     issueRepo = module.get(getRepositoryToken(IssueTrackerEntity));
-    jest.spyOn(userSerivce, 'findById').mockResolvedValue({} as UserEntity);
   });
 
   describe('create', () => {

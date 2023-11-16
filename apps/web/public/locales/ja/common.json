@@ -232,7 +232,12 @@
         "apiKeys": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
         "issueTracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。 使用中のIssue Tracking System情報を入力してください。"
       },
-      "continue-channel-creation": "Channelまで生成しないとUser Feedbackを使用できません。\nChannel生成を続けますか？"
+      "continue-channel-creation": "Channelまで生成しないとUser Feedbackを使用できません。\nChannel生成を続けますか？",
+      "guide": {
+        "invalid-member": "無効なMemberリストが存在します。",
+        "invalid-role": "無効なRole情報が存在します。",
+        "invalid-project": "無効なProject情報が存在します。"
+      }
     },
     "create-channel": {
       "title": "Channel生成",
@@ -247,7 +252,10 @@
         "fields": "Field 管理",
         "field-preview": "Field プレビュー"
       },
-      "finish-channel-creation": "すべての準備が完了しました。\nUser Feedbackの利用を始めてみてください！"
+      "finish-channel-creation": "すべての準備が完了しました。\nUser Feedbackの利用を始めてみてください！",
+      "guide": {
+        "invalid-channel": "無効なChannel情報が存在します。"
+      }
     }
   },
   "header": {
@@ -311,7 +319,9 @@
     "equal-search": "完全一致",
     "like-search": "部分一致",
     "helper": "ヘルプ",
-    "warning-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。"
+    "warning-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
+    "no-channel": "登録されたチャンネルがありません。",
+    "guide": "案内"
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -328,6 +338,7 @@
   "hint": {
     "required": "必須入力対象です。",
     "max-length": "{{length}}字以下で入力してください。",
-    "name-already-exists": "既に存在する{{name}}です。"
+    "name-already-exists": "既に存在する{{name}}です。",
+    "invalid-domain": "ドメイン形式ではありません。"
   }
 }

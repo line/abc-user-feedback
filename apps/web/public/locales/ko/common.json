@@ -233,7 +233,12 @@
         "apiKeys": "피드백 수집 API의 API Key 정보를 관리합니다. API를 활용해 피드백을 수집한다면 Key 정보를 생성해 주세요.",
         "issueTracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다. 사용 중인 Issue Tracking System 정보를 입력해 주세요."
       },
-      "continue-channel-creation": "Channel까지 생성해야 UserFeedback을 사용할 수 있습니다.\nChannel 생성을 이어서 하시겠어요?"
+      "continue-channel-creation": "Channel까지 생성해야 UserFeedback을 사용할 수 있습니다.\nChannel 생성을 이어서 하시겠어요?",
+      "guide": {
+        "invalid-member": "유효하지 않은 Member 목록이 존재합니다.",
+        "invalid-role": "유효하지 않는 Role 정보가 존재합니다.",
+        "invalid-project": "유효하지 않는 Project 정보가 존재합니다."
+      }
     },
     "create-channel": {
       "title": "Channel 생성",
@@ -248,7 +253,10 @@
         "fields": "Field 관리",
         "field-preview": "Field 미리보기"
       },
-      "finish-channel-creation": "모든 준비가 완료됐습니다.\nUserFeedback 이용을 시작해보세요!"
+      "finish-channel-creation": "모든 준비가 완료됐습니다.\nUserFeedback 이용을 시작해보세요!",
+      "guide": {
+        "invalid-channel": "유효하지 않은 Project 정보가 존재합니다."
+      }
     }
   },
   "header": {
@@ -312,7 +320,9 @@
     "equal-search": "완전 일치",
     "like-search": "부분 일치",
     "helper": "도움말",
-    "warning-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다."
+    "warning-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.",
+    "no-channel": "등록된 Channel이 없습니다.",
+    "guide": "안내"
   },
   "toast": {
     "sign-in": "로그인 성공",
@@ -329,6 +339,7 @@
   "hint": {
     "required": "필수 입력 대상입니다.",
     "max-length": "{{length}}자 이하로 입력해주세요.",
-    "name-already-exists": "이미 존재하는 {{name}}입니다."
+    "name-already-exists": "이미 존재하는 {{name}}입니다.",
+    "invalid-domain": "도메인 형식이 아닙니다."
   }
 }

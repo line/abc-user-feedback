@@ -17,9 +17,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
-import { Icon } from '@ufb/ui';
-
-import { SelectBox, SettingMenuTemplate } from '@/components';
+import { NoChannel, SelectBox, SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { Path } from '@/constants/path';
 import { useChannels, usePermissions } from '@/hooks';
@@ -53,30 +51,12 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
   }, [channelData]);
 
   const gotoCreateChannel = () =>
-    router.push({
-      pathname: Path.CREATE_CHANNEL,
-      query: { projectId },
-    });
+    router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
+
   if (!channelId) {
     return (
       <SettingMenuTemplate title="Channel">
-        <div className="flex flex-1 flex-col items-center justify-center gap-8">
-          <div className="flex flex-col items-center gap-3">
-            <Icon
-              name="WarningTriangleFill"
-              size={56}
-              className="text-tertiary"
-            />
-            <p>등록된 Channel이 없습니다.</p>
-          </div>
-          <button
-            className="btn btn-blue btn-lg w-[200px] gap-2"
-            onClick={gotoCreateChannel}
-          >
-            <Icon name="Plus" size={24} className="text-above-primary" />
-            Channel 생성
-          </button>
-        </div>
+        <NoChannel projectId={projectId} />
       </SettingMenuTemplate>
     );
   }

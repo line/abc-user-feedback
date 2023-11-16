@@ -14,10 +14,12 @@
  * under the License.
  */
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
 import { Path } from '@/constants/path';
+import { usePermissions } from '@/hooks';
 
 interface IProps {
   projectId: number;
@@ -25,24 +27,28 @@ interface IProps {
 
 const NoChannel: React.FC<IProps> = ({ projectId }) => {
   const router = useRouter();
+  const perms = usePermissions(projectId);
+  const { t } = useTranslation();
   return (
     <div className="flex flex-1 flex-col items-center justify-center gap-8">
       <div className="flex flex-col items-center gap-3">
         <Icon name="WarningTriangleFill" size={56} className="text-tertiary" />
-        <p>등록된 Channel이 없습니다.</p>
+        <p>{t('text.no-channel')}.</p>
       </div>
-      <button
-        className="btn btn-blue btn-lg w-[200px] gap-2"
-        onClick={() =>
-          router.push({
-            pathname: Path.CREATE_CHANNEL,
-            query: { projectId },
-          })
-        }
-      >
-        <Icon name="Plus" size={24} className="text-above-primary" />
-        Channel 생성
-      </button>
+      {perms.includes('channel_create') && (
+        <button
+          className="btn btn-blue btn-lg w-[200px] gap-2"
+          onClick={() =>
+            router.push({
+              pathname: Path.CREATE_CHANNEL,
+              query: { projectId },
+            })
+          }
+        >
+          <Icon name="Plus" size={24} className="text-above-primary" />
+          {t('main.setting.button.create-channel')}
+        </button>
+      )}
     </div>
   );
 };

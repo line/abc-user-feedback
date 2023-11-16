@@ -27,10 +27,6 @@ interface IForm {
   roleName: string;
 }
 
-const scheme: Zod.ZodType<IForm> = z.object({
-  roleName: z.string().min(1, '필수 입력대상 입니다.').max(20),
-});
-
 interface IProps {
   roles: RoleType[];
   disabled?: boolean;
@@ -42,7 +38,11 @@ const CreateRolePopover: React.FC<IProps> = ({ disabled, onCreate, roles }) => {
   const { t } = useTranslation();
 
   const { register, handleSubmit, formState, setError, reset } = useForm<IForm>(
-    { resolver: zodResolver(scheme) },
+    {
+      resolver: zodResolver(
+        z.object({ roleName: z.string().min(1, t('hint.required')).max(20) }),
+      ),
+    },
   );
 
   useEffect(() => {

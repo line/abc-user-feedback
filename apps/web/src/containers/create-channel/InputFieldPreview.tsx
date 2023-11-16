@@ -15,6 +15,7 @@
  */
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, toast } from '@ufb/ui';
@@ -28,6 +29,7 @@ import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 interface IProps {}
 
 const InputFieldPreview: React.FC<IProps> = () => {
+  const { t } = useTranslation();
   const { input, gotoStep } = useCreateChannel();
 
   const [openChannelInfoError, setOpenChannelInfoError] = useState(false);
@@ -78,10 +80,10 @@ const InputFieldPreview: React.FC<IProps> = () => {
           onOpenChange={setOpenChannelInfoError}
         >
           <PopoverModalContent
-            title="안내"
-            description="유효하지 않은 Channel 정보가 존재합니다."
+            title={t('text.guide')}
+            description={t('main.create-channel.guide.invalid-channel')}
             submitButton={{
-              children: '확인',
+              children: t('button.confirm'),
               onClick: () => {
                 setOpenChannelInfoError(false);
                 gotoStep('channelInfo');
