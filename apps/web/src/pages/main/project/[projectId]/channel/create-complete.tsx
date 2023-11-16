@@ -14,13 +14,15 @@
  * under the License.
  */
 import React, { useMemo } from 'react';
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
+import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import {
   ChannelInfoSection,
@@ -116,6 +118,13 @@ const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
       </button>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+    },
+  };
 };
 
 export default CreateCompletePage;

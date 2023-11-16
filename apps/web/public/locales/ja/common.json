@@ -310,7 +310,8 @@
     },
     "equal-search": "完全一致",
     "like-search": "部分一致",
-    "helper": "ヘルプ"
+    "helper": "ヘルプ",
+    "warning-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。"
   },
   "toast": {
     "sign-in": "ログイン成功",

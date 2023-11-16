@@ -15,6 +15,7 @@
  */
 import { createContext, useCallback, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import { useLocalStorage } from '@/hooks';
 
@@ -61,6 +62,7 @@ export const CreateProvider = <
   projectId,
   stepperText,
 }: IProps<StepType, InputType>) => {
+  const { t } = useTranslation();
   const FIRST_STEP = steps[0] as StepType;
 
   const [input, setInput] = useLocalStorage<InputType>(
@@ -123,7 +125,7 @@ export const CreateProvider = <
 
   useEffect(() => {
     if (completeStepIndex === 0) return;
-    const confirmMsg = `${type} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.`;
+    const confirmMsg = t('text.warning-get-out', { type });
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.returnValue = confirmMsg;

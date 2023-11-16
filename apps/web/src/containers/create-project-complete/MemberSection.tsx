@@ -109,7 +109,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
                     className="text-tertiary"
                     size={56}
                   />
-                  <p>{t('main.setting.register-member')}</p>
+                  <p>{t('text.no-data')}</p>
                 </div>
               </td>
             </tr>

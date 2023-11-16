@@ -108,6 +108,7 @@ const CreateCompletePage: NextPage = () => {
 };
 
 const Header: React.FC = () => {
+  const { t } = useTranslation();
   const router = useRouter();
   return (
     <div className="flex h-12 items-center justify-between">
@@ -125,7 +126,7 @@ const Header: React.FC = () => {
         onClick={() => router.push(Path.MAIN)}
       >
         <Icon name="Out" size={16} />
-        <span className="font-12-bold uppercase">나가기</span>
+        <span className="font-12-bold uppercase">{t('button.get-out')}</span>
       </button>
     </div>
   );

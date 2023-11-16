@@ -310,7 +310,8 @@
     },
     "equal-search": "Equal",
     "like-search": "Like",
-    "helper": "Help"
+    "helper": "Help",
+    "warning-get-out": "Will you leave the process of creating a {{type}}?\nEven if you leave, you can proceed later."
   },
   "toast": {
     "sign-in": "Login Successful",

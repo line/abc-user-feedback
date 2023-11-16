@@ -311,7 +311,8 @@
     },
     "equal-search": "완전 일치",
     "like-search": "부분 일치",
-    "helper": "도움말"
+    "helper": "도움말",
+    "warning-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다."
   },
   "toast": {
     "sign-in": "로그인 성공",
