@@ -19,9 +19,12 @@ import { ConfigModule } from '@nestjs/config';
 import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
-import { jwtConfig } from '@/configs/jwt.config';
-import { opensearchConfig } from '@/configs/opensearch.config';
-import { smtpConfig } from '@/configs/smtp.config';
+import { jwtConfig, jwtConfigSchema } from '@/configs/jwt.config';
+import {
+  opensearchConfig,
+  opensearchConfigSchema,
+} from '@/configs/opensearch.config';
+import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import type { AuthService } from '@/domains/auth/auth.service';
 import { UserDto } from '@/domains/user/dtos';
 import { UserStateEnum } from '@/domains/user/entities/enums';
@@ -37,6 +40,9 @@ export const getMockProvider = (
 export const TestConfig = ConfigModule.forRoot({
   load: [smtpConfig, jwtConfig, opensearchConfig],
   envFilePath: '.env.test',
+  validationSchema: smtpConfigSchema
+    .concat(jwtConfigSchema)
+    .concat(opensearchConfigSchema),
 });
 
 export const MockDataSource = {
