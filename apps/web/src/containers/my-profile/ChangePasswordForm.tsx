@@ -18,6 +18,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { ErrorCode } from '@ufb/shared';
 import { TextInput, toast } from '@ufb/ui';
 
 import { useOAIMutation } from '@/hooks';
@@ -63,7 +64,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       },
       onError(error) {
         if (typeof error.message === 'string') {
-          if (error.code === 'InvalidPassword') {
+          if (error.code === ErrorCode.User.InvalidPassword) {
             setError('password', { message: 'Invalid Password' });
           }
           toast.negative({ title: error.message as string });

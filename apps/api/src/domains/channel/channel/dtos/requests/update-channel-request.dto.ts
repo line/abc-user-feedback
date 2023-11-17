@@ -21,7 +21,7 @@ import { IsNullable } from '@/domains/user/decorators';
 export class UpdateChannelRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(2)
+  @MinLength(1)
   name: string;
 
   @ApiProperty({ nullable: true })

@@ -1,0 +1,32 @@
+{
+  "name": "@ufb/shared",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "format": "prettier --check \"src/**/*.ts\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+  },
+  "prettier": "@ufb/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "@ufb/eslint-config/base",
+      "@ufb/eslint-config/react"
+    ],
+    "root": true
+  },
+  "devDependencies": {
+    "@ufb/eslint-config": "^0.1.0",
+    "@ufb/prettier-config": "^0.1.0",
+    "@ufb/tsconfig": "^0.1.0",
+    "eslint": "^8.51.0",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2"
+  }
+}

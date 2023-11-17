@@ -13,7 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { createContext, useCallback, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
@@ -186,3 +192,7 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
     </UserContext.Provider>
   );
 };
+
+export function useUser() {
+  return useContext(UserContext);
+}

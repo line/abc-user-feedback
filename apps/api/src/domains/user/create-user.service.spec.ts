@@ -41,6 +41,7 @@ describe('CreateUserService', () => {
   let tenantRepo: Repository<TenantEntity>;
   let memberRepo: Repository<MemberEntity>;
   let roleRepo: Repository<RoleEntity>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],

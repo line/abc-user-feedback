@@ -16,6 +16,9 @@
     "web#dev": {
       "dependsOn": ["@ufb/tailwind#build"]
     },
+    "@ufb/tailwind#build": {
+      "outputs": ["dist/**"]
+    },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],
       "outputMode": "new-only"
@@ -29,7 +32,7 @@
       "outputs": ["node_modules/.cache/tsbuildinfo.json"]
     },
     "test": {
-      "dependsOn": ["topo"]
+      "dependsOn": ["topo", "@ufb/shared#build"]
     },
     "clean": {
       "cache": false

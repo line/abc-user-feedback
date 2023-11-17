@@ -16,10 +16,14 @@
 import type { FieldType } from './field.type';
 
 export type ChannelType = {
-  createdAt: string;
-  description: string | null;
-  fields: FieldType[];
   id: number;
   name: string;
+  description: string;
+  fields: FieldType[];
+  createdAt: string;
   updatedAt: string;
 };
+export type InputChannelInfoType = Omit<
+  ChannelType,
+  'id' | 'fields' | 'updatedAt' | 'createdAt'
+>;

@@ -85,6 +85,12 @@ export class ProjectController {
     );
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('/name-check')
+  async checkName(@Query('name') name: string) {
+    return this.projectService.checkName(name);
+  }
+
   @RequirePermission(PermissionEnum.project_read)
   @ApiOkResponse({ type: FindProjectByIdResponseDto })
   @Get('/:projectId')

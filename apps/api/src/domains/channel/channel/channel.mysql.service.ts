@@ -21,7 +21,11 @@ import { Transactional } from 'typeorm-transactional';
 
 import { isSelectFieldFormat } from '@/common/enums';
 import { ChannelEntity } from './channel.entity';
-import type { FindAllChannelsByProjectIdDto, FindByChannelIdDto } from './dtos';
+import type {
+  FindAllChannelsByProjectIdDto,
+  FindByChannelIdDto,
+  FindOneByNameAndProjectIdDto,
+} from './dtos';
 import { CreateChannelDto, UpdateChannelDto } from './dtos';
 import {
   ChannelAlreadyExistsException,
@@ -35,6 +39,11 @@ export class ChannelMySQLService {
     @InjectRepository(ChannelEntity)
     private readonly repository: Repository<ChannelEntity>,
   ) {}
+  async findOneBy({ name, projectId }: FindOneByNameAndProjectIdDto) {
+    return await this.repository.findOne({
+      where: { name, project: { id: projectId } },
+    });
+  }
 
   @Transactional()
   async create(dto: CreateChannelDto) {

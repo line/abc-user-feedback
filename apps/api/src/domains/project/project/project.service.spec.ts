@@ -54,6 +54,7 @@ describe('ProjectService Test suite', () => {
   let memberRepo: Repository<MemberEntity>;
   let apiKeyRepo: Repository<ApiKeyEntity>;
   let issueRepo: Repository<IssueTrackerEntity>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],

@@ -19,9 +19,9 @@ import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import { Badge, Input, toast, Tooltip } from '@ufb/ui';
+import { Badge, Input, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
+import { DescriptionTooltip, SettingMenuTemplate } from '@/components';
 import { useOAIMutation, useTenant } from '@/hooks';
 import type { OAuthConfigType } from '@/types/tenant.type';
 import OAuthInput from './OAuthInput';
@@ -117,7 +117,7 @@ const SignUpSetting: React.FC<IProps> = () => {
       setDomainState((prev) => ({
         ...prev,
         isValid: false,
-        hint: '1글자 이상 입력해주세요.',
+        hint: t('hint.required'),
       }));
       return;
     }
@@ -128,7 +128,7 @@ const SignUpSetting: React.FC<IProps> = () => {
       setDomainState((prev) => ({
         ...prev,
         isValid: false,
-        hint: '도메인 형식이 아닙니다.',
+        hint: t('hint.invalid-domain'),
       }));
       return;
     }
@@ -235,7 +235,7 @@ const SignUpSetting: React.FC<IProps> = () => {
           <div>
             <p className="input-label mb-2 flex items-center gap-1">
               Email domain WhiteList
-              <Tooltip
+              <DescriptionTooltip
                 description={t(
                   'main.setting.sign-up-mgmt.domain-restriction-tooltip',
                 )}

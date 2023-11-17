@@ -93,7 +93,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
       <PopoverModalContent
         title={t('main.setting.dialog.edit-api-key.title')}
         description={t('main.setting.dialog.edit-api-key.description')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'WarningCircleFill',
           className: 'text-orange-primary',

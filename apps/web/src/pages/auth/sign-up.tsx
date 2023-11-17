@@ -30,7 +30,7 @@ import { Icon, TextInput, toast } from '@ufb/ui';
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
 import client from '@/libs/client';
 import type { IFetchError } from '@/types/fetch-error.type';
 import type { NextPageWithLayout } from '../_app';

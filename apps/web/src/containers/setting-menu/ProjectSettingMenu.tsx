@@ -73,7 +73,7 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           iconName="TicketFill"
           onClick={onClickSettingMenu('TICKET_MANAGEMENT')}
           active={settingMenu === 'TICKET_MANAGEMENT'}
-          name={t('main.setting.subtitle.ticket-mgmt')}
+          name={t('main.setting.subtitle.issue-tracker-mgmt')}
           disabled={!perms.includes('project_tracker_read')}
         />
         <SettingMenuItem

@@ -104,7 +104,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.invite-user.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           children: t('button.confirm'),
           type: 'submit',

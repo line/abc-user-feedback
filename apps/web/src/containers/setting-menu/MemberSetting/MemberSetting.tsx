@@ -150,7 +150,7 @@ const MemberSetting: React.FC<IProps> = ({ projectId }) => {
     <SettingMenuTemplate
       title={t('main.setting.subtitle.member-mgmt')}
       actionBtn={{
-        children: t('main.setting.dialog.register-member.title'),
+        children: t('main.setting.button.register-member'),
         onClick: () => setOpenDialog(true),
         disabled: !perms.includes('project_member_create'),
       }}
@@ -178,11 +178,11 @@ const MemberSetting: React.FC<IProps> = ({ projectId }) => {
               <td colSpan={columns.length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
                   <Icon
-                    name="WarningTriangleFill"
+                    name="DriverRegisterFill"
                     className="text-tertiary"
                     size={56}
                   />
-                  <p>{t('text.no-data')}</p>
+                  <p>{t('main.setting.register-member')}</p>
                 </div>
               </td>
             </tr>

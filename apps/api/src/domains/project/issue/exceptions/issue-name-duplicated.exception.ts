@@ -15,7 +15,7 @@
  */
 import { BadRequestException } from '@nestjs/common';
 
-import { ErrorCode } from '@/constants/error-code.enum';
+import { ErrorCode } from '@ufb/shared';
 
 export class IssueNameDuplicatedException extends BadRequestException {
   constructor() {

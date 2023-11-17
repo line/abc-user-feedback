@@ -18,3 +18,4 @@ export { CreateChannelDto } from './create-channel.dto';
 export { UpdateChannelDto } from './update-channel.dto';
 export { FindByChannelIdDto } from './find-by-channel-id.dto';
 export { UpdateChannelFieldsDto } from './update-channel-fields.dto';
+export { FindOneByNameAndProjectIdDto } from './find-one-by-name-and-project-id.dto';

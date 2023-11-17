@@ -29,7 +29,8 @@ import { OAuthLoginButton } from '@/components';
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useTenant, useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
+import { useTenant } from '@/hooks';
 import type { NextPageWithLayout } from '@/pages/_app';
 import type { IFetchError } from '@/types/fetch-error.type';
 

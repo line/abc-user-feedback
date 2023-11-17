@@ -15,7 +15,7 @@
  */
 import { UnauthorizedException } from '@nestjs/common';
 
-import { ErrorCode } from '@/constants/error-code.enum';
+import { ErrorCode } from '@ufb/shared';
 
 export class EmailNotVerifiedException extends UnauthorizedException {
   constructor() {

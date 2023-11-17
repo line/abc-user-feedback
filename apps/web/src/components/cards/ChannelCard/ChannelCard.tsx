@@ -21,7 +21,6 @@ import { Icon } from '@ufb/ui';
 import type { ColorType } from '@/types/color.type';
 
 interface IProps extends React.PropsWithChildren {
-  isChecked?: boolean;
   value?: React.ReactNode;
   rightChildren?: React.ReactNode;
   color: ColorType;
@@ -30,7 +29,7 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const ChannelCard: React.FC<IProps> = (props) => {
-  const { isChecked, value, rightChildren, color, iconName, name } = props;
+  const { value, rightChildren, color, iconName, name } = props;
 
   const { bg, icon } = useMemo(() => {
     switch (color) {
@@ -45,10 +44,9 @@ const ChannelCard: React.FC<IProps> = (props) => {
 
   return (
     <div
-      className={[
-        'flex w-[360px] items-center gap-4 rounded border p-2',
-        !isChecked ? 'opacity-50' : '',
-      ].join(' ')}
+      className={['flex w-[360px] items-center gap-4 rounded border p-2'].join(
+        ' ',
+      )}
     >
       <div
         className={bg + ' flex h-14 w-14 items-center justify-center rounded'}
