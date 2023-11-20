@@ -16,6 +16,6 @@
 export type UserType = {
   id: number;
   email: string;
-  name: string;
+  name: string | null;
   department: string | null;
 };
