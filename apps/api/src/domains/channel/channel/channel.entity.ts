@@ -24,6 +24,7 @@ import {
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
+import { FeedbackStatisticsEntity } from '@/domains/statistics/feedback/feedback-statistics.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';
@@ -52,6 +53,15 @@ export class ChannelEntity extends CommonEntity {
     cascade: true,
   })
   feedbacks: Relation<FeedbackEntity>[];
+
+  @OneToMany(
+    () => FeedbackStatisticsEntity,
+    (feedbackStats) => feedbackStats.channel,
+    {
+      cascade: true,
+    },
+  )
+  feedbackStats: Relation<FeedbackStatisticsEntity>[];
 
   static from(name: string, description: string, projectId: number) {
     const channel = new ChannelEntity();
