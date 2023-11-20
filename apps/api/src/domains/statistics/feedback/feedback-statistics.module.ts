@@ -17,13 +17,18 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
+import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { FeedbackStatisticsController } from './feedback-statistics.controller';
 import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([FeedbackStatisticsEntity, FeedbackEntity]),
+    TypeOrmModule.forFeature([
+      FeedbackStatisticsEntity,
+      FeedbackEntity,
+      IssueEntity,
+    ]),
   ],
   providers: [FeedbackStatisticsService],
   controllers: [FeedbackStatisticsController],

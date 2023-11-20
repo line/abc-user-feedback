@@ -20,7 +20,12 @@ import dotenv from 'dotenv';
 import { Between, In, Repository } from 'typeorm';
 
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
-import type { GetCountByDateByChannelDto, GetCountDto } from './dtos';
+import { IssueEntity } from '@/domains/project/issue/issue.entity';
+import type {
+  GetCountByDateByChannelDto,
+  GetCountDto,
+  GetIssuedRateDto,
+} from './dtos';
 import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
 
 dotenv.config();
@@ -32,6 +37,8 @@ export class FeedbackStatisticsService {
     private readonly repository: Repository<FeedbackStatisticsEntity>,
     @InjectRepository(FeedbackEntity)
     private readonly feedbackRepository: Repository<FeedbackEntity>,
+    @InjectRepository(IssueEntity)
+    private readonly issueRepository: Repository<IssueEntity>,
   ) {}
 
   private convertDatetimeToTimezone(datetime: Date) {
@@ -115,6 +122,38 @@ export class FeedbackStatisticsService {
           channel: { project: { id: dto.projectId } },
         },
       }),
+    };
+  }
+
+  async getIssuedRatio(dto: GetIssuedRateDto) {
+    return {
+      ratio:
+        (
+          await this.issueRepository
+            .createQueryBuilder('issue')
+            .select('feedbacks.id')
+            .innerJoin('issue.feedbacks', 'feedbacks')
+            .innerJoin('feedbacks.channel', 'channel')
+            .innerJoin('channel.project', 'project')
+            .where('feedbacks.createdAt BETWEEN :from AND :to', {
+              from: this.convertDatetimeToTimezone(dto.from),
+              to: this.convertDatetimeToTimezone(dto.to),
+            })
+            .andWhere('project.id = :projectId', {
+              projectId: dto.projectId,
+            })
+            .groupBy('feedbacks.id')
+            .getRawMany()
+        ).length /
+        (await this.feedbackRepository.count({
+          where: {
+            createdAt: Between(
+              this.convertDatetimeToTimezone(dto.from),
+              this.convertDatetimeToTimezone(dto.to),
+            ),
+            channel: { project: { id: dto.projectId } },
+          },
+        })),
     };
   }
 }

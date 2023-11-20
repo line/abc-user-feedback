@@ -15,3 +15,4 @@
  */
 export { GetCountByDateByChannelDto } from './get-count-by-date-by-channel.dto';
 export { GetCountDto } from './get-count.dto';
+export { GetIssuedRateDto } from './get-issued-rate.dto';

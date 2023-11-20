@@ -19,8 +19,9 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
+import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { FeedbackStatisticsServiceProviders } from '@/test-utils/providers/feedback-statistics.service.providers';
-import { TestConfig } from '@/test-utils/util-functions';
+import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { GetCountByDateByChannelDto, GetCountDto } from './dtos';
 import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
@@ -68,6 +69,7 @@ describe('FieldService suite', () => {
   let feedbackStatsService: FeedbackStatisticsService;
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;
+  let issueRepo: Repository<IssueEntity>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -82,6 +84,7 @@ describe('FieldService suite', () => {
       getRepositoryToken(FeedbackStatisticsEntity),
     );
     feedbackRepo = module.get(getRepositoryToken(FeedbackEntity));
+    issueRepo = module.get(getRepositoryToken(IssueEntity));
   });
 
   describe('getCountByDateByChannel', () => {
@@ -209,6 +212,7 @@ describe('FieldService suite', () => {
       });
     });
   });
+
   describe('getCount', () => {
     it('getting count succeeds with valid inputs', async () => {
       const from = faker.date.past();
@@ -227,6 +231,35 @@ describe('FieldService suite', () => {
       expect(feedbackRepo.count).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         count: feedbackStatsFixture.length,
+      });
+    });
+  });
+
+  describe('getIssuedRatio', () => {
+    it('getting issued ratio succeeds with valid inputs', async () => {
+      const from = faker.date.past();
+      const to = faker.date.future();
+      const projectId = faker.number.int();
+      const dto = new GetCountDto();
+      dto.from = from;
+      dto.to = to;
+      dto.projectId = projectId;
+      jest
+        .spyOn(issueRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
+      jest
+        .spyOn(createQueryBuilder, 'getRawMany')
+        .mockResolvedValue(feedbackStatsFixture);
+      jest
+        .spyOn(feedbackRepo, 'count')
+        .mockResolvedValue(feedbackStatsFixture.length);
+
+      const countByDateByChannel =
+        await feedbackStatsService.getIssuedRatio(dto);
+
+      expect(feedbackRepo.count).toBeCalledTimes(1);
+      expect(countByDateByChannel).toEqual({
+        ratio: 1,
       });
     });
   });

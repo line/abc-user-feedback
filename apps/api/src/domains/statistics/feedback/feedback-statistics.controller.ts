@@ -19,6 +19,7 @@ import { ApiOkResponse } from '@nestjs/swagger';
 import {
   FindCountByDateByChannelResponseDto,
   FindCountResponseDto,
+  FindIssuedRateResponseDto,
 } from './dtos/responses';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
 
@@ -56,6 +57,22 @@ export class FeedbackStatisticsController {
   ) {
     return FindCountResponseDto.transform(
       await this.feedbackStatisticsService.getCount({
+        from,
+        to,
+        projectId,
+      }),
+    );
+  }
+
+  @ApiOkResponse({ type: [FindIssuedRateResponseDto] })
+  @Get('/issued-ratio')
+  async getIssuedRatio(
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query('projectId') projectId: number,
+  ) {
+    return FindIssuedRateResponseDto.transform(
+      await this.feedbackStatisticsService.getIssuedRatio({
         from,
         to,
         projectId,

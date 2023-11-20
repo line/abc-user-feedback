@@ -13,7 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
 
-export { FindCountByDateByChannelResponseDto } from './find-count-by-date-by-channel-response.dto';
-export { FindCountResponseDto } from './find-count-response.dto';
-export { FindIssuedRateResponseDto } from './find-issued-rate.dto';
+export class FindIssuedRateResponseDto {
+  @ApiProperty()
+  @Expose()
+  ratio: number;
+
+  public static transform(params: any): FindIssuedRateResponseDto {
+    return plainToInstance(FindIssuedRateResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
+}

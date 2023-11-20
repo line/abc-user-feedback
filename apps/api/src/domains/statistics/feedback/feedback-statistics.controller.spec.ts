@@ -23,6 +23,7 @@ import { FeedbackStatisticsService } from './feedback-statistics.service';
 const MockFeedbackStatisticsService = {
   getCountByDateByChannel: jest.fn(),
   getCount: jest.fn(),
+  getIssuedRatio: jest.fn(),
 };
 
 describe('Feedback Statistics Controller', () => {
@@ -72,5 +73,14 @@ describe('Feedback Statistics Controller', () => {
     const projectId = faker.number.int();
     await feedbackStatisticsController.getCount(from, to, projectId);
     expect(MockFeedbackStatisticsService.getCount).toBeCalledTimes(1);
+  });
+
+  it('getIssuedRatio', async () => {
+    jest.spyOn(MockFeedbackStatisticsService, 'getIssuedRatio');
+    const from = faker.date.past();
+    const to = faker.date.future();
+    const projectId = faker.number.int();
+    await feedbackStatisticsController.getIssuedRatio(from, to, projectId);
+    expect(MockFeedbackStatisticsService.getIssuedRatio).toBeCalledTimes(1);
   });
 });

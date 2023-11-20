@@ -16,6 +16,7 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
+import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { FeedbackStatisticsEntity } from '@/domains/statistics/feedback/feedback-statistics.entity';
 import { FeedbackStatisticsService } from '@/domains/statistics/feedback/feedback-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
@@ -28,6 +29,10 @@ export const FeedbackStatisticsServiceProviders = [
   },
   {
     provide: getRepositoryToken(FeedbackEntity),
+    useValue: mockRepository(),
+  },
+  {
+    provide: getRepositoryToken(IssueEntity),
     useValue: mockRepository(),
   },
 ];
