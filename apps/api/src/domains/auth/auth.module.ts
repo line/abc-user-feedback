@@ -14,7 +14,7 @@
  * under the License.
  */
 import { HttpModule } from '@nestjs/axios';
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -34,14 +34,14 @@ import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
   imports: [
-    CodeModule,
-    UserModule,
-    PassportModule,
-    MailingModule,
-    ApiKeyModule,
-    TenantModule,
-    RoleModule,
-    MemberModule,
+    forwardRef(() => CodeModule),
+    forwardRef(() => UserModule),
+    forwardRef(() => PassportModule),
+    forwardRef(() => MailingModule),
+    forwardRef(() => ApiKeyModule),
+    forwardRef(() => TenantModule),
+    forwardRef(() => RoleModule),
+    forwardRef(() => MemberModule),
     HttpModule.register({
       timeout: 5000,
       maxRedirects: 5,

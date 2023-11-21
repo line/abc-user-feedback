@@ -38,7 +38,7 @@ const FeedbackTableWrapper: React.FC<IProps> = (props) => {
     return channels.items?.[0]?.id ?? null;
   }, [channelId, channels]);
 
-  if (!currentChannelId) return <div>No Channel</div>;
+  if (!currentChannelId) return <div>Invalid Channel Id</div>;
 
   return (
     <FeedbackTableProvider projectId={projectId} channelId={currentChannelId}>

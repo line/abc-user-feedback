@@ -54,11 +54,13 @@ const Project = {
   ProjectNotFound: 'ProjectNotFound',
   ProjectInvalidName: 'ProjectInvalidName',
 };
+
 const Channel = {
   ChannelAlreadyExists: 'ChannelAlreadyExists',
   ChannelNotFound: 'ChannelNotFound',
   ChannelInvalidName: 'ChannelInvalidName',
 };
+
 const Issue = {
   IssueNameDuplicated: 'IssueNameDuplicated',
   IssueInvalidName: 'IssueInvalidName',
@@ -73,20 +75,24 @@ const Option = {
   OptionNameDuplicated: 'OptionNameDuplicated',
   OptionKeyDuplicated: 'OptionKeyDuplicated',
 };
+
 const Feedback = {
   InvalidExpressionFormat: 'InvalidExpressionFormat',
   InvalidFieldType: 'InvalidFieldType',
   InvalidFieldRequest: 'InvalidFieldRequest',
   NotFoundAddressInfo: 'NotFoundAddressInfo',
 };
+
 const Member = {
   MemberAlreadyExists: 'MemberAlreadyExists',
   MemberNotFound: 'MemberNotFound',
   MemberUpdateRoleNotMatchedProject: 'MemberUpdateRoleNotMatchedProject ',
 };
+
 const Opensearch = {
   LargeWindow: 'LargeWindow',
 };
+
 export const ErrorCode = {
   Tenant,
   Role,

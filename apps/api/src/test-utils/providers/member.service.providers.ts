@@ -19,6 +19,7 @@ import { mockRepository } from '@/test-utils/util-functions';
 import { MemberEntity } from '../../domains/project/member/member.entity';
 import { MemberService } from '../../domains/project/member/member.service';
 import { RoleServiceProviders } from './role.service.providers';
+import { UserServiceProviders } from './user.service.providers';
 
 export const MemberServiceProviders = [
   MemberService,
@@ -27,4 +28,5 @@ export const MemberServiceProviders = [
     useValue: mockRepository(),
   },
   ...RoleServiceProviders,
+  ...UserServiceProviders,
 ];

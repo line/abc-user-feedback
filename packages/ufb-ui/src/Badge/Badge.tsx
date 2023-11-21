@@ -18,15 +18,7 @@ import { useMemo } from 'react';
 
 import type { IconNameType } from '../Icon';
 import { Icon } from '../Icon';
-
-type ColorType =
-  | 'red'
-  | 'orange'
-  | 'yellow'
-  | 'green'
-  | 'blue'
-  | 'navy'
-  | 'purple';
+import type { ColorType } from '../types/color.type';
 
 interface IProps extends React.PropsWithChildren {
   left?: {

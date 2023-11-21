@@ -24,6 +24,13 @@ module.exports = {
       quaternary: 'var(--fill-color-quaternary)',
       inverse: 'var(--fill-color-inverse)',
     },
+    text: {
+      primary: 'var(--text-color-primary)',
+      secondary: 'var(--text-color-secondary)',
+      tertiary: 'var(--text-color-tertiary)',
+      quaternary: 'var(--text-color-quaternary)',
+      inverse: 'var(--text-color-inverse)',
+    },
     ...colors,
   },
   textColor: {

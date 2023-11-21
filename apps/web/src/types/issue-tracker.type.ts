@@ -17,3 +17,4 @@ export type IssueTrackerType = {
   ticketKey: string;
   ticketDomain: string;
 };
+export type InputIssueTrackerType = IssueTrackerType;

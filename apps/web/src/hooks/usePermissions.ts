@@ -16,10 +16,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { useUser } from '@/contexts/user.context';
 import type { PermissionType } from '@/types/permission.type';
 import { PermissionList } from '@/types/permission.type';
 import useOAIQuery from './useOAIQuery';
-import useUser from './useUser';
 
 const usePermissions = (inputProjectId?: number | null) => {
   const { user } = useUser();

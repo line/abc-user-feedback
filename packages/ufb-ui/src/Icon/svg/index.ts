@@ -15,6 +15,7 @@
  */
 
 export { ReactComponent as Title } from './title.svg';
+export { ReactComponent as IdeaColor } from './color/idea-color.svg';
 
 export { ReactComponent as BagFill } from './fill/bag-fill.svg';
 export { ReactComponent as BellFill } from './fill/bell-fill.svg';
@@ -40,6 +41,7 @@ export { ReactComponent as DocumentFill } from './fill/document-fill.svg';
 export { ReactComponent as DocumentInfoFill } from './fill/document-info-fill.svg';
 export { ReactComponent as DocumentTermsFill } from './fill/document-terms-fill.svg';
 export { ReactComponent as DownCircleFill } from './fill/down-circle-fill.svg';
+export { ReactComponent as DriverRegisterFill } from './fill/driver-register-fill.svg';
 export { ReactComponent as EditFill } from './fill/edit-fill.svg';
 export { ReactComponent as ExchangeCircleFill } from './fill/exchange-circle-fill.svg';
 export { ReactComponent as EyeFill } from './fill/eye-fill.svg';
@@ -57,6 +59,7 @@ export { ReactComponent as MarkerFill } from './fill/marker-fill.svg';
 export { ReactComponent as MinusCircleFill } from './fill/minus-circle-fill.svg';
 export { ReactComponent as NarrowFill } from './fill/narrow-fill.svg';
 export { ReactComponent as NewCircleFill } from './fill/new-circle-fill.svg';
+export { ReactComponent as NoChannelFill } from './fill/no-channel-fill.svg';
 export { ReactComponent as OfficeFill } from './fill/office-fill.svg';
 export { ReactComponent as PlusCircleFill } from './fill/plus-circle-fill.svg';
 export { ReactComponent as PrinterFill } from './fill/printer-fill.svg';

@@ -20,3 +20,7 @@ export type ProjectType = {
   createdAt: string;
   updatedAt: string;
 };
+export type InputProjectInfoType = Omit<
+  ProjectType,
+  'id' | 'createdAt' | 'updatedAt'
+>;

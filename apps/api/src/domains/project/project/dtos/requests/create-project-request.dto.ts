@@ -20,7 +20,6 @@ import {
   IsOptional,
   IsString,
   Length,
-  MinLength,
 } from 'class-validator';
 
 import { CreateIssueTrackerRequestDto } from '@/domains/project/issue-tracker/dtos/requests';
@@ -47,7 +46,6 @@ class CreateApiKeyByValueDto {
 export class CreateProjectRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(2)
   name: string;
 
   @ApiProperty({ nullable: true })

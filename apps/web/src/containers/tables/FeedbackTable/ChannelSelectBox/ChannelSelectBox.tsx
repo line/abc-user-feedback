@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Tooltip } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
 
+import { DescriptionTooltip } from '@/components';
 import { useChannels } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
 import useFeedbackTable from '../feedback-table.context';
@@ -44,7 +45,9 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
             </div>
             <span>{channel.name}</span>
           </div>
-          <Tooltip description={getDescriptionStr(channel.description)} />
+          <DescriptionTooltip
+            description={getDescriptionStr(channel.description)}
+          />
         </div>
       ))}
     </div>
