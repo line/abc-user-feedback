@@ -84,9 +84,9 @@ export const projectInputScheme: Zod.ZodType<ProjectInputType> = z.object({
       roleId: z.number(),
       user: z.object({
         id: z.number(),
-        name: z.string(),
         email: z.string().email(),
-        department: z.string(),
+        name: z.string().nullable(),
+        department: z.string().nullable(),
       }),
     }),
   ),
