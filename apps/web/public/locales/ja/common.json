@@ -70,6 +70,9 @@
         }
       }
     },
+    "dashboard": {
+      "title": "대시보드"
+    },
     "feedback": {
       "title": "フィードバック",
       "column-setting": "カラムの設定",

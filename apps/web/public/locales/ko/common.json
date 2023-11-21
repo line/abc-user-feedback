@@ -70,6 +70,9 @@
         }
       }
     },
+    "dashboard": {
+      "title": "대시보드"
+    },
     "feedback": {
       "title": "피드백",
       "column-setting": "컬럼설정",

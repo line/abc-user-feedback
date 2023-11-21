@@ -49,10 +49,14 @@ const SideNav: React.FC<IProps> = () => {
         }}
       >
         <MenuItem
-          href={{
-            pathname: Path.FEEDBACK,
-            query: { projectId },
-          }}
+          href={{ pathname: Path.DASHBOARD, query: { projectId } }}
+          iconName="BubbleDotsStroke"
+          activePathname={Path.DASHBOARD}
+          isHover={isHover}
+          text={t('main.feedback.title')}
+        />
+        <MenuItem
+          href={{ pathname: Path.FEEDBACK, query: { projectId } }}
           iconName="BubbleDotsStroke"
           activePathname={Path.FEEDBACK}
           disabled={!perms.includes('feedback_read')}
@@ -60,10 +64,7 @@ const SideNav: React.FC<IProps> = () => {
           text={t('main.feedback.title')}
         />
         <MenuItem
-          href={{
-            pathname: Path.ISSUE,
-            query: { projectId },
-          }}
+          href={{ pathname: Path.ISSUE, query: { projectId } }}
           iconName="DocumentStroke"
           activePathname={Path.ISSUE}
           disabled={!perms.includes('issue_read')}

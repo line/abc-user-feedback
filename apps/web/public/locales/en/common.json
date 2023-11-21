@@ -70,6 +70,9 @@
         }
       }
     },
+    "dashboard": {
+      "title": "Dashboard"
+    },
     "feedback": {
       "title": "Feedback",
       "column-setting": "Column Setting",

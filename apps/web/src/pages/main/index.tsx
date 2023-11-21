@@ -101,7 +101,7 @@ const ProjectList: React.FC<{ projectId: number }> = ({ projectId }) => {
       total={channels?.meta.totalItems}
       feedbackCount={feedbackCount?.total}
       onClick={() =>
-        router.push({ pathname: Path.FEEDBACK, query: { projectId } })
+        router.push({ pathname: Path.PROJECT_MAIN, query: { projectId } })
       }
     />
   );
