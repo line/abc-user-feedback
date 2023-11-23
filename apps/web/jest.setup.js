@@ -13,5 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ChannelCard } from './ChannelCard';
-export { default as TenantProjectCard } from './TenantProjectCard';
+import '@testing-library/jest-dom';
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => {
+    return { t: (str) => str };
+  },
+}));

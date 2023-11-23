@@ -17,8 +17,8 @@ import { useTranslation } from 'next-i18next';
 
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
+import { useTenant } from '@/contexts/tenant.context';
 import { useUser } from '@/contexts/user.context';
-import { useTenant } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {

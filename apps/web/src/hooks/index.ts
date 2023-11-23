@@ -18,7 +18,6 @@ export { default as useOAIMutation } from './useOAIMutation';
 export { default as useFeedbackSearch } from './useFeedbackSearch';
 export { default as useIssueSearch } from './useIssueSearch';
 export { default as useSort } from './useSort';
-export { default as useTenant } from './useTenant';
 export { default as useProjects } from './useProjects';
 export { default as useChannels } from './useChannels';
 export { default as useLocalStorage } from './useLocalStorage';

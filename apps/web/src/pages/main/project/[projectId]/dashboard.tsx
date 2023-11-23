@@ -20,7 +20,7 @@ import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { DescriptionTooltip, MainTemplate, SelectBox } from '@/components';
+import { MainTemplate } from '@/components';
 import {
   SimpleBarChart,
   SimpleLineChart,
@@ -29,6 +29,7 @@ import {
 import DashboardCard from '@/components/etc/DashboardCard';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
+import { IssueRank } from '@/containers/dashboard';
 import { env } from '@/env.mjs';
 import type { NextPageWithLayout } from '@/pages/_app';
 
@@ -37,25 +38,12 @@ interface IProps {
 }
 
 const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
-  console.log('projectId: ', projectId);
   const { t } = useTranslation();
+  console.log('projectId: ', projectId);
   return (
     <>
       <h1 className="font-20-bold mb-3">{t('main.dashboard.title')}</h1>
-
-      <div className="border-fill-tertiary rounded border">
-        <div className="flex justify-between p-4">
-          <div className="flex items-center gap-1">
-            <h3 className="font-20-bold">이슈 순위</h3>
-            <DescriptionTooltip description="이슈 순위" />
-          </div>
-          <div className="flex items-center gap-2">
-            <SelectBox />
-            <button className="btn btn-secondary">필터설정</button>
-          </div>
-        </div>
-        <table></table>
-      </div>
+      <IssueRank />
       <div className="flex flex-wrap">
         <DashboardCard
           percentage={-10}
@@ -63,8 +51,6 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           count={652148}
         />
       </div>
-
-      {/* simple line chart */}
       <SimpleLineChart
         data={Array.from({ length: 10 }).map((_, i) => ({
           date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
@@ -72,14 +58,12 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           feedbackCount: faker.number.int(1000),
         }))}
       />
-      {/* simple bar chart */}
       <SimpleBarChart
         data={Array.from({ length: 10 }).map((_, i) => ({
           name: dayjs().add(i, 'day').format('YYYY-MM-DD'),
           value: faker.number.int(1000),
         }))}
       />
-      {/* stacked bar chart */}
       <StackedBarChart
         data={Array.from({ length: 10 }).map((_, i) => ({
           date: dayjs().add(i, 'day').format('YYYY-MM-DD'),

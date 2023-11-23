@@ -18,7 +18,8 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import { useOAIQuery, useTenant } from '@/hooks';
+import { useTenant } from '@/contexts/tenant.context';
+import { useOAIQuery } from '@/hooks';
 
 interface IProps {}
 

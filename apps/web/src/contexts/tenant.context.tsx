@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
@@ -76,4 +76,7 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
       )}
     </TenantContext.Provider>
   );
+};
+export const useTenant = () => {
+  return useContext(TenantContext);
 };

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from 'react';
+import React from 'react';
 
 import * as svg from './svg';
 
@@ -25,16 +25,17 @@ export interface IIconProps extends React.HTMLAttributes<HTMLOrSVGElement> {
   size?: number;
   className?: string;
 }
+
 export const Icon: React.FC<IIconProps> = ({
   name,
   size = 24,
   className,
   ...props
 }) => {
-  return React.createElement(svg[name], {
+  return React.createElement(svg[name] ?? 'div', {
     width: size,
     height: size,
-    className: `inline-block ${className}`,
+    className: ['inline-block', className].join(' '),
     ...props,
   });
 };

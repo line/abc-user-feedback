@@ -13,5 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ChannelCard } from './ChannelCard';
-export { default as TenantProjectCard } from './TenantProjectCard';
+import { Badge } from '@ufb/ui';
+
+interface IProps {}
+
+const Test: React.FC<IProps> = () => {
+  return <Badge></Badge>;
+};
+
+export default Test;

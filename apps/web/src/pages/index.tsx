@@ -22,11 +22,6 @@ const IndexPage: NextPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    redirect: {
-      destination: Path.SIGN_IN,
-      permanent: true,
-    },
-  };
+  return { redirect: { destination: Path.SIGN_IN, permanent: true } };
 };
 export default IndexPage;

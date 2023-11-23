@@ -13,5 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ChannelCard } from './ChannelCard';
-export { default as TenantProjectCard } from './TenantProjectCard';
+import { faker } from '@faker-js/faker';
+import { render } from '@testing-library/react';
+
+import TenantProjectCard from './TenantProjectCard';
+
+describe('TenantProjectCard', () => {
+  it('should render successfully', () => {
+    const props = {
+      name: faker.string.sample(),
+      description: faker.string.sample(),
+      type: 'tenant' as 'tenant' | 'project',
+    };
+    const { baseElement } = render(<TenantProjectCard {...props} />);
+    expect(baseElement).toBeTruthy();
+  });
+});
