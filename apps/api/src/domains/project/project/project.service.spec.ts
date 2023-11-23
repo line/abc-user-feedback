@@ -316,7 +316,7 @@ describe('ProjectService Test suite', () => {
       expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         where: { name: Like(`%${dto.searchText}%`) },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
       });
     });
     it('finding all projects succeds as a GENERAL user', async () => {
@@ -338,7 +338,7 @@ describe('ProjectService Test suite', () => {
           name: Like(`%${dto.searchText}%`),
           roles: { members: { user: { id: userId } } },
         },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
       });
     });
   });
