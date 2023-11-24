@@ -149,7 +149,7 @@ export class ProjectService {
       return await paginate(
         this.projectRepo.createQueryBuilder().setFindOptions({
           where: { name: Like(`%${searchText}%`) },
-          order: { createdAt: 'DESC' },
+          order: { createdAt: 'ASC' },
         }),
         options,
       );
@@ -161,7 +161,7 @@ export class ProjectService {
           name: Like(`%${searchText}%`),
           roles: { members: { user: { id: user.id } } },
         },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
       }),
       options,
     );
