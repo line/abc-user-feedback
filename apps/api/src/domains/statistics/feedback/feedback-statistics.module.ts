@@ -14,10 +14,13 @@
  * under the License.
  */
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { InjectRepository, TypeOrmModule } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 
+import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
+import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { FeedbackStatisticsController } from './feedback-statistics.controller';
 import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
@@ -28,9 +31,26 @@ import { FeedbackStatisticsService } from './feedback-statistics.service';
       FeedbackStatisticsEntity,
       FeedbackEntity,
       IssueEntity,
+      ChannelEntity,
+      ProjectEntity,
     ]),
   ],
+  exports: [FeedbackStatisticsService],
   providers: [FeedbackStatisticsService],
   controllers: [FeedbackStatisticsController],
 })
-export class FeedbackStatisticsModule {}
+export class FeedbackStatisticsModule {
+  constructor(
+    private readonly service: FeedbackStatisticsService,
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepo: Repository<ProjectEntity>,
+  ) {}
+  async onModuleInit() {
+    const projects = await this.projectRepo.find({
+      select: ['id'],
+    });
+    for (const { id } of projects) {
+      await this.service.addCronJobByProjectId(id);
+    }
+  }
+}

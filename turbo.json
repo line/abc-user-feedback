@@ -93,7 +93,6 @@
     "AUTO_MIGRATION",
     "MASTER_API_KEY",
     "BASE_URL",
-    "NEXT_PUBLIC_MAX_DAYS",
-    "DASHBOARD_TZ"
+    "NEXT_PUBLIC_MAX_DAYS"
   ]
 }

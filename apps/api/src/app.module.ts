@@ -15,6 +15,7 @@
  */
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { ScheduleModule } from '@nestjs/schedule';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
@@ -109,6 +110,7 @@ const domainModules = [
       global: true,
       middleware: { mount: true },
     }),
+    ScheduleModule.forRoot(),
     ...domainModules,
   ],
 })

@@ -13,16 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 
+import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
 import { MigrationService } from './migration.service';
 
-@Controller('/channels/:channelId/migration')
+@Controller('/migration')
 export class MigrationController {
-  constructor(private readonly migrationService: MigrationService) {}
+  constructor(
+    private readonly migrationService: MigrationService,
+    private readonly feedbackStatisticsService: FeedbackStatisticsService,
+  ) {}
 
-  @Post()
+  @Post('/channels/:channelId')
   async migrate(@Param('channelId', ParseIntPipe) channelId: number) {
     await this.migrationService.migrateToESByChannelId(channelId);
+  }
+
+  @Post('/statistics/feedback')
+  async migrateFeedbackStatistics(
+    @Body() body: { projectId: number; day: number },
+  ) {
+    await this.feedbackStatisticsService.createFeedbackStatistics(
+      body.projectId,
+      body.day,
+    );
   }
 }
