@@ -15,12 +15,12 @@
  */
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class FeedbackStatistics1700180989122 implements MigrationInterface {
-  name = 'FeedbackStatistics1700180989122';
+export class FeedbackStatistics1700795163534 implements MigrationInterface {
+  name = 'FeedbackStatistics1700795163534';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE \`feedback_statistics\` (\`id\` int NOT NULL AUTO_INCREMENT, \`date\` date NOT NULL, \`count\` int NOT NULL DEFAULT '0', \`channel_id\` int NULL, INDEX \`IDX_5fa818c0260778270c1de5735e\` (\`channel_id\`, \`date\`), UNIQUE INDEX \`date-channel-unique\` (\`date\`, \`channel_id\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
+      `CREATE TABLE \`feedback_statistics\` (\`id\` int NOT NULL AUTO_INCREMENT, \`date\` date NOT NULL, \`count\` int NOT NULL DEFAULT '0', \`channel_id\` int NULL, UNIQUE INDEX \`channel-date-unique\` (\`channel_id\`, \`date\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
     await queryRunner.query(
       `ALTER TABLE \`feedback_statistics\` ADD CONSTRAINT \`FK_7250a09c7ee486d1d24938a7054\` FOREIGN KEY (\`channel_id\`) REFERENCES \`channels\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
@@ -32,10 +32,7 @@ export class FeedbackStatistics1700180989122 implements MigrationInterface {
       `ALTER TABLE \`feedback_statistics\` DROP FOREIGN KEY \`FK_7250a09c7ee486d1d24938a7054\``,
     );
     await queryRunner.query(
-      `DROP INDEX \`date-channel-unique\` ON \`feedback_statistics\``,
-    );
-    await queryRunner.query(
-      `DROP INDEX \`IDX_5fa818c0260778270c1de5735e\` ON \`feedback_statistics\``,
+      `DROP INDEX \`channel-date-unique\` ON \`feedback_statistics\``,
     );
     await queryRunner.query(`DROP TABLE \`feedback_statistics\``);
   }
