@@ -88,6 +88,9 @@ describe('ProjectService Test suite', () => {
       jest
         .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
 
       const { id } = await projectService.create(dto);
 
@@ -110,6 +113,9 @@ describe('ProjectService Test suite', () => {
         .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
 
       const { id } = await projectService.create(dto);
 
@@ -154,6 +160,9 @@ describe('ProjectService Test suite', () => {
           ...MemberEntity.from({ roleId: faker.number.int(), userId }),
         })) as any,
       );
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
 
       const { id } = await projectService.create(dto);
 
@@ -186,7 +195,7 @@ describe('ProjectService Test suite', () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
         .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
+        .mockResolvedValue({ id: projectId, timezoneOffset: '+09:00' } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(roleRepo, 'save').mockResolvedValue(
         dto.roles.map((role) => ({
@@ -207,6 +216,9 @@ describe('ProjectService Test suite', () => {
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValueOnce({} as ProjectEntity);
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
 
       const { id } = await projectService.create(dto);
 
@@ -245,7 +257,7 @@ describe('ProjectService Test suite', () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
         .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
+        .mockResolvedValue({ id: projectId, timezoneOffset: '+09:00' } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(roleRepo, 'save').mockResolvedValue(
         dto.roles.map((role) => ({
@@ -255,7 +267,7 @@ describe('ProjectService Test suite', () => {
         })) as any,
       );
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: projectId },
+        project: { id: projectId, timezoneOffset: '+09:00' },
       } as RoleEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save').mockResolvedValue(
@@ -266,6 +278,9 @@ describe('ProjectService Test suite', () => {
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValueOnce({} as ProjectEntity);
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
 
       const { id } = await projectService.create(dto);
 
@@ -285,7 +300,7 @@ describe('ProjectService Test suite', () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
         .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
+        .mockResolvedValue({ id: projectId, timezoneOffset: '+09:00' } as any);
 
       await expect(projectService.create(dto)).rejects.toThrowError(
         ProjectAlreadyExistsException,

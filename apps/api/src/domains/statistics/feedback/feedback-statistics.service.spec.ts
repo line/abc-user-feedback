@@ -14,12 +14,15 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
+import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { FeedbackStatisticsServiceProviders } from '@/test-utils/providers/feedback-statistics.service.providers';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { GetCountByDateByChannelDto, GetCountDto } from './dtos';
@@ -70,6 +73,9 @@ describe('FieldService suite', () => {
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;
   let issueRepo: Repository<IssueEntity>;
+  let channelRepo: Repository<ChannelEntity>;
+  let projectRepo: Repository<ProjectEntity>;
+  let schedulerRegistry: SchedulerRegistry;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -85,6 +91,9 @@ describe('FieldService suite', () => {
     );
     feedbackRepo = module.get(getRepositoryToken(FeedbackEntity));
     issueRepo = module.get(getRepositoryToken(IssueEntity));
+    channelRepo = module.get(getRepositoryToken(ChannelEntity));
+    projectRepo = module.get(getRepositoryToken(ProjectEntity));
+    schedulerRegistry = module.get(SchedulerRegistry);
   });
 
   describe('getCountByDateByChannel', () => {
@@ -261,6 +270,56 @@ describe('FieldService suite', () => {
       expect(countByDateByChannel).toEqual({
         ratio: 1,
       });
+    });
+  });
+
+  describe('addCronJobByProjectId', () => {
+    it('adding a cron job succeeds with valid input', async () => {
+      const projectId = faker.number.int();
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
+      jest.spyOn(schedulerRegistry, 'addCronJob');
+
+      await feedbackStatsService.addCronJobByProjectId(projectId);
+
+      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
+      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+        `feedback-statistics-${projectId}`,
+        expect.anything(),
+      );
+    });
+  });
+
+  describe('createFeedbackStatistics', () => {
+    it('creating feedback statistics data succeeds with valid inputs', async () => {
+      const projectId = faker.number.int();
+      const dayToCreate = faker.number.int({ min: 2, max: 10 });
+      const channelCount = faker.number.int({ min: 2, max: 10 });
+      const channels = Array.from({ length: channelCount }).map(() => ({
+        id: faker.number.int(),
+      }));
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        timezoneOffset: '+09:00',
+      } as ProjectEntity);
+      jest
+        .spyOn(channelRepo, 'find')
+        .mockResolvedValue(channels as ChannelEntity[]);
+      jest.spyOn(feedbackRepo, 'count').mockResolvedValueOnce(0);
+      jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
+      jest
+        .spyOn(feedbackStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
+
+      await feedbackStatsService.createFeedbackStatistics(
+        projectId,
+        dayToCreate,
+      );
+
+      expect(feedbackRepo.count).toBeCalledTimes(dayToCreate * channelCount);
+      expect(feedbackStatsRepo.createQueryBuilder).toBeCalledTimes(
+        dayToCreate * channelCount - 1,
+      );
     });
   });
 });

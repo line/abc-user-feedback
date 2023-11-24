@@ -91,6 +91,11 @@ export const createQueryBuilder: any = {
   andWhere: () => createQueryBuilder,
   groupBy: () => createQueryBuilder,
   getRawMany: () => createQueryBuilder,
+  insert: () => createQueryBuilder,
+  values: () => createQueryBuilder,
+  orUpdate: () => createQueryBuilder,
+  updateEntity: () => createQueryBuilder,
+  execute: () => createQueryBuilder,
 };
 
 export const mockRepository = () => ({
