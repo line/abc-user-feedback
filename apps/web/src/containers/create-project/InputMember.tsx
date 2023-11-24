@@ -45,6 +45,8 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
     header: 'Email',
     enableSorting: false,
     cell: ({ getValue }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { t } = useTranslation();
       return (
         <>
           {users.some((v) => v.email === getValue()) ? (
@@ -54,7 +56,7 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
               <span className="text-red-primary">{getValue()}</span>
               <DescriptionTooltip
                 color="red"
-                description="현재 존재하지 않는 User 정보 입니다."
+                description={t('main.create-project.error-member')}
               />
             </div>
           )}

@@ -220,6 +220,7 @@
         "apiKeys": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
         "issueTracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information."
       },
+      "error-member": "User information that does not currently exist.",
       "continue-channel-creation": "UserFeedback must be created up to the Channel before UserFeedback is available.\nWould you like to continue creating a channel?",
       "guide": {
         "invalid-member": "Invalid Member List exists.",
