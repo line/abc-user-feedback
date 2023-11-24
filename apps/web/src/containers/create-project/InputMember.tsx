@@ -30,7 +30,7 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { SelectBox, TableSortIcon } from '@/components';
+import { DescriptionTooltip, SelectBox, TableSortIcon } from '@/components';
 import { useCreateProject } from '@/contexts/create-project.context';
 import { useUserSearch } from '@/hooks';
 import type { InputMemberType } from '@/types/member.type';
@@ -52,10 +52,9 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
           ) : (
             <div className="flex items-center gap-1">
               <span className="text-red-primary">{getValue()}</span>
-              <Icon
-                name="WarningCircleFill"
-                className="text-red-primary"
-                size={16}
+              <DescriptionTooltip
+                color="red"
+                description="현재 존재하지 않는 User 정보 입니다."
               />
             </div>
           )}

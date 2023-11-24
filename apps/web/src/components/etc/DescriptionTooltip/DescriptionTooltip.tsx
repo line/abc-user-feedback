@@ -21,16 +21,24 @@ import { Icon, Tooltip, TooltipContent, TooltipTrigger } from '@ufb/ui';
 export interface ITooltipProps {
   description?: string;
   placement?: Placement;
+  color?: 'red';
 }
 
 const DescriptionTooltip: React.FC<ITooltipProps> = ({
   description,
   placement,
+  color,
 }) => {
   return (
     <Tooltip placement={placement ?? 'right'}>
       <TooltipTrigger>
-        <Icon name="InfoCircleFill" size={16} className="text-tertiary ml-1" />
+        <Icon
+          name="InfoCircleFill"
+          size={16}
+          className={[
+            color === 'red' ? 'text-red-primary' : 'text-tertiary ml-1',
+          ].join('')}
+        />
       </TooltipTrigger>
       <TooltipContent>{description}</TooltipContent>
     </Tooltip>
