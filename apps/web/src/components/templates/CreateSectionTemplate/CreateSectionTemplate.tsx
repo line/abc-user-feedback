@@ -31,12 +31,12 @@ const CreateSectionTemplate: React.FC<IProps> = ({
 
   return (
     <div className="border-fill-tertiary overflow-hidden rounded-sm border">
-      <div className="bg-fill-quaternary flex items-center justify-between px-6 py-3">
+      <div
+        className="bg-fill-quaternary flex cursor-pointer items-center justify-between px-6 py-3"
+        onClick={() => setOpen((prev) => !prev)}
+      >
         <p className="font-14-bold">{title}</p>
-        <button
-          className="icon-btn icon-btn-sm icon-btn-tertiary icon-btn-rounded"
-          onClick={() => setOpen((prev) => !prev)}
-        >
+        <button className="icon-btn icon-btn-sm icon-btn-tertiary icon-btn-rounded">
           <Icon
             name="ChevronDown"
             className={[

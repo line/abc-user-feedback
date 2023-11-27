@@ -57,13 +57,14 @@ const getColumns = (t: TFunction, onDelete: (index: number) => void) => [
         </button>
       </div>
     ),
+    size: 300,
   }),
   columnHelper.display({
     header: 'Created',
     cell: () => (
       <p className="text-primary">{dayjs().format(DATE_TIME_FORMAT)}</p>
     ),
-    size: 100,
+    size: 150,
   }),
   columnHelper.display({
     header: 'Status',
@@ -72,7 +73,7 @@ const getColumns = (t: TFunction, onDelete: (index: number) => void) => [
         {t('main.setting.api-key-status.active')}
       </Badge>
     ),
-    size: 50,
+    size: 150,
   }),
   columnHelper.display({
     id: 'delete',
@@ -85,7 +86,7 @@ const getColumns = (t: TFunction, onDelete: (index: number) => void) => [
         <Icon name="TrashFill" />
       </button>
     ),
-    size: 50,
+    size: 100,
   }),
 ];
 
@@ -123,7 +124,7 @@ const InputApiKey: React.FC = () => {
         </button>
       }
     >
-      <table className="table">
+      <table className="table table-fixed">
         <thead>
           <tr>
             {table.getFlatHeaders().map((header, i) => (

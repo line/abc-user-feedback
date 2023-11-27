@@ -60,7 +60,7 @@ const NoChannel: React.FC<IProps> = ({ projectId }) => {
     <div className="flex flex-1 flex-col items-center justify-center gap-8">
       <div className="flex flex-col items-center gap-3">
         <Icon name="NoChannelFill" size={56} className="text-tertiary" />
-        <p>{t('text.no-channel')}.</p>
+        <p>{t('text.no-channel')}</p>
       </div>
       <Tooltip open={step > 0} placement="bottom">
         <TooltipTrigger asChild>

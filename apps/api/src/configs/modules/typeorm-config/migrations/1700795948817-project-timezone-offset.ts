@@ -13,5 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './error-code.enum';
-export * from './timezone';
+import { MigrationInterface, QueryRunner } from 'typeorm';
+
+export class ProjectTimezoneOffset1700795948817 implements MigrationInterface {
+  name = 'ProjectTimezoneOffset1700795948817';
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`projects\` ADD \`timezone_offset\` varchar(255) NOT NULL`,
+    );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`projects\` DROP COLUMN \`timezone_offset\``,
+    );
+  }
+}
