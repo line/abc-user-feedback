@@ -15,21 +15,23 @@
  */
 import { Icon } from '@ufb/ui';
 
-import DescriptionTooltip from '../DescriptionTooltip';
+import { DescriptionTooltip } from '@/components/etc';
 
 interface IProps {
   title: string;
   count: number;
   percentage: number;
+  description?: string;
 }
 
-const DashboardCard: React.FC<IProps> = ({ title, count, percentage }) => {
+const DashboardCard: React.FC<IProps> = (props) => {
+  const { title, count, percentage, description } = props;
   return (
     <div className="border-fill-tertiary flex flex-col gap-2 rounded border p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <p>{title}</p>
-          <DescriptionTooltip description="피드백 누적 수" />
+          {description && <DescriptionTooltip description={description} />}
         </div>
         <button className="icon-btn icon-btn-tertiary">
           <Icon name="Dots" className="text-tertiary rotate-90" />
@@ -49,7 +51,7 @@ const DashboardCard: React.FC<IProps> = ({ title, count, percentage }) => {
               percentage > 0 ? 'text-blue-primary' : 'text-red-primary'
             }
           />
-          ({percentage}%)
+          ({Math.abs(percentage)}%)
         </p>
       </div>
     </div>

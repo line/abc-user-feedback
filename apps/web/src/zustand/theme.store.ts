@@ -21,7 +21,7 @@ interface ThemeState {
   toggle: () => void;
 }
 
-const themeStore = create<ThemeState>()(
+const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       theme: 'light',
@@ -31,4 +31,4 @@ const themeStore = create<ThemeState>()(
     { name: 'theme' },
   ),
 );
-export default themeStore;
+export default useThemeStore;

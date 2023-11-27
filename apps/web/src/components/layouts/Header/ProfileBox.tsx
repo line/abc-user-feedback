@@ -28,6 +28,17 @@ const ProfileBox: React.FC<IProps> = () => {
   const { user, signOut } = useUser();
   const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  const handleClickProfile = () => {
+    router.push('/main/profile');
+    setOpen(false);
+  };
+
+  const handleClickSignout = () => {
+    signOut();
+    setOpen(false);
+  };
+
   if (!user) return <></>;
   return (
     <div className="relative h-full">
@@ -49,19 +60,13 @@ const ProfileBox: React.FC<IProps> = () => {
           <ul>
             <li
               className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
-              onClick={() => {
-                router.push('/main/profile');
-                setOpen(false);
-              }}
+              onClick={handleClickProfile}
             >
               {t('header.profile')}
             </li>
             <li
               className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
-              onClick={() => {
-                signOut();
-                setOpen(false);
-              }}
+              onClick={handleClickSignout}
             >
               {t('header.sign-out')}
             </li>

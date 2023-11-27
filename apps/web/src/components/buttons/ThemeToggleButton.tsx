@@ -13,26 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect } from 'react';
 
-import { ThemeToggleButton } from '@/components/buttons';
-import HeaderName from './HeaderName';
-import LocaleSelectBox from './LocaleSelectBox';
-import Logo from './Logo';
-import ProfileBox from './ProfileBox';
+import { Icon } from '@ufb/ui';
 
-const Header: React.FC = () => {
+import useThemeStore from '@/zustand/theme.store';
+
+interface IProps {}
+
+const ThemeToggleButton: React.FC<IProps> = () => {
+  const { theme, toggle } = useThemeStore();
+
+  useEffect(() => {
+    if (!theme) return;
+    document.documentElement.className = theme;
+  }, [theme]);
+
   return (
-    <header className="bg-primary relative flex h-[48px] items-center justify-between px-4">
-      <div className="flex flex-1 items-center gap-6">
-        <Logo />
-        <HeaderName />
-      </div>
-      <div className="flex items-center gap-2 self-stretch">
-        <ProfileBox />
-        <LocaleSelectBox />
-        <ThemeToggleButton />
-      </div>
-    </header>
+    <button
+      className="icon-btn icon-btn-sm icon-btn-secondary"
+      onClick={() => toggle()}
+    >
+      <Icon
+        name={theme === 'light' ? 'MoonStroke' : 'SunStroke'}
+        className="text-primary"
+      />
+    </button>
   );
 };
-export default Header;
+
+export default ThemeToggleButton;

@@ -13,5 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ButtonWithTooltip } from './ButtonWithTooltip';
-export { default as ThemeToggleButton } from './ThemeToggleButton';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
+import { Icon } from '@ufb/ui';
+
+import { Path } from '@/constants/path';
+
+interface IProps {}
+
+const Logo: React.FC<IProps> = () => {
+  const router = useRouter();
+  return (
+    <Link
+      className="flex cursor-pointer items-center gap-1"
+      href={Path.isProtectPage(router.pathname) ? Path.MAIN : Path.SIGN_IN}
+    >
+      <Image src="/assets/images/logo.svg" alt="logo" width={24} height={24} />
+      <Icon name="Title" className="h-[24px] w-[123px]" />
+    </Link>
+  );
+};
+
+export default Logo;

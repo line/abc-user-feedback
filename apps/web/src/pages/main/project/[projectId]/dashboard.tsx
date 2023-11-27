@@ -20,13 +20,12 @@ import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate } from '@/components';
+import { DashboardCard, MainTemplate } from '@/components';
 import {
   SimpleBarChart,
   SimpleLineChart,
   StackedBarChart,
 } from '@/components/charts';
-import DashboardCard from '@/components/etc/DashboardCard';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import { IssueRank } from '@/containers/dashboard';

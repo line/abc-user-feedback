@@ -22,7 +22,7 @@ import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import { useDownload, usePermissions } from '@/hooks';
 import type { IFetchError } from '@/types/fetch-error.type';
-import themeStore from '@/zustand/theme.store';
+import useThemeStore from '@/zustand/theme.store';
 import useFeedbackTable from '../feedback-table.context';
 
 export interface IDownloadButtonProps {
@@ -39,7 +39,7 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
   const { channelId, projectId, createdAtRange } = useFeedbackTable();
 
   const [open, setOpen] = useState(false);
-  const { theme } = useStore(themeStore);
+  const { theme } = useStore(useThemeStore);
   const perms = usePermissions(projectId);
 
   const { t } = useTranslation();

@@ -15,3 +15,4 @@
  */
 export { default as ChannelCard } from './ChannelCard';
 export { default as TenantProjectCard } from './TenantProjectCard';
+export { default as DashboardCard } from './DashboardCard';
