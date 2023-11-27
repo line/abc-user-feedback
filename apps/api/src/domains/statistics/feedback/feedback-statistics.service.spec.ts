@@ -68,7 +68,7 @@ const feedbackStatsFixture = [
   },
 ] as FeedbackStatisticsEntity[];
 
-describe('FieldService suite', () => {
+describe('FeedbackStatisticsService suite', () => {
   let feedbackStatsService: FeedbackStatisticsService;
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;

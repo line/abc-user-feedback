@@ -16,6 +16,7 @@
 import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 
 import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
+import { IssueStatisticsService } from '../statistics/issue/issue-statistics.service';
 import { MigrationService } from './migration.service';
 
 @Controller('/migration')
@@ -23,6 +24,7 @@ export class MigrationController {
   constructor(
     private readonly migrationService: MigrationService,
     private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly issueStatisticsService: IssueStatisticsService,
   ) {}
 
   @Post('/channels/:channelId')
@@ -35,6 +37,16 @@ export class MigrationController {
     @Body() body: { projectId: number; day: number },
   ) {
     await this.feedbackStatisticsService.createFeedbackStatistics(
+      body.projectId,
+      body.day,
+    );
+  }
+
+  @Post('/statistics/issue')
+  async migrateIssueStatistics(
+    @Body() body: { projectId: number; day: number },
+  ) {
+    await this.issueStatisticsService.createIssueStatistics(
       body.projectId,
       body.day,
     );

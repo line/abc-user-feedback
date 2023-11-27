@@ -27,6 +27,7 @@ import { TimezoneOffset } from '@ufb/shared';
 import { CommonEntity } from '@/common/entities';
 import type { ApiKeyEntity } from '@/domains/project/api-key/api-key.entity';
 import type { IssueTrackerEntity } from '@/domains/project/issue-tracker/issue-tracker.entity';
+import { IssueStatisticsEntity } from '@/domains/statistics/issue/issue-statistics.entity';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { IssueEntity } from '../issue/issue.entity';
@@ -72,6 +73,11 @@ export class ProjectEntity extends CommonEntity {
     onDelete: 'CASCADE',
   })
   tenant: Relation<TenantEntity>;
+
+  @OneToMany(() => IssueStatisticsEntity, (stats) => stats.project, {
+    cascade: true,
+  })
+  stats: Relation<IssueStatisticsEntity>[];
 
   static from({
     tenantId,
