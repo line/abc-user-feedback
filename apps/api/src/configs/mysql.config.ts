@@ -14,7 +14,10 @@
  * under the License.
  */
 import { registerAs } from '@nestjs/config';
+import dotenv from 'dotenv';
 import Joi from 'joi';
+
+dotenv.config();
 
 export const mysqlConfigSchema = Joi.object({
   MYSQL_PRIMARY_URL: Joi.string().required(),

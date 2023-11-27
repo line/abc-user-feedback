@@ -16,35 +16,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 
-import { TimezoneOffset } from '@ufb/shared';
-
-export class FindProjectByIdResponseDto {
-  @Expose()
+export class FindCountByDateByChannelResponseDto {
   @ApiProperty()
-  id: number;
-
   @Expose()
-  @ApiProperty()
-  name: string;
+  channels: {
+    id: number;
+    name: string;
+    statistics: { date: Date; count: number };
+  }[];
 
-  @Expose()
-  @ApiProperty()
-  description: string;
-
-  @Expose()
-  @ApiProperty()
-  timezoneOffset: TimezoneOffset;
-
-  @Expose()
-  @ApiProperty()
-  createdAt: Date;
-
-  @Expose()
-  @ApiProperty()
-  updatedAt: Date;
-
-  public static transform(params: any): FindProjectByIdResponseDto {
-    return plainToInstance(FindProjectByIdResponseDto, params, {
+  public static transform(params: any): FindCountByDateByChannelResponseDto {
+    return plainToInstance(FindCountByDateByChannelResponseDto, params, {
       excludeExtraneousValues: true,
     });
   }

@@ -13,5 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './error-code.enum';
-export * from './timezone';
+export class GetIssuedRateDto {
+  from: Date;
+  to: Date;
+  projectId: number;
+}
