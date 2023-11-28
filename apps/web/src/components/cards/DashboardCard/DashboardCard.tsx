@@ -20,14 +20,14 @@ import { DescriptionTooltip } from '@/components/etc';
 interface IProps {
   title: string;
   count: number;
-  percentage: number;
+  percentage?: number;
   description?: string;
 }
 
 const DashboardCard: React.FC<IProps> = (props) => {
   const { title, count, percentage, description } = props;
   return (
-    <div className="border-fill-tertiary flex flex-col gap-2 rounded border p-4">
+    <div className="border-fill-tertiary flex min-w-[220px] flex-col gap-2 rounded border p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1">
           <p>{title}</p>
@@ -37,22 +37,31 @@ const DashboardCard: React.FC<IProps> = (props) => {
           <Icon name="Dots" className="text-tertiary rotate-90" />
         </button>
       </div>
-      <div className="flex gap-1 p-2">
+      <div className="flex gap-2 p-2">
         <p className="font-24-bold">{Number(count).toLocaleString()}</p>
-        <p
-          className={[
-            percentage > 0 ? 'text-blue-primary' : 'text-red-primary',
-            'flex items-center',
-          ].join(' ')}
-        >
-          <Icon
-            name={percentage > 0 ? 'TriangleUp' : 'TriangleDown'}
-            className={
-              percentage > 0 ? 'text-blue-primary' : 'text-red-primary'
-            }
-          />
-          ({Math.abs(percentage)}%)
-        </p>
+        {typeof percentage !== 'undefined' && (
+          <div className="flex items-center">
+            {percentage !== 0 && (
+              <Icon
+                name={percentage > 0 ? 'TriangleUp' : 'TriangleDown'}
+                className={
+                  percentage > 0 ? 'text-blue-primary' : 'text-red-primary'
+                }
+              />
+            )}
+            <p
+              className={
+                percentage === 0
+                  ? 'text-primary'
+                  : percentage > 0
+                  ? 'text-blue-primary'
+                  : 'text-red-primary'
+              }
+            >
+              ({parseFloat(Math.abs(percentage).toFixed(1))}%)
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

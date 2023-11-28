@@ -38,7 +38,6 @@ const columns = [
     header: 'Trend',
     enableSorting: false,
     cell(props) {
-      console.log('props.getValue(): ', props.getValue());
       return (
         <LineChart width={100} height={40} data={props.getValue()}>
           <Line

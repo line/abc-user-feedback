@@ -14,3 +14,18 @@
  * under the License.
  */
 export { default as IssueRank } from './IssueRank';
+
+export { default as TotalFeedbackCard } from './TotalFeedbackCard';
+export { default as TotalIssueCard } from './TotalIssueCard';
+
+export { default as CreateFeedbackPerIssueCard } from './CreateFeedbackPerIssueCard';
+
+export { default as TodayFeedbackCard } from './TodayFeedbackCard';
+export { default as YesterdayFeedbackCard } from './YesterdayFeedbackCard';
+export { default as SevenDaysFeedbackCard } from './SevenDaysFeedbackCard';
+export { default as ThirtyDaysFeedbackCard } from './ThirtyDaysFeedbackCard';
+
+export { default as TodayIssueCard } from './TodayIssueCard';
+export { default as YesterdayIssueCard } from './YesterdayIssueCard';
+export { default as SevendaysIssueCard } from './SevenDaysIssueCard';
+export { default as ThirtyDaysIssueCard } from './ThirtyDaysIssueCard';

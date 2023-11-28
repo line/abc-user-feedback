@@ -119,7 +119,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       <PopoverTrigger asChild>
         <div
           className={[
-            'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between rounded border px-3.5 py-[9.5px]',
+            'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded border px-3.5 py-[9.5px]',
             currentValue ? 'text-primary' : 'text-tertiary',
             isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
           ].join(' ')}

@@ -29,7 +29,7 @@ export class FeedbackStatisticsController {
     private readonly feedbackStatisticsService: FeedbackStatisticsService,
   ) {}
 
-  @ApiOkResponse({ type: [FindCountByDateByChannelResponseDto] })
+  @ApiOkResponse({ type: FindCountByDateByChannelResponseDto })
   @Get()
   async getCountByDateByChannel(
     @Query('from') from: Date,
@@ -48,7 +48,7 @@ export class FeedbackStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindCountResponseDto] })
+  @ApiOkResponse({ type: FindCountResponseDto })
   @Get('/count')
   async getCount(
     @Query('from') from: Date,
@@ -64,7 +64,7 @@ export class FeedbackStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindIssuedRateResponseDto] })
+  @ApiOkResponse({ type: FindIssuedRateResponseDto })
   @Get('/issued-ratio')
   async getIssuedRatio(
     @Query('from') from: Date,

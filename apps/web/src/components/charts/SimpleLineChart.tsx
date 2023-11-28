@@ -23,18 +23,25 @@ import {
   YAxis,
 } from 'recharts';
 
-import { randLightColor } from '@/utils/rand-light-color';
-
+function getDarkColor() {
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += Math.floor(Math.random() * 10);
+  }
+  return color;
+}
 interface IProps {
   data: any[];
 }
 
 const SimpleLineChart: React.FC<IProps> = (props) => {
   const { data } = props;
+
   const dataKeys = useMemo(() => {
     if (!data[0]) return [];
     return Object.keys(data[0]).filter((v) => v !== 'date');
   }, [data]);
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
@@ -51,7 +58,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
             key={v}
             type="monotone"
             dataKey={v}
-            stroke={randLightColor()}
+            stroke={getDarkColor()}
             activeDot={{ r: 8 }}
           />
         ))}
