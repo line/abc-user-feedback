@@ -29,8 +29,8 @@ dayjs.extend(weekday);
 const DATE_FORMAT = 'YYYY-MM-DD';
 
 interface IProps extends React.PropsWithChildren {
-  onChange: (value: DateRangeType | null) => void;
-  value: DateRangeType | null;
+  onChange: (value: DateRangeType) => void;
+  value: DateRangeType;
   minDate?: Date;
   maxDate?: Date;
   maxDays?: number;

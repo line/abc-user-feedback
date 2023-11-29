@@ -705,8 +705,18 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
+    StatisticData: {
+      /** Format: date-time */
+      date: string;
+      count: number;
+    };
+    ChannelStatisticData: {
+      id: number;
+      name: string;
+      statistics: components["schemas"]["StatisticData"][];
+    };
     FindCountByDateByChannelResponseDto: {
-      channels: string[];
+      channels: components["schemas"]["ChannelStatisticData"][];
     };
     FindCountResponseDto: {
       count: number;

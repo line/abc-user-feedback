@@ -190,12 +190,12 @@ export class FeedbackStatisticsService {
               dayjs()
                 .subtract(day, 'day')
                 .startOf('day')
-                .subtract(offset, 'hour')
+                .subtract(-offset, 'hour')
                 .toDate(),
               dayjs()
                 .subtract(day, 'day')
                 .endOf('day')
-                .subtract(offset, 'hour')
+                .subtract(-offset, 'hour')
                 .toDate(),
             ),
           },

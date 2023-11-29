@@ -38,6 +38,7 @@ export class FeedbackStatisticsController {
     @Query('channelIds') channelIds: string,
   ) {
     const channelIdsArray = channelIds.split(',').map((v) => parseInt(v, 10));
+
     return FindCountByDateByChannelResponseDto.transform(
       await this.feedbackStatisticsService.getCountByDateByChannel({
         from,

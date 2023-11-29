@@ -30,7 +30,11 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
   return (
     <Tooltip placement={placement ?? 'right'}>
       <TooltipTrigger>
-        <Icon name="InfoCircleFill" size={16} className="text-tertiary ml-1" />
+        <Icon
+          name="QuestionCircleStroke"
+          size={16}
+          className="text-tertiary ml-1"
+        />
       </TooltipTrigger>
       <TooltipContent>{description}</TooltipContent>
     </Tooltip>
