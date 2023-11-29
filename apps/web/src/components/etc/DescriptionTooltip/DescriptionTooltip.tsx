@@ -19,7 +19,7 @@ import type { Placement } from '@floating-ui/react';
 import { Icon, Tooltip, TooltipContent, TooltipTrigger } from '@ufb/ui';
 
 export interface ITooltipProps {
-  description?: string;
+  description: string;
   placement?: Placement;
   color?: 'red';
 }

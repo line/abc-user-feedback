@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
-import type { ColumnDef, Table } from '@tanstack/react-table';
+import { useEffect, useMemo } from 'react';
+import type { ColumnDef, Table, VisibilityState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -64,6 +64,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
   const {
     columnOrder,
     columnVisibility,
+    setColumnVisibility,
     limit,
     resetColumnSetting,
     page,
@@ -75,6 +76,26 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
     createdAtRange,
     setCreatedAtRange,
   } = useFeedbackTable();
+
+  useEffect(() => {
+    if (!fieldData) return;
+
+    const inactiveKeys = fieldData
+      .filter((v) => v.status === 'INACTIVE')
+      .map((v) => v.key);
+
+    const keys = Object.keys(columnVisibility);
+    const newInactiveKeys = inactiveKeys.filter((v) => !keys.includes(v));
+
+    if (newInactiveKeys.length === 0) return;
+
+    const initialVisibility = newInactiveKeys.reduce(
+      (acc, v) => ({ ...acc, [v]: false }),
+      {} as VisibilityState,
+    );
+
+    setColumnVisibility(initialVisibility);
+  }, [fieldData]);
 
   const { t } = useTranslation();
 

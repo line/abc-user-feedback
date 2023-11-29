@@ -313,7 +313,8 @@
     "no-channel": "등록된 Channel이 없습니다.",
     "guide": "안내",
     "more": "더보기",
-    "shrink": "줄이기"
+    "shrink": "줄이기",
+    "feedback-detail": "피드백 상세"
   },
   "toast": {
     "sign-in": "로그인 성공",
