@@ -47,6 +47,7 @@ import { IssueModule } from './domains/project/issue/issue.module';
 import { MemberModule } from './domains/project/member/member.module';
 import { ProjectModule } from './domains/project/project/project.module';
 import { RoleModule } from './domains/project/role/role.module';
+import { FeedbackIssueStatisticsModule } from './domains/statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from './domains/statistics/feedback/feedback-statistics.module';
 import { IssueStatisticsModule } from './domains/statistics/issue/issue-statistics.module';
 import { TenantModule } from './domains/tenant/tenant.module';
@@ -71,6 +72,7 @@ const domainModules = [
   HistoryModule,
   FeedbackStatisticsModule,
   IssueStatisticsModule,
+  FeedbackIssueStatisticsModule,
 ];
 
 @Module({
