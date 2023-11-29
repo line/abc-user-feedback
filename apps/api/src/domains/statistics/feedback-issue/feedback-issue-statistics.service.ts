@@ -170,7 +170,7 @@ export class FeedbackIssueStatisticsService {
             issue: { id: issue.id },
             feedbackCount,
           })
-          .orUpdate(['count'], ['date', 'issue'])
+          .orUpdate(['feedback_count'], ['date', 'issue'])
           .updateEntity(false)
           .execute();
       }
