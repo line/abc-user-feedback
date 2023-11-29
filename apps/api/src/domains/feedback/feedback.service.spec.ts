@@ -28,6 +28,7 @@ import {
 import { OpensearchRepository } from '@/common/repositories';
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
 import {
+  createQueryBuilder,
   MockOpensearchRepository,
   TestConfig,
 } from '@/test-utils/util-functions';
@@ -37,6 +38,7 @@ import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
 import { FeedbackStatisticsEntity } from '../statistics/feedback/feedback-statistics.entity';
+import { IssueStatisticsEntity } from '../statistics/issue/issue-statistics.entity';
 import { CreateFeedbackDto, FindFeedbacksByChannelIdDto } from './dtos';
 import { FeedbackEntity } from './feedback.entity';
 import { FeedbackService } from './feedback.service';
@@ -71,7 +73,8 @@ describe('FeedbackService Test Suite', () => {
   let issueRepo: Repository<IssueEntity>;
   let channelRepo: Repository<ChannelEntity>;
   let osRepo: OpensearchRepository;
-  let feedbackStatisticsRepo: Repository<FeedbackStatisticsEntity>;
+  let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
+  let issueStatsRepo: Repository<IssueStatisticsEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -85,9 +88,10 @@ describe('FeedbackService Test Suite', () => {
     issueRepo = module.get(getRepositoryToken(IssueEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     osRepo = module.get(OpensearchRepository);
-    feedbackStatisticsRepo = module.get(
+    feedbackStatsRepo = module.get(
       getRepositoryToken(FeedbackStatisticsEntity),
     );
+    issueStatsRepo = module.get(getRepositoryToken(IssueStatisticsEntity));
   });
 
   describe('create', () => {
@@ -101,7 +105,7 @@ describe('FeedbackService Test Suite', () => {
         rawData: dto.data,
       } as FeedbackEntity);
       jest
-        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
 
       await feedbackService.create(dto);
@@ -323,14 +327,20 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({
         id: faker.number.int(),
+        project: {
+          id: faker.number.int(),
+        },
       } as IssueEntity);
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
         id: feedbackId,
         issues: [],
       } as FeedbackEntity);
       jest
-        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
+      jest
+        .spyOn(issueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
       clsService.set = jest.fn();
 
       await feedbackService.create(dto);
@@ -366,7 +376,7 @@ describe('FeedbackService Test Suite', () => {
         issues: [],
       } as FeedbackEntity);
       jest
-        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       clsService.set = jest.fn();
 
@@ -399,14 +409,20 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({
         id: faker.number.int(),
+        project: {
+          id: faker.number.int(),
+        },
       } as IssueEntity);
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
         id: feedbackId,
         issues: [],
       } as FeedbackEntity);
       jest
-        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
+      jest
+        .spyOn(issueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
       clsService.set = jest.fn();
 
       await feedbackService.create(dto);

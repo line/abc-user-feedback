@@ -18,6 +18,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { mockRepository } from '@/test-utils/util-functions';
 import { IssueEntity } from '../../domains/project/issue/issue.entity';
 import { IssueService } from '../../domains/project/issue/issue.service';
+import { IssueStatisticsServiceProviders } from './issue-statistics.service.providers';
 
 export const IssueServiceProviders = [
   IssueService,
@@ -25,4 +26,5 @@ export const IssueServiceProviders = [
     provide: getRepositoryToken(IssueEntity),
     useValue: mockRepository(),
   },
+  ...IssueStatisticsServiceProviders,
 ];

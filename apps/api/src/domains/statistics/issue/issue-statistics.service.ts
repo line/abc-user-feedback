@@ -24,6 +24,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { UpdateCountDto } from './dtos';
 import type { GetCountByDateDto, GetCountDto } from './dtos';
 import { IssueStatisticsEntity } from './issue-statistics.entity';
 
@@ -170,6 +171,37 @@ export class IssueStatisticsService {
           date: dayjs().subtract(day, 'day').toDate(),
           count: issueCount,
           project: { id },
+        })
+        .orUpdate(['count'], ['date', 'project'])
+        .updateEntity(false)
+        .execute();
+    }
+  }
+
+  @Transactional()
+  async updateCount(dto: UpdateCountDto) {
+    if (dto.count === 0) return;
+    if (!dto.count) dto.count = 1;
+
+    const stats = await this.repository.findOne({
+      where: {
+        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        project: { id: dto.projectId },
+      },
+    });
+
+    if (stats) {
+      stats.count += dto.count;
+      await this.repository.save(stats);
+      return;
+    } else {
+      await this.repository
+        .createQueryBuilder()
+        .insert()
+        .values({
+          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          count: dto.count,
+          project: { id: dto.projectId },
         })
         .orUpdate(['count'], ['date', 'project'])
         .updateEntity(false)
