@@ -266,4 +266,52 @@ describe('FeedbackIssueStatisticsService suite', () => {
       );
     });
   });
+
+  describe('updateFeedbackCount', () => {
+    it('updating feedback count succeeds with valid inputs and existent date', async () => {
+      const issueId = faker.number.int();
+      const date = faker.date.past();
+      const feedbackCount = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue({
+        feedbackCount: 1,
+      } as FeedbackIssueStatisticsEntity);
+
+      await feedbackIssueStatsService.updateFeedbackCount({
+        issueId,
+        date,
+        feedbackCount,
+      });
+
+      expect(feedbackIssueStatsRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackIssueStatsRepo.save).toBeCalledTimes(1);
+      expect(feedbackIssueStatsRepo.save).toBeCalledWith({
+        feedbackCount: 1 + feedbackCount,
+      });
+    });
+    it('updating feedback count succeeds with valid inputs and nonexistent date', async () => {
+      const issueId = faker.number.int();
+      const date = faker.date.past();
+      const feedbackCount = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue(null);
+      jest
+        .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
+      jest.spyOn(createQueryBuilder, 'values');
+
+      await feedbackIssueStatsService.updateFeedbackCount({
+        issueId,
+        date,
+        feedbackCount,
+      });
+
+      expect(feedbackIssueStatsRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackIssueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
+      expect(createQueryBuilder.values).toBeCalledTimes(1);
+      expect(createQueryBuilder.values).toBeCalledWith({
+        date: new Date(date.toISOString().split('T')[0] + 'T00:00:00'),
+        feedbackCount,
+        issue: { id: issueId },
+      });
+    });
+  });
 });

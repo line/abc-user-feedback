@@ -25,6 +25,7 @@ import { Transactional } from 'typeorm-transactional';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { UpdateFeedbackCountDto } from './dtos';
 import type { GetCountByDateByIssueDto } from './dtos';
 import { FeedbackIssueStatisticsEntity } from './feedback-issue-statistics.entity';
 
@@ -174,6 +175,37 @@ export class FeedbackIssueStatisticsService {
           .updateEntity(false)
           .execute();
       }
+    }
+  }
+
+  @Transactional()
+  async updateFeedbackCount(dto: UpdateFeedbackCountDto) {
+    if (dto.feedbackCount === 0) return;
+    if (!dto.feedbackCount) dto.feedbackCount = 1;
+
+    const stats = await this.repository.findOne({
+      where: {
+        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        issue: { id: dto.issueId },
+      },
+    });
+
+    if (stats) {
+      stats.feedbackCount += dto.feedbackCount;
+      await this.repository.save(stats);
+      return;
+    } else {
+      await this.repository
+        .createQueryBuilder()
+        .insert()
+        .values({
+          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          feedbackCount: dto.feedbackCount,
+          issue: { id: dto.issueId },
+        })
+        .orUpdate(['feedback_count'], ['date', 'issue'])
+        .updateEntity(false)
+        .execute();
     }
   }
 }

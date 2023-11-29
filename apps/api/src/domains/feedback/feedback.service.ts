@@ -41,6 +41,7 @@ import type { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
 import { OptionService } from '../channel/option/option.service';
 import { IssueService } from '../project/issue/issue.service';
+import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/feedback-issue-statistics.service';
 import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
 import type {
   CountByProjectIdDto,
@@ -70,6 +71,7 @@ export class FeedbackService {
     private readonly channelService: ChannelService,
     private readonly configService: ConfigService,
     private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
   private validateQuery(
@@ -471,6 +473,12 @@ export class FeedbackService {
   @Transactional()
   async addIssue(dto: AddIssueDto) {
     await this.feedbackMySQLService.addIssue(dto);
+
+    await this.feedbackIssueStatisticsService.updateFeedbackCount({
+      issueId: dto.issueId,
+      date: DateTime.utc().toJSDate(),
+      feedbackCount: 1,
+    });
 
     if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.upsertFeedbackItem({

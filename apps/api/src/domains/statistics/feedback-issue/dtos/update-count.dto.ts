@@ -13,5 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetCountByDateByIssueDto } from './get-count-by-date-by-issue.dto';
-export { UpdateFeedbackCountDto } from './update-count.dto';
+export class UpdateFeedbackCountDto {
+  issueId: number;
+  date: Date;
+  feedbackCount?: number;
+}
