@@ -99,6 +99,25 @@ export class IssueStatisticsService {
     };
   }
 
+  async getCountByStatus(dto: GetCountDto) {
+    return {
+      statistics: await this.issueRepository
+        .createQueryBuilder('issue')
+        .select('issue.status', 'status')
+        .addSelect('COUNT(issue.id)', 'count')
+        .where('issue.project_id = :projectId', { projectId: dto.projectId })
+        .andWhere('issue.createdAt BETWEEN :from AND :to', {
+          from: dto.from,
+          to: dto.to,
+        })
+        .groupBy('issue.status')
+        .getRawMany()
+        .then((res) =>
+          res.map((stat) => ({ status: stat.status, count: stat.count })),
+        ),
+    };
+  }
+
   async addCronJobByProjectId(projectId: number) {
     const { timezoneOffset } = await this.projectRepository.findOne({
       where: { id: projectId },

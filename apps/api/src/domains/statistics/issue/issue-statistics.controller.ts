@@ -17,7 +17,8 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 
 import {
-  FindCountByDateByChannelResponseDto,
+  FindCountByDateResponseDto,
+  FindCountByStatusResponseDto,
   FindCountResponseDto,
 } from './dtos/responses';
 import { IssueStatisticsService } from './issue-statistics.service';
@@ -44,7 +45,7 @@ export class IssueStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindCountByDateByChannelResponseDto] })
+  @ApiOkResponse({ type: [FindCountByDateResponseDto] })
   @Get('/count-by-date')
   async getCountByDate(
     @Query('from') from: Date,
@@ -52,11 +53,27 @@ export class IssueStatisticsController {
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('projectId') projectId: number,
   ) {
-    return FindCountByDateByChannelResponseDto.transform(
+    return FindCountByDateResponseDto.transform(
       await this.issueStatisticsService.getCountByDate({
         from,
         to,
         interval,
+        projectId,
+      }),
+    );
+  }
+
+  @ApiOkResponse({ type: [FindCountByStatusResponseDto] })
+  @Get('/count-by-status')
+  async getCountByStatus(
+    @Query('from') from: Date,
+    @Query('to') to: Date,
+    @Query('projectId') projectId: number,
+  ) {
+    return FindCountByStatusResponseDto.transform(
+      await this.issueStatisticsService.getCountByStatus({
+        from,
+        to,
         projectId,
       }),
     );
