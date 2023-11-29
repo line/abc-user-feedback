@@ -36,6 +36,7 @@ import { ChannelEntity } from '../channel/channel/channel.entity';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
+import { FeedbackStatisticsEntity } from '../statistics/feedback/feedback-statistics.entity';
 import { CreateFeedbackDto, FindFeedbacksByChannelIdDto } from './dtos';
 import { FeedbackEntity } from './feedback.entity';
 import { FeedbackService } from './feedback.service';
@@ -70,6 +71,7 @@ describe('FeedbackService Test Suite', () => {
   let issueRepo: Repository<IssueEntity>;
   let channelRepo: Repository<ChannelEntity>;
   let osRepo: OpensearchRepository;
+  let feedbackStatisticsRepo: Repository<FeedbackStatisticsEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -83,6 +85,9 @@ describe('FeedbackService Test Suite', () => {
     issueRepo = module.get(getRepositoryToken(IssueEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     osRepo = module.get(OpensearchRepository);
+    feedbackStatisticsRepo = module.get(
+      getRepositoryToken(FeedbackStatisticsEntity),
+    );
   });
 
   describe('create', () => {
@@ -95,6 +100,9 @@ describe('FeedbackService Test Suite', () => {
         id: faker.number.int(),
         rawData: dto.data,
       } as FeedbackEntity);
+      jest
+        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
 
       await feedbackService.create(dto);
 
@@ -320,6 +328,9 @@ describe('FeedbackService Test Suite', () => {
         id: feedbackId,
         issues: [],
       } as FeedbackEntity);
+      jest
+        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       clsService.set = jest.fn();
 
       await feedbackService.create(dto);
@@ -354,6 +365,9 @@ describe('FeedbackService Test Suite', () => {
         id: feedbackId,
         issues: [],
       } as FeedbackEntity);
+      jest
+        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       clsService.set = jest.fn();
 
       await feedbackService.create(dto);
@@ -390,6 +404,9 @@ describe('FeedbackService Test Suite', () => {
         id: feedbackId,
         issues: [],
       } as FeedbackEntity);
+      jest
+        .spyOn(feedbackStatisticsRepo, 'findOne')
+        .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       clsService.set = jest.fn();
 
       await feedbackService.create(dto);

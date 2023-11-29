@@ -27,6 +27,7 @@ import { FeedbackMySQLService } from '../../domains/feedback/feedback.mysql.serv
 import { FeedbackOSService } from '../../domains/feedback/feedback.os.service';
 import { FeedbackService } from '../../domains/feedback/feedback.service';
 import { ChannelServiceProviders } from './channel.service.providers';
+import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';
 import { FieldServiceProviders } from './field.service.providers';
 import { IssueServiceProviders } from './issue.service.providers';
 import { OptionServiceProviders } from './option.service.providers';
@@ -43,6 +44,7 @@ export const FeedbackServiceProviders = [
   ...IssueServiceProviders,
   ...OptionServiceProviders,
   ...ChannelServiceProviders,
+  ...FeedbackStatisticsServiceProviders,
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
   FeedbackOSService,
 ];

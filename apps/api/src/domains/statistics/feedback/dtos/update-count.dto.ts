@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetCountByDateByChannelDto } from './get-count-by-date-by-channel.dto';
-export { GetCountDto } from './get-count.dto';
-export { GetIssuedRateDto } from './get-issued-rate.dto';
-export { UpdateCountDto } from './update-count.dto';
+export class UpdateCountDto {
+  channelId: number;
+  date: Date;
+  count?: number;
+}
