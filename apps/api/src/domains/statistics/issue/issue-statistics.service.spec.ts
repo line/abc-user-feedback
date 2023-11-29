@@ -88,7 +88,7 @@ describe('IssueStatisticsService suite', () => {
     schedulerRegistry = module.get(SchedulerRegistry);
   });
 
-  describe('getCountByDateByChannel', () => {
+  describe('getCountByDate', () => {
     it('getting counts by date succeeds with valid inputs', async () => {
       const from = faker.date.past();
       const to = faker.date.future();
