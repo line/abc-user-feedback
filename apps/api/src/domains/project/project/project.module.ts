@@ -24,7 +24,9 @@ import { OptionEntity } from '@/domains/channel/option/option.entity';
 import { OptionModule } from '@/domains/channel/option/option.module';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { FeedbackModule } from '@/domains/feedback/feedback.module';
+import { FeedbackIssueStatisticsModule } from '@/domains/statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from '@/domains/statistics/feedback/feedback-statistics.module';
+import { IssueStatisticsModule } from '@/domains/statistics/issue/issue-statistics.module';
 import { TenantModule } from '@/domains/tenant/tenant.module';
 import { ApiKeyModule } from '../api-key/api-key.module';
 import { IssueTrackerModule } from '../issue-tracker/issue-tracker.module';
@@ -56,6 +58,8 @@ import { ProjectService } from './project.service';
     MemberModule,
     IssueTrackerModule,
     FeedbackStatisticsModule,
+    IssueStatisticsModule,
+    FeedbackIssueStatisticsModule,
   ],
   providers: [ProjectService, OpensearchRepository],
   controllers: [ProjectController],

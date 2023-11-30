@@ -13,18 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { IssueEntity } from '@/domains/project/issue/issue.entity';
+import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { IssueStatisticsEntity } from '@/domains/statistics/issue/issue-statistics.entity';
+import { IssueStatisticsService } from '@/domains/statistics/issue/issue-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
-import { IssueEntity } from '../../domains/project/issue/issue.entity';
-import { IssueService } from '../../domains/project/issue/issue.service';
-import { IssueStatisticsServiceProviders } from './issue-statistics.service.providers';
 
-export const IssueServiceProviders = [
-  IssueService,
+export const IssueStatisticsServiceProviders = [
+  IssueStatisticsService,
+  {
+    provide: getRepositoryToken(IssueStatisticsEntity),
+    useValue: mockRepository(),
+  },
   {
     provide: getRepositoryToken(IssueEntity),
     useValue: mockRepository(),
   },
-  ...IssueStatisticsServiceProviders,
+  {
+    provide: getRepositoryToken(ProjectEntity),
+    useValue: mockRepository(),
+  },
+  SchedulerRegistry,
 ];

@@ -22,61 +22,54 @@ import dotenv from 'dotenv';
 import { Between, In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { UpdateCountDto } from './dtos';
-import type {
-  GetCountByDateByChannelDto,
-  GetCountDto,
-  GetIssuedRateDto,
-} from './dtos';
-import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
+import { UpdateFeedbackCountDto } from './dtos';
+import type { GetCountByDateByIssueDto } from './dtos';
+import { FeedbackIssueStatisticsEntity } from './feedback-issue-statistics.entity';
 
 dotenv.config();
 
 @Injectable()
-export class FeedbackStatisticsService {
-  private logger = new Logger(FeedbackStatisticsService.name);
+export class FeedbackIssueStatisticsService {
+  private logger = new Logger(FeedbackIssueStatisticsService.name);
 
   constructor(
-    @InjectRepository(FeedbackStatisticsEntity)
-    private readonly repository: Repository<FeedbackStatisticsEntity>,
+    @InjectRepository(FeedbackIssueStatisticsEntity)
+    private readonly repository: Repository<FeedbackIssueStatisticsEntity>,
     @InjectRepository(FeedbackEntity)
     private readonly feedbackRepository: Repository<FeedbackEntity>,
     @InjectRepository(IssueEntity)
     private readonly issueRepository: Repository<IssueEntity>,
-    @InjectRepository(ChannelEntity)
-    private readonly channelRepository: Repository<ChannelEntity>,
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
 
-  async getCountByDateByChannel(dto: GetCountByDateByChannelDto) {
-    const { from, to, interval, channelIds } = dto;
+  async getCountByDateByIssue(dto: GetCountByDateByIssueDto) {
+    const { from, to, interval, issueIds } = dto;
 
-    const feedbackStatistics = await this.repository.find({
+    const feedbackIssueStatistics = await this.repository.find({
       where: {
-        channel: In(channelIds),
+        issue: { id: In(issueIds) },
         date: Between(from, to),
       },
-      relations: { channel: true },
-      order: { channel: { id: 'ASC' }, date: 'ASC' },
+      relations: { issue: true },
+      order: { issue: { id: 'ASC' }, date: 'ASC' },
     });
 
     return {
-      channels: feedbackStatistics.reduce(
+      issues: feedbackIssueStatistics.reduce(
         (acc, curr) => {
-          let channel = acc.find((ch) => ch.id === curr.channel.id);
-          if (!channel) {
-            channel = {
-              id: curr.channel.id,
-              name: curr.channel.name,
+          let issue = acc.find((ch) => ch.id === curr.issue.id);
+          if (!issue) {
+            issue = {
+              id: curr.issue.id,
+              name: curr.issue.name,
               statistics: [],
             };
-            acc.push(channel);
+            acc.push(issue);
           }
 
           let endDate: dayjs.Dayjs;
@@ -91,66 +84,26 @@ export class FeedbackStatisticsService {
               endDate = dayjs(curr.date);
           }
 
-          let statistic = channel.statistics.find(
+          let statistic = issue.statistics.find(
             (stat) => stat.date === endDate.format('YYYY-MM-DD'),
           );
           if (!statistic) {
             statistic = {
               date: endDate.format('YYYY-MM-DD'),
-              count: 0,
+              feedbackCount: 0,
             };
-            channel.statistics.push(statistic);
+            issue.statistics.push(statistic);
           }
-          statistic.count += curr.count;
+          statistic.feedbackCount += curr.feedbackCount;
 
           return acc;
         },
         [] as {
           id: number;
           name: string;
-          statistics: { date: string; count: number }[];
+          statistics: { date: string; feedbackCount: number }[];
         }[],
       ),
-    };
-  }
-
-  async getCount(dto: GetCountDto) {
-    return {
-      count: await this.feedbackRepository.count({
-        where: {
-          createdAt: Between(dto.from, dto.to),
-          channel: { project: { id: dto.projectId } },
-        },
-      }),
-    };
-  }
-
-  async getIssuedRatio(dto: GetIssuedRateDto) {
-    return {
-      ratio:
-        (
-          await this.issueRepository
-            .createQueryBuilder('issue')
-            .select('feedbacks.id')
-            .innerJoin('issue.feedbacks', 'feedbacks')
-            .innerJoin('feedbacks.channel', 'channel')
-            .innerJoin('channel.project', 'project')
-            .where('feedbacks.createdAt BETWEEN :from AND :to', {
-              from: dto.from,
-              to: dto.to,
-            })
-            .andWhere('project.id = :projectId', {
-              projectId: dto.projectId,
-            })
-            .groupBy('feedbacks.id')
-            .getRawMany()
-        ).length /
-        (await this.feedbackRepository.count({
-          where: {
-            createdAt: Between(dto.from, dto.to),
-            channel: { project: { id: dto.projectId } },
-          },
-        })),
     };
   }
 
@@ -162,41 +115,47 @@ export class FeedbackStatisticsService {
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
     const job = new CronJob(`0 ${cronHour} * * *`, async () => {
-      await this.createFeedbackStatistics(projectId);
+      await this.createFeedbackIssueStatistics(projectId);
     });
-    this.schedulerRegistry.addCronJob(`feedback-statistics-${projectId}`, job);
+    this.schedulerRegistry.addCronJob(
+      `feedback-issue-statistics-${projectId}`,
+      job,
+    );
     job.start();
 
-    this.logger.log(`feedback-statistics-${projectId} cron job started`);
+    this.logger.log(`feedback-issue-statistics-${projectId} cron job started`);
   }
 
   @Transactional()
-  async createFeedbackStatistics(projectId: number, dayToCreate: number = 1) {
+  async createFeedbackIssueStatistics(
+    projectId: number,
+    dayToCreate: number = 1,
+  ) {
     const { timezoneOffset } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
-    const channels = await this.channelRepository.find({
+    const issues = await this.issueRepository.find({
       where: { project: { id: projectId } },
     });
 
     for (let day = 1; day <= dayToCreate; day++) {
-      for (const channel of channels) {
+      for (const issue of issues) {
         const feedbackCount = await this.feedbackRepository.count({
           where: {
-            channel: { id: channel.id },
+            issues: { id: issue.id },
             createdAt: Between(
               dayjs()
                 .subtract(day, 'day')
                 .startOf('day')
-                .subtract(-offset, 'hour')
+                .subtract(offset, 'hour')
                 .toDate(),
               dayjs()
                 .subtract(day, 'day')
                 .endOf('day')
-                .subtract(-offset, 'hour')
+                .subtract(offset, 'hour')
                 .toDate(),
             ),
           },
@@ -209,10 +168,10 @@ export class FeedbackStatisticsService {
           .insert()
           .values({
             date: dayjs().subtract(day, 'day').toDate(),
-            count: feedbackCount,
-            channel: { id: channel.id },
+            issue: { id: issue.id },
+            feedbackCount,
           })
-          .orUpdate(['count'], ['date', 'channel'])
+          .orUpdate(['feedback_count'], ['date', 'issue'])
           .updateEntity(false)
           .execute();
       }
@@ -220,19 +179,19 @@ export class FeedbackStatisticsService {
   }
 
   @Transactional()
-  async updateCount(dto: UpdateCountDto) {
-    if (dto.count === 0) return;
-    if (!dto.count) dto.count = 1;
+  async updateFeedbackCount(dto: UpdateFeedbackCountDto) {
+    if (dto.feedbackCount === 0) return;
+    if (!dto.feedbackCount) dto.feedbackCount = 1;
 
     const stats = await this.repository.findOne({
       where: {
         date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
-        channel: { id: dto.channelId },
+        issue: { id: dto.issueId },
       },
     });
 
     if (stats) {
-      stats.count += dto.count;
+      stats.feedbackCount += dto.feedbackCount;
       await this.repository.save(stats);
       return;
     } else {
@@ -241,10 +200,10 @@ export class FeedbackStatisticsService {
         .insert()
         .values({
           date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
-          count: dto.count,
-          channel: { id: dto.channelId },
+          feedbackCount: dto.feedbackCount,
+          issue: { id: dto.issueId },
         })
-        .orUpdate(['count'], ['date', 'channel'])
+        .orUpdate(['feedback_count'], ['date', 'issue'])
         .updateEntity(false)
         .execute();
     }

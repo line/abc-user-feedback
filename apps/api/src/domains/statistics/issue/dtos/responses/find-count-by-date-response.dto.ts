@@ -13,18 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
 
-import { IssueStatisticsModule } from '@/domains/statistics/issue/issue-statistics.module';
-import { IssueController } from './issue.controller';
-import { IssueEntity } from './issue.entity';
-import { IssueService } from './issue.service';
+export class FindCountByDateResponseDto {
+  @ApiProperty()
+  @Expose()
+  statistics: {
+    date: string;
+    count: number;
+  }[];
 
-@Module({
-  imports: [TypeOrmModule.forFeature([IssueEntity]), IssueStatisticsModule],
-  providers: [IssueService],
-  controllers: [IssueController],
-  exports: [IssueService],
-})
-export class IssueModule {}
+  public static transform(params: any): FindCountByDateResponseDto {
+    return plainToInstance(FindCountByDateResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
+}

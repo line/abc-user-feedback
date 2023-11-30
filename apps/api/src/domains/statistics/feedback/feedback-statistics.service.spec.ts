@@ -68,7 +68,7 @@ const feedbackStatsFixture = [
   },
 ] as FeedbackStatisticsEntity[];
 
-describe('FieldService suite', () => {
+describe('FeedbackStatisticsService suite', () => {
   let feedbackStatsService: FeedbackStatisticsService;
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;
@@ -320,6 +320,54 @@ describe('FieldService suite', () => {
       expect(feedbackStatsRepo.createQueryBuilder).toBeCalledTimes(
         dayToCreate * channelCount - 1,
       );
+    });
+  });
+
+  describe('updateCount', () => {
+    it('updating count succeeds with valid inputs and existent date', async () => {
+      const channelId = faker.number.int();
+      const date = faker.date.past();
+      const count = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(feedbackStatsRepo, 'findOne').mockResolvedValue({
+        count: 1,
+      } as FeedbackStatisticsEntity);
+
+      await feedbackStatsService.updateCount({
+        channelId,
+        date,
+        count,
+      });
+
+      expect(feedbackStatsRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.save).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.save).toBeCalledWith({
+        count: 1 + count,
+      });
+    });
+    it('updating count succeeds with valid inputs and nonexistent date', async () => {
+      const channelId = faker.number.int();
+      const date = faker.date.past();
+      const count = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(feedbackStatsRepo, 'findOne').mockResolvedValue(null);
+      jest
+        .spyOn(feedbackStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
+      jest.spyOn(createQueryBuilder, 'values');
+
+      await feedbackStatsService.updateCount({
+        channelId,
+        date,
+        count,
+      });
+
+      expect(feedbackStatsRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.createQueryBuilder).toBeCalledTimes(1);
+      expect(createQueryBuilder.values).toBeCalledTimes(1);
+      expect(createQueryBuilder.values).toBeCalledWith({
+        date: new Date(date.toISOString().split('T')[0] + 'T00:00:00'),
+        count,
+        channel: { id: channelId },
+      });
     });
   });
 });
