@@ -13,18 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { IssueStatisticsModule } from '@/domains/statistics/issue/issue-statistics.module';
-import { IssueController } from './issue.controller';
-import { IssueEntity } from './issue.entity';
-import { IssueService } from './issue.service';
-
-@Module({
-  imports: [TypeOrmModule.forFeature([IssueEntity]), IssueStatisticsModule],
-  providers: [IssueService],
-  controllers: [IssueController],
-  exports: [IssueService],
-})
-export class IssueModule {}
+export { GetCountByDateDto } from './get-count-by-date-by-channel.dto';
+export { GetCountDto } from './get-count.dto';
+export { UpdateCountDto } from './update-count.dto';

@@ -26,7 +26,9 @@ import {
 import { ProjectEntity } from '../../domains/project/project/project.entity';
 import { ProjectService } from '../../domains/project/project/project.service';
 import { ApiKeyServiceProviders } from './api-key.service.providers';
+import { FeedbackIssueStatisticsServiceProviders } from './feedback-issue-statistics.service.providers';
 import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';
+import { IssueStatisticsServiceProviders } from './issue-statistics.service.providers';
 import { IssueTrackerServiceProviders } from './issue-tracker.service.provider';
 import { MemberServiceProviders } from './member.service.providers';
 import { RoleServiceProviders } from './role.service.providers';
@@ -48,4 +50,6 @@ export const ProjectServiceProviders = [
   ...ApiKeyServiceProviders,
   ...IssueTrackerServiceProviders,
   ...FeedbackStatisticsServiceProviders,
+  ...IssueStatisticsServiceProviders,
+  ...FeedbackIssueStatisticsServiceProviders,
 ];

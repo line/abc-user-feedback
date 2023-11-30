@@ -29,6 +29,8 @@ import { IssueEntity } from '../project/issue/issue.entity';
 import { IssueModule } from '../project/issue/issue.module';
 import { ProjectEntity } from '../project/project/project.entity';
 import { ProjectModule } from '../project/project/project.module';
+import { FeedbackIssueStatisticsModule } from '../statistics/feedback-issue/feedback-issue-statistics.module';
+import { FeedbackStatisticsModule } from '../statistics/feedback/feedback-statistics.module';
 import { FeedbackController } from './feedback.controller';
 import { FeedbackEntity } from './feedback.entity';
 import { FeedbackMySQLService } from './feedback.mysql.service';
@@ -52,6 +54,8 @@ import { FeedbackService } from './feedback.service';
     IssueModule,
     forwardRef(() => ProjectModule),
     HistoryModule,
+    FeedbackStatisticsModule,
+    FeedbackIssueStatisticsModule,
   ],
   providers: [
     FeedbackService,

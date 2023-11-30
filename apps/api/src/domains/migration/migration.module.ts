@@ -25,7 +25,9 @@ import { FieldModule } from '../channel/field/field.module';
 import { OptionEntity } from '../channel/option/option.entity';
 import { OptionModule } from '../channel/option/option.module';
 import { FeedbackEntity } from '../feedback/feedback.entity';
+import { FeedbackIssueStatisticsModule } from '../statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from '../statistics/feedback/feedback-statistics.module';
+import { IssueStatisticsModule } from '../statistics/issue/issue-statistics.module';
 import { MigrationController } from './migration.controller';
 import { MigrationService } from './migration.service';
 
@@ -40,6 +42,8 @@ import { MigrationService } from './migration.service';
     FieldModule,
     OptionModule,
     FeedbackStatisticsModule,
+    IssueStatisticsModule,
+    FeedbackIssueStatisticsModule,
   ],
   providers: [MigrationService, OpensearchRepository],
   controllers: [MigrationController],

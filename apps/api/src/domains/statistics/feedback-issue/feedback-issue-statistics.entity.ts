@@ -22,11 +22,11 @@ import {
   Unique,
 } from 'typeorm';
 
-import { ChannelEntity } from '../../channel/channel/channel.entity';
+import { IssueEntity } from '@/domains/project/issue/issue.entity';
 
-@Entity('feedback_statistics')
-@Unique('channel-date-unique', ['channel', 'date'])
-export class FeedbackStatisticsEntity {
+@Entity('feedback_issue_statistics')
+@Unique('issue-date-unique', ['issue', 'date'])
+export class FeedbackIssueStatisticsEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
@@ -34,29 +34,29 @@ export class FeedbackStatisticsEntity {
   date: Date;
 
   @Column('int', { default: 0 })
-  count: number;
+  feedbackCount: number;
 
-  @ManyToOne(() => ChannelEntity, (channel) => channel.feedbackStats, {
+  @ManyToOne(() => IssueEntity, (issue) => issue.stats, {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
   })
-  channel: Relation<ChannelEntity>;
+  issue: Relation<IssueEntity>;
 
   static from({
     date,
-    count,
-    channelId,
+    feedbackCount,
+    issueId,
   }: {
     date: Date;
-    count: number;
-    channelId: number;
+    feedbackCount: number;
+    issueId: number;
   }) {
-    const feedbackStats = new FeedbackStatisticsEntity();
-    feedbackStats.channel = new ChannelEntity();
-    feedbackStats.channel.id = channelId;
-    feedbackStats.date = date;
-    feedbackStats.count = count;
+    const feedbackIssueStats = new FeedbackIssueStatisticsEntity();
+    feedbackIssueStats.issue = new IssueEntity();
+    feedbackIssueStats.issue.id = issueId;
+    feedbackIssueStats.date = date;
+    feedbackIssueStats.feedbackCount = feedbackCount;
 
-    return feedbackStats;
+    return feedbackIssueStats;
   }
 }

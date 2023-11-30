@@ -26,6 +26,7 @@ import { ConfigService } from '@nestjs/config';
 import dayjs from 'dayjs';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
+import { DateTime } from 'luxon';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
@@ -40,6 +41,8 @@ import type { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
 import { OptionService } from '../channel/option/option.service';
 import { IssueService } from '../project/issue/issue.service';
+import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/feedback-issue-statistics.service';
+import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
 import type {
   CountByProjectIdDto,
   FindFeedbacksByChannelIdDto,
@@ -67,6 +70,8 @@ export class FeedbackService {
     private readonly optionService: OptionService,
     private readonly channelService: ChannelService,
     private readonly configService: ConfigService,
+    private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
   private validateQuery(
@@ -328,6 +333,12 @@ export class FeedbackService {
       data: feedbackData,
     });
 
+    await this.feedbackStatisticsService.updateCount({
+      channelId,
+      date: DateTime.utc().toJSDate(),
+      count: 1,
+    });
+
     if (issueNames) {
       for (const issueName of issueNames) {
         let issue = await this.issueService.findByName({ name: issueName });
@@ -462,6 +473,12 @@ export class FeedbackService {
   @Transactional()
   async addIssue(dto: AddIssueDto) {
     await this.feedbackMySQLService.addIssue(dto);
+
+    await this.feedbackIssueStatisticsService.updateFeedbackCount({
+      issueId: dto.issueId,
+      date: DateTime.utc().toJSDate(),
+      feedbackCount: 1,
+    });
 
     if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.upsertFeedbackItem({
