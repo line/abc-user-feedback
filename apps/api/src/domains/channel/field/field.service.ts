@@ -90,4 +90,8 @@ export class FieldService {
       });
     }
   }
+
+  async findByIds(ids: number[]) {
+    return this.fieldMySQLService.findByIds(ids);
+  }
 }
