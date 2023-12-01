@@ -125,14 +125,24 @@ export class FeedbackController {
   async exportFeedbacks(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: ExportFeedbacksRequestDto,
-    @Body('type') type: 'xlsx' | 'csv',
     @Res() res: FastifyReply,
     @CurrentUser() user: UserDto,
   ) {
-    const { query, sort } = body;
+    const { query, sort, type, fieldIds } = body;
     const channel = await this.channelService.findById({ channelId });
     const projectName = channel.project.name;
     const channelName = channel.name;
+
+    const { streamableFile, feedbackIds } =
+      await this.feedbackService.generateFile({
+        channelId,
+        query,
+        sort,
+        type,
+        fieldIds,
+      });
+    const stream = streamableFile.getStream();
+
     const filename = `UFB_${projectName}_${channelName}_Feedback_${dayjs().format(
       'YYYY-MM-DD',
     )}.${type}`;
@@ -145,15 +155,6 @@ export class FeedbackController {
     } else if (type === 'csv') {
       res.type('text/csv');
     }
-
-    const { streamableFile, feedbackIds } =
-      await this.feedbackService.generateFile({
-        channelId,
-        query,
-        sort,
-        type,
-      });
-    const stream = streamableFile.getStream();
 
     res.send(stream);
 
