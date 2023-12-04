@@ -82,7 +82,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     setRowSelection({});
   }, [limit, query]);
 
-  const q = useMemo(
+  const formattedQuery = useMemo(
     () =>
       produce(query, (draft) => {
         if (sub) {
@@ -137,7 +137,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   } = useFeedbackSearch(
     projectId,
     channelId,
-    { page, limit, sort: sort as Record<string, never>, query: q },
+    { page, limit, sort: sort as Record<string, never>, query: formattedQuery },
     { enabled: channelId !== -1 },
   );
 
@@ -184,6 +184,16 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     [rowSelection],
   );
 
+  const fieldIds = useMemo(() => {
+    if (!fieldData) return [];
+    if (columnOrder.length === 0) return fieldData.map((v) => v.id);
+
+    return fieldData
+      .filter((v) => columnVisibility[v.key] !== false)
+      .sort((a, b) => columnOrder.indexOf(a.key) - columnOrder.indexOf(b.key))
+      .map((v) => v.id);
+  }, [columnOrder, columnVisibility, fieldData]);
+
   return (
     <div className="flex flex-col gap-2">
       <FeedbackTableBar
@@ -197,6 +207,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
         fieldData={fieldData}
         meta={data?.meta}
         sub={sub}
+        formattedQuery={formattedQuery}
       />
       {fieldData && (
         <div className="overflow-x-auto">
@@ -221,7 +232,12 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                     onClickCancle={table.resetRowSelection}
                     onClickDelete={() => setOpenDeleteDialog(true)}
                     disabled={!perms.includes('feedback_delete')}
-                    download={{ channelId, projectId, ids: rowSelectionIds }}
+                    download={{
+                      channelId,
+                      projectId,
+                      ids: rowSelectionIds,
+                      fieldIds,
+                    }}
                   />
                 ) : (
                   table.getFlatHeaders().map((header) => (
