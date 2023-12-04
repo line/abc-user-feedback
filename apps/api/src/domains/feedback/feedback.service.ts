@@ -156,9 +156,9 @@ export class FeedbackService {
     }
 
     return Object.keys(convertedFeedback)
-      .filter((key) => fieldsToExport.find((field) => field.key === key))
+      .filter((key) => fieldsToExport.find((field) => field.name === key))
       .reduce((obj, key) => {
-        obj[key] = feedback[key];
+        obj[key] = convertedFeedback[key];
         return obj;
       }, {});
   }
@@ -228,6 +228,7 @@ export class FeedbackService {
           fieldsByKey,
           fieldsToExport,
         );
+
         worksheet.addRow(convertedFeedback).commit();
         feedbackIds.push(feedback.id);
       }
