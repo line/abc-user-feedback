@@ -86,13 +86,11 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
       description={description}
       title={title}
       chedkedList={checkedList}
-      onChecked={(name, checked) => {
-        if (checked) {
-          setCheckedList([...checkedList, name]);
-        } else {
-          setCheckedList(checkedList.filter((v) => v !== name));
-        }
-      }}
+      onChecked={(name, checked) =>
+        checked
+          ? setCheckedList([...checkedList, name])
+          : setCheckedList(checkedList.filter((v) => v !== name))
+      }
       showLegend={showLegend}
       showFilter={showFilter}
     >

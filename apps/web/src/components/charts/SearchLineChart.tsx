@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import {
   Line,
@@ -24,7 +24,7 @@ import {
   YAxis,
 } from 'recharts';
 
-import ChartContainer from './ChartContainer';
+import ChartSearchContainer from './ChartSearchContainer';
 
 interface IProps {
   title: string;
@@ -37,16 +37,29 @@ interface IProps {
   }[];
   from: Date;
   to: Date;
+  onChangeSearch: (v: string) => void;
+  items: { id: number; name: string }[];
+  checkedList: { id: number; name: string }[];
+  setCheckedList: (input: { id: number; name: string }[]) => void;
+  maxItems: number;
 }
 
-const SearchedSImpleLineChart: React.FC<IProps> = (props) => {
-  const { title, description, height, data, from, to } = props;
+const SearchLineChart: React.FC<IProps> = (props) => {
+  const {
+    title,
+    description,
+    height,
+    data,
+    from,
+    to,
+    onChangeSearch,
+    items,
+    checkedList,
+    setCheckedList,
+    maxItems,
+  } = props;
 
   const dataKeys = useMemo(() => data, [data]);
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-  useEffect(() => {
-    setCheckedList(dataKeys.map((v) => v.name));
-  }, [dataKeys]);
 
   const newData = useMemo(() => {
     if (!data) return [];
@@ -59,7 +72,8 @@ const SearchedSImpleLineChart: React.FC<IProps> = (props) => {
 
       const channelData = data.reduce(
         (acc, cur) => {
-          if (!checkedList.includes(cur.name)) return acc;
+          if (!checkedList.some((checkedItem) => checkedItem.name === cur.name))
+            return acc;
           const count =
             cur.data.find((v) => v.date === currentDate.format('YYYY-MM-DD'))
               ?.count ?? 0;
@@ -76,18 +90,18 @@ const SearchedSImpleLineChart: React.FC<IProps> = (props) => {
   }, [data, checkedList]);
 
   return (
-    <ChartContainer
+    <ChartSearchContainer
       dataKeys={dataKeys}
       description={description}
       title={title}
       chedkedList={checkedList}
-      onChecked={(name, checked) => {
-        if (checked) {
-          setCheckedList([...checkedList, name]);
-        } else {
-          setCheckedList(checkedList.filter((v) => v !== name));
-        }
-      }}
+      items={items}
+      onChecked={(item, checked) =>
+        checked && checkedList.length < maxItems
+          ? setCheckedList([...checkedList, item])
+          : setCheckedList(checkedList.filter((v) => v.id !== item.id))
+      }
+      onChangeSearch={onChangeSearch}
     >
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
         <LineChart width={500} height={300} data={newData}>
@@ -105,8 +119,8 @@ const SearchedSImpleLineChart: React.FC<IProps> = (props) => {
           ))}
         </LineChart>
       </ResponsiveContainer>
-    </ChartContainer>
+    </ChartSearchContainer>
   );
 };
 
-export default SearchedSImpleLineChart;
+export default SearchLineChart;

@@ -13,16 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
+import { Icon, Input, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
 interface IProps {
-  items: string[];
-  checkedList: string[];
-  onChecked?: (name: string, checked: boolean) => void;
+  items: { id: number; name: string }[];
+  checkedList: { id: number; name: string }[];
+  onChecked: (item: { id: number; name: string }, checked: boolean) => void;
+  onChange: (value: string) => void;
 }
 
-const ChartFilter: React.FC<IProps> = (props) => {
-  const { checkedList, items, onChecked } = props;
+const ChartSearchFilter: React.FC<IProps> = (props) => {
+  const { checkedList, items, onChecked, onChange } = props;
 
   return (
     <Popover placement="bottom-end">
@@ -32,16 +33,23 @@ const ChartFilter: React.FC<IProps> = (props) => {
         </button>
       </PopoverTrigger>
       <PopoverContent className="p-3">
+        <Input
+          onChange={(e) => onChange(e.currentTarget.value)}
+          placeholder="Search"
+          className="mb-3"
+        />
         <div className="space-y-1">
-          {items.map((name) => (
-            <label className="flex items-center gap-2 py-1" key={name}>
+          {items.map((item) => (
+            <label className="flex items-center gap-2 py-1" key={item.id}>
               <input
                 className="checkbox checkbox-sm"
                 type="checkbox"
-                checked={checkedList ? checkedList.includes(name) : true}
-                onChange={(e) => onChecked?.(name, e.currentTarget.checked)}
+                checked={checkedList.some(
+                  (checkedItem) => checkedItem.id === item.id,
+                )}
+                onChange={(e) => onChecked(item, e.currentTarget.checked)}
               />
-              <p className="font-12-regular flex-1">{name}</p>
+              <p className="font-12-regular flex-1">{item.name}</p>
             </label>
           ))}
         </div>
@@ -50,4 +58,4 @@ const ChartFilter: React.FC<IProps> = (props) => {
   );
 };
 
-export default ChartFilter;
+export default ChartSearchFilter;

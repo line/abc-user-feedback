@@ -13,10 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
+import { useThrottle } from 'react-use';
 
-import { SimpleLineChart } from '@/components/charts';
+import { SearchLineChart } from '@/components/charts';
 import { useIssueSearch, useOAIQuery } from '@/hooks';
+import client from '@/libs/client';
 
 const getDarkColor = () => {
   return (
@@ -34,26 +37,41 @@ interface IProps {
 }
 
 const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
-  const { data } = useIssueSearch(projectId, {
-    sort: { feedbackCount: 'DESC' } as any,
-    limit: 5,
-  });
+  const [searchName, setSearchName] = useState('');
+  const throttledSearchName = useThrottle(searchName, 1000);
+  const [currentIssues, setCurrentIssues] = useState<
+    { id: number; name: string }[]
+  >([]);
 
-  const enabled = (data?.items ?? []).length > 0;
+  const { data: searchedIssues } = useIssueSearch(projectId, {
+    query: { name: throttledSearchName },
+    page: 0,
+    limit: 10,
+  });
 
   const { data: feedbackIssues } = useOAIQuery({
     path: '/api/statistics/feedback-issue',
     variables: {
       from: dayjs(from).startOf('day').toISOString(),
       to: dayjs(to).endOf('day').toISOString(),
-      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
+      issueIds: (currentIssues.map((issue) => issue.id) ?? []).join(','),
       interval: 'day',
     },
-    queryOptions: { enabled },
+    queryOptions: { enabled: currentIssues.length > 0 },
   });
 
+  useEffect(() => {
+    client
+      .post({
+        path: '/api/projects/{projectId}/issues/search',
+        body: { sort: { feedbackCount: 'DESC' } as any, limit: 5 },
+        pathParams: { projectId },
+      })
+      .then(({ data }) => setCurrentIssues(data?.items ?? []));
+  }, []);
+
   return (
-    <SimpleLineChart
+    <SearchLineChart
       title="전체 이슈 추이"
       description={`특정 기간의 이슈 생성 추이를 나타냅니다 (${dayjs()
         .subtract(7, 'day')
@@ -73,8 +91,13 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       }
       from={from}
       to={to}
-      showLegend
-      showFilter
+      onChangeSearch={setSearchName}
+      items={
+        throttledSearchName === '' ? currentIssues : searchedIssues?.items ?? []
+      }
+      checkedList={currentIssues}
+      setCheckedList={setCurrentIssues}
+      maxItems={5}
     />
   );
 };
