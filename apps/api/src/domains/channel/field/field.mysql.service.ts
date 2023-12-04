@@ -15,7 +15,7 @@
  */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import {
@@ -212,5 +212,9 @@ export class FieldMySQLService {
     }
 
     return createdFields;
+  }
+
+  async findByIds(ids: number[]) {
+    return await this.repository.findBy({ id: In(ids) });
   }
 }

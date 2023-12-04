@@ -26,6 +26,7 @@ import { ConfigService } from '@nestjs/config';
 import dayjs from 'dayjs';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
+import { DateTime } from 'luxon';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
@@ -40,6 +41,8 @@ import type { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
 import { OptionService } from '../channel/option/option.service';
 import { IssueService } from '../project/issue/issue.service';
+import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/feedback-issue-statistics.service';
+import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
 import type {
   CountByProjectIdDto,
   FindFeedbacksByChannelIdDto,
@@ -67,6 +70,8 @@ export class FeedbackService {
     private readonly optionService: OptionService,
     private readonly channelService: ChannelService,
     private readonly configService: ConfigService,
+    private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
   private validateQuery(
@@ -139,6 +144,7 @@ export class FeedbackService {
   private convertFeedback(
     feedback: any,
     fieldsByKey: Record<string, FieldEntity>,
+    fieldsToExport: FieldEntity[],
   ) {
     const convertedFeedback: Record<string, any> = {};
     for (const key of Object.keys(feedback)) {
@@ -149,10 +155,22 @@ export class FeedbackService {
         : feedback[key];
     }
 
-    return convertedFeedback;
+    return Object.keys(convertedFeedback)
+      .filter((key) => fieldsToExport.find((field) => field.name === key))
+      .reduce((obj, key) => {
+        obj[key] = convertedFeedback[key];
+        return obj;
+      }, {});
   }
 
-  private async generateXLSXFile(channelId, query, sort, fields, fieldsByKey) {
+  private async generateXLSXFile({
+    channelId,
+    query,
+    sort,
+    fields,
+    fieldsByKey,
+    fieldsToExport,
+  }) {
     if (!existsSync('/tmp')) {
       await fs.mkdir('/tmp');
     }
@@ -162,7 +180,7 @@ export class FeedbackService {
     });
     const worksheet = workbook.addWorksheet('Sheet 1');
 
-    const headers = fields.map((field) => ({
+    const headers = fieldsToExport.map((field) => ({
       header: field.name,
       key: field.name,
     }));
@@ -205,7 +223,12 @@ export class FeedbackService {
 
       for (const feedback of feedbacks) {
         feedback.issues = issuesByFeedbackIds[feedback.id];
-        const convertedFeedback = this.convertFeedback(feedback, fieldsByKey);
+        const convertedFeedback = this.convertFeedback(
+          feedback,
+          fieldsByKey,
+          fieldsToExport,
+        );
+
         worksheet.addRow(convertedFeedback).commit();
         feedbackIds.push(feedback.id);
       }
@@ -222,7 +245,14 @@ export class FeedbackService {
     return { streamableFile: new StreamableFile(fileStream), feedbackIds };
   }
 
-  private async generateCSVFile(channelId, query, sort, fields, fieldsByKey) {
+  private async generateCSVFile({
+    channelId,
+    query,
+    sort,
+    fields,
+    fieldsByKey,
+    fieldsToExport,
+  }) {
     const stream = new PassThrough();
     const csvStream = fastcsv.format({ headers: true });
 
@@ -265,7 +295,11 @@ export class FeedbackService {
 
       for (const feedback of feedbacks) {
         feedback.issues = issuesByFeedbackIds[feedback.id];
-        const convertedFeedback = this.convertFeedback(feedback, fieldsByKey);
+        const convertedFeedback = this.convertFeedback(
+          feedback,
+          fieldsByKey,
+          fieldsToExport,
+        );
         csvStream.write(convertedFeedback);
         feedbackIds.push(feedback.id);
       }
@@ -326,6 +360,12 @@ export class FeedbackService {
     const feedback = await this.feedbackMySQLService.create({
       channelId,
       data: feedbackData,
+    });
+
+    await this.feedbackStatisticsService.updateCount({
+      channelId,
+      date: DateTime.utc().toJSDate(),
+      count: 1,
     });
 
     if (issueNames) {
@@ -463,6 +503,12 @@ export class FeedbackService {
   async addIssue(dto: AddIssueDto) {
     await this.feedbackMySQLService.addIssue(dto);
 
+    await this.feedbackIssueStatisticsService.updateFeedbackCount({
+      issueId: dto.issueId,
+      date: DateTime.utc().toJSDate(),
+      feedbackCount: 1,
+    });
+
     if (this.configService.get('opensearch.use')) {
       await this.feedbackOSService.upsertFeedbackItem({
         channelId: dto.channelId,
@@ -502,11 +548,21 @@ export class FeedbackService {
     streamableFile: StreamableFile;
     feedbackIds: number[];
   }> {
-    const { channelId, query, sort, type } = dto;
+    const { channelId, query, sort, type, fieldIds } = dto;
+
     const fields = await this.fieldService.findByChannelId({
       channelId: channelId,
     });
     if (fields.length === 0) throw new BadRequestException('invalid channel');
+
+    let fieldsToExport = fields;
+    if (fieldIds) {
+      fieldsToExport = await this.fieldService.findByIds(fieldIds);
+      if (fields.length === 0) {
+        throw new BadRequestException('invalid fieldIds');
+      }
+    }
+
     this.validateQuery(query, fields);
     const fieldsByKey = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
@@ -517,9 +573,23 @@ export class FeedbackService {
     );
 
     if (type === 'xlsx') {
-      return this.generateXLSXFile(channelId, query, sort, fields, fieldsByKey);
+      return this.generateXLSXFile({
+        channelId,
+        query,
+        sort,
+        fields,
+        fieldsByKey,
+        fieldsToExport,
+      });
     } else if (type === 'csv') {
-      return this.generateCSVFile(channelId, query, sort, fields, fieldsByKey);
+      return this.generateCSVFile({
+        channelId,
+        query,
+        sort,
+        fields,
+        fieldsByKey,
+        fieldsToExport,
+      });
     }
   }
 }

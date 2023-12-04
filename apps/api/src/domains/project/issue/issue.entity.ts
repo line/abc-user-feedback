@@ -19,12 +19,14 @@ import {
   Index,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   Relation,
   Unique,
 } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
 import { IssueStatusEnum } from '@/common/enums';
+import { FeedbackIssueStatisticsEntity } from '@/domains/statistics/feedback-issue/feedback-issue-statistics.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { ProjectEntity } from '../project/project.entity';
 
@@ -58,6 +60,11 @@ export class IssueEntity extends CommonEntity {
     onDelete: 'CASCADE',
   })
   project: Relation<ProjectEntity>;
+
+  @OneToMany(() => FeedbackIssueStatisticsEntity, (stats) => stats.issue, {
+    cascade: true,
+  })
+  stats: Relation<FeedbackIssueStatisticsEntity>[];
 
   static from({ name, projectId }: { name: string; projectId: number }) {
     const issue = new IssueEntity();

@@ -15,6 +15,7 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { DateTime } from 'luxon';
 import { paginate } from 'nestjs-typeorm-paginate';
 import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
 import { In, Like, Not, Raw, Repository } from 'typeorm';
@@ -22,6 +23,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
 import type { CountByProjectIdDto } from '@/domains/feedback/dtos';
+import { IssueStatisticsService } from '@/domains/statistics/issue/issue-statistics.service';
 import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
 import { CreateIssueDto, UpdateIssueDto } from './dtos';
 import {
@@ -36,6 +38,7 @@ export class IssueService {
   constructor(
     @InjectRepository(IssueEntity)
     private readonly repository: Repository<IssueEntity>,
+    private readonly issueStatisticsService: IssueStatisticsService,
   ) {}
 
   @Transactional()
@@ -49,7 +52,15 @@ export class IssueService {
 
     if (duplicateIssue) throw new IssueNameDuplicatedException();
 
-    return await this.repository.save(issue);
+    const savedIssue = await this.repository.save(issue);
+
+    await this.issueStatisticsService.updateCount({
+      projectId: savedIssue.project.id,
+      date: DateTime.utc().toJSDate(),
+      count: 1,
+    });
+
+    return savedIssue;
   }
 
   async findIssuesByProjectId(dto: FindIssuesByProjectIdDto) {

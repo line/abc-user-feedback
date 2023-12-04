@@ -29,6 +29,7 @@ interface IProps {
     projectId: number;
     channelId: number;
     ids: number[];
+    fieldIds: number[];
   };
   disabled?: boolean;
 }
@@ -73,6 +74,7 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
               <DownloadButton
                 query={{ ids: download.ids }}
                 count={download.ids.length}
+                fieldIds={download.fieldIds}
                 isHead
               />
               <div className="border-r-fill-secondary h-4 border-r-[1px]" />
