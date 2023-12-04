@@ -16,12 +16,13 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { IssueStatisticsModule } from '@/domains/statistics/issue/issue-statistics.module';
 import { IssueController } from './issue.controller';
 import { IssueEntity } from './issue.entity';
 import { IssueService } from './issue.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([IssueEntity])],
+  imports: [TypeOrmModule.forFeature([IssueEntity]), IssueStatisticsModule],
   providers: [IssueService],
   controllers: [IssueController],
   exports: [IssueService],

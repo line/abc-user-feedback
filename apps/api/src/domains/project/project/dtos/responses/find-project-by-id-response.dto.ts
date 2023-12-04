@@ -16,6 +16,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 
+import { TimezoneOffset } from '@ufb/shared';
+
 export class FindProjectByIdResponseDto {
   @Expose()
   @ApiProperty()
@@ -28,6 +30,10 @@ export class FindProjectByIdResponseDto {
   @Expose()
   @ApiProperty()
   description: string;
+
+  @Expose()
+  @ApiProperty()
+  timezoneOffset: TimezoneOffset;
 
   @Expose()
   @ApiProperty()

@@ -114,13 +114,7 @@ describe('FeedbackController', () => {
       project: { name: faker.string.sample() },
     } as ChannelEntity);
 
-    await feedbackController.exportFeedbacks(
-      channelId,
-      dto,
-      'csv',
-      response,
-      userDto,
-    );
+    await feedbackController.exportFeedbacks(channelId, dto, response, userDto);
 
     expect(MockFeedbackService.generateFile).toBeCalledTimes(1);
   });

@@ -22,6 +22,8 @@ import {
   Length,
 } from 'class-validator';
 
+import { TimezoneOffset } from '@ufb/shared';
+
 import { CreateIssueTrackerRequestDto } from '@/domains/project/issue-tracker/dtos/requests';
 import { CreateRoleRequestDto } from '@/domains/project/role/dtos/requests';
 import { IsNullable } from '@/domains/user/decorators';
@@ -52,6 +54,10 @@ export class CreateProjectRequestDto {
   @IsString()
   @IsNullable()
   description: string | null;
+
+  @ApiProperty()
+  @IsString()
+  timezoneOffset: TimezoneOffset;
 
   @ApiProperty({ type: [CreateRoleRequestDto], required: false })
   @IsArray()

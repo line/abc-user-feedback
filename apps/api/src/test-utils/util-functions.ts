@@ -84,10 +84,18 @@ export const signInTestUser = async (
 export const DEFAULT_FIELD_COUNT = 2;
 
 export const createQueryBuilder: any = {
-  setFindOptions: () =>
-    jest.fn().mockImplementation(() => {
-      return createQueryBuilder;
-    }),
+  setFindOptions: () => jest.fn().mockImplementation(() => createQueryBuilder),
+  select: () => createQueryBuilder,
+  innerJoin: () => createQueryBuilder,
+  where: () => createQueryBuilder,
+  andWhere: () => createQueryBuilder,
+  groupBy: () => createQueryBuilder,
+  getRawMany: () => createQueryBuilder,
+  insert: () => createQueryBuilder,
+  values: () => createQueryBuilder,
+  orUpdate: () => createQueryBuilder,
+  updateEntity: () => createQueryBuilder,
+  execute: () => createQueryBuilder,
 };
 
 export const mockRepository = () => ({

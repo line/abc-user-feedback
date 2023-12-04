@@ -13,16 +13,54 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Param, ParseIntPipe, Post } from '@nestjs/common';
 
+import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/feedback-issue-statistics.service';
+import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
+import { IssueStatisticsService } from '../statistics/issue/issue-statistics.service';
 import { MigrationService } from './migration.service';
 
-@Controller('/channels/:channelId/migration')
+@Controller('/migration')
 export class MigrationController {
-  constructor(private readonly migrationService: MigrationService) {}
+  constructor(
+    private readonly migrationService: MigrationService,
+    private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly issueStatisticsService: IssueStatisticsService,
+    private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
+  ) {}
 
-  @Post()
+  @Post('/channels/:channelId')
   async migrate(@Param('channelId', ParseIntPipe) channelId: number) {
     await this.migrationService.migrateToESByChannelId(channelId);
+  }
+
+  @Post('/statistics/feedback')
+  async migrateFeedbackStatistics(
+    @Body() body: { projectId: number; day: number },
+  ) {
+    await this.feedbackStatisticsService.createFeedbackStatistics(
+      body.projectId,
+      body.day,
+    );
+  }
+
+  @Post('/statistics/issue')
+  async migrateIssueStatistics(
+    @Body() body: { projectId: number; day: number },
+  ) {
+    await this.issueStatisticsService.createIssueStatistics(
+      body.projectId,
+      body.day,
+    );
+  }
+
+  @Post('/statistics/feedback-issue')
+  async migrateFeedbackIssueStatistics(
+    @Body() body: { projectId: number; day: number },
+  ) {
+    await this.feedbackIssueStatisticsService.createFeedbackIssueStatistics(
+      body.projectId,
+      body.day,
+    );
   }
 }

@@ -69,7 +69,7 @@ export class ChannelMySQLService {
     return await paginate(
       this.repository.createQueryBuilder().setFindOptions({
         where: { project: { id: projectId }, name: Like(`%${searchText}%`) },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
       }),
       options,
     );

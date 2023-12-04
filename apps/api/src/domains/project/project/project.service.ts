@@ -21,6 +21,9 @@ import { Like, Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { OpensearchRepository } from '@/common/repositories';
+import { FeedbackIssueStatisticsService } from '@/domains/statistics/feedback-issue/feedback-issue-statistics.service';
+import { FeedbackStatisticsService } from '@/domains/statistics/feedback/feedback-statistics.service';
+import { IssueStatisticsService } from '@/domains/statistics/issue/issue-statistics.service';
 import { TenantService } from '@/domains/tenant/tenant.service';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
@@ -53,6 +56,9 @@ export class ProjectService {
     private readonly apiKeyService: ApiKeyService,
     private readonly issueTrackerService: IssueTrackerService,
     private readonly configService: ConfigService,
+    private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly issueStatisticsService: IssueStatisticsService,
+    private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
   async checkName(name: string) {
@@ -141,6 +147,12 @@ export class ProjectService {
       savedProject.issueTracker = savedIssueTracker;
     }
 
+    await this.feedbackStatisticsService.addCronJobByProjectId(savedProject.id);
+    await this.issueStatisticsService.addCronJobByProjectId(savedProject.id);
+    await this.feedbackIssueStatisticsService.addCronJobByProjectId(
+      savedProject.id,
+    );
+
     return savedProject;
   }
 
@@ -149,7 +161,7 @@ export class ProjectService {
       return await paginate(
         this.projectRepo.createQueryBuilder().setFindOptions({
           where: { name: Like(`%${searchText}%`) },
-          order: { createdAt: 'DESC' },
+          order: { createdAt: 'ASC' },
         }),
         options,
       );
@@ -161,7 +173,7 @@ export class ProjectService {
           name: Like(`%${searchText}%`),
           roles: { members: { user: { id: user.id } } },
         },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
       }),
       options,
     );
