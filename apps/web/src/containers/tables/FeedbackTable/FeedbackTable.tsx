@@ -184,6 +184,16 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     [rowSelection],
   );
 
+  const fieldIds = useMemo(() => {
+    if (!fieldData) return [];
+    if (columnOrder.length === 0) return fieldData.map((v) => v.id);
+
+    return fieldData
+      .filter((v) => columnVisibility[v.key] !== false)
+      .sort((a, b) => columnOrder.indexOf(a.key) - columnOrder.indexOf(b.key))
+      .map((v) => v.id);
+  }, [columnOrder, columnVisibility, fieldData]);
+
   return (
     <div className="flex flex-col gap-2">
       <FeedbackTableBar
@@ -221,7 +231,12 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                     onClickCancle={table.resetRowSelection}
                     onClickDelete={() => setOpenDeleteDialog(true)}
                     disabled={!perms.includes('feedback_delete')}
-                    download={{ channelId, projectId, ids: rowSelectionIds }}
+                    download={{
+                      channelId,
+                      projectId,
+                      ids: rowSelectionIds,
+                      fieldIds,
+                    }}
                   />
                 ) : (
                   table.getFlatHeaders().map((header) => (

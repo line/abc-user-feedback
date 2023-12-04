@@ -125,6 +125,15 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
       )
       .sort((a, b) => getSearchItemPriority(a) - getSearchItemPriority(b));
   }, [fieldData, issues, t]);
+  const fieldIds = useMemo(() => {
+    if (!fieldData) return [];
+    if (columnOrder.length === 0) return fieldData.map((v) => v.id);
+
+    return fieldData
+      .filter((v) => columnVisibility[v.key] !== false)
+      .sort((a, b) => columnOrder.indexOf(a.key) - columnOrder.indexOf(b.key))
+      .map((v) => v.id);
+  }, [columnOrder, columnVisibility, fieldData]);
 
   if (sub) {
     return (
@@ -145,7 +154,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             toggleAllRowsExpanded={table.toggleAllRowsExpanded}
           />
           <div className="bg-fill-tertiary h-4 w-[1px]" />
-          <DownloadButton count={count} query={query} />
+          <DownloadButton count={count} query={query} fieldIds={fieldIds} />
         </div>
       </div>
     );
@@ -169,7 +178,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             isAllExpanded={table.getIsAllRowsExpanded()}
             toggleAllRowsExpanded={table.toggleAllRowsExpanded}
           />
-          <DownloadButton count={count} query={query} />
+          <DownloadButton count={count} query={query} fieldIds={fieldIds} />
         </div>
       </div>
       <div className="flex justify-between">

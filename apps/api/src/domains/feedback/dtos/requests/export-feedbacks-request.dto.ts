@@ -23,7 +23,7 @@ export class ExportFeedbacksRequestDto extends FindFeedbacksByChannelIdRequestDt
   @IsString()
   type: 'xlsx' | 'csv';
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: [Number] })
   @IsOptional()
   @IsArray()
   fieldIds?: number[];
