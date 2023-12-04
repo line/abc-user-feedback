@@ -14,8 +14,10 @@
  * under the License.
  */
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
-import { DashboardCard } from '@/components';
+import { SimpleBarChart } from '@/components/charts';
+import { ISSUES } from '@/constants/issues';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {
@@ -24,21 +26,28 @@ interface IProps {
   to: Date;
 }
 
-const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
+const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const { t } = useTranslation();
   const { data } = useOAIQuery({
-    path: '/api/statistics/issue/count',
-    variables: { from: from.toISOString(), to: to.toISOString(), projectId },
+    path: '/api/statistics/issue/count-by-status',
+    variables: {
+      from: dayjs(from).startOf('day').toISOString(),
+      to: dayjs(to).endOf('day').toISOString(),
+      projectId,
+    },
   });
 
   return (
-    <DashboardCard
-      count={data?.count ?? 0}
-      title="전체 이슈 수"
-      description={`특정 기간 동안 생성된 이슈 개수입니다. (${dayjs(
-        from,
-      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
+    <SimpleBarChart
+      data={ISSUES(t).map(({ key, name }) => ({
+        name,
+        value: data?.statistics.find((v) => v.status === key)?.count ?? 0,
+      }))}
+      title="전체 이슈 현황"
+      description="이슈 상태에 따른 전체 이슈 현황을 나타냅니다."
+      height={400}
     />
   );
 };
 
-export default TotalIssueCard;
+export default IssueBarChart;

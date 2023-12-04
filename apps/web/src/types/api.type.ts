@@ -167,10 +167,14 @@ export interface paths {
   "/api/projects/{projectId}/issues/search": {
     post: operations["IssueController_findAllByProjectId"];
   };
-  "/api/projects/{projectId}/issue-tracker": {
-    get: operations["IssueTrackerController_findOne"];
-    put: operations["IssueTrackerController_updateOne"];
-    post: operations["IssueTrackerController_create"];
+  "/api/statistics/issue/count": {
+    get: operations["IssueStatisticsController_getCount"];
+  };
+  "/api/statistics/issue/count-by-date": {
+    get: operations["IssueStatisticsController_getCountByDate"];
+  };
+  "/api/statistics/issue/count-by-status": {
+    get: operations["IssueStatisticsController_getCountByStatus"];
   };
   "/api/statistics/feedback": {
     get: operations["FeedbackStatisticsController_getCountByDateByChannel"];
@@ -181,6 +185,14 @@ export interface paths {
   "/api/statistics/feedback/issued-ratio": {
     get: operations["FeedbackStatisticsController_getIssuedRatio"];
   };
+  "/api/statistics/feedback-issue": {
+    get: operations["FeedbackIssueStatisticsController_getCountByDateByIssue"];
+  };
+  "/api/projects/{projectId}/issue-tracker": {
+    get: operations["IssueTrackerController_findOne"];
+    put: operations["IssueTrackerController_updateOne"];
+    post: operations["IssueTrackerController_create"];
+  };
   "/api/health": {
     get: operations["HealthController_check"];
   };
@@ -189,6 +201,12 @@ export interface paths {
   };
   "/api/migration/statistics/feedback": {
     post: operations["MigrationController_migrateFeedbackStatistics"];
+  };
+  "/api/migration/statistics/issue": {
+    post: operations["MigrationController_migrateIssueStatistics"];
+  };
+  "/api/migration/statistics/feedback-issue": {
+    post: operations["MigrationController_migrateFeedbackIssueStatistics"];
   };
 }
 
@@ -686,6 +704,52 @@ export interface components {
     DeleteIssuesRequestDto: {
       issueIds: number[];
     };
+    FindCountResponseDto: {
+      count: number;
+    };
+    IssueStatistics: {
+      date: string;
+      count: number;
+    };
+    FindCountByDateResponseDto: {
+      statistics: components["schemas"]["IssueStatistics"][];
+    };
+    IssueStatusStatistics: {
+      status: string;
+      count: number;
+    };
+    FindCountByStatusResponseDto: {
+      statistics: components["schemas"]["IssueStatusStatistics"][];
+    };
+    StatisticData: {
+      /** Format: date-time */
+      date: string;
+      count: number;
+    };
+    ChannelStatisticData: {
+      id: number;
+      name: string;
+      statistics: components["schemas"]["StatisticData"][];
+    };
+    FindCountByDateByChannelResponseDto: {
+      channels: components["schemas"]["ChannelStatisticData"][];
+    };
+    FindIssuedRateResponseDto: {
+      ratio: number;
+    };
+    IssueStatisticData: {
+      /** Format: date-time */
+      date: string;
+      feedbackCount: number;
+    };
+    IssueStatistic: {
+      id: number;
+      name: string;
+      statistics: components["schemas"]["IssueStatisticData"][];
+    };
+    FindCountByDateByIssueResponseDto: {
+      issues: components["schemas"]["IssueStatistic"][];
+    };
     CreateIssueTrackerResponseDto: {
       id: number;
       data: Record<string, never>;
@@ -704,25 +768,6 @@ export interface components {
       data: Record<string, never>;
       /** Format: date-time */
       createdAt: string;
-    };
-    StatisticData: {
-      /** Format: date-time */
-      date: string;
-      count: number;
-    };
-    ChannelStatisticData: {
-      id: number;
-      name: string;
-      statistics: components["schemas"]["StatisticData"][];
-    };
-    FindCountByDateByChannelResponseDto: {
-      channels: components["schemas"]["ChannelStatisticData"][];
-    };
-    FindCountResponseDto: {
-      count: number;
-    };
-    FindIssuedRateResponseDto: {
-      ratio: number;
     };
   };
   responses: never;
@@ -1723,54 +1768,51 @@ export interface operations {
       };
     };
   };
-  IssueTrackerController_findOne: {
+  IssueStatisticsController_getCount: {
     parameters: {
-      path: {
+      query: {
+        from: string;
+        to: string;
         projectId: number;
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindIssueTrackerResponseDto"];
+          "application/json": components["schemas"]["FindCountResponseDto"];
         };
       };
     };
   };
-  IssueTrackerController_updateOne: {
+  IssueStatisticsController_getCountByDate: {
     parameters: {
-      path: {
+      query: {
+        from: string;
+        to: string;
+        interval: string;
         projectId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["UpdateIssueTrackerRequestDto"];
       };
     };
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["UpdateIssueTrackerResponseDto"];
+          "application/json": components["schemas"]["FindCountByDateResponseDto"];
         };
       };
     };
   };
-  IssueTrackerController_create: {
+  IssueStatisticsController_getCountByStatus: {
     parameters: {
-      path: {
+      query: {
+        from: string;
+        to: string;
         projectId: number;
       };
     };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["CreateIssueTrackerRequestDto"];
-      };
-    };
     responses: {
-      201: {
+      200: {
         content: {
-          "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
+          "application/json": components["schemas"]["FindCountByStatusResponseDto"];
         };
       };
     };
@@ -1820,6 +1862,75 @@ export interface operations {
       200: {
         content: {
           "application/json": components["schemas"]["FindIssuedRateResponseDto"];
+        };
+      };
+    };
+  };
+  FeedbackIssueStatisticsController_getCountByDateByIssue: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        interval: string;
+        issueIds: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountByDateByIssueResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_findOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_updateOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateIssueTrackerRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_create: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateIssueTrackerRequestDto"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
         };
       };
     };
@@ -1936,6 +2047,20 @@ export interface operations {
     };
   };
   MigrationController_migrateFeedbackStatistics: {
+    responses: {
+      201: {
+        content: never;
+      };
+    };
+  };
+  MigrationController_migrateIssueStatistics: {
+    responses: {
+      201: {
+        content: never;
+      };
+    };
+  };
+  MigrationController_migrateFeedbackIssueStatistics: {
     responses: {
       201: {
         content: never;

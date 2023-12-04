@@ -25,7 +25,7 @@ export class FeedbackIssueStatisticsController {
     private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
-  @ApiOkResponse({ type: [FindCountByDateByIssueResponseDto] })
+  @ApiOkResponse({ type: FindCountByDateByIssueResponseDto })
   @Get()
   async getCountByDateByIssue(
     @Query('from') from: Date,
@@ -34,6 +34,7 @@ export class FeedbackIssueStatisticsController {
     @Query('issueIds') issueIds: string,
   ) {
     const issueIdsArray = issueIds.split(',').map((v) => parseInt(v, 10));
+
     return FindCountByDateByIssueResponseDto.transform(
       await this.feedbackIssueStatisticsService.getCountByDateByIssue({
         from,

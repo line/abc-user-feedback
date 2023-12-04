@@ -15,7 +15,7 @@
  */
 import dayjs from 'dayjs';
 
-import { DashboardCard } from '@/components';
+import { SimpleLineChart } from '@/components/charts';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {
@@ -24,21 +24,35 @@ interface IProps {
   to: Date;
 }
 
-const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
+const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { data } = useOAIQuery({
-    path: '/api/statistics/issue/count',
-    variables: { from: from.toISOString(), to: to.toISOString(), projectId },
+    path: '/api/statistics/issue/count-by-date',
+    variables: {
+      from: dayjs(from).startOf('day').toISOString(),
+      to: dayjs(to).endOf('day').toISOString(),
+      projectId,
+      interval: 'day',
+    },
   });
 
   return (
-    <DashboardCard
-      count={data?.count ?? 0}
-      title="전체 이슈 수"
-      description={`특정 기간 동안 생성된 이슈 개수입니다. (${dayjs(
-        from,
-      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
+    <SimpleLineChart
+      title="전체 이슈 추이"
+      description={`특정 기간의 이슈 생성 추이를 나타냅니다 (${dayjs()
+        .subtract(7, 'day')
+        .format('YYYY/MM/DD')} - ${dayjs()
+        .subtract(1, 'day')
+        .format('YYYY/MM/DD')})`}
+      height={400}
+      data={
+        data
+          ? [{ color: 'black', name: '피드백 수', data: data.statistics }]
+          : []
+      }
+      from={from}
+      to={to}
     />
   );
 };
 
-export default TotalIssueCard;
+export default IssueLineChart;

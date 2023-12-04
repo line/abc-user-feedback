@@ -13,22 +13,49 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
 import dayjs from 'dayjs';
 
 import { DashboardCard } from '@/components';
+import { useOAIQuery } from '@/hooks';
 
-interface IProps {}
+interface IProps {
+  projectId: number;
+}
 
-const ThirtyDaysIssueCard: React.FC<IProps> = () => {
+const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
+  const { data: currentData } = useOAIQuery({
+    path: '/api/statistics/issue/count',
+    variables: {
+      from: dayjs().subtract(30, 'day').startOf('day').toISOString(),
+      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
+      projectId,
+    },
+  });
+  const { data: previousData } = useOAIQuery({
+    path: '/api/statistics/issue/count',
+    variables: {
+      from: dayjs().subtract(60, 'day').startOf('day').toISOString(),
+      to: dayjs().subtract(31, 'day').endOf('day').toISOString(),
+      projectId,
+    },
+  });
+
+  const percentage = useMemo(() => {
+    if (!currentData || !previousData || currentData.count === 0) return 0;
+    return ((currentData.count - previousData.count) / currentData.count) * 100;
+  }, [currentData, previousData]);
+
   return (
     <DashboardCard
-      count={0}
+      count={currentData?.count ?? 0}
       title="지난 30일 이슈 수"
       description={`지난 30일 동안 생성된 이슈 개수입니다. (${dayjs()
         .subtract(7, 'day')
         .format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
+      percentage={percentage}
     />
   );
 };

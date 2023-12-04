@@ -27,5 +27,11 @@ export { default as ThirtyDaysFeedbackCard } from './ThirtyDaysFeedbackCard';
 
 export { default as TodayIssueCard } from './TodayIssueCard';
 export { default as YesterdayIssueCard } from './YesterdayIssueCard';
-export { default as SevendaysIssueCard } from './SevenDaysIssueCard';
+export { default as SevenDaysIssueCard } from './SevenDaysIssueCard';
 export { default as ThirtyDaysIssueCard } from './ThirtyDaysIssueCard';
+
+export { default as IssueLineChart } from './IssueLineChart';
+
+export { default as IssueBarChart } from './IssueBarChart';
+
+export { default as IssueFeedbackLineChart } from './IssueFeedbackLineChart';

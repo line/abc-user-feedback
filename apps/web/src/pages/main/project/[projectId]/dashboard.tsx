@@ -13,23 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
-import { faker } from '@faker-js/faker';
 import dayjs from 'dayjs';
 import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
 import { DateRangePicker, MainTemplate } from '@/components';
-import { SimpleBarChart, StackedBarChart } from '@/components/charts';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import {
   CreateFeedbackPerIssueCard,
+  IssueBarChart,
+  IssueFeedbackLineChart,
+  IssueLineChart,
   IssueRank,
   SevenDaysFeedbackCard,
-  SevendaysIssueCard,
+  SevenDaysIssueCard,
   ThirtyDaysFeedbackCard,
   ThirtyDaysIssueCard,
   TodayFeedbackCard,
@@ -55,7 +56,41 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     startDate: dayjs().subtract(1, 'month').toDate(),
     endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
   });
-  console.log('dateRange: ', dateRange?.endDate);
+
+  const options = useMemo(() => {
+    return [
+      {
+        label: t('text.date.yesterday'),
+        startDate: dayjs().subtract(1, 'days').startOf('day').toDate(),
+        endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
+      },
+      {
+        label: t('text.date.before-days', { day: 7 }),
+        startDate: dayjs().subtract(8, 'days').toDate(),
+        endDate: dayjs().subtract(1, 'days').toDate(),
+      },
+      {
+        label: t('text.date.before-days', { day: 30 }),
+        startDate: dayjs().subtract(31, 'days').toDate(),
+        endDate: dayjs().subtract(1, 'days').toDate(),
+      },
+      {
+        label: t('text.date.before-days', { day: 90 }),
+        startDate: dayjs().subtract(91, 'days').toDate(),
+        endDate: dayjs().subtract(1, 'days').toDate(),
+      },
+      {
+        label: t('text.date.before-days', { day: 180 }),
+        startDate: dayjs().subtract(181, 'days').toDate(),
+        endDate: dayjs().subtract(1, 'days').toDate(),
+      },
+      {
+        label: t('text.date.before-days', { day: 365 }),
+        startDate: dayjs().subtract(366, 'days').toDate(),
+        endDate: dayjs().subtract(1, 'days').toDate(),
+      },
+    ];
+  }, [t]);
 
   if (!dateRange || !dateRange.startDate || !dateRange.endDate) return <></>;
 
@@ -68,6 +103,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             value={dateRange}
             onChange={setDateRange}
             maxDate={dayjs().subtract(1, 'day').toDate()}
+            options={options}
           />
         </div>
       </div>
@@ -92,38 +128,43 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <SevenDaysFeedbackCard projectId={projectId} />
         <ThirtyDaysFeedbackCard projectId={projectId} />
 
-        <TodayIssueCard />
-        <YesterdayIssueCard />
-        <SevendaysIssueCard />
-        <ThirtyDaysIssueCard />
+        <TodayIssueCard projectId={projectId} />
+        <YesterdayIssueCard projectId={projectId} />
+        <SevenDaysIssueCard projectId={projectId} />
+        <ThirtyDaysIssueCard projectId={projectId} />
       </div>
       <FeedbackLineChart
         from={dateRange.startDate}
         to={dateRange.endDate}
         projectId={projectId}
       />
-      <div className="h-[400px]">
-        <SimpleBarChart
-          data={Array.from({ length: 10 }).map((_, i) => ({
-            name: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-            value: faker.number.int(1000),
-          }))}
-        />
-      </div>
-      <div className="flex h-[400px]">
+      <IssueLineChart
+        from={dateRange.startDate}
+        to={dateRange.endDate}
+        projectId={projectId}
+      />
+
+      <div className="flex gap-5">
         <div className="flex-1">
-          <StackedBarChart
-            data={Array.from({ length: 10 }).map((_, i) => ({
-              date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-              issuedFeedbackCount: faker.number.int(100),
-              feedbackCount: faker.number.int(100),
-            }))}
+          <IssueBarChart
+            from={dateRange.startDate}
+            to={dateRange.endDate}
+            projectId={projectId}
           />
         </div>
         <div className="flex-1">
-          <IssueRank />
+          <IssueRank
+            from={dateRange.startDate}
+            to={dateRange.endDate}
+            projectId={projectId}
+          />
         </div>
       </div>
+      <IssueFeedbackLineChart
+        from={dateRange.startDate}
+        to={dateRange.endDate}
+        projectId={projectId}
+      />
     </div>
   );
 };

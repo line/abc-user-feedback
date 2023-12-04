@@ -13,27 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { Expose, plainToInstance } from 'class-transformer';
-
-class IssueStatusStatistics {
-  @ApiProperty()
-  @Expose()
-  status: string;
-
-  @ApiProperty()
-  @Expose()
-  count: number;
+interface IProps {
+  dataKeys: { name: string; color: string }[];
 }
 
-export class FindCountByStatusResponseDto {
-  @ApiProperty({ type: [IssueStatusStatistics] })
-  @Expose()
-  statistics: IssueStatusStatistics[];
+const Legend: React.FC<IProps> = ({ dataKeys }) => {
+  return (
+    <div className="flex gap-2">
+      {dataKeys?.map((v, i) => (
+        <div className="flex items-center gap-2" key={i}>
+          <div
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: v.color }}
+          />
+          <p>{v.name}</p>
+        </div>
+      ))}
+    </div>
+  );
+};
 
-  public static transform(params: any): FindCountByStatusResponseDto {
-    return plainToInstance(FindCountByStatusResponseDto, params, {
-      excludeExtraneousValues: true,
-    });
-  }
-}
+export default Legend;

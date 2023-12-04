@@ -23,29 +23,44 @@ import {
   YAxis,
 } from 'recharts';
 
+import ChartContainer from './ChartContainer';
+
 interface IProps {
+  title: string;
+  description?: string;
+  height?: number;
   data: { name: string; value: number }[];
+  showLegend?: boolean;
+  showFilter?: boolean;
 }
 
-const SimpleBarChart: React.FC<IProps> = ({ data }) => {
+const SimpleBarChart: React.FC<IProps> = (props) => {
+  const { data, title, description, height, showLegend, showFilter } = props;
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart
-        width={500}
-        height={300}
-        data={data}
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      >
-        <XAxis dataKey="name" />
-        <YAxis />
-        <Tooltip />
-        <Bar
-          dataKey="value"
-          fill="#8884d8"
-          activeBar={<Rectangle stroke="blue" />}
-        />
-      </BarChart>
-    </ResponsiveContainer>
+    <ChartContainer
+      description={description}
+      title={title}
+      showLegend={showLegend}
+      showFilter={showFilter}
+    >
+      <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
+        <BarChart
+          width={500}
+          height={300}
+          data={data}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Bar
+            dataKey="value"
+            fill="#8884d8"
+            activeBar={<Rectangle stroke="blue" />}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </ChartContainer>
   );
 };
 

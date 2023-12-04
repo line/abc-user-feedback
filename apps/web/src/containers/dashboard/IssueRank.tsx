@@ -13,27 +13,45 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
+import { useMemo } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { Line, LineChart } from 'recharts';
 
 import DashboardTable from '@/components/etc/DashboardTable';
+import { useIssueSearch, useOAIQuery } from '@/hooks';
 
 interface IssueTableData {
-  id: number;
+  no: number;
   name: string;
   count: number;
-  yoy: number;
+  growth: number;
   trend: { date: string; value: number }[];
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
 const columns = [
-  columnHelper.accessor('id', { header: 'No', enableSorting: false }),
+  columnHelper.accessor('no', { header: 'No', enableSorting: false }),
   columnHelper.accessor('name', { header: 'Issue' }),
   columnHelper.accessor('count', { header: 'Count' }),
-  columnHelper.accessor('yoy', { header: 'YoY' }),
+  columnHelper.accessor('growth', {
+    header: 'Growth',
+    cell({ getValue }) {
+      return (
+        <p
+          className={
+            getValue() === 0
+              ? 'text-primary'
+              : getValue() > 0
+              ? 'text-blue-primary'
+              : 'text-red-primary'
+          }
+        >
+          {parseFloat(Math.abs(getValue()).toFixed(1))}%
+        </p>
+      );
+    },
+  }),
   columnHelper.accessor('trend', {
     header: 'Trend',
     enableSorting: false,
@@ -51,47 +69,85 @@ const columns = [
     },
   }),
 ];
-interface IProps {}
+interface IProps {
+  projectId: number;
+  from: Date;
+  to: Date;
+}
 
-const IssueRank: React.FC<IProps> = () => {
-  return (
-    <DashboardTable
-      columns={columns}
-      data={[
-        {
-          id: 1,
-          name: 'name',
-          count: faker.number.int(1000),
-          yoy: faker.number.int(100),
-          trend: Array.from({ length: 10 }).map((_, i) => ({
-            date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-            value: faker.number.int(1000),
-          })),
-        },
-        {
-          id: 2,
-          name: 'name',
-          count: faker.number.int(1000),
-          yoy: faker.number.int(100),
-          trend: Array.from({ length: 10 }).map((_, i) => ({
-            date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-            value: faker.number.int(1000),
-          })),
-        },
-        {
-          id: 3,
-          name: 'name',
-          count: faker.number.int(1000),
-          yoy: faker.number.int(100),
-          trend: Array.from({ length: 10 }).map((_, i) => ({
-            date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
-            value: faker.number.int(1000),
-          })),
-        },
-      ]}
-      title="이슈 순위"
-    />
-  );
+const IssueRank: React.FC<IProps> = ({ projectId }) => {
+  const { data } = useIssueSearch(projectId, {
+    sort: { feedbackCount: 'DESC' } as any,
+    limit: 5,
+  });
+
+  const enabled = (data?.items ?? []).length > 0;
+
+  const { data: currentData } = useOAIQuery({
+    path: '/api/statistics/feedback-issue',
+    variables: {
+      from: dayjs().subtract(7, 'day').startOf('day').toISOString(),
+      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
+      interval: 'day',
+      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
+    },
+    queryOptions: { enabled },
+  });
+
+  const { data: previousData } = useOAIQuery({
+    path: '/api/statistics/feedback-issue',
+    variables: {
+      from: dayjs().subtract(14, 'day').startOf('day').toISOString(),
+      to: dayjs().subtract(8, 'day').endOf('day').toISOString(),
+      interval: 'day',
+      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
+    },
+    queryOptions: { enabled },
+  });
+  const { data: trendData } = useOAIQuery({
+    path: '/api/statistics/feedback-issue',
+    variables: {
+      from: dayjs().subtract(90, 'day').startOf('day').toISOString(),
+      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
+      interval: 'week',
+      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
+    },
+    queryOptions: { enabled },
+  });
+
+  const newData = useMemo(() => {
+    if (!data || !currentData || !previousData || !trendData) return [];
+
+    return data.items.map((item, i) => {
+      const thisWeekCount =
+        currentData.issues
+          .find((v) => v.name === item.name)
+          ?.statistics.reduce((acc, cur) => acc + cur.feedbackCount, 0) ?? 0;
+
+      const lastWeekCount =
+        previousData.issues
+          .find((v) => v.name === item.name)
+          ?.statistics.reduce((acc, cur) => acc + cur.feedbackCount, 0) ?? 0;
+
+      const trend =
+        trendData.issues
+          .find((v) => v.name === item.name)
+          ?.statistics.map((v) => ({
+            date: v.date,
+            value: v.feedbackCount,
+          })) ?? [];
+
+      return {
+        no: i + 1,
+        count: item.feedbackCount,
+        name: item.name,
+        growth: ((lastWeekCount - thisWeekCount) / lastWeekCount) * 100,
+        trend,
+      };
+    });
+  }, [data, currentData, previousData]);
+
+  return <DashboardTable title="이슈 순위" columns={columns} data={newData} />;
 };
 
 export default IssueRank;

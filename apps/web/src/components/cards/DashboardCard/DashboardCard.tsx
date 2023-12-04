@@ -22,10 +22,12 @@ interface IProps {
   count: number;
   percentage?: number;
   description?: string;
+  autofreshCount?: number;
 }
 
 const DashboardCard: React.FC<IProps> = (props) => {
-  const { title, count, percentage, description } = props;
+  const { title, count, percentage, description, autofreshCount } = props;
+
   return (
     <div className="border-fill-tertiary flex min-w-[220px] flex-col gap-2 rounded border p-4">
       <div className="flex items-center justify-between">
@@ -33,9 +35,7 @@ const DashboardCard: React.FC<IProps> = (props) => {
           <p>{title}</p>
           {description && <DescriptionTooltip description={description} />}
         </div>
-        <button className="icon-btn icon-btn-tertiary">
-          <Icon name="Dots" className="text-tertiary rotate-90" />
-        </button>
+        {typeof autofreshCount !== 'undefined' && <p>{autofreshCount}</p>}
       </div>
       <div className="flex gap-2 p-2">
         <p className="font-24-bold">{Number(count).toLocaleString()}</p>

@@ -37,18 +37,13 @@ interface IProps {
   }[];
   from: Date;
   to: Date;
-  showLegend?: boolean;
-  showFilter?: boolean;
 }
 
-const SimpleLineChart: React.FC<IProps> = (props) => {
-  const { title, description, height, data, from, to, showLegend, showFilter } =
-    props;
+const SearchedSImpleLineChart: React.FC<IProps> = (props) => {
+  const { title, description, height, data, from, to } = props;
 
   const dataKeys = useMemo(() => data, [data]);
-
   const [checkedList, setCheckedList] = useState<string[]>([]);
-
   useEffect(() => {
     setCheckedList(dataKeys.map((v) => v.name));
   }, [dataKeys]);
@@ -93,8 +88,6 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
           setCheckedList(checkedList.filter((v) => v !== name));
         }
       }}
-      showLegend={showLegend}
-      showFilter={showFilter}
     >
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
         <LineChart width={500} height={300} data={newData}>
@@ -116,4 +109,4 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
   );
 };
 
-export default SimpleLineChart;
+export default SearchedSImpleLineChart;

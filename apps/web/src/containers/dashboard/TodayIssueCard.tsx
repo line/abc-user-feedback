@@ -13,20 +13,60 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { useInterval } from 'react-use';
 
 import { DashboardCard } from '@/components';
+import { useOAIQuery } from '@/hooks';
 
-interface IProps {}
+interface IProps {
+  projectId: number;
+}
 
-const TodayIssueCard: React.FC<IProps> = () => {
+const TodayIssueCard: React.FC<IProps> = ({ projectId }) => {
+  const [count, setCount] = useState(60);
+
+  const { data: currentData, refetch: refetchCurrentData } = useOAIQuery({
+    path: '/api/statistics/issue/count',
+    variables: {
+      from: dayjs().startOf('day').toISOString(),
+      to: dayjs().endOf('day').toISOString(),
+      projectId,
+    },
+  });
+
+  const { data: previousData, refetch: refetchPreviousData } = useOAIQuery({
+    path: '/api/statistics/issue/count',
+    variables: {
+      from: dayjs().subtract(1, 'day').startOf('day').toISOString(),
+      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
+      projectId,
+    },
+  });
+
+  const percentage = useMemo(() => {
+    if (!currentData || !previousData || currentData.count === 0) return 0;
+    return ((currentData.count - previousData.count) / currentData.count) * 100;
+  }, [currentData, previousData]);
+
+  useInterval(() => {
+    if (count === 0) {
+      refetchCurrentData();
+      refetchPreviousData();
+      setCount(60);
+    } else setCount((prev) => prev - 1);
+  }, 1000);
+
   return (
     <DashboardCard
-      count={0}
+      count={currentData?.count ?? 0}
       title="오늘 이슈 수"
       description={`오늘 생성된 이슈 개수입니다. (${dayjs().format(
         'YYYY/MM/DD',
       )})`}
+      percentage={percentage}
+      autofreshCount={count}
     />
   );
 };

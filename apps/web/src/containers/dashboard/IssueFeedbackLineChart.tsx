@@ -16,7 +16,7 @@
 import dayjs from 'dayjs';
 
 import { SimpleLineChart } from '@/components/charts';
-import { useOAIQuery } from '@/hooks';
+import { useIssueSearch, useOAIQuery } from '@/hooks';
 
 const getDarkColor = () => {
   return (
@@ -26,67 +26,49 @@ const getDarkColor = () => {
       .join('')
   );
 };
+
 interface IProps {
   projectId: number;
   from: Date;
   to: Date;
 }
 
-const FeedbackLineChartWrapper: React.FC<IProps> = ({
-  from,
-  projectId,
-  to,
-}) => {
-  const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
-    variables: { projectId },
+const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const { data } = useIssueSearch(projectId, {
+    sort: { feedbackCount: 'DESC' } as any,
+    limit: 5,
   });
 
-  if (!data) return null;
-  return (
-    <FeedbackLineChart
-      from={from}
-      to={to}
-      channelIds={data.items.map((v) => v.id)}
-    />
-  );
-};
+  const enabled = (data?.items ?? []).length > 0;
 
-interface IFeedbackLineChartProps {
-  from: Date;
-  to: Date;
-  channelIds: number[];
-}
-
-const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
-  from,
-  channelIds,
-  to,
-}) => {
-  const { data } = useOAIQuery({
-    path: '/api/statistics/feedback',
+  const { data: feedbackIssues } = useOAIQuery({
+    path: '/api/statistics/feedback-issue',
     variables: {
       from: dayjs(from).startOf('day').toISOString(),
       to: dayjs(to).endOf('day').toISOString(),
-      channelIds: channelIds.join(','),
+      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
       interval: 'day',
     },
+    queryOptions: { enabled },
   });
 
   return (
     <SimpleLineChart
-      title="전체 피드백 추이"
-      description={`특정 기간의 피드백 수집 추이를 나타냅니다. (${dayjs()
+      title="전체 이슈 추이"
+      description={`특정 기간의 이슈 생성 추이를 나타냅니다 (${dayjs()
         .subtract(7, 'day')
         .format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       height={400}
       data={
-        data?.channels.map((v) => ({
+        feedbackIssues?.issues.map((v) => ({
           color: getDarkColor(),
           name: v.name,
-          data: v.statistics.map((v) => ({ date: v.date, count: v.count })),
+          data: v.statistics.map((v) => ({
+            date: v.date,
+            count: v.feedbackCount,
+          })),
         })) ?? []
       }
       from={from}
@@ -97,4 +79,4 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
   );
 };
 
-export default FeedbackLineChartWrapper;
+export default IssueFeedbackLineChart;
