@@ -130,7 +130,8 @@
       "button": {
         "create-project": "Create Project",
         "create-channel": "Create Channel",
-        "create-api-key": "Create Key"
+        "create-api-key": "Create Key",
+        "register-member": "Register Member"
       },
       "sign-up-mgmt": {
         "ufb-login": "UFB Login",

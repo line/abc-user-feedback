@@ -19,7 +19,7 @@ import { Expose, plainToInstance } from 'class-transformer';
 export class FindCountByDateByIssueResponseDto {
   @ApiProperty()
   @Expose()
-  channels: {
+  issues: {
     id: number;
     name: string;
     statistics: { date: Date; count: number };

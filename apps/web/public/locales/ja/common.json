@@ -130,7 +130,8 @@
       "button": {
         "create-project": "Project生成",
         "create-channel": "Channel生成",
-        "create-api-key": "Key生成"
+        "create-api-key": "Key生成",
+        "register-member": "Member 登録"
       },
       "sign-up-mgmt": {
         "ufb-login": "UFB ログイン",

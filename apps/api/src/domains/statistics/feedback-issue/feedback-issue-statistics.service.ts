@@ -19,6 +19,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
 import dayjs from 'dayjs';
 import dotenv from 'dotenv';
+import { DateTime } from 'luxon';
 import { Between, In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -72,24 +73,21 @@ export class FeedbackIssueStatisticsService {
             acc.push(issue);
           }
 
-          let endDate: dayjs.Dayjs;
-          switch (interval) {
-            case 'week':
-              endDate = dayjs(curr.date).endOf('week');
-              break;
-            case 'month':
-              endDate = dayjs(curr.date).endOf('month');
-              break;
-            default:
-              endDate = dayjs(curr.date);
-          }
+          const intervalCount = Math.floor(
+            DateTime.fromJSDate(from)
+              .until(DateTime.fromJSDate(new Date(curr.date)))
+              .length(interval),
+          );
+          const endOfInterval = DateTime.fromJSDate(from).plus({
+            [interval]: intervalCount,
+          });
 
           let statistic = issue.statistics.find(
-            (stat) => stat.date === endDate.format('YYYY-MM-DD'),
+            (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
           );
           if (!statistic) {
             statistic = {
-              date: endDate.format('YYYY-MM-DD'),
+              date: endOfInterval.toFormat('yyyy-MM-dd'),
               feedbackCount: 0,
             };
             issue.statistics.push(statistic);
