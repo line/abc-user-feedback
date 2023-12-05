@@ -107,7 +107,7 @@ const InputIssueTracker: React.FC<IProps> = () => {
         userId: member.user.id,
       })),
       roles: input.roles,
-      timezoneOffset: '+90:00',
+      timezoneOffset: '+09:00',
     });
   };
 
