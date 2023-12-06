@@ -18,6 +18,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { UserService } from '@/domains/user/user.service';
 import { RoleService } from '../role/role.service';
 import type { FindByProjectIdDto } from './dtos';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
@@ -26,6 +27,7 @@ import {
   MemberNotFoundException,
   MemberUpdateRoleNotMatchedProjectException,
 } from './exceptions';
+import { MemberInvalidUserException } from './exceptions/member-invalid-user.exception';
 import { MemberEntity } from './member.entity';
 
 @Injectable()
@@ -33,11 +35,18 @@ export class MemberService {
   constructor(
     @InjectRepository(MemberEntity)
     private readonly repository: Repository<MemberEntity>,
+    private readonly userService: UserService,
     private readonly roleService: RoleService,
   ) {}
 
   private async validateMember(userId: number, roleId: number) {
     const role = await this.roleService.findById(roleId);
+
+    try {
+      await this.userService.findById(userId);
+    } catch (error) {
+      throw new MemberInvalidUserException();
+    }
 
     const member = await this.repository.findOne({
       where: {

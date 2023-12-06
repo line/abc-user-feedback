@@ -119,7 +119,10 @@ const InputApiKey: React.FC = () => {
   return (
     <CreateProjectInputTemplate
       actionButton={
-        <button className="btn btn-primary btn-md w-[120px]" onClick={onCreate}>
+        <button
+          className="btn btn-primary btn-md min-w-[120px]"
+          onClick={onCreate}
+        >
           {t('main.setting.button.create-api-key')}
         </button>
       }
