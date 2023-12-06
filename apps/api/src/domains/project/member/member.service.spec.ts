@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { UserEntity } from '@/domains/user/entities/user.entity';
 import { TestConfig } from '@/test-utils/util-functions';
 import { MemberServiceProviders } from '../../../test-utils/providers/member.service.providers';
 import { RoleEntity } from '../role/role.entity';
@@ -33,6 +34,7 @@ import { MemberService } from './member.service';
 describe('MemberService test suite', () => {
   let memberService: MemberService;
   let memberRepo: Repository<MemberEntity>;
+  let userRepo: Repository<UserEntity>;
   let roleRepo: Repository<RoleEntity>;
 
   beforeEach(async () => {
@@ -43,6 +45,7 @@ describe('MemberService test suite', () => {
 
     memberService = module.get<MemberService>(MemberService);
     memberRepo = module.get(getRepositoryToken(MemberEntity));
+    userRepo = module.get(getRepositoryToken(UserEntity));
     roleRepo = module.get(getRepositoryToken(RoleEntity));
   });
 
@@ -61,6 +64,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
@@ -78,6 +82,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({} as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
@@ -107,6 +112,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
@@ -125,6 +131,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue({} as MemberEntity);
       jest.spyOn(memberRepo, 'save');
 
