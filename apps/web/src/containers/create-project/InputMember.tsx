@@ -243,7 +243,7 @@ const CreateMemberButton: React.FC<{
     <Popover onOpenChange={setOpen} open={open} modal>
       <PopoverTrigger asChild>
         <button
-          className="btn btn-primary btn-md w-[120px]"
+          className="btn btn-primary btn-md min-w-[120px]"
           onClick={() => setOpen(true)}
         >
           {t('main.setting.button.register-member')}
