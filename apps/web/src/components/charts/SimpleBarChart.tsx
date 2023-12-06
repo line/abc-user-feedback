@@ -53,11 +53,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Bar
-            dataKey="value"
-            fill="#8884d8"
-            activeBar={<Rectangle stroke="blue" />}
-          />
+          <Bar dataKey="value" fill="#007AFF" activeBar={<Rectangle />} />
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>
