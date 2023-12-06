@@ -215,6 +215,11 @@ export class FieldMySQLService {
   }
 
   async findByIds(ids: number[]) {
-    return await this.repository.findBy({ id: In(ids) });
+    const fields = await this.repository.find({
+      where: { id: In(ids) },
+      withDeleted: true,
+    });
+    const fieldMap = new Map(fields.map((field) => [field.id, field]));
+    return ids.map((id) => fieldMap.get(id));
   }
 }
