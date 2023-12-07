@@ -35,16 +35,6 @@ import {
 } from './exceptions';
 import { RESERVED_FIELD_KEYS, RESERVED_FIELD_NAMES } from './field.constants';
 
-export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
-  text: 'text',
-  keyword: 'keyword',
-  number: 'integer',
-  boolean: 'boolean',
-  select: 'keyword',
-  multiSelect: 'keyword',
-  date: 'date',
-};
-
 @Injectable()
 export class FieldMySQLService {
   constructor(
