@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { Line, LineChart } from 'recharts';
@@ -76,9 +76,11 @@ interface IProps {
 }
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
+  const [limit, setLimit] = useState(5);
+
   const { data } = useIssueSearch(projectId, {
     sort: { feedbackCount: 'DESC' } as any,
-    limit: 5,
+    limit,
   });
 
   const enabled = (data?.items ?? []).length > 0;
@@ -145,9 +147,27 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
         trend,
       };
     });
-  }, [data, currentData, previousData]);
+  }, [data, currentData, previousData, trendData]);
 
-  return <DashboardTable title="이슈 순위" columns={columns} data={newData} />;
+  return (
+    <DashboardTable
+      title="이슈 순위"
+      columns={columns}
+      data={newData}
+      select={{
+        options: [
+          { name: '5개', key: 5 },
+          { name: '10개', key: 10 },
+          { name: '15개', key: 15 },
+          { name: '20개', key: 20 },
+        ],
+        defaultValue: { name: '5개', key: 5 },
+        onChange: (v) => {
+          setLimit(v?.key);
+        },
+      }}
+    />
+  );
 };
 
 export default IssueRank;
