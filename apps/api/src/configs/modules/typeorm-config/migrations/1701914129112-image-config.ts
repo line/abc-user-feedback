@@ -13,25 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsObject, IsString, MinLength } from 'class-validator';
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
-import { IsNullable } from '@/domains/user/decorators';
-import { ImageConfigRequestDto } from './image-config-request.dto';
+export class ImageConfig1701914129112 implements MigrationInterface {
+  name = 'ImageConfig1701914129112';
 
-export class UpdateChannelRequestDto {
-  @ApiProperty()
-  @IsString()
-  @MinLength(1)
-  name: string;
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`channels\` ADD \`image_config\` json NULL`,
+    );
+  }
 
-  @ApiProperty({ nullable: true })
-  @IsNullable()
-  @IsString()
-  description: string | null;
-
-  @ApiProperty({ nullable: true, type: ImageConfigRequestDto })
-  @IsNullable()
-  @IsObject()
-  imageConfig: ImageConfigRequestDto | null;
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`channels\` DROP COLUMN \`image_config\``,
+    );
+  }
 }

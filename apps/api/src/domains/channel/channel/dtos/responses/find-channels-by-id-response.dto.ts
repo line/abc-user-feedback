@@ -17,6 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { PaginationResponseDto } from '@/common/dtos';
+import { ImageConfigResponseDto } from './image-config-response.dto';
 
 class FindChannelsByProjectDto {
   @Expose()
@@ -30,6 +31,10 @@ class FindChannelsByProjectDto {
   @Expose()
   @ApiProperty()
   description: string;
+
+  @Expose()
+  @ApiProperty()
+  imageConfig: ImageConfigResponseDto;
 
   @Expose()
   @ApiProperty()

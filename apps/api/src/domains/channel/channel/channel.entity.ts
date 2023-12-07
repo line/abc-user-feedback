@@ -29,6 +29,14 @@ import { FeedbackEntity } from '../../feedback/feedback.entity';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';
 
+export interface ImageConfig {
+  accessKeyId: string;
+  secretAccessKey: string;
+  endpoint: string;
+  region: string;
+  bucket: string;
+}
+
 @Entity('channels')
 @Index(['name', 'createdAt'])
 @Unique('project-name-unique', ['name', 'project'])
@@ -38,6 +46,9 @@ export class ChannelEntity extends CommonEntity {
 
   @Column('varchar', { nullable: true })
   description: string;
+
+  @Column({ type: 'json', nullable: true })
+  imageConfig: ImageConfig | null;
 
   @ManyToOne(() => ProjectEntity, (project) => project.channels, {
     onDelete: 'CASCADE',
@@ -63,11 +74,19 @@ export class ChannelEntity extends CommonEntity {
   )
   feedbackStats: Relation<FeedbackStatisticsEntity>[];
 
-  static from(name: string, description: string, projectId: number) {
+  static from(
+    name: string,
+    description: string,
+    projectId: number,
+    imageConfig: ImageConfig | null,
+  ) {
     const channel = new ChannelEntity();
     channel.name = name;
     if (description) {
       channel.description = description;
+    }
+    if (imageConfig) {
+      channel.imageConfig = imageConfig;
     }
     channel.project = new ProjectEntity();
     channel.project.id = projectId;
