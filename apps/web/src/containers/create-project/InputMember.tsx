@@ -30,7 +30,7 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { SelectBox, TableSortIcon } from '@/components';
+import { DescriptionTooltip, SelectBox, TableSortIcon } from '@/components';
 import { useCreateProject } from '@/contexts/create-project.context';
 import { useUserSearch } from '@/hooks';
 import type { InputMemberType } from '@/types/member.type';
@@ -45,6 +45,8 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
     header: 'Email',
     enableSorting: false,
     cell: ({ getValue }) => {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const { t } = useTranslation();
       return (
         <>
           {users.some((v) => v.email === getValue()) ? (
@@ -52,10 +54,9 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
           ) : (
             <div className="flex items-center gap-1">
               <span className="text-red-primary">{getValue()}</span>
-              <Icon
-                name="WarningCircleFill"
-                className="text-red-primary"
-                size={16}
+              <DescriptionTooltip
+                color="red"
+                description={t('main.create-project.error-member')}
               />
             </div>
           )}
@@ -242,7 +243,7 @@ const CreateMemberButton: React.FC<{
     <Popover onOpenChange={setOpen} open={open} modal>
       <PopoverTrigger asChild>
         <button
-          className="btn btn-primary btn-md w-[120px]"
+          className="btn btn-primary btn-md min-w-[120px]"
           onClick={() => setOpen(true)}
         >
           {t('main.setting.button.register-member')}

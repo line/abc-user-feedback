@@ -14,10 +14,17 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsOptional, IsString } from 'class-validator';
 
 import { FindFeedbacksByChannelIdRequestDto } from './find-feedbacks-by-channel-id-request.dto';
 
 export class ExportFeedbacksRequestDto extends FindFeedbacksByChannelIdRequestDto {
-  @ApiProperty({ required: false })
-  type: string;
+  @ApiProperty()
+  @IsString()
+  type: 'xlsx' | 'csv';
+
+  @ApiProperty({ required: false, type: [Number] })
+  @IsOptional()
+  @IsArray()
+  fieldIds?: number[];
 }

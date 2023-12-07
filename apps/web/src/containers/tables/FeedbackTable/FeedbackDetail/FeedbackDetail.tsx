@@ -25,6 +25,7 @@ import {
   useRole,
 } from '@floating-ui/react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon } from '@ufb/ui';
 
@@ -44,6 +45,7 @@ interface IProps {
 }
 
 const FeedbackDetail: React.FC<IProps> = (props) => {
+  const { t } = useTranslation();
   const { channelId, id, projectId, onOpenChange, open } = props;
   const { data } = useFeedbackSearch(projectId, channelId, {
     query: { ids: [id] },
@@ -83,7 +85,9 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
           >
             <div className="overflow-y-auto p-10">
               <div className="flex items-center">
-                <h1 className="font-20-bold flex-1">피드백 상세</h1>
+                <h1 className="font-20-bold flex-1">
+                  {t('text.feedback-detail')}
+                </h1>
                 <button
                   className="icon-btn icon-btn-tertiary icon-btn-md"
                   onClick={() => context.onOpenChange(false)}

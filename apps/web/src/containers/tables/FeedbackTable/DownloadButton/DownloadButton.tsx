@@ -27,13 +27,15 @@ import useFeedbackTable from '../feedback-table.context';
 
 export interface IDownloadButtonProps {
   query: any;
+  fieldIds: number[];
   count?: number;
   isHead?: boolean;
 }
 
 const DownloadButton: React.FC<IDownloadButtonProps> = ({
-  count,
   query,
+  fieldIds,
+  count,
   isHead = false,
 }) => {
   const { channelId, projectId, createdAtRange } = useFeedbackTable();
@@ -49,10 +51,7 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
   }, [query]);
 
   const { mutateAsync } = useDownload({
-    params: {
-      channelId,
-      projectId,
-    },
+    params: { channelId, projectId },
     options: {
       onSuccess: async () => {
         setIsClicked(false);
@@ -71,8 +70,7 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
     toast.promise(
       mutateAsync({
         type,
-        limit: count,
-        page: 1,
+        fieldIds,
         query: {
           ...query,
           createdAt: {

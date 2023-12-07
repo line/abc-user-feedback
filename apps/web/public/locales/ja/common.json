@@ -133,7 +133,8 @@
       "button": {
         "create-project": "Project生成",
         "create-channel": "Channel生成",
-        "create-api-key": "Key生成"
+        "create-api-key": "Key生成",
+        "register-member": "Member 登録"
       },
       "sign-up-mgmt": {
         "ufb-login": "UFB ログイン",
@@ -223,6 +224,7 @@
         "apiKeys": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
         "issueTracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。 使用中のIssue Tracking System情報を入力してください。"
       },
+      "error-member": "現在存在しないユーザ情報です。",
       "continue-channel-creation": "Channelまで生成しないとUser Feedbackを使用できません。\nChannel生成を続けますか？",
       "guide": {
         "invalid-member": "無効なMemberリストが存在します。",
@@ -314,7 +316,8 @@
     "no-channel": "登録されたチャンネルがありません。",
     "guide": "案内",
     "more": "もっと",
-    "shrink": "縮む"
+    "shrink": "縮む",
+    "feedback-detail": "フィードバック詳細です"
   },
   "toast": {
     "sign-in": "ログイン成功",

@@ -144,6 +144,7 @@ export class FeedbackService {
   private convertFeedback(
     feedback: any,
     fieldsByKey: Record<string, FieldEntity>,
+    fieldsToExport: FieldEntity[],
   ) {
     const convertedFeedback: Record<string, any> = {};
     for (const key of Object.keys(feedback)) {
@@ -154,10 +155,22 @@ export class FeedbackService {
         : feedback[key];
     }
 
-    return convertedFeedback;
+    return Object.keys(convertedFeedback)
+      .filter((key) => fieldsToExport.find((field) => field.name === key))
+      .reduce((obj, key) => {
+        obj[key] = convertedFeedback[key];
+        return obj;
+      }, {});
   }
 
-  private async generateXLSXFile(channelId, query, sort, fields, fieldsByKey) {
+  private async generateXLSXFile({
+    channelId,
+    query,
+    sort,
+    fields,
+    fieldsByKey,
+    fieldsToExport,
+  }) {
     if (!existsSync('/tmp')) {
       await fs.mkdir('/tmp');
     }
@@ -167,7 +180,7 @@ export class FeedbackService {
     });
     const worksheet = workbook.addWorksheet('Sheet 1');
 
-    const headers = fields.map((field) => ({
+    const headers = fieldsToExport.map((field) => ({
       header: field.name,
       key: field.name,
     }));
@@ -210,7 +223,12 @@ export class FeedbackService {
 
       for (const feedback of feedbacks) {
         feedback.issues = issuesByFeedbackIds[feedback.id];
-        const convertedFeedback = this.convertFeedback(feedback, fieldsByKey);
+        const convertedFeedback = this.convertFeedback(
+          feedback,
+          fieldsByKey,
+          fieldsToExport,
+        );
+
         worksheet.addRow(convertedFeedback).commit();
         feedbackIds.push(feedback.id);
       }
@@ -227,7 +245,14 @@ export class FeedbackService {
     return { streamableFile: new StreamableFile(fileStream), feedbackIds };
   }
 
-  private async generateCSVFile(channelId, query, sort, fields, fieldsByKey) {
+  private async generateCSVFile({
+    channelId,
+    query,
+    sort,
+    fields,
+    fieldsByKey,
+    fieldsToExport,
+  }) {
     const stream = new PassThrough();
     const csvStream = fastcsv.format({ headers: true });
 
@@ -270,7 +295,11 @@ export class FeedbackService {
 
       for (const feedback of feedbacks) {
         feedback.issues = issuesByFeedbackIds[feedback.id];
-        const convertedFeedback = this.convertFeedback(feedback, fieldsByKey);
+        const convertedFeedback = this.convertFeedback(
+          feedback,
+          fieldsByKey,
+          fieldsToExport,
+        );
         csvStream.write(convertedFeedback);
         feedbackIds.push(feedback.id);
       }
@@ -519,11 +548,21 @@ export class FeedbackService {
     streamableFile: StreamableFile;
     feedbackIds: number[];
   }> {
-    const { channelId, query, sort, type } = dto;
+    const { channelId, query, sort, type, fieldIds } = dto;
+
     const fields = await this.fieldService.findByChannelId({
       channelId: channelId,
     });
     if (fields.length === 0) throw new BadRequestException('invalid channel');
+
+    let fieldsToExport = fields;
+    if (fieldIds) {
+      fieldsToExport = await this.fieldService.findByIds(fieldIds);
+      if (fields.length === 0) {
+        throw new BadRequestException('invalid fieldIds');
+      }
+    }
+
     this.validateQuery(query, fields);
     const fieldsByKey = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
@@ -534,9 +573,23 @@ export class FeedbackService {
     );
 
     if (type === 'xlsx') {
-      return this.generateXLSXFile(channelId, query, sort, fields, fieldsByKey);
+      return this.generateXLSXFile({
+        channelId,
+        query,
+        sort,
+        fields,
+        fieldsByKey,
+        fieldsToExport,
+      });
     } else if (type === 'csv') {
-      return this.generateCSVFile(channelId, query, sort, fields, fieldsByKey);
+      return this.generateCSVFile({
+        channelId,
+        query,
+        sort,
+        fields,
+        fieldsByKey,
+        fieldsToExport,
+      });
     }
   }
 }

@@ -23,7 +23,7 @@ class IssueStatisticData {
 
   @ApiProperty()
   @Expose()
-  feedbackCount: number;
+  count: number;
 }
 class IssueStatistic {
   @ApiProperty()

@@ -66,7 +66,6 @@ const InputIssueTracker: React.FC<IProps> = () => {
     path: '/api/projects',
     queryOptions: {
       onError(error) {
-        console.log('error: ', error);
         if (error.code === ErrorCode.Member.MemberInvalidUser)
           setOpenMemberError(true);
         else if (error.code === ErrorCode.Project.ProjectAlreadyExists)
@@ -88,7 +87,6 @@ const InputIssueTracker: React.FC<IProps> = () => {
       projectInputScheme.parse(input);
     } catch (error) {
       if (error instanceof ZodError) {
-        console.log('error: ', error);
         error.errors.forEach((err) => {
           if (err.path[0] === 'members') setOpenMemberError(true);
           else if (err.path[0] === 'projectInfo') setOpenProjectError(true);

@@ -95,7 +95,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
 
   describe('getCountByDateByissue', () => {
     it('getting counts by day by issue succeeds with valid inputs', async () => {
-      const from = faker.date.past();
+      const from = new Date('2023-01-01');
       const to = faker.date.future();
       const interval = 'day';
       const issueIds = [faker.number.int(), faker.number.int()];
@@ -140,7 +140,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
     });
     it('getting counts by week by issue succeeds with valid inputs', async () => {
-      const from = faker.date.past();
+      const from = new Date('2023-01-01');
       const to = faker.date.future();
       const interval = 'week';
       const issueIds = [faker.number.int(), faker.number.int()];
@@ -165,15 +165,15 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 3,
-                date: '2023-01-07',
+                date: '2023-01-01',
               },
               {
                 feedbackCount: 3,
-                date: '2023-01-14',
+                date: '2023-01-08',
               },
               {
                 feedbackCount: 4,
-                date: '2023-02-04',
+                date: '2023-01-29',
               },
             ],
           },
@@ -181,7 +181,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
     });
     it('getting counts by month by issue succeeds with valid inputs', async () => {
-      const from = faker.date.past();
+      const from = new Date('2023-01-01');
       const to = faker.date.future();
       const interval = 'month';
       const issueIds = [faker.number.int(), faker.number.int()];
@@ -206,11 +206,11 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 6,
-                date: '2023-01-31',
+                date: '2023-01-01',
               },
               {
                 feedbackCount: 4,
-                date: '2023-02-28',
+                date: '2023-02-01',
               },
             ],
           },

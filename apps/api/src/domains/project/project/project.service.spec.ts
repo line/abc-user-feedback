@@ -22,6 +22,7 @@ import { Like } from 'typeorm';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
 import { UserDto } from '@/domains/user/dtos';
 import { UserTypeEnum } from '@/domains/user/entities/enums';
+import { UserEntity } from '@/domains/user/entities/user.entity';
 import {
   createQueryBuilder,
   getRandomEnumValues,
@@ -51,6 +52,7 @@ describe('ProjectService Test suite', () => {
   let tenantRepo: Repository<TenantEntity>;
   let channelRepo: Repository<ChannelEntity>;
   let roleRepo: Repository<RoleEntity>;
+  let userRepo: Repository<UserEntity>;
   let memberRepo: Repository<MemberEntity>;
   let apiKeyRepo: Repository<ApiKeyEntity>;
   let issueRepo: Repository<IssueTrackerEntity>;
@@ -66,6 +68,7 @@ describe('ProjectService Test suite', () => {
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     roleRepo = module.get(getRepositoryToken(RoleEntity));
+    userRepo = module.get(getRepositoryToken(UserEntity));
     memberRepo = module.get(getRepositoryToken(MemberEntity));
     apiKeyRepo = module.get(getRepositoryToken(ApiKeyEntity));
     issueRepo = module.get(getRepositoryToken(IssueTrackerEntity));
@@ -154,6 +157,7 @@ describe('ProjectService Test suite', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: projectId },
       } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save').mockResolvedValue(
         dto.members.map(({ userId }) => ({
@@ -207,6 +211,7 @@ describe('ProjectService Test suite', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: projectId },
       } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save').mockResolvedValue(
         dto.members.map(({ userId }) => ({
@@ -269,6 +274,7 @@ describe('ProjectService Test suite', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: projectId, timezoneOffset: '+09:00' },
       } as RoleEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save').mockResolvedValue(
         dto.members.map(({ userId }) => ({
