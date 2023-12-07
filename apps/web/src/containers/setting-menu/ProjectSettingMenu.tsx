@@ -15,6 +15,8 @@
  */
 import { useTranslation } from 'next-i18next';
 
+import { Icon } from '@ufb/ui';
+
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useOAIQuery, usePermissions } from '@/hooks';
@@ -84,8 +86,9 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           disabled={!perms.includes('project_delete')}
         />
       </ul>
-      <button className="btn btn-primary" disabled>
-        + {t('main.setting.button.create-project')}
+      <button className="btn btn-primary btn-lg gap-2" disabled>
+        <Icon name="Plus" size={24} className="text-above-primary" />
+        {t('main.setting.button.create-project')}
       </button>
     </SettingMenuTemplate>
   );

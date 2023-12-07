@@ -42,7 +42,7 @@
       "total-feedback": "전체 피드백 수",
       "create-project": "Project 생성",
       "no-project": "등록된 프로젝트가 없습니다.",
-      "in-progress": "생성중인 Project가 있습니다."
+      "in-progress": "진행중"
     },
     "profile": {
       "title": "프로필",
