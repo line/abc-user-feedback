@@ -18,6 +18,7 @@ export {
   CreateFeedbackMySQLDto,
   CreateFeedbackOSDto,
 } from './create-feedback.dto';
+export { CreateImageUploadUrlDto } from './create-image-upload-url.dto';
 export { FindFeedbacksByChannelIdDto } from './find-feedbacks-by-channel-id.dto';
 export {
   UpdateFeedbackDto,

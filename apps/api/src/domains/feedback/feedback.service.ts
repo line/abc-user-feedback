@@ -17,6 +17,8 @@ import { createReadStream, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import path from 'path';
 import { PassThrough } from 'stream';
+import { S3Client } from '@aws-sdk/client-s3';
+import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import {
   BadRequestException,
   Injectable,
@@ -45,6 +47,7 @@ import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/fee
 import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
 import type {
   CountByProjectIdDto,
+  CreateImageUploadUrlDto,
   FindFeedbacksByChannelIdDto,
   GenerateExcelDto,
 } from './dtos';
@@ -591,5 +594,32 @@ export class FeedbackService {
         fieldsToExport,
       });
     }
+  }
+
+  async createImageUploadUrl(dto: CreateImageUploadUrlDto) {
+    const {
+      projectId,
+      channelId,
+      accessKeyId,
+      secretAccessKey,
+      endpoint,
+      region,
+      bucket,
+    } = dto;
+
+    const s3 = new S3Client({
+      credentials: {
+        accessKeyId,
+        secretAccessKey,
+      },
+      endpoint,
+      region,
+    });
+
+    return await createPresignedPost(s3, {
+      Bucket: bucket,
+      Key: `${projectId}_${channelId}_${Date.now()}.png`,
+      Conditions: [{ 'Content-Type': 'image/png' }],
+    });
   }
 }
