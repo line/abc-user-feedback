@@ -42,7 +42,7 @@
       "total-feedback": "全体フィードバック数",
       "create-project": "Project生成",
       "no-project": "登録されたプロジェクトがありません。",
-      "in-progress": "作成中のProjectがあります。"
+      "in-progress": "進行中"
     },
     "profile": {
       "title": "プロフィール",
@@ -314,7 +314,7 @@
     "guide": "案内",
     "more": "もっと",
     "shrink": "縮む",
-    "feedback-detail": "フィードバック詳細です"
+    "feedback-detail": "フィードバック詳細"
   },
   "toast": {
     "sign-in": "ログイン成功",
