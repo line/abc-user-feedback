@@ -70,12 +70,12 @@ export class IssueStatisticsService {
     return {
       statistics: issueStatistics.reduce(
         (acc, curr) => {
-          const intervalCount = Math.floor(
-            DateTime.fromJSDate(from)
-              .until(DateTime.fromJSDate(new Date(curr.date)))
+          const intervalCount = Math.ceil(
+            DateTime.fromJSDate(new Date(curr.date))
+              .until(DateTime.fromJSDate(to))
               .length(interval),
           );
-          const endOfInterval = DateTime.fromJSDate(from).plus({
+          const endOfInterval = DateTime.fromJSDate(to).minus({
             [interval]: intervalCount,
           });
 
