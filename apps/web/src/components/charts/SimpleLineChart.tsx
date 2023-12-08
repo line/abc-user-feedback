@@ -15,16 +15,9 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import {
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 
 import ChartContainer from './ChartContainer';
+import LineChart from './LineChart';
 
 interface IProps {
   title: string;
@@ -94,22 +87,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
       showLegend={showLegend}
       showFilter={showFilter}
     >
-      <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
-        <LineChart width={500} height={300} data={newData}>
-          <Tooltip />
-          <XAxis dataKey="date" />
-          <YAxis />
-          {dataKeys.map(({ color, name }) => (
-            <Line
-              key={name}
-              type="monotone"
-              dataKey={name}
-              stroke={color}
-              activeDot={{ r: 8 }}
-            />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+      <LineChart data={newData} dataKeys={dataKeys} height={height} />
     </ChartContainer>
   );
 };

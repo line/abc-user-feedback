@@ -53,14 +53,14 @@ const FeedbackLineChartWrapper: React.FC<IProps> = ({
 };
 
 interface IFeedbackLineChartProps {
+  channelIds: number[];
   from: Date;
   to: Date;
-  channelIds: number[];
 }
 
 const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
-  from,
   channelIds,
+  from,
   to,
 }) => {
   const { data } = useOAIQuery({

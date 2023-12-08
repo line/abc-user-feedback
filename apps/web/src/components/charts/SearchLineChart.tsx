@@ -15,16 +15,9 @@
  */
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import {
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 
 import ChartSearchContainer from './ChartSearchContainer';
+import LineChart from './LineChart';
 
 interface IProps {
   title: string;
@@ -103,22 +96,7 @@ const SearchLineChart: React.FC<IProps> = (props) => {
       }
       onChangeSearch={onChangeSearch}
     >
-      <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
-        <LineChart width={500} height={300} data={newData}>
-          <Tooltip />
-          <XAxis dataKey="date" />
-          <YAxis />
-          {dataKeys.map(({ color, name }) => (
-            <Line
-              key={name}
-              type="monotone"
-              dataKey={name}
-              stroke={color}
-              activeDot={{ r: 8 }}
-            />
-          ))}
-        </LineChart>
-      </ResponsiveContainer>
+      <LineChart data={newData} dataKeys={dataKeys} height={height} />
     </ChartSearchContainer>
   );
 };
