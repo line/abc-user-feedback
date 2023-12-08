@@ -167,7 +167,9 @@ export class FeedbackOSService {
                     [key]: query[fieldKey] as TimeRange,
                   },
                 });
-              } else if (format === FieldFormatEnum.text) {
+              } else if (
+                [FieldFormatEnum.text, FieldFormatEnum.image].includes(format)
+              ) {
                 osQuery.bool.must.push({
                   match_phrase: {
                     [key]: query[fieldKey] as string,

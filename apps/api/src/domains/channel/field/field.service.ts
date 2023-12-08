@@ -31,6 +31,7 @@ export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
   select: 'keyword',
   multiSelect: 'keyword',
   date: 'date',
+  image: 'text',
 };
 
 @Injectable()
@@ -45,19 +46,20 @@ export class FieldService {
     return fields.reduce(
       (mapping: Record<string, { type: string }>, field) =>
         Object.assign(mapping, {
-          [field.key]:
-            field.format === FieldFormatEnum.text
-              ? {
-                  type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
-                  analyzer: 'ngram_analyzer',
-                  search_analyzer: 'ngram_analyzer',
-                }
-              : field.format === FieldFormatEnum.date
-              ? {
-                  type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
-                  format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
-                }
-              : { type: FIELD_TYPES_TO_MAPPING_TYPES[field.format] },
+          [field.key]: [FieldFormatEnum.text, FieldFormatEnum.image].includes(
+            field.format,
+          )
+            ? {
+                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+                analyzer: 'ngram_analyzer',
+                search_analyzer: 'ngram_analyzer',
+              }
+            : field.format === FieldFormatEnum.date
+            ? {
+                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+                format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
+              }
+            : { type: FIELD_TYPES_TO_MAPPING_TYPES[field.format] },
         }),
       {},
     );

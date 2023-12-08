@@ -84,9 +84,6 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           disabled={!perms.includes('project_delete')}
         />
       </ul>
-      <button className="btn btn-primary" disabled>
-        + {t('main.setting.button.create-project')}
-      </button>
     </SettingMenuTemplate>
   );
 };

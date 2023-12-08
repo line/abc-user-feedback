@@ -35,16 +35,6 @@ import {
 } from './exceptions';
 import { RESERVED_FIELD_KEYS, RESERVED_FIELD_NAMES } from './field.constants';
 
-export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
-  text: 'text',
-  keyword: 'keyword',
-  number: 'integer',
-  boolean: 'boolean',
-  select: 'keyword',
-  multiSelect: 'keyword',
-  date: 'date',
-};
-
 @Injectable()
 export class FieldMySQLService {
   constructor(
@@ -215,6 +205,11 @@ export class FieldMySQLService {
   }
 
   async findByIds(ids: number[]) {
-    return await this.repository.findBy({ id: In(ids) });
+    const fields = await this.repository.find({
+      where: { id: In(ids) },
+      withDeleted: true,
+    });
+    const fieldMap = new Map(fields.map((field) => [field.id, field]));
+    return ids.map((id) => fieldMap.get(id));
   }
 }

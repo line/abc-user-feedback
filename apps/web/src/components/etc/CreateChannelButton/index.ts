@@ -13,25 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsObject, IsString, MinLength } from 'class-validator';
-
-import { IsNullable } from '@/domains/user/decorators';
-import { ImageConfigRequestDto } from './image-config-request.dto';
-
-export class UpdateChannelRequestDto {
-  @ApiProperty()
-  @IsString()
-  @MinLength(1)
-  name: string;
-
-  @ApiProperty({ nullable: true })
-  @IsNullable()
-  @IsString()
-  description: string | null;
-
-  @ApiProperty({ nullable: true, type: ImageConfigRequestDto })
-  @IsNullable()
-  @IsObject()
-  imageConfig: ImageConfigRequestDto | null;
-}
+export { default } from './CreateChannelButton';

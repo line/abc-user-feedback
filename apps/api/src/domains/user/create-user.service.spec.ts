@@ -219,6 +219,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -257,6 +260,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -361,6 +367,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -399,6 +408,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -559,6 +571,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -597,6 +612,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 

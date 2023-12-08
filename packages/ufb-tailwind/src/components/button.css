@@ -1,8 +1,8 @@
 .btn {
-  @apply inline-flex flex-shrink-0 cursor-pointer select-none items-center justify-center rounded font-bold px-3 min-w-[80px] whitespace-nowrap;
+  @apply inline-flex min-w-[80px] flex-shrink-0 cursor-pointer select-none items-center justify-center whitespace-nowrap rounded px-3 font-bold;
 
   /* default */
-  @apply py-[9.5px] font-14-bold;
+  @apply font-14-bold py-[9.5px];
 
   &-full {
     @apply w-full;
@@ -13,35 +13,42 @@
   }
 
   &-lg {
-    @apply py-3 font-16-bold h-12;
+    @apply font-16-bold h-12 py-3;
   }
 
   &-md {
-    @apply py-[9.5px] font-14-bold h-10;
+    @apply font-14-bold h-10 py-[9.5px];
   }
 
   &-sm {
-    @apply py-[7px] font-12-bold h-8;
+    @apply font-12-bold h-8 py-[7px];
   }
 
   &-xs {
-    @apply py-1 font-12-bold;
+    @apply font-12-bold py-1;
   }
 
   &-primary {
     @apply bg-fill-primary text-inverse;
 
     &:hover {
-      background-color: color-mix(in srgb, var(--fill-color-primary), transparent 20%);
+      background-color: color-mix(
+        in srgb,
+        var(--fill-color-primary),
+        transparent 20%
+      );
     }
 
     &:disabled {
       @apply bg-fill-tertiary text-tertiary pointer-events-none;
+      svg {
+        @apply text-tertiary;
+      }
     }
   }
 
   &-secondary {
-    @apply bg-fill-inverse text-primary border border-fill-tertiary;
+    @apply bg-fill-inverse text-primary border-fill-tertiary border;
 
     &:hover {
       @apply bg-fill-tertiary;

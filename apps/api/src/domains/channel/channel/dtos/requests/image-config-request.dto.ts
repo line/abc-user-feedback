@@ -14,24 +14,26 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsObject, IsString, MinLength } from 'class-validator';
+import { IsString } from 'class-validator';
 
-import { IsNullable } from '@/domains/user/decorators';
-import { ImageConfigRequestDto } from './image-config-request.dto';
-
-export class UpdateChannelRequestDto {
+export class ImageConfigRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(1)
-  name: string;
+  accessKeyId: string;
 
-  @ApiProperty({ nullable: true })
-  @IsNullable()
+  @ApiProperty()
   @IsString()
-  description: string | null;
+  secretAccessKey: string;
 
-  @ApiProperty({ nullable: true, type: ImageConfigRequestDto })
-  @IsNullable()
-  @IsObject()
-  imageConfig: ImageConfigRequestDto | null;
+  @ApiProperty()
+  @IsString()
+  endpoint: string;
+
+  @ApiProperty()
+  @IsString()
+  region: string;
+
+  @ApiProperty()
+  @IsString()
+  bucket: string;
 }

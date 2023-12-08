@@ -14,12 +14,14 @@
  * under the License.
  */
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 
-import { NoChannel, SelectBox, SettingMenuTemplate } from '@/components';
+import {
+  CreateChannelButton,
+  SelectBox,
+  SettingMenuTemplate,
+} from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
-import { Path } from '@/constants/path';
 import { useChannels, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
@@ -39,7 +41,6 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     channelId,
     setChannelId,
   } = props;
-  const router = useRouter();
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
@@ -50,13 +51,12 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     setChannelId(channelData.items?.[0]?.id ?? 0);
   }, [channelData]);
 
-  const gotoCreateChannel = () =>
-    router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
-
   if (!channelId) {
     return (
       <SettingMenuTemplate title="Channel">
-        <NoChannel projectId={projectId} />
+        <div className="flex flex-1 items-center justify-center">
+          <CreateChannelButton projectId={projectId} type="blue" />
+        </div>
       </SettingMenuTemplate>
     );
   }
@@ -92,13 +92,11 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
           disabled={!perms.includes('channel_delete')}
         />
       </ul>
-      <button
-        className="btn btn-primary"
-        disabled={!perms.includes('channel_create')}
-        onClick={gotoCreateChannel}
-      >
-        + {t('main.setting.button.create-channel')}
-      </button>
+      <CreateChannelButton
+        projectId={projectId}
+        type="primary"
+        placement="top"
+      />
     </SettingMenuTemplate>
   );
 };
