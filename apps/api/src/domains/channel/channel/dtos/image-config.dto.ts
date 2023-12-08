@@ -13,36 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, plainToInstance, Type } from 'class-transformer';
+import { Expose, plainToInstance } from 'class-transformer';
 
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
-import { CreateFieldDto } from '../field/dtos';
-
-export class CreateChannelDto {
+export class ImageConfigDto {
   @Expose()
-  projectId: number;
+  accessKeyId: string;
 
   @Expose()
-  name: string;
+  secretAccessKey: string;
 
   @Expose()
-  description: string;
+  endpoint: string;
 
   @Expose()
-  @Type(() => CreateFieldDto)
-  fields: CreateFieldDto[];
+  region: string;
 
-  public static from(params: any): CreateChannelDto {
-    return plainToInstance(CreateChannelDto, params, {
+  @Expose()
+  bucket: string;
+
+  public static from(params: any): ImageConfigDto {
+    return plainToInstance(ImageConfigDto, params, {
       excludeExtraneousValues: true,
     });
-  }
-
-  static toChannelEntity(params: CreateChannelDto) {
-    return ChannelEntity.from(
-      params.name,
-      params.description,
-      params.projectId,
-    );
   }
 }

@@ -18,6 +18,7 @@ import { Type } from 'class-transformer';
 import {
   IsEnum,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   MinLength,
@@ -30,6 +31,7 @@ import {
   FieldTypeEnum,
 } from '@/common/enums';
 import { IsNullable } from '@/domains/user/decorators';
+import { ImageConfigRequestDto } from './image-config-request.dto';
 
 class CreateChannelRequestFieldSelectOptionDto {
   @ApiProperty({ required: false })
@@ -94,6 +96,11 @@ export class CreateChannelRequestDto {
   @IsNullable()
   @IsString()
   description: string | null;
+
+  @ApiProperty({ nullable: true, type: ImageConfigRequestDto })
+  @IsNullable()
+  @IsObject()
+  imageConfig: ImageConfigRequestDto | null;
 
   @ApiProperty({ type: [CreateChannelRequestFieldDto] })
   @Type(() => CreateChannelRequestFieldDto)
