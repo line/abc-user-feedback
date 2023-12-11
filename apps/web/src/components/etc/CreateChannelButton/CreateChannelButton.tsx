@@ -85,7 +85,7 @@ const CreateChannelButton: React.FC<IProps> = (props) => {
           </button>
         </TooltipTrigger>
         <TooltipContent color="red">
-          {t('main.index.in-progress')}{' '}
+          {t('text.create-channel-in-progress')}{' '}
           <b>
             ({step + 1}/{CHANNEL_STEPS.length})
           </b>

@@ -41,8 +41,7 @@
       "total-channel": "Total Channel",
       "total-feedback": "Total Feedback",
       "create-project": "Create Project",
-      "no-project": "There are no registered projects.",
-      "in-progress": "In Progress"
+      "no-project": "There are no registered projects."
     },
     "profile": {
       "title": "Profile",
@@ -314,7 +313,9 @@
     "guide": "Guide",
     "more": "more",
     "shrink": "shrink",
-    "feedback-detail": "Feedback Detail"
+    "feedback-detail": "Feedback Detail",
+    "create-channel-in-progress": "There is a Channel being created.",
+    "create-project-in-progress": "There is a Project being created."
   },
   "toast": {
     "sign-in": "Login Successful",
