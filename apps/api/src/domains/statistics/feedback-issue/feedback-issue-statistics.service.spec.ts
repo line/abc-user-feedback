@@ -96,7 +96,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
   describe('getCountByDateByissue', () => {
     it('getting counts by day by issue succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'day';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
@@ -141,7 +141,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
     });
     it('getting counts by week by issue succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'week';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
@@ -182,7 +182,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
     });
     it('getting counts by month by issue succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'month';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
@@ -206,11 +206,11 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 6,
-                date: '2023-01-01',
+                date: '2022-12-31',
               },
               {
                 feedbackCount: 4,
-                date: '2023-02-01',
+                date: '2023-01-31',
               },
             ],
           },

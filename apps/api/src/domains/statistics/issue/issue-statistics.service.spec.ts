@@ -91,7 +91,7 @@ describe('IssueStatisticsService suite', () => {
   describe('getCountByDate', () => {
     it('getting counts by date succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'day';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
@@ -127,7 +127,7 @@ describe('IssueStatisticsService suite', () => {
     });
     it('getting counts by week by channel succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'week';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
@@ -159,7 +159,7 @@ describe('IssueStatisticsService suite', () => {
     });
     it('getting counts by month by channel succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'month';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
@@ -176,11 +176,11 @@ describe('IssueStatisticsService suite', () => {
         statistics: [
           {
             count: 6,
-            date: '2023-01-01',
+            date: '2022-12-31',
           },
           {
             count: 4,
-            date: '2023-02-01',
+            date: '2023-01-31',
           },
         ],
       });
@@ -190,7 +190,7 @@ describe('IssueStatisticsService suite', () => {
   describe('getCount', () => {
     it('getting count succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const projectId = faker.number.int();
       const dto = new GetCountDto();
       dto.from = from;

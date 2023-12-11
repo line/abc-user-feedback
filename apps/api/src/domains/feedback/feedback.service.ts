@@ -235,7 +235,6 @@ export class FeedbackService {
           fieldsByKey,
           fieldsToExport,
         );
-
         worksheet.addRow(convertedFeedback).commit();
         feedbackIds.push(feedback.id);
       }
@@ -261,7 +260,9 @@ export class FeedbackService {
     fieldsToExport,
   }) {
     const stream = new PassThrough();
-    const csvStream = fastcsv.format({ headers: true });
+    const csvStream = fastcsv.format({
+      headers: fieldsToExport.map((field) => field.name),
+    });
 
     csvStream.pipe(stream);
 

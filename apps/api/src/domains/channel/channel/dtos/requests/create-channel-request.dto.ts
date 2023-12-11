@@ -97,7 +97,8 @@ export class CreateChannelRequestDto {
   @IsString()
   description: string | null;
 
-  @ApiProperty({ nullable: true, type: ImageConfigRequestDto })
+  @ApiProperty({ required: false, nullable: true, type: ImageConfigRequestDto })
+  @IsOptional()
   @IsNullable()
   @IsObject()
   imageConfig: ImageConfigRequestDto | null;
