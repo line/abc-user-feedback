@@ -41,8 +41,7 @@
       "total-channel": "全チャンネル数",
       "total-feedback": "全体フィードバック数",
       "create-project": "Project生成",
-      "no-project": "登録されたプロジェクトがありません。",
-      "in-progress": "進行中"
+      "no-project": "登録されたプロジェクトがありません。"
     },
     "profile": {
       "title": "プロフィール",
@@ -314,7 +313,9 @@
     "guide": "案内",
     "more": "もっと",
     "shrink": "縮む",
-    "feedback-detail": "フィードバック詳細"
+    "feedback-detail": "フィードバック詳細",
+    "create-channel-in-progress": "作成中のChannelがあります。",
+    "create-project-in-progress": "作成中のProjectがあります。"
   },
   "toast": {
     "sign-in": "ログイン成功",
