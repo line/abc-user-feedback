@@ -92,8 +92,16 @@ export class IssueService {
       andWhere.id = query.id as number;
     }
 
+    if (query.statuses) {
+      andWhere.status = In(query.statuses as string[]);
+    }
+
     for (const column of Object.keys(query)) {
-      if (['id', 'createdAt', 'updatedAt', 'searchText'].includes(column)) {
+      if (
+        ['id', 'createdAt', 'updatedAt', 'searchText', 'statuses'].includes(
+          column,
+        )
+      ) {
         continue;
       }
 
