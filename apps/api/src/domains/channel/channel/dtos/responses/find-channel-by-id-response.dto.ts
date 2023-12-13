@@ -17,6 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { FindFieldsResponseDto } from '@/domains/channel/field/dtos/responses';
+import { ImageConfigResponseDto } from './image-config-response.dto';
 
 export class FindChannelByIdResponseDto {
   @Expose()
@@ -30,6 +31,10 @@ export class FindChannelByIdResponseDto {
   @Expose()
   @ApiProperty()
   description: string;
+
+  @Expose()
+  @ApiProperty()
+  imageConfig: ImageConfigResponseDto;
 
   @Expose()
   @ApiProperty()

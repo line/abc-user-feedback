@@ -18,7 +18,7 @@ import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate, NoChannel } from '@/components';
+import { CreateChannelButton, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import { FeedbackTable } from '@/containers';
@@ -44,7 +44,9 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     <>
       <h1 className="font-20-bold mb-3">{t('main.feedback.title')}</h1>
       {noChannel ? (
-        <NoChannel projectId={projectId} />
+        <div className="flex flex-1 items-center justify-center">
+          <CreateChannelButton projectId={projectId} type="blue" />
+        </div>
       ) : (
         <FeedbackTable projectId={projectId} channelId={channelId} />
       )}

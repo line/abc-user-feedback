@@ -60,7 +60,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             t('main.index.no-project')
           ) : (
             <>
-              {t('main.index.in-progress')}{' '}
+              {t('text.create-project-in-progress')}{' '}
               <b>
                 ({step + 1}/{PROJECT_STEPS.length})
               </b>

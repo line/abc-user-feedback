@@ -18,6 +18,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -190,5 +191,28 @@ export class FeedbackController {
     @Body() { feedbackIds }: DeleteFeedbacksRequestDto,
   ) {
     await this.feedbackService.deleteByIds({ channelId, feedbackIds });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @UseGuards(ApiKeyAuthGuard)
+  @Get('/image-upload-url')
+  async getImageUploadUrl(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
+  ) {
+    const channel = await this.channelService.findById({ channelId });
+    if (channel.project.id !== projectId) {
+      throw new BadRequestException('Invalid channel id');
+    }
+
+    return await this.feedbackService.createImageUploadUrl({
+      projectId,
+      channelId,
+      accessKeyId: channel.imageConfig.accessKeyId,
+      secretAccessKey: channel.imageConfig.secretAccessKey,
+      endpoint: channel.imageConfig.endpoint,
+      region: channel.imageConfig.region,
+      bucket: channel.imageConfig.bucket,
+    });
   }
 }

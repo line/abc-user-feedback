@@ -99,7 +99,7 @@ describe('FeedbackStatisticsService suite', () => {
   describe('getCountByDateByChannel', () => {
     it('getting counts by day by channel succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'day';
       const channelIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByChannelDto();
@@ -144,7 +144,7 @@ describe('FeedbackStatisticsService suite', () => {
     });
     it('getting counts by week by channel succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'week';
       const channelIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByChannelDto();
@@ -185,7 +185,7 @@ describe('FeedbackStatisticsService suite', () => {
     });
     it('getting counts by month by channel succeeds with valid inputs', async () => {
       const from = new Date('2023-01-01');
-      const to = faker.date.future();
+      const to = new Date('2023-12-31');
       const interval = 'month';
       const channelIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByChannelDto();
@@ -209,11 +209,11 @@ describe('FeedbackStatisticsService suite', () => {
             statistics: [
               {
                 count: 6,
-                date: '2023-01-01',
+                date: '2022-12-31',
               },
               {
                 count: 4,
-                date: '2023-02-01',
+                date: '2023-01-31',
               },
             ],
           },
