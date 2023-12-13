@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
 import dayjs from 'dayjs';
 
 import { SimpleLineChart } from '@/components/charts';
@@ -33,7 +34,30 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       projectId,
       interval: 'day',
     },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
+
+  const newData = useMemo(() => {
+    if (!data) return [];
+
+    const result = [];
+    let currentDate = dayjs(from).startOf('day');
+    const endDate = dayjs(to).endOf('day');
+    while (currentDate.isBefore(endDate)) {
+      const count =
+        data.statistics.find((v) => v.date === currentDate.format('YYYY-MM-DD'))
+          ?.count ?? 0;
+
+      result.push({ date: currentDate.format('MM/DD'), '피드백 수': count });
+      currentDate = currentDate.add(1, 'day');
+    }
+    return result;
+  }, [data]);
 
   return (
     <SimpleLineChart
@@ -44,13 +68,8 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       height={400}
-      data={
-        data
-          ? [{ color: 'black', name: '피드백 수', data: data.statistics }]
-          : []
-      }
-      from={from}
-      to={to}
+      data={newData}
+      dataKeys={[{ color: 'black', name: '피드백 수' }]}
     />
   );
 };

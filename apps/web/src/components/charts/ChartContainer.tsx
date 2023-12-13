@@ -22,23 +22,13 @@ interface IProps extends React.PropsWithChildren {
   title: string;
   description?: string;
   dataKeys?: { name: string; color: string }[];
-  onChecked?: (name: string, checked: boolean) => void;
-  chedkedList?: string[];
   showLegend?: boolean;
-  showFilter?: boolean;
+  filterContent?: React.ReactNode;
 }
 
 const ChartContainer: React.FC<IProps> = (props) => {
-  const {
-    children,
-    description,
-    title,
-    dataKeys,
-    chedkedList,
-    onChecked,
-    showLegend,
-    showFilter,
-  } = props;
+  const { children, description, title, dataKeys, filterContent, showLegend } =
+    props;
   return (
     <div className="border-fill-tertiary rounded border p-4">
       <div className="flex h-[72px] items-center justify-between">
@@ -48,13 +38,7 @@ const ChartContainer: React.FC<IProps> = (props) => {
         </div>
         <div className="flex gap-3">
           {showLegend && <Legend dataKeys={dataKeys ?? []} />}
-          {showFilter && (
-            <ChartFilter
-              checkedList={chedkedList ?? []}
-              items={dataKeys?.map((v) => v.name) ?? []}
-              onChecked={onChecked}
-            />
-          )}
+          {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
         </div>
       </div>
       {children}

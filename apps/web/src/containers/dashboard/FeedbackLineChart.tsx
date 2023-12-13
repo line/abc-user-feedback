@@ -13,9 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 
+import { PopoverCloseButton } from '@ufb/ui';
+
 import { SimpleLineChart } from '@/components/charts';
+import { CHART_COLORS } from '@/constants/chart-colors';
 import { useOAIQuery } from '@/hooks';
 
 const getDarkColor = () => {
@@ -43,35 +47,79 @@ const FeedbackLineChartWrapper: React.FC<IProps> = ({
   });
 
   if (!data) return null;
-  return (
-    <FeedbackLineChart
-      from={from}
-      to={to}
-      channelIds={data.items.map((v) => v.id)}
-    />
-  );
+  return <FeedbackLineChart from={from} to={to} channels={data.items} />;
 };
 
 interface IFeedbackLineChartProps {
-  channelIds: number[];
+  channels: {
+    id: number;
+    name: string;
+    description: string;
+    createdAt: string;
+    updatedAt: string;
+  }[];
   from: Date;
   to: Date;
 }
 
 const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
-  channelIds,
+  channels,
   from,
   to,
 }) => {
+  const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
+
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback',
     variables: {
       from: dayjs(from).startOf('day').toISOString(),
       to: dayjs(to).endOf('day').toISOString(),
-      channelIds: channelIds.join(','),
+      channelIds: currentChannels.map(({ id }) => id).join(','),
       interval: 'day',
     },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
+
+  const dataKeys = useMemo(() => {
+    return (
+      data?.channels.map((v, i) => ({
+        color: CHART_COLORS[i] ?? getDarkColor(),
+        name: v.name,
+      })) ?? []
+    );
+  }, [data]);
+
+  const newData = useMemo(() => {
+    if (!data) return [];
+
+    const result = [];
+    let currentDate = dayjs(from).startOf('day');
+    const endDate = dayjs(to).endOf('day');
+    while (currentDate.isBefore(endDate)) {
+      let total = 0;
+
+      const channelData = data.channels.reduce(
+        (acc, cur) => {
+          const count =
+            cur.statistics.find(
+              (v) => v.date === currentDate.format('YYYY-MM-DD'),
+            )?.count ?? 0;
+          total += count;
+          return { ...acc, [cur.name]: count };
+        },
+        { date: currentDate.format('MM/DD') },
+      );
+
+      result.push({ ...channelData, total });
+      currentDate = currentDate.add(1, 'day');
+    }
+    return result;
+  }, [data]);
 
   return (
     <SimpleLineChart
@@ -82,17 +130,46 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       height={400}
-      data={
-        data?.channels.map((v) => ({
-          color: getDarkColor(),
-          name: v.name,
-          data: v.statistics.map((v) => ({ date: v.date, count: v.count })),
-        })) ?? []
+      dataKeys={dataKeys}
+      data={newData}
+      filterContent={
+        <div className="flex flex-col gap-3 px-4 py-3">
+          <div className="flex justify-between">
+            <h1 className="font-16-bold">
+              채널{' '}
+              <span>
+                {currentChannels.length}
+                <span className="text-tertiary">/5</span>
+              </span>
+            </h1>
+            <PopoverCloseButton />
+          </div>
+          <ul>
+            {channels.map((channel) => (
+              <li key={channel.id} className="py-1">
+                <label className="flex cursor-pointer items-center gap-2 py-1">
+                  <input
+                    className="checkbox checkbox-sm"
+                    type="checkbox"
+                    checked={currentChannels.some(
+                      ({ id }) => id === channel.id,
+                    )}
+                    onChange={(e) =>
+                      e.currentTarget.checked
+                        ? setCurrentChannels((prev) => [...prev, channel])
+                        : setCurrentChannels((prev) =>
+                            prev.filter((v) => v.id !== channel.id),
+                          )
+                    }
+                  />
+                  <p className="font-12-regular flex-1">{channel.name}</p>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
       }
-      from={from}
-      to={to}
       showLegend
-      showFilter
     />
   );
 };

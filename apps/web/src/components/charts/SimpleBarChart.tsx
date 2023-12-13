@@ -16,7 +16,6 @@
 import {
   Bar,
   BarChart,
-  Rectangle,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -53,7 +52,12 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="value" fill="#007AFF" activeBar={<Rectangle />} />
+          <Bar
+            dataKey="value"
+            fill="#5D7BE7"
+            barSize={16}
+            radius={[8, 8, 0, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>

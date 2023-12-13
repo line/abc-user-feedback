@@ -31,6 +31,12 @@ const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
       to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
       projectId,
     },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback/count',
@@ -38,6 +44,12 @@ const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
       from: dayjs().subtract(60, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(31, 'day').endOf('day').toISOString(),
       projectId,
+    },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
     },
   });
 

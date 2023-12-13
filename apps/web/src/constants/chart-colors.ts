@@ -13,21 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
-
-interface IProps extends React.PropsWithChildren {}
-
-const ChartFilter: React.FC<IProps> = ({ children }) => {
-  return (
-    <Popover placement="bottom-end">
-      <PopoverTrigger asChild>
-        <button className="icon-btn icon-btn-secondary icon-btn-sm">
-          <Icon name="FilterCircleStroke" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="min-w-[200px]">{children}</PopoverContent>
-    </Popover>
-  );
-};
-
-export default ChartFilter;
+export const CHART_COLORS = [
+  '#5D7BE7',
+  '#5FC1E7',
+  '#AED252',
+  '#D05772',
+  '#D3B854',
+];

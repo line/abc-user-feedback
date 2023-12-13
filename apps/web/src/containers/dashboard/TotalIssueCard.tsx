@@ -28,6 +28,12 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
 
   return (

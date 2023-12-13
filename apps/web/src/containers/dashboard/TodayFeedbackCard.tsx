@@ -13,9 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import { useInterval } from 'react-use';
 
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
@@ -25,23 +24,33 @@ interface IProps {
 }
 
 const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
-  const [count, setCount] = useState(60);
-
-  const { data: currentData, refetch: refetchCurrentData } = useOAIQuery({
+  const { data: currentData } = useOAIQuery({
     path: '/api/statistics/feedback/count',
     variables: {
       from: dayjs().startOf('day').toISOString(),
       to: dayjs().endOf('day').toISOString(),
       projectId,
     },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
 
-  const { data: previousData, refetch: refetchPreviousData } = useOAIQuery({
+  const { data: previousData } = useOAIQuery({
     path: '/api/statistics/feedback/count',
     variables: {
       from: dayjs().subtract(1, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
       projectId,
+    },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
     },
   });
 
@@ -49,14 +58,6 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     if (!currentData || !previousData || currentData.count === 0) return 0;
     return ((currentData.count - previousData.count) / currentData.count) * 100;
   }, [currentData, previousData]);
-
-  useInterval(() => {
-    if (count === 0) {
-      refetchCurrentData();
-      refetchPreviousData();
-      setCount(60);
-    } else setCount((prev) => prev - 1);
-  }, 1000);
 
   return (
     <DashboardCard
@@ -66,7 +67,6 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
         'YYYY/MM/DD',
       )})`}
       percentage={percentage}
-      autofreshCount={count}
     />
   );
 };

@@ -35,6 +35,12 @@ const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
       to: dayjs(to).endOf('day').toISOString(),
       projectId,
     },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
 
   return (

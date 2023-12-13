@@ -8,6 +8,9 @@ module.exports = {
       full: '99999px',
       none: '0',
     },
+    screens: {
+      lg: '960px',
+    },
   },
   content: [
     './src/**/*.{js,ts,jsx,tsx}',

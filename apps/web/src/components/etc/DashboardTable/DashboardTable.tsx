@@ -22,6 +22,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
+import ChartFilter from '@/components/charts/ChartFilter';
 import DescriptionTooltip from '../DescriptionTooltip';
 import type { ISelectBoxProps } from '../SelectBox';
 import SelectBox from '../SelectBox';
@@ -33,10 +34,11 @@ interface IProps<T> {
   data: T[];
   columns: ColumnDef<T, any>[];
   select?: ISelectBoxProps<false>;
+  filterContent?: React.ReactNode;
 }
 
 function DashboardTable<T>(props: IProps<T>) {
-  const { title, description, columns, data, select } = props;
+  const { title, description, columns, data, select, filterContent } = props;
   const [sorting, setSorting] = useState<SortingState>([]);
 
   const table = useReactTable({
@@ -58,7 +60,7 @@ function DashboardTable<T>(props: IProps<T>) {
         </div>
         <div className="flex items-center gap-2">
           {select && <SelectBox {...select} />}
-          <button className="btn btn-secondary">필터설정</button>
+          {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
         </div>
       </div>
       <div className="mb-5 h-[336px] overflow-x-hidden overflow-y-scroll">

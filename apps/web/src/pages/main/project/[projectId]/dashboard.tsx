@@ -13,12 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
+import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
 import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
+
+import { Icon } from '@ufb/ui';
 
 import { DateRangePicker, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
@@ -51,6 +53,7 @@ interface IProps {
 
 const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const currentDate = useMemo(() => dayjs().format('YYYY-MM-DD HH:mm'), []);
 
   const [dateRange, setDateRange] = useState<DateRangeType>({
     startDate: dayjs().subtract(1, 'month').toDate(),
@@ -97,7 +100,12 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   return (
     <div className="flex flex-col gap-3">
       <div className="flex justify-between">
-        <h1 className="font-20-bold mb-3">{t('main.dashboard.title')}</h1>
+        <h1 className="font-20-bold mb-3">
+          {t('main.dashboard.title')}
+          <span className="font-12-regular text-secondary ml-2">
+            Update: {currentDate}
+          </span>
+        </h1>
         <div>
           <DateRangePicker
             value={dateRange}
@@ -107,7 +115,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           />
         </div>
       </div>
-      <div className="flex flex-wrap gap-3">
+      <CardSlider>
         <TotalFeedbackCard
           projectId={projectId}
           from={dateRange.startDate}
@@ -132,7 +140,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <YesterdayIssueCard projectId={projectId} />
         <SevenDaysIssueCard projectId={projectId} />
         <ThirtyDaysIssueCard projectId={projectId} />
-      </div>
+      </CardSlider>
       <FeedbackLineChart
         from={dateRange.startDate}
         to={dateRange.endDate}
@@ -169,8 +177,56 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-DashboardPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+const CardSlider: React.FC<React.PropsWithChildren> = ({ children }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [showButton, setShowButton] = useState(false);
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+    const observer = new ResizeObserver(([entry]) => {
+      if (!entry) return;
+      const { height } = entry.contentRect;
+      setShowButton(height === 220);
+    });
+
+    // 2. 감지할 요소 추가하기
+    observer.observe(ref.current);
+    return () => {
+      if (!ref.current) return;
+      observer.unobserve(ref.current);
+    };
+  }, [ref.current]);
+
+  const scroll = (scrollOffset: number) => {
+    if (!ref.current) return;
+    ref.current.scrollTo({ left: scrollOffset, behavior: 'smooth' });
+  };
+
+  return (
+    <div className="relative overflow-hidden">
+      <div
+        className="scrollbar-hide flex max-h-[220px] flex-wrap gap-3 overflow-x-auto"
+        ref={ref}
+      >
+        {children}
+      </div>
+      {showButton && (
+        <>
+          <button
+            onClick={() => scroll(220)}
+            className="icon-btn icon-btn-secondary icon-btn-md icon-btn-rounded absolute-y-center absolute right-0"
+          >
+            <Icon name="ArrowRight" />
+          </button>
+          <button
+            onClick={() => scroll(-220)}
+            className="icon-btn icon-btn-secondary icon-btn-md icon-btn-rounded absolute-y-center absolute left-0"
+          >
+            <Icon name="ArrowLeft" />
+          </button>
+        </>
+      )}
+    </div>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({
@@ -202,6 +258,9 @@ export const getServerSideProps: GetServerSideProps = async ({
       projectId,
     },
   };
+};
+DashboardPage.getLayout = function getLayout(page) {
+  return <MainTemplate>{page}</MainTemplate>;
 };
 
 export default DashboardPage;

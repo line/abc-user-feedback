@@ -31,6 +31,12 @@ const YesterdayIssueCard: React.FC<IProps> = ({ projectId }) => {
       to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
       projectId,
     },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
   const { data: previousData } = useOAIQuery({
     path: '/api/statistics/issue/count',
@@ -38,6 +44,12 @@ const YesterdayIssueCard: React.FC<IProps> = ({ projectId }) => {
       from: dayjs().subtract(2, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(2, 'day').endOf('day').toISOString(),
       projectId,
+    },
+    queryOptions: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
     },
   });
   const percentage = useMemo(() => {

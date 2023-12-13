@@ -36,6 +36,7 @@ export class UserInvitationMailingService {
       subject: `User Feedback Invitation`,
       context: {
         link: `${this.baseUrl}/link/user-invitation?code=${code}&email=${email}`,
+        baseAssetUrl: `${this.baseUrl}/assets/mailing`,
       },
       template: 'invitation',
     });

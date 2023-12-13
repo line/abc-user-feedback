@@ -263,6 +263,24 @@ export const PopoverHeading = React.forwardRef<
     </div>
   );
 });
+export const PopoverCloseButton: React.FC = () => {
+  const { setLabelId, setOpen } = usePopoverContext();
+  const id = useId();
+
+  React.useLayoutEffect(() => {
+    setLabelId(id);
+    return () => setLabelId(undefined);
+  }, [id, setLabelId]);
+
+  return (
+    <button
+      className="icon-btn icon-btn-tertiary icon-btn-xs"
+      onClick={() => setOpen(false)}
+    >
+      <Icon name="Close" />
+    </button>
+  );
+};
 
 export interface IPopoverModalContentProps extends React.PropsWithChildren {
   title: string;

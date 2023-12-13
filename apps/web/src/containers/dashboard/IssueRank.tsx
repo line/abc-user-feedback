@@ -16,22 +16,26 @@
 import { useMemo, useState } from 'react';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { Line, LineChart } from 'recharts';
+import { useTranslation } from 'react-i18next';
+
+import { PopoverCloseButton } from '@ufb/ui';
 
 import DashboardTable from '@/components/etc/DashboardTable';
+import { ISSUES } from '@/constants/issues';
 import { useIssueSearch, useOAIQuery } from '@/hooks';
 
 interface IssueTableData {
   no: number;
+  status: string;
   name: string;
   count: number;
   growth: number;
-  trend: { date: string; value: number }[];
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
 const columns = [
   columnHelper.accessor('no', { header: 'No', enableSorting: false }),
+  columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
   columnHelper.accessor('name', { header: 'Issue' }),
   columnHelper.accessor('count', { header: 'Count' }),
   columnHelper.accessor('growth', {
@@ -52,22 +56,6 @@ const columns = [
       );
     },
   }),
-  columnHelper.accessor('trend', {
-    header: 'Trend',
-    enableSorting: false,
-    cell(props) {
-      return (
-        <LineChart width={100} height={40} data={props.getValue()}>
-          <Line
-            type="monotone"
-            dataKey="value"
-            stroke="#000000"
-            dot={{ r: 0 }}
-          />
-        </LineChart>
-      );
-    },
-  }),
 ];
 interface IProps {
   projectId: number;
@@ -76,7 +64,10 @@ interface IProps {
 }
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
+  const issues = useMemo(() => ISSUES(t), [t]);
   const [limit, setLimit] = useState(5);
+  const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
 
   const { data } = useIssueSearch(projectId, {
     sort: { feedbackCount: 'DESC' } as any,
@@ -93,7 +84,13 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       interval: 'day',
       issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
     },
-    queryOptions: { enabled },
+    queryOptions: {
+      enabled,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
+    },
   });
 
   const { data: previousData } = useOAIQuery({
@@ -104,21 +101,17 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       interval: 'day',
       issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
     },
-    queryOptions: { enabled },
-  });
-  const { data: trendData } = useOAIQuery({
-    path: '/api/statistics/feedback-issue',
-    variables: {
-      from: dayjs().subtract(90, 'day').startOf('day').toISOString(),
-      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
-      interval: 'week',
-      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
+    queryOptions: {
+      enabled,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      refetchInterval: false,
     },
-    queryOptions: { enabled },
   });
 
   const newData = useMemo(() => {
-    if (!data || !currentData || !previousData || !trendData) return [];
+    if (!data || !currentData || !previousData) return [];
 
     return data.items.map((item, i) => {
       const thisWeekCount =
@@ -131,27 +124,20 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
           .find((v) => v.name === item.name)
           ?.statistics.reduce((acc, cur) => acc + cur.feedbackCount, 0) ?? 0;
 
-      const trend =
-        trendData.issues
-          .find((v) => v.name === item.name)
-          ?.statistics.map((v) => ({
-            date: v.date,
-            value: v.feedbackCount,
-          })) ?? [];
-
       return {
         no: i + 1,
         count: item.feedbackCount,
         name: item.name,
+        status: ISSUES(t).find((v) => v.key === item.status)?.name ?? '',
         growth: ((lastWeekCount - thisWeekCount) / lastWeekCount) * 100,
-        trend,
       };
     });
-  }, [data, currentData, previousData, trendData]);
+  }, [data, currentData, previousData, t]);
 
   return (
     <DashboardTable
-      title="이슈 순위"
+      title="상위 이슈 목록"
+      description="피드백이 많은 상위 목록의 이슈를 나타냅니다."
       columns={columns}
       data={newData}
       select={{
@@ -162,10 +148,45 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
           { name: '20개', key: 20 },
         ],
         defaultValue: { name: '5개', key: 5 },
-        onChange: (v) => {
-          setLimit(v?.key);
-        },
+        onChange: (v) => setLimit(v?.key),
       }}
+      filterContent={
+        <div className="flex flex-col gap-3 px-4 py-3">
+          <div className="flex justify-between">
+            <h1 className="font-16-bold">
+              이슈 상태{' '}
+              <span>
+                {currentIssueStatusList.length}
+                <span className="text-tertiary">/5</span>
+              </span>
+            </h1>
+            <PopoverCloseButton />
+          </div>
+          <ul>
+            {issues.map((issue) => (
+              <li key={issue.key} className="py-1">
+                <label className="flex cursor-pointer items-center gap-2 py-1">
+                  <input
+                    className="checkbox checkbox-sm"
+                    type="checkbox"
+                    checked={currentIssueStatusList.some(
+                      ({ key }) => key === issue.key,
+                    )}
+                    onChange={(e) =>
+                      e.currentTarget.checked
+                        ? setCurrentIssueStatusList((prev) => [...prev, issue])
+                        : setCurrentIssueStatusList((prev) =>
+                            prev.filter((v) => v.key !== issue.key),
+                          )
+                    }
+                  />
+                  <p className="font-12-regular flex-1">{issue.name}</p>
+                </label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      }
     />
   );
 };

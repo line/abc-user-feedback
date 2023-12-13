@@ -13,8 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
-import dayjs from 'dayjs';
 
 import ChartContainer from './ChartContainer';
 import LineChart from './LineChart';
@@ -23,71 +21,32 @@ interface IProps {
   title: string;
   description?: string;
   height?: number;
-  data: {
-    color: string;
-    name: string;
-    data: { date: string; count: number }[];
-  }[];
-  from: Date;
-  to: Date;
+  data: any[];
+  dataKeys: { color: string; name: string }[];
   showLegend?: boolean;
-  showFilter?: boolean;
+  filterContent?: React.ReactNode;
 }
 
 const SimpleLineChart: React.FC<IProps> = (props) => {
-  const { title, description, height, data, from, to, showLegend, showFilter } =
-    props;
-
-  const dataKeys = useMemo(() => data, [data]);
-
-  const [checkedList, setCheckedList] = useState<string[]>([]);
-
-  useEffect(() => {
-    setCheckedList(dataKeys.map((v) => v.name));
-  }, [dataKeys]);
-
-  const newData = useMemo(() => {
-    if (!data) return [];
-
-    const result = [];
-    let currentDate = dayjs(from).startOf('day');
-    const endDate = dayjs(to).endOf('day');
-    while (currentDate.isBefore(endDate)) {
-      let total = 0;
-
-      const channelData = data.reduce(
-        (acc, cur) => {
-          if (!checkedList.includes(cur.name)) return acc;
-          const count =
-            cur.data.find((v) => v.date === currentDate.format('YYYY-MM-DD'))
-              ?.count ?? 0;
-          total += count;
-          return { ...acc, [cur.name]: count };
-        },
-        { date: currentDate.format('YYYY-MM-DD') },
-      );
-
-      result.push({ ...channelData, total });
-      currentDate = currentDate.add(1, 'day');
-    }
-    return result;
-  }, [data, checkedList]);
+  const {
+    title,
+    description,
+    height,
+    data,
+    dataKeys,
+    showLegend,
+    filterContent,
+  } = props;
 
   return (
     <ChartContainer
       dataKeys={dataKeys}
       description={description}
       title={title}
-      chedkedList={checkedList}
-      onChecked={(name, checked) =>
-        checked
-          ? setCheckedList([...checkedList, name])
-          : setCheckedList(checkedList.filter((v) => v !== name))
-      }
       showLegend={showLegend}
-      showFilter={showFilter}
+      filterContent={filterContent}
     >
-      <LineChart data={newData} dataKeys={dataKeys} height={height} />
+      <LineChart data={data} dataKeys={dataKeys} height={height} />
     </ChartContainer>
   );
 };
