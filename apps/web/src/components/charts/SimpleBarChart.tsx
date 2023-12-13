@@ -30,17 +30,15 @@ interface IProps {
   height?: number;
   data: { name: string; value: number }[];
   showLegend?: boolean;
-  showFilter?: boolean;
 }
 
 const SimpleBarChart: React.FC<IProps> = (props) => {
-  const { data, title, description, height, showLegend, showFilter } = props;
+  const { data, title, description, height, showLegend } = props;
   return (
     <ChartContainer
       description={description}
       title={title}
       showLegend={showLegend}
-      showFilter={showFilter}
     >
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
         <BarChart
