@@ -115,7 +115,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           />
         </div>
       </div>
-      <CardSlider cardLength={11}>
+      <CardSlider>
         <TotalFeedbackCard
           projectId={projectId}
           from={dateRange.startDate}
@@ -177,26 +177,21 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-interface ICardSliderProps extends React.PropsWithChildren {
-  cardLength: number;
-}
+interface ICardSliderProps extends React.PropsWithChildren {}
 
 const CardSlider: React.FC<ICardSliderProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [showButton, setShowButton] = useState(false);
+  const [showRightButton, setShowRightButton] = useState(false);
+  const [showLeftButton, setShowLeftButton] = useState(false);
+
   useLayoutEffect(() => {
     if (!containerRef.current) return;
     const observer = new ResizeObserver(([entry]) => {
       if (!entry) return;
-      const { height, width } = entry.contentRect;
-      console.log('width: ', width);
-      const count = Math.floor(width / 226);
-      console.log('count: ', count);
-      setShowButton(height > 220);
+      const { width } = entry.contentRect;
+      setShowRightButton(width < 1380);
     });
-
-    // 2. 감지할 요소 추가하기
     observer.observe(containerRef.current);
     return () => {
       if (!containerRef.current) return;
@@ -204,34 +199,39 @@ const CardSlider: React.FC<ICardSliderProps> = ({ children }) => {
     };
   }, [containerRef.current]);
 
-  const scroll = (scrollOffset: number) => {
+  const scrollLeft = () => {
     if (!containerRef.current) return;
-    containerRef.current.scrollTo({ left: scrollOffset, behavior: 'smooth' });
+    setShowLeftButton(false);
+    setShowRightButton(true);
+    containerRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+  };
+  const scrollRight = () => {
+    if (!containerRef.current) return;
+    setShowLeftButton(true);
+    setShowRightButton(false);
+    containerRef.current.scrollTo({ left: 1380, behavior: 'smooth' });
   };
 
   return (
-    <div className="relative max-h-[220px] overflow-hidden">
-      <div
-        className="scrollbar-hide flex flex-wrap gap-3 overflow-x-auto"
-        ref={containerRef}
-      >
-        {children}
+    <div className="relative">
+      <div className="scrollbar-hide overflow-auto" ref={containerRef}>
+        <div className="flex min-w-[1380px] flex-wrap gap-3">{children}</div>
       </div>
-      {showButton && (
-        <>
-          <button
-            onClick={() => scroll(220)}
-            className="icon-btn icon-btn-secondary icon-btn-md icon-btn-rounded absolute-y-center absolute right-0"
-          >
-            <Icon name="ArrowRight" />
-          </button>
-          <button
-            onClick={() => scroll(-220)}
-            className="icon-btn icon-btn-secondary icon-btn-md icon-btn-rounded absolute-y-center absolute left-0"
-          >
-            <Icon name="ArrowLeft" />
-          </button>
-        </>
+      {showRightButton && (
+        <button
+          onClick={scrollRight}
+          className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center absolute right-0"
+        >
+          <Icon name="ArrowRight" />
+        </button>
+      )}
+      {showLeftButton && (
+        <button
+          onClick={scrollLeft}
+          className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center absolute left-0"
+        >
+          <Icon name="ArrowLeft" />
+        </button>
       )}
     </div>
   );
