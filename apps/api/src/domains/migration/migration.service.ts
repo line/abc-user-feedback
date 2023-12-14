@@ -16,7 +16,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import { Repository } from 'typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
@@ -62,8 +62,12 @@ export class MigrationService {
         id: feedback.id,
         ...feedback.rawData,
         ...feedback.additionalData,
-        createdAt: dayjs(feedback.createdAt).format('YYYY-MM-DD HH:mm:ssZ'),
-        updatedAt: dayjs(feedback.updatedAt).format('YYYY-MM-DD HH:mm:ssZ'),
+        createdAt: DateTime.fromJSDate(feedback.createdAt).toFormat(
+          'yyyy-MM-dd HH:mm:ssZZ',
+        ),
+        updatedAt: DateTime.fromJSDate(feedback.updatedAt).toFormat(
+          'yyyy-MM-dd HH:mm:ssZZ',
+        ),
       };
     });
     this.logger.log('documents.length: ' + documents.length);
