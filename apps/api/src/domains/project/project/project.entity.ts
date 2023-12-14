@@ -41,7 +41,7 @@ export class ProjectEntity extends CommonEntity {
   @Column('varchar', { nullable: true })
   description: string;
 
-  @Column('varchar')
+  @Column('varchar', { default: '+00:00' })
   timezoneOffset: TimezoneOffset;
 
   @OneToMany(() => ChannelEntity, (channel) => channel.project, {
