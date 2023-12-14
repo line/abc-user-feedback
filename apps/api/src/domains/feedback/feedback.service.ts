@@ -25,7 +25,6 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import dayjs from 'dayjs';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
 import { DateTime } from 'luxon';
@@ -521,7 +520,7 @@ export class FeedbackService {
       await this.feedbackOSService.upsertFeedbackItem({
         channelId: dto.channelId,
         feedbackId: dto.feedbackId,
-        data: { updatedAt: dayjs().toISOString() },
+        data: { updatedAt: DateTime.utc().toISO() },
       });
     }
   }
@@ -534,7 +533,7 @@ export class FeedbackService {
       await this.feedbackOSService.upsertFeedbackItem({
         channelId: dto.channelId,
         feedbackId: dto.feedbackId,
-        data: { updatedAt: dayjs().toISOString() },
+        data: { updatedAt: DateTime.utc().toISO() },
       });
     }
   }
