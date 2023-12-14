@@ -39,7 +39,9 @@
     "index": {
       "total-project": "Total Project",
       "total-channel": "Total Channel",
-      "total-feedback": "Total Feedback"
+      "total-feedback": "Total Feedback",
+      "create-project": "Create Project",
+      "no-project": "There are no registered projects."
     },
     "profile": {
       "title": "Profile",
@@ -118,7 +120,7 @@
         "member-mgmt": "Member Management",
         "role-mgmt": "Role Management",
         "api-key-mgmt": "API Key Management",
-        "ticket-mgmt": "Issue Tracker Management",
+        "issue-tracker-mgmt": "Issue Tracker Management",
         "delete-project": "Delete Project",
         "channel-info": "Channel Information",
         "field-mgmt": "Field Management",
@@ -127,7 +129,8 @@
       "button": {
         "create-project": "Create Project",
         "create-channel": "Create Channel",
-        "create-api-key": "Create Key"
+        "create-api-key": "Create Key",
+        "register-member": "Register Member"
       },
       "sign-up-mgmt": {
         "ufb-login": "UFB Login",
@@ -141,6 +144,7 @@
       },
       "role-mgmt": {
         "edit-role": "Edit Role",
+        "update-role-name": "Update Role Name",
         "delete-role": "Delete Role"
       },
       "api-key-status": {
@@ -151,9 +155,10 @@
         "active": "Active",
         "inactive": "Inactive"
       },
+      "register-member": "Please register a member.",
       "same-key": "Input the same value as the key",
       "feedback-request-code": "Feedback Request Code",
-      "ticket-mgmt.description": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
+      "issue-tracker-mgmt.description": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
       "option-info": "Option Information",
       "field-mgmt": {
         "description": "To save, click Preview first.",
@@ -173,7 +178,11 @@
         },
         "create-role": {
           "title": "Create Role",
-          "description": "Do you want to create a Role?"
+          "description": "Please enter a new Role Name."
+        },
+        "update-role-name": {
+          "title": "Update Role Name",
+          "description": "Please enter Role Name."
         },
         "edit-api-key": {
           "title": "Edit API KEY",
@@ -185,7 +194,7 @@
         },
         "delete-role": {
           "title": "Delete Role",
-          "description": "Are you sure you want to delete the Role?"
+          "description": "Are you sure you want to delete Role?\nMembers with that Role will also disappear."
         },
         "edit-member": {
           "title": "Edit Member",
@@ -199,6 +208,42 @@
         "add-field": { "title": "Add Field" },
         "edit-field": { "title": "Edit Field" },
         "invite-user": { "title": "Invite User" }
+      }
+    },
+    "create-project": {
+      "title": "Create Project",
+      "complete-title": "Project creation is complete.",
+      "help": {
+        "projectInfo": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
+        "roles": "You can set permissions to access and use the Project.",
+        "members": "You can register or manage members to participate in the Project.",
+        "apiKeys": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
+        "issueTracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information."
+      },
+      "error-member": "User information that does not currently exist.",
+      "continue-channel-creation": "UserFeedback must be created up to the Channel before UserFeedback is available.\nWould you like to continue creating a channel?",
+      "guide": {
+        "invalid-member": "Invalid Member List exists.",
+        "invalid-role": "Invalid Role information exists.",
+        "invalid-project": "Invalid Project information exists."
+      }
+    },
+    "create-channel": {
+      "title": "Create Channel",
+      "complete-title": "Channel creation is complete.",
+      "help": {
+        "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
+        "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
+        "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
+      },
+      "stepper-text": {
+        "channel-info": "Channel Infomation",
+        "fields": "Field Management",
+        "field-preview": "Field Preview"
+      },
+      "finish-channel-creation": "Everything is ready.\nStart Using UserFeedback!",
+      "guide": {
+        "invalid-channel": "Invalid Channel information exists."
       }
     }
   },
@@ -218,7 +263,13 @@
     "register": "Register",
     "select-cancel": "Cancel",
     "reset": "Reset",
-    "confirm": "OK"
+    "confirm": "OK",
+    "get-out": "Get out",
+    "previous": "Previous",
+    "next": "Next",
+    "complete": "Complete",
+    "next-time": "Next time",
+    "start": "Start"
   },
   "input": {
     "label": {
@@ -256,8 +307,15 @@
     },
     "equal-search": "Equal",
     "like-search": "Like",
+    "helper": "Help",
+    "warning-get-out": "Will you leave the process of creating a {{type}}?\nEven if you leave, you can proceed later.",
+    "no-channel": "There is no registered channel.",
+    "guide": "Guide",
     "more": "more",
-    "shrink": "shrink"
+    "shrink": "shrink",
+    "feedback-detail": "Feedback Detail",
+    "create-channel-in-progress": "There is a Channel being created.",
+    "create-project-in-progress": "There is a Project being created."
   },
   "toast": {
     "sign-in": "Login Successful",
@@ -269,5 +327,22 @@
     "inactive": "Deactivation",
     "add": "Addition Complete",
     "copy": "Copy Complete"
+  },
+  "placeholder": "Please enter {{name}}.",
+  "hint": {
+    "required": "Required",
+    "max-length": "Please enter {{length}} characters or less.",
+    "name-already-exists": "{{name}} already exists.",
+    "invalid-domain": "Not in domain format."
+  },
+  "dialog": {
+    "continue": {
+      "title": "Do you want to continue?",
+      "description": "There is a {{type}} currently being created. Do you want to continue? (If you do it from scratch, the existing information disappears.)",
+      "button": {
+        "continue": "Continue",
+        "restart": "Restart"
+      }
+    }
   }
 }

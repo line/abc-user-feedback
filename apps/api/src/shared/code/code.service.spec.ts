@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import MockDate from 'mockdate';
 import type { Repository } from 'typeorm';
 
@@ -140,7 +140,7 @@ describe('CodeService', () => {
       codeEntity.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
       codeEntity.isVerified = false;
       codeEntity.id = faker.number.int();
-      codeEntity.expiredAt = dayjs().add(5, 'minutes').toDate();
+      codeEntity.expiredAt = DateTime.utc().plus({ minutes: 5 }).toJSDate();
     });
     it('verify code with valid code, key, type', async () => {
       const { code, type } = codeEntity;

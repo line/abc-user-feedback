@@ -86,7 +86,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
           <PopoverModalContent
             title={t('main.setting.dialog.delete-channel.title')}
             description={t('main.setting.dialog.delete-channel.description')}
-            cancelText={t('button.cancel')}
+            cancelButton={{ children: t('button.cancel') }}
             icon={{
               name: 'WarningTriangleFill',
               className: 'text-red-primary',

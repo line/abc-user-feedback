@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CodeModule } from '@/shared/code/code.module';
@@ -28,10 +28,10 @@ import { UserService } from './user.service';
 
 @Module({
   imports: [
-    TenantModule,
-    MailingModule,
-    CodeModule,
-    MemberModule,
+    forwardRef(() => TenantModule),
+    forwardRef(() => MailingModule),
+    forwardRef(() => CodeModule),
+    forwardRef(() => MemberModule),
     TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [UserService, CreateUserService, UserPasswordService],

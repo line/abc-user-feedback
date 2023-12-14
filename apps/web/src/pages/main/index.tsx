@@ -20,16 +20,18 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { MainTemplate } from '@/components';
+import { CreateProjectButton, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIQuery, useProjects, useTenant } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
 import type { NextPageWithLayout } from '../_app';
 
+const CARD_BORDER_CSS =
+  'border-fill-tertiary h-[204px] w-[452px] rounded border';
+
 const MainIndexPage: NextPageWithLayout = () => {
   const { tenant } = useTenant();
-
   const { data } = useProjects();
 
   return (
@@ -41,6 +43,14 @@ const MainIndexPage: NextPageWithLayout = () => {
       <h1 className="font-20-bold my-6 mb-4">Project</h1>
       <ul className="flex flex-wrap gap-2">
         {data?.items.map(({ id }) => <ProjectList key={id} projectId={id} />)}
+        <div
+          className={[
+            CARD_BORDER_CSS,
+            'flex flex-col items-center justify-center',
+          ].join(' ')}
+        >
+          <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
+        </div>
       </ul>
     </div>
   );
@@ -77,10 +87,12 @@ const ProjectList: React.FC<{ projectId: number }> = ({ projectId }) => {
     path: '/api/projects/{projectId}/feedback-count',
     variables: { projectId },
   });
+
   const { data: channels } = useOAIQuery({
     path: '/api/projects/{projectId}/channels',
     variables: { projectId, limit: 1000 },
   });
+
   return (
     <CardItem
       type="project"
@@ -116,7 +128,8 @@ const CardItem: React.FC<IProps> = ({
   return (
     <li
       className={[
-        'border-fill-tertiary rounded border p-8',
+        CARD_BORDER_CSS,
+        'p-8',
         type === 'project' ? 'hover:cursor-pointer hover:opacity-50' : '',
       ].join(' ')}
       onClick={onClick}
@@ -134,9 +147,9 @@ const CardItem: React.FC<IProps> = ({
             size={20}
           />
         </div>
-        <div>
+        <div className="flex-1">
           <p className="font-16-bold mb-1">{name}</p>
-          <p className="font-12-regular text-secondary w-[250px] break-words">
+          <p className="font-12-regular text-secondary line-clamp-1 break-all">
             {getDescriptionStr(description)}
           </p>
         </div>

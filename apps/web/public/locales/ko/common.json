@@ -39,7 +39,9 @@
     "index": {
       "total-project": "전체 Project 수",
       "total-channel": "전체 Channel 수",
-      "total-feedback": "전체 피드백 수"
+      "total-feedback": "전체 피드백 수",
+      "create-project": "Project 생성",
+      "no-project": "등록된 프로젝트가 없습니다."
     },
     "profile": {
       "title": "프로필",
@@ -118,7 +120,7 @@
         "member-mgmt": "Member 관리",
         "role-mgmt": "Role 관리",
         "api-key-mgmt": "API Key 관리",
-        "ticket-mgmt": "Issue Tracker 관리",
+        "issue-tracker-mgmt": "Issue Tracker 관리",
         "delete-project": "Project 삭제",
         "channel-info": "Channel 정보",
         "field-mgmt": "Field 관리",
@@ -127,7 +129,8 @@
       "button": {
         "create-project": "Project 생성",
         "create-channel": "Channel 생성",
-        "create-api-key": "Key 생성"
+        "create-api-key": "Key 생성",
+        "register-member": "Member 등록"
       },
       "sign-up-mgmt": {
         "ufb-login": "UFB 로그인",
@@ -141,6 +144,7 @@
       },
       "role-mgmt": {
         "edit-role": "Role 수정",
+        "update-role-name": "Role 수정",
         "delete-role": "Role 삭제"
       },
       "api-key-status": {
@@ -151,9 +155,10 @@
         "active": "활성",
         "inactive": "비활성"
       },
+      "register-member": "Member를 등록해주세요.",
       "same-key": "Key 정보와 동일하게 입력",
       "feedback-request-code": "피드백 요청 코드",
-      "ticket-mgmt.description": "UserFeedback Issue와 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. \n 사용중인 Issue Tracking System URL을 입력해주세요.",
+      "issue-tracker-mgmt.description": "UserFeedback Issue와 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. \n 사용중인 Issue Tracking System URL을 입력해주세요.",
       "option-info": "옵션 정보",
       "field-mgmt": {
         "description": "저장을 하려면 미리보기를 먼저 눌러주세요.",
@@ -173,7 +178,11 @@
         },
         "create-role": {
           "title": "Role 생성",
-          "description": "신규 Role의 명칭을 입력해주세요."
+          "description": "신규 Role Name을 입력해주세요."
+        },
+        "update-role-name": {
+          "title": "Role Name 수정",
+          "description": "Role의 Name을 수정해주세요."
         },
         "edit-api-key": {
           "title": "API KEY 편집",
@@ -185,7 +194,7 @@
         },
         "delete-role": {
           "title": "Role 삭제",
-          "description": "Role을 삭제하시겠습니까?"
+          "description": "Role을 삭제하시겠어요?\n해당 Role을 가진 Member도 같이 없어집니다."
         },
         "edit-member": {
           "title": "Member 편집",
@@ -199,6 +208,42 @@
         "add-field": { "title": "Field 추가" },
         "edit-field": { "title": "Field 수정" },
         "invite-user": { "title": "User 초대" }
+      }
+    },
+    "create-project": {
+      "title": "Project 생성",
+      "complete-title": "Project 생성이 완료되었습니다.",
+      "help": {
+        "projectInfo": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
+        "roles": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
+        "members": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
+        "apiKeys": "피드백 수집 API의 API Key 정보를 관리합니다. API를 활용해 피드백을 수집한다면 Key 정보를 생성해 주세요.",
+        "issueTracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다. 사용 중인 Issue Tracking System 정보를 입력해 주세요."
+      },
+      "error-member": "현재 존재하지 않는 User 정보 입니다.",
+      "continue-channel-creation": "Channel까지 생성해야 UserFeedback을 사용할 수 있습니다.\nChannel 생성을 이어서 하시겠어요?",
+      "guide": {
+        "invalid-member": "유효하지 않은 Member 목록이 존재합니다.",
+        "invalid-role": "유효하지 않는 Role 정보가 존재합니다.",
+        "invalid-project": "유효하지 않는 Project 정보가 존재합니다."
+      }
+    },
+    "create-channel": {
+      "title": "Channel 생성",
+      "complete-title": "Channel 생성이 완료되었습니다.",
+      "help": {
+        "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
+        "fields": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
+        "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다."
+      },
+      "stepper-text": {
+        "channel-info": "Channel 정보",
+        "fields": "Field 관리",
+        "field-preview": "Field 미리보기"
+      },
+      "finish-channel-creation": "모든 준비가 완료됐습니다.\nUserFeedback 이용을 시작해보세요!",
+      "guide": {
+        "invalid-channel": "유효하지 않은 Project 정보가 존재합니다."
       }
     }
   },
@@ -218,7 +263,13 @@
     "register": "등록",
     "select-cancel": "선택 취소",
     "reset": "초기화",
-    "confirm": "확인"
+    "confirm": "확인",
+    "get-out": "나가기",
+    "previous": "이전",
+    "next": "다음",
+    "complete": "완료",
+    "next-time": "다음에",
+    "start": "시작하기"
   },
   "input": {
     "label": {
@@ -256,8 +307,15 @@
     },
     "equal-search": "완전 일치",
     "like-search": "부분 일치",
+    "helper": "도움말",
+    "warning-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.",
+    "no-channel": "등록된 Channel이 없습니다.",
+    "guide": "안내",
     "more": "더보기",
-    "shrink": "줄이기"
+    "shrink": "줄이기",
+    "feedback-detail": "피드백 상세",
+    "create-channel-in-progress": "생성중인 Channel이 있습니다.",
+    "create-project-in-progress": "생성중인 Project가 있습니다."
   },
   "toast": {
     "sign-in": "로그인 성공",
@@ -269,5 +327,22 @@
     "inactive": "비활성화",
     "add": "추가 완료",
     "copy": "복사 완료"
+  },
+  "placeholder": "{{name}}을 입력해주세요.",
+  "hint": {
+    "required": "필수 입력 대상입니다.",
+    "max-length": "{{length}}자 이하로 입력해주세요.",
+    "name-already-exists": "이미 존재하는 {{name}}입니다.",
+    "invalid-domain": "도메인 형식이 아닙니다."
+  },
+  "dialog": {
+    "continue": {
+      "title": "이어서 생성하시겠어요?",
+      "description": "현재 생성중인 {{type}} 있습니다. 이어서 생성하시겠어요? (처음부터 하면 기존 정보는 사라집니다.)",
+      "button": {
+        "continue": "이어서하기",
+        "restart": "처음부터"
+      }
+    }
   }
 }

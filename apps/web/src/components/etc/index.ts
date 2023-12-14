@@ -29,4 +29,10 @@ export { default as IssueCircle } from './IssueCircle';
 export { default as OAuthLoginButton } from './OAuthLoginButton';
 
 export { default as SelectBox } from './SelectBox';
+export { default as CreateProjectButton } from './CreateProjectButton';
+export { default as NoChannel } from './NoChannel';
+
+export { default as DescriptionTooltip } from './DescriptionTooltip';
 export { default as Popper } from './Popper';
+
+export { default as CreateChannelButton } from './CreateChannelButton';

@@ -3,173 +3,210 @@
  * Do not make direct changes to the file.
  */
 
+
 export interface paths {
-  '/api/metrics': {
-    get: operations['PrometheusController_index'];
+  "/api/metrics": {
+    get: operations["PrometheusController_index"];
   };
-  '/api/auth/email/code': {
-    post: operations['AuthController_sendCode'];
+  "/api/auth/email/code": {
+    post: operations["AuthController_sendCode"];
   };
-  '/api/auth/email/code/verify': {
-    post: operations['AuthController_verifyEmailCode'];
+  "/api/auth/email/code/verify": {
+    post: operations["AuthController_verifyEmailCode"];
   };
-  '/api/auth/signUp/email': {
-    post: operations['AuthController_signUpEmailUser'];
+  "/api/auth/signUp/email": {
+    post: operations["AuthController_signUpEmailUser"];
   };
-  '/api/auth/signUp/invitation': {
-    post: operations['AuthController_signUpInvitationUser'];
+  "/api/auth/signUp/invitation": {
+    post: operations["AuthController_signUpInvitationUser"];
   };
-  '/api/auth/signUp/oauth': {
-    post: operations['AuthController_signUpOAuthUser'];
+  "/api/auth/signUp/oauth": {
+    post: operations["AuthController_signUpOAuthUser"];
   };
-  '/api/auth/signIn/email': {
-    post: operations['AuthController_signInEmail'];
+  "/api/auth/signIn/email": {
+    post: operations["AuthController_signInEmail"];
   };
-  '/api/auth/signIn/oauth/loginURL': {
-    get: operations['AuthController_redirectToLoginURL'];
+  "/api/auth/signIn/oauth/loginURL": {
+    get: operations["AuthController_redirectToLoginURL"];
   };
-  '/api/auth/signIn/oauth': {
-    get: operations['AuthController_handleCallback'];
+  "/api/auth/signIn/oauth": {
+    get: operations["AuthController_handleCallback"];
   };
-  '/api/auth/refresh': {
-    get: operations['AuthController_refreshToken'];
+  "/api/auth/refresh": {
+    get: operations["AuthController_refreshToken"];
   };
-  '/api/users': {
-    get: operations['UserController_getAllUsers'];
-    delete: operations['UserController_deleteUsers'];
+  "/api/users": {
+    get: operations["UserController_getAllUsers"];
+    delete: operations["UserController_deleteUsers"];
   };
-  '/api/users/search': {
-    post: operations['UserController_searchUsers'];
+  "/api/users/search": {
+    post: operations["UserController_searchUsers"];
   };
-  '/api/users/{id}': {
-    get: operations['UserController_getUser'];
-    put: operations['UserController_updateUser'];
-    delete: operations['UserController_deleteUser'];
+  "/api/users/{id}": {
+    get: operations["UserController_getUser"];
+    put: operations["UserController_updateUser"];
+    delete: operations["UserController_deleteUser"];
   };
-  '/api/users/{userId}/roles': {
-    get: operations['UserController_getRoles'];
+  "/api/users/{userId}/roles": {
+    get: operations["UserController_getRoles"];
   };
-  '/api/users/invite': {
-    post: operations['UserController_inviteUser'];
+  "/api/users/invite": {
+    post: operations["UserController_inviteUser"];
   };
-  '/api/users/password/reset/code': {
-    post: operations['UserController_requestResetPassword'];
+  "/api/users/password/reset/code": {
+    post: operations["UserController_requestResetPassword"];
   };
-  '/api/users/password/reset': {
-    post: operations['UserController_resetPassword'];
+  "/api/users/password/reset": {
+    post: operations["UserController_resetPassword"];
   };
-  '/api/users/password/change': {
-    post: operations['UserController_changePassword'];
+  "/api/users/password/change": {
+    post: operations["UserController_changePassword"];
   };
-  '/api/tenants': {
-    get: operations['TenantController_get'];
-    put: operations['TenantController_update'];
-    post: operations['TenantController_setup'];
+  "/api/tenants": {
+    get: operations["TenantController_get"];
+    put: operations["TenantController_update"];
+    post: operations["TenantController_setup"];
   };
-  '/api/tenants/{tenantId}/feedback-count': {
-    get: operations['TenantController_countFeedbacks'];
+  "/api/tenants/{tenantId}/feedback-count": {
+    get: operations["TenantController_countFeedbacks"];
   };
-  '/api/projects/{projectId}/roles': {
-    get: operations['RoleController_getAllRolesByProjectId'];
-    post: operations['RoleController_createRole'];
+  "/api/projects/{projectId}/roles": {
+    get: operations["RoleController_getAllRolesByProjectId"];
+    post: operations["RoleController_createRole"];
   };
-  '/api/projects/{projectId}/roles/{roleId}': {
-    put: operations['RoleController_updateRole'];
-    delete: operations['RoleController_deleteRole'];
+  "/api/projects/{projectId}/roles/{roleId}": {
+    put: operations["RoleController_updateRole"];
+    delete: operations["RoleController_deleteRole"];
   };
-  '/api/projects/{projectId}/members': {
-    get: operations['MemberController_getAllRolesByProjectId'];
-    post: operations['MemberController_create'];
+  "/api/projects/{projectId}/members": {
+    get: operations["MemberController_getAllRolesByProjectId"];
+    post: operations["MemberController_create"];
   };
-  '/api/projects/{projectId}/members/{memberId}': {
-    put: operations['MemberController_update'];
-    delete: operations['MemberController_delete'];
+  "/api/projects/{projectId}/members/{memberId}": {
+    put: operations["MemberController_update"];
+    delete: operations["MemberController_delete"];
   };
-  '/api/projects/{projectId}/api-keys': {
-    get: operations['ApiKeyController_findAll'];
-    post: operations['ApiKeyController_create'];
+  "/api/projects/{projectId}/api-keys": {
+    get: operations["ApiKeyController_findAll"];
+    post: operations["ApiKeyController_create"];
   };
-  '/api/projects/{projectId}/api-keys/{apiKeyId}/soft': {
-    delete: operations['ApiKeyController_softDelete'];
+  "/api/projects/{projectId}/api-keys/{apiKeyId}/soft": {
+    delete: operations["ApiKeyController_softDelete"];
   };
-  '/api/projects/{projectId}/api-keys/{apiKeyId}/recover': {
-    delete: operations['ApiKeyController_recover'];
+  "/api/projects/{projectId}/api-keys/{apiKeyId}/recover": {
+    delete: operations["ApiKeyController_recover"];
   };
-  '/api/projects/{projectId}/api-keys/{apiKeyId}': {
-    delete: operations['ApiKeyController_delete'];
+  "/api/projects/{projectId}/api-keys/{apiKeyId}": {
+    delete: operations["ApiKeyController_delete"];
   };
-  '/api/projects': {
-    get: operations['ProjectController_findAll'];
-    post: operations['ProjectController_create'];
+  "/api/projects/{projectId}/channels": {
+    get: operations["ChannelController_findAllByProjectId"];
+    post: operations["ChannelController_create"];
   };
-  '/api/projects/{projectId}': {
-    get: operations['ProjectController_findOne'];
-    put: operations['ProjectController_updateOne'];
-    delete: operations['ProjectController_delete'];
+  "/api/projects/{projectId}/channels/name-check": {
+    get: operations["ChannelController_checkName"];
   };
-  '/api/projects/{projectId}/feedback-count': {
-    get: operations['ProjectController_countFeedbacks'];
+  "/api/projects/{projectId}/channels/{channelId}": {
+    get: operations["ChannelController_findOne"];
+    delete: operations["ChannelController_delete"];
   };
-  '/api/projects/{projectId}/issue-count': {
-    get: operations['ProjectController_countIssues'];
+  "/api/projects/{projectId}/channels/channels/{channelId}": {
+    put: operations["ChannelController_updateOne"];
   };
-  '/api/projects/{projectId}/channels': {
-    get: operations['ChannelController_findAllByProjectId'];
-    post: operations['ChannelController_create'];
+  "/api/projects/{projectId}/channels/channels/{channelId}/fields": {
+    put: operations["ChannelController_updateFields"];
   };
-  '/api/projects/{projectId}/channels/{channelId}': {
-    get: operations['ChannelController_findOne'];
-    delete: operations['ChannelController_delete'];
+  "/api/field/{fieldId}/options": {
+    get: operations["OptionController_getOptions"];
+    post: operations["OptionController_createOption"];
   };
-  '/api/projects/{projectId}/channels/channels/{channelId}': {
-    put: operations['ChannelController_updateOne'];
+  "/api/projects": {
+    get: operations["ProjectController_findAll"];
+    post: operations["ProjectController_create"];
   };
-  '/api/projects/{projectId}/channels/channels/{channelId}/fields': {
-    put: operations['ChannelController_updateFields'];
+  "/api/projects/name-check": {
+    get: operations["ProjectController_checkName"];
   };
-  '/api/field/{fieldId}/options': {
-    get: operations['OptionController_getOptions'];
-    post: operations['OptionController_createOption'];
+  "/api/projects/{projectId}": {
+    get: operations["ProjectController_findOne"];
+    put: operations["ProjectController_updateOne"];
+    delete: operations["ProjectController_delete"];
   };
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks': {
-    post: operations['FeedbackController_create'];
-    delete: operations['FeedbackController_deleteMany'];
+  "/api/projects/{projectId}/feedback-count": {
+    get: operations["ProjectController_countFeedbacks"];
   };
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/search': {
-    post: operations['FeedbackController_findByChannelId'];
+  "/api/projects/{projectId}/issue-count": {
+    get: operations["ProjectController_countIssues"];
   };
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}': {
-    post: operations['FeedbackController_addIssue'];
-    delete: operations['FeedbackController_removeIssue'];
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks": {
+    post: operations["FeedbackController_create"];
+    delete: operations["FeedbackController_deleteMany"];
   };
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/export': {
-    post: operations['FeedbackController_exportFeedbacks'];
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+    post: operations["FeedbackController_findByChannelId"];
   };
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}': {
-    put: operations['FeedbackController_updateFeedback'];
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+    post: operations["FeedbackController_addIssue"];
+    delete: operations["FeedbackController_removeIssue"];
   };
-  '/api/projects/{projectId}/issues': {
-    post: operations['IssueController_create'];
-    delete: operations['IssueController_deleteMany'];
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/export": {
+    post: operations["FeedbackController_exportFeedbacks"];
   };
-  '/api/projects/{projectId}/issues/{issueId}': {
-    get: operations['IssueController_findById'];
-    put: operations['IssueController_update'];
-    delete: operations['IssueController_delete'];
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+    put: operations["FeedbackController_updateFeedback"];
   };
-  '/api/projects/{projectId}/issues/search': {
-    post: operations['IssueController_findAllByProjectId'];
+  "/api/projects/{projectId}/issues": {
+    post: operations["IssueController_create"];
+    delete: operations["IssueController_deleteMany"];
   };
-  '/api/health': {
-    get: operations['HealthController_check'];
+  "/api/projects/{projectId}/issues/{issueId}": {
+    get: operations["IssueController_findById"];
+    put: operations["IssueController_update"];
+    delete: operations["IssueController_delete"];
   };
-  '/api/channels/{channelId}/migration': {
-    post: operations['MigrationController_migrate'];
+  "/api/projects/{projectId}/issues/search": {
+    post: operations["IssueController_findAllByProjectId"];
   };
-  '/api/projects/{projectId}/issue-tracker': {
-    get: operations['IssueTrackerController_findOne'];
-    put: operations['IssueTrackerController_updateOne'];
-    post: operations['IssueTrackerController_create'];
+  "/api/statistics/issue/count": {
+    get: operations["IssueStatisticsController_getCount"];
+  };
+  "/api/statistics/issue/count-by-date": {
+    get: operations["IssueStatisticsController_getCountByDate"];
+  };
+  "/api/statistics/issue/count-by-status": {
+    get: operations["IssueStatisticsController_getCountByStatus"];
+  };
+  "/api/statistics/feedback": {
+    get: operations["FeedbackStatisticsController_getCountByDateByChannel"];
+  };
+  "/api/statistics/feedback/count": {
+    get: operations["FeedbackStatisticsController_getCount"];
+  };
+  "/api/statistics/feedback/issued-ratio": {
+    get: operations["FeedbackStatisticsController_getIssuedRatio"];
+  };
+  "/api/statistics/feedback-issue": {
+    get: operations["FeedbackIssueStatisticsController_getCountByDateByIssue"];
+  };
+  "/api/projects/{projectId}/issue-tracker": {
+    get: operations["IssueTrackerController_findOne"];
+    put: operations["IssueTrackerController_updateOne"];
+    post: operations["IssueTrackerController_create"];
+  };
+  "/api/health": {
+    get: operations["HealthController_check"];
+  };
+  "/api/migration/channels/{channelId}": {
+    post: operations["MigrationController_migrate"];
+  };
+  "/api/migration/statistics/feedback": {
+    post: operations["MigrationController_migrateFeedbackStatistics"];
+  };
+  "/api/migration/statistics/issue": {
+    post: operations["MigrationController_migrateIssueStatistics"];
+  };
+  "/api/migration/statistics/feedback-issue": {
+    post: operations["MigrationController_migrateFeedbackIssueStatistics"];
   };
 }
 
@@ -225,11 +262,11 @@ export interface components {
     };
     RoleDto: {
       name: string;
-      project: components['schemas']['ProjectDto'];
+      project: components["schemas"]["ProjectDto"];
     };
     MemberDto: {
       id: number;
-      role: components['schemas']['RoleDto'];
+      role: components["schemas"]["RoleDto"];
     };
     GetAllUserResponse: {
       id: number;
@@ -237,16 +274,16 @@ export interface components {
       name: string;
       department: string | null;
       /** @enum {string} */
-      type: 'SUPER' | 'GENERAL';
-      members: components['schemas']['MemberDto'][];
+      type: "SUPER" | "GENERAL";
+      members: components["schemas"]["MemberDto"][];
       /** Format: date-time */
       createdAt: string;
       /** @enum {string} */
-      signUpMethod: 'EMAIL' | 'OAUTH';
+      signUpMethod: "EMAIL" | "OAUTH";
     };
     GetAllUserResponseDto: {
-      meta: components['schemas']['PaginationMetaDto'];
-      items: components['schemas']['GetAllUserResponse'][];
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: components["schemas"]["GetAllUserResponse"][];
     };
     TimeRange: {
       gte: string;
@@ -257,21 +294,21 @@ export interface components {
       name?: string;
       department?: string;
       /** @enum {string} */
-      type?: 'SUPER' | 'GENERAL';
-      createdAt?: components['schemas']['TimeRange'];
+      type?: "SUPER" | "GENERAL";
+      createdAt?: components["schemas"]["TimeRange"];
       projectId?: number;
     };
     UserOrder: {
       /** @enum {string} */
-      createdAt: 'ASC' | 'DESC';
+      createdAt: "ASC" | "DESC";
     };
     GetAllUsersRequestDto: {
       /** @default 10 */
       limit?: number;
       /** @default 1 */
       page?: number;
-      query?: components['schemas']['UserSearchQuery'];
-      order?: components['schemas']['UserOrder'];
+      query?: components["schemas"]["UserSearchQuery"];
+      order?: components["schemas"]["UserOrder"];
     };
     DeleteUsersRequestDto: {
       ids: number[];
@@ -282,9 +319,9 @@ export interface components {
       name: string;
       department: string | null;
       /** @enum {string} */
-      type: 'SUPER' | 'GENERAL';
+      type: "SUPER" | "GENERAL";
       /** @enum {string} */
-      signUpMethod: 'EMAIL' | 'OAUTH';
+      signUpMethod: "EMAIL" | "OAUTH";
     };
     RoleProjectDto: {
       id: number;
@@ -300,55 +337,22 @@ export interface components {
       updatedAt: string;
       deletedAt: string;
       name: string;
-      permissions: (
-        | 'feedback_read'
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_read'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_read'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'channel_read'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-      )[];
-      project: components['schemas']['RoleProjectDto'];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      project: components["schemas"]["RoleProjectDto"];
     };
     GetRolesByIdResponseDto: {
-      roles: components['schemas']['RoleItemDto'][];
+      roles: components["schemas"]["RoleItemDto"][];
     };
     UpdateUserRequestDto: {
       name: string | null;
       department: string | null;
       /** @enum {string} */
-      type?: 'SUPER' | 'GENERAL';
+      type?: "SUPER" | "GENERAL";
     };
     UserInvitationRequestDto: {
       email: string;
       /** @enum {string} */
-      userType: 'SUPER' | 'GENERAL';
+      userType: "SUPER" | "GENERAL";
       roleId?: number;
     };
     ResetPasswordMailingRequestDto: {
@@ -383,7 +387,7 @@ export interface components {
       isRestrictDomain: boolean;
       allowDomains: string[] | null;
       useOAuth: boolean;
-      oauthConfig: components['schemas']['OAuthConfigRequestDto'] | null;
+      oauthConfig: components["schemas"]["OAuthConfigRequestDto"] | null;
     };
     OAuthConfigResponseDto: {
       oauthUse: boolean;
@@ -405,7 +409,7 @@ export interface components {
       isRestrictDomain: boolean;
       allowDomains: string[];
       useEmailVerification: boolean;
-      oauthConfig: components['schemas']['OAuthConfigResponseDto'] | null;
+      oauthConfig: components["schemas"]["OAuthConfigResponseDto"] | null;
     };
     CountFeedbacksByTenantIdResponseDto: {
       total: number;
@@ -413,118 +417,19 @@ export interface components {
     GetAllRoleResponseRoleDto: {
       id: number;
       name: string;
-      permissions: (
-        | 'feedback_read'
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_read'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_read'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'channel_read'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-      )[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
     };
     GetAllRoleResponseDto: {
-      roles: components['schemas']['GetAllRoleResponseRoleDto'][];
+      roles: components["schemas"]["GetAllRoleResponseRoleDto"][];
       total: number;
     };
     CreateRoleRequestDto: {
       name: string;
-      permissions: (
-        | 'feedback_read'
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_read'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_read'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'channel_read'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-      )[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
     };
     UpdateRoleRequestDto: {
       name: string;
-      permissions: (
-        | 'feedback_read'
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_read'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_read'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'channel_read'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-      )[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
     };
     MemberUserDto: {
       id: number;
@@ -535,50 +440,17 @@ export interface components {
     MemberRoleDto: {
       id: number;
       name: string;
-      permissions: (
-        | 'feedback_read'
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_read'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_read'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'channel_read'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-      )[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
     };
     GetAllMember: {
       id: number;
-      user: components['schemas']['MemberUserDto'];
-      role: components['schemas']['MemberRoleDto'];
+      user: components["schemas"]["MemberUserDto"];
+      role: components["schemas"]["MemberRoleDto"];
       /** Format: date-time */
       createdAt: string;
     };
     GetAllMemberResponseDto: {
-      members: components['schemas']['GetAllMember'][];
+      members: components["schemas"]["GetAllMember"][];
       total: number;
     };
     CreateMemberRequestDto: {
@@ -587,6 +459,9 @@ export interface components {
     };
     UpdateMemberRequestDto: {
       roleId: number;
+    };
+    CreateApiKeyRequestDto: {
+      value: string;
     };
     CreateApiKeyResponseDto: {
       id: number;
@@ -603,54 +478,14 @@ export interface components {
       deletedAt: string;
     };
     FindApiKeysResponseDto: {
-      items: components['schemas']['ApiKeyResponseDto'][];
-    };
-    CreateProjectRequestDto: {
-      name: string;
-      description: string | null;
-    };
-    CreateProjectResponseDto: {
-      id: number;
-    };
-    FindProjectByIdResponseDto: {
-      id: number;
-      name: string;
-      description: string;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
-    };
-    FindProjectsResponseDto: {
-      meta: components['schemas']['PaginationMetaDto'];
-      items: components['schemas']['FindProjectByIdResponseDto'][];
-    };
-    CountFeedbacksByIdResponseDto: {
-      total: number;
-    };
-    CountIssuesByIdResponseDto: {
-      total: number;
-    };
-    UpdateProjectRequestDto: {
-      name: string;
-      description: string | null;
-    };
-    UpdateProjectResponseDto: {
-      id: number;
+      items: components["schemas"]["ApiKeyResponseDto"][];
     };
     /** @enum {string} */
-    FieldFormatEnum:
-      | 'text'
-      | 'keyword'
-      | 'number'
-      | 'boolean'
-      | 'select'
-      | 'multiSelect'
-      | 'date';
+    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
     /** @enum {string} */
-    FieldTypeEnum: 'DEFAULT' | 'ADMIN' | 'API';
+    FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
-    FieldStatusEnum: 'ACTIVE' | 'INACTIVE';
+    FieldStatusEnum: "ACTIVE" | "INACTIVE";
     CreateChannelRequestFieldSelectOptionDto: {
       id?: number;
       name: string;
@@ -660,15 +495,15 @@ export interface components {
       name: string;
       key: string;
       description: string | null;
-      format: components['schemas']['FieldFormatEnum'];
-      type: components['schemas']['FieldTypeEnum'];
-      status: components['schemas']['FieldStatusEnum'];
-      options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
+      format: components["schemas"]["FieldFormatEnum"];
+      type: components["schemas"]["FieldTypeEnum"];
+      status: components["schemas"]["FieldStatusEnum"];
+      options?: components["schemas"]["CreateChannelRequestFieldSelectOptionDto"][];
     };
     CreateChannelRequestDto: {
       name: string;
       description: string | null;
-      fields: components['schemas']['CreateChannelRequestFieldDto'][];
+      fields: components["schemas"]["CreateChannelRequestFieldDto"][];
     };
     CreateChannelResponseDto: {
       id: number;
@@ -683,8 +518,8 @@ export interface components {
       updatedAt: string;
     };
     FindChannelsByProjectIdResponseDto: {
-      meta: components['schemas']['PaginationMetaDto'];
-      items: components['schemas']['FindChannelsByProjectDto'][];
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: components["schemas"]["FindChannelsByProjectDto"][];
     };
     FindFieldsResponseSelectOptionDto: {
       id: number;
@@ -694,18 +529,11 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format:
-        | 'text'
-        | 'keyword'
-        | 'number'
-        | 'boolean'
-        | 'select'
-        | 'multiSelect'
-        | 'date';
+      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
       /** @enum {string} */
-      type: 'DEFAULT' | 'ADMIN' | 'API';
+      type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */
-      status: 'ACTIVE' | 'INACTIVE';
+      status: "ACTIVE" | "INACTIVE";
       name: string;
       key: string;
       description: string | null;
@@ -713,7 +541,7 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
-      options: components['schemas']['FindFieldsResponseSelectOptionDto'][];
+      options: components["schemas"]["FindFieldsResponseSelectOptionDto"][];
     };
     FindChannelByIdResponseDto: {
       id: number;
@@ -723,7 +551,7 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
-      fields: components['schemas']['FindFieldsResponseDto'][];
+      fields: components["schemas"]["FindFieldsResponseDto"][];
     };
     UpdateChannelRequestDto: {
       name: string;
@@ -733,14 +561,14 @@ export interface components {
       name: string;
       key: string;
       description: string | null;
-      format: components['schemas']['FieldFormatEnum'];
-      type: components['schemas']['FieldTypeEnum'];
-      status: components['schemas']['FieldStatusEnum'];
-      options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
+      format: components["schemas"]["FieldFormatEnum"];
+      type: components["schemas"]["FieldTypeEnum"];
+      status: components["schemas"]["FieldStatusEnum"];
+      options?: components["schemas"]["CreateChannelRequestFieldSelectOptionDto"][];
       id?: number;
     };
     UpdateChannelFieldsRequestDto: {
-      fields: components['schemas']['UpdateChannelRequestFieldDto'][];
+      fields: components["schemas"]["UpdateChannelRequestFieldDto"][];
     };
     FindOptionByFieldIdResponseDto: {
       id: number;
@@ -754,6 +582,60 @@ export interface components {
     CreateOptionResponseDto: {
       id: number;
     };
+    CreateMemberByNameDto: {
+      roleName: string;
+      userId: number;
+    };
+    CreateApiKeyByValueDto: {
+      value: string;
+    };
+    CreateIssueTrackerRequestDto: {
+      data: Record<string, never>;
+    };
+    CreateProjectRequestDto: {
+      name: string;
+      description: string | null;
+      timezoneOffset: string;
+      roles?: components["schemas"]["CreateRoleRequestDto"][];
+      members?: components["schemas"]["CreateMemberByNameDto"][];
+      apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
+      issueTracker?: components["schemas"]["CreateIssueTrackerRequestDto"];
+    };
+    CreateProjectResponseDto: {
+      id: number;
+    };
+    FindProjectByIdResponseDto: {
+      id: number;
+      name: string;
+      description: string;
+      timezoneOffset: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    FindProjectsResponseDto: {
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: components["schemas"]["FindProjectByIdResponseDto"][];
+    };
+    CountFeedbacksByIdResponseDto: {
+      total: number;
+    };
+    CountIssuesByIdResponseDto: {
+      total: number;
+    };
+    UpdateProjectRequestDto: {
+      name: string;
+      description: string | null;
+      timezoneOffset: string;
+      roles?: components["schemas"]["CreateRoleRequestDto"][];
+      members?: components["schemas"]["CreateMemberByNameDto"][];
+      apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
+      issueTracker?: components["schemas"]["CreateIssueTrackerRequestDto"];
+    };
+    UpdateProjectResponseDto: {
+      id: number;
+    };
     FindFeedbacksByChannelIdRequestDto: {
       /** @default 10 */
       limit?: number;
@@ -764,8 +646,8 @@ export interface components {
     };
     Feedback: Record<string, never>;
     FindFeedbacksByChannelIdResponseDto: {
-      meta: components['schemas']['PaginationMetaDto'];
-      items: components['schemas']['Feedback'][];
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: components["schemas"]["Feedback"][];
     };
     AddIssueResponseDto: {
       issueId: number;
@@ -778,7 +660,8 @@ export interface components {
       page?: number;
       query?: Record<string, never>;
       sort?: Record<string, never>;
-      type?: string;
+      type: string;
+      fieldIds?: number[];
     };
     DeleteFeedbacksRequestDto: {
       feedbackIds: number[];
@@ -810,8 +693,8 @@ export interface components {
       sort?: Record<string, never>;
     };
     FindIssuesByProjectIdResponseDto: {
-      meta: components['schemas']['PaginationMetaDto'];
-      items: components['schemas']['FindIssueByIdResponseDto'][];
+      meta: components["schemas"]["PaginationMetaDto"];
+      items: components["schemas"]["FindIssueByIdResponseDto"][];
     };
     UpdateIssueRequestDto: {
       name: string;
@@ -822,8 +705,23 @@ export interface components {
     DeleteIssuesRequestDto: {
       issueIds: number[];
     };
-    CreateIssueTrackerRequestDto: {
-      data: Record<string, never>;
+    FindCountResponseDto: {
+      count: number;
+    };
+    FindCountByDateResponseDto: {
+      statistics: string[];
+    };
+    FindCountByStatusResponseDto: {
+      statistics: string[];
+    };
+    FindCountByDateByChannelResponseDto: {
+      channels: string[];
+    };
+    FindIssuedRateResponseDto: {
+      ratio: number;
+    };
+    FindCountByDateByIssueResponseDto: {
+      channels: string[];
     };
     CreateIssueTrackerResponseDto: {
       id: number;
@@ -852,24 +750,29 @@ export interface components {
   pathItems: never;
 }
 
+export type $defs = Record<string, never>;
+
 export type external = Record<string, never>;
 
 export interface operations {
+
   PrometheusController_index: {
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   AuthController_sendCode: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['EmailVerificationMailingRequestDto'];
+        "application/json": components["schemas"]["EmailVerificationMailingRequestDto"];
       };
     };
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['SendEmailCodeResponseDto'];
+          "application/json": components["schemas"]["SendEmailCodeResponseDto"];
         };
       };
     };
@@ -877,53 +780,61 @@ export interface operations {
   AuthController_verifyEmailCode: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['EmailVerificationCodeRequestDto'];
+        "application/json": components["schemas"]["EmailVerificationCodeRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   AuthController_signUpEmailUser: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['EmailUserSignUpRequestDto'];
+        "application/json": components["schemas"]["EmailUserSignUpRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   AuthController_signUpInvitationUser: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['InvitationUserSignUpRequestDto'];
+        "application/json": components["schemas"]["InvitationUserSignUpRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   AuthController_signUpOAuthUser: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['OAuthUserSignUpRequestDto'];
+        "application/json": components["schemas"]["OAuthUserSignUpRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   AuthController_signInEmail: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['EmailUserSignInRequestDto'];
+        "application/json": components["schemas"]["EmailUserSignInRequestDto"];
       };
     };
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['SignInResponseDto'];
+          "application/json": components["schemas"]["SignInResponseDto"];
         };
       };
     };
@@ -937,21 +848,23 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['OAuthLoginUrlResponseDto'];
+          "application/json": components["schemas"]["OAuthLoginUrlResponseDto"];
         };
       };
     };
   };
   AuthController_handleCallback: {
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   AuthController_refreshToken: {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['SignInResponseDto'];
+          "application/json": components["schemas"]["SignInResponseDto"];
         };
       };
     };
@@ -966,7 +879,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['GetAllUserResponseDto'];
+          "application/json": components["schemas"]["GetAllUserResponseDto"];
         };
       };
     };
@@ -974,23 +887,25 @@ export interface operations {
   UserController_deleteUsers: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['DeleteUsersRequestDto'];
+        "application/json": components["schemas"]["DeleteUsersRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   UserController_searchUsers: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['GetAllUsersRequestDto'];
+        "application/json": components["schemas"]["GetAllUsersRequestDto"];
       };
     };
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['GetAllUserResponseDto'];
+          "application/json": components["schemas"]["GetAllUserResponseDto"];
         };
       };
     };
@@ -1004,7 +919,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['UserDto'];
+          "application/json": components["schemas"]["UserDto"];
         };
       };
     };
@@ -1017,11 +932,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateUserRequestDto'];
+        "application/json": components["schemas"]["UpdateUserRequestDto"];
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   UserController_deleteUser: {
@@ -1031,7 +948,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   UserController_getRoles: {
@@ -1043,7 +962,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['GetRolesByIdResponseDto'];
+          "application/json": components["schemas"]["GetRolesByIdResponseDto"];
         };
       };
     };
@@ -1051,48 +970,56 @@ export interface operations {
   UserController_inviteUser: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UserInvitationRequestDto'];
+        "application/json": components["schemas"]["UserInvitationRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   UserController_requestResetPassword: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['ResetPasswordMailingRequestDto'];
+        "application/json": components["schemas"]["ResetPasswordMailingRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   UserController_resetPassword: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['ResetPasswordRequestDto'];
+        "application/json": components["schemas"]["ResetPasswordRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   UserController_changePassword: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['ChangePasswordRequestDto'];
+        "application/json": components["schemas"]["ChangePasswordRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   TenantController_get: {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['GetTenantResponseDto'];
+          "application/json": components["schemas"]["GetTenantResponseDto"];
         };
       };
     };
@@ -1100,21 +1027,25 @@ export interface operations {
   TenantController_update: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateTenantRequestDto'];
+        "application/json": components["schemas"]["UpdateTenantRequestDto"];
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   TenantController_setup: {
     requestBody: {
       content: {
-        'application/json': components['schemas']['SetupTenantRequestDto'];
+        "application/json": components["schemas"]["SetupTenantRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   TenantController_countFeedbacks: {
@@ -1126,7 +1057,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['CountFeedbacksByTenantIdResponseDto'];
+          "application/json": components["schemas"]["CountFeedbacksByTenantIdResponseDto"];
         };
       };
     };
@@ -1140,7 +1071,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['GetAllRoleResponseDto'];
+          "application/json": components["schemas"]["GetAllRoleResponseDto"];
         };
       };
     };
@@ -1153,11 +1084,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateRoleRequestDto'];
+        "application/json": components["schemas"]["CreateRoleRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   RoleController_updateRole: {
@@ -1169,11 +1102,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateRoleRequestDto'];
+        "application/json": components["schemas"]["UpdateRoleRequestDto"];
       };
     };
     responses: {
-      204: never;
+      204: {
+        content: never;
+      };
     };
   };
   RoleController_deleteRole: {
@@ -1184,7 +1119,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   MemberController_getAllRolesByProjectId: {
@@ -1199,7 +1136,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['GetAllMemberResponseDto'];
+          "application/json": components["schemas"]["GetAllMemberResponseDto"];
         };
       };
     };
@@ -1212,11 +1149,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateMemberRequestDto'];
+        "application/json": components["schemas"]["CreateMemberRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   MemberController_update: {
@@ -1228,11 +1167,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateMemberRequestDto'];
+        "application/json": components["schemas"]["UpdateMemberRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   MemberController_delete: {
@@ -1243,7 +1184,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ApiKeyController_findAll: {
@@ -1255,7 +1198,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindApiKeysResponseDto'];
+          "application/json": components["schemas"]["FindApiKeysResponseDto"];
         };
       };
     };
@@ -1266,10 +1209,15 @@ export interface operations {
         projectId: number;
       };
     };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateApiKeyRequestDto"];
+      };
+    };
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['CreateApiKeyResponseDto'];
+          "application/json": components["schemas"]["CreateApiKeyResponseDto"];
         };
       };
     };
@@ -1281,7 +1229,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ApiKeyController_recover: {
@@ -1291,7 +1241,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ApiKeyController_delete: {
@@ -1301,107 +1253,8 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
-    };
-  };
-  ProjectController_findAll: {
-    parameters: {
-      query?: {
-        limit?: number;
-        page?: number;
-        searchText?: string;
-      };
-    };
-    responses: {
       200: {
-        content: {
-          'application/json': components['schemas']['FindProjectsResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_create: {
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateProjectRequestDto'];
-      };
-    };
-    responses: {
-      201: {
-        content: {
-          'application/json': components['schemas']['CreateProjectResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_findOne: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['FindProjectByIdResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_updateOne: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateProjectRequestDto'];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['UpdateProjectResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_delete: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: never;
-    };
-  };
-  ProjectController_countFeedbacks: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['CountFeedbacksByIdResponseDto'];
-        };
-      };
-    };
-  };
-  ProjectController_countIssues: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['CountIssuesByIdResponseDto'];
-        };
+        content: never;
       };
     };
   };
@@ -1419,7 +1272,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindChannelsByProjectIdResponseDto'];
+          "application/json": components["schemas"]["FindChannelsByProjectIdResponseDto"];
         };
       };
     };
@@ -1432,14 +1285,29 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateChannelRequestDto'];
+        "application/json": components["schemas"]["CreateChannelRequestDto"];
       };
     };
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['CreateChannelResponseDto'];
+          "application/json": components["schemas"]["CreateChannelResponseDto"];
         };
+      };
+    };
+  };
+  ChannelController_checkName: {
+    parameters: {
+      query: {
+        name: string;
+      };
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
       };
     };
   };
@@ -1453,7 +1321,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindChannelByIdResponseDto'];
+          "application/json": components["schemas"]["FindChannelByIdResponseDto"];
         };
       };
     };
@@ -1466,7 +1334,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ChannelController_updateOne: {
@@ -1478,11 +1348,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateChannelRequestDto'];
+        "application/json": components["schemas"]["UpdateChannelRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   ChannelController_updateFields: {
@@ -1494,11 +1366,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateChannelFieldsRequestDto'];
+        "application/json": components["schemas"]["UpdateChannelFieldsRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   OptionController_getOptions: {
@@ -1510,7 +1384,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindOptionByFieldIdResponseDto'][];
+          "application/json": components["schemas"]["FindOptionByFieldIdResponseDto"][];
         };
       };
     };
@@ -1523,13 +1397,128 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateOptionRequestDto'];
+        "application/json": components["schemas"]["CreateOptionRequestDto"];
       };
     };
     responses: {
       201: {
         content: {
-          'application/json': components['schemas']['CreateOptionResponseDto'];
+          "application/json": components["schemas"]["CreateOptionResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_findAll: {
+    parameters: {
+      query?: {
+        limit?: number;
+        page?: number;
+        searchText?: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindProjectsResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_create: {
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateProjectRequestDto"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateProjectResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_checkName: {
+    parameters: {
+      query: {
+        name: string;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ProjectController_findOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindProjectByIdResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_updateOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateProjectRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateProjectResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_delete: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ProjectController_countFeedbacks: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CountFeedbacksByIdResponseDto"];
+        };
+      };
+    };
+  };
+  ProjectController_countIssues: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["CountIssuesByIdResponseDto"];
         };
       };
     };
@@ -1542,7 +1531,9 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   FeedbackController_deleteMany: {
@@ -1554,11 +1545,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['DeleteFeedbacksRequestDto'];
+        "application/json": components["schemas"]["DeleteFeedbacksRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   FeedbackController_findByChannelId: {
@@ -1570,13 +1563,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['FindFeedbacksByChannelIdRequestDto'];
+        "application/json": components["schemas"]["FindFeedbacksByChannelIdRequestDto"];
       };
     };
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindFeedbacksByChannelIdResponseDto'];
+          "application/json": components["schemas"]["FindFeedbacksByChannelIdResponseDto"];
         };
       };
     };
@@ -1593,7 +1586,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['AddIssueResponseDto'];
+          "application/json": components["schemas"]["AddIssueResponseDto"];
         };
       };
     };
@@ -1610,7 +1603,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['AddIssueResponseDto'];
+          "application/json": components["schemas"]["AddIssueResponseDto"];
         };
       };
     };
@@ -1624,11 +1617,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['ExportFeedbacksRequestDto'];
+        "application/json": components["schemas"]["ExportFeedbacksRequestDto"];
       };
     };
     responses: {
-      201: never;
+      201: {
+        content: never;
+      };
     };
   };
   FeedbackController_updateFeedback: {
@@ -1640,7 +1635,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_create: {
@@ -1651,13 +1648,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['CreateIssueRequestDto'];
+        "application/json": components["schemas"]["CreateIssueRequestDto"];
       };
     };
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['CreateIssueResponseDto'];
+          "application/json": components["schemas"]["CreateIssueResponseDto"];
         };
       };
     };
@@ -1670,11 +1667,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['DeleteIssuesRequestDto'];
+        "application/json": components["schemas"]["DeleteIssuesRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_findById: {
@@ -1687,7 +1686,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindIssueByIdResponseDto'][];
+          "application/json": components["schemas"]["FindIssueByIdResponseDto"][];
         };
       };
     };
@@ -1701,11 +1700,13 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['UpdateIssueRequestDto'];
+        "application/json": components["schemas"]["UpdateIssueRequestDto"];
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_delete: {
@@ -1716,7 +1717,9 @@ export interface operations {
       };
     };
     responses: {
-      200: never;
+      200: {
+        content: never;
+      };
     };
   };
   IssueController_findAllByProjectId: {
@@ -1727,13 +1730,180 @@ export interface operations {
     };
     requestBody: {
       content: {
-        'application/json': components['schemas']['FindIssuesByProjectIdRequestDto'];
+        "application/json": components["schemas"]["FindIssuesByProjectIdRequestDto"];
       };
     };
     responses: {
       200: {
         content: {
-          'application/json': components['schemas']['FindIssuesByProjectIdResponseDto'];
+          "application/json": components["schemas"]["FindIssuesByProjectIdResponseDto"];
+        };
+      };
+    };
+  };
+  IssueStatisticsController_getCount: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountResponseDto"][];
+        };
+      };
+    };
+  };
+  IssueStatisticsController_getCountByDate: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        interval: string;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountByDateResponseDto"][];
+        };
+      };
+    };
+  };
+  IssueStatisticsController_getCountByStatus: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountByStatusResponseDto"][];
+        };
+      };
+    };
+  };
+  FeedbackStatisticsController_getCountByDateByChannel: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        interval: string;
+        channelIds: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountByDateByChannelResponseDto"][];
+        };
+      };
+    };
+  };
+  FeedbackStatisticsController_getCount: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountResponseDto"][];
+        };
+      };
+    };
+  };
+  FeedbackStatisticsController_getIssuedRatio: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindIssuedRateResponseDto"][];
+        };
+      };
+    };
+  };
+  FeedbackIssueStatisticsController_getCountByDateByIssue: {
+    parameters: {
+      query: {
+        from: string;
+        to: string;
+        interval: string;
+        issueIds: string;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindCountByDateByIssueResponseDto"][];
+        };
+      };
+    };
+  };
+  IssueTrackerController_findOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["FindIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_updateOne: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateIssueTrackerRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  IssueTrackerController_create: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateIssueTrackerRequestDto"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
         };
       };
     };
@@ -1743,7 +1913,7 @@ export interface operations {
       /** @description The Health Check is successful */
       200: {
         content: {
-          'application/json': {
+          "application/json": {
             /** @example ok */
             status?: string;
             /**
@@ -1753,23 +1923,19 @@ export interface operations {
              *   }
              * }
              */
-            info?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
+            info?: ({
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            }) | null;
             /** @example {} */
-            error?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
+            error?: ({
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            }) | null;
             /**
              * @example {
              *   "database": {
@@ -1778,12 +1944,10 @@ export interface operations {
              * }
              */
             details?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
             };
           };
         };
@@ -1791,7 +1955,7 @@ export interface operations {
       /** @description The Health Check is not successful */
       503: {
         content: {
-          'application/json': {
+          "application/json": {
             /** @example error */
             status?: string;
             /**
@@ -1801,14 +1965,12 @@ export interface operations {
              *   }
              * }
              */
-            info?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
+            info?: ({
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            }) | null;
             /**
              * @example {
              *   "redis": {
@@ -1817,14 +1979,12 @@ export interface operations {
              *   }
              * }
              */
-            error?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
-            } | null;
+            error?: ({
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
+            }) | null;
             /**
              * @example {
              *   "database": {
@@ -1837,12 +1997,10 @@ export interface operations {
              * }
              */
             details?: {
-              [key: string]:
-                | {
-                    status?: string;
-                    [key: string]: string | undefined;
-                  }
-                | undefined;
+              [key: string]: {
+                status?: string;
+                [key: string]: string | undefined;
+              };
             };
           };
         };
@@ -1856,58 +2014,29 @@ export interface operations {
       };
     };
     responses: {
-      201: never;
-    };
-  };
-  IssueTrackerController_findOne: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['FindIssueTrackerResponseDto'];
-        };
+      201: {
+        content: never;
       };
     };
   };
-  IssueTrackerController_updateOne: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['UpdateIssueTrackerRequestDto'];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          'application/json': components['schemas']['UpdateIssueTrackerResponseDto'];
-        };
-      };
-    };
-  };
-  IssueTrackerController_create: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        'application/json': components['schemas']['CreateIssueTrackerRequestDto'];
-      };
-    };
+  MigrationController_migrateFeedbackStatistics: {
     responses: {
       201: {
-        content: {
-          'application/json': components['schemas']['CreateIssueTrackerResponseDto'];
-        };
+        content: never;
+      };
+    };
+  };
+  MigrationController_migrateIssueStatistics: {
+    responses: {
+      201: {
+        content: never;
+      };
+    };
+  };
+  MigrationController_migrateFeedbackIssueStatistics: {
+    responses: {
+      201: {
+        content: never;
       };
     };
   };

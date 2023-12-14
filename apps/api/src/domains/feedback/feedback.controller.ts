@@ -18,6 +18,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -26,8 +27,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
-import dayjs from 'dayjs';
 import { FastifyReply } from 'fastify';
+import { DateTime } from 'luxon';
 
 import { ApiKeyAuthGuard } from '@/domains/auth/guards';
 import { ChannelService } from '../channel/channel/channel.service';
@@ -125,16 +126,26 @@ export class FeedbackController {
   async exportFeedbacks(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: ExportFeedbacksRequestDto,
-    @Body('type') type: 'xlsx' | 'csv',
     @Res() res: FastifyReply,
     @CurrentUser() user: UserDto,
   ) {
-    const { query, sort } = body;
+    const { query, sort, type, fieldIds } = body;
     const channel = await this.channelService.findById({ channelId });
     const projectName = channel.project.name;
     const channelName = channel.name;
-    const filename = `UFB_${projectName}_${channelName}_Feedback_${dayjs().format(
-      'YYYY-MM-DD',
+
+    const { streamableFile, feedbackIds } =
+      await this.feedbackService.generateFile({
+        channelId,
+        query,
+        sort,
+        type,
+        fieldIds,
+      });
+    const stream = streamableFile.getStream();
+
+    const filename = `UFB_${projectName}_${channelName}_Feedback_${DateTime.utc().toFormat(
+      'yyyy-MM-dd',
     )}.${type}`;
     res.header('Content-Disposition', `attachment; filename="${filename}"`);
 
@@ -145,15 +156,6 @@ export class FeedbackController {
     } else if (type === 'csv') {
       res.type('text/csv');
     }
-
-    const { streamableFile, feedbackIds } =
-      await this.feedbackService.generateFile({
-        channelId,
-        query,
-        sort,
-        type,
-      });
-    const stream = streamableFile.getStream();
 
     res.send(stream);
 
@@ -189,5 +191,28 @@ export class FeedbackController {
     @Body() { feedbackIds }: DeleteFeedbacksRequestDto,
   ) {
     await this.feedbackService.deleteByIds({ channelId, feedbackIds });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @UseGuards(ApiKeyAuthGuard)
+  @Get('/image-upload-url')
+  async getImageUploadUrl(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
+  ) {
+    const channel = await this.channelService.findById({ channelId });
+    if (channel.project.id !== projectId) {
+      throw new BadRequestException('Invalid channel id');
+    }
+
+    return await this.feedbackService.createImageUploadUrl({
+      projectId,
+      channelId,
+      accessKeyId: channel.imageConfig.accessKeyId,
+      secretAccessKey: channel.imageConfig.secretAccessKey,
+      endpoint: channel.imageConfig.endpoint,
+      region: channel.imageConfig.region,
+      bucket: channel.imageConfig.bucket,
+    });
   }
 }

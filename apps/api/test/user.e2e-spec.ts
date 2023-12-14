@@ -19,7 +19,7 @@ import { ValidationPipe } from '@nestjs/common';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
@@ -83,7 +83,11 @@ describe('AppController (e2e)', () => {
           hashPassword: faker.internet.password(),
         })),
       )
-    ).sort((a, b) => dayjs(b.createdAt).diff(a.createdAt));
+    ).sort((a, b) =>
+      DateTime.fromJSDate(b.createdAt)
+        .diff(DateTime.fromJSDate(a.createdAt))
+        .as('milliseconds'),
+    );
 
     const { jwt, user } = await signInTestUser(dataSource, authService);
     accessToken = jwt.accessToken;
@@ -96,7 +100,11 @@ describe('AppController (e2e)', () => {
     it('no query', async () => {
       const expectUsers = userEntities
         .concat(ownerUser)
-        .sort((a, b) => dayjs(b.createdAt).diff(a.createdAt))
+        .sort((a, b) =>
+          DateTime.fromJSDate(b.createdAt)
+            .diff(DateTime.fromJSDate(a.createdAt))
+            .as('milliseconds'),
+        )
         .map(({ id, email }) => ({
           id,
           email,
@@ -133,7 +141,11 @@ describe('AppController (e2e)', () => {
 
       const expectUsers = userEntities
         .concat(ownerUser)
-        .sort((a, b) => dayjs(b.createdAt).diff(a.createdAt))
+        .sort((a, b) =>
+          DateTime.fromJSDate(b.createdAt)
+            .diff(DateTime.fromJSDate(a.createdAt))
+            .as('milliseconds'),
+        )
         .map(({ id, email }) => ({
           id,
           email,

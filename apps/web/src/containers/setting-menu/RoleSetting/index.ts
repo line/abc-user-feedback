@@ -14,3 +14,4 @@
  * under the License.
  */
 export { default } from './RoleSetting';
+export { default as RoleSettingTable } from './RoleSettingTable';

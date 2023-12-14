@@ -29,4 +29,5 @@ export class GenerateExcelDto {
     [key: string]: SortMethodEnum;
   };
   type: 'xlsx' | 'csv';
+  fieldIds?: number[];
 }

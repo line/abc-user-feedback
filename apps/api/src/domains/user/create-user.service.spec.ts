@@ -41,6 +41,7 @@ describe('CreateUserService', () => {
   let tenantRepo: Repository<TenantEntity>;
   let memberRepo: Repository<MemberEntity>;
   let roleRepo: Repository<RoleEntity>;
+
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -218,6 +219,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -256,6 +260,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -360,6 +367,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -398,6 +408,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -558,6 +571,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 
@@ -596,6 +612,9 @@ describe('CreateUserService', () => {
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
         project: { id: faker.number.int() },
       } as RoleEntity);
+      jest
+        .spyOn(userRepo, 'findOne')
+        .mockResolvedValue({ id: userId } as UserEntity);
 
       await createUserService.createInvitationUser(dto);
 

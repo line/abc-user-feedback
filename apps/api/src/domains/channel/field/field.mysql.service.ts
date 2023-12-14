@@ -15,7 +15,7 @@
  */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import {
@@ -34,16 +34,6 @@ import {
   FieldNameDuplicatedException,
 } from './exceptions';
 import { RESERVED_FIELD_KEYS, RESERVED_FIELD_NAMES } from './field.constants';
-
-export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
-  text: 'text',
-  keyword: 'keyword',
-  number: 'integer',
-  boolean: 'boolean',
-  select: 'keyword',
-  multiSelect: 'keyword',
-  date: 'date',
-};
 
 @Injectable()
 export class FieldMySQLService {
@@ -212,5 +202,14 @@ export class FieldMySQLService {
     }
 
     return createdFields;
+  }
+
+  async findByIds(ids: number[]) {
+    const fields = await this.repository.find({
+      where: { id: In(ids) },
+      withDeleted: true,
+    });
+    const fieldMap = new Map(fields.map((field) => [field.id, field]));
+    return ids.map((id) => fieldMap.get(id));
   }
 }

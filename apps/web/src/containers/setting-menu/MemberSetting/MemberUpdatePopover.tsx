@@ -79,7 +79,7 @@ const MemberUpdatePopover: React.FC<IProps> = ({
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.edit-member.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'ProfileSettingFill',
           className: 'text-orange-primary',

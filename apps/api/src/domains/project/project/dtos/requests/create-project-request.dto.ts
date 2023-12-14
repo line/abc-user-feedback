@@ -20,8 +20,11 @@ import {
   IsOptional,
   IsString,
   Length,
+  MaxLength,
   MinLength,
 } from 'class-validator';
+
+import { TimezoneOffset } from '@ufb/shared';
 
 import { CreateIssueTrackerRequestDto } from '@/domains/project/issue-tracker/dtos/requests';
 import { CreateRoleRequestDto } from '@/domains/project/role/dtos/requests';
@@ -47,13 +50,19 @@ class CreateApiKeyByValueDto {
 export class CreateProjectRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(2)
+  @MinLength(1)
+  @MaxLength(20)
   name: string;
 
   @ApiProperty({ nullable: true })
   @IsString()
   @IsNullable()
+  @MaxLength(50)
   description: string | null;
+
+  @ApiProperty()
+  @IsString()
+  timezoneOffset: TimezoneOffset;
 
   @ApiProperty({ type: [CreateRoleRequestDto], required: false })
   @IsArray()

@@ -18,7 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
-import { useOAIMutation, useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
+import { useOAIMutation } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
 
@@ -47,12 +48,13 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
       <PopoverTrigger
         className="btn btn-md btn-secondary text-red-primary min-w-[120px]"
         disabled={user?.signUpMethod === 'OAUTH'}
+        onClick={() => setOpen(true)}
       >
         {t('main.profile.button.delete-account')}
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.profile.dialog.delete-account.title')}
-        cancelText={t('button.cancel')}
+        cancelButton={{ children: t('button.cancel') }}
         icon={{
           name: 'WarningTriangleFill',
           className: 'text-red-primary',

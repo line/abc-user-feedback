@@ -23,6 +23,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiCreatedResponse,
@@ -31,6 +32,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '@/domains/auth/guards';
 import { PermissionEnum } from '@/domains/project/role/permission.enum';
 import { RequirePermission } from '@/domains/project/role/require-permission.decorator';
 import { ChannelService } from './channel.service';
@@ -81,6 +83,14 @@ export class ChannelController {
         projectId,
       }),
     );
+  }
+  @UseGuards(JwtAuthGuard)
+  @Get('/name-check')
+  async checkName(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query('name') name: string,
+  ) {
+    return this.channelService.checkName({ projectId, name });
   }
 
   @ApiParam({ name: 'projectId', type: Number })

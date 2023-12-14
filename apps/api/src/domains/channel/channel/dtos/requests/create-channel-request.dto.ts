@@ -16,11 +16,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
-  ArrayNotEmpty,
   IsEnum,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -31,6 +32,7 @@ import {
   FieldTypeEnum,
 } from '@/common/enums';
 import { IsNullable } from '@/domains/user/decorators';
+import { ImageConfigRequestDto } from './image-config-request.dto';
 
 class CreateChannelRequestFieldSelectOptionDto {
   @ApiProperty({ required: false })
@@ -88,17 +90,24 @@ export class CreateChannelRequestFieldDto {
 export class CreateChannelRequestDto {
   @ApiProperty()
   @IsString()
-  @MinLength(2)
+  @MinLength(1)
+  @MaxLength(20)
   name: string;
 
   @ApiProperty({ nullable: true })
   @IsNullable()
   @IsString()
+  @MaxLength(50)
   description: string | null;
+
+  @ApiProperty({ required: false, nullable: true, type: ImageConfigRequestDto })
+  @IsOptional()
+  @IsNullable()
+  @IsObject()
+  imageConfig: ImageConfigRequestDto | null;
 
   @ApiProperty({ type: [CreateChannelRequestFieldDto] })
   @Type(() => CreateChannelRequestFieldDto)
   @ValidateNested({ each: true })
-  @ArrayNotEmpty()
   fields: CreateChannelRequestFieldDto[];
 }

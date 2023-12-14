@@ -85,7 +85,6 @@ export const getColumns = (
       ].concat(
         fieldData
           .filter((v) => v.key !== 'id' && v.key !== 'issues')
-          .filter((v) => v.status === 'ACTIVE')
           .map((field) =>
             columnHelper.accessor(field.key, {
               id: field.key,

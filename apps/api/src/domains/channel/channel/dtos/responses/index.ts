@@ -16,3 +16,4 @@
 export { CreateChannelResponseDto } from './create-channel-response.dto';
 export { FindChannelByIdResponseDto } from './find-channel-by-id-response.dto';
 export { FindChannelsByProjectIdResponseDto } from './find-channels-by-id-response.dto';
+export { ImageConfigResponseDto } from './image-config-response.dto';

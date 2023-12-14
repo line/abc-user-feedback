@@ -15,7 +15,6 @@
  */
 export { default as useOAIQuery } from './useOAIQuery';
 export { default as useOAIMutation } from './useOAIMutation';
-export { default as useUser } from './useUser';
 export { default as useFeedbackSearch } from './useFeedbackSearch';
 export { default as useIssueSearch } from './useIssueSearch';
 export { default as useSort } from './useSort';

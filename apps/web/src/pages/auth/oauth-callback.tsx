@@ -20,7 +20,7 @@ import { useRouter } from 'next/router';
 import { toast } from '@ufb/ui';
 
 import { Path } from '@/constants/path';
-import { useUser } from '@/hooks';
+import { useUser } from '@/contexts/user.context';
 
 interface IQuery {
   code: string;

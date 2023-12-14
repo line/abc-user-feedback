@@ -22,9 +22,12 @@ import {
   Relation,
 } from 'typeorm';
 
+import { TimezoneOffset } from '@ufb/shared';
+
 import { CommonEntity } from '@/common/entities';
 import type { ApiKeyEntity } from '@/domains/project/api-key/api-key.entity';
 import type { IssueTrackerEntity } from '@/domains/project/issue-tracker/issue-tracker.entity';
+import { IssueStatisticsEntity } from '@/domains/statistics/issue/issue-statistics.entity';
 import { TenantEntity } from '@/domains/tenant/tenant.entity';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { IssueEntity } from '../issue/issue.entity';
@@ -37,6 +40,9 @@ export class ProjectEntity extends CommonEntity {
 
   @Column('varchar', { nullable: true })
   description: string;
+
+  @Column('varchar', { default: '+00:00' })
+  timezoneOffset: TimezoneOffset;
 
   @OneToMany(() => ChannelEntity, (channel) => channel.project, {
     cascade: true,
@@ -68,20 +74,28 @@ export class ProjectEntity extends CommonEntity {
   })
   tenant: Relation<TenantEntity>;
 
+  @OneToMany(() => IssueStatisticsEntity, (stats) => stats.project, {
+    cascade: true,
+  })
+  stats: Relation<IssueStatisticsEntity>[];
+
   static from({
     tenantId,
     name,
     description,
+    timezoneOffset,
   }: {
     tenantId: number;
     name: string;
     description: string;
+    timezoneOffset: TimezoneOffset;
   }) {
     const project = new ProjectEntity();
     project.tenant = new TenantEntity();
     project.tenant.id = tenantId;
     project.name = name;
     project.description = description;
+    project.timezoneOffset = timezoneOffset;
 
     return project;
   }

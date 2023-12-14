@@ -14,7 +14,7 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString, MaxLength } from 'class-validator';
 
 import { IssueStatusEnum } from '@/common/enums';
 import { IsNullable } from '@/domains/user/decorators';
@@ -24,6 +24,7 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   @ApiProperty({ nullable: true })
   @IsString()
   @IsNullable()
+  @MaxLength(50)
   description: string | null;
 
   @ApiProperty({ required: false })

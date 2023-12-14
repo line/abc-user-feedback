@@ -15,10 +15,15 @@
  */
 import { Expose } from 'class-transformer';
 
+import type { ImageConfigDto } from './image-config.dto';
+
 export class UpdateChannelDto {
   @Expose()
   name: string;
 
   @Expose()
   description: string;
+
+  @Expose()
+  imageConfig: ImageConfigDto | null;
 }

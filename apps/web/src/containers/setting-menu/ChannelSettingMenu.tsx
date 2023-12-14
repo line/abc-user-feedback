@@ -16,7 +16,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { SelectBox, SettingMenuTemplate } from '@/components';
+import {
+  CreateChannelButton,
+  SelectBox,
+  SettingMenuTemplate,
+} from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useChannels, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
@@ -46,6 +50,16 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     if (!channelData || channelData.items.length === 0) return;
     setChannelId(channelData.items?.[0]?.id ?? 0);
   }, [channelData]);
+
+  if (!channelId) {
+    return (
+      <SettingMenuTemplate title="Channel">
+        <div className="flex flex-1 items-center justify-center">
+          <CreateChannelButton projectId={projectId} type="blue" />
+        </div>
+      </SettingMenuTemplate>
+    );
+  }
 
   return (
     <SettingMenuTemplate title="Channel">
@@ -78,12 +92,11 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
           disabled={!perms.includes('channel_delete')}
         />
       </ul>
-      <button
-        className="btn btn-primary"
-        disabled={true || !perms.includes('channel_create')}
-      >
-        + {t('main.setting.button.create-channel')}
-      </button>
+      <CreateChannelButton
+        projectId={projectId}
+        type="primary"
+        placement="top"
+      />
     </SettingMenuTemplate>
   );
 };

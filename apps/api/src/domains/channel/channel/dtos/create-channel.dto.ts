@@ -17,6 +17,7 @@ import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { CreateFieldDto } from '../../field/dtos/create-field.dto';
 import { ChannelEntity } from '../channel.entity';
+import type { ImageConfigDto } from './image-config.dto';
 
 export class CreateChannelDto {
   @Expose()
@@ -27,6 +28,9 @@ export class CreateChannelDto {
 
   @Expose()
   description: string;
+
+  @Expose()
+  imageConfig: ImageConfigDto | null;
 
   @Expose()
   @Type(() => CreateFieldDto)
@@ -43,6 +47,7 @@ export class CreateChannelDto {
       params.name,
       params.description,
       params.projectId,
+      params.imageConfig,
     );
   }
 }

@@ -21,7 +21,11 @@ import { OpensearchRepository } from '@/common/repositories';
 import { ProjectService } from '@/domains/project/project/project.service';
 import { FieldService } from '../field/field.service';
 import { ChannelMySQLService } from './channel.mysql.service';
-import type { FindAllChannelsByProjectIdDto, FindByChannelIdDto } from './dtos';
+import type {
+  FindAllChannelsByProjectIdDto,
+  FindByChannelIdDto,
+  FindOneByNameAndProjectIdDto,
+} from './dtos';
 import {
   CreateChannelDto,
   UpdateChannelDto,
@@ -37,6 +41,11 @@ export class ChannelService {
     private readonly fieldService: FieldService,
     private readonly configService: ConfigService,
   ) {}
+
+  async checkName(dto: FindOneByNameAndProjectIdDto) {
+    const res = await this.channelMySQLService.findOneBy(dto);
+    return !!res;
+  }
 
   @Transactional()
   async create(dto: CreateChannelDto) {

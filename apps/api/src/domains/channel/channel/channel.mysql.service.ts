@@ -21,7 +21,11 @@ import { Transactional } from 'typeorm-transactional';
 
 import { isSelectFieldFormat } from '@/common/enums';
 import { ChannelEntity } from './channel.entity';
-import type { FindAllChannelsByProjectIdDto, FindByChannelIdDto } from './dtos';
+import type {
+  FindAllChannelsByProjectIdDto,
+  FindByChannelIdDto,
+  FindOneByNameAndProjectIdDto,
+} from './dtos';
 import { CreateChannelDto, UpdateChannelDto } from './dtos';
 import {
   ChannelAlreadyExistsException,
@@ -35,6 +39,11 @@ export class ChannelMySQLService {
     @InjectRepository(ChannelEntity)
     private readonly repository: Repository<ChannelEntity>,
   ) {}
+  async findOneBy({ name, projectId }: FindOneByNameAndProjectIdDto) {
+    return await this.repository.findOne({
+      where: { name, project: { id: projectId } },
+    });
+  }
 
   @Transactional()
   async create(dto: CreateChannelDto) {
@@ -60,7 +69,7 @@ export class ChannelMySQLService {
     return await paginate(
       this.repository.createQueryBuilder().setFindOptions({
         where: { project: { id: projectId }, name: Like(`%${searchText}%`) },
-        order: { createdAt: 'DESC' },
+        order: { createdAt: 'ASC' },
       }),
       options,
     );
@@ -85,7 +94,8 @@ export class ChannelMySQLService {
   }
 
   @Transactional()
-  async update(channelId: number, { name, description }: UpdateChannelDto) {
+  async update(channelId: number, dto: UpdateChannelDto) {
+    const { name, description, imageConfig } = dto;
     const channel = await this.findById({ channelId });
 
     if (
@@ -99,6 +109,7 @@ export class ChannelMySQLService {
 
     channel.name = name;
     channel.description = description;
+    channel.imageConfig = imageConfig;
     await this.repository.save(channel);
   }
 

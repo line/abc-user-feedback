@@ -15,7 +15,7 @@
  */
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 
 import { getMockProvider } from '@/test-utils/util-functions';
 import { TenantService } from '../tenant/tenant.service';
@@ -59,7 +59,7 @@ describe('AuthController', () => {
   it('sendCode', async () => {
     jest
       .spyOn(MockAuthService, 'sendEmailCode')
-      .mockResolvedValue(dayjs().format());
+      .mockResolvedValue(DateTime.utc().toISO());
 
     const dto = new EmailVerificationMailingRequestDto();
     dto.email = faker.internet.email();

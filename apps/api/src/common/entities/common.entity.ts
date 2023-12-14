@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -38,12 +38,12 @@ export abstract class CommonEntity {
 
   @BeforeInsert()
   beforeInsertHook() {
-    this.createdAt = dayjs().toDate();
-    this.updatedAt = dayjs().toDate();
+    this.createdAt = DateTime.utc().toJSDate();
+    this.updatedAt = DateTime.utc().toJSDate();
   }
 
   @BeforeUpdate()
   beforeUpdateHook() {
-    this.updatedAt = dayjs().toDate();
+    this.updatedAt = DateTime.utc().toJSDate();
   }
 }

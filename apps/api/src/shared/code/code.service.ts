@@ -19,7 +19,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -52,9 +52,9 @@ export class CodeService {
         key,
         code,
         isVerified: false,
-        expiredAt: dayjs()
-          .add(durationSec ?? SECONDS, 'seconds')
-          .toDate(),
+        expiredAt: DateTime.utc()
+          .plus({ seconds: durationSec ?? SECONDS })
+          .toJSDate(),
         data: type === CodeTypeEnum.USER_INVITATION ? dto.data : undefined,
       }),
     );
@@ -74,7 +74,7 @@ export class CodeService {
       throw new BadRequestException('invalid code');
     }
 
-    if (dayjs().isAfter(codeEntity.expiredAt)) {
+    if (DateTime.utc() > DateTime.fromJSDate(codeEntity.expiredAt)) {
       throw new BadRequestException('code expired');
     }
 

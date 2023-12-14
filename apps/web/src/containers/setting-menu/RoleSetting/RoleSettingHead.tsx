@@ -13,75 +13,62 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Icon,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverModalContent,
-  PopoverTrigger,
-  toast,
-} from '@ufb/ui';
+import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
-import { useOAIMutation, usePermissions } from '@/hooks';
+import { DeleteRolePopover, UpdateRolePopover } from '@/components/popovers';
+import { usePermissions } from '@/hooks';
+import type { RoleType } from '@/types/role.type';
 
 interface IProps {
-  name: string;
-  roleId: number;
+  role: RoleType;
+  roles: RoleType[];
   isEdit: boolean;
-  projectId: number;
+  projectId?: number;
   onChangeEditRole: (roleId?: number) => void;
   onChangeEditName: (name: string) => void;
   onSubmitEdit: () => void;
-  refetch: () => void;
+  onClickDelete: (roleId: number) => void;
+  onClickUpdate: (role: RoleType) => void;
+  viewOnly?: boolean;
 }
 
 const RoleSettingHead: React.FC<IProps> = ({
-  name,
-  roleId,
+  role,
+  roles,
   isEdit,
   projectId,
   onChangeEditRole,
   onChangeEditName,
   onSubmitEdit,
-  refetch,
+  onClickDelete,
+  onClickUpdate,
+  viewOnly,
 }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
-  const [dialogOpen, setDialogOpen] = useState(false);
 
-  const { mutate } = useOAIMutation({
-    method: 'delete',
-    path: '/api/projects/{projectId}/roles/{roleId}',
-    pathParams: { roleId, projectId },
-    queryOptions: {
-      async onSuccess() {
-        await refetch();
-        setDialogOpen(false);
-        toast.negative({ title: t('toast.delete') });
-      },
-      onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
-      },
-    },
-  });
+  const [deletePopupOpen, setDeletePopupOpen] = useState(false);
+  const [updatePopupOpen, setUpdatePopupOpen] = useState(false);
+
+  const hasUpdateRolePerm = useMemo(
+    () => !projectId || perms.includes('project_role_update'),
+    [perms, projectId],
+  );
+
+  const hasDeleteRolePerm = useMemo(
+    () => !projectId || perms.includes('project_role_delete'),
+    [perms, projectId],
+  );
+
+  if (viewOnly) return <p className="text-center">{role.name}</p>;
 
   return (
     <>
       <div className="flex items-center justify-center gap-1">
-        {isEdit ? (
-          <Input
-            size="sm"
-            defaultValue={name}
-            className="w-[100px]"
-            onChange={(e) => onChangeEditName(e.target.value)}
-          />
-        ) : (
-          <p className="text-center">{name}</p>
-        )}
+        <p className="text-center">{role.name}</p>
         {isEdit ? (
           <div className="flex gap-1">
             <button
@@ -107,13 +94,14 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'mb-1 flex items-center gap-2 rounded p-2',
-                    !perms.includes('project_role_update')
+                    !hasUpdateRolePerm
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
-                    if (!perms.includes('project_role_update')) return;
-                    onChangeEditRole(roleId);
+                    if (!hasUpdateRolePerm) return;
+                    onChangeEditRole(role.id);
+                    onChangeEditName(role.name);
                   }}
                 >
                   <Icon name="EditFill" size={16} />
@@ -123,14 +111,31 @@ const RoleSettingHead: React.FC<IProps> = ({
                 </li>
                 <li
                   className={[
-                    'flex items-center gap-2 rounded p-2',
-                    !perms.includes('project_role_delete')
+                    'mb-1 flex items-center gap-2 rounded p-2',
+                    !hasUpdateRolePerm
                       ? 'text-tertiary cursor-not-allowed'
                       : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
-                    if (!perms.includes('project_role_delete')) return;
-                    setDialogOpen(true);
+                    if (!hasUpdateRolePerm) return;
+                    setUpdatePopupOpen(true);
+                  }}
+                >
+                  <Icon name="DriverRegisterFill" size={16} />
+                  <span className="font-12-regular">
+                    {t('main.setting.role-mgmt.update-role-name')}
+                  </span>
+                </li>
+                <li
+                  className={[
+                    'flex items-center gap-2 rounded p-2',
+                    !hasDeleteRolePerm || roles.length === 1
+                      ? 'text-tertiary cursor-not-allowed'
+                      : 'hover:bg-fill-tertiary cursor-pointer',
+                  ].join(' ')}
+                  onClick={() => {
+                    if (!hasDeleteRolePerm || roles.length === 1) return;
+                    setDeletePopupOpen(true);
                   }}
                 >
                   <Icon name="TrashFill" size={16} />
@@ -143,23 +148,18 @@ const RoleSettingHead: React.FC<IProps> = ({
           </Popover>
         )}
       </div>
-      <Popover open={dialogOpen} onOpenChange={setDialogOpen} modal>
-        <PopoverModalContent
-          title={t('main.setting.dialog.delete-role.title')}
-          description={t('main.setting.dialog.delete-role.description')}
-          cancelText={t('button.cancel')}
-          icon={{
-            name: 'WarningCircleFill',
-            className: 'text-red-primary',
-            size: 56,
-          }}
-          submitButton={{
-            children: t('button.delete'),
-            className: 'bg-red-primary',
-            onClick: () => mutate(undefined),
-          }}
-        />
-      </Popover>
+      <DeleteRolePopover
+        open={deletePopupOpen}
+        onOpenChange={setDeletePopupOpen}
+        onClickDelete={() => onClickDelete(role.id)}
+      />
+      <UpdateRolePopover
+        open={updatePopupOpen}
+        onOpenChange={setUpdatePopupOpen}
+        onClickUpdate={onClickUpdate}
+        role={role}
+        roles={roles}
+      />
     </>
   );
 };
