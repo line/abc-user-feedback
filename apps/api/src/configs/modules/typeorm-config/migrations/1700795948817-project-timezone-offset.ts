@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class ProjectTimezoneOffset1700795948817 implements MigrationInterface {
   name = 'ProjectTimezoneOffset1700795948817';
