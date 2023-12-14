@@ -115,7 +115,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           />
         </div>
       </div>
-      <CardSlider>
+      <CardSlider cardLength={11}>
         <TotalFeedbackCard
           projectId={projectId}
           from={dateRange.startDate}
@@ -177,35 +177,43 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-const CardSlider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const ref = useRef<HTMLDivElement>(null);
+interface ICardSliderProps extends React.PropsWithChildren {
+  cardLength: number;
+}
+
+const CardSlider: React.FC<ICardSliderProps> = ({ children }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [showButton, setShowButton] = useState(false);
   useLayoutEffect(() => {
-    if (!ref.current) return;
+    if (!containerRef.current) return;
     const observer = new ResizeObserver(([entry]) => {
       if (!entry) return;
-      const { height } = entry.contentRect;
-      setShowButton(height === 220);
+      const { height, width } = entry.contentRect;
+      console.log('width: ', width);
+      const count = Math.floor(width / 226);
+      console.log('count: ', count);
+      setShowButton(height > 220);
     });
 
     // 2. 감지할 요소 추가하기
-    observer.observe(ref.current);
+    observer.observe(containerRef.current);
     return () => {
-      if (!ref.current) return;
-      observer.unobserve(ref.current);
+      if (!containerRef.current) return;
+      observer.unobserve(containerRef.current);
     };
-  }, [ref.current]);
+  }, [containerRef.current]);
 
   const scroll = (scrollOffset: number) => {
-    if (!ref.current) return;
-    ref.current.scrollTo({ left: scrollOffset, behavior: 'smooth' });
+    if (!containerRef.current) return;
+    containerRef.current.scrollTo({ left: scrollOffset, behavior: 'smooth' });
   };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative max-h-[220px] overflow-hidden">
       <div
-        className="scrollbar-hide flex max-h-[220px] flex-wrap gap-3 overflow-x-auto"
-        ref={ref}
+        className="scrollbar-hide flex flex-wrap gap-3 overflow-x-auto"
+        ref={containerRef}
       >
         {children}
       </div>

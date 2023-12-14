@@ -39,7 +39,7 @@ const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
   return (
     <DashboardCard
       count={data?.count ?? 0}
-      title="전체 피드백 수"
+      title="전체 피드백 수전체 피드백 수전체 피드백 수전체 피드백 수전체 피드백 수"
       description={`특정 기간 동안 수집된 피드백 개수입니다. (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}

@@ -28,14 +28,12 @@ const DashboardCard: React.FC<IProps> = (props) => {
   const { title, count, percentage, description } = props;
 
   return (
-    <div className="border-fill-tertiary flex h-[104px] min-w-[220px] flex-col gap-2 rounded border p-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1">
-          <p>{title}</p>
-          {description && <DescriptionTooltip description={description} />}
-        </div>
-      </div>
-      <div className="flex gap-2 p-2">
+    <div className="border-fill-tertiary flex h-[104px] w-[220px] flex-col gap-[10px] rounded border p-3">
+      <p className="line-clamp-2 h-[42px]">
+        {title}
+        {description && <DescriptionTooltip description={description} />}
+      </p>
+      <div className="flex gap-2">
         <p className="font-24-bold">{Number(count).toLocaleString()}</p>
         {typeof percentage !== 'undefined' && (
           <div className="flex items-center">
@@ -56,7 +54,7 @@ const DashboardCard: React.FC<IProps> = (props) => {
                   : 'text-red-primary'
               }
             >
-              ({parseFloat(Math.abs(percentage).toFixed(1))}%)
+              {parseFloat(Math.abs(percentage).toFixed(1))}%
             </p>
           </div>
         )}

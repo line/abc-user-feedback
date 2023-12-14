@@ -155,6 +155,9 @@ export interface paths {
   "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
   };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
+    get: operations["FeedbackController_getImageUploadUrl"];
+  };
   "/api/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
     delete: operations["IssueController_deleteMany"];
@@ -480,8 +483,15 @@ export interface components {
     FindApiKeysResponseDto: {
       items: components["schemas"]["ApiKeyResponseDto"][];
     };
+    ImageConfigRequestDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
     /** @enum {string} */
-    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
+    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
     /** @enum {string} */
     FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
@@ -503,15 +513,24 @@ export interface components {
     CreateChannelRequestDto: {
       name: string;
       description: string | null;
+      imageConfig?: components["schemas"]["ImageConfigRequestDto"] | null;
       fields: components["schemas"]["CreateChannelRequestFieldDto"][];
     };
     CreateChannelResponseDto: {
       id: number;
     };
+    ImageConfigResponseDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
     FindChannelsByProjectDto: {
       id: number;
       name: string;
       description: string;
+      imageConfig: components["schemas"]["ImageConfigResponseDto"];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -529,7 +548,7 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
+      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
       /** @enum {string} */
       type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */
@@ -547,6 +566,7 @@ export interface components {
       id: number;
       name: string;
       description: string;
+      imageConfig: components["schemas"]["ImageConfigResponseDto"];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -556,6 +576,7 @@ export interface components {
     UpdateChannelRequestDto: {
       name: string;
       description: string | null;
+      imageConfig: components["schemas"]["ImageConfigRequestDto"] | null;
     };
     UpdateChannelRequestFieldDto: {
       name: string;
@@ -1660,6 +1681,19 @@ export interface operations {
         channelId: number;
         feedbackId: number;
         projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  FeedbackController_getImageUploadUrl: {
+    parameters: {
+      path: {
+        projectId: number;
+        channelId: number;
       };
     };
     responses: {

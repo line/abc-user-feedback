@@ -31,13 +31,11 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
 }) => {
   return (
     <Tooltip placement={placement ?? 'right'}>
-      <TooltipTrigger>
+      <TooltipTrigger className="ml-1 align-middle">
         <Icon
           name="QuestionCircleStroke"
           size={16}
-          className={[
-            color === 'red' ? 'text-red-primary' : 'text-tertiary ml-1',
-          ].join('')}
+          className={color === 'red' ? 'text-red-primary' : 'text-tertiary'}
         />
       </TooltipTrigger>
       <TooltipContent>{description}</TooltipContent>

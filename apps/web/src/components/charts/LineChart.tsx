@@ -33,7 +33,7 @@ const LineChart: React.FC<IProps> = ({ dataKeys, height, data }) => {
     <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
       <LineRechart width={500} height={300} data={data}>
         <Tooltip />
-        <XAxis dataKey="date" />
+        <XAxis dataKey="date" interval="equidistantPreserveStart" />
         <YAxis />
         {dataKeys.map(({ color, name }) => (
           <Line

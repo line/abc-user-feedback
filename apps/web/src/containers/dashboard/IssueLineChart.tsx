@@ -26,13 +26,15 @@ interface IProps {
 }
 
 const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count-by-date',
     variables: {
       from: dayjs(from).startOf('day').toISOString(),
       to: dayjs(to).endOf('day').toISOString(),
       projectId,
-      interval: 'day',
+      interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {
       refetchOnMount: false,
@@ -46,18 +48,27 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     if (!data) return [];
 
     const result = [];
-    let currentDate = dayjs(from).startOf('day');
-    const endDate = dayjs(to).endOf('day');
-    while (currentDate.isBefore(endDate)) {
+    let currentDate = dayjs(to).endOf('day');
+    const startDate = dayjs(from).startOf('day');
+
+    while (currentDate.isAfter(startDate)) {
+      const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
+
       const count =
         data.statistics.find((v) => v.date === currentDate.format('YYYY-MM-DD'))
           ?.count ?? 0;
 
-      result.push({ date: currentDate.format('MM/DD'), '피드백 수': count });
-      currentDate = currentDate.add(1, 'day');
+      result.push({
+        date:
+          dayCount > 50
+            ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
+            : currentDate.format('MM/DD'),
+        '피드백 수': count,
+      });
+      currentDate = prevDate;
     }
-    return result;
-  }, [data]);
+    return result.reverse();
+  }, [data, dayCount]);
 
   return (
     <SimpleLineChart

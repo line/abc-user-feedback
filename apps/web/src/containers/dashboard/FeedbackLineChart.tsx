@@ -69,13 +69,15 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
 }) => {
   const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
 
+  const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback',
     variables: {
       from: dayjs(from).startOf('day').toISOString(),
       to: dayjs(to).endOf('day').toISOString(),
       channelIds: currentChannels.map(({ id }) => id).join(','),
-      interval: 'day',
+      interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {
       refetchOnMount: false,
@@ -98,10 +100,11 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
     if (!data) return [];
 
     const result = [];
-    let currentDate = dayjs(from).startOf('day');
-    const endDate = dayjs(to).endOf('day');
-    while (currentDate.isBefore(endDate)) {
-      let total = 0;
+    let currentDate = dayjs(to).endOf('day');
+    const startDate = dayjs(from).startOf('day');
+
+    while (currentDate.isAfter(startDate)) {
+      const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
 
       const channelData = data.channels.reduce(
         (acc, cur) => {
@@ -109,17 +112,21 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
             cur.statistics.find(
               (v) => v.date === currentDate.format('YYYY-MM-DD'),
             )?.count ?? 0;
-          total += count;
           return { ...acc, [cur.name]: count };
         },
-        { date: currentDate.format('MM/DD') },
+        {
+          date:
+            dayCount > 50
+              ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
+              : currentDate.format('MM/DD'),
+        },
       );
 
-      result.push({ ...channelData, total });
-      currentDate = currentDate.add(1, 'day');
+      result.push(channelData);
+      currentDate = prevDate;
     }
-    return result;
-  }, [data]);
+    return result.reverse();
+  }, [data, dayCount]);
 
   return (
     <SimpleLineChart

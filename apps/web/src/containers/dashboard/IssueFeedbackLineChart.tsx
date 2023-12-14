@@ -38,6 +38,8 @@ interface IProps {
 }
 
 const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+
   const [searchName, setSearchName] = useState('');
   const throttledSearchName = useThrottle(searchName, 1000);
   const [currentIssues, setCurrentIssues] = useState<
@@ -66,7 +68,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       from: dayjs(from).startOf('day').toISOString(),
       to: dayjs(to).endOf('day').toISOString(),
       issueIds: (currentIssues.map((issue) => issue.id) ?? []).join(','),
-      interval: 'day',
+      interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {
       enabled: currentIssues.length > 0,
@@ -100,10 +102,10 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     if (!data) return [];
 
     const result = [];
-    let currentDate = dayjs(from).startOf('day');
-    const endDate = dayjs(to).endOf('day');
-    while (currentDate.isBefore(endDate)) {
-      let total = 0;
+    let currentDate = dayjs(to).endOf('day');
+    const startDate = dayjs(from).startOf('day');
+    while (currentDate.isAfter(startDate)) {
+      const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
 
       const channelData = data.issues.reduce(
         (acc, cur) => {
@@ -111,18 +113,21 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
             cur.statistics.find(
               (v) => v.date === currentDate.format('YYYY-MM-DD'),
             )?.feedbackCount ?? 0;
-          total += count;
           return { ...acc, [cur.name]: count };
         },
-        { date: currentDate.format('MM/DD') },
+        {
+          date:
+            dayCount > 50
+              ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
+              : currentDate.format('MM/DD'),
+        },
       );
 
-      result.push({ ...channelData, total });
-      currentDate = currentDate.add(1, 'day');
+      result.push(channelData);
+      currentDate = prevDate;
     }
-    return result;
-  }, [data]);
-  console.log('newData: ', newData);
+    return result.reverse();
+  }, [data, dayCount]);
 
   return (
     <SimpleLineChart

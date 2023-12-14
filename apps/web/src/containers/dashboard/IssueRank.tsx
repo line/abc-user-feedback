@@ -14,17 +14,21 @@
  * under the License.
  */
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { PopoverCloseButton } from '@ufb/ui';
+import { Icon, PopoverCloseButton } from '@ufb/ui';
 
 import DashboardTable from '@/components/etc/DashboardTable';
 import { ISSUES } from '@/constants/issues';
+import { Path } from '@/constants/path';
 import { useIssueSearch, useOAIQuery } from '@/hooks';
 
 interface IssueTableData {
+  id: number;
   no: number;
   status: string;
   name: string;
@@ -36,7 +40,32 @@ const columnHelper = createColumnHelper<IssueTableData>();
 const columns = [
   columnHelper.accessor('no', { header: 'No', enableSorting: false }),
   columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
-  columnHelper.accessor('name', { header: 'Issue' }),
+  columnHelper.accessor('name', {
+    header: 'Issue',
+    enableSorting: false,
+    cell({ getValue, row }) {
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const router = useRouter();
+
+      return (
+        <div className="flex items-center gap-1">
+          <p>{getValue()}</p>
+          <Link
+            href={{
+              pathname: Path.ISSUE,
+              query: { projectId: router.query.projectId, id: row.original.id },
+            }}
+          >
+            <Icon
+              name="RightCircleStroke"
+              size={16}
+              className="text-tertiary cursor-pointer"
+            />
+          </Link>
+        </div>
+      );
+    },
+  }),
   columnHelper.accessor('count', { header: 'Count' }),
   columnHelper.accessor('growth', {
     header: 'Growth',
@@ -65,6 +94,7 @@ interface IProps {
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+
   const issues = useMemo(() => ISSUES(t), [t]);
   const [limit, setLimit] = useState(5);
   const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
@@ -72,6 +102,7 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const { data } = useIssueSearch(projectId, {
     sort: { feedbackCount: 'DESC' } as any,
     limit,
+    query: { statuses: currentIssueStatusList.map((v) => v.key) },
   });
 
   const enabled = (data?.items ?? []).length > 0;
@@ -125,6 +156,7 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
           ?.statistics.reduce((acc, cur) => acc + cur.feedbackCount, 0) ?? 0;
 
       return {
+        id: item.id,
         no: i + 1,
         count: item.feedbackCount,
         name: item.name,
