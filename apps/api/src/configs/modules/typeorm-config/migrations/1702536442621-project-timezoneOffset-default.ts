@@ -15,27 +15,20 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class FeedbackIssueStatistics1701234953280
+export class ProjectTimezoneOffsetDefault1702536442621
   implements MigrationInterface
 {
-  name = 'FeedbackIssueStatistics1701234953280';
+  name = 'ProjectTimezoneOffsetDefault1702536442621';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE \`feedback_issue_statistics\` (\`id\` int NOT NULL AUTO_INCREMENT, \`date\` date NOT NULL, \`feedback_count\` int NOT NULL DEFAULT '0', \`issue_id\` int NULL, UNIQUE INDEX \`issue-date-unique\` (\`issue_id\`, \`date\`), PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE \`feedback_issue_statistics\` ADD CONSTRAINT \`FK_f90e8299de4ac2a05d3b6cbb2a6\` FOREIGN KEY (\`issue_id\`) REFERENCES \`issues\`(\`id\`) ON DELETE CASCADE ON UPDATE NO ACTION`,
+      `ALTER TABLE \`projects\` CHANGE \`timezone_offset\` \`timezone_offset\` varchar(255) NOT NULL DEFAULT '+00:00'`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`feedback_issue_statistics\` DROP FOREIGN KEY \`FK_f90e8299de4ac2a05d3b6cbb2a6\``,
+      `ALTER TABLE \`projects\` CHANGE \`timezone_offset\` \`stimezone_offset\` varchar(255) NOT NULL`,
     );
-    await queryRunner.query(
-      `DROP INDEX \`issue-date-unique\` ON \`feedback_issue_statistics\``,
-    );
-    await queryRunner.query(`DROP TABLE \`feedback_issue_statistics\``);
   }
 }
