@@ -15,7 +15,7 @@
  */
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { In, Repository } from 'typeorm';
 
@@ -216,8 +216,8 @@ export class FeedbackOSService {
     const osFeedbackData = {
       ...feedback.rawData,
       id: feedback.id,
-      createdAt: dayjs().toISOString(),
-      updatedAt: dayjs().toISOString(),
+      createdAt: DateTime.utc().toISO(),
+      updatedAt: DateTime.utc().toISO(),
     };
 
     return await this.osRepository.createData({
@@ -304,7 +304,7 @@ export class FeedbackOSService {
 
   async upsertFeedbackItem(dto: UpdateFeedbackESDto) {
     const { feedbackId, data, channelId } = dto;
-    data.updatedAt = dayjs().toISOString();
+    data.updatedAt = DateTime.utc().toISO();
     await this.osRepository.updateData({
       id: feedbackId.toString(),
       index: channelId.toString(),

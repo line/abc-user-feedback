@@ -24,7 +24,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AxiosError } from 'axios';
 import * as bcrypt from 'bcrypt';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { Transactional } from 'typeorm-transactional';
 
@@ -90,9 +90,9 @@ export class AuthService {
     });
     await this.emailVerificationMailingService.send({ code, email });
 
-    return dayjs()
-      .add(5 * 60, 'seconds')
-      .format();
+    return DateTime.utc()
+      .plus({ seconds: 5 * 60 })
+      .toISO();
   }
 
   async verifyEmailCode({ code, email }: VerifyEmailCodeDto) {

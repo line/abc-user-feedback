@@ -16,7 +16,7 @@
 import { randomBytes } from 'crypto';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
@@ -105,7 +105,7 @@ export class ApiKeyService {
     });
 
     await this.repository.save(
-      Object.assign(apiKey, { deletedAt: dayjs().toDate() }),
+      Object.assign(apiKey, { deletedAt: DateTime.utc().toJSDate() }),
     );
   }
 

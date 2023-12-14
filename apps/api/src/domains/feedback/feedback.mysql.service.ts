@@ -15,7 +15,7 @@
  */
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import dayjs from 'dayjs';
+import { DateTime } from 'luxon';
 import { ClsService } from 'nestjs-cls';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Brackets, QueryFailedError, Repository } from 'typeorm';
@@ -291,7 +291,7 @@ export class FeedbackMySQLService {
 
           return query;
         },
-        updatedAt: () => `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
+        updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       })
       .where('id = :feedbackId', { feedbackId })
       .execute();
@@ -316,12 +316,12 @@ export class FeedbackMySQLService {
 
       await this.feedbackRepository.save({
         ...feedback,
-        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss'),
       });
 
       await this.issueRepository.update(dto.issueId, {
         feedbackCount: () => 'feedback_count + 1',
-        updatedAt: () => `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
+        updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       });
     } catch (e) {
       if (e instanceof QueryFailedError) {
@@ -353,12 +353,12 @@ export class FeedbackMySQLService {
 
       await this.feedbackRepository.save({
         ...feedback,
-        updatedAt: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+        updatedAt: DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss'),
       });
 
       await this.issueRepository.update(dto.issueId, {
         feedbackCount: () => 'feedback_count - 1',
-        updatedAt: () => `'${dayjs().format('YYYY-MM-DD HH:mm:ss')}'`,
+        updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       });
     } catch (e) {
       if (e instanceof QueryFailedError) {
