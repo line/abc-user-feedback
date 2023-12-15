@@ -24,7 +24,7 @@ interface IProps {
 }
 
 const SevenDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
-  const { data: yesterDay } = useOAIQuery({
+  const { data: currentData } = useOAIQuery({
     path: '/api/statistics/feedback/count',
     variables: {
       from: dayjs().subtract(7, 'day').startOf('day').toISOString(),
@@ -38,7 +38,7 @@ const SevenDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
       refetchInterval: false,
     },
   });
-  const { data } = useOAIQuery({
+  const { data: previousData } = useOAIQuery({
     path: '/api/statistics/feedback/count',
     variables: {
       from: dayjs().subtract(14, 'day').startOf('day').toISOString(),
@@ -53,13 +53,15 @@ const SevenDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     },
   });
   const percentage = useMemo(() => {
-    if (!yesterDay || !data || yesterDay.count === 0) return 0;
-    return ((yesterDay.count - data.count) / yesterDay.count) * 100;
-  }, [yesterDay, data]);
+    if (!currentData || !previousData) return 0;
+    return (
+      ((currentData.count - previousData.count) / previousData.count) * 100
+    );
+  }, [currentData, previousData]);
 
   return (
     <DashboardCard
-      count={yesterDay?.count ?? 0}
+      data={currentData?.count ?? 0}
       title="지난 7일 피드백 수"
       description={`지난 7일 동안 수집된 피드백의 개수입니다. (${dayjs()
         .subtract(7, 'day')

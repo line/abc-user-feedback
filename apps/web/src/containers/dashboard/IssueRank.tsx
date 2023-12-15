@@ -70,7 +70,9 @@ const columns = [
   columnHelper.accessor('growth', {
     header: 'Growth',
     cell({ getValue }) {
-      return (
+      return isNaN(getValue()) ? (
+        <p>-</p>
+      ) : (
         <p
           className={
             getValue() === 0

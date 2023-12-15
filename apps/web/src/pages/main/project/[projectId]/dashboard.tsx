@@ -25,6 +25,7 @@ import { Icon } from '@ufb/ui';
 import { DateRangePicker, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
+import { Path } from '@/constants/path';
 import {
   CreateFeedbackPerIssueCard,
   IssueBarChart,
@@ -44,21 +45,28 @@ import {
 } from '@/containers/dashboard';
 import FeedbackLineChart from '@/containers/dashboard/FeedbackLineChart';
 import { env } from '@/env.mjs';
+import useQueryParamsState from '@/hooks/useQueryParamsState';
 import type { NextPageWithLayout } from '@/pages/_app';
 import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps {
   projectId: number;
 }
+const DEFAULT_DATE_RANGE: DateRangeType = {
+  startDate: dayjs().subtract(30, 'day').toDate(),
+  endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
+};
 
 const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
-  const currentDate = useMemo(() => dayjs().format('YYYY-MM-DD HH:mm'), []);
 
-  const [dateRange, setDateRange] = useState<DateRangeType>({
-    startDate: dayjs().subtract(1, 'month').toDate(),
-    endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
-  });
+  const { createdAtRange: dateRange, setCreatedAtRange: setDateRange } =
+    useQueryParamsState(Path.DASHBOARD, { projectId }, DEFAULT_DATE_RANGE);
+
+  const currentDate = useMemo(
+    () => dayjs().format('YYYY-MM-DD HH:mm'),
+    [dateRange],
+  );
 
   const options = useMemo(() => {
     return [
@@ -103,7 +111,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <h1 className="font-20-bold mb-3">
           {t('main.dashboard.title')}
           <span className="font-12-regular text-secondary ml-2">
-            Update: {currentDate}
+            Updated: {currentDate}
           </span>
         </h1>
         <div>
@@ -112,6 +120,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             onChange={setDateRange}
             maxDate={dayjs().subtract(1, 'day').toDate()}
             options={options}
+            maxDays={365}
           />
         </div>
       </div>
@@ -131,6 +140,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           from={dateRange.startDate}
           to={dateRange.endDate}
         />
+
         <TodayFeedbackCard projectId={projectId} />
         <YesterdayFeedbackCard projectId={projectId} />
         <SevenDaysFeedbackCard projectId={projectId} />

@@ -37,7 +37,10 @@ export class FeedbackStatisticsController {
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('channelIds') channelIds: string,
   ) {
-    const channelIdsArray = channelIds.split(',').map((v) => parseInt(v, 10));
+    const channelIdsArray = channelIds
+      .split(',')
+      .map((v) => parseInt(v, 10))
+      .filter((v) => !isNaN(v));
 
     return FindCountByDateByChannelResponseDto.transform(
       await this.feedbackStatisticsService.getCountByDateByChannel({

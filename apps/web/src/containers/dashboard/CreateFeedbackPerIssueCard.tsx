@@ -41,7 +41,7 @@ const CreateFeedbackPerIssueCard: React.FC<IProps> = ({
   });
   return (
     <DashboardCard
-      count={data?.ratio ?? 0}
+      data={`${(data?.ratio ?? 0) * 100}%`}
       title="이슈 등록 비중"
       description={`특정 기간 동안 수집된 피드백의 이슈 등록 비중입니다.. (${dayjs(
         from,

@@ -33,7 +33,10 @@ export class FeedbackIssueStatisticsController {
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('issueIds') issueIds: string,
   ) {
-    const issueIdsArray = issueIds.split(',').map((v) => parseInt(v, 10));
+    const issueIdsArray = issueIds
+      .split(',')
+      .map((v) => parseInt(v, 10))
+      .filter((v) => !isNaN(v));
 
     return FindCountByDateByIssueResponseDto.transform(
       await this.feedbackIssueStatisticsService.getCountByDateByIssue({

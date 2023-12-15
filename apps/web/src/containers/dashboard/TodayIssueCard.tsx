@@ -55,13 +55,15 @@ const TodayIssueCard: React.FC<IProps> = ({ projectId }) => {
   });
 
   const percentage = useMemo(() => {
-    if (!currentData || !previousData || currentData.count === 0) return 0;
-    return ((currentData.count - previousData.count) / currentData.count) * 100;
+    if (!currentData || !previousData) return 0;
+    return (
+      ((currentData.count - previousData.count) / previousData.count) * 100
+    );
   }, [currentData, previousData]);
 
   return (
     <DashboardCard
-      count={currentData?.count ?? 0}
+      data={currentData?.count ?? 0}
       title="오늘 이슈 수"
       description={`오늘 생성된 이슈 개수입니다. (${dayjs().format(
         'YYYY/MM/DD',

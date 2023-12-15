@@ -32,7 +32,7 @@ const ChartContainer: React.FC<IProps> = (props) => {
   return (
     <div className="border-fill-tertiary rounded border p-4">
       <div className="flex h-[72px] items-center justify-between">
-        <div>
+        <div className="flex items-center">
           <span className="font-20-bold">{title}</span>
           {description && <DescriptionTooltip description={description} />}
         </div>

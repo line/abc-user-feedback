@@ -19,13 +19,13 @@ import { DescriptionTooltip } from '@/components/etc';
 
 interface IProps {
   title: string;
-  count: number;
+  data: string | number;
   percentage?: number;
   description?: string;
 }
 
 const DashboardCard: React.FC<IProps> = (props) => {
-  const { title, count, percentage, description } = props;
+  const { title, data, percentage, description } = props;
 
   return (
     <div className="border-fill-tertiary flex h-[104px] w-[220px] flex-col gap-[10px] rounded border p-3">
@@ -33,9 +33,15 @@ const DashboardCard: React.FC<IProps> = (props) => {
         {title}
         {description && <DescriptionTooltip description={description} />}
       </p>
-      <div className="flex gap-2">
-        <p className="font-24-bold">{Number(count).toLocaleString()}</p>
-        {typeof percentage !== 'undefined' && (
+      <div className="flex items-center gap-2">
+        <p className="font-24-bold">
+          {typeof data === 'number' ? data.toLocaleString() : data}
+        </p>
+        {typeof percentage === 'undefined' ? (
+          <></>
+        ) : isNaN(percentage) || !isFinite(percentage) ? (
+          <p className="text-primary">-</p>
+        ) : (
           <div className="flex items-center">
             {percentage !== 0 && (
               <Icon

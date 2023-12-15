@@ -38,7 +38,7 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
 
   return (
     <DashboardCard
-      count={data?.count ?? 0}
+      data={data?.count ?? 0}
       title="전체 이슈 수"
       description={`특정 기간 동안 생성된 이슈 개수입니다. (${dayjs(
         from,

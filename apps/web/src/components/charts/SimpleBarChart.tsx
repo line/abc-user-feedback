@@ -16,6 +16,7 @@
 import {
   Bar,
   BarChart,
+  Rectangle,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -30,10 +31,11 @@ interface IProps {
   height?: number;
   data: { name: string; value: number }[];
   showLegend?: boolean;
+  onClick?: (data?: { name: string; value: number }) => void;
 }
 
 const SimpleBarChart: React.FC<IProps> = (props) => {
-  const { data, title, description, height, showLegend } = props;
+  const { data, title, description, height, showLegend, onClick } = props;
   return (
     <ChartContainer
       description={description}
@@ -46,16 +48,18 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           height={300}
           data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          barSize={16}
+          onClick={(e) => {
+            onClick?.(e.activePayload?.[0].payload);
+          }}
         >
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip />
-          <Bar
-            dataKey="value"
-            fill="#5D7BE7"
-            barSize={16}
-            radius={[8, 8, 0, 0]}
+          <Tooltip
+            cursor={<Rectangle fill="#5D7BE729" />}
+            contentStyle={{ background: 'var(--background-color-primary)' }}
           />
+          <Bar dataKey="value" fill="#5D7BE7" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
     </ChartContainer>

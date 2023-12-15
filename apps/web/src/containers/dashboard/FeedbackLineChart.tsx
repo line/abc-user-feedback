@@ -62,11 +62,9 @@ interface IFeedbackLineChartProps {
   to: Date;
 }
 
-const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
-  channels,
-  from,
-  to,
-}) => {
+const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
+  const { channels, from, to } = props;
+
   const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
 
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
@@ -89,12 +87,12 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
 
   const dataKeys = useMemo(() => {
     return (
-      data?.channels.map((v, i) => ({
+      channels.map((v, i) => ({
         color: CHART_COLORS[i] ?? getDarkColor(),
         name: v.name,
       })) ?? []
     );
-  }, [data]);
+  }, [channels]);
 
   const newData = useMemo(() => {
     if (!data) return [];
@@ -106,12 +104,14 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
     while (currentDate.isAfter(startDate)) {
       const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
 
-      const channelData = data.channels.reduce(
+      const channelData = channels.reduce(
         (acc, cur) => {
           const count =
-            cur.statistics.find(
-              (v) => v.date === currentDate.format('YYYY-MM-DD'),
-            )?.count ?? 0;
+            data.channels
+              .find((v) => v.id === cur.id)
+              ?.statistics.find(
+                (v) => v.date === currentDate.format('YYYY-MM-DD'),
+              )?.count ?? 0;
           return { ...acc, [cur.name]: count };
         },
         {
@@ -121,12 +121,12 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
               : currentDate.format('MM/DD'),
         },
       );
-
       result.push(channelData);
+
       currentDate = prevDate;
     }
     return result.reverse();
-  }, [data, dayCount]);
+  }, [data, dayCount, channels]);
 
   return (
     <SimpleLineChart
@@ -146,7 +146,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = ({
               채널{' '}
               <span>
                 {currentChannels.length}
-                <span className="text-tertiary">/5</span>
+                <span className="text-tertiary">/{channels.length}</span>
               </span>
             </h1>
             <PopoverCloseButton />

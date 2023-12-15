@@ -45,6 +45,7 @@ const bgColorPrimary = {
   navy: 'bg-navy-primary',
   purple: 'bg-purple-primary',
 };
+
 const bgColor = {
   black: 'bg-fill-quaternary',
   red: 'bg-red-quaternary',

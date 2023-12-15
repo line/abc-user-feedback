@@ -17,6 +17,8 @@ import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useThrottle } from 'react-use';
 
+import { Badge, Icon, toast } from '@ufb/ui';
+
 import { SimpleLineChart } from '@/components/charts';
 import { CHART_COLORS } from '@/constants/chart-colors';
 import { useIssueSearch, useOAIQuery } from '@/hooks';
@@ -39,6 +41,8 @@ interface IProps {
 
 const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+
+  const [showInput, setShowInput] = useState(false);
 
   const [searchName, setSearchName] = useState('');
   const throttledSearchName = useThrottle(searchName, 1000);
@@ -71,7 +75,6 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {
-      enabled: currentIssues.length > 0,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
       refetchOnReconnect: false,
@@ -91,12 +94,12 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
 
   const dataKeys = useMemo(() => {
     return (
-      data?.issues.map((v, i) => ({
+      currentIssues.map((v, i) => ({
         color: CHART_COLORS[i] ?? getDarkColor(),
         name: v.name,
       })) ?? []
     );
-  }, [data]);
+  }, [currentIssues]);
 
   const newData = useMemo(() => {
     if (!data) return [];
@@ -107,12 +110,14 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     while (currentDate.isAfter(startDate)) {
       const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
 
-      const channelData = data.issues.reduce(
+      const issueData = currentIssues.reduce(
         (acc, cur) => {
           const count =
-            cur.statistics.find(
-              (v) => v.date === currentDate.format('YYYY-MM-DD'),
-            )?.feedbackCount ?? 0;
+            data.issues
+              .find((v) => v.id === cur.id)
+              ?.statistics.find(
+                (v) => v.date === currentDate.format('YYYY-MM-DD'),
+              )?.feedbackCount ?? 0;
           return { ...acc, [cur.name]: count };
         },
         {
@@ -123,52 +128,82 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
         },
       );
 
-      result.push(channelData);
+      result.push(issueData);
       currentDate = prevDate;
     }
     return result.reverse();
-  }, [data, dayCount]);
+  }, [data, dayCount, currentIssues]);
+
+  const handleIssueCheck = (issue: { id: number; name: string }) => {
+    if (currentIssues.length === 5) {
+      toast.negative({ title: '이슈는 최대 5개까지 선택할 수 있습니다.' });
+      return;
+    }
+    setCurrentIssues((prev) => [...prev, issue]);
+    setSearchName('');
+  };
+  const handleIssueUncheck = (issue: { id: number; name: string }) => {
+    setCurrentIssues((prev) => prev.filter((v) => v.id !== issue.id));
+  };
 
   return (
     <SimpleLineChart
-      title="전체 이슈 추이"
-      description={`특정 기간의 이슈 생성 추이를 나타냅니다 (${dayjs()
-        .subtract(7, 'day')
-        .format('YYYY/MM/DD')} - ${dayjs()
-        .subtract(1, 'day')
-        .format('YYYY/MM/DD')})`}
+      title="이슈 추이 비교"
+      description={`선택한 이슈의 피드백 추이를 나타냅니다. (${dayjs(
+        from,
+      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
       dataKeys={dataKeys}
       data={newData}
       showLegend
       filterContent={
         <>
-          <input
-            className="border-b-fill-tertiary w-full border-b-[1px] px-3 py-2"
-            onChange={(e) => setSearchName(e.target.value)}
-            value={searchName}
-          />
+          <div className="border-b-fill-tertiary flex flex-wrap gap-2 border-b-[1px] px-3 py-2">
+            {currentIssues.map((v) => (
+              <Badge key={v.id} type="tertiary">
+                <span className="font-12-regular">{v.name}</span>
+                <Icon
+                  className="ml-1 cursor-pointer"
+                  name="Close"
+                  size={12}
+                  onClick={() => handleIssueUncheck(v)}
+                />
+              </Badge>
+            ))}
+            {showInput ? (
+              <input
+                className="input-sm h-[28px] w-[90px]"
+                onChange={(e) => setSearchName(e.target.value)}
+                value={searchName}
+                onBlur={() => setShowInput(false)}
+                autoFocus
+              />
+            ) : (
+              <div
+                className="border-fill-tertiary flex w-[90px] cursor-pointer items-center gap-1 rounded-[20px] border px-3 py-1"
+                onClick={() => setShowInput(true)}
+              >
+                <Icon name="Search" size={12} />
+                <span className="font-12-regular">이슈 검색</span>
+              </div>
+            )}
+          </div>
           <p className="font-14-regular text-secondary px-3 py-2">이슈 목록</p>
           <ul className="max-h-[150px] overflow-auto">
-            {searchedIssues?.items.map((issue) => (
-              <li key={issue.id} className="px-3 py-2">
-                <label className="flex cursor-pointer items-center gap-2 py-1">
-                  <input
-                    className="checkbox checkbox-sm"
-                    type="checkbox"
-                    checked={currentIssues.some(({ id }) => id === issue.id)}
-                    onChange={(e) =>
-                      e.currentTarget.checked
-                        ? setCurrentIssues((prev) => [...prev, issue])
-                        : setCurrentIssues((prev) =>
-                            prev.filter((v) => v.id !== issue.id),
-                          )
-                    }
-                  />
-                  <p className="font-12-regular flex-1">{issue.name}</p>
-                </label>
-              </li>
-            ))}
+            {searchedIssues?.items
+              .filter(
+                (issue) => !currentIssues.some(({ id }) => id === issue.id),
+              )
+              .map((issue) => (
+                <li key={issue.id} className="px-3 py-2">
+                  <label
+                    className="flex cursor-pointer items-center gap-2 py-1"
+                    onClick={() => handleIssueCheck(issue)}
+                  >
+                    <p className="font-12-regular flex-1">{issue.name}</p>
+                  </label>
+                </li>
+              ))}
           </ul>
         </>
       }
