@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 import { PopoverCloseButton } from '@ufb/ui';
 
 import { SimpleLineChart } from '@/components/charts';
-import { CHART_COLORS } from '@/constants/chart-colors';
+import { CHART_TEN_COLORS } from '@/constants/chart-colors';
 import { useOAIQuery } from '@/hooks';
 
 const getDarkColor = () => {
@@ -88,7 +88,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
   const dataKeys = useMemo(() => {
     return (
       channels.map((v, i) => ({
-        color: CHART_COLORS[i] ?? getDarkColor(),
+        color: CHART_TEN_COLORS[i] ?? getDarkColor(),
         name: v.name,
       })) ?? []
     );
@@ -104,7 +104,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
     while (currentDate.isAfter(startDate)) {
       const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
 
-      const channelData = channels.reduce(
+      const channelData = currentChannels.reduce(
         (acc, cur) => {
           const count =
             data.channels
@@ -126,7 +126,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
       currentDate = prevDate;
     }
     return result.reverse();
-  }, [data, dayCount, channels]);
+  }, [data, dayCount, currentChannels]);
 
   return (
     <SimpleLineChart

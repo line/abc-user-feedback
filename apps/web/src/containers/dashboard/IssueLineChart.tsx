@@ -80,7 +80,7 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
         .format('YYYY/MM/DD')})`}
       height={400}
       data={newData}
-      dataKeys={[{ color: 'black', name: '피드백 수' }]}
+      dataKeys={[{ color: '#5D7BE7', name: '피드백 수' }]}
     />
   );
 };

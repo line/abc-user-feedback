@@ -20,7 +20,7 @@ import { useThrottle } from 'react-use';
 import { Badge, Icon, toast } from '@ufb/ui';
 
 import { SimpleLineChart } from '@/components/charts';
-import { CHART_COLORS } from '@/constants/chart-colors';
+import { CHART_FIVE_COLORS } from '@/constants/chart-colors';
 import { useIssueSearch, useOAIQuery } from '@/hooks';
 import client from '@/libs/client';
 
@@ -95,7 +95,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const dataKeys = useMemo(() => {
     return (
       currentIssues.map((v, i) => ({
-        color: CHART_COLORS[i] ?? getDarkColor(),
+        color: CHART_FIVE_COLORS[i] ?? getDarkColor(),
         name: v.name,
       })) ?? []
     );
