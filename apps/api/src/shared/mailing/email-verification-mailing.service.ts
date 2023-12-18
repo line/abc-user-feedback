@@ -15,17 +15,26 @@
  */
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
+import type { ConfigServiceType } from '@/types/config-service.type';
 import type { SendMailDto } from './send-mail.dto';
 
 @Injectable()
 export class EmailVerificationMailingService {
-  constructor(private readonly mailerService: MailerService) {}
+  private readonly baseUrl: string;
+
+  constructor(
+    private readonly mailerService: MailerService,
+    private readonly configService: ConfigService<ConfigServiceType>,
+  ) {
+    this.baseUrl = this.configService.get('smtp', { infer: true }).baseUrl;
+  }
   async send({ code, email }: SendMailDto) {
     await this.mailerService.sendMail({
       to: email,
       subject: `User feedback Email Verification`,
-      context: { code },
+      context: { code, baseUrl: this.baseUrl },
       template: 'verification',
     });
   }
