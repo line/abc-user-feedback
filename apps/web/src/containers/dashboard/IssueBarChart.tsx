@@ -29,9 +29,9 @@ interface IProps {
 }
 
 const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const { t } = useTranslation();
   const router = useRouter();
 
-  const { t } = useTranslation();
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count-by-status',
     variables: {
@@ -51,7 +51,7 @@ const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
     <SimpleBarChart
       data={ISSUES(t).map(({ key, name }) => ({
         name,
-        value: data?.statistics.find((v) => v.status === key)?.count ?? 0,
+        value: +(data?.statistics.find((v) => v.status === key)?.count ?? 0),
       }))}
       title="전체 이슈 현황"
       description="이슈 상태에 따른 전체 이슈 현황을 나타냅니다."
