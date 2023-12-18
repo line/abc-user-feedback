@@ -64,9 +64,13 @@
   @apply bg-fill-primary text-inverse !important;
 }
 
-/* .react-datepicker__day {
+.react-datepicker__day {
   @apply text-primary;
-} */
+}
+
+.react-datepicker__day--disabled {
+  color: #ccc;
+}
 
 .react-datepicker__day:hover,
 .react-datepicker__month-text:hover,
@@ -86,9 +90,6 @@
 .react-datepicker__day--today {
   @apply font-12-bold text-blue-primary;
 }
-/* .react-datepicker__day--disabled {
-  @apply text-secondary;
-} */
 
 .react-datepicker__day--outside-month {
   background-color: var(--background-color-tertiary) !important;
