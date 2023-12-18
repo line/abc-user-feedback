@@ -50,7 +50,7 @@ const SideNav: React.FC<IProps> = () => {
       >
         <MenuItem
           href={{ pathname: Path.DASHBOARD, query: { projectId } }}
-          iconName="HomeStroke"
+          iconName="PerformanceSalesStroke"
           activePathname={Path.DASHBOARD}
           isHover={isHover}
           text={'Dashboard'}

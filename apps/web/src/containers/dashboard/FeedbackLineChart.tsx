@@ -87,12 +87,12 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
 
   const dataKeys = useMemo(() => {
     return (
-      channels.map((v, i) => ({
+      currentChannels.map((v, i) => ({
         color: CHART_TEN_COLORS[i] ?? getDarkColor(),
         name: v.name,
       })) ?? []
     );
-  }, [channels]);
+  }, [currentChannels]);
 
   const newData = useMemo(() => {
     if (!data) return [];

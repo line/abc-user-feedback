@@ -53,7 +53,7 @@ interface IProps {
   projectId: number;
 }
 const DEFAULT_DATE_RANGE: DateRangeType = {
-  startDate: dayjs().subtract(30, 'day').startOf('day').toDate(),
+  startDate: dayjs().subtract(31, 'day').startOf('day').toDate(),
   endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
 };
 

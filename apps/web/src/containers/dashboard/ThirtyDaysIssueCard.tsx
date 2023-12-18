@@ -38,6 +38,7 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
       refetchInterval: false,
     },
   });
+
   const { data: previousData } = useOAIQuery({
     path: '/api/statistics/issue/count',
     variables: {
@@ -55,6 +56,7 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
 
   const percentage = useMemo(() => {
     if (!currentData || !previousData) return 0;
+    console.log('previousData.count: ', previousData.count);
     return (
       ((currentData.count - previousData.count) / previousData.count) * 100
     );
