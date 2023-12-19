@@ -21,6 +21,7 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  MaxLength,
   MinLength,
   ValidateNested,
 } from 'class-validator';
@@ -90,11 +91,13 @@ export class CreateChannelRequestDto {
   @ApiProperty()
   @IsString()
   @MinLength(1)
+  @MaxLength(20)
   name: string;
 
   @ApiProperty({ nullable: true })
   @IsNullable()
   @IsString()
+  @MaxLength(50)
   description: string | null;
 
   @ApiProperty({ required: false, nullable: true, type: ImageConfigRequestDto })

@@ -29,12 +29,11 @@ export class EmailVerificationMailingService {
   ) {
     this.baseUrl = this.configService.get('smtp', { infer: true }).baseUrl;
   }
-
   async send({ code, email }: SendMailDto) {
     await this.mailerService.sendMail({
       to: email,
       subject: `User feedback Email Verification`,
-      context: { code, baseAssetUrl: `${this.baseUrl}/assets/mailing` },
+      context: { code, baseUrl: this.baseUrl },
       template: 'verification',
     });
   }

@@ -27,8 +27,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
-import dayjs from 'dayjs';
 import { FastifyReply } from 'fastify';
+import { DateTime } from 'luxon';
 
 import { ApiKeyAuthGuard } from '@/domains/auth/guards';
 import { ChannelService } from '../channel/channel/channel.service';
@@ -144,8 +144,8 @@ export class FeedbackController {
       });
     const stream = streamableFile.getStream();
 
-    const filename = `UFB_${projectName}_${channelName}_Feedback_${dayjs().format(
-      'YYYY-MM-DD',
+    const filename = `UFB_${projectName}_${channelName}_Feedback_${DateTime.utc().toFormat(
+      'yyyy-MM-dd',
     )}.${type}`;
     res.header('Content-Disposition', `attachment; filename="${filename}"`);
 

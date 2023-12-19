@@ -20,6 +20,8 @@ import {
   IsOptional,
   IsString,
   Length,
+  MaxLength,
+  MinLength,
 } from 'class-validator';
 
 import { TimezoneOffset } from '@ufb/shared';
@@ -48,11 +50,14 @@ class CreateApiKeyByValueDto {
 export class CreateProjectRequestDto {
   @ApiProperty()
   @IsString()
+  @MinLength(1)
+  @MaxLength(20)
   name: string;
 
   @ApiProperty({ nullable: true })
   @IsString()
   @IsNullable()
+  @MaxLength(50)
   description: string | null;
 
   @ApiProperty()

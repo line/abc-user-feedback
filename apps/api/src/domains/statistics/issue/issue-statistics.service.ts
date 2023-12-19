@@ -17,7 +17,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
-import dayjs from 'dayjs';
 import dotenv from 'dotenv';
 import { DateTime } from 'luxon';
 import { Between, Repository } from 'typeorm';
@@ -146,16 +145,16 @@ export class IssueStatisticsService {
         where: {
           project: { id },
           createdAt: Between(
-            dayjs()
-              .subtract(day, 'day')
+            DateTime.utc()
+              .minus({ days: day })
               .startOf('day')
-              .subtract(offset, 'hour')
-              .toDate(),
-            dayjs()
-              .subtract(day, 'day')
+              .minus({ hours: offset })
+              .toJSDate(),
+            DateTime.utc()
+              .minus({ days: day })
               .endOf('day')
-              .subtract(offset, 'hour')
-              .toDate(),
+              .minus({ hours: offset })
+              .toJSDate(),
           ),
         },
       });
@@ -166,7 +165,18 @@ export class IssueStatisticsService {
         .createQueryBuilder()
         .insert()
         .values({
-          date: dayjs().subtract(day, 'day').toDate(),
+          date:
+            offset >= 0
+              ? DateTime.utc()
+                  .minus({ days: day })
+                  .endOf('day')
+                  .minus({ hours: offset })
+                  .toFormat('yyyy-MM-dd')
+              : DateTime.utc()
+                  .minus({ days: day })
+                  .startOf('day')
+                  .minus({ hours: offset })
+                  .toFormat('yyyy-MM-dd'),
           count: issueCount,
           project: { id },
         })
