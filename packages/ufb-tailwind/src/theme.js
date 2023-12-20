@@ -16,6 +16,13 @@
 const colors = require('./colors');
 
 module.exports = {
+  fill: {
+    primary: 'var(--fill-color-primary)',
+    secondary: 'var(--fill-color-secondary)',
+    tertiary: 'var(--fill-color-tertiary)',
+    quaternary: 'var(--fill-color-quaternary)',
+    inverse: 'var(--fill-color-inverse)',
+  },
   colors: {
     fill: {
       primary: 'var(--fill-color-primary)',
