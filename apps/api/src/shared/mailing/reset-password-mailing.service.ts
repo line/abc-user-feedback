@@ -35,6 +35,7 @@ export class ResetPasswordMailingService {
       subject: `User feedback Reset Password`,
       context: {
         link: `${this.baseUrl}/link/reset-password?code=${code}&email=${email}`,
+        baseUrl: this.baseUrl,
       },
       template: 'resetPassword',
     });
