@@ -6,17 +6,7 @@
   "types": "index.d.ts",
   "typings": "index.d.ts",
   "scripts": {
-    "base": "tailwindcss --config src/base/tailwind.config.js -i src/base/base.css -o dist/layer/base.css --postcss",
-    "postbase": "prejss-cli dist/layer/base.css --format commonjs",
-    "utilities": "tailwindcss --config src/utilities/tailwind.config.js -i src/utilities/utilities.css -o dist/layer/utilities.css --postcss",
-    "postutilities": "prejss-cli dist/layer/utilities.css --format commonjs",
-    "components": "tailwindcss --config src/components/tailwind.config.js -i src/components/components.css -o dist/layer/components.css --postcss",
-    "postcomponents": "prejss-cli dist/layer/components.css --format commonjs",
-    "build": "yarn base && yarn utilities && yarn components && yarn merge",
-    "merge": "cat dist/layer/*.css > dist/tailwind.css",
-    "format": "prettier --check \"**/*.{tsx,ts,md,json}\"",
-    "lint": "eslint .",
-    "clean": "rm -rf .turbo node_modules dist"
+    "build": "node src/build"
   },
   "prettier": "@ufb/prettier-config",
   "eslintConfig": {
@@ -28,10 +18,8 @@
   "devDependencies": {
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
-    "@ufb/tsconfig": "^0.1.0",
     "autoprefixer": "^10.4.16",
     "eslint": "^8.51.0",
-    "npm-watch": "^0.11.0",
     "postcss": "^8.4.31",
     "postcss-cli": "^10.1.0",
     "postcss-import": "^15.1.0",

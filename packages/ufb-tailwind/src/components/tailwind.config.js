@@ -5,8 +5,8 @@ module.exports = {
   theme: require('../theme'),
   plugins: [
     plugin(({ addBase, addUtilities }) => {
-      addBase(require('../../dist/layer/base'));
-      addUtilities(require('../../dist/layer/utilities'));
+      addBase(require('../../dist/base'));
+      addUtilities(require('../../dist/utilities'));
     }),
   ],
 };
