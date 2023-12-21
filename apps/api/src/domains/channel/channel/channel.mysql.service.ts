@@ -100,7 +100,11 @@ export class ChannelMySQLService {
 
     if (
       await this.repository.findOne({
-        where: { name, id: Not(channelId) },
+        where: {
+          name,
+          id: Not(channelId),
+          project: { id: channel.project.id },
+        },
         select: ['id'],
       })
     ) {
