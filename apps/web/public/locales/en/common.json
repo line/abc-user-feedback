@@ -395,7 +395,8 @@
     },
     "total-issue-trend": {
       "title": "Overall issue trend",
-      "description": "This indicates the trend of issue creation over a specific period of time."
+      "description": "This indicates the trend of issue creation over a specific period of time.",
+      "issue-count": "Issue Count"
     },
     "issue-status-count": {
       "title": "Issue Status Count",

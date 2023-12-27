@@ -66,12 +66,12 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
           dayCount > 50
             ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
             : currentDate.format('MM/DD'),
-        '피드백 수': count,
+        [t('chart.total-issue-trend.issue-count')]: count,
       });
       currentDate = prevDate;
     }
     return result.reverse();
-  }, [data, dayCount]);
+  }, [data, dayCount, t]);
 
   return (
     <SimpleLineChart
@@ -83,7 +83,9 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
         .format('YYYY/MM/DD')})`}
       height={400}
       data={newData}
-      dataKeys={[{ color: '#5D7BE7', name: '피드백 수' }]}
+      dataKeys={[
+        { color: '#5D7BE7', name: t('chart.total-issue-trend.issue-count') },
+      ]}
     />
   );
 };

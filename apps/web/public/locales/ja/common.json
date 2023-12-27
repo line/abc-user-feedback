@@ -395,7 +395,8 @@
     },
     "total-issue-trend": {
       "title": "全体イシュー推移",
-      "description": "特定の期間のイシュー作成推移を示します。"
+      "description": "特定の期間のイシュー作成推移を示します。",
+      "issue-count": "イシュー件数"
     },
     "issue-status-count": {
       "title": "イシューステータス数",
