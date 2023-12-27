@@ -8,8 +8,7 @@
     "clean": "rm -rf .turbo node_modules",
     "format": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
-    "test": "jest"
+    "typecheck": "tsc --noEmit"
   },
   "prettier": "@ufb/prettier-config",
   "eslintConfig": {
