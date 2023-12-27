@@ -31,7 +31,9 @@ const DashboardCard: React.FC<IProps> = (props) => {
     <div className="border-fill-tertiary flex h-[104px] w-[220px] flex-col gap-[10px] rounded border p-3">
       <p className="line-clamp-2 h-[42px]">
         {title}
-        {description && <DescriptionTooltip description={description} />}
+        {description && (
+          <DescriptionTooltip description={description} placement="bottom" />
+        )}
       </p>
       <div className="flex items-center gap-2">
         <p className="font-24-bold">

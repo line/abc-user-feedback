@@ -56,7 +56,9 @@ function DashboardTable<T>(props: IProps<T>) {
       <div className="flex justify-between p-4">
         <div className="flex items-center gap-1">
           <h3 className="font-20-bold">{title}</h3>
-          {description && <DescriptionTooltip description={description} />}
+          {description && (
+            <DescriptionTooltip description={description} placement="bottom" />
+          )}
         </div>
         <div className="flex items-center gap-2">
           {select && <SelectBox {...select} />}

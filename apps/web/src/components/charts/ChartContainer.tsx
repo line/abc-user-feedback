@@ -34,7 +34,9 @@ const ChartContainer: React.FC<IProps> = (props) => {
       <div className="flex h-[72px] items-center justify-between">
         <div className="flex items-center">
           <span className="font-20-bold">{title}</span>
-          {description && <DescriptionTooltip description={description} />}
+          {description && (
+            <DescriptionTooltip description={description} placement="bottom" />
+          )}
         </div>
         <div className="flex gap-3">
           {showLegend && <Legend dataKeys={dataKeys ?? []} />}

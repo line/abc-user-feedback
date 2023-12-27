@@ -22,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, PopoverCloseButton } from '@ufb/ui';
 
+import { DescriptionTooltip } from '@/components';
 import DashboardTable from '@/components/etc/DashboardTable';
 import { ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
@@ -38,15 +39,13 @@ interface IssueTableData {
 
 const columnHelper = createColumnHelper<IssueTableData>();
 const columns = [
-  columnHelper.accessor('no', { header: 'No', enableSorting: false }),
-  columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
+  columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 30 }),
   columnHelper.accessor('name', {
     header: 'Issue',
     enableSorting: false,
     cell({ getValue, row }) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const router = useRouter();
-
       return (
         <div className="flex items-center gap-1">
           <p>{getValue()}</p>
@@ -55,6 +54,8 @@ const columns = [
               pathname: Path.ISSUE,
               query: { projectId: router.query.projectId, id: row.original.id },
             }}
+            target="_blank"
+            rel="noreferrer"
           >
             <Icon
               name="RightCircleStroke"
@@ -66,9 +67,18 @@ const columns = [
       );
     },
   }),
-  columnHelper.accessor('count', { header: 'Count' }),
+  columnHelper.accessor('count', {
+    header: () => (
+      <>
+        Count{' '}
+        <DescriptionTooltip description="해당 이슈로 등록된 전체 피드백 개수입니다." />
+      </>
+    ),
+  }),
+  columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
   columnHelper.accessor('growth', {
     header: 'Growth',
+    enableSorting: false,
     cell({ getValue }) {
       return isNaN(getValue()) ? (
         <p>-</p>

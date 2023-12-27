@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -30,7 +29,6 @@ interface IProps {
 
 const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { t } = useTranslation();
-  const router = useRouter();
 
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count-by-status',
@@ -59,10 +57,13 @@ const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
       onClick={(data) => {
         if (!data) return;
         const issue = ISSUES(t).find((v) => v.name === data.name);
-        router.push({
-          pathname: Path.ISSUE,
-          query: { projectId, status: issue?.key },
-        });
+
+        window.open(
+          Path.ISSUE.replace('[projectId]', projectId.toString()) +
+            '?status=' +
+            issue?.key,
+          '_blank',
+        );
       }}
     />
   );

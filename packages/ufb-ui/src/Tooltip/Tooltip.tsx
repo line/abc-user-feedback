@@ -215,7 +215,7 @@ export const TooltipContent = React.forwardRef<
         ref={ref}
         style={{ ...context.floatingStyles, ...style }}
         className={[
-          'font-12-regular min-w-[50px] rounded p-2',
+          'font-12-regular z-40 min-w-[50px] rounded p-2',
           bgCN,
           textCN,
         ].join(' ')}
