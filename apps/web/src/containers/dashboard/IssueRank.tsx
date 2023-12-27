@@ -18,6 +18,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
+import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, PopoverCloseButton } from '@ufb/ui';
@@ -38,7 +39,7 @@ interface IssueTableData {
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
-const columns = [
+const columns = (t: TFunction) => [
   columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 30 }),
   columnHelper.accessor('name', {
     header: 'Issue',
@@ -71,7 +72,9 @@ const columns = [
     header: () => (
       <>
         Count{' '}
-        <DescriptionTooltip description="해당 이슈로 등록된 전체 피드백 개수입니다." />
+        <DescriptionTooltip
+          description={t('chart.issue-rank.feedback-count')}
+        />
       </>
     ),
     cell: ({ getValue }) => getValue().toLocaleString(),
@@ -184,7 +187,7 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
     <DashboardTable
       title={t('chart.issue-rank.title')}
       description={t('chart.issue-rank.description')}
-      columns={columns}
+      columns={columns(t)}
       data={newData}
       select={{
         options: [

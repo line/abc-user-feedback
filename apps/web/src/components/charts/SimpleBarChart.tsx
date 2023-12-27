@@ -49,15 +49,21 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           data={data}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           barSize={16}
-          onClick={(e) => {
-            onClick?.(e.activePayload?.[0].payload);
-          }}
+          onClick={(e) => onClick?.(e.activePayload?.[0].payload)}
         >
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip
             cursor={<Rectangle fill="#5D7BE729" />}
-            contentStyle={{ background: 'var(--background-color-primary)' }}
+            formatter={(value) => value.toLocaleString()}
+            content={({ payload, label }) => (
+              <div className="bg-primary cursor-pointer rounded border p-3">
+                <p className="mb-2">{label}</p>
+                <p style={{ color: '#5D7BE7' }}>
+                  {payload?.[0]?.value?.toLocaleString()}
+                </p>
+              </div>
+            )}
           />
           <Bar dataKey="value" fill="#5D7BE7" radius={[8, 8, 0, 0]} />
         </BarChart>

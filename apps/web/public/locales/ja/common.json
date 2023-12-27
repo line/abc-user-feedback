@@ -403,7 +403,8 @@
     },
     "issue-rank": {
       "title": "トップイシューランク",
-      "description": "これはトップリストのIssueを表しています。"
+      "description": "これはトップリストのIssueを表しています。",
+      "feedback-count": "該当イシューとして登録された全体フィードバック数です。"
     },
     "issue-trend": {
       "title": "イシュー傾向比較",

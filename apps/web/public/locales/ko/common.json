@@ -403,7 +403,8 @@
     },
     "issue-rank": {
       "title": "상위 이슈 목록",
-      "description": "피드백이 많은 상위 목록의 이슈를 나타냅니다."
+      "description": "피드백이 많은 상위 목록의 이슈를 나타냅니다.",
+      "feedback-count": "해당 이슈로 등록된 전체 피드백 개수입니다."
     },
     "issue-trend": {
       "title": "이슈 추이 비교",
