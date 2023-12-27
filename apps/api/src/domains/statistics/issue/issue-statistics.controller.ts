@@ -65,15 +65,9 @@ export class IssueStatisticsController {
 
   @ApiOkResponse({ type: FindCountByStatusResponseDto })
   @Get('/count-by-status')
-  async getCountByStatus(
-    @Query('from') from: Date,
-    @Query('to') to: Date,
-    @Query('projectId') projectId: number,
-  ) {
+  async getCountByStatus(@Query('projectId') projectId: number) {
     return FindCountByStatusResponseDto.transform(
       await this.issueStatisticsService.getCountByStatus({
-        from,
-        to,
         projectId,
       }),
     );
