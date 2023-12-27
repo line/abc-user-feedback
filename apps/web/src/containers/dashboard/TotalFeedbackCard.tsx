@@ -14,6 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
@@ -25,6 +26,8 @@ interface IProps {
 }
 
 const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
+  const { t } = useTranslation();
+
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback/count',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
@@ -39,8 +42,8 @@ const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
   return (
     <DashboardCard
       data={data?.count ?? 0}
-      title="전체 피드백 수"
-      description={`특정 기간 동안 수집된 피드백 개수입니다. (${dayjs(
+      title={t('card.dashboard.total-feedback.title')}
+      description={`${t('card.dashboard.total-feedback.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
     />

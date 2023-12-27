@@ -15,6 +15,7 @@
  */
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
@@ -24,6 +25,8 @@ interface IProps {
 }
 
 const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
+
   const { data: currentData } = useOAIQuery({
     path: '/api/statistics/feedback/count',
     variables: {
@@ -63,10 +66,10 @@ const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
   return (
     <DashboardCard
       data={currentData?.count ?? 0}
-      title="지난 30일 피드백 수"
-      description={`지난 30일 동안 수집된 피드백의 개수입니다. (${dayjs()
-        .subtract(7, 'day')
-        .format('YYYY/MM/DD')} - ${dayjs()
+      title={t('card.dashboard.n-days-feedback.title', { n: 30 })}
+      description={`${t('card.dashboard.n-days-feedback.description', {
+        n: 30,
+      })} (${dayjs().subtract(7, 'day').format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       percentage={percentage}

@@ -51,8 +51,8 @@ const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
         name,
         value: +(data?.statistics.find((v) => v.status === key)?.count ?? 0),
       }))}
-      title="전체 이슈 현황"
-      description="이슈 상태에 따른 전체 이슈 현황을 나타냅니다."
+      title={t('chart.issue-status-count.title')}
+      description={t('chart.issue-status-count.description')}
       height={400}
       onClick={(data) => {
         if (!data) return;

@@ -28,8 +28,8 @@ const DashboardCard: React.FC<IProps> = (props) => {
   const { title, data, percentage, description } = props;
 
   return (
-    <div className="border-fill-tertiary flex h-[104px] w-[220px] flex-col gap-[10px] rounded border p-3">
-      <p className="line-clamp-2 h-[42px]">
+    <div className="border-fill-tertiary flex h-[108px] w-[220px] flex-col gap-[10px] rounded border p-3">
+      <p className="line-clamp-2 flex-1">
         {title}
         {description && (
           <DescriptionTooltip description={description} placement="bottom" />

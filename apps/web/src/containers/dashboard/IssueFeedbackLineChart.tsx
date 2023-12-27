@@ -15,6 +15,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import { useThrottle } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
@@ -40,6 +41,8 @@ interface IProps {
 }
 
 const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const { t } = useTranslation();
+
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
 
   const [showInput, setShowInput] = useState(false);
@@ -136,7 +139,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
 
   const handleIssueCheck = (issue: { id: number; name: string }) => {
     if (currentIssues.length === 5) {
-      toast.negative({ title: '이슈는 최대 5개까지 선택할 수 있습니다.' });
+      toast.negative({ title: t('popover.select-issue.max-issue-count') });
       return;
     }
     setCurrentIssues((prev) => [...prev, issue]);
@@ -148,8 +151,8 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
 
   return (
     <SimpleLineChart
-      title="이슈 추이 비교"
-      description={`선택한 이슈의 피드백 추이를 나타냅니다. (${dayjs(
+      title={t('chart.total-issue-trend.title')}
+      description={`${t('chart.total-issue-trend.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
@@ -180,15 +183,19 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
               />
             ) : (
               <div
-                className="border-fill-tertiary flex w-[90px] cursor-pointer items-center gap-1 rounded-[20px] border px-3 py-1"
+                className="border-fill-tertiary flex cursor-pointer items-center gap-1 rounded-[20px] border px-3 py-1"
                 onClick={() => setShowInput(true)}
               >
                 <Icon name="Search" size={12} />
-                <span className="font-12-regular">이슈 검색</span>
+                <span className="font-12-regular">
+                  {t('popover.select-issue.search-issue')}
+                </span>
               </div>
             )}
           </div>
-          <p className="font-14-regular text-secondary px-3 py-2">이슈 목록</p>
+          <p className="font-14-regular text-secondary px-3 py-2">
+            {t('popover.select-issue.issue-list')}
+          </p>
           <ul className="max-h-[150px] overflow-auto">
             {searchedIssues?.items
               .filter(

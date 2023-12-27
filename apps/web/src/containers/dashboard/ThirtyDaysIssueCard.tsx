@@ -15,6 +15,7 @@
  */
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
@@ -24,6 +25,8 @@ interface IProps {
 }
 
 const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
+
   const { data: currentData } = useOAIQuery({
     path: '/api/statistics/issue/count',
     variables: {
@@ -65,10 +68,10 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
   return (
     <DashboardCard
       data={currentData?.count ?? 0}
-      title="지난 30일 이슈 수"
-      description={`지난 30일 동안 생성된 이슈 개수입니다. (${dayjs()
-        .subtract(7, 'day')
-        .format('YYYY/MM/DD')} - ${dayjs()
+      title={t('card.dashboard.n-days-issue.title', { n: 30 })}
+      description={`${t('card.dashboard.n-days-issue.description', {
+        n: 30,
+      })} (${dayjs().subtract(7, 'day').format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       percentage={percentage}

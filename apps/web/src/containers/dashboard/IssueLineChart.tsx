@@ -15,6 +15,7 @@
  */
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { SimpleLineChart } from '@/components/charts';
 import { useOAIQuery } from '@/hooks';
@@ -26,6 +27,8 @@ interface IProps {
 }
 
 const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
+  const { t } = useTranslation();
+
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
 
   const { data } = useOAIQuery({
@@ -72,8 +75,8 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
 
   return (
     <SimpleLineChart
-      title="전체 이슈 추이"
-      description={`특정 기간의 이슈 생성 추이를 나타냅니다 (${dayjs()
+      title={t('chart.total-issue-trend.title')}
+      description={`${t('chart.total-issue-trend.description')} (${dayjs()
         .subtract(7, 'day')
         .format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')

@@ -14,6 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
@@ -25,6 +26,8 @@ interface IProps {
 }
 
 const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
+  const { t } = useTranslation();
+
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
@@ -39,8 +42,8 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
   return (
     <DashboardCard
       data={data?.count ?? 0}
-      title="전체 이슈 수"
-      description={`특정 기간 동안 생성된 이슈 개수입니다. (${dayjs(
+      title={t('card.dashboard.total-issue.title')}
+      description={`${t('card.dashboard.total-issue.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
     />

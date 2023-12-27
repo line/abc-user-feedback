@@ -14,6 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
@@ -24,11 +25,11 @@ interface IProps {
   to: Date;
 }
 
-const CreateFeedbackPerIssueCard: React.FC<IProps> = ({
-  from,
-  to,
-  projectId,
-}) => {
+const CreateFeedbackPerIssueCard: React.FC<IProps> = (props) => {
+  const { from, to, projectId } = props;
+
+  const { t } = useTranslation();
+
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback/issued-ratio',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
@@ -42,8 +43,8 @@ const CreateFeedbackPerIssueCard: React.FC<IProps> = ({
   return (
     <DashboardCard
       data={`${parseFloat(Math.abs((data?.ratio ?? 0) * 100).toFixed(1))}%`}
-      title="이슈 등록 비중"
-      description={`특정 기간 동안 수집된 피드백의 이슈 등록 비중입니다.. (${dayjs(
+      title={t('card.dashboard.issue-ratio.title')}
+      description={`${t('card.dashboard.issue-ratio.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
     />

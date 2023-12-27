@@ -15,6 +15,7 @@
  */
 import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import { PopoverCloseButton } from '@ufb/ui';
 
@@ -64,6 +65,8 @@ interface IFeedbackLineChartProps {
 
 const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
   const { channels, from, to } = props;
+
+  const { t } = useTranslation();
 
   const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
 
@@ -130,8 +133,8 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
 
   return (
     <SimpleLineChart
-      title="전체 피드백 추이"
-      description={`특정 기간의 피드백 수집 추이를 나타냅니다. (${dayjs()
+      title={t('chart.total-feedback-trend.title')}
+      description={`${t('chart.total-feedback-trend.description')} (${dayjs()
         .subtract(7, 'day')
         .format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
@@ -143,7 +146,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
         <div className="flex flex-col gap-3 px-4 py-3">
           <div className="flex justify-between">
             <h1 className="font-16-bold">
-              채널{' '}
+              Channel{' '}
               <span>
                 {currentChannels.length}
                 <span className="text-tertiary">/{channels.length}</span>

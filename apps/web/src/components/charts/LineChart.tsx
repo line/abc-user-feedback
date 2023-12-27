@@ -34,9 +34,10 @@ const LineChart: React.FC<IProps> = ({ dataKeys, height, data }) => {
       <LineRechart width={500} height={300} data={data}>
         <Tooltip
           contentStyle={{ background: 'var(--background-color-primary)' }}
+          formatter={(value) => value.toLocaleString()}
         />
         <XAxis dataKey="date" interval="equidistantPreserveStart" />
-        <YAxis />
+        <YAxis tickFormatter={(v) => v.toLocaleString()} />
         {dataKeys.map(({ color, name }) => (
           <Line
             key={name}

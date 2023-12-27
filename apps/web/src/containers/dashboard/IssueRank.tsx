@@ -74,8 +74,10 @@ const columns = [
         <DescriptionTooltip description="해당 이슈로 등록된 전체 피드백 개수입니다." />
       </>
     ),
+    cell: ({ getValue }) => getValue().toLocaleString(),
   }),
   columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
+
   columnHelper.accessor('growth', {
     header: 'Growth',
     enableSorting: false,
@@ -180,25 +182,25 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardTable
-      title="상위 이슈 목록"
-      description="피드백이 많은 상위 목록의 이슈를 나타냅니다."
+      title={t('chart.issue-rank.title')}
+      description={t('chart.issue-rank.description')}
       columns={columns}
       data={newData}
       select={{
         options: [
-          { name: '5개', key: 5 },
-          { name: '10개', key: 10 },
-          { name: '15개', key: 15 },
-          { name: '20개', key: 20 },
+          { name: '5', key: 5 },
+          { name: '10', key: 10 },
+          { name: '15', key: 15 },
+          { name: '20', key: 20 },
         ],
-        defaultValue: { name: '5개', key: 5 },
+        defaultValue: { name: '5', key: 5 },
         onChange: (v) => setLimit(v?.key),
       }}
       filterContent={
         <div className="flex flex-col gap-3 px-4 py-3">
           <div className="flex justify-between">
             <h1 className="font-16-bold">
-              이슈 상태{' '}
+              {t('popover.select-issue-status.issue-status')}{' '}
               <span>
                 {currentIssueStatusList.length}
                 <span className="text-tertiary">/5</span>
