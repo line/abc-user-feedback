@@ -25,7 +25,11 @@ import { Transactional } from 'typeorm-transactional';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
 import { UpdateCountDto } from './dtos';
-import type { GetCountByDateDto, GetCountDto } from './dtos';
+import type {
+  GetCountByDateDto,
+  GetCountByStatusDto,
+  GetCountDto,
+} from './dtos';
 import { IssueStatisticsEntity } from './issue-statistics.entity';
 
 dotenv.config();
@@ -97,17 +101,13 @@ export class IssueStatisticsService {
     };
   }
 
-  async getCountByStatus(dto: GetCountDto) {
+  async getCountByStatus(dto: GetCountByStatusDto) {
     return {
       statistics: await this.issueRepository
         .createQueryBuilder('issue')
         .select('issue.status', 'status')
         .addSelect('COUNT(issue.id)', 'count')
         .where('issue.project_id = :projectId', { projectId: dto.projectId })
-        .andWhere('issue.createdAt BETWEEN :from AND :to', {
-          from: dto.from,
-          to: dto.to,
-        })
         .groupBy('issue.status')
         .getRawMany()
         .then((res) =>
