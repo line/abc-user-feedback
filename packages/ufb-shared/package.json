@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
+    "clean": "rm -rf dist .turbo node_modules",
     "format": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",

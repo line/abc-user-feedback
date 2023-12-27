@@ -125,6 +125,7 @@ export { ReactComponent as MinusCircleStroke } from './stroke/minus-circle-strok
 export { ReactComponent as MoonStroke } from './stroke/moon-stroke.svg';
 export { ReactComponent as NarrowStroke } from './stroke/narrow-stroke.svg';
 export { ReactComponent as NewCircleStroke } from './stroke/new-circle-stroke.svg';
+export { ReactComponent as PerformanceSalesStroke } from './stroke/performance-sales-stroke.svg';
 export { ReactComponent as PlusCircleStroke } from './stroke/plus-circle-stroke.svg';
 export { ReactComponent as PrinterStroke } from './stroke/printer-stroke.svg';
 export { ReactComponent as ProfileCircleStroke } from './stroke/profile-circle-stroke.svg';

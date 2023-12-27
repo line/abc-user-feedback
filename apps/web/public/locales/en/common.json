@@ -69,6 +69,9 @@
         }
       }
     },
+    "dashboard": {
+      "title": "Dashboard"
+    },
     "feedback": {
       "title": "Feedback",
       "column-setting": "Column Setting",
@@ -343,6 +346,80 @@
         "continue": "Continue",
         "restart": "Restart"
       }
+    }
+  },
+  "card": {
+    "dashboard": {
+      "total-feedback": {
+        "title": "Total number of feedbacks",
+        "description": "Number of feedback collected over a specific period of time."
+      },
+      "total-issue": {
+        "title": "Total number of issues",
+        "description": "Number of issues created in a specific period of time."
+      },
+      "issue-ratio": {
+        "title": "Issue registration rate",
+        "description": "Issue enrollment rate of feedback collected over a specific period of time."
+      },
+      "today-feedback": {
+        "title": "Today's feedback count",
+        "description": "Number of feedback collected today."
+      },
+      "yesterday-feedback": {
+        "title": "Number of yesterday's feedback",
+        "description": "Number of feedback collected yesterday."
+      },
+      "n-days-feedback": {
+        "title": "Number of feedbacks in the last {{n}} days",
+        "description": "Number of feedback collected in the last {{n}} days"
+      },
+      "today-issue": {
+        "title": "Number of issues today",
+        "description": "Number of issues created today."
+      },
+      "yesterday-issue": {
+        "title": "Number of issues yesterday",
+        "description": "Number of issues created yesterday."
+      },
+      "n-days-issue": {
+        "title": "Number of issues last {{n}} days",
+        "description": "Number of issues created in the last {{n}} days"
+      }
+    }
+  },
+  "chart": {
+    "total-feedback-trend": {
+      "title": "Overall feedback trend",
+      "description": "This indicates the trend of feedback collection over a specific period of time."
+    },
+    "total-issue-trend": {
+      "title": "Overall issue trend",
+      "description": "This indicates the trend of issue creation over a specific period of time.",
+      "issue-count": "Issue Count"
+    },
+    "issue-status-count": {
+      "title": "Issue Status Count",
+      "description": "This indicates the number of all issues by status."
+    },
+    "issue-rank": {
+      "title": "Top Issue Rank",
+      "description": "This represents an issue in the top list.",
+      "feedback-count": "The total number of feedbacks registered for this issue."
+    },
+    "issue-trend": {
+      "title": "Issue trend comparison",
+      "description": "This indicates the feedback trend of the selected issue."
+    }
+  },
+  "popover": {
+    "select-issue": {
+      "search-issue": "Search Issue",
+      "max-issue-count": "You can choose up to five issues.",
+      "issue-list": "Issue List"
+    },
+    "select-issue-status": {
+      "issue-status": "Issue Status"
     }
   }
 }

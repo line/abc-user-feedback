@@ -29,7 +29,7 @@ export class IssueStatisticsController {
     private readonly issueStatisticsService: IssueStatisticsService,
   ) {}
 
-  @ApiOkResponse({ type: [FindCountResponseDto] })
+  @ApiOkResponse({ type: FindCountResponseDto })
   @Get('/count')
   async getCount(
     @Query('from') from: Date,
@@ -45,7 +45,7 @@ export class IssueStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindCountByDateResponseDto] })
+  @ApiOkResponse({ type: FindCountByDateResponseDto })
   @Get('/count-by-date')
   async getCountByDate(
     @Query('from') from: Date,
@@ -63,7 +63,7 @@ export class IssueStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindCountByStatusResponseDto] })
+  @ApiOkResponse({ type: FindCountByStatusResponseDto })
   @Get('/count-by-status')
   async getCountByStatus(@Query('projectId') projectId: number) {
     return FindCountByStatusResponseDto.transform(

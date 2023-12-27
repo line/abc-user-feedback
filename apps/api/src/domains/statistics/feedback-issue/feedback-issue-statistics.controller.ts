@@ -25,7 +25,7 @@ export class FeedbackIssueStatisticsController {
     private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
-  @ApiOkResponse({ type: [FindCountByDateByIssueResponseDto] })
+  @ApiOkResponse({ type: FindCountByDateByIssueResponseDto })
   @Get()
   async getCountByDateByIssue(
     @Query('from') from: Date,
@@ -33,7 +33,11 @@ export class FeedbackIssueStatisticsController {
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('issueIds') issueIds: string,
   ) {
-    const issueIdsArray = issueIds.split(',').map((v) => parseInt(v, 10));
+    const issueIdsArray = issueIds
+      .split(',')
+      .map((v) => parseInt(v, 10))
+      .filter((v) => !isNaN(v));
+
     return FindCountByDateByIssueResponseDto.transform(
       await this.feedbackIssueStatisticsService.getCountByDateByIssue({
         from,

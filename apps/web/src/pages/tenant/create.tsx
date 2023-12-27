@@ -26,7 +26,8 @@ import { toast } from '@ufb/ui';
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useOAIMutation, useTenant } from '@/hooks';
+import { useTenant } from '@/contexts/tenant.context';
+import { useOAIMutation } from '@/hooks';
 import type { NextPageWithLayout } from '../_app';
 
 interface IForm {

@@ -16,7 +16,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 
-import themeStore from '@/zustand/theme.store';
+import useThemeStore from '@/zustand/theme.store';
 
 interface IProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
   isSelected: boolean;
@@ -26,7 +26,7 @@ interface IProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
 const TableRow: React.FC<IProps> = (props) => {
   const { isSelected, children, hoverElement, ...otherProps } = props;
   const ref = useRef<HTMLTableRowElement>(null);
-  const theme = useStore(themeStore, ({ theme }) => theme);
+  const theme = useStore(useThemeStore, ({ theme }) => theme);
 
   const [isHover, setIsHover] = useState(false);
   const [rowHeight, setRowHeight] = useState(50);

@@ -32,11 +32,13 @@ import {
 interface IForm {
   name: string;
   description: string | null;
+  imageConfig: any;
 }
 
 const scheme: Zod.ZodType<IForm> = z.object({
   name: z.string(),
   description: z.string().nullable(),
+  imageConfig: z.object({}),
 });
 
 interface IProps extends React.PropsWithChildren {

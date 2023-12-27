@@ -77,7 +77,7 @@ const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
         onClick={() => {
           if (type === 'channel') {
             router.push({
-              pathname: Path.FEEDBACK,
+              pathname: Path.PROJECT_MAIN,
               query: { projectId: router.query.projectId },
             });
           } else if (type === 'project') {

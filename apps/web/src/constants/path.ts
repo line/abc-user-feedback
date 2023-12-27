@@ -51,6 +51,13 @@ class PathV3 {
     return '/main/project/[projectId]/channel/create-complete';
   }
 
+  get PROJECT_MAIN() {
+    return this.DASHBOARD;
+  }
+  get DASHBOARD() {
+    return '/main/project/[projectId]/dashboard';
+  }
+
   get FEEDBACK() {
     return '/main/project/[projectId]/feedback';
   }

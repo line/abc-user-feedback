@@ -69,6 +69,9 @@
         }
       }
     },
+    "dashboard": {
+      "title": "대시보드"
+    },
     "feedback": {
       "title": "피드백",
       "column-setting": "컬럼설정",
@@ -343,6 +346,80 @@
         "continue": "이어서하기",
         "restart": "처음부터"
       }
+    }
+  },
+  "card": {
+    "dashboard": {
+      "total-feedback": {
+        "title": "전체 피드백 수",
+        "description": "특정 기간 동안 수집된 피드백 개수입니다."
+      },
+      "total-issue": {
+        "title": "전체 이슈 수",
+        "description": "특정 기간 동안 생성된 이슈 개수입니다."
+      },
+      "issue-ratio": {
+        "title": "이슈 등록 비중",
+        "description": "특정 기간 동안 수집된 피드백의 이슈 등록 비중입니다."
+      },
+      "today-feedback": {
+        "title": "오늘 피드백 수",
+        "description": "오늘 수집된 피드백의 개수입니다."
+      },
+      "yesterday-feedback": {
+        "title": "어제 피드백 수",
+        "description": "어제 수집된 피드백의 개수입니다."
+      },
+      "n-days-feedback": {
+        "title": "지난 {{n}}일 피드백 수",
+        "description": "지난 {{n}}일 동안 수집된 피드백의 개수입니다."
+      },
+      "today-issue": {
+        "title": "오늘 이슈 수",
+        "description": "오늘 생성된 이슈 개수입니다."
+      },
+      "yesterday-issue": {
+        "title": "어제 이슈 수",
+        "description": "어제 생성된 이슈 개수입니다."
+      },
+      "n-days-issue": {
+        "title": "지난 {{n}}일 이슈 수",
+        "description": "지난 {{n}}일 동안 생성된 이슈 개수입니다."
+      }
+    }
+  },
+  "chart": {
+    "total-feedback-trend": {
+      "title": "전체 피드백 추이",
+      "description": "특정 기간의 피드백 수집 추이를 나타냅니다."
+    },
+    "total-issue-trend": {
+      "title": "전체 이슈 추이",
+      "description": "특정 기간의 이슈 생성 추이를 나타냅니다.",
+      "issue-count": "이슈 수"
+    },
+    "issue-status-count": {
+      "title": "이슈 상태 현황",
+      "description": "모든 이슈의 상태별 현황을 나타냅니다."
+    },
+    "issue-rank": {
+      "title": "상위 이슈 목록",
+      "description": "피드백이 많은 상위 목록의 이슈를 나타냅니다.",
+      "feedback-count": "해당 이슈로 등록된 전체 피드백 개수입니다."
+    },
+    "issue-trend": {
+      "title": "이슈 추이 비교",
+      "description": "선택한 이슈의 피드백 추이를 나타냅니다."
+    }
+  },
+  "popover": {
+    "select-issue": {
+      "search-issue": "이슈 검색",
+      "max-issue-count": "이슈는 최대 5개까지 선택할 수 있습니다.",
+      "issue-list": "이슈 목록"
+    },
+    "select-issue-status": {
+      "issue-status": "이슈 상태"
     }
   }
 }

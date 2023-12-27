@@ -13,11 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useContext } from 'react';
-
-import { TenantContext } from '@/contexts/tenant.context';
-
-const useTenant = () => {
-  return useContext(TenantContext);
-};
-export default useTenant;
+export { default } from './TenantProjectCard';

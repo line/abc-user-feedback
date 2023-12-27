@@ -155,6 +155,9 @@ export interface paths {
   "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
   };
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
+    get: operations["FeedbackController_getImageUploadUrl"];
+  };
   "/api/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
     delete: operations["IssueController_deleteMany"];
@@ -480,8 +483,15 @@ export interface components {
     FindApiKeysResponseDto: {
       items: components["schemas"]["ApiKeyResponseDto"][];
     };
+    ImageConfigRequestDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
     /** @enum {string} */
-    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
+    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
     /** @enum {string} */
     FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
@@ -503,15 +513,24 @@ export interface components {
     CreateChannelRequestDto: {
       name: string;
       description: string | null;
+      imageConfig?: components["schemas"]["ImageConfigRequestDto"] | null;
       fields: components["schemas"]["CreateChannelRequestFieldDto"][];
     };
     CreateChannelResponseDto: {
       id: number;
     };
+    ImageConfigResponseDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
     FindChannelsByProjectDto: {
       id: number;
       name: string;
       description: string;
+      imageConfig: components["schemas"]["ImageConfigResponseDto"];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -529,7 +548,7 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date";
+      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
       /** @enum {string} */
       type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */
@@ -547,6 +566,7 @@ export interface components {
       id: number;
       name: string;
       description: string;
+      imageConfig: components["schemas"]["ImageConfigResponseDto"];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -556,6 +576,7 @@ export interface components {
     UpdateChannelRequestDto: {
       name: string;
       description: string | null;
+      imageConfig: components["schemas"]["ImageConfigRequestDto"] | null;
     };
     UpdateChannelRequestFieldDto: {
       name: string;
@@ -708,20 +729,48 @@ export interface components {
     FindCountResponseDto: {
       count: number;
     };
+    IssueStatistics: {
+      date: string;
+      count: number;
+    };
     FindCountByDateResponseDto: {
-      statistics: string[];
+      statistics: components["schemas"]["IssueStatistics"][];
+    };
+    IssueStatusStatistics: {
+      status: string;
+      count: number;
     };
     FindCountByStatusResponseDto: {
-      statistics: string[];
+      statistics: components["schemas"]["IssueStatusStatistics"][];
+    };
+    StatisticData: {
+      /** Format: date-time */
+      date: string;
+      count: number;
+    };
+    ChannelStatisticData: {
+      id: number;
+      name: string;
+      statistics: components["schemas"]["StatisticData"][];
     };
     FindCountByDateByChannelResponseDto: {
-      channels: string[];
+      channels: components["schemas"]["ChannelStatisticData"][];
     };
     FindIssuedRateResponseDto: {
       ratio: number;
     };
+    IssueStatisticData: {
+      /** Format: date-time */
+      date: string;
+      feedbackCount: number;
+    };
+    IssueStatistic: {
+      id: number;
+      name: string;
+      statistics: components["schemas"]["IssueStatisticData"][];
+    };
     FindCountByDateByIssueResponseDto: {
-      channels: string[];
+      issues: components["schemas"]["IssueStatistic"][];
     };
     CreateIssueTrackerResponseDto: {
       id: number;
@@ -1640,6 +1689,19 @@ export interface operations {
       };
     };
   };
+  FeedbackController_getImageUploadUrl: {
+    parameters: {
+      path: {
+        projectId: number;
+        channelId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
   IssueController_create: {
     parameters: {
       path: {
@@ -1752,7 +1814,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindCountResponseDto"][];
+          "application/json": components["schemas"]["FindCountResponseDto"];
         };
       };
     };
@@ -1769,7 +1831,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindCountByDateResponseDto"][];
+          "application/json": components["schemas"]["FindCountByDateResponseDto"];
         };
       };
     };
@@ -1785,7 +1847,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindCountByStatusResponseDto"][];
+          "application/json": components["schemas"]["FindCountByStatusResponseDto"];
         };
       };
     };
@@ -1802,7 +1864,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindCountByDateByChannelResponseDto"][];
+          "application/json": components["schemas"]["FindCountByDateByChannelResponseDto"];
         };
       };
     };
@@ -1818,7 +1880,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindCountResponseDto"][];
+          "application/json": components["schemas"]["FindCountResponseDto"];
         };
       };
     };
@@ -1834,7 +1896,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindIssuedRateResponseDto"][];
+          "application/json": components["schemas"]["FindIssuedRateResponseDto"];
         };
       };
     };
@@ -1851,7 +1913,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["FindCountByDateByIssueResponseDto"][];
+          "application/json": components["schemas"]["FindCountByDateByIssueResponseDto"];
         };
       };
     };

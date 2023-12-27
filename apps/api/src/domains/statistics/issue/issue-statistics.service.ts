@@ -111,7 +111,7 @@ export class IssueStatisticsService {
         .groupBy('issue.status')
         .getRawMany()
         .then((res) =>
-          res.map((stat) => ({ status: stat.status, count: stat.count })),
+          res.map((stat) => ({ status: stat.status, count: +stat.count })),
         ),
     };
   }

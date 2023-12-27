@@ -22,7 +22,8 @@ import { z } from 'zod';
 import { Badge, Input, toast } from '@ufb/ui';
 
 import { DescriptionTooltip, SettingMenuTemplate } from '@/components';
-import { useOAIMutation, useTenant } from '@/hooks';
+import { useTenant } from '@/contexts/tenant.context';
+import { useOAIMutation } from '@/hooks';
 import type { OAuthConfigType } from '@/types/tenant.type';
 import OAuthInput from './OAuthInput';
 import RadioGroup from './RadioGroup';

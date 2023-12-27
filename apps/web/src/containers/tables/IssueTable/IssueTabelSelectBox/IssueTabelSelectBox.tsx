@@ -33,7 +33,6 @@ type IssueCountOption = { count: number; key: string };
 
 const IssueTabelSelectBox: React.FC<IProps> = (props) => {
   const { projectId, currentIssueKey, onChangeOption, createdAtRange } = props;
-  console.log('currentIssueKey: ', currentIssueKey);
 
   const { t } = useTranslation();
 

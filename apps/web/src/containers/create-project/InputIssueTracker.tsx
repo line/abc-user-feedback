@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { ZodError } from 'zod';
 
+import type { TimezoneOffset } from '@ufb/shared';
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, TextInput, toast } from '@ufb/ui';
 
@@ -105,7 +106,7 @@ const InputIssueTracker: React.FC<IProps> = () => {
         userId: member.user.id,
       })),
       roles: input.roles,
-      timezoneOffset: '+09:00',
+      timezoneOffset: '+09:00' as TimezoneOffset,
     });
   };
 

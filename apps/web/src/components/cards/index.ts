@@ -13,4 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { ChannelCard } from './ChannelCard';
+export { default as ChannelCard } from './ChannelCard';
+export { default as TenantProjectCard } from './TenantProjectCard';
+export { default as DashboardCard } from './DashboardCard';

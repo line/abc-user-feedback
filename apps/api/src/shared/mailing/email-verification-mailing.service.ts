@@ -23,7 +23,6 @@ import type { SendMailDto } from './send-mail.dto';
 @Injectable()
 export class EmailVerificationMailingService {
   private readonly baseUrl: string;
-
   constructor(
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService<ConfigServiceType>,

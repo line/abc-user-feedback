@@ -8,6 +8,9 @@ module.exports = {
       full: '99999px',
       none: '0',
     },
+    screens: {
+      lg: '960px',
+    },
   },
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
@@ -15,6 +18,7 @@ module.exports = {
   ],
   plugins: [
     require('@ufb/tailwind'),
+    // @ts-ignore
     require('tailwind-scrollbar-hide'),
     require('@headlessui/tailwindcss'),
   ],

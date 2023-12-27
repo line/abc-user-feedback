@@ -7,6 +7,9 @@
   @apply border-none bg-transparent p-2;
 }
 
+.react-datepicker__month {
+  @apply p-2;
+}
 .react-datepicker__current-month {
   @apply bg-fill-quaternary font-16-regular text-primary rounded-sm px-4 py-3;
 }
@@ -65,8 +68,23 @@
   @apply text-primary;
 }
 
-.react-datepicker__day:hover {
+.react-datepicker__day--disabled {
+  color: #ccc;
+}
+
+.react-datepicker__day:hover,
+.react-datepicker__month-text:hover,
+.react-datepicker__quarter-text:hover,
+.react-datepicker__year-text:hover {
   @apply text-inverse bg-fill-primary rounded-full;
+}
+
+.react-datepicker__day--disabled:hover,
+.react-datepicker__month-text--disabled:hover,
+.react-datepicker__quarter-text--disabled:hover,
+.react-datepicker__year-text--disabled:hover {
+  @apply bg-transparent;
+  color: #ccc;
 }
 
 .react-datepicker__day--today {
