@@ -71,18 +71,20 @@ const columns = (t: TFunction) => [
   columnHelper.accessor('count', {
     header: () => (
       <>
-        Count{' '}
-        <DescriptionTooltip
-          description={t('chart.issue-rank.feedback-count')}
-        />
+        Count
+        <DescriptionTooltip description={t('tooltip.issue-feedback-count')} />
       </>
     ),
     cell: ({ getValue }) => getValue().toLocaleString(),
   }),
   columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
-
   columnHelper.accessor('growth', {
-    header: 'Growth',
+    header: () => (
+      <>
+        Growth
+        <DescriptionTooltip description={t('tooltip.issue-feedback-growth')} />
+      </>
+    ),
     enableSorting: false,
     cell({ getValue }) {
       return isNaN(getValue()) ? (

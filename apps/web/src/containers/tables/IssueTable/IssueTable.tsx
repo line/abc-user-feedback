@@ -404,7 +404,8 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                         />
                         <IssueSettingPopover
                           issue={row.original}
-                          refetch={refetch}
+                          refetchIssueTable={refetch}
+                          createdAtRange={createdAtRange}
                           issueTracker={
                             issueTracker?.data as IssueTrackerType | undefined
                           }

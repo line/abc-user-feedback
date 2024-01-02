@@ -576,7 +576,7 @@ export interface components {
     UpdateChannelRequestDto: {
       name: string;
       description: string | null;
-      imageConfig: components["schemas"]["ImageConfigRequestDto"] | null;
+      imageConfig?: components["schemas"]["ImageConfigRequestDto"] | null;
     };
     UpdateChannelRequestFieldDto: {
       name: string;
@@ -1839,8 +1839,6 @@ export interface operations {
   IssueStatisticsController_getCountByStatus: {
     parameters: {
       query: {
-        from: string;
-        to: string;
         projectId: number;
       };
     };

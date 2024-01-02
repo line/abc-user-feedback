@@ -405,7 +405,7 @@
     "issue-rank": {
       "title": "Top Issue Rank",
       "description": "This represents an issue in the top list.",
-      "feedback-count": "The total number of feedbacks registered for this issue."
+      "feedback-count": ""
     },
     "issue-trend": {
       "title": "Issue trend comparison",
@@ -421,5 +421,9 @@
     "select-issue-status": {
       "issue-status": "Issue Status"
     }
+  },
+  "tooltip": {
+    "issue-feedback-count": "The total number of feedbacks registered for this issue.",
+    "issue-feedback-growth": "This represents the feedback increase/decrease rate of the issue over the past seven days."
   }
 }
