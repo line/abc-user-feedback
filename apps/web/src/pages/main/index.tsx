@@ -16,8 +16,9 @@
 import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { CreateProjectButton, MainTemplate } from '@/components';
+import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
+import { CreateProjectButton } from '@/containers/buttons';
 import { ProjectCard, TenantCard } from '@/containers/main';
 import { useProjects } from '@/hooks';
 import type { NextPageWithLayout } from '../_app';

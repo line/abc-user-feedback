@@ -36,7 +36,6 @@ import {
   DateRangePicker,
   ExpandableText,
   IssueCircle,
-  ShareButton,
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
@@ -48,6 +47,7 @@ import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSear
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
+import { ShareButton } from '@/containers/buttons';
 import {
   useIssueSearch,
   useOAIMutation,
