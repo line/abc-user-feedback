@@ -15,22 +15,23 @@
  */
 import { components } from 'react-select';
 
-import type { ISelectBoxProps, SelectOptionType } from '../SelectBox/SelectBox';
+import type { ISelectBoxProps } from '../SelectBox/SelectBox';
 import SelectBox from '../SelectBox/SelectBox';
 
-interface IProps<IsMulti extends boolean> extends ISelectBoxProps<IsMulti> {
+interface IProps<Option, IsMulti extends boolean>
+  extends ISelectBoxProps<Option, IsMulti> {
   SingleValue?: {
-    left?: (data: SelectOptionType) => React.ReactNode;
-    right?: (data: SelectOptionType) => React.ReactNode;
+    left?: (data: Option) => React.ReactNode;
+    right?: (data: Option) => React.ReactNode;
   };
   Option?: {
-    left?: (data: SelectOptionType) => React.ReactNode;
-    right?: (data: SelectOptionType) => React.ReactNode;
+    left?: (data: Option) => React.ReactNode;
+    right?: (data: Option) => React.ReactNode;
   };
 }
 
-function SelectBoxWithIcon<IsMulti extends boolean = false>(
-  props: IProps<IsMulti>,
+function SelectBoxWithIcon<Option = unknown, IsMulti extends boolean = false>(
+  props: IProps<Option, IsMulti>,
 ) {
   const { SingleValue, Option, ...otherProps } = props;
   return (

@@ -191,13 +191,13 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       data={newData}
       select={{
         options: [
-          { name: '5', key: 5 },
-          { name: '10', key: 10 },
-          { name: '15', key: 15 },
-          { name: '20', key: 20 },
+          { label: '5', value: 5 },
+          { label: '10', value: 10 },
+          { label: '15', value: 15 },
+          { label: '20', value: 20 },
         ],
-        defaultValue: { name: '5', key: 5 },
-        onChange: (v) => setLimit(v?.key),
+        defaultValue: { label: '5', value: 5 },
+        onChange: (v) => setLimit(v?.value ?? 5),
       }}
       filterContent={
         <div className="flex flex-col gap-3 px-4 py-3">

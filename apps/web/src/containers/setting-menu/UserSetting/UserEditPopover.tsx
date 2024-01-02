@@ -100,14 +100,13 @@ const UserEditPopover: React.FC<IProps> = ({ data, refetch }) => {
             <div>
               <label className="input-label mb-2">Type</label>
               <SelectBox
-                isClearable={false}
-                isSearchable={false}
-                isMulti={false}
-                value={{ key: watch('type'), name: watch('type') }}
-                onChange={(v) => (v && v.key ? setValue('type', v.key) : {})}
+                value={{ label: watch('type'), value: watch('type') }}
+                onChange={(v) =>
+                  v?.value && setValue('type', v.value as UserTypeEnum)
+                }
                 options={[
-                  { name: 'SUPER', key: 'SUPER' },
-                  { name: 'GENERAL', key: 'GENERAL' },
+                  { label: 'SUPER', value: 'SUPER' },
+                  { label: 'GENERAL', value: 'GENERAL' },
                 ]}
               />
             </div>

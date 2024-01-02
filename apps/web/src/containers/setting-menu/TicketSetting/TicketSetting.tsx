@@ -118,8 +118,8 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
       </div>
       <form id="form" className="flex flex-col gap-6">
         <SelectBox
-          options={[{ key: 'jira', name: 'JIRA' }]}
-          value={{ key: 'jira', name: 'JIRA' }}
+          options={[{ value: 'jira', label: 'JIRA' }]}
+          value={{ value: 'jira', label: 'JIRA' }}
           label="Issue Tracking System"
         />
         <TextInput

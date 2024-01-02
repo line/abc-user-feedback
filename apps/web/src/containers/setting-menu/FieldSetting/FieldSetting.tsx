@@ -197,7 +197,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   useEffect(() => {
     getChannelData();
-  }, []);
+  }, [channelId]);
 
   const modifyField = (input: FieldRowType, index: number) => {
     setRows((v) =>

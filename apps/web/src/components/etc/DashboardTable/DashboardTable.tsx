@@ -33,7 +33,7 @@ interface IProps<T> {
   description?: string;
   data: T[];
   columns: ColumnDef<T, any>[];
-  select?: ISelectBoxProps<false>;
+  select?: ISelectBoxProps<{ label: string; value: number }, false>;
   filterContent?: React.ReactNode;
 }
 

@@ -95,9 +95,10 @@ const MemberUpdatePopover: React.FC<IProps> = ({
         <SelectBox
           label="Role"
           options={data?.roles ?? []}
-          onChange={(v) => (v && v.id ? setInputRoleId(v.id) : {})}
+          onChange={(v) => v?.id && setInputRoleId(v?.id)}
+          getOptionValue={(option) => String(option.id)}
+          getOptionLabel={(option) => option.name}
           defaultValue={currentRole}
-          isSearchable={false}
         />
       </PopoverModalContent>
     </Popover>
