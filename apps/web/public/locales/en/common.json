@@ -404,8 +404,7 @@
     },
     "issue-rank": {
       "title": "Top Issue Rank",
-      "description": "This represents an issue in the top list.",
-      "feedback-count": ""
+      "description": "This represents an issue in the top list."
     },
     "issue-trend": {
       "title": "Issue trend comparison",
