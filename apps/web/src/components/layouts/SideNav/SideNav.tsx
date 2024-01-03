@@ -53,7 +53,7 @@ const SideNav: React.FC<IProps> = () => {
           iconName="PerformanceSalesStroke"
           activePathname={Path.DASHBOARD}
           isHover={isHover}
-          text={'Dashboard'}
+          text={t('main.dashboard.title')}
         />
         <hr />
         <MenuItem

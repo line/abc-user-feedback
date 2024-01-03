@@ -45,18 +45,17 @@ const DashboardCard: React.FC<IProps> = (props) => {
           <p className="text-primary">-</p>
         ) : (
           <div className="flex items-center">
-            {percentage !== 0 && (
-              <Icon
-                name={percentage > 0 ? 'TriangleUp' : 'TriangleDown'}
-                className={
-                  percentage > 0 ? 'text-blue-primary' : 'text-red-primary'
-                }
-              />
+            {percentage === 0 ? (
+              <Icon name="Minus" className="text-secondary" />
+            ) : percentage > 0 ? (
+              <Icon name="TriangleUp" className="text-blue-primary" />
+            ) : (
+              <Icon name="TriangleDown" className="text-red-primary" />
             )}
             <p
               className={
                 percentage === 0
-                  ? 'text-primary'
+                  ? 'text-secondary'
                   : percentage > 0
                   ? 'text-blue-primary'
                   : 'text-red-primary'

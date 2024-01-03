@@ -87,20 +87,30 @@ const columns = (t: TFunction) => [
     ),
     enableSorting: false,
     cell({ getValue }) {
-      return isNaN(getValue()) ? (
+      const percentage = getValue();
+      return isNaN(percentage) ? (
         <p>-</p>
       ) : (
-        <p
-          className={
-            getValue() === 0
-              ? 'text-primary'
-              : getValue() > 0
-              ? 'text-blue-primary'
-              : 'text-red-primary'
-          }
-        >
-          {parseFloat(Math.abs(getValue()).toFixed(1))}%
-        </p>
+        <div className="flex items-center">
+          {percentage === 0 ? (
+            <Icon name="Minus" className="text-secondary" />
+          ) : percentage > 0 ? (
+            <Icon name="TriangleUp" className="text-blue-primary" />
+          ) : (
+            <Icon name="TriangleDown" className="text-red-primary" />
+          )}
+          <p
+            className={
+              percentage === 0
+                ? 'text-secondary'
+                : percentage > 0
+                ? 'text-blue-primary'
+                : 'text-red-primary'
+            }
+          >
+            {parseFloat(Math.abs(percentage).toFixed(1))}%
+          </p>
+        </div>
       );
     },
   }),
@@ -180,7 +190,7 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
         count: item.feedbackCount,
         name: item.name,
         status: ISSUES(t).find((v) => v.key === item.status)?.name ?? '',
-        growth: ((lastWeekCount - thisWeekCount) / lastWeekCount) * 100,
+        growth: ((thisWeekCount - lastWeekCount) / lastWeekCount) * 100,
       };
     });
   }, [data, currentData, previousData, t]);
