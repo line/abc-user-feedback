@@ -53,8 +53,9 @@ const SideNav: React.FC<IProps> = () => {
           iconName="PerformanceSalesStroke"
           activePathname={Path.DASHBOARD}
           isHover={isHover}
-          text={'Dashboard'}
+          text={t('main.dashboard.title')}
         />
+        <hr />
         <MenuItem
           href={{ pathname: Path.FEEDBACK, query: { projectId } }}
           iconName="BubbleDotsStroke"

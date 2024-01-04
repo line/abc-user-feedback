@@ -18,10 +18,11 @@ import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { CreateChannelButton, MainTemplate } from '@/components';
+import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { ironOption } from '@/constants/iron-option';
 import { FeedbackTable } from '@/containers';
+import { CreateChannelButton } from '@/containers/buttons';
 import { env } from '@/env.mjs';
 import type { NextPageWithLayout } from '@/pages/_app';
 

@@ -58,7 +58,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     {
       query: { name: throttledSearchName },
       page: 0,
-      limit: 10,
+      limit: 1000,
       sort: { feedbackCount: 'desc' } as any,
     },
     {

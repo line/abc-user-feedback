@@ -37,9 +37,12 @@ import { useLocalStorage, usePermissions } from '@/hooks';
 
 interface IProps {
   projectId: number;
+  type: 'primary' | 'blue';
+  placement?: 'top' | 'bottom';
 }
 
-const NoChannel: React.FC<IProps> = ({ projectId }) => {
+const CreateChannelButton: React.FC<IProps> = (props) => {
+  const { projectId, type, placement } = props;
   const { t } = useTranslation();
 
   const router = useRouter();
@@ -50,22 +53,25 @@ const NoChannel: React.FC<IProps> = ({ projectId }) => {
     CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
     0,
   );
+
   const goToCreateChannel = () =>
-    router.push({
-      pathname: Path.CREATE_CHANNEL,
-      query: { projectId },
-    });
+    router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-8">
-      <div className="flex flex-col items-center gap-3">
-        <Icon name="NoChannelFill" size={56} className="text-tertiary" />
-        <p>{t('text.no-channel')}</p>
-      </div>
-      <Tooltip open={step > 0} placement="bottom">
+    <div className="flex flex-col gap-8">
+      {type !== 'primary' && (
+        <div className="flex flex-col items-center gap-3">
+          <Icon name="NoChannelFill" size={56} className="text-tertiary" />
+          <p>{t('text.no-channel')}</p>
+        </div>
+      )}
+      <Tooltip open={step > 0} placement={placement ?? 'bottom'}>
         <TooltipTrigger asChild>
           <button
-            className="btn btn-blue btn-lg w-[200px] gap-2"
+            className={[
+              type === 'primary' ? 'btn-primary' : 'btn-blue',
+              'btn btn-lg gap-2',
+            ].join(' ')}
             onClick={() => {
               if (step > 0) setOpen(true);
               else goToCreateChannel();
@@ -76,7 +82,7 @@ const NoChannel: React.FC<IProps> = ({ projectId }) => {
             {t('main.setting.button.create-channel')}
           </button>
         </TooltipTrigger>
-        <TooltipContent color="blue">
+        <TooltipContent color="red">
           {t('text.create-channel-in-progress')}{' '}
           <b>
             ({step + 1}/{CHANNEL_STEPS.length})
@@ -111,4 +117,4 @@ const NoChannel: React.FC<IProps> = ({ projectId }) => {
   );
 };
 
-export default NoChannel;
+export default CreateChannelButton;

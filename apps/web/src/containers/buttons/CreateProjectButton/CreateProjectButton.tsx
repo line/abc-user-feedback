@@ -17,9 +17,15 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverModalContent } from '@ufb/ui';
+import {
+  Icon,
+  Popover,
+  PopoverModalContent,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@ufb/ui';
 
-import { ButtonWithTooltip } from '@/components/buttons';
 import {
   CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
   CREATE_PROJECT_CURRENT_STEP_KEY,
@@ -47,16 +53,25 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
 
   return (
     <>
-      <ButtonWithTooltip
+      <Tooltip
         open={!hasProject || (hasProject && step > 0)}
-        onClick={() => {
-          if (step > 0) setOpen(true);
-          else goToCreateProjectPage();
-        }}
-        disabled={user?.type !== 'SUPER'}
-        tooltipColor={!hasProject ? 'blue' : 'red'}
-        tooltipContent={
-          !hasProject ? (
+        placement="bottom"
+      >
+        <TooltipTrigger asChild>
+          <button
+            className="btn btn-lg btn-primary w-[200px] gap-2"
+            onClick={() => {
+              if (step > 0) setOpen(true);
+              else goToCreateProjectPage();
+            }}
+            disabled={user?.type !== 'SUPER'}
+          >
+            <Icon name="Plus" className="text-above-white" />
+            {t('main.index.create-project')}
+          </button>
+        </TooltipTrigger>
+        <TooltipContent color={!hasProject ? 'blue' : 'red'}>
+          {!hasProject ? (
             t('main.index.no-project')
           ) : (
             <>
@@ -65,13 +80,9 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
                 ({step + 1}/{PROJECT_STEPS.length})
               </b>
             </>
-          )
-        }
-      >
-        <Icon name="Plus" className="text-above-white" />
-        {t('main.index.create-project')}
-      </ButtonWithTooltip>
-
+          )}
+        </TooltipContent>
+      </Tooltip>
       <Popover modal open={open} onOpenChange={setOpen}>
         <PopoverModalContent
           title={t('dialog.continue.title')}
