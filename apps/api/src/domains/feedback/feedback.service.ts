@@ -139,9 +139,11 @@ export class FeedbackService {
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
-        case FieldFormatEnum.image:
-          if (typeof query[fieldKey] !== 'string')
-            throw new BadRequestException(`${fieldKey} must be string`);
+        case FieldFormatEnum.images:
+          if (!Array.isArray(query[fieldKey]))
+            throw new BadRequestException(
+              `${fieldKey} must be array of string`,
+            );
           break;
       }
     }

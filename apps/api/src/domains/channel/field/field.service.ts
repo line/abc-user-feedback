@@ -31,7 +31,7 @@ export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
   select: 'keyword',
   multiSelect: 'keyword',
   date: 'date',
-  image: 'text',
+  images: 'text',
 };
 
 @Injectable()
@@ -46,7 +46,7 @@ export class FieldService {
     return fields.reduce(
       (mapping: Record<string, { type: string }>, field) =>
         Object.assign(mapping, {
-          [field.key]: [FieldFormatEnum.text, FieldFormatEnum.image].includes(
+          [field.key]: [FieldFormatEnum.text, FieldFormatEnum.images].includes(
             field.format,
           )
             ? {
