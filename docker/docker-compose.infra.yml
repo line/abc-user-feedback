@@ -20,6 +20,26 @@ services:
     networks:
       - app_network
 
+  # optional for e2e test
+  mysql-for-e2e:
+    hostname: mysql
+    image: mysql:8.0.19
+    platform: linux/amd64
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: userfeedback
+      MYSQL_DATABASE: e2e
+      MYSQL_USER: userfeedback
+      MYSQL_PASSWORD: userfeedback
+      TZ: UTC
+    ports:
+      - 13307:3306
+    volumes:
+      - ./volumes/mysql-for-e2e:/var/lib/mysql-for-e2e
+    networks:
+      - app_network
+
   # optional for email verification on creating user
   smtp4dev:
     image: rnwood/smtp4dev:v3

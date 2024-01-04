@@ -29,6 +29,7 @@
     "lint": "turbo lint --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache'",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
     "test": "turbo run test",
+    "test:e2e": "cd apps/e2e && yarn test",
     "typecheck": "turbo typecheck"
   },
   "prettier": "@ufb/prettier-config",
