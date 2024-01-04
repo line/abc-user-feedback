@@ -23,6 +23,8 @@ services:
       context: ..
       dockerfile: docker/api.dockerfile
     restart: always
+    ports:
+      - 4000:4000
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e

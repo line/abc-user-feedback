@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 export default () => {
   test.afterEach(async ({ page }) => {
     await page.getByText('TestProject').click();
-    await page.getByText('FeedbackIssueSetting').click();
+    await page.getByText('FeedbackIssueSetting').hover();
     await page.getByRole('button', { name: 'Setting', exact: true }).click();
 
     await page.getByText('Delete Project').click();

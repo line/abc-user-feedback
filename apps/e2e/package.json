@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "playwright test"
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@playwright/test": "^1.40.1",
