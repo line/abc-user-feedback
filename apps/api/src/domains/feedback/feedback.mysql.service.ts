@@ -178,7 +178,7 @@ export class FeedbackMySQLService {
             );
           }
         } else if (
-          [FieldFormatEnum.text, FieldFormatEnum.image].includes(format)
+          [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
         ) {
           queryBuilder.andWhere(
             `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"') like :value`,

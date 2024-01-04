@@ -47,8 +47,8 @@ export function validateValue(field: FieldEntity, value: any) {
       }
     case FieldFormatEnum.date:
       return !isNaN(Date.parse(value)) && typeof value !== 'number';
-    case FieldFormatEnum.image:
-      return typeof value === 'string';
+    case FieldFormatEnum.images:
+      return Array.isArray(value);
     default:
       throw new Error(`${field.key}: ${field.format} is error ${value}`);
   }

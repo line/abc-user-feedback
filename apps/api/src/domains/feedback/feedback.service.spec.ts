@@ -264,8 +264,8 @@ describe('FeedbackService Test Suite', () => {
           invalidValues: ['not a date', 123, true, {}, []],
         },
         {
-          format: FieldFormatEnum.image,
-          invalidValues: [123, true, {}, [], new Date()],
+          format: FieldFormatEnum.images,
+          invalidValues: ['not images', 123, true, {}, new Date()],
         },
       ];
       for (const { format, invalidValues } of formats) {

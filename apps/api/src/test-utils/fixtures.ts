@@ -99,8 +99,8 @@ export const getRandomValue = (
             .map((option) => option.key);
     case FieldFormatEnum.date:
       return faker.date.anytime().toISOString();
-    case FieldFormatEnum.image:
-      return faker.string.sample();
+    case FieldFormatEnum.images:
+      return [faker.string.sample()];
     default:
       throw new Error('Invalid field type ');
   }
