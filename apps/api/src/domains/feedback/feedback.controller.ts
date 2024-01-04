@@ -43,6 +43,7 @@ import {
   DeleteFeedbacksRequestDto,
   ExportFeedbacksRequestDto,
   FindFeedbacksByChannelIdRequestDto,
+  ImageUploadUrlTestRequestDto,
 } from './dtos/requests';
 import {
   AddIssueResponseDto,
@@ -214,5 +215,34 @@ export class FeedbackController {
       region: channel.imageConfig.region,
       bucket: channel.imageConfig.bucket,
     });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @Post('/image-upload-url-test')
+  async getImageUploadUrlTest(
+    @Body()
+    {
+      accessKeyId,
+      secretAccessKey,
+      endpoint,
+      region,
+      bucket,
+    }: ImageUploadUrlTestRequestDto,
+  ) {
+    const presignedUrl = await this.feedbackService.createImageUploadUrl({
+      projectId: 0,
+      channelId: 0,
+      accessKeyId,
+      secretAccessKey,
+      endpoint,
+      region,
+      bucket,
+    });
+
+    if (presignedUrl.url) {
+      return { success: true };
+    } else {
+      return { success: false };
+    }
   }
 }
