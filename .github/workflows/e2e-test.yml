@@ -36,7 +36,7 @@ jobs:
 
       - name: Build and run
         run: |
-          docker-compose -f "docker-compose.e2e.yml" up -d
+          docker-compose -f "./docker/docker-compose.e2e.yml" up -d
 
       - name: Run e2e tests
         run: |

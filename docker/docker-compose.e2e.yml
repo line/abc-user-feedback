@@ -4,8 +4,8 @@ services:
   web:
     hostname: web
     build:
-      context: .
-      dockerfile: ./apps/web/Dockerfile
+      context: ..
+      dockerfile: web.dockerfile
     restart: always
     ports:
       - 3000:3000
@@ -20,8 +20,8 @@ services:
   api:
     hostname: api
     build:
-      context: .
-      dockerfile: ./apps/api/Dockerfile
+      context: ..
+      dockerfile: api.dockerfile
     restart: always
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
