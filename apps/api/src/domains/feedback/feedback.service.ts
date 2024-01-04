@@ -353,10 +353,6 @@ export class FeedbackService {
         throw new BadRequestException('this field is for admin: ' + fieldKey);
       }
 
-      if (field.status === FieldStatusEnum.INACTIVE) {
-        throw new BadRequestException('this field is inactive: ' + fieldKey);
-      }
-
       if (!validateValue(field, value)) {
         throw new BadRequestException(
           `invalid value: (value: ${JSON.stringify(value)}, type: ${
