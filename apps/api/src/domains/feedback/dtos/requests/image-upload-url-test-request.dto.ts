@@ -13,7 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { FindFeedbacksByChannelIdRequestDto } from './find-feedbacks-by-channel-id-request.dto';
-export { ExportFeedbacksRequestDto } from './export-feedbacks-request.dto';
-export { DeleteFeedbacksRequestDto } from './delete-feedbacks-request.dto';
-export { ImageUploadUrlTestRequestDto } from './image-upload-url-test-request.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+
+export class ImageUploadUrlTestRequestDto {
+  @ApiProperty()
+  @IsString()
+  accessKeyId: string;
+
+  @ApiProperty()
+  @IsString()
+  secretAccessKey: string;
+
+  @ApiProperty()
+  @IsString()
+  endpoint: string;
+
+  @ApiProperty()
+  @IsString()
+  region: string;
+
+  @ApiProperty()
+  @IsString()
+  bucket: string;
+}
