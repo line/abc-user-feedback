@@ -16,6 +16,7 @@ jobs:
           MYSQL_DATABASE: e2e
           MYSQL_USER: userfeedback
           MYSQL_PASSWORD: userfeedback
+          TZ: UTC
         ports:
           - 13307:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -38,12 +39,13 @@ jobs:
 
       - name: Build and run
         run: |
-          docker-compose -f "./docker/docker-compose.e2e.yml" up -d
+          docker-compose -f "./docker/docker-compose.e2e.yml" up
 
       - name: Setup e2e test
         run: |
           cd apps/e2e
           yarn
+          yarn playwright install
 
       - name: Run e2e tests
         run: |
