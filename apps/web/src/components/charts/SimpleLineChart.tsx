@@ -25,6 +25,7 @@ interface IProps {
   dataKeys: { color: string; name: string }[];
   showLegend?: boolean;
   filterContent?: React.ReactNode;
+  noColor?: boolean;
 }
 
 const SimpleLineChart: React.FC<IProps> = (props) => {
@@ -36,6 +37,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
     dataKeys,
     showLegend,
     filterContent,
+    noColor,
   } = props;
 
   return (
@@ -46,7 +48,12 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
       showLegend={showLegend}
       filterContent={filterContent}
     >
-      <LineChart data={data} dataKeys={dataKeys} height={height} />
+      <LineChart
+        data={data}
+        dataKeys={dataKeys}
+        height={height}
+        noColor={noColor}
+      />
     </ChartContainer>
   );
 };

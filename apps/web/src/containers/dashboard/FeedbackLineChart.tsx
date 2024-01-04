@@ -20,17 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { PopoverCloseButton } from '@ufb/ui';
 
 import { SimpleLineChart } from '@/components/charts';
-import { CHART_TEN_COLORS } from '@/constants/chart-colors';
-import { useOAIQuery } from '@/hooks';
+import { useLineChartData, useOAIQuery } from '@/hooks';
 
-const getDarkColor = () => {
-  return (
-    '#' +
-    Array.from({ length: 6 })
-      .map(() => Math.floor(Math.random() * 16).toString(16))
-      .join('')
-  );
-};
 interface IProps {
   projectId: number;
   from: Date;
@@ -69,8 +60,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
   const { t } = useTranslation();
 
   const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
-
-  const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+  const dayCount = useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
 
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback',
@@ -87,49 +77,12 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
       refetchInterval: false,
     },
   });
-
-  const dataKeys = useMemo(() => {
-    return (
-      currentChannels.map((v, i) => ({
-        color: CHART_TEN_COLORS[i] ?? getDarkColor(),
-        name: v.name,
-      })) ?? []
-    );
-  }, [currentChannels]);
-
-  const newData = useMemo(() => {
-    if (!data) return [];
-
-    const result = [];
-    let currentDate = dayjs(to).endOf('day');
-    const startDate = dayjs(from).startOf('day');
-
-    while (currentDate.isAfter(startDate)) {
-      const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
-
-      const channelData = currentChannels.reduce(
-        (acc, cur) => {
-          const count =
-            data.channels
-              .find((v) => v.id === cur.id)
-              ?.statistics.find(
-                (v) => v.date === currentDate.format('YYYY-MM-DD'),
-              )?.count ?? 0;
-          return { ...acc, [cur.name]: count };
-        },
-        {
-          date:
-            dayCount > 50
-              ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
-              : currentDate.format('MM/DD'),
-        },
-      );
-      result.push(channelData);
-
-      currentDate = prevDate;
-    }
-    return result.reverse();
-  }, [data, dayCount, currentChannels]);
+  const { chartData, dataKeys } = useLineChartData(
+    from,
+    to,
+    currentChannels,
+    data?.channels ?? [],
+  );
 
   return (
     <SimpleLineChart
@@ -141,7 +94,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
         .format('YYYY/MM/DD')})`}
       height={400}
       dataKeys={dataKeys}
-      data={newData}
+      data={chartData}
       filterContent={
         <div className="flex flex-col gap-3 px-4 py-3">
           <div className="flex justify-between">

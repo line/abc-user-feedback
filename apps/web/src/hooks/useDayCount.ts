@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const CHART_FIVE_COLORS = [
-  '#5D7BE7',
-  '#4BD8BA',
-  '#D3B854',
-  '#AED252',
-  '#D05772',
-];
+import { useMemo } from 'react';
+import dayjs from 'dayjs';
+
+const useDayCount = (from: Date, to: Date) => {
+  return useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
+};
+export default useDayCount;

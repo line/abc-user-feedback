@@ -396,7 +396,7 @@
     "total-issue-trend": {
       "title": "전체 이슈 추이",
       "description": "특정 기간의 이슈 생성 추이를 나타냅니다.",
-      "issue-count": "이슈 수"
+      "issue-count": "이슈 생성 수"
     },
     "issue-status-count": {
       "title": "이슈 상태 현황",

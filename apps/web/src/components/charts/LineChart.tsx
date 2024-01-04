@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { TooltipProps } from 'recharts';
 import {
   Line,
   LineChart as LineRechart,
@@ -21,23 +22,44 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import type {
+  NameType,
+  ValueType,
+} from 'recharts/types/component/DefaultTooltipContent';
 
 interface IProps {
   dataKeys: { color: string; name: string }[];
   height?: number;
   data: any[];
+  noColor?: boolean;
 }
 
-const LineChart: React.FC<IProps> = ({ dataKeys, height, data }) => {
+const LineChart: React.FC<IProps> = ({
+  dataKeys,
+  height,
+  data,
+  noColor = false,
+}) => {
   return (
     <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
       <LineRechart width={500} height={300} data={data}>
         <Tooltip
-          contentStyle={{ background: 'var(--background-color-primary)' }}
+          contentStyle={{
+            background: 'var(--background-color-primary)',
+            borderRadius: 8,
+          }}
+          content={(props) => <CustomTooltip {...props} noColor={noColor} />}
           formatter={(value) => value.toLocaleString()}
         />
-        <XAxis dataKey="date" interval="equidistantPreserveStart" />
-        <YAxis tickFormatter={(v) => v.toLocaleString()} />
+        <XAxis
+          dataKey="date"
+          interval="equidistantPreserveStart"
+          className="font-10-regular text-secondary"
+        />
+        <YAxis
+          tickFormatter={(v) => v.toLocaleString()}
+          className="font-10-regular text-secondary"
+        />
         {dataKeys.map(({ color, name }) => (
           <Line
             key={name}
@@ -45,11 +67,46 @@ const LineChart: React.FC<IProps> = ({ dataKeys, height, data }) => {
             dataKey={name}
             stroke={color}
             activeDot={{ r: 8 }}
-            dot={{ fill: color }}
+            dot={{
+              fill: color,
+              r: 4,
+              strokeWidth: 2,
+              stroke: 'var(--fill-color-inverse)',
+            }}
           />
         ))}
       </LineRechart>
     </ResponsiveContainer>
+  );
+};
+
+const CustomTooltip: React.FC<
+  TooltipProps<ValueType, NameType> & { noColor: boolean }
+> = (props) => {
+  const { active, payload, label, noColor } = props;
+
+  if (!active || !payload) return null;
+
+  return (
+    <div className="bg-primary border-fill-secondary max-w-[240px] rounded border px-4 py-3">
+      <h1 className="font-12-bold mb-3">{label}</h1>
+      <div className="flex flex-col gap-1">
+        {payload.map(({ color, name, value }, i) => (
+          <div className="flex items-center justify-between gap-4" key={i}>
+            <div className="flex items-center gap-2">
+              {!noColor && (
+                <div
+                  style={{ background: color }}
+                  className="h-2 w-2 flex-shrink-0 rounded-full"
+                />
+              )}
+              <p className="font-12-regular break-all">{name}</p>
+            </div>
+            <p className="font-12-regular">{value?.toLocaleString()}</p>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
