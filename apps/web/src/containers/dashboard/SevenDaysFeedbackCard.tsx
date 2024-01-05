@@ -65,9 +65,9 @@ const SevenDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     <DashboardCard
       data={currentData?.count ?? 0}
       title={t('card.dashboard.n-days-feedback.title', { n: 7 })}
-      description={`${
-        (t('card.dashboard.n-days-feedback.description'), { n: 7 })
-      } (${dayjs().subtract(7, 'day').format('YYYY/MM/DD')} - ${dayjs()
+      description={`${t('card.dashboard.n-days-feedback.description', {
+        n: 7,
+      })} (${dayjs().subtract(7, 'day').format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       percentage={percentage}

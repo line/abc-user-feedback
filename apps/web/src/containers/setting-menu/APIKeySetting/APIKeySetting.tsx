@@ -165,7 +165,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
       title={t('main.setting.subtitle.api-key-mgmt')}
       actionBtn={{
         children: t('main.setting.button.create-api-key'),
-        onClick: () => createApiKey({ value: '' }), // Fix it
+        onClick: () => createApiKey({ value: undefined }),
         disabled:
           !perms.includes('project_apikey_create') || status === 'pending',
       }}

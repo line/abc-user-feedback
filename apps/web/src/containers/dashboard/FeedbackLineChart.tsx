@@ -83,6 +83,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
     currentChannels,
     data?.channels ?? [],
   );
+  console.log('data: ', data);
 
   return (
     <SimpleLineChart

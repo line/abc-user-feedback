@@ -15,6 +15,7 @@
  */
 import type { TooltipProps } from 'recharts';
 import {
+  CartesianGrid,
   Line,
   LineChart as LineRechart,
   ResponsiveContainer,
@@ -42,7 +43,16 @@ const LineChart: React.FC<IProps> = ({
 }) => {
   return (
     <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
-      <LineRechart width={500} height={300} data={data}>
+      <LineRechart
+        width={500}
+        height={300}
+        data={data}
+        margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
+      >
+        <CartesianGrid
+          strokeDasharray="3 3"
+          stroke="var(--fill-color-secondary)"
+        />
         <Tooltip
           contentStyle={{
             background: 'var(--background-color-primary)',
@@ -53,12 +63,15 @@ const LineChart: React.FC<IProps> = ({
         />
         <XAxis
           dataKey="date"
-          interval="equidistantPreserveStart"
           className="font-10-regular text-secondary"
+          tickSize={15}
+          tickLine={false}
         />
         <YAxis
           tickFormatter={(v) => v.toLocaleString()}
           className="font-10-regular text-secondary"
+          tickSize={15}
+          tickLine={false}
         />
         {dataKeys.map(({ color, name }) => (
           <Line

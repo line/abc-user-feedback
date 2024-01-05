@@ -107,6 +107,11 @@ export class FeedbackStatisticsService {
               channel.statistics.push(statistic);
             }
             statistic.count += curr.count;
+            console.log(
+              'endOfInterval: ',
+              endOfInterval.toFormat('yyyy-MM-dd'),
+            );
+            console.log('statistic.count: ', statistic.count);
           }
 
           return acc;

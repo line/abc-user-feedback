@@ -58,7 +58,7 @@ const useLineChartData = (
 
     while (currentDate.isAfter(startDate)) {
       const prevDate = dayjs.max(
-        currentDate.subtract(dayCount > 50 ? 7 : 1, 'day'),
+        currentDate.subtract(dayCount > 50 ? 6 : 0, 'day'),
         dayjs(from),
       );
       if (!prevDate) throw new Error("Can't get prevDate");
@@ -68,7 +68,7 @@ const useLineChartData = (
           const currentData = data.find((v) => v.id === cur.id);
           const count =
             currentData?.statistics.find(
-              (v) => dayjs(v.date).diff(dayjs(currentDate), 'day') === 0,
+              (v) => v.date === currentDate.format('YYYY-MM-DD'),
             )?.count ?? 0;
           return { ...acc, [cur.name]: count };
         },
@@ -82,7 +82,7 @@ const useLineChartData = (
 
       result.push(channelData);
 
-      currentDate = prevDate;
+      currentDate = prevDate.subtract(1, 'day');
     }
     return result.reverse();
   }, [data, dayCount, targetData]);

@@ -59,7 +59,7 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
 
   const percentage = useMemo(() => {
     if (!currentData || !previousData) return 0;
-    console.log('previousData.count: ', previousData.count);
+
     return (
       ((currentData.count - previousData.count) / previousData.count) * 100
     );
@@ -71,7 +71,7 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
       title={t('card.dashboard.n-days-issue.title', { n: 30 })}
       description={`${t('card.dashboard.n-days-issue.description', {
         n: 30,
-      })} (${dayjs().subtract(7, 'day').format('YYYY/MM/DD')} - ${dayjs()
+      })} (${dayjs().subtract(30, 'day').format('YYYY/MM/DD')} - ${dayjs()
         .subtract(1, 'day')
         .format('YYYY/MM/DD')})`}
       percentage={percentage}

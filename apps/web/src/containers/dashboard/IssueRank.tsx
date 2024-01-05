@@ -88,8 +88,8 @@ const columns = (t: TFunction) => [
     enableSorting: false,
     cell({ getValue }) {
       const percentage = getValue();
-      return isNaN(percentage) ? (
-        <p>-</p>
+      return isNaN(percentage) || !isFinite(percentage) ? (
+        <Icon name="Minus" className="text-secondary" />
       ) : (
         <div className="flex items-center">
           {percentage === 0 ? (
