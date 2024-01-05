@@ -72,26 +72,35 @@ export class FeedbackIssueStatisticsService {
             acc.push(issue);
           }
 
-          const intervalCount = Math.ceil(
-            DateTime.fromJSDate(new Date(curr.date))
-              .until(DateTime.fromJSDate(to))
-              .length(interval),
-          );
-          const endOfInterval = DateTime.fromJSDate(to).minus({
-            [interval]: intervalCount,
-          });
+          if (interval === 'day') {
+            issue.statistics.push({
+              date: DateTime.fromJSDate(new Date(curr.date)).toFormat(
+                'yyyy-MM-dd',
+              ),
+              feedbackCount: curr.feedbackCount,
+            });
+          } else {
+            const intervalCount = Math.ceil(
+              DateTime.fromJSDate(new Date(curr.date))
+                .until(DateTime.fromJSDate(to))
+                .length(interval),
+            );
+            const endOfInterval = DateTime.fromJSDate(to).minus({
+              [interval]: intervalCount,
+            });
 
-          let statistic = issue.statistics.find(
-            (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
-          );
-          if (!statistic) {
-            statistic = {
-              date: endOfInterval.toFormat('yyyy-MM-dd'),
-              feedbackCount: 0,
-            };
-            issue.statistics.push(statistic);
+            let statistic = issue.statistics.find(
+              (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
+            );
+            if (!statistic) {
+              statistic = {
+                date: endOfInterval.toFormat('yyyy-MM-dd'),
+                feedbackCount: 0,
+              };
+              issue.statistics.push(statistic);
+            }
+            statistic.feedbackCount += curr.feedbackCount;
           }
-          statistic.feedbackCount += curr.feedbackCount;
 
           return acc;
         },
