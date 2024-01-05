@@ -54,10 +54,6 @@ const LineChart: React.FC<IProps> = ({
           stroke="var(--fill-color-secondary)"
         />
         <Tooltip
-          contentStyle={{
-            background: 'var(--background-color-primary)',
-            borderRadius: 8,
-          }}
           content={(props) => <CustomTooltip {...props} noColor={noColor} />}
           formatter={(value) => value.toLocaleString()}
         />
@@ -79,7 +75,7 @@ const LineChart: React.FC<IProps> = ({
             type="linear"
             dataKey={name}
             stroke={color}
-            activeDot={{ r: 8 }}
+            activeDot={{ r: 8, stroke: 'var(--fill-color-inverse)' }}
             dot={{
               fill: color,
               r: 4,
@@ -101,7 +97,7 @@ const CustomTooltip: React.FC<
   if (!active || !payload) return null;
 
   return (
-    <div className="bg-primary border-fill-secondary max-w-[240px] rounded border px-4 py-3">
+    <div className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3">
       <h1 className="font-12-bold mb-3">{label}</h1>
       <div className="flex flex-col gap-1">
         {payload.map(({ color, name, value }, i) => (

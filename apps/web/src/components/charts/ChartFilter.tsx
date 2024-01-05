@@ -25,7 +25,7 @@ const ChartFilter: React.FC<IProps> = ({ children }) => {
           <Icon name="FilterCircleStroke" />
         </button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] overflow-hidden">
+      <PopoverContent className="bg-tertiary w-[300px] overflow-hidden">
         {children}
       </PopoverContent>
     </Popover>

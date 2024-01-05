@@ -40,7 +40,7 @@ interface IssueTableData {
 
 const columnHelper = createColumnHelper<IssueTableData>();
 const columns = (t: TFunction) => [
-  columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 30 }),
+  columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 50 }),
   columnHelper.accessor('name', {
     header: 'Issue',
     enableSorting: false,
@@ -78,42 +78,6 @@ const columns = (t: TFunction) => [
     cell: ({ getValue }) => getValue().toLocaleString(),
   }),
   columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
-  columnHelper.accessor('growth', {
-    header: () => (
-      <>
-        Growth
-        <DescriptionTooltip description={t('tooltip.issue-feedback-growth')} />
-      </>
-    ),
-    enableSorting: false,
-    cell({ getValue }) {
-      const percentage = getValue();
-      return isNaN(percentage) || !isFinite(percentage) ? (
-        <Icon name="Minus" className="text-secondary" />
-      ) : (
-        <div className="flex items-center">
-          {percentage === 0 ? (
-            <Icon name="Minus" className="text-secondary" />
-          ) : percentage > 0 ? (
-            <Icon name="TriangleUp" className="text-blue-primary" />
-          ) : (
-            <Icon name="TriangleDown" className="text-red-primary" />
-          )}
-          <p
-            className={
-              percentage === 0
-                ? 'text-secondary'
-                : percentage > 0
-                ? 'text-blue-primary'
-                : 'text-red-primary'
-            }
-          >
-            {parseFloat(Math.abs(percentage).toFixed(1))}%
-          </p>
-        </div>
-      );
-    },
-  }),
 ];
 interface IProps {
   projectId: number;
