@@ -73,26 +73,35 @@ export class IssueStatisticsService {
     return {
       statistics: issueStatistics.reduce(
         (acc, curr) => {
-          const intervalCount = Math.ceil(
-            DateTime.fromJSDate(new Date(curr.date))
-              .until(DateTime.fromJSDate(to))
-              .length(interval),
-          );
-          const endOfInterval = DateTime.fromJSDate(to).minus({
-            [interval]: intervalCount,
-          });
+          if (interval === 'day') {
+            acc.push({
+              date: DateTime.fromJSDate(new Date(curr.date)).toFormat(
+                'yyyy-MM-dd',
+              ),
+              count: curr.count,
+            });
+          } else {
+            const intervalCount = Math.ceil(
+              DateTime.fromJSDate(new Date(curr.date))
+                .until(DateTime.fromJSDate(to))
+                .length(interval),
+            );
+            const endOfInterval = DateTime.fromJSDate(to).minus({
+              [interval]: intervalCount,
+            });
 
-          let statistic = acc.find(
-            (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
-          );
-          if (!statistic) {
-            statistic = {
-              date: endOfInterval.toFormat('yyyy-MM-dd'),
-              count: 0,
-            };
-            acc.push(statistic);
+            let statistic = acc.find(
+              (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
+            );
+            if (!statistic) {
+              statistic = {
+                date: endOfInterval.toFormat('yyyy-MM-dd'),
+                count: 0,
+              };
+              acc.push(statistic);
+            }
+            statistic.count += curr.count;
           }
-          statistic.count += curr.count;
 
           return acc;
         },

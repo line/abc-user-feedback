@@ -18,16 +18,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { AuthModule } from '../auth/auth.module';
-import { ChannelEntity } from '../channel/channel/channel.entity';
 import { ChannelModule } from '../channel/channel/channel.module';
-import { FieldEntity } from '../channel/field/field.entity';
 import { FieldModule } from '../channel/field/field.module';
 import { OptionEntity } from '../channel/option/option.entity';
 import { OptionModule } from '../channel/option/option.module';
 import { HistoryModule } from '../history/history.module';
 import { IssueEntity } from '../project/issue/issue.entity';
 import { IssueModule } from '../project/issue/issue.module';
-import { ProjectEntity } from '../project/project/project.entity';
 import { ProjectModule } from '../project/project/project.module';
 import { FeedbackIssueStatisticsModule } from '../statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from '../statistics/feedback/feedback-statistics.module';
@@ -39,20 +36,13 @@ import { FeedbackService } from './feedback.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      ProjectEntity,
-      ChannelEntity,
-      FieldEntity,
-      FeedbackEntity,
-      IssueEntity,
-      OptionEntity,
-    ]),
+    TypeOrmModule.forFeature([FeedbackEntity, IssueEntity, OptionEntity]),
     forwardRef(() => AuthModule),
+    forwardRef(() => ProjectModule),
     forwardRef(() => ChannelModule),
     FieldModule,
     OptionModule,
     IssueModule,
-    forwardRef(() => ProjectModule),
     HistoryModule,
     FeedbackStatisticsModule,
     FeedbackIssueStatisticsModule,
