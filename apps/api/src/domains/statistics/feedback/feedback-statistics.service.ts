@@ -26,6 +26,7 @@ import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateCountDto } from './dtos';
 import type {
   GetCountByDateByChannelDto,
@@ -55,12 +56,12 @@ export class FeedbackStatisticsService {
   ) {}
 
   async getCountByDateByChannel(dto: GetCountByDateByChannelDto) {
-    const { from, to, interval, channelIds } = dto;
+    const { startDate, endDate, interval, channelIds } = dto;
 
     const feedbackStatistics = await this.repository.find({
       where: {
         channel: In(channelIds),
-        date: Between(from, to),
+        date: Between(new Date(startDate), new Date(endDate)),
       },
       relations: { channel: true },
       order: { channel: { id: 'ASC' }, date: 'ASC' },
@@ -79,42 +80,32 @@ export class FeedbackStatisticsService {
             acc.push(channel);
           }
 
-          if (interval === 'day') {
-            channel.statistics.push({
-              date: DateTime.fromJSDate(new Date(curr.date)).toFormat(
-                'yyyy-MM-dd',
-              ),
-              count: curr.count,
-            });
-          } else {
-            const intervalCount = Math.ceil(
-              DateTime.fromJSDate(new Date(curr.date))
-                .until(DateTime.fromJSDate(to))
-                .length(interval),
-            );
-            const endOfInterval = DateTime.fromJSDate(to).minus({
-              [interval]: intervalCount,
-            });
+          const { startOfInterval, endOfInterval } = getIntervalDatesInFormat(
+            startDate,
+            endDate,
+            curr.date,
+            interval,
+          );
 
-            let statistic = channel.statistics.find(
-              (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
-            );
-            if (!statistic) {
-              statistic = {
-                date: endOfInterval.toFormat('yyyy-MM-dd'),
-                count: 0,
-              };
-              channel.statistics.push(statistic);
-            }
-            statistic.count += curr.count;
+          let statistic = channel.statistics.find(
+            (stat) => stat.startDate === startOfInterval,
+          );
+          if (!statistic) {
+            statistic = {
+              startDate: startOfInterval,
+              endDate: endOfInterval,
+              count: 0,
+            };
+            channel.statistics.push(statistic);
           }
+          statistic.count += curr.count;
 
           return acc;
         },
         [] as {
           id: number;
           name: string;
-          statistics: { date: string; count: number }[];
+          statistics: { startDate: string; endDate: string; count: number }[];
         }[],
       ),
     };

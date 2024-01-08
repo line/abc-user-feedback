@@ -14,8 +14,8 @@
  * under the License.
  */
 export class GetCountByDateByChannelDto {
-  from: Date;
-  to: Date;
+  startDate: string;
+  endDate: string;
   interval: 'day' | 'week' | 'month';
   channelIds: number[];
 }

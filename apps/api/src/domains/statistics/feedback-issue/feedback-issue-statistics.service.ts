@@ -25,6 +25,7 @@ import { Transactional } from 'typeorm-transactional';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateFeedbackCountDto } from './dtos';
 import type { GetCountByDateByIssueDto } from './dtos';
 import { FeedbackIssueStatisticsEntity } from './feedback-issue-statistics.entity';
@@ -48,12 +49,12 @@ export class FeedbackIssueStatisticsService {
   ) {}
 
   async getCountByDateByIssue(dto: GetCountByDateByIssueDto) {
-    const { from, to, interval, issueIds } = dto;
+    const { startDate, endDate, interval, issueIds } = dto;
 
     const feedbackIssueStatistics = await this.repository.find({
       where: {
         issue: { id: In(issueIds) },
-        date: Between(from, to),
+        date: Between(new Date(startDate), new Date(endDate)),
       },
       relations: { issue: true },
       order: { issue: { id: 'ASC' }, date: 'ASC' },
@@ -72,42 +73,36 @@ export class FeedbackIssueStatisticsService {
             acc.push(issue);
           }
 
-          if (interval === 'day') {
-            issue.statistics.push({
-              date: DateTime.fromJSDate(new Date(curr.date)).toFormat(
-                'yyyy-MM-dd',
-              ),
-              feedbackCount: curr.feedbackCount,
-            });
-          } else {
-            const intervalCount = Math.ceil(
-              DateTime.fromJSDate(new Date(curr.date))
-                .until(DateTime.fromJSDate(to))
-                .length(interval),
-            );
-            const endOfInterval = DateTime.fromJSDate(to).minus({
-              [interval]: intervalCount,
-            });
+          const { startOfInterval, endOfInterval } = getIntervalDatesInFormat(
+            startDate,
+            endDate,
+            curr.date,
+            interval,
+          );
 
-            let statistic = issue.statistics.find(
-              (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
-            );
-            if (!statistic) {
-              statistic = {
-                date: endOfInterval.toFormat('yyyy-MM-dd'),
-                feedbackCount: 0,
-              };
-              issue.statistics.push(statistic);
-            }
-            statistic.feedbackCount += curr.feedbackCount;
+          let statistic = issue.statistics.find(
+            (stat) => stat.startDate === startOfInterval,
+          );
+          if (!statistic) {
+            statistic = {
+              startDate: startOfInterval,
+              endDate: endOfInterval,
+              feedbackCount: 0,
+            };
+            issue.statistics.push(statistic);
           }
+          statistic.feedbackCount += curr.feedbackCount;
 
           return acc;
         },
         [] as {
           id: number;
           name: string;
-          statistics: { date: string; feedbackCount: number }[];
+          statistics: {
+            startDate: string;
+            endDate: string;
+            feedbackCount: number;
+          }[];
         }[],
       ),
     };
