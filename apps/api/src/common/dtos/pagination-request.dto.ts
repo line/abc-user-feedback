@@ -21,14 +21,14 @@ import { toNumber } from '@/common/helper/cast.helper';
 
 export class PaginationRequestDto {
   @Transform(({ value }) => toNumber(value, { default: 10, min: 1 }))
-  @ApiProperty({ required: false, minimum: 1, default: 10 })
+  @ApiProperty({ required: false, minimum: 1, default: 10, example: 10 })
   @IsOptional()
   @IsNumber()
   @Min(1)
   limit: number;
 
   @Transform(({ value }) => toNumber(value, { default: 1, min: 1 }))
-  @ApiProperty({ required: false, minimum: 1, default: 1 })
+  @ApiProperty({ required: false, minimum: 1, default: 1, example: 1 })
   @IsOptional()
   @IsNumber()
   @Min(1)

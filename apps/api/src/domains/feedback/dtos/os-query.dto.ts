@@ -25,4 +25,7 @@ export class MustItem {
   match_phrase?: Record<string, string>;
   range?: Record<string, TimeRange>;
   term?: Record<string, string>;
+  ids?: {
+    values: string[];
+  };
 }

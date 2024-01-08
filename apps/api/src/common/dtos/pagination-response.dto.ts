@@ -18,23 +18,23 @@ import { Expose, Type } from 'class-transformer';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 
 class PaginationMetaDto implements IPaginationMeta {
-  @ApiProperty()
+  @ApiProperty({ example: 10 })
   @Expose()
   itemCount: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 100 })
   @Expose()
   totalItems?: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 10 })
   @Expose()
   itemsPerPage: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 10 })
   @Expose()
   totalPages?: number;
 
-  @ApiProperty()
+  @ApiProperty({ example: 1 })
   @Expose()
   currentPage: number;
 }

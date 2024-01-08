@@ -384,4 +384,22 @@ export class FeedbackMySQLService {
     });
     await this.feedbackRepository.remove(feedbacks);
   }
+
+  async findById({ feedbackId }: { feedbackId: number }) {
+    const feedback = await this.feedbackRepository.findOne({
+      where: { id: feedbackId },
+      relations: ['issues'],
+    });
+    if (!feedback) {
+      throw new BadRequestException('unknown id');
+    }
+    return {
+      ...feedback.rawData,
+      ...feedback.additionalData,
+      id: feedback.id,
+      createdAt: feedback.createdAt,
+      updatedAt: feedback.updatedAt,
+      issues: feedback.issues,
+    };
+  }
 }

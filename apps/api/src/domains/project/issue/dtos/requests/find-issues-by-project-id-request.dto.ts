@@ -21,14 +21,24 @@ import { PaginationRequestDto } from '@/common/dtos';
 import type { SortMethodEnum } from '@/common/enums';
 
 export class FindIssuesByProjectIdRequestDto extends PaginationRequestDto {
-  @ApiProperty({ type: Object, required: false })
+  @ApiProperty({
+    required: false,
+    description:
+      "You can query by key-value with this object. If you want to search by text, you can use 'searchText' key.",
+    example: { name: 'issue name' },
+  })
   @IsOptional()
   query?: {
     searchText?: string;
     [key: string]: string | string[] | TimeRange | number | number[];
   };
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    description:
+      "You can sort by specific feedback key with sort method values: 'ASC', 'DESC'",
+    example: { createdAt: 'ASC' },
+  })
   @IsOptional()
   sort?: {
     [key: string]: SortMethodEnum;

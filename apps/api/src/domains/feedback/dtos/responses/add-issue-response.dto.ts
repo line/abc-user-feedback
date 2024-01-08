@@ -18,11 +18,11 @@ import { Expose, plainToInstance } from 'class-transformer';
 
 export class AddIssueResponseDto {
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'Issue id', example: 1 })
   issueId: number;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'Issue id', example: 1 })
   feedbackId: number;
 
   public static transform(params: any): AddIssueResponseDto {
