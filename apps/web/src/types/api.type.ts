@@ -464,7 +464,7 @@ export interface components {
       roleId: number;
     };
     CreateApiKeyRequestDto: {
-      value: string;
+      value?: string;
     };
     CreateApiKeyResponseDto: {
       id: number;

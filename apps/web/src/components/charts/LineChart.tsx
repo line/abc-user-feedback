@@ -15,6 +15,7 @@
  */
 import type { TooltipProps } from 'recharts';
 import {
+  CartesianGrid,
   Line,
   LineChart as LineRechart,
   ResponsiveContainer,
@@ -42,23 +43,31 @@ const LineChart: React.FC<IProps> = ({
 }) => {
   return (
     <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
-      <LineRechart width={500} height={300} data={data}>
+      <LineRechart
+        width={500}
+        height={300}
+        data={data}
+        margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
+      >
+        <CartesianGrid
+          strokeDasharray="3 3"
+          stroke="var(--fill-color-secondary)"
+        />
         <Tooltip
-          contentStyle={{
-            background: 'var(--background-color-primary)',
-            borderRadius: 8,
-          }}
           content={(props) => <CustomTooltip {...props} noColor={noColor} />}
           formatter={(value) => value.toLocaleString()}
         />
         <XAxis
           dataKey="date"
-          interval="equidistantPreserveStart"
           className="font-10-regular text-secondary"
+          tickSize={15}
+          tickLine={false}
         />
         <YAxis
           tickFormatter={(v) => v.toLocaleString()}
           className="font-10-regular text-secondary"
+          tickSize={15}
+          tickLine={false}
         />
         {dataKeys.map(({ color, name }) => (
           <Line
@@ -66,7 +75,7 @@ const LineChart: React.FC<IProps> = ({
             type="linear"
             dataKey={name}
             stroke={color}
-            activeDot={{ r: 8 }}
+            activeDot={{ r: 8, stroke: 'var(--fill-color-inverse)' }}
             dot={{
               fill: color,
               r: 4,
@@ -88,7 +97,7 @@ const CustomTooltip: React.FC<
   if (!active || !payload) return null;
 
   return (
-    <div className="bg-primary border-fill-secondary max-w-[240px] rounded border px-4 py-3">
+    <div className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3">
       <h1 className="font-12-bold mb-3">{label}</h1>
       <div className="flex flex-col gap-1">
         {payload.map(({ color, name, value }, i) => (

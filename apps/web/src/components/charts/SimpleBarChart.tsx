@@ -16,6 +16,7 @@
 import {
   Bar,
   BarChart,
+  CartesianGrid,
   Rectangle,
   ResponsiveContainer,
   Tooltip,
@@ -47,12 +48,15 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           width={500}
           height={300}
           data={data}
-          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
           barSize={16}
           onClick={(e) => onClick?.(e.activePayload?.[0].payload)}
         >
-          <XAxis dataKey="name" />
-          <YAxis />
+          <CartesianGrid
+            strokeDasharray="3 3"
+            stroke="var(--fill-color-secondary)"
+            vertical={false}
+          />
           <Tooltip
             cursor={<Rectangle fill="#5D7BE729" />}
             formatter={(value) => value.toLocaleString()}
@@ -64,6 +68,18 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
                 </p>
               </div>
             )}
+          />
+          <XAxis
+            dataKey="name"
+            className="font-10-regular text-secondary"
+            tickSize={15}
+            tickLine={false}
+          />
+          <YAxis
+            tickFormatter={(v) => v.toLocaleString()}
+            className="font-10-regular text-secondary"
+            tickSize={15}
+            tickLine={false}
           />
           <Bar dataKey="value" fill="#5D7BE7" radius={[8, 8, 0, 0]} />
         </BarChart>
