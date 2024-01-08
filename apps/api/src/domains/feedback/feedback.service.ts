@@ -626,4 +626,27 @@ export class FeedbackService {
       Conditions: [{ 'Content-Type': 'image/png' }],
     });
   }
+
+  async findById({
+    channelId,
+    feedbackId,
+  }: {
+    channelId: number;
+    feedbackId: number;
+  }) {
+    if (this.configService.get('opensearch.use')) {
+      const { items } = await this.feedbackOSService.findById({
+        channelId,
+        feedbackId,
+      });
+      const feedback = items[0];
+      const issuesByFeedbackIds =
+        await this.issueService.findIssuesByFeedbackIds([feedback.id]);
+      feedback.issues = issuesByFeedbackIds[feedback.id];
+
+      return feedback;
+    } else {
+      return await this.feedbackMySQLService.findById({ feedbackId });
+    }
+  }
 }

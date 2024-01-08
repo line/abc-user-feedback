@@ -37,6 +37,7 @@ import { AuthModule } from './domains/auth/auth.module';
 import { ChannelModule } from './domains/channel/channel/channel.module';
 import { FieldModule } from './domains/channel/field/field.module';
 import { OptionModule } from './domains/channel/option/option.module';
+import { ExternalModule } from './domains/external/external.module';
 import { FeedbackModule } from './domains/feedback/feedback.module';
 import { HealthModule } from './domains/health/health.module';
 import { HistoryModule } from './domains/history/history.module';
@@ -73,6 +74,7 @@ const domainModules = [
   FeedbackStatisticsModule,
   IssueStatisticsModule,
   FeedbackIssueStatisticsModule,
+  ExternalModule,
 ];
 
 @Module({

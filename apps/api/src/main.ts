@@ -24,6 +24,7 @@ import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
+import { ExternalModule } from './domains/external/external.module';
 import type { ConfigServiceType } from './types/config-service.type';
 
 const globalPrefix = 'api';
@@ -52,8 +53,12 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, documentConfig);
-
   SwaggerModule.setup('docs', app, document);
+
+  const externalDocument = SwaggerModule.createDocument(app, documentConfig, {
+    include: [ExternalModule],
+  });
+  SwaggerModule.setup('external-docs', app, externalDocument);
 
   const configService = app.get(ConfigService<ConfigServiceType>);
   const { port, address } = configService.get('app', { infer: true });
