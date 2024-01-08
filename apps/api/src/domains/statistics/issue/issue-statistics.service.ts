@@ -24,6 +24,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateCountDto } from './dtos';
 import type {
   GetCountByDateDto,
@@ -60,11 +61,11 @@ export class IssueStatisticsService {
   }
 
   async getCountByDate(dto: GetCountByDateDto) {
-    const { from, to, interval } = dto;
+    const { startDate, endDate, interval } = dto;
 
     const issueStatistics = await this.repository.find({
       where: {
-        date: Between(from, to),
+        date: Between(new Date(startDate), new Date(endDate)),
         project: { id: dto.projectId },
       },
       order: { date: 'ASC' },
@@ -73,39 +74,29 @@ export class IssueStatisticsService {
     return {
       statistics: issueStatistics.reduce(
         (acc, curr) => {
-          if (interval === 'day') {
-            acc.push({
-              date: DateTime.fromJSDate(new Date(curr.date)).toFormat(
-                'yyyy-MM-dd',
-              ),
-              count: curr.count,
-            });
-          } else {
-            const intervalCount = Math.ceil(
-              DateTime.fromJSDate(new Date(curr.date))
-                .until(DateTime.fromJSDate(to))
-                .length(interval),
-            );
-            const endOfInterval = DateTime.fromJSDate(to).minus({
-              [interval]: intervalCount,
-            });
+          const { startOfInterval, endOfInterval } = getIntervalDatesInFormat(
+            startDate,
+            endDate,
+            curr.date,
+            interval,
+          );
 
-            let statistic = acc.find(
-              (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
-            );
-            if (!statistic) {
-              statistic = {
-                date: endOfInterval.toFormat('yyyy-MM-dd'),
-                count: 0,
-              };
-              acc.push(statistic);
-            }
-            statistic.count += curr.count;
+          let statistic = acc.find(
+            (stat) => stat.startDate === startOfInterval,
+          );
+          if (!statistic) {
+            statistic = {
+              startDate: startOfInterval,
+              endDate: endOfInterval,
+              count: 0,
+            };
+            acc.push(statistic);
           }
+          statistic.count += curr.count;
 
           return acc;
         },
-        [] as { date: string; count: number }[],
+        [] as { startDate: string; endDate: string; count: number }[],
       ),
     };
   }
