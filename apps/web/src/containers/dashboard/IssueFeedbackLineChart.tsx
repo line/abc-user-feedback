@@ -67,8 +67,8 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback-issue',
     variables: {
-      from: dayjs(from).startOf('day').toISOString(),
-      to: dayjs(to).endOf('day').toISOString(),
+      startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
+      endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       issueIds: (currentIssues.map((issue) => issue.id) ?? []).join(','),
       interval: dayCount > 50 ? 'week' : 'day',
     },
@@ -96,8 +96,9 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     currentIssues,
     data?.issues.map((v) => ({
       id: v.id,
-      statistics: v.statistics.map(({ date, feedbackCount }) => ({
-        date,
+      statistics: v.statistics.map(({ startDate, endDate, feedbackCount }) => ({
+        startDate,
+        endDate,
         count: feedbackCount,
       })),
     })),

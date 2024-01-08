@@ -65,8 +65,8 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback',
     variables: {
-      from: dayjs(from).startOf('day').toISOString(),
-      to: dayjs(to).endOf('day').toISOString(),
+      startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
+      endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       channelIds: currentChannels.map(({ id }) => id).join(','),
       interval: dayCount > 50 ? 'week' : 'day',
     },
@@ -77,13 +77,13 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
       refetchInterval: false,
     },
   });
+
   const { chartData, dataKeys } = useLineChartData(
     from,
     to,
     currentChannels,
     data?.channels ?? [],
   );
-  console.log('data: ', data);
 
   return (
     <SimpleLineChart

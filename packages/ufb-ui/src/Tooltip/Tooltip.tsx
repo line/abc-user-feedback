@@ -203,7 +203,7 @@ export const TooltipContent = React.forwardRef<
             'fill-yellow-quaternary',
           ];
         default:
-          return ['bg-fill-primary', 'text-fill-inverse', 'fill-fill-primary'];
+          return ['bg-fill-primary', 'text-fill-inverse', 'fill-primary'];
       }
     }, [color]);
 

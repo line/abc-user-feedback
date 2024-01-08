@@ -34,8 +34,8 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     path: '/api/statistics/issue/count-by-date',
     variables: {
       projectId,
-      from: dayjs(from).startOf('day').toISOString(),
-      to: dayjs(to).endOf('day').toISOString(),
+      startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
+      endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {

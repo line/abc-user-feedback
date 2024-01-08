@@ -30,7 +30,7 @@ const ChartContainer: React.FC<IProps> = (props) => {
   const { children, description, title, dataKeys, filterContent, showLegend } =
     props;
   return (
-    <div className="border-fill-tertiary bg-tertiary rounded border px-4">
+    <div className="border-fill-tertiary bg-tertiary rounded border px-4 ">
       <div className="flex h-[72px] items-center justify-between">
         <div className="flex items-center">
           <span className="font-20-bold">{title}</span>

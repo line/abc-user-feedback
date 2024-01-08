@@ -35,7 +35,10 @@ const useLineChartData = (
   from: Date,
   to: Date,
   targetData: { id: number; name: string }[],
-  data?: { id: number; statistics: { date: string; count: number }[] }[],
+  data?: {
+    id: number;
+    statistics: { startDate: string; endDate: string; count: number }[];
+  }[],
 ) => {
   const dataKeys = useMemo(
     () =>
@@ -68,7 +71,7 @@ const useLineChartData = (
           const currentData = data.find((v) => v.id === cur.id);
           const count =
             currentData?.statistics.find(
-              (v) => v.date === currentDate.format('YYYY-MM-DD'),
+              (v) => v.endDate === currentDate.format('YYYY-MM-DD'),
             )?.count ?? 0;
           return { ...acc, [cur.name]: count };
         },
