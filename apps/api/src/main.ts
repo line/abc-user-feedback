@@ -39,7 +39,9 @@ async function bootstrap() {
 
   app.enableCors({ origin: '*', exposedHeaders: ['Content-Disposition'] });
 
-  app.setGlobalPrefix(globalPrefix);
+  app.setGlobalPrefix(globalPrefix, {
+    exclude: ['/external/docs'],
+  });
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));

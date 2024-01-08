@@ -24,7 +24,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '../auth/guards';
 import { CreateIssueDto } from '../project/issue/dtos';
@@ -47,7 +47,13 @@ import { IssueService } from '../project/issue/issue.service';
 export class IssueController {
   constructor(private readonly issueService: IssueService) {}
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiBody({ type: CreateIssueRequestDto })
   @ApiOkResponse({ type: CreateIssueResponseDto })
   @Post()
   async create(
@@ -61,7 +67,18 @@ export class IssueController {
     );
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id',
+    example: 1,
+  })
   @ApiOkResponse({ type: [FindIssueByIdResponseDto] })
   @Get(':issueId')
   async findById(@Param('issueId', ParseIntPipe) issueId: number) {
@@ -70,7 +87,12 @@ export class IssueController {
     );
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
   @Post('search')
   async findAllByProjectId(
@@ -85,7 +107,18 @@ export class IssueController {
     );
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id',
+    example: 1,
+  })
   @Put(':issueId')
   async update(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -95,12 +128,29 @@ export class IssueController {
     await this.issueService.update({ ...body, issueId, projectId });
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id',
+    example: 1,
+  })
   @Delete(':issueId')
   async delete(@Param('issueId', ParseIntPipe) issueId: number) {
     await this.issueService.deleteById(issueId);
   }
 
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
   @Delete('')
   async deleteMany(
     @Param('projectId', ParseIntPipe) _: number,

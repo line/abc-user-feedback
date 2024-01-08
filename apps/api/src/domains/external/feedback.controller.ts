@@ -25,7 +25,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import { ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '@/domains/auth/guards';
 import { ChannelService } from '../channel/channel/channel.service';
@@ -39,6 +39,7 @@ import {
 } from '../feedback/dtos/responses';
 import { FeedbackService } from '../feedback/feedback.service';
 
+@ApiTags('feedbacks')
 @Controller('/external/projects/:projectId/channels/:channelId/feedbacks')
 @UseGuards(ApiKeyAuthGuard)
 export class FeedbackController {
@@ -47,7 +48,40 @@ export class FeedbackController {
     private readonly channelService: ChannelService,
   ) {}
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiBody({
+    type: Object,
+    description: 'Feedback data in json',
+    examples: {
+      'Create feedback': {
+        summary: 'Create feedback',
+        value: {
+          message: 'feedback message',
+          issueNames: ['issue name 1', 'issue name 2'],
+        },
+      },
+    },
+  })
+  @ApiOkResponse({
+    type: Object,
+    description: 'Feedback id',
+    schema: {
+      example: {
+        id: 1,
+      },
+    },
+  })
   @Post()
   async create(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -63,7 +97,19 @@ export class FeedbackController {
     return { id };
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiBody({ type: FindFeedbacksByChannelIdRequestDto })
   @ApiOkResponse({ type: FindFeedbacksByChannelIdResponseDto })
   @Post('search')
   async findByChannelId(
@@ -75,7 +121,30 @@ export class FeedbackController {
     );
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'feedbackId',
+    type: Number,
+    description: 'Feedback id to add an issue',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id to be added to the feedback',
+    example: 1,
+  })
   @ApiOkResponse({ type: AddIssueResponseDto })
   @Post(':feedbackId/issue/:issueId')
   async addIssue(
@@ -90,7 +159,30 @@ export class FeedbackController {
     });
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'feedbackId',
+    type: Number,
+    description: 'Feedback id to remove the added issue',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id to remove from the feedback',
+    example: 1,
+  })
   @ApiOkResponse({ type: AddIssueResponseDto })
   @Delete(':feedbackId/issue/:issueId')
   async removeIssue(
@@ -105,7 +197,37 @@ export class FeedbackController {
     });
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'feedbackId',
+    type: Number,
+    description: 'Feedback id to update',
+    example: 1,
+  })
+  @ApiBody({
+    type: Object,
+    description: 'Feedback data to be updated in json',
+    examples: {
+      'Update feedback': {
+        summary: 'Update feedback',
+        value: {
+          message: 'updated feedback message',
+          issueNames: ['issue name 1'],
+        },
+      },
+    },
+  })
   @Put(':feedbackId')
   async updateFeedback(
     @Param('channelId', ParseIntPipe) channelId: number,
@@ -119,7 +241,19 @@ export class FeedbackController {
     });
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiBody({ type: DeleteFeedbacksRequestDto })
   @Delete()
   async deleteMany(
     @Param('channelId', ParseIntPipe) channelId: number,
@@ -128,13 +262,30 @@ export class FeedbackController {
     await this.feedbackService.deleteByIds({ channelId, feedbackIds });
   }
 
-  @ApiParam({ name: 'projectId', type: Number })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'feedbackId',
+    type: Number,
+    description: 'Feedback id to find',
+    example: 1,
+  })
+  @ApiOkResponse({ type: Object, description: 'Feedback data' })
   @Get(':feedbackId')
   async findFeedback(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Param('feedbackId', ParseIntPipe) feedbackId: number,
   ) {
-    console.log(123);
     return await this.feedbackService.findById({
       channelId,
       feedbackId,

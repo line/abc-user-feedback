@@ -31,6 +31,7 @@ import { IssueEntity } from '../project/issue/issue.entity';
 import { IssueModule } from '../project/issue/issue.module';
 import { FeedbackIssueStatisticsModule } from '../statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from '../statistics/feedback/feedback-statistics.module';
+import { ExternalController } from './external.controller';
 import { FeedbackController } from './feedback.controller';
 import { IssueController } from './issue.controller';
 
@@ -52,6 +53,6 @@ import { IssueController } from './issue.controller';
     FeedbackOSService,
     OpensearchRepository,
   ],
-  controllers: [FeedbackController, IssueController],
+  controllers: [FeedbackController, IssueController, ExternalController],
 })
 export class ExternalModule {}
