@@ -38,6 +38,7 @@ import {
   FindFeedbacksByChannelIdResponseDto,
 } from '../feedback/dtos/responses';
 import { FeedbackService } from '../feedback/feedback.service';
+import { GetImageUploadUrlResponseDto } from './dtos/responses';
 
 @ApiTags('feedbacks')
 @Controller('/external/projects/:projectId/channels/:channelId/feedbacks')
@@ -289,6 +290,46 @@ export class FeedbackController {
     return await this.feedbackService.findById({
       channelId,
       feedbackId,
+    });
+  }
+
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiOkResponse({
+    type: GetImageUploadUrlResponseDto,
+    description: 'Feedback data',
+  })
+  @Get('/image-upload-url')
+  async getImageUploadUrl(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
+  ) {
+    const channel = await this.channelService.findById({ channelId });
+    if (channel.project.id !== projectId) {
+      throw new BadRequestException('Invalid channel id');
+    }
+    if (!channel.imageConfig) {
+      throw new BadRequestException('No image config in this channel');
+    }
+
+    return await this.feedbackService.createImageUploadUrl({
+      projectId,
+      channelId,
+      accessKeyId: channel.imageConfig.accessKeyId,
+      secretAccessKey: channel.imageConfig.secretAccessKey,
+      endpoint: channel.imageConfig.endpoint,
+      region: channel.imageConfig.region,
+      bucket: channel.imageConfig.bucket,
     });
   }
 }
