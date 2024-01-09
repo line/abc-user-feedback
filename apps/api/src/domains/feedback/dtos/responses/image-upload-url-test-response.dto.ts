@@ -13,25 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { FieldType } from './field.type';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
 
-export type ChannelType = {
-  id: number;
-  name: string;
-  description: string;
-  fields: FieldType[];
-  createdAt: string;
-  updatedAt: string;
-};
-export type InputChannelInfoType = Omit<
-  ChannelType,
-  'id' | 'fields' | 'updatedAt' | 'createdAt'
->;
-
-export type InputImageConfigType = {
-  accessKeyId: string;
-  secretAccessKey: string;
-  endpoint: string;
-  region: string;
-  bucket: string;
-};
+export class ImageUploadUrlTestResponseDto {
+  @Expose()
+  @ApiProperty()
+  success: boolean;
+  public static transform(
+    params: Partial<ImageUploadUrlTestResponseDto>,
+  ): ImageUploadUrlTestResponseDto {
+    return plainToInstance(ImageUploadUrlTestResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
+}

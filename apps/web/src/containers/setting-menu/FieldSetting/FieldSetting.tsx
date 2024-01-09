@@ -227,7 +227,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/channels/channels/{channelId}/fields',
+    path: '/api/projects/{projectId}/channels/{channelId}/fields',
     pathParams: { channelId, projectId },
     queryOptions: {
       onSuccess: async () => {

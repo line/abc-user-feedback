@@ -68,6 +68,7 @@ const InputFieldPreview: React.FC<IProps> = () => {
     mutate({
       ...input.channelInfo,
       fields: input.fields.filter((v) => v.type !== 'DEFAULT'),
+      imageConfig: input.imageConfig,
     });
   };
 

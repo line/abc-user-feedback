@@ -16,9 +16,10 @@
 import type { TFunction } from 'next-i18next';
 
 import type { ColorType } from '@/types/color.type';
+import type { IssueStatus } from '@/types/issue.type';
 
 export type IssuesItemType = {
-  key: string;
+  key: IssueStatus;
   name: string;
   color: ColorType;
 };
@@ -30,7 +31,7 @@ export const ISSUES: (t: TFunction) => IssuesItemType[] = (t) => [
   { key: 'RESOLVED', name: t('text.issue.resolved'), color: 'green' },
   { key: 'PENDING', name: t('text.issue.pending'), color: 'purple' },
 ];
-export const getStatusColor = (status: string): ColorType => {
+export const getStatusColor = (status: IssueStatus): ColorType => {
   switch (status) {
     case 'INIT':
       return 'red';

@@ -18,8 +18,15 @@ export type IssueType = {
   name: string;
   description: string | null;
   feedbackCount: number;
-  status: string;
+  status: IssueStatus;
   createdAt: string;
   updatedAt: string;
   externalIssueId: string;
 };
+
+export type IssueStatus =
+  | 'INIT'
+  | 'ON_REVIEW'
+  | 'IN_PROGRESS'
+  | 'RESOLVED'
+  | 'PENDING';

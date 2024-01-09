@@ -82,6 +82,13 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
           disabled={!perms.includes('channel_field_read')}
         />
         <SettingMenuItem
+          iconName="MediaImageFill"
+          name={t('main.setting.subtitle.image-upload')}
+          onClick={onClickSettingMenu('IMAGE_UPLOAD_SETTING')}
+          active={settingMenu === 'IMAGE_UPLOAD_SETTING'}
+          disabled={!perms.includes('channel_field_read')}
+        />
+        <SettingMenuItem
           iconName="TrashFill"
           name={t('main.setting.subtitle.delete-channel')}
           onClick={onClickSettingMenu('DELETE_CHANNEL')}

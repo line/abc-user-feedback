@@ -13,25 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { FieldType } from './field.type';
-
-export type ChannelType = {
-  id: number;
-  name: string;
-  description: string;
-  fields: FieldType[];
-  createdAt: string;
-  updatedAt: string;
-};
-export type InputChannelInfoType = Omit<
-  ChannelType,
-  'id' | 'fields' | 'updatedAt' | 'createdAt'
->;
-
-export type InputImageConfigType = {
-  accessKeyId: string;
-  secretAccessKey: string;
-  endpoint: string;
-  region: string;
-  bucket: string;
-};
+export { default } from './ImageButton';

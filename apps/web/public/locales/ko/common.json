@@ -127,6 +127,7 @@
         "delete-project": "Project 삭제",
         "channel-info": "Channel 정보",
         "field-mgmt": "Field 관리",
+        "image-upload": "Image 연동 관리",
         "delete-channel": "Channel 삭제"
       },
       "button": {
@@ -237,12 +238,14 @@
       "help": {
         "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
         "fields": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
-        "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다."
+        "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다.",
+        "image-upload": "Presigned URL을 활용해 Image 포맷의 피드백을 수집할 수 있습니다. Presigned URL 연동을 위한 정보를 입력해 주세요."
       },
       "stepper-text": {
         "channel-info": "Channel 정보",
         "fields": "Field 관리",
-        "field-preview": "Field 미리보기"
+        "field-preview": "Field 미리보기",
+        "image-upload": "Image 연동 관리"
       },
       "finish-channel-creation": "모든 준비가 완료됐습니다.\nUserFeedback 이용을 시작해보세요!",
       "guide": {

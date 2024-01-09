@@ -15,3 +15,5 @@
  */
 export { default as InputField } from './InputField';
 export { default as InputFieldPreview } from './InputFieldPreview';
+export { default as InputImageUpload } from './InputImageUpload';
+export { default as InputChannelInfo } from './InputChannelInfo';

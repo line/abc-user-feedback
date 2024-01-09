@@ -28,6 +28,7 @@ import {
   ChannelInfoSection,
   FieldPreviewSection,
   FieldSection,
+  ImageUploadSection,
 } from '@/containers/create-channel-complete';
 import { useOAIQuery } from '@/hooks';
 
@@ -70,6 +71,7 @@ const CreateCompletePage: NextPage = () => {
         <>
           <ChannelInfoSection {...data} />
           <FieldSection fields={data.fields} />
+          <ImageUploadSection {...data.imageConfig} />
           <FieldPreviewSection fields={data.fields} />
         </>
       )}

@@ -44,6 +44,7 @@ import {
   TicketSetting,
   UserSetting,
 } from '@/containers/setting-menu';
+import ImageUploadSetting from '@/containers/setting-menu/ImageUploadSetting';
 import { env } from '@/env.mjs';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 import type { NextPageWithLayout } from '../../../_app';
@@ -90,6 +91,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         break;
       case 'CHANNEL_INFO':
       case 'FIELD_MANAGEMENT':
+      case 'IMAGE_UPLOAD_SETTING':
       case 'DELETE_CHANNEL':
         setShowList([2, 3]);
         break;
@@ -165,6 +167,9 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             )}
             {settingMenu === 'FIELD_MANAGEMENT' && channelId && (
               <FieldSetting projectId={projectId} channelId={channelId} />
+            )}
+            {settingMenu === 'IMAGE_UPLOAD_SETTING' && channelId && (
+              <ImageUploadSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'DELETE_CHANNEL' && channelId && (
               <ChannelDeleteSetting

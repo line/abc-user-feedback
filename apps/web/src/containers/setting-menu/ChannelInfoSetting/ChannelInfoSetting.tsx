@@ -60,7 +60,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/channels/channels/{channelId}',
+    path: '/api/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
     queryOptions: {
       onSuccess: async () => {

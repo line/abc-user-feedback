@@ -20,8 +20,12 @@ import { useTranslation } from 'react-i18next';
 
 import { CreateProjectChannelTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { InputField, InputFieldPreview } from '@/containers/create-channel';
-import InputChannelInfo from '@/containers/create-channel/InputChannelInfo';
+import {
+  InputChannelInfo,
+  InputField,
+  InputFieldPreview,
+  InputImageUpload,
+} from '@/containers/create-channel';
 import {
   CreateChannelProvider,
   useCreateChannel,
@@ -44,6 +48,7 @@ const CreateChannel: NextPage = () => {
     return {
       channelInfo: t('main.create-channel.help.channel-info'),
       fields: t('main.create-channel.help.fields'),
+      imageUpload: t('main.create-channel.help.image-upload'),
       fieldPreview: t('main.create-channel.help.field-preview'),
     };
   }, [t]);
@@ -69,6 +74,7 @@ const Contents: React.FC = () => {
     <>
       {currentStep === 'channelInfo' && <InputChannelInfo />}
       {currentStep === 'fields' && <InputField />}
+      {currentStep === 'imageUpload' && <InputImageUpload />}
       {currentStep === 'fieldPreview' && <InputFieldPreview />}
     </>
   );

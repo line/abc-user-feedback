@@ -108,12 +108,10 @@ export interface paths {
   };
   "/api/projects/{projectId}/channels/{channelId}": {
     get: operations["ChannelController_findOne"];
+    put: operations["ChannelController_updateOne"];
     delete: operations["ChannelController_delete"];
   };
-  "/api/projects/{projectId}/channels/channels/{channelId}": {
-    put: operations["ChannelController_updateOne"];
-  };
-  "/api/projects/{projectId}/channels/channels/{channelId}/fields": {
+  "/api/projects/{projectId}/channels/{channelId}/fields": {
     put: operations["ChannelController_updateFields"];
   };
   "/api/field/{fieldId}/options": {
@@ -155,8 +153,8 @@ export interface paths {
   "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
-    get: operations["FeedbackController_getImageUploadUrl"];
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url-test": {
+    post: operations["FeedbackController_getImageUploadUrlTest"];
   };
   "/api/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
@@ -211,6 +209,36 @@ export interface paths {
   "/api/migration/statistics/feedback-issue": {
     post: operations["MigrationController_migrateFeedbackIssueStatistics"];
   };
+  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks": {
+    post: operations["FeedbackController_create"];
+    delete: operations["FeedbackController_deleteMany"];
+  };
+  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+    post: operations["FeedbackController_findByChannelId"];
+  };
+  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+    post: operations["FeedbackController_addIssue"];
+    delete: operations["FeedbackController_removeIssue"];
+  };
+  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+    get: operations["FeedbackController_findFeedback"];
+    put: operations["FeedbackController_updateFeedback"];
+  };
+  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
+    get: operations["FeedbackController_getImageUploadUrl"];
+  };
+  "/api/external/projects/{projectId}/issues": {
+    post: operations["IssueController_create"];
+    delete: operations["IssueController_deleteMany"];
+  };
+  "/api/external/projects/{projectId}/issues/{issueId}": {
+    get: operations["IssueController_findById"];
+    put: operations["IssueController_update"];
+    delete: operations["IssueController_delete"];
+  };
+  "/api/external/projects/{projectId}/issues/search": {
+    post: operations["IssueController_findAllByProjectId"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -253,10 +281,15 @@ export interface components {
       url: string;
     };
     PaginationMetaDto: {
+      /** @example 10 */
       itemCount: number;
+      /** @example 100 */
       totalItems: number;
+      /** @example 10 */
       itemsPerPage: number;
+      /** @example 10 */
       totalPages: number;
+      /** @example 1 */
       currentPage: number;
     };
     ProjectDto: {
@@ -306,9 +339,15 @@ export interface components {
       createdAt: "ASC" | "DESC";
     };
     GetAllUsersRequestDto: {
-      /** @default 10 */
+      /**
+       * @default 10
+       * @example 10
+       */
       limit?: number;
-      /** @default 1 */
+      /**
+       * @default 1
+       * @example 1
+       */
       page?: number;
       query?: components["schemas"]["UserSearchQuery"];
       order?: components["schemas"]["UserOrder"];
@@ -491,7 +530,7 @@ export interface components {
       bucket: string;
     };
     /** @enum {string} */
-    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
+    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "images";
     /** @enum {string} */
     FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
@@ -548,7 +587,7 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
+      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "images";
       /** @enum {string} */
       type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */
@@ -657,60 +696,205 @@ export interface components {
     UpdateProjectResponseDto: {
       id: number;
     };
+    Query: {
+      /**
+       * @description Search text for feedback data
+       * @example payment
+       */
+      searchText?: string;
+      /**
+       * @example {
+       *   "gte": "2023-01-01",
+       *   "lt": "2023-12-31"
+       * }
+       */
+      createdAt?: components["schemas"]["TimeRange"];
+      /**
+       * @example {
+       *   "gte": "2023-01-01",
+       *   "lt": "2023-12-31"
+       * }
+       */
+      updatedAt?: components["schemas"]["TimeRange"];
+    };
     FindFeedbacksByChannelIdRequestDto: {
-      /** @default 10 */
+      /**
+       * @default 10
+       * @example 10
+       */
       limit?: number;
-      /** @default 1 */
+      /**
+       * @default 1
+       * @example 1
+       */
       page?: number;
-      query?: Record<string, never>;
+      /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+      query?: components["schemas"]["Query"];
+      /**
+       * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
+       * @example {
+       *   "createdAt": "ASC"
+       * }
+       */
       sort?: Record<string, never>;
     };
     Feedback: Record<string, never>;
     FindFeedbacksByChannelIdResponseDto: {
       meta: components["schemas"]["PaginationMetaDto"];
+      /**
+       * @example [
+       *   {
+       *     "id": 1,
+       *     "name": "feedback",
+       *     "issues": [
+       *       {
+       *         "id": 1,
+       *         "name": "issue"
+       *       }
+       *     ]
+       *   }
+       * ]
+       */
       items: components["schemas"]["Feedback"][];
     };
     AddIssueResponseDto: {
+      /**
+       * @description Issue id
+       * @example 1
+       */
       issueId: number;
+      /**
+       * @description Issue id
+       * @example 1
+       */
       feedbackId: number;
     };
     ExportFeedbacksRequestDto: {
-      /** @default 10 */
+      /**
+       * @default 10
+       * @example 10
+       */
       limit?: number;
-      /** @default 1 */
+      /**
+       * @default 1
+       * @example 1
+       */
       page?: number;
-      query?: Record<string, never>;
+      /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+      query?: components["schemas"]["Query"];
+      /**
+       * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
+       * @example {
+       *   "createdAt": "ASC"
+       * }
+       */
       sort?: Record<string, never>;
       type: string;
       fieldIds?: number[];
     };
     DeleteFeedbacksRequestDto: {
+      /**
+       * @description Feedback ids in an array
+       * @example [
+       *   1,
+       *   2
+       * ]
+       */
       feedbackIds: number[];
     };
+    ImageUploadUrlTestRequestDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
+    ImageUploadUrlTestResponseDto: {
+      success: boolean;
+    };
     CreateIssueRequestDto: {
+      /**
+       * @description Issue name
+       * @example payment issue
+       */
       name: string;
     };
     CreateIssueResponseDto: {
+      /**
+       * @description Issue id
+       * @example 1
+       */
       id: number;
     };
     FindIssueByIdResponseDto: {
+      /**
+       * @description Issue id
+       * @example 1
+       */
       id: number;
+      /**
+       * @description Issue Name
+       * @example 1
+       */
       name: string;
+      /**
+       * @description Issue description
+       * @example This is a payment issue
+       */
       description: string;
-      status: string;
+      /**
+       * @description Issue status
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      status: "INIT" | "ON_REVIEW" | "IN_PROGRESS" | "RESOLVED" | "PENDING";
+      /**
+       * @description External Issue Id
+       * @example 123
+       */
       externalIssueId: string;
+      /**
+       * @description Feedback count of the issue
+       * @example 100
+       */
       feedbackCount: number;
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @description Created datetime of the issue
+       * @example 2023-01-01T00:00:00.000Z
+       */
       createdAt: string;
-      /** Format: date-time */
+      /**
+       * Format: date-time
+       * @description Updated datetime of the issue
+       * @example 2023-01-01T00:00:00.000Z
+       */
       updatedAt: string;
     };
     FindIssuesByProjectIdRequestDto: {
-      /** @default 10 */
+      /**
+       * @default 10
+       * @example 10
+       */
       limit?: number;
-      /** @default 1 */
+      /**
+       * @default 1
+       * @example 1
+       */
       page?: number;
+      /**
+       * @description You can query by key-value with this object. If you want to search by text, you can use 'searchText' key.
+       * @example {
+       *   "name": "issue name"
+       * }
+       */
       query?: Record<string, never>;
+      /**
+       * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
+       * @example {
+       *   "createdAt": "ASC"
+       * }
+       */
       sort?: Record<string, never>;
     };
     FindIssuesByProjectIdResponseDto: {
@@ -718,12 +902,37 @@ export interface components {
       items: components["schemas"]["FindIssueByIdResponseDto"][];
     };
     UpdateIssueRequestDto: {
+      /**
+       * @description Issue name
+       * @example payment issue
+       */
       name: string;
+      /**
+       * @description Issue description
+       * @example This is a payment issue
+       */
       description: string | null;
-      status?: string;
+      /**
+       * @description Issue status
+       * @example IN_PROGRESS
+       * @enum {string}
+       */
+      status?: "INIT" | "ON_REVIEW" | "IN_PROGRESS" | "RESOLVED" | "PENDING";
+      /**
+       * @description External Issue Id
+       * @example 123
+       */
       externalIssueId?: string;
     };
     DeleteIssuesRequestDto: {
+      /**
+       * @description Issue ids in an array to delete in chunk
+       * @example [
+       *   1,
+       *   2,
+       *   3
+       * ]
+       */
       issueIds: number[];
     };
     FindCountResponseDto: {
@@ -790,6 +999,27 @@ export interface components {
       data: Record<string, never>;
       /** Format: date-time */
       createdAt: string;
+    };
+    Object: Record<string, never>;
+    GetImageUploadUrlResponseDto: {
+      /**
+       * @description Presigned post url
+       * @example https://example.com
+       */
+      url: string;
+      /**
+       * @description Presigned post fields
+       * @example {
+       *   "key": "key",
+       *   "bucket": "bucket",
+       *   "X-Amz-Algorithm": "X-Amz-Algorithm",
+       *   "X-Amz-Credential": "X-Amz-Credential",
+       *   "X-Amz-Date": "X-Amz-Date",
+       *   "Policy": "Policy",
+       *   "X-Amz-Signature": "X-Amz-Signature"
+       * }
+       */
+      fields: Record<string, never>;
     };
   };
   responses: never;
@@ -921,7 +1151,9 @@ export interface operations {
   UserController_getAllUsers: {
     parameters: {
       query?: {
+        /** @example 10 */
         limit?: number;
+        /** @example 1 */
         page?: number;
       };
     };
@@ -1310,7 +1542,9 @@ export interface operations {
   ChannelController_findAllByProjectId: {
     parameters: {
       query?: {
+        /** @example 10 */
         limit?: number;
+        /** @example 1 */
         page?: number;
         searchText?: string;
       };
@@ -1375,19 +1609,6 @@ export interface operations {
       };
     };
   };
-  ChannelController_delete: {
-    parameters: {
-      path: {
-        channelId: number;
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
   ChannelController_updateOne: {
     parameters: {
       path: {
@@ -1398,6 +1619,19 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateChannelRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ChannelController_delete: {
+    parameters: {
+      path: {
+        channelId: number;
+        projectId: number;
       };
     };
     responses: {
@@ -1460,7 +1694,9 @@ export interface operations {
   ProjectController_findAll: {
     parameters: {
       query?: {
+        /** @example 10 */
         limit?: number;
+        /** @example 1 */
         page?: number;
         searchText?: string;
       };
@@ -1575,20 +1811,45 @@ export interface operations {
   FeedbackController_create: {
     parameters: {
       path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
+        /**
+         * @description Channel id
+         * @example 1
+         */
         channelId: number;
       };
     };
+    /** @description Feedback data in json */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Object"];
+      };
+    };
     responses: {
-      201: {
-        content: never;
+      /** @description Feedback id */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
       };
     };
   };
   FeedbackController_deleteMany: {
     parameters: {
       path: {
+        /**
+         * @description Channel id
+         * @example 1
+         */
         channelId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1606,7 +1867,15 @@ export interface operations {
   FeedbackController_findByChannelId: {
     parameters: {
       path: {
+        /**
+         * @description Channel id
+         * @example 1
+         */
         channelId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1626,9 +1895,25 @@ export interface operations {
   FeedbackController_addIssue: {
     parameters: {
       path: {
+        /**
+         * @description Channel id
+         * @example 1
+         */
         channelId: number;
+        /**
+         * @description Feedback id to add an issue
+         * @example 1
+         */
         feedbackId: number;
+        /**
+         * @description Issue id to be added to the feedback
+         * @example 1
+         */
         issueId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1643,9 +1928,25 @@ export interface operations {
   FeedbackController_removeIssue: {
     parameters: {
       path: {
+        /**
+         * @description Channel id
+         * @example 1
+         */
         channelId: number;
+        /**
+         * @description Feedback id to remove the added issue
+         * @example 1
+         */
         feedbackId: number;
+        /**
+         * @description Issue id to remove from the feedback
+         * @example 1
+         */
         issueId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1678,9 +1979,27 @@ export interface operations {
   FeedbackController_updateFeedback: {
     parameters: {
       path: {
+        /**
+         * @description Channel id
+         * @example 1
+         */
         channelId: number;
+        /**
+         * @description Feedback id to update
+         * @example 1
+         */
         feedbackId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
+      };
+    };
+    /** @description Feedback data to be updated in json */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Object"];
       };
     };
     responses: {
@@ -1689,22 +2008,32 @@ export interface operations {
       };
     };
   };
-  FeedbackController_getImageUploadUrl: {
+  FeedbackController_getImageUploadUrlTest: {
     parameters: {
       path: {
         projectId: number;
-        channelId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImageUploadUrlTestRequestDto"];
       };
     };
     responses: {
       200: {
-        content: never;
+        content: {
+          "application/json": components["schemas"]["ImageUploadUrlTestResponseDto"];
+        };
       };
     };
   };
   IssueController_create: {
     parameters: {
       path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1724,6 +2053,10 @@ export interface operations {
   IssueController_deleteMany: {
     parameters: {
       path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1741,7 +2074,15 @@ export interface operations {
   IssueController_findById: {
     parameters: {
       path: {
+        /**
+         * @description Issue id
+         * @example 1
+         */
         issueId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1756,7 +2097,15 @@ export interface operations {
   IssueController_update: {
     parameters: {
       path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
+        /**
+         * @description Issue id
+         * @example 1
+         */
         issueId: number;
       };
     };
@@ -1774,7 +2123,15 @@ export interface operations {
   IssueController_delete: {
     parameters: {
       path: {
+        /**
+         * @description Issue id
+         * @example 1
+         */
         issueId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -1787,6 +2144,10 @@ export interface operations {
   IssueController_findAllByProjectId: {
     parameters: {
       path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
         projectId: number;
       };
     };
@@ -2097,6 +2458,59 @@ export interface operations {
     responses: {
       201: {
         content: never;
+      };
+    };
+  };
+  FeedbackController_findFeedback: {
+    parameters: {
+      path: {
+        /**
+         * @description Channel id
+         * @example 1
+         */
+        channelId: number;
+        /**
+         * @description Feedback id to find
+         * @example 1
+         */
+        feedbackId: number;
+        /**
+         * @description Project id
+         * @example 1
+         */
+        projectId: number;
+      };
+    };
+    responses: {
+      /** @description Feedback data */
+      200: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+    };
+  };
+  FeedbackController_getImageUploadUrl: {
+    parameters: {
+      path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
+        projectId: number;
+        /**
+         * @description Channel id
+         * @example 1
+         */
+        channelId: number;
+      };
+    };
+    responses: {
+      /** @description Feedback data */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetImageUploadUrlResponseDto"];
+        };
       };
     };
   };
