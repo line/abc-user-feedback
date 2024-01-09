@@ -61,11 +61,12 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
             cursor={<Rectangle fill="#5D7BE729" />}
             formatter={(value) => value.toLocaleString()}
             content={({ payload, label }) => (
-              <div className="bg-tertiary border-fill-secondary shadow-floating-depth-2 max-w-[240px] rounded border px-4 py-3">
+              <div
+                className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
+                style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
+              >
                 <p className="mb-2">{label}</p>
-                <p style={{ color: '#5D7BE7' }}>
-                  {payload?.[0]?.value?.toLocaleString()}
-                </p>
+                <p>{payload?.[0]?.value?.toLocaleString()}</p>
               </div>
             )}
           />

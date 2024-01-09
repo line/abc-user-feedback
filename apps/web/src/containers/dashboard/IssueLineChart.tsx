@@ -64,7 +64,7 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       height={400}
       data={chartData}
       dataKeys={dataKeys}
-      noColor
+      noLabel
     />
   );
 };

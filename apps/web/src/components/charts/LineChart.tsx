@@ -35,14 +35,14 @@ interface IProps {
   dataKeys: { color: string; name: string }[];
   height?: number;
   data: any[];
-  noColor?: boolean;
+  noLabel?: boolean;
 }
 
 const LineChart: React.FC<IProps> = ({
   dataKeys,
   height,
   data,
-  noColor = false,
+  noLabel = false,
 }) => {
   return (
     <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
@@ -57,7 +57,7 @@ const LineChart: React.FC<IProps> = ({
           stroke="var(--fill-color-secondary)"
         />
         <Tooltip
-          content={(props) => <CustomTooltip {...props} noColor={noColor} />}
+          content={(props) => <CustomTooltip {...props} noLabel={noLabel} />}
           formatter={(value) => value.toLocaleString()}
         />
         <XAxis
@@ -93,9 +93,9 @@ const LineChart: React.FC<IProps> = ({
 };
 
 const CustomTooltip: React.FC<
-  TooltipProps<ValueType, NameType> & { noColor: boolean }
+  TooltipProps<ValueType, NameType> & { noLabel: boolean }
 > = (props) => {
-  const { active, payload, label, noColor } = props;
+  const { active, payload, label, noLabel } = props;
   const { t } = useTranslation();
   const days = useMemo(() => {
     if (!label || typeof label !== 'string' || !label.includes('-')) {
@@ -111,7 +111,7 @@ const CustomTooltip: React.FC<
   return (
     <div
       className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
-      style={{ boxShadow: '0 0.25rem 0.5rem rgb(var(--shadow-rgb) / 30%)' }}
+      style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
     >
       <h1 className="font-12-bold mb-3">
         {label}
@@ -124,15 +124,15 @@ const CustomTooltip: React.FC<
       <div className="flex flex-col gap-1">
         {payload.map(({ color, name, value }, i) => (
           <div className="flex items-center justify-between gap-4" key={i}>
-            <div className="flex items-center gap-2">
-              {!noColor && (
+            {!noLabel && (
+              <div className="flex items-center gap-2">
                 <div
                   style={{ background: color }}
                   className="h-2 w-2 flex-shrink-0 rounded-full"
                 />
-              )}
-              <p className="font-12-regular break-all">{name}</p>
-            </div>
+                <p className="font-12-regular break-all">{name}</p>
+              </div>
+            )}
             <p className="font-12-regular">{value?.toLocaleString()}</p>
           </div>
         ))}
