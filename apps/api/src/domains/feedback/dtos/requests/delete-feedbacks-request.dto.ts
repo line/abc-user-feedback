@@ -17,7 +17,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray } from 'class-validator';
 
 export class DeleteFeedbacksRequestDto {
-  @ApiProperty({ type: [Number] })
+  @ApiProperty({
+    type: [Number],
+    description: 'Feedback ids in an array',
+    example: [1, 2],
+  })
   @IsArray()
   feedbackIds: number[];
 }
