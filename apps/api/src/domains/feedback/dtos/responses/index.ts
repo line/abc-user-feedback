@@ -15,4 +15,3 @@
  */
 export { FindFeedbacksByChannelIdResponseDto } from './find-feedbacks-by-channel-id-response.dto';
 export { AddIssueResponseDto } from './add-issue-response.dto';
-export { ImageUploadUrlTestResponseDto } from './image-upload-url-test-response.dto';

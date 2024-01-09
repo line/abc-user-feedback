@@ -322,7 +322,7 @@ export class FeedbackController {
       throw new BadRequestException('No image config in this channel');
     }
 
-    return await this.feedbackService.createImageUploadUrl({
+    return await this.channelService.createImageUploadUrl({
       projectId,
       channelId,
       accessKeyId: channel.imageConfig.accessKeyId,
