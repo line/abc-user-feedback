@@ -16,7 +16,7 @@ module.exports = {
       top: '0 -0.031rem 0 rgb(var(--shadow-rgb) / 10%)',
       bottom: '0 0.031rem 0 rgb(var(--shadow-rgb) / 10%)',
       'floating-depth-1': '0 0 0.063rem rgb(var(--shadow-rgb) / 30%)',
-      'floating-depth-2': '0 0.25rem 0.5rem rgb(var(--shadow-rgb) / 30%)',
+      'floating-depth-2': '0 0.25rem 0.5rem rgb(var(--shadow-rgb) / 10%)',
       'floating-depth-3': '0 0.25rem 1rem rgb(var(--shadow-rgb) / 20%)',
     },
   },

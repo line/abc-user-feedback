@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
+import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import type { TooltipProps } from 'recharts';
 import {
   CartesianGrid,
@@ -93,12 +96,31 @@ const CustomTooltip: React.FC<
   TooltipProps<ValueType, NameType> & { noColor: boolean }
 > = (props) => {
   const { active, payload, label, noColor } = props;
+  const { t } = useTranslation();
+  const days = useMemo(() => {
+    if (!label || typeof label !== 'string' || !label.includes('-')) {
+      return null;
+    }
+    const [start, end] = label.split(' - ');
+
+    return dayjs(end).diff(dayjs(start), 'day') + 1;
+  }, [label]);
 
   if (!active || !payload) return null;
 
   return (
-    <div className="bg-tertiary border-fill-secondary shadow-floating-depth-2 max-w-[240px] rounded border px-4 py-3">
-      <h1 className="font-12-bold mb-3">{label}</h1>
+    <div
+      className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
+      style={{ boxShadow: '0 0.25rem 0.5rem rgb(var(--shadow-rgb) / 30%)' }}
+    >
+      <h1 className="font-12-bold mb-3">
+        {label}
+        {days && (
+          <span className="text-secondary ml-1">
+            ({t('text.days', { days })})
+          </span>
+        )}
+      </h1>
       <div className="flex flex-col gap-1">
         {payload.map(({ color, name, value }, i) => (
           <div className="flex items-center justify-between gap-4" key={i}>

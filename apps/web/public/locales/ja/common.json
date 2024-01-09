@@ -318,7 +318,8 @@
     "shrink": "縮む",
     "feedback-detail": "フィードバック詳細",
     "create-channel-in-progress": "作成中のChannelがあります。",
-    "create-project-in-progress": "作成中のProjectがあります。"
+    "create-project-in-progress": "作成中のProjectがあります。",
+    "days": "{{days}} 日"
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -422,7 +423,6 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "該当イシューとして登録された全体フィードバック数です。",
-    "issue-feedback-growth": "過去 7 日間の当該イシューのフィードバック増減率を示します。"
+    "issue-feedback-count": "該当イシューとして登録された全体フィードバック数です。"
   }
 }

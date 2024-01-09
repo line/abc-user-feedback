@@ -78,7 +78,7 @@ const CreateChannelButton: React.FC<IProps> = (props) => {
             }}
             disabled={!perms.includes('channel_create')}
           >
-            <Icon name="Plus" size={24} className="text-above-primary" />
+            <Icon name="Plus" size={24} className="text-inverse" />
             {t('main.setting.button.create-channel')}
           </button>
         </TooltipTrigger>

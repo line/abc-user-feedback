@@ -39,7 +39,7 @@ class MyDocument extends Document {
             }}
           />
         </Head>
-        <body>
+        <body style={{ background: 'var(--body-background-color)' }}>
           <Main />
           <NextScript />
         </body>

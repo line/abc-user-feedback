@@ -318,7 +318,8 @@
     "shrink": "줄이기",
     "feedback-detail": "피드백 상세",
     "create-channel-in-progress": "생성중인 Channel이 있습니다.",
-    "create-project-in-progress": "생성중인 Project가 있습니다."
+    "create-project-in-progress": "생성중인 Project가 있습니다.",
+    "days": "{{days}} 일"
   },
   "toast": {
     "sign-in": "로그인 성공",
@@ -422,7 +423,6 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "해당 이슈로 등록된 전체 피드백 개수입니다.",
-    "issue-feedback-growth": "지난 7일 동안 해당 이슈의 피드백 증감률을 나타냅니다."
+    "issue-feedback-count": "해당 이슈로 등록된 전체 피드백 개수입니다."
   }
 }
