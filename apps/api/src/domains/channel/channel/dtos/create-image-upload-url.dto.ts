@@ -13,9 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { CreateChannelRequestDto } from './create-channel-request.dto';
-export { FindChannelsByProjectIdRequestDto } from './find-channels-by-project-id-request.dto';
-export { ImageConfigRequestDto } from './image-config-request.dto';
-export { UpdateChannelRequestDto } from './update-channel-request.dto';
-export { UpdateChannelFieldsRequestDto } from './update-channel-fields-request.dto';
-export { ImageUploadUrlTestRequestDto } from './image-upload-url-test-request.dto';
+
+export class CreateImageUploadUrlDto {
+  projectId: number;
+  channelId: number;
+  accessKeyId: string;
+  secretAccessKey: string;
+  endpoint: string;
+  region: string;
+  bucket: string;
+}

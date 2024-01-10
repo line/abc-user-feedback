@@ -16,4 +16,3 @@
 export { FindFeedbacksByChannelIdRequestDto } from './find-feedbacks-by-channel-id-request.dto';
 export { ExportFeedbacksRequestDto } from './export-feedbacks-request.dto';
 export { DeleteFeedbacksRequestDto } from './delete-feedbacks-request.dto';
-export { ImageUploadUrlTestRequestDto } from './image-upload-url-test-request.dto';
