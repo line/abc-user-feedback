@@ -114,6 +114,9 @@ export interface paths {
   "/api/projects/{projectId}/channels/{channelId}/fields": {
     put: operations["ChannelController_updateFields"];
   };
+  "/api/projects/{projectId}/channels/image-upload-url-test": {
+    post: operations["ChannelController_getImageUploadUrlTest"];
+  };
   "/api/field/{fieldId}/options": {
     get: operations["OptionController_getOptions"];
     post: operations["OptionController_createOption"];
@@ -152,9 +155,6 @@ export interface paths {
   };
   "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
-  };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url-test": {
-    post: operations["FeedbackController_getImageUploadUrlTest"];
   };
   "/api/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
@@ -209,6 +209,9 @@ export interface paths {
   "/api/migration/statistics/feedback-issue": {
     post: operations["MigrationController_migrateFeedbackIssueStatistics"];
   };
+  "/api/external/projects/{projectId}/channels/{channelId}/image-upload-url": {
+    get: operations["ChannelController_getImageUploadUrl"];
+  };
   "/api/external/projects/{projectId}/channels/{channelId}/feedbacks": {
     post: operations["FeedbackController_create"];
     delete: operations["FeedbackController_deleteMany"];
@@ -223,9 +226,6 @@ export interface paths {
   "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     get: operations["FeedbackController_findFeedback"];
     put: operations["FeedbackController_updateFeedback"];
-  };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
-    get: operations["FeedbackController_getImageUploadUrl"];
   };
   "/api/external/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
@@ -630,6 +630,16 @@ export interface components {
     UpdateChannelFieldsRequestDto: {
       fields: components["schemas"]["UpdateChannelRequestFieldDto"][];
     };
+    ImageUploadUrlTestRequestDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
+    ImageUploadUrlTestResponseDto: {
+      success: boolean;
+    };
     FindOptionByFieldIdResponseDto: {
       id: number;
       name: string;
@@ -801,16 +811,6 @@ export interface components {
        * ]
        */
       feedbackIds: number[];
-    };
-    ImageUploadUrlTestRequestDto: {
-      accessKeyId: string;
-      secretAccessKey: string;
-      endpoint: string;
-      region: string;
-      bucket: string;
-    };
-    ImageUploadUrlTestResponseDto: {
-      success: boolean;
     };
     CreateIssueRequestDto: {
       /**
@@ -1000,7 +1000,6 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
-    Object: Record<string, never>;
     GetImageUploadUrlResponseDto: {
       /**
        * @description Presigned post url
@@ -1021,6 +1020,7 @@ export interface components {
        */
       fields: Record<string, never>;
     };
+    Object: Record<string, never>;
   };
   responses: never;
   parameters: never;
@@ -1658,6 +1658,25 @@ export interface operations {
       };
     };
   };
+  ChannelController_getImageUploadUrlTest: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImageUploadUrlTestRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImageUploadUrlTestResponseDto"];
+        };
+      };
+    };
+  };
   OptionController_getOptions: {
     parameters: {
       path: {
@@ -2005,25 +2024,6 @@ export interface operations {
     responses: {
       200: {
         content: never;
-      };
-    };
-  };
-  FeedbackController_getImageUploadUrlTest: {
-    parameters: {
-      path: {
-        projectId: number;
-      };
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["ImageUploadUrlTestRequestDto"];
-      };
-    };
-    responses: {
-      200: {
-        content: {
-          "application/json": components["schemas"]["ImageUploadUrlTestResponseDto"];
-        };
       };
     };
   };
@@ -2461,6 +2461,30 @@ export interface operations {
       };
     };
   };
+  ChannelController_getImageUploadUrl: {
+    parameters: {
+      path: {
+        /**
+         * @description Project id
+         * @example 1
+         */
+        projectId: number;
+        /**
+         * @description Channel id
+         * @example 1
+         */
+        channelId: number;
+      };
+    };
+    responses: {
+      /** @description Feedback data */
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetImageUploadUrlResponseDto"];
+        };
+      };
+    };
+  };
   FeedbackController_findFeedback: {
     parameters: {
       path: {
@@ -2486,30 +2510,6 @@ export interface operations {
       200: {
         content: {
           "application/json": Record<string, never>;
-        };
-      };
-    };
-  };
-  FeedbackController_getImageUploadUrl: {
-    parameters: {
-      path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
-        projectId: number;
-        /**
-         * @description Channel id
-         * @example 1
-         */
-        channelId: number;
-      };
-    };
-    responses: {
-      /** @description Feedback data */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetImageUploadUrlResponseDto"];
         };
       };
     };

@@ -15,6 +15,7 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import { Input, toast } from '@ufb/ui';
@@ -31,6 +32,11 @@ interface IProps {}
 const InputImageUpload: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { input, onChangeInput } = useCreateChannel();
+  const router = useRouter();
+  const projectId = useMemo(
+    () => Number(router.query.projectId),
+    [router.query.projectId],
+  );
 
   const [inputError, setInputError] = useState<{
     name?: string;
@@ -81,8 +87,8 @@ const InputImageUpload: React.FC<IProps> = () => {
   );
   const { mutate: testConection } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url-test',
-    pathParams: { channelId: 1, projectId: 1 },
+    path: '/api/projects/{projectId}/channels/image-upload-url-test',
+    pathParams: { projectId },
     queryOptions: {
       onSuccess(data) {
         if (data?.success) {
