@@ -20,12 +20,12 @@ import { OpensearchRepository } from '@/common/repositories';
 import {
   getMockProvider,
   MockOpensearchRepository,
-  mockRepository,
 } from '@/test-utils/util-functions';
 import { FeedbackEntity } from '../../domains/admin/feedback/feedback.entity';
 import { FeedbackMySQLService } from '../../domains/admin/feedback/feedback.mysql.service';
 import { FeedbackOSService } from '../../domains/admin/feedback/feedback.os.service';
 import { FeedbackService } from '../../domains/admin/feedback/feedback.service';
+import { FeedbackRepositoryStub } from '../stubs/feedback.repository.stub';
 import { ChannelServiceProviders } from './channel.service.providers';
 import { FeedbackIssueStatisticsServiceProviders } from './feedback-issue-statistics.service.providers';
 import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';
@@ -38,7 +38,7 @@ export const FeedbackServiceProviders = [
   FeedbackMySQLService,
   {
     provide: getRepositoryToken(FeedbackEntity),
-    useValue: mockRepository(),
+    useClass: FeedbackRepositoryStub,
   },
   ClsService,
   ...FieldServiceProviders,

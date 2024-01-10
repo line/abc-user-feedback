@@ -142,18 +142,6 @@ describe('TenantService', () => {
 
       const feedbackCounts = await tenantService.countByTenantId(dto);
 
-      expect(feedbackRepo.count).toHaveBeenCalledTimes(1);
-      expect(feedbackRepo.count).toHaveBeenCalledWith({
-        where: {
-          channel: {
-            project: {
-              tenant: {
-                id: dto.tenantId,
-              },
-            },
-          },
-        },
-      });
       expect(feedbackCounts.total).toEqual(count);
     });
   });

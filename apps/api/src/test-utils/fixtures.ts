@@ -23,6 +23,7 @@ import {
 } from '@/common/enums';
 import type { ReplaceFieldDto } from '@/domains/admin/channel/field/dtos';
 import type { CreateFieldDto } from '@/domains/admin/channel/field/dtos/create-field.dto';
+import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
@@ -138,3 +139,26 @@ export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
 
 export const optionSort = (a, b) =>
   a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+
+export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
+  Object.values(FieldTypeEnum).flatMap((type) =>
+    Object.values(FieldStatusEnum).flatMap((status) => ({
+      id: faker.number.int(),
+      ...createFieldDto({
+        format,
+        type,
+        status,
+      }),
+    })),
+  ),
+) as FieldEntity[];
+
+export const feedbackFixture = fieldsFixture.reduce((prev, curr) => {
+  if (curr.type === FieldTypeEnum.ADMIN) return prev;
+  if (curr.status === FieldStatusEnum.INACTIVE) return prev;
+  const value = getRandomValue(curr.format, curr.options);
+  return {
+    ...prev,
+    [curr.key]: value,
+  };
+}, {});

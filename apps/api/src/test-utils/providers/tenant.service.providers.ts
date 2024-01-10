@@ -20,6 +20,7 @@ import { FeedbackEntity } from '../../domains/admin/feedback/feedback.entity';
 import { TenantEntity } from '../../domains/admin/tenant/tenant.entity';
 import { TenantService } from '../../domains/admin/tenant/tenant.service';
 import { UserEntity } from '../../domains/admin/user/entities/user.entity';
+import { FeedbackRepositoryStub } from '../stubs/feedback.repository.stub';
 
 export const TenantServiceProviders = [
   TenantService,
@@ -33,6 +34,6 @@ export const TenantServiceProviders = [
   },
   {
     provide: getRepositoryToken(FeedbackEntity),
-    useValue: mockRepository(),
+    useClass: FeedbackRepositoryStub,
   },
 ];

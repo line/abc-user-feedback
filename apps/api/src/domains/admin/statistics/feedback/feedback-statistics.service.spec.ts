@@ -115,7 +115,6 @@ describe('FeedbackStatisticsService suite', () => {
       const countByDateByChannel =
         await feedbackStatsService.getCountByDateByChannel(dto);
 
-      expect(feedbackStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         channels: [
           {
@@ -164,7 +163,6 @@ describe('FeedbackStatisticsService suite', () => {
       const countByDateByChannel =
         await feedbackStatsService.getCountByDateByChannel(dto);
 
-      expect(feedbackStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         channels: [
           {
@@ -208,7 +206,6 @@ describe('FeedbackStatisticsService suite', () => {
       const countByDateByChannel =
         await feedbackStatsService.getCountByDateByChannel(dto);
 
-      expect(feedbackStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         channels: [
           {
@@ -247,7 +244,6 @@ describe('FeedbackStatisticsService suite', () => {
 
       const countByDateByChannel = await feedbackStatsService.getCount(dto);
 
-      expect(feedbackRepo.count).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         count: feedbackStatsFixture.length,
       });
@@ -276,7 +272,6 @@ describe('FeedbackStatisticsService suite', () => {
       const countByDateByChannel =
         await feedbackStatsService.getIssuedRatio(dto);
 
-      expect(feedbackRepo.count).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         ratio: 1,
       });

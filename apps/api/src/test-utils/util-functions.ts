@@ -87,15 +87,21 @@ export const createQueryBuilder: any = {
   setFindOptions: () => jest.fn().mockImplementation(() => createQueryBuilder),
   select: () => createQueryBuilder,
   innerJoin: () => createQueryBuilder,
+  leftJoin: () => createQueryBuilder,
   where: () => createQueryBuilder,
   andWhere: () => createQueryBuilder,
   groupBy: () => createQueryBuilder,
+  addOrderBy: () => createQueryBuilder,
   getRawMany: () => createQueryBuilder,
   insert: () => createQueryBuilder,
   values: () => createQueryBuilder,
   orUpdate: () => createQueryBuilder,
   updateEntity: () => createQueryBuilder,
   execute: () => createQueryBuilder,
+  offset: () => createQueryBuilder,
+  limit: () => createQueryBuilder,
+  getMany: () => createQueryBuilder,
+  getCount: () => createQueryBuilder,
 };
 
 export const mockRepository = () => ({
