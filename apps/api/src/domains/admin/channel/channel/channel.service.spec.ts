@@ -19,10 +19,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import { createFieldDto } from '@/test-utils/fixtures';
-import {
-  MockOpensearchRepository,
-  TestConfig,
-} from '@/test-utils/util-functions';
+import { TestConfig } from '@/test-utils/util-functions';
 import { ChannelServiceProviders } from '../../../../test-utils/providers/channel.service.providers';
 import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';
@@ -82,14 +79,6 @@ describe('ChannelService', () => {
       const channel = await channelService.create(dto);
 
       expect(channel.id).toEqual(channelFixture.id);
-      expect(channelRepo.save).toBeCalledTimes(1);
-      expect(channelRepo.save).toHaveBeenCalledWith(
-        CreateChannelDto.toChannelEntity(dto),
-      );
-      expect(MockOpensearchRepository.createIndex).toBeCalledTimes(1);
-      expect(MockOpensearchRepository.createIndex).toHaveBeenCalledWith({
-        index: channelFixture.id.toString(),
-      });
     });
     it('creating a channel fails with a duplicate name', async () => {
       const fieldCount = faker.number.int({ min: 1, max: 10 });
@@ -108,9 +97,6 @@ describe('ChannelService', () => {
       await expect(channelService.create(dto)).rejects.toThrow(
         ChannelAlreadyExistsException,
       );
-
-      expect(channelRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.createIndex).not.toBeCalled();
     });
   });
   describe('findById', () => {

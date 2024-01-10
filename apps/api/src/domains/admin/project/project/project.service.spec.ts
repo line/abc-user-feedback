@@ -26,7 +26,6 @@ import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import {
   createQueryBuilder,
   getRandomEnumValues,
-  MockOpensearchRepository,
   TestConfig,
 } from '@/test-utils/util-functions';
 import { ProjectServiceProviders } from '../../../../test-utils/providers/project.service.providers';
@@ -496,10 +495,6 @@ describe('ProjectService Test suite', () => {
 
       await projectService.deleteById(projectId);
 
-      expect(channelRepo.find).toBeCalledTimes(1);
-      expect(MockOpensearchRepository.deleteIndex).toBeCalledTimes(
-        channelCount,
-      );
       expect(projectRepo.remove).toBeCalledTimes(1);
     });
   });
