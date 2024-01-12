@@ -42,8 +42,6 @@ export class FeedbackStatisticsController {
       .map((v) => parseInt(v, 10))
       .filter((v) => !isNaN(v));
 
-    console.log('startDate: ', startDate);
-    console.log('endDate: ', endDate);
     return FindCountByDateByChannelResponseDto.transform(
       await this.feedbackStatisticsService.getCountByDateByChannel({
         startDate,

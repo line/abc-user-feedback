@@ -102,8 +102,8 @@ const CustomTooltip: React.FC<
       return null;
     }
     const [start, end] = label.split(' - ');
-
-    return dayjs(end).diff(dayjs(start), 'day') + 1;
+    const dates = dayjs(end).diff(dayjs(start), 'day') + 1;
+    return dates > 0 ? dates : 365 + dates;
   }, [label]);
 
   if (!active || !payload) return null;

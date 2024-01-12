@@ -106,9 +106,9 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   if (!dateRange || !dateRange.startDate || !dateRange.endDate) return <></>;
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="flex justify-between">
-        <h1 className="font-20-bold mb-3">
+    <div className="flex flex-col gap-6">
+      <div className="flex items-center justify-between">
+        <h1 className="font-20-bold">
           {t('main.dashboard.title')}
           <span className="font-12-regular text-secondary ml-2">
             Updated: {currentDate}
@@ -162,7 +162,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         projectId={projectId}
       />
 
-      <div className="flex gap-5">
+      <div className="flex gap-6">
         <div className="flex-1">
           <IssueBarChart
             from={dateRange.startDate}

@@ -49,7 +49,7 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { chartData, dataKeys } = useLineChartData(
     from,
     to,
-    [{ id: 1, name: t('chart.total-issue-trend.issue-count') }],
+    [{ id: 1, name: '' }],
     [{ id: 1, statistics: data?.statistics ?? [] }],
   );
 

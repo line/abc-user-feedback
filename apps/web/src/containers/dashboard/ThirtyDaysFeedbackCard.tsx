@@ -67,11 +67,19 @@ const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     <DashboardCard
       data={currentData?.count ?? 0}
       title={t('card.dashboard.n-days-feedback.title', { n: 30 })}
-      description={`${t('card.dashboard.n-days-feedback.description', {
+      description={t('card.dashboard.n-days-feedback.description', {
         n: 30,
-      })} (${dayjs().subtract(30, 'day').format('YYYY/MM/DD')} - ${dayjs()
-        .subtract(1, 'day')
-        .format('YYYY/MM/DD')})`}
+        targetDate: `${dayjs()
+          .subtract(30, 'day')
+          .format('YYYY/MM/DD')} - ${dayjs()
+          .subtract(1, 'day')
+          .format('YYYY/MM/DD')}`,
+        compareDate: `${dayjs()
+          .subtract(60, 'day')
+          .format('YYYY/MM/DD')} - ${dayjs()
+          .subtract(31, 'day')
+          .format('YYYY/MM/DD')}`,
+      })}
       percentage={percentage}
     />
   );

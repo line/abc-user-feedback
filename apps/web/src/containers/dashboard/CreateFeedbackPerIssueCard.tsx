@@ -44,9 +44,11 @@ const CreateFeedbackPerIssueCard: React.FC<IProps> = (props) => {
     <DashboardCard
       data={`${parseFloat(Math.abs((data?.ratio ?? 0) * 100).toFixed(1))}%`}
       title={t('card.dashboard.issue-ratio.title')}
-      description={`${t('card.dashboard.issue-ratio.description')} (${dayjs(
-        from,
-      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
+      description={`${t('card.dashboard.issue-ratio.description', {
+        targetDate: `${dayjs(from).format('YYYY/MM/DD')} - ${dayjs(to).format(
+          'YYYY/MM/DD',
+        )}`,
+      })}`}
     />
   );
 };

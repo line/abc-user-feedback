@@ -353,63 +353,62 @@
     "dashboard": {
       "total-feedback": {
         "title": "Total number of feedbacks",
-        "description": "Number of feedback collected over a specific period of time."
+        "description": "Number of feedback created in a specific period of time. ({{targetDate}})"
       },
       "total-issue": {
         "title": "Total number of issues",
-        "description": "Number of issues created in a specific period of time."
+        "description": "Number of issues created in a specific period of time. ({{targetDate}})"
       },
       "issue-ratio": {
-        "title": "Issue registration rate",
-        "description": "Issue enrollment rate of feedback collected over a specific period of time."
+        "title": "Register Issue rate",
+        "description": "Register Issue rate of feedback created in a specific period of time. ({{targetDate}})"
       },
       "today-feedback": {
-        "title": "Today's feedback count",
-        "description": "Number of feedback collected today."
+        "title": "Number of today's feedback",
+        "description": "Number of feedback created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
       },
       "yesterday-feedback": {
         "title": "Number of yesterday's feedback",
-        "description": "Number of feedback collected yesterday."
+        "description": "Number of feedback created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
       },
       "n-days-feedback": {
         "title": "Number of feedbacks in the last {{n}} days",
-        "description": "Number of feedback collected in the last {{n}} days"
+        "description": "Number of feedback created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
       },
       "today-issue": {
-        "title": "Number of issues today",
-        "description": "Number of issues created today."
+        "title": "Number of today's issue",
+        "description": "Number of issue created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
       },
       "yesterday-issue": {
-        "title": "Number of issues yesterday",
-        "description": "Number of issues created yesterday."
+        "title": "Number of yesterday's issue",
+        "description": "Number of issue created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
       },
       "n-days-issue": {
-        "title": "Number of issues last {{n}} days",
-        "description": "Number of issues created in the last {{n}} days"
+        "title": "Number of issue in the last {{n}} days",
+        "description": "Number of issue created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
       }
     }
   },
   "chart": {
     "total-feedback-trend": {
-      "title": "Overall feedback trend",
-      "description": "This indicates the trend of feedback collection over a specific period of time."
+      "title": "Feedback Trend",
+      "description": "Display the trend of feedback creation over a specific period of time."
     },
     "total-issue-trend": {
-      "title": "Overall issue trend",
-      "description": "This indicates the trend of issue creation over a specific period of time.",
-      "issue-count": "Number of Issue Creation"
+      "title": "Issue Trend",
+      "description": "Display the trend of Issue creation over a specific period of time."
     },
     "issue-status-count": {
-      "title": "Issue Status Count",
-      "description": "This indicates the number of all issues by status."
+      "title": "Issue Status",
+      "description": "Display the current status of the entire issue."
     },
     "issue-rank": {
-      "title": "Top Issue Rank",
-      "description": "This represents an issue in the top list."
+      "title": "Top Issue",
+      "description": "Display the top issues with a large number of count."
     },
     "issue-trend": {
-      "title": "Issue trend comparison",
-      "description": "This indicates the feedback trend of the selected issue."
+      "title": "Issue comparison",
+      "description": "Compare and display the trend of feedback creation for selected issues."
     }
   },
   "popover": {
@@ -423,6 +422,6 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "The total number of feedbacks registered for this issue."
+    "issue-feedback-count": "Number of feedbacks registered in the issue."
   }
 }

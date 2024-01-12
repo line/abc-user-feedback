@@ -42,15 +42,19 @@ const DashboardCard: React.FC<IProps> = (props) => {
         {typeof percentage === 'undefined' ? (
           <></>
         ) : isNaN(percentage) || !isFinite(percentage) ? (
-          <Icon name="Minus" className="text-secondary" />
+          <Icon name="StableLine" className="text-secondary" size={16} />
         ) : (
-          <div className="flex items-center">
+          <div className="flex items-center gap-0.5">
             {percentage === 0 ? (
-              <Icon name="Minus" className="text-secondary" />
+              <Icon name="StableLine" className="text-secondary" size={16} />
             ) : percentage > 0 ? (
-              <Icon name="TriangleUp" className="text-blue-primary" />
+              <Icon name="TriangleUp" className="text-blue-primary" size={16} />
             ) : (
-              <Icon name="TriangleDown" className="text-red-primary" />
+              <Icon
+                name="TriangleDown"
+                className="text-red-primary"
+                size={16}
+              />
             )}
             <p
               className={
