@@ -70,3 +70,11 @@ async function bootstrap() {
 }
 
 void bootstrap();
+
+// setInterval(() => {
+//   const { rss, heapTotal, heapUsed } = process.memoryUsage();
+//   console.log('RSS:', (rss / 1024 / 1024).toFixed(2), 'MB');
+//   console.log('Heap Total:', (heapTotal / 1024 / 1024).toFixed(2), 'MB');
+//   console.log('Heap Used:', (heapUsed / 1024 / 1024).toFixed(2), 'MB');
+//   console.log('------------------------');
+// }, 1000);
