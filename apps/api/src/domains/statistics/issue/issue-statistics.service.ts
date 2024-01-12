@@ -24,6 +24,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateCountDto } from './dtos';
 import type {
   GetCountByDateDto,
@@ -60,11 +61,11 @@ export class IssueStatisticsService {
   }
 
   async getCountByDate(dto: GetCountByDateDto) {
-    const { from, to, interval } = dto;
+    const { startDate, endDate, interval } = dto;
 
     const issueStatistics = await this.repository.find({
       where: {
-        date: Between(from, to),
+        date: Between(new Date(startDate), new Date(endDate)),
         project: { id: dto.projectId },
       },
       order: { date: 'ASC' },
@@ -73,21 +74,20 @@ export class IssueStatisticsService {
     return {
       statistics: issueStatistics.reduce(
         (acc, curr) => {
-          const intervalCount = Math.ceil(
-            DateTime.fromJSDate(new Date(curr.date))
-              .until(DateTime.fromJSDate(to))
-              .length(interval),
+          const { startOfInterval, endOfInterval } = getIntervalDatesInFormat(
+            startDate,
+            endDate,
+            curr.date,
+            interval,
           );
-          const endOfInterval = DateTime.fromJSDate(to).minus({
-            [interval]: intervalCount,
-          });
 
           let statistic = acc.find(
-            (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
+            (stat) => stat.startDate === startOfInterval,
           );
           if (!statistic) {
             statistic = {
-              date: endOfInterval.toFormat('yyyy-MM-dd'),
+              startDate: startOfInterval,
+              endDate: endOfInterval,
               count: 0,
             };
             acc.push(statistic);
@@ -96,7 +96,7 @@ export class IssueStatisticsService {
 
           return acc;
         },
-        [] as { date: string; count: number }[],
+        [] as { startDate: string; endDate: string; count: number }[],
       ),
     };
   }

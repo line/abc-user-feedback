@@ -14,8 +14,8 @@
  * under the License.
  */
 export class GetCountByDateByIssueDto {
-  from: Date;
-  to: Date;
+  startDate: string;
+  endDate: string;
   interval: 'day' | 'week' | 'month';
   issueIds: number[];
 }

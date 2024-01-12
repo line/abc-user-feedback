@@ -189,6 +189,7 @@ export { ReactComponent as Search } from './symbol/search.svg';
 export { ReactComponent as Share } from './symbol/share.svg';
 export { ReactComponent as SquareCheck } from './symbol/square-check.svg';
 export { ReactComponent as SquareEmpty } from './symbol/square-empty.svg';
+export { ReactComponent as StableLine } from './symbol/stable-line.svg';
 export { ReactComponent as Target } from './symbol/target.svg';
 export { ReactComponent as TriangleDown } from './symbol/triangle-down.svg';
 export { ReactComponent as TriangleUp } from './symbol/triangle-up.svg';

@@ -28,7 +28,7 @@ const DashboardCard: React.FC<IProps> = (props) => {
   const { title, data, percentage, description } = props;
 
   return (
-    <div className="border-fill-tertiary flex h-[108px] w-[220px] flex-col gap-[10px] rounded border p-3">
+    <div className="border-fill-tertiary bg-tertiary flex h-[108px] w-[220px] flex-col gap-[10px] rounded border p-3">
       <p className="line-clamp-2 flex-1">
         {title}
         {description && (
@@ -42,15 +42,19 @@ const DashboardCard: React.FC<IProps> = (props) => {
         {typeof percentage === 'undefined' ? (
           <></>
         ) : isNaN(percentage) || !isFinite(percentage) ? (
-          <p className="text-primary">-</p>
+          <Icon name="StableLine" className="text-secondary" size={16} />
         ) : (
-          <div className="flex items-center">
+          <div className="flex items-center gap-0.5">
             {percentage === 0 ? (
-              <Icon name="Minus" className="text-secondary" />
+              <Icon name="StableLine" className="text-secondary" size={16} />
             ) : percentage > 0 ? (
-              <Icon name="TriangleUp" className="text-blue-primary" />
+              <Icon name="TriangleUp" className="text-blue-primary" size={16} />
             ) : (
-              <Icon name="TriangleDown" className="text-red-primary" />
+              <Icon
+                name="TriangleDown"
+                className="text-red-primary"
+                size={16}
+              />
             )}
             <p
               className={

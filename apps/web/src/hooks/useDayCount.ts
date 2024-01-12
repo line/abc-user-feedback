@@ -13,23 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
+import { useMemo } from 'react';
+import dayjs from 'dayjs';
 
-interface IProps extends React.PropsWithChildren {}
-
-const ChartFilter: React.FC<IProps> = ({ children }) => {
-  return (
-    <Popover placement="bottom-end">
-      <PopoverTrigger asChild>
-        <button className="icon-btn icon-btn-secondary icon-btn-sm">
-          <Icon name="FilterCircleStroke" />
-        </button>
-      </PopoverTrigger>
-      <PopoverContent className="bg-tertiary w-[300px] overflow-hidden">
-        {children}
-      </PopoverContent>
-    </Popover>
-  );
+const useDayCount = (from: Date, to: Date) => {
+  return useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
 };
-
-export default ChartFilter;
+export default useDayCount;

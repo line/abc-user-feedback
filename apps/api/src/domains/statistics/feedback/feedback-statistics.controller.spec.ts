@@ -47,16 +47,16 @@ describe('Feedback Statistics Controller', () => {
 
   it('getCountByDateByChannel', async () => {
     jest.spyOn(MockFeedbackStatisticsService, 'getCountByDateByChannel');
-    const from = faker.date.past();
-    const to = faker.date.future();
+    const startDate = '2023-01-01';
+    const endDate = '2023-12-01';
     const interval = ['day', 'week', 'month'][
       faker.number.int({ min: 0, max: 2 })
     ] as 'day' | 'week' | 'month';
     const channelIds = [faker.number.int(), faker.number.int()];
 
     await feedbackStatisticsController.getCountByDateByChannel(
-      from,
-      to,
+      startDate,
+      endDate,
       interval,
       channelIds.join(','),
     );

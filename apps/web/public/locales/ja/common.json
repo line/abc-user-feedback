@@ -318,7 +318,8 @@
     "shrink": "縮む",
     "feedback-detail": "フィードバック詳細",
     "create-channel-in-progress": "作成中のChannelがあります。",
-    "create-project-in-progress": "作成中のProjectがあります。"
+    "create-project-in-progress": "作成中のProjectがあります。",
+    "days": "{{days}} 日"
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -352,69 +353,69 @@
     "dashboard": {
       "total-feedback": {
         "title": "フィードバックの合計数",
-        "description": "特定の期間に収集されたフィードバックの数。"
+        "description": "特定の期間中に作成されたフィードバックの数です。 ({{targetDate}})"
       },
       "total-issue": {
-        "title": "問題の総数",
-        "description": "特定の期間内に作成された問題の数"
+        "title": "全体イシュー数",
+        "description": "特定の期間中に作成されたイシューの数です。 ({{targetDate}})"
       },
       "issue-ratio": {
-        "title": "イシュー登録率",
-        "description": "特定の期間に収集されたフィードバックの登録率を発行します。"
+        "title": "イシュー登録比重",
+        "description": "特定の期間中に作成されたフィードバックのイシュー登録の割合です。 ({{targetDate}})"
       },
       "today-feedback": {
         "title": "今日のフィードバック数",
-        "description": "今日収集されたフィードバックの数。"
+        "description": "今日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       },
       "yesterday-feedback": {
-        "title": "昨日のフィードバックの数",
-        "description": "昨日収集されたフィードバックの数。"
+        "title": "昨日のフィードバック数",
+        "description": "昨日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       },
       "n-days-feedback": {
-        "title": "過去 {{n}} 日間のフィードバック数",
-        "description": "過去 {{n}} 日間に収集されたフィードバックの数"
+        "title": "過去{{n}}日フィードバック数",
+        "description": "過去{{n}}日間に生成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       },
       "today-issue": {
-        "title": "現在の問題数",
-        "description": "今日作成された問題の数。"
+        "title": "今日の話題数",
+        "description": "今日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       },
       "yesterday-issue": {
-        "title": "昨日の問題数",
-        "description": "昨日作成された問題の数。"
+        "title": "昨日のイシュー数",
+        "description": "昨日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       },
       "n-days-issue": {
-        "title": "過去 {{n}} 日の問題数",
-        "description": "過去 {{n}} 日間に作成された問題の数"
+        "title": "過去{{n}}日のイシュー数",
+        "description": "過去{{n}}日間に生成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       }
     }
   },
   "chart": {
     "total-feedback-trend": {
-      "title": "全体的なフィードバックの傾向",
-      "description": "特定の期間のフィードバック収集の推移を示します。"
+      "title": "フィードバック生成推移",
+      "description": "特定の期間のフィードバック生成の推移を示します。"
     },
     "total-issue-trend": {
-      "title": "全体イシュー推移",
-      "description": "特定の期間のイシュー作成推移を示します。",
-      "issue-count": "イシュー件数"
+      "title": "イシュー生成推移",
+      "description": "特定期間のイシュー作成推移を示します。",
+      "issue-count": "イシュー生成数"
     },
     "issue-status-count": {
-      "title": "イシューステータス数",
-      "description": "ステータス別にすべての問題の数を示します。"
+      "title": "イシュー現況",
+      "description": "全体イシューの現況を示します。"
     },
     "issue-rank": {
-      "title": "トップイシューランク",
-      "description": "これはトップリストのIssueを表しています。"
+      "title": "上位イシュー",
+      "description": "フィードバック数が多い上位イシューを表示します。"
     },
     "issue-trend": {
-      "title": "イシュー傾向比較",
-      "description": "選択した問題のフィードバック傾向を示します。"
+      "title": "イシュー比較",
+      "description": "選択したイシューのフィードバック生成推移を比較して表示します。"
     }
   },
   "popover": {
     "select-issue": {
       "search-issue": "問題の検索",
-      "max-issue-count": "イシューは最大5つまで選択できます。",
+      "max-issue-count": "最大5つまでイシューを選択できます。",
       "issue-list": "イシューリスト"
     },
     "select-issue-status": {
@@ -422,7 +423,6 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "該当イシューとして登録された全体フィードバック数です。",
-    "issue-feedback-growth": "過去 7 日間の当該イシューのフィードバック増減率を示します。"
+    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
   }
 }

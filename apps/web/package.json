@@ -43,7 +43,7 @@
     "axios": "^1.6.0",
     "axios-auth-refresh": "^3.3.6",
     "cookies-next": "^4.0.0",
-    "date-fns": "^2.30.0",
+    "date-fns": "^3.0.6",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.16.4",
     "i18next": "^23.6.0",

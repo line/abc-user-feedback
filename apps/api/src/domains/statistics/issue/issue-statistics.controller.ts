@@ -48,15 +48,15 @@ export class IssueStatisticsController {
   @ApiOkResponse({ type: FindCountByDateResponseDto })
   @Get('/count-by-date')
   async getCountByDate(
-    @Query('from') from: Date,
-    @Query('to') to: Date,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('projectId') projectId: number,
   ) {
     return FindCountByDateResponseDto.transform(
       await this.issueStatisticsService.getCountByDate({
-        from,
-        to,
+        startDate,
+        endDate,
         interval,
         projectId,
       }),

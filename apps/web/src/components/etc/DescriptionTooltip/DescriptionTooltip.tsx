@@ -38,7 +38,9 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
           className={color === 'red' ? 'text-red-primary' : 'text-tertiary'}
         />
       </TooltipTrigger>
-      <TooltipContent>{description}</TooltipContent>
+      <TooltipContent className="whitespace-pre-line">
+        {description}
+      </TooltipContent>
     </Tooltip>
   );
 };

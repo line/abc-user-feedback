@@ -95,13 +95,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
 
   describe('getCountByDateByissue', () => {
     it('getting counts by day by issue succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'day';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.issueIds = issueIds;
       jest
@@ -120,19 +120,23 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 1,
-                date: '2023-01-01',
+                startDate: '2023-01-01',
+                endDate: '2023-01-01',
               },
               {
                 feedbackCount: 2,
-                date: '2023-01-02',
+                startDate: '2023-01-02',
+                endDate: '2023-01-02',
               },
               {
                 feedbackCount: 3,
-                date: '2023-01-08',
+                startDate: '2023-01-08',
+                endDate: '2023-01-08',
               },
               {
                 feedbackCount: 4,
-                date: '2023-02-01',
+                startDate: '2023-02-01',
+                endDate: '2023-02-01',
               },
             ],
           },
@@ -140,13 +144,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
     });
     it('getting counts by week by issue succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'week';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.issueIds = issueIds;
       jest
@@ -164,16 +168,19 @@ describe('FeedbackIssueStatisticsService suite', () => {
             name: 'issue1',
             statistics: [
               {
-                feedbackCount: 3,
-                date: '2023-01-01',
+                feedbackCount: 1,
+                startDate: '2023-01-01',
+                endDate: '2023-01-01',
               },
               {
-                feedbackCount: 3,
-                date: '2023-01-08',
+                feedbackCount: 5,
+                startDate: '2023-01-02',
+                endDate: '2023-01-08',
               },
               {
                 feedbackCount: 4,
-                date: '2023-01-29',
+                startDate: '2023-01-30',
+                endDate: '2023-02-05',
               },
             ],
           },
@@ -181,13 +188,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
     });
     it('getting counts by month by issue succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'month';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.issueIds = issueIds;
       jest
@@ -206,11 +213,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 6,
-                date: '2022-12-31',
+                startDate: '2023-01-01',
+                endDate: '2023-01-31',
               },
               {
                 feedbackCount: 4,
-                date: '2023-01-31',
+                startDate: '2023-02-01',
+                endDate: '2023-02-28',
               },
             ],
           },

@@ -154,7 +154,7 @@ export const TooltipTrigger = React.forwardRef<
 export const TooltipContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & { color?: ColorType }
->(function TooltipContent({ style, color, ...props }, propRef) {
+>(function TooltipContent({ style, color, className, ...props }, propRef) {
   const context = useTooltipContext();
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
   const [bgCN, textCN, arrowCN]: [string, string, string] =
@@ -203,7 +203,7 @@ export const TooltipContent = React.forwardRef<
             'fill-yellow-quaternary',
           ];
         default:
-          return ['bg-fill-primary', 'text-fill-inverse', 'fill-fill-primary'];
+          return ['bg-fill-primary', 'text-fill-inverse', 'fill-primary'];
       }
     }, [color]);
 
@@ -218,6 +218,7 @@ export const TooltipContent = React.forwardRef<
           'font-12-regular z-40 min-w-[50px] rounded p-2',
           bgCN,
           textCN,
+          className,
         ].join(' ')}
         {...context.getFloatingProps(props)}
       >
