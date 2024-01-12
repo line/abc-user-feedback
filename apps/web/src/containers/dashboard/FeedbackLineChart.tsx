@@ -88,11 +88,9 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
   return (
     <SimpleLineChart
       title={t('chart.total-feedback-trend.title')}
-      description={`${t('chart.total-feedback-trend.description')} (${dayjs()
-        .subtract(7, 'day')
-        .format('YYYY/MM/DD')} - ${dayjs()
-        .subtract(1, 'day')
-        .format('YYYY/MM/DD')})`}
+      description={`${t('chart.total-feedback-trend.description')} (${dayjs(
+        from,
+      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
       dataKeys={dataKeys}
       data={chartData}

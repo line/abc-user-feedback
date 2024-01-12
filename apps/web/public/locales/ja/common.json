@@ -373,7 +373,7 @@
       },
       "n-days-feedback": {
         "title": "過去{{n}}日フィードバック数",
-        "description": "過去{{n}}日間に生成されたフィードバックの数です。 ({targetDate})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+        "description": "過去{{n}}日間に生成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       },
       "today-issue": {
         "title": "今日の話題数",
@@ -385,7 +385,7 @@
       },
       "n-days-issue": {
         "title": "過去{{n}}日のイシュー数",
-        "description": "過去{{n}}日間に生成されたイシュー数です。 ({targetDate})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+        "description": "過去{{n}}日間に生成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
       }
     }
   },

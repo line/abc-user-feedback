@@ -56,11 +56,9 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   return (
     <SimpleLineChart
       title={t('chart.total-issue-trend.title')}
-      description={`${t('chart.total-issue-trend.description')} (${dayjs()
-        .subtract(7, 'day')
-        .format('YYYY/MM/DD')} - ${dayjs()
-        .subtract(1, 'day')
-        .format('YYYY/MM/DD')})`}
+      description={`${t('chart.total-issue-trend.description')} (${dayjs(
+        from,
+      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
       data={chartData}
       dataKeys={dataKeys}
