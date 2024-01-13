@@ -56,7 +56,7 @@ docker pull line/abc-user-feedback-api
 - SMTP - for mail verification during making accounts
 - [OpenSearch v7](https://opensearch.org/) - for performance on searching feedbacks
 
-You can use [docker-compose.infra.yml](./docker-compose.infra.yml) file for requirements.
+You can use [docker-compose.infra.yml](/docker/docker-compose.infra.yml) file for requirements.
 
 ### Getting Started With Local Development
 
