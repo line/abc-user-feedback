@@ -3,7 +3,7 @@
     <h1 align="center">ABC User Feedback</h1>
 </p>
 
-ABC User Feedback is an open-source platform. It helps to collect and organize user feedback. It consists of a backend built with NestJS and a client built with NextJS.
+ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. We ABC Studio are using it to millions users services. 
 
 <p align="center">
     <img src="./assets/sample.png">
@@ -13,17 +13,15 @@ ABC User Feedback is an open-source platform. It helps to collect and organize u
 
 ABC User Feedback provides the following features:
 
-- Dynamic Feedback Field
-- Feedback Tagging
-- Addon Issue tracking
+- You can customize the data fields to match your questionnaire.
+- You can assign tags to each feedback to categorize them by topic.
+- The Issue feature has a status indicator that lets you use it as a simple issue tracker. You can also link each issue to a ticket in your own issue tracker system.
 - Role Based Access Control (RBAC)
-- Admin UI
+- Admin UI with an attractive dashboard.
 
 # Getting Started
 
-You can get started with Docker image on your server.
-
-Alternatively you can set up a local development environment.
+Our backend is built with NestJS and our frontend is built with NextJS. We provide Docker images for fast and easy setup. 
 
 ## 1. Official Docker Image Installation
 
@@ -40,6 +38,8 @@ docker pull line/abc-user-feedback-api
 ```
 
 ## 2. Development Environment (Local)
+
+Alternatively you can set up a local development environment.
 
 ### System Requirements
 
