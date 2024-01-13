@@ -3,7 +3,7 @@
     <h1 align="center">ABC User Feedback</h1>
 </p>
 
-ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. We ABC Studio are using it to millions users services. 
+ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. The product is being applied and used in services worth 10 million MAU. 
 
 <p align="center">
     <img src="./assets/sample.png">
@@ -16,22 +16,23 @@ ABC User Feedback provides the following features:
 - You can customize the data fields to match your questionnaire.
 - You can assign tags to each feedback to categorize them by topic.
 - The Issue feature has a status indicator that lets you use it as a simple issue tracker. You can also link each issue to a ticket in your own issue tracker system.
-- Role Based Access Control (RBAC)
+- Authentication offers OAuth to accommodate enterprise-level single sign-on (SSO) requirements.
+- Role Based Access Control (RBAC).
 - Admin UI with an attractive dashboard.
 
 # Getting Started
 
-Our backend is built with NestJS and our frontend is built with NextJS. We provide Docker images for fast and easy setup. 
+The frontend is built with NextJS and the backend is built with NestJS. We provide Docker images for fast and easy setup. 
 
-## 1. Official Docker Image Installation
+## 1. Official Docker Image
 
-### [web](https://hub.docker.com/r/line/abc-user-feedback-web)
+### [Web Admin Frontend](https://hub.docker.com/r/line/abc-user-feedback-web)
 
 ```
 docker pull line/abc-user-feedback-web
 ```
 
-### [api](https://hub.docker.com/r/line/abc-user-feedback-api)
+### [API Backend](https://hub.docker.com/r/line/abc-user-feedback-api)
 
 ```
 docker pull line/abc-user-feedback-api
