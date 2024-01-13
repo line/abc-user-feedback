@@ -1,8 +1,6 @@
-# ABC User Feedback Server
+# ABC User Feedback Backend
 
-ABC User Feedback Server is the main component that provides critical back-end functionality to support the operation of the platform.
-
-The server is built with the following awesome open source technologies: Node.js, NestJS, Typeorm, and many more.
+ABC User Feedback Backend provides API and its related operations. It is built with Node.js, NestJS, Typeorm, and many more.
 
 ## Setup
 

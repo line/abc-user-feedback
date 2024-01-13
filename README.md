@@ -110,18 +110,17 @@ You can always find more information in each app/library's respective README.md 
 
 You can use a manual step-by-step approach to set up ABC User Feedback in a local development environment. To do so, you should follow the following instructions for **Setting Up ABC User Feedback Server**, and **Setting Up ABC User Feedback Client**.
 
-#### Setting up [ABC User Feedback Server](./apps/api/README.md)
+#### Setting up [ABC User Feedback Backend](./apps/api/README.md)
 
-ABC User Feedback Server is built with the following awesome open-source technologies: Node.js, NestJS, Typeorm, and many more.
+You can configure the backend for MySQL, SMTP for email verification, OpenSearch-powered improved search experience, etc.
 
-#### Setting Up [ABC User Feedback Client](./apps/web/README.md)
+#### Setting Up [ABC User Feedback Frontend](./apps/web/README.md)
 
-ABC User Feedback Client is the front end of the platform that provides you with an easy-to-drive UI for building your next low-code application.
-The client is based on React, React Hook Form, React Query, Tailwind css, MUI, and more.
+You can configure the frontend for session password, maximum time span to query, etc.
 
 ### Build Docker Image
 
-For your code build, you can buile docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using turborepo
+For your code build, you can build docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`
 
 ```
 docker-compose build
