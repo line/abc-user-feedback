@@ -56,6 +56,7 @@ describe('TenantService', () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
+      jest.spyOn(userRepo, 'save');
 
       await tenantService.create(dto);
 

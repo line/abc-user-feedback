@@ -48,16 +48,10 @@ describe('UserPasswordService', () => {
 
   describe('sendResetPasswordMail', () => {
     it('sending a reset password mail succeeds with valid inputs', async () => {
-      const userId = faker.number.int();
       const email = faker.internet.email();
-      jest
-        .spyOn(userRepo, 'findOneBy')
-        .mockResolvedValue({ id: userId } as UserEntity);
 
       await userPasswordService.sendResetPasswordMail(email);
 
-      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email });
       expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(1);
     });
     it('sending a reset password mail fails with invalid email', async () => {
@@ -68,8 +62,6 @@ describe('UserPasswordService', () => {
         userPasswordService.sendResetPasswordMail(email),
       ).rejects.toThrow(UserNotFoundException);
 
-      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email });
       expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(0);
     });
   });
@@ -79,28 +71,18 @@ describe('UserPasswordService', () => {
       dto.email = faker.internet.email();
       dto.code = faker.string.sample();
       dto.password = faker.internet.password();
-      const userId = faker.number.int();
-      jest
-        .spyOn(userRepo, 'findOneBy')
-        .mockResolvedValue({ id: userId } as UserEntity);
       jest
         .spyOn(codeRepo, 'findOneBy')
         .mockResolvedValue({ code: dto.code } as CodeEntity);
 
-      await userPasswordService.resetPassword(dto);
+      const user = await userPasswordService.resetPassword(dto);
 
-      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email: dto.email });
       expect(codeRepo.findOneBy).toHaveBeenCalledTimes(1);
       expect(codeRepo.findOneBy).toHaveBeenCalledWith({
         key: dto.email,
         type: CodeTypeEnum.RESET_PASSWORD,
       });
-      expect(userRepo.save).toHaveBeenCalledTimes(1);
-      expect(userRepo.save).toHaveBeenCalledWith({
-        id: userId,
-        hashPassword: expect.any(String),
-      });
+      expect(bcrypt.compareSync(dto.password, user.hashPassword)).toBe(true);
     });
     it('resetting a password fails with an invalid email', async () => {
       const dto = new ResetPasswordDto();
@@ -112,9 +94,6 @@ describe('UserPasswordService', () => {
       await expect(userPasswordService.resetPassword(dto)).rejects.toThrow(
         UserNotFoundException,
       );
-
-      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(userRepo.findOneBy).toHaveBeenCalledWith({ email: dto.email });
     });
   });
   describe('changePassword', () => {
@@ -130,15 +109,9 @@ describe('UserPasswordService', () => {
         ),
       } as UserEntity);
 
-      await userPasswordService.changePassword(dto);
+      const user = await userPasswordService.changePassword(dto);
 
-      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(userRepo.findOneBy).toHaveBeenCalledWith({ id: dto.userId });
-      expect(userRepo.save).toHaveBeenCalledTimes(1);
-      expect(userRepo.save).toHaveBeenCalledWith({
-        id: dto.userId,
-        hashPassword: expect.any(String),
-      });
+      expect(bcrypt.compareSync(dto.newPassword, user.hashPassword)).toBe(true);
     });
     it('changing the password fails with the invalid original password', async () => {
       const dto = new ChangePasswordDto();
@@ -154,9 +127,6 @@ describe('UserPasswordService', () => {
       await expect(userPasswordService.changePassword(dto)).rejects.toThrow(
         InvalidPasswordException,
       );
-
-      expect(userRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(userRepo.findOneBy).toHaveBeenCalledWith({ id: dto.userId });
     });
   });
   it('createHashPassword', async () => {

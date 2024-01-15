@@ -15,12 +15,12 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import { TenantService } from '@/domains/admin/tenant/tenant.service';
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import { mockRepository } from '@/test-utils/util-functions';
-import { FeedbackEntity } from '../../domains/admin/feedback/feedback.entity';
-import { TenantEntity } from '../../domains/admin/tenant/tenant.entity';
-import { TenantService } from '../../domains/admin/tenant/tenant.service';
-import { UserEntity } from '../../domains/admin/user/entities/user.entity';
-import { FeedbackRepositoryStub } from '../stubs';
+import { FeedbackRepositoryStub, UserRepositoryStub } from '../stubs';
 
 export const TenantServiceProviders = [
   TenantService,
@@ -28,10 +28,7 @@ export const TenantServiceProviders = [
     provide: getRepositoryToken(TenantEntity),
     useValue: mockRepository(),
   },
-  {
-    provide: getRepositoryToken(UserEntity),
-    useValue: mockRepository(),
-  },
+  { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
   {
     provide: getRepositoryToken(FeedbackEntity),
     useClass: FeedbackRepositoryStub,

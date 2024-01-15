@@ -59,7 +59,7 @@ export class UserPasswordService {
       code,
     });
 
-    await this.userRepo.save(
+    return await this.userRepo.save(
       Object.assign(user, {
         hashPassword: await this.createHashPassword(password),
       }),
@@ -78,7 +78,7 @@ export class UserPasswordService {
       throw new InvalidPasswordException();
     }
 
-    await this.userRepo.save(
+    return await this.userRepo.save(
       Object.assign(user, {
         hashPassword: await this.createHashPassword(newPassword),
       }),
