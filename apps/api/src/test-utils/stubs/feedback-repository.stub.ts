@@ -13,43 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
 import { feedbackFixture } from '../fixtures';
 import { createQueryBuilder } from '../util-functions';
 
 export class FeedbackRepositoryStub {
   findOne() {
-    return { ...feedbackFixture, id: 1, issues: [], createdAt: new Date() };
+    return feedbackFixture;
   }
 
   findOneBy() {
-    return { ...feedbackFixture, id: 1, issues: [], createdAt: new Date() };
+    return feedbackFixture;
   }
 
   find() {
-    return [{ ...feedbackFixture, id: 1, issues: [], createdAt: new Date() }];
+    return [feedbackFixture];
   }
 
   findBy() {
-    return [{ ...feedbackFixture, id: 1, issues: [], createdAt: new Date() }];
+    return [feedbackFixture];
   }
 
   findAndCount() {
-    return [
-      [{ ...feedbackFixture, id: 1, issues: [], createdAt: new Date() }],
-      1,
-    ];
+    return [[feedbackFixture], 1];
   }
 
   findAndCountBy() {
-    return [
-      [{ ...feedbackFixture, id: 1, issues: [], createdAt: new Date() }],
-      1,
-    ];
+    return [[feedbackFixture], 1];
   }
 
-  save() {
-    return { ...feedbackFixture, id: 1, issues: [], createdAt: new Date() };
+  save(feedback) {
+    return { ...feedback, id: feedbackFixture.id };
   }
 
   count() {
@@ -57,9 +50,7 @@ export class FeedbackRepositoryStub {
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [
-      { ...feedbackFixture, id: 1, issues: [], createdAt: new Date() },
-    ];
+    createQueryBuilder.getMany = () => [feedbackFixture];
     return createQueryBuilder;
   }
 }

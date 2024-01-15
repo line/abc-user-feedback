@@ -27,7 +27,7 @@ import {
 } from '@/common/enums';
 import {
   createFieldDto,
-  feedbackFixture,
+  feedbackDataFixture,
   fieldsFixture,
 } from '@/test-utils/fixtures';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
@@ -78,7 +78,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
         id: faker.number.int(),
         timezone: {
@@ -97,7 +97,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with an invalid channel', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([]);
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
@@ -107,7 +107,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with a reserved field key', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const reservedFieldKey = faker.helpers.arrayElement(RESERVED_FIELD_KEYS);
       dto.data[reservedFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
@@ -121,7 +121,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with an invalid field key', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const invalidFieldKey = 'invalidFieldKey';
       dto.data[invalidFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
@@ -133,7 +133,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with an admin field', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const adminFieldKey = 'adminFieldKey';
       dto.data[adminFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([
@@ -151,7 +151,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with an inactive field', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const inactiveFieldKey = 'inactiveFieldKey';
       dto.data[inactiveFieldKey] = faker.string.sample();
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([
@@ -233,7 +233,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs and issue names', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const issueNames = Array.from({
         length: faker.number.int({ min: 1, max: 1 }),
       }).map(() => faker.string.sample());
@@ -285,7 +285,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs and an existent issue name', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const issueNames = Array.from({
         length: faker.number.int({ min: 1, max: 1 }),
       }).map(() => faker.string.sample());
@@ -319,7 +319,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs and a nonexistent issue name', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       dto.data.issueNames = [faker.string.sample()];
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
         id: faker.number.int(),

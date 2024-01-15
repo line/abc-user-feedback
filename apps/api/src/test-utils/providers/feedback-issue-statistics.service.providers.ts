@@ -22,7 +22,7 @@ import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { FeedbackIssueStatisticsEntity } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.entity';
 import { FeedbackIssueStatisticsService } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
-import { FeedbackRepositoryStub } from '../stubs/feedback.repository.stub';
+import { FeedbackRepositoryStub } from '../stubs';
 
 export const FeedbackIssueStatisticsServiceProviders = [
   FeedbackIssueStatisticsService,
