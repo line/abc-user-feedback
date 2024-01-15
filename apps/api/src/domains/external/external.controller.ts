@@ -13,9 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 
 @Controller('/external')
 @ApiExcludeController()
@@ -23,7 +23,11 @@ export class ExternalController {
   constructor() {}
 
   @Get('docs')
-  getExternalDocs(@Res() reply: FastifyReply): void {
+  getExternalDocs(
+    @Req() request: FastifyRequest,
+    @Res() reply: FastifyReply,
+  ): void {
+    const host = request.hostname;
     const html = `<!DOCTYPE html>
     <html>
       <head>
@@ -44,7 +48,7 @@ export class ExternalController {
         </style>
       </head>
       <body>
-        <redoc spec-url='http://localhost:4000/external-docs-json'></redoc>
+        <redoc spec-url='http://${host}/external-docs-json'></redoc>
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
       </body>
     </html>`;
