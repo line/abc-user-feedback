@@ -108,6 +108,9 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                 lt: dayjs(lt).endOf('day').toISOString(),
               };
             }
+            if (value === 'true' || value === 'false') {
+              draft[key] = value === 'true';
+            }
           });
           if (createdAtRange) {
             draft['createdAt'] = {

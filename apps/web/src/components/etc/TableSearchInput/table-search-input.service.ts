@@ -130,7 +130,7 @@ export const objToQuery = (
             result[key] = Boolean(value);
             break;
           case 'number':
-            result[key] = Number(value);
+            result[key] = value;
             break;
           case 'date':
             if (typeof value === 'string') {

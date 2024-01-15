@@ -202,10 +202,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     () => Object.keys(rowSelection).map((v) => parseInt(v)),
     [rowSelection],
   );
+
   const q = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
       if (key === 'status' && value === 'total') return prev;
-      if (createdAtRange) {
+      if (key === 'createdAt' && createdAtRange) {
         return {
           ...prev,
           createdAt: {
@@ -214,6 +215,8 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           },
         };
       }
+      console.log('key, value: ', key, value);
+
       return { ...prev, [key]: value };
     }, {});
   }, [query, createdAtRange]);
