@@ -182,7 +182,7 @@ const TableSearchInput: React.FC<IProps> = ({
           className={filterIconCN + ' flex-shrink-0'}
         />
       </button>
-      <Combobox.Options className="bg-primary absolute left-0 top-full z-10 mt-2 w-full rounded border">
+      <Combobox.Options className="bg-primary absolute left-0 top-full z-10 mt-2 w-full overflow-hidden rounded border">
         {editingName === ''
           ? searchItems
               .filter(
