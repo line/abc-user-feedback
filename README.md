@@ -1,68 +1,77 @@
-<p align="center">
-    <img src="./assets/cover.png">
-    <h1 align="center">ABC User Feedback</h1>
-</p>
+# ABC User Feedback
+![cover image](./assets/cover.png)
 
-ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. We ABC Studio are using it to millions users services. 
+ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. The product is being applied and used in services worth 10 million MAU. 
 
-<p align="center">
-    <img src="./assets/sample.png">
-</p>
+![sample image](./assets/sample.png)
 
-# Features
+## Features
 
 ABC User Feedback provides the following features:
 
 - You can customize the data fields to match your questionnaire.
 - You can assign tags to each feedback to categorize them by topic.
 - The Issue feature has a status indicator that lets you use it as a simple issue tracker. You can also link each issue to a ticket in your own issue tracker system.
-- Role Based Access Control (RBAC)
+- Authentication offers OAuth to accommodate enterprise-level single sign-on (SSO) requirements.
+- Role Based Access Control (RBAC).
 - Admin UI with an attractive dashboard.
 
-# Getting Started
+## Getting Started
 
-Our backend is built with NestJS and our frontend is built with NextJS. We provide Docker images for fast and easy setup. 
-
-## 1. Official Docker Image Installation
-
-### [web](https://hub.docker.com/r/line/abc-user-feedback-web)
-
-```
-docker pull line/abc-user-feedback-web
-```
-
-### [api](https://hub.docker.com/r/line/abc-user-feedback-api)
-
-```
-docker pull line/abc-user-feedback-api
-```
-
-## 2. Development Environment (Local)
-
-Alternatively you can set up a local development environment.
+The frontend is built with NextJS and the backend is built with NestJS. We provide Docker images for fast and easy setup.
 
 ### System Requirements
 
 :bulb: Before you begin, make sure you have the following installed:
 
-#### Required
+**Required**
 
 - [Node.js v18 or above](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
 - [MySQL v8](https://www.mysql.com/downloads/)
 
-#### Optional
+**Optional**
 
 - SMTP - for mail verification during making accounts
 - [OpenSearch v7](https://opensearch.org/) - for performance on searching feedbacks
 
 You can use [docker-compose.infra.yml](/docker/docker-compose.infra.yml) file for requirements.
 
-### Getting Started With Local Development
+### Docker Hub Images
+
+We publish two images to https://hub.docker.com at every release.
+
+#### [Web Admin Frontend](https://hub.docker.com/r/line/abc-user-feedback-web)
+
+```bash
+docker pull line/abc-user-feedback-web
+```
+
+#### [API Backend](https://hub.docker.com/r/line/abc-user-feedback-api)
+
+```bash
+docker pull line/abc-user-feedback-api
+```
+
+### Configuration
+
+**Frontend**
+
+:point_right: [Go to Frontend README](./apps/web/README.md)
+
+You can configure the frontend for session password, maximum time span to query, etc.
+
+**Backend**
+
+:point_right: [Go to Backend README](./apps/api/README.md)
+
+You can configure the backend for MySQL, SMTP for email verification, OpenSearch-powered improved search experience, etc.
+
+## Setup Dev Environment (Local)
 
 ABC User Feedback is using a monorepo (powered by [TurboRepo](https://turbo.build/)) with multiple apps and packages.
 
-Follow these simple instructions to set up a local development environment.
+Follow the instructions below to set up a local development environment.
 
 1. Clone the repository and install dependencies:
 
@@ -72,7 +81,7 @@ cd abc-user-feedback
 yarn install
 ```
 
-2. Spin up all required infrastructure (Mysql, Opensearch, etc.) using Docker Compose:
+2. Spin up all required infrastructure (Mysql, OpenSearch, etc.) using Docker Compose:
 
 ```bash
 docker-compose -f docker-compose.infra.yml up -d
@@ -103,24 +112,9 @@ yarn turbo run dev --filter=web
 yarn turbo run dev --filter=api
 ```
 
-You can always find more information in each app/library's respective README.md file.
-
-### Setting Up ABC User Feedback Manually
-
-You can use a manual step-by-step approach to set up ABC User Feedback in a local development environment. To do so, you should follow the following instructions for **Setting Up ABC User Feedback Server**, and **Setting Up ABC User Feedback Client**.
-
-#### Setting up [ABC User Feedback Server](./apps/api/README.md)
-
-ABC User Feedback Server is built with the following awesome open-source technologies: Node.js, NestJS, Typeorm, and many more.
-
-#### Setting Up [ABC User Feedback Client](./apps/web/README.md)
-
-ABC User Feedback Client is the front end of the platform that provides you with an easy-to-drive UI for building your next low-code application.
-The client is based on React, React Hook Form, React Query, Tailwind css, MUI, and more.
-
 ### Build Docker Image
 
-For your code build, you can buile docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using turborepo
+For your code build, you can build docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
 
 ```
 docker-compose build
@@ -132,15 +126,11 @@ Then, run docker-compose
 docker-compose up -d
 ```
 
-# Contributing Guidelines
+## Contributing Guidelines
 
 Please follow the [contributing guidelines](./CONTRIBUTING.md) to contribute to the project.
 
-# Contributors
-
-[![abc-user-feedback-contributors](https://contrib.rocks/image?repo=line/abc-user-feedback)](https://github.com/line/abc-user-feedback/graphs/contributors)
-
-# License
+## License
 
 ```
 Copyright 2023 LINE Corporation
