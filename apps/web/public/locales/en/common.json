@@ -390,11 +390,11 @@
     }
   },
   "chart": {
-    "total-feedback-trend": {
+    "feedback-trend": {
       "title": "Feedback Trend",
       "description": "Display the trend of feedback creation over a specific period of time."
     },
-    "total-issue-trend": {
+    "issue-trend": {
       "title": "Issue Trend",
       "description": "Display the trend of Issue creation over a specific period of time."
     },
@@ -406,7 +406,7 @@
       "title": "Top Issue",
       "description": "Display the top issues with a large number of count."
     },
-    "issue-trend": {
+    "issue-comparison": {
       "title": "Issue comparison",
       "description": "Compare and display the trend of feedback creation for selected issues."
     }

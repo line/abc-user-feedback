@@ -118,8 +118,8 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
 
   return (
     <SimpleLineChart
-      title={t('chart.total-issue-trend.title')}
-      description={`${t('chart.total-issue-trend.description')} (${dayjs(
+      title={t('chart.issue-comparison.title')}
+      description={`${t('chart.issue-comparison.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
