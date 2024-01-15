@@ -43,9 +43,11 @@ const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
     <DashboardCard
       data={data?.count ?? 0}
       title={t('card.dashboard.total-feedback.title')}
-      description={`${t('card.dashboard.total-feedback.description')} (${dayjs(
-        from,
-      ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
+      description={t('card.dashboard.total-feedback.description', {
+        targetDate: `${dayjs(from).format('YYYY/MM/DD')} - ${dayjs(to).format(
+          'YYYY/MM/DD',
+        )}`,
+      })}
     />
   );
 };

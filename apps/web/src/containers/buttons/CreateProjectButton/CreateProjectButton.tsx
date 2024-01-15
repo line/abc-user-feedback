@@ -66,7 +66,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             }}
             disabled={user?.type !== 'SUPER'}
           >
-            <Icon name="Plus" className="text-above-white" />
+            <Icon name="Plus" className="text-inverse" />
             {t('main.index.create-project')}
           </button>
         </TooltipTrigger>

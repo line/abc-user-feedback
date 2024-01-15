@@ -157,3 +157,10 @@ th {
     url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.woff') format('woff'),
     url('/fonts/LINESeedKR/TTF/LINESeedKR-Bd.ttf') format('truetype');
 }
+
+html {
+  --body-background-color: #ffffff;
+}
+html.dark {
+  --body-background-color: #191919;
+}

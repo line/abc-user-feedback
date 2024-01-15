@@ -48,18 +48,30 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
 
   const documentConfig = new DocumentBuilder()
-    .setTitle('User feedback')
+    .setTitle('User Feedback')
     .setDescription('User feedback API description')
     .setVersion('1.0.0')
     .addBearerAuth()
     .build();
-
   const document = SwaggerModule.createDocument(app, documentConfig);
   SwaggerModule.setup('docs', app, document);
 
-  const externalDocument = SwaggerModule.createDocument(app, documentConfig, {
-    include: [ExternalModule],
-  });
+  const externalDocumentConfig = new DocumentBuilder()
+    .setTitle('User Feedback External API Document')
+    .setDescription(
+      `You can use this API to integrate with your own service or system. This API is protected by a simple API key authentication, so please do not expose this API to the public. You can make an API key in the admin setting page. You should put the API key in the header with the key name 'x-api-key'.
+      `,
+    )
+    .setVersion('1.0.0')
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' })
+    .build();
+  const externalDocument = SwaggerModule.createDocument(
+    app,
+    externalDocumentConfig,
+    {
+      include: [ExternalModule],
+    },
+  );
   SwaggerModule.setup('external-docs', app, externalDocument);
 
   const configService = app.get(ConfigService<ConfigServiceType>);

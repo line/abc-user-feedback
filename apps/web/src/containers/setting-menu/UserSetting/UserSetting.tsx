@@ -221,7 +221,7 @@ const UserSetting: React.FC<IProps> = () => {
               {t('text.number-count', { count: data?.meta.totalItems ?? 0 })}
             </span>
           </p>
-          <div className="flex">
+          <div className="flex gap-2">
             <TablePagination
               limit={limit}
               nextPage={() => setPage((prev) => prev + 1)}

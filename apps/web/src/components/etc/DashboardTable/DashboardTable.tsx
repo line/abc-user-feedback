@@ -52,7 +52,7 @@ function DashboardTable<T>(props: IProps<T>) {
   });
 
   return (
-    <div className="border-fill-tertiary rounded border">
+    <div className="border-fill-tertiary bg-tertiary rounded border">
       <div className="flex justify-between p-4">
         <div className="flex items-center gap-1">
           <h3 className="font-20-bold">{title}</h3>
@@ -65,7 +65,7 @@ function DashboardTable<T>(props: IProps<T>) {
           {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
         </div>
       </div>
-      <div className="mb-5 h-[336px] overflow-x-hidden overflow-y-scroll">
+      <div className="mb-5 h-[310px] overflow-x-hidden overflow-y-scroll">
         <table className="mx-2 w-full">
           <thead>
             <tr className="h-14">

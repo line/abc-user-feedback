@@ -43,3 +43,8 @@ volumes
 dist
 
 tsconfig.tsbuildinfo
+
+# playwright
+playwright-report
+test-results
+user.json

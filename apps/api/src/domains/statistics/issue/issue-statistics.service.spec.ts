@@ -90,13 +90,13 @@ describe('IssueStatisticsService suite', () => {
 
   describe('getCountByDate', () => {
     it('getting counts by date succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'day';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.projectId = projectId;
       jest.spyOn(issueStatsRepo, 'find').mockResolvedValue(issueStatsFixture);
@@ -108,31 +108,35 @@ describe('IssueStatisticsService suite', () => {
         statistics: [
           {
             count: 1,
-            date: '2023-01-01',
+            startDate: '2023-01-01',
+            endDate: '2023-01-01',
           },
           {
             count: 2,
-            date: '2023-01-02',
+            startDate: '2023-01-02',
+            endDate: '2023-01-02',
           },
           {
             count: 3,
-            date: '2023-01-08',
+            startDate: '2023-01-08',
+            endDate: '2023-01-08',
           },
           {
             count: 4,
-            date: '2023-02-01',
+            startDate: '2023-02-01',
+            endDate: '2023-02-01',
           },
         ],
       });
     });
     it('getting counts by week by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-03';
       const interval = 'week';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.projectId = projectId;
       jest.spyOn(issueStatsRepo, 'find').mockResolvedValue(issueStatsFixture);
@@ -143,28 +147,31 @@ describe('IssueStatisticsService suite', () => {
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
-            count: 3,
-            date: '2023-01-01',
+            count: 1,
+            startDate: '2023-01-01',
+            endDate: '2023-01-01',
           },
           {
-            count: 3,
-            date: '2023-01-08',
+            count: 5,
+            startDate: '2023-01-02',
+            endDate: '2023-01-08',
           },
           {
             count: 4,
-            date: '2023-01-29',
+            startDate: '2023-01-30',
+            endDate: '2023-02-05',
           },
         ],
       });
     });
     it('getting counts by month by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'month';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.projectId = projectId;
       jest.spyOn(issueStatsRepo, 'find').mockResolvedValue(issueStatsFixture);
@@ -176,11 +183,13 @@ describe('IssueStatisticsService suite', () => {
         statistics: [
           {
             count: 6,
-            date: '2022-12-31',
+            startDate: '2023-01-01',
+            endDate: '2023-01-31',
           },
           {
             count: 4,
-            date: '2023-01-31',
+            startDate: '2023-02-01',
+            endDate: '2023-02-28',
           },
         ],
       });

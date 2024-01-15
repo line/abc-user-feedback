@@ -14,22 +14,9 @@
  * under the License.
  */
 export const CHART_FIVE_COLORS = [
-  '#D05772',
   '#5D7BE7',
-  '#5FC1E7',
-  '#AED252',
-  '#D3B854',
-];
-
-export const CHART_TEN_COLORS = [
-  '#D05772',
-  '#C067D6',
-  '#5F55DD',
-  '#865FE7',
-  '#5D7BE7',
-  '#5FC1E7',
   '#4BD8BA',
-  '#5FE786',
   '#D3B854',
   '#AED252',
+  '#D05772',
 ];

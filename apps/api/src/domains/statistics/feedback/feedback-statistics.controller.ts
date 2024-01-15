@@ -32,8 +32,8 @@ export class FeedbackStatisticsController {
   @ApiOkResponse({ type: FindCountByDateByChannelResponseDto })
   @Get()
   async getCountByDateByChannel(
-    @Query('from') from: Date,
-    @Query('to') to: Date,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('channelIds') channelIds: string,
   ) {
@@ -44,8 +44,8 @@ export class FeedbackStatisticsController {
 
     return FindCountByDateByChannelResponseDto.transform(
       await this.feedbackStatisticsService.getCountByDateByChannel({
-        from,
-        to,
+        startDate,
+        endDate,
         interval,
         channelIds: channelIdsArray,
       }),
