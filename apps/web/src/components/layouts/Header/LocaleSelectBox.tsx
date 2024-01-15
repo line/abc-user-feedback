@@ -48,7 +48,7 @@ const LocaleSelectBox: React.FC<IProps> = () => {
           </>
         )}
       </Listbox.Button>
-      <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full rounded border">
+      <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full overflow-hidden rounded border">
         {router.locales
           ?.filter((v) => v !== 'default')
           .map((v) => (
