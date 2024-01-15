@@ -390,14 +390,13 @@
     }
   },
   "chart": {
-    "total-feedback-trend": {
+    "feedback-trend": {
       "title": "フィードバック生成推移",
       "description": "特定の期間のフィードバック生成の推移を示します。"
     },
-    "total-issue-trend": {
+    "issue-trend": {
       "title": "イシュー生成推移",
-      "description": "特定期間のイシュー作成推移を示します。",
-      "issue-count": "イシュー生成数"
+      "description": "特定期間のイシュー作成推移を示します。"
     },
     "issue-status-count": {
       "title": "イシュー現況",
@@ -407,7 +406,7 @@
       "title": "上位イシュー",
       "description": "フィードバック数が多い上位イシューを表示します。"
     },
-    "issue-trend": {
+    "issue-comparison": {
       "title": "イシュー比較",
       "description": "選択したイシューのフィードバック生成推移を比較して表示します。"
     }

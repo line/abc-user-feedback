@@ -65,6 +65,7 @@ const LineChart: React.FC<IProps> = ({
           className="font-10-regular text-secondary"
           tickSize={15}
           tickLine={false}
+          interval="equidistantPreserveStart"
         />
         <YAxis
           tickFormatter={(v) => v.toLocaleString()}
