@@ -17,6 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
   IsNumber,
+  IsObject,
   IsOptional,
   IsString,
   Length,
@@ -47,6 +48,20 @@ class CreateApiKeyByValueDto {
   value: string;
 }
 
+class TimezoneDto {
+  @ApiProperty()
+  @IsString()
+  countryCode: string;
+
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  offset: TimezoneOffset;
+}
+
 export class CreateProjectRequestDto {
   @ApiProperty()
   @IsString()
@@ -60,9 +75,9 @@ export class CreateProjectRequestDto {
   @MaxLength(50)
   description: string | null;
 
-  @ApiProperty()
-  @IsString()
-  timezoneOffset: TimezoneOffset;
+  @ApiProperty({ type: TimezoneDto })
+  @IsObject()
+  timezone: TimezoneDto;
 
   @ApiProperty({ type: [CreateRoleRequestDto], required: false })
   @IsArray()

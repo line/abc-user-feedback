@@ -213,7 +213,11 @@ describe('IssueStatisticsService suite', () => {
     it('adding a cron job succeeds with valid input', async () => {
       const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezoneOffset: '+09:00',
+        timezone: {
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+          offset: '+09:00',
+        },
       } as ProjectEntity);
       jest.spyOn(schedulerRegistry, 'addCronJob');
 
@@ -232,7 +236,11 @@ describe('IssueStatisticsService suite', () => {
       const projectId = faker.number.int();
       const dayToCreate = faker.number.int({ min: 2, max: 10 });
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezoneOffset: '+09:00',
+        timezone: {
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+          offset: '+09:00',
+        },
       } as ProjectEntity);
       jest.spyOn(issueRepo, 'count').mockResolvedValueOnce(0);
       jest.spyOn(issueRepo, 'count').mockResolvedValue(1);

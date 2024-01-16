@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { TimezoneOffset } from '@ufb/shared';
 
 import type { CreateRoleDto } from '../../role/dtos';
+import type { Timezone } from '../project.entity';
 
 export class CreateProjectDto {
   name: string;
   description: string;
-  timezoneOffset: TimezoneOffset;
+  timezone: Timezone;
   roles?: Omit<CreateRoleDto, 'projectId'>[];
   members?: {
     roleName: string;
