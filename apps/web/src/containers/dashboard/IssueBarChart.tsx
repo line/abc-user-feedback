@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { SimpleBarChart } from '@/components/charts';
@@ -27,16 +26,12 @@ interface IProps {
   to: Date;
 }
 
-const IssueBarChart: React.FC<IProps> = ({ from, projectId, to }) => {
+const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count-by-status',
-    variables: {
-      from: dayjs(from).startOf('day').toISOString(),
-      to: dayjs(to).endOf('day').toISOString(),
-      projectId,
-    },
+    variables: { projectId },
     queryOptions: {
       refetchOnMount: false,
       refetchOnWindowFocus: false,

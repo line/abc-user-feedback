@@ -66,8 +66,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Th.woff') format('woff'),
-    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Th.ttf') format('truetype');
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Th.woff') format('woff'),
+    url('/fonts/LINESeedEN/TTF/LINESeedEN-Th.ttf') format('truetype');
 }
 
 @font-face {
@@ -77,8 +77,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Rg.woff') format('woff'),
-    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Rg.ttf') format('truetype');
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Rg.woff') format('woff'),
+    url('/fonts/LINESeedEN/TTF/LINESeedEN-Rg.ttf') format('truetype');
 }
 
 @font-face {
@@ -88,8 +88,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Bd.woff') format('woff'),
-    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Bd.ttf') format('truetype');
+    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Bd.woff') format('woff'),
+    url('/fonts/LINESeedEN/TTF/LINESeedEN-Bd.ttf') format('truetype');
 }
 
 @font-face {
@@ -99,8 +99,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Th.woff') format('woff'),
-    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Th.ttf') format('truetype');
+    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Th.woff') format('woff'),
+    url('/fonts/LINESeedJP/TTF/LINESeedJP-Th.ttf') format('truetype');
 }
 
 @font-face {
@@ -110,8 +110,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Rg.woff') format('woff'),
-    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Rg.ttf') format('truetype');
+    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Rg.woff') format('woff'),
+    url('/fonts/LINESeedJP/TTF/LINESeedJP-Rg.ttf') format('truetype');
 }
 
 @font-face {
@@ -121,8 +121,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Bd.woff') format('woff'),
-    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Bd.ttf') format('truetype');
+    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Bd.woff') format('woff'),
+    url('/fonts/LINESeedJP/TTF/LINESeedJP-Bd.ttf') format('truetype');
 }
 
 @font-face {
@@ -132,8 +132,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Th.woff') format('woff'),
-    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Th.ttf') format('truetype');
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Th.woff') format('woff'),
+    url('/fonts/LINESeedKR/TTF/LINESeedKR-Th.ttf') format('truetype');
 }
 
 @font-face {
@@ -143,8 +143,8 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Rg.woff') format('woff'),
-    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Rg.ttf') format('truetype');
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Rg.woff') format('woff'),
+    url('/fonts/LINESeedKR/TTF/LINESeedKR-Rg.ttf') format('truetype');
 }
 
 @font-face {
@@ -154,6 +154,13 @@ th {
   src:
     local(※),
     url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Bd.woff') format('woff'),
-    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.ttf') format('truetype');
+    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.woff') format('woff'),
+    url('/fonts/LINESeedKR/TTF/LINESeedKR-Bd.ttf') format('truetype');
+}
+
+html {
+  --body-background-color: #ffffff;
+}
+html.dark {
+  --body-background-color: #191919;
 }

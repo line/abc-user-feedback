@@ -98,13 +98,13 @@ describe('FeedbackStatisticsService suite', () => {
 
   describe('getCountByDateByChannel', () => {
     it('getting counts by day by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'day';
       const channelIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByChannelDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.channelIds = channelIds;
       jest
@@ -123,19 +123,23 @@ describe('FeedbackStatisticsService suite', () => {
             statistics: [
               {
                 count: 1,
-                date: '2023-01-01',
+                startDate: '2023-01-01',
+                endDate: '2023-01-01',
               },
               {
                 count: 2,
-                date: '2023-01-02',
+                startDate: '2023-01-02',
+                endDate: '2023-01-02',
               },
               {
                 count: 3,
-                date: '2023-01-08',
+                startDate: '2023-01-08',
+                endDate: '2023-01-08',
               },
               {
                 count: 4,
-                date: '2023-02-01',
+                startDate: '2023-02-01',
+                endDate: '2023-02-01',
               },
             ],
           },
@@ -143,13 +147,13 @@ describe('FeedbackStatisticsService suite', () => {
       });
     });
     it('getting counts by week by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-02-07';
       const interval = 'week';
       const channelIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByChannelDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.channelIds = channelIds;
       jest
@@ -168,15 +172,18 @@ describe('FeedbackStatisticsService suite', () => {
             statistics: [
               {
                 count: 3,
-                date: '2023-01-01',
+                startDate: '2023-01-01',
+                endDate: '2023-01-03',
               },
               {
                 count: 3,
-                date: '2023-01-08',
+                startDate: '2023-01-04',
+                endDate: '2023-01-10',
               },
               {
                 count: 4,
-                date: '2023-01-29',
+                startDate: '2023-02-01',
+                endDate: '2023-02-07',
               },
             ],
           },
@@ -184,13 +191,13 @@ describe('FeedbackStatisticsService suite', () => {
       });
     });
     it('getting counts by month by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'month';
       const channelIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByChannelDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.channelIds = channelIds;
       jest
@@ -209,11 +216,13 @@ describe('FeedbackStatisticsService suite', () => {
             statistics: [
               {
                 count: 6,
-                date: '2022-12-31',
+                startDate: '2023-01-01',
+                endDate: '2023-01-31',
               },
               {
                 count: 4,
-                date: '2023-01-31',
+                startDate: '2023-02-01',
+                endDate: '2023-02-28',
               },
             ],
           },

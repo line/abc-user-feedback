@@ -17,7 +17,6 @@ import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { createColumnHelper } from '@tanstack/react-table';
-import dayjs from 'dayjs';
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 
@@ -27,7 +26,7 @@ import { DescriptionTooltip } from '@/components';
 import DashboardTable from '@/components/etc/DashboardTable';
 import { ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
-import { useIssueSearch, useOAIQuery } from '@/hooks';
+import { useIssueSearch } from '@/hooks';
 
 interface IssueTableData {
   id: number;
@@ -35,12 +34,11 @@ interface IssueTableData {
   status: string;
   name: string;
   count: number;
-  growth: number;
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
 const columns = (t: TFunction) => [
-  columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 30 }),
+  columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 50 }),
   columnHelper.accessor('name', {
     header: 'Issue',
     enableSorting: false,
@@ -71,37 +69,13 @@ const columns = (t: TFunction) => [
   columnHelper.accessor('count', {
     header: () => (
       <>
-        Count{' '}
-        <DescriptionTooltip
-          description={t('chart.issue-rank.feedback-count')}
-        />
+        Count
+        <DescriptionTooltip description={t('tooltip.issue-feedback-count')} />
       </>
     ),
     cell: ({ getValue }) => getValue().toLocaleString(),
   }),
   columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
-
-  columnHelper.accessor('growth', {
-    header: 'Growth',
-    enableSorting: false,
-    cell({ getValue }) {
-      return isNaN(getValue()) ? (
-        <p>-</p>
-      ) : (
-        <p
-          className={
-            getValue() === 0
-              ? 'text-primary'
-              : getValue() > 0
-              ? 'text-blue-primary'
-              : 'text-red-primary'
-          }
-        >
-          {parseFloat(Math.abs(getValue()).toFixed(1))}%
-        </p>
-      );
-    },
-  }),
 ];
 interface IProps {
   projectId: number;
@@ -122,66 +96,19 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
     query: { statuses: currentIssueStatusList.map((v) => v.key) },
   });
 
-  const enabled = (data?.items ?? []).length > 0;
-
-  const { data: currentData } = useOAIQuery({
-    path: '/api/statistics/feedback-issue',
-    variables: {
-      from: dayjs().subtract(7, 'day').startOf('day').toISOString(),
-      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
-      interval: 'day',
-      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
-    },
-    queryOptions: {
-      enabled,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchInterval: false,
-    },
-  });
-
-  const { data: previousData } = useOAIQuery({
-    path: '/api/statistics/feedback-issue',
-    variables: {
-      from: dayjs().subtract(14, 'day').startOf('day').toISOString(),
-      to: dayjs().subtract(8, 'day').endOf('day').toISOString(),
-      interval: 'day',
-      issueIds: (data?.items.map((issue) => issue.id) ?? []).join(','),
-    },
-    queryOptions: {
-      enabled,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchInterval: false,
-    },
-  });
-
   const newData = useMemo(() => {
-    if (!data || !currentData || !previousData) return [];
+    if (!data) return [];
 
     return data.items.map((item, i) => {
-      const thisWeekCount =
-        currentData.issues
-          .find((v) => v.name === item.name)
-          ?.statistics.reduce((acc, cur) => acc + cur.feedbackCount, 0) ?? 0;
-
-      const lastWeekCount =
-        previousData.issues
-          .find((v) => v.name === item.name)
-          ?.statistics.reduce((acc, cur) => acc + cur.feedbackCount, 0) ?? 0;
-
       return {
         id: item.id,
         no: i + 1,
         count: item.feedbackCount,
         name: item.name,
         status: ISSUES(t).find((v) => v.key === item.status)?.name ?? '',
-        growth: ((lastWeekCount - thisWeekCount) / lastWeekCount) * 100,
       };
     });
-  }, [data, currentData, previousData, t]);
+  }, [data, t]);
 
   return (
     <DashboardTable

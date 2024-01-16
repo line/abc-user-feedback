@@ -13,19 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
-import { render } from '@testing-library/react';
-
-import TenantProjectCard from './TenantProjectCard';
-
-describe('TenantProjectCard', () => {
-  it('should render successfully', () => {
-    const props = {
-      name: faker.string.sample(),
-      description: faker.string.sample(),
-      type: 'tenant' as 'tenant' | 'project',
-    };
-    const { baseElement } = render(<TenantProjectCard {...props} />);
-    expect(baseElement).toBeTruthy();
-  });
-});
+export { default as ShareButton } from './ShareButton';
+export { default as OAuthLoginButton } from './OAuthLoginButton';
+export { default as CreateChannelButton } from './CreateChannelButton';
+export { default as CreateProjectButton } from './CreateProjectButton';

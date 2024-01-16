@@ -17,7 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
 export class CreateIssueRequestDto {
-  @ApiProperty()
+  @ApiProperty({ description: 'Issue name', example: 'payment issue' })
   @IsString()
   @MinLength(1)
   @MaxLength(20)

@@ -464,7 +464,7 @@ export interface components {
       roleId: number;
     };
     CreateApiKeyRequestDto: {
-      value: string;
+      value?: string;
     };
     CreateApiKeyResponseDto: {
       id: number;
@@ -576,7 +576,7 @@ export interface components {
     UpdateChannelRequestDto: {
       name: string;
       description: string | null;
-      imageConfig: components["schemas"]["ImageConfigRequestDto"] | null;
+      imageConfig?: components["schemas"]["ImageConfigRequestDto"] | null;
     };
     UpdateChannelRequestFieldDto: {
       name: string;
@@ -730,7 +730,8 @@ export interface components {
       count: number;
     };
     IssueStatistics: {
-      date: string;
+      startDate: string;
+      endDate: string;
       count: number;
     };
     FindCountByDateResponseDto: {
@@ -744,8 +745,8 @@ export interface components {
       statistics: components["schemas"]["IssueStatusStatistics"][];
     };
     StatisticData: {
-      /** Format: date-time */
-      date: string;
+      startDate: string;
+      endDate: string;
       count: number;
     };
     ChannelStatisticData: {
@@ -760,8 +761,8 @@ export interface components {
       ratio: number;
     };
     IssueStatisticData: {
-      /** Format: date-time */
-      date: string;
+      startDate: string;
+      endDate: string;
       feedbackCount: number;
     };
     IssueStatistic: {
@@ -1822,8 +1823,8 @@ export interface operations {
   IssueStatisticsController_getCountByDate: {
     parameters: {
       query: {
-        from: string;
-        to: string;
+        startDate: string;
+        endDate: string;
         interval: string;
         projectId: number;
       };
@@ -1839,8 +1840,6 @@ export interface operations {
   IssueStatisticsController_getCountByStatus: {
     parameters: {
       query: {
-        from: string;
-        to: string;
         projectId: number;
       };
     };
@@ -1855,8 +1854,8 @@ export interface operations {
   FeedbackStatisticsController_getCountByDateByChannel: {
     parameters: {
       query: {
-        from: string;
-        to: string;
+        startDate: string;
+        endDate: string;
         interval: string;
         channelIds: string;
       };
@@ -1904,8 +1903,8 @@ export interface operations {
   FeedbackIssueStatisticsController_getCountByDateByIssue: {
     parameters: {
       query: {
-        from: string;
-        to: string;
+        startDate: string;
+        endDate: string;
         interval: string;
         issueIds: string;
       };

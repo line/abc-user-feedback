@@ -71,9 +71,10 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     <DashboardCard
       data={(currentData?.count ?? 0).toLocaleString()}
       title={t('card.dashboard.today-feedback.title')}
-      description={`${t(
-        'card.dashboard.today-feedback.description',
-      )} (${dayjs().format('YYYY/MM/DD')})`}
+      description={t('card.dashboard.today-feedback.description', {
+        targetDate: dayjs().format('YYYY/MM/DD'),
+        compareDate: dayjs().subtract(1, 'day').format('YYYY/MM/DD'),
+      })}
       percentage={percentage}
     />
   );

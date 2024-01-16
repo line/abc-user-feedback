@@ -1,7 +1,6 @@
-# ABC User Feedback Client
+# ABC User Feedback Frontend
 
-ABC User Feedback Client is the front end of the platform that provides the beautiful UI to build your next low-code application.
-The client is built with NextJS, React Query, React Hook Form, Tailwind css, MUI, and many more.
+ABC User Feedback Frontend is the web browser application that provides the beautiful admin UI. The client is built with NextJS, React Query, React Hook Form, Tailwind css, MUI, and many more.
 
 ## Setup
 

@@ -40,12 +40,12 @@ const SideNav: React.FC<IProps> = () => {
     <nav className="relative" ref={ref}>
       <div className="h-full w-[72px]" />
       <ul
-        className="bg-fill-inverse absolute left-0 top-0 z-20 h-full space-y-1 p-4"
+        className="absolute left-0 top-0 z-20 h-full space-y-1 p-4"
         onMouseOver={() => setIsHover(true)}
         onMouseOut={() => setIsHover(false)}
         style={{
+          backgroundColor: 'var(--body-background-color)',
           width: isHover ? 200 : 'max-content',
-          boxShadow: isHover ? '4px 4px 8px 0px #0000000F' : '',
         }}
       >
         <MenuItem
@@ -53,8 +53,9 @@ const SideNav: React.FC<IProps> = () => {
           iconName="PerformanceSalesStroke"
           activePathname={Path.DASHBOARD}
           isHover={isHover}
-          text={'Dashboard'}
+          text={t('main.dashboard.title')}
         />
+        <hr />
         <MenuItem
           href={{ pathname: Path.FEEDBACK, query: { projectId } }}
           iconName="BubbleDotsStroke"

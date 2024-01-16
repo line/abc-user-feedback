@@ -204,7 +204,8 @@ const DateRangePicker: React.FC<IProps> = (props) => {
 const isOverMaxDays = (date: DateRangeType, maxDays: number) => {
   if (!date) return false;
   if (!date.startDate || !date.endDate) return false;
-  return dayjs(date.startDate).add(maxDays, 'days').toDate() < date.endDate;
+
+  return maxDays < dayjs(date.endDate).diff(date.startDate, 'days');
 };
 
 export default DateRangePicker;

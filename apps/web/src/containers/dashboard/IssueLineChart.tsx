@@ -13,12 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { SimpleLineChart } from '@/components/charts';
-import { useOAIQuery } from '@/hooks';
+import { useDayCount, useLineChartData, useOAIQuery } from '@/hooks';
 
 interface IProps {
   projectId: number;
@@ -29,14 +28,14 @@ interface IProps {
 const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { t } = useTranslation();
 
-  const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+  const dayCount = useDayCount(from, to);
 
   const { data } = useOAIQuery({
     path: '/api/statistics/issue/count-by-date',
     variables: {
-      from: dayjs(from).startOf('day').toISOString(),
-      to: dayjs(to).endOf('day').toISOString(),
       projectId,
+      startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
+      endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       interval: dayCount > 50 ? 'week' : 'day',
     },
     queryOptions: {
@@ -47,45 +46,23 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     },
   });
 
-  const newData = useMemo(() => {
-    if (!data) return [];
-
-    const result = [];
-    let currentDate = dayjs(to).endOf('day');
-    const startDate = dayjs(from).startOf('day');
-
-    while (currentDate.isAfter(startDate)) {
-      const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
-
-      const count =
-        data.statistics.find((v) => v.date === currentDate.format('YYYY-MM-DD'))
-          ?.count ?? 0;
-
-      result.push({
-        date:
-          dayCount > 50
-            ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
-            : currentDate.format('MM/DD'),
-        [t('chart.total-issue-trend.issue-count')]: count,
-      });
-      currentDate = prevDate;
-    }
-    return result.reverse();
-  }, [data, dayCount, t]);
+  const { chartData, dataKeys } = useLineChartData(
+    from,
+    to,
+    [{ id: 1, name: '' }],
+    [{ id: 1, statistics: data?.statistics ?? [] }],
+  );
 
   return (
     <SimpleLineChart
-      title={t('chart.total-issue-trend.title')}
-      description={`${t('chart.total-issue-trend.description')} (${dayjs()
-        .subtract(7, 'day')
-        .format('YYYY/MM/DD')} - ${dayjs()
-        .subtract(1, 'day')
-        .format('YYYY/MM/DD')})`}
+      title={t('chart.issue-trend.title')}
+      description={`${t('chart.issue-trend.description')} (${dayjs(from).format(
+        'YYYY/MM/DD',
+      )} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
-      data={newData}
-      dataKeys={[
-        { color: '#5D7BE7', name: t('chart.total-issue-trend.issue-count') },
-      ]}
+      data={chartData}
+      dataKeys={dataKeys}
+      noLabel
     />
   );
 };

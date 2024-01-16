@@ -69,7 +69,7 @@
 }
 
 .react-datepicker__day--disabled {
-  color: #ccc;
+  color: var(--text-color-tertiary);
 }
 
 .react-datepicker__day:hover,
@@ -84,7 +84,7 @@
 .react-datepicker__quarter-text--disabled:hover,
 .react-datepicker__year-text--disabled:hover {
   @apply bg-transparent;
-  color: #ccc;
+  color: var(--text-color-tertiary);
 }
 
 .react-datepicker__day--today {

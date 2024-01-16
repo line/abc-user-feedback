@@ -22,7 +22,7 @@ import ProfileBox from './ProfileBox';
 
 const Header: React.FC = () => {
   return (
-    <header className="bg-primary relative flex h-[48px] items-center justify-between px-4">
+    <header className="relative flex h-[48px] items-center justify-between px-4">
       <div className="flex flex-1 items-center gap-6">
         <Logo />
         <HeaderName />

@@ -19,7 +19,11 @@ import { Expose, plainToInstance } from 'class-transformer';
 class IssueStatistics {
   @ApiProperty()
   @Expose()
-  date: string;
+  startDate: string;
+
+  @ApiProperty()
+  @Expose()
+  endDate: string;
 
   @ApiProperty()
   @Expose()

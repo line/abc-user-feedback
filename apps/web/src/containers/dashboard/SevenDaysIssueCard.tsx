@@ -66,11 +66,19 @@ const SevenDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
     <DashboardCard
       data={currentData?.count ?? 0}
       title={t('card.dashboard.n-days-issue.title', { n: 7 })}
-      description={`${t('card.dashboard.n-days-issue.description', {
+      description={t('card.dashboard.n-days-issue.description', {
         n: 7,
-      })} (${dayjs().subtract(7, 'day').format('YYYY/MM/DD')} - ${dayjs()
-        .subtract(1, 'day')
-        .format('YYYY/MM/DD')})`}
+        targetDate: `${dayjs()
+          .subtract(7, 'day')
+          .format('YYYY/MM/DD')} - ${dayjs()
+          .subtract(1, 'day')
+          .format('YYYY/MM/DD')}`,
+        compareDate: `${dayjs()
+          .subtract(14, 'day')
+          .format('YYYY/MM/DD')} - ${dayjs()
+          .subtract(8, 'day')
+          .format('YYYY/MM/DD')}`,
+      })}
       percentage={percentage}
     />
   );

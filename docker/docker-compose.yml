@@ -5,7 +5,7 @@ services:
     hostname: web
     build:
       context: ..
-      dockerfile: web.dockerfile
+      dockerfile: docker/web.dockerfile
       args:
         - TURBO_TOKEN=TURBO_TOKEN
         - TURBO_TEAM=TURBO_TEAM
@@ -26,7 +26,7 @@ services:
     hostname: api
     build:
       context: ..
-      dockerfile: api.dockerfile
+      dockerfile: docker/api.dockerfile
       args:
         - TURBO_TOKEN=TURBO_TOKEN
         - TURBO_TEAM=TURBO_TEAM

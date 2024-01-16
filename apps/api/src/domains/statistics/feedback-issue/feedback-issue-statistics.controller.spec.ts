@@ -46,16 +46,16 @@ describe('FeedbackIssue Statistics Controller', () => {
 
   it('getCountByDateByIssue', async () => {
     jest.spyOn(MockFeedbackIssueStatisticsService, 'getCountByDateByIssue');
-    const from = faker.date.past();
-    const to = faker.date.future();
+    const startDate = '2023-01-01';
+    const endDate = '2023-12-01';
     const interval = ['day', 'week', 'month'][
       faker.number.int({ min: 0, max: 2 })
     ] as 'day' | 'week' | 'month';
     const issueIds = [faker.number.int(), faker.number.int()];
 
     await feedbackIssueStatisticsController.getCountByDateByIssue(
-      from,
-      to,
+      startDate,
+      endDate,
       interval,
       issueIds.join(','),
     );

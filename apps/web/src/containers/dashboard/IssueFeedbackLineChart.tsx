@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useThrottle } from 'react-use';
@@ -21,18 +21,13 @@ import { useThrottle } from 'react-use';
 import { Badge, Icon, toast } from '@ufb/ui';
 
 import { SimpleLineChart } from '@/components/charts';
-import { CHART_FIVE_COLORS } from '@/constants/chart-colors';
-import { useIssueSearch, useOAIQuery } from '@/hooks';
+import {
+  useDayCount,
+  useIssueSearch,
+  useLineChartData,
+  useOAIQuery,
+} from '@/hooks';
 import client from '@/libs/client';
-
-const getDarkColor = () => {
-  return (
-    '#' +
-    Array.from({ length: 6 })
-      .map(() => Math.floor(Math.random() * 16).toString(16))
-      .join('')
-  );
-};
 
 interface IProps {
   projectId: number;
@@ -43,7 +38,7 @@ interface IProps {
 const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { t } = useTranslation();
 
-  const dayCount = useMemo(() => dayjs(to).diff(from, 'day'), [from, to]);
+  const dayCount = useDayCount(from, to);
 
   const [showInput, setShowInput] = useState(false);
 
@@ -58,7 +53,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     {
       query: { name: throttledSearchName },
       page: 0,
-      limit: 10,
+      limit: 1000,
       sort: { feedbackCount: 'desc' } as any,
     },
     {
@@ -72,8 +67,8 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { data } = useOAIQuery({
     path: '/api/statistics/feedback-issue',
     variables: {
-      from: dayjs(from).startOf('day').toISOString(),
-      to: dayjs(to).endOf('day').toISOString(),
+      startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
+      endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
       issueIds: (currentIssues.map((issue) => issue.id) ?? []).join(','),
       interval: dayCount > 50 ? 'week' : 'day',
     },
@@ -95,47 +90,19 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       .then(({ data }) => setCurrentIssues(data?.items ?? []));
   }, []);
 
-  const dataKeys = useMemo(() => {
-    return (
-      currentIssues.map((v, i) => ({
-        color: CHART_FIVE_COLORS[i] ?? getDarkColor(),
-        name: v.name,
-      })) ?? []
-    );
-  }, [currentIssues]);
-
-  const newData = useMemo(() => {
-    if (!data) return [];
-
-    const result = [];
-    let currentDate = dayjs(to).endOf('day');
-    const startDate = dayjs(from).startOf('day');
-    while (currentDate.isAfter(startDate)) {
-      const prevDate = currentDate.subtract(dayCount > 50 ? 7 : 1, 'day');
-
-      const issueData = currentIssues.reduce(
-        (acc, cur) => {
-          const count =
-            data.issues
-              .find((v) => v.id === cur.id)
-              ?.statistics.find(
-                (v) => v.date === currentDate.format('YYYY-MM-DD'),
-              )?.feedbackCount ?? 0;
-          return { ...acc, [cur.name]: count };
-        },
-        {
-          date:
-            dayCount > 50
-              ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
-              : currentDate.format('MM/DD'),
-        },
-      );
-
-      result.push(issueData);
-      currentDate = prevDate;
-    }
-    return result.reverse();
-  }, [data, dayCount, currentIssues]);
+  const { chartData, dataKeys } = useLineChartData(
+    from,
+    to,
+    currentIssues,
+    data?.issues.map((v) => ({
+      id: v.id,
+      statistics: v.statistics.map(({ startDate, endDate, feedbackCount }) => ({
+        startDate,
+        endDate,
+        count: feedbackCount,
+      })),
+    })),
+  );
 
   const handleIssueCheck = (issue: { id: number; name: string }) => {
     if (currentIssues.length === 5) {
@@ -151,13 +118,13 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
 
   return (
     <SimpleLineChart
-      title={t('chart.total-issue-trend.title')}
-      description={`${t('chart.total-issue-trend.description')} (${dayjs(
+      title={t('chart.issue-comparison.title')}
+      description={`${t('chart.issue-comparison.description')} (${dayjs(
         from,
       ).format('YYYY/MM/DD')} - ${dayjs(to).format('YYYY/MM/DD')})`}
       height={400}
       dataKeys={dataKeys}
-      data={newData}
+      data={chartData}
       showLegend
       filterContent={
         <>

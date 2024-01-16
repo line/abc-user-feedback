@@ -318,4 +318,24 @@ export class FeedbackOSService {
       ids: feedbackIds,
     });
   }
+
+  async findById({ channelId, feedbackId }: { channelId: number; feedbackId }) {
+    return await this.osRepository.getData({
+      index: channelId.toString(),
+      query: {
+        bool: {
+          must: [
+            {
+              ids: {
+                values: [feedbackId.toString()],
+              },
+            },
+          ],
+        },
+      },
+      sort: ['id:desc'],
+      page: 1,
+      limit: 1,
+    });
+  }
 }

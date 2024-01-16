@@ -67,9 +67,10 @@ const YesterdayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     <DashboardCard
       data={currentData?.count ?? 0}
       title={t('card.dashboard.yesterday-feedback.title')}
-      description={`${t(
-        'card.dashboard.yesterday-feedback.description',
-      )} (${dayjs().subtract(1, 'day').format('YYYY/MM/DD')})`}
+      description={t('card.dashboard.yesterday-feedback.description', {
+        targetDate: dayjs().subtract(1, 'day').format('YYYY/MM/DD'),
+        compareDate: dayjs().subtract(2, 'day').format('YYYY/MM/DD'),
+      })}
       percentage={percentage}
     />
   );

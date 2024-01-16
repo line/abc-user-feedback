@@ -21,18 +21,31 @@ import { IsNullable } from '@/domains/user/decorators';
 import { CreateIssueRequestDto } from './create-issue-request.dto';
 
 export class UpdateIssueRequestDto extends CreateIssueRequestDto {
-  @ApiProperty({ nullable: true })
+  @ApiProperty({
+    nullable: true,
+    description: 'Issue description',
+    example: 'This is a payment issue',
+  })
   @IsString()
   @IsNullable()
   @MaxLength(50)
   description: string | null;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    enum: IssueStatusEnum,
+    description: 'Issue status',
+    example: IssueStatusEnum.IN_PROGRESS,
+  })
   @IsEnum(IssueStatusEnum)
   @IsOptional()
   status?: IssueStatusEnum;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({
+    required: false,
+    description: 'External Issue Id',
+    example: '123',
+  })
   @IsString()
   @IsOptional()
   externalIssueId?: string;

@@ -28,11 +28,11 @@ const OAuthLoginButton: React.FC<IProps> = () => {
   const router = useRouter();
   const { tenant } = useTenant();
 
-  const callback_url = useMemo(() => {
-    return router.query.callback_url
-      ? (router.query.callback_url as string)
-      : '';
-  }, [router.query]);
+  const callback_url = useMemo(
+    () =>
+      router.query.callback_url ? (router.query.callback_url as string) : '',
+    [router.query],
+  );
 
   const { data } = useOAIQuery({
     path: '/api/auth/signIn/oauth/loginURL',

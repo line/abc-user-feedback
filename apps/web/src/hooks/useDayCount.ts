@@ -13,4 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './NoChannel';
+import { useMemo } from 'react';
+import dayjs from 'dayjs';
+
+const useDayCount = (from: Date, to: Date) => {
+  return useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
+};
+export default useDayCount;
