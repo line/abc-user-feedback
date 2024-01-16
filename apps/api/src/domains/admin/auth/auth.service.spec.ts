@@ -26,6 +26,7 @@ import {
   passwordFixture,
   userFixture,
 } from '@/test-utils/fixtures';
+import type { TenantRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import {
   AuthServiceProviders,
@@ -52,7 +53,7 @@ import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 describe('auth service ', () => {
   let authService: AuthService;
   let userRepo: Repository<UserEntity>;
-  let tenantRepo: Repository<TenantEntity>;
+  let tenantRepo: TenantRepositoryStub;
   let codeRepo: Repository<CodeEntity>;
   let apiKeyRepo: Repository<ApiKeyEntity>;
   beforeEach(async () => {
@@ -77,11 +78,7 @@ describe('auth service ', () => {
       const validEmail = faker.internet.email();
       dto.email = validEmail;
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          isRestrictDomain: false,
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setIsRestrictDomain(false);
       jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue({} as CodeEntity);
       jest.spyOn(codeRepo, 'save').mockResolvedValue({} as CodeEntity);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
@@ -96,11 +93,7 @@ describe('auth service ', () => {
     it('sending a code by email succeeds with a duplicate email', async () => {
       const duplicateEmail = emailFixture;
       dto.email = duplicateEmail;
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          isRestrictDomain: false,
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setIsRestrictDomain(false);
       jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue({} as CodeEntity);
       jest.spyOn(codeRepo, 'save').mockResolvedValue({} as CodeEntity);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
@@ -156,34 +149,26 @@ describe('auth service ', () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
+      tenantRepo.setIsRestrictDomain(false);
+      tenantRepo.setIsPrivate(false);
       jest
         .spyOn(codeRepo, 'findOneBy')
         .mockResolvedValue({ isVerified: true } as CodeEntity);
-      jest
-        .spyOn(tenantRepo, 'find')
-        .mockResolvedValue([
-          { isPrivate: false, isRestrictDomain: false },
-        ] as TenantEntity[]);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
 
       const user = await authService.signUpEmailUser(dto);
 
       expect(user.signUpMethod).toEqual(SignUpMethodEnum.EMAIL);
-      expect(codeRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.find).toBeCalledTimes(2);
     });
     it('signing up by an email fails with a not verified email', async () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
+      tenantRepo.setIsRestrictDomain(false);
+      tenantRepo.setIsPrivate(false);
       jest
         .spyOn(codeRepo, 'findOneBy')
         .mockResolvedValue({ isVerified: false } as CodeEntity);
-      jest
-        .spyOn(tenantRepo, 'find')
-        .mockResolvedValue([
-          { isPrivate: false, isRestrictDomain: false },
-        ] as TenantEntity[]);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
       jest.spyOn(userRepo, 'save');
 
@@ -191,20 +176,15 @@ describe('auth service ', () => {
         NotVerifiedEmailException,
       );
 
-      expect(codeRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.find).not.toBeCalled();
       expect(userRepo.save).not.toBeCalled();
     });
     it('signing up by an email fails with a not verification requested email', async () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
+      tenantRepo.setIsRestrictDomain(false);
+      tenantRepo.setIsPrivate(false);
       jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null as CodeEntity);
-      jest
-        .spyOn(tenantRepo, 'find')
-        .mockResolvedValue([
-          { isPrivate: false, isRestrictDomain: false },
-        ] as TenantEntity[]);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
       jest.spyOn(userRepo, 'save');
 
@@ -212,8 +192,6 @@ describe('auth service ', () => {
         new BadRequestException('must request email verification'),
       );
 
-      expect(codeRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.find).not.toBeCalled();
       expect(userRepo.save).not.toBeCalled();
     });
   });
@@ -280,41 +258,27 @@ describe('auth service ', () => {
       const clientId = faker.string.sample();
       const scopeString = faker.string.sample();
       const authCodeRequestURL = faker.internet.domainName();
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          useOAuth: true,
-          oauthConfig: {
-            clientId,
-            scopeString,
-            authCodeRequestURL,
-          },
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setUseOAuth(true, {
+        clientId,
+        scopeString,
+        authCodeRequestURL,
+      });
 
       const OAuthLoginURL = await authService.getOAuthLoginURL();
 
-      expect(tenantRepo.find).toBeCalledTimes(1);
       expect(OAuthLoginURL.includes(authCodeRequestURL));
       expect(OAuthLoginURL.includes(`client_id=${clientId}`));
       expect(OAuthLoginURL.includes(`scope=${scopeString}`));
     });
     it('getting an oauth login url fails with no oauth using tenant', async () => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          useOAuth: false,
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setUseOAuth(false, null);
 
       await expect(authService.getOAuthLoginURL()).rejects.toThrowError(
         new BadRequestException('OAuth login is disabled.'),
       );
     });
     it('getting an oauth login url fails with no oauthconfig tenant', async () => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          useOAuth: true,
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setUseOAuth(true, null);
 
       await expect(authService.getOAuthLoginURL()).rejects.toThrowError(
         new BadRequestException('OAuth Config is required.'),

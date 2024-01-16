@@ -14,4 +14,5 @@
  * under the License.
  */
 export { FeedbackRepositoryStub } from './feedback-repository.stub';
+export { TenantRepositoryStub } from './tenant-repository.stub';
 export { UserRepositoryStub } from './user-repository.stub';

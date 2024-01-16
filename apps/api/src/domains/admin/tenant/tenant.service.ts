@@ -47,20 +47,24 @@ export class TenantService {
     const [tenant] = await this.tenantRepo.find({ take: 1 });
     if (tenant) throw new TenantAlreadyExistsException();
     const newTenant = new TenantEntity();
+    const savedTenant = await this.tenantRepo.save(
+      Object.assign(newTenant, dto),
+    );
 
-    await this.tenantRepo.save(Object.assign(newTenant, dto));
     const user = new UserEntity();
     user.email = 'user@feedback.com';
     user.hashPassword =
       '$2b$10$87iuFh.Yty8esbdmuB4bz.NNVh0thMWtf0MPfajzqjvxHfRf6zR0C';
     user.type = UserTypeEnum.SUPER;
     await this.userRepo.save(user);
+
+    return savedTenant;
   }
 
   @Transactional()
   async update(dto: UpdateTenantDto) {
     const tenant = await this.findOne();
-    await this.tenantRepo.save(Object.assign(tenant, dto));
+    return await this.tenantRepo.save(Object.assign(tenant, dto));
   }
 
   async findOne() {

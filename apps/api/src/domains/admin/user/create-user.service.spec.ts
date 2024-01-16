@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import type { TenantRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import { CreateUserServiceProviders } from '../../../test-utils/providers/create-user.service.providers';
 import { MemberEntity } from '../project/member/member.entity';
@@ -38,7 +39,7 @@ describe('CreateUserService', () => {
   let createUserService: CreateUserService;
 
   let userRepo: Repository<UserEntity>;
-  let tenantRepo: Repository<TenantEntity>;
+  let tenantRepo: TenantRepositoryStub;
   let memberRepo: Repository<MemberEntity>;
   let roleRepo: Repository<RoleEntity>;
 
@@ -57,17 +58,12 @@ describe('CreateUserService', () => {
   });
 
   describe('createOAuthUser', () => {
-    it('createing a user with OAuth succeeds with a valid email', async () => {
+    it('creating a user with OAuth succeeds with a valid email', async () => {
       const dto: CreateOAuthUserDto = {
         email: faker.internet.email(),
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          isRestrictDomain: false,
-          allowDomains: [],
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setIsRestrictDomain(false);
 
       const user = await createUserService.createOAuthUser(dto);
 
@@ -79,7 +75,6 @@ describe('CreateUserService', () => {
       const dto: CreateOAuthUserDto = {
         email: faker.internet.email(),
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue({} as UserEntity);
 
       await expect(createUserService.createOAuthUser(dto)).rejects.toThrow(
         UserAlreadyExistsException,
@@ -88,13 +83,8 @@ describe('CreateUserService', () => {
   });
   describe('with a private and having restrictions on domain tenant', () => {
     beforeEach(() => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          isPrivate: true,
-          isRestrictDomain: true,
-          allowDomains: ['linecorp.com'],
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setIsPrivate(true);
+      tenantRepo.setIsRestrictDomain(true, ['linecorp.com']);
     });
 
     it('creating a user with an email fails', async () => {
@@ -216,12 +206,8 @@ describe('CreateUserService', () => {
   });
   describe('with a private and no restrict on domain tenant', () => {
     beforeEach(() => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          isPrivate: true,
-          isRestrictDomain: false,
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setIsPrivate(true);
+      tenantRepo.setIsRestrictDomain(false);
     });
     it('creating a user with an email fails', async () => {
       const dto: CreateEmailUserDto = {
@@ -317,13 +303,8 @@ describe('CreateUserService', () => {
 
   describe('with a non-private and having restrictions on domain tenant', () => {
     beforeEach(() => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([
-        {
-          isPrivate: false,
-          isRestrictDomain: true,
-          allowDomains: ['linecorp.com'],
-        },
-      ] as TenantEntity[]);
+      tenantRepo.setIsPrivate(false);
+      tenantRepo.setIsRestrictDomain(true, ['linecorp.com']);
     });
     it('creating a user with an email succeeds with valid inputs', async () => {
       const dto: CreateEmailUserDto = {

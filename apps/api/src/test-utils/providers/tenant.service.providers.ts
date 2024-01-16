@@ -19,15 +19,15 @@ import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
-import { mockRepository } from '@/test-utils/util-functions';
-import { FeedbackRepositoryStub, UserRepositoryStub } from '../stubs';
+import {
+  FeedbackRepositoryStub,
+  TenantRepositoryStub,
+  UserRepositoryStub,
+} from '../stubs';
 
 export const TenantServiceProviders = [
   TenantService,
-  {
-    provide: getRepositoryToken(TenantEntity),
-    useValue: mockRepository(),
-  },
+  { provide: getRepositoryToken(TenantEntity), useClass: TenantRepositoryStub },
   { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
   {
     provide: getRepositoryToken(FeedbackEntity),

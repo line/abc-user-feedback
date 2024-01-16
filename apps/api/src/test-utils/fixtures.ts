@@ -30,6 +30,7 @@ import type {
 import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
+import type { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import {
   SignUpMethodEnum,
   UserStateEnum,
@@ -205,3 +206,17 @@ export const userFixture = {
   type: getRandomEnumValue(UserTypeEnum),
   signUpMethod: getRandomEnumValue(SignUpMethodEnum),
 } as UserEntity;
+
+export const tenantFixture = {
+  id: faker.number.int(),
+  siteName: faker.string.sample(),
+  description: faker.lorem.lines(2),
+  useEmail: faker.datatype.boolean(),
+  isPrivate: faker.datatype.boolean(),
+  isRestrictDomain: faker.datatype.boolean(),
+  allowDomains: [],
+  useOAuth: faker.datatype.boolean(),
+  oauthConfig: null,
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+} as TenantEntity;
