@@ -55,7 +55,8 @@ export class ProjectEntity extends CommonEntity {
       offset: '+09:00',
     }),
     transformer: {
-      from: (value: string) => JSON.parse(value),
+      from: (value: string) =>
+        typeof value === 'object' ? value : JSON.parse(value),
       to: (value: Timezone) => JSON.stringify(value),
     },
   })

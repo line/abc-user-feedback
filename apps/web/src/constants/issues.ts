@@ -16,9 +16,10 @@
 import type { TFunction } from 'next-i18next';
 
 import type { ColorType } from '@/types/color.type';
+import type { IssueStatus } from '@/types/issue.type';
 
 export type IssuesItemType = {
-  key: string;
+  key: IssueStatus;
   name: string;
   color: ColorType;
 };

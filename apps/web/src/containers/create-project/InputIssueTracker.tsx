@@ -18,7 +18,6 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 import { ZodError } from 'zod';
 
-import type { TimezoneOffset } from '@ufb/shared';
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, TextInput, toast } from '@ufb/ui';
 
@@ -95,18 +94,20 @@ const InputIssueTracker: React.FC<IProps> = () => {
       }
       return;
     }
+
+    const { apiKeys, issueTracker, members, projectInfo, roles } = input;
+
     mutate({
-      name: input.projectInfo.name,
-      description: input.projectInfo.description,
-      apiKeys: input.apiKeys,
-      issueTracker: { data: input.issueTracker as any },
-      members: input.members.map((member) => ({
-        roleName:
-          input.roles.find((role) => role.id === member.roleId)?.name ?? '',
+      name: projectInfo.name,
+      description: projectInfo.description,
+      apiKeys: apiKeys,
+      issueTracker: { data: issueTracker as any },
+      members: members.map((member) => ({
+        roleName: roles.find((role) => role.id === member.roleId)?.name ?? '',
         userId: member.user.id,
       })),
-      roles: input.roles,
-      timezoneOffset: '+09:00' as TimezoneOffset,
+      roles: roles,
+      timezone: projectInfo.timezone,
     });
   };
 

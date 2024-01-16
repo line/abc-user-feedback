@@ -22,7 +22,7 @@ import { Input } from '@ufb/ui';
 
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import client from '@/libs/client';
-import type { InputProjectInfoType } from '@/types/project.type';
+import type { InputChannelInfoType } from '@/types/channel.type';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 const defaultInputError = {};
@@ -65,9 +65,9 @@ const InputChannelInfo: React.FC<IProps> = () => {
   }, [input.channelInfo]);
 
   const onChangeProjectInfo = useCallback(
-    <T extends keyof InputProjectInfoType>(
+    <T extends keyof InputChannelInfoType>(
       key: T,
-      value: InputProjectInfoType[T],
+      value: InputChannelInfoType[T],
     ) => {
       onChangeInput('channelInfo', { name, description, [key]: value });
     },

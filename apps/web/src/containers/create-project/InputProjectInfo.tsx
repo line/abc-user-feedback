@@ -15,12 +15,11 @@
  */
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { getAllTimezones } from 'countries-and-timezones';
 import { useTranslation } from 'react-i18next';
 
 import { Input } from '@ufb/ui';
 
-import { SelectBox } from '@/components';
+import { TimezoneSelectBox } from '@/components';
 import { useCreateProject } from '@/contexts/create-project.context';
 import client from '@/libs/client';
 import type { InputProjectInfoType } from '@/types/project.type';
@@ -32,11 +31,6 @@ interface IProps {}
 const InputProjectInfo: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { input, onChangeInput } = useCreateProject();
-  const timezoneOptions = useMemo(() => Object.values(getAllTimezones()), []);
-
-  const [timezone, setTimezone] = useState(
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-  );
 
   const [inputError, setInputError] = useState<{
     name?: string;
@@ -48,9 +42,14 @@ const InputProjectInfo: React.FC<IProps> = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const name = useMemo(() => input.projectInfo.name, [input.projectInfo.name]);
+
   const description = useMemo(
     () => input.projectInfo.description,
     [input.projectInfo.description],
+  );
+  const timezone = useMemo(
+    () => input.projectInfo.timezone,
+    [input.projectInfo.timezone],
   );
 
   const resetError = useCallback(() => {
@@ -64,7 +63,12 @@ const InputProjectInfo: React.FC<IProps> = () => {
       key: T,
       value: InputProjectInfoType[T],
     ) => {
-      onChangeInput('projectInfo', { name, description, [key]: value });
+      onChangeInput('projectInfo', {
+        name,
+        description,
+        timezone,
+        [key]: value,
+      });
     },
     [input?.projectInfo],
   );
@@ -76,6 +80,7 @@ const InputProjectInfo: React.FC<IProps> = () => {
   const validate = async () => {
     setIsSubmitted(true);
     let isValid = true;
+
     if (name.length > 20) {
       setInputError((prev) => ({
         ...prev,
@@ -98,6 +103,7 @@ const InputProjectInfo: React.FC<IProps> = () => {
     }
 
     setIsLoading(true);
+
     const { data: isDuplicated } = await client.get({
       path: '/api/projects/name-check',
       query: { name },
@@ -139,15 +145,9 @@ const InputProjectInfo: React.FC<IProps> = () => {
         isValid={!inputError.description}
         hint={inputError.description}
       />
-      <SelectBox
-        options={timezoneOptions}
-        value={timezoneOptions.find((option) => option.name === timezone)}
-        onChange={(option) => option?.name && setTimezone(option.name)}
-        getOptionValue={(option) => option.name}
-        getOptionLabel={(option) => `(${option.utcOffsetStr}) ${option.name}`}
-        className="w-64"
-        label="Timezone"
-        required
+      <TimezoneSelectBox
+        value={timezone}
+        onChange={(option) => onChangeProjectInfo('timezone', option)}
       />
     </CreateProjectInputTemplate>
   );

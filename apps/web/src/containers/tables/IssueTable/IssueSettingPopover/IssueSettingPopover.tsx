@@ -31,12 +31,12 @@ import {
 import useCurrentProjectId from '@/hooks/useCurrentProjectId';
 import type { DateRangeType } from '@/types/date-range.type';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
-import type { IssueType } from '@/types/issue.type';
+import type { IssueStatus, IssueType } from '@/types/issue.type';
 
 type UpdateIssueType = {
   name: string;
   description: string | null;
-  status: string;
+  status: IssueStatus;
   color: string;
   externalIssueId: string;
 };

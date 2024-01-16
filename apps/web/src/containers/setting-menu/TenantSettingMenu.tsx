@@ -35,7 +35,12 @@ const TenantSettingMenu: React.FC<IProps> = (props) => {
 
   return (
     <SettingMenuTemplate title="Tenant">
-      <input className="input input-md" value={data?.siteName} disabled />
+      <input
+        className="input input-md"
+        value={data?.siteName}
+        disabled
+        style={{ color: 'var(--text-color-primary)' }}
+      />
       <hr className="border-fill-tertiary" />
       <ul>
         <SettingMenuItem

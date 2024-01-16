@@ -21,21 +21,29 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
+import { SettingMenuTemplate, TimezoneSelectBox } from '@/components';
 import {
   useOAIMutation,
   useOAIQuery,
   usePermissions,
   useProjects,
 } from '@/hooks';
+import type { TimezoneInfo } from '@/types/timezone-info';
 
 interface IForm {
   name: string;
   description: string | null;
+  timezone: TimezoneInfo;
 }
+
 const scheme: Zod.ZodType<IForm> = z.object({
   name: z.string(),
   description: z.string().nullable(),
+  timezone: z.object({
+    countryCode: z.string(),
+    name: z.string(),
+    offset: z.string(),
+  }),
 });
 
 interface IProps extends React.PropsWithChildren {
@@ -46,13 +54,14 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   const perms = usePermissions(projectId);
 
   const { refetch: refetchProjects } = useProjects();
+
   const { data, refetch } = useOAIQuery({
     path: '/api/projects/{projectId}',
     variables: { projectId },
   });
-  const { reset, register, handleSubmit, formState } = useForm<IForm>({
-    resolver: zodResolver(scheme),
-  });
+
+  const { reset, register, handleSubmit, formState, setValue, watch } =
+    useForm<IForm>({ resolver: zodResolver(scheme) });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -104,6 +113,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
           {...register('description')}
           label="Project Description"
           disabled={!perms.includes('project_update')}
+        />
+        <TimezoneSelectBox
+          value={watch('timezone')}
+          onChange={(value) => setValue('timezone', value)}
+          disabled
         />
       </form>
     </SettingMenuTemplate>
