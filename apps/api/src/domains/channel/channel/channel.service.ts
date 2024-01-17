@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { S3Client } from '@aws-sdk/client-s3';
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Transactional } from 'typeorm-transactional';
@@ -114,11 +114,12 @@ export class ChannelService {
       endpoint,
       region,
     });
-
-    return await createPresignedPost(s3, {
+    const command = new PutObjectCommand({
       Bucket: bucket,
       Key: `${projectId}_${channelId}_${Date.now()}.png`,
-      Conditions: [{ 'Content-Type': 'image/png' }],
+      ContentType: 'image/png',
     });
+
+    return await getSignedUrl(s3, command, { expiresIn: 60 * 60 });
   }
 }
