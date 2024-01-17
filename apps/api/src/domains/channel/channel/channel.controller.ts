@@ -156,7 +156,7 @@ export class ChannelController {
         bucket,
       });
 
-      if (presignedUrl.url) {
+      if (presignedUrl) {
         return { success: true };
       } else {
         return { success: false };

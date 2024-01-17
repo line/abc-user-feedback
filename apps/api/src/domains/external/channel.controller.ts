@@ -25,7 +25,6 @@ import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '@/domains/auth/guards';
 import { ChannelService } from '../channel/channel/channel.service';
-import { GetImageUploadUrlResponseDto } from './dtos/responses';
 
 @ApiTags('channels')
 @Controller('/external/projects/:projectId/channels/:channelId/')
@@ -46,8 +45,8 @@ export class ChannelController {
     example: 1,
   })
   @ApiOkResponse({
-    type: GetImageUploadUrlResponseDto,
-    description: 'Feedback data',
+    type: String,
+    description: 'Signed url for image upload',
   })
   @Get('/image-upload-url')
   async getImageUploadUrl(
