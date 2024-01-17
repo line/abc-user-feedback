@@ -18,6 +18,20 @@ import { Expose, plainToInstance } from 'class-transformer';
 
 import { TimezoneOffset } from '@ufb/shared';
 
+export class TimezoneDto {
+  @Expose()
+  @ApiProperty()
+  countryCode: string;
+
+  @Expose()
+  @ApiProperty()
+  name: string;
+
+  @Expose()
+  @ApiProperty()
+  offset: TimezoneOffset;
+}
+
 export class FindProjectByIdResponseDto {
   @Expose()
   @ApiProperty()
@@ -32,8 +46,8 @@ export class FindProjectByIdResponseDto {
   description: string;
 
   @Expose()
-  @ApiProperty()
-  timezoneOffset: TimezoneOffset;
+  @ApiProperty({ type: TimezoneDto })
+  timezone: TimezoneDto;
 
   @Expose()
   @ApiProperty()

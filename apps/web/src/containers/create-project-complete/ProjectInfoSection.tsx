@@ -18,14 +18,21 @@ import { useTranslation } from 'react-i18next';
 
 import { Input } from '@ufb/ui';
 
+import { TimezoneSelectBox } from '@/components';
 import { CreateSectionTemplate } from '@/components/templates';
+import type { TimezoneInfo } from '@/types/timezone-info';
 
 interface IProps {
   name: string;
   description: string;
+  timezone: TimezoneInfo;
 }
 
-const ProjectInfoSection: React.FC<IProps> = ({ description, name }) => {
+const ProjectInfoSection: React.FC<IProps> = ({
+  description,
+  name,
+  timezone,
+}) => {
   const { t } = useTranslation();
   return (
     <CreateSectionTemplate
@@ -34,6 +41,7 @@ const ProjectInfoSection: React.FC<IProps> = ({ description, name }) => {
     >
       <Input label="Project Name" value={name} required disabled />
       <Input label="Project Description" value={description} disabled />
+      <TimezoneSelectBox value={timezone} disabled />
     </CreateSectionTemplate>
   );
 };

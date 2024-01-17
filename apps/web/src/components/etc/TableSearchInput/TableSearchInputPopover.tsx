@@ -115,10 +115,12 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
             <SelectBox
               label={item.name}
               value={currentQuery[item.key]}
-              onChange={(v) => {
-                setCurrentQuery((prev) => ({ ...prev, [item.key]: v }));
-              }}
+              onChange={(v) =>
+                setCurrentQuery((prev) => ({ ...prev, [item.key]: v }))
+              }
               options={item.options}
+              getOptionValue={(option) => option.key ?? option.id}
+              getOptionLabel={(option) => option.name}
               isClearable
             />
           )}
@@ -132,6 +134,8 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
                 setCurrentQuery((prev) => ({ ...prev, [item.key]: v?.key }));
               }}
               options={BooleanOptions}
+              getOptionValue={(option) => String(option.key)}
+              getOptionLabel={(option) => option.name}
               isClearable
             />
           )}

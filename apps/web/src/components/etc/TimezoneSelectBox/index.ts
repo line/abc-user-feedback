@@ -13,17 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { TimezoneInfo } from './timezone-info';
-
-export type ProjectType = {
-  id: number;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  timezone: TimezoneInfo;
-};
-export type InputProjectInfoType = Omit<
-  ProjectType,
-  'id' | 'createdAt' | 'updatedAt'
->;
+export { default } from './TimezoneSelectBox';

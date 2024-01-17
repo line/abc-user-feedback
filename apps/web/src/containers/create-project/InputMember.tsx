@@ -284,6 +284,8 @@ const CreateMemberButton: React.FC<{
               if (!newUser) return;
               setUser(newUser);
             }}
+            getOptionValue={(option) => String(option.id)}
+            getOptionLabel={(option) => option.name}
           />
           <SelectBox
             label="Role"
@@ -294,6 +296,8 @@ const CreateMemberButton: React.FC<{
               if (!newRole) return;
               setRole(newRole);
             }}
+            getOptionValue={(option) => String(option.id)}
+            getOptionLabel={(option) => option.name}
           />
         </div>
       </PopoverModalContent>
@@ -390,6 +394,8 @@ const MemberUpdatePopover: React.FC<{ member: InputMemberType }> = ({
           }}
           defaultValue={role}
           isSearchable={false}
+          getOptionValue={(option) => String(option.id)}
+          getOptionLabel={(option) => option.name}
         />
       </PopoverModalContent>
     </Popover>

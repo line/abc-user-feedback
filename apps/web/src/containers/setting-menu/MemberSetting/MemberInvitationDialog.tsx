@@ -109,17 +109,21 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
                     ),
                 )
                 .map((v) => ({
-                  name: v.name ? `${v.email} (${v.name})` : v.email,
                   id: v.id,
+                  name: v.name ? `${v.email} (${v.name})` : v.email,
                 })) ?? []
             }
-            onChange={(v) => (v && v.id ? setValue('userId', v.id) : {})}
+            onChange={(v) => v?.id && setValue('userId', v?.id)}
+            getOptionValue={(option) => String(option.id)}
+            getOptionLabel={(option) => option.name}
           />
           <SelectBox
             label="Role"
             required
             options={roleData?.roles ?? []}
-            onChange={(v) => (v && v?.id ? setValue('roleId', v.id) : {})}
+            onChange={(v) => v?.id && setValue('roleId', v.id)}
+            getOptionValue={(option) => String(option.id)}
+            getOptionLabel={(option) => option.name}
           />
         </form>
       </PopoverModalContent>

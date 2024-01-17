@@ -403,7 +403,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           onChange={row.getToggleSelectedHandler()}
                         />
                         <ShareButton
-                          pathname={`/main/${projectId}/issue?id=${row.original.id}`}
+                          pathname={`/main/project/${projectId}/issue?id=${row.original.id}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}

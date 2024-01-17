@@ -109,12 +109,11 @@ export class FeedbackIssueStatisticsService {
   }
 
   async addCronJobByProjectId(projectId: number) {
-    const { timezoneOffset } = await this.projectRepository.findOne({
+    const { timezone } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-
+    const timezoneOffset = timezone.offset;
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
-
     const job = new CronJob(`0 ${cronHour} * * *`, async () => {
       await this.createFeedbackIssueStatistics(projectId);
     });
@@ -132,9 +131,10 @@ export class FeedbackIssueStatisticsService {
     projectId: number,
     dayToCreate: number = 1,
   ) {
-    const { timezoneOffset } = await this.projectRepository.findOne({
+    const { timezone } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
+    const timezoneOffset = timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 

@@ -1,17 +1,6 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@ufb/tsconfig/nestjs.json",
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "ES2021",
-    "sourceMap": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {

@@ -18,18 +18,14 @@ import ReactSelect from 'react-select';
 
 import { Badge, Icon } from '@ufb/ui';
 
-export type SelectOptionType =
-  | { id?: number; key: any; name: string; [key: string]: any }
-  | { id: number; key?: any; name: string; [key: string]: any };
-
-export interface ISelectBoxProps<IsMulti extends boolean>
-  extends Props<SelectOptionType, IsMulti> {
+export interface ISelectBoxProps<Option, IsMulti extends boolean>
+  extends Props<Option, IsMulti> {
   isExpand?: boolean;
   label?: string;
 }
 
-function SelectBox<IsMulti extends boolean = false>(
-  props: ISelectBoxProps<IsMulti>,
+function SelectBox<Option = unknown, IsMulti extends boolean = false>(
+  props: ISelectBoxProps<Option, IsMulti>,
 ) {
   const component = () => (
     <ReactSelect
@@ -91,8 +87,6 @@ function SelectBox<IsMulti extends boolean = false>(
           );
         },
       }}
-      getOptionValue={(option) => option.key ?? option.id}
-      getOptionLabel={(option) => option.name}
       menuPortalTarget={document.body}
       unstyled
       {...props}
