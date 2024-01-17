@@ -38,7 +38,12 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
 
   return (
     <SettingMenuTemplate title="Project">
-      <input className="input input-md" value={data?.name} disabled />
+      <input
+        className="input input-md text-primary"
+        value={data?.name}
+        style={{ color: 'var(--text-color-primary)' }}
+        disabled
+      />
       <hr className="border-fill-tertiary basis" />
       <ul className="flex-1">
         <SettingMenuItem

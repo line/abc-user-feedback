@@ -652,6 +652,11 @@ export interface components {
     CreateOptionResponseDto: {
       id: number;
     };
+    TimezoneDto: {
+      countryCode: string;
+      name: string;
+      offset: string;
+    };
     CreateMemberByNameDto: {
       roleName: string;
       userId: number;
@@ -665,7 +670,7 @@ export interface components {
     CreateProjectRequestDto: {
       name: string;
       description: string | null;
-      timezoneOffset: string;
+      timezone: components["schemas"]["TimezoneDto"];
       roles?: components["schemas"]["CreateRoleRequestDto"][];
       members?: components["schemas"]["CreateMemberByNameDto"][];
       apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
@@ -678,7 +683,7 @@ export interface components {
       id: number;
       name: string;
       description: string;
-      timezoneOffset: string;
+      timezone: components["schemas"]["TimezoneDto"];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -697,7 +702,7 @@ export interface components {
     UpdateProjectRequestDto: {
       name: string;
       description: string | null;
-      timezoneOffset: string;
+      timezone: components["schemas"]["TimezoneDto"];
       roles?: components["schemas"]["CreateRoleRequestDto"][];
       members?: components["schemas"]["CreateMemberByNameDto"][];
       apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];

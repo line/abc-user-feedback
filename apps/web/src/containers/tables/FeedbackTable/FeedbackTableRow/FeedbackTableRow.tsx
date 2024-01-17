@@ -112,7 +112,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
                   <Icon name="EditStroke" size={16} />
                 </button>
                 <ShareButton
-                  pathname={`/main/${projectId}/feedback?ids=${
+                  pathname={`/main/project/${projectId}/feedback?ids=${
                     row.original.id
                   }&channelId=${channelId}&createdAt=${dayjs(
                     row.original.createdAt,

@@ -1,41 +1,39 @@
 .input {
-  @apply px-[14px] rounded bg-fill-quaternary text-primary w-full box-border;
+  @apply bg-fill-quaternary text-primary box-border w-full rounded px-[14px];
 
   /* default size */
-  @apply py-[9.5px] font-14-regular h-10;
+  @apply font-14-regular h-10 py-[9.5px];
 
   &-lg {
-    @apply py-3 font-16-regular h-12;
+    @apply font-16-regular h-12 py-3;
   }
 
   &-md {
-    @apply py-[9.5px] font-14-regular h-10;
+    @apply font-14-regular h-10 py-[9.5px];
   }
 
   &-sm {
-    @apply py-[7px] font-12-regular h-8;
+    @apply font-12-regular h-8 py-[7px];
   }
 
   &:focus,
   &:active,
   &:not(:placeholder-shown) {
-    @apply border border-fill-primary bg-fill-inverse;
+    @apply border-fill-primary bg-fill-inverse border;
   }
 
-
   &-error {
-    @apply border border-red-primary !important;
+    @apply border-red-primary border !important;
   }
 
   &-success {
-    @apply border border-blue-primary !important;
+    @apply border-blue-primary border !important;
   }
 
   &:disabled,
   &-disabled {
-    @apply cursor-not-allowed bg-fill-tertiary pointer-events-none border-none;
+    @apply bg-fill-tertiary text-tertiary pointer-events-none cursor-not-allowed border-none;
   }
-
 
   /* input-label */
   &-label {

@@ -19,12 +19,12 @@ import ReactSelect from 'react-select/creatable';
 
 import { Badge, Icon } from '@ufb/ui';
 
-export type SelectOptionType =
-  | { id?: number; key: any; name: string; [key: string]: any }
-  | { id: number; key?: any; name: string; [key: string]: any };
-
 export interface ISelectBoxProps<IsMulti extends boolean>
-  extends Props<SelectOptionType, IsMulti, GroupBase<SelectOptionType>> {
+  extends Props<
+    { key: string; name: string },
+    IsMulti,
+    GroupBase<{ key: string; name: string }>
+  > {
   isExpand?: boolean;
   label?: string;
 }
@@ -95,7 +95,7 @@ function SelectBoxCreatable<IsMulti extends boolean = false>(
         key: inputValue,
         name: optionLabel as string,
       })}
-      getOptionValue={(option) => option.key ?? option.id}
+      getOptionValue={(option) => option.key}
       getOptionLabel={(option) => option.name}
       unstyled
       menuPortalTarget={document.body}

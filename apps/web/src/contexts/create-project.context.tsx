@@ -23,6 +23,7 @@ import type { InputMemberType } from '@/types/member.type';
 import { PermissionList } from '@/types/permission.type';
 import type { InputProjectInfoType } from '@/types/project.type';
 import type { InputRoleType } from '@/types/role.type';
+import { getDefaultTimezone } from '@/utils/timezone';
 import {
   CreateContext,
   CreateProvider,
@@ -56,7 +57,7 @@ const PROJECT_DEFAULT_INPUT: ProjectInputType = {
   members: [],
   roles: DEFAULT_ROLES,
   issueTracker: { ticketDomain: '', ticketKey: '' },
-  projectInfo: { description: '', name: '' },
+  projectInfo: { description: '', name: '', timezone: getDefaultTimezone() },
 };
 
 interface ProjectInputType {
@@ -71,6 +72,11 @@ export const projectInputScheme: Zod.ZodType<ProjectInputType> = z.object({
   projectInfo: z.object({
     name: z.string().min(1).max(20),
     description: z.string().max(50),
+    timezone: z.object({
+      countryCode: z.string(),
+      name: z.string(),
+      offset: z.string(),
+    }),
   }),
   roles: z.array(
     z.object({

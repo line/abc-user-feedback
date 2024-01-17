@@ -103,7 +103,9 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                         {field.name}
                       </th>
                       <FeedbackDetailCell>
-                        {field.key === 'issues' ? (
+                        {typeof feedbackData[field.key] === 'undefined' ? (
+                          '-'
+                        ) : field.key === 'issues' ? (
                           <div className="flex flex-wrap gap-2">
                             {(
                               feedbackData[field.key] ?? ([] as IssueType[])
@@ -125,6 +127,8 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           dayjs(feedbackData[field.key]).format(
                             DATE_TIME_FORMAT,
                           )
+                        ) : field.format === 'boolean' ? (
+                          String(feedbackData[field.key])
                         ) : (
                           feedbackData[field.key]
                         )}
