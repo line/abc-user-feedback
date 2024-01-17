@@ -14,4 +14,4 @@
  * under the License.
  */
 export { default as ThemeToggleButton } from './ThemeToggleButton';
-export { default as ImageButton } from './ImageButton';
+export { default as ImageViewButton } from './ImageViewButton';

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
-import { ImageButton } from '@/components/buttons';
+import { ImageViewButton } from '@/components/buttons';
 import { ExpandableText, TableResizer } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
@@ -37,7 +37,7 @@ import type { FieldRowType } from './FieldSetting';
 
 const columnHelper = createColumnHelper<any>();
 
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   fields: FieldRowType[];
 }
 
@@ -93,8 +93,8 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
               : field.format === 'images'
               ? faker.helpers.arrayElements(
                   Array.from(
-                    { length: faker.datatype.number({ min: 1, max: 5 }) },
-                    () => faker.image.imageUrl(),
+                    { length: faker.number.int({ min: 10, max: 15 }) },
+                    () => faker.image.url(),
                   ),
                 )
               : null;
@@ -102,6 +102,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
       }
       fakeRows.push(fakeData);
     }
+
     setRows(fakeRows);
   }, [fields]);
 
@@ -142,7 +143,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                 {info.getValue() as string}
               </ExpandableText>
             ) : field.format === 'images' ? (
-              <ImageButton urls={(info.getValue() ?? []) as string[]} />
+              <ImageViewButton urls={(info.getValue() ?? []) as string[]} />
             ) : (
               String(info.getValue())
             ),
@@ -210,4 +211,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
   );
 };
 
-export default PreviewTable;
+export default memo(
+  PreviewTable,
+  (prev, next) => JSON.stringify(prev.fields) === JSON.stringify(next.fields),
+);

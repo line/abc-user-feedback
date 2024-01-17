@@ -169,19 +169,17 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
+  const [status, setStatus] = useState<'ACTIVE' | 'INACTIVE'>('ACTIVE');
+  const [rows, setRows] = useState<FieldRowType[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
+  const [channelData, setChannelData] = useState<ChannelType>();
+  const [channelDataLoading, setChannelDataLoading] = useState<boolean>(true);
+
   const canUpdateField = useMemo(
     () => perms.includes('channel_field_update'),
     [perms],
   );
 
-  const [status, setStatus] = useState<'ACTIVE' | 'INACTIVE'>('ACTIVE');
-  const [rows, setRows] = useState<FieldRowType[]>([]);
-
-  const [showPreview, setShowPreview] = useState(false);
-
-  const [channelData, setChannelData] = useState<ChannelType>();
-
-  const [channelDataLoading, setChannelDataLoading] = useState<boolean>(true);
   const getChannelData = async () => {
     setChannelDataLoading(true);
 
@@ -206,6 +204,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       }),
     );
   };
+
   const deleteField = (index: number) => {
     setRows((prev) => prev.filter((_, i) => i !== index));
   };
