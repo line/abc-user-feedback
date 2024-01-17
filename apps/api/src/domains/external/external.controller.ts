@@ -27,7 +27,7 @@ export class ExternalController {
     @Req() request: FastifyRequest,
     @Res() reply: FastifyReply,
   ): void {
-    const host = request.hostname;
+    const { protocol, hostname } = request;
     const html = `<!DOCTYPE html>
     <html>
       <head>
@@ -48,7 +48,7 @@ export class ExternalController {
         </style>
       </head>
       <body>
-        <redoc spec-url='http://${host}/external-docs-json'></redoc>
+        <redoc spec-url='${protocol}://${hostname}/external-docs-json'></redoc>
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
       </body>
     </html>`;
