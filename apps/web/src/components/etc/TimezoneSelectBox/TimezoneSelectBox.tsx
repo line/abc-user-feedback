@@ -39,12 +39,15 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
 
   const options = useMemo(() => getTimezoneOptions(), []);
 
-  const filteredOptions =
-    query === ''
-      ? options
-      : options.filter((option) =>
-          getLabel(option).toLowerCase().includes(query.toLowerCase()),
-        );
+  const filteredOptions = useMemo(
+    () =>
+      query === ''
+        ? options
+        : options.filter((option) =>
+            getLabel(option).toLowerCase().includes(query.toLowerCase()),
+          ),
+    [query, options],
+  );
 
   return (
     <div className="flex flex-col gap-2">
@@ -57,7 +60,12 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
         disabled={disabled}
       >
         <Listbox.Button className="input">
-          {getLabel(value) ?? 'Select'}
+          {({ open }) => (
+            <div className="flex w-full justify-between">
+              {getLabel(value) ?? 'Select'}
+              <Icon name={open ? 'ChevronUp' : 'ChevronDown'} size={20} />
+            </div>
+          )}
         </Listbox.Button>
         <Listbox.Options
           as="div"
@@ -78,11 +86,9 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
                 value={option}
                 className="hover:bg-fill-quaternary flex h-10 cursor-pointer items-center justify-between px-3"
               >
-                {({ selected }) => (
-                  <>
-                    {getLabel(option)}
-                    {selected && <Icon name="Check" size={16} />}
-                  </>
+                {getLabel(option)}
+                {JSON.stringify(option) === JSON.stringify(value) && (
+                  <Icon name="Check" size={16} />
                 )}
               </Listbox.Option>
             ))}
