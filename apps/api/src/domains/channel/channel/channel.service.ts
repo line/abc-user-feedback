@@ -107,17 +107,16 @@ export class ChannelService {
     } = dto;
 
     const s3 = new S3Client({
-      credentials: {
-        accessKeyId,
-        secretAccessKey,
-      },
+      credentials: { accessKeyId, secretAccessKey },
       endpoint,
       region,
     });
+
     const command = new PutObjectCommand({
       Bucket: bucket,
       Key: `${projectId}_${channelId}_${Date.now()}.png`,
       ContentType: 'image/png',
+      ACL: 'public-read',
     });
 
     return await getSignedUrl(s3, command, { expiresIn: 60 * 60 });

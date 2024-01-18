@@ -14,10 +14,11 @@
  * under the License.
  */
 
-import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import { useState } from 'react';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
+
+import { useHorizontalScroll } from '@/hooks';
 
 interface IProps {
   urls: string[];
@@ -26,47 +27,17 @@ interface IProps {
 const ImageViewButton: React.FC<IProps> = ({ urls }) => {
   const [open, setOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(urls[0]);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  const [showLeftButton, setShowLeftButton] = useState(false);
-  const [showRightButton, setShowRightButton] = useState(urls.length > 7);
-
-  useEffect(() => {
-    if (!containerRef.current) return;
-
-    containerRef.current.addEventListener('scroll', () => {
-      if (!containerRef.current) return;
-      const { scrollWidth, scrollLeft } = containerRef.current;
-
-      setShowLeftButton(scrollLeft > 0);
-      setShowRightButton(scrollLeft + 580 < scrollWidth);
-    });
-  }, [containerRef]);
-
-  const scrollLeft = () => {
-    if (!containerRef.current) return;
-    const { scrollWidth, scrollLeft } = containerRef.current;
-
-    const left = scrollLeft - 78;
-
-    setShowLeftButton(left > 0);
-    setShowRightButton(left + 580 <= scrollWidth);
-    containerRef.current.scrollTo({ left, behavior: 'smooth' });
-  };
-
-  const scrollRight = () => {
-    if (!containerRef.current) return;
-    const { scrollWidth, scrollLeft } = containerRef.current;
-
-    const left = scrollLeft + 78;
-
-    setShowLeftButton(left > 0);
-    setShowRightButton(left + 580 <= scrollWidth);
-    containerRef.current.scrollTo({
-      left: containerRef.current.scrollLeft + 78,
-      behavior: 'smooth',
-    });
-  };
+  const {
+    containerRef,
+    scrollLeft,
+    scrollRight,
+    showLeftButton,
+    showRightButton,
+  } = useHorizontalScroll({
+    defaultRightButtonShown: urls.length > 7,
+    scrollGap: 78,
+  });
 
   if (urls.length === 0) return null;
   return (
@@ -74,7 +45,10 @@ const ImageViewButton: React.FC<IProps> = ({ urls }) => {
       <PopoverTrigger asChild>
         <button
           className="btn btn-secondary btn-xs btn-rounded gap-1"
-          onClick={() => setOpen(!open)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setOpen(!open);
+          }}
         >
           <Icon name="MediaImageFill" size={12} />
           Image
@@ -82,6 +56,7 @@ const ImageViewButton: React.FC<IProps> = ({ urls }) => {
       </PopoverTrigger>
       <PopoverContent
         className="border-fill-secondary flex flex-col gap-5 border p-5"
+        onClick={(e) => e.stopPropagation()}
         diabledDimmed
       >
         <div className="flex items-center justify-between">
@@ -93,14 +68,16 @@ const ImageViewButton: React.FC<IProps> = ({ urls }) => {
             <Icon name="Close" />
           </button>
         </div>
-        <div
-          className="bg-fill-quaternary overflow-hidden rounded"
-          style={{ width: 580, height: 400, position: 'relative' }}
-        >
-          {currentImage && (
-            <Image src={currentImage} alt="preview" fill objectFit="contain" />
-          )}
-        </div>
+
+        <img
+          src={currentImage}
+          alt="preview"
+          className="bg-fill-quaternary h-full w-full cursor-pointer rounded object-contain"
+          onClick={() => window.open(currentImage, '_blank')}
+          style={{ width: 580, height: 400 }}
+          width={580}
+          height={400}
+        />
         <div className="relative overflow-hidden">
           <div className="top-0 w-full">
             {showRightButton && (
@@ -133,19 +110,20 @@ const ImageViewButton: React.FC<IProps> = ({ urls }) => {
                   style={{ width: 70, height: 40 }}
                   onClick={() => setCurrentImage(url)}
                 >
-                  <Image src={url} alt="preview" fill objectFit="cover" />
+                  <img
+                    src={url}
+                    alt="preview"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
                   {url === currentImage && (
                     <>
                       <div
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          background: 'var(--text-color-quaternary)',
-                        }}
-                        className="absolute left-0 top-0"
+                        style={{ background: 'var(--text-color-quaternary)' }}
+                        className="absolute left-0 top-0 h-full w-full"
                       />
                       <Icon
                         name="Check"

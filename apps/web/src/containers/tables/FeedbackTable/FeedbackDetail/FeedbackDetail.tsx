@@ -31,7 +31,7 @@ import { Badge, Icon } from '@ufb/ui';
 
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor } from '@/constants/issues';
-import { useFeedbackSearch, useOAIQuery } from '@/hooks';
+import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
 import type { FieldType } from '@/types/field.type';
 import type { IssueType } from '@/types/issue.type';
 import FeedbackDetailCell from './FeedbackDetailCell';
@@ -129,6 +129,8 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           )
                         ) : field.format === 'boolean' ? (
                           String(feedbackData[field.key])
+                        ) : field.format === 'images' ? (
+                          <ImageSlider urls={feedbackData[field.key] ?? []} />
                         ) : (
                           feedbackData[field.key]
                         )}
@@ -144,6 +146,77 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
     </FloatingPortal>
   );
 };
+
+interface IImageSliderProps {
+  urls: string[];
+}
+const ImageSlider: React.FC<IImageSliderProps> = ({ urls }) => {
+  const {
+    containerRef,
+    scrollLeft,
+    scrollRight,
+    showLeftButton,
+    showRightButton,
+  } = useHorizontalScroll({
+    defaultRightButtonShown: urls.length > 4,
+    scrollGap: 140,
+  });
+  return (
+    <div className="relative w-full overflow-hidden">
+      <div className="top-0 w-full">
+        {showRightButton && (
+          <button
+            onClick={scrollRight}
+            className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute right-0 z-10"
+          >
+            <Icon name="ArrowRight" />
+          </button>
+        )}
+        {showLeftButton && (
+          <button
+            onClick={scrollLeft}
+            className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute left-0 z-10"
+          >
+            <Icon name="ArrowLeft" />
+          </button>
+        )}
+      </div>
+      <div
+        className="overflow-hidden"
+        ref={containerRef}
+        style={{ width: 580 }}
+      >
+        <div className="flex gap-2">
+          {urls?.map((url) => (
+            <div
+              key={url}
+              className="relative shrink-0 cursor-pointer overflow-hidden rounded"
+              style={{ width: 140, height: 80 }}
+              onClick={() => window.open(url, '_blank')}
+            >
+              <div
+                style={{
+                  background: 'var(--text-color-quaternary)',
+                }}
+                className="absolute left-0 top-0 h-full w-full"
+              />
+              <Icon
+                name="Search"
+                className="text-above-primary absolute-center absolute left-1/2 top-1/2 text-white"
+              />
+              <img
+                src={url}
+                alt="preview"
+                className="h-full w-full object-cover"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const fieldSortType = (a: FieldType, b: FieldType) => {
   const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
   const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
