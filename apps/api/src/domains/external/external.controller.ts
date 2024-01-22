@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Controller, Get, Logger, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 
@@ -21,6 +21,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 @ApiExcludeController()
 export class ExternalController {
   constructor() {}
+  private logger = new Logger(ExternalController.name);
 
   @Get('docs')
   getExternalDocs(
@@ -28,6 +29,7 @@ export class ExternalController {
     @Res() reply: FastifyReply,
   ): void {
     const { protocol, hostname } = request;
+    this.logger.log(`protocol: ${protocol}, hostname: ${hostname}`);
     const html = `<!DOCTYPE html>
     <html>
       <head>
