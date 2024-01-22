@@ -160,7 +160,7 @@ export class FeedbackStatisticsService {
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
     const job = new CronJob(`0 ${cronHour} * * *`, async () => {
-      await this.createFeedbackStatistics(projectId);
+      await this.createFeedbackStatistics(projectId, 365);
     });
     this.schedulerRegistry.addCronJob(`feedback-statistics-${projectId}`, job);
     job.start();

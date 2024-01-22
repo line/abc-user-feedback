@@ -114,8 +114,8 @@ export class FeedbackIssueStatisticsService {
     });
     const timezoneOffset = timezone.offset;
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
-    const job = new CronJob(`0 ${cronHour} * * *`, async () => {
-      await this.createFeedbackIssueStatistics(projectId);
+    const job = new CronJob(`2 ${cronHour} * * *`, async () => {
+      await this.createFeedbackIssueStatistics(projectId, 365);
     });
     this.schedulerRegistry.addCronJob(
       `feedback-issue-statistics-${projectId}`,
