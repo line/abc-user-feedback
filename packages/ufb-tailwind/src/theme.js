@@ -22,6 +22,7 @@ module.exports = {
     tertiary: 'var(--fill-color-tertiary)',
     quaternary: 'var(--fill-color-quaternary)',
     inverse: 'var(--fill-color-inverse)',
+    ...colors,
   },
   colors: {
     fill: {

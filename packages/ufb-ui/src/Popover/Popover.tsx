@@ -208,7 +208,7 @@ export const PopoverContent = React.forwardRef<
           ...(context.modal || disabledFloatingStyle
             ? { position: 'absolute' }
             : context.floatingStyles),
-          zIndex: 20,
+          zIndex: 50,
           ...style,
         }}
         aria-labelledby={context.labelId}

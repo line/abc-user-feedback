@@ -124,8 +124,8 @@ export class IssueStatisticsService {
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
-    const job = new CronJob(`0 ${cronHour} * * *`, async () => {
-      await this.createIssueStatistics(projectId);
+    const job = new CronJob(`4 ${cronHour} * * *`, async () => {
+      await this.createIssueStatistics(projectId, 365);
     });
     this.schedulerRegistry.addCronJob(`issue-statistics-${projectId}`, job);
     job.start();
