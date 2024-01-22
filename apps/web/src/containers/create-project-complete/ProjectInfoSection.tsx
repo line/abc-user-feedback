@@ -36,7 +36,7 @@ const ProjectInfoSection: React.FC<IProps> = ({
   const { t } = useTranslation();
   return (
     <CreateSectionTemplate
-      title={t('main.setting.subtitle.project-info')}
+      title={t('project-setting-menu.project-info')}
       defaultOpen
     >
       <Input label="Project Name" value={name} required disabled />

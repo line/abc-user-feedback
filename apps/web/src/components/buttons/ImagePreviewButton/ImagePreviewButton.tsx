@@ -15,6 +15,7 @@
  */
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
@@ -24,7 +25,8 @@ interface IProps {
   urls: string[];
 }
 
-const ImageViewButton: React.FC<IProps> = ({ urls }) => {
+const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(urls[0]);
 
@@ -60,7 +62,7 @@ const ImageViewButton: React.FC<IProps> = ({ urls }) => {
         diabledDimmed
       >
         <div className="flex items-center justify-between">
-          <h1 className="font-14-bold">Image 미리보기</h1>
+          <h1 className="font-14-bold">{t('modal.image-preview.title')}</h1>
           <button
             className="icon-btn icon-btn-xs icon-btn-tertiary"
             onClick={() => setOpen(false)}
@@ -141,4 +143,4 @@ const ImageViewButton: React.FC<IProps> = ({ urls }) => {
   );
 };
 
-export default ImageViewButton;
+export default ImagePreviewButton;

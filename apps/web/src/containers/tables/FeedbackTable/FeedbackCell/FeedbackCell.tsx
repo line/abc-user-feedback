@@ -17,7 +17,7 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 
 import { ExpandableText } from '@/components';
-import { ImageViewButton } from '@/components/buttons';
+import { ImagePreviewButton } from '@/components/buttons';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import type { FieldType } from '@/types/field.type';
 
@@ -45,7 +45,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
       ) : field.format === 'select' ? (
         field.options?.find((option) => option.key === value)?.name ?? value
       ) : field.format === 'images' ? (
-        <ImageViewButton urls={value} />
+        <ImagePreviewButton urls={value} />
       ) : field.format === 'text' ? (
         (value as string)
       ) : (

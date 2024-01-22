@@ -50,42 +50,42 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           iconName="DocumentInfoFill"
           onClick={onClickSettingMenu('PROJECT_INFO')}
           active={settingMenu === 'PROJECT_INFO'}
-          name={t('main.setting.subtitle.project-info')}
+          name={t('project-setting-menu.project-info')}
           disabled={!perms.includes('project_read')}
         />
         <SettingMenuItem
           iconName="ProfileCircleFill"
           onClick={onClickSettingMenu('MEMBER_MANAGEMENT')}
           active={settingMenu === 'MEMBER_MANAGEMENT'}
-          name={t('main.setting.subtitle.member-mgmt')}
+          name={t('project-setting-menu.member-mgmt')}
           disabled={!perms.includes('project_member_read')}
         />
         <SettingMenuItem
           iconName="ShieldPrivacyFill"
           onClick={onClickSettingMenu('ROLE_MANAGEMENT')}
           active={settingMenu === 'ROLE_MANAGEMENT'}
-          name={t('main.setting.subtitle.role-mgmt')}
+          name={t('project-setting-menu.role-mgmt')}
           disabled={!perms.includes('project_role_read')}
         />
         <SettingMenuItem
           iconName="ShieldWSimFill"
           onClick={onClickSettingMenu('API_KEY_MANAGEMENT')}
           active={settingMenu === 'API_KEY_MANAGEMENT'}
-          name={t('main.setting.subtitle.api-key-mgmt')}
+          name={t('project-setting-menu.api-key-mgmt')}
           disabled={!perms.includes('project_apikey_read')}
         />
         <SettingMenuItem
           iconName="TicketFill"
           onClick={onClickSettingMenu('TICKET_MANAGEMENT')}
           active={settingMenu === 'TICKET_MANAGEMENT'}
-          name={t('main.setting.subtitle.issue-tracker-mgmt')}
+          name={t('project-setting-menu.issue-tracker-mgmt')}
           disabled={!perms.includes('project_tracker_read')}
         />
         <SettingMenuItem
           iconName="TrashFill"
           onClick={onClickSettingMenu('DELETE_PROJECT')}
           active={settingMenu === 'DELETE_PROJECT'}
-          name={t('main.setting.subtitle.delete-project')}
+          name={t('project-setting-menu.delete-project')}
           disabled={!perms.includes('project_delete')}
         />
       </ul>

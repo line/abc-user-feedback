@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
 import {
   autoUpdate,
   FloatingFocusManager,
@@ -69,6 +70,30 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
 
   const { getFloatingProps } = useInteractions([click, dismiss, role]);
 
+  const idField = useMemo(
+    () => channelData?.fields.find((field) => field.key === 'id') ?? null,
+    [channelData?.fields],
+  );
+  const issuesField = useMemo(
+    () => channelData?.fields.find((field) => field.key === 'issues') ?? null,
+    [channelData?.fields],
+  );
+  const createdField = useMemo(
+    () =>
+      channelData?.fields.find((field) => field.key === 'createdAt') ?? null,
+    [channelData?.fields],
+  );
+  const updatedField = useMemo(
+    () =>
+      channelData?.fields.find((field) => field.key === 'updatedAt') ?? null,
+    [channelData?.fields],
+  );
+
+  const feedbackFields = useMemo(() => {
+    if (!channelData?.fields) return [];
+    return channelData?.fields.filter((field) => field.type !== 'DEFAULT');
+  }, [channelData?.fields]);
+
   return (
     <FloatingPortal>
       <FloatingFocusManager context={context} modal>
@@ -97,8 +122,54 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
               </div>
               <table className="table-fixed border-separate border-spacing-y-5">
                 <tbody>
-                  {channelData?.fields.sort(fieldSortType).map((field) => (
-                    <tr key={field.name}>
+                  <tr>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {idField?.name}
+                    </th>
+                    <td width="260">
+                      {JSON.stringify(feedbackData[idField?.key ?? ''])}
+                    </td>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {issuesField?.name}
+                    </th>
+                    <td width="260">
+                      <div className="flex flex-wrap gap-2">
+                        {(
+                          feedbackData[issuesField?.key ?? ''] ??
+                          ([] as IssueType[])
+                        ).map((v) => (
+                          <Badge
+                            key={v.id}
+                            color={getStatusColor(v.status)}
+                            type="secondary"
+                          >
+                            {v.name}
+                          </Badge>
+                        ))}
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {createdField?.name}
+                    </th>
+                    <td>
+                      {dayjs(feedbackData[createdField?.key ?? '']).format(
+                        DATE_TIME_FORMAT,
+                      )}
+                    </td>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {updatedField?.name}
+                    </th>
+                    <td>
+                      {dayjs(feedbackData[updatedField?.key ?? '']).format(
+                        DATE_TIME_FORMAT,
+                      )}
+                    </td>
+                  </tr>
+
+                  {feedbackFields.sort(fieldSortType).map((field) => (
+                    <tr key={field.id}>
                       <th className="font-14-regular text-secondary min-w-[80px] max-w-[80px] break-words text-left align-text-top">
                         {field.name}
                       </th>

@@ -38,7 +38,7 @@ const scheme: Zod.ZodType<IForm> = z.object({
 interface IProps extends React.PropsWithChildren {
   projectId: number;
 }
-const TicketSetting: React.FC<IProps> = ({ projectId }) => {
+const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
@@ -91,7 +91,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.issue-tracker-mgmt')}
+      title={t('project-setting-menu.issue-tracker-mgmt')}
       actionBtn={{
         children: t('button.save'),
         disabled:
@@ -105,7 +105,7 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          {t('main.setting.issue-tracker-mgmt.description')}
+          {t('help-card.issue-tracker-mgmt')}
         </p>
         <div className="relative h-full w-[160px]">
           <Image
@@ -154,4 +154,4 @@ const TicketSetting: React.FC<IProps> = ({ projectId }) => {
   );
 };
 
-export default TicketSetting;
+export default IssueTrackerSetting;

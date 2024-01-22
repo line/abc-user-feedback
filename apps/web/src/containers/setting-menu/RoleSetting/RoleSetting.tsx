@@ -86,7 +86,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.role-mgmt')}
+      title={t('project-setting-menu.role-mgmt')}
       action={
         <CreateRolePopover
           onCreate={(name) => createRole({ name, permissions: [] })}

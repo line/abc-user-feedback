@@ -162,7 +162,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.api-key-mgmt')}
+      title={t('project-setting-menu.api-key-mgmt')}
       actionBtn={{
         children: t('main.setting.button.create-api-key'),
         onClick: () => createApiKey({ value: undefined }),

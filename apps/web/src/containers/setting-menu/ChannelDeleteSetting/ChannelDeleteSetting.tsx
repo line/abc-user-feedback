@@ -73,7 +73,7 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.delete-channel')}
+      title={t('channel-setting-menu.delete-channel')}
       action={
         <Popover modal open={open} onOpenChange={setOpen}>
           <PopoverTrigger

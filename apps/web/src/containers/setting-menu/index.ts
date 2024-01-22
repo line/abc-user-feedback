@@ -20,7 +20,7 @@ export { default as ProjectDeleteSetting } from './ProjectDeleteSetting';
 export { default as ProjectInfoSetting } from './ProjectInfoSetting';
 export { default as SignUpSetting } from './SignUpSetting';
 export { default as TenantInfoSetting } from './TenantInfoSetting';
-export { default as TicketSetting } from './TicketSetting';
+export { default as IssueTrackerSetting } from './IssueTrackerSetting';
 export { default as RoleSetting } from './RoleSetting';
 export { default as ChannelInfoSetting } from './ChannelInfoSetting';
 export { default as MemberSetting } from './MemberSetting';

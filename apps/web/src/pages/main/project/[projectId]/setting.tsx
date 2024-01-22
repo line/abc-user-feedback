@@ -33,6 +33,7 @@ import {
   ChannelInfoSetting,
   ChannelSettingMenu,
   FieldSetting,
+  IssueTrackerSetting,
   MemberSetting,
   ProjectDeleteSetting,
   ProjectInfoSetting,
@@ -41,7 +42,6 @@ import {
   SignUpSetting,
   TenantInfoSetting,
   TenantSettingMenu,
-  TicketSetting,
   UserSetting,
 } from '@/containers/setting-menu';
 import ImageUploadSetting from '@/containers/setting-menu/ImageUploadSetting';
@@ -157,7 +157,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <APIKeySetting projectId={projectId} />
             )}
             {settingMenu === 'TICKET_MANAGEMENT' && (
-              <TicketSetting projectId={projectId} />
+              <IssueTrackerSetting projectId={projectId} />
             )}
             {settingMenu === 'DELETE_PROJECT' && (
               <ProjectDeleteSetting projectId={projectId} />

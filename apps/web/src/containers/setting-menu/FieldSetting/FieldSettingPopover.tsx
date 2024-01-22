@@ -329,7 +329,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                       e.target.checked ? setValue('type', 'ADMIN') : {}
                     }
                     checked={watch('type') === 'ADMIN'}
-                    disabled={isOriginalData}
+                    disabled={isOriginalData || watch('format') === 'images'}
                   />
                   ADMIN
                 </label>

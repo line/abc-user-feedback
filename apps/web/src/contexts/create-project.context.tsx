@@ -142,11 +142,11 @@ export const CreateProjectProvider: React.FC<React.PropsWithChildren> = ({
   const { t } = useTranslation();
   const PROJECT_STEPPER_TEXT: Record<ProjectStepType, string> = useMemo(() => {
     return {
-      projectInfo: t('main.setting.subtitle.project-info'),
-      roles: t('main.setting.subtitle.role-mgmt'),
-      members: t('main.setting.subtitle.member-mgmt'),
-      apiKeys: t('main.setting.subtitle.api-key-mgmt'),
-      issueTracker: t('main.setting.subtitle.issue-tracker-mgmt'),
+      projectInfo: t('project-setting-menu.project-info'),
+      roles: t('project-setting-menu.role-mgmt'),
+      members: t('project-setting-menu.member-mgmt'),
+      apiKeys: t('project-setting-menu.api-key-mgmt'),
+      issueTracker: t('project-setting-menu.issue-tracker-mgmt'),
     };
   }, []);
   return (

@@ -82,7 +82,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <CreateSectionTemplate title={t('main.setting.subtitle.member-mgmt')}>
+    <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
       <table className="table">
         <thead>
           <tr>

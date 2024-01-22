@@ -45,21 +45,21 @@ const TenantSettingMenu: React.FC<IProps> = (props) => {
       <ul>
         <SettingMenuItem
           iconName="InfoCircleFill"
-          name={t('main.setting.subtitle.tenant-info')}
+          name={t('tenant-setting-menu.tenant-info')}
           onClick={onClickSettingMenu('TENANT_INFO')}
           active={settingMenu === 'TENANT_INFO'}
           disabled={user?.type !== 'SUPER'}
         />
         <SettingMenuItem
           iconName="ProfileSettingFill"
-          name={t('main.setting.subtitle.sign-up-mgmt')}
+          name={t('tenant-setting-menu.sign-up-mgmt')}
           onClick={onClickSettingMenu('SIGNUP_SETTING')}
           active={settingMenu === 'SIGNUP_SETTING'}
           disabled={user?.type !== 'SUPER'}
         />
         <SettingMenuItem
           iconName="ProfileCircleFill"
-          name={t('main.setting.subtitle.user-mgmt')}
+          name={t('tenant-setting-menu.user-mgmt')}
           onClick={onClickSettingMenu('USER_MANAGEMENT')}
           active={settingMenu === 'USER_MANAGEMENT'}
           disabled={user?.type !== 'SUPER'}

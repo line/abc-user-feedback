@@ -71,28 +71,28 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
       <ul className="flex-1">
         <SettingMenuItem
           iconName="InfoCircleFill"
-          name={t('main.setting.subtitle.channel-info')}
+          name={t('channel-setting-menu.channel-info')}
           onClick={onClickSettingMenu('CHANNEL_INFO')}
           active={settingMenu === 'CHANNEL_INFO'}
           disabled={!perms.includes('channel_read')}
         />
         <SettingMenuItem
           iconName="DocumentTermsFill"
-          name={t('main.setting.subtitle.field-mgmt')}
+          name={t('channel-setting-menu.field-mgmt')}
           onClick={onClickSettingMenu('FIELD_MANAGEMENT')}
           active={settingMenu === 'FIELD_MANAGEMENT'}
           disabled={!perms.includes('channel_field_read')}
         />
         <SettingMenuItem
           iconName="MediaImageFill"
-          name={t('main.setting.subtitle.image-upload')}
+          name={t('channel-setting-menu.image-storage-integration-mgmt')}
           onClick={onClickSettingMenu('IMAGE_UPLOAD_SETTING')}
           active={settingMenu === 'IMAGE_UPLOAD_SETTING'}
           disabled={!perms.includes('channel_field_read')}
         />
         <SettingMenuItem
           iconName="TrashFill"
-          name={t('main.setting.subtitle.delete-channel')}
+          name={t('channel-setting-menu.delete-channel')}
           onClick={onClickSettingMenu('DELETE_CHANNEL')}
           active={settingMenu === 'DELETE_CHANNEL'}
           disabled={!perms.includes('channel_delete')}

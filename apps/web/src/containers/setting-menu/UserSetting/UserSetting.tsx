@@ -210,7 +210,7 @@ const UserSetting: React.FC<IProps> = () => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.user-mgmt')}
+      title={t('tenant-setting-menu.user-mgmt')}
       action={<UserInvitationDialog />}
     >
       <div>

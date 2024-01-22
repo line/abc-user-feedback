@@ -246,7 +246,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.field-mgmt')}
+      title={t('channel-setting-menu.field-mgmt')}
       action={
         <div className="flex gap-2">
           <FeedbackRequestPopover projectId={projectId} channelId={channelId} />

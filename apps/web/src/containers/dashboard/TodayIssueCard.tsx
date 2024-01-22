@@ -67,8 +67,8 @@ const TodayIssueCard: React.FC<IProps> = ({ projectId }) => {
   return (
     <DashboardCard
       data={currentData?.count ?? 0}
-      title={t('card.dashboard.today-issue.title')}
-      description={t('card.dashboard.today-issue.description', {
+      title={t('dashboard-card.today-issue.title')}
+      description={t('dashboard-card.today-issue.description', {
         targetDate: dayjs().format('YYYY/MM/DD'),
         compareDate: dayjs().subtract(1, 'day').format('YYYY/MM/DD'),
       })}

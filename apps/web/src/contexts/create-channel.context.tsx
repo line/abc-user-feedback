@@ -125,10 +125,10 @@ export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
 
   const CHANNEL_STEPPER_TEXT: Record<ChannelStepType, string> = useMemo(() => {
     return {
-      channelInfo: t('main.create-channel.stepper-text.channel-info'),
-      fields: t('main.create-channel.stepper-text.fields'),
-      imageUpload: t('main.create-channel.stepper-text.image-upload'),
-      fieldPreview: t('main.create-channel.stepper-text.field-preview'),
+      channelInfo: t('channel-setting-menu.channel-info'),
+      fields: t('channel-setting-menu.field-mgmt'),
+      imageUpload: t('channel-setting-menu.image-storage-integration-mgmt'),
+      fieldPreview: 'Field ' + t('main.setting.field-mgmt.preview'),
     };
   }, [t]);
 

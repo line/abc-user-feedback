@@ -99,7 +99,7 @@ const ApiKeySection: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <CreateSectionTemplate title={t('main.setting.subtitle.api-key-mgmt')}>
+    <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
       <table className="table">
         <thead>
           <tr>

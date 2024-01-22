@@ -68,7 +68,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
   };
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.tenant-info')}
+      title={t('tenant-setting-menu.tenant-info')}
       actionBtn={{
         children: t('button.save'),
         onClick: handleSubmit(onSubmit),

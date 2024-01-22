@@ -158,7 +158,7 @@ const SignUpSetting: React.FC<IProps> = () => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.sign-up-mgmt')}
+      title={t('tenant-setting-menu.sign-up-mgmt')}
       actionBtn={{
         children: t('button.save'),
         onClick: handleSubmit(onSubmit),

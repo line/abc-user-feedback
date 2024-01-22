@@ -33,9 +33,7 @@ const IssueTrackerSection: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId },
   });
   return (
-    <CreateSectionTemplate
-      title={t('main.setting.subtitle.issue-tracker-mgmt')}
-    >
+    <CreateSectionTemplate title={t('project-setting-menu.issue-tracker-mgmt')}>
       <SelectBox
         options={[{ value: 'jira', label: 'JIRA' }]}
         value={{ value: 'jira', label: 'JIRA' }}

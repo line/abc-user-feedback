@@ -115,21 +115,6 @@
     },
     "setting": {
       "title": "설정",
-      "subtitle": {
-        "tenant-info": "Tenant 정보",
-        "sign-up-mgmt": "Login & Signup 관리",
-        "user-mgmt": "User 관리",
-        "project-info": "Project 정보",
-        "member-mgmt": "Member 관리",
-        "role-mgmt": "Role 관리",
-        "api-key-mgmt": "API Key 관리",
-        "issue-tracker-mgmt": "Issue Tracker 관리",
-        "delete-project": "Project 삭제",
-        "channel-info": "Channel 정보",
-        "field-mgmt": "Field 관리",
-        "image-upload": "Image 연동 관리",
-        "delete-channel": "Channel 삭제"
-      },
       "button": {
         "create-project": "Project 생성",
         "create-channel": "Channel 생성",
@@ -241,12 +226,6 @@
         "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다.",
         "image-upload": "Presigned URL을 활용해 Image 포맷의 피드백을 수집할 수 있습니다. Presigned URL 연동을 위한 정보를 입력해 주세요."
       },
-      "stepper-text": {
-        "channel-info": "Channel 정보",
-        "fields": "Field 관리",
-        "field-preview": "Field 미리보기",
-        "image-upload": "Image 연동 관리"
-      },
       "finish-channel-creation": "모든 준비가 완료됐습니다.\nUserFeedback 이용을 시작해보세요!",
       "guide": {
         "invalid-channel": "유효하지 않은 Project 정보가 존재합니다."
@@ -352,44 +331,42 @@
       }
     }
   },
-  "card": {
-    "dashboard": {
-      "total-feedback": {
-        "title": "전체 피드백 수",
-        "description": "특정 기간 동안 생성된 피드백 개수입니다. ({{targetDate}})"
-      },
-      "total-issue": {
-        "title": "전체 이슈 수",
-        "description": "특정 기간 동안 생성된 이슈 개수입니다. ({{targetDate}})"
-      },
-      "issue-ratio": {
-        "title": "이슈 등록 비중",
-        "description": "특정 기간 동안 생성된 피드백의 이슈 등록 비중입니다. ({{targetDate}}) "
-      },
-      "today-feedback": {
-        "title": "오늘 피드백 수",
-        "description": "오늘 생성된 피드백 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
-      },
-      "yesterday-feedback": {
-        "title": "어제 피드백 수",
-        "description": "어제 생성된 피드백 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
-      },
-      "n-days-feedback": {
-        "title": "지난 {{n}}일 피드백 수",
-        "description": "지난 {{n}}일 동안 생성된 피드백 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
-      },
-      "today-issue": {
-        "title": "오늘 이슈 수",
-        "description": "오늘 생성된 이슈 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
-      },
-      "yesterday-issue": {
-        "title": "어제 이슈 수",
-        "description": "어제 생성된 이슈 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
-      },
-      "n-days-issue": {
-        "title": "지난 {{n}}일 이슈 수",
-        "description": "지난 {{n}}일 동안 생성된 이슈 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
-      }
+  "dashboard-card": {
+    "total-feedback": {
+      "title": "전체 피드백 수",
+      "description": "특정 기간 동안 생성된 피드백 개수입니다. ({{targetDate}})"
+    },
+    "total-issue": {
+      "title": "전체 이슈 수",
+      "description": "특정 기간 동안 생성된 이슈 개수입니다. ({{targetDate}})"
+    },
+    "issue-ratio": {
+      "title": "이슈 등록 비중",
+      "description": "특정 기간 동안 생성된 피드백의 이슈 등록 비중입니다. ({{targetDate}}) "
+    },
+    "today-feedback": {
+      "title": "오늘 피드백 수",
+      "description": "오늘 생성된 피드백 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
+    },
+    "yesterday-feedback": {
+      "title": "어제 피드백 수",
+      "description": "어제 생성된 피드백 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
+    },
+    "n-days-feedback": {
+      "title": "지난 {{n}}일 피드백 수",
+      "description": "지난 {{n}}일 동안 생성된 피드백 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
+    },
+    "today-issue": {
+      "title": "오늘 이슈 수",
+      "description": "오늘 생성된 이슈 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
+    },
+    "yesterday-issue": {
+      "title": "어제 이슈 수",
+      "description": "어제 생성된 이슈 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
+    },
+    "n-days-issue": {
+      "title": "지난 {{n}}일 이슈 수",
+      "description": "지난 {{n}}일 동안 생성된 이슈 개수입니다. ({{targetDate}})\n증감률은 다음 기간과 비교해서 나타냅니다. ({{compareDate}})"
     }
   },
   "chart": {
@@ -426,5 +403,33 @@
   },
   "tooltip": {
     "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다."
+  },
+  "tenant-setting-menu": {
+    "tenant-info": "Tenant 정보",
+    "sign-up-mgmt": "Login & Signup 관리",
+    "user-mgmt": "User 관리"
+  },
+  "project-setting-menu": {
+    "project-info": "Project 정보",
+    "member-mgmt": "Member 관리",
+    "role-mgmt": "Role 관리",
+    "api-key-mgmt": "API Key 관리",
+    "issue-tracker-mgmt": "Issue Tracker 관리",
+    "delete-project": "Project 삭제"
+  },
+  "channel-setting-menu": {
+    "channel-info": "Channel 정보",
+    "field-mgmt": "Field 관리",
+    "image-storage-integration-mgmt": "Image Storage 연동 관리",
+    "delete-channel": "Channel 삭제"
+  },
+  "modal": {
+    "image-preview": {
+      "title": "Image 미리보기"
+    }
+  },
+  "help-card": {
+    "issue-tracker-mgmt": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
+    "image-storage-integration-mgmt": "Presigned URL을 활용해 Image 포맷의 피드백을 수집할 수 있습니다.\nPresigned URL 연동을 위한 정보를 입력해 주세요."
   }
 }

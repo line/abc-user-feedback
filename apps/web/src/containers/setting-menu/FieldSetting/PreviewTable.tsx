@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
-import { ImageViewButton } from '@/components/buttons';
+import { ImagePreviewButton } from '@/components/buttons';
 import { ExpandableText, TableResizer } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
@@ -143,7 +143,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                 {info.getValue() as string}
               </ExpandableText>
             ) : field.format === 'images' ? (
-              <ImageViewButton urls={(info.getValue() ?? []) as string[]} />
+              <ImagePreviewButton urls={(info.getValue() ?? []) as string[]} />
             ) : (
               String(info.getValue())
             ),

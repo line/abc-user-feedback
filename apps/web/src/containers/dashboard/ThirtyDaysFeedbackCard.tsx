@@ -66,8 +66,8 @@ const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
   return (
     <DashboardCard
       data={currentData?.count ?? 0}
-      title={t('card.dashboard.n-days-feedback.title', { n: 30 })}
-      description={t('card.dashboard.n-days-feedback.description', {
+      title={t('dashboard-card.n-days-feedback.title', { n: 30 })}
+      description={t('dashboard-card.n-days-feedback.description', {
         n: 30,
         targetDate: `${dayjs()
           .subtract(30, 'day')
