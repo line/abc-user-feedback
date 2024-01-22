@@ -273,6 +273,9 @@ export class FeedbackMySQLService {
       .update('feedbacks')
       .set({
         additionalData: () => {
+          if (Object.keys(data).length === 0) {
+            return 'additional_data';
+          }
           let query = `JSON_SET(IFNULL(feedbacks.additional_data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
             query += `'$."${fieldKey}"', ${
