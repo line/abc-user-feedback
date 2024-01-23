@@ -17,14 +17,23 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { IssueStatisticsModule } from '@/domains/statistics/issue/issue-statistics.module';
+import { ProjectEntity } from '../project/project.entity';
 import { IssueController } from './issue.controller';
 import { IssueEntity } from './issue.entity';
 import { IssueService } from './issue.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([IssueEntity]), IssueStatisticsModule],
+  imports: [
+    TypeOrmModule.forFeature([IssueEntity, ProjectEntity]),
+    IssueStatisticsModule,
+  ],
   providers: [IssueService],
   controllers: [IssueController],
   exports: [IssueService],
 })
-export class IssueModule {}
+export class IssueModule {
+  constructor(private readonly service: IssueService) {}
+  async onModuleInit() {
+    await this.service.addCronJob();
+  }
+}
