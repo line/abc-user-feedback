@@ -18,7 +18,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
 import { ClsService } from 'nestjs-cls';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
-import { Brackets, QueryFailedError, Repository } from 'typeorm';
+import { Brackets, In, QueryFailedError, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
@@ -273,6 +273,9 @@ export class FeedbackMySQLService {
       .update('feedbacks')
       .set({
         additionalData: () => {
+          if (Object.keys(data).length === 0) {
+            return 'additional_data';
+          }
           let query = `JSON_SET(IFNULL(feedbacks.additional_data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
             query += `'$."${fieldKey}"', ${
@@ -377,11 +380,21 @@ export class FeedbackMySQLService {
   }
 
   async deleteByIds({ feedbackIds }: DeleteByIdsDto) {
-    const feedbacks = feedbackIds.map((id) => {
-      const feedback = new FeedbackEntity();
-      feedback.id = id;
-      return feedback;
+    const feedbacks = await this.feedbackRepository.find({
+      where: { id: In(feedbackIds) },
+      relations: ['issues'],
     });
+
+    for (const feedback of feedbacks) {
+      for (const issue of feedback.issues) {
+        await this.issueRepository.update(issue.id, {
+          feedbackCount: () => 'feedback_count - 1',
+          updatedAt: () =>
+            `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
+        });
+      }
+    }
+
     await this.feedbackRepository.remove(feedbacks);
   }
 
