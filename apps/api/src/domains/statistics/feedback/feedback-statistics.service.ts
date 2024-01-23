@@ -234,9 +234,23 @@ export class FeedbackStatisticsService {
     if (dto.count === 0) return;
     if (!dto.count) dto.count = 1;
 
+    const { timezone } = await this.projectRepository.findOne({
+      where: { channels: { id: dto.channelId } },
+    });
+    const timezoneOffset = timezone.offset;
+    const [hours, minutes] = timezoneOffset.split(':');
+    const offset = Number(hours) + Number(minutes) / 60;
+
+    const date = new Date(
+      DateTime.fromJSDate(dto.date)
+        .plus({ hours: offset })
+        .toISO()
+        .split('T')[0] + 'T00:00:00',
+    );
+
     const stats = await this.repository.findOne({
       where: {
-        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        date,
         channel: { id: dto.channelId },
       },
     });
@@ -250,7 +264,7 @@ export class FeedbackStatisticsService {
         .createQueryBuilder()
         .insert()
         .values({
-          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          date,
           count: dto.count,
           channel: { id: dto.channelId },
         })

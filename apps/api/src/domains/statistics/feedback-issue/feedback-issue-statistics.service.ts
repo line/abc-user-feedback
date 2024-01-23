@@ -195,9 +195,23 @@ export class FeedbackIssueStatisticsService {
     if (dto.feedbackCount === 0) return;
     if (!dto.feedbackCount) dto.feedbackCount = 1;
 
+    const { timezone } = await this.projectRepository.findOne({
+      where: { issues: { id: dto.issueId } },
+    });
+    const timezoneOffset = timezone.offset;
+    const [hours, minutes] = timezoneOffset.split(':');
+    const offset = Number(hours) + Number(minutes) / 60;
+
+    const date = new Date(
+      DateTime.fromJSDate(dto.date)
+        .plus({ hours: offset })
+        .toISO()
+        .split('T')[0] + 'T00:00:00',
+    );
+
     const stats = await this.repository.findOne({
       where: {
-        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        date,
         issue: { id: dto.issueId },
       },
     });
@@ -211,7 +225,7 @@ export class FeedbackIssueStatisticsService {
         .createQueryBuilder()
         .insert()
         .values({
-          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          date,
           feedbackCount: dto.feedbackCount,
           issue: { id: dto.issueId },
         })

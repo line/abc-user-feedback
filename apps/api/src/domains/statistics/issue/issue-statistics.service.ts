@@ -193,9 +193,23 @@ export class IssueStatisticsService {
     if (dto.count === 0) return;
     if (!dto.count) dto.count = 1;
 
+    const { timezone } = await this.projectRepository.findOne({
+      where: { id: dto.projectId },
+    });
+    const timezoneOffset = timezone.offset;
+    const [hours, minutes] = timezoneOffset.split(':');
+    const offset = Number(hours) + Number(minutes) / 60;
+
+    const date = new Date(
+      DateTime.fromJSDate(dto.date)
+        .plus({ hours: offset })
+        .toISO()
+        .split('T')[0] + 'T00:00:00',
+    );
+
     const stats = await this.repository.findOne({
       where: {
-        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        date,
         project: { id: dto.projectId },
       },
     });
@@ -209,7 +223,7 @@ export class IssueStatisticsService {
         .createQueryBuilder()
         .insert()
         .values({
-          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          date,
           count: dto.count,
           project: { id: dto.projectId },
         })
