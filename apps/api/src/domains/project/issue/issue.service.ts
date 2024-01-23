@@ -197,18 +197,35 @@ export class IssueService {
 
   @Transactional()
   async deleteById(id: number) {
-    const issue = new IssueEntity();
-    issue.id = id;
+    const issue = await this.repository.findOne({
+      where: { id },
+      relations: { project: true },
+    });
+
+    await this.issueStatisticsService.updateCount({
+      projectId: issue.project.id,
+      date: issue.createdAt,
+      count: -1,
+    });
+
     await this.repository.remove(issue);
   }
 
   @Transactional()
   async deleteByIds(ids: number[]) {
-    const issues = ids.map((id) => {
-      const issue = new IssueEntity();
-      issue.id = id;
-      return issue;
+    const issues = await this.repository.find({
+      where: { id: In(ids) },
+      relations: { project: true },
     });
+
+    for (const issue of issues) {
+      await this.issueStatisticsService.updateCount({
+        projectId: issue.project.id,
+        date: issue.createdAt,
+        count: -1,
+      });
+    }
+
     await this.repository.remove(issues);
   }
 

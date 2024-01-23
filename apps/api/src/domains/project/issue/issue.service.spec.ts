@@ -23,6 +23,7 @@ import type { TimeRange } from '@/common/dtos';
 import { IssueStatisticsEntity } from '@/domains/statistics/issue/issue-statistics.entity';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { IssueServiceProviders } from '../../../test-utils/providers/issue.service.providers';
+import { ProjectEntity } from '../project/project.entity';
 import {
   CreateIssueDto,
   FindIssuesByProjectIdDto,
@@ -38,6 +39,7 @@ import { IssueService } from './issue.service';
 describe('IssueService test suite', () => {
   let issueService: IssueService;
   let issueRepo: Repository<IssueEntity>;
+  let projectRepo: Repository<ProjectEntity>;
   let issueStatsRepo: Repository<IssueStatisticsEntity>;
 
   beforeEach(async () => {
@@ -48,6 +50,7 @@ describe('IssueService test suite', () => {
 
     issueService = module.get<IssueService>(IssueService);
     issueRepo = module.get(getRepositoryToken(IssueEntity));
+    projectRepo = module.get(getRepositoryToken(ProjectEntity));
     issueStatsRepo = module.get(getRepositoryToken(IssueStatisticsEntity));
   });
 
@@ -61,6 +64,12 @@ describe('IssueService test suite', () => {
 
     it('creating an issue succeeds with valid inputs', async () => {
       dto.name = faker.string.sample();
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null as IssueEntity);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({
         id: faker.number.int(),
