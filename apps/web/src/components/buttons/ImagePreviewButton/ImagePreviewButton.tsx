@@ -28,7 +28,8 @@ interface IProps {
 const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const [currentImage, setCurrentImage] = useState(urls[0]);
+  // const [currentImage, setCurrentImage] = useState(urls[0]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const {
     containerRef,
@@ -72,10 +73,10 @@ const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
         </div>
 
         <img
-          src={currentImage}
+          src={urls[currentImageIndex]}
           alt="preview"
           className="bg-fill-quaternary h-full w-full cursor-pointer rounded object-contain"
-          onClick={() => window.open(currentImage, '_blank')}
+          onClick={() => window.open(urls[currentImageIndex], '_blank')}
           style={{ width: 580, height: 400 }}
           width={580}
           height={400}
@@ -105,12 +106,12 @@ const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
             ref={containerRef}
           >
             <div className="relative flex gap-2">
-              {urls.map((url) => (
+              {urls.map((url, index) => (
                 <div
-                  key={url}
+                  key={index}
                   className="relative flex-shrink-0 cursor-pointer overflow-hidden rounded-sm"
                   style={{ width: 70, height: 40 }}
-                  onClick={() => setCurrentImage(url)}
+                  onClick={() => setCurrentImageIndex(index)}
                 >
                   <img
                     src={url}
@@ -121,7 +122,7 @@ const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
                       objectFit: 'cover',
                     }}
                   />
-                  {url === currentImage && (
+                  {index === currentImageIndex && (
                     <>
                       <div
                         style={{ background: 'var(--text-color-quaternary)' }}

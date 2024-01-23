@@ -72,6 +72,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     `${env.API_BASE_URL}/api/projects/${projectId}/channels`,
     { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
   );
+
   if (response.status === 401) {
     return {
       redirect: {
