@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { DateTime } from 'luxon';
 import type { Repository } from 'typeorm';
 
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
@@ -289,6 +290,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const issueId = faker.number.int();
       const date = faker.date.past();
       const feedbackCount = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue({
         feedbackCount: 1,
       } as FeedbackIssueStatisticsEntity);
@@ -309,6 +316,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const issueId = faker.number.int();
       const date = faker.date.past();
       const feedbackCount = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue(null);
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
@@ -325,7 +338,10 @@ describe('FeedbackIssueStatisticsService suite', () => {
       expect(feedbackIssueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
-        date: new Date(date.toISOString().split('T')[0] + 'T00:00:00'),
+        date: new Date(
+          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO().split('T')[0] +
+            'T00:00:00',
+        ),
         feedbackCount,
         issue: { id: issueId },
       });
