@@ -92,16 +92,13 @@ const InputImageUpload: React.FC<IProps> = () => {
     queryOptions: {
       onSuccess(data) {
         if (data?.success) {
-          toast.positive({
-            title: '연결 성공',
-            description: '연결에 성공했습니다.',
-          });
+          toast.positive({ title: 'Test Connection Success' });
         } else {
-          toast.negative({
-            title: '연결 실패',
-            description: '연결에 실패했습니다.',
-          });
+          toast.negative({ title: 'Test Connection failed' });
         }
+      },
+      onError() {
+        toast.negative({ title: 'Test Connection failed' });
       },
     },
   });
@@ -130,7 +127,7 @@ const InputImageUpload: React.FC<IProps> = () => {
         label="Secret Access Key ID"
         placeholder={t('placeholder', { name: 'Secret Access Key ID' })}
         value={bucket}
-        onChange={(e) => onChangeProjectInfo('bucket', e.target.value)}
+        onChange={(e) => onChangeProjectInfo('secretAccessKey', e.target.value)}
         isSubmitted={isSubmitted}
         isValid={!inputError.description}
         hint={inputError.description}
@@ -157,7 +154,7 @@ const InputImageUpload: React.FC<IProps> = () => {
         label="Bucket Name"
         placeholder={t('placeholder', { name: 'Bucket Name' })}
         value={secretAccessKey}
-        onChange={(e) => onChangeProjectInfo('secretAccessKey', e.target.value)}
+        onChange={(e) => onChangeProjectInfo('bucket', e.target.value)}
         isSubmitted={isSubmitted}
         isValid={!inputError.description}
         hint={inputError.description}
