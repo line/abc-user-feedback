@@ -14,26 +14,27 @@
  * under the License.
  */
 import type { GetServerSideProps } from 'next';
-import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
 import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { ironOption } from '@/constants/iron-option';
 import { FeedbackTable } from '@/containers';
 import { CreateChannelButton } from '@/containers/buttons';
-import { env } from '@/env.mjs';
+import { useOAIQuery } from '@/hooks';
 import type { NextPageWithLayout } from '@/pages/_app';
 
 interface IProps {
   projectId: number;
   channelId?: number | null;
-  noChannel?: boolean;
 }
 
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
-  const { projectId, channelId, noChannel } = props;
+  const { projectId, channelId } = props;
+  const { data, status } = useOAIQuery({
+    path: '/api/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   const { t } = useTranslation();
 
@@ -44,7 +45,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   return (
     <>
       <h1 className="font-20-bold mb-3">{t('main.feedback.title')}</h1>
-      {noChannel ? (
+      {status === 'pending' ? (
+        <p className="font-32-bold animate-bounce">Loading...</p>
+      ) : status === 'error' ? (
+        <p className="font-32-bold">Not Permission</p>
+      ) : data.meta.totalItems === 0 ? (
         <div className="flex flex-1 items-center justify-center">
           <CreateChannelButton projectId={projectId} type="blue" />
         </div>
@@ -62,34 +67,8 @@ FeedbackManagementPage.getLayout = function getLayout(page) {
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   locale,
-  req,
-  res,
 }) => {
-  const session = await getIronSession(req, res, ironOption);
   const projectId = parseInt(query.projectId as string);
-
-  const response = await fetch(
-    `${env.API_BASE_URL}/api/projects/${projectId}/channels`,
-    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
-  );
-  if (response.status === 401) {
-    return {
-      redirect: {
-        destination: `/main/${projectId}/not-permission`,
-        permanent: true,
-      },
-    };
-  }
-  const data = await response.json();
-  if (data.meta.totalItems === 0) {
-    return {
-      props: {
-        ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
-        projectId,
-        noChannel: true,
-      },
-    };
-  }
 
   return {
     props: {
