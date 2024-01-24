@@ -14,7 +14,9 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CronJob } from 'cron';
 import { DateTime } from 'luxon';
 import { paginate } from 'nestjs-typeorm-paginate';
 import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
@@ -24,6 +26,7 @@ import { Transactional } from 'typeorm-transactional';
 import type { TimeRange } from '@/common/dtos';
 import type { CountByProjectIdDto } from '@/domains/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/statistics/issue/issue-statistics.service';
+import { ProjectEntity } from '../project/project.entity';
 import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
 import { CreateIssueDto, UpdateIssueDto } from './dtos';
 import {
@@ -38,7 +41,10 @@ export class IssueService {
   constructor(
     @InjectRepository(IssueEntity)
     private readonly repository: Repository<IssueEntity>,
+    @InjectRepository(ProjectEntity)
+    private readonly projectRepository: Repository<ProjectEntity>,
     private readonly issueStatisticsService: IssueStatisticsService,
+    private readonly schedulerRegistry: SchedulerRegistry,
   ) {}
 
   @Transactional()
@@ -191,18 +197,35 @@ export class IssueService {
 
   @Transactional()
   async deleteById(id: number) {
-    const issue = new IssueEntity();
-    issue.id = id;
+    const issue = await this.repository.findOne({
+      where: { id },
+      relations: { project: true },
+    });
+
+    await this.issueStatisticsService.updateCount({
+      projectId: issue.project.id,
+      date: issue.createdAt,
+      count: -1,
+    });
+
     await this.repository.remove(issue);
   }
 
   @Transactional()
   async deleteByIds(ids: number[]) {
-    const issues = ids.map((id) => {
-      const issue = new IssueEntity();
-      issue.id = id;
-      return issue;
+    const issues = await this.repository.find({
+      where: { id: In(ids) },
+      relations: { project: true },
     });
+
+    for (const issue of issues) {
+      await this.issueStatisticsService.updateCount({
+        projectId: issue.project.id,
+        date: issue.createdAt,
+        count: -1,
+      });
+    }
+
     await this.repository.remove(issues);
   }
 
@@ -213,5 +236,32 @@ export class IssueService {
         where: { project: { id: projectId } },
       }),
     };
+  }
+
+  async calculateFeedbackCount(projectId: number) {
+    await this.repository
+      .createQueryBuilder()
+      .update('issues')
+      .set({
+        feedbackCount: () =>
+          '(SELECT COUNT(*) FROM feedbacks_issues_issues WHERE issues.id = feedbacks_issues_issues.issues_id)',
+      })
+      .where('project_id = :projectId', { projectId })
+      .execute();
+  }
+
+  async addCronJob() {
+    const projects = await this.projectRepository.find();
+    for (const { id, timezone } of projects) {
+      const timezoneOffset = timezone.offset;
+
+      const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
+
+      const job = new CronJob(`30 ${cronHour} * * *`, async () => {
+        await this.calculateFeedbackCount(id);
+      });
+      this.schedulerRegistry.addCronJob(`feedback-count-by-issue-${id}`, job);
+      job.start();
+    }
   }
 }

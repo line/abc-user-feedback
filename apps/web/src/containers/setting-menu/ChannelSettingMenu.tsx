@@ -16,14 +16,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import {
-  CreateChannelButton,
-  SelectBox,
-  SettingMenuTemplate,
-} from '@/components';
+import { SelectBox, SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useChannels, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
+import { CreateChannelButton } from '../buttons';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
@@ -67,6 +64,8 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
         options={channelData?.items ?? []}
         value={channelData?.items.find((v) => v.id === channelId) ?? null}
         onChange={(input) => (input && input.id ? setChannelId(input.id) : {})}
+        getOptionValue={(option) => String(option.id)}
+        getOptionLabel={(option) => option.name}
       />
       <hr className="border-fill-tertiary basis" />
       <ul className="flex-1">

@@ -21,8 +21,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { ShareButton, TableCheckbox } from '@/components';
+import { TableCheckbox } from '@/components';
 import { DATE_FORMAT } from '@/constants/dayjs-format';
+import { ShareButton } from '@/containers/buttons';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
 import { TableRow } from '../../IssueTable/TableRow';
@@ -111,7 +112,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
                   <Icon name="EditStroke" size={16} />
                 </button>
                 <ShareButton
-                  pathname={`/main/${projectId}/feedback?ids=${
+                  pathname={`/main/project/${projectId}/feedback?ids=${
                     row.original.id
                   }&channelId=${channelId}&createdAt=${dayjs(
                     row.original.createdAt,

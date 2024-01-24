@@ -29,26 +29,30 @@ export class FeedbackStatisticsController {
     private readonly feedbackStatisticsService: FeedbackStatisticsService,
   ) {}
 
-  @ApiOkResponse({ type: [FindCountByDateByChannelResponseDto] })
+  @ApiOkResponse({ type: FindCountByDateByChannelResponseDto })
   @Get()
   async getCountByDateByChannel(
-    @Query('from') from: Date,
-    @Query('to') to: Date,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('channelIds') channelIds: string,
   ) {
-    const channelIdsArray = channelIds.split(',').map((v) => parseInt(v, 10));
+    const channelIdsArray = channelIds
+      .split(',')
+      .map((v) => parseInt(v, 10))
+      .filter((v) => !isNaN(v));
+
     return FindCountByDateByChannelResponseDto.transform(
       await this.feedbackStatisticsService.getCountByDateByChannel({
-        from,
-        to,
+        startDate,
+        endDate,
         interval,
         channelIds: channelIdsArray,
       }),
     );
   }
 
-  @ApiOkResponse({ type: [FindCountResponseDto] })
+  @ApiOkResponse({ type: FindCountResponseDto })
   @Get('/count')
   async getCount(
     @Query('from') from: Date,
@@ -64,7 +68,7 @@ export class FeedbackStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindIssuedRateResponseDto] })
+  @ApiOkResponse({ type: FindIssuedRateResponseDto })
   @Get('/issued-ratio')
   async getIssuedRatio(
     @Query('from') from: Date,

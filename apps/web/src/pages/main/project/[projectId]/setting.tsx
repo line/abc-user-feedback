@@ -16,7 +16,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { getIronSession } from 'iron-session';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -25,7 +24,6 @@ import { Icon } from '@ufb/ui';
 import { MainTemplate } from '@/components';
 import { SettingMenuBox } from '@/components/layouts/setting-menu';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { ironOption } from '@/constants/iron-option';
 import { Path } from '@/constants/path';
 import {
   APIKeySetting,
@@ -44,7 +42,6 @@ import {
   TicketSetting,
   UserSetting,
 } from '@/containers/setting-menu';
-import { env } from '@/env.mjs';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 import type { NextPageWithLayout } from '../../../_app';
 
@@ -184,36 +181,11 @@ SettingPage.getLayout = function getLayout(page) {
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({
-  req,
-  res,
   locale,
   query,
 }) => {
-  const session = await getIronSession(req, res, ironOption);
-
   const projectId = parseInt(query.projectId as string);
-  try {
-    const data = await (
-      await fetch(`${env.API_BASE_URL}/api/projects/${projectId}`, {
-        headers: { Authorization: 'Bearer ' + session.jwt?.accessToken },
-      })
-    ).json();
-    if (data?.statusCode === 401) {
-      return {
-        redirect: {
-          destination: `/main/${projectId}/not-permission`,
-          permanent: true,
-        },
-      };
-    }
-  } catch (error) {
-    return {
-      redirect: {
-        destination: `/main/${projectId}/not-permission`,
-        permanent: true,
-      },
-    };
-  }
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),

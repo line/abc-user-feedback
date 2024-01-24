@@ -28,63 +28,58 @@ dayjs.extend(weekday);
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 
-interface IProps extends React.PropsWithChildren {
-  onChange: (value: DateRangeType | null) => void;
-  value: DateRangeType | null;
+interface IProps {
+  onChange: (value: DateRangeType) => void;
+  value: DateRangeType;
   minDate?: Date;
   maxDate?: Date;
   maxDays?: number;
   isClearable?: boolean;
-  disableTotalDateRange?: boolean;
+  options?: {
+    label: string;
+    startDate: Date;
+    endDate: Date;
+  }[];
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
-  const {
-    value,
-    onChange,
-    maxDate,
-    minDate,
-    maxDays,
-    isClearable,
-    disableTotalDateRange,
-  } = props;
+  const { value, onChange, maxDate, minDate, maxDays, isClearable, options } =
+    props;
 
   const { t, i18n } = useTranslation();
-
-  const [currentValue, setCurrentValue] = useState<DateRangeType | null>(value);
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [activeIdx, setActiveIdx] = useState(-1);
-
   const items = useMemo(() => {
     return [
       {
         label: t('text.date.today'),
-        startDate: dayjs().toDate(),
-        endDate: dayjs().toDate(),
+        startDate: dayjs().startOf('day').toDate(),
+        endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.yesterday'),
-        startDate: dayjs().subtract(1, 'days').toDate(),
-        endDate: dayjs().toDate(),
+        startDate: dayjs().subtract(1, 'days').startOf('day').toDate(),
+        endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 7 }),
-        startDate: dayjs().subtract(7, 'days').toDate(),
-        endDate: dayjs().toDate(),
+        startDate: dayjs().subtract(7, 'days').startOf('day').toDate(),
+        endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 30 }),
-        startDate: dayjs().subtract(30, 'days').toDate(),
-        endDate: dayjs().toDate(),
+        startDate: dayjs().subtract(30, 'days').startOf('day').toDate(),
+        endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 90 }),
-        startDate: dayjs().subtract(90, 'days').toDate(),
-        endDate: dayjs().toDate(),
+        startDate: dayjs().subtract(90, 'days').startOf('day').toDate(),
+        endDate: dayjs().endOf('day').toDate(),
       },
     ];
-  }, [t, disableTotalDateRange]);
+  }, [t]);
+  const [currentValue, setCurrentValue] = useState<DateRangeType | null>(value);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(-1);
 
   useEffect(() => {
     setActiveIdx(-1);
@@ -119,7 +114,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       <PopoverTrigger asChild>
         <div
           className={[
-            'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between rounded border px-3.5 py-[9.5px]',
+            'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded border px-3.5 py-[9.5px]',
             currentValue ? 'text-primary' : 'text-tertiary',
             isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
           ].join(' ')}
@@ -157,7 +152,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       <PopoverContent isPortal className="bg-tertiary">
         <div className="border-fill-secondary  flex border-b">
           <ul className="border-fill-secondary border-r p-2">
-            {items.map(({ label, startDate, endDate }, index) => (
+            {(options ?? items).map(({ label, startDate, endDate }, index) => (
               <li
                 className={[
                   'font-14-regular hover:bg-fill-secondary m-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
@@ -209,7 +204,8 @@ const DateRangePicker: React.FC<IProps> = (props) => {
 const isOverMaxDays = (date: DateRangeType, maxDays: number) => {
   if (!date) return false;
   if (!date.startDate || !date.endDate) return false;
-  return dayjs(date.startDate).add(maxDays, 'days').toDate() < date.endDate;
+
+  return maxDays < dayjs(date.endDate).diff(date.startDate, 'days');
 };
 
 export default DateRangePicker;

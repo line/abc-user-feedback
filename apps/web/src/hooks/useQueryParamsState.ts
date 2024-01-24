@@ -94,13 +94,7 @@ const useQueryParamsState = (
       }
 
       router.push(
-        {
-          pathname,
-          query: {
-            ...defaultQuery,
-            ...newQuery,
-          },
-        },
+        { pathname, query: { ...defaultQuery, ...newQuery } },
         undefined,
         { shallow: true },
       );

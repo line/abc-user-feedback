@@ -25,6 +25,7 @@ import { Transactional } from 'typeorm-transactional';
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateFeedbackCountDto } from './dtos';
 import type { GetCountByDateByIssueDto } from './dtos';
 import { FeedbackIssueStatisticsEntity } from './feedback-issue-statistics.entity';
@@ -48,12 +49,12 @@ export class FeedbackIssueStatisticsService {
   ) {}
 
   async getCountByDateByIssue(dto: GetCountByDateByIssueDto) {
-    const { from, to, interval, issueIds } = dto;
+    const { startDate, endDate, interval, issueIds } = dto;
 
     const feedbackIssueStatistics = await this.repository.find({
       where: {
         issue: { id: In(issueIds) },
-        date: Between(from, to),
+        date: Between(new Date(startDate), new Date(endDate)),
       },
       relations: { issue: true },
       order: { issue: { id: 'ASC' }, date: 'ASC' },
@@ -72,21 +73,20 @@ export class FeedbackIssueStatisticsService {
             acc.push(issue);
           }
 
-          const intervalCount = Math.ceil(
-            DateTime.fromJSDate(new Date(curr.date))
-              .until(DateTime.fromJSDate(to))
-              .length(interval),
+          const { startOfInterval, endOfInterval } = getIntervalDatesInFormat(
+            startDate,
+            endDate,
+            curr.date,
+            interval,
           );
-          const endOfInterval = DateTime.fromJSDate(to).minus({
-            [interval]: intervalCount,
-          });
 
           let statistic = issue.statistics.find(
-            (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
+            (stat) => stat.startDate === startOfInterval,
           );
           if (!statistic) {
             statistic = {
-              date: endOfInterval.toFormat('yyyy-MM-dd'),
+              startDate: startOfInterval,
+              endDate: endOfInterval,
               feedbackCount: 0,
             };
             issue.statistics.push(statistic);
@@ -98,21 +98,24 @@ export class FeedbackIssueStatisticsService {
         [] as {
           id: number;
           name: string;
-          statistics: { date: string; feedbackCount: number }[];
+          statistics: {
+            startDate: string;
+            endDate: string;
+            feedbackCount: number;
+          }[];
         }[],
       ),
     };
   }
 
   async addCronJobByProjectId(projectId: number) {
-    const { timezoneOffset } = await this.projectRepository.findOne({
+    const { timezone } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-
+    const timezoneOffset = timezone.offset;
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
-
-    const job = new CronJob(`0 ${cronHour} * * *`, async () => {
-      await this.createFeedbackIssueStatistics(projectId);
+    const job = new CronJob(`2 ${cronHour} * * *`, async () => {
+      await this.createFeedbackIssueStatistics(projectId, 365);
     });
     this.schedulerRegistry.addCronJob(
       `feedback-issue-statistics-${projectId}`,
@@ -128,9 +131,10 @@ export class FeedbackIssueStatisticsService {
     projectId: number,
     dayToCreate: number = 1,
   ) {
-    const { timezoneOffset } = await this.projectRepository.findOne({
+    const { timezone } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
+    const timezoneOffset = timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
@@ -191,9 +195,23 @@ export class FeedbackIssueStatisticsService {
     if (dto.feedbackCount === 0) return;
     if (!dto.feedbackCount) dto.feedbackCount = 1;
 
+    const { timezone } = await this.projectRepository.findOne({
+      where: { issues: { id: dto.issueId } },
+    });
+    const timezoneOffset = timezone.offset;
+    const [hours, minutes] = timezoneOffset.split(':');
+    const offset = Number(hours) + Number(minutes) / 60;
+
+    const date = new Date(
+      DateTime.fromJSDate(dto.date)
+        .plus({ hours: offset })
+        .toISO()
+        .split('T')[0] + 'T00:00:00',
+    );
+
     const stats = await this.repository.findOne({
       where: {
-        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        date,
         issue: { id: dto.issueId },
       },
     });
@@ -207,7 +225,7 @@ export class FeedbackIssueStatisticsService {
         .createQueryBuilder()
         .insert()
         .values({
-          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          date,
           feedbackCount: dto.feedbackCount,
           issue: { id: dto.issueId },
         })

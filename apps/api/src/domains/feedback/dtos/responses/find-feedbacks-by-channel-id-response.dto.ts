@@ -26,7 +26,21 @@ export class Feedback {
 
 export class FindFeedbacksByChannelIdResponseDto extends PaginationResponseDto<Feedback> {
   @Expose()
-  @ApiProperty({ type: [Feedback] })
+  @ApiProperty({
+    type: [Feedback],
+    example: [
+      {
+        id: 1,
+        name: 'feedback',
+        issues: [
+          {
+            id: 1,
+            name: 'issue',
+          },
+        ],
+      },
+    ],
+  })
   @Type(() => Feedback)
   items: Feedback[];
 

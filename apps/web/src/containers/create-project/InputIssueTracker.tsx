@@ -94,26 +94,28 @@ const InputIssueTracker: React.FC<IProps> = () => {
       }
       return;
     }
+
+    const { apiKeys, issueTracker, members, projectInfo, roles } = input;
+
     mutate({
-      name: input.projectInfo.name,
-      description: input.projectInfo.description,
-      apiKeys: input.apiKeys,
-      issueTracker: { data: input.issueTracker as any },
-      members: input.members.map((member) => ({
-        roleName:
-          input.roles.find((role) => role.id === member.roleId)?.name ?? '',
+      name: projectInfo.name,
+      description: projectInfo.description,
+      apiKeys: apiKeys,
+      issueTracker: { data: issueTracker as any },
+      members: members.map((member) => ({
+        roleName: roles.find((role) => role.id === member.roleId)?.name ?? '',
         userId: member.user.id,
       })),
-      roles: input.roles,
-      timezoneOffset: '+09:00',
+      roles: roles,
+      timezone: projectInfo.timezone,
     });
   };
 
   return (
     <CreateProjectInputTemplate onComplete={onComplete} isLoading={isPending}>
       <SelectBox
-        options={[{ key: 'jira', name: 'JIRA' }]}
-        value={{ key: 'jira', name: 'JIRA' }}
+        options={[{ value: 'jira', label: 'JIRA' }]}
+        value={{ value: 'jira', label: 'JIRA' }}
         label="Issue Tracking System"
       />
       <TextInput

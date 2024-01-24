@@ -16,13 +16,24 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 
-export class FindCountByDateResponseDto {
+class IssueStatistics {
   @ApiProperty()
   @Expose()
-  statistics: {
-    date: string;
-    count: number;
-  }[];
+  startDate: string;
+
+  @ApiProperty()
+  @Expose()
+  endDate: string;
+
+  @ApiProperty()
+  @Expose()
+  count: number;
+}
+
+export class FindCountByDateResponseDto {
+  @ApiProperty({ type: [IssueStatistics] })
+  @Expose()
+  statistics: IssueStatistics[];
 
   public static transform(params: any): FindCountByDateResponseDto {
     return plainToInstance(FindCountByDateResponseDto, params, {

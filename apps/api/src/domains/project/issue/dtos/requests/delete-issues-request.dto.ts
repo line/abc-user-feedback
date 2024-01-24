@@ -17,7 +17,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray } from 'class-validator';
 
 export class DeleteIssuesRequestDto {
-  @ApiProperty({ type: [Number] })
+  @ApiProperty({
+    type: [Number],
+    description: 'Issue ids in an array to delete in chunk',
+    example: [1, 2, 3],
+  })
   @IsArray()
   issueIds: number[];
 }

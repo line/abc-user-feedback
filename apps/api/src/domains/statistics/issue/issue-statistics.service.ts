@@ -24,8 +24,13 @@ import { Transactional } from 'typeorm-transactional';
 
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateCountDto } from './dtos';
-import type { GetCountByDateDto, GetCountDto } from './dtos';
+import type {
+  GetCountByDateDto,
+  GetCountByStatusDto,
+  GetCountDto,
+} from './dtos';
 import { IssueStatisticsEntity } from './issue-statistics.entity';
 
 dotenv.config();
@@ -56,11 +61,11 @@ export class IssueStatisticsService {
   }
 
   async getCountByDate(dto: GetCountByDateDto) {
-    const { from, to, interval } = dto;
+    const { startDate, endDate, interval } = dto;
 
     const issueStatistics = await this.repository.find({
       where: {
-        date: Between(from, to),
+        date: Between(new Date(startDate), new Date(endDate)),
         project: { id: dto.projectId },
       },
       order: { date: 'ASC' },
@@ -69,21 +74,20 @@ export class IssueStatisticsService {
     return {
       statistics: issueStatistics.reduce(
         (acc, curr) => {
-          const intervalCount = Math.ceil(
-            DateTime.fromJSDate(new Date(curr.date))
-              .until(DateTime.fromJSDate(to))
-              .length(interval),
+          const { startOfInterval, endOfInterval } = getIntervalDatesInFormat(
+            startDate,
+            endDate,
+            curr.date,
+            interval,
           );
-          const endOfInterval = DateTime.fromJSDate(to).minus({
-            [interval]: intervalCount,
-          });
 
           let statistic = acc.find(
-            (stat) => stat.date === endOfInterval.toFormat('yyyy-MM-dd'),
+            (stat) => stat.startDate === startOfInterval,
           );
           if (!statistic) {
             statistic = {
-              date: endOfInterval.toFormat('yyyy-MM-dd'),
+              startDate: startOfInterval,
+              endDate: endOfInterval,
               count: 0,
             };
             acc.push(statistic);
@@ -92,39 +96,36 @@ export class IssueStatisticsService {
 
           return acc;
         },
-        [] as { date: string; count: number }[],
+        [] as { startDate: string; endDate: string; count: number }[],
       ),
     };
   }
 
-  async getCountByStatus(dto: GetCountDto) {
+  async getCountByStatus(dto: GetCountByStatusDto) {
     return {
       statistics: await this.issueRepository
         .createQueryBuilder('issue')
         .select('issue.status', 'status')
         .addSelect('COUNT(issue.id)', 'count')
         .where('issue.project_id = :projectId', { projectId: dto.projectId })
-        .andWhere('issue.createdAt BETWEEN :from AND :to', {
-          from: dto.from,
-          to: dto.to,
-        })
         .groupBy('issue.status')
         .getRawMany()
         .then((res) =>
-          res.map((stat) => ({ status: stat.status, count: stat.count })),
+          res.map((stat) => ({ status: stat.status, count: +stat.count })),
         ),
     };
   }
 
   async addCronJobByProjectId(projectId: number) {
-    const { timezoneOffset } = await this.projectRepository.findOne({
+    const { timezone } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
+    const timezoneOffset = timezone.offset;
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
-    const job = new CronJob(`0 ${cronHour} * * *`, async () => {
-      await this.createIssueStatistics(projectId);
+    const job = new CronJob(`4 ${cronHour} * * *`, async () => {
+      await this.createIssueStatistics(projectId, 365);
     });
     this.schedulerRegistry.addCronJob(`issue-statistics-${projectId}`, job);
     job.start();
@@ -134,9 +135,10 @@ export class IssueStatisticsService {
 
   @Transactional()
   async createIssueStatistics(projectId: number, dayToCreate: number = 1) {
-    const { timezoneOffset, id } = await this.projectRepository.findOne({
+    const { timezone, id } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
+    const timezoneOffset = timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
@@ -191,9 +193,23 @@ export class IssueStatisticsService {
     if (dto.count === 0) return;
     if (!dto.count) dto.count = 1;
 
+    const { timezone } = await this.projectRepository.findOne({
+      where: { id: dto.projectId },
+    });
+    const timezoneOffset = timezone.offset;
+    const [hours, minutes] = timezoneOffset.split(':');
+    const offset = Number(hours) + Number(minutes) / 60;
+
+    const date = new Date(
+      DateTime.fromJSDate(dto.date)
+        .plus({ hours: offset })
+        .toISO()
+        .split('T')[0] + 'T00:00:00',
+    );
+
     const stats = await this.repository.findOne({
       where: {
-        date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+        date,
         project: { id: dto.projectId },
       },
     });
@@ -207,7 +223,7 @@ export class IssueStatisticsService {
         .createQueryBuilder()
         .insert()
         .values({
-          date: new Date(dto.date.toISOString().split('T')[0] + 'T00:00:00'),
+          date,
           count: dto.count,
           project: { id: dto.projectId },
         })

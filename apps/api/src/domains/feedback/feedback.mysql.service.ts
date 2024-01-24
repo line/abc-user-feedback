@@ -18,7 +18,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
 import { ClsService } from 'nestjs-cls';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
-import { Brackets, QueryFailedError, Repository } from 'typeorm';
+import { Brackets, In, QueryFailedError, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
@@ -28,14 +28,13 @@ import { ChannelEntity } from '../channel/channel/channel.entity';
 import type { FieldEntity } from '../channel/field/field.entity';
 import { OptionEntity } from '../channel/option/option.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
-import type {
-  CountByProjectIdDto,
-  DeleteByIdsDto,
-  FindFeedbacksByChannelIdDto,
-} from './dtos';
+import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/feedback-issue-statistics.service';
+import { FeedbackStatisticsService } from '../statistics/feedback/feedback-statistics.service';
+import type { CountByProjectIdDto, FindFeedbacksByChannelIdDto } from './dtos';
 import {
   AddIssueDto,
   CreateFeedbackMySQLDto,
+  DeleteByIdsDto,
   RemoveIssueDto,
   UpdateFeedbackMySQLDto,
 } from './dtos';
@@ -54,6 +53,8 @@ export class FeedbackMySQLService {
     @InjectRepository(OptionEntity)
     private readonly optionRepository: Repository<OptionEntity>,
     private readonly cls: ClsService<ClsServiceType>,
+    private readonly feedbackStatisticsService: FeedbackStatisticsService,
+    private readonly feedbackIssueStatisticsService: FeedbackIssueStatisticsService,
   ) {}
 
   @Transactional()
@@ -62,6 +63,13 @@ export class FeedbackMySQLService {
     feedback.channel = new ChannelEntity();
     feedback.channel.id = channelId;
     feedback.rawData = data;
+
+    await this.feedbackStatisticsService.updateCount({
+      channelId,
+      date: DateTime.utc().toJSDate(),
+      count: 1,
+    });
+
     return await this.feedbackRepository.save(feedback);
   }
 
@@ -273,6 +281,9 @@ export class FeedbackMySQLService {
       .update('feedbacks')
       .set({
         additionalData: () => {
+          if (Object.keys(data).length === 0) {
+            return 'additional_data';
+          }
           let query = `JSON_SET(IFNULL(feedbacks.additional_data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
             query += `'$."${fieldKey}"', ${
@@ -323,6 +334,12 @@ export class FeedbackMySQLService {
         feedbackCount: () => 'feedback_count + 1',
         updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       });
+
+      await this.feedbackIssueStatisticsService.updateFeedbackCount({
+        issueId: dto.issueId,
+        date: feedback.createdAt,
+        feedbackCount: 1,
+      });
     } catch (e) {
       if (e instanceof QueryFailedError) {
         if (e.driverError.code === 'ER_NO_REFERENCED_ROW_2') {
@@ -360,6 +377,12 @@ export class FeedbackMySQLService {
         feedbackCount: () => 'feedback_count - 1',
         updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       });
+
+      await this.feedbackIssueStatisticsService.updateFeedbackCount({
+        issueId,
+        date: feedback.createdAt,
+        feedbackCount: -1,
+      });
     } catch (e) {
       if (e instanceof QueryFailedError) {
         this.logger.error(e);
@@ -376,12 +399,47 @@ export class FeedbackMySQLService {
     });
   }
 
-  async deleteByIds({ feedbackIds }: DeleteByIdsDto) {
-    const feedbacks = feedbackIds.map((id) => {
-      const feedback = new FeedbackEntity();
-      feedback.id = id;
-      return feedback;
+  @Transactional()
+  async deleteByIds({ channelId, feedbackIds }: DeleteByIdsDto) {
+    const feedbacks = await this.feedbackRepository.find({
+      where: { id: In(feedbackIds) },
+      relations: { issues: true },
     });
+
+    for (const feedback of feedbacks) {
+      for (const issue of feedback.issues) {
+        await this.issueRepository.update(issue.id, {
+          feedbackCount: () => 'feedback_count - 1',
+          updatedAt: () =>
+            `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
+        });
+      }
+
+      await this.feedbackStatisticsService.updateCount({
+        channelId,
+        date: feedback.createdAt,
+        count: -1,
+      });
+    }
+
     await this.feedbackRepository.remove(feedbacks);
+  }
+
+  async findById({ feedbackId }: { feedbackId: number }) {
+    const feedback = await this.feedbackRepository.findOne({
+      where: { id: feedbackId },
+      relations: ['issues'],
+    });
+    if (!feedback) {
+      throw new BadRequestException('unknown id');
+    }
+    return {
+      ...feedback.rawData,
+      ...feedback.additionalData,
+      id: feedback.id,
+      createdAt: feedback.createdAt,
+      updatedAt: feedback.updatedAt,
+      issues: feedback.issues,
+    };
   }
 }

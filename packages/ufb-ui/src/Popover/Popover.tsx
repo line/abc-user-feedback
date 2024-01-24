@@ -201,7 +201,7 @@ export const PopoverContent = React.forwardRef<
           ...(context.modal || disabledFloatingStyle
             ? { position: 'absolute' }
             : context.floatingStyles),
-          zIndex: 20,
+          zIndex: 50,
           ...style,
         }}
         aria-labelledby={context.labelId}
@@ -220,7 +220,7 @@ export const PopoverContent = React.forwardRef<
     <FloatingOverlay
       lockScroll={context.modal}
       className="bg-dim"
-      style={{ display: 'grid', placeItems: 'center', zIndex: 20 }}
+      style={{ display: 'grid', placeItems: 'center', zIndex: 50 }}
     >
       {child}
     </FloatingOverlay>
@@ -263,6 +263,24 @@ export const PopoverHeading = React.forwardRef<
     </div>
   );
 });
+export const PopoverCloseButton: React.FC = () => {
+  const { setLabelId, setOpen } = usePopoverContext();
+  const id = useId();
+
+  React.useLayoutEffect(() => {
+    setLabelId(id);
+    return () => setLabelId(undefined);
+  }, [id, setLabelId]);
+
+  return (
+    <button
+      className="icon-btn icon-btn-tertiary icon-btn-xs"
+      onClick={() => setOpen(false)}
+    >
+      <Icon name="Close" />
+    </button>
+  );
+};
 
 export interface IPopoverModalContentProps extends React.PropsWithChildren {
   title: string;

@@ -29,7 +29,7 @@ export class IssueStatisticsController {
     private readonly issueStatisticsService: IssueStatisticsService,
   ) {}
 
-  @ApiOkResponse({ type: [FindCountResponseDto] })
+  @ApiOkResponse({ type: FindCountResponseDto })
   @Get('/count')
   async getCount(
     @Query('from') from: Date,
@@ -45,35 +45,29 @@ export class IssueStatisticsController {
     );
   }
 
-  @ApiOkResponse({ type: [FindCountByDateResponseDto] })
+  @ApiOkResponse({ type: FindCountByDateResponseDto })
   @Get('/count-by-date')
   async getCountByDate(
-    @Query('from') from: Date,
-    @Query('to') to: Date,
+    @Query('startDate') startDate: string,
+    @Query('endDate') endDate: string,
     @Query('interval') interval: 'day' | 'week' | 'month',
     @Query('projectId') projectId: number,
   ) {
     return FindCountByDateResponseDto.transform(
       await this.issueStatisticsService.getCountByDate({
-        from,
-        to,
+        startDate,
+        endDate,
         interval,
         projectId,
       }),
     );
   }
 
-  @ApiOkResponse({ type: [FindCountByStatusResponseDto] })
+  @ApiOkResponse({ type: FindCountByStatusResponseDto })
   @Get('/count-by-status')
-  async getCountByStatus(
-    @Query('from') from: Date,
-    @Query('to') to: Date,
-    @Query('projectId') projectId: number,
-  ) {
+  async getCountByStatus(@Query('projectId') projectId: number) {
     return FindCountByStatusResponseDto.transform(
       await this.issueStatisticsService.getCountByStatus({
-        from,
-        to,
         projectId,
       }),
     );

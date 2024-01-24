@@ -37,6 +37,8 @@ import { ChannelEntity } from '../channel/channel/channel.entity';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
+import { ProjectEntity } from '../project/project/project.entity';
+import { FeedbackIssueStatisticsEntity } from '../statistics/feedback-issue/feedback-issue-statistics.entity';
 import { FeedbackStatisticsEntity } from '../statistics/feedback/feedback-statistics.entity';
 import { IssueStatisticsEntity } from '../statistics/issue/issue-statistics.entity';
 import { CreateFeedbackDto, FindFeedbacksByChannelIdDto } from './dtos';
@@ -72,9 +74,11 @@ describe('FeedbackService Test Suite', () => {
   let fieldRepo: Repository<FieldEntity>;
   let issueRepo: Repository<IssueEntity>;
   let channelRepo: Repository<ChannelEntity>;
+  let projectRepo: Repository<ProjectEntity>;
   let osRepo: OpensearchRepository;
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let issueStatsRepo: Repository<IssueStatisticsEntity>;
+  let feedbackIssueStatsRepo: Repository<FeedbackIssueStatisticsEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       imports: [TestConfig],
@@ -87,11 +91,15 @@ describe('FeedbackService Test Suite', () => {
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
     issueRepo = module.get(getRepositoryToken(IssueEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
+    projectRepo = module.get(getRepositoryToken(ProjectEntity));
     osRepo = module.get(OpensearchRepository);
     feedbackStatsRepo = module.get(
       getRepositoryToken(FeedbackStatisticsEntity),
     );
     issueStatsRepo = module.get(getRepositoryToken(IssueStatisticsEntity));
+    feedbackIssueStatsRepo = module.get(
+      getRepositoryToken(FeedbackIssueStatisticsEntity),
+    );
   });
 
   describe('create', () => {
@@ -99,6 +107,12 @@ describe('FeedbackService Test Suite', () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
         id: faker.number.int(),
@@ -312,6 +326,12 @@ describe('FeedbackService Test Suite', () => {
       }).map(() => faker.string.sample());
       dto.data.issueNames = [...issueNames, faker.string.sample()];
       const feedbackId = faker.number.int();
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
         id: feedbackId,
@@ -338,12 +358,16 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
         id: feedbackId,
         issues: [],
+        createdAt: new Date(),
       } as FeedbackEntity);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
+      jest
+        .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilder);
       clsService.set = jest.fn();
 
@@ -365,6 +389,12 @@ describe('FeedbackService Test Suite', () => {
       }).map(() => faker.string.sample());
       dto.data.issueNames = [...issueNames];
       const feedbackId = faker.number.int();
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
         id: feedbackId,
@@ -378,10 +408,14 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
         id: feedbackId,
         issues: [],
+        createdAt: new Date(),
       } as FeedbackEntity);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
+      jest
+        .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
       clsService.set = jest.fn();
 
       await feedbackService.create(dto);
@@ -397,6 +431,12 @@ describe('FeedbackService Test Suite', () => {
       dto.data = JSON.parse(JSON.stringify(feedbackFixture));
       dto.data.issueNames = [faker.string.sample()];
       const feedbackId = faker.number.int();
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(feedbackRepo, 'save').mockResolvedValue({
         id: feedbackId,
@@ -420,12 +460,16 @@ describe('FeedbackService Test Suite', () => {
       jest.spyOn(feedbackRepo, 'findOne').mockResolvedValue({
         id: feedbackId,
         issues: [],
+        createdAt: new Date(),
       } as FeedbackEntity);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
+      jest
+        .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilder);
       clsService.set = jest.fn();
 

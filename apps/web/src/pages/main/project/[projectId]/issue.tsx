@@ -14,28 +14,35 @@
  * under the License.
  */
 import type { GetServerSideProps } from 'next';
-import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { CreateChannelButton, MainTemplate } from '@/components';
+import { MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { ironOption } from '@/constants/iron-option';
+import { CreateChannelButton } from '@/containers/buttons';
 import { IssueTable } from '@/containers/tables';
-import { env } from '@/env.mjs';
+import { useOAIQuery } from '@/hooks';
 import type { NextPageWithLayout } from '../../../_app';
 
 interface IProps {
   projectId: number;
-  noChannel?: boolean;
 }
 const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
-  const { projectId, noChannel } = props;
+  const { projectId } = props;
   const { t } = useTranslation();
+  const { data, status } = useOAIQuery({
+    path: '/api/projects/{projectId}/channels',
+    variables: { projectId },
+  });
+
   return (
     <>
       <h1 className="font-20-bold mb-3">{t('main.issue.title')}</h1>
-      {noChannel ? (
+      {status === 'pending' ? (
+        <p className="font-32-bold animate-bounce">Loading...</p>
+      ) : status === 'error' ? (
+        <p className="font-32-bold">Not Permission</p>
+      ) : data.meta.totalItems === 0 ? (
         <div className="flex flex-1 items-center justify-center">
           <CreateChannelButton projectId={projectId} type="blue" />
         </div>
@@ -51,51 +58,10 @@ IssueMangementPage.getLayout = function getLayout(page) {
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({
-  req,
-  res,
   locale,
   query,
 }) => {
-  const session = await getIronSession(req, res, ironOption);
-
   const projectId = parseInt(query.projectId as string);
-
-  const response1 = await fetch(
-    `${env.API_BASE_URL}/api/projects/${projectId}`,
-    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
-  );
-
-  if (response1.status === 401) {
-    return {
-      redirect: {
-        destination: `/main/${projectId}/not-permission`,
-        permanent: true,
-      },
-    };
-  }
-
-  const response2 = await fetch(
-    `${env.API_BASE_URL}/api/projects/${projectId}/channels`,
-    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
-  );
-  if (response2.status === 401) {
-    return {
-      redirect: {
-        destination: `/main/${projectId}/not-permission`,
-        permanent: true,
-      },
-    };
-  }
-  const data = await response2.json();
-  if (data.meta.totalItems === 0) {
-    return {
-      props: {
-        ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
-        projectId,
-        noChannel: true,
-      },
-    };
-  }
 
   return {
     props: {

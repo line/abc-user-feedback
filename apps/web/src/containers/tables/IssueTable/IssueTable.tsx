@@ -36,7 +36,6 @@ import {
   DateRangePicker,
   ExpandableText,
   IssueCircle,
-  ShareButton,
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
@@ -48,6 +47,7 @@ import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSear
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
+import { ShareButton } from '@/containers/buttons';
 import {
   useIssueSearch,
   useOAIMutation,
@@ -202,10 +202,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     () => Object.keys(rowSelection).map((v) => parseInt(v)),
     [rowSelection],
   );
+
   const q = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
       if (key === 'status' && value === 'total') return prev;
-      if (createdAtRange) {
+      if (key === 'createdAt' && createdAtRange) {
         return {
           ...prev,
           createdAt: {
@@ -214,6 +215,8 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           },
         };
       }
+      console.log('key, value: ', key, value);
+
       return { ...prev, [key]: value };
     }, {});
   }, [query, createdAtRange]);
@@ -400,11 +403,12 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           onChange={row.getToggleSelectedHandler()}
                         />
                         <ShareButton
-                          pathname={`/main/${projectId}/issue?id=${row.original.id}`}
+                          pathname={`/main/project/${projectId}/issue?id=${row.original.id}`}
                         />
                         <IssueSettingPopover
                           issue={row.original}
-                          refetch={refetch}
+                          refetchIssueTable={refetch}
+                          createdAtRange={createdAtRange}
                           issueTracker={
                             issueTracker?.data as IssueTrackerType | undefined
                           }

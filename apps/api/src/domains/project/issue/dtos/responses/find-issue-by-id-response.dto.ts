@@ -20,35 +20,48 @@ import { IssueStatusEnum } from '@/common/enums';
 
 export class FindIssueByIdResponseDto {
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'Issue id', example: 1 })
   id: number;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'Issue Name', example: 1 })
   name: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Issue description',
+    example: 'This is a payment issue',
+  })
   description: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Issue status',
+    example: IssueStatusEnum.IN_PROGRESS,
+    enum: IssueStatusEnum,
+  })
   status: IssueStatusEnum;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'External Issue Id', example: '123' })
   externalIssueId: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ description: 'Feedback count of the issue', example: 100 })
   feedbackCount: number;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Created datetime of the issue',
+    example: '2023-01-01T00:00:00.000Z',
+  })
   createdAt: Date;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Updated datetime of the issue',
+    example: '2023-01-01T00:00:00.000Z',
+  })
   updatedAt: Date;
 
   public static transform(params: any): FindIssueByIdResponseDto {

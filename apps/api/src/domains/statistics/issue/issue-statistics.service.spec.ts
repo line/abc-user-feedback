@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { DateTime } from 'luxon';
 import type { Repository } from 'typeorm';
 
 import { IssueEntity } from '@/domains/project/issue/issue.entity';
@@ -90,13 +91,13 @@ describe('IssueStatisticsService suite', () => {
 
   describe('getCountByDate', () => {
     it('getting counts by date succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'day';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.projectId = projectId;
       jest.spyOn(issueStatsRepo, 'find').mockResolvedValue(issueStatsFixture);
@@ -108,31 +109,35 @@ describe('IssueStatisticsService suite', () => {
         statistics: [
           {
             count: 1,
-            date: '2023-01-01',
+            startDate: '2023-01-01',
+            endDate: '2023-01-01',
           },
           {
             count: 2,
-            date: '2023-01-02',
+            startDate: '2023-01-02',
+            endDate: '2023-01-02',
           },
           {
             count: 3,
-            date: '2023-01-08',
+            startDate: '2023-01-08',
+            endDate: '2023-01-08',
           },
           {
             count: 4,
-            date: '2023-02-01',
+            startDate: '2023-02-01',
+            endDate: '2023-02-01',
           },
         ],
       });
     });
     it('getting counts by week by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-03';
       const interval = 'week';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.projectId = projectId;
       jest.spyOn(issueStatsRepo, 'find').mockResolvedValue(issueStatsFixture);
@@ -143,28 +148,31 @@ describe('IssueStatisticsService suite', () => {
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
-            count: 3,
-            date: '2023-01-01',
+            count: 1,
+            startDate: '2023-01-01',
+            endDate: '2023-01-01',
           },
           {
-            count: 3,
-            date: '2023-01-08',
+            count: 5,
+            startDate: '2023-01-02',
+            endDate: '2023-01-08',
           },
           {
             count: 4,
-            date: '2023-01-29',
+            startDate: '2023-01-30',
+            endDate: '2023-02-05',
           },
         ],
       });
     });
     it('getting counts by month by channel succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'month';
       const projectId = faker.number.int();
       const dto = new GetCountByDateDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.projectId = projectId;
       jest.spyOn(issueStatsRepo, 'find').mockResolvedValue(issueStatsFixture);
@@ -176,11 +184,13 @@ describe('IssueStatisticsService suite', () => {
         statistics: [
           {
             count: 6,
-            date: '2022-12-31',
+            startDate: '2023-01-01',
+            endDate: '2023-01-31',
           },
           {
             count: 4,
-            date: '2023-01-31',
+            startDate: '2023-02-01',
+            endDate: '2023-02-28',
           },
         ],
       });
@@ -213,7 +223,11 @@ describe('IssueStatisticsService suite', () => {
     it('adding a cron job succeeds with valid input', async () => {
       const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezoneOffset: '+09:00',
+        timezone: {
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+          offset: '+09:00',
+        },
       } as ProjectEntity);
       jest.spyOn(schedulerRegistry, 'addCronJob');
 
@@ -232,7 +246,11 @@ describe('IssueStatisticsService suite', () => {
       const projectId = faker.number.int();
       const dayToCreate = faker.number.int({ min: 2, max: 10 });
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezoneOffset: '+09:00',
+        timezone: {
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+          offset: '+09:00',
+        },
       } as ProjectEntity);
       jest.spyOn(issueRepo, 'count').mockResolvedValueOnce(0);
       jest.spyOn(issueRepo, 'count').mockResolvedValue(1);
@@ -254,6 +272,12 @@ describe('IssueStatisticsService suite', () => {
       const projectId = faker.number.int();
       const date = faker.date.past();
       const count = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(issueStatsRepo, 'findOne').mockResolvedValue({
         count: 1,
       } as IssueStatisticsEntity);
@@ -274,6 +298,12 @@ describe('IssueStatisticsService suite', () => {
       const projectId = faker.number.int();
       const date = faker.date.past();
       const count = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(issueStatsRepo, 'findOne').mockResolvedValue(null);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
@@ -290,7 +320,10 @@ describe('IssueStatisticsService suite', () => {
       expect(issueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
-        date: new Date(date.toISOString().split('T')[0] + 'T00:00:00'),
+        date: new Date(
+          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO().split('T')[0] +
+            'T00:00:00',
+        ),
         count,
         project: { id: projectId },
       });

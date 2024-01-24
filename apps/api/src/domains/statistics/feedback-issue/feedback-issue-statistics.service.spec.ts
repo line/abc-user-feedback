@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { DateTime } from 'luxon';
 import type { Repository } from 'typeorm';
 
 import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
@@ -95,13 +96,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
 
   describe('getCountByDateByissue', () => {
     it('getting counts by day by issue succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'day';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.issueIds = issueIds;
       jest
@@ -120,19 +121,23 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 1,
-                date: '2023-01-01',
+                startDate: '2023-01-01',
+                endDate: '2023-01-01',
               },
               {
                 feedbackCount: 2,
-                date: '2023-01-02',
+                startDate: '2023-01-02',
+                endDate: '2023-01-02',
               },
               {
                 feedbackCount: 3,
-                date: '2023-01-08',
+                startDate: '2023-01-08',
+                endDate: '2023-01-08',
               },
               {
                 feedbackCount: 4,
-                date: '2023-02-01',
+                startDate: '2023-02-01',
+                endDate: '2023-02-01',
               },
             ],
           },
@@ -140,13 +145,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
     });
     it('getting counts by week by issue succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'week';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.issueIds = issueIds;
       jest
@@ -164,16 +169,19 @@ describe('FeedbackIssueStatisticsService suite', () => {
             name: 'issue1',
             statistics: [
               {
-                feedbackCount: 3,
-                date: '2023-01-01',
+                feedbackCount: 1,
+                startDate: '2023-01-01',
+                endDate: '2023-01-01',
               },
               {
-                feedbackCount: 3,
-                date: '2023-01-08',
+                feedbackCount: 5,
+                startDate: '2023-01-02',
+                endDate: '2023-01-08',
               },
               {
                 feedbackCount: 4,
-                date: '2023-01-29',
+                startDate: '2023-01-30',
+                endDate: '2023-02-05',
               },
             ],
           },
@@ -181,13 +189,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
       });
     });
     it('getting counts by month by issue succeeds with valid inputs', async () => {
-      const from = new Date('2023-01-01');
-      const to = new Date('2023-12-31');
+      const startDate = '2023-01-01';
+      const endDate = '2023-12-31';
       const interval = 'month';
       const issueIds = [faker.number.int(), faker.number.int()];
       const dto = new GetCountByDateByIssueDto();
-      dto.from = from;
-      dto.to = to;
+      dto.startDate = startDate;
+      dto.endDate = endDate;
       dto.interval = interval;
       dto.issueIds = issueIds;
       jest
@@ -206,11 +214,13 @@ describe('FeedbackIssueStatisticsService suite', () => {
             statistics: [
               {
                 feedbackCount: 6,
-                date: '2022-12-31',
+                startDate: '2023-01-01',
+                endDate: '2023-01-31',
               },
               {
                 feedbackCount: 4,
-                date: '2023-01-31',
+                startDate: '2023-02-01',
+                endDate: '2023-02-28',
               },
             ],
           },
@@ -223,7 +233,11 @@ describe('FeedbackIssueStatisticsService suite', () => {
     it('adding a cron job succeeds with valid input', async () => {
       const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezoneOffset: '+09:00',
+        timezone: {
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+          offset: '+09:00',
+        },
       } as ProjectEntity);
       jest.spyOn(schedulerRegistry, 'addCronJob');
 
@@ -246,7 +260,11 @@ describe('FeedbackIssueStatisticsService suite', () => {
         id: faker.number.int(),
       }));
       jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezoneOffset: '+09:00',
+        timezone: {
+          countryCode: 'KR',
+          name: 'Asia/Seoul',
+          offset: '+09:00',
+        },
       } as ProjectEntity);
       jest.spyOn(issueRepo, 'find').mockResolvedValue(issues as IssueEntity[]);
       jest.spyOn(feedbackRepo, 'count').mockResolvedValueOnce(0);
@@ -272,6 +290,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const issueId = faker.number.int();
       const date = faker.date.past();
       const feedbackCount = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue({
         feedbackCount: 1,
       } as FeedbackIssueStatisticsEntity);
@@ -292,6 +316,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const issueId = faker.number.int();
       const date = faker.date.past();
       const feedbackCount = faker.number.int({ min: 1, max: 10 });
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
+        id: faker.number.int(),
+        timezone: {
+          offset: '+09:00',
+        },
+      } as ProjectEntity);
       jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue(null);
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
@@ -308,7 +338,10 @@ describe('FeedbackIssueStatisticsService suite', () => {
       expect(feedbackIssueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
-        date: new Date(date.toISOString().split('T')[0] + 'T00:00:00'),
+        date: new Date(
+          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO().split('T')[0] +
+            'T00:00:00',
+        ),
         feedbackCount,
         issue: { id: issueId },
       });

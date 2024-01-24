@@ -14,5 +14,6 @@
  * under the License.
  */
 export { GetCountByDateDto } from './get-count-by-date-by-channel.dto';
+export { GetCountByStatusDto } from './get-count-by-status.dto';
 export { GetCountDto } from './get-count.dto';
 export { UpdateCountDto } from './update-count.dto';

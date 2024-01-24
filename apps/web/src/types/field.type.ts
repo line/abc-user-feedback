@@ -20,6 +20,7 @@ export const PrimitiveFieldFormatEnumList = [
   'boolean',
   'number',
   'date',
+  'image',
 ] as const;
 
 export const FieldFormatEnumList = [

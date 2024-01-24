@@ -69,6 +69,9 @@
         }
       }
     },
+    "dashboard": {
+      "title": "ダッシュボード"
+    },
     "feedback": {
       "title": "フィードバック",
       "column-setting": "カラムの設定",
@@ -315,7 +318,8 @@
     "shrink": "縮む",
     "feedback-detail": "フィードバック詳細",
     "create-channel-in-progress": "作成中のChannelがあります。",
-    "create-project-in-progress": "作成中のProjectがあります。"
+    "create-project-in-progress": "作成中のProjectがあります。",
+    "days": "{{days}} 日"
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -344,5 +348,80 @@
         "restart": "再起動"
       }
     }
+  },
+  "card": {
+    "dashboard": {
+      "total-feedback": {
+        "title": "フィードバックの合計数",
+        "description": "特定の期間中に作成されたフィードバックの数です。 ({{targetDate}})"
+      },
+      "total-issue": {
+        "title": "全体イシュー数",
+        "description": "特定の期間中に作成されたイシューの数です。 ({{targetDate}})"
+      },
+      "issue-ratio": {
+        "title": "イシュー登録比重",
+        "description": "特定の期間中に作成されたフィードバックのイシュー登録の割合です。 ({{targetDate}})"
+      },
+      "today-feedback": {
+        "title": "今日のフィードバック数",
+        "description": "今日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+      },
+      "yesterday-feedback": {
+        "title": "昨日のフィードバック数",
+        "description": "昨日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+      },
+      "n-days-feedback": {
+        "title": "過去{{n}}日フィードバック数",
+        "description": "過去{{n}}日間に生成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+      },
+      "today-issue": {
+        "title": "今日の話題数",
+        "description": "今日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+      },
+      "yesterday-issue": {
+        "title": "昨日のイシュー数",
+        "description": "昨日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+      },
+      "n-days-issue": {
+        "title": "過去{{n}}日のイシュー数",
+        "description": "過去{{n}}日間に生成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+      }
+    }
+  },
+  "chart": {
+    "feedback-trend": {
+      "title": "フィードバック生成推移",
+      "description": "特定の期間のフィードバック生成の推移を示します。"
+    },
+    "issue-trend": {
+      "title": "イシュー生成推移",
+      "description": "特定期間のイシュー作成推移を示します。"
+    },
+    "issue-status-count": {
+      "title": "イシュー現況",
+      "description": "全体イシューの現況を示します。"
+    },
+    "issue-rank": {
+      "title": "上位イシュー",
+      "description": "フィードバック数が多い上位イシューを表示します。"
+    },
+    "issue-comparison": {
+      "title": "イシュー比較",
+      "description": "選択したイシューのフィードバック生成推移を比較して表示します。"
+    }
+  },
+  "popover": {
+    "select-issue": {
+      "search-issue": "問題の検索",
+      "max-issue-count": "最大5つまでイシューを選択できます。",
+      "issue-list": "イシューリスト"
+    },
+    "select-issue-status": {
+      "issue-status": "イシューステータス"
+    }
+  },
+  "tooltip": {
+    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
   }
 }

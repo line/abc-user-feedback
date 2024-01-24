@@ -154,28 +154,56 @@ export const TooltipTrigger = React.forwardRef<
 export const TooltipContent = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & { color?: ColorType }
->(function TooltipContent({ style, color, ...props }, propRef) {
+>(function TooltipContent({ style, color, className, ...props }, propRef) {
   const context = useTooltipContext();
   const ref = useMergeRefs([context.refs.setFloating, propRef]);
   const [bgCN, textCN, arrowCN]: [string, string, string] =
     React.useMemo(() => {
       switch (color) {
         case 'blue':
-          return ['bg-blue-quaternary', 'text-blue-primary', '#007AFF1A'];
+          return [
+            'bg-blue-quaternary',
+            'text-blue-primary',
+            'fill-blue-quaternary',
+          ];
         case 'green':
-          return ['bg-green-quaternary', 'text-green-primary', '#34C7591A'];
+          return [
+            'bg-green-quaternary',
+            'text-green-primary',
+            'fill-green-quaternary',
+          ];
         case 'navy':
-          return ['bg-navy-quaternary', 'text-navy-primary', '#2C39851A'];
+          return [
+            'bg-navy-quaternary',
+            'text-navy-primary',
+            'fill-navy-quaternary',
+          ];
         case 'orange':
-          return ['bg-orange-quaternary', 'text-orange-primary', '#FF95001A'];
+          return [
+            'bg-orange-quaternary',
+            'text-orange-primary',
+            'fill-orange-quaternary',
+          ];
         case 'purple':
-          return ['bg-purple-quaternary', 'text-purple-primary', '#AF52DE1A'];
+          return [
+            'bg-purple-quaternary',
+            'text-purple-primary',
+            'fill-purple-quaternary',
+          ];
         case 'red':
-          return ['bg-red-quaternary', 'text-red-primary', '#F429001A'];
+          return [
+            'bg-red-quaternary',
+            'text-red-primary',
+            'fill-red-quaternary',
+          ];
         case 'yellow':
-          return ['bg-yellow-quaternary', 'text-yellow-primary', '#FFCC001A'];
+          return [
+            'bg-yellow-quaternary',
+            'text-yellow-primary',
+            'fill-yellow-quaternary',
+          ];
         default:
-          return ['bg-fill-primary', 'text-fill-inverse', '#000000'];
+          return ['bg-fill-primary', 'text-fill-inverse', 'fill-primary'];
       }
     }, [color]);
 
@@ -187,9 +215,10 @@ export const TooltipContent = React.forwardRef<
         ref={ref}
         style={{ ...context.floatingStyles, ...style }}
         className={[
-          'font-12-regular min-w-[50px] rounded p-2',
+          'font-12-regular z-40 min-w-[50px] rounded p-2',
           bgCN,
           textCN,
+          className,
         ].join(' ')}
         {...context.getFloatingProps(props)}
       >
@@ -197,7 +226,7 @@ export const TooltipContent = React.forwardRef<
         <FloatingArrow
           ref={context.arrowRef}
           context={context.context}
-          fill={arrowCN}
+          className={arrowCN}
         />
       </div>
     </FloatingPortal>

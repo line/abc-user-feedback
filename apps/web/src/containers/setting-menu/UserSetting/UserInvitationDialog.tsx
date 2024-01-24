@@ -71,6 +71,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
   useEffect(() => {
     reset({ roleId: undefined }, { keepValues: true });
   }, [watch('projectId')]);
+  console.log("watch('projectId'): ", watch('projectId'));
 
   const { data: projectData } = useOAIQuery({ path: '/api/projects' });
 
@@ -133,30 +134,28 @@ const UserInvitationDialog: React.FC<IProps> = () => {
           />
           <SelectBox
             label="Type"
-            required
-            isSearchable={false}
-            isMulti={false}
-            onChange={(v) => (v && v.key ? setValue('type', v.key) : {})}
+            onChange={(v) =>
+              v?.value && setValue('type', v.value as UserTypeEnum)
+            }
             options={[
-              { name: 'SUPER', key: 'SUPER' },
-              { name: 'GENERAL', key: 'GENERAL' },
+              { label: 'SUPER', value: 'SUPER' },
+              { label: 'GENERAL', value: 'GENERAL' },
             ]}
             defaultValue={
               watch('type')
-                ? { name: watch('type'), key: watch('type') }
+                ? { label: watch('type'), value: watch('type') }
                 : undefined
             }
+            required
           />
           {watch('type') === 'GENERAL' && (
             <>
               <SelectBox
                 label="Project"
                 options={projectData?.items ?? []}
-                onChange={(v) =>
-                  v && v.id
-                    ? setValue('projectId', v.id)
-                    : setValue('projectId', undefined)
-                }
+                onChange={(v) => setValue('projectId', v?.id)}
+                getOptionValue={(option) => String(option.id)}
+                getOptionLabel={(option) => option.name}
                 isClearable
               />
               {watch('projectId') && (
@@ -164,12 +163,14 @@ const UserInvitationDialog: React.FC<IProps> = () => {
                   label="Role"
                   required
                   options={roleData?.roles ?? []}
-                  onChange={(v) => (v && v.id ? setValue('roleId', v.id) : {})}
+                  onChange={(v) => setValue('roleId', v?.id)}
                   value={
                     roleData?.roles.find(
                       (role) => role.id === watch('roleId'),
                     ) ?? null
                   }
+                  getOptionValue={(option) => String(option.id)}
+                  getOptionLabel={(option) => option.name}
                 />
               )}
             </>

@@ -17,7 +17,8 @@ import { Fragment, useMemo } from 'react';
 
 import { Icon } from '@ufb/ui';
 
-import { useChannels, useProjects, useTenant } from '@/hooks';
+import { useTenant } from '@/contexts/tenant.context';
+import { useChannels, useProjects } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {

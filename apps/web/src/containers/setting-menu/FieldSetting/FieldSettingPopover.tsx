@@ -256,14 +256,12 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             </div>
             <SelectBox
               label="Field Format"
-              onChange={(value) => setValue('format', value?.key)}
+              onChange={(value) => value?.key && setValue('format', value?.key)}
               options={FieldFormatEnumList.map((v) => ({ key: v, name: v }))}
-              value={
-                watch('format')
-                  ? { key: watch('format'), name: watch('format') }
-                  : null
-              }
+              value={{ key: watch('format'), name: watch('format') }}
               isDisabled={isOriginalData}
+              getOptionValue={(option) => option.key}
+              getOptionLabel={(option) => option.name}
             />
             {(watch('format') === 'select' ||
               watch('format') === 'multiSelect') && (

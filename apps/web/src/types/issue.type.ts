@@ -13,12 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+export type IssueStatus =
+  | 'INIT'
+  | 'ON_REVIEW'
+  | 'IN_PROGRESS'
+  | 'RESOLVED'
+  | 'PENDING';
 export type IssueType = {
   id: number;
   name: string;
   description: string | null;
   feedbackCount: number;
-  status: string;
+  status: IssueStatus;
   createdAt: string;
   updatedAt: string;
   externalIssueId: string;

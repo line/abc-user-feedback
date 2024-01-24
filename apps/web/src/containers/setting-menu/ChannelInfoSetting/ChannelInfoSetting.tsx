@@ -32,11 +32,13 @@ import {
 interface IForm {
   name: string;
   description: string | null;
+  imageConfig: any;
 }
 
 const scheme: Zod.ZodType<IForm> = z.object({
   name: z.string(),
   description: z.string().nullable(),
+  imageConfig: z.object({}).nullable(),
 });
 
 interface IProps extends React.PropsWithChildren {
@@ -54,6 +56,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   const { reset, register, handleSubmit, formState } = useForm<IForm>({
     resolver: zodResolver(scheme),
   });
+
   const { refetch: refetchChannelList } = useChannels(projectId);
 
   const { mutate, isPending } = useOAIMutation({
@@ -88,13 +91,13 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       actionBtn={{
         children: t('button.save'),
         onClick: handleSubmit(onSubmit),
-        form: 'form',
+        form: 'form1',
         type: 'submit',
         disabled:
           !perms.includes('channel_update') || !formState.isDirty || isPending,
       }}
     >
-      <form id="form" className="flex flex-col gap-6">
+      <form id="form1" className="flex flex-col gap-6">
         <TextInput value={data?.id} label="Channel ID" disabled />
         <TextInput
           {...register('name')}
