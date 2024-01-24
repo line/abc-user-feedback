@@ -16,7 +16,6 @@
 import { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
-import { getIronSession } from 'iron-session';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
@@ -24,7 +23,6 @@ import { Icon } from '@ufb/ui';
 
 import { DateRangePicker, MainTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { ironOption } from '@/constants/iron-option';
 import { Path } from '@/constants/path';
 import {
   CreateFeedbackPerIssueCard,
@@ -44,7 +42,6 @@ import {
   YesterdayIssueCard,
 } from '@/containers/dashboard';
 import FeedbackLineChart from '@/containers/dashboard/FeedbackLineChart';
-import { env } from '@/env.mjs';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
 import type { NextPageWithLayout } from '@/pages/_app';
 import type { DateRangeType } from '@/types/date-range.type';
@@ -250,25 +247,8 @@ const CardSlider: React.FC<ICardSliderProps> = ({ children }) => {
 export const getServerSideProps: GetServerSideProps = async ({
   query,
   locale,
-  req,
-  res,
 }) => {
-  const session = await getIronSession(req, res, ironOption);
   const projectId = parseInt(query.projectId as string);
-
-  const response = await fetch(
-    `${env.API_BASE_URL}/api/projects/${projectId}`,
-    { headers: { Authorization: 'Bearer ' + session.jwt?.accessToken } },
-  );
-
-  if (response.status === 401) {
-    return {
-      redirect: {
-        destination: `/main/${projectId}/not-permission`,
-        permanent: true,
-      },
-    };
-  }
 
   return {
     props: {
