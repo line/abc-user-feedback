@@ -48,9 +48,10 @@ interface IProps {
 
 const ImageUploadSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const { t } = useTranslation();
-  const { register, formState, handleSubmit, reset } = useForm<IForm>({
-    resolver: zodResolver(schema),
-  });
+  const { register, formState, handleSubmit, reset, getValues } =
+    useForm<IForm>({
+      resolver: zodResolver(schema),
+    });
 
   const { data } = useOAIQuery({
     path: '/api/projects/{projectId}/channels/{channelId}',
@@ -92,7 +93,7 @@ const ImageUploadSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   };
   const handleTestConnection = () => {
     if (!data) return;
-    testConection(data.imageConfig);
+    testConection(getValues());
   };
 
   return (
