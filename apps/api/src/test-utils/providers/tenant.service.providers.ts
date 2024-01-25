@@ -16,10 +16,10 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
-import { FeedbackEntity } from '../../domains/feedback/feedback.entity';
-import { TenantEntity } from '../../domains/tenant/tenant.entity';
-import { TenantService } from '../../domains/tenant/tenant.service';
-import { UserEntity } from '../../domains/user/entities/user.entity';
+import { FeedbackEntity } from '../../domains/admin/feedback/feedback.entity';
+import { TenantEntity } from '../../domains/admin/tenant/tenant.entity';
+import { TenantService } from '../../domains/admin/tenant/tenant.service';
+import { UserEntity } from '../../domains/admin/user/entities/user.entity';
 
 export const TenantServiceProviders = [
   TenantService,

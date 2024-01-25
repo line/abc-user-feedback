@@ -33,26 +33,26 @@ import {
   opensearchConfigSchema,
 } from './configs/opensearch.config';
 import { smtpConfig, smtpConfigSchema } from './configs/smtp.config';
-import { AuthModule } from './domains/auth/auth.module';
-import { ChannelModule } from './domains/channel/channel/channel.module';
-import { FieldModule } from './domains/channel/field/field.module';
-import { OptionModule } from './domains/channel/option/option.module';
-import { ExternalModule } from './domains/external/external.module';
-import { FeedbackModule } from './domains/feedback/feedback.module';
-import { HealthModule } from './domains/health/health.module';
-import { HistoryModule } from './domains/history/history.module';
-import { MigrationModule } from './domains/migration/migration.module';
-import { ApiKeyModule } from './domains/project/api-key/api-key.module';
-import { IssueTrackerModule } from './domains/project/issue-tracker/issue-tracker.module';
-import { IssueModule } from './domains/project/issue/issue.module';
-import { MemberModule } from './domains/project/member/member.module';
-import { ProjectModule } from './domains/project/project/project.module';
-import { RoleModule } from './domains/project/role/role.module';
-import { FeedbackIssueStatisticsModule } from './domains/statistics/feedback-issue/feedback-issue-statistics.module';
-import { FeedbackStatisticsModule } from './domains/statistics/feedback/feedback-statistics.module';
-import { IssueStatisticsModule } from './domains/statistics/issue/issue-statistics.module';
-import { TenantModule } from './domains/tenant/tenant.module';
-import { UserModule } from './domains/user/user.module';
+import { AuthModule } from './domains/admin/auth/auth.module';
+import { ChannelModule } from './domains/admin/channel/channel/channel.module';
+import { FieldModule } from './domains/admin/channel/field/field.module';
+import { OptionModule } from './domains/admin/channel/option/option.module';
+import { FeedbackModule } from './domains/admin/feedback/feedback.module';
+import { HistoryModule } from './domains/admin/history/history.module';
+import { ApiKeyModule } from './domains/admin/project/api-key/api-key.module';
+import { IssueTrackerModule } from './domains/admin/project/issue-tracker/issue-tracker.module';
+import { IssueModule } from './domains/admin/project/issue/issue.module';
+import { MemberModule } from './domains/admin/project/member/member.module';
+import { ProjectModule } from './domains/admin/project/project/project.module';
+import { RoleModule } from './domains/admin/project/role/role.module';
+import { FeedbackIssueStatisticsModule } from './domains/admin/statistics/feedback-issue/feedback-issue-statistics.module';
+import { FeedbackStatisticsModule } from './domains/admin/statistics/feedback/feedback-statistics.module';
+import { IssueStatisticsModule } from './domains/admin/statistics/issue/issue-statistics.module';
+import { TenantModule } from './domains/admin/tenant/tenant.module';
+import { UserModule } from './domains/admin/user/user.module';
+import { APIModule } from './domains/api/api.module';
+import { HealthModule } from './domains/operation/health/health.module';
+import { MigrationModule } from './domains/operation/migration/migration.module';
 
 const domainModules = [
   AuthModule,
@@ -74,7 +74,7 @@ const domainModules = [
   FeedbackStatisticsModule,
   IssueStatisticsModule,
   FeedbackIssueStatisticsModule,
-  ExternalModule,
+  APIModule,
 ];
 
 @Module({

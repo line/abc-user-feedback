@@ -19,8 +19,8 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
 import { getMockProvider, mockRepository } from '@/test-utils/util-functions';
-import { UserEntity } from '../../domains/user/entities/user.entity';
-import { UserPasswordService } from '../../domains/user/user-password.service';
+import { UserEntity } from '../../domains/admin/user/entities/user.entity';
+import { UserPasswordService } from '../../domains/admin/user/user-password.service';
 
 const MockMailerService = {
   sendMail: jest.fn(),

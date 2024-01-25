@@ -16,8 +16,8 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
-import { MemberEntity } from '../../domains/project/member/member.entity';
-import { MemberService } from '../../domains/project/member/member.service';
+import { MemberEntity } from '../../domains/admin/project/member/member.entity';
+import { MemberService } from '../../domains/admin/project/member/member.service';
 import { RoleServiceProviders } from './role.service.providers';
 import { UserServiceProviders } from './user.service.providers';
 

@@ -21,9 +21,9 @@ import {
   MockOpensearchRepository,
   mockRepository,
 } from '@/test-utils/util-functions';
-import { FieldEntity } from '../../domains/channel/field/field.entity';
-import { FieldMySQLService } from '../../domains/channel/field/field.mysql.service';
-import { FieldService } from '../../domains/channel/field/field.service';
+import { FieldEntity } from '../../domains/admin/channel/field/field.entity';
+import { FieldMySQLService } from '../../domains/admin/channel/field/field.mysql.service';
+import { FieldService } from '../../domains/admin/channel/field/field.service';
 import { OptionServiceProviders } from './option.service.providers';
 
 export const FieldServiceProviders = [

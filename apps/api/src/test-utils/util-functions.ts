@@ -25,10 +25,10 @@ import {
   opensearchConfigSchema,
 } from '@/configs/opensearch.config';
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
-import type { AuthService } from '@/domains/auth/auth.service';
-import { UserDto } from '@/domains/user/dtos';
-import { UserStateEnum } from '@/domains/user/entities/enums';
-import { UserEntity } from '@/domains/user/entities/user.entity';
+import type { AuthService } from '@/domains/admin/auth/auth.service';
+import { UserDto } from '@/domains/admin/user/dtos';
+import { UserStateEnum } from '@/domains/admin/user/entities/enums';
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 
 initializeTransactionalContext();
 
