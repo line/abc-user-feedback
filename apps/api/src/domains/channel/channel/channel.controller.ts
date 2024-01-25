@@ -154,6 +154,7 @@ export class ChannelController {
         endpoint,
         region,
         bucket,
+        extension: 'png',
       });
 
       if (presignedUrl) {

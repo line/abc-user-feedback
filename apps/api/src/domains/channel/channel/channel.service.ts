@@ -104,6 +104,7 @@ export class ChannelService {
       endpoint,
       region,
       bucket,
+      extension,
     } = dto;
 
     const s3 = new S3Client({
@@ -114,8 +115,8 @@ export class ChannelService {
 
     const command = new PutObjectCommand({
       Bucket: bucket,
-      Key: `${projectId}_${channelId}_${Date.now()}.png`,
-      ContentType: 'image/png',
+      Key: `${projectId}_${channelId}_${Date.now()}.${extension}`,
+      ContentType: 'image/*',
       ACL: 'public-read',
     });
 

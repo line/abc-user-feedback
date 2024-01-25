@@ -19,6 +19,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
@@ -52,7 +53,11 @@ export class ChannelController {
   async getImageUploadUrl(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Param('channelId', ParseIntPipe) channelId: number,
+    @Query('extension') extension: string,
   ) {
+    if (!extension) {
+      throw new BadRequestException('Extension is required in query parameter');
+    }
     const channel = await this.channelService.findById({ channelId });
     if (channel.project.id !== projectId) {
       throw new BadRequestException('Invalid channel id');
@@ -69,6 +74,7 @@ export class ChannelController {
       endpoint: channel.imageConfig.endpoint,
       region: channel.imageConfig.region,
       bucket: channel.imageConfig.bucket,
+      extension,
     });
   }
 }
