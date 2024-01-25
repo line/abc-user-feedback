@@ -126,7 +126,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
                       {idField?.name}
                     </th>
-                    <td width="260">
+                    <td width="260" className="align-text-top">
                       {JSON.stringify(feedbackData[idField?.key ?? ''])}
                     </td>
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
@@ -167,7 +167,6 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                       )}
                     </td>
                   </tr>
-
                   {feedbackFields.sort(fieldSortType).map((field) => (
                     <tr key={field.id}>
                       <th className="font-14-regular text-secondary min-w-[80px] max-w-[80px] break-words text-left align-text-top">
@@ -266,9 +265,7 @@ const ImageSlider: React.FC<IImageSliderProps> = ({ urls }) => {
               onClick={() => window.open(url, '_blank')}
             >
               <div
-                style={{
-                  background: 'var(--text-color-quaternary)',
-                }}
+                style={{ background: 'var(--text-color-quaternary)' }}
                 className="absolute left-0 top-0 h-full w-full"
               />
               <Icon

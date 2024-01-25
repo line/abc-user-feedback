@@ -31,6 +31,8 @@ export const toast = {
     reactToast.custom((t) => <ToastBox type="positive" {...input} t={t} />),
   negative: (input: IToastProps) =>
     reactToast.custom((t) => <ToastBox type="negative" {...input} t={t} />),
+  accent: (input: IToastProps) =>
+    reactToast.custom((t) => <ToastBox type="accent" {...input} t={t} />),
   promise: async (
     fn: Promise<any>,
     input: {

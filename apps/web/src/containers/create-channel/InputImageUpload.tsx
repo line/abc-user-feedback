@@ -92,7 +92,7 @@ const InputImageUpload: React.FC<IProps> = () => {
     queryOptions: {
       onSuccess(data) {
         if (data?.success) {
-          toast.positive({ title: 'Test Connection Success' });
+          toast.accent({ title: 'Test Connection Success' });
         } else {
           toast.negative({ title: 'Test Connection failed' });
         }
