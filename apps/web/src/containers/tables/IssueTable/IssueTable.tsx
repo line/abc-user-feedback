@@ -114,8 +114,8 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
   columnHelper.accessor('feedbackCount', {
     header: 'Feedback Count',
     cell: ({ getValue }) => getValue().toLocaleString(),
-    size: 100,
-    minSize: 100,
+    size: 160,
+    minSize: 150,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -215,7 +215,16 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           },
         };
       }
-      console.log('key, value: ', key, value);
+      if (key === 'updatedAt') {
+        const [startDate, endDate] = value.split('~');
+        return {
+          ...prev,
+          updatedAt: {
+            gte: dayjs(startDate).startOf('day').toISOString(),
+            lt: dayjs(endDate).endOf('day').toISOString(),
+          },
+        };
+      }
 
       return { ...prev, [key]: value };
     }, {});
