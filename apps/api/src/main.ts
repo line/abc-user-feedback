@@ -22,9 +22,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
-import { AppModule } from './app.module';
+import { AppModule, domainModules } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
 import { APIModule } from './domains/api/api.module';
+import { HealthModule } from './domains/operation/health/health.module';
+import { MigrationModule } from './domains/operation/migration/migration.module';
 import type { ConfigServiceType } from './types/config-service.type';
 
 const globalPrefix = 'api';
@@ -53,7 +55,10 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addBearerAuth()
     .build();
-  const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig);
+  const excludeModules = [APIModule, HealthModule, MigrationModule];
+  const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
+    include: domainModules.filter((module) => !excludeModules.includes(module)),
+  });
   SwaggerModule.setup('admin-docs', app, adminDocument);
 
   const documentConfig = new DocumentBuilder()

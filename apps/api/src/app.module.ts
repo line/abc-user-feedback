@@ -54,7 +54,7 @@ import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
 
-const domainModules = [
+export const domainModules = [
   AuthModule,
   ChannelModule,
   FieldModule,
@@ -75,7 +75,7 @@ const domainModules = [
   IssueStatisticsModule,
   FeedbackIssueStatisticsModule,
   APIModule,
-];
+] as any[];
 
 @Module({
   imports: [
