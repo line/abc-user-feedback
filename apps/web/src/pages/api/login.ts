@@ -24,7 +24,7 @@ export default withIronSessionApiRoute(async (req, res) => {
   const { email, password } = req.body;
   try {
     const response = await axios.post(
-      `${env.API_BASE_URL}/api/auth/signIn/email`,
+      `${env.API_BASE_URL}/api/admin/auth/signIn/email`,
       { email, password },
     );
 
