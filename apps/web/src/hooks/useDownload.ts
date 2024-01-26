@@ -20,11 +20,11 @@ import client from '@/libs/client';
 import type { OAIPathParameters, OAIRequestBody } from '@/types/openapi.type';
 
 type IPath = OAIPathParameters<
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/export',
+  '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',
   'post'
 >;
 type IBody = OAIRequestBody<
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/export',
+  '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',
   'post'
 >;
 
@@ -38,12 +38,12 @@ interface IInput {
 const useDownload = ({ params, options }: IInput) => {
   return useMutation({
     mutationKey: [
-      '/api/projects/{projectId}/channels/{channelId}/feedbacks/export',
+      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',
       params,
     ],
     mutationFn: async (body: IBody) => {
       const { data, headers } = await client.post({
-        path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/export',
+        path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',
         pathParams: params,
         body,
         config: { responseType: 'arraybuffer' },

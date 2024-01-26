@@ -46,7 +46,7 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
     }
 
     try {
-      const { data } = await client.get({ path: '/api/tenants' });
+      const { data } = await client.get({ path: '/api/admin/tenants' });
       setTenant(data);
     } catch (error) {
       router.push(Path.CREATE_TENANT);

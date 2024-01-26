@@ -5,7 +5,7 @@ module.exports = {
   collectCoverageFrom: ['**/*.(t|j)s'],
   testEnvironment: 'node',
   moduleNameMapper: {
-    '^@/(.*)$': ['<rootDir>/$1'],
+    '^@/(.*)$': ['<rootDir>/$2'],
   },
   transform: {
     '^.+\\.(t|j)s$': ['@swc-node/jest'],

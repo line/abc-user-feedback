@@ -16,12 +16,12 @@
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
-import { FeedbackEntity } from '@/domains/feedback/feedback.entity';
-import { IssueEntity } from '@/domains/project/issue/issue.entity';
-import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { FeedbackStatisticsEntity } from '@/domains/statistics/feedback/feedback-statistics.entity';
-import { FeedbackStatisticsService } from '@/domains/statistics/feedback/feedback-statistics.service';
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { FeedbackStatisticsEntity } from '@/domains/admin/statistics/feedback/feedback-statistics.entity';
+import { FeedbackStatisticsService } from '@/domains/admin/statistics/feedback/feedback-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
 
 export const FeedbackStatisticsServiceProviders = [

@@ -114,8 +114,8 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
   columnHelper.accessor('feedbackCount', {
     header: 'Feedback Count',
     cell: ({ getValue }) => getValue().toLocaleString(),
-    size: 100,
-    minSize: 100,
+    size: 160,
+    minSize: 150,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -215,7 +215,16 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           },
         };
       }
-      console.log('key, value: ', key, value);
+      if (key === 'updatedAt') {
+        const [startDate, endDate] = value.split('~');
+        return {
+          ...prev,
+          updatedAt: {
+            gte: dayjs(startDate).startOf('day').toISOString(),
+            lt: dayjs(endDate).endOf('day').toISOString(),
+          },
+        };
+      }
 
       return { ...prev, [key]: value };
     }, {});
@@ -228,14 +237,14 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     sort: sort as Record<string, never>,
   });
   const { data: issueTracker } = useOAIQuery({
-    path: '/api/projects/{projectId}/issue-tracker',
+    path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
 
   const { mutate: deleteIssues, isPending: deleteIssuesPending } =
     useOAIMutation({
       method: 'delete',
-      path: '/api/projects/{projectId}/issues',
+      path: '/api/admin/projects/{projectId}/issues',
       pathParams: { projectId },
       queryOptions: {
         async onSuccess() {

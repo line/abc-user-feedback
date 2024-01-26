@@ -105,7 +105,7 @@ const InputProjectInfo: React.FC<IProps> = () => {
     setIsLoading(true);
 
     const { data: isDuplicated } = await client.get({
-      path: '/api/projects/name-check',
+      path: '/api/admin/projects/name-check',
       query: { name },
     });
     if (isDuplicated) {

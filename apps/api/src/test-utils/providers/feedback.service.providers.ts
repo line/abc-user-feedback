@@ -22,10 +22,10 @@ import {
   MockOpensearchRepository,
   mockRepository,
 } from '@/test-utils/util-functions';
-import { FeedbackEntity } from '../../domains/feedback/feedback.entity';
-import { FeedbackMySQLService } from '../../domains/feedback/feedback.mysql.service';
-import { FeedbackOSService } from '../../domains/feedback/feedback.os.service';
-import { FeedbackService } from '../../domains/feedback/feedback.service';
+import { FeedbackEntity } from '../../domains/admin/feedback/feedback.entity';
+import { FeedbackMySQLService } from '../../domains/admin/feedback/feedback.mysql.service';
+import { FeedbackOSService } from '../../domains/admin/feedback/feedback.os.service';
+import { FeedbackService } from '../../domains/admin/feedback/feedback.service';
 import { ChannelServiceProviders } from './channel.service.providers';
 import { FeedbackIssueStatisticsServiceProviders } from './feedback-issue-statistics.service.providers';
 import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';

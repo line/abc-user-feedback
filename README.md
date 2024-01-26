@@ -34,7 +34,7 @@ The frontend is built with NextJS and the backend is built with NestJS. We provi
 **Optional**
 
 - SMTP - for mail verification during making accounts
-- [OpenSearch v7](https://opensearch.org/) - for performance on searching feedbacks
+- [OpenSearch v7](https://opensearch.org/) - for performance on searching feedback
 
 You can use [docker-compose.infra.yml](/docker/docker-compose.infra.yml) file for requirements.
 

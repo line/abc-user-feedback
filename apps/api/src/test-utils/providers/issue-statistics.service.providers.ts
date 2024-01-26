@@ -16,10 +16,10 @@
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { IssueEntity } from '@/domains/project/issue/issue.entity';
-import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { IssueStatisticsEntity } from '@/domains/statistics/issue/issue-statistics.entity';
-import { IssueStatisticsService } from '@/domains/statistics/issue/issue-statistics.service';
+import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { IssueStatisticsEntity } from '@/domains/admin/statistics/issue/issue-statistics.entity';
+import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
 
 export const IssueStatisticsServiceProviders = [

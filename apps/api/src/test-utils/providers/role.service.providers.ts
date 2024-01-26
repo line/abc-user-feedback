@@ -16,8 +16,8 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
-import { RoleEntity } from '../../domains/project/role/role.entity';
-import { RoleService } from '../../domains/project/role/role.service';
+import { RoleEntity } from '../../domains/admin/project/role/role.entity';
+import { RoleService } from '../../domains/admin/project/role/role.service';
 
 export const RoleServiceProviders = [
   RoleService,

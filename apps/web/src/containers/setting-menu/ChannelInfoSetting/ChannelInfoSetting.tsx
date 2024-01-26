@@ -49,7 +49,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   const perms = usePermissions(projectId);
   const { t } = useTranslation();
   const { data, refetch } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
 
@@ -61,7 +61,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/channels/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/channels/{channelId}',
     pathParams: { channelId, projectId },
     queryOptions: {
       onSuccess: async () => {

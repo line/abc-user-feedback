@@ -89,7 +89,7 @@ function DashboardTable<T>(props: IProps<T>) {
           <tbody>
             {table.getRowModel().rows.map((row) => (
               <Fragment key={row.index}>
-                <tr className="h-14 ">
+                <tr className="h-14">
                   {row.getVisibleCells().map((cell) => (
                     <td
                       key={`${cell.id} ${cell.row.index}`}

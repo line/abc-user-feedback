@@ -31,7 +31,7 @@ import {
 
 import { SelectBox } from '@/components';
 import type { UserTypeEnum } from '@/contexts/user.context';
-import { useOAIMutation, useOAIQuery } from '@/hooks';
+import { useOAIMutation, useOAIQuery, useProjects } from '@/hooks';
 
 interface IProps {}
 
@@ -71,12 +71,11 @@ const UserInvitationDialog: React.FC<IProps> = () => {
   useEffect(() => {
     reset({ roleId: undefined }, { keepValues: true });
   }, [watch('projectId')]);
-  console.log("watch('projectId'): ", watch('projectId'));
 
-  const { data: projectData } = useOAIQuery({ path: '/api/projects' });
+  const { data: projectData } = useProjects();
 
   const { data: roleData } = useOAIQuery({
-    path: '/api/projects/{projectId}/roles',
+    path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId: watch('projectId')! },
     queryOptions: {
       enabled: !!watch('projectId') && watch('type') === 'GENERAL',
@@ -85,7 +84,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/users/invite',
+    path: '/api/admin/users/invite',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: t('toast.invite'), iconName: 'MailFill' });

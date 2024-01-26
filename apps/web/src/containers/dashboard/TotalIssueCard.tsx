@@ -29,7 +29,7 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
   const { t } = useTranslation();
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/issue/count',
+    path: '/api/admin/statistics/issue/count',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
     queryOptions: {
       refetchOnMount: false,

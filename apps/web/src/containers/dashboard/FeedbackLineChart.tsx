@@ -34,7 +34,7 @@ const FeedbackLineChartWrapper: React.FC<IProps> = ({
   to,
 }) => {
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
 
@@ -63,7 +63,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/feedback',
+    path: '/api/admin/statistics/feedback',
     variables: {
       startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
       endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),

@@ -33,7 +33,7 @@ const useIssueCountByStatusAndCreatedAtRange = (
       const issues = ISSUES(t);
       for (const issue of issues) {
         const { data } = await client.post({
-          path: '/api/projects/{projectId}/issues/search',
+          path: '/api/admin/projects/{projectId}/issues/search',
           pathParams: { projectId },
           body: {
             limit: 1,

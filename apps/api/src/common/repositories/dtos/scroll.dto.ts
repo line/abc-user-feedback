@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { OsQueryDto } from '@/domains/feedback/dtos/os-query.dto';
+import type { OsQueryDto } from '@/domains/admin/feedback/dtos/os-query.dto';
 
 export class ScrollDto {
   index: string;

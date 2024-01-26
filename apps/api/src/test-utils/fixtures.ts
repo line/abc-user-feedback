@@ -21,9 +21,9 @@ import {
   FieldTypeEnum,
   isSelectFieldFormat,
 } from '@/common/enums';
-import type { ReplaceFieldDto } from '@/domains/channel/field/dtos';
-import type { CreateFieldDto } from '@/domains/channel/field/dtos/create-field.dto';
-import type { CreateIssueDto } from '@/domains/project/issue/dtos';
+import type { ReplaceFieldDto } from '@/domains/admin/channel/field/dtos';
+import type { CreateFieldDto } from '@/domains/admin/channel/field/dtos/create-field.dto';
+import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);

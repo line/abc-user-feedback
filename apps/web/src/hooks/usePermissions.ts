@@ -28,7 +28,7 @@ const usePermissions = (inputProjectId?: number | null) => {
   const router = useRouter();
 
   const { data } = useOAIQuery({
-    path: '/api/users/{userId}/roles',
+    path: '/api/admin/users/{userId}/roles',
     variables: { userId: user?.id ?? 0 },
     queryOptions: { enabled: !!user },
   });

@@ -17,7 +17,7 @@ import useOAIQuery from './useOAIQuery';
 
 const useProjects = () => {
   return useOAIQuery({
-    path: '/api/projects',
+    path: '/api/admin/projects',
     variables: { limit: 1000, page: 1 } as any,
   });
 };

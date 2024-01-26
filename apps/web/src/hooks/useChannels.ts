@@ -17,7 +17,7 @@ import useOAIQuery from './useOAIQuery';
 
 const useChannels = (projectId: number) => {
   return useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId, limit: 1000, page: 1 },
   });
 };

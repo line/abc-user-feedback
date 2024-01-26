@@ -126,7 +126,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   );
 
   const { data: channelData, refetch: refetchChannelData } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
 

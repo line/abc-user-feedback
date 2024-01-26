@@ -21,8 +21,8 @@ import { DateTime } from 'luxon';
 import MockDate from 'mockdate';
 import type { Repository } from 'typeorm';
 
-import { UserDto } from '@/domains/user/dtos';
-import { UserTypeEnum } from '@/domains/user/entities/enums';
+import { UserDto } from '@/domains/admin/user/dtos';
+import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import { TestConfig } from '@/test-utils/util-functions';
 import { CodeServiceProviders } from '../../test-utils/providers/code.service.providers';
 import { CodeTypeEnum } from './code-type.enum';

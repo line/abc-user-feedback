@@ -53,7 +53,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/users/password/reset/code',
+    path: '/api/admin/users/password/reset/code',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: 'Success' });

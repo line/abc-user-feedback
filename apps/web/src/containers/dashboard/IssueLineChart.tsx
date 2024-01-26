@@ -31,7 +31,7 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const dayCount = useDayCount(from, to);
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/issue/count-by-date',
+    path: '/api/admin/statistics/issue/count-by-date',
     variables: {
       projectId,
       startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),

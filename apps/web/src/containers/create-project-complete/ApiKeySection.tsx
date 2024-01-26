@@ -84,7 +84,7 @@ const ApiKeySection: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const [rows, setRows] = useState<ApiKeyType[]>([]);
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/api-keys',
+    path: '/api/admin/projects/{projectId}/api-keys',
     variables: { projectId },
   });
   useEffect(() => {
