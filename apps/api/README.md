@@ -82,7 +82,7 @@ npm run migration:run
 | SMTP_BASE_URL             | default UserFeedback URL for mail to be redirected                               | http://localhost:3000                                              |
 | APP_PORT                  | the post that the server is running on                                           | 4000                                                               |
 | APP_ADDRESS               | the address that the server is running on                                        | 0.0.0.0                                                            |
-| OS_USE                    | flag for using opensearch (for better performance on searching feedbacks)        | false                                                              |
+| OS_USE                    | flag for using opensearch (for better performance on searching feedback)         | false                                                              |
 | OS_NODE                   | opensearch node url                                                              | http://localhost:9200                                              |
 | OS_USERNAME               | opensearch username if exists                                                    |                                                                    |
 | OS_PASSWORD               | opensearch password if exists                                                    |                                                                    |
