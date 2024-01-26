@@ -70,8 +70,9 @@ const ImageUploadSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       onSuccess(data) {
+        console.log('data: ', data);
         if (data?.success) {
-          toast.positive({ title: 'Test Connection Success' });
+          toast.accent({ title: 'Test Connection Success' });
         } else {
           toast.negative({ title: 'Test Connection failed' });
         }
