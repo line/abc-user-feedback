@@ -20,13 +20,13 @@ import client from '@/libs/client';
 import type { OAIMutationResponse, OAIRequestBody } from '@/types/openapi.type';
 
 type TData = OAIMutationResponse<
-  '/api/projects/{projectId}/issues/search',
+  '/api/admin/projects/{projectId}/issues/search',
   'post'
 >;
 
 interface IBody
   extends Omit<
-    OAIRequestBody<'/api/projects/{projectId}/issues/search', 'post'>,
+    OAIRequestBody<'/api/admin/projects/{projectId}/issues/search', 'post'>,
     'query'
   > {
   query?: any;
@@ -38,10 +38,14 @@ const useIssueSearch = (
   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'>,
 ) => {
   return useQuery<TData>({
-    queryKey: ['/api/projects/{projectId}/issues/search', projectId, body],
+    queryKey: [
+      '/api/admin/projects/{projectId}/issues/search',
+      projectId,
+      body,
+    ],
     queryFn: async () => {
       const { data: result } = await client.post({
-        path: '/api/projects/{projectId}/issues/search',
+        path: '/api/admin/projects/{projectId}/issues/search',
         pathParams: { projectId },
         body,
       });

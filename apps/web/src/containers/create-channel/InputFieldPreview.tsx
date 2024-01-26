@@ -43,7 +43,7 @@ const InputFieldPreview: React.FC<IProps> = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     pathParams: { projectId },
     queryOptions: {
       onError(error) {

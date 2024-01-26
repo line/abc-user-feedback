@@ -29,7 +29,7 @@ const TenantCard: React.FC<{ tenantId: number }> = ({ tenantId }) => {
   const { data } = useProjects();
 
   const { data: feedbackCount } = useOAIQuery({
-    path: '/api/tenants/{tenantId}/feedback-count',
+    path: '/api/admin/tenants/{tenantId}/feedback-count',
     variables: { tenantId },
   });
 

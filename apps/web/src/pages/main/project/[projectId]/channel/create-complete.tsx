@@ -43,7 +43,7 @@ const CreateCompletePage: NextPage = () => {
   );
 
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
   const gotoFeedback = () => {

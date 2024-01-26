@@ -29,7 +29,7 @@ interface IProps {
 const IssueTrackerSection: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/issue-tracker',
+    path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
   return (

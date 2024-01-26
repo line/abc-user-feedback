@@ -45,7 +45,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
 
   const { mutate: softDelete, isPending: softDeletePending } = useOAIMutation({
     method: 'delete',
-    path: '/api/projects/{projectId}/api-keys/{apiKeyId}/soft',
+    path: '/api/admin/projects/{projectId}/api-keys/{apiKeyId}/soft',
     pathParams: { apiKeyId, projectId },
     queryOptions: {
       async onSuccess() {
@@ -60,7 +60,7 @@ const APIKeyEditButton: React.FC<IProps> = (props) => {
   });
   const { mutate: recover, isPending: recoverPending } = useOAIMutation({
     method: 'delete',
-    path: '/api/projects/{projectId}/api-keys/{apiKeyId}/recover',
+    path: '/api/admin/projects/{projectId}/api-keys/{apiKeyId}/recover',
     pathParams: { apiKeyId, projectId },
     queryOptions: {
       async onSuccess() {

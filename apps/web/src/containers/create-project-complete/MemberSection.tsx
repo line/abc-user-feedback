@@ -68,7 +68,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const [rows, setRows] = useState<MemberType[]>([]);
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/members',
+    path: '/api/admin/projects/{projectId}/members',
     variables: { projectId, createdAt: 'ASC' },
   });
   useEffect(() => {

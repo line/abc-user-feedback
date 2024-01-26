@@ -8,190 +8,190 @@ export interface paths {
   "/api/metrics": {
     get: operations["PrometheusController_index"];
   };
-  "/api/auth/email/code": {
+  "/api/admin/auth/email/code": {
     post: operations["AuthController_sendCode"];
   };
-  "/api/auth/email/code/verify": {
+  "/api/admin/auth/email/code/verify": {
     post: operations["AuthController_verifyEmailCode"];
   };
-  "/api/auth/signUp/email": {
+  "/api/admin/auth/signUp/email": {
     post: operations["AuthController_signUpEmailUser"];
   };
-  "/api/auth/signUp/invitation": {
+  "/api/admin/auth/signUp/invitation": {
     post: operations["AuthController_signUpInvitationUser"];
   };
-  "/api/auth/signUp/oauth": {
+  "/api/admin/auth/signUp/oauth": {
     post: operations["AuthController_signUpOAuthUser"];
   };
-  "/api/auth/signIn/email": {
+  "/api/admin/auth/signIn/email": {
     post: operations["AuthController_signInEmail"];
   };
-  "/api/auth/signIn/oauth/loginURL": {
+  "/api/admin/auth/signIn/oauth/loginURL": {
     get: operations["AuthController_redirectToLoginURL"];
   };
-  "/api/auth/signIn/oauth": {
+  "/api/admin/auth/signIn/oauth": {
     get: operations["AuthController_handleCallback"];
   };
-  "/api/auth/refresh": {
+  "/api/admin/auth/refresh": {
     get: operations["AuthController_refreshToken"];
   };
-  "/api/users": {
+  "/api/admin/users": {
     get: operations["UserController_getAllUsers"];
     delete: operations["UserController_deleteUsers"];
   };
-  "/api/users/search": {
+  "/api/admin/users/search": {
     post: operations["UserController_searchUsers"];
   };
-  "/api/users/{id}": {
+  "/api/admin/users/{id}": {
     get: operations["UserController_getUser"];
     put: operations["UserController_updateUser"];
     delete: operations["UserController_deleteUser"];
   };
-  "/api/users/{userId}/roles": {
+  "/api/admin/users/{userId}/roles": {
     get: operations["UserController_getRoles"];
   };
-  "/api/users/invite": {
+  "/api/admin/users/invite": {
     post: operations["UserController_inviteUser"];
   };
-  "/api/users/password/reset/code": {
+  "/api/admin/users/password/reset/code": {
     post: operations["UserController_requestResetPassword"];
   };
-  "/api/users/password/reset": {
+  "/api/admin/users/password/reset": {
     post: operations["UserController_resetPassword"];
   };
-  "/api/users/password/change": {
+  "/api/admin/users/password/change": {
     post: operations["UserController_changePassword"];
   };
-  "/api/tenants": {
+  "/api/admin/tenants": {
     get: operations["TenantController_get"];
     put: operations["TenantController_update"];
     post: operations["TenantController_setup"];
   };
-  "/api/tenants/{tenantId}/feedback-count": {
+  "/api/admin/tenants/{tenantId}/feedback-count": {
     get: operations["TenantController_countFeedbacks"];
   };
-  "/api/projects/{projectId}/roles": {
+  "/api/admin/projects/{projectId}/roles": {
     get: operations["RoleController_getAllRolesByProjectId"];
     post: operations["RoleController_createRole"];
   };
-  "/api/projects/{projectId}/roles/{roleId}": {
+  "/api/admin/projects/{projectId}/roles/{roleId}": {
     put: operations["RoleController_updateRole"];
     delete: operations["RoleController_deleteRole"];
   };
-  "/api/projects/{projectId}/members": {
+  "/api/admin/projects/{projectId}/members": {
     get: operations["MemberController_getAllRolesByProjectId"];
     post: operations["MemberController_create"];
   };
-  "/api/projects/{projectId}/members/{memberId}": {
+  "/api/admin/projects/{projectId}/members/{memberId}": {
     put: operations["MemberController_update"];
     delete: operations["MemberController_delete"];
   };
-  "/api/projects/{projectId}/api-keys": {
+  "/api/admin/projects/{projectId}/api-keys": {
     get: operations["ApiKeyController_findAll"];
     post: operations["ApiKeyController_create"];
   };
-  "/api/projects/{projectId}/api-keys/{apiKeyId}/soft": {
+  "/api/admin/projects/{projectId}/api-keys/{apiKeyId}/soft": {
     delete: operations["ApiKeyController_softDelete"];
   };
-  "/api/projects/{projectId}/api-keys/{apiKeyId}/recover": {
+  "/api/admin/projects/{projectId}/api-keys/{apiKeyId}/recover": {
     delete: operations["ApiKeyController_recover"];
   };
-  "/api/projects/{projectId}/api-keys/{apiKeyId}": {
+  "/api/admin/projects/{projectId}/api-keys/{apiKeyId}": {
     delete: operations["ApiKeyController_delete"];
   };
-  "/api/projects/{projectId}/channels": {
+  "/api/admin/projects/{projectId}/channels": {
     get: operations["ChannelController_findAllByProjectId"];
     post: operations["ChannelController_create"];
   };
-  "/api/projects/{projectId}/channels/name-check": {
+  "/api/admin/projects/{projectId}/channels/name-check": {
     get: operations["ChannelController_checkName"];
   };
-  "/api/projects/{projectId}/channels/{channelId}": {
+  "/api/admin/projects/{projectId}/channels/{channelId}": {
     get: operations["ChannelController_findOne"];
     delete: operations["ChannelController_delete"];
   };
-  "/api/projects/{projectId}/channels/channels/{channelId}": {
+  "/api/admin/projects/{projectId}/channels/channels/{channelId}": {
     put: operations["ChannelController_updateOne"];
   };
-  "/api/projects/{projectId}/channels/channels/{channelId}/fields": {
+  "/api/admin/projects/{projectId}/channels/channels/{channelId}/fields": {
     put: operations["ChannelController_updateFields"];
   };
-  "/api/field/{fieldId}/options": {
+  "/api/admin/fields/{fieldId}/options": {
     get: operations["OptionController_getOptions"];
     post: operations["OptionController_createOption"];
   };
-  "/api/projects": {
+  "/api/admin/projects": {
     get: operations["ProjectController_findAll"];
     post: operations["ProjectController_create"];
   };
-  "/api/projects/name-check": {
+  "/api/admin/projects/name-check": {
     get: operations["ProjectController_checkName"];
   };
-  "/api/projects/{projectId}": {
+  "/api/admin/projects/{projectId}": {
     get: operations["ProjectController_findOne"];
     put: operations["ProjectController_updateOne"];
     delete: operations["ProjectController_delete"];
   };
-  "/api/projects/{projectId}/feedback-count": {
+  "/api/admin/projects/{projectId}/feedback-count": {
     get: operations["ProjectController_countFeedbacks"];
   };
-  "/api/projects/{projectId}/issue-count": {
+  "/api/admin/projects/{projectId}/issue-count": {
     get: operations["ProjectController_countIssues"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks": {
     post: operations["FeedbackController_create"];
     delete: operations["FeedbackController_deleteMany"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search": {
     post: operations["FeedbackController_findByChannelId"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
     post: operations["FeedbackController_addIssue"];
     delete: operations["FeedbackController_removeIssue"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/export": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export": {
     post: operations["FeedbackController_exportFeedbacks"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
     get: operations["FeedbackController_getImageUploadUrl"];
   };
-  "/api/projects/{projectId}/issues": {
+  "/api/admin/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
     delete: operations["IssueController_deleteMany"];
   };
-  "/api/projects/{projectId}/issues/{issueId}": {
+  "/api/admin/projects/{projectId}/issues/{issueId}": {
     get: operations["IssueController_findById"];
     put: operations["IssueController_update"];
     delete: operations["IssueController_delete"];
   };
-  "/api/projects/{projectId}/issues/search": {
+  "/api/admin/projects/{projectId}/issues/search": {
     post: operations["IssueController_findAllByProjectId"];
   };
-  "/api/statistics/issue/count": {
+  "/api/admin/statistics/issue/count": {
     get: operations["IssueStatisticsController_getCount"];
   };
-  "/api/statistics/issue/count-by-date": {
+  "/api/admin/statistics/issue/count-by-date": {
     get: operations["IssueStatisticsController_getCountByDate"];
   };
-  "/api/statistics/issue/count-by-status": {
+  "/api/admin/statistics/issue/count-by-status": {
     get: operations["IssueStatisticsController_getCountByStatus"];
   };
-  "/api/statistics/feedback": {
+  "/api/admin/statistics/feedback": {
     get: operations["FeedbackStatisticsController_getCountByDateByChannel"];
   };
-  "/api/statistics/feedback/count": {
+  "/api/admin/statistics/feedback/count": {
     get: operations["FeedbackStatisticsController_getCount"];
   };
-  "/api/statistics/feedback/issued-ratio": {
+  "/api/admin/statistics/feedback/issued-ratio": {
     get: operations["FeedbackStatisticsController_getIssuedRatio"];
   };
-  "/api/statistics/feedback-issue": {
+  "/api/admin/statistics/feedback-issue": {
     get: operations["FeedbackIssueStatisticsController_getCountByDateByIssue"];
   };
-  "/api/projects/{projectId}/issue-tracker": {
+  "/api/admin/projects/{projectId}/issue-tracker": {
     get: operations["IssueTrackerController_findOne"];
     put: operations["IssueTrackerController_updateOne"];
     post: operations["IssueTrackerController_create"];
@@ -211,31 +211,31 @@ export interface paths {
   "/api/migration/statistics/feedback-issue": {
     post: operations["MigrationController_migrateFeedbackIssueStatistics"];
   };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks": {
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks": {
     post: operations["FeedbackController_create"];
     delete: operations["FeedbackController_deleteMany"];
   };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/search": {
     post: operations["FeedbackController_findByChannelId"];
   };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
     post: operations["FeedbackController_addIssue"];
     delete: operations["FeedbackController_removeIssue"];
   };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     get: operations["FeedbackController_findFeedback"];
     put: operations["FeedbackController_updateFeedback"];
   };
-  "/api/external/projects/{projectId}/issues": {
+  "/api/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
     delete: operations["IssueController_deleteMany"];
   };
-  "/api/external/projects/{projectId}/issues/{issueId}": {
+  "/api/projects/{projectId}/issues/{issueId}": {
     get: operations["IssueController_findById"];
     put: operations["IssueController_update"];
     delete: operations["IssueController_delete"];
   };
-  "/api/external/projects/{projectId}/issues/search": {
+  "/api/projects/{projectId}/issues/search": {
     post: operations["IssueController_findAllByProjectId"];
   };
 }

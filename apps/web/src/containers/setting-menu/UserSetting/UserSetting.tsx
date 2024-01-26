@@ -164,7 +164,7 @@ const UserSetting: React.FC<IProps> = () => {
 
   const { mutate } = useOAIMutation({
     method: 'delete',
-    path: '/api/users',
+    path: '/api/admin/users',
     queryOptions: {
       async onSuccess() {
         await refetch();
@@ -182,7 +182,7 @@ const UserSetting: React.FC<IProps> = () => {
     [rowSelection],
   );
 
-  const { data: projectData } = useOAIQuery({ path: '/api/projects' });
+  const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
 
   const searchItems = useMemo(() => {
     return [

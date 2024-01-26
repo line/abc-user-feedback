@@ -228,14 +228,14 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     sort: sort as Record<string, never>,
   });
   const { data: issueTracker } = useOAIQuery({
-    path: '/api/projects/{projectId}/issue-tracker',
+    path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
 
   const { mutate: deleteIssues, isPending: deleteIssuesPending } =
     useOAIMutation({
       method: 'delete',
-      path: '/api/projects/{projectId}/issues',
+      path: '/api/admin/projects/{projectId}/issues',
       pathParams: { projectId },
       queryOptions: {
         async onSuccess() {

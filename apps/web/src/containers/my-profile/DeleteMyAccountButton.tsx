@@ -31,7 +31,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'delete',
-    path: '/api/users/{id}',
+    path: '/api/admin/users/{id}',
     pathParams: { id: user?.id ?? -1 },
     queryOptions: {
       async onSuccess() {

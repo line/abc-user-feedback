@@ -44,7 +44,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
   const [rows, setRows] = useState<ApiKeyType[]>([]);
 
   const { data, refetch } = useOAIQuery({
-    path: '/api/projects/{projectId}/api-keys',
+    path: '/api/admin/projects/{projectId}/api-keys',
     variables: { projectId },
   });
 
@@ -147,7 +147,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
 
   const { mutate: createApiKey, status } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/api-keys',
+    path: '/api/admin/projects/{projectId}/api-keys',
     pathParams: { projectId },
     queryOptions: {
       onSuccess: async () => {

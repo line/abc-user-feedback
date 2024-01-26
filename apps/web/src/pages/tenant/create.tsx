@@ -55,7 +55,7 @@ const CreatePage: NextPageWithLayout = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/tenants',
+    path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: 'Success' });

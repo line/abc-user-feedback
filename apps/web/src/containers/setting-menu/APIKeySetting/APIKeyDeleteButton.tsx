@@ -32,7 +32,7 @@ const APIKeyDeleteButton: React.FC<IProps> = (props) => {
 
   const { mutate: deleteAPiKey, isPending } = useOAIMutation({
     method: 'delete',
-    path: '/api/projects/{projectId}/api-keys/{apiKeyId}',
+    path: '/api/admin/projects/{projectId}/api-keys/{apiKeyId}',
     pathParams: { projectId, apiKeyId },
     queryOptions: {
       async onSuccess() {

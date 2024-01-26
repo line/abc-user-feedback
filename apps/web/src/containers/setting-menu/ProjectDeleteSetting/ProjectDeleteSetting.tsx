@@ -43,21 +43,21 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
   const [inputChannelName, setInputChannelName] = useState('');
 
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
 
   const { data: channelData } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
   const { data: issueData } = useOAIQuery({
-    path: '/api/projects/{projectId}/issue-count',
+    path: '/api/admin/projects/{projectId}/issue-count',
     variables: { projectId },
   });
   const { mutate, isPending } = useOAIMutation({
     method: 'delete',
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {

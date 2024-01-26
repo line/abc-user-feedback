@@ -37,7 +37,7 @@ const FeedbackDeleteDialog: React.FC<IProps> = (props) => {
   const { mutate: deleteFeedback, isPending: deleteFeedbackPending } =
     useOAIMutation({
       method: 'delete',
-      path: '/api/projects/{projectId}/channels/{channelId}/feedbacks',
+      path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks',
       pathParams: { projectId, channelId },
       queryOptions: {
         async onSuccess() {
