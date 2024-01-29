@@ -16,11 +16,12 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { UserPasswordService } from '@/domains/admin/user/user-password.service';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
-import { getMockProvider, mockRepository } from '@/test-utils/util-functions';
-import { UserEntity } from '../../domains/admin/user/entities/user.entity';
-import { UserPasswordService } from '../../domains/admin/user/user-password.service';
+import { UserRepositoryStub } from '../stubs';
+import { getMockProvider } from '../util-functions';
 
 const MockMailerService = {
   sendMail: jest.fn(),
@@ -34,8 +35,5 @@ export const UserPasswordServiceProviders = [
   ...CodeServiceProviders,
   getMockProvider(ResetPasswordMailingService, MockResetPasswordMailingService),
   getMockProvider(MailerService, MockMailerService),
-  {
-    provide: getRepositoryToken(UserEntity),
-    useValue: mockRepository(),
-  },
+  { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
 ];

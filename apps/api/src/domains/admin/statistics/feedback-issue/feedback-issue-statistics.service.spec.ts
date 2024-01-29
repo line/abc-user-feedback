@@ -112,7 +112,6 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const countByDateByissue =
         await feedbackIssueStatsService.getCountByDateByIssue(dto);
 
-      expect(feedbackIssueStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByissue).toEqual({
         issues: [
           {
@@ -161,7 +160,6 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const countByDateByIssue =
         await feedbackIssueStatsService.getCountByDateByIssue(dto);
 
-      expect(feedbackIssueStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByIssue).toEqual({
         issues: [
           {
@@ -205,7 +203,6 @@ describe('FeedbackIssueStatisticsService suite', () => {
       const countByDateByIssue =
         await feedbackIssueStatsService.getCountByDateByIssue(dto);
 
-      expect(feedbackIssueStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByIssue).toEqual({
         issues: [
           {

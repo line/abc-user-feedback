@@ -21,10 +21,7 @@ import type { Repository } from 'typeorm';
 
 import { FieldFormatEnum, isSelectFieldFormat } from '@/common/enums';
 import { createFieldDto, updateFieldDto } from '@/test-utils/fixtures';
-import {
-  MockOpensearchRepository,
-  TestConfig,
-} from '@/test-utils/util-functions';
+import { TestConfig } from '@/test-utils/util-functions';
 import { FieldServiceProviders } from '../../../../test-utils/providers/field.service.providers';
 import { OptionEntity } from '../option/option.entity';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
@@ -74,7 +71,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.save).toBeCalledTimes(fieldCount + 4);
       expect(optionRepo.save).toBeCalledTimes(selectFieldCount);
-      expect(MockOpensearchRepository.putMappings).toBeCalledTimes(1);
     });
     it('creating many fields fails with duplicate names', async () => {
       const channelId = faker.number.int();
@@ -87,8 +83,6 @@ describe('FieldService suite', () => {
       await expect(fieldService.createMany(dto)).rejects.toThrow(
         FieldNameDuplicatedException,
       );
-
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('creating many fields fails with duplicate keys', async () => {
       const channelId = faker.number.int();
@@ -101,8 +95,6 @@ describe('FieldService suite', () => {
       await expect(fieldService.createMany(dto)).rejects.toThrow(
         FieldKeyDuplicatedException,
       );
-
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('creating many fields fails with options in non-select format field', async () => {
       const channelId = faker.number.int();
@@ -120,8 +112,6 @@ describe('FieldService suite', () => {
       await expect(fieldService.createMany(dto)).rejects.toThrow(
         new BadRequestException('only select format field has options'),
       );
-
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
   });
   describe('replaceMany', () => {
@@ -150,7 +140,6 @@ describe('FieldService suite', () => {
       expect(fieldRepo.save).toBeCalledTimes(
         updatingFieldDtos.length + creatingFieldDtos.length,
       );
-      expect(MockOpensearchRepository.putMappings).toBeCalledTimes(1);
     });
     it('replacing many fields fails with duplicate names', async () => {
       const channelId = faker.number.int();
@@ -174,7 +163,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.findBy).not.toBeCalled();
       expect(fieldRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with duplicate keys', async () => {
       const channelId = faker.number.int();
@@ -198,7 +186,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.findBy).not.toBeCalled();
       expect(fieldRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with options in non-select format field', async () => {
       const channelId = faker.number.int();
@@ -229,7 +216,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.findBy).not.toBeCalled();
       expect(fieldRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with a nonexistent field', async () => {
       const channelId = faker.number.int();
@@ -256,7 +242,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
       expect(fieldRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with a format change', async () => {
       const channelId = faker.number.int();
@@ -283,7 +268,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
       expect(fieldRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
     it('replacing many fields fails with a key change', async () => {
       const channelId = faker.number.int();
@@ -310,7 +294,6 @@ describe('FieldService suite', () => {
 
       expect(fieldRepo.findBy).toBeCalledTimes(1);
       expect(fieldRepo.save).not.toBeCalled();
-      expect(MockOpensearchRepository.putMappings).not.toBeCalled();
     });
   });
 });

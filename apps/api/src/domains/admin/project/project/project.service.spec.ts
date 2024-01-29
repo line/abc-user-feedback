@@ -19,18 +19,16 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
-import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
-import { UserDto } from '@/domains/admin/user/dtos';
-import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
-import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import {
   createQueryBuilder,
   getRandomEnumValues,
-  MockOpensearchRepository,
   TestConfig,
 } from '@/test-utils/util-functions';
 import { ProjectServiceProviders } from '../../../../test-utils/providers/project.service.providers';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
+import { UserDto } from '../../user/dtos';
+import { UserTypeEnum } from '../../user/entities/enums';
+import { UserEntity } from '../../user/entities/user.entity';
 import { ApiKeyEntity } from '../api-key/api-key.entity';
 import { IssueTrackerEntity } from '../issue-tracker/issue-tracker.entity';
 import { MemberEntity } from '../member/member.entity';
@@ -49,7 +47,6 @@ import { ProjectService } from './project.service';
 describe('ProjectService Test suite', () => {
   let projectService: ProjectService;
   let projectRepo: Repository<ProjectEntity>;
-  let tenantRepo: Repository<TenantEntity>;
   let channelRepo: Repository<ChannelEntity>;
   let roleRepo: Repository<RoleEntity>;
   let userRepo: Repository<UserEntity>;
@@ -65,7 +62,6 @@ describe('ProjectService Test suite', () => {
 
     projectService = module.get<ProjectService>(ProjectService);
     projectRepo = module.get(getRepositoryToken(ProjectEntity));
-    tenantRepo = module.get(getRepositoryToken(TenantEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     roleRepo = module.get(getRepositoryToken(RoleEntity));
     userRepo = module.get(getRepositoryToken(UserEntity));
@@ -87,7 +83,6 @@ describe('ProjectService Test suite', () => {
     it('creating a project succeeds with project data', async () => {
       const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
         .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
@@ -102,7 +97,6 @@ describe('ProjectService Test suite', () => {
       const { id } = await projectService.create(dto);
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(id).toEqual(projectId);
     });
@@ -115,7 +109,6 @@ describe('ProjectService Test suite', () => {
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
         .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
@@ -131,7 +124,6 @@ describe('ProjectService Test suite', () => {
       const { id } = await projectService.create(dto);
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(id).toEqual(projectId);
     });
@@ -150,7 +142,6 @@ describe('ProjectService Test suite', () => {
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest
         .spyOn(projectRepo, 'save')
         .mockResolvedValue({ id: projectId } as any);
@@ -183,7 +174,6 @@ describe('ProjectService Test suite', () => {
       const { id } = await projectService.create(dto);
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(memberRepo.save).toBeCalledTimes(1);
       expect(id).toEqual(projectId);
@@ -208,7 +198,6 @@ describe('ProjectService Test suite', () => {
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest.spyOn(projectRepo, 'save').mockResolvedValue({
         id: projectId,
         timezone: {
@@ -248,7 +237,6 @@ describe('ProjectService Test suite', () => {
 
       const { id } = await projectService.create(dto);
 
-      expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(memberRepo.save).toBeCalledTimes(1);
       expect(apiKeyRepo.save).toBeCalledTimes(1);
@@ -280,7 +268,6 @@ describe('ProjectService Test suite', () => {
         },
       };
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest.spyOn(projectRepo, 'save').mockResolvedValue({
         id: projectId,
         timezone: {
@@ -327,7 +314,6 @@ describe('ProjectService Test suite', () => {
 
       const { id } = await projectService.create(dto);
 
-      expect(tenantRepo.find).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
       expect(memberRepo.save).toBeCalledTimes(1);
       expect(apiKeyRepo.save).toBeCalledTimes(1);
@@ -340,7 +326,6 @@ describe('ProjectService Test suite', () => {
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValue({ name: dto.name } as ProjectEntity);
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{}] as TenantEntity[]);
       jest.spyOn(projectRepo, 'save').mockResolvedValue({
         id: projectId,
         timezone: {
@@ -355,7 +340,6 @@ describe('ProjectService Test suite', () => {
       );
 
       expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(tenantRepo.findOne).not.toBeCalled();
       expect(projectRepo.save).not.toBeCalled();
     });
   });
@@ -496,10 +480,6 @@ describe('ProjectService Test suite', () => {
 
       await projectService.deleteById(projectId);
 
-      expect(channelRepo.find).toBeCalledTimes(1);
-      expect(MockOpensearchRepository.deleteIndex).toBeCalledTimes(
-        channelCount,
-      );
       expect(projectRepo.remove).toBeCalledTimes(1);
     });
   });

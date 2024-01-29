@@ -16,11 +16,12 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { UserService } from '@/domains/admin/user/user.service';
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
-import { getMockProvider, mockRepository } from '@/test-utils/util-functions';
-import { UserEntity } from '../../domains/admin/user/entities/user.entity';
-import { UserService } from '../../domains/admin/user/user.service';
+import { UserRepositoryStub } from '../stubs';
+import { getMockProvider } from '../util-functions';
 import { TenantServiceProviders } from './tenant.service.providers';
 
 export const MockUserInvitationMailingService = {
@@ -32,7 +33,7 @@ const MockMailerService = {
 
 export const UserServiceProviders = [
   UserService,
-  { provide: getRepositoryToken(UserEntity), useValue: mockRepository() },
+  { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
   getMockProvider(
     UserInvitationMailingService,
     MockUserInvitationMailingService,

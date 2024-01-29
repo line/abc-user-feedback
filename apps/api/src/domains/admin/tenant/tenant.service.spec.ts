@@ -18,6 +18,8 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { tenantFixture } from '@/test-utils/fixtures';
+import type { TenantRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import { TenantServiceProviders } from '../../../test-utils/providers/tenant.service.providers';
 import { FeedbackEntity } from '../feedback/feedback.entity';
@@ -36,7 +38,7 @@ import { TenantService } from './tenant.service';
 
 describe('TenantService', () => {
   let tenantService: TenantService;
-  let tenantRepo: Repository<TenantEntity>;
+  let tenantRepo: TenantRepositoryStub;
   let userRepo: Repository<UserEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;
 
@@ -55,19 +57,18 @@ describe('TenantService', () => {
     it('creation succeeds with valid data', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
+      tenantRepo.setNull();
+      jest.spyOn(userRepo, 'save');
 
-      await tenantService.create(dto);
+      const tenant = await tenantService.create(dto);
 
-      expect(tenantRepo.find).toHaveBeenCalledTimes(1);
-      expect(tenantRepo.save).toHaveBeenCalledTimes(1);
-      expect(tenantRepo.save).toHaveBeenCalledWith(dto);
+      expect(tenant.id).toBeDefined();
+      expect(tenant.siteName).toEqual(dto.siteName);
       expect(userRepo.save).toHaveBeenCalledTimes(1);
     });
     it('creation fails with the duplicate site name', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([{} as TenantEntity]);
 
       await expect(tenantService.create(dto)).rejects.toThrow(
         TenantAlreadyExistsException,
@@ -94,18 +95,19 @@ describe('TenantService', () => {
     };
 
     it('update succeeds with valid data', async () => {
-      const tenantId = faker.number.int();
-      jest
-        .spyOn(tenantRepo, 'find')
-        .mockResolvedValue([{ id: tenantId }] as TenantEntity[]);
+      const tenant = await tenantService.update(dto);
 
-      await tenantService.update(dto);
-
-      expect(tenantRepo.find).toHaveBeenCalledTimes(1);
-      expect(tenantRepo.save).toHaveBeenCalledTimes(1);
+      expect(tenant.id).toBeDefined();
+      expect(tenant.siteName).toEqual(dto.siteName);
+      expect(tenant.useEmail).toEqual(dto.useEmail);
+      expect(tenant.isPrivate).toEqual(dto.isPrivate);
+      expect(tenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
+      expect(tenant.allowDomains).toEqual(dto.allowDomains);
+      expect(tenant.useOAuth).toEqual(dto.useOAuth);
+      expect(tenant.oauthConfig).toEqual(dto.oauthConfig);
     });
     it('update fails when there is no tenant', async () => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([] as TenantEntity[]);
+      tenantRepo.setNull();
 
       await expect(tenantService.update(dto)).rejects.toThrow(
         TenantNotFoundException,
@@ -114,18 +116,12 @@ describe('TenantService', () => {
   });
   describe('findOne', () => {
     it('finding a tenant succeeds when there is a tenant', async () => {
-      const tenantId = faker.number.int();
-      jest
-        .spyOn(tenantRepo, 'find')
-        .mockResolvedValue([{ id: tenantId }] as TenantEntity[]);
-
       const tenant = await tenantService.findOne();
 
-      expect(tenantRepo.find).toHaveBeenCalledTimes(1);
-      expect(tenant).toEqual({ id: tenantId, useEmailVerification: false });
+      expect(tenant).toEqual({ ...tenantFixture, useEmailVerification: false });
     });
     it('finding a tenant fails when there is a tenant', async () => {
-      jest.spyOn(tenantRepo, 'find').mockResolvedValue([] as TenantEntity[]);
+      tenantRepo.setNull();
 
       await expect(tenantService.findOne()).rejects.toThrow(
         TenantNotFoundException,
@@ -142,18 +138,6 @@ describe('TenantService', () => {
 
       const feedbackCounts = await tenantService.countByTenantId(dto);
 
-      expect(feedbackRepo.count).toHaveBeenCalledTimes(1);
-      expect(feedbackRepo.count).toHaveBeenCalledWith({
-        where: {
-          channel: {
-            project: {
-              tenant: {
-                id: dto.tenantId,
-              },
-            },
-          },
-        },
-      });
       expect(feedbackCounts.total).toEqual(count);
     });
   });
