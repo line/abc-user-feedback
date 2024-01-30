@@ -25,9 +25,10 @@ export default withIronSessionApiRoute(async (req, res) => {
   if (!jwt) return res.status(400).end();
 
   try {
-    const response = await axios.get(`${env.API_BASE_URL}/api/auth/refresh`, {
-      headers: { Authorization: `Bearer ${jwt?.refreshToken}` },
-    });
+    const response = await axios.get(
+      `${env.API_BASE_URL}/api/admin/auth/refresh`,
+      { headers: { Authorization: `Bearer ${jwt?.refreshToken}` } },
+    );
 
     if (response.status !== 200) {
       return res.status(response.status).send(response.data);

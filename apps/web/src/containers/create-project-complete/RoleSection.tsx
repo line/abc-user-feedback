@@ -27,7 +27,7 @@ interface IProps {
 const RoleSection: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/roles',
+    path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId },
   });
 

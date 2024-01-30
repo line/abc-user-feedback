@@ -65,7 +65,7 @@ const UserInvitationPage: NextPageWithLayout = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/auth/signUp/invitation',
+    path: '/api/admin/auth/signUp/invitation',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: 'Success' });

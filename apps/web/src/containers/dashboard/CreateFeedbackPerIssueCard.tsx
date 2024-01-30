@@ -31,7 +31,7 @@ const CreateFeedbackPerIssueCard: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/feedback/issued-ratio',
+    path: '/api/admin/statistics/feedback/issued-ratio',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
     queryOptions: {
       refetchOnMount: false,

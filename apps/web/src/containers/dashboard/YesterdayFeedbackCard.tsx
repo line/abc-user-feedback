@@ -28,7 +28,7 @@ const YesterdayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const { data: currentData } = useOAIQuery({
-    path: '/api/statistics/feedback/count',
+    path: '/api/admin/statistics/feedback/count',
     variables: {
       from: dayjs().subtract(1, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
@@ -43,7 +43,7 @@ const YesterdayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
   });
 
   const { data: previousData } = useOAIQuery({
-    path: '/api/statistics/feedback/count',
+    path: '/api/admin/statistics/feedback/count',
     variables: {
       from: dayjs().subtract(2, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(2, 'day').endOf('day').toISOString(),

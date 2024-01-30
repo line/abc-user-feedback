@@ -70,7 +70,7 @@ const MemberSetting: React.FC<IProps> = ({ projectId }) => {
     refetch,
     isLoading,
   } = useOAIQuery({
-    path: '/api/projects/{projectId}/members',
+    path: '/api/admin/projects/{projectId}/members',
     variables: { projectId, createdAt: sort.createdAt } as any,
   });
 

@@ -35,7 +35,7 @@ const HeaderName: React.FC<IProps> = () => {
   }, [router]);
 
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     variables: { projectId },
     queryOptions: { enabled: projectId !== -1 },
   });

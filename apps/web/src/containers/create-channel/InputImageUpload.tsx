@@ -87,7 +87,7 @@ const InputImageUpload: React.FC<IProps> = () => {
   );
   const { mutate: testConection } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/channels/image-upload-url-test',
+    path: '/api/admin/projects/{projectId}/channels/image-upload-url-test',
     pathParams: { projectId },
     queryOptions: {
       onSuccess(data) {

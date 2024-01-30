@@ -16,8 +16,8 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
-import { IssueTrackerEntity } from '../../domains/project/issue-tracker/issue-tracker.entity';
-import { IssueTrackerService } from '../../domains/project/issue-tracker/issue-tracker.service';
+import { IssueTrackerEntity } from '../../domains/admin/project/issue-tracker/issue-tracker.entity';
+import { IssueTrackerService } from '../../domains/admin/project/issue-tracker/issue-tracker.service';
 
 export const IssueTrackerServiceProviders = [
   IssueTrackerService,

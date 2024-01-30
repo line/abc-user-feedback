@@ -65,6 +65,7 @@ const columns = (t: TFunction) => [
         </div>
       );
     },
+    size: 200,
   }),
   columnHelper.accessor('count', {
     header: () => (
@@ -74,8 +75,13 @@ const columns = (t: TFunction) => [
       </>
     ),
     cell: ({ getValue }) => getValue().toLocaleString(),
+    size: 50,
   }),
-  columnHelper.accessor('status', { header: 'Status', enableSorting: false }),
+  columnHelper.accessor('status', {
+    header: 'Status',
+    enableSorting: false,
+    size: 50,
+  }),
 ];
 interface IProps {
   projectId: number;

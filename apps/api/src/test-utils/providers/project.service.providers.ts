@@ -16,15 +16,15 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { TenantServiceProviders } from '@/test-utils/providers/tenant.service.providers';
 import {
   getMockProvider,
   MockOpensearchRepository,
   mockRepository,
 } from '@/test-utils/util-functions';
-import { ProjectEntity } from '../../domains/project/project/project.entity';
-import { ProjectService } from '../../domains/project/project/project.service';
+import { ProjectEntity } from '../../domains/admin/project/project/project.entity';
+import { ProjectService } from '../../domains/admin/project/project/project.service';
 import { ApiKeyServiceProviders } from './api-key.service.providers';
 import { FeedbackIssueStatisticsServiceProviders } from './feedback-issue-statistics.service.providers';
 import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';

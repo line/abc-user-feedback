@@ -44,7 +44,7 @@ const MemberDeleteDialog: React.FC<IProps> = ({
 
   const { mutate, isPending } = useOAIMutation({
     method: 'delete',
-    path: '/api/projects/{projectId}/members/{memberId}',
+    path: '/api/admin/projects/{projectId}/members/{memberId}',
     pathParams: { memberId, projectId },
     queryOptions: {
       async onSuccess() {

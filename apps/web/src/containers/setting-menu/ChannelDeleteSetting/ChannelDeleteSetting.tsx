@@ -48,13 +48,13 @@ const ChannelDeleteSetting: React.FC<IProps> = (props) => {
   const router = useRouter();
 
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'delete',
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
     queryOptions: {
       async onSuccess() {

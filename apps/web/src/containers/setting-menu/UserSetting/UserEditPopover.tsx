@@ -64,7 +64,7 @@ const UserEditPopover: React.FC<IProps> = ({ data, refetch }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/users/{id}',
+    path: '/api/admin/users/{id}',
     pathParams: { id: data.id },
     queryOptions: {
       async onSuccess() {

@@ -20,13 +20,22 @@ jobs:
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --check-cache
 
-      - name: setup environment variables
+      - name: setup environment variables (with opensearch)
         run: |
           echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
-          echo "OS_USE=${{ vars.TEST_OS_USE }}" >> ./apps/api/.env.test
+          echo "OS_USE=true" >> ./apps/api/.env.test
           echo "OS_NODE=http://localhost:9200" >> ./apps/api/.env.test
           echo "OS_USERNAME=''" >> ./apps/api/.env.test
           echo "OS_PASSWORD=''" >> ./apps/api/.env.test
+
+      - name: Run Tests
+        run: yarn test
+
+      - name: setup environment variables (without opensearch)
+        run: |
+          rm ./apps/api/.env.test
+          echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
+          echo "OS_USE=false" >> ./apps/api/.env.test
 
       - name: Run Tests
         run: yarn test

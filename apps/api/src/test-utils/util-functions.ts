@@ -25,10 +25,10 @@ import {
   opensearchConfigSchema,
 } from '@/configs/opensearch.config';
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
-import type { AuthService } from '@/domains/auth/auth.service';
-import { UserDto } from '@/domains/user/dtos';
-import { UserStateEnum } from '@/domains/user/entities/enums';
-import { UserEntity } from '@/domains/user/entities/user.entity';
+import type { AuthService } from '@/domains/admin/auth/auth.service';
+import { UserDto } from '@/domains/admin/user/dtos';
+import { UserStateEnum } from '@/domains/admin/user/entities/enums';
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 
 initializeTransactionalContext();
 
@@ -87,15 +87,21 @@ export const createQueryBuilder: any = {
   setFindOptions: () => jest.fn().mockImplementation(() => createQueryBuilder),
   select: () => createQueryBuilder,
   innerJoin: () => createQueryBuilder,
+  leftJoin: () => createQueryBuilder,
   where: () => createQueryBuilder,
   andWhere: () => createQueryBuilder,
   groupBy: () => createQueryBuilder,
+  addOrderBy: () => createQueryBuilder,
   getRawMany: () => createQueryBuilder,
   insert: () => createQueryBuilder,
   values: () => createQueryBuilder,
   orUpdate: () => createQueryBuilder,
   updateEntity: () => createQueryBuilder,
   execute: () => createQueryBuilder,
+  offset: () => createQueryBuilder,
+  limit: () => createQueryBuilder,
+  getMany: () => createQueryBuilder,
+  getCount: () => createQueryBuilder,
 };
 
 export const mockRepository = () => ({

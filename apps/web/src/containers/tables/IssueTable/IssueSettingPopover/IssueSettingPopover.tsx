@@ -94,7 +94,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/issues/{issueId}',
+    path: '/api/admin/projects/{projectId}/issues/{issueId}',
     pathParams: { projectId, issueId: issue.id },
     queryOptions: {
       async onSuccess() {

@@ -29,7 +29,7 @@ const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
   const { t } = useTranslation();
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/feedback/count',
+    path: '/api/admin/statistics/feedback/count',
     variables: { from: from.toISOString(), to: to.toISOString(), projectId },
     queryOptions: {
       refetchOnMount: false,

@@ -55,7 +55,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
   const feedbackData = data?.items?.[0] ?? {};
 
   const { data: channelData } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
 

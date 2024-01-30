@@ -19,19 +19,19 @@ import { useQuery } from '@tanstack/react-query';
 import client from '@/libs/client';
 import type { OAIMutationResponse, OAIRequestBody } from '@/types/openapi.type';
 
-type TData = OAIMutationResponse<'/api/users/search', 'post'>;
+type TData = OAIMutationResponse<'/api/admin/users/search', 'post'>;
 
-interface IBody extends OAIRequestBody<'/api/users/search', 'post'> {}
+interface IBody extends OAIRequestBody<'/api/admin/users/search', 'post'> {}
 
 const useUserSearch = (
   body: IBody = { limit: 10, page: 1 },
   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'>,
 ) => {
   return useQuery<TData>({
-    queryKey: ['/api/users/search', body],
+    queryKey: ['/api/admin/users/search', body],
     queryFn: async () => {
       const { data: result } = await client.post({
-        path: '/api/users/search',
+        path: '/api/admin/users/search',
         body,
       });
       return result;

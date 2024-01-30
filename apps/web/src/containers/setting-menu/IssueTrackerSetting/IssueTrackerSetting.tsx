@@ -47,7 +47,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   });
 
   const { data, refetch } = useOAIQuery({
-    path: '/api/projects/{projectId}/issue-tracker',
+    path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
 
@@ -58,7 +58,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
 
   const { mutate: modify, isPending: modifyPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/issue-tracker',
+    path: '/api/admin/projects/{projectId}/issue-tracker',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
@@ -73,7 +73,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
 
   const { mutate: create, isPending: createPending } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/issue-tracker',
+    path: '/api/admin/projects/{projectId}/issue-tracker',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {

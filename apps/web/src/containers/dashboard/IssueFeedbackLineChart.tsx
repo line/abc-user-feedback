@@ -65,7 +65,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   );
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/feedback-issue',
+    path: '/api/admin/statistics/feedback-issue',
     variables: {
       startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
       endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
@@ -83,7 +83,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   useEffect(() => {
     client
       .post({
-        path: '/api/projects/{projectId}/issues/search',
+        path: '/api/admin/projects/{projectId}/issues/search',
         body: { sort: { feedbackCount: 'DESC' } as any, limit: 5 },
         pathParams: { projectId },
       })

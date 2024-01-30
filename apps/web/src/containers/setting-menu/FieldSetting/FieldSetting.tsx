@@ -184,7 +184,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
     setChannelDataLoading(true);
 
     const { data } = await client.get({
-      path: '/api/projects/{projectId}/channels/{channelId}',
+      path: '/api/admin/projects/{projectId}/channels/{channelId}',
       pathParams: { channelId, projectId },
     });
     setChannelData(data);
@@ -226,7 +226,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/channels/{channelId}/fields',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/fields',
     pathParams: { channelId, projectId },
     queryOptions: {
       onSuccess: async () => {

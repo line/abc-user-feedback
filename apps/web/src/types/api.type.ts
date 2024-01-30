@@ -5,239 +5,191 @@
 
 
 export interface paths {
-  "/api/metrics": {
-    get: operations["PrometheusController_index"];
-  };
-  "/api/auth/email/code": {
+  "/api/admin/auth/email/code": {
     post: operations["AuthController_sendCode"];
   };
-  "/api/auth/email/code/verify": {
+  "/api/admin/auth/email/code/verify": {
     post: operations["AuthController_verifyEmailCode"];
   };
-  "/api/auth/signUp/email": {
+  "/api/admin/auth/signUp/email": {
     post: operations["AuthController_signUpEmailUser"];
   };
-  "/api/auth/signUp/invitation": {
+  "/api/admin/auth/signUp/invitation": {
     post: operations["AuthController_signUpInvitationUser"];
   };
-  "/api/auth/signUp/oauth": {
+  "/api/admin/auth/signUp/oauth": {
     post: operations["AuthController_signUpOAuthUser"];
   };
-  "/api/auth/signIn/email": {
+  "/api/admin/auth/signIn/email": {
     post: operations["AuthController_signInEmail"];
   };
-  "/api/auth/signIn/oauth/loginURL": {
+  "/api/admin/auth/signIn/oauth/loginURL": {
     get: operations["AuthController_redirectToLoginURL"];
   };
-  "/api/auth/signIn/oauth": {
+  "/api/admin/auth/signIn/oauth": {
     get: operations["AuthController_handleCallback"];
   };
-  "/api/auth/refresh": {
+  "/api/admin/auth/refresh": {
     get: operations["AuthController_refreshToken"];
   };
-  "/api/users": {
+  "/api/admin/users": {
     get: operations["UserController_getAllUsers"];
     delete: operations["UserController_deleteUsers"];
   };
-  "/api/users/search": {
+  "/api/admin/users/search": {
     post: operations["UserController_searchUsers"];
   };
-  "/api/users/{id}": {
+  "/api/admin/users/{id}": {
     get: operations["UserController_getUser"];
     put: operations["UserController_updateUser"];
     delete: operations["UserController_deleteUser"];
   };
-  "/api/users/{userId}/roles": {
+  "/api/admin/users/{userId}/roles": {
     get: operations["UserController_getRoles"];
   };
-  "/api/users/invite": {
+  "/api/admin/users/invite": {
     post: operations["UserController_inviteUser"];
   };
-  "/api/users/password/reset/code": {
+  "/api/admin/users/password/reset/code": {
     post: operations["UserController_requestResetPassword"];
   };
-  "/api/users/password/reset": {
+  "/api/admin/users/password/reset": {
     post: operations["UserController_resetPassword"];
   };
-  "/api/users/password/change": {
+  "/api/admin/users/password/change": {
     post: operations["UserController_changePassword"];
   };
-  "/api/tenants": {
+  "/api/admin/tenants": {
     get: operations["TenantController_get"];
     put: operations["TenantController_update"];
     post: operations["TenantController_setup"];
   };
-  "/api/tenants/{tenantId}/feedback-count": {
+  "/api/admin/tenants/{tenantId}/feedback-count": {
     get: operations["TenantController_countFeedbacks"];
   };
-  "/api/projects/{projectId}/roles": {
+  "/api/admin/projects/{projectId}/roles": {
     get: operations["RoleController_getAllRolesByProjectId"];
     post: operations["RoleController_createRole"];
   };
-  "/api/projects/{projectId}/roles/{roleId}": {
+  "/api/admin/projects/{projectId}/roles/{roleId}": {
     put: operations["RoleController_updateRole"];
     delete: operations["RoleController_deleteRole"];
   };
-  "/api/projects/{projectId}/members": {
+  "/api/admin/projects/{projectId}/members": {
     get: operations["MemberController_getAllRolesByProjectId"];
     post: operations["MemberController_create"];
   };
-  "/api/projects/{projectId}/members/{memberId}": {
+  "/api/admin/projects/{projectId}/members/{memberId}": {
     put: operations["MemberController_update"];
     delete: operations["MemberController_delete"];
   };
-  "/api/projects/{projectId}/api-keys": {
+  "/api/admin/projects/{projectId}/api-keys": {
     get: operations["ApiKeyController_findAll"];
     post: operations["ApiKeyController_create"];
   };
-  "/api/projects/{projectId}/api-keys/{apiKeyId}/soft": {
+  "/api/admin/projects/{projectId}/api-keys/{apiKeyId}/soft": {
     delete: operations["ApiKeyController_softDelete"];
   };
-  "/api/projects/{projectId}/api-keys/{apiKeyId}/recover": {
+  "/api/admin/projects/{projectId}/api-keys/{apiKeyId}/recover": {
     delete: operations["ApiKeyController_recover"];
   };
-  "/api/projects/{projectId}/api-keys/{apiKeyId}": {
+  "/api/admin/projects/{projectId}/api-keys/{apiKeyId}": {
     delete: operations["ApiKeyController_delete"];
   };
-  "/api/projects/{projectId}/channels": {
+  "/api/admin/projects/{projectId}/channels": {
     get: operations["ChannelController_findAllByProjectId"];
     post: operations["ChannelController_create"];
   };
-  "/api/projects/{projectId}/channels/name-check": {
+  "/api/admin/projects/{projectId}/channels/name-check": {
     get: operations["ChannelController_checkName"];
   };
-  "/api/projects/{projectId}/channels/{channelId}": {
+  "/api/admin/projects/{projectId}/channels/{channelId}": {
     get: operations["ChannelController_findOne"];
     put: operations["ChannelController_updateOne"];
     delete: operations["ChannelController_delete"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/fields": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/fields": {
     put: operations["ChannelController_updateFields"];
   };
-  "/api/projects/{projectId}/channels/image-upload-url-test": {
+  "/api/admin/projects/{projectId}/channels/image-upload-url-test": {
     post: operations["ChannelController_getImageUploadUrlTest"];
   };
-  "/api/field/{fieldId}/options": {
+  "/api/admin/fields/{fieldId}/options": {
     get: operations["OptionController_getOptions"];
     post: operations["OptionController_createOption"];
   };
-  "/api/projects": {
+  "/api/admin/projects": {
     get: operations["ProjectController_findAll"];
     post: operations["ProjectController_create"];
   };
-  "/api/projects/name-check": {
+  "/api/admin/projects/name-check": {
     get: operations["ProjectController_checkName"];
   };
-  "/api/projects/{projectId}": {
+  "/api/admin/projects/{projectId}": {
     get: operations["ProjectController_findOne"];
     put: operations["ProjectController_updateOne"];
     delete: operations["ProjectController_delete"];
   };
-  "/api/projects/{projectId}/feedback-count": {
+  "/api/admin/projects/{projectId}/feedback-count": {
     get: operations["ProjectController_countFeedbacks"];
   };
-  "/api/projects/{projectId}/issue-count": {
+  "/api/admin/projects/{projectId}/issue-count": {
     get: operations["ProjectController_countIssues"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks": {
     post: operations["FeedbackController_create"];
     delete: operations["FeedbackController_deleteMany"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search": {
     post: operations["FeedbackController_findByChannelId"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
     post: operations["FeedbackController_addIssue"];
     delete: operations["FeedbackController_removeIssue"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/export": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export": {
     post: operations["FeedbackController_exportFeedbacks"];
   };
-  "/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
   };
-  "/api/projects/{projectId}/issues": {
+  "/api/admin/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
     delete: operations["IssueController_deleteMany"];
   };
-  "/api/projects/{projectId}/issues/{issueId}": {
+  "/api/admin/projects/{projectId}/issues/{issueId}": {
     get: operations["IssueController_findById"];
     put: operations["IssueController_update"];
     delete: operations["IssueController_delete"];
   };
-  "/api/projects/{projectId}/issues/search": {
+  "/api/admin/projects/{projectId}/issues/search": {
     post: operations["IssueController_findAllByProjectId"];
   };
-  "/api/statistics/issue/count": {
+  "/api/admin/statistics/issue/count": {
     get: operations["IssueStatisticsController_getCount"];
   };
-  "/api/statistics/issue/count-by-date": {
+  "/api/admin/statistics/issue/count-by-date": {
     get: operations["IssueStatisticsController_getCountByDate"];
   };
-  "/api/statistics/issue/count-by-status": {
+  "/api/admin/statistics/issue/count-by-status": {
     get: operations["IssueStatisticsController_getCountByStatus"];
   };
-  "/api/statistics/feedback": {
+  "/api/admin/statistics/feedback": {
     get: operations["FeedbackStatisticsController_getCountByDateByChannel"];
   };
-  "/api/statistics/feedback/count": {
+  "/api/admin/statistics/feedback/count": {
     get: operations["FeedbackStatisticsController_getCount"];
   };
-  "/api/statistics/feedback/issued-ratio": {
+  "/api/admin/statistics/feedback/issued-ratio": {
     get: operations["FeedbackStatisticsController_getIssuedRatio"];
   };
-  "/api/statistics/feedback-issue": {
+  "/api/admin/statistics/feedback-issue": {
     get: operations["FeedbackIssueStatisticsController_getCountByDateByIssue"];
   };
-  "/api/projects/{projectId}/issue-tracker": {
+  "/api/admin/projects/{projectId}/issue-tracker": {
     get: operations["IssueTrackerController_findOne"];
     put: operations["IssueTrackerController_updateOne"];
     post: operations["IssueTrackerController_create"];
-  };
-  "/api/health": {
-    get: operations["HealthController_check"];
-  };
-  "/api/migration/channels/{channelId}": {
-    post: operations["MigrationController_migrate"];
-  };
-  "/api/migration/statistics/feedback": {
-    post: operations["MigrationController_migrateFeedbackStatistics"];
-  };
-  "/api/migration/statistics/issue": {
-    post: operations["MigrationController_migrateIssueStatistics"];
-  };
-  "/api/migration/statistics/feedback-issue": {
-    post: operations["MigrationController_migrateFeedbackIssueStatistics"];
-  };
-  "/api/external/projects/{projectId}/channels/{channelId}/image-upload-url": {
-    get: operations["ChannelController_getImageUploadUrl"];
-  };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks": {
-    post: operations["FeedbackController_create"];
-    delete: operations["FeedbackController_deleteMany"];
-  };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/search": {
-    post: operations["FeedbackController_findByChannelId"];
-  };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
-    post: operations["FeedbackController_addIssue"];
-    delete: operations["FeedbackController_removeIssue"];
-  };
-  "/api/external/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
-    get: operations["FeedbackController_findFeedback"];
-    put: operations["FeedbackController_updateFeedback"];
-  };
-  "/api/external/projects/{projectId}/issues": {
-    post: operations["IssueController_create"];
-    delete: operations["IssueController_deleteMany"];
-  };
-  "/api/external/projects/{projectId}/issues/{issueId}": {
-    get: operations["IssueController_findById"];
-    put: operations["IssueController_update"];
-    delete: operations["IssueController_delete"];
-  };
-  "/api/external/projects/{projectId}/issues/search": {
-    post: operations["IssueController_findAllByProjectId"];
   };
 }
 
@@ -1006,27 +958,6 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
-    GetImageUploadUrlResponseDto: {
-      /**
-       * @description Presigned post url
-       * @example https://example.com
-       */
-      url: string;
-      /**
-       * @description Presigned post fields
-       * @example {
-       *   "key": "key",
-       *   "bucket": "bucket",
-       *   "X-Amz-Algorithm": "X-Amz-Algorithm",
-       *   "X-Amz-Credential": "X-Amz-Credential",
-       *   "X-Amz-Date": "X-Amz-Date",
-       *   "Policy": "Policy",
-       *   "X-Amz-Signature": "X-Amz-Signature"
-       * }
-       */
-      fields: Record<string, never>;
-    };
-    Object: Record<string, never>;
   };
   responses: never;
   parameters: never;
@@ -1041,13 +972,6 @@ export type external = Record<string, never>;
 
 export interface operations {
 
-  PrometheusController_index: {
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
   AuthController_sendCode: {
     requestBody: {
       content: {
@@ -1836,45 +1760,20 @@ export interface operations {
   FeedbackController_create: {
     parameters: {
       path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
-        /**
-         * @description Channel id
-         * @example 1
-         */
         channelId: number;
       };
     };
-    /** @description Feedback data in json */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Object"];
-      };
-    };
     responses: {
-      /** @description Feedback id */
-      200: {
-        content: {
-          "application/json": Record<string, never>;
-        };
+      201: {
+        content: never;
       };
     };
   };
   FeedbackController_deleteMany: {
     parameters: {
       path: {
-        /**
-         * @description Channel id
-         * @example 1
-         */
         channelId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -1892,15 +1791,7 @@ export interface operations {
   FeedbackController_findByChannelId: {
     parameters: {
       path: {
-        /**
-         * @description Channel id
-         * @example 1
-         */
         channelId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -1920,25 +1811,9 @@ export interface operations {
   FeedbackController_addIssue: {
     parameters: {
       path: {
-        /**
-         * @description Channel id
-         * @example 1
-         */
         channelId: number;
-        /**
-         * @description Feedback id to add an issue
-         * @example 1
-         */
         feedbackId: number;
-        /**
-         * @description Issue id to be added to the feedback
-         * @example 1
-         */
         issueId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -1953,25 +1828,9 @@ export interface operations {
   FeedbackController_removeIssue: {
     parameters: {
       path: {
-        /**
-         * @description Channel id
-         * @example 1
-         */
         channelId: number;
-        /**
-         * @description Feedback id to remove the added issue
-         * @example 1
-         */
         feedbackId: number;
-        /**
-         * @description Issue id to remove from the feedback
-         * @example 1
-         */
         issueId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -2004,27 +1863,9 @@ export interface operations {
   FeedbackController_updateFeedback: {
     parameters: {
       path: {
-        /**
-         * @description Channel id
-         * @example 1
-         */
         channelId: number;
-        /**
-         * @description Feedback id to update
-         * @example 1
-         */
         feedbackId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
-      };
-    };
-    /** @description Feedback data to be updated in json */
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["Object"];
       };
     };
     responses: {
@@ -2036,10 +1877,6 @@ export interface operations {
   IssueController_create: {
     parameters: {
       path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -2059,10 +1896,6 @@ export interface operations {
   IssueController_deleteMany: {
     parameters: {
       path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -2080,15 +1913,7 @@ export interface operations {
   IssueController_findById: {
     parameters: {
       path: {
-        /**
-         * @description Issue id
-         * @example 1
-         */
         issueId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -2103,15 +1928,7 @@ export interface operations {
   IssueController_update: {
     parameters: {
       path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
-        /**
-         * @description Issue id
-         * @example 1
-         */
         issueId: number;
       };
     };
@@ -2129,15 +1946,7 @@ export interface operations {
   IssueController_delete: {
     parameters: {
       path: {
-        /**
-         * @description Issue id
-         * @example 1
-         */
         issueId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -2150,10 +1959,6 @@ export interface operations {
   IssueController_findAllByProjectId: {
     parameters: {
       path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
         projectId: number;
       };
     };
@@ -2331,191 +2136,6 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
-        };
-      };
-    };
-  };
-  HealthController_check: {
-    responses: {
-      /** @description The Health Check is successful */
-      200: {
-        content: {
-          "application/json": {
-            /** @example ok */
-            status?: string;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   }
-             * }
-             */
-            info?: ({
-              [key: string]: {
-                status?: string;
-                [key: string]: string | undefined;
-              };
-            }) | null;
-            /** @example {} */
-            error?: ({
-              [key: string]: {
-                status?: string;
-                [key: string]: string | undefined;
-              };
-            }) | null;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   }
-             * }
-             */
-            details?: {
-              [key: string]: {
-                status?: string;
-                [key: string]: string | undefined;
-              };
-            };
-          };
-        };
-      };
-      /** @description The Health Check is not successful */
-      503: {
-        content: {
-          "application/json": {
-            /** @example error */
-            status?: string;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   }
-             * }
-             */
-            info?: ({
-              [key: string]: {
-                status?: string;
-                [key: string]: string | undefined;
-              };
-            }) | null;
-            /**
-             * @example {
-             *   "redis": {
-             *     "status": "down",
-             *     "message": "Could not connect"
-             *   }
-             * }
-             */
-            error?: ({
-              [key: string]: {
-                status?: string;
-                [key: string]: string | undefined;
-              };
-            }) | null;
-            /**
-             * @example {
-             *   "database": {
-             *     "status": "up"
-             *   },
-             *   "redis": {
-             *     "status": "down",
-             *     "message": "Could not connect"
-             *   }
-             * }
-             */
-            details?: {
-              [key: string]: {
-                status?: string;
-                [key: string]: string | undefined;
-              };
-            };
-          };
-        };
-      };
-    };
-  };
-  MigrationController_migrate: {
-    parameters: {
-      path: {
-        channelId: number;
-      };
-    };
-    responses: {
-      201: {
-        content: never;
-      };
-    };
-  };
-  MigrationController_migrateFeedbackStatistics: {
-    responses: {
-      201: {
-        content: never;
-      };
-    };
-  };
-  MigrationController_migrateIssueStatistics: {
-    responses: {
-      201: {
-        content: never;
-      };
-    };
-  };
-  MigrationController_migrateFeedbackIssueStatistics: {
-    responses: {
-      201: {
-        content: never;
-      };
-    };
-  };
-  ChannelController_getImageUploadUrl: {
-    parameters: {
-      path: {
-        /**
-         * @description Project id
-         * @example 1
-         */
-        projectId: number;
-        /**
-         * @description Channel id
-         * @example 1
-         */
-        channelId: number;
-      };
-    };
-    responses: {
-      /** @description Feedback data */
-      200: {
-        content: {
-          "application/json": components["schemas"]["GetImageUploadUrlResponseDto"];
-        };
-      };
-    };
-  };
-  FeedbackController_findFeedback: {
-    parameters: {
-      path: {
-        /**
-         * @description Channel id
-         * @example 1
-         */
-        channelId: number;
-        /**
-         * @description Feedback id to find
-         * @example 1
-         */
-        feedbackId: number;
-        /**
-         * @description Project id
-         * @example 1
-         */
-        projectId: number;
-      };
-    };
-    responses: {
-      /** @description Feedback data */
-      200: {
-        content: {
-          "application/json": Record<string, never>;
         };
       };
     };

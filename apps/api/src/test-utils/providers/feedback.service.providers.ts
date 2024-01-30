@@ -17,15 +17,15 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
 
 import { OpensearchRepository } from '@/common/repositories';
+import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import { FeedbackMySQLService } from '@/domains/admin/feedback/feedback.mysql.service';
+import { FeedbackOSService } from '@/domains/admin/feedback/feedback.os.service';
+import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
 import {
   getMockProvider,
   MockOpensearchRepository,
-  mockRepository,
 } from '@/test-utils/util-functions';
-import { FeedbackEntity } from '../../domains/feedback/feedback.entity';
-import { FeedbackMySQLService } from '../../domains/feedback/feedback.mysql.service';
-import { FeedbackOSService } from '../../domains/feedback/feedback.os.service';
-import { FeedbackService } from '../../domains/feedback/feedback.service';
+import { FeedbackRepositoryStub } from '../stubs';
 import { ChannelServiceProviders } from './channel.service.providers';
 import { FeedbackIssueStatisticsServiceProviders } from './feedback-issue-statistics.service.providers';
 import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';
@@ -38,7 +38,7 @@ export const FeedbackServiceProviders = [
   FeedbackMySQLService,
   {
     provide: getRepositoryToken(FeedbackEntity),
-    useValue: mockRepository(),
+    useClass: FeedbackRepositoryStub,
   },
   ClsService,
   ...FieldServiceProviders,

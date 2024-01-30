@@ -14,7 +14,7 @@
  * under the License.
  */
 import { PaginationDto } from '@/common/dtos';
-import type { OsQueryDto } from '@/domains/feedback/dtos/os-query.dto';
+import type { OsQueryDto } from '@/domains/admin/feedback/dtos/os-query.dto';
 
 export class GetDataDto extends PaginationDto {
   index: string;

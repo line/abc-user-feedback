@@ -36,7 +36,7 @@ const IssueSetting: React.FC<IProps> = (props) => {
 
   const { mutate: update, isPending: updatePending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/issues/{issueId}',
+    path: '/api/admin/projects/{projectId}/issues/{issueId}',
     pathParams: { issueId: issue.id, projectId },
     queryOptions: {
       async onSuccess() {
@@ -52,7 +52,7 @@ const IssueSetting: React.FC<IProps> = (props) => {
   const { mutate: deleteIssue, isPending: deleteIssuePending } = useOAIMutation(
     {
       method: 'delete',
-      path: '/api/projects/{projectId}/issues/{issueId}',
+      path: '/api/admin/projects/{projectId}/issues/{issueId}',
       pathParams: { projectId, issueId: issue.id },
       queryOptions: {
         async onSuccess() {

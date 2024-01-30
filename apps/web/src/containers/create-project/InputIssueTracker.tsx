@@ -62,7 +62,7 @@ const InputIssueTracker: React.FC<IProps> = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/projects',
+    path: '/api/admin/projects',
     queryOptions: {
       onError(error) {
         if (error.code === ErrorCode.Member.MemberInvalidUser)

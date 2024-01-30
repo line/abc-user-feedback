@@ -22,9 +22,11 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { Logger } from 'nestjs-pino';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
-import { AppModule } from './app.module';
+import { AppModule, domainModules } from './app.module';
 import { HttpExceptionFilter } from './common/filters';
-import { ExternalModule } from './domains/external/external.module';
+import { APIModule } from './domains/api/api.module';
+import { HealthModule } from './domains/operation/health/health.module';
+import { MigrationModule } from './domains/operation/migration/migration.module';
 import type { ConfigServiceType } from './types/config-service.type';
 
 const globalPrefix = 'api';
@@ -40,24 +42,27 @@ async function bootstrap() {
   app.enableCors({ origin: '*', exposedHeaders: ['Content-Disposition'] });
 
   app.setGlobalPrefix(globalPrefix, {
-    exclude: ['/external/docs'],
+    exclude: ['/docs/redoc'],
   });
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useLogger(app.get(Logger));
 
-  const documentConfig = new DocumentBuilder()
-    .setTitle('User Feedback')
-    .setDescription('User feedback API description')
+  const adminDocumentConfig = new DocumentBuilder()
+    .setTitle('User Feedback Admin API Document')
+    .setDescription('User feedback Admin API description')
     .setVersion('1.0.0')
     .addBearerAuth()
     .build();
-  const document = SwaggerModule.createDocument(app, documentConfig);
-  SwaggerModule.setup('docs', app, document);
+  const excludeModules = [APIModule, HealthModule, MigrationModule];
+  const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
+    include: domainModules.filter((module) => !excludeModules.includes(module)),
+  });
+  SwaggerModule.setup('admin-docs', app, adminDocument);
 
-  const externalDocumentConfig = new DocumentBuilder()
-    .setTitle('User Feedback External API Document')
+  const documentConfig = new DocumentBuilder()
+    .setTitle('User Feedback API Document')
     .setDescription(
       `You can use this API to integrate with your own service or system. This API is protected by a simple API key authentication, so please do not expose this API to the public. You can make an API key in the admin setting page. You should put the API key in the header with the key name 'x-api-key'.
       `,
@@ -65,14 +70,10 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' })
     .build();
-  const externalDocument = SwaggerModule.createDocument(
-    app,
-    externalDocumentConfig,
-    {
-      include: [ExternalModule],
-    },
-  );
-  SwaggerModule.setup('external-docs', app, externalDocument);
+  const document = SwaggerModule.createDocument(app, documentConfig, {
+    include: [APIModule],
+  });
+  SwaggerModule.setup('docs', app, document);
 
   const configService = app.get(ConfigService<ConfigServiceType>);
   const { port, address } = configService.get('app', { infer: true });

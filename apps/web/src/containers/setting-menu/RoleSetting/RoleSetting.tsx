@@ -34,13 +34,13 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
   const perms = usePermissions(projectId);
 
   const { data, refetch } = useOAIQuery({
-    path: '/api/projects/{projectId}/roles',
+    path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId },
   });
 
   const { mutateAsync: createRole } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/roles',
+    path: '/api/admin/projects/{projectId}/roles',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
@@ -57,19 +57,23 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
   const { mutate: deleteRole } = useMutation({
     mutationKey: [
       'delete',
-      '/api/projects/{projectId}/roles/{roleId}',
+      '/api/admin/projects/{projectId}/roles/{roleId}',
       projectId,
     ],
     mutationFn: async (input: { roleId: number }) => {
       return client.delete({
-        path: '/api/projects/{projectId}/roles/{roleId}',
+        path: '/api/admin/projects/{projectId}/roles/{roleId}',
         pathParams: { projectId, roleId: input.roleId },
       });
     },
   });
 
   const { mutateAsync: updateRole } = useMutation({
-    mutationKey: ['put', '/api/projects/{projectId}/roles/{roleId}', projectId],
+    mutationKey: [
+      'put',
+      '/api/admin/projects/{projectId}/roles/{roleId}',
+      projectId,
+    ],
     mutationFn: async (input: {
       roleId: number;
       name: string;
@@ -77,7 +81,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
     }) => {
       const { name, permissions, roleId } = input;
       return client.put({
-        path: '/api/projects/{projectId}/roles/{roleId}',
+        path: '/api/admin/projects/{projectId}/roles/{roleId}',
         pathParams: { projectId, roleId },
         body: { name, permissions },
       });

@@ -28,7 +28,7 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const { data: currentData } = useOAIQuery({
-    path: '/api/statistics/issue/count',
+    path: '/api/admin/statistics/issue/count',
     variables: {
       from: dayjs().subtract(30, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
@@ -43,7 +43,7 @@ const ThirtyDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
   });
 
   const { data: previousData } = useOAIQuery({
-    path: '/api/statistics/issue/count',
+    path: '/api/admin/statistics/issue/count',
     variables: {
       from: dayjs().subtract(60, 'day').startOf('day').toISOString(),
       to: dayjs().subtract(31, 'day').endOf('day').toISOString(),

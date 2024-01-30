@@ -31,7 +31,7 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
   const { t } = useTranslation();
   const { data, status } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
 

@@ -23,9 +23,9 @@ import {
   MockOpensearchRepository,
   mockRepository,
 } from '@/test-utils/util-functions';
-import { ChannelEntity } from '../../domains/channel/channel/channel.entity';
-import { ChannelMySQLService } from '../../domains/channel/channel/channel.mysql.service';
-import { ChannelService } from '../../domains/channel/channel/channel.service';
+import { ChannelEntity } from '../../domains/admin/channel/channel/channel.entity';
+import { ChannelMySQLService } from '../../domains/admin/channel/channel/channel.mysql.service';
+import { ChannelService } from '../../domains/admin/channel/channel/channel.service';
 import { FieldServiceProviders } from './field.service.providers';
 
 export const ChannelServiceProviders = [

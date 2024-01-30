@@ -54,19 +54,19 @@ const ImageUploadSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     });
 
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
 
   const { mutate } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
   });
 
   const { mutate: testConection } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/channels/image-upload-url-test',
+    path: '/api/admin/projects/{projectId}/channels/image-upload-url-test',
     pathParams: { projectId },
     queryOptions: {
       onSuccess(data) {
