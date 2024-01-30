@@ -85,7 +85,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
         />
         <SettingMenuItem
           iconName="MediaImageFill"
-          name={t('channel-setting-menu.image-storage-integration-mgmt')}
+          name={t('channel-setting-menu.image-storage-integration')}
           onClick={onClickSettingMenu('IMAGE_UPLOAD_SETTING')}
           active={settingMenu === 'IMAGE_UPLOAD_SETTING'}
           disabled={!perms.includes('channel_field_read')}

@@ -420,7 +420,7 @@
   "channel-setting-menu": {
     "channel-info": "Channel 정보",
     "field-mgmt": "Field 관리",
-    "image-storage-integration-mgmt": "Image Storage 연동 관리",
+    "image-storage-integration": "Image Storage 연동",
     "delete-channel": "Channel 삭제"
   },
   "modal": {
@@ -430,6 +430,6 @@
   },
   "help-card": {
     "issue-tracker-mgmt": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
-    "image-storage-integration-mgmt": "Presigned URL을 활용해 Image 포맷의 피드백을 수집할 수 있습니다.\nPresigned URL 연동을 위한 정보를 입력해 주세요."
+    "image-storage-integration": "Presigned URL을 활용해 Image 포맷의 피드백을 수집할 수 있습니다.\nPresigned URL 연동을 위한 정보를 입력해 주세요."
   }
 }

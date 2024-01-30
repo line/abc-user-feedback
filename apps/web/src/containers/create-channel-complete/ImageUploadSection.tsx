@@ -34,7 +34,7 @@ const ImageUploadSection: React.FC<IProps> = ({
 
   return (
     <CreateSectionTemplate
-      title={t('channel-setting-menu.image-storage-integration-mgmt')}
+      title={t('channel-setting-menu.image-storage-integration')}
     >
       <Input label="Access Key ID" value={accessKeyId} disabled />
       <Input label="Secret Access Key ID" value={secretAccessKey} disabled />

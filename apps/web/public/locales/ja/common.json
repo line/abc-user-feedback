@@ -418,7 +418,7 @@
   "channel-setting-menu": {
     "channel-info": "Channel情報",
     "field-mgmt": "Field管理",
-    "image-storage-integration-mgmt": "Image Storage連動管理",
+    "image-storage-integration": "Image Storage連動",
     "delete-channel": "Channel削除"
   },
   "modal": {
@@ -428,6 +428,6 @@
   },
   "help-card": {
     "issue-tracker-mgmt": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
-    "image-storage-integration-mgmt": "Presigned URLを活用してImageフォーマットのフィードバックを収集することができます。\nPresigned URL連動のための情報を入力することをお願いします。"
+    "image-storage-integration": "Presigned URLを活用してImageフォーマットのフィードバックを収集することができます。\nPresigned URL連動のための情報を入力することをお願いします。"
   }
 }

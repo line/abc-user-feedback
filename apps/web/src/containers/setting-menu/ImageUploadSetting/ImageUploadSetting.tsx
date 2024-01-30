@@ -99,7 +99,7 @@ const ImageUploadSetting: React.FC<IProps> = ({ channelId, projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('channel-setting-menu.image-storage-integration-mgmt')}
+      title={t('channel-setting-menu.image-storage-integration')}
       actionBtn={{
         children: t('button.save'),
         disabled: false, // TODO: 권한 추가후 수정해야함.
@@ -109,7 +109,7 @@ const ImageUploadSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          {t('help-card.image-storage-integration-mgmt')}
+          {t('help-card.image-storage-integration')}
         </p>
         <div className="relative h-full w-[80px]">
           <Image

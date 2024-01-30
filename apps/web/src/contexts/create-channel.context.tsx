@@ -127,7 +127,7 @@ export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
     return {
       channelInfo: t('channel-setting-menu.channel-info'),
       fields: t('channel-setting-menu.field-mgmt'),
-      imageUpload: t('channel-setting-menu.image-storage-integration-mgmt'),
+      imageUpload: t('channel-setting-menu.image-storage-integration'),
       fieldPreview: 'Field ' + t('main.setting.field-mgmt.preview'),
     };
   }, [t]);
