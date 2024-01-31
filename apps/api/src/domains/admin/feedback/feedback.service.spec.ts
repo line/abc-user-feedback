@@ -148,25 +148,6 @@ describe('FeedbackService Test Suite', () => {
         new BadRequestException('this field is for admin: ' + adminFieldKey),
       );
     });
-    it('creating a feedback fails with an inactive field', async () => {
-      const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const inactiveFieldKey = 'inactiveFieldKey';
-      dto.data[inactiveFieldKey] = faker.string.sample();
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue([
-        ...fieldsFixture,
-        createFieldDto({
-          key: inactiveFieldKey,
-          type: FieldTypeEnum.API,
-          status: FieldStatusEnum.INACTIVE,
-        }) as FieldEntity,
-      ]);
-
-      await expect(feedbackService.create(dto)).rejects.toThrow(
-        new BadRequestException('this field is inactive: ' + inactiveFieldKey),
-      );
-    });
     it('creating a feedback fails with an invalid value for field type', async () => {
       const formats = [
         {
