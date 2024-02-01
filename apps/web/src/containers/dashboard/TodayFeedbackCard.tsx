@@ -20,9 +20,6 @@ import { useTranslation } from 'react-i18next';
 import { DashboardCard } from '@/components';
 import { useOAIQuery } from '@/hooks';
 
-const endDate = dayjs().toISOString();
-const yesterdayEndDate = dayjs().subtract(1, 'day').toISOString();
-
 interface IProps {
   projectId: number;
 }
@@ -34,7 +31,7 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     path: '/api/admin/statistics/feedback/count',
     variables: {
       from: dayjs().startOf('day').toISOString(),
-      to: endDate,
+      to: dayjs().endOf('day').toISOString(),
       projectId,
     },
     queryOptions: {
@@ -49,7 +46,7 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
     path: '/api/admin/statistics/feedback/count',
     variables: {
       from: dayjs().subtract(1, 'day').startOf('day').toISOString(),
-      to: yesterdayEndDate,
+      to: dayjs().subtract(1, 'day').endOf('day').toISOString(),
       projectId,
     },
     queryOptions: {
