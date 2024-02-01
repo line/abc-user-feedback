@@ -98,7 +98,7 @@ const InputChannelInfo: React.FC<IProps> = () => {
 
     setIsLoading(true);
     const { data: isDuplicated } = await client.get({
-      path: '/api/projects/{projectId}/channels/name-check',
+      path: '/api/admin/projects/{projectId}/channels/name-check',
       pathParams: { projectId },
       query: { name },
     });

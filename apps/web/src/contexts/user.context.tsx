@@ -95,7 +95,7 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
   const [isInitialized, setIsInitialized] = useState(false);
 
   const { refetch } = useQuery({
-    queryKey: ['/api/users/{id}', jwt],
+    queryKey: ['/api/admin/users/{id}', jwt],
     queryFn: async () => {
       if (!jwt) return;
       const { accessToken } = jwt;
@@ -107,7 +107,7 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
       }
       try {
         const { data } = await client.get({
-          path: '/api/users/{id}',
+          path: '/api/admin/users/{id}',
           pathParams: { id: parseInt(sub) },
           options: { headers: { Authorization: `Bearer ${accessToken}` } }, // session storage delay
         });
@@ -149,7 +149,10 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
 
   const signInOAuth = async ({ code, callback_url }: ISignInOAuthInput) => {
     try {
-      const { data } = await axios.post('/api/oauth', { code, callback_url });
+      const { data } = await axios.post('/api/oauth', {
+        code,
+        callback_url,
+      });
       setJwt(data);
       if (router.query.callback_url) {
         router.push(router.query.callback_url as string);
@@ -163,7 +166,7 @@ export const UserProvider: React.FC<React.PropsWithChildren> = ({
 
   const signUp = useCallback(async ({ email, password }: ISignUpInput) => {
     await client.post({
-      path: '/api/auth/signUp/email',
+      path: '/api/admin/auth/signUp/email',
       body: { email, password, department: null },
     });
   }, []);

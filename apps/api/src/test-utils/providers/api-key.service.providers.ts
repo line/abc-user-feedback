@@ -15,10 +15,10 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { mockRepository } from '@/test-utils/util-functions';
-import { ApiKeyEntity } from '../../domains/project/api-key/api-key.entity';
-import { ApiKeyService } from '../../domains/project/api-key/api-key.service';
+import { ApiKeyEntity } from '../../domains/admin/project/api-key/api-key.entity';
+import { ApiKeyService } from '../../domains/admin/project/api-key/api-key.service';
 
 export const ApiKeyServiceProviders = [
   ApiKeyService,

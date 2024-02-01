@@ -21,14 +21,14 @@ import type { IFetchError } from '@/types/fetch-error.type';
 import type { OAIMutationResponse, OAIRequestBody } from '@/types/openapi.type';
 
 type TData = OAIMutationResponse<
-  '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',
+  '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
   'post'
 >;
 
 interface IBody
   extends Omit<
     OAIRequestBody<
-      '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',
+      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
       'post'
     >,
     'query'
@@ -44,14 +44,14 @@ const useFeedbackSearch = (
 ) => {
   return useQuery<TData, IFetchError>({
     queryKey: [
-      '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',
+      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
       projectId,
       channelId,
       body,
     ],
     queryFn: async () => {
       const { data: result } = await client.post({
-        path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/search',
+        path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
         pathParams: { projectId, channelId },
         body,
       });

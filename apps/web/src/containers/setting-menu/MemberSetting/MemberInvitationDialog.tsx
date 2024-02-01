@@ -48,12 +48,12 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
   });
 
   const { data: projectData } = useOAIQuery({
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
 
   const { data: roleData } = useOAIQuery({
-    path: '/api/projects/{projectId}/roles',
+    path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId },
   });
 
@@ -64,7 +64,7 @@ const MemberInvitationDialog: React.FC<IProps> = (props) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/projects/{projectId}/members',
+    path: '/api/admin/projects/{projectId}/members',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {

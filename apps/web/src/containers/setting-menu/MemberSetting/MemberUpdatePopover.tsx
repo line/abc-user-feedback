@@ -48,13 +48,13 @@ const MemberUpdatePopover: React.FC<IProps> = ({
   const [inputRoleId, setInputRoleId] = useState<number>(currentRole.id);
 
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}/roles',
+    path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId },
   });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/members/{memberId}',
+    path: '/api/admin/projects/{projectId}/members/{memberId}',
     pathParams: { memberId, projectId },
     queryOptions: {
       async onSuccess() {

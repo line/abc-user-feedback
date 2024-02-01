@@ -56,7 +56,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   const { refetch: refetchProjects } = useProjects();
 
   const { data, refetch } = useOAIQuery({
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
 
@@ -65,7 +65,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     pathParams: { projectId },
     queryOptions: {
       onSuccess: async () => {

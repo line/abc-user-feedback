@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { UserDto } from '@/domains/user/dtos';
-import type { UserTypeEnum } from '@/domains/user/entities/enums';
+import type { UserDto } from '@/domains/admin/user/dtos';
+import type { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import type { CodeTypeEnum } from '../code-type.enum';
 
 export type SetCodeDto =

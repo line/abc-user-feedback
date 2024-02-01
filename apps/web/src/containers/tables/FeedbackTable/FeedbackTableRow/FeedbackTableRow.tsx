@@ -55,7 +55,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
     pathParams: { projectId, channelId, feedbackId: row.original.id },
     queryOptions: {
       async onSuccess() {

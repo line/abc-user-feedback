@@ -14,6 +14,7 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
+import * as bcrypt from 'bcrypt';
 
 import {
   FieldFormatEnum,
@@ -21,9 +22,21 @@ import {
   FieldTypeEnum,
   isSelectFieldFormat,
 } from '@/common/enums';
-import type { ReplaceFieldDto } from '@/domains/channel/field/dtos';
-import type { CreateFieldDto } from '@/domains/channel/field/dtos/create-field.dto';
-import type { CreateIssueDto } from '@/domains/project/issue/dtos';
+import type { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import type {
+  CreateFieldDto,
+  ReplaceFieldDto,
+} from '@/domains/admin/channel/field/dtos';
+import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
+import type { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import {
+  SignUpMethodEnum,
+  UserStateEnum,
+  UserTypeEnum,
+} from '@/domains/admin/user/entities/enums';
+import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
@@ -138,3 +151,72 @@ export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
 
 export const optionSort = (a, b) =>
   a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+
+export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
+  Object.values(FieldTypeEnum).flatMap((type) =>
+    Object.values(FieldStatusEnum).flatMap((status) => ({
+      id: faker.number.int(),
+      ...createFieldDto({
+        format,
+        type,
+        status,
+      }),
+    })),
+  ),
+) as FieldEntity[];
+
+export const feedbackDataFixture = fieldsFixture.reduce((prev, curr) => {
+  if (curr.type === FieldTypeEnum.ADMIN) return prev;
+  if (curr.status === FieldStatusEnum.INACTIVE) return prev;
+  const value = getRandomValue(curr.format, curr.options);
+  return {
+    ...prev,
+    [curr.key]: value,
+  };
+}, {});
+
+export const feedbackFixture = {
+  id: faker.number.int(),
+  rawData: feedbackDataFixture,
+  additionalData: {},
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+  channel: {
+    id: faker.number.int(),
+    name: faker.string.sample(),
+    description: faker.lorem.lines(2),
+    imageConfig: null,
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.past(),
+  } as ChannelEntity,
+  issues: [],
+} as FeedbackEntity;
+
+export const passwordFixture = faker.internet.password();
+
+export const emailFixture = faker.internet.email();
+
+export const userFixture = {
+  id: faker.number.int(),
+  email: emailFixture,
+  name: faker.string.sample(),
+  department: faker.string.sample(),
+  state: getRandomEnumValue(UserStateEnum),
+  hashPassword: bcrypt.hashSync(passwordFixture, 0),
+  type: getRandomEnumValue(UserTypeEnum),
+  signUpMethod: getRandomEnumValue(SignUpMethodEnum),
+} as UserEntity;
+
+export const tenantFixture = {
+  id: faker.number.int(),
+  siteName: faker.string.sample(),
+  description: faker.lorem.lines(2),
+  useEmail: faker.datatype.boolean(),
+  isPrivate: faker.datatype.boolean(),
+  isRestrictDomain: faker.datatype.boolean(),
+  allowDomains: [],
+  useOAuth: faker.datatype.boolean(),
+  oauthConfig: null,
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+} as TenantEntity;

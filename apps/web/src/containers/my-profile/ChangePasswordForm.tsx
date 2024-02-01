@@ -56,7 +56,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/users/password/change',
+    path: '/api/admin/users/password/change',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: t('toast.save') });

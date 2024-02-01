@@ -35,7 +35,7 @@ const OAuthLoginButton: React.FC<IProps> = () => {
   );
 
   const { data } = useOAIQuery({
-    path: '/api/auth/signIn/oauth/loginURL',
+    path: '/api/admin/auth/signIn/oauth/loginURL',
     queryOptions: { enabled: tenant?.useOAuth ?? false },
     variables: { callback_url },
   });

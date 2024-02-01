@@ -16,8 +16,8 @@
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
-import { OptionEntity } from '../../domains/channel/option/option.entity';
-import { OptionService } from '../../domains/channel/option/option.service';
+import { OptionEntity } from '../../domains/admin/channel/option/option.entity';
+import { OptionService } from '../../domains/admin/channel/option/option.service';
 
 export const OptionServiceProviders = [
   OptionService,

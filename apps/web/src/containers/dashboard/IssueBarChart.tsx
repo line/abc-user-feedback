@@ -30,7 +30,7 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const { data } = useOAIQuery({
-    path: '/api/statistics/issue/count-by-status',
+    path: '/api/admin/statistics/issue/count-by-status',
     variables: { projectId },
     queryOptions: {
       refetchOnMount: false,

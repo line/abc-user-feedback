@@ -86,7 +86,7 @@ const SignUpSetting: React.FC<IProps> = () => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/tenants',
+    path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
         await refetch();

@@ -30,7 +30,7 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
   const { projectId, onClickSettingMenu, settingMenu } = props;
   const perms = usePermissions(projectId);
   const { data } = useOAIQuery({
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
 

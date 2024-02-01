@@ -23,17 +23,17 @@ const ProjectCard: React.FC<{ projectId: number }> = ({ projectId }) => {
   const router = useRouter();
 
   const { data: project } = useOAIQuery({
-    path: '/api/projects/{projectId}',
+    path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
 
   const { data: feedbackCount } = useOAIQuery({
-    path: '/api/projects/{projectId}/feedback-count',
+    path: '/api/admin/projects/{projectId}/feedback-count',
     variables: { projectId },
   });
 
   const { data: channels } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId, limit: 1000 },
   });
 

@@ -25,7 +25,7 @@ export default withIronSessionApiRoute(async (req, res) => {
   try {
     const params = new URLSearchParams({ code });
     const response = await fetch(
-      `${env.API_BASE_URL}/api/auth/signIn/oauth?${params}`,
+      `${env.API_BASE_URL}/api/admin/auth/signIn/oauth?${params}`,
     );
 
     const data = await response.json();

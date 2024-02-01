@@ -136,7 +136,7 @@ const SignUpPage: NextPageWithLayout = () => {
 
     try {
       const { data } = await client.post({
-        path: '/api/auth/email/code',
+        path: '/api/admin/auth/email/code',
         body: { email: getValues('email') },
       });
       setValue('emailState', 'VERIFING');
@@ -159,7 +159,7 @@ const SignUpPage: NextPageWithLayout = () => {
     if (code.length !== 6) return;
     try {
       await client.post({
-        path: '/api/auth/email/code/verify',
+        path: '/api/admin/auth/email/code/verify',
         body: { code, email: getValues('email') },
       });
       setValue('emailState', 'VERIFIED');

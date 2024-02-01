@@ -57,11 +57,11 @@ const MyProfileForm: React.FC<IProps> = () => {
   }, [user]);
 
   const { mutate } = useMutation({
-    mutationKey: ['put', '/api/users/{id}', user],
+    mutationKey: ['put', '/api/admin/users/{id}', user],
     mutationFn: async (input: IForm & { userId: number }) => {
       const { userId, ...body } = input;
       await client.put({
-        path: '/api/users/{id}',
+        path: '/api/admin/users/{id}',
         body,
         pathParams: { id: userId },
       });

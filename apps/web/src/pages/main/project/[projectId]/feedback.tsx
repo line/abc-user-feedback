@@ -32,7 +32,7 @@ interface IProps {
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId, channelId } = props;
   const { data, status } = useOAIQuery({
-    path: '/api/projects/{projectId}/channels',
+    path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
 
