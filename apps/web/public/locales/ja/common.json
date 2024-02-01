@@ -313,12 +313,6 @@
     "copy": "コピー完了"
   },
   "placeholder": "{{name}}を入力してください。",
-  "hint": {
-    "required": "必須入力対象です。",
-    "max-length": "{{length}}字以下で入力してください。",
-    "name-already-exists": "既に存在する{{name}}です。",
-    "invalid-domain": "ドメイン形式ではありません。"
-  },
   "dialog": {
     "continue": {
       "title": "続いて作成しますか？",
@@ -429,5 +423,12 @@
   "help-card": {
     "issue-tracker-mgmt": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
     "image-storage-integration": "Presigned URLを活用してImageフォーマットのフィードバックを収集することができます。\nPresigned URL連動のための情報を入力することをお願いします。"
+  },
+  "hint": {
+    "required": "必須入力対象です。",
+    "max-length": "{{length}}字以下で入力してください。",
+    "name-already-exists": "既に存在する{{name}}です。",
+    "invalid-domain": "ドメイン形式ではありません。",
+    "image-format": "Image URLを入力するフォーマットです。"
   }
 }

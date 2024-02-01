@@ -313,12 +313,6 @@
     "copy": "Copy Complete"
   },
   "placeholder": "Please enter {{name}}.",
-  "hint": {
-    "required": "Required",
-    "max-length": "Please enter {{length}} characters or less.",
-    "name-already-exists": "{{name}} already exists.",
-    "invalid-domain": "Not in domain format."
-  },
   "dialog": {
     "continue": {
       "title": "Do you want to continue?",
@@ -429,5 +423,12 @@
   "help-card": {
     "issue-tracker-mgmt": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
     "image-storage-integration": "You can use the Presigned URL to collect feedback in the Image format.\nEnter information for the Presigned URL interworking."
+  },
+  "hint": {
+    "required": "Required",
+    "max-length": "Please enter {{length}} characters or less.",
+    "name-already-exists": "{{name}} already exists.",
+    "invalid-domain": "Invalid domain format.",
+    "image-format": "The format for entering the Image URL."
   }
 }

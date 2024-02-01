@@ -315,12 +315,7 @@
     "copy": "복사 완료"
   },
   "placeholder": "{{name}}을 입력해주세요.",
-  "hint": {
-    "required": "필수 입력 대상입니다.",
-    "max-length": "{{length}}자 이하로 입력해주세요.",
-    "name-already-exists": "이미 존재하는 {{name}}입니다.",
-    "invalid-domain": "도메인 형식이 아닙니다."
-  },
+
   "dialog": {
     "continue": {
       "title": "이어서 생성하시겠어요?",
@@ -431,5 +426,12 @@
   "help-card": {
     "issue-tracker-mgmt": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
     "image-storage-integration": "Presigned URL을 활용해 Image 포맷의 피드백을 수집할 수 있습니다.\nPresigned URL 연동을 위한 정보를 입력해 주세요."
+  },
+  "hint": {
+    "required": "필수 입력 대상입니다.",
+    "max-length": "{{length}}자 이하로 입력해주세요.",
+    "name-already-exists": "이미 존재하는 {{name}}입니다.",
+    "invalid-domain": "도메인 형식이 아닙니다.",
+    "image-format": "Image URL을 입력하는 포맷입니다."
   }
 }
