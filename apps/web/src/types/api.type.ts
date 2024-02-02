@@ -484,7 +484,7 @@ export interface components {
       bucket: string;
     };
     /** @enum {string} */
-    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
+    FieldFormatEnum: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "image";
     /** @enum {string} */
     FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
@@ -541,7 +541,7 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "image";
+      format: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "image";
       /** @enum {string} */
       type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */

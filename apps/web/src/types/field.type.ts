@@ -17,7 +17,6 @@
 export const PrimitiveFieldFormatEnumList = [
   'text',
   'keyword',
-  'boolean',
   'number',
   'date',
   'image',
