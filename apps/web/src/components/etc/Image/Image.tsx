@@ -13,11 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const config = {
-  extends: ['plugin:@next/next/recommended'],
-  rules: {
-    '@next/next/no-html-link-for-pages': 'off',
-  },
+import type { ImageProps as NextImageProps } from 'next/image';
+import NextImage from 'next/image';
+
+import { useOAIQuery } from '@/hooks';
+
+interface IProps extends NextImageProps {
+  projectId: number;
+  channelId: number;
+}
+
+const Image: React.FC<IProps> = (props) => {
+  const { channelId, projectId, ...otherProps } = props;
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
+    variables: { channelId, projectId },
+  });
+  console.log('data: ', data?.imageConfig.domainWhiteList);
+  return <NextImage {...otherProps} />;
 };
 
-module.exports = config;
+export default Image;

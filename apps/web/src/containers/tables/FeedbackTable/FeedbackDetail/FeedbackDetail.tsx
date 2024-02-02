@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useMemo } from 'react';
+import Image from 'next/image';
 import {
   autoUpdate,
   FloatingFocusManager,
@@ -266,16 +267,17 @@ const ImageSlider: React.FC<IImageSliderProps> = ({ urls }) => {
             >
               <div
                 style={{ background: 'var(--text-color-quaternary)' }}
-                className="absolute left-0 top-0 h-full w-full"
+                className="absolute left-0 top-0 z-10 h-full w-full"
               />
               <Icon
                 name="Search"
-                className="text-above-primary absolute-center absolute left-1/2 top-1/2 text-white"
+                className="text-above-primary absolute-center absolute left-1/2 top-1/2 z-20 text-white"
               />
-              <img
+              <Image
                 src={url}
                 alt="preview"
                 className="h-full w-full object-cover"
+                fill
               />
             </div>
           ))}

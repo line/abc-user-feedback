@@ -13,11 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const config = {
-  extends: ['plugin:@next/next/recommended'],
-  rules: {
-    '@next/next/no-html-link-for-pages': 'off',
-  },
-};
-
-module.exports = config;
+export { default } from './Image';

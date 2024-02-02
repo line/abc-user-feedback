@@ -19,16 +19,19 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
+import { Image } from '@/components';
 import { useHorizontalScroll } from '@/hooks';
 
 interface IProps {
   urls: string[];
+  projectId: number;
+  channelId: number;
 }
 
-const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
+const ImagePreviewButton: React.FC<IProps> = (props) => {
+  const { urls, channelId, projectId } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  // const [currentImage, setCurrentImage] = useState(urls[0]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const {
@@ -72,14 +75,16 @@ const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
           </button>
         </div>
 
-        <img
-          src={urls[currentImageIndex]}
+        <Image
+          src={urls[currentImageIndex] ?? ''}
           alt="preview"
-          className="bg-fill-quaternary h-full w-full cursor-pointer rounded object-contain"
+          className="bg-fill-quaternary cursor-pointer rounded object-contain"
           onClick={() => window.open(urls[currentImageIndex], '_blank')}
           style={{ width: 580, height: 400 }}
           width={580}
           height={400}
+          channelId={channelId}
+          projectId={projectId}
         />
         <div className="relative overflow-hidden">
           <div className="top-0 w-full">
@@ -113,14 +118,13 @@ const ImagePreviewButton: React.FC<IProps> = ({ urls }) => {
                   style={{ width: 70, height: 40 }}
                   onClick={() => setCurrentImageIndex(index)}
                 >
-                  <img
+                  <Image
                     src={url}
                     alt="preview"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
+                    fill
+                    className="object-cover"
+                    channelId={channelId}
+                    projectId={projectId}
                   />
                   {index === currentImageIndex && (
                     <>
