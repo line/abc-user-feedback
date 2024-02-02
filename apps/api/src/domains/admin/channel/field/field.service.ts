@@ -27,7 +27,6 @@ export const FIELD_TYPES_TO_MAPPING_TYPES: Record<FieldFormatEnum, string> = {
   text: 'text',
   keyword: 'keyword',
   number: 'integer',
-  boolean: 'boolean',
   select: 'keyword',
   multiSelect: 'keyword',
   date: 'date',

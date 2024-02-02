@@ -24,11 +24,6 @@ import DateRangePicker from '../DateRangePicker';
 import SelectBox from '../SelectBox';
 import type { SearchItemType } from './TableSearchInput';
 
-const BooleanOptions = [
-  { name: 'True', key: true },
-  { name: 'False', key: false },
-];
-
 interface IProps extends React.PropsWithChildren {
   columns: SearchItemType[];
   onSubmit: (query: Record<string, any>) => void;
@@ -120,21 +115,6 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
               }
               options={item.options}
               getOptionValue={(option) => option.key ?? option.id}
-              getOptionLabel={(option) => option.name}
-              isClearable
-            />
-          )}
-          {item.format === 'boolean' && (
-            <SelectBox
-              label={item.name}
-              value={BooleanOptions.find(
-                (v) => v.key === currentQuery[item.key],
-              )}
-              onChange={(v) => {
-                setCurrentQuery((prev) => ({ ...prev, [item.key]: v?.key }));
-              }}
-              options={BooleanOptions}
-              getOptionValue={(option) => String(option.key)}
               getOptionLabel={(option) => option.name}
               isClearable
             />

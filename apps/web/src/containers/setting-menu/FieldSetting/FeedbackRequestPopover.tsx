@@ -57,7 +57,6 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
       if (field.type !== 'API' || field.status === 'INACTIVE') continue;
       const key = `'${field.key}'`;
       switch (field.format) {
-        case 'boolean':
         case 'number':
         case 'date':
           body[key] = field.format;
