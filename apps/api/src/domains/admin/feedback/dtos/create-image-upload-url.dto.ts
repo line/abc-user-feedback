@@ -22,4 +22,5 @@ export class CreateImageUploadUrlDto {
   endpoint: string;
   region: string;
   bucket: string;
+  extension: string;
 }

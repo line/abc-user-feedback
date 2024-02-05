@@ -33,6 +33,7 @@ import { IssueModule } from '../admin/project/issue/issue.module';
 import { FeedbackIssueStatisticsModule } from '../admin/statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from '../admin/statistics/feedback/feedback-statistics.module';
 import { APIController } from './api.controller';
+import { ChannelController } from './channel.controller';
 import { FeedbackController } from './feedback.controller';
 import { IssueController } from './issue.controller';
 
@@ -58,6 +59,11 @@ import { IssueController } from './issue.controller';
     FeedbackOSService,
     OpensearchRepository,
   ],
-  controllers: [FeedbackController, IssueController, APIController],
+  controllers: [
+    FeedbackController,
+    IssueController,
+    APIController,
+    ChannelController,
+  ],
 })
 export class APIModule {}
