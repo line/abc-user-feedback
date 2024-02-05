@@ -40,6 +40,7 @@ import { CreateChannelDto } from './dtos';
 import {
   CreateChannelRequestDto,
   FindChannelsByProjectIdRequestDto,
+  ImageUploadUrlTestRequestDto,
   UpdateChannelFieldsRequestDto,
   UpdateChannelRequestDto,
 } from './dtos/requests';
@@ -47,6 +48,7 @@ import {
   CreateChannelResponseDto,
   FindChannelByIdResponseDto,
   FindChannelsByProjectIdResponseDto,
+  ImageUploadUrlTestResponseDto,
 } from './dtos/responses';
 
 @ApiTags('channel')
@@ -128,5 +130,40 @@ export class ChannelController {
   @Delete('/:channelId')
   async delete(@Param('channelId', ParseIntPipe) channelId: number) {
     await this.channelService.deleteById(channelId);
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @ApiOkResponse({ type: ImageUploadUrlTestResponseDto })
+  @Post('/image-upload-url-test')
+  async getImageUploadUrlTest(
+    @Body()
+    {
+      accessKeyId,
+      secretAccessKey,
+      endpoint,
+      region,
+      bucket,
+    }: ImageUploadUrlTestRequestDto,
+  ) {
+    try {
+      const presignedUrl = await this.channelService.createImageUploadUrl({
+        projectId: 0,
+        channelId: 0,
+        accessKeyId,
+        secretAccessKey,
+        endpoint,
+        region,
+        bucket,
+        extension: 'png',
+      });
+
+      if (presignedUrl) {
+        return { success: true };
+      } else {
+        return { success: false };
+      }
+    } catch (error) {
+      return { success: false };
+    }
   }
 }
