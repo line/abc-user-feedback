@@ -13,14 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useState } from 'react';
-import type { ColumnDef, SortingState } from '@tanstack/react-table';
-import {
-  flexRender,
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table';
+import type { Table } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 
 import ChartFilter from '@/components/charts/ChartFilter';
 import DescriptionTooltip from '../DescriptionTooltip';
@@ -31,25 +25,13 @@ import TableSortIcon from '../TableSortIcon';
 interface IProps<T> {
   title: string;
   description?: string;
-  data: T[];
-  columns: ColumnDef<T, any>[];
-  select?: ISelectBoxProps<{ label: string; value: number }, false>;
+  selectData?: ISelectBoxProps<{ label: string; value: number }, false>;
+  table: Table<T>;
   filterContent?: React.ReactNode;
 }
 
 function DashboardTable<T>(props: IProps<T>) {
-  const { title, description, columns, data, select, filterContent } = props;
-  const [sorting, setSorting] = useState<SortingState>([]);
-
-  const table = useReactTable({
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    columns,
-    data,
-    enableSorting: true,
-    state: { sorting },
-    onSortingChange: setSorting,
-  });
+  const { title, description, table, selectData, filterContent } = props;
 
   return (
     <div className="border-fill-tertiary bg-tertiary rounded border">
@@ -61,7 +43,7 @@ function DashboardTable<T>(props: IProps<T>) {
           )}
         </div>
         <div className="flex items-center gap-2">
-          {select && <SelectBox {...select} />}
+          {selectData && <SelectBox {...selectData} />}
           {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
         </div>
       </div>
@@ -75,35 +57,32 @@ function DashboardTable<T>(props: IProps<T>) {
                   style={{ width: header.getSize() }}
                   className="font-14-regular text-secondary px-3 text-left"
                 >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-                  {header.column.getCanSort() && (
-                    <TableSortIcon column={header.column} />
-                  )}
+                  <div className="flex items-center gap-1">
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                    {header.column.getCanSort() && (
+                      <TableSortIcon column={header.column} />
+                    )}
+                  </div>
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <Fragment key={row.index}>
-                <tr className="h-14">
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={`${cell.id} ${cell.row.index}`}
-                      className="border-none px-3"
-                      style={{ width: cell.column.getSize() }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              </Fragment>
+              <tr className="h-14" key={row.index}>
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={`${cell.id} ${cell.row.index}`}
+                    className="border-none px-3"
+                    style={{ width: cell.column.getSize() }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
             ))}
           </tbody>
         </table>
