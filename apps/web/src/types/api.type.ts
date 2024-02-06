@@ -480,9 +480,10 @@ export interface components {
       endpoint: string;
       region: string;
       bucket: string;
+      domainWhiteList: string[];
     };
     /** @enum {string} */
-    FieldFormatEnum: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "images";
+    FieldFormatEnum: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "images";
     /** @enum {string} */
     FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
@@ -516,6 +517,7 @@ export interface components {
       endpoint: string;
       region: string;
       bucket: string;
+      domainWhiteList: string[];
     };
     FindChannelsByProjectDto: {
       id: number;
@@ -539,7 +541,7 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format: "text" | "keyword" | "number" | "boolean" | "select" | "multiSelect" | "date" | "images";
+      format: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "images";
       /** @enum {string} */
       type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */

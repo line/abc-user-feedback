@@ -107,7 +107,7 @@ export class ChannelController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.channel_update)
-  @Put('/channels/:channelId')
+  @Put('/:channelId')
   async updateOne(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: UpdateChannelRequestDto,
@@ -117,7 +117,7 @@ export class ChannelController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.channel_field_update)
-  @Put('/channels/:channelId/fields')
+  @Put('/:channelId/fields')
   async updateFields(
     @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: UpdateChannelFieldsRequestDto,

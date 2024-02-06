@@ -31,6 +31,7 @@ interface IForm {
   endpoint: string;
   region: string;
   bucket: string;
+  domainWhiteList: string[];
 }
 
 const schema: Zod.ZodType<IForm> = z.object({
@@ -39,6 +40,7 @@ const schema: Zod.ZodType<IForm> = z.object({
   endpoint: z.string(),
   region: z.string(),
   bucket: z.string(),
+  domainWhiteList: z.array(z.string()),
 });
 
 interface IProps {

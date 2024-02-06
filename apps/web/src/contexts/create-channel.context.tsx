@@ -80,6 +80,7 @@ const CHANNEL_DEFAULT_INPUT: ChannelInputType = {
     endpoint: '',
     region: '',
     secretAccessKey: '',
+    domainWhiteList: [],
   },
 };
 
