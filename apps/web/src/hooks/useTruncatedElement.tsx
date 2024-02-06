@@ -14,19 +14,29 @@
  * under the License.
  */
 import type { RefObject } from 'react';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const useTruncatedElement = ({ ref }: { ref: RefObject<HTMLElement> }) => {
   const [isTruncated, setIsTruncated] = useState(false);
   const [isShowingMore, setIsShowingMore] = useState(false);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!ref.current) return;
-    const { offsetHeight, scrollHeight } = ref.current;
 
-    if (offsetHeight + 1 < scrollHeight) setIsTruncated(true);
-    else setIsTruncated(false);
-  }, [ref.current?.innerHTML]);
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { offsetHeight, scrollHeight } = entry.target as HTMLDivElement;
+        if (offsetHeight + 1 < scrollHeight) {
+          setIsTruncated(true);
+          observer.disconnect();
+        } else setIsTruncated(false);
+      }
+    });
+    observer.observe(ref.current);
+    return () => {
+      observer.disconnect();
+    };
+  }, [ref.current]);
 
   const toggleIsShowingMore = () => setIsShowingMore((prev) => !prev);
 

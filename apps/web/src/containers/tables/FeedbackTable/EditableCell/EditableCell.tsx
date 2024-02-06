@@ -59,8 +59,6 @@ const EditableCell: React.FC<IProps> = memo((props) => {
         ? value
           ? Number(value)
           : null
-        : field.format === 'boolean'
-        ? Boolean(value)
         : value,
     );
   }, [value]);
@@ -74,8 +72,6 @@ const EditableCell: React.FC<IProps> = memo((props) => {
         ? currentValue ?? ''
         : field.format === 'number'
         ? Number(currentValue)
-        : field.format === 'boolean'
-        ? Boolean(currentValue)
         : field.format === 'date'
         ? new Date(currentValue)
         : field.format === 'select'
@@ -90,15 +86,6 @@ const EditableCell: React.FC<IProps> = memo((props) => {
 
   return (
     <div className="overflow-hidden">
-      {field.format === 'boolean' && (
-        <input
-          type="checkbox"
-          className="toggle"
-          disabled={!isEditable}
-          checked={Boolean(currentValue)}
-          onChange={(e) => setCurrentValue(e.target.checked)}
-        />
-      )}
       {(field.format === 'keyword' || field.format === 'text') && (
         <input
           type="text"

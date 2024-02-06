@@ -45,8 +45,6 @@ export const strToObj = (input: string, searchItems: SearchItemType[]) => {
 
 export const strValueToObj = (value: string, searchItems: SearchItemType) => {
   switch (searchItems.format) {
-    case 'boolean':
-      return strToBoolean(value);
     case 'date': {
       const [gte, lt] = value
         .split('~')
@@ -75,8 +73,6 @@ export const objToStr = (
       const { name } = column;
 
       switch (column.format) {
-        case 'boolean':
-          return `${name}:${booleanToStr(value)}`;
         case 'date':
           if (typeof value === 'string') {
             return `${name}:${value}`;
@@ -126,9 +122,6 @@ export const objToQuery = (
     else {
       try {
         switch (column.format) {
-          case 'boolean':
-            result[key] = Boolean(value);
-            break;
           case 'number':
             result[key] = value;
             break;
@@ -184,31 +177,4 @@ export const objToQuery = (
     }
   }
   return result;
-};
-
-const booleanToStr = (input: any) => {
-  switch (input) {
-    case true:
-    case 'true':
-    case 'True':
-      return 'True';
-    case false:
-    case 'false':
-    case 'False':
-      return 'False';
-    default:
-      return input;
-  }
-};
-const strToBoolean = (input: string) => {
-  switch (input) {
-    case 'true':
-    case 'True':
-      return true;
-    case 'false':
-    case 'False':
-      return false;
-    default:
-      return input;
-  }
 };

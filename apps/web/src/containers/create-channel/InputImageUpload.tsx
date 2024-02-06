@@ -80,7 +80,7 @@ const InputImageUpload: React.FC<IProps> = () => {
         endpoint,
         region,
         secretAccessKey,
-        domainWhiteList: [],
+        domainWhiteList: [], // TODO: apply input domain whitelist
         [key]: value,
       });
     },

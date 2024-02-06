@@ -30,7 +30,11 @@ const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
 
   const { data } = useOAIQuery({
     path: '/api/admin/statistics/feedback/count',
-    variables: { from: from.toISOString(), to: to.toISOString(), projectId },
+    variables: {
+      from: dayjs(from).startOf('day').toISOString(),
+      to: dayjs(to).endOf('day').toISOString(),
+      projectId,
+    },
     queryOptions: {
       refetchOnMount: false,
       refetchOnWindowFocus: false,

@@ -17,7 +17,6 @@ export enum FieldFormatEnum {
   text = 'text',
   keyword = 'keyword',
   number = 'number',
-  boolean = 'boolean',
   select = 'select',
   multiSelect = 'multiSelect',
   date = 'date',

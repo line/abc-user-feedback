@@ -97,8 +97,6 @@ export const getRandomValue = (
       return faker.string.sample();
     case FieldFormatEnum.number:
       return faker.number.int();
-    case FieldFormatEnum.boolean:
-      return faker.datatype.boolean();
     case FieldFormatEnum.select:
       return options.length === 0
         ? undefined

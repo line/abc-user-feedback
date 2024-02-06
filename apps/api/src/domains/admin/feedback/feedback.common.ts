@@ -22,8 +22,6 @@ export function isInvalidSortMethod(method: SortMethodEnum) {
 
 export function validateValue(field: FieldEntity, value: any) {
   switch (field.format) {
-    case FieldFormatEnum.boolean:
-      return typeof value === 'boolean';
     case FieldFormatEnum.number:
       return typeof value === 'number';
     case FieldFormatEnum.text:
