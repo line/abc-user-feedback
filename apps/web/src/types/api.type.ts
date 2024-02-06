@@ -105,13 +105,14 @@ export interface paths {
   };
   "/api/admin/projects/{projectId}/channels/{channelId}": {
     get: operations["ChannelController_findOne"];
+    put: operations["ChannelController_updateOne"];
     delete: operations["ChannelController_delete"];
   };
-  "/api/admin/projects/{projectId}/channels/channels/{channelId}": {
-    put: operations["ChannelController_updateOne"];
-  };
-  "/api/admin/projects/{projectId}/channels/channels/{channelId}/fields": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/fields": {
     put: operations["ChannelController_updateFields"];
+  };
+  "/api/admin/projects/{projectId}/channels/image-upload-url-test": {
+    post: operations["ChannelController_getImageUploadUrlTest"];
   };
   "/api/admin/fields/{fieldId}/options": {
     get: operations["OptionController_getOptions"];
@@ -582,6 +583,16 @@ export interface components {
     };
     UpdateChannelFieldsRequestDto: {
       fields: components["schemas"]["UpdateChannelRequestFieldDto"][];
+    };
+    ImageUploadUrlTestRequestDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
+    ImageUploadUrlTestResponseDto: {
+      success: boolean;
     };
     FindOptionByFieldIdResponseDto: {
       id: number;
@@ -1530,19 +1541,6 @@ export interface operations {
       };
     };
   };
-  ChannelController_delete: {
-    parameters: {
-      path: {
-        channelId: number;
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
   ChannelController_updateOne: {
     parameters: {
       path: {
@@ -1553,6 +1551,19 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateChannelRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ChannelController_delete: {
+    parameters: {
+      path: {
+        channelId: number;
+        projectId: number;
       };
     };
     responses: {
@@ -1576,6 +1587,25 @@ export interface operations {
     responses: {
       200: {
         content: never;
+      };
+    };
+  };
+  ChannelController_getImageUploadUrlTest: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImageUploadUrlTestRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImageUploadUrlTestResponseDto"];
+        };
       };
     };
   };

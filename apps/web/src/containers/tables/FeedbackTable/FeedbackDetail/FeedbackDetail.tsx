@@ -37,6 +37,7 @@ import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
 import type { FieldType } from '@/types/field.type';
 import type { IssueType } from '@/types/issue.type';
 import FeedbackDetailCell from './FeedbackDetailCell';
+import FeedbackDetailIssueCell from './FeedbackDetailIssueCell';
 
 interface IProps {
   id: number;
@@ -133,21 +134,13 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
                       {issuesField?.name}
                     </th>
-                    <td width="260">
-                      <div className="flex flex-wrap gap-2">
-                        {(
+                    <td width="260" className="overflow-hidden">
+                      <FeedbackDetailIssueCell
+                        issues={
                           feedbackData[issuesField?.key ?? ''] ??
                           ([] as IssueType[])
-                        ).map((v) => (
-                          <Badge
-                            key={v.id}
-                            color={getStatusColor(v.status)}
-                            type="secondary"
-                          >
-                            {v.name}
-                          </Badge>
-                        ))}
-                      </div>
+                        }
+                      />
                     </td>
                   </tr>
                   <tr>

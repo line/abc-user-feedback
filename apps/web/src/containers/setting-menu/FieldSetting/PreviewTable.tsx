@@ -143,7 +143,11 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                 {info.getValue() as string}
               </ExpandableText>
             ) : field.format === 'images' ? (
-              <ImagePreviewButton urls={(info.getValue() ?? []) as string[]} />
+              <ImagePreviewButton
+                urls={(info.getValue() ?? []) as string[]}
+                channelId={info.row.original.id}
+                projectId={info.row.original.projectId}
+              />
             ) : (
               String(info.getValue())
             ),
