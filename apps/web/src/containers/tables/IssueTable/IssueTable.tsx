@@ -49,6 +49,7 @@ import { getStatusColor, ISSUES } from '@/constants/issues';
 import { Path } from '@/constants/path';
 import { ShareButton } from '@/containers/buttons';
 import {
+  useIssueCount,
   useIssueSearch,
   useOAIMutation,
   useOAIQuery,
@@ -225,17 +226,31 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           },
         };
       }
-
       return { ...prev, [key]: value };
     }, {});
   }, [query, createdAtRange]);
 
-  const { data, refetch, isLoading } = useIssueSearch(projectId, {
+  const {
+    data,
+    refetch: refetchIssueSearch,
+    isLoading,
+  } = useIssueSearch(projectId, {
     page,
     limit,
     query: q,
     sort: sort as Record<string, never>,
   });
+
+  const { data: issueCountData, refetch: refetchIssueCount } = useIssueCount(
+    projectId,
+    q,
+  );
+
+  const refetch = async () => {
+    await refetchIssueSearch();
+    await refetchIssueCount();
+  };
+
   const { data: issueTracker } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
@@ -264,7 +279,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const columns = useMemo(
     () => getColumns(t, issueTracker?.data as IssueTrackerType | undefined),
-    [refetch, t, issueTracker],
+    [t, issueTracker],
   );
   const table = useReactTable({
     data: rows,
@@ -303,14 +318,12 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       ] as SearchItemType[],
     [t],
   );
-
   return (
     <div className="flex flex-col gap-2">
       <IssueTabelSelectBox
         currentIssueKey={currentIssueKey}
-        projectId={projectId}
-        createdAtRange={createdAtRange}
-        onChangeOption={(option) => setQuery({ status: option.key })}
+        issueCountData={issueCountData}
+        onChangeOption={(option) => setQuery({ ...query, status: option.key })}
       />
       <div className="flex items-center justify-between">
         <h2 className="font-18-regular">
@@ -416,8 +429,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                         />
                         <IssueSettingPopover
                           issue={row.original}
-                          refetchIssueTable={refetch}
-                          createdAtRange={createdAtRange}
+                          refetch={refetch}
                           issueTracker={
                             issueTracker?.data as IssueTrackerType | undefined
                           }
