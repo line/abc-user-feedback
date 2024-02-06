@@ -17,27 +17,19 @@ import { useTranslation } from 'react-i18next';
 
 import { IssueCircle } from '@/components';
 import { ISSUES } from '@/constants/issues';
-import { useIssueCountByStatusAndCreatedAtRange } from '@/hooks';
-import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps extends React.PropsWithChildren {
-  projectId: number;
   onChangeOption: (issue: IssueCountOption) => void;
-  createdAtRange: DateRangeType;
   currentIssueKey: string;
+  issueCountData: { key: string; count: number }[] | undefined;
 }
 
 type IssueCountOption = { count: number; key: string };
 
 const IssueTabelSelectBox: React.FC<IProps> = (props) => {
-  const { projectId, currentIssueKey, onChangeOption, createdAtRange } = props;
+  const { currentIssueKey, onChangeOption, issueCountData } = props;
 
   const { t } = useTranslation();
-
-  const { data: issueCountData } = useIssueCountByStatusAndCreatedAtRange(
-    createdAtRange,
-    projectId,
-  );
 
   return (
     <div className="flex flex-wrap gap-2">
