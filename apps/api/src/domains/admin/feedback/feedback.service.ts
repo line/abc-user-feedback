@@ -17,9 +17,11 @@ import { createReadStream, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import path from 'path';
 import { PassThrough } from 'stream';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -595,6 +597,65 @@ export class FeedbackService {
       return feedback;
     } else {
       return await this.feedbackMySQLService.findById({ feedbackId });
+    }
+  }
+
+  async uploadImages({
+    channelId,
+    files,
+  }: {
+    channelId: number;
+    files: Array<any>;
+  }) {
+    const channel = await this.channelService.findById({ channelId });
+    if (!channel) {
+      throw new BadRequestException('invalid channel id');
+    }
+
+    const s3 = new S3Client({
+      credentials: {
+        accessKeyId: channel.imageConfig.accessKeyId,
+        secretAccessKey: channel.imageConfig.secretAccessKey,
+      },
+      endpoint: channel.imageConfig.endpoint,
+      region: channel.imageConfig.region,
+    });
+    try {
+      const imageUrls = await Promise.all(
+        files.map(async (file) => {
+          const key = `${channelId}_${Date.now()}_${file.originalname}`;
+          const command = new PutObjectCommand({
+            Bucket: channel.imageConfig.bucket,
+            Key: key,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+            ACL: 'public-read',
+          });
+          await s3.send(command);
+
+          return {
+            ...file,
+            url: `${channel.imageConfig.endpoint}/${channel.imageConfig.bucket}/${key}`,
+          };
+        }),
+      );
+      const imageUrlsByKeys = imageUrls.reduce((prev, curr) => {
+        if (curr.fieldname in prev) {
+          return {
+            ...prev,
+            [curr.fieldname]: prev[curr.fieldname].concat(curr.url),
+          };
+        } else {
+          return {
+            ...prev,
+            [curr.fieldname]: [curr.url],
+          };
+        }
+      }, {});
+
+      return imageUrlsByKeys;
+    } catch (e) {
+      throw new InternalServerErrorException('failed to upload images');
     }
   }
 }
