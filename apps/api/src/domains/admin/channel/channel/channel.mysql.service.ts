@@ -114,13 +114,13 @@ export class ChannelMySQLService {
     channel.name = name;
     channel.description = description;
     channel.imageConfig = imageConfig;
-    await this.repository.save(channel);
+    return await this.repository.save(channel);
   }
 
   @Transactional()
   async delete(channelId: number) {
     const channel = new ChannelEntity();
     channel.id = channelId;
-    await this.repository.remove(channel);
+    return await this.repository.remove(channel);
   }
 }

@@ -25,6 +25,7 @@ import {
 } from '@/test-utils/util-functions';
 import { ProjectEntity } from '../../domains/admin/project/project/project.entity';
 import { ProjectService } from '../../domains/admin/project/project/project.service';
+import { ChannelRepositoryStub } from '../stubs';
 import { ApiKeyServiceProviders } from './api-key.service.providers';
 import { FeedbackIssueStatisticsServiceProviders } from './feedback-issue-statistics.service.providers';
 import { FeedbackStatisticsServiceProviders } from './feedback-statistics.service.providers';
@@ -41,7 +42,7 @@ export const ProjectServiceProviders = [
   },
   {
     provide: getRepositoryToken(ChannelEntity),
-    useValue: mockRepository(),
+    useClass: ChannelRepositoryStub,
   },
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
   ...TenantServiceProviders,
