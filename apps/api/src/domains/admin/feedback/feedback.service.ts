@@ -351,6 +351,23 @@ export class FeedbackService {
           }, fieldKey: ${field.key})`,
         );
       }
+
+      if (field.format === FieldFormatEnum.images) {
+        const channel = await this.channelService.findById({ channelId });
+        const domainWhiteList = channel.imageConfig.domainWhiteList;
+
+        if (domainWhiteList) {
+          const images = value as string[];
+          for (const image of images) {
+            const url = new URL(image);
+            if (!domainWhiteList.includes(url.hostname)) {
+              throw new BadRequestException(
+                `invalid domain in image link: ${url.hostname} (fieldKey: ${field.key})`,
+              );
+            }
+          }
+        }
+      }
     }
 
     const feedback = await this.feedbackMySQLService.create({

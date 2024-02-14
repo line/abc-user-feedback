@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+export { ChannelRepositoryStub } from './channel-repository.stub';
 export { FeedbackRepositoryStub } from './feedback-repository.stub';
 export { TenantRepositoryStub } from './tenant-repository.stub';
 export { UserRepositoryStub } from './user-repository.stub';
