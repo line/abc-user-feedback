@@ -128,18 +128,13 @@ describe('ChannelService', () => {
       const dto = new UpdateChannelDto();
       dto.name = faker.string.sample();
       dto.description = faker.string.sample();
-      jest
-        .spyOn(ChannelMySQLService.prototype, 'findById')
-        .mockResolvedValue(channelFixture);
-      jest.spyOn(channelRepo, 'findOne').mockResolvedValue(null);
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValueOnce(channelFixture);
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValueOnce(null);
 
-      await channelService.updateInfo(channelId, dto);
+      const channel = await channelService.updateInfo(channelId, dto);
 
-      expect(channelRepo.save).toBeCalledTimes(1);
-      expect(channelRepo.save).toHaveBeenCalledWith({
-        ...channelFixture,
-        ...dto,
-      });
+      expect(channel.name).toEqual(dto.name);
+      expect(channel.description).toEqual(dto.description);
     });
     it('updating fails with a duplicate channel name', async () => {
       const channelId = channelFixture.id;
@@ -166,10 +161,9 @@ describe('ChannelService', () => {
       const channel = new ChannelEntity();
       channel.id = channelId;
 
-      await channelService.deleteById(channelId);
+      const deletedChannel = await channelService.deleteById(channelId);
 
-      expect(channelRepo.remove).toBeCalledTimes(1);
-      expect(channelRepo.remove).toHaveBeenCalledWith(channel);
+      expect(deletedChannel.id).toEqual(channel.id);
     });
   });
 });

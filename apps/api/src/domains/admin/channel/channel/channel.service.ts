@@ -75,7 +75,7 @@ export class ChannelService {
 
   @Transactional()
   async updateInfo(channelId: number, dto: UpdateChannelDto) {
-    await this.channelMySQLService.update(channelId, dto);
+    return await this.channelMySQLService.update(channelId, dto);
   }
 
   @Transactional()
@@ -92,7 +92,7 @@ export class ChannelService {
       await this.osRepository.deleteIndex(channelId.toString());
     }
 
-    await this.channelMySQLService.delete(channelId);
+    return await this.channelMySQLService.delete(channelId);
   }
 
   async createImageUploadUrl(dto: CreateImageUploadUrlDto) {

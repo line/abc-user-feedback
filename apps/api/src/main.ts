@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import multiPart from '@fastify/multipart';
 import { Logger as DefaultLogger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
@@ -38,6 +39,8 @@ async function bootstrap() {
     new FastifyAdapter({}),
     { bufferLogs: true },
   );
+
+  await app.register(multiPart);
 
   app.enableCors({ origin: '*', exposedHeaders: ['Content-Disposition'] });
 
