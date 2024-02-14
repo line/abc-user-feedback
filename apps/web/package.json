@@ -40,7 +40,7 @@
     "@ufb/shared": "^0.1.0",
     "@ufb/tailwind": "^0.1.0",
     "@ufb/ui": "^0.1.0",
-    "axios": "^1.6.0",
+    "axios": "^1.6.7",
     "axios-auth-refresh": "^3.3.6",
     "cookies-next": "^4.0.0",
     "countries-and-timezones": "^3.6.0",
