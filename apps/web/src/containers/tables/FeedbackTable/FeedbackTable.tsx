@@ -86,9 +86,8 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     () =>
       produce(query, (draft) => {
         if (sub) {
-          if (issueId) {
-            draft['issueIds'] = [issueId];
-          }
+          if (issueId) draft['issueIds'] = [issueId];
+
           Object.keys(draft).forEach((key) => {
             if (key === 'issueIds') return;
             delete draft[key];
