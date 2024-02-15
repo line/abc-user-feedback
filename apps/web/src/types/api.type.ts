@@ -331,7 +331,7 @@ export interface components {
       updatedAt: string;
       deletedAt: string;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
       project: components["schemas"]["RoleProjectDto"];
     };
     GetRolesByIdResponseDto: {
@@ -411,7 +411,7 @@ export interface components {
     GetAllRoleResponseRoleDto: {
       id: number;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     GetAllRoleResponseDto: {
       roles: components["schemas"]["GetAllRoleResponseRoleDto"][];
@@ -419,11 +419,11 @@ export interface components {
     };
     CreateRoleRequestDto: {
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     UpdateRoleRequestDto: {
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     MemberUserDto: {
       id: number;
@@ -434,7 +434,7 @@ export interface components {
     MemberRoleDto: {
       id: number;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     GetAllMember: {
       id: number;
@@ -480,7 +480,7 @@ export interface components {
       endpoint: string;
       region: string;
       bucket: string;
-      domainWhiteList: string[];
+      domainWhiteList: string[] | null;
     };
     /** @enum {string} */
     FieldFormatEnum: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "images";

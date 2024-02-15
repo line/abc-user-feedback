@@ -15,21 +15,19 @@
  */
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
-import { Image } from '@/components';
 import { useHorizontalScroll } from '@/hooks';
 
 interface IProps {
   urls: string[];
-  projectId: number;
-  channelId: number;
 }
 
 const ImagePreviewButton: React.FC<IProps> = (props) => {
-  const { urls, channelId, projectId } = props;
+  const { urls } = props;
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -83,8 +81,6 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
           style={{ width: 580, height: 400 }}
           width={580}
           height={400}
-          channelId={channelId}
-          projectId={projectId}
         />
         <div className="relative overflow-hidden">
           <div className="top-0 w-full">
@@ -121,10 +117,10 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
                   <Image
                     src={url}
                     alt="preview"
-                    fill
+                    style={{ width: 70, height: 40 }}
+                    width={70}
+                    height={40}
                     className="object-cover"
-                    channelId={channelId}
-                    projectId={projectId}
                   />
                   {index === currentImageIndex && (
                     <>

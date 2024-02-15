@@ -170,6 +170,7 @@ export { ReactComponent as Compress } from './symbol/compress.svg';
 export { ReactComponent as Dots } from './symbol/dots.svg';
 export { ReactComponent as Download } from './symbol/download.svg';
 export { ReactComponent as Exchange } from './symbol/exchange.svg';
+export { ReactComponent as ExpandPopup } from './symbol/expand-popup.svg';
 export { ReactComponent as Expand } from './symbol/expand.svg';
 export { ReactComponent as Frozen } from './symbol/frozen.svg';
 export { ReactComponent as Handle } from './symbol/handle.svg';

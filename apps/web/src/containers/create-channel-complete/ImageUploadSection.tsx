@@ -33,9 +33,7 @@ const ImageUploadSection: React.FC<IProps> = ({
   const { t } = useTranslation();
 
   return (
-    <CreateSectionTemplate
-      title={t('channel-setting-menu.image-storage-integration')}
-    >
+    <CreateSectionTemplate title={t('channel-setting-menu.image-mgmt')}>
       <Input label="Access Key ID" value={accessKeyId} disabled />
       <Input label="Secret Access Key ID" value={secretAccessKey} disabled />
       <Input label="End Point" value={endpoint} disabled />

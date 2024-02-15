@@ -91,8 +91,8 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
               : field.format === 'images'
               ? faker.helpers.arrayElements(
                   Array.from(
-                    { length: faker.number.int({ min: 10, max: 15 }) },
-                    () => faker.image.url(),
+                    { length: faker.number.int({ min: 1, max: 15 }) },
+                    () => '/assets/images/sample_image.png',
                   ),
                 )
               : null;
@@ -141,11 +141,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                 {info.getValue() as string}
               </ExpandableText>
             ) : field.format === 'images' ? (
-              <ImagePreviewButton
-                urls={(info.getValue() ?? []) as string[]}
-                channelId={info.row.original.id}
-                projectId={info.row.original.projectId}
-              />
+              <ImagePreviewButton urls={(info.getValue() ?? []) as string[]} />
             ) : (
               String(info.getValue())
             ),

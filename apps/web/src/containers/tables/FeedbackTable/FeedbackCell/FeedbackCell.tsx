@@ -20,7 +20,6 @@ import { ExpandableText } from '@/components';
 import { ImagePreviewButton } from '@/components/buttons';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import type { FieldType } from '@/types/field.type';
-import useFeedbackTable from '../feedback-table.context';
 
 interface IProps extends React.PropsWithChildren {
   isExpanded: boolean;
@@ -30,7 +29,6 @@ interface IProps extends React.PropsWithChildren {
 
 const FeedbackCell: React.FC<IProps> = memo((props) => {
   const { isExpanded, field, value } = props;
-  const { projectId, channelId } = useFeedbackTable();
 
   return (
     <ExpandableText isExpanded={isExpanded}>
@@ -47,11 +45,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
       ) : field.format === 'select' ? (
         field.options?.find((option) => option.key === value)?.name ?? value
       ) : field.format === 'images' ? (
-        <ImagePreviewButton
-          urls={value}
-          projectId={projectId}
-          channelId={channelId}
-        />
+        <ImagePreviewButton urls={value} />
       ) : field.format === 'text' ? (
         (value as string)
       ) : (

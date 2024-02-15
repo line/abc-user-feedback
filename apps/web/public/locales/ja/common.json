@@ -412,7 +412,7 @@
   "channel-setting-menu": {
     "channel-info": "Channel情報",
     "field-mgmt": "Field管理",
-    "image-storage-integration": "Image Storage連動",
+    "image-mgmt": "Image管理",
     "delete-channel": "Channel削除"
   },
   "modal": {
@@ -422,7 +422,7 @@
   },
   "help-card": {
     "issue-tracker-mgmt": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
-    "image-storage-integration": "Presigned URLを活用してImageフォーマットのフィードバックを収集することができます。\nPresigned URL連動のための情報を入力することをお願いします。"
+    "image-mgmt": "Imageフィードバックに対してStorage連動によるフィードバック収集を設定したり、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。"
   },
   "hint": {
     "required": "必須入力対象です。",
@@ -430,5 +430,8 @@
     "name-already-exists": "既に存在する{{name}}です。",
     "invalid-domain": "ドメイン形式ではありません。",
     "image-format": "Image URLを入力するフォーマットです。"
+  },
+  "image-mgmt-setting": {
+    "image-storage-integration-setting": "画像リポジトリの連動設定"
   }
 }

@@ -31,7 +31,9 @@ interface IProps<T extends string> extends React.PropsWithChildren {
   currentStep: T;
 }
 
-function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
+const CreateProjectChannelTemplate = <T extends string>(
+  props: IProps<T>,
+): React.ReactNode => {
   const {
     type,
     helpText,
@@ -55,7 +57,7 @@ function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
       {children}
     </div>
   );
-}
+};
 
 const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
   const { t } = useTranslation();

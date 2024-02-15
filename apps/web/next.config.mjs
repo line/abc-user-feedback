@@ -17,9 +17,7 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@ufb/ui'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
-  images: {
-    remotePatterns: [{ hostname: '*' }],
-  },
+  images: { remotePatterns: [{ hostname: '*' }] },
   webpack(config) {
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),

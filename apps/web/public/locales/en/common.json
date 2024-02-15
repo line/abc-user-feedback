@@ -412,7 +412,7 @@
   "channel-setting-menu": {
     "channel-info": "Channel Information",
     "field-mgmt": "Field Management",
-    "image-storage-integration": "Image Storage Intergration",
+    "image-mgmt": "Image Management",
     "delete-channel": "Delete Channel"
   },
   "modal": {
@@ -422,7 +422,7 @@
   },
   "help-card": {
     "issue-tracker-mgmt": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
-    "image-storage-integration": "You can use the Presigned URL to collect feedback in the Image format.\nEnter information for the Presigned URL interworking."
+    "image-mgmt": "For Image feedback, you can set up feedback collection through Storage Integration or a whitelist for Image URL domains.\nSee Image <icon></icon> <docs>Docs</docs> for more information."
   },
   "hint": {
     "required": "Required",
@@ -430,5 +430,8 @@
     "name-already-exists": "{{name}} already exists.",
     "invalid-domain": "Invalid domain format.",
     "image-format": "The format for entering the Image URL."
+  },
+  "image-mgmt-setting": {
+    "image-storage-integration-setting": "Image Storage Integration Setting"
   }
 }

@@ -30,6 +30,7 @@ import {
   ApiBody,
   ApiConsumes,
   ApiOkResponse,
+  ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
@@ -89,6 +90,10 @@ export class FeedbackController {
         id: 1,
       },
     },
+  })
+  @ApiOperation({
+    summary: 'Update feedback',
+    description: 'Update feedback123123',
   })
   @Post('feedbacks')
   async create(

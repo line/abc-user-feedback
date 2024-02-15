@@ -37,7 +37,7 @@ export class ImageConfigRequestDto {
   @IsString()
   bucket: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   @IsString({ each: true })
   domainWhiteList: string[];
 }

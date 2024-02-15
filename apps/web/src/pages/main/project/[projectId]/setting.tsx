@@ -31,6 +31,7 @@ import {
   ChannelInfoSetting,
   ChannelSettingMenu,
   FieldSetting,
+  ImageFieldSetting,
   IssueTrackerSetting,
   MemberSetting,
   ProjectDeleteSetting,
@@ -42,7 +43,6 @@ import {
   TenantSettingMenu,
   UserSetting,
 } from '@/containers/setting-menu';
-import ImageUploadSetting from '@/containers/setting-menu/ImageUploadSetting';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 import type { NextPageWithLayout } from '../../../_app';
 
@@ -166,7 +166,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <FieldSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'IMAGE_UPLOAD_SETTING' && channelId && (
-              <ImageUploadSetting projectId={projectId} channelId={channelId} />
+              <ImageFieldSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'DELETE_CHANNEL' && channelId && (
               <ChannelDeleteSetting

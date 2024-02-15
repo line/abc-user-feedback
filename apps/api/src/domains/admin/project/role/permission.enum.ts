@@ -51,6 +51,8 @@ export enum PermissionEnum {
   channel_delete = 'channel_delete',
   channel_field_read = 'channel_field_read',
   channel_field_update = 'channel_field_update',
+  channel_image_read = 'channel_image_read',
+  channel_image_update = 'channel_image_update',
 }
 
 export const AllPermissions = Object.values(PermissionEnum);

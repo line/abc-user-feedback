@@ -36,11 +36,10 @@ const DEFAULT_ROLES: InputRoleType[] = [
     name: 'Editor',
     permissions: [...PermissionList].filter(
       (v) =>
-        !v.includes('role') &&
-        (v.includes('read') ||
-          v.includes('feedback') ||
-          v.includes('issue') ||
-          v.includes('member_create')),
+        v.includes('read') ||
+        v.includes('feedback') ||
+        v.includes('issue') ||
+        v.includes('member_create'),
     ),
   },
   {
