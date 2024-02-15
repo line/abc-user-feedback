@@ -13,11 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import crypto from 'crypto';
 import {
   BadRequestException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
 import { Repository } from 'typeorm';
@@ -35,6 +37,7 @@ export class CodeService {
   constructor(
     @InjectRepository(CodeEntity)
     private readonly codeRepo: Repository<CodeEntity>,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @Transactional()
@@ -70,7 +73,12 @@ export class CodeService {
     if (codeEntity.isVerified)
       throw new BadRequestException('already verified');
 
+    if (codeEntity.tryCount >= 5) {
+      throw new BadRequestException('code expired');
+    }
+
     if (codeEntity.code !== code) {
+      this.eventEmitter.emit('code.verify.failed', codeEntity);
       throw new BadRequestException('invalid code');
     }
 
@@ -102,6 +110,12 @@ export class CodeService {
   }
 
   private createCode() {
-    return String(Math.floor(Math.random() * 999998 + 1)).padStart(6, '0');
+    return String(crypto.randomInt(1, 1000000)).padStart(6, '0');
+  }
+
+  @OnEvent('code.verify.failed', { async: true })
+  private async handleCodeVerificationFailure(codeEntity: CodeEntity) {
+    codeEntity.tryCount += 1;
+    await this.codeRepo.save(codeEntity);
   }
 }
