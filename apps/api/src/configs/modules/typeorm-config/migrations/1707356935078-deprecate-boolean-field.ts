@@ -26,7 +26,7 @@ export class DeprecateBooleanField1707356935078 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'boolean', 'select', 'multiSelect', 'date', 'images') NOT NULL`,
+      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'boolean', 'select', 'multiSelect', 'date', 'image') NOT NULL`,
     );
   }
 }
