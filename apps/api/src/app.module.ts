@@ -15,6 +15,7 @@
  */
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 import { ClsModule } from 'nestjs-cls';
@@ -117,6 +118,7 @@ export const domainModules = [
       middleware: { mount: true },
     }),
     ScheduleModule.forRoot(),
+    EventEmitterModule.forRoot(),
     ...domainModules,
   ],
 })

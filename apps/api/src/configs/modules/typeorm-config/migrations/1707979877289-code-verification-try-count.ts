@@ -15,18 +15,18 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class DeprecateBooleanField1707356935078 implements MigrationInterface {
-  name = 'DeprecateBooleanField1707356935078';
+export class CodeVerificationTryCount1707979877289
+  implements MigrationInterface
+{
+  name = 'CodeVerificationTryCount1707979877289';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'select', 'multiSelect', 'date', 'image') NOT NULL`,
+      `ALTER TABLE \`codes\` ADD \`try_count\` int NOT NULL DEFAULT '0'`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(
-      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'boolean', 'select', 'multiSelect', 'date', 'image') NOT NULL`,
-    );
+    await queryRunner.query(`ALTER TABLE \`codes\` DROP COLUMN \`try_count\``);
   }
 }
