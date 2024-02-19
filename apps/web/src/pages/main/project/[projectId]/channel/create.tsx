@@ -24,7 +24,7 @@ import {
   InputChannelInfo,
   InputField,
   InputFieldPreview,
-  InputImageUpload,
+  InputImageSetting,
 } from '@/containers/create-channel';
 import {
   CreateChannelProvider,
@@ -74,7 +74,7 @@ const Contents: React.FC = () => {
     <>
       {currentStep === 'channelInfo' && <InputChannelInfo />}
       {currentStep === 'fields' && <InputField />}
-      {currentStep === 'imageUpload' && <InputImageUpload />}
+      {currentStep === 'imageUpload' && <InputImageSetting />}
       {currentStep === 'fieldPreview' && <InputFieldPreview />}
     </>
   );

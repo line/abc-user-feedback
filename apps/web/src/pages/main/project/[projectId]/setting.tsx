@@ -31,7 +31,7 @@ import {
   ChannelInfoSetting,
   ChannelSettingMenu,
   FieldSetting,
-  ImageFieldSetting,
+  ImageSetting,
   IssueTrackerSetting,
   MemberSetting,
   ProjectDeleteSetting,
@@ -166,7 +166,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <FieldSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'IMAGE_UPLOAD_SETTING' && channelId && (
-              <ImageFieldSetting projectId={projectId} channelId={channelId} />
+              <ImageSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'DELETE_CHANNEL' && channelId && (
               <ChannelDeleteSetting

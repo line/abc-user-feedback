@@ -54,7 +54,7 @@ interface IProps {
   projectId: number;
 }
 
-const ImageFieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
+const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
   const [inputDomain, setInputDomain] = useState('');
@@ -358,4 +358,4 @@ const ImageFieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   );
 };
 
-export default ImageFieldSetting;
+export default ImageSetting;

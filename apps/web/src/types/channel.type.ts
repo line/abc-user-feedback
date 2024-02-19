@@ -34,5 +34,5 @@ export type InputImageConfigType = {
   endpoint: string;
   region: string;
   bucket: string;
-  domainWhiteList: string[];
+  domainWhiteList: string[] | null;
 };

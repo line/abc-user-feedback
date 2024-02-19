@@ -25,7 +25,7 @@ export { default as RoleSetting } from './RoleSetting';
 export { default as ChannelInfoSetting } from './ChannelInfoSetting';
 export { default as MemberSetting } from './MemberSetting';
 export { default as UserSetting } from './UserSetting';
-export { default as ImageFieldSetting } from './ImageFieldSetting';
+export { default as ImageSetting } from './ImageSetting';
 
 export { default as TenantSettingMenu } from './TenantSettingMenu';
 export { default as ProjectSettingMenu } from './ProjectSettingMenu';
