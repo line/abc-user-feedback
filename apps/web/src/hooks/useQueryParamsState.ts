@@ -18,64 +18,39 @@ import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/constants/dayjs-format';
-import type { DateRangeType } from '@/types/date-range.type';
 import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
 
 const useQueryParamsState = (
-  pathname: string,
-  defaultQuery: Record<string, any>,
-  defaultDateRange?: DateRangeType,
+  defaultNextQuery: Record<string, any>,
+  defaultQuery?: Record<string, string>,
+  validate?: (input: Record<string, string>) => boolean,
 ) => {
   const router = useRouter();
 
   const query = useMemo(() => {
     const newQuery = Object.entries(router.query).reduce(
       (acc, [key, value]) => {
-        if (key in defaultQuery) return acc;
+        if (key in defaultNextQuery) return acc;
         return { ...acc, [key]: value };
       },
       {} as Record<string, any>,
     );
-
-    return removeEmptyValueInObject(newQuery);
-  }, [router.query]);
-
-  const createdAtRange = useMemo(() => {
-    if (!query.createdAt) return defaultDateRange ?? null;
-
-    const [startDate, endDate] = query.createdAt.split('~');
-
-    return {
-      startDate: dayjs(startDate).toDate(),
-      endDate: dayjs(endDate).toDate(),
+    const result = {
+      ...defaultQuery,
+      ...removeEmptyValueInObject(newQuery),
     };
-  }, [query]);
-
-  const setCreatedAtRange = useCallback(
-    (dateRange: DateRangeType) => {
-      router.push(
-        {
-          pathname,
-          query: {
-            ...defaultQuery,
-            ...query,
-            createdAt: dateRange
-              ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
-                  dateRange.endDate,
-                ).format(DATE_FORMAT)}`
-              : undefined,
-          },
-        },
-        undefined,
-        { shallow: true },
-      );
-    },
-    [router, query],
-  );
+    if (validate && !validate(result)) {
+      router.replace({ pathname: router.pathname, query: defaultNextQuery });
+      return defaultQuery ?? {};
+    }
+    return result;
+  }, [router.query]);
 
   const setQuery = useCallback(
     (input: Record<string, any>) => {
-      const newQuery = Object.entries(input).reduce(
+      const newQuery: Record<string, string> = Object.entries(
+        removeEmptyValueInObject(input),
+      ).reduce(
         (acc, [key, value]) => {
           if (typeof value === 'object' && isDate(value)) {
             value = `${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
@@ -86,22 +61,18 @@ const useQueryParamsState = (
         },
         {} as Record<string, any>,
       );
-      if (createdAtRange) {
-        const { startDate, endDate } = createdAtRange;
-        newQuery['createdAt'] = `${dayjs(startDate).format(
-          DATE_FORMAT,
-        )}~${dayjs(endDate).format(DATE_FORMAT)}`;
-      }
-
       router.push(
-        { pathname, query: { ...defaultQuery, ...newQuery } },
+        {
+          pathname: router.pathname,
+          query: { ...defaultNextQuery, ...defaultQuery, ...newQuery },
+        },
         undefined,
         { shallow: true },
       );
     },
     [router, defaultQuery],
   );
-  return { query, setQuery, createdAtRange, setCreatedAtRange };
+  return { query, setQuery };
 };
 
 export default useQueryParamsState;
