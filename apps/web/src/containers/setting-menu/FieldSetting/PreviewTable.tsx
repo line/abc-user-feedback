@@ -70,9 +70,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
           }
         } else if (field.type === 'API') {
           fakeData[field.name] =
-            field.format === 'boolean'
-              ? faker.datatype.boolean()
-              : field.format === 'date'
+            field.format === 'date'
               ? faker.date.anytime()
               : field.format === 'keyword'
               ? faker.word.noun()

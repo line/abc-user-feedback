@@ -221,8 +221,7 @@ const TableSearchInput: React.FC<IProps> = ({
                 v.format === 'multiSelect' ||
                 v.format === 'date' ||
                 v.format === 'issue' ||
-                v.format === 'issue_status' ||
-                v.format === 'boolean',
+                v.format === 'issue_status',
             )}
             close={close}
             query={currentObj}

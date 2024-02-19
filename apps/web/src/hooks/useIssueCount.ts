@@ -14,20 +14,15 @@
  * under the License.
  */
 import { useQuery } from '@tanstack/react-query';
-import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { ISSUES } from '@/constants/issues';
 import client from '@/libs/client';
-import type { DateRangeType } from '@/types/date-range.type';
 
-const useIssueCountByStatusAndCreatedAtRange = (
-  createdAtRange: DateRangeType,
-  projectId: number,
-) => {
+const useIssueCount = (projectId: number, query: Record<string, any>) => {
   const { t } = useTranslation();
   return useQuery({
-    queryKey: ['all_issues', createdAtRange, projectId],
+    queryKey: ['all_issues', query, projectId],
     queryFn: async () => {
       const result: { count: number; key: string }[] = [];
       const issues = ISSUES(t);
@@ -38,19 +33,7 @@ const useIssueCountByStatusAndCreatedAtRange = (
           body: {
             limit: 1,
             page: 1,
-            query: {
-              status: issue.key,
-              createdAt: createdAtRange
-                ? {
-                    gte: dayjs(createdAtRange?.startDate)
-                      .startOf('day')
-                      .toISOString(),
-                    lt: dayjs(createdAtRange?.endDate)
-                      .endOf('day')
-                      .toISOString(),
-                  }
-                : undefined,
-            } as any,
+            query: { ...query, status: issue.key } as any,
           },
         });
         result.push({ ...issue, count: data?.meta.totalItems ?? 0 });
@@ -60,4 +43,4 @@ const useIssueCountByStatusAndCreatedAtRange = (
     },
   });
 };
-export default useIssueCountByStatusAndCreatedAtRange;
+export default useIssueCount;

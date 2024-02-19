@@ -127,8 +127,6 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           dayjs(feedbackData[field.key]).format(
                             DATE_TIME_FORMAT,
                           )
-                        ) : field.format === 'boolean' ? (
-                          String(feedbackData[field.key])
                         ) : (
                           feedbackData[field.key]
                         )}

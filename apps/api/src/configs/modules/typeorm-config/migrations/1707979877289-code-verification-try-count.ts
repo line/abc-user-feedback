@@ -13,16 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export enum FieldFormatEnum {
-  text = 'text',
-  keyword = 'keyword',
-  number = 'number',
-  select = 'select',
-  multiSelect = 'multiSelect',
-  date = 'date',
-  image = 'image',
-}
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export function isSelectFieldFormat(type: FieldFormatEnum) {
-  return [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(type);
+export class CodeVerificationTryCount1707979877289
+  implements MigrationInterface
+{
+  name = 'CodeVerificationTryCount1707979877289';
+
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`codes\` ADD \`try_count\` int NOT NULL DEFAULT '0'`,
+    );
+  }
+
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE \`codes\` DROP COLUMN \`try_count\``);
+  }
 }

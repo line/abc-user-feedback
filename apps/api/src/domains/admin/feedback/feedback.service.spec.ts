@@ -182,10 +182,6 @@ describe('FeedbackService Test Suite', () => {
           invalidValues: ['not a number', true, {}, [], new Date()],
         },
         {
-          format: FieldFormatEnum.boolean,
-          invalidValues: ['not a boolean', 123, {}, [], new Date()],
-        },
-        {
           format: FieldFormatEnum.select,
           invalidValues: [['option1', 'option2'], 123, true, {}, new Date()],
         },

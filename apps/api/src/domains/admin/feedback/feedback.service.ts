@@ -99,10 +99,6 @@ export class FeedbackService {
       }
 
       switch (fieldsByKey[fieldKey].format) {
-        case FieldFormatEnum.boolean:
-          if (typeof query[fieldKey] !== 'boolean')
-            throw new BadRequestException(`${fieldKey} must be boolean`);
-          break;
         case FieldFormatEnum.keyword:
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
