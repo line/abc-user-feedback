@@ -225,7 +225,10 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
           {fieldData && (
             <TableSearchInput
               searchItems={searchItems}
-              onChangeQuery={setQuery}
+              onChangeQuery={(input) => {
+                const { createdAt } = query;
+                setQuery({ createdAt, ...input });
+              }}
               query={query}
             />
           )}

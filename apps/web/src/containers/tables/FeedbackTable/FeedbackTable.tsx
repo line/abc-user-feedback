@@ -82,6 +82,13 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     setRowSelection({});
   }, [limit, query]);
 
+  const { data: channelData, refetch: refetchChannelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
+    variables: { channelId, projectId },
+  });
+
+  const fieldData = channelData?.fields ?? [];
+
   const formattedQuery = useMemo(
     () =>
       produce(query, (draft) => {
@@ -101,36 +108,24 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
             draft['issueIds'] = [draft['issueIds']].map((v) => +v);
           }
           Object.entries(draft).forEach(([key, value]) => {
-            if (typeof value === 'string' && value.split('~').length === 2) {
-              const [gte, lt] = value.split('~');
-              draft[key] = {
-                gte: dayjs(gte).startOf('day').toISOString(),
-                lt: dayjs(lt).endOf('day').toISOString(),
-              };
-            }
-            if (value === 'true' || value === 'false') {
-              draft[key] = value === 'true';
+            const field = fieldData.find((v) => v.key === key);
+            if (field) {
+              if (field.format === 'date') {
+                const [gte, lt] = value.split('~');
+                draft[key] = {
+                  gte: dayjs(gte).startOf('day').toISOString(),
+                  lt: dayjs(lt).endOf('day').toISOString(),
+                };
+              }
+              if (field.format === 'number') {
+                draft[key] = Number(value);
+              }
             }
           });
-          if (createdAtRange) {
-            draft['createdAt'] = {
-              gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
-              lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
-            };
-          } else {
-            delete draft['createdAt'];
-          }
         }
       }),
-    [issueId, query, createdAtRange, sub],
+    [issueId, query, createdAtRange, sub, fieldData],
   );
-
-  const { data: channelData, refetch: refetchChannelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels/{channelId}',
-    variables: { channelId, projectId },
-  });
-
-  const fieldData = channelData?.fields ?? [];
 
   const {
     data,

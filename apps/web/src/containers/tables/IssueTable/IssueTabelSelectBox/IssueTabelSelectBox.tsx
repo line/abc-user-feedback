@@ -20,7 +20,7 @@ import { ISSUES } from '@/constants/issues';
 
 interface IProps extends React.PropsWithChildren {
   onChangeOption: (issue: IssueCountOption) => void;
-  currentIssueKey: string;
+  currentIssueKey: string | undefined;
   issueCountData: { key: string; count: number }[] | undefined;
 }
 

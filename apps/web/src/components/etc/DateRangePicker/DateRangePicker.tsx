@@ -56,22 +56,22 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       },
       {
         label: t('text.date.yesterday'),
-        startDate: dayjs().subtract(1, 'days').startOf('day').toDate(),
-        endDate: dayjs().endOf('day').toDate(),
+        startDate: dayjs().subtract(1, 'day').startOf('day').toDate(),
+        endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 7 }),
-        startDate: dayjs().subtract(7, 'days').startOf('day').toDate(),
+        startDate: dayjs().subtract(7, 'day').startOf('day').toDate(),
         endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 30 }),
-        startDate: dayjs().subtract(30, 'days').startOf('day').toDate(),
+        startDate: dayjs().subtract(30, 'day').startOf('day').toDate(),
         endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 90 }),
-        startDate: dayjs().subtract(90, 'days').startOf('day').toDate(),
+        startDate: dayjs().subtract(90, 'day').startOf('day').toDate(),
         endDate: dayjs().endOf('day').toDate(),
       },
     ];
