@@ -22,7 +22,8 @@ import { Transactional } from 'typeorm-transactional';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeService } from '@/shared/code/code.service';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
-import { ChangePasswordDto, ResetPasswordDto } from './dtos';
+import type { ResetPasswordDto } from './dtos';
+import { ChangePasswordDto } from './dtos';
 import { UserEntity } from './entities/user.entity';
 import { InvalidPasswordException, UserNotFoundException } from './exceptions';
 
@@ -48,16 +49,17 @@ export class UserPasswordService {
     await this.resetPasswordMailingService.send({ email, code });
   }
 
-  @Transactional()
   async resetPassword({ email, code, password }: ResetPasswordDto) {
     const user = await this.userRepo.findOneBy({ email });
     if (!user) throw new UserNotFoundException();
 
-    await this.codeService.verifyCode({
+    const { error } = await this.codeService.verifyCode({
       type: CodeTypeEnum.RESET_PASSWORD,
       key: email,
       code,
     });
+
+    if (error) throw error;
 
     return await this.userRepo.save(
       Object.assign(user, {

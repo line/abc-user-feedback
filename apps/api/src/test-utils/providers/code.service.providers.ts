@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { EventEmitter2 } from '@nestjs/event-emitter';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
@@ -23,6 +22,5 @@ import { CodeService } from '../../shared/code/code.service';
 
 export const CodeServiceProviders = [
   CodeService,
-  EventEmitter2,
   { provide: getRepositoryToken(CodeEntity), useValue: mockRepository() },
 ];
