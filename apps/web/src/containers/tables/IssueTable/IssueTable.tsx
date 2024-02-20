@@ -351,7 +351,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       <IssueTabelSelectBox
         currentIssueKey={currentIssueKey}
         issueCountData={issueCountData}
-        onChangeOption={(option) => setQuery({ ...query, status: option.key })}
+        onChangeOption={(status) => setQuery({ ...query, status })}
       />
       <div className="flex items-center justify-between">
         <h2 className="font-18-regular">
