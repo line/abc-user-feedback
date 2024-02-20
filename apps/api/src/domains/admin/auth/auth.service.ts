@@ -48,14 +48,11 @@ import { UserService } from '../user/user.service';
 import type {
   JwtDto,
   SendEmailCodeDto,
+  SignUpInvitationUserDto,
   ValidateEmailUserDto,
   VerifyEmailCodeDto,
 } from './dtos';
-import {
-  SignUpEmailUserDto,
-  SignUpInvitationUserDto,
-  SignUpOauthUserDto,
-} from './dtos';
+import { SignUpEmailUserDto, SignUpOauthUserDto } from './dtos';
 import { PasswordNotMatchException, UserBlockedException } from './exceptions';
 
 @Injectable()
@@ -96,11 +93,13 @@ export class AuthService {
   }
 
   async verifyEmailCode({ code, email }: VerifyEmailCodeDto) {
-    await this.codeService.verifyCode({
+    const { error } = await this.codeService.verifyCode({
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
       key: email,
       code,
     });
+
+    if (error) throw error;
   }
 
   async validateEmailUser({ email, password }: ValidateEmailUserDto) {
@@ -131,15 +130,15 @@ export class AuthService {
     return await this.createUserService.createEmailUser(dto);
   }
 
-  @Transactional()
   async signUpInvitationUser(dto: SignUpInvitationUserDto) {
     const { code, ...rest } = dto;
 
-    await this.codeService.verifyCode({
+    const { error } = await this.codeService.verifyCode({
       type: CodeTypeEnum.USER_INVITATION,
       key: dto.email,
       code,
     });
+    if (error) throw error;
 
     const data = await this.codeService.getDataByCodeAndType(
       CodeTypeEnum.USER_INVITATION,
