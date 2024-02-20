@@ -182,58 +182,67 @@ const InputImageSetting: React.FC<IProps> = () => {
 
   return (
     <CreateChannelInputTemplate disableNextBtn={!!inputError.domainWhiteList}>
-      <Input
-        label="Access Key ID"
-        placeholder={t('placeholder', { name: 'Access Key ID' })}
-        value={accessKeyId}
-        onChange={(e) => onChangeProjectInfo('accessKeyId', e.target.value)}
-        isSubmitted={isSubmitted}
-        isValid={!inputError.accessKeyId}
-        hint={inputError.accessKeyId}
-      />
-      <Input
-        label="Secret Access Key ID"
-        placeholder={t('placeholder', { name: 'Secret Access Key ID' })}
-        value={bucket}
-        onChange={(e) => onChangeProjectInfo('secretAccessKey', e.target.value)}
-        isSubmitted={isSubmitted}
-        isValid={!inputError.secretAccessKey}
-        hint={inputError.secretAccessKey}
-      />
-      <Input
-        label="End Point"
-        placeholder={t('placeholder', { name: 'End Point' })}
-        value={endpoint}
-        onChange={(e) => onChangeProjectInfo('endpoint', e.target.value)}
-        isSubmitted={isSubmitted}
-        isValid={!inputError.endpoint}
-        hint={inputError.endpoint}
-      />
-      <Input
-        label="Region"
-        placeholder={t('placeholder', { name: 'Region' })}
-        value={region}
-        onChange={(e) => onChangeProjectInfo('region', e.target.value)}
-        isSubmitted={isSubmitted}
-        isValid={!inputError.region}
-        hint={inputError.region}
-      />
-      <Input
-        label="Bucket Name"
-        placeholder={t('placeholder', { name: 'Bucket Name' })}
-        value={secretAccessKey}
-        onChange={(e) => onChangeProjectInfo('bucket', e.target.value)}
-        isSubmitted={isSubmitted}
-        isValid={!inputError.bucket}
-        hint={inputError.bucket}
-      />
-      <button
-        className="btn btn-secondary btn-lg w-fit"
-        type="button"
-        onClick={handleTestConnection}
-      >
-        Test Connection
-      </button>
+      <div className="mb-6 flex flex-col gap-2">
+        <div className="flex items-center justify-between">
+          <h2 className="font-20-bold">
+            {t('image-mgmt-setting.image-storage-integration-setting')}
+          </h2>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleTestConnection}
+          >
+            Test Connection
+          </button>
+        </div>
+        <Input
+          label="Access Key ID"
+          placeholder={t('placeholder', { name: 'Access Key ID' })}
+          value={accessKeyId}
+          onChange={(e) => onChangeProjectInfo('accessKeyId', e.target.value)}
+          isSubmitted={isSubmitted}
+          isValid={!inputError.accessKeyId}
+          hint={inputError.accessKeyId}
+        />
+        <Input
+          label="Secret Access Key ID"
+          placeholder={t('placeholder', { name: 'Secret Access Key ID' })}
+          value={bucket}
+          onChange={(e) =>
+            onChangeProjectInfo('secretAccessKey', e.target.value)
+          }
+          isSubmitted={isSubmitted}
+          isValid={!inputError.secretAccessKey}
+          hint={inputError.secretAccessKey}
+        />
+        <Input
+          label="End Point"
+          placeholder={t('placeholder', { name: 'End Point' })}
+          value={endpoint}
+          onChange={(e) => onChangeProjectInfo('endpoint', e.target.value)}
+          isSubmitted={isSubmitted}
+          isValid={!inputError.endpoint}
+          hint={inputError.endpoint}
+        />
+        <Input
+          label="Region"
+          placeholder={t('placeholder', { name: 'Region' })}
+          value={region}
+          onChange={(e) => onChangeProjectInfo('region', e.target.value)}
+          isSubmitted={isSubmitted}
+          isValid={!inputError.region}
+          hint={inputError.region}
+        />
+        <Input
+          label="Bucket Name"
+          placeholder={t('placeholder', { name: 'Bucket Name' })}
+          value={secretAccessKey}
+          onChange={(e) => onChangeProjectInfo('bucket', e.target.value)}
+          isSubmitted={isSubmitted}
+          isValid={!inputError.bucket}
+          hint={inputError.bucket}
+        />
+      </div>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <h2 className="font-20-bold">Image URL Domain Whitelist</h2>
