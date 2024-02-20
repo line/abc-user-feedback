@@ -21,8 +21,9 @@ import client from '@/libs/client';
 
 const useIssueCount = (projectId: number, query: Record<string, any>) => {
   const { t } = useTranslation();
+  const { status: _, ...otherQuery } = query;
   return useQuery({
-    queryKey: ['all_issues', query, projectId],
+    queryKey: ['all_issues', otherQuery, projectId],
     queryFn: async () => {
       const result: { count: number; key: string }[] = [];
       const issues = ISSUES(t);
@@ -33,7 +34,7 @@ const useIssueCount = (projectId: number, query: Record<string, any>) => {
           body: {
             limit: 1,
             page: 1,
-            query: { ...query, status: issue.key } as any,
+            query: { ...otherQuery, status: issue.key } as any,
           },
         });
         result.push({ ...issue, count: data?.meta.totalItems ?? 0 });

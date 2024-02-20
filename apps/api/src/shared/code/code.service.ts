@@ -19,7 +19,6 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
 import { Repository } from 'typeorm';
@@ -37,7 +36,6 @@ export class CodeService {
   constructor(
     @InjectRepository(CodeEntity)
     private readonly codeRepo: Repository<CodeEntity>,
-    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @Transactional()
@@ -59,6 +57,7 @@ export class CodeService {
           .plus({ seconds: durationSec ?? SECONDS })
           .toJSDate(),
         data: type === CodeTypeEnum.USER_INVITATION ? dto.data : undefined,
+        tryCount: 0,
       }),
     );
 
@@ -69,24 +68,26 @@ export class CodeService {
   async verifyCode({ code, key, type }: VerifyCodeDto) {
     const codeEntity = await this.codeRepo.findOneBy({ key, type });
 
-    if (!codeEntity) throw new NotFoundException('not found code');
+    if (!codeEntity) return { error: new NotFoundException('not found code') };
     if (codeEntity.isVerified)
-      throw new BadRequestException('already verified');
+      return { error: new BadRequestException('already verified') };
 
     if (codeEntity.tryCount >= 5) {
-      throw new BadRequestException('code expired');
+      return { error: new BadRequestException('code expired') };
     }
 
     if (codeEntity.code !== code) {
-      this.eventEmitter.emit('code.verify.failed', codeEntity);
-      throw new BadRequestException('invalid code');
+      codeEntity.tryCount += 1;
+      await this.codeRepo.save(codeEntity);
+      return { error: new BadRequestException('invalid code') };
     }
 
     if (DateTime.utc() > DateTime.fromJSDate(codeEntity.expiredAt)) {
-      throw new BadRequestException('code expired');
+      return { error: new BadRequestException('code expired') };
     }
 
     await this.codeRepo.save(Object.assign(codeEntity, { isVerified: true }));
+    return { error: null };
   }
 
   async getDataByCodeAndType(
@@ -111,11 +112,5 @@ export class CodeService {
 
   private createCode() {
     return String(crypto.randomInt(1, 1000000)).padStart(6, '0');
-  }
-
-  @OnEvent('code.verify.failed', { async: true })
-  private async handleCodeVerificationFailure(codeEntity: CodeEntity) {
-    codeEntity.tryCount += 1;
-    await this.codeRepo.save(codeEntity);
   }
 }

@@ -44,9 +44,8 @@ import {
   TableSortIcon,
 } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
-import { Path } from '@/constants/path';
 import { ShareButton } from '@/containers/buttons';
 import {
   useIssueCount,
@@ -57,6 +56,7 @@ import {
   useSort,
 } from '@/hooks';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
+import type { DateRangeType } from '@/types/date-range.type';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 import type { IssueType } from '@/types/issue.type';
 import { FeedbackTableInIssue } from '../FeedbackTable';
@@ -188,8 +188,17 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(50);
-  const { createdAtRange, query, setCreatedAtRange, setQuery } =
-    useQueryParamsState(Path.ISSUE, { projectId });
+  const { query, setQuery } = useQueryParamsState(
+    { projectId },
+    { status: 'total' },
+    (input) => {
+      if (!input.createdAt) return true;
+      const [starDate, endDate] = input.createdAt.split('~');
+      if (dayjs(endDate).isAfter(dayjs(), 'day')) return false;
+      if (dayjs(endDate).isBefore(dayjs(starDate), 'day')) return false;
+      return true;
+    },
+  );
 
   const sort = useSort(sorting);
   const currentIssueKey = useMemo(() => query.status, [query]);
@@ -204,23 +213,14 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     [rowSelection],
   );
 
-  const q = useMemo(() => {
+  const formattedQuery = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
       if (key === 'status' && value === 'total') return prev;
-      if (key === 'createdAt' && createdAtRange) {
-        return {
-          ...prev,
-          createdAt: {
-            gte: dayjs(createdAtRange.startDate).startOf('day').toISOString(),
-            lt: dayjs(createdAtRange.endDate).endOf('day').toISOString(),
-          },
-        };
-      }
-      if (key === 'updatedAt') {
+      if (key === 'createdAt' || key === 'updatedAt') {
         const [startDate, endDate] = value.split('~');
         return {
           ...prev,
-          updatedAt: {
+          [key]: {
             gte: dayjs(startDate).startOf('day').toISOString(),
             lt: dayjs(endDate).endOf('day').toISOString(),
           },
@@ -228,7 +228,30 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       }
       return { ...prev, [key]: value };
     }, {});
-  }, [query, createdAtRange]);
+  }, [query]);
+
+  const dateRange = useMemo(() => {
+    const queryStr = query['createdAt'];
+    if (!queryStr) return null;
+
+    const [startDateStr, endDateStr] = queryStr.split('~');
+
+    return {
+      startDate: dayjs(startDateStr).toDate(),
+      endDate: dayjs(endDateStr).toDate(),
+    };
+  }, [query]);
+
+  const setDateRange = (dateRange: DateRangeType) => {
+    setQuery({
+      ...query,
+      createdAt: dateRange
+        ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
+            dateRange.endDate,
+          ).format(DATE_FORMAT)}`
+        : undefined,
+    });
+  };
 
   const {
     data,
@@ -237,13 +260,13 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   } = useIssueSearch(projectId, {
     page,
     limit,
-    query: q,
+    query: formattedQuery,
     sort: sort as Record<string, never>,
   });
 
   const { data: issueCountData, refetch: refetchIssueCount } = useIssueCount(
     projectId,
-    q,
+    formattedQuery,
   );
 
   const refetch = async () => {
@@ -318,12 +341,17 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       ] as SearchItemType[],
     [t],
   );
+  const onChangeInputSearch = (input: Record<string, any>) => {
+    const { status, createdAt } = query;
+    setQuery({ status, createdAt, ...input });
+  };
+
   return (
     <div className="flex flex-col gap-2">
       <IssueTabelSelectBox
         currentIssueKey={currentIssueKey}
         issueCountData={issueCountData}
-        onChangeOption={(option) => setQuery({ ...query, status: option.key })}
+        onChangeOption={(status) => setQuery({ ...query, status })}
       />
       <div className="flex items-center justify-between">
         <h2 className="font-18-regular">
@@ -343,15 +371,15 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           />
           <div className="w-[300px]">
             <DateRangePicker
-              value={createdAtRange}
-              onChange={setCreatedAtRange}
+              value={dateRange}
+              onChange={setDateRange}
               maxDate={new Date()}
               isClearable
             />
           </div>
           <TableSearchInput
             searchItems={columnInfo}
-            onChangeQuery={(input) => setQuery(input)}
+            onChangeQuery={onChangeInputSearch}
             query={query}
           />
         </div>

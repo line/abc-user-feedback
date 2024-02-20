@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -22,8 +22,8 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@ufb/ui';
 
 import { DateRangePicker, MainTemplate } from '@/components';
+import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
 import {
   CreateFeedbackPerIssueCard,
   IssueBarChart,
@@ -53,12 +53,52 @@ const DEFAULT_DATE_RANGE: DateRangeType = {
   startDate: dayjs().subtract(31, 'day').startOf('day').toDate(),
   endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
 };
+const DEFAULT_DATE_RANGE_STRING = {
+  createdAt: `${dayjs(DEFAULT_DATE_RANGE.startDate).format(
+    'YYYY-MM-DD',
+  )}~${dayjs(DEFAULT_DATE_RANGE.endDate).format('YYYY-MM-DD')}`,
+};
 
 const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
-  const { createdAtRange: dateRange, setCreatedAtRange: setDateRange } =
-    useQueryParamsState(Path.DASHBOARD, { projectId }, DEFAULT_DATE_RANGE);
+  const { query, setQuery } = useQueryParamsState(
+    { projectId },
+    DEFAULT_DATE_RANGE_STRING,
+    (input) => {
+      if (!input.createdAt) return false;
+      const [starDate, endDate] = input.createdAt.split('~');
+      if (dayjs(endDate).isAfter(dayjs(), 'day')) return false;
+      if (dayjs(endDate).isBefore(dayjs(starDate), 'day')) return false;
+      return true;
+    },
+  );
+
+  const dateRange = useMemo(() => {
+    const queryStr =
+      query['createdAt'] ?? DEFAULT_DATE_RANGE_STRING['createdAt'];
+
+    const [startDateStr, endDateStr] = queryStr.split('~');
+
+    return {
+      startDate: dayjs(startDateStr).toDate(),
+      endDate: dayjs(endDateStr).toDate(),
+    };
+  }, [query]);
+
+  const setDateRange = useCallback(
+    (dateRange: DateRangeType) => {
+      setQuery({
+        ...query,
+        createdAt: dateRange
+          ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
+              dateRange.endDate,
+            ).format(DATE_FORMAT)}`
+          : undefined,
+      });
+    },
+    [query],
+  );
 
   const currentDate = useMemo(
     () => dayjs().format('YYYY-MM-DD HH:mm'),
