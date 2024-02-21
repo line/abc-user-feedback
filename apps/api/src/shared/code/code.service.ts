@@ -66,7 +66,10 @@ export class CodeService {
 
   @Transactional()
   async verifyCode({ code, key, type }: VerifyCodeDto) {
-    const codeEntity = await this.codeRepo.findOneBy({ key, type });
+    const codeEntity = await this.codeRepo.findOne({
+      where: { key, type },
+      lock: { mode: 'pessimistic_write' },
+    });
 
     if (!codeEntity) return { error: new NotFoundException('not found code') };
     if (codeEntity.isVerified)

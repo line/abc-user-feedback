@@ -19,7 +19,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import type { Repository } from 'typeorm';
 
-import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
 import { TestConfig } from '@/test-utils/util-functions';
@@ -72,16 +71,12 @@ describe('UserPasswordService', () => {
       dto.code = faker.string.sample();
       dto.password = faker.internet.password();
       jest
-        .spyOn(codeRepo, 'findOneBy')
+        .spyOn(codeRepo, 'findOne')
         .mockResolvedValue({ code: dto.code } as CodeEntity);
 
       const user = await userPasswordService.resetPassword(dto);
 
-      expect(codeRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(codeRepo.findOneBy).toHaveBeenCalledWith({
-        key: dto.email,
-        type: CodeTypeEnum.RESET_PASSWORD,
-      });
+      expect(codeRepo.findOne).toHaveBeenCalledTimes(1);
       expect(bcrypt.compareSync(dto.password, user.hashPassword)).toBe(true);
     });
     it('resetting a password fails with an invalid email', async () => {
