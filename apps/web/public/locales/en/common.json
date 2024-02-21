@@ -201,13 +201,6 @@
     "create-project": {
       "title": "Create Project",
       "complete-title": "Project creation is complete.",
-      "help": {
-        "projectInfo": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
-        "roles": "You can set permissions to access and use the Project.",
-        "members": "You can register or manage members to participate in the Project.",
-        "apiKeys": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
-        "issueTracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information."
-      },
       "error-member": "User information that does not currently exist.",
       "continue-channel-creation": "UserFeedback must be created up to the Channel before UserFeedback is available.\nWould you like to continue creating a channel?",
       "guide": {
@@ -219,11 +212,6 @@
     "create-channel": {
       "title": "Create Channel",
       "complete-title": "Channel creation is complete.",
-      "help": {
-        "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
-        "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
-        "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
-      },
       "finish-channel-creation": "Everything is ready.\nStart Using UserFeedback!",
       "guide": {
         "invalid-channel": "Invalid Channel information exists."
@@ -421,8 +409,15 @@
     }
   },
   "help-card": {
-    "issue-tracker-mgmt": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
-    "image-mgmt": "For Image feedback, you can set up feedback collection through Storage Integration or a whitelist for Image URL domains.\nSee Image <icon></icon> <docs>Docs</docs> for more information."
+    "project-info": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
+    "role": "You can set permissions to access and use the Project.",
+    "member": "You can register or manage members to participate in the Project.",
+    "api-key": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
+    "issue-tracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information.",
+    "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
+    "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
+    "image-setting": "When collecting feedback on the Image format, you can work with Image Storage and set up a whitelist for the Image URL domain.\nSee Image <icon></icon> <docs>Docs</docs>.",
+    "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
   },
   "hint": {
     "required": "Required",

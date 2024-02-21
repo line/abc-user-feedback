@@ -57,7 +57,9 @@ const InputImageSetting: React.FC<IProps> = () => {
     },
     [],
   );
-  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [isSubmittedWhiteList, setIsSubmittedWhiteList] =
+    useState<boolean>(false);
+  const [isSubmittedConfig, setIsSubmittedConfig] = useState<boolean>(false);
 
   const [inputDomain, setInputDomain] = useState('');
 
@@ -83,7 +85,8 @@ const InputImageSetting: React.FC<IProps> = () => {
 
   const resetError = useCallback(() => {
     setInputError(defaultInputError);
-    setIsSubmitted(false);
+    setIsSubmittedConfig(false);
+    setIsSubmittedWhiteList(false);
   }, [defaultInputError]);
 
   useEffect(() => {
@@ -127,6 +130,7 @@ const InputImageSetting: React.FC<IProps> = () => {
   });
 
   const handleTestConnection = () => {
+    setIsSubmittedConfig(true);
     let isError = false;
     if (accessKeyId.length === 0) {
       setError('accessKeyId', { message: t('hint.required') });
@@ -179,9 +183,20 @@ const InputImageSetting: React.FC<IProps> = () => {
       domainWhiteList.filter((_, i) => i !== index),
     );
   };
+  const validate = () => {
+    setIsSubmittedWhiteList(true);
+    if (domainWhiteList?.length === 0) {
+      setError('domainWhiteList', { message: t('hint.required') });
+      return false;
+    }
+    return true;
+  };
 
   return (
-    <CreateChannelInputTemplate disableNextBtn={!!inputError.domainWhiteList}>
+    <CreateChannelInputTemplate
+      disableNextBtn={!!inputError.domainWhiteList}
+      validate={validate}
+    >
       <div className="mb-6 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <h2 className="font-20-bold">
@@ -200,18 +215,18 @@ const InputImageSetting: React.FC<IProps> = () => {
           placeholder={t('placeholder', { name: 'Access Key ID' })}
           value={accessKeyId}
           onChange={(e) => onChangeProjectInfo('accessKeyId', e.target.value)}
-          isSubmitted={isSubmitted}
+          isSubmitted={isSubmittedConfig}
           isValid={!inputError.accessKeyId}
           hint={inputError.accessKeyId}
         />
         <Input
           label="Secret Access Key ID"
           placeholder={t('placeholder', { name: 'Secret Access Key ID' })}
-          value={bucket}
+          value={secretAccessKey}
           onChange={(e) =>
             onChangeProjectInfo('secretAccessKey', e.target.value)
           }
-          isSubmitted={isSubmitted}
+          isSubmitted={isSubmittedConfig}
           isValid={!inputError.secretAccessKey}
           hint={inputError.secretAccessKey}
         />
@@ -220,7 +235,7 @@ const InputImageSetting: React.FC<IProps> = () => {
           placeholder={t('placeholder', { name: 'End Point' })}
           value={endpoint}
           onChange={(e) => onChangeProjectInfo('endpoint', e.target.value)}
-          isSubmitted={isSubmitted}
+          isSubmitted={isSubmittedConfig}
           isValid={!inputError.endpoint}
           hint={inputError.endpoint}
         />
@@ -229,16 +244,16 @@ const InputImageSetting: React.FC<IProps> = () => {
           placeholder={t('placeholder', { name: 'Region' })}
           value={region}
           onChange={(e) => onChangeProjectInfo('region', e.target.value)}
-          isSubmitted={isSubmitted}
+          isSubmitted={isSubmittedConfig}
           isValid={!inputError.region}
           hint={inputError.region}
         />
         <Input
           label="Bucket Name"
           placeholder={t('placeholder', { name: 'Bucket Name' })}
-          value={secretAccessKey}
+          value={bucket}
           onChange={(e) => onChangeProjectInfo('bucket', e.target.value)}
-          isSubmitted={isSubmitted}
+          isSubmitted={isSubmittedConfig}
           isValid={!inputError.bucket}
           hint={inputError.bucket}
         />
@@ -250,12 +265,13 @@ const InputImageSetting: React.FC<IProps> = () => {
             type="checkbox"
             className="toggle toggle-sm"
             checked={!!domainWhiteList}
-            onChange={(e) =>
+            onChange={(e) => {
+              setIsSubmittedWhiteList(false);
               onChangeProjectInfo(
                 'domainWhiteList',
                 e.target.checked ? [] : null,
-              )
-            }
+              );
+            }}
           />
         </div>
         {domainWhiteList && (
@@ -276,7 +292,7 @@ const InputImageSetting: React.FC<IProps> = () => {
               }
               isValid={!inputError.domainWhiteList}
               hint={inputError.domainWhiteList}
-              isSubmitted={isSubmitted}
+              isSubmitted={isSubmittedWhiteList}
               required
             />
             <div className="flex items-center gap-2">

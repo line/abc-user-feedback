@@ -147,7 +147,6 @@
       "register-member": "Member를 등록해주세요.",
       "same-key": "Key 정보와 동일하게 입력",
       "feedback-request-code": "피드백 요청 코드",
-      "issue-tracker-mgmt.description": "UserFeedback Issue와 Issue Tracking System 티켓을 연결하여 관리할 수 있습니다. \n 사용중인 Issue Tracking System URL을 입력해주세요.",
       "option-info": "옵션 정보",
       "field-mgmt": {
         "description": "저장을 하려면 미리보기를 먼저 눌러주세요.",
@@ -202,13 +201,6 @@
     "create-project": {
       "title": "Project 생성",
       "complete-title": "Project 생성이 완료되었습니다.",
-      "help": {
-        "projectInfo": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
-        "roles": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
-        "members": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
-        "apiKeys": "피드백 수집 API의 API Key 정보를 관리합니다. API를 활용해 피드백을 수집한다면 Key 정보를 생성해 주세요.",
-        "issueTracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다. 사용 중인 Issue Tracking System 정보를 입력해 주세요."
-      },
       "error-member": "현재 존재하지 않는 User 정보 입니다.",
       "continue-channel-creation": "Channel까지 생성해야 UserFeedback을 사용할 수 있습니다.\nChannel 생성을 이어서 하시겠어요?",
       "guide": {
@@ -309,7 +301,6 @@
     "copy": "복사 완료"
   },
   "placeholder": "{{name}}을 입력해주세요.",
-
   "dialog": {
     "continue": {
       "title": "이어서 생성하시겠어요?",
@@ -418,10 +409,13 @@
     }
   },
   "help-card": {
-    "issue-tracker-mgmt": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
-
+    "project-info": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
+    "role": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
+    "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
+    "api-key": "피드백 수집 API의 API Key 정보를 관리합니다. API를 활용해 피드백을 수집한다면 Key 정보를 생성해 주세요.",
+    "issue-tracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
     "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
-    "fields": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
+    "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
     "image-setting": "Image 포맷에 대해 피드백을 수집할 때 Image Storage와 연동할 수 있고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있습니다.\n자세한 내용은 Image <icon></icon> <docs>Docs</docs>를 참고해 주세요.",
     "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다."
   },

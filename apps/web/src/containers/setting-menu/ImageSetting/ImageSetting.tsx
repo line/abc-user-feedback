@@ -218,9 +218,27 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
                   name="ExpandPopup"
                   className="text-blue-primary cursor-pointer"
                   size={12}
+                  onClick={() => {
+                    if (typeof window === 'undefined') return;
+                    window.open(
+                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
+                      '_blank',
+                    );
+                  }}
                 />
               ),
-              docs: <span className="text-blue-primary cursor-pointer" />,
+              docs: (
+                <span
+                  className="text-blue-primary cursor-pointer"
+                  onClick={() => {
+                    if (typeof window === 'undefined') return;
+                    window.open(
+                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
+                      '_blank',
+                    );
+                  }}
+                />
+              ),
             }}
           />
         </p>

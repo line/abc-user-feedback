@@ -105,7 +105,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          {t('help-card.issue-tracker-mgmt')}
+          {t('help-card.issue-tracker')}
         </p>
         <div className="relative h-full w-[160px]">
           <Image

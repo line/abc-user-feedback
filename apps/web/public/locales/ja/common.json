@@ -201,13 +201,6 @@
     "create-project": {
       "title": "Project生成",
       "complete-title": "Projectの作成が完了しました。",
-      "help": {
-        "projectInfo": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
-        "roles": "Projectにfアクセスして使用する権限を設定できます。",
-        "members": "Projectに参加する Memberを登録または管理することができます。",
-        "apiKeys": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
-        "issueTracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。 使用中のIssue Tracking System情報を入力してください。"
-      },
       "error-member": "現在存在しないユーザ情報です。",
       "continue-channel-creation": "Channelまで生成しないとUser Feedbackを使用できません。\nChannel生成を続けますか？",
       "guide": {
@@ -219,11 +212,6 @@
     "create-channel": {
       "title": "Channel生成",
       "complete-title": "Channelの作成が完了しました。",
-      "help": {
-        "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
-        "fields": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
-        "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
-      },
       "finish-channel-creation": "すべての準備が完了しました。\nUser Feedbackの利用を始めてみてください！",
       "guide": {
         "invalid-channel": "無効なChannel情報が存在します。"
@@ -421,8 +409,15 @@
     }
   },
   "help-card": {
-    "issue-tracker-mgmt": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
-    "image-mgmt": "Imageフィードバックに対してStorage連動によるフィードバック収集を設定したり、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。"
+    "project-info": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
+    "role": "Projectにfアクセスして使用する権限を設定できます。",
+    "member": "Projectに参加する Memberを登録または管理することができます。",
+    "api-key": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
+    "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
+    "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
+    "fields": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
+    "image-setting": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。",
+    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
   },
   "hint": {
     "required": "必須入力対象です。",
