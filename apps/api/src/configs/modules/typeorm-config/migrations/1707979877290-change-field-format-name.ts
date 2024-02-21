@@ -15,18 +15,18 @@
  */
 import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class ChangeFieldFormatName1704354941457 implements MigrationInterface {
-  name = 'ChangeFieldFormatName1704354941457';
+export class ChangeFieldFormatName1707979877290 implements MigrationInterface {
+  name = 'ChangeFieldFormatName1707979877290';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'boolean', 'select', 'multiSelect', 'date', 'images') NOT NULL`,
+      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'select', 'multiSelect', 'date', 'images') NOT NULL`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'boolean', 'select', 'multiSelect', 'date', 'image') NOT NULL`,
+      `ALTER TABLE \`fields\` CHANGE \`format\` \`format\` enum ('text', 'keyword', 'number', 'select', 'multiSelect', 'date', 'image') NOT NULL`,
     );
   }
 }
