@@ -92,8 +92,11 @@ export class FeedbackController {
     },
   })
   @ApiOperation({
-    summary: 'Update feedback',
-    description: 'Update feedback123123',
+    summary: 'Create Feedback',
+    description: `Create feedback by json data. If you want to create feedback with issues, you can add 'issueNames' in the request data.
+      You can put an array of image urls in the 'images format field' in the request data.
+      Make sure to set image domain whitelist in the channel settings.
+      `,
   })
   @Post('feedbacks')
   async create(
@@ -146,6 +149,10 @@ export class FeedbackController {
         id: 1,
       },
     },
+  })
+  @ApiOperation({
+    summary: 'Create Feedback with Image Files',
+    description: `Create feedback with data and image files by multi-part. If you want to create feedback with issues, you can add 'issueNames' in the request data.`,
   })
   @Post('feedbacks-with-images')
   async createWithImageFiles(
