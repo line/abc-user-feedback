@@ -27,7 +27,7 @@ export { default as useUserSearch } from './useUserSearch';
 export { default as useCurrentProjectId } from './useCurrentProjectId';
 export { default as useDownload } from './useDownload';
 export { default as useTruncatedElement } from './useTruncatedElement';
-export { default as useIssueCountByStatusAndCreatedAtRange } from './useIssueCountByStatusAndCreatedAtRange';
+export { default as useIssueCount } from './useIssueCount';
 export { default as useLineChartData } from './useLineChartData';
 export { default as useDayCount } from './useDayCount';
 

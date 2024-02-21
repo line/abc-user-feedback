@@ -142,54 +142,61 @@ describe('CodeService', () => {
       codeEntity.id = faker.number.int();
       codeEntity.expiredAt = DateTime.utc().plus({ minutes: 5 }).toJSDate();
     });
-    it('verify code with valid code, key, type', async () => {
+    it('verifying code succeeds with a valid code, key, type', async () => {
       const { code, type } = codeEntity;
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
       await codeService.verifyCode({ code, key, type });
 
-      expect(codeRepo.findOneBy).toHaveBeenCalledWith({
-        key: codeEntity.key,
-        type: codeEntity.type,
-      });
       expect(codeRepo.save).toHaveBeenCalledWith(
         Object.assign(codeEntity, { isVerified: true }),
       );
     });
-    it('verify code with invalid code', async () => {
+    it('verifying code fails with an invalid code', async () => {
       const { type } = codeEntity;
       const invalidCode = faker.string.sample(6);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
-      await expect(
-        codeService.verifyCode({
-          code: invalidCode,
-          key,
-          type,
-        }),
-      ).rejects.toThrow(BadRequestException);
+      const { error } = await codeService.verifyCode({
+        code: invalidCode,
+        key,
+        type,
+      });
+      expect(error).toEqual(new BadRequestException('invalid code'));
     });
-    it('verify code with invalid key', async () => {
+    it('verifying code fails with an invalid code more than 5 times', async () => {
+      const { type } = codeEntity;
+      const invalidCode = faker.string.sample(6);
+      jest
+        .spyOn(codeRepo, 'findOne')
+        .mockResolvedValue({ ...codeEntity, tryCount: 5 } as CodeEntity);
+
+      const { error } = await codeService.verifyCode({
+        code: invalidCode,
+        key,
+        type,
+      });
+      expect(error).toEqual(new BadRequestException('code expired'));
+    });
+    it('verifying code fails with an invalid key', async () => {
       const { code, type } = codeEntity;
       const invalidKey = faker.string.sample(6);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(null);
 
-      await expect(
-        codeService.verifyCode({
-          code,
-          key: invalidKey,
-          type,
-        }),
-      ).rejects.toThrow(NotFoundException);
+      const { error } = await codeService.verifyCode({
+        code,
+        key: invalidKey,
+        type,
+      });
+      expect(error).toEqual(new NotFoundException('not found code'));
     });
-    it('verify code at expired date', async () => {
+    it('verifying code fails at expired date', async () => {
       MockDate.set(new Date(Date.now() + 5 * 60 * 1000 + 1000));
       const { code, type } = codeEntity;
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
-      await expect(codeService.verifyCode({ code, key, type })).rejects.toThrow(
-        BadRequestException,
-      );
+      const { error } = await codeService.verifyCode({ code, key, type });
+      expect(error).toEqual(new BadRequestException('code expired'));
       MockDate.reset();
     });
   });

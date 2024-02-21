@@ -41,6 +41,9 @@ export class CodeEntity extends CommonEntity {
   @Column('boolean', { default: false })
   isVerified: boolean;
 
+  @Column('int', { default: 0 })
+  tryCount: number;
+
   @Column('datetime')
   expiredAt: Date;
 }

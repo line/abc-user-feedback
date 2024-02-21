@@ -14,18 +14,30 @@
  * under the License.
  */
 import type { Dispatch, SetStateAction } from 'react';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useMemo, useState } from 'react';
 import type {
   ColumnOrderState,
   SortingState,
   VisibilityState,
 } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
-import { DEFAULT_DATE_RANGE } from '@/constants/default-date-range';
-import { Path } from '@/constants/path';
+import { DATE_FORMAT } from '@/constants/dayjs-format';
+import { env } from '@/env.mjs';
 import { useLocalColumnSetting, useLocalStorage } from '@/hooks';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
 import type { DateRangeType } from '@/types/date-range.type';
+
+const DEFAULT_DATE_RANGE: DateRangeType = {
+  startDate: dayjs().subtract(env.NEXT_PUBLIC_MAX_DAYS, 'day').toDate(),
+  endDate: dayjs().toDate(),
+};
+
+const DEFAULT_DATE_RANGE_STRING = {
+  createdAt: `${dayjs(DEFAULT_DATE_RANGE.startDate).format(
+    'YYYY-MM-DD',
+  )}~${dayjs(DEFAULT_DATE_RANGE.endDate).format('YYYY-MM-DD')}`,
+};
 
 const DEFAULT_FN = () => {};
 interface IFeedbackTableContext {
@@ -80,12 +92,19 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
 }) => {
   const [page, setPage] = useState(1);
 
-  const { createdAtRange, query, setCreatedAtRange, setQuery } =
-    useQueryParamsState(
-      Path.FEEDBACK,
-      { projectId, channelId },
-      DEFAULT_DATE_RANGE,
-    );
+  const { query, setQuery } = useQueryParamsState(
+    { projectId, channelId },
+    DEFAULT_DATE_RANGE_STRING,
+    (input) => {
+      if (!input.createdAt) return false;
+      const [starDate, endDate] = input.createdAt.split('~');
+      if (dayjs(endDate).isAfter(dayjs(), 'day')) return false;
+      if (dayjs(endDate).isBefore(dayjs(starDate), 'day')) return false;
+      return (
+        dayjs(endDate).diff(dayjs(starDate), 'day') <= env.NEXT_PUBLIC_MAX_DAYS
+      );
+    },
+  );
 
   const [limit, setLimit] = useLocalStorage<number>(`limit`, 50);
 
@@ -111,6 +130,29 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
       projectId,
       initialValue: [],
     });
+
+  const createdAtRange = useMemo(() => {
+    const queryStr = query['createdAt'];
+    if (!queryStr) return null;
+
+    const [startDateStr, endDateStr] = queryStr.split('~');
+
+    return {
+      startDate: dayjs(startDateStr).toDate(),
+      endDate: dayjs(endDateStr).toDate(),
+    };
+  }, [query]);
+
+  const setCreatedAtRange = (dateRange: DateRangeType) => {
+    setQuery({
+      ...query,
+      createdAt: dateRange
+        ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
+            dateRange.endDate,
+          ).format(DATE_FORMAT)}`
+        : undefined,
+    });
+  };
 
   return (
     <FeedbackTableContext.Provider

@@ -24,12 +24,8 @@ import { Icon, Input, toast } from '@ufb/ui';
 
 import { Popper } from '@/components';
 import { ISSUES } from '@/constants/issues';
-import {
-  useIssueCountByStatusAndCreatedAtRange,
-  useOAIMutation,
-} from '@/hooks';
+import { useOAIMutation } from '@/hooks';
 import useCurrentProjectId from '@/hooks/useCurrentProjectId';
-import type { DateRangeType } from '@/types/date-range.type';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 import type { IssueStatus, IssueType } from '@/types/issue.type';
 
@@ -50,16 +46,14 @@ const schema = z.object({
 
 interface IProps {
   issue: IssueType;
-  refetchIssueTable: () => Promise<any>;
+  refetch: () => Promise<any>;
   issueTracker?: IssueTrackerType;
   disabled: boolean;
-  createdAtRange: DateRangeType;
 }
 
 const IssueSettingPopover: React.FC<IProps> = ({
   issue,
-  createdAtRange,
-  refetchIssueTable,
+  refetch,
   issueTracker,
   disabled,
 }) => {
@@ -68,10 +62,6 @@ const IssueSettingPopover: React.FC<IProps> = ({
   const [open, setOpen] = useState(false);
 
   const { projectId } = useCurrentProjectId();
-  const { refetch } = useIssueCountByStatusAndCreatedAtRange(
-    createdAtRange,
-    projectId,
-  );
 
   const { register, handleSubmit, formState, reset, control } =
     useForm<UpdateIssueType>({
@@ -99,7 +89,6 @@ const IssueSettingPopover: React.FC<IProps> = ({
     queryOptions: {
       async onSuccess() {
         await refetch();
-        await refetchIssueTable();
         toast.positive({ title: t('toast.save') });
         close();
       },

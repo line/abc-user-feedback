@@ -16,9 +16,14 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { createColumnHelper } from '@tanstack/react-table';
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import type { TFunction } from 'i18next';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Icon, PopoverCloseButton } from '@ufb/ui';
 
@@ -69,12 +74,12 @@ const columns = (t: TFunction) => [
   }),
   columnHelper.accessor('count', {
     header: () => (
-      <>
-        Count
+      <div className="flex items-center">
+        <p>Count</p>
         <DescriptionTooltip description={t('tooltip.issue-feedback-count')} />
-      </>
+      </div>
     ),
-    cell: ({ getValue }) => getValue().toLocaleString(),
+    cell: ({ getValue }) => <p>{getValue().toLocaleString()}</p>,
     size: 50,
   }),
   columnHelper.accessor('status', {
@@ -88,12 +93,19 @@ interface IProps {
   from: Date;
   to: Date;
 }
+const limitOptions = [
+  { label: '5', value: 5 },
+  { label: '10', value: 10 },
+  { label: '15', value: 15 },
+  { label: '20', value: 20 },
+];
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const issues = useMemo(() => ISSUES(t), [t]);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(limitOptions[0]?.value ?? 0);
+
   const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
 
   const { data } = useIssueSearch(projectId, {
@@ -102,34 +114,34 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
     query: { statuses: currentIssueStatusList.map((v) => v.key) },
   });
 
-  const newData = useMemo(() => {
-    if (!data) return [];
-
-    return data.items.map((item, i) => {
-      return {
+  const newData = useMemo(
+    () =>
+      data?.items.map((item, i) => ({
         id: item.id,
         no: i + 1,
         count: item.feedbackCount,
         name: item.name,
         status: ISSUES(t).find((v) => v.key === item.status)?.name ?? '',
-      };
-    });
-  }, [data, t]);
+      })) ?? [],
+    [data, t],
+  );
+
+  const table = useReactTable({
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    columns: columns(t),
+    data: newData,
+    enableSorting: true,
+  });
 
   return (
     <DashboardTable
       title={t('chart.issue-rank.title')}
       description={t('chart.issue-rank.description')}
-      columns={columns(t)}
-      data={newData}
-      select={{
-        options: [
-          { label: '5', value: 5 },
-          { label: '10', value: 10 },
-          { label: '15', value: 15 },
-          { label: '20', value: 20 },
-        ],
-        defaultValue: { label: '5', value: 5 },
+      table={table}
+      selectData={{
+        options: limitOptions,
+        defaultValue: limitOptions[0],
         onChange: (v) => setLimit(v?.value ?? 5),
       }}
       filterContent={

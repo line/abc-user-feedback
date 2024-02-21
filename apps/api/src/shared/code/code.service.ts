@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import crypto from 'crypto';
 import {
   BadRequestException,
   Injectable,
@@ -56,6 +57,7 @@ export class CodeService {
           .plus({ seconds: durationSec ?? SECONDS })
           .toJSDate(),
         data: type === CodeTypeEnum.USER_INVITATION ? dto.data : undefined,
+        tryCount: 0,
       }),
     );
 
@@ -64,21 +66,31 @@ export class CodeService {
 
   @Transactional()
   async verifyCode({ code, key, type }: VerifyCodeDto) {
-    const codeEntity = await this.codeRepo.findOneBy({ key, type });
+    const codeEntity = await this.codeRepo.findOne({
+      where: { key, type },
+      lock: { mode: 'pessimistic_write' },
+    });
 
-    if (!codeEntity) throw new NotFoundException('not found code');
+    if (!codeEntity) return { error: new NotFoundException('not found code') };
     if (codeEntity.isVerified)
-      throw new BadRequestException('already verified');
+      return { error: new BadRequestException('already verified') };
+
+    if (codeEntity.tryCount >= 5) {
+      return { error: new BadRequestException('code expired') };
+    }
 
     if (codeEntity.code !== code) {
-      throw new BadRequestException('invalid code');
+      codeEntity.tryCount += 1;
+      await this.codeRepo.save(codeEntity);
+      return { error: new BadRequestException('invalid code') };
     }
 
     if (DateTime.utc() > DateTime.fromJSDate(codeEntity.expiredAt)) {
-      throw new BadRequestException('code expired');
+      return { error: new BadRequestException('code expired') };
     }
 
     await this.codeRepo.save(Object.assign(codeEntity, { isVerified: true }));
+    return { error: null };
   }
 
   async getDataByCodeAndType(
@@ -102,6 +114,6 @@ export class CodeService {
   }
 
   private createCode() {
-    return String(Math.floor(Math.random() * 999998 + 1)).padStart(6, '0');
+    return String(crypto.randomInt(1, 1000000)).padStart(6, '0');
   }
 }
