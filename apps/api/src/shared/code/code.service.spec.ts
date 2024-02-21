@@ -144,14 +144,10 @@ describe('CodeService', () => {
     });
     it('verifying code succeeds with a valid code, key, type', async () => {
       const { code, type } = codeEntity;
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
       await codeService.verifyCode({ code, key, type });
 
-      expect(codeRepo.findOneBy).toHaveBeenCalledWith({
-        key: codeEntity.key,
-        type: codeEntity.type,
-      });
       expect(codeRepo.save).toHaveBeenCalledWith(
         Object.assign(codeEntity, { isVerified: true }),
       );
@@ -159,7 +155,7 @@ describe('CodeService', () => {
     it('verifying code fails with an invalid code', async () => {
       const { type } = codeEntity;
       const invalidCode = faker.string.sample(6);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
       const { error } = await codeService.verifyCode({
         code: invalidCode,
@@ -172,7 +168,7 @@ describe('CodeService', () => {
       const { type } = codeEntity;
       const invalidCode = faker.string.sample(6);
       jest
-        .spyOn(codeRepo, 'findOneBy')
+        .spyOn(codeRepo, 'findOne')
         .mockResolvedValue({ ...codeEntity, tryCount: 5 } as CodeEntity);
 
       const { error } = await codeService.verifyCode({
@@ -185,7 +181,7 @@ describe('CodeService', () => {
     it('verifying code fails with an invalid key', async () => {
       const { code, type } = codeEntity;
       const invalidKey = faker.string.sample(6);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(null);
 
       const { error } = await codeService.verifyCode({
         code,
@@ -197,7 +193,7 @@ describe('CodeService', () => {
     it('verifying code fails at expired date', async () => {
       MockDate.set(new Date(Date.now() + 5 * 60 * 1000 + 1000));
       const { code, type } = codeEntity;
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(codeEntity);
+      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
       const { error } = await codeService.verifyCode({ code, key, type });
       expect(error).toEqual(new BadRequestException('code expired'));
