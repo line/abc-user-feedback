@@ -16,7 +16,9 @@
 import React, { useMemo } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+
+import { Icon } from '@ufb/ui';
 
 import { CreateProjectChannelTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
@@ -44,12 +46,26 @@ const CreateChannel: NextPage = () => {
   const { completeStepIndex, currentStepIndex, currentStep, stepperText } =
     useCreateChannel();
 
-  const HELP_TEXT: Record<ChannelStepType, string> = useMemo(() => {
+  const HELP_TEXT: Record<ChannelStepType, React.ReactNode> = useMemo(() => {
     return {
-      channelInfo: t('main.create-channel.help.channel-info'),
-      fields: t('main.create-channel.help.fields'),
-      imageUpload: t('main.create-channel.help.image-upload'),
-      fieldPreview: t('main.create-channel.help.field-preview'),
+      channelInfo: t('help-card.channel-info'),
+      fields: t('help-card.fields'),
+      imageUpload: (
+        <Trans
+          i18nKey="help-card.image-setting"
+          components={{
+            icon: (
+              <Icon
+                name="ExpandPopup"
+                className="text-blue-primary cursor-pointer"
+                size={12}
+              />
+            ),
+            docs: <span className="text-blue-primary cursor-pointer" />,
+          }}
+        />
+      ),
+      fieldPreview: t('help-card.field-preview'),
     };
   }, [t]);
 

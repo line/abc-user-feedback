@@ -211,7 +211,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
           <Trans
-            i18nKey="help-card.image-mgmt"
+            i18nKey="help-card.image-setting"
             components={{
               icon: (
                 <Icon
