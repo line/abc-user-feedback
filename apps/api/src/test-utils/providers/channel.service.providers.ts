@@ -21,11 +21,11 @@ import { ProjectServiceProviders } from '@/test-utils/providers/project.service.
 import {
   getMockProvider,
   MockOpensearchRepository,
-  mockRepository,
 } from '@/test-utils/util-functions';
 import { ChannelEntity } from '../../domains/admin/channel/channel/channel.entity';
 import { ChannelMySQLService } from '../../domains/admin/channel/channel/channel.mysql.service';
 import { ChannelService } from '../../domains/admin/channel/channel/channel.service';
+import { ChannelRepositoryStub } from '../stubs';
 import { FieldServiceProviders } from './field.service.providers';
 
 export const ChannelServiceProviders = [
@@ -33,7 +33,7 @@ export const ChannelServiceProviders = [
   ChannelMySQLService,
   {
     provide: getRepositoryToken(ChannelEntity),
-    useValue: mockRepository(),
+    useClass: ChannelRepositoryStub,
   },
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
   ...ProjectServiceProviders,

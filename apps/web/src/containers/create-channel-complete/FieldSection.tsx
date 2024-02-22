@@ -103,7 +103,7 @@ const FieldSection: React.FC<IProps> = ({ fields }) => {
   });
 
   return (
-    <CreateSectionTemplate title={t('main.create-channel.stepper-text.fields')}>
+    <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
       <table className="table rounded border">
         <thead>
           <tr>

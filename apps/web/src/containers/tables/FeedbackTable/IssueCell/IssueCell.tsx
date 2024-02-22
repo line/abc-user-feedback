@@ -149,7 +149,7 @@ const IssueCell: React.FC<IProps> = (props) => {
   };
 
   return (
-    <div className="relative" onClick={(e) => e.stopPropagation()}>
+    <div className="relative">
       <Popper
         open={isEditing}
         setOpen={setIsEditing}
@@ -159,7 +159,10 @@ const IssueCell: React.FC<IProps> = (props) => {
           issues?.length === 0 ? (
             <button
               className="btn btn-xs btn-secondary btn-rounded font-12-regular my-2"
-              onClick={() => setIsEditing(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsEditing(true);
+              }}
               disabled={!perms.includes('feedback_issue_update')}
             >
               {t('main.feedback.issue-cell.register-issue')}
@@ -193,7 +196,10 @@ const IssueCell: React.FC<IProps> = (props) => {
               )}
               <button
                 className="icon-btn icon-btn-xs icon-btn-rounded icon-btn-secondary"
-                onClick={() => setIsEditing(true)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEditing(true);
+                }}
                 disabled={!perms.includes('feedback_issue_update')}
               >
                 <Icon name="Plus" />
@@ -202,7 +208,12 @@ const IssueCell: React.FC<IProps> = (props) => {
           )
         }
       >
-        <Combobox onChange={addIssue} as="div" className="w-[300px]">
+        <Combobox
+          onChange={addIssue}
+          as="div"
+          className="w-[300px]"
+          onClick={(e) => e.stopPropagation()}
+        >
           <label className="bg-primary flex cursor-text flex-wrap items-center gap-1 rounded px-3 py-2">
             {issues?.map(({ id, name, status }) => (
               <Badge

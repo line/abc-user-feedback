@@ -168,7 +168,7 @@ export class FeedbackOSService {
                   },
                 });
               } else if (
-                [FieldFormatEnum.text, FieldFormatEnum.image].includes(format)
+                [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
               ) {
                 osQuery.bool.must.push({
                   match_phrase: {

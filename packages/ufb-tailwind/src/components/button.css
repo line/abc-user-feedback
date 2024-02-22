@@ -48,10 +48,12 @@
   }
 
   &-secondary {
-    @apply bg-fill-inverse text-primary border-fill-tertiary border;
+    @apply bg-fill-inverse text-primary border-fill-tertiary relative overflow-hidden border;
 
-    &:hover {
-      @apply bg-fill-tertiary;
+    &:hover::after {
+      content: '';
+      background-color: #0000001f;
+      @apply absolute inset-0;
     }
 
     &:disabled {

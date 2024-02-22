@@ -17,11 +17,11 @@ import { createReadStream, existsSync } from 'fs';
 import * as fs from 'fs/promises';
 import path from 'path';
 import { PassThrough } from 'stream';
-import { S3Client } from '@aws-sdk/client-s3';
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import {
   BadRequestException,
   Injectable,
+  InternalServerErrorException,
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
@@ -44,7 +44,6 @@ import { OptionService } from '../channel/option/option.service';
 import { IssueService } from '../project/issue/issue.service';
 import type {
   CountByProjectIdDto,
-  CreateImageUploadUrlDto,
   FindFeedbacksByChannelIdDto,
   GenerateExcelDto,
 } from './dtos';
@@ -131,9 +130,11 @@ export class FeedbackService {
           if (typeof query[fieldKey] !== 'string')
             throw new BadRequestException(`${fieldKey} must be string`);
           break;
-        case FieldFormatEnum.image:
-          if (typeof query[fieldKey] !== 'string')
-            throw new BadRequestException(`${fieldKey} must be string`);
+        case FieldFormatEnum.images:
+          if (!Array.isArray(query[fieldKey]))
+            throw new BadRequestException(
+              `${fieldKey} must be array of string`,
+            );
           break;
       }
     }
@@ -343,16 +344,29 @@ export class FeedbackService {
         throw new BadRequestException('this field is for admin: ' + fieldKey);
       }
 
-      if (field.status === FieldStatusEnum.INACTIVE) {
-        throw new BadRequestException('this field is inactive: ' + fieldKey);
-      }
-
       if (!validateValue(field, value)) {
         throw new BadRequestException(
           `invalid value: (value: ${JSON.stringify(value)}, type: ${
             field.format
           }, fieldKey: ${field.key})`,
         );
+      }
+
+      if (field.format === FieldFormatEnum.images) {
+        const channel = await this.channelService.findById({ channelId });
+        const domainWhiteList = channel.imageConfig.domainWhiteList;
+
+        if (domainWhiteList) {
+          const images = value as string[];
+          for (const image of images) {
+            const url = new URL(image);
+            if (!domainWhiteList.includes(url.hostname)) {
+              throw new BadRequestException(
+                `invalid domain in image link: ${url.hostname} (fieldKey: ${field.key})`,
+              );
+            }
+          }
+        }
       }
     }
 
@@ -580,33 +594,6 @@ export class FeedbackService {
     }
   }
 
-  async createImageUploadUrl(dto: CreateImageUploadUrlDto) {
-    const {
-      projectId,
-      channelId,
-      accessKeyId,
-      secretAccessKey,
-      endpoint,
-      region,
-      bucket,
-    } = dto;
-
-    const s3 = new S3Client({
-      credentials: {
-        accessKeyId,
-        secretAccessKey,
-      },
-      endpoint,
-      region,
-    });
-
-    return await createPresignedPost(s3, {
-      Bucket: bucket,
-      Key: `${projectId}_${channelId}_${Date.now()}.png`,
-      Conditions: [{ 'Content-Type': 'image/png' }],
-    });
-  }
-
   async findById({
     channelId,
     feedbackId,
@@ -627,6 +614,65 @@ export class FeedbackService {
       return feedback;
     } else {
       return await this.feedbackMySQLService.findById({ feedbackId });
+    }
+  }
+
+  async uploadImages({
+    channelId,
+    files,
+  }: {
+    channelId: number;
+    files: Array<any>;
+  }) {
+    const channel = await this.channelService.findById({ channelId });
+    if (!channel) {
+      throw new BadRequestException('invalid channel id');
+    }
+
+    const s3 = new S3Client({
+      credentials: {
+        accessKeyId: channel.imageConfig.accessKeyId,
+        secretAccessKey: channel.imageConfig.secretAccessKey,
+      },
+      endpoint: channel.imageConfig.endpoint,
+      region: channel.imageConfig.region,
+    });
+    try {
+      const imageUrls = await Promise.all(
+        files.map(async (file) => {
+          const key = `${channelId}_${Date.now()}_${file.originalname}`;
+          const command = new PutObjectCommand({
+            Bucket: channel.imageConfig.bucket,
+            Key: key,
+            Body: file.buffer,
+            ContentType: file.mimetype,
+            ACL: 'public-read',
+          });
+          await s3.send(command);
+
+          return {
+            ...file,
+            url: `${channel.imageConfig.endpoint}/${channel.imageConfig.bucket}/${key}`,
+          };
+        }),
+      );
+      const imageUrlsByKeys = imageUrls.reduce((prev, curr) => {
+        if (curr.fieldname in prev) {
+          return {
+            ...prev,
+            [curr.fieldname]: prev[curr.fieldname].concat(curr.url),
+          };
+        } else {
+          return {
+            ...prev,
+            [curr.fieldname]: [curr.url],
+          };
+        }
+      }, {});
+
+      return imageUrlsByKeys;
+    } catch (e) {
+      throw new InternalServerErrorException('failed to upload images');
     }
   }
 }

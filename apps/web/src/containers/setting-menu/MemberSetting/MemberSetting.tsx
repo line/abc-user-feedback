@@ -148,7 +148,7 @@ const MemberSetting: React.FC<IProps> = ({ projectId }) => {
   });
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.member-mgmt')}
+      title={t('project-setting-menu.member-mgmt')}
       actionBtn={{
         children: t('main.setting.button.register-member'),
         onClick: () => setOpenDialog(true),

@@ -29,7 +29,7 @@ const ChannelInfoSection: React.FC<IProps> = ({ description, name }) => {
   const { t } = useTranslation();
   return (
     <CreateSectionTemplate
-      title={t('main.create-channel.stepper-text.channel-info')}
+      title={t('channel-setting-menu.channel-info')}
       defaultOpen
     >
       <Input label="Channel Name" value={name} required disabled />

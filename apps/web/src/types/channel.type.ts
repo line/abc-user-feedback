@@ -27,3 +27,12 @@ export type InputChannelInfoType = Omit<
   ChannelType,
   'id' | 'fields' | 'updatedAt' | 'createdAt'
 >;
+
+export type InputImageConfigType = {
+  accessKeyId: string;
+  secretAccessKey: string;
+  endpoint: string;
+  region: string;
+  bucket: string;
+  domainWhiteList: string[] | null;
+};

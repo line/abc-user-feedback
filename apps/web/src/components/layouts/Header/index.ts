@@ -13,4 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as Header } from './Header';
+export { default } from './Header';

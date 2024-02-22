@@ -21,7 +21,7 @@ import type { IconNameType } from '../Icon';
 import { Icon } from '../Icon';
 
 interface IProps {
-  type: 'positive' | 'negative';
+  type: 'positive' | 'negative' | 'accent';
   title?: string;
   description?: string;
   iconName?: IconNameType;
@@ -41,16 +41,21 @@ export const ToastBox: React.FC<IProps> = ({
         return 'bg-red-primary';
       case 'positive':
         return 'bg-green-primary';
+      case 'accent':
+        return 'bg-blue-primary';
       default:
         return '';
     }
   }, [type]);
+
   const icon = useMemo(() => {
     if (iconName) return iconName;
     switch (type) {
       case 'negative':
         return 'WarningTriangleFill' as const;
       case 'positive':
+        return 'CircleCheck' as const;
+      case 'accent':
         return 'CircleCheck' as const;
       default:
         return 'CircleCheck' as const;

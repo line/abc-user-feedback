@@ -91,7 +91,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.project-info')}
+      title={t('project-setting-menu.project-info')}
       actionBtn={{
         children: t('button.save'),
         onClick: handleSubmit(onSubmit),

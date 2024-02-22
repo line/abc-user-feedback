@@ -29,7 +29,7 @@ const FeedbackDetailCell: React.FC<IProps> = ({ children }) => {
     useTruncatedElement({ ref });
 
   return (
-    <td className="pl-2">
+    <td className="pl-2" colSpan={3}>
       <div
         className={`font-14-regular text-primary break-words break-all align-top ${
           !isShowingMore && 'line-clamp-6'

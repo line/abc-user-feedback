@@ -24,4 +24,8 @@ type ProjectSetting =
   | 'TICKET_MANAGEMENT'
   | 'DELETE_PROJECT';
 
-type ChannelSetting = 'CHANNEL_INFO' | 'FIELD_MANAGEMENT' | 'DELETE_CHANNEL';
+type ChannelSetting =
+  | 'CHANNEL_INFO'
+  | 'FIELD_MANAGEMENT'
+  | 'IMAGE_UPLOAD_SETTING'
+  | 'DELETE_CHANNEL';

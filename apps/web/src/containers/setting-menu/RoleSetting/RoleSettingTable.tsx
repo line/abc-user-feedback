@@ -19,6 +19,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { PermissionType } from '@/types/permission.type';
 import {
   ChannelFieldPermissionList,
+  ChannelImageSettingPermissionList,
   ChannelInfoPermissionList,
   ChannelPermissionText,
   FeedbackPermissionList,
@@ -223,6 +224,20 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
           editPermissions={editPermissions}
           permText={ChannelPermissionText}
           permissions={ChannelFieldPermissionList}
+          onChecked={onChecked}
+          roles={roles ?? []}
+          depth={3}
+        />
+        <RoleTitleRow
+          title="Channel Image Setting"
+          colspan={colSpan}
+          depth={2}
+        />
+        <PermissionRows
+          editRoleId={editRoleId}
+          editPermissions={editPermissions}
+          permText={ChannelPermissionText}
+          permissions={ChannelImageSettingPermissionList}
           onChecked={onChecked}
           roles={roles ?? []}
           depth={3}

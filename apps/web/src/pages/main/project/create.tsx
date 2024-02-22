@@ -47,11 +47,11 @@ const CreateProject: React.FC = () => {
 
   const HELP_TEXT: Record<ProjectStepType, string> = useMemo(() => {
     return {
-      projectInfo: t('main.create-project.help.projectInfo'),
-      roles: t('main.create-project.help.roles'),
-      members: t('main.create-project.help.members'),
-      apiKeys: t('main.create-project.help.apiKeys'),
-      issueTracker: t('main.create-project.help.issueTracker'),
+      projectInfo: t('help-card.project-info'),
+      roles: t('help-card.role'),
+      members: t('help-card.member'),
+      apiKeys: t('help-card.api-key'),
+      issueTracker: t('help-card.issue-tracker'),
     };
   }, []);
 

@@ -115,20 +115,6 @@
     },
     "setting": {
       "title": "Setting",
-      "subtitle": {
-        "tenant-info": "Tenant Information",
-        "sign-up-mgmt": "Login & Signup Management",
-        "user-mgmt": "User Management",
-        "project-info": "Project Information",
-        "member-mgmt": "Member Management",
-        "role-mgmt": "Role Management",
-        "api-key-mgmt": "API Key Management",
-        "issue-tracker-mgmt": "Issue Tracker Management",
-        "delete-project": "Delete Project",
-        "channel-info": "Channel Information",
-        "field-mgmt": "Field Management",
-        "delete-channel": "Delete Channel"
-      },
       "button": {
         "create-project": "Create Project",
         "create-channel": "Create Channel",
@@ -161,7 +147,6 @@
       "register-member": "Please register a member.",
       "same-key": "Input the same value as the key",
       "feedback-request-code": "Feedback Request Code",
-      "issue-tracker-mgmt.description": "UserFeedback issues and Issue Tracking System tickets can be linked and managed. \nPlease enter the Issue Tracking System URL you are using.",
       "option-info": "Option Information",
       "field-mgmt": {
         "description": "To save, click Preview first.",
@@ -216,13 +201,6 @@
     "create-project": {
       "title": "Create Project",
       "complete-title": "Project creation is complete.",
-      "help": {
-        "projectInfo": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
-        "roles": "You can set permissions to access and use the Project.",
-        "members": "You can register or manage members to participate in the Project.",
-        "apiKeys": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
-        "issueTracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information."
-      },
       "error-member": "User information that does not currently exist.",
       "continue-channel-creation": "UserFeedback must be created up to the Channel before UserFeedback is available.\nWould you like to continue creating a channel?",
       "guide": {
@@ -234,16 +212,6 @@
     "create-channel": {
       "title": "Create Channel",
       "complete-title": "Channel creation is complete.",
-      "help": {
-        "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
-        "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
-        "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
-      },
-      "stepper-text": {
-        "channel-info": "Channel Infomation",
-        "fields": "Field Management",
-        "field-preview": "Field Preview"
-      },
       "finish-channel-creation": "Everything is ready.\nStart Using UserFeedback!",
       "guide": {
         "invalid-channel": "Invalid Channel information exists."
@@ -333,12 +301,6 @@
     "copy": "Copy Complete"
   },
   "placeholder": "Please enter {{name}}.",
-  "hint": {
-    "required": "Required",
-    "max-length": "Please enter {{length}} characters or less.",
-    "name-already-exists": "{{name}} already exists.",
-    "invalid-domain": "Not in domain format."
-  },
   "dialog": {
     "continue": {
       "title": "Do you want to continue?",
@@ -349,44 +311,42 @@
       }
     }
   },
-  "card": {
-    "dashboard": {
-      "total-feedback": {
-        "title": "Total number of feedbacks",
-        "description": "Number of feedback created in a specific period of time. ({{targetDate}})"
-      },
-      "total-issue": {
-        "title": "Total number of issues",
-        "description": "Number of issues created in a specific period of time. ({{targetDate}})"
-      },
-      "issue-ratio": {
-        "title": "Register Issue rate",
-        "description": "Register Issue rate of feedback created in a specific period of time. ({{targetDate}})"
-      },
-      "today-feedback": {
-        "title": "Number of today's feedback",
-        "description": "Number of feedback created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
-      },
-      "yesterday-feedback": {
-        "title": "Number of yesterday's feedback",
-        "description": "Number of feedback created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
-      },
-      "n-days-feedback": {
-        "title": "Number of feedbacks in the last {{n}} days",
-        "description": "Number of feedback created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
-      },
-      "today-issue": {
-        "title": "Number of today's issue",
-        "description": "Number of issue created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
-      },
-      "yesterday-issue": {
-        "title": "Number of yesterday's issue",
-        "description": "Number of issue created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
-      },
-      "n-days-issue": {
-        "title": "Number of issue in the last {{n}} days",
-        "description": "Number of issue created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
-      }
+  "dashboard-card": {
+    "total-feedback": {
+      "title": "Total number of feedbacks",
+      "description": "Number of feedback created in a specific period of time. ({{targetDate}})"
+    },
+    "total-issue": {
+      "title": "Total number of issues",
+      "description": "Number of issues created in a specific period of time. ({{targetDate}})"
+    },
+    "issue-ratio": {
+      "title": "Register Issue rate",
+      "description": "Register Issue rate of feedback created in a specific period of time. ({{targetDate}})"
+    },
+    "today-feedback": {
+      "title": "Number of today's feedback",
+      "description": "Number of feedback created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+    },
+    "yesterday-feedback": {
+      "title": "Number of yesterday's feedback",
+      "description": "Number of feedback created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+    },
+    "n-days-feedback": {
+      "title": "Number of feedbacks in the last {{n}} days",
+      "description": "Number of feedback created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+    },
+    "today-issue": {
+      "title": "Number of today's issue",
+      "description": "Number of issue created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+    },
+    "yesterday-issue": {
+      "title": "Number of yesterday's issue",
+      "description": "Number of issue created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+    },
+    "n-days-issue": {
+      "title": "Number of issue in the last {{n}} days",
+      "description": "Number of issue created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
     }
   },
   "chart": {
@@ -423,5 +383,50 @@
   },
   "tooltip": {
     "issue-feedback-count": "Number of feedbacks registered in the issue."
+  },
+  "tenant-setting-menu": {
+    "tenant-info": "Tenant Information",
+    "sign-up-mgmt": "Login & Signup Management",
+    "user-mgmt": "User Management"
+  },
+  "project-setting-menu": {
+    "project-info": "Project Information",
+    "member-mgmt": "Member Management",
+    "role-mgmt": "Role Management",
+    "api-key-mgmt": "API Key Management",
+    "issue-tracker-mgmt": "Issue Tracker Management",
+    "delete-project": "Delete Project"
+  },
+  "channel-setting-menu": {
+    "channel-info": "Channel Information",
+    "field-mgmt": "Field Management",
+    "image-mgmt": "Image Management",
+    "delete-channel": "Delete Channel"
+  },
+  "modal": {
+    "image-preview": {
+      "title": "Image Preview"
+    }
+  },
+  "help-card": {
+    "project-info": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
+    "role": "You can set permissions to access and use the Project.",
+    "member": "You can register or manage members to participate in the Project.",
+    "api-key": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
+    "issue-tracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information.",
+    "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
+    "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
+    "image-setting": "When collecting feedback on the Image format, you can work with Image Storage and set up a whitelist for the Image URL domain.\nSee Image <icon></icon> <docs>Docs</docs>.",
+    "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
+  },
+  "hint": {
+    "required": "Required",
+    "max-length": "Please enter {{length}} characters or less.",
+    "name-already-exists": "{{name}} already exists.",
+    "invalid-domain": "Invalid domain format.",
+    "image-format": "The format for entering the Image URL."
+  },
+  "image-mgmt-setting": {
+    "image-storage-integration-setting": "Image Storage Integration Setting"
   }
 }

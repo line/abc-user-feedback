@@ -105,13 +105,14 @@ export interface paths {
   };
   "/api/admin/projects/{projectId}/channels/{channelId}": {
     get: operations["ChannelController_findOne"];
+    put: operations["ChannelController_updateOne"];
     delete: operations["ChannelController_delete"];
   };
-  "/api/admin/projects/{projectId}/channels/channels/{channelId}": {
-    put: operations["ChannelController_updateOne"];
-  };
-  "/api/admin/projects/{projectId}/channels/channels/{channelId}/fields": {
+  "/api/admin/projects/{projectId}/channels/{channelId}/fields": {
     put: operations["ChannelController_updateFields"];
+  };
+  "/api/admin/projects/{projectId}/channels/image-upload-url-test": {
+    post: operations["ChannelController_getImageUploadUrlTest"];
   };
   "/api/admin/fields/{fieldId}/options": {
     get: operations["OptionController_getOptions"];
@@ -151,9 +152,6 @@ export interface paths {
   };
   "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
     put: operations["FeedbackController_updateFeedback"];
-  };
-  "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/image-upload-url": {
-    get: operations["FeedbackController_getImageUploadUrl"];
   };
   "/api/admin/projects/{projectId}/issues": {
     post: operations["IssueController_create"];
@@ -333,7 +331,7 @@ export interface components {
       updatedAt: string;
       deletedAt: string;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
       project: components["schemas"]["RoleProjectDto"];
     };
     GetRolesByIdResponseDto: {
@@ -413,7 +411,7 @@ export interface components {
     GetAllRoleResponseRoleDto: {
       id: number;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     GetAllRoleResponseDto: {
       roles: components["schemas"]["GetAllRoleResponseRoleDto"][];
@@ -421,11 +419,11 @@ export interface components {
     };
     CreateRoleRequestDto: {
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     UpdateRoleRequestDto: {
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     MemberUserDto: {
       id: number;
@@ -436,7 +434,7 @@ export interface components {
     MemberRoleDto: {
       id: number;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     GetAllMember: {
       id: number;
@@ -482,9 +480,10 @@ export interface components {
       endpoint: string;
       region: string;
       bucket: string;
+      domainWhiteList: string[] | null;
     };
     /** @enum {string} */
-    FieldFormatEnum: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "image";
+    FieldFormatEnum: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "images";
     /** @enum {string} */
     FieldTypeEnum: "DEFAULT" | "ADMIN" | "API";
     /** @enum {string} */
@@ -518,6 +517,7 @@ export interface components {
       endpoint: string;
       region: string;
       bucket: string;
+      domainWhiteList: string[];
     };
     FindChannelsByProjectDto: {
       id: number;
@@ -541,7 +541,7 @@ export interface components {
     FindFieldsResponseDto: {
       id: number;
       /** @enum {string} */
-      format: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "image";
+      format: "text" | "keyword" | "number" | "select" | "multiSelect" | "date" | "images";
       /** @enum {string} */
       type: "DEFAULT" | "ADMIN" | "API";
       /** @enum {string} */
@@ -583,6 +583,16 @@ export interface components {
     };
     UpdateChannelFieldsRequestDto: {
       fields: components["schemas"]["UpdateChannelRequestFieldDto"][];
+    };
+    ImageUploadUrlTestRequestDto: {
+      accessKeyId: string;
+      secretAccessKey: string;
+      endpoint: string;
+      region: string;
+      bucket: string;
+    };
+    ImageUploadUrlTestResponseDto: {
+      success: boolean;
     };
     FindOptionByFieldIdResponseDto: {
       id: number;
@@ -1531,19 +1541,6 @@ export interface operations {
       };
     };
   };
-  ChannelController_delete: {
-    parameters: {
-      path: {
-        channelId: number;
-        projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
   ChannelController_updateOne: {
     parameters: {
       path: {
@@ -1554,6 +1551,19 @@ export interface operations {
     requestBody: {
       content: {
         "application/json": components["schemas"]["UpdateChannelRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: never;
+      };
+    };
+  };
+  ChannelController_delete: {
+    parameters: {
+      path: {
+        channelId: number;
+        projectId: number;
       };
     };
     responses: {
@@ -1577,6 +1587,25 @@ export interface operations {
     responses: {
       200: {
         content: never;
+      };
+    };
+  };
+  ChannelController_getImageUploadUrlTest: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ImageUploadUrlTestRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["ImageUploadUrlTestResponseDto"];
+        };
       };
     };
   };
@@ -1839,19 +1868,6 @@ export interface operations {
         channelId: number;
         feedbackId: number;
         projectId: number;
-      };
-    };
-    responses: {
-      200: {
-        content: never;
-      };
-    };
-  };
-  FeedbackController_getImageUploadUrl: {
-    parameters: {
-      path: {
-        projectId: number;
-        channelId: number;
       };
     };
     responses: {

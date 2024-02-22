@@ -16,12 +16,18 @@
 import React, { useMemo } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
+
+import { Icon } from '@ufb/ui';
 
 import { CreateProjectChannelTemplate } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { InputField, InputFieldPreview } from '@/containers/create-channel';
-import InputChannelInfo from '@/containers/create-channel/InputChannelInfo';
+import {
+  InputChannelInfo,
+  InputField,
+  InputFieldPreview,
+  InputImageSetting,
+} from '@/containers/create-channel';
 import {
   CreateChannelProvider,
   useCreateChannel,
@@ -40,11 +46,44 @@ const CreateChannel: NextPage = () => {
   const { completeStepIndex, currentStepIndex, currentStep, stepperText } =
     useCreateChannel();
 
-  const HELP_TEXT: Record<ChannelStepType, string> = useMemo(() => {
+  const HELP_TEXT: Record<ChannelStepType, React.ReactNode> = useMemo(() => {
     return {
-      channelInfo: t('main.create-channel.help.channel-info'),
-      fields: t('main.create-channel.help.fields'),
-      fieldPreview: t('main.create-channel.help.field-preview'),
+      channelInfo: t('help-card.channel-info'),
+      fields: t('help-card.field'),
+      imageUpload: (
+        <Trans
+          i18nKey="help-card.image-setting"
+          components={{
+            icon: (
+              <Icon
+                name="ExpandPopup"
+                className="text-blue-primary cursor-pointer"
+                size={12}
+                onClick={() => {
+                  if (typeof window === 'undefined') return;
+                  window.open(
+                    'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
+                    '_blank',
+                  );
+                }}
+              />
+            ),
+            docs: (
+              <span
+                className="text-blue-primary cursor-pointer"
+                onClick={() => {
+                  if (typeof window === 'undefined') return;
+                  window.open(
+                    'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
+                    '_blank',
+                  );
+                }}
+              />
+            ),
+          }}
+        />
+      ),
+      fieldPreview: t('help-card.field-preview'),
     };
   }, [t]);
 
@@ -69,6 +108,7 @@ const Contents: React.FC = () => {
     <>
       {currentStep === 'channelInfo' && <InputChannelInfo />}
       {currentStep === 'fields' && <InputField />}
+      {currentStep === 'imageUpload' && <InputImageSetting />}
       {currentStep === 'fieldPreview' && <InputFieldPreview />}
     </>
   );

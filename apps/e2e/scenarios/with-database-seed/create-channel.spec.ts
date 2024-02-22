@@ -18,6 +18,7 @@ export default () => {
         .fill('Channel for test');
       await page.getByRole('button', { name: 'Next' }).click();
       await page.getByRole('button', { name: 'Next' }).click();
+      await page.getByRole('button', { name: 'Next' }).click();
       await page.getByRole('button', { name: 'Complete' }).click();
       await expect(page.locator('#Channel\\ Name')).toHaveValue('TestChannel');
       await expect(page.locator('#Channel\\ Description')).toHaveValue(

@@ -46,8 +46,8 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
   return (
     <DashboardCard
       data={data?.count ?? 0}
-      title={t('card.dashboard.total-issue.title')}
-      description={t('card.dashboard.total-issue.description', {
+      title={t('dashboard-card.total-issue.title')}
+      description={t('dashboard-card.total-issue.description', {
         targetDate: `${dayjs(from).format('YYYY/MM/DD')} - ${dayjs(to).format(
           'YYYY/MM/DD',
         )}`,

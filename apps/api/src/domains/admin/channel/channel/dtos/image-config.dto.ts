@@ -31,6 +31,9 @@ export class ImageConfigDto {
   @Expose()
   bucket: string;
 
+  @Expose()
+  domainWhiteList: string[];
+
   public static from(params: any): ImageConfigDto {
     return plainToInstance(ImageConfigDto, params, {
       excludeExtraneousValues: true,

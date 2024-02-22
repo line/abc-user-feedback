@@ -289,6 +289,11 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   isSubmitted={optionSubmitted}
                   hint={formState.errors.options?.message}
                 />
+                {watch('format') === 'images' && (
+                  <p className="text-primary font-12-regular">
+                    {t('hint.image-format')}
+                  </p>
+                )}
                 {(watch('options') ?? []).length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-2">
                     {watch('options')?.map((v, i) => (
@@ -329,7 +334,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                       e.target.checked ? setValue('type', 'ADMIN') : {}
                     }
                     checked={watch('type') === 'ADMIN'}
-                    disabled={isOriginalData}
+                    disabled={isOriginalData || watch('format') === 'images'}
                   />
                   ADMIN
                 </label>

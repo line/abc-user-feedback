@@ -17,7 +17,10 @@ import { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import type { InputChannelInfoType } from '@/types/channel.type';
+import type {
+  InputChannelInfoType,
+  InputImageConfigType,
+} from '@/types/channel.type';
 import type { InputFieldType } from '@/types/field.type';
 import {
   CreateContext,
@@ -64,14 +67,29 @@ interface ChannelInputType {
   channelInfo: InputChannelInfoType;
   fields: InputFieldType[];
   fieldPreview: null;
+  imageConfig: InputImageConfigType;
 }
+
 const CHANNEL_DEFAULT_INPUT: ChannelInputType = {
   channelInfo: { name: '', description: '' },
   fields: DEFAULT_FIELDS,
   fieldPreview: null,
+  imageConfig: {
+    accessKeyId: '',
+    bucket: '',
+    endpoint: '',
+    region: '',
+    secretAccessKey: '',
+    domainWhiteList: null,
+  },
 };
 
-export const CHANNEL_STEPS = ['channelInfo', 'fields', 'fieldPreview'] as const;
+export const CHANNEL_STEPS = [
+  'channelInfo',
+  'fields',
+  'imageUpload',
+  'fieldPreview',
+] as const;
 
 export type ChannelStepsType = typeof CHANNEL_STEPS;
 export type ChannelStepType = (typeof CHANNEL_STEPS)[number];
@@ -89,6 +107,7 @@ const CreateChannelContext = CreateContext<ChannelStepType, ChannelInputType>({
   stepperText: {
     channelInfo: 'Channel 정보',
     fields: 'Field 관리',
+    imageUpload: 'Image 연동 관리',
     fieldPreview: 'Field 미리보기',
   },
 });
@@ -97,16 +116,20 @@ export const CreateChannelProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const { t } = useTranslation();
+
   const router = useRouter();
+
   const projectId = useMemo(
     () => Number(router.query.projectId),
     [router.query.projectId],
   );
+
   const CHANNEL_STEPPER_TEXT: Record<ChannelStepType, string> = useMemo(() => {
     return {
-      channelInfo: t('main.create-channel.stepper-text.channel-info'),
-      fields: t('main.create-channel.stepper-text.fields'),
-      fieldPreview: t('main.create-channel.stepper-text.field-preview'),
+      channelInfo: t('channel-setting-menu.channel-info'),
+      fields: t('channel-setting-menu.field-mgmt'),
+      imageUpload: t('channel-setting-menu.image-mgmt'),
+      fieldPreview: 'Field ' + t('main.setting.field-mgmt.preview'),
     };
   }, [t]);
 

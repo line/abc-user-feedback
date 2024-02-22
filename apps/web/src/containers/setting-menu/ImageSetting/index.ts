@@ -13,4 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const strSort = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0);
+export { default } from './ImageSetting';

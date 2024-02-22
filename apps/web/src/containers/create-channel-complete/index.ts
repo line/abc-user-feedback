@@ -16,3 +16,4 @@
 export { default as ChannelInfoSection } from './ChannelInfoSection';
 export { default as FieldPreviewSection } from './FieldPreviewSection';
 export { default as FieldSection } from './FieldSection';
+export { default as ImageUploadSection } from './ImageUploadSection';

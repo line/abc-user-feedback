@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, memo, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
@@ -26,16 +26,18 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
+import { ImagePreviewButton } from '@/components/buttons';
 import { ExpandableText, TableResizer } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
 import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
 import type { FieldType } from '@/types/field.type';
+import type { IssueStatus } from '@/types/issue.type';
 import type { FieldRowType } from './FieldSetting';
 
 const columnHelper = createColumnHelper<any>();
 
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   fields: FieldRowType[];
 }
 
@@ -86,11 +88,19 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
               ? faker.number.int()
               : field.format === 'text'
               ? faker.lorem.text()
+              : field.format === 'images'
+              ? faker.helpers.arrayElements(
+                  Array.from(
+                    { length: faker.number.int({ min: 1, max: 15 }) },
+                    () => '/assets/images/sample_image.png',
+                  ),
+                )
               : null;
         }
       }
       fakeRows.push(fakeData);
     }
+
     setRows(fakeRows);
   }, [fields]);
 
@@ -112,17 +122,17 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
               dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
             ) : field.key === 'issues' ? (
               <div className="scrollbar-hide flex items-center gap-1">
-                {(info.getValue() as { status: string; name: string }[])?.map(
-                  (v, i) => (
-                    <Badge
-                      key={i}
-                      color={getStatusColor(v.status)}
-                      type="secondary"
-                    >
-                      {v.name}
-                    </Badge>
-                  ),
-                )}
+                {(
+                  info.getValue() as { status: IssueStatus; name: string }[]
+                )?.map((v, i) => (
+                  <Badge
+                    key={i}
+                    color={getStatusColor(v.status)}
+                    type="secondary"
+                  >
+                    {v.name}
+                  </Badge>
+                ))}
               </div>
             ) : field.format === 'multiSelect' ? (
               ((info.getValue() ?? []) as string[]).join(', ')
@@ -130,6 +140,8 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
               <ExpandableText isExpanded={info.row.getIsExpanded()}>
                 {info.getValue() as string}
               </ExpandableText>
+            ) : field.format === 'images' ? (
+              <ImagePreviewButton urls={(info.getValue() ?? []) as string[]} />
             ) : (
               String(info.getValue())
             ),
@@ -197,4 +209,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
   );
 };
 
-export default PreviewTable;
+export default memo(
+  PreviewTable,
+  (prev, next) => JSON.stringify(prev.fields) === JSON.stringify(next.fields),
+);

@@ -36,9 +36,9 @@ export class FindIssueByIdResponseDto {
 
   @Expose()
   @ApiProperty({
+    enum: IssueStatusEnum,
     description: 'Issue status',
     example: IssueStatusEnum.IN_PROGRESS,
-    enum: IssueStatusEnum,
   })
   status: IssueStatusEnum;
 

@@ -13,7 +13,6 @@
     @apply rounded-full;
   }
 
-
   &-lg {
     svg {
       width: 24px;
@@ -23,7 +22,6 @@
     @apply p-3;
   }
 
-
   &-md {
     svg {
       width: 20px;
@@ -32,7 +30,6 @@
 
     @apply p-2.5;
   }
-
 
   &-sm {
     svg {
@@ -49,9 +46,8 @@
       height: 12px;
     }
 
-    @apply p-[7px]
+    @apply p-[7px];
   }
-
 
   &-primary {
     @apply bg-fill-primary text-inverse;
@@ -66,10 +62,11 @@
   }
 
   &-secondary {
-    @apply bg-fill-inverse text-primary border border-fill-tertiary;
+    @apply bg-fill-inverse text-primary border-fill-tertiary relative overflow-hidden border;
 
-    &:hover {
-      @apply bg-fill-tertiary;
+    &:hover::after {
+      content: '';
+      @apply bg-fill-tertiary absolute inset-0;
     }
 
     &:disabled {
@@ -93,7 +90,11 @@
     @apply bg-red-primary text-white;
 
     &:hover {
-      background-color: color-mix(in srgb, var(--fill-color-primary), transparent 20%);
+      background-color: color-mix(
+        in srgb,
+        var(--fill-color-primary),
+        transparent 20%
+      );
     }
 
     &:disabled {

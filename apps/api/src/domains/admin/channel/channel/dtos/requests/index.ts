@@ -18,3 +18,4 @@ export { FindChannelsByProjectIdRequestDto } from './find-channels-by-project-id
 export { ImageConfigRequestDto } from './image-config-request.dto';
 export { UpdateChannelRequestDto } from './update-channel-request.dto';
 export { UpdateChannelFieldsRequestDto } from './update-channel-fields-request.dto';
+export { ImageUploadUrlTestRequestDto } from './image-upload-url-test-request.dto';
