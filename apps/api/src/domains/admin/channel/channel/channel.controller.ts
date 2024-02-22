@@ -142,28 +142,15 @@ export class ChannelController {
       secretAccessKey,
       endpoint,
       region,
-      bucket,
     }: ImageUploadUrlTestRequestDto,
   ) {
-    try {
-      const presignedUrl = await this.channelService.createImageUploadUrl({
-        projectId: 0,
-        channelId: 0,
+    return {
+      success: await this.channelService.isValidImageConfig({
         accessKeyId,
         secretAccessKey,
         endpoint,
         region,
-        bucket,
-        extension: 'png',
-      });
-
-      if (presignedUrl) {
-        return { success: true };
-      } else {
-        return { success: false };
-      }
-    } catch (error) {
-      return { success: false };
-    }
+      }),
+    };
   }
 }
