@@ -107,9 +107,9 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
         <pre className="bg-fill-quaternary font-10-regular m-5 whitespace-pre-wrap rounded p-4">
           {`curl --request POST ${
             env.NEXT_PUBLIC_API_BASE_URL
-          }/api/admin/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${
+          }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${
             apiKey?.value ?? 'API_KEY'
-          }'\\\n--data-raw '${
+          }' \\\n--data-raw '${
             snippetBody
               ? JSON.stringify(snippetBody, null, 4)
                   .replace(/\"/g, '')
