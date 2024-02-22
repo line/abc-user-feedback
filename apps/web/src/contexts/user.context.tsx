@@ -26,7 +26,7 @@ import type { AxiosError } from 'axios';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import type { JwtPayload } from 'jwt-decode';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useSessionStorage } from 'react-use';
 
 import isServer from '@/constants/is-server';
