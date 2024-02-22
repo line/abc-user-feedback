@@ -116,7 +116,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     if (!data) return;
     reset({
       ...data.imageConfig,
-      domainWhiteList: data.imageConfig.domainWhiteList ?? null,
+      domainWhiteList: data.imageConfig?.domainWhiteList ?? null,
     });
   }, [data]);
 

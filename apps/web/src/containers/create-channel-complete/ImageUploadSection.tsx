@@ -16,7 +16,7 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { Input } from '@ufb/ui';
+import { Badge, Input } from '@ufb/ui';
 
 import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
 import type { InputImageConfigType } from '@/types/channel.type';
@@ -29,16 +29,34 @@ const ImageUploadSection: React.FC<IProps> = ({
   endpoint,
   region,
   secretAccessKey,
+  domainWhiteList,
 }) => {
   const { t } = useTranslation();
 
   return (
     <CreateSectionTemplate title={t('channel-setting-menu.image-mgmt')}>
-      <Input label="Access Key ID" value={accessKeyId} disabled />
-      <Input label="Secret Access Key ID" value={secretAccessKey} disabled />
-      <Input label="End Point" value={endpoint} disabled />
-      <Input label="Region" value={region} disabled />
-      <Input label="Bucket Name" value={bucket} disabled />
+      <div className="flex flex-col gap-2">
+        <h2 className="font-20-bold pb-1">
+          {t('image-mgmt-setting.image-storage-integration-setting')}
+        </h2>
+        <Input label="Access Key ID" value={accessKeyId} disabled />
+        <Input label="Secret Access Key ID" value={secretAccessKey} disabled />
+        <Input label="End Point" value={endpoint} disabled />
+        <Input label="Region" value={region} disabled />
+        <Input label="Bucket Name" value={bucket} disabled />
+      </div>
+      <div>
+        <h2 className="font-20-bold pb-3">Image URL Domain Whitelist</h2>
+        {domainWhiteList && (
+          <div className="flex items-center gap-2">
+            {domainWhiteList.map((domain, index) => (
+              <Badge key={index} type="secondary">
+                {domain}
+              </Badge>
+            ))}
+          </div>
+        )}
+      </div>
     </CreateSectionTemplate>
   );
 };
