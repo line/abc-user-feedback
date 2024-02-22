@@ -415,7 +415,7 @@
     "api-key": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
     "issue-tracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information.",
     "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
-    "fields": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
+    "field": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
     "image-setting": "When collecting feedback on the Image format, you can work with Image Storage and set up a whitelist for the Image URL domain.\nSee Image <icon></icon> <docs>Docs</docs>.",
     "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
   },

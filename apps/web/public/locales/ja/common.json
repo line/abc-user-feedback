@@ -415,7 +415,7 @@
     "api-key": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
     "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
     "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
-    "fields": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
+    "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
     "image-setting": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。",
     "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
   },
