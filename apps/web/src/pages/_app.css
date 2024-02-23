@@ -164,3 +164,7 @@ html {
 html.dark {
   --body-background-color: #191919;
 }
+
+input:focus::placeholder {
+  color: transparent;
+}
