@@ -220,8 +220,8 @@ const InputImageSetting: React.FC<IProps> = () => {
           hint={inputError.accessKeyId}
         />
         <Input
-          label="Secret Access Key ID"
-          placeholder={t('placeholder', { name: 'Secret Access Key ID' })}
+          label="Secret Access Key"
+          placeholder={t('placeholder', { name: 'Secret Access Key' })}
           value={secretAccessKey}
           onChange={(e) =>
             onChangeProjectInfo('secretAccessKey', e.target.value)

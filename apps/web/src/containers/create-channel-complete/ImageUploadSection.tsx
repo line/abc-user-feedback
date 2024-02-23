@@ -40,7 +40,7 @@ const ImageUploadSection: React.FC<IProps> = ({
           {t('title-box.image-storage-integration')}
         </h2>
         <Input label="Access Key ID" value={accessKeyId} disabled />
-        <Input label="Secret Access Key ID" value={secretAccessKey} disabled />
+        <Input label="Secret Access Key" value={secretAccessKey} disabled />
         <Input label="End Point" value={endpoint} disabled />
         <Input label="Region" value={region} disabled />
         <Input label="Bucket Name" value={bucket} disabled />

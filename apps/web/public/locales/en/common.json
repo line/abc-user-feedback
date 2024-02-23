@@ -300,7 +300,6 @@
     "add": "Addition Complete",
     "copy": "Copy Complete"
   },
-  "placeholder": "Please enter {{name}}.",
   "dialog": {
     "continue": {
       "title": "Do you want to continue?",
@@ -428,5 +427,6 @@
   },
   "title-box": {
     "image-storage-integration": "Image Storage Integration"
-  }
+  },
+  "placeholder": "Please enter {{name}}."
 }
