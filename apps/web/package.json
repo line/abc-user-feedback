@@ -47,7 +47,7 @@
     "date-fns": "^3.0.6",
     "dayjs": "^1.11.10",
     "framer-motion": "^10.16.4",
-    "i18next": "^23.7.18",
+    "i18next": "^23.9.0",
     "immer": "^10.0.3",
     "iron-session": "^6.3.1",
     "jwt-decode": "^3.1.2",
