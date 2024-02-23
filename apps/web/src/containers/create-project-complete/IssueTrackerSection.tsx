@@ -48,7 +48,7 @@ const IssueTrackerSection: React.FC<IProps> = ({ projectId }) => {
       />
       <TextInput
         label="Project Key"
-        placeholder="Delivery"
+        placeholder="PROJECT"
         value={data?.data.ticketKey}
         disabled
       />
