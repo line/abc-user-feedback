@@ -426,7 +426,7 @@
     "invalid-domain": "ドメイン形式ではありません。",
     "image-format": "Image URLを入力するフォーマットです。"
   },
-  "image-mgmt-setting": {
-    "image-storage-integration-setting": "画像リポジトリの連動設定"
+  "title-box": {
+    "image-storage-integration": "Image Storageの連動"
   }
 }

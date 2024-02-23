@@ -255,7 +255,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         <div className="mb-6 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <h2 className="font-20-bold">
-              {t('image-mgmt-setting.image-storage-integration-setting')}
+              {t('title-box.image-storage-integration')}
             </h2>
             <button
               type="button"
