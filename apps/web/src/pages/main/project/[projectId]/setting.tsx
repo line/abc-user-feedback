@@ -42,6 +42,7 @@ import {
   TenantInfoSetting,
   TenantSettingMenu,
   UserSetting,
+  WebhookSetting,
 } from '@/containers/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 import type { NextPageWithLayout } from '../../../_app';
@@ -83,6 +84,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
       case 'MEMBER_MANAGEMENT':
       case 'ROLE_MANAGEMENT':
       case 'TICKET_MANAGEMENT':
+      case 'WEBHOOK_MANAGEMENT':
       case 'DELETE_PROJECT':
         setShowList([1, 3]);
         break;
@@ -155,6 +157,9 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             )}
             {settingMenu === 'TICKET_MANAGEMENT' && (
               <IssueTrackerSetting projectId={projectId} />
+            )}
+            {settingMenu === 'WEBHOOK_MANAGEMENT' && (
+              <WebhookSetting projectId={projectId} />
             )}
             {settingMenu === 'DELETE_PROJECT' && (
               <ProjectDeleteSetting projectId={projectId} />

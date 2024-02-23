@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   createColumnHelper,
   flexRender,
@@ -324,22 +324,20 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               </thead>
               <tbody>
                 {table.getRowModel().rows.map((row) => (
-                  <Fragment key={row.index}>
-                    <tr>
-                      {row.getVisibleCells().map((cell) => (
-                        <td
-                          key={`${cell.id} ${cell.row.index}`}
-                          className="border-none"
-                          style={{ width: cell.column.getSize() }}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext(),
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  </Fragment>
+                  <tr key={row.index}>
+                    {row.getVisibleCells().map((cell) => (
+                      <td
+                        key={`${cell.id} ${cell.row.index}`}
+                        className="border-none"
+                        style={{ width: cell.column.getSize() }}
+                      >
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext(),
+                        )}
+                      </td>
+                    ))}
+                  </tr>
                 ))}
               </tbody>
             </table>

@@ -306,19 +306,27 @@ export interface IPopoverModalContentProps extends React.PropsWithChildren {
     children?: React.ReactNode;
     onClick?: React.MouseEventHandler<HTMLButtonElement>;
   };
+  width?: number;
 }
 
 export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
   props,
 ) => {
-  const { title, description, children, submitButton, icon, cancelButton } =
-    props;
+  const {
+    title,
+    description,
+    children,
+    submitButton,
+    icon,
+    cancelButton,
+    width = 400,
+  } = props;
   const { setOpen } = usePopoverContext();
 
   return (
     <PopoverContent isPortal>
       <PopoverHeading>{title}</PopoverHeading>
-      <div className="m-5 w-[400px]">
+      <div className="m-5" style={{ width }}>
         {icon && (
           <div className="mb-6 text-center">
             <Icon {...icon} />

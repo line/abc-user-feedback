@@ -395,6 +395,7 @@
     "role-mgmt": "Role管理",
     "api-key-mgmt": "API Key管理",
     "issue-tracker-mgmt": "Issue Tracker管理",
+    "webhook-integration": "Webhook連動",
     "delete-project": "Project削除"
   },
   "channel-setting-menu": {

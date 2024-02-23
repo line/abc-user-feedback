@@ -395,6 +395,7 @@
     "role-mgmt": "Role Management",
     "api-key-mgmt": "API Key Management",
     "issue-tracker-mgmt": "Issue Tracker Management",
+    "webhook-integration": "Webhook Integration",
     "delete-project": "Delete Project"
   },
   "channel-setting-menu": {

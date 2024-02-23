@@ -13,20 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type SettingMenuType = TenantSetting | ProjectSetting | ChannelSetting;
-
-type TenantSetting = 'TENANT_INFO' | 'SIGNUP_SETTING' | 'USER_MANAGEMENT';
-type ProjectSetting =
-  | 'PROJECT_INFO'
-  | 'MEMBER_MANAGEMENT'
-  | 'ROLE_MANAGEMENT'
-  | 'API_KEY_MANAGEMENT'
-  | 'TICKET_MANAGEMENT'
-  | 'WEBHOOK_MANAGEMENT'
-  | 'DELETE_PROJECT';
-
-type ChannelSetting =
-  | 'CHANNEL_INFO'
-  | 'FIELD_MANAGEMENT'
-  | 'IMAGE_UPLOAD_SETTING'
-  | 'DELETE_CHANNEL';
+export { default } from './WebhookSetting';
