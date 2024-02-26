@@ -13,5 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetAllRolesResponseDto } from './get-all-roles-response.dto';
-export { GetRoleByIdResponseDto } from './get-role-by-id-response.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance } from 'class-transformer';
+import { IsNumber } from 'class-validator';
+
+export class CreateWebhookResponseDto {
+  @ApiProperty()
+  @IsNumber()
+  @Expose()
+  id: number;
+
+  public static transform(params: any): CreateWebhookResponseDto {
+    return plainToInstance(CreateWebhookResponseDto, params, {
+      excludeExtraneousValues: true,
+    });
+  }
+}

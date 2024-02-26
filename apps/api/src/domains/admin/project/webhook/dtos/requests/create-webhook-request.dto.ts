@@ -13,5 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetAllRolesResponseDto } from './get-all-roles-response.dto';
-export { GetRoleByIdResponseDto } from './get-role-by-id-response.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsEnum, IsString } from 'class-validator';
+
+import { WebhookStatusEnum } from '@/common/enums';
+import type { EventDto } from '..';
+
+export class CreateWebhookRequestDto {
+  @ApiProperty()
+  @IsString()
+  name: string;
+
+  @ApiProperty()
+  @IsString()
+  url: string;
+
+  @ApiProperty()
+  @IsEnum(WebhookStatusEnum)
+  status: WebhookStatusEnum;
+
+  @ApiProperty()
+  @IsArray()
+  events: EventDto[];
+}

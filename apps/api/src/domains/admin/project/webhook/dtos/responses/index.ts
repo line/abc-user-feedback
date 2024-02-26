@@ -13,5 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetAllRolesResponseDto } from './get-all-roles-response.dto';
-export { GetRoleByIdResponseDto } from './get-role-by-id-response.dto';
+export { CreateWebhookResponseDto } from './create-webhook-response.dto';
+export { GetWebhookByIdResponseDto } from './get-webhook-by-id-response.dto';
+export { GetWebhooksByProjectIdResponseDto } from './get-webhooks-by-project-id-response.dto';
+export { UpdateWebhookResponseDto } from './update-webhook-response.dto';

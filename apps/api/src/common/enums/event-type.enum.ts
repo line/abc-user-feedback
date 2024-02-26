@@ -13,5 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetAllRolesResponseDto } from './get-all-roles-response.dto';
-export { GetRoleByIdResponseDto } from './get-role-by-id-response.dto';
+export enum EventTypeEnum {
+  FEEDBACK_CREATION = 'FEEDBACK_CREATION',
+  ISSUE_CREATION = 'ISSUE_CREATION',
+  ISSUE_STATUS_CHANGE = 'ISSUE_STATUS_CHANGE',
+  ISSUE_ADDITION = 'ISSUE_ADDITION',
+}

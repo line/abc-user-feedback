@@ -17,10 +17,13 @@ import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
 
 import {
+  EventStatusEnum,
+  EventTypeEnum,
   FieldFormatEnum,
   FieldStatusEnum,
   FieldTypeEnum,
   isSelectFieldFormat,
+  WebhookStatusEnum,
 } from '@/common/enums';
 import type { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import type {
@@ -30,6 +33,9 @@ import type {
 import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
+import type { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import type { EventEntity } from '@/domains/admin/project/webhook/event.entity';
+import type { WebhookEntity } from '@/domains/admin/project/webhook/webhook.entity';
 import type { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import {
   SignUpMethodEnum,
@@ -219,6 +225,15 @@ export const tenantFixture = {
   updatedAt: faker.date.past(),
 } as TenantEntity;
 
+export const projectFixture = {
+  id: faker.number.int(),
+  name: faker.string.sample(),
+  description: faker.lorem.lines(2),
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+  tenant: tenantFixture,
+} as ProjectEntity;
+
 export const channelFixture = {
   id: faker.number.int(),
   name: faker.string.sample(),
@@ -226,12 +241,25 @@ export const channelFixture = {
   imageConfig: null,
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
-  project: {
-    id: faker.number.int(),
-    name: faker.string.sample(),
-    description: faker.lorem.lines(2),
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.past(),
-  },
+  project: projectFixture,
   fields: fieldsFixture,
 } as ChannelEntity;
+
+export const webhookFixture = {
+  id: faker.number.int(),
+  name: faker.string.sample(),
+  url: faker.internet.url(),
+  status: WebhookStatusEnum.ACTIVE,
+  project: projectFixture,
+  events: [],
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+} as WebhookEntity;
+
+export const eventFixture = {
+  id: faker.number.int(),
+  status: EventStatusEnum.ACTIVE,
+  type: getRandomEnumValue(EventTypeEnum),
+  webhook: webhookFixture,
+  channels: [channelFixture],
+} as EventEntity;

@@ -13,5 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { GetAllRolesResponseDto } from './get-all-roles-response.dto';
-export { GetRoleByIdResponseDto } from './get-role-by-id-response.dto';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsArray, IsEnum } from 'class-validator';
+
+import { EventStatusEnum, EventTypeEnum } from '@/common/enums';
+
+export class EventDto {
+  @ApiProperty()
+  @IsEnum(EventTypeEnum)
+  type: EventTypeEnum;
+
+  @ApiProperty()
+  @IsEnum(EventStatusEnum)
+  status: EventStatusEnum;
+
+  @ApiProperty({ required: false })
+  @IsArray()
+  channelIds: number[] | null;
+}
