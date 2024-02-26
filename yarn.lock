@@ -7946,10 +7946,10 @@ fast-csv@^4.3.1:
     "@fast-csv/format" "4.3.5"
     "@fast-csv/parse" "4.3.6"
 
-fast-csv@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/fast-csv/-/fast-csv-5.0.0.tgz#74b2c0ada46909dc35d341d1c19ee67d9be06a8a"
-  integrity sha512-CEwsCv2W+0AvlZRfS4rpagcP2gpMbMjbkFOn9SZ5T6F8gvl040fwPf7/8Rx9/Pxz3NQWbHYOsRFhK/MH/xjaaQ==
+fast-csv@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/fast-csv/-/fast-csv-5.0.1.tgz#2beaa2437ea83bd335cc3a39a41e69d9936f3987"
+  integrity sha512-Q43zC4NdQD5MAWOVQOF8KA+D6ddvTJjX2ib8zqysm74jZhtk6+dc8C75/OqRV6Y9CLc4kgvbC3PLG8YL4YZfgw==
   dependencies:
     "@fast-csv/format" "5.0.0"
     "@fast-csv/parse" "5.0.0"
