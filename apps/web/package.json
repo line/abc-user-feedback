@@ -83,7 +83,7 @@
     "@types/react": "^18.2.55",
     "@types/react-beautiful-dnd": "^13.1.6",
     "@types/react-datepicker": "^4.19.1",
-    "@types/react-dom": "^18.2.18",
+    "@types/react-dom": "^18.2.19",
     "@ufb/eslint-config": "^0.1.0",
     "@ufb/prettier-config": "^0.1.0",
     "@ufb/tsconfig": "^0.1.0",
