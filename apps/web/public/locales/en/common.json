@@ -300,7 +300,6 @@
     "add": "Addition Complete",
     "copy": "Copy Complete"
   },
-  "placeholder": "Please enter {{name}}.",
   "dialog": {
     "continue": {
       "title": "Do you want to continue?",
@@ -426,7 +425,8 @@
     "invalid-domain": "Invalid domain format.",
     "image-format": "The format for entering the Image URL."
   },
-  "image-mgmt-setting": {
-    "image-storage-integration-setting": "Image Storage Integration Setting"
-  }
+  "title-box": {
+    "image-storage-integration": "Image Storage Integration"
+  },
+  "placeholder": "Please enter {{name}}."
 }

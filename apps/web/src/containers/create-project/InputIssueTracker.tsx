@@ -126,7 +126,7 @@ const InputIssueTracker: React.FC<IProps> = () => {
       />
       <TextInput
         label="Project Key"
-        placeholder="Delivery"
+        placeholder="PROJECT"
         value={ticketKey}
         onChange={(e) => onChangeIssueTracker('ticketKey', e.target.value)}
       />

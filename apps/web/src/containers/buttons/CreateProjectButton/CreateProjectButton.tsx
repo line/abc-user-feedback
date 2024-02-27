@@ -53,10 +53,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
 
   return (
     <>
-      <Tooltip
-        open={!hasProject || (hasProject && step > 0)}
-        placement="bottom"
-      >
+      <Tooltip open={!hasProject || step > 0} placement="bottom">
         <TooltipTrigger asChild>
           <button
             className="btn btn-lg btn-primary w-[200px] gap-2"
@@ -70,16 +67,16 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             {t('main.index.create-project')}
           </button>
         </TooltipTrigger>
-        <TooltipContent color={!hasProject ? 'blue' : 'red'}>
-          {!hasProject ? (
-            t('main.index.no-project')
-          ) : (
+        <TooltipContent color={step > 0 ? 'red' : 'blue'}>
+          {step > 0 ? (
             <>
               {t('text.create-project-in-progress')}{' '}
               <b>
                 ({step + 1}/{PROJECT_STEPS.length})
               </b>
             </>
+          ) : (
+            t('main.index.no-project')
           )}
         </TooltipContent>
       </Tooltip>
