@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import {
   createColumnHelper,
@@ -22,23 +22,24 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import classNames from 'classnames';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
-import { usePermissions } from '@/hooks';
+import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import { useOAIQuery, usePermissions } from '@/hooks';
+import type { WebhookEvent, WebhookType } from '@/types/webhook.type';
 import WebhookCreateDialog from './WebhookCreateDialog';
 
-interface IWebhook {
-  status: 'on' | 'off';
-  name: string;
-  url: string;
-  event: string[];
-  createdAt: string;
-}
+type WebhookItemType = Omit<WebhookType, 'id' | 'events'> & {
+  id?: number;
+  events: (Omit<WebhookEvent, 'id'> & { id?: number })[];
+};
 
-const columnHelper = createColumnHelper<IWebhook>();
+const columnHelper = createColumnHelper<WebhookItemType>();
+
 const columns = [
   columnHelper.accessor('status', {
     header: '',
@@ -48,9 +49,9 @@ const columns = [
         <input
           type="checkbox"
           className={classNames('toggle toggle-sm', {
-            'border-fill-primary bg-fill-primary': status === 'off',
+            'border-fill-primary bg-fill-primary': status === 'INACTIVE',
           })}
-          checked={status === 'on'}
+          checked={status === 'ACTIVE'}
         />
       );
     },
@@ -63,13 +64,16 @@ const columns = [
     header: 'URL',
     cell: ({ getValue }) => getValue(),
   }),
-  columnHelper.accessor('event', {
+  columnHelper.accessor('events', {
     header: 'Event',
-    cell: ({ getValue }) => getValue().join(', '),
+    cell: ({ getValue }) =>
+      getValue()
+        .map((v) => v.type)
+        .join(', '),
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
-    cell: ({ getValue }) => getValue(),
+    cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
   }),
   columnHelper.display({
     id: 'edit',
@@ -93,22 +97,6 @@ const columns = [
   }),
 ];
 
-const data: IWebhook[] = [
-  {
-    createdAt: '2023-01-01',
-    event: ['issue', 'comment'],
-    name: 'webhook1',
-    status: 'on',
-    url: 'https://webhook1.com',
-  },
-  {
-    createdAt: '2023-01-01',
-    event: ['issue', 'comment'],
-    name: 'webhook1',
-    status: 'off',
-    url: 'https://webhook1.com',
-  },
-];
 interface IProps {
   projectId: number;
 }
@@ -116,7 +104,16 @@ interface IProps {
 const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions();
-  const [rows] = useState(data);
+  const [rows, setRows] = useState<WebhookItemType[]>([]);
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/webhooks',
+    variables: { projectId },
+  });
+
+  useEffect(() => {
+    if (!data) setRows([]);
+    else setRows(data.items);
+  }, [data]);
 
   const table = useReactTable({
     columns,
@@ -164,7 +161,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
             <tr
               key={row.index}
               className={classNames({
-                'text-tertiary': row.original.status === 'off',
+                'text-tertiary': row.original.status === 'INACTIVE',
               })}
             >
               {row.getVisibleCells().map((cell) => (

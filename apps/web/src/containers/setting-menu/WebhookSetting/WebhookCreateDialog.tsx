@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -20,6 +21,7 @@ import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
 import { DescriptionTooltip, SelectBox } from '@/components';
 import { useOAIQuery } from '@/hooks';
+import type { WebhookEventEnum } from '@/types/webhook.type';
 
 interface IForm {
   name: string;
@@ -41,6 +43,7 @@ interface IProps extends React.PropsWithChildren {
 
 const WebhookCreateDialog: React.FC<IProps> = ({ children, projectId }) => {
   const { t } = useTranslation();
+  const [eventTypes, setEventTypes] = useState<WebhookEventEnum[]>([]);
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
@@ -48,6 +51,15 @@ const WebhookCreateDialog: React.FC<IProps> = ({ children, projectId }) => {
   });
 
   const { register } = useForm<IForm>();
+
+  const toggleEventType =
+    (type: WebhookEventEnum) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.checked && eventTypes.includes(type)) {
+        setEventTypes(eventTypes.filter((eventType) => eventType !== type));
+      } else {
+        setEventTypes([...eventTypes, type]);
+      }
+    };
 
   return (
     <Popover modal>
@@ -80,43 +92,67 @@ const WebhookCreateDialog: React.FC<IProps> = ({ children, projectId }) => {
             <p className="input-label">Event</p>
             <div className="flex h-12 items-center">
               <div className="flex flex-1 items-center">
-                <input type="checkbox" className="toggle toggle-sm" />
+                <input
+                  type="checkbox"
+                  className="toggle toggle-sm"
+                  checked={eventTypes.includes('FEEDBACK_CREATION')}
+                  onChange={toggleEventType('FEEDBACK_CREATION')}
+                />
                 <p className="ml-2">피드백 생성</p>
                 <DescriptionTooltip description="description" />
               </div>
-              <SelectBox
-                isMulti
-                options={data?.items ?? []}
-                getOptionValue={(option) => String(option.id)}
-                getOptionLabel={(option) => option.name}
-                width={340}
-                height={48}
-              />
+              {eventTypes.includes('FEEDBACK_CREATION') && (
+                <SelectBox
+                  isMulti
+                  options={data?.items ?? []}
+                  getOptionValue={(option) => String(option.id)}
+                  getOptionLabel={(option) => option.name}
+                  width={340}
+                  height={48}
+                />
+              )}
             </div>
             <div className="flex h-12 items-center">
               <div className="flex flex-1 items-center">
-                <input type="checkbox" className="toggle toggle-sm" />
+                <input
+                  type="checkbox"
+                  className="toggle toggle-sm"
+                  checked={eventTypes.includes('ISSUE_ADDITION')}
+                  onChange={toggleEventType('ISSUE_ADDITION')}
+                />
                 <p className="ml-2">이슈 등록</p>
                 <DescriptionTooltip description="description" />
               </div>
-              <SelectBox
-                isMulti
-                options={data?.items ?? []}
-                getOptionValue={(option) => String(option.id)}
-                getOptionLabel={(option) => option.name}
-                classNames={{ container: () => 'w-[340px]' }}
-              />
+              {eventTypes.includes('ISSUE_ADDITION') && (
+                <SelectBox
+                  isMulti
+                  options={data?.items ?? []}
+                  getOptionValue={(option) => String(option.id)}
+                  getOptionLabel={(option) => option.name}
+                  classNames={{ container: () => 'w-[340px]' }}
+                />
+              )}
             </div>
             <div className="flex h-12 items-center">
               <div className="flex flex-1 items-center">
-                <input type="checkbox" className="toggle toggle-sm" />
+                <input
+                  type="checkbox"
+                  className="toggle toggle-sm"
+                  checked={eventTypes.includes('ISSUE_STATUS_CHANGE')}
+                  onChange={toggleEventType('ISSUE_STATUS_CHANGE')}
+                />
                 <p className="ml-2">이슈 상태 변경</p>
                 <DescriptionTooltip description="description" />
               </div>
             </div>
             <div className="flex h-12 items-center">
               <div className="flex flex-1 items-center">
-                <input type="checkbox" className="toggle toggle-sm" />
+                <input
+                  type="checkbox"
+                  className="toggle toggle-sm"
+                  checked={eventTypes.includes('ISSUE_CREATION')}
+                  onChange={toggleEventType('ISSUE_CREATION')}
+                />
                 <p className="ml-2">이슈 생성</p>
                 <DescriptionTooltip description="description" />
               </div>

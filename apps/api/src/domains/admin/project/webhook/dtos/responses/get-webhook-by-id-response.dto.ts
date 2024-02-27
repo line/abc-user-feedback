@@ -16,8 +16,29 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 
-import { WebhookStatusEnum } from '@/common/enums';
-import { EventEntity } from '../../event.entity';
+import {
+  EventStatusEnum,
+  EventTypeEnum,
+  WebhookStatusEnum,
+} from '@/common/enums';
+
+export class GetWebhookResponseEventDto {
+  @Expose()
+  @ApiProperty()
+  id: number;
+
+  @Expose()
+  @ApiProperty({ enum: EventStatusEnum })
+  status: EventStatusEnum;
+
+  @Expose()
+  @ApiProperty({ enum: EventTypeEnum })
+  type: EventTypeEnum;
+
+  @Expose()
+  @ApiProperty()
+  createdAt: Date;
+}
 
 export class GetWebhookByIdResponseDto {
   @Expose()
@@ -37,8 +58,12 @@ export class GetWebhookByIdResponseDto {
   status: WebhookStatusEnum;
 
   @Expose()
-  @ApiProperty({ type: [EventEntity] })
-  events: EventEntity[];
+  @ApiProperty({ type: [GetWebhookResponseEventDto] })
+  events: GetWebhookResponseEventDto[];
+
+  @Expose()
+  @ApiProperty()
+  createdAt: Date;
 
   public static transform(plain: any): GetWebhookByIdResponseDto {
     return plainToInstance(GetWebhookByIdResponseDto, plain);
