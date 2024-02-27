@@ -228,7 +228,7 @@
     "sign-in": "ログイン",
     "sign-up": "会員加入",
     "save": "保存",
-    "create": "生成",
+    "create": "{{name}}生成",
     "cancel": "キャンセル",
     "delete": "削除",
     "register": "登錄",
@@ -287,7 +287,13 @@
     "feedback-detail": "フィードバック詳細",
     "create-channel-in-progress": "作成中のChannelがあります。",
     "create-project-in-progress": "作成中のProjectがあります。",
-    "days": "{{days}} 日"
+    "days": "{{days}}日",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "フィードバックの作成",
+      "ISSUE_CREATION": "イシュー作成",
+      "ISSUE_STATUS_CHANGE": "イシューステータス変更",
+      "ISSUE_ADDITION": "イシュー追加"
+    }
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -309,6 +315,16 @@
         "continue": "続行",
         "restart": "再起動"
       }
+    },
+    "create-webhook": {
+      "title": "Webhook生成"
+    },
+    "update-webhook": {
+      "title": "Webhook編集"
+    },
+    "delete-webhook": {
+      "title": "Webhook削除",
+      "description": "Webhookを削除すると、連動したデータがすべて削除されます。"
     }
   },
   "dashboard-card": {
@@ -418,7 +434,8 @@
     "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
     "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
     "image-setting": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。",
-    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
+    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。",
+    "webhook": "Webhookを使用すると、User Feedbackで発生する様々なイベントを活用することができます。 詳細はWebhook <icon></icon> <docs>Docs</docs> をご覧ください。"
   },
   "hint": {
     "required": "必須入力対象です。",

@@ -13,26 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum, IsString } from 'class-validator';
-
-import { WebhookStatusEnum } from '@/common/enums';
-import { EventDto } from '..';
-
-export class CreateWebhookRequestDto {
-  @ApiProperty()
-  @IsString()
-  name: string;
-
-  @ApiProperty()
-  @IsString()
-  url: string;
-
-  @ApiProperty({ enum: WebhookStatusEnum })
-  @IsEnum(WebhookStatusEnum)
-  status: WebhookStatusEnum;
-
-  @ApiProperty({ type: [EventDto] })
-  @IsArray()
-  events: EventDto[];
-}
+export { default } from './HelpCardDocs';

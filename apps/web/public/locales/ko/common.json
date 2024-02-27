@@ -228,7 +228,7 @@
     "sign-in": "로그인",
     "sign-up": "회원가입",
     "save": "저장",
-    "create": "생성",
+    "create": "{{name}} 생성",
     "cancel": "취소",
     "delete": "삭제",
     "register": "등록",
@@ -287,7 +287,13 @@
     "feedback-detail": "피드백 상세",
     "create-channel-in-progress": "생성중인 Channel이 있습니다.",
     "create-project-in-progress": "생성중인 Project가 있습니다.",
-    "days": "{{days}}일"
+    "days": "{{days}}일",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "피드백 생성",
+      "ISSUE_CREATION": "이슈 생성",
+      "ISSUE_STATUS_CHANGE": "이슈 상태 변경",
+      "ISSUE_ADDITION": "이슈 등록"
+    }
   },
   "toast": {
     "sign-in": "로그인 성공",
@@ -309,6 +315,16 @@
         "continue": "이어서하기",
         "restart": "처음부터"
       }
+    },
+    "create-webhook": {
+      "title": "Webhook 생성"
+    },
+    "update-webhook": {
+      "title": "Webhook 편집"
+    },
+    "delete-webhook": {
+      "title": "Webhook 삭제",
+      "description": "Webhook를 삭제하면 연동된 데이터가 모두 삭제됩니다."
     }
   },
   "dashboard-card": {
@@ -418,7 +434,8 @@
     "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
     "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
     "image-setting": "Image 포맷에 대해 피드백을 수집할 때 Image Storage와 연동할 수 있고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있습니다.\n자세한 내용은 Image <icon></icon> <docs>Docs</docs>를 참고해 주세요.",
-    "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다."
+    "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다.",
+    "webhook": "Webhook을 사용하면 User Feedback에서 발생하는 다양한 이벤트를 활용할 수 있습니다. 자세한 내용은 Webhook <icon></icon> <docs>Docs</docs>를 참고해 주세요."
   },
   "hint": {
     "required": "필수 입력 대상입니다.",

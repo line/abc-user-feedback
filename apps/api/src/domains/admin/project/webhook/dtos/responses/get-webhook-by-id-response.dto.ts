@@ -36,6 +36,10 @@ export class GetWebhookResponseEventDto {
   type: EventTypeEnum;
 
   @Expose()
+  @ApiProperty({ type: [Number] })
+  channelIds: number[];
+
+  @Expose()
   @ApiProperty()
   createdAt: Date;
 }

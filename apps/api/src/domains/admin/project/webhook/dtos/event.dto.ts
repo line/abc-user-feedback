@@ -19,15 +19,15 @@ import { IsArray, IsEnum } from 'class-validator';
 import { EventStatusEnum, EventTypeEnum } from '@/common/enums';
 
 export class EventDto {
-  @ApiProperty()
+  @ApiProperty({ enum: EventTypeEnum })
   @IsEnum(EventTypeEnum)
   type: EventTypeEnum;
 
-  @ApiProperty()
+  @ApiProperty({ enum: EventStatusEnum })
   @IsEnum(EventStatusEnum)
   status: EventStatusEnum;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ type: [Number], nullable: true })
   @IsArray()
   channelIds: number[] | null;
 }

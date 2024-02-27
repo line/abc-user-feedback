@@ -43,13 +43,13 @@ export class WebhookService {
         event.type,
       )
     ) {
-      if (event.channelIds?.length > 0) {
+      if (event.channelIds.length > 0) {
         const channels = await this.channelRepo.findBy({
           id: In(event.channelIds),
         });
         return channels.length === event.channelIds.length;
       } else {
-        return false;
+        return true;
       }
     } else if (
       [
@@ -57,7 +57,7 @@ export class WebhookService {
         EventTypeEnum.ISSUE_STATUS_CHANGE,
       ].includes(event.type)
     ) {
-      return event.channelIds === null;
+      return event.channelIds.length === 0;
     }
   }
 
@@ -117,9 +117,7 @@ export class WebhookService {
   async findByProjectId(projectId: number) {
     const webhooks = await this.repository.find({
       where: { project: { id: projectId } },
-      relations: {
-        events: true,
-      },
+      relations: { events: true },
     });
 
     return webhooks;

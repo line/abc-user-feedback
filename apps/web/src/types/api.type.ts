@@ -969,11 +969,19 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
+    EventDto: {
+      /** @enum {string} */
+      type: "FEEDBACK_CREATION" | "ISSUE_CREATION" | "ISSUE_STATUS_CHANGE" | "ISSUE_ADDITION";
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      channelIds: number[] | null;
+    };
     CreateWebhookRequestDto: {
       name: string;
       url: string;
-      status: string;
-      events: string[];
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      events: components["schemas"]["EventDto"][];
     };
     CreateWebhookResponseDto: {
       id: number;
@@ -984,6 +992,7 @@ export interface components {
       status: "ACTIVE" | "INACTIVE";
       /** @enum {string} */
       type: "FEEDBACK_CREATION" | "ISSUE_CREATION" | "ISSUE_STATUS_CHANGE" | "ISSUE_ADDITION";
+      channelIds: number[];
       /** Format: date-time */
       createdAt: string;
     };
@@ -1003,8 +1012,9 @@ export interface components {
     UpdateWebhookRequestDto: {
       name: string;
       url: string;
-      status: string;
-      events: string[];
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      events: components["schemas"]["EventDto"][];
     };
     UpdateWebhookResponseDto: {
       id: number;
