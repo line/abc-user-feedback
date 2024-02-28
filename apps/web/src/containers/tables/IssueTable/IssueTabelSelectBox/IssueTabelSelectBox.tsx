@@ -26,7 +26,6 @@ interface IProps extends React.PropsWithChildren {
 
 const IssueTabelSelectBox: React.FC<IProps> = (props) => {
   const { currentIssueKey, onChangeOption, issueCountData } = props;
-  console.log('issueCountData: ', issueCountData);
 
   const { t } = useTranslation();
 
