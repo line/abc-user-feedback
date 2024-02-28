@@ -224,7 +224,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
           <div className="flex flex-col gap-2">
             <p className="input-label">Event</p>
             <div className="flex h-12 items-center">
-              <div className="flex flex-1 items-center">
+              <label className="flex flex-1 items-center">
                 <input
                   type="checkbox"
                   className="toggle toggle-sm"
@@ -235,7 +235,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                   {t('text.webhook-type.FEEDBACK_CREATION')}
                 </p>
                 <DescriptionTooltip description="description" />
-              </div>
+              </label>
               {getEventChecked('FEEDBACK_CREATION') && (
                 <SelectBox
                   isMulti
@@ -255,7 +255,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
               )}
             </div>
             <div className="flex h-12 items-center">
-              <div className="flex flex-1 items-center">
+              <label className="flex flex-1 items-center">
                 <input
                   type="checkbox"
                   className="toggle toggle-sm"
@@ -264,7 +264,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                 />
                 <p className="ml-2">{t('text.webhook-type.ISSUE_ADDITION')}</p>
                 <DescriptionTooltip description="description" />
-              </div>
+              </label>
               {getEventChecked('ISSUE_ADDITION') && (
                 <SelectBox
                   isMulti
@@ -283,7 +283,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
               )}
             </div>
             <div className="flex h-12 items-center">
-              <div className="flex flex-1 items-center">
+              <label className="flex flex-1 items-center">
                 <input
                   type="checkbox"
                   className="toggle toggle-sm"
@@ -294,10 +294,10 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                   {t('text.webhook-type.ISSUE_STATUS_CHANGE')}
                 </p>
                 <DescriptionTooltip description="description" />
-              </div>
+              </label>
             </div>
             <div className="flex h-12 items-center">
-              <div className="flex flex-1 items-center">
+              <label className="flex flex-1 items-center">
                 <input
                   type="checkbox"
                   className="toggle toggle-sm"
@@ -306,7 +306,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                 />
                 <p className="ml-2">{t('text.webhook-type.ISSUE_CREATION')}</p>
                 <DescriptionTooltip description="description" />
-              </div>
+              </label>
             </div>
           </div>
           <div className="flex flex-col gap-2">
