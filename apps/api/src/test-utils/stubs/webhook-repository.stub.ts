@@ -28,7 +28,17 @@ export class WebhookRepositoryStub {
     return this.webhook;
   }
 
-  find() {
+  find({ where }) {
+    if (where?.events?.type) {
+      return [
+        {
+          ...this.webhook,
+          events: this.webhook.events.filter(
+            (event) => event.type === where.events.type,
+          ),
+        },
+      ];
+    }
     return [this.webhook];
   }
 

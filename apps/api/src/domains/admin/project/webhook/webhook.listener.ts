@@ -1,0 +1,224 @@
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import { HttpService } from '@nestjs/axios';
+import { Injectable, Logger } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
+import { InjectRepository } from '@nestjs/typeorm';
+import type { AxiosError } from 'axios';
+import { catchError, lastValueFrom, of } from 'rxjs';
+import { Repository } from 'typeorm';
+
+import type { IssueStatusEnum } from '@/common/enums';
+import {
+  EventStatusEnum,
+  EventTypeEnum,
+  WebhookStatusEnum,
+} from '@/common/enums';
+import { FeedbackEntity } from '../../feedback/feedback.entity';
+import { IssueEntity } from '../issue/issue.entity';
+import { WebhookEntity } from './webhook.entity';
+
+@Injectable()
+export class WebhookListener {
+  private logger = new Logger(WebhookListener.name);
+  constructor(
+    @InjectRepository(WebhookEntity)
+    private readonly webhookRepo: Repository<WebhookEntity>,
+    @InjectRepository(FeedbackEntity)
+    private readonly feedbackRepo: Repository<FeedbackEntity>,
+    @InjectRepository(IssueEntity)
+    private readonly issueRepo: Repository<IssueEntity>,
+    private readonly httpService: HttpService,
+  ) {}
+
+  private async sendWebhooks({
+    webhooks,
+    event,
+    data,
+  }: {
+    webhooks: WebhookEntity[];
+    event: EventTypeEnum;
+    data: any;
+  }) {
+    await Promise.all(
+      webhooks.map((webhook) =>
+        lastValueFrom(
+          this.httpService
+            .post(
+              webhook.url,
+              { event, data },
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              },
+            )
+            .pipe(
+              catchError((error: AxiosError) => {
+                this.logger.error({
+                  message: 'Failed to send webhook',
+                  axiosError: error?.response?.data
+                    ? {
+                        data: error.response.data,
+                        status: error.response.status,
+                      }
+                    : { message: error.message },
+                });
+                return of(null);
+              }),
+            ),
+        ).catch((error) => {
+          this.logger.error(
+            'Error sending webhook after RxJS catchError',
+            error,
+          );
+        }),
+      ),
+    );
+  }
+
+  @OnEvent(EventTypeEnum.FEEDBACK_CREATION)
+  async handleFeedbackCreation({ feedbackId }: { feedbackId: number }) {
+    const feedback = await this.feedbackRepo.findOne({
+      where: { id: feedbackId },
+      relations: {
+        channel: {
+          project: true,
+        },
+        issues: true,
+      },
+    });
+    const webhooks = await this.webhookRepo.find({
+      where: {
+        project: { id: feedback.channel.project.id },
+        status: WebhookStatusEnum.ACTIVE,
+        events: {
+          channels: { id: feedback.channel.id },
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.FEEDBACK_CREATION,
+        },
+      },
+    });
+
+    this.sendWebhooks({
+      webhooks,
+      event: EventTypeEnum.FEEDBACK_CREATION,
+      data: { feedback },
+    });
+  }
+
+  @OnEvent(EventTypeEnum.ISSUE_ADDITION)
+  async handleIssueAddition({
+    feedbackId,
+    issueId,
+  }: {
+    feedbackId: number;
+    issueId: number;
+  }) {
+    const feedback = await this.feedbackRepo.findOne({
+      where: { id: feedbackId },
+      relations: {
+        channel: {
+          project: true,
+        },
+        issues: true,
+      },
+    });
+    const webhooks = await this.webhookRepo.find({
+      where: {
+        project: { id: feedback.channel.project.id },
+        status: WebhookStatusEnum.ACTIVE,
+        events: {
+          channels: { id: feedback.channel.id },
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_ADDITION,
+        },
+      },
+    });
+
+    this.sendWebhooks({
+      webhooks,
+      event: EventTypeEnum.ISSUE_ADDITION,
+      data: {
+        feedback,
+        addedIssue: feedback.issues.find((issue) => issue.id === issueId),
+      },
+    });
+  }
+
+  @OnEvent(EventTypeEnum.ISSUE_CREATION)
+  async handleIssueCreation({ issueId }: { issueId: number }) {
+    const issue = await this.issueRepo.findOne({
+      where: { id: issueId },
+      relations: {
+        project: true,
+      },
+    });
+    const webhooks = await this.webhookRepo.find({
+      where: {
+        project: { id: issue.project.id },
+        status: WebhookStatusEnum.ACTIVE,
+        events: {
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_CREATION,
+        },
+      },
+    });
+
+    this.sendWebhooks({
+      webhooks,
+      event: EventTypeEnum.ISSUE_CREATION,
+      data: {
+        issue,
+      },
+    });
+  }
+
+  @OnEvent(EventTypeEnum.ISSUE_STATUS_CHANGE)
+  async handleIssueStatusChange({
+    issueId,
+    previousStatus,
+  }: {
+    issueId: number;
+    previousStatus: IssueStatusEnum;
+  }) {
+    const issue = await this.issueRepo.findOne({
+      where: { id: issueId },
+      relations: {
+        project: true,
+      },
+    });
+    const webhooks = await this.webhookRepo.find({
+      where: {
+        project: { id: issue.project.id },
+        status: WebhookStatusEnum.ACTIVE,
+        events: {
+          status: EventStatusEnum.ACTIVE,
+          type: EventTypeEnum.ISSUE_STATUS_CHANGE,
+        },
+      },
+    });
+
+    this.sendWebhooks({
+      webhooks,
+      event: EventTypeEnum.ISSUE_STATUS_CHANGE,
+      data: {
+        issue,
+        previousStatus,
+      },
+    });
+  }
+}

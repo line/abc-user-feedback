@@ -23,6 +23,7 @@ import {
   FieldStatusEnum,
   FieldTypeEnum,
   isSelectFieldFormat,
+  IssueStatusEnum,
   WebhookStatusEnum,
 } from '@/common/enums';
 import type { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
@@ -33,6 +34,7 @@ import type {
 import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
+import type { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import type { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import type { EventEntity } from '@/domains/admin/project/webhook/event.entity';
 import type { WebhookEntity } from '@/domains/admin/project/webhook/webhook.entity';
@@ -169,33 +171,6 @@ export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
   ),
 ) as FieldEntity[];
 
-export const feedbackDataFixture = fieldsFixture.reduce((prev, curr) => {
-  if (curr.type === FieldTypeEnum.ADMIN) return prev;
-  if (curr.status === FieldStatusEnum.INACTIVE) return prev;
-  const value = getRandomValue(curr.format, curr.options);
-  return {
-    ...prev,
-    [curr.key]: value,
-  };
-}, {});
-
-export const feedbackFixture = {
-  id: faker.number.int(),
-  rawData: feedbackDataFixture,
-  additionalData: {},
-  createdAt: faker.date.past(),
-  updatedAt: faker.date.past(),
-  channel: {
-    id: faker.number.int(),
-    name: faker.string.sample(),
-    description: faker.lorem.lines(2),
-    imageConfig: null,
-    createdAt: faker.date.past(),
-    updatedAt: faker.date.past(),
-  } as ChannelEntity,
-  issues: [],
-} as FeedbackEntity;
-
 export const passwordFixture = faker.internet.password();
 
 export const emailFixture = faker.internet.email();
@@ -245,21 +220,59 @@ export const channelFixture = {
   fields: fieldsFixture,
 } as ChannelEntity;
 
+export const issueFixture = {
+  id: faker.number.int(),
+  name: faker.string.sample(),
+  description: faker.lorem.lines(2),
+  status: getRandomEnumValue(IssueStatusEnum),
+  feedbackCount: faker.number.int(),
+  externalIssueId: faker.string.sample(),
+  project: projectFixture,
+} as IssueEntity;
+
+export const feedbackDataFixture = fieldsFixture.reduce((prev, curr) => {
+  if (curr.type === FieldTypeEnum.ADMIN) return prev;
+  if (curr.status === FieldStatusEnum.INACTIVE) return prev;
+  const value = getRandomValue(curr.format, curr.options);
+  return {
+    ...prev,
+    [curr.key]: value,
+  };
+}, {});
+
+export const feedbackFixture = {
+  id: faker.number.int(),
+  rawData: feedbackDataFixture,
+  additionalData: {},
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+  channel: channelFixture,
+  issues: [],
+} as FeedbackEntity;
+
+export const eventFixture = {
+  id: faker.number.int(),
+  status: EventStatusEnum.ACTIVE,
+  type: getRandomEnumValue(EventTypeEnum),
+  channels: [channelFixture],
+} as EventEntity;
+
+function getAllEvents() {
+  return Object.values(EventTypeEnum).map((type) => ({
+    id: faker.number.int(),
+    status: EventStatusEnum.ACTIVE,
+    type,
+    channels: [channelFixture],
+  }));
+}
+
 export const webhookFixture = {
   id: faker.number.int(),
   name: faker.string.sample(),
   url: faker.internet.url(),
   status: WebhookStatusEnum.ACTIVE,
   project: projectFixture,
-  events: [],
+  events: getAllEvents(),
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
 } as WebhookEntity;
-
-export const eventFixture = {
-  id: faker.number.int(),
-  status: EventStatusEnum.ACTIVE,
-  type: getRandomEnumValue(EventTypeEnum),
-  webhook: webhookFixture,
-  channels: [channelFixture],
-} as EventEntity;

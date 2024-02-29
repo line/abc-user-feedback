@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { mockRepository } from '@/test-utils/util-functions';
@@ -27,4 +28,5 @@ export const IssueServiceProviders = [
     useValue: mockRepository(),
   },
   ...IssueStatisticsServiceProviders,
+  EventEmitter2,
 ];

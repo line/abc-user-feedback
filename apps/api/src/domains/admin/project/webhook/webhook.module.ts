@@ -13,13 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ChannelEntity } from '../../channel/channel/channel.entity';
+import { FeedbackEntity } from '../../feedback/feedback.entity';
+import { IssueEntity } from '../issue/issue.entity';
 import { EventEntity } from './event.entity';
 import { WebhookController } from './webhook.controller';
 import { WebhookEntity } from './webhook.entity';
+import { WebhookListener } from './webhook.listener';
 import { WebhookService } from './webhook.service';
 
 @Module({
@@ -27,9 +31,15 @@ import { WebhookService } from './webhook.service';
     TypeOrmModule.forFeature([WebhookEntity]),
     TypeOrmModule.forFeature([EventEntity]),
     TypeOrmModule.forFeature([ChannelEntity]),
+    TypeOrmModule.forFeature([FeedbackEntity]),
+    TypeOrmModule.forFeature([IssueEntity]),
+    HttpModule.register({
+      timeout: 5000,
+      maxRedirects: 5,
+    }),
   ],
   controllers: [WebhookController],
-  providers: [WebhookService],
+  providers: [WebhookService, WebhookListener],
   exports: [WebhookService],
 })
 export class WebhookModule {}
