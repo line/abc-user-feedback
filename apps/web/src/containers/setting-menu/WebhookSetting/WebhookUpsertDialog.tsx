@@ -309,12 +309,6 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
               </label>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
-            <p className="input-label">Test Integration</p>
-            <button className="btn btn-primary w-[136px]" type="button">
-              Test Webhook
-            </button>
-          </div>
         </form>
       </PopoverModalContent>
     </Popover>
