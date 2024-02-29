@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { ChannelType } from './channel.type';
+
 export type WebhookType = {
   id: number;
   name: string;
@@ -26,7 +28,7 @@ export type WebhookEvent = {
   id: number;
   status: WebhookStatusEnum;
   type: WebhookEventEnum;
-  channelIds: number[];
+  channels: ChannelType[];
   createdAt: string;
 };
 

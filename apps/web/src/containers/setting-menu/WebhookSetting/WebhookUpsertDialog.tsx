@@ -97,7 +97,7 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     reset(
-      defaultValues ?? {
+      convertDefatulValuesToFormValues(defaultValues) ?? {
         events: [
           { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
           { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },
@@ -319,6 +319,19 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
       </PopoverModalContent>
     </Popover>
   );
+};
+
+const convertDefatulValuesToFormValues = (defaultValues?: WebhookType) => {
+  if (!defaultValues) return undefined;
+  return {
+    name: defaultValues.name,
+    url: defaultValues.url,
+    events: defaultValues.events.map((event) => ({
+      status: event.status,
+      type: event.type,
+      channelIds: event.channels.map((channel) => channel.id),
+    })),
+  };
 };
 
 export default WebhookUpsertDialog;

@@ -974,7 +974,7 @@ export interface components {
       type: "FEEDBACK_CREATION" | "ISSUE_CREATION" | "ISSUE_STATUS_CHANGE" | "ISSUE_ADDITION";
       /** @enum {string} */
       status: "ACTIVE" | "INACTIVE";
-      channelIds: number[] | null;
+      channelIds: number[];
     };
     CreateWebhookRequestDto: {
       name: string;
@@ -992,7 +992,7 @@ export interface components {
       status: "ACTIVE" | "INACTIVE";
       /** @enum {string} */
       type: "FEEDBACK_CREATION" | "ISSUE_CREATION" | "ISSUE_STATUS_CHANGE" | "ISSUE_ADDITION";
-      channelIds: number[];
+      channels: components["schemas"]["FindChannelByIdResponseDto"][];
       /** Format: date-time */
       createdAt: string;
     };

@@ -23,20 +23,18 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { useChannels } from '@/hooks';
+import type { ChannelType } from '@/types/channel.type';
 import type { WebhookEventEnum } from '@/types/webhook.type';
 import { toCamelCase } from '@/utils/str';
 
 interface IProps {
   type: WebhookEventEnum;
-  channelIds: number[] | null;
-  projectId: number;
+  channels: ChannelType[];
 }
 
 const WebhookTypePopover: React.FC<IProps> = (props) => {
-  const { channelIds, type, projectId } = props;
+  const { channels, type } = props;
   const { t } = useTranslation();
-  const { data } = useChannels(projectId);
 
   return (
     <Popover>
@@ -50,9 +48,9 @@ const WebhookTypePopover: React.FC<IProps> = (props) => {
           {t('channel-setting-menu.channel-info')}
         </PopoverHeading>
         <div className="m-4 flex min-w-[200px] max-w-[340px] flex-wrap gap-2">
-          {channelIds?.map((id) => (
+          {channels.map(({ id, name }) => (
             <Badge key={id} type="secondary">
-              {data?.items.find((v) => v.id === id)?.name}
+              {name}
             </Badge>
           ))}
         </div>

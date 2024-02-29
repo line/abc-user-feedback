@@ -21,6 +21,7 @@ import {
   EventTypeEnum,
   WebhookStatusEnum,
 } from '@/common/enums';
+import { FindChannelByIdResponseDto } from '@/domains/admin/channel/channel/dtos/responses';
 
 export class GetWebhookResponseEventDto {
   @Expose()
@@ -36,8 +37,8 @@ export class GetWebhookResponseEventDto {
   type: EventTypeEnum;
 
   @Expose()
-  @ApiProperty({ type: [Number] })
-  channelIds: number[];
+  @ApiProperty({ type: [FindChannelByIdResponseDto] })
+  channels: FindChannelByIdResponseDto[];
 
   @Expose()
   @ApiProperty()

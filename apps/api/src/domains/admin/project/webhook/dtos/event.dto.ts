@@ -27,7 +27,7 @@ export class EventDto {
   @IsEnum(EventStatusEnum)
   status: EventStatusEnum;
 
-  @ApiProperty({ type: [Number], nullable: true })
+  @ApiProperty({ type: [Number] })
   @IsArray()
-  channelIds: number[] | null;
+  channelIds: number[];
 }
