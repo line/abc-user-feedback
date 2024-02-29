@@ -50,12 +50,26 @@ export class EventEntity extends CommonEntity {
   @JoinTable()
   channels: ChannelEntity[];
 
-  static from({ webhookId, status, type, channelIds }) {
+  static from({
+    webhookId,
+    status,
+    type,
+    channelIds,
+  }: {
+    webhookId?: number;
+    status: EventStatusEnum;
+    type: EventTypeEnum;
+    channelIds: number[];
+  }) {
     const event = new EventEntity();
     event.status = status;
     event.type = type;
-    event.webhook = new WebhookEntity();
-    event.webhook.id = webhookId;
+
+    if (webhookId) {
+      event.webhook = new WebhookEntity();
+      event.webhook.id = webhookId;
+    }
+
     if (channelIds) {
       event.channels = channelIds.map((channelId) => {
         const channel = new ChannelEntity();

@@ -13,21 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsEnum } from 'class-validator';
-
-import { EventStatusEnum, EventTypeEnum } from '@/common/enums';
-
-export class EventDto {
-  @ApiProperty({ enum: EventTypeEnum })
-  @IsEnum(EventTypeEnum)
-  type: EventTypeEnum;
-
-  @ApiProperty({ enum: EventStatusEnum })
-  @IsEnum(EventStatusEnum)
-  status: EventStatusEnum;
-
-  @ApiProperty({ type: [Number] })
-  @IsArray()
-  channelIds: number[];
-}
+export { default } from './HelpCardDocs';

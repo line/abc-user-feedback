@@ -13,21 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { ChannelType } from './channel.type';
+
 export type WebhookType = {
   id: number;
   name: string;
   url: string;
-  status: 'ACTIVE' | 'INACTIVE';
+  status: WebhookStatusEnum;
   events: WebhookEvent[];
   createdAt: string;
 };
 
 export type WebhookEvent = {
   id: number;
-  status: 'ACTIVE' | 'INACTIVE';
+  status: WebhookStatusEnum;
   type: WebhookEventEnum;
+  channels: ChannelType[];
   createdAt: string;
 };
+
+export type WebhookStatusEnum = 'ACTIVE' | 'INACTIVE';
 
 export type WebhookEventEnum =
   | 'FEEDBACK_CREATION'

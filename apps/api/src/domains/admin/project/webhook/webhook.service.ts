@@ -43,13 +43,13 @@ export class WebhookService {
         event.type,
       )
     ) {
-      if (event.channelIds?.length > 0) {
+      if (event.channelIds.length > 0) {
         const channels = await this.channelRepo.findBy({
           id: In(event.channelIds),
         });
         return channels.length === event.channelIds.length;
       } else {
-        return false;
+        return true;
       }
     } else if (
       [
@@ -57,7 +57,7 @@ export class WebhookService {
         EventTypeEnum.ISSUE_STATUS_CHANGE,
       ].includes(event.type)
     ) {
-      return event.channelIds === null;
+      return event.channelIds.length === 0;
     }
   }
 
@@ -72,15 +72,6 @@ export class WebhookService {
     });
     if (webhookWithSameURL) throw new WebhookAlreadyExistsException();
 
-    const newWebhook = WebhookEntity.from({
-      projectId: dto.projectId,
-      name: dto.name,
-      url: dto.url,
-      status: dto.status,
-    });
-
-    const savedWebhook = await this.repository.save(newWebhook);
-
     const events = (
       await Promise.all(
         dto.events.map(async (event) => {
@@ -91,24 +82,32 @@ export class WebhookService {
       )
     ).map((event) =>
       EventEntity.from({
-        webhookId: savedWebhook.id,
         status: event.status,
         type: event.type,
         channelIds: event.channelIds,
       }),
     );
-    const savedEvents = await this.eventRepo.save(events);
-    savedWebhook.events = savedEvents;
 
-    return savedWebhook;
+    const newWebhook = WebhookEntity.from({
+      projectId: dto.projectId,
+      name: dto.name,
+      url: dto.url,
+      status: dto.status,
+      events,
+    });
+
+    return await this.repository.save(newWebhook);
+
+    // const savedEvents = await this.eventRepo.save(events);
+    // savedWebhook.events = savedEvents;
+
+    // return savedWebhook;
   }
 
   async findById(webhookId: number) {
     const webhook = await this.repository.find({
       where: { id: webhookId },
-      relations: {
-        events: true,
-      },
+      relations: { events: { channels: true } },
     });
 
     return webhook;
@@ -117,9 +116,7 @@ export class WebhookService {
   async findByProjectId(projectId: number) {
     const webhooks = await this.repository.find({
       where: { project: { id: projectId } },
-      relations: {
-        events: true,
-      },
+      relations: { events: { channels: true } },
     });
 
     return webhooks;

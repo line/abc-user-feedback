@@ -25,51 +25,57 @@ import classNames from 'classnames';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
+import { Icon, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
+import { HelpCardDocs, SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { useOAIQuery, usePermissions } from '@/hooks';
-import type { WebhookEvent, WebhookType } from '@/types/webhook.type';
-import WebhookCreateDialog from './WebhookCreateDialog';
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
+import type { WebhookType } from '@/types/webhook.type';
+import WebhookDeleteDialog from './WebhookDeleteDialog';
+import WebhookTypePopover from './WebhookTypePopover';
+import WebhookUpsertDialog from './WebhookUpsertDialog';
 
-type WebhookItemType = Omit<WebhookType, 'id' | 'events'> & {
-  id?: number;
-  events: (Omit<WebhookEvent, 'id'> & { id?: number })[];
-};
+const columnHelper = createColumnHelper<WebhookType>();
 
-const columnHelper = createColumnHelper<WebhookItemType>();
-
-const columns = [
+const getColumns = (projectId: number, refetch: () => Promise<any>) => [
   columnHelper.accessor('status', {
     header: '',
-    cell: ({ getValue }) => {
-      const status = getValue();
+    cell: ({ row }) => {
       return (
-        <input
-          type="checkbox"
-          className={classNames('toggle toggle-sm', {
-            'border-fill-primary bg-fill-primary': status === 'INACTIVE',
-          })}
-          checked={status === 'ACTIVE'}
+        <WebhookSwitch
+          projectId={projectId}
+          row={row.original}
+          refetch={refetch}
         />
       );
     },
+    size: 50,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
     cell: ({ getValue }) => getValue(),
+    size: 75,
   }),
   columnHelper.accessor('url', {
     header: 'URL',
     cell: ({ getValue }) => getValue(),
+    size: 100,
   }),
   columnHelper.accessor('events', {
     header: 'Event',
-    cell: ({ getValue }) =>
-      getValue()
-        .map((v) => v.type)
-        .join(', '),
+    cell: ({ getValue }) => (
+      <div className="flex flex-wrap gap-2.5">
+        {getValue()
+          .filter((v) => v.status === 'ACTIVE')
+          .map((v) => (
+            <WebhookTypePopover
+              key={v.id}
+              channels={v.channels}
+              type={v.type}
+            />
+          ))}
+      </div>
+    ),
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
@@ -78,22 +84,30 @@ const columns = [
   columnHelper.display({
     id: 'edit',
     header: 'Edit',
-    cell: () => (
-      <button className="icon-btn icon-btn-sm icon-btn-tertiary">
-        <Icon name="EditFill" />
-      </button>
+    cell: ({ row }) => (
+      <WebhookUpsertDialog
+        projectId={projectId}
+        defaultValues={row.original}
+        refetch={refetch}
+      >
+        <button className="icon-btn icon-btn-sm icon-btn-tertiary">
+          <Icon name="EditFill" />
+        </button>
+      </WebhookUpsertDialog>
     ),
-    size: 75,
+    size: 50,
   }),
   columnHelper.display({
     id: 'delete',
     header: 'Delete',
-    cell: () => (
-      <button className="icon-btn icon-btn-sm icon-btn-tertiary">
-        <Icon name="TrashFill" />
-      </button>
+    cell: ({ row }) => (
+      <WebhookDeleteDialog
+        projectId={projectId}
+        webhookId={row.original.id}
+        refetch={refetch}
+      />
     ),
-    size: 75,
+    size: 50,
   }),
 ];
 
@@ -104,8 +118,8 @@ interface IProps {
 const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions();
-  const [rows, setRows] = useState<WebhookItemType[]>([]);
-  const { data } = useOAIQuery({
+  const [rows, setRows] = useState<WebhookType[]>([]);
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/webhooks',
     variables: { projectId },
   });
@@ -116,7 +130,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
   }, [data]);
 
   const table = useReactTable({
-    columns,
+    columns: getColumns(projectId, refetch),
     data: rows,
     getCoreRowModel: getCoreRowModel(),
   });
@@ -125,23 +139,23 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     <SettingMenuTemplate
       title={t('project-setting-menu.webhook-integration')}
       action={
-        <WebhookCreateDialog projectId={projectId}>
+        <WebhookUpsertDialog projectId={projectId} refetch={refetch}>
           <button
             className="btn btn-primary"
             disabled={!perms.includes('project_webhook_create')}
           >
-            Webhook {t('button.register')}
+            {t('button.create', { name: 'Webhook' })}
           </button>
-        </WebhookCreateDialog>
+        </WebhookUpsertDialog>
       }
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          {t('help-card.issue-tracker')}
+          <HelpCardDocs i18nKey="help-card.webhook" />
         </p>
-        <div className="relative h-full w-[160px]">
+        <div className="relative h-full w-[90px]">
           <Image
-            src="/assets/images/temp.png"
+            src="/assets/images/webhook-help.png"
             style={{ objectFit: 'contain' }}
             alt="temp"
             fill
@@ -178,6 +192,51 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
         </tbody>
       </table>
     </SettingMenuTemplate>
+  );
+};
+
+interface IWebhookSwitch {
+  projectId: number;
+  row: WebhookType;
+  refetch: () => Promise<any>;
+}
+const WebhookSwitch: React.FC<IWebhookSwitch> = (props) => {
+  const { projectId, row, refetch } = props;
+
+  const { t } = useTranslation();
+  const { mutate } = useOAIMutation({
+    method: 'put',
+    path: '/api/admin/projects/{projectId}/webhooks/{webhookId}',
+    pathParams: { projectId, webhookId: row.id },
+    queryOptions: {
+      async onSuccess() {
+        await refetch();
+        toast.positive({ title: t('toast.save') });
+      },
+      onError(error) {
+        toast.negative({ title: error?.message ?? 'Error' });
+      },
+    },
+  });
+
+  return (
+    <input
+      type="checkbox"
+      className={classNames('toggle toggle-sm', {
+        'border-fill-primary bg-fill-primary': row.status === 'INACTIVE',
+      })}
+      checked={row.status === 'ACTIVE'}
+      onChange={(e) => {
+        mutate({
+          ...row,
+          events: row.events.map((event) => ({
+            ...event,
+            channelIds: event.channels.map((channel) => channel.id),
+          })),
+          status: e.target.checked ? 'ACTIVE' : 'INACTIVE',
+        });
+      }}
+    />
   );
 };
 

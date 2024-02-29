@@ -17,7 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsString } from 'class-validator';
 
 import { WebhookStatusEnum } from '@/common/enums';
-import type { EventDto } from '..';
+import { EventDto } from '..';
 
 export class CreateWebhookRequestDto {
   @ApiProperty()
@@ -28,11 +28,11 @@ export class CreateWebhookRequestDto {
   @IsString()
   url: string;
 
-  @ApiProperty()
+  @ApiProperty({ enum: WebhookStatusEnum })
   @IsEnum(WebhookStatusEnum)
   status: WebhookStatusEnum;
 
-  @ApiProperty()
+  @ApiProperty({ type: [EventDto] })
   @IsArray()
   events: EventDto[];
 }
