@@ -398,7 +398,11 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다."
+    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다.",
+    "webhook-feedback-creation": "이 이벤트는 채널별 피드백이 수집될 때마다 발동됩니다.",
+    "webhook-issue-addition": "이 이벤트는 채널별 피드백에 이슈를 등록할 때마다 발동됩니다.",
+    "webhook-issue-creation": "이 이벤트는 채널에 상관없이 이슈를 생성할 때마다 발동됩니다.",
+    "webhook-issue-status-change": "이 이벤트는 채널에 상관없이 이슈상태를 변경할 때마다 발동됩니다.."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant 정보",

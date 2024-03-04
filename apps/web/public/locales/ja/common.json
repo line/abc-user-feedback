@@ -398,7 +398,11 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
+    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。",
+    "webhook-feedback-creation": "このイベントは、チャネル固有のフィードバックが収集されるたびにトリガーされます。",
+    "webhook-issue-addition": "このイベントは、チャネル固有のフィードバックに問題が登録されるたびにトリガーされます。",
+    "webhook-issue-creation": "このイベントは、チャネルに関係なく、問題が発生するたびにトリガーされます。",
+    "webhook-issue-status-change": "このイベントは、チャネルに関係なく、イシューステータスが変更されるたびにトリガーされます。"
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant情報",
