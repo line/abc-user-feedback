@@ -228,7 +228,7 @@ export const PopoverContent = React.forwardRef<
     <FloatingOverlay
       lockScroll={context.modal}
       className={diabledDimmed ? '' : 'bg-dim'}
-      style={{ display: 'grid', placeItems: 'center', zIndex: 20 }}
+      style={{ display: 'grid', placeItems: 'center', zIndex: 100 }}
     >
       {child}
     </FloatingOverlay>
