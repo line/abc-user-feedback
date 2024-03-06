@@ -112,11 +112,38 @@ export class WebhookListener {
         },
       },
     });
+    const data = {
+      feedback: {
+        id: feedback.id,
+        createdAt: feedback.createdAt,
+        updatedAt: feedback.updatedAt,
+        ...feedback.rawData,
+        ...feedback.additionalData,
+        issues: feedback.issues.map((issue) => ({
+          id: issue.id,
+          createdAt: issue.createdAt,
+          updatedAt: issue.updatedAt,
+          name: issue.name,
+          description: issue.description,
+          status: issue.status,
+          externalIssueId: issue.externalIssueId,
+          feedbackCount: issue.feedbackCount,
+        })),
+      },
+      channel: {
+        id: feedback.channel.id,
+        name: feedback.channel.name,
+      },
+      project: {
+        id: feedback.channel.project.id,
+        name: feedback.channel.project.name,
+      },
+    };
 
     this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.FEEDBACK_CREATION,
-      data: { feedback },
+      data,
     });
   }
 
@@ -148,14 +175,40 @@ export class WebhookListener {
         },
       },
     });
+    const issues = feedback.issues.map((issue) => ({
+      id: issue.id,
+      createdAt: issue.createdAt,
+      updatedAt: issue.updatedAt,
+      name: issue.name,
+      description: issue.description,
+      status: issue.status,
+      externalIssueId: issue.externalIssueId,
+      feedbackCount: issue.feedbackCount,
+    }));
+    const data = {
+      feedback: {
+        id: feedback.id,
+        createdAt: feedback.createdAt,
+        updatedAt: feedback.updatedAt,
+        ...feedback.rawData,
+        ...feedback.additionalData,
+        issues,
+      },
+      channel: {
+        id: feedback.channel.id,
+        name: feedback.channel.name,
+      },
+      project: {
+        id: feedback.channel.project.id,
+        name: feedback.channel.project.name,
+      },
+      addedIssue: issues.find((issue) => issue.id === issueId),
+    };
 
     this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.ISSUE_ADDITION,
-      data: {
-        feedback,
-        addedIssue: feedback.issues.find((issue) => issue.id === issueId),
-      },
+      data,
     });
   }
 
@@ -177,13 +230,27 @@ export class WebhookListener {
         },
       },
     });
+    const data = {
+      issue: {
+        id: issue.id,
+        createdAt: issue.createdAt,
+        updatedAt: issue.updatedAt,
+        name: issue.name,
+        description: issue.description,
+        status: issue.status,
+        externalIssueId: issue.externalIssueId,
+        feedbackCount: issue.feedbackCount,
+      },
+      project: {
+        id: issue.project.id,
+        name: issue.project.name,
+      },
+    };
 
     this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.ISSUE_CREATION,
-      data: {
-        issue,
-      },
+      data,
     });
   }
 
@@ -211,14 +278,28 @@ export class WebhookListener {
         },
       },
     });
+    const data = {
+      issue: {
+        id: issue.id,
+        createdAt: issue.createdAt,
+        updatedAt: issue.updatedAt,
+        name: issue.name,
+        description: issue.description,
+        status: issue.status,
+        externalIssueId: issue.externalIssueId,
+        feedbackCount: issue.feedbackCount,
+      },
+      project: {
+        id: issue.project.id,
+        name: issue.project.name,
+      },
+      previousStatus,
+    };
 
     this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.ISSUE_STATUS_CHANGE,
-      data: {
-        issue,
-        previousStatus,
-      },
+      data,
     });
   }
 }
