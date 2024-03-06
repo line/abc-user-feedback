@@ -28,7 +28,7 @@ const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
       case 'help-card.image-setting':
         return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration';
       case 'help-card.webhook':
-        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#Webhook Feature';
+        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#webhook-feature';
       default:
         return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md';
     }
