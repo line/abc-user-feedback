@@ -21,7 +21,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -32,7 +32,7 @@ import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 import type { WebhookType } from '@/types/webhook.type';
 import WebhookDeleteDialog from './WebhookDeleteDialog';
-import WebhookTypePopover from './WebhookTypePopover';
+import WebhookEventTableCell from './WebhookEventTableCell';
 import WebhookUpsertDialog from './WebhookUpsertDialog';
 
 const columnHelper = createColumnHelper<WebhookType>();
@@ -42,11 +42,13 @@ const getColumns = (projectId: number, refetch: () => Promise<any>) => [
     header: '',
     cell: ({ row }) => {
       return (
-        <WebhookSwitch
-          projectId={projectId}
-          row={row.original}
-          refetch={refetch}
-        />
+        <div className="flex justify-center">
+          <WebhookSwitch
+            projectId={projectId}
+            row={row.original}
+            refetch={refetch}
+          />
+        </div>
       );
     },
     size: 50,
@@ -58,28 +60,33 @@ const getColumns = (projectId: number, refetch: () => Promise<any>) => [
   }),
   columnHelper.accessor('url', {
     header: 'URL',
-    cell: ({ getValue }) => getValue(),
+    cell: ({ getValue }) => (
+      <p className="line-clamp-2 break-all">{getValue()}</p>
+    ),
     size: 100,
   }),
   columnHelper.accessor('events', {
     header: 'Event',
-    cell: ({ getValue }) => (
-      <div className="flex flex-wrap gap-2.5">
+    cell: ({ getValue, row }) => (
+      <div className="my-1 flex flex-wrap gap-x-2.5 gap-y-1">
         {getValue()
           .filter((v) => v.status === 'ACTIVE')
           .map((v) => (
-            <WebhookTypePopover
+            <WebhookEventTableCell
               key={v.id}
               channels={v.channels}
               type={v.type}
+              webhookStatus={row.original.status}
             />
           ))}
       </div>
     ),
+    size: 300,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
+    size: 150,
   }),
   columnHelper.display({
     id: 'edit',
@@ -174,7 +181,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
           {table.getRowModel().rows.map((row) => (
             <tr
               key={row.index}
-              className={classNames({
+              className={clsx({
                 'text-tertiary': row.original.status === 'INACTIVE',
               })}
             >
@@ -222,7 +229,7 @@ const WebhookSwitch: React.FC<IWebhookSwitch> = (props) => {
   return (
     <input
       type="checkbox"
-      className={classNames('toggle toggle-sm', {
+      className={clsx('toggle toggle-sm', {
         'border-fill-primary bg-fill-primary': row.status === 'INACTIVE',
       })}
       checked={row.status === 'ACTIVE'}

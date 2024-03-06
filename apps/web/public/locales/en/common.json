@@ -398,7 +398,11 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Number of feedbacks registered in the issue."
+    "issue-feedback-count": "Number of feedbacks registered in the issue.",
+    "webhook-feedback-creation": "This event is triggered whenever channel-specific feedback is collected.",
+    "webhook-issue-addition": "This event is triggered whenever an issue is registered in the channel-specific feedback.",
+    "webhook-issue-creation": "This event is triggered whenever an issue is generated, regardless of the channel.",
+    "webhook-issue-status-change": "This event is triggered whenever the issue status changes, regardless of the channel."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant Information",

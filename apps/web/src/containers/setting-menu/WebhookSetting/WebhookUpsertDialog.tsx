@@ -48,7 +48,7 @@ type IWebhookEventForm = {
 };
 
 const scheme: Zod.ZodType<IWebhookForm> = z.object({
-  name: z.string(),
+  name: z.string().max(20),
   url: z.string(),
   events: z.array(
     z.object({
@@ -82,18 +82,25 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
 
   const [open, setOpen] = useState(false);
 
-  const { register, setValue, getValues, watch, handleSubmit, reset } =
-    useForm<IWebhookForm>({
-      resolver: zodResolver(scheme),
-      defaultValues: {
-        events: [
-          { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
-          { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },
-          { type: 'ISSUE_STATUS_CHANGE', channelIds: [], status: 'INACTIVE' },
-          { type: 'ISSUE_CREATION', channelIds: [], status: 'INACTIVE' },
-        ],
-      },
-    });
+  const {
+    register,
+    setValue,
+    getValues,
+    watch,
+    handleSubmit,
+    reset,
+    formState,
+  } = useForm<IWebhookForm>({
+    resolver: zodResolver(scheme),
+    defaultValues: {
+      events: [
+        { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
+        { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },
+        { type: 'ISSUE_STATUS_CHANGE', channelIds: [], status: 'INACTIVE' },
+        { type: 'ISSUE_CREATION', channelIds: [], status: 'INACTIVE' },
+      ],
+    },
+  });
 
   useEffect(() => {
     reset(
@@ -146,11 +153,18 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
         ? 'ACTIVE'
         : 'INACTIVE';
 
+      const channelIds =
+        status === 'ACTIVE' &&
+        (type === 'FEEDBACK_CREATION' || type === 'ISSUE_ADDITION')
+          ? data?.items.map((v) => v.id) ?? []
+          : [];
+
       setValue(
         'events',
-        getValues('events').map((event) =>
-          event.type === type ? { ...event, status } : event,
-        ),
+        getValues('events').map((event) => {
+          if (event.type !== type) return event;
+          return event.type === type ? { ...event, status, channelIds } : event;
+        }),
       );
     };
 
@@ -175,9 +189,20 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
   const onChangeEventChannels = (type: WebhookEventEnum, ids: number[]) => {
     setValue(
       'events',
-      getValues('events').map((event) =>
-        event.type === type ? { ...event, channelIds: ids } : event,
-      ),
+      getValues('events').map((event) => {
+        if (event.type !== type) return event;
+        if (
+          ids.length === 0 &&
+          (type === 'FEEDBACK_CREATION' || type === 'ISSUE_ADDITION')
+        ) {
+          return {
+            ...event,
+            status: 'INACTIVE' as WebhookStatusEnum,
+            channelIds: ids,
+          };
+        }
+        return { ...event, channelIds: ids };
+      }),
     );
   };
 
@@ -214,12 +239,20 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
             placeholder={t('placeholder', { name: 'Name' })}
             required
             {...register('name')}
+            isSubmitted={formState.isSubmitted}
+            isSubmitting={formState.isSubmitting}
+            isValid={!formState.errors.name}
+            hint={formState.errors.name?.message}
           />
           <Input
             label="URL"
             placeholder={t('placeholder', { name: 'URL' })}
             required
             {...register('url')}
+            isSubmitted={formState.isSubmitted}
+            isSubmitting={formState.isSubmitting}
+            isValid={!formState.errors.name}
+            hint={formState.errors.url?.message}
           />
           <div className="flex flex-col gap-2">
             <p className="input-label">Event</p>
@@ -234,7 +267,9 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                 <p className="ml-2">
                   {t('text.webhook-type.FEEDBACK_CREATION')}
                 </p>
-                <DescriptionTooltip description="description" />
+                <DescriptionTooltip
+                  description={t('tooltip.webhook-feedback-creation')}
+                />
               </label>
               {getEventChecked('FEEDBACK_CREATION') && (
                 <SelectBox
@@ -263,7 +298,9 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                   onChange={toggleEventType('ISSUE_ADDITION')}
                 />
                 <p className="ml-2">{t('text.webhook-type.ISSUE_ADDITION')}</p>
-                <DescriptionTooltip description="description" />
+                <DescriptionTooltip
+                  description={t('tooltip.webhook-issue-addition')}
+                />
               </label>
               {getEventChecked('ISSUE_ADDITION') && (
                 <SelectBox
@@ -293,7 +330,9 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                 <p className="ml-2">
                   {t('text.webhook-type.ISSUE_STATUS_CHANGE')}
                 </p>
-                <DescriptionTooltip description="description" />
+                <DescriptionTooltip
+                  description={t('tooltip.webhook-issue-status-change')}
+                />
               </label>
             </div>
             <div className="flex h-12 items-center">
@@ -305,7 +344,9 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
                   onChange={toggleEventType('ISSUE_CREATION')}
                 />
                 <p className="ml-2">{t('text.webhook-type.ISSUE_CREATION')}</p>
-                <DescriptionTooltip description="description" />
+                <DescriptionTooltip
+                  description={t('tooltip.webhook-issue-creation')}
+                />
               </label>
             </div>
           </div>

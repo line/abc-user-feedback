@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
 import { Trans } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
@@ -22,6 +23,16 @@ interface IProps {
 }
 
 const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
+  const url = useMemo(() => {
+    switch (i18nKey) {
+      case 'help-card.image-setting':
+        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration';
+      case 'help-card.webhook':
+        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#webhook-feature';
+      default:
+        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md';
+    }
+  }, [i18nKey]);
   return (
     <Trans
       i18nKey={i18nKey}
@@ -31,25 +42,13 @@ const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
             name="ExpandPopup"
             className="text-blue-primary cursor-pointer"
             size={12}
-            onClick={() => {
-              if (typeof window === 'undefined') return;
-              window.open(
-                'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
-                '_blank',
-              );
-            }}
+            onClick={() => window.open(url, '_blank')}
           />
         ),
         docs: (
           <span
             className="text-blue-primary cursor-pointer"
-            onClick={() => {
-              if (typeof window === 'undefined') return;
-              window.open(
-                'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
-                '_blank',
-              );
-            }}
+            onClick={() => window.open(url, '_blank')}
           />
         ),
       }}
