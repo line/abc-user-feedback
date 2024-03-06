@@ -42,11 +42,13 @@ const getColumns = (projectId: number, refetch: () => Promise<any>) => [
     header: '',
     cell: ({ row }) => {
       return (
-        <WebhookSwitch
-          projectId={projectId}
-          row={row.original}
-          refetch={refetch}
-        />
+        <div className="flex justify-center">
+          <WebhookSwitch
+            projectId={projectId}
+            row={row.original}
+            refetch={refetch}
+          />
+        </div>
       );
     },
     size: 50,
@@ -79,12 +81,12 @@ const getColumns = (projectId: number, refetch: () => Promise<any>) => [
           ))}
       </div>
     ),
-    size: 200,
+    size: 300,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
-    size: 50,
+    size: 150,
   }),
   columnHelper.display({
     id: 'edit',
