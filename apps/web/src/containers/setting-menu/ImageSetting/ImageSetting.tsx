@@ -221,7 +221,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
                   onClick={() => {
                     if (typeof window === 'undefined') return;
                     window.open(
-                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
+                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
                       '_blank',
                     );
                   }}
@@ -233,7 +233,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
                   onClick={() => {
                     if (typeof window === 'undefined') return;
                     window.open(
-                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
+                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
                       '_blank',
                     );
                   }}
