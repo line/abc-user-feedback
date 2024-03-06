@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -24,22 +25,31 @@ import {
 } from '@ufb/ui';
 
 import type { ChannelType } from '@/types/channel.type';
-import type { WebhookEventEnum } from '@/types/webhook.type';
+import type { WebhookEventEnum, WebhookStatusEnum } from '@/types/webhook.type';
 import { toCamelCase } from '@/utils/str';
 
 interface IProps {
+  webhookStatus: WebhookStatusEnum;
   type: WebhookEventEnum;
   channels: ChannelType[];
 }
 
-const WebhookTypePopover: React.FC<IProps> = (props) => {
-  const { channels, type } = props;
+const WebhookEventTableCell: React.FC<IProps> = (props) => {
+  const { channels, type, webhookStatus } = props;
   const { t } = useTranslation();
+  if (type === 'ISSUE_CREATION' || type === 'ISSUE_STATUS_CHANGE') {
+    return <p>{toCamelCase(t(`text.webhook-type.${type}`))}</p>;
+  }
 
   return (
     <Popover>
-      <PopoverTrigger>
-        <span className="text-blue-primary font-12-regular cursor-pointer underline">
+      <PopoverTrigger disabled={webhookStatus === 'INACTIVE'}>
+        <span
+          className={clsx(
+            'text-blue-primary font-12-regular cursor-pointer underline',
+            { 'text-tertiary': webhookStatus === 'INACTIVE' },
+          )}
+        >
           {toCamelCase(t(`text.webhook-type.${type}`))}
         </span>
       </PopoverTrigger>
@@ -59,4 +69,4 @@ const WebhookTypePopover: React.FC<IProps> = (props) => {
   );
 };
 
-export default WebhookTypePopover;
+export default WebhookEventTableCell;
