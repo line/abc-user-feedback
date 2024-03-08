@@ -100,14 +100,14 @@ const InputIssueTracker: React.FC<IProps> = () => {
     mutate({
       name: projectInfo.name,
       description: projectInfo.description,
-      apiKeys: apiKeys,
-      issueTracker: { data: issueTracker as any },
+      timezone: projectInfo.timezone,
       members: members.map((member) => ({
         roleName: roles.find((role) => role.id === member.roleId)?.name ?? '',
         userId: member.user.id,
       })),
-      roles: roles,
-      timezone: projectInfo.timezone,
+      issueTracker: { data: issueTracker as any },
+      apiKeys,
+      roles,
     });
   };
 
@@ -126,7 +126,7 @@ const InputIssueTracker: React.FC<IProps> = () => {
       />
       <TextInput
         label="Project Key"
-        placeholder="Delivery"
+        placeholder="PROJECT"
         value={ticketKey}
         onChange={(e) => onChangeIssueTracker('ticketKey', e.target.value)}
       />

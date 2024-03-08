@@ -29,7 +29,7 @@ export { RemoveIssueDto } from './remove-issue.dto';
 export { AddIssueDto } from './add-issue.dto';
 export { CountByProjectIdDto } from './count-by-project-id.dto';
 export { DeleteByIdsDto } from './delete-by-ids.dto';
-
+export { ImageUploadUrlTestDto } from './image-upload-url-test.dto';
 export { ScrollFeedbacksDto } from './scroll-feedbacks.dto';
 export { GenerateExcelDto } from './generate-excel.dto';
 export { OsQueryDto, MustItem } from './os-query.dto';

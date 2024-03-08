@@ -13,3 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString } from 'class-validator';
+
+export class ImageUploadUrlTestRequestDto {
+  @ApiProperty()
+  @IsString()
+  accessKeyId: string;
+
+  @ApiProperty()
+  @IsString()
+  secretAccessKey: string;
+
+  @ApiProperty()
+  @IsString()
+  endpoint: string;
+
+  @ApiProperty()
+  @IsString()
+  region: string;
+
+  @ApiProperty()
+  @IsString()
+  bucket: string;
+}

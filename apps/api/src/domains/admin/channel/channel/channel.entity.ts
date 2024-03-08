@@ -35,6 +35,7 @@ export interface ImageConfig {
   endpoint: string;
   region: string;
   bucket: string;
+  domainWhiteList: string[];
 }
 
 @Entity('channels')

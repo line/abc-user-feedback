@@ -32,7 +32,7 @@ const RoleSection: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <CreateSectionTemplate title={t('main.setting.subtitle.role-mgmt')}>
+    <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
       <RoleSettingTable
         roles={data?.roles ?? []}
         onDelete={() => {}}

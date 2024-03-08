@@ -17,7 +17,6 @@ ABC User Feedback provides the following features:
 ![role management image](./assets/05-role-management.png)
 ![dashboard image](./assets/06-dashboard.png)
 
-
 ## Getting Started
 
 The frontend is built with NextJS and the backend is built with NestJS. We provide Docker images for fast and easy setup.
@@ -114,6 +113,10 @@ yarn turbo run dev --filter=web
 yarn turbo run dev --filter=api
 ```
 
+### ADMIN WEB GUIDE
+
+For detailed information on using the admin web interface, please refer to our [Admin Web Guide](./GUIDE.md).
+
 ### Build Docker Image
 
 For your code build, you can build docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
@@ -151,4 +154,3 @@ under the License.
 ```
 
 See [LICENSE](./LICENSE) for more details.
-

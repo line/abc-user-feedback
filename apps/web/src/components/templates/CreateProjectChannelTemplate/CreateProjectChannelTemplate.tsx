@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment } from 'react';
+import React, { Fragment } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
@@ -24,14 +24,16 @@ import { Path } from '@/constants/path';
 
 interface IProps<T extends string> extends React.PropsWithChildren {
   type: 'project' | 'channel';
-  helpText: Record<T, string>;
+  helpText: Record<T, string | React.ReactNode>;
   stepObj: Record<T, string>;
   currentStepIndex: number;
   completeStepIndex: number;
   currentStep: T;
 }
 
-function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
+const CreateProjectChannelTemplate = <T extends string>(
+  props: IProps<T>,
+): React.ReactNode => {
   const {
     type,
     helpText,
@@ -55,7 +57,7 @@ function CreateProjectChannelTemplate<T extends string>(props: IProps<T>) {
       {children}
     </div>
   );
-}
+};
 
 const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
   const { t } = useTranslation();
@@ -157,7 +159,7 @@ const Stepper: React.FC<IStepperProps> = (props) => {
   );
 };
 
-const Helper: React.FC<{ text: string }> = ({ text }) => {
+const Helper: React.FC<{ text: string | React.ReactNode }> = ({ text }) => {
   const { t } = useTranslation();
   return (
     <div className="border-fill-secondary rounded border px-6 py-4">

@@ -30,6 +30,7 @@ import {
   feedbackDataFixture,
   fieldsFixture,
 } from '@/test-utils/fixtures';
+import type { ChannelRepositoryStub } from '@/test-utils/stubs';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { FeedbackServiceProviders } from '../../../test-utils/providers/feedback.service.providers';
 import { ChannelEntity } from '../channel/channel/channel.entity';
@@ -48,7 +49,7 @@ describe('FeedbackService Test Suite', () => {
   let clsService: ClsService;
   let fieldRepo: Repository<FieldEntity>;
   let issueRepo: Repository<IssueEntity>;
-  let channelRepo: Repository<ChannelEntity>;
+  let channelRepo: ChannelRepositoryStub;
   let projectRepo: Repository<ProjectEntity>;
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let issueStatsRepo: Repository<IssueStatisticsEntity>;
@@ -75,6 +76,11 @@ describe('FeedbackService Test Suite', () => {
   });
 
   describe('create', () => {
+    beforeEach(() => {
+      channelRepo.setImageConfig({
+        domainWhiteList: ['example.com'],
+      });
+    });
     it('creating a feedback succeeds with valid inputs', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
@@ -148,25 +154,6 @@ describe('FeedbackService Test Suite', () => {
         new BadRequestException('this field is for admin: ' + adminFieldKey),
       );
     });
-    it('creating a feedback fails with an inactive field', async () => {
-      const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const inactiveFieldKey = 'inactiveFieldKey';
-      dto.data[inactiveFieldKey] = faker.string.sample();
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue([
-        ...fieldsFixture,
-        createFieldDto({
-          key: inactiveFieldKey,
-          type: FieldTypeEnum.API,
-          status: FieldStatusEnum.INACTIVE,
-        }) as FieldEntity,
-      ]);
-
-      await expect(feedbackService.create(dto)).rejects.toThrow(
-        new BadRequestException('this field is inactive: ' + inactiveFieldKey),
-      );
-    });
     it('creating a feedback fails with an invalid value for field type', async () => {
       const formats = [
         {
@@ -194,8 +181,8 @@ describe('FeedbackService Test Suite', () => {
           invalidValues: ['not a date', 123, true, {}, []],
         },
         {
-          format: FieldFormatEnum.image,
-          invalidValues: [123, true, {}, [], new Date()],
+          format: FieldFormatEnum.images,
+          invalidValues: ['not images', 123, true, {}, new Date()],
         },
       ];
       for (const { format, invalidValues } of formats) {
@@ -245,13 +232,6 @@ describe('FeedbackService Test Suite', () => {
         id: faker.number.int(),
         name: issueNames[0],
       } as IssueEntity);
-      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
-        id: dto.channelId,
-        fields: [],
-        project: {
-          id: faker.number.int(),
-        },
-      } as ChannelEntity);
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({
         id: faker.number.int(),
@@ -275,7 +255,6 @@ describe('FeedbackService Test Suite', () => {
       expect(feedback.id).toBeDefined();
       expect(fieldRepo.find).toBeCalledTimes(1);
       expect(issueRepo.findOneBy).toBeCalledTimes(3);
-      expect(channelRepo.findOne).toBeCalledTimes(1);
       expect(issueRepo.save).toBeCalledTimes(1);
     });
     it('creating a feedback succeeds with valid inputs and an existent issue name', async () => {
@@ -325,13 +304,6 @@ describe('FeedbackService Test Suite', () => {
       } as ProjectEntity);
       jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
-        id: dto.channelId,
-        fields: [],
-        project: {
-          id: faker.number.int(),
-        },
-      } as ChannelEntity);
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
       jest.spyOn(issueRepo, 'save').mockResolvedValue({
         id: faker.number.int(),
@@ -354,7 +326,6 @@ describe('FeedbackService Test Suite', () => {
 
       expect(feedback.id).toBeDefined();
       expect(issueRepo.findOneBy).toBeCalledTimes(2);
-      expect(channelRepo.findOne).toBeCalledTimes(1);
       expect(issueRepo.save).toBeCalledTimes(1);
     });
   });

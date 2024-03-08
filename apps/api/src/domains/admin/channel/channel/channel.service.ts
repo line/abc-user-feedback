@@ -13,12 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import {
+  ListBucketsCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Transactional } from 'typeorm-transactional';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { ProjectService } from '@/domains/admin/project/project/project.service';
+import type {
+  CreateImageUploadUrlDto,
+  ImageUploadUrlTestDto,
+} from '../../feedback/dtos';
 import { FieldService } from '../field/field.service';
 import { ChannelMySQLService } from './channel.mysql.service';
 import type {
@@ -72,7 +82,7 @@ export class ChannelService {
 
   @Transactional()
   async updateInfo(channelId: number, dto: UpdateChannelDto) {
-    await this.channelMySQLService.update(channelId, dto);
+    return await this.channelMySQLService.update(channelId, dto);
   }
 
   @Transactional()
@@ -89,6 +99,53 @@ export class ChannelService {
       await this.osRepository.deleteIndex(channelId.toString());
     }
 
-    await this.channelMySQLService.delete(channelId);
+    return await this.channelMySQLService.delete(channelId);
+  }
+
+  async createImageUploadUrl(dto: CreateImageUploadUrlDto) {
+    const {
+      projectId,
+      channelId,
+      accessKeyId,
+      secretAccessKey,
+      endpoint,
+      region,
+      bucket,
+      extension,
+    } = dto;
+
+    const s3 = new S3Client({
+      credentials: { accessKeyId, secretAccessKey },
+      endpoint,
+      region,
+    });
+
+    const command = new PutObjectCommand({
+      Bucket: bucket,
+      Key: `${projectId}_${channelId}_${Date.now()}.${extension}`,
+      ContentType: 'image/*',
+      ACL: 'public-read',
+    });
+
+    return await getSignedUrl(s3, command, { expiresIn: 60 * 60 });
+  }
+
+  async isValidImageConfig(dto: ImageUploadUrlTestDto) {
+    const { accessKeyId, secretAccessKey, endpoint, region } = dto;
+
+    const s3 = new S3Client({
+      credentials: { accessKeyId, secretAccessKey },
+      endpoint,
+      region,
+    });
+
+    const command = new ListBucketsCommand({});
+
+    try {
+      await s3.send(command);
+      return true;
+    } catch {
+      return false;
+    }
   }
 }

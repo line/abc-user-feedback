@@ -41,10 +41,12 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
+
   const { data: apiKeysData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/api-keys',
     variables: { projectId },
   });
+
   const apiKey = useMemo(
     () => apiKeysData?.items.find((v) => !v.deletedAt) ?? null,
     [apiKeysData],
@@ -70,6 +72,9 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
           break;
         case 'multiSelect':
           body[key] = `[${field.options.map((v) => `'${v.name}'`).join(', ')}]`;
+          break;
+        case 'images':
+          body[key] = `URL[]`;
           break;
         default:
           break;

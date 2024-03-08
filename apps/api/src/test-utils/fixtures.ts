@@ -110,8 +110,8 @@ export const getRandomValue = (
             .map((option) => option.key);
     case FieldFormatEnum.date:
       return faker.date.anytime().toISOString();
-    case FieldFormatEnum.image:
-      return faker.string.sample();
+    case FieldFormatEnum.images:
+      return ['https://example.com/' + faker.string.sample()];
     default:
       throw new Error('Invalid field type ');
   }
@@ -218,3 +218,20 @@ export const tenantFixture = {
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
 } as TenantEntity;
+
+export const channelFixture = {
+  id: faker.number.int(),
+  name: faker.string.sample(),
+  description: faker.lorem.lines(2),
+  imageConfig: null,
+  createdAt: faker.date.past(),
+  updatedAt: faker.date.past(),
+  project: {
+    id: faker.number.int(),
+    name: faker.string.sample(),
+    description: faker.lorem.lines(2),
+    createdAt: faker.date.past(),
+    updatedAt: faker.date.past(),
+  },
+  fields: fieldsFixture,
+} as ChannelEntity;

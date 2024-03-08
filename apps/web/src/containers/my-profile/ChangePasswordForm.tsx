@@ -59,7 +59,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
     path: '/api/admin/users/password/change',
     queryOptions: {
       async onSuccess() {
-        toast.positive({ title: t('toast.save') });
+        toast.accent({ title: t('toast.save') });
         reset({ confirmNewPassword: '', newPassword: '', password: '' });
       },
       onError(error) {

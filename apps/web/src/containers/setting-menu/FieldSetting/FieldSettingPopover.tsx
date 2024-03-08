@@ -254,15 +254,24 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 {t('main.setting.same-key')}
               </label>
             </div>
-            <SelectBox
-              label="Field Format"
-              onChange={(value) => value?.key && setValue('format', value?.key)}
-              options={FieldFormatEnumList.map((v) => ({ key: v, name: v }))}
-              value={{ key: watch('format'), name: watch('format') }}
-              isDisabled={isOriginalData}
-              getOptionValue={(option) => option.key}
-              getOptionLabel={(option) => option.name}
-            />
+            <div>
+              <SelectBox
+                label="Field Format"
+                onChange={(value) =>
+                  value?.key && setValue('format', value?.key)
+                }
+                options={FieldFormatEnumList.map((v) => ({ key: v, name: v }))}
+                value={{ key: watch('format'), name: watch('format') }}
+                isDisabled={isOriginalData}
+                getOptionValue={(option) => option.key}
+                getOptionLabel={(option) => option.name}
+              />
+              {watch('format') === 'images' && (
+                <p className="text-primary font-12-regular mt-2">
+                  {t('hint.image-format')}
+                </p>
+              )}
+            </div>
             {(watch('format') === 'select' ||
               watch('format') === 'multiSelect') && (
               <div>
@@ -289,6 +298,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   isSubmitted={optionSubmitted}
                   hint={formState.errors.options?.message}
                 />
+
                 {(watch('options') ?? []).length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-2">
                     {watch('options')?.map((v, i) => (
@@ -329,7 +339,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                       e.target.checked ? setValue('type', 'ADMIN') : {}
                     }
                     checked={watch('type') === 'ADMIN'}
-                    disabled={isOriginalData}
+                    disabled={isOriginalData || watch('format') === 'images'}
                   />
                   ADMIN
                 </label>

@@ -28,12 +28,9 @@ interface IProps {
   refetch: () => void;
 }
 
-const IssueSetting: React.FC<IProps> = ({
-  issue: issue,
-  projectId,
-  onClose,
-  refetch,
-}) => {
+const IssueSetting: React.FC<IProps> = (props) => {
+  const { issue, projectId, onClose, refetch } = props;
+
   const { t } = useTranslation();
   const perms = usePermissions();
 

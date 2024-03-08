@@ -31,6 +31,8 @@ import {
   ChannelInfoSetting,
   ChannelSettingMenu,
   FieldSetting,
+  ImageSetting,
+  IssueTrackerSetting,
   MemberSetting,
   ProjectDeleteSetting,
   ProjectInfoSetting,
@@ -39,7 +41,6 @@ import {
   SignUpSetting,
   TenantInfoSetting,
   TenantSettingMenu,
-  TicketSetting,
   UserSetting,
 } from '@/containers/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
@@ -87,6 +88,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         break;
       case 'CHANNEL_INFO':
       case 'FIELD_MANAGEMENT':
+      case 'IMAGE_UPLOAD_SETTING':
       case 'DELETE_CHANNEL':
         setShowList([2, 3]);
         break;
@@ -152,7 +154,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <APIKeySetting projectId={projectId} />
             )}
             {settingMenu === 'TICKET_MANAGEMENT' && (
-              <TicketSetting projectId={projectId} />
+              <IssueTrackerSetting projectId={projectId} />
             )}
             {settingMenu === 'DELETE_PROJECT' && (
               <ProjectDeleteSetting projectId={projectId} />
@@ -162,6 +164,9 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             )}
             {settingMenu === 'FIELD_MANAGEMENT' && channelId && (
               <FieldSetting projectId={projectId} channelId={channelId} />
+            )}
+            {settingMenu === 'IMAGE_UPLOAD_SETTING' && channelId && (
+              <ImageSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'DELETE_CHANNEL' && channelId && (
               <ChannelDeleteSetting

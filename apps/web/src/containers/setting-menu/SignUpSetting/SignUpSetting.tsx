@@ -59,6 +59,7 @@ const scheme: Zod.ZodType<ISignUpInfoForm> = z.object({
     })
     .nullable(),
 });
+
 type DomainStateType = {
   isSubmitted: boolean;
   isValid: boolean;
@@ -113,7 +114,7 @@ const SignUpSetting: React.FC<IProps> = () => {
   };
 
   const onClickAdd = () => {
-    setDomainState({ isSubmitted: true, isValid: false });
+    setDomainState({ isSubmitted: true, isValid: true });
     if (!currentDomain || currentDomain.length < 1) {
       setDomainState((prev) => ({
         ...prev,
@@ -137,11 +138,9 @@ const SignUpSetting: React.FC<IProps> = () => {
     setValue(`allowDomains.${(watch('allowDomains') ?? []).length}`, domain, {
       shouldDirty: true,
     });
+
     setCurrentDomain('');
-    setDomainState((prev) => ({
-      ...prev,
-      isValid: true,
-    }));
+    setDomainState((prev) => ({ ...prev, isValid: true }));
   };
 
   const onSubmit = (input: ISignUpInfoForm) => {
@@ -158,7 +157,7 @@ const SignUpSetting: React.FC<IProps> = () => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.sign-up-mgmt')}
+      title={t('tenant-setting-menu.sign-up-mgmt')}
       actionBtn={{
         children: t('button.save'),
         onClick: handleSubmit(onSubmit),

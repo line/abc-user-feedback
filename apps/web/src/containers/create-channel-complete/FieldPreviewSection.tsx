@@ -27,7 +27,7 @@ const FieldPreviewSection: React.FC<IProps> = ({ fields }) => {
   const { t } = useTranslation();
   return (
     <CreateSectionTemplate
-      title={t('main.create-channel.stepper-text.field-preview')}
+      title={'Field ' + t('main.setting.field-mgmt.preview')}
     >
       <PreviewTable fields={fields} />
     </CreateSectionTemplate>

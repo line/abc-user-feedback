@@ -216,11 +216,12 @@ export const PopoverContent = React.forwardRef<
       </div>
     </FloatingFocusManager>
   );
+
   const modalChild = context.modal ? (
     <FloatingOverlay
       lockScroll={context.modal}
       className="bg-dim"
-      style={{ display: 'grid', placeItems: 'center', zIndex: 50 }}
+      style={{ display: 'grid', placeItems: 'center', zIndex: 100 }}
     >
       {child}
     </FloatingOverlay>

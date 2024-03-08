@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
+import Image from 'next/image';
 import {
   autoUpdate,
   FloatingFocusManager,
@@ -31,10 +33,11 @@ import { Badge, Icon } from '@ufb/ui';
 
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor } from '@/constants/issues';
-import { useFeedbackSearch, useOAIQuery } from '@/hooks';
+import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
 import type { FieldType } from '@/types/field.type';
 import type { IssueType } from '@/types/issue.type';
 import FeedbackDetailCell from './FeedbackDetailCell';
+import FeedbackDetailIssueCell from './FeedbackDetailIssueCell';
 
 interface IProps {
   id: number;
@@ -69,6 +72,30 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
 
   const { getFloatingProps } = useInteractions([click, dismiss, role]);
 
+  const idField = useMemo(
+    () => channelData?.fields.find((field) => field.key === 'id') ?? null,
+    [channelData?.fields],
+  );
+  const issuesField = useMemo(
+    () => channelData?.fields.find((field) => field.key === 'issues') ?? null,
+    [channelData?.fields],
+  );
+  const createdField = useMemo(
+    () =>
+      channelData?.fields.find((field) => field.key === 'createdAt') ?? null,
+    [channelData?.fields],
+  );
+  const updatedField = useMemo(
+    () =>
+      channelData?.fields.find((field) => field.key === 'updatedAt') ?? null,
+    [channelData?.fields],
+  );
+
+  const feedbackFields = useMemo(() => {
+    if (!channelData?.fields) return [];
+    return channelData?.fields.filter((field) => field.type !== 'DEFAULT');
+  }, [channelData?.fields]);
+
   return (
     <FloatingPortal>
       <FloatingFocusManager context={context} modal>
@@ -97,8 +124,45 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
               </div>
               <table className="table-fixed border-separate border-spacing-y-5">
                 <tbody>
-                  {channelData?.fields.sort(fieldSortType).map((field) => (
-                    <tr key={field.name}>
+                  <tr>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {idField?.name}
+                    </th>
+                    <td width="260" className="align-text-top">
+                      {JSON.stringify(feedbackData[idField?.key ?? ''])}
+                    </td>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {issuesField?.name}
+                    </th>
+                    <td width="260" className="overflow-hidden">
+                      <FeedbackDetailIssueCell
+                        issues={
+                          feedbackData[issuesField?.key ?? ''] ??
+                          ([] as IssueType[])
+                        }
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {createdField?.name}
+                    </th>
+                    <td>
+                      {dayjs(feedbackData[createdField?.key ?? '']).format(
+                        DATE_TIME_FORMAT,
+                      )}
+                    </td>
+                    <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
+                      {updatedField?.name}
+                    </th>
+                    <td>
+                      {dayjs(feedbackData[updatedField?.key ?? '']).format(
+                        DATE_TIME_FORMAT,
+                      )}
+                    </td>
+                  </tr>
+                  {feedbackFields.sort(fieldSortType).map((field) => (
+                    <tr key={field.id}>
                       <th className="font-14-regular text-secondary min-w-[80px] max-w-[80px] break-words text-left align-text-top">
                         {field.name}
                       </th>
@@ -127,6 +191,8 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           dayjs(feedbackData[field.key]).format(
                             DATE_TIME_FORMAT,
                           )
+                        ) : field.format === 'images' ? (
+                          <ImageSlider urls={feedbackData[field.key] ?? []} />
                         ) : (
                           feedbackData[field.key]
                         )}
@@ -142,6 +208,76 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
     </FloatingPortal>
   );
 };
+
+interface IImageSliderProps {
+  urls: string[];
+}
+const ImageSlider: React.FC<IImageSliderProps> = ({ urls }) => {
+  const {
+    containerRef,
+    scrollLeft,
+    scrollRight,
+    showLeftButton,
+    showRightButton,
+  } = useHorizontalScroll({
+    defaultRightButtonShown: urls.length > 4,
+    scrollGap: 140,
+  });
+  return (
+    <div className="relative w-full overflow-hidden">
+      <div className="top-0 w-full">
+        {showRightButton && (
+          <button
+            onClick={scrollRight}
+            className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute right-0 z-10"
+          >
+            <Icon name="ArrowRight" />
+          </button>
+        )}
+        {showLeftButton && (
+          <button
+            onClick={scrollLeft}
+            className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute left-0 z-10"
+          >
+            <Icon name="ArrowLeft" />
+          </button>
+        )}
+      </div>
+      <div
+        className="overflow-hidden"
+        ref={containerRef}
+        style={{ width: 580 }}
+      >
+        <div className="flex gap-2">
+          {urls?.map((url) => (
+            <div
+              key={url}
+              className="relative shrink-0 cursor-pointer overflow-hidden rounded"
+              style={{ width: 140, height: 80 }}
+              onClick={() => window.open(url, '_blank')}
+            >
+              <div
+                style={{ background: 'var(--text-color-quaternary)' }}
+                className="absolute left-0 top-0 z-10 h-full w-full"
+              />
+              <Icon
+                name="Search"
+                className="text-above-primary absolute-center absolute left-1/2 top-1/2 z-20 text-white"
+              />
+              <Image
+                src={url}
+                alt="preview"
+                className="h-full w-full object-cover"
+                fill
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const fieldSortType = (a: FieldType, b: FieldType) => {
   const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
   const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;

@@ -29,7 +29,7 @@ export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
   feedback_download_read: 'Download Feedback',
   feedback_update: 'Edit Feedback',
   feedback_delete: 'Delete Feedback',
-  feedback_issue_update: 'Attach/Dettach Issue in Feedback',
+  feedback_issue_update: 'Attach/Detach Issue in Feedback',
   issue_create: 'Create Issue',
   issue_delete: 'Delete Issue',
 };
@@ -60,29 +60,34 @@ export const ProjectPermissionList = [
   'project_tracker_read',
   'project_tracker_update',
 ] as const;
+
 export const ProjectInfoPermissionList = [
   'project_read',
   'project_update',
   'project_delete',
 ] as const;
+
 export const ProjectMemberPermissionList = [
   'project_member_read',
   'project_member_create',
   'project_member_update',
   'project_member_delete',
 ] as const;
+
 export const ProjectRolePermissionList = [
   'project_role_read',
   'project_role_create',
   'project_role_update',
   'project_role_delete',
 ] as const;
+
 export const ProjectApiKeyPermissionList = [
   'project_apikey_read',
   'project_apikey_create',
   'project_apikey_update',
   'project_apikey_delete',
 ] as const;
+
 export const ProjectTrackerPermissionList = [
   'project_tracker_read',
   'project_tracker_update',
@@ -114,10 +119,17 @@ export const ChannelInfoPermissionList = [
   'channel_create',
   'channel_delete',
 ] as const;
+
 export const ChannelFieldPermissionList = [
   'channel_field_read',
   'channel_field_update',
 ] as const;
+
+export const ChannelImageSettingPermissionList = [
+  'channel_image_read',
+  'channel_image_update',
+] as const;
+
 export const ChannelPermissionList = [
   'channel_read',
   'channel_create',
@@ -125,6 +137,8 @@ export const ChannelPermissionList = [
   'channel_delete',
   'channel_field_read',
   'channel_field_update',
+  'channel_image_read',
+  'channel_image_update',
 ] as const;
 
 export const ChannelPermissionText: Record<ChannelPermissionType, string> = {
@@ -132,6 +146,8 @@ export const ChannelPermissionText: Record<ChannelPermissionType, string> = {
   channel_update: 'Edit Channel Info',
   channel_field_read: 'Read Channel Field',
   channel_field_update: 'Edit Channel Field',
+  channel_image_read: 'Read Image Setting',
+  channel_image_update: 'Edit Image Setting',
   channel_create: 'Create Channel',
   channel_delete: 'Delete Channel',
 };

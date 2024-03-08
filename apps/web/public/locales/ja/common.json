@@ -115,20 +115,6 @@
     },
     "setting": {
       "title": "設定",
-      "subtitle": {
-        "tenant-info": "Tenant情報",
-        "sign-up-mgmt": "Login &Signup管理",
-        "user-mgmt": "User管理",
-        "project-info": "Project情報",
-        "member-mgmt": "Member管理",
-        "role-mgmt": "Role管理",
-        "api-key-mgmt": "API Key管理",
-        "issue-tracker-mgmt": "Issue Tracker管理",
-        "delete-project": "Project削除",
-        "channel-info": "Channel情報",
-        "field-mgmt": "Field管理",
-        "delete-channel": "Channel削除"
-      },
       "button": {
         "create-project": "Project生成",
         "create-channel": "Channel生成",
@@ -161,7 +147,6 @@
       "register-member": "会員を登録してください。",
       "same-key": "Key と同様に入力",
       "feedback-request-code": "フィードバック要求コード",
-      "issue-tracker-mgmt.description": "ユーザーフィードバックイシューとイシュー追跡システムチケットをリンクして管理することができます。 \n使用中のイシュー追跡システムURLを入力してください。",
       "option-info": "オプション情報",
       "field-mgmt": {
         "description": "保存するにはプレビューを先に押してください。",
@@ -216,13 +201,6 @@
     "create-project": {
       "title": "Project生成",
       "complete-title": "Projectの作成が完了しました。",
-      "help": {
-        "projectInfo": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
-        "roles": "Projectにfアクセスして使用する権限を設定できます。",
-        "members": "Projectに参加する Memberを登録または管理することができます。",
-        "apiKeys": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
-        "issueTracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。 使用中のIssue Tracking System情報を入力してください。"
-      },
       "error-member": "現在存在しないユーザ情報です。",
       "continue-channel-creation": "Channelまで生成しないとUser Feedbackを使用できません。\nChannel生成を続けますか？",
       "guide": {
@@ -234,16 +212,6 @@
     "create-channel": {
       "title": "Channel生成",
       "complete-title": "Channelの作成が完了しました。",
-      "help": {
-        "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
-        "fields": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
-        "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
-      },
-      "stepper-text": {
-        "channel-info": "Channel Infomation",
-        "fields": "Field 管理",
-        "field-preview": "Field プレビュー"
-      },
       "finish-channel-creation": "すべての準備が完了しました。\nUser Feedbackの利用を始めてみてください！",
       "guide": {
         "invalid-channel": "無効なChannel情報が存在します。"
@@ -332,13 +300,6 @@
     "add": "追加完了",
     "copy": "コピー完了"
   },
-  "placeholder": "{{name}}を入力してください。",
-  "hint": {
-    "required": "必須入力対象です。",
-    "max-length": "{{length}}字以下で入力してください。",
-    "name-already-exists": "既に存在する{{name}}です。",
-    "invalid-domain": "ドメイン形式ではありません。"
-  },
   "dialog": {
     "continue": {
       "title": "続いて作成しますか？",
@@ -349,44 +310,42 @@
       }
     }
   },
-  "card": {
-    "dashboard": {
-      "total-feedback": {
-        "title": "フィードバックの合計数",
-        "description": "特定の期間中に作成されたフィードバックの数です。 ({{targetDate}})"
-      },
-      "total-issue": {
-        "title": "全体イシュー数",
-        "description": "特定の期間中に作成されたイシューの数です。 ({{targetDate}})"
-      },
-      "issue-ratio": {
-        "title": "イシュー登録比重",
-        "description": "特定の期間中に作成されたフィードバックのイシュー登録の割合です。 ({{targetDate}})"
-      },
-      "today-feedback": {
-        "title": "今日のフィードバック数",
-        "description": "今日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
-      },
-      "yesterday-feedback": {
-        "title": "昨日のフィードバック数",
-        "description": "昨日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
-      },
-      "n-days-feedback": {
-        "title": "過去{{n}}日フィードバック数",
-        "description": "過去{{n}}日間に生成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
-      },
-      "today-issue": {
-        "title": "今日の話題数",
-        "description": "今日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
-      },
-      "yesterday-issue": {
-        "title": "昨日のイシュー数",
-        "description": "昨日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
-      },
-      "n-days-issue": {
-        "title": "過去{{n}}日のイシュー数",
-        "description": "過去{{n}}日間に生成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
-      }
+  "dashboard-card": {
+    "total-feedback": {
+      "title": "フィードバックの合計数",
+      "description": "特定の期間中に作成されたフィードバックの数です。 ({{targetDate}})"
+    },
+    "total-issue": {
+      "title": "全体イシュー数",
+      "description": "特定の期間中に作成されたイシューの数です。 ({{targetDate}})"
+    },
+    "issue-ratio": {
+      "title": "イシュー登録比重",
+      "description": "特定の期間中に作成されたフィードバックのイシュー登録の割合です。 ({{targetDate}})"
+    },
+    "today-feedback": {
+      "title": "今日のフィードバック数",
+      "description": "今日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+    },
+    "yesterday-feedback": {
+      "title": "昨日のフィードバック数",
+      "description": "昨日作成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+    },
+    "n-days-feedback": {
+      "title": "過去{{n}}日フィードバック数",
+      "description": "過去{{n}}日間に生成されたフィードバックの数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+    },
+    "today-issue": {
+      "title": "今日の話題数",
+      "description": "今日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+    },
+    "yesterday-issue": {
+      "title": "昨日のイシュー数",
+      "description": "昨日作成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
+    },
+    "n-days-issue": {
+      "title": "過去{{n}}日のイシュー数",
+      "description": "過去{{n}}日間に生成されたイシュー数です。 ({{targetDate}})\n増減率は次の期間と比較して示します。 ({{compareDate}})"
     }
   },
   "chart": {
@@ -423,5 +382,51 @@
   },
   "tooltip": {
     "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
-  }
+  },
+  "tenant-setting-menu": {
+    "tenant-info": "Tenant情報",
+    "sign-up-mgmt": "Login & Signup管理",
+    "user-mgmt": "User管理"
+  },
+  "project-setting-menu": {
+    "project-info": "Project情報",
+    "member-mgmt": "Member管理",
+    "role-mgmt": "Role管理",
+    "api-key-mgmt": "API Key管理",
+    "issue-tracker-mgmt": "Issue Tracker管理",
+    "delete-project": "Project削除"
+  },
+  "channel-setting-menu": {
+    "channel-info": "Channel情報",
+    "field-mgmt": "Field管理",
+    "image-mgmt": "Image管理",
+    "delete-channel": "Channel削除"
+  },
+  "modal": {
+    "image-preview": {
+      "title": "Imageプレビュー"
+    }
+  },
+  "help-card": {
+    "project-info": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
+    "role": "Projectにfアクセスして使用する権限を設定できます。",
+    "member": "Projectに参加する Memberを登録または管理することができます。",
+    "api-key": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
+    "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
+    "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
+    "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
+    "image-setting": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。",
+    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
+  },
+  "hint": {
+    "required": "必須入力対象です。",
+    "max-length": "{{length}}字以下で入力してください。",
+    "name-already-exists": "既に存在する{{name}}です。",
+    "invalid-domain": "ドメイン形式ではありません。",
+    "image-format": "Image URLを入力するフォーマットです。"
+  },
+  "title-box": {
+    "image-storage-integration": "Image Storageの連動"
+  },
+  "placeholder": "{{name}}を入力してください。"
 }

@@ -13,4 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './TicketSetting';
+
+export class ImageUploadUrlTestDto {
+  accessKeyId: string;
+  secretAccessKey: string;
+  endpoint: string;
+  region: string;
+}

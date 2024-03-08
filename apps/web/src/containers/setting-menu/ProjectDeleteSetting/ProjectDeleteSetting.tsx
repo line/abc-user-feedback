@@ -72,7 +72,7 @@ const ProjectDeleteSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.delete-project')}
+      title={t('project-setting-menu.delete-project')}
       action={
         <Popover modal open={open} onOpenChange={setOpen}>
           <PopoverTrigger

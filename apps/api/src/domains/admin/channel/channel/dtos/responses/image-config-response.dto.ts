@@ -36,4 +36,8 @@ export class ImageConfigResponseDto {
   @Expose()
   @ApiProperty()
   bucket: string;
+
+  @Expose()
+  @ApiProperty()
+  domainWhiteList: string[];
 }

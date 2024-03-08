@@ -19,13 +19,13 @@ export const PrimitiveFieldFormatEnumList = [
   'keyword',
   'number',
   'date',
-  'image',
 ] as const;
 
 export const FieldFormatEnumList = [
   ...PrimitiveFieldFormatEnumList,
   'select',
   'multiSelect',
+  'images',
 ] as const;
 
 export type PrimitiveFieldFormatEnumType =

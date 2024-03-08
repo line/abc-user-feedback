@@ -61,7 +61,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
-    path: '/api/admin/projects/{projectId}/channels/channels/{channelId}',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
     queryOptions: {
       onSuccess: async () => {
@@ -87,7 +87,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('main.setting.subtitle.channel-info')}
+      title={t('channel-setting-menu.channel-info')}
       actionBtn={{
         children: t('button.save'),
         onClick: handleSubmit(onSubmit),
