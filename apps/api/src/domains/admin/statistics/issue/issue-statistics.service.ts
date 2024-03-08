@@ -24,6 +24,8 @@ import { Transactional } from 'typeorm-transactional';
 
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
+import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateCountDto } from './dtos';
 import type {
@@ -47,6 +49,7 @@ export class IssueStatisticsService {
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly schedulerRegistry: SchedulerRegistry,
+    private readonly schedulerLockService: SchedulerLockService,
   ) {}
 
   async getCount(dto: GetCountDto) {
@@ -125,7 +128,24 @@ export class IssueStatisticsService {
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
     const job = new CronJob(`4 ${cronHour} * * *`, async () => {
-      await this.createIssueStatistics(projectId, 365);
+      if (
+        await this.schedulerLockService.acquireLock(
+          LockTypeEnum.ISSUE_STATISTICS,
+          1000 * 60 * 5,
+        )
+      ) {
+        try {
+          await this.createIssueStatistics(projectId, 365);
+        } finally {
+          await this.schedulerLockService.releaseLock(
+            LockTypeEnum.ISSUE_STATISTICS,
+          );
+        }
+      } else {
+        this.logger.log({
+          message: 'Failed to acquire lock for feedback count calculation',
+        });
+      }
     });
     this.schedulerRegistry.addCronJob(`issue-statistics-${projectId}`, job);
     job.start();
@@ -133,7 +153,6 @@ export class IssueStatisticsService {
     this.logger.log(`issue-statistics-${projectId} cron job started`);
   }
 
-  @Transactional()
   async createIssueStatistics(projectId: number, dayToCreate: number = 1) {
     const { timezone, id } = await this.projectRepository.findOne({
       where: { id: projectId },
@@ -143,48 +162,58 @@ export class IssueStatisticsService {
     const offset = Number(hours) + Number(minutes) / 60;
 
     for (let day = 1; day <= dayToCreate; day++) {
-      const issueCount = await this.issueRepository.count({
-        where: {
-          project: { id },
-          createdAt: Between(
-            DateTime.utc()
-              .minus({ days: day })
-              .startOf('day')
-              .minus({ hours: offset })
-              .toJSDate(),
-            DateTime.utc()
-              .minus({ days: day })
-              .endOf('day')
-              .minus({ hours: offset })
-              .toJSDate(),
-          ),
-        },
-      });
-
-      if (issueCount === 0) continue;
-
-      await this.repository
-        .createQueryBuilder()
-        .insert()
-        .values({
-          date:
-            offset >= 0
-              ? DateTime.utc()
-                  .minus({ days: day })
-                  .endOf('day')
-                  .minus({ hours: offset })
-                  .toFormat('yyyy-MM-dd')
-              : DateTime.utc()
+      await this.issueRepository.manager
+        .transaction(async (transactionalEntityManager) => {
+          const issueCount = await this.issueRepository.count({
+            where: {
+              project: { id },
+              createdAt: Between(
+                DateTime.utc()
                   .minus({ days: day })
                   .startOf('day')
                   .minus({ hours: offset })
-                  .toFormat('yyyy-MM-dd'),
-          count: issueCount,
-          project: { id },
+                  .toJSDate(),
+                DateTime.utc()
+                  .minus({ days: day })
+                  .endOf('day')
+                  .minus({ hours: offset })
+                  .toJSDate(),
+              ),
+            },
+          });
+
+          if (issueCount === 0) return;
+
+          await transactionalEntityManager
+            .createQueryBuilder()
+            .insert()
+            .into(IssueStatisticsEntity)
+            .values({
+              date:
+                offset >= 0
+                  ? DateTime.utc()
+                      .minus({ days: day })
+                      .endOf('day')
+                      .minus({ hours: offset })
+                      .toFormat('yyyy-MM-dd')
+                  : DateTime.utc()
+                      .minus({ days: day })
+                      .startOf('day')
+                      .minus({ hours: offset })
+                      .toFormat('yyyy-MM-dd'),
+              count: issueCount,
+              project: { id },
+            })
+            .orUpdate(['count'], ['date', 'project'])
+            .updateEntity(false)
+            .execute();
         })
-        .orUpdate(['count'], ['date', 'project'])
-        .updateEntity(false)
-        .execute();
+        .catch((error) => {
+          this.logger.error({
+            message: 'Failed to create issue statistics',
+            error,
+          });
+        });
     }
   }
 

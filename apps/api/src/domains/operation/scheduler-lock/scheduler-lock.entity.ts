@@ -13,18 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-import { registerAs } from '@nestjs/config';
-import Joi from 'joi';
-import { v4 as uuidv4 } from 'uuid';
+import { LockTypeEnum } from './lock-type.enum';
 
-export const appConfigSchema = Joi.object({
-  APP_PORT: Joi.number().default(4000),
-  APP_ADDRESS: Joi.string().default('0.0.0.0'),
-});
+@Entity('scheduler_locks')
+export class SchedulerLockEntity {
+  @PrimaryColumn('enum', { enum: LockTypeEnum })
+  lockType: LockTypeEnum;
 
-export const appConfig = registerAs('app', () => ({
-  port: process.env.APP_PORT,
-  address: process.env.APP_ADDRESS,
-  serverId: uuidv4(),
-}));
+  @Column('varchar')
+  serverId: string;
+
+  @Column('datetime')
+  timestamp: Date;
+}

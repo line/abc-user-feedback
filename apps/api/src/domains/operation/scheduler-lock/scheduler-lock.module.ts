@@ -13,18 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { registerAs } from '@nestjs/config';
-import Joi from 'joi';
-import { v4 as uuidv4 } from 'uuid';
+import { SchedulerLockEntity } from './scheduler-lock.entity';
+import { SchedulerLockService } from './scheduler-lock.service';
 
-export const appConfigSchema = Joi.object({
-  APP_PORT: Joi.number().default(4000),
-  APP_ADDRESS: Joi.string().default('0.0.0.0'),
-});
-
-export const appConfig = registerAs('app', () => ({
-  port: process.env.APP_PORT,
-  address: process.env.APP_ADDRESS,
-  serverId: uuidv4(),
-}));
+@Module({
+  imports: [TypeOrmModule.forFeature([SchedulerLockEntity])],
+  providers: [SchedulerLockService],
+  exports: [SchedulerLockService],
+})
+export class SchedulerLockModule {}

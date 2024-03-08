@@ -20,6 +20,7 @@ import { Repository } from 'typeorm';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { SchedulerLockModule } from '@/domains/operation/scheduler-lock/scheduler-lock.module';
 import { FeedbackIssueStatisticsController } from './feedback-issue-statistics.controller';
 import { FeedbackIssueStatisticsEntity } from './feedback-issue-statistics.entity';
 import { FeedbackIssueStatisticsService } from './feedback-issue-statistics.service';
@@ -32,6 +33,7 @@ import { FeedbackIssueStatisticsService } from './feedback-issue-statistics.serv
       IssueEntity,
       ProjectEntity,
     ]),
+    SchedulerLockModule,
   ],
   exports: [FeedbackIssueStatisticsService],
   providers: [FeedbackIssueStatisticsService],

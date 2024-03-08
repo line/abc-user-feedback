@@ -25,6 +25,8 @@ import { Transactional } from 'typeorm-transactional';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
+import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateFeedbackCountDto } from './dtos';
 import type { GetCountByDateByIssueDto } from './dtos';
@@ -46,6 +48,7 @@ export class FeedbackIssueStatisticsService {
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly schedulerRegistry: SchedulerRegistry,
+    private readonly schedulerLockService: SchedulerLockService,
   ) {}
 
   async getCountByDateByIssue(dto: GetCountByDateByIssueDto) {
@@ -115,7 +118,24 @@ export class FeedbackIssueStatisticsService {
     const timezoneOffset = timezone.offset;
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
     const job = new CronJob(`2 ${cronHour} * * *`, async () => {
-      await this.createFeedbackIssueStatistics(projectId, 365);
+      if (
+        await this.schedulerLockService.acquireLock(
+          LockTypeEnum.FEEDBACK_ISSUE_STATISTICS,
+          1000 * 60 * 5,
+        )
+      ) {
+        try {
+          await this.createFeedbackIssueStatistics(projectId, 365);
+        } finally {
+          await this.schedulerLockService.releaseLock(
+            LockTypeEnum.FEEDBACK_ISSUE_STATISTICS,
+          );
+        }
+      } else {
+        this.logger.log({
+          message: 'Failed to acquire lock for feedback count calculation',
+        });
+      }
     });
     this.schedulerRegistry.addCronJob(
       `feedback-issue-statistics-${projectId}`,
@@ -126,7 +146,6 @@ export class FeedbackIssueStatisticsService {
     this.logger.log(`feedback-issue-statistics-${projectId} cron job started`);
   }
 
-  @Transactional()
   async createFeedbackIssueStatistics(
     projectId: number,
     dayToCreate: number = 1,
@@ -144,48 +163,58 @@ export class FeedbackIssueStatisticsService {
 
     for (let day = 1; day <= dayToCreate; day++) {
       for (const issue of issues) {
-        const feedbackCount = await this.feedbackRepository.count({
-          where: {
-            issues: { id: issue.id },
-            createdAt: Between(
-              DateTime.utc()
-                .minus({ days: day })
-                .startOf('day')
-                .minus({ hours: offset })
-                .toJSDate(),
-              DateTime.utc()
-                .minus({ days: day })
-                .endOf('day')
-                .minus({ hours: offset })
-                .toJSDate(),
-            ),
-          },
-        });
-
-        if (feedbackCount === 0) continue;
-
-        await this.repository
-          .createQueryBuilder()
-          .insert()
-          .values({
-            date:
-              offset >= 0
-                ? DateTime.utc()
-                    .minus({ days: day })
-                    .endOf('day')
-                    .minus({ hours: offset })
-                    .toFormat('yyyy-MM-dd')
-                : DateTime.utc()
+        await this.feedbackRepository.manager
+          .transaction(async (transactionalEntityManager) => {
+            const feedbackCount = await this.feedbackRepository.count({
+              where: {
+                issues: { id: issue.id },
+                createdAt: Between(
+                  DateTime.utc()
                     .minus({ days: day })
                     .startOf('day')
                     .minus({ hours: offset })
-                    .toFormat('yyyy-MM-dd'),
-            issue: { id: issue.id },
-            feedbackCount,
+                    .toJSDate(),
+                  DateTime.utc()
+                    .minus({ days: day })
+                    .endOf('day')
+                    .minus({ hours: offset })
+                    .toJSDate(),
+                ),
+              },
+            });
+
+            if (feedbackCount === 0) return;
+
+            await transactionalEntityManager
+              .createQueryBuilder()
+              .insert()
+              .into(FeedbackIssueStatisticsEntity)
+              .values({
+                date:
+                  offset >= 0
+                    ? DateTime.utc()
+                        .minus({ days: day })
+                        .endOf('day')
+                        .minus({ hours: offset })
+                        .toFormat('yyyy-MM-dd')
+                    : DateTime.utc()
+                        .minus({ days: day })
+                        .startOf('day')
+                        .minus({ hours: offset })
+                        .toFormat('yyyy-MM-dd'),
+                issue: { id: issue.id },
+                feedbackCount,
+              })
+              .orUpdate(['feedback_count'], ['date', 'issue'])
+              .updateEntity(false)
+              .execute();
           })
-          .orUpdate(['feedback_count'], ['date', 'issue'])
-          .updateEntity(false)
-          .execute();
+          .catch((error) => {
+            this.logger.error({
+              message: 'Failed to create feedback issue statistics',
+              error,
+            });
+          });
       }
     }
   }

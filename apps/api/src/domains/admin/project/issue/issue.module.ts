@@ -17,6 +17,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { IssueStatisticsModule } from '@/domains/admin/statistics/issue/issue-statistics.module';
+import { SchedulerLockModule } from '@/domains/operation/scheduler-lock/scheduler-lock.module';
 import { ProjectEntity } from '../project/project.entity';
 import { IssueController } from './issue.controller';
 import { IssueEntity } from './issue.entity';
@@ -26,6 +27,7 @@ import { IssueService } from './issue.service';
   imports: [
     TypeOrmModule.forFeature([IssueEntity, ProjectEntity]),
     IssueStatisticsModule,
+    SchedulerLockModule,
   ],
   providers: [IssueService],
   controllers: [IssueController],
