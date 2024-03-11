@@ -31,18 +31,18 @@ function runCommand(command) {
   });
 }
 
-async function concatCssFiles(from, to) {
+async function concatCssFiles(source, output) {
   try {
-    // Use glob to match all css files in the dist/base directory
-    const files = await globAsync(from);
+    // Use glob to match all css files in the source files
+    const files = await globAsync(source);
 
     // Concatenate the content of all matched CSS files
     const combinedCss = files
-        .map((file) => fs.readFileSync(file, 'utf8'))
-        .join('');
+      .map((file) => fs.readFileSync(file, 'utf8'))
+      .join('');
 
-    // Write the combined content to dist/base.css
-    fs.writeFileSync(to, combinedCss);
+    // Write the combined content to output css file
+    fs.writeFileSync(output, combinedCss);
   } catch (error) {
     console.error('Error concatenating CSS files:', error);
     process.exit(1);
