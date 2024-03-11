@@ -162,7 +162,7 @@ export class FeedbackStatisticsService {
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
-    const job = new CronJob(`28 ${cronHour} * * *`, async () => {
+    const job = new CronJob(`0 ${cronHour} * * *`, async () => {
       if (
         await this.schedulerLockService.acquireLock(
           LockTypeEnum.FEEDBACK_STATISTICS,
