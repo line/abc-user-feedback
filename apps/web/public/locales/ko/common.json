@@ -306,7 +306,6 @@
     "add": "추가 완료",
     "copy": "복사 완료"
   },
-  "placeholder": "{{name}}을 입력해주세요.",
   "dialog": {
     "continue": {
       "title": "이어서 생성하시겠어요?",
@@ -448,7 +447,8 @@
     "image-format": "Image URL을 입력하는 포맷입니다.",
     "invalid-domain": "도메인 형식이 아닙니다."
   },
-  "image-mgmt-setting": {
-    "image-storage-integration-setting": "Image Storage 연동 설정"
-  }
+  "title-box": {
+    "image-storage-integration": "Image Storage 연동"
+  },
+  "placeholder": "{{name}}을 입력해주세요."
 }

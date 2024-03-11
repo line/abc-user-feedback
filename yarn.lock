@@ -7956,10 +7956,10 @@ fast-csv@^4.3.1:
     "@fast-csv/format" "4.3.5"
     "@fast-csv/parse" "4.3.6"
 
-fast-csv@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/fast-csv/-/fast-csv-5.0.0.tgz#74b2c0ada46909dc35d341d1c19ee67d9be06a8a"
-  integrity sha512-CEwsCv2W+0AvlZRfS4rpagcP2gpMbMjbkFOn9SZ5T6F8gvl040fwPf7/8Rx9/Pxz3NQWbHYOsRFhK/MH/xjaaQ==
+fast-csv@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/fast-csv/-/fast-csv-5.0.1.tgz#2beaa2437ea83bd335cc3a39a41e69d9936f3987"
+  integrity sha512-Q43zC4NdQD5MAWOVQOF8KA+D6ddvTJjX2ib8zqysm74jZhtk6+dc8C75/OqRV6Y9CLc4kgvbC3PLG8YL4YZfgw==
   dependencies:
     "@fast-csv/format" "5.0.0"
     "@fast-csv/parse" "5.0.0"
@@ -9112,14 +9112,14 @@ interpret@^1.0.0:
   integrity sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==
 
 ip@^1.1.5:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.8.tgz#ae05948f6b075435ed3307acce04629da8cdbf48"
-  integrity sha512-PuExPYUiu6qMBQb4l06ecm6T6ujzhmh+MeJcW9wa89PoAz5pvd4zPgN5WJV104mb6S2T1AwNIAaB70JNrLQWhg==
+  version "1.1.9"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-1.1.9.tgz#8dfbcc99a754d07f425310b86a99546b1151e396"
+  integrity sha512-cyRxvOEpNHNtchU3Ln9KC/auJgup87llfQpQ+t5ghoC/UhL16SWzbueiCsdTnWmqAWl7LadfuwhlqmtOaqMHdQ==
 
 ip@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ip/-/ip-2.0.0.tgz#4cf4ab182fee2314c75ede1276f8c80b479936da"
-  integrity sha512-WKa+XuLG1A1R0UWhl2+1XQSi+fZWMsYKffMZTTYsiZaUD8k2yDAj5atimTUD2TZkyCkNEeYE5NhFZmupOGtjYQ==
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/ip/-/ip-2.0.1.tgz#e8f3595d33a3ea66490204234b77636965307105"
+  integrity sha512-lJUL9imLTNi1ZfXT+DU6rBBdbiKGBuay9B6xGSPVjUeQwaH1RIGqef8RZkUtHioLmSNpPR5M4HVKJGm1j8FWVQ==
 
 ipaddr.js@1.9.1:
   version "1.9.1"

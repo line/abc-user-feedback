@@ -29,7 +29,7 @@ export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
   feedback_download_read: 'Download Feedback',
   feedback_update: 'Edit Feedback',
   feedback_delete: 'Delete Feedback',
-  feedback_issue_update: 'Attach/Dettach Issue in Feedback',
+  feedback_issue_update: 'Attach/Detach Issue in Feedback',
   issue_create: 'Create Issue',
   issue_delete: 'Delete Issue',
 };

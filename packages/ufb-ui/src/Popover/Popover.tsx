@@ -183,16 +183,9 @@ export const PopoverContent = React.forwardRef<
   React.HTMLProps<HTMLDivElement> & {
     isPortal?: boolean;
     disabledFloatingStyle?: boolean;
-    diabledDimmed?: boolean;
   }
 >(function PopoverContent(
-  {
-    style,
-    isPortal = false,
-    disabledFloatingStyle = false,
-    diabledDimmed = false,
-    ...props
-  },
+  { style, isPortal = false, disabledFloatingStyle = false, ...props },
   propRef,
 ) {
   const { context: floatingContext, ...context } = usePopoverContext();
@@ -227,8 +220,8 @@ export const PopoverContent = React.forwardRef<
   const modalChild = context.modal ? (
     <FloatingOverlay
       lockScroll={context.modal}
-      className={diabledDimmed ? '' : 'bg-dim'}
-      style={{ display: 'grid', placeItems: 'center', zIndex: 20 }}
+      className="bg-dim"
+      style={{ display: 'grid', placeItems: 'center', zIndex: 100 }}
     >
       {child}
     </FloatingOverlay>

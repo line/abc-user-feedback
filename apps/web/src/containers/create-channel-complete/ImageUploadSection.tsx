@@ -37,10 +37,10 @@ const ImageUploadSection: React.FC<IProps> = ({
     <CreateSectionTemplate title={t('channel-setting-menu.image-mgmt')}>
       <div className="flex flex-col gap-2">
         <h2 className="font-20-bold pb-1">
-          {t('image-mgmt-setting.image-storage-integration-setting')}
+          {t('title-box.image-storage-integration')}
         </h2>
         <Input label="Access Key ID" value={accessKeyId} disabled />
-        <Input label="Secret Access Key ID" value={secretAccessKey} disabled />
+        <Input label="Secret Access Key" value={secretAccessKey} disabled />
         <Input label="End Point" value={endpoint} disabled />
         <Input label="Region" value={region} disabled />
         <Input label="Bucket Name" value={bucket} disabled />

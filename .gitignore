@@ -48,3 +48,6 @@ tsconfig.tsbuildinfo
 playwright-report
 test-results
 user.json
+
+# JetBrains
+.idea

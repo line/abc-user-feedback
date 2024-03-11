@@ -225,7 +225,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         <div className="mb-6 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <h2 className="font-20-bold">
-              {t('image-mgmt-setting.image-storage-integration-setting')}
+              {t('title-box.image-storage-integration')}
             </h2>
             <button
               type="button"
@@ -238,7 +238,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('accessKeyId')}
             label="Access Key ID"
-            placeholder="input"
+            placeholder={t('placeholder', { name: 'Access Key ID' })}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.accessKeyId}
             hint={formState.errors.accessKeyId?.message}
@@ -247,8 +247,8 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           />
           <TextInput
             {...register('secretAccessKey')}
-            label="Secret Access Key ID"
-            placeholder="input"
+            label="Secret Access Key"
+            placeholder={t('placeholder', { name: 'Secret Access Key' })}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.secretAccessKey}
             hint={formState.errors.secretAccessKey?.message}
@@ -258,7 +258,9 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('endpoint')}
             label="End Point"
-            placeholder="input"
+            placeholder={`${t('placeholder', {
+              name: 'End Point',
+            })} (ex: https://s3.ap-northeast-2.amazonaws.com)`}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.endpoint}
             hint={formState.errors.endpoint?.message}
@@ -268,7 +270,9 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('region')}
             label="Region"
-            placeholder="input"
+            placeholder={`${t('placeholder', {
+              name: 'Region',
+            })} (ex: ap-northeast-2)`}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.region}
             hint={formState.errors.region?.message}
@@ -278,7 +282,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('bucket')}
             label="Bucket Name"
-            placeholder="input"
+            placeholder={t('placeholder', { name: 'Bucket Name' })}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.bucket}
             hint={formState.errors.bucket?.message}

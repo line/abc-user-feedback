@@ -306,7 +306,6 @@
     "add": "追加完了",
     "copy": "コピー完了"
   },
-  "placeholder": "{{name}}を入力してください。",
   "dialog": {
     "continue": {
       "title": "続いて作成しますか？",
@@ -448,7 +447,8 @@
     "invalid-domain": "ドメイン形式ではありません。",
     "image-format": "Image URLを入力するフォーマットです。"
   },
-  "image-mgmt-setting": {
-    "image-storage-integration-setting": "画像リポジトリの連動設定"
-  }
+  "title-box": {
+    "image-storage-integration": "Image Storageの連動"
+  },
+  "placeholder": "{{name}}を入力してください。"
 }
