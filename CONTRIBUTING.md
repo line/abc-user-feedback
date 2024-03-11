@@ -6,6 +6,7 @@ First of all, thank you so much for taking your time to contribute! ABC User Fee
   to report bugs and propose new features and improvements.
 - Ask a question using [the issue tracker](https://github.com/line/abc-user-feedback/issues).
 - Contribute your work by sending [a pull request](https://github.com/line/abc-user-feedback/pulls).
+- You should make your pull request base branch as `dev` not `main`. After merging to `dev` branch, we test the pull request in our separate environment and if there is no issue, it would be merged to `main` and released.
 
 ## Contributor license agreement
 
