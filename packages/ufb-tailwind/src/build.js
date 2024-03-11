@@ -13,6 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+const fs = require('fs');
+const glob = require('glob');
+const util = require('util');
+const globAsync = util.promisify(glob);
 const { exec } = require('child_process');
 
 function runCommand(command) {
@@ -27,31 +31,37 @@ function runCommand(command) {
   });
 }
 
+async function concatCssFiles(source, output) {
+  try {
+    // Use glob to match all css files in the source files
+    const files = await globAsync(source);
+
+    // Concatenate the content of all matched CSS files
+    const combinedCss = files
+      .map((file) => fs.readFileSync(file, 'utf8'))
+      .join('');
+
+    // Write the combined content to output css file
+    fs.writeFileSync(output, combinedCss);
+  } catch (error) {
+    console.error('Error concatenating CSS files:', error);
+    process.exit(1);
+  }
+}
+
 async function executeCommands() {
   try {
-    await runCommand(
-      'node_modules/.bin/postcss --config src/base src/base/*.css --base src --dir dist',
-    );
-    await runCommand('cat dist/base/*.css > dist/base.css');
-    await runCommand(
-      'node_modules/.bin/prejss-cli dist/base.css --format commonjs',
-    );
+    await runCommand('npm run build:postcss-base');
+    await concatCssFiles('dist/base/*.css', 'dist/base.css');
+    await runCommand('npm run build:prejss-base');
 
-    await runCommand(
-      'node_modules/.bin/postcss --config src/utilities src/utilities/*.css --base src --dir dist',
-    );
-    await runCommand('cat dist/utilities/*.css > dist/utilities.css');
-    await runCommand(
-      'node_modules/.bin/prejss-cli dist/utilities.css --format commonjs',
-    );
+    await runCommand('npm run build:postcss-utilities');
+    await concatCssFiles('dist/utilities/*.css', 'dist/utilities.css');
+    await runCommand('npm run build:prejss-utilities');
 
-    await runCommand(
-      'node_modules/.bin/postcss --config src/components src/components/*.css --base src --dir dist',
-    );
-    await runCommand('cat dist/components/*.css > dist/components.css');
-    await runCommand(
-      'node_modules/.bin/prejss-cli dist/components.css --format commonjs',
-    );
+    await runCommand('npm run build:postcss-components');
+    await concatCssFiles('dist/components/*.css', 'dist/components.css');
+    await runCommand('npm run build:prejss-components');
   } catch (error) {
     console.error('Error executing commands:', error);
   }

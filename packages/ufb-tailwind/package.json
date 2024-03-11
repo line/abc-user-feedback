@@ -6,7 +6,13 @@
   "types": "index.d.ts",
   "typings": "index.d.ts",
   "scripts": {
-    "build": "node src/build"
+    "build": "node src/build",
+    "build:postcss-base": "postcss --config src/base src/base/*.css --base src --dir dist",
+    "build:prejss-base": "prejss-cli dist/base.css --format commonjs",
+    "build:postcss-utilities": "postcss --config src/utilities src/utilities/*.css --base src --dir dist",
+    "build:prejss-utilities": "prejss-cli dist/utilities.css --format commonjs",
+    "build:postcss-components": "postcss --config src/components src/components/*.css --base src --dir dist",
+    "build:prejss-components": "prejss-cli dist/components.css --format commonjs"
   },
   "prettier": "@ufb/prettier-config",
   "eslintConfig": {
