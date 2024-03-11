@@ -1,0 +1,444 @@
+{
+  "tenant": {
+    "create": {
+      "title": "Mandanteneinstellungen",
+      "site-name": "Seitenname"
+    }
+  },
+  "auth": {
+    "sign-in": {
+      "reset-password": "Passwort zurücksetzen"
+    },
+    "sign-up": {
+      "title": "Ein Konto erstellen",
+      "label": {
+        "auth-code": "Authentifizierungscode"
+      },
+      "placeholder": {
+        "auth-code": "Bitte Code eingeben"
+      },
+      "button": {
+        "request-auth-code": "Anfordern",
+        "verify-auth-code": "Überprüfen"
+      }
+    },
+    "reset-password": {
+      "title": "Passwort zurücksetzen",
+      "button": {
+        "send-email": "E-Mail senden"
+      }
+    }
+  },
+  "link": {
+    "reset-password": {
+      "title": "Passwort zurücksetzen"
+    },
+    "user-invitation": {
+      "title": "Ein Konto erstellen"
+    }
+  },
+  "main": {
+    "index": {
+      "total-project": "Gesamtprojekt",
+      "total-channel": "Gesamtkanal",
+      "total-feedback": "Gesamtfeedback",
+      "create-project": "Projekt erstellen",
+      "no-project": "Es sind keine registrierten Projekte vorhanden."
+    },
+    "profile": {
+      "title": "Profil",
+      "profile-info": "Profilinformationen",
+      "change-password": "Passwort ändern",
+      "label": {
+        "user-type": "Typ",
+        "new-password": "Neues Passwort",
+        "confirm-new-password": "Neues Passwort bestätigen"
+      },
+      "placeholder": {
+        "name": "Bitte Namen eingeben.",
+        "department": "Bitte Abteilung eingeben.",
+        "new-password": "Bitte neues Passwort eingeben",
+        "confirm-new-password": "Bitte neues Passwort bestätigen."
+      },
+      "button": {
+        "delete-account": "Konto löschen"
+      },
+      "dialog": {
+        "delete-account": {
+          "title": "Konto löschen",
+          "description1": "Sind Sie sicher, dass Sie es löschen möchten?",
+          "description2": "Der Dienst ist nach dem Löschen des Kontos nicht mehr verfügbar."
+        }
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "feedback": {
+      "title": "Feedback",
+      "column-setting": "Spalteneinstellung",
+      "issue-cell": {
+        "issue-list": "Problemliste",
+        "register-issue": "Problem registrieren",
+        "create-issue": "Problem erstellen",
+        "input-issue": "Problem eingeben",
+        "delete-issue": "Problem löschen"
+      },
+      "download": {
+        "loading": "Herunterladen...",
+        "success": "Download abgeschlossen.",
+        "error": "Download fehlgeschlagen.",
+        "loading-description": "Download von insgesamt {{count, number}}",
+        "success-description": "Download von insgesamt {{count, number}}",
+        "error-description": "Download von insgesamt {{count, number}}"
+      },
+      "button": {
+        "all-download": "Alles herunterladen",
+        "select-download": "{{count, number}} Elemente herunterladen",
+        "excel-download": "Excel herunterladen",
+        "csv-download": "CSV herunterladen"
+      },
+      "dialog": {
+        "delete-feedback": {
+          "title": "Feedbacks löschen",
+          "description": "Sind Sie sicher, dass Sie alle ausgewählten Feedbacks löschen möchten?"
+        }
+      }
+    },
+    "issue": {
+      "title": "Problem",
+      "setting": "Problemeinstellungen",
+      "dialog": {
+        "delete-issue": {
+          "title": "Probleme löschen",
+          "description": "Sind Sie sicher, dass Sie alle ausgewählten Probleme löschen möchten?"
+        }
+      }
+    },
+    "setting": {
+      "title": "Einstellung",
+      "button": {
+        "create-project": "Projekt erstellen",
+        "create-channel": "Kanal erstellen",
+        "create-api-key": "Schlüssel erstellen",
+        "register-member": "Mitglied registrieren"
+      },
+      "sign-up-mgmt": {
+        "ufb-login": "UFB-Anmeldung",
+        "oauth-login": "OAuth2.0-Anmeldung",
+        "all-login": "Alle",
+        "possibility": "Direkte Anmeldung möglich",
+        "impossibility": "Direkte Anmeldung nicht möglich",
+        "no-domain-restriction": "Keine Domain-Beschränkungen",
+        "domain-restriction": "Domain-Beschränkungen",
+        "domain-restriction-tooltip": "Sie können die Domain der E-Mail festlegen, die als Benutzer registriert werden kann."
+      },
+      "role-mgmt": {
+        "edit-role": "Rolle bearbeiten",
+        "update-role-name": "Rollenname aktualisieren",
+        "delete-role": "Rolle löschen"
+      },
+      "api-key-status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv"
+      },
+      "field-status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv"
+      },
+      "register-member": "Bitte registrieren Sie ein Mitglied.",
+      "same-key": "Geben Sie denselben Wert wie den Schlüssel ein",
+      "feedback-request-code": "Feedback anforderungs code",
+      "option-info": "Options informationen",
+      "field-mgmt": {
+        "description": "Zum Speichern zuerst Vorschau klicken.",
+        "preview": "Vorschau",
+        "preview-caption": "Vorschau ist ein Beispiel, um Ihnen zu helfen, zu verstehen.",
+        "preview-description": "Sie können es überprüfen, nachdem Sie <preview>Vorschau</preview> ausgewählt haben."
+      },
+      "dialog": {
+        "edit-user": {
+          "title": "Benutzer bearbeiten"
+        },
+        "delete-project": {
+          "title": "Projekt löschen",
+          "description": "Das Löschen eines Projekts löscht alle Problem-/Feedback daten.\nBitte geben Sie den folgenden Text ein, um mit dem Löschen fortzufahren."
+        },
+        "delete-channel": {
+          "title": "Kanal löschen",
+          "description": "Das Löschen eines Kanals löscht alle Feedback aaten.\nBitte geben Sie den folgenden Text ein, um mit dem Löschen fortzufahren."
+        },
+        "create-role": {
+          "title": "Rolle erstellen",
+          "description": "Bitte geben Sie einen neuen Rollennamen ein."
+        },
+        "update-role-name": {
+          "title": "Rollenname aktualisieren",
+          "description": "Bitte geben Sie Rollennamen ein."
+        },
+        "edit-api-key": {
+          "title": "API-SCHLÜSSEL bearbeiten",
+          "description": "Wenn Sie den API-SCHLÜSSEL auf inaktiv ändern, ist die API für diesen SCHLÜSSEL nicht verfügbar.\nBitte ändern Sie den Status nur auf inaktiv, wenn Sie den API-SCHLÜSSEL nicht verwenden."
+        },
+        "delete-option": {
+          "title": "Option löschen",
+          "description": "Es gilt nicht für Optionen in früherem Feedback."
+        },
+        "delete-role": {
+          "title": "Rolle löschen",
+          "description": "Sind Sie sicher, dass Sie die Rolle löschen möchten?\nMitglieder mit dieser Rolle verschwinden auch."
+        },
+        "edit-member": {
+          "title": "Mitglied bearbeiten",
+          "description": "Die Rolle variiert von den zugänglichen Menüs bis zu den verfügbaren Funktionen.\nBitte überprüfen Sie das Mitglied und wählen Sie die richtige Rolle aus."
+        },
+        "register-member": {
+          "title": "Mitglied registrieren"
+        },
+        "delete-member": {
+          "title": "Mitglied löschen",
+          "description": "Sind Sie sicher, dass Sie das Mitglied löschen möchten?"
+        },
+        "add-field": {
+          "title": "Feld hinzufügen"
+        },
+        "edit-field": {
+          "title": "Feld bearbeiten"
+        },
+        "invite-user": {
+          "title": "Benutzer einladen"
+        }
+      }
+    },
+    "create-project": {
+      "title": "Projekt erstellen",
+      "complete-title": "Projekterstellung ist abgeschlossen.",
+      "error-member": "Benutzerinformationen, die derzeit nicht existieren.",
+      "continue-channel-creation": "UserFeedback muss bis zum Kanal erstellt werden, bevor UserFeedback verfügbar ist.\nMöchten Sie mit der Erstellung eines Kanals fortfahren?",
+      "guide": {
+        "invalid-member": "Ungültige Mitgliederliste vorhanden.",
+        "invalid-role": "Ungültige Rolleninformationen vorhanden.",
+        "invalid-project": "Ungültige Projektinformationen vorhanden."
+      }
+    },
+    "create-channel": {
+      "title": "Kanal erstellen",
+      "complete-title": "Kanalerstellung ist abgeschlossen.",
+      "finish-channel-creation": "Alles ist bereit.\nBeginnen Sie mit der Nutzung von UserFeedback!",
+      "guide": {
+        "invalid-channel": "Ungültige Kanalinformationen vorhanden."
+      }
+    }
+  },
+  "header": {
+    "profile": "Profil",
+    "sign-out": "Abmelden"
+  },
+  "button": {
+    "setting": "Einstellung",
+    "back": "Zurück",
+    "sign-in": "Anmelden",
+    "sign-up": "Registrieren",
+    "save": "Speichern",
+    "create": "Erstellen",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "register": "Registrieren",
+    "select-cancel": "Abbrechen",
+    "reset": "Zurücksetzen",
+    "confirm": "OK",
+    "get-out": "Verlassen",
+    "previous": "Vorherige",
+    "next": "Nächste",
+    "complete": "Fertig",
+    "next-time": "Nächstes Mal",
+    "start": "Starten"
+  },
+  "input": {
+    "label": {
+      "password": "Passwort",
+      "confirm-password": "Passwort bestätigen"
+    },
+    "placeholder": {
+      "input": "Bitte eingeben",
+      "email": "Bitte E-Mail eingeben",
+      "password": "Bitte Passwort eingeben",
+      "confirm-password": "Bitte Passwort bestätigen"
+    }
+  },
+  "text": {
+    "search-result": "Suchergebnis",
+    "number-count": "{{count, number}} Artikel",
+    "no-data": "Keine Daten",
+    "per-page": "Pro Seite",
+    "select-option": "'{{name}}' auswählen",
+    "select-count": "{{count,number}} auswählen",
+    "search-filter": "Suchfeld",
+    "all": "Alle",
+    "issue": {
+      "init": "Neu",
+      "onReview": "In Überprüfung",
+      "inProgress": "In Bearbeitung",
+      "resolved": "Erledigt",
+      "pending": "Nicht fortsetzen"
+    },
+    "date": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "before-days": "Vor {{day, number}} Tagen",
+      "date-range-over-max-days": "Der Anfragezeitraum kann nur bis zu {{maxDays}} Tage eingegeben werden"
+    },
+    "equal-search": "Gleich",
+    "like-search": "Ähnlich",
+    "helper": "Hilfe",
+    "warning-get-out": "Werden Sie den Prozess der Erstellung eines {{type}} verlassen?\nSelbst wenn Sie gehen, können Sie später fortfahren.",
+    "no-channel": "Es ist kein registrierter Kanal vorhanden.",
+    "guide": "Anleitung",
+    "more": "mehr",
+    "shrink": "schrumpfen",
+    "feedback-detail": "Feedback-Details",
+    "create-channel-in-progress": "Es wird gerade ein Kanal erstellt.",
+    "create-project-in-progress": "Es wird gerade ein Projekt erstellt.",
+    "days": "{{days}} Tage"
+  },
+  "toast": {
+    "sign-in": "Anmeldung erfolgreich",
+    "register": "Registrierung abgeschlossen",
+    "delete": "Löschung abgeschlossen",
+    "save": "Gespeichert",
+    "invite": "Einladung abgeschlossen",
+    "active": "Aktivierung",
+    "inactive": "Deaktivierung",
+    "add": "Hinzufügung abgeschlossen",
+    "copy": "Kopie abgeschlossen"
+  },
+  "dialog": {
+    "continue": {
+      "title": "Möchten Sie fortfahren?",
+      "description": "Es wird derzeit ein {{type}} erstellt. Möchten Sie fortfahren? (Wenn Sie von vorne beginnen, verschwinden die vorhandenen Informationen.)",
+      "button": {
+        "continue": "Fortfahren",
+        "restart": "Neustart"
+      }
+    }
+  },
+  "dashboard-card": {
+    "total-feedback": {
+      "title": "Gesamtzahl der Feedbacks",
+      "description": "Anzahl der in einem bestimmten Zeitraum erstellten Feedbacks. ({{targetDate}})"
+    },
+    "total-issue": {
+      "title": "Gesamtzahl der Probleme",
+      "description": "Anzahl der in einem bestimmten Zeitraum erstellten Probleme. ({{targetDate}})"
+    },
+    "issue-ratio": {
+      "title": "Registrierungsrate von Problemen",
+      "description": "Registrierungsrate von Problemen für in einem bestimmten Zeitraum erstelltes Feedback. ({{targetDate}})"
+    },
+    "today-feedback": {
+      "title": "Anzahl des heutigen Feedbacks",
+      "description": "Anzahl des heute erstellten Feedbacks. ({{targetDate}})\nDie Zunahme-/Abnahmerate wird im Vergleich zum folgenden Zeitraum berechnet. ({{compareDate}})"
+    },
+    "yesterday-feedback": {
+      "title": "Anzahl des gestrigen Feedbacks",
+      "description": "Anzahl des gestern erstellten Feedbacks. ({{targetDate}})\nDie Zunahme-/Abnahmerate wird im Vergleich zum folgenden Zeitraum berechnet. ({{compareDate}})"
+    },
+    "n-days-feedback": {
+      "title": "Anzahl der Feedbacks in den letzten {{n}} Tagen",
+      "description": "Anzahl der in den letzten {{n}} Tagen erstellten Feedbacks. ({{targetDate}})\nDie Zunahme-/Abnahmerate wird im Vergleich zum folgenden Zeitraum berechnet. ({{compareDate}})"
+    },
+    "today-issue": {
+      "title": "Anzahl der heutigen Probleme",
+      "description": "Anzahl der heute erstellten Probleme. ({{targetDate}})\nDie Zunahme-/Abnahmerate wird im Vergleich zum folgenden Zeitraum berechnet. ({{compareDate}})"
+    },
+    "yesterday-issue": {
+      "title": "Anzahl der gestrigen Probleme",
+      "description": "Anzahl der gestern erstellten Probleme. ({{targetDate}})\nDie Zunahme-/Abnahmerate wird im Vergleich zum folgenden Zeitraum berechnet. ({{compareDate}})"
+    },
+    "n-days-issue": {
+      "title": "Anzahl der Probleme in den letzten {{n}} Tagen",
+      "description": "Anzahl der in den letzten {{n}} Tagen erstellten Probleme. ({{targetDate}})\nDie Zunahme-/Abnahmerate wird im Vergleich zum folgenden Zeitraum berechnet. ({{compareDate}})"
+    }
+  },
+  "chart": {
+    "feedback-trend": {
+      "title": "Feedback-Trend",
+      "description": "Zeigt den Trend der Feedback-Erstellung über einen bestimmten Zeitraum an."
+    },
+    "issue-trend": {
+      "title": "Problemtrend",
+      "description": "Zeigt den Trend der Problemerstellung über einen bestimmten Zeitraum an."
+    },
+    "issue-status-count": {
+      "title": "Status der Probleme",
+      "description": "Zeigt den aktuellen Status des gesamten Problems an."
+    },
+    "issue-rank": {
+      "title": "Top-Probleme",
+      "description": "Zeigt die Top-Probleme mit einer großen Anzahl von Fällen an."
+    },
+    "issue-comparison": {
+      "title": "Probleme vergleichen",
+      "description": "Vergleicht und zeigt den Trend der Feedback-Erstellung für ausgewählte Probleme an."
+    }
+  },
+  "popover": {
+    "select-issue": {
+      "search-issue": "Probleme suchen",
+      "max-issue-count": "Sie können bis zu fünf Probleme auswählen.",
+      "issue-list": "Problemliste"
+    },
+    "select-issue-status": {
+      "issue-status": "Status der Probleme"
+    }
+  },
+  "tooltip": {
+    "issue-feedback-count": "Anzahl der im Problem registrierten Feedbacks."
+  },
+  "tenant-setting-menu": {
+    "tenant-info": "Mandanten informationen",
+    "sign-up-mgmt": "Anmelden & Registrierungs management",
+    "user-mgmt": "Benutzerverwaltung"
+  },
+  "project-setting-menu": {
+    "project-info": "Projekt informationen",
+    "member-mgmt": "Mitgliederverwaltung",
+    "role-mgmt": "Rollenverwaltung",
+    "api-key-mgmt": "API-Schlüsselverwaltung",
+    "issue-tracker-mgmt": "Issue-Tracker-Verwaltung",
+    "delete-project": "Projekt löschen"
+  },
+  "channel-setting-menu": {
+    "channel-info": "Kanalinformationen",
+    "field-mgmt": "Feldverwaltung",
+    "image-mgmt": "Bildverwaltung",
+    "delete-channel": "Kanal löschen"
+  },
+  "modal": {
+    "image-preview": {
+      "title": "Bildvorschau"
+    }
+  },
+  "help-card": {
+    "project-info": "Sie können Feedback projektweise sammeln. Bitte registrieren Sie Ihre Projekt informationen basierend auf dem Produkt, für das Sie Ihr Feedback verwalten möchten. (z.B. Produktname)",
+    "role": "Sie können Berechtigungen für den Zugriff auf das Projekt und dessen Nutzung festlegen.",
+    "member": "Sie können Mitglieder registrieren oder verwalten, die am Projekt teilnehmen.",
+    "api-key": "Verwalten Sie die API-Schlüsselinformationen in der Feedback-Sammlungs-API. Wenn Sie Feedback über eine API sammeln, generieren Sie bitte die Schlüsselinformationen.",
+    "issue-tracker": "UserFeedback und Issue-Tracking-System können verknüpft und verwaltet werden. Bitte geben Sie Ihre Informationen zum Issue-Tracking-System ein.",
+    "channel-info": "Sie können die Feedbackfelder definieren, die Sie über den Kanal erfassen möchten. Bitte registrieren Sie die Kanalinformationen unter Berücksichtigung des Feedbackweges und der Persönlichkeit. (z.B. VOC, APP-Bewertung)",
+    "field": "Definieren Sie die Feedbackfelder, die Sie mit User Feedback gemäß dem registrierten Kanal erfassen möchten. Versuchen Sie, die Felder vorab einzustellen, die Sie über die API sammeln oder direkt vom ADMIN registrieren möchten.",
+    "image-setting": "Wenn Sie Feedback im Bildformat sammeln, können Sie mit der Bildspeicherung arbeiten und eine Whitelist für die Bild-URL-Domäne einrichten.\nSiehe Bild <icon></icon> <docs>Dokumentation</docs>.",
+    "field-preview": "Sie können eine Vorschau darauf erhalten, wie die von Ihnen in der Feldverwaltung eingerichteten Felder aussehen werden. Vorschauen sind nicht echt, da sie als willkürliche Daten angezeigt werden."
+  },
+  "hint": {
+    "required": "Erforderlich",
+    "max-length": "Bitte geben Sie {{length}} Zeichen oder weniger ein.",
+    "name-already-exists": "{{name}} existiert bereits.",
+    "invalid-domain": "Ungültiges Domainformat.",
+    "image-format": "Das Format für die Eingabe der Bild-URL."
+  },
+  "title-box": {
+    "image-storage-integration": "Bildspeicher integration"
+  },
+  "placeholder": "Bitte geben Sie {{name}} ein."
+}
