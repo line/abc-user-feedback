@@ -23,6 +23,7 @@ import { FeedbackIssueStatisticsEntity } from '@/domains/admin/statistics/feedba
 import { FeedbackIssueStatisticsService } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
 import { FeedbackRepositoryStub } from '../stubs';
+import { SchedulerLockServiceProviders } from './scheduler-lock.service.providers';
 
 export const FeedbackIssueStatisticsServiceProviders = [
   FeedbackIssueStatisticsService,
@@ -43,4 +44,5 @@ export const FeedbackIssueStatisticsServiceProviders = [
     useValue: mockRepository(),
   },
   SchedulerRegistry,
+  ...SchedulerLockServiceProviders,
 ];

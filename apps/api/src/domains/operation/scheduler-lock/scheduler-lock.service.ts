@@ -26,12 +26,14 @@ import { SchedulerLockEntity } from './scheduler-lock.entity';
 
 @Injectable()
 export class SchedulerLockService {
+  private readonly serverId: string;
   constructor(
     @InjectRepository(SchedulerLockEntity)
     private readonly repository: Repository<SchedulerLockEntity>,
     private readonly configService: ConfigService<ConfigServiceType>,
-  ) {}
-  serverId = this.configService.get('app', { infer: true }).serverId;
+  ) {
+    this.serverId = this.configService.get('app', { infer: true }).serverId;
+  }
 
   @Transactional()
   async acquireLock(

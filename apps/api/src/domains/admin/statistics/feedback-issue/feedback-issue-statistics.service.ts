@@ -163,7 +163,7 @@ export class FeedbackIssueStatisticsService {
 
     for (let day = 1; day <= dayToCreate; day++) {
       for (const issue of issues) {
-        await this.feedbackRepository.manager
+        await this.repository.manager
           .transaction(async (transactionalEntityManager) => {
             const feedbackCount = await this.feedbackRepository.count({
               where: {

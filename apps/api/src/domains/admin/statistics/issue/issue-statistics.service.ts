@@ -162,7 +162,7 @@ export class IssueStatisticsService {
     const offset = Number(hours) + Number(minutes) / 60;
 
     for (let day = 1; day <= dayToCreate; day++) {
-      await this.issueRepository.manager
+      await this.repository.manager
         .transaction(async (transactionalEntityManager) => {
           const issueCount = await this.issueRepository.count({
             where: {

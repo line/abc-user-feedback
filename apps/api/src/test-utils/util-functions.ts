@@ -19,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
 import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
+import { appConfig } from '@/configs/app.config';
 import { jwtConfig, jwtConfigSchema } from '@/configs/jwt.config';
 import {
   opensearchConfig,
@@ -38,7 +39,7 @@ export const getMockProvider = (
 ): Provider => ({ provide: injectToken, useFactory: () => factory });
 
 export const TestConfig = ConfigModule.forRoot({
-  load: [smtpConfig, jwtConfig, opensearchConfig],
+  load: [appConfig, smtpConfig, jwtConfig, opensearchConfig],
   envFilePath: '.env.test',
   validationSchema: smtpConfigSchema
     .concat(jwtConfigSchema)
@@ -119,6 +120,9 @@ export const mockRepository = () => ({
   remove: jest.fn(),
   createQueryBuilder: jest.fn(() => createQueryBuilder),
   query: jest.fn(),
+  manager: {
+    transaction: async () => jest.fn().mockImplementation(mockRepository),
+  },
 });
 
 export const MockOpensearchRepository = {
