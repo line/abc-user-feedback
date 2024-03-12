@@ -14,6 +14,7 @@
  * under the License.
  */
 import { Injectable, Logger } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
@@ -24,6 +25,7 @@ import { In, Like, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
+import { EventTypeEnum } from '@/common/enums';
 import type { CountByProjectIdDto } from '@/domains/admin/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
@@ -49,6 +51,7 @@ export class IssueService {
     private readonly issueStatisticsService: IssueStatisticsService,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly schedulerLockService: SchedulerLockService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   @Transactional()
@@ -68,6 +71,10 @@ export class IssueService {
       projectId: savedIssue.project.id,
       date: DateTime.utc().toJSDate(),
       count: 1,
+    });
+
+    this.eventEmitter.emit(EventTypeEnum.ISSUE_CREATION, {
+      issueId: savedIssue.id,
     });
 
     return savedIssue;
@@ -185,7 +192,7 @@ export class IssueService {
 
   @Transactional()
   async update(dto: UpdateIssueDto) {
-    const { issueId, name } = dto;
+    const { issueId, name, status } = dto;
     const issue = await this.findById({ issueId });
 
     if (
@@ -196,7 +203,17 @@ export class IssueService {
     ) {
       throw new IssueInvalidNameException('Duplicated name');
     }
+
+    const statusHasChanged = issue.status !== status;
+    const previousStatus = issue.status;
+
     await this.repository.save(Object.assign(issue, dto));
+
+    if (statusHasChanged)
+      this.eventEmitter.emit(EventTypeEnum.ISSUE_STATUS_CHANGE, {
+        issueId,
+        previousStatus,
+      });
   }
 
   @Transactional()

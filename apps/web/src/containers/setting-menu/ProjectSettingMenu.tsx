@@ -20,7 +20,7 @@ import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useOAIQuery, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   projectId: number;
   onClickSettingMenu: (input: SettingMenuType) => () => void;
   settingMenu: SettingMenuType | null;
@@ -79,6 +79,13 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           onClick={onClickSettingMenu('TICKET_MANAGEMENT')}
           active={settingMenu === 'TICKET_MANAGEMENT'}
           name={t('project-setting-menu.issue-tracker-mgmt')}
+          disabled={!perms.includes('project_tracker_read')}
+        />
+        <SettingMenuItem
+          iconName="TicketFill"
+          onClick={onClickSettingMenu('WEBHOOK_MANAGEMENT')}
+          active={settingMenu === 'WEBHOOK_MANAGEMENT'}
+          name={t('project-setting-menu.webhook-integration')}
           disabled={!perms.includes('project_tracker_read')}
         />
         <SettingMenuItem

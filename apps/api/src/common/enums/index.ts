@@ -18,3 +18,6 @@ export { FieldTypeEnum } from './field-type.enum';
 export { FieldStatusEnum } from './field-status.enum';
 export { IssueStatusEnum } from './issue-status.enum';
 export { SortMethodEnum } from './sort-method.enum';
+export { EventTypeEnum } from './event-type.enum';
+export { EventStatusEnum } from './event-status.enum';
+export { WebhookStatusEnum } from './webhook-status.enum';

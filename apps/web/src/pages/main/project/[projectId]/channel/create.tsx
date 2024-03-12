@@ -16,11 +16,9 @@
 import React, { useMemo } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
-
-import { CreateProjectChannelTemplate } from '@/components';
+import { CreateProjectChannelTemplate, HelpCardDocs } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import {
   InputChannelInfo,
@@ -50,39 +48,7 @@ const CreateChannel: NextPage = () => {
     return {
       channelInfo: t('help-card.channel-info'),
       fields: t('help-card.field'),
-      imageUpload: (
-        <Trans
-          i18nKey="help-card.image-setting"
-          components={{
-            icon: (
-              <Icon
-                name="ExpandPopup"
-                className="text-blue-primary cursor-pointer"
-                size={12}
-                onClick={() => {
-                  if (typeof window === 'undefined') return;
-                  window.open(
-                    'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
-                    '_blank',
-                  );
-                }}
-              />
-            ),
-            docs: (
-              <span
-                className="text-blue-primary cursor-pointer"
-                onClick={() => {
-                  if (typeof window === 'undefined') return;
-                  window.open(
-                    'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
-                    '_blank',
-                  );
-                }}
-              />
-            ),
-          }}
-        />
-      ),
+      imageUpload: <HelpCardDocs i18nKey="help-card.image-setting" />,
       fieldPreview: t('help-card.field-preview'),
     };
   }, [t]);

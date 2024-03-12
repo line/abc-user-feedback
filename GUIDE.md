@@ -31,3 +31,178 @@ Depending on your use case and the desired level of access, you may need to adju
 Users can specify a whitelist of domains for image URLs. This ensures that only images from trusted sources are accepted and managed by User Feedback API server.
 
 **Note**: The domain whitelist is enforced at the time of posting feedback with images. This means that validation against the whitelist occurs only during the submission of new feedback. Once an image URL has been uploaded to the database and accepted, it will be accessible through the web admin interface regardless of its current status on the whitelist. It is important to ensure that image URLs are from trusted sources before they are uploaded, as subsequent changes to the whitelist will not retroactively affect previously stored image URLs.
+
+## Webhook Feature
+
+### Introduction to Webhooks
+
+Webhooks in ABC User Feedback provide a powerful way to integrate with external services. They allow you to receive real-time notifications when specific events occur within the application, such as new feedback submissions or issue updates.
+
+Furthermore, you can combine webhooks with ABC User Feedback API to make more powerful features such as translation, sentiment analysis or whatever you want. Just make a webhook listener and build your own script and send the result to ABC User Feedback by API.
+
+### Setting Up Webhooks
+
+To set up webhooks in ABC User Feedback:
+
+1. Navigate to the project settings where you want to enable webhooks.
+2. Add a new webhook by providing the URL endpoint that ABC User Feedback will send the data to when events occur.
+3. Turn on the events you wish to subscribe to.
+4. Save the webhook configuration.
+
+Ensure that the endpoint you provide is secure and can accept POST requests with a JSON payload.
+
+### Event Types and Request Bodies
+
+ABC User Feedback's webhook supports the following event types, each with its own specific payload structure:
+
+#### FEEDBACK_CREATION
+
+This event is triggered when a new piece of feedback is created.
+
+**Payload Structure:**
+
+```json
+{
+  "event": "FEEDBACK_CREATION",
+  "data": {
+    "feedback": {
+      "id": 1,
+      "createdAt": "2023-04-02T15:30:00Z",
+      "updatedAt": "2023-04-02T15:30:00Z",
+      "issues": [
+        {
+          "id": 1,
+          "createdAt": "2023-04-02T15:30:00Z",
+          "updatedAt": "2023-04-02T15:30:00Z",
+          "name": "issue name",
+          "description": "issue description",
+          "status": "INIT",
+          "externalIssueId": "123",
+          "feedbackCount": 1
+        }
+      ]
+    },
+    "channel": {
+      "id": 1,
+      "name": "channel name"
+    },
+    "project": {
+      "id": 1,
+      "name": "project name"
+    }
+  }
+}
+```
+
+#### ISSUE_ADDITION
+
+This event is triggered when an issue is added to an existing piece of feedback.
+
+**Payload Structure:**
+
+```json
+{
+  "event": "ISSUE_ADDITION",
+  "data": {
+    "feedback": {
+      "id": 1,
+      "createdAt": "2023-04-02T15:30:00Z",
+      "updatedAt": "2023-04-02T15:30:00Z",
+      "issues": [
+        {
+          "id": 1,
+          "createdAt": "2023-04-02T15:30:00Z",
+          "updatedAt": "2023-04-02T15:30:00Z",
+          "name": "issue name",
+          "description": "issue description",
+          "status": "INIT",
+          "externalIssueId": "123",
+          "feedbackCount": 1
+        }
+      ]
+    },
+    "channel": {
+      "id": 1,
+      "name": "channel name"
+    },
+    "project": {
+      "id": 1,
+      "name": "project name"
+    },
+    "addedIssue": {
+      "id": 1,
+      "createdAt": "2023-04-02T15:30:00Z",
+      "updatedAt": "2023-04-02T15:30:00Z",
+      "name": "issue name",
+      "description": "issue description",
+      "status": "INIT",
+      "externalIssueId": "123",
+      "feedbackCount": 1
+    }
+  }
+}
+```
+
+#### ISSUE_CREATION
+
+This event is triggered when a new issue is created within a project.
+
+**Payload Structure:**
+
+```json
+{
+  "event": "ISSUE_CREATION",
+  "data": {
+    "issue": {
+      "id": 1,
+      "createdAt": "2023-04-02T15:30:00Z",
+      "updatedAt": "2023-04-02T15:30:00Z",
+      "name": "issue name",
+      "description": "issue description",
+      "status": "INIT",
+      "externalIssueId": "123",
+      "feedbackCount": 1
+    },
+    "project": {
+      "id": 1,
+      "name": "project name"
+    }
+  }
+}
+```
+
+#### ISSUE_STATUS_CHANGE
+
+This event is triggered when the status of an issue is updated.
+
+**Payload Structure:**
+
+```json
+{
+  "event": "ISSUE_STATUS_CHANGE",
+  "data": {
+    "issue": {
+      "id": 1,
+      "createdAt": "2023-04-02T15:30:00Z",
+      "updatedAt": "2023-04-02T15:30:00Z",
+      "name": "issue name",
+      "description": "issue description",
+      "status": "ON_REVIEW",
+      "externalIssueId": "123",
+      "feedbackCount": 1
+    },
+    "project": {
+      "id": 1,
+      "name": "project name"
+    },
+    "previousStatus": "INIT"
+  }
+}
+```
+
+### Handling Webhooks
+
+Upon receiving a webhook payload, your endpoint should:
+
+Parse the JSON payload.
+Take appropriate action based on the event type and data received.

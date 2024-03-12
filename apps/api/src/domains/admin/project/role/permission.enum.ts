@@ -29,21 +29,29 @@ export enum PermissionEnum {
   project_read = 'project_read',
   project_update = 'project_update',
   project_delete = 'project_delete',
+
   project_member_read = 'project_member_read',
   project_member_create = 'project_member_create',
   project_member_update = 'project_member_update',
   project_member_delete = 'project_member_delete',
+
   project_role_read = 'project_role_read',
   project_role_create = 'project_role_create',
   project_role_update = 'project_role_update',
   project_role_delete = 'project_role_delete',
-  project_apikey_read = 'project_apikey_read',
 
+  project_apikey_read = 'project_apikey_read',
   project_apikey_create = 'project_apikey_create',
   project_apikey_update = 'project_apikey_update',
   project_apikey_delete = 'project_apikey_delete',
+
   project_tracker_read = 'project_tracker_read',
   project_tracker_update = 'project_tracker_update',
+
+  project_webhook_read = 'project_webhook_read',
+  project_webhook_create = 'project_webhook_create',
+  project_webhook_update = 'project_webhook_update',
+  project_webhook_delete = 'project_webhook_delete',
 
   channel_read = 'channel_read',
   channel_create = 'channel_create',

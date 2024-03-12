@@ -25,6 +25,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
 import { DateTime } from 'luxon';
@@ -32,6 +33,7 @@ import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
 import {
+  EventTypeEnum,
   FieldFormatEnum,
   FieldStatusEnum,
   FieldTypeEnum,
@@ -69,6 +71,7 @@ export class FeedbackService {
     private readonly optionService: OptionService,
     private readonly channelService: ChannelService,
     private readonly configService: ConfigService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   private validateQuery(
@@ -399,6 +402,10 @@ export class FeedbackService {
       await this.feedbackOSService.create({ channelId, feedback });
     }
 
+    this.eventEmitter.emit(EventTypeEnum.FEEDBACK_CREATION, {
+      feedbackId: feedback.id,
+    });
+
     return { id: feedback.id };
   }
 
@@ -517,6 +524,11 @@ export class FeedbackService {
         data: { updatedAt: DateTime.utc().toISO() },
       });
     }
+
+    this.eventEmitter.emit(EventTypeEnum.ISSUE_ADDITION, {
+      feedbackId: dto.feedbackId,
+      issueId: dto.issueId,
+    });
   }
 
   @Transactional()

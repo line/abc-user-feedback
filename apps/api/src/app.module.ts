@@ -46,6 +46,7 @@ import { IssueModule } from './domains/admin/project/issue/issue.module';
 import { MemberModule } from './domains/admin/project/member/member.module';
 import { ProjectModule } from './domains/admin/project/project/project.module';
 import { RoleModule } from './domains/admin/project/role/role.module';
+import { WebhookModule } from './domains/admin/project/webhook/webhook.module';
 import { FeedbackIssueStatisticsModule } from './domains/admin/statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from './domains/admin/statistics/feedback/feedback-statistics.module';
 import { IssueStatisticsModule } from './domains/admin/statistics/issue/issue-statistics.module';
@@ -73,6 +74,7 @@ export const domainModules = [
   UserModule,
   MemberModule,
   HistoryModule,
+  WebhookModule,
   FeedbackStatisticsModule,
   IssueStatisticsModule,
   FeedbackIssueStatisticsModule,

@@ -14,6 +14,9 @@
  * under the License.
  */
 export { ChannelRepositoryStub } from './channel-repository.stub';
+export { EventRepositoryStub } from './event-repository.stub';
 export { FeedbackRepositoryStub } from './feedback-repository.stub';
+export { IssueRepositoryStub } from './issue-repository.stub';
 export { TenantRepositoryStub } from './tenant-repository.stub';
 export { UserRepositoryStub } from './user-repository.stub';
+export { WebhookRepositoryStub } from './webhook-repository.stub';

@@ -16,35 +16,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
-import { PermissionEnum } from '../../permission.enum';
+import { GetWebhookByIdResponseDto } from './get-webhook-by-id-response.dto';
 
-class GetAllRoleResponseRoleDto {
+export class GetWebhooksByProjectIdResponseDto {
   @Expose()
-  @ApiProperty()
-  id: number;
+  @ApiProperty({ type: [GetWebhookByIdResponseDto] })
+  @Type(() => GetWebhookByIdResponseDto)
+  items: GetWebhookByIdResponseDto[];
 
-  @Expose()
-  @ApiProperty()
-  name: string;
-
-  @Expose()
-  @ApiProperty({ type: [PermissionEnum], enum: PermissionEnum })
-  permissions: PermissionEnum[];
-}
-
-export class GetAllRoleResponseDto {
-  @Expose()
-  @ApiProperty({ type: [GetAllRoleResponseRoleDto] })
-  @Type(() => GetAllRoleResponseRoleDto)
-  roles: GetAllRoleResponseRoleDto[];
-
-  @Expose()
-  @ApiProperty()
-  total: number;
-
-  public static transform(plain: unknown): GetAllRoleResponseDto {
-    return plainToInstance(GetAllRoleResponseDto, plain, {
-      excludeExtraneousValues: true,
-    });
+  public static transform(params: any): GetWebhooksByProjectIdResponseDto {
+    return plainToInstance(GetWebhooksByProjectIdResponseDto, params);
   }
 }
