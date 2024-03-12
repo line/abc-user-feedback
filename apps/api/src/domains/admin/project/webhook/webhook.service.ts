@@ -61,7 +61,7 @@ export class WebhookService {
         EventTypeEnum.ISSUE_STATUS_CHANGE,
       ].includes(event.type)
     ) {
-      return !event.channelIds;
+      return !event.channelIds || event.channelIds.length === 0;
     }
 
     return false;
@@ -103,11 +103,6 @@ export class WebhookService {
     });
 
     return await this.repository.save(newWebhook);
-
-    // const savedEvents = await this.eventRepo.save(events);
-    // savedWebhook.events = savedEvents;
-
-    // return savedWebhook;
   }
 
   async findById(webhookId: number) {
