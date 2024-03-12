@@ -28,4 +28,5 @@ export enum EntityNameEnum {
   User = 'User',
   FeedbackIssue = 'FeedbackIssue',
   Code = 'Code',
+  Webhook = 'Webhook',
 }

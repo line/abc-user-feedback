@@ -22,18 +22,29 @@ export interface ISelectBoxProps<Option, IsMulti extends boolean>
   extends Props<Option, IsMulti> {
   isExpand?: boolean;
   label?: string;
+  width?: number;
+  height?: number;
 }
 
 function SelectBox<Option = unknown, IsMulti extends boolean = false>(
   props: ISelectBoxProps<Option, IsMulti>,
 ) {
+  const {
+    isExpand,
+    label,
+    classNames,
+    height = 40,
+    width,
+    styles,
+    ...reactSelectProps
+  } = props;
+
   const component = () => (
     <ReactSelect
       classNames={{
-        container: () => 'min-w-[120px]',
         control: ({ isFocused, isDisabled }) =>
           [
-            'border rounded py-2 px-3 gap-2 min-h-10',
+            'border rounded py-2 px-3 gap-2 min-h-10 min-w-[120px]',
             isFocused ? 'border-fill-primary' : 'border-fill-tertiary',
             isDisabled ? 'bg-fill-tertiary' : 'bg-primary',
           ].join(' '),
@@ -52,13 +63,16 @@ function SelectBox<Option = unknown, IsMulti extends boolean = false>(
         valueContainer: () => 'gap-1',
         input: () => 'font-12-regular',
         indicatorsContainer: () => 'flex gap-2',
+        ...classNames,
       }}
       styles={{
         valueContainer: (base) => ({
           ...base,
-          flexWrap: props.isExpand ? 'wrap' : 'nowrap',
+          flexWrap: isExpand ? 'wrap' : 'nowrap',
         }),
         menuPortal: (base) => ({ ...base, zIndex: 100 }),
+        control: (base) => ({ ...base, width: width ?? 'full', height }),
+        ...styles,
       }}
       components={{
         IndicatorSeparator: () => null,
@@ -89,15 +103,15 @@ function SelectBox<Option = unknown, IsMulti extends boolean = false>(
       }}
       menuPortalTarget={document.body}
       unstyled
-      {...props}
+      {...reactSelectProps}
     />
   );
 
-  if (props.label) {
+  if (label) {
     return (
       <div>
         <label className="input-label mb-2">
-          {props.label}
+          {label}
           {props.required && <span className="text-red-primary ml-1">*</span>}
         </label>
         {component()}

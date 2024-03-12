@@ -32,6 +32,7 @@ import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { IssueEntity } from '../issue/issue.entity';
 import { RoleEntity } from '../role/role.entity';
+import { WebhookEntity } from '../webhook/webhook.entity';
 
 export interface Timezone {
   countryCode: string;
@@ -86,6 +87,11 @@ export class ProjectEntity extends CommonEntity {
     cascade: true,
   })
   roles: Relation<RoleEntity>[];
+
+  @OneToMany(() => WebhookEntity, (webhook) => webhook.project, {
+    cascade: true,
+  })
+  webhooks: Relation<WebhookEntity>[];
 
   @ManyToOne(() => TenantEntity, (tenant) => tenant.projects, {
     onDelete: 'CASCADE',

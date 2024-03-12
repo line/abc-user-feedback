@@ -32,6 +32,7 @@ import { ProjectHistorySubscriber } from './subscribers/project-history.subscrib
 import { RoleHistorySubscriber } from './subscribers/role-history.subscriber';
 import { TenantHistorySubscriber } from './subscribers/tenant-history.subscriber';
 import { UserHistorySubscriber } from './subscribers/user-history.subscriber';
+import { WebhookHistorySubscriber } from './subscribers/webhook-history.subscriber';
 
 const subscribers = [
   ApiKeyHistorySubscriber,
@@ -48,6 +49,7 @@ const subscribers = [
   UserHistorySubscriber,
   FeedbackIssueHistorySubscriber,
   CodeHistorySubscriber,
+  WebhookHistorySubscriber,
 ];
 @Module({
   imports: [TypeOrmModule.forFeature([HistoryEntity])],

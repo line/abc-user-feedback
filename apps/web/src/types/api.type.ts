@@ -191,6 +191,15 @@ export interface paths {
     put: operations["IssueTrackerController_updateOne"];
     post: operations["IssueTrackerController_create"];
   };
+  "/api/admin/projects/{projectId}/webhooks": {
+    get: operations["WebhookController_getByProjectId"];
+    post: operations["WebhookController_create"];
+  };
+  "/api/admin/projects/{projectId}/webhooks/{webhookId}": {
+    get: operations["WebhookController_get"];
+    put: operations["WebhookController_update"];
+    delete: operations["WebhookController_delete"];
+  };
 }
 
 export type webhooks = Record<string, never>;
@@ -331,7 +340,7 @@ export interface components {
       updatedAt: string;
       deletedAt: string;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
       project: components["schemas"]["RoleProjectDto"];
     };
     GetRolesByIdResponseDto: {
@@ -408,22 +417,22 @@ export interface components {
     CountFeedbacksByTenantIdResponseDto: {
       total: number;
     };
-    GetAllRoleResponseRoleDto: {
+    GetAllRolesResponseRoleDto: {
       id: number;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
-    GetAllRoleResponseDto: {
-      roles: components["schemas"]["GetAllRoleResponseRoleDto"][];
+    GetAllRolesResponseDto: {
+      roles: components["schemas"]["GetAllRolesResponseRoleDto"][];
       total: number;
     };
     CreateRoleRequestDto: {
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     UpdateRoleRequestDto: {
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     MemberUserDto: {
       id: number;
@@ -434,7 +443,7 @@ export interface components {
     MemberRoleDto: {
       id: number;
       name: string;
-      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
+      permissions: ("feedback_read" | "feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_read" | "issue_create" | "issue_update" | "issue_delete" | "project_read" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_read" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
     };
     GetAllMember: {
       id: number;
@@ -960,6 +969,56 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
+    EventDto: {
+      /** @enum {string} */
+      type: "FEEDBACK_CREATION" | "ISSUE_CREATION" | "ISSUE_STATUS_CHANGE" | "ISSUE_ADDITION";
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      channelIds: number[];
+    };
+    CreateWebhookRequestDto: {
+      name: string;
+      url: string;
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      events: components["schemas"]["EventDto"][];
+    };
+    CreateWebhookResponseDto: {
+      id: number;
+    };
+    GetWebhookResponseEventDto: {
+      id: number;
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      /** @enum {string} */
+      type: "FEEDBACK_CREATION" | "ISSUE_CREATION" | "ISSUE_STATUS_CHANGE" | "ISSUE_ADDITION";
+      channels: components["schemas"]["FindChannelByIdResponseDto"][];
+      /** Format: date-time */
+      createdAt: string;
+    };
+    GetWebhookByIdResponseDto: {
+      id: number;
+      name: string;
+      url: string;
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      events: components["schemas"]["GetWebhookResponseEventDto"][];
+      /** Format: date-time */
+      createdAt: string;
+    };
+    GetWebhooksByProjectIdResponseDto: {
+      items: components["schemas"]["GetWebhookByIdResponseDto"][];
+    };
+    UpdateWebhookRequestDto: {
+      name: string;
+      url: string;
+      /** @enum {string} */
+      status: "ACTIVE" | "INACTIVE";
+      events: components["schemas"]["EventDto"][];
+    };
+    UpdateWebhookResponseDto: {
+      id: number;
+    };
   };
   responses: never;
   parameters: never;
@@ -1284,7 +1343,7 @@ export interface operations {
     responses: {
       200: {
         content: {
-          "application/json": components["schemas"]["GetAllRoleResponseDto"];
+          "application/json": components["schemas"]["GetAllRolesResponseDto"];
         };
       };
     };
@@ -2138,6 +2197,87 @@ export interface operations {
       201: {
         content: {
           "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
+        };
+      };
+    };
+  };
+  WebhookController_getByProjectId: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWebhooksByProjectIdResponseDto"];
+        };
+      };
+    };
+  };
+  WebhookController_create: {
+    parameters: {
+      path: {
+        projectId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateWebhookRequestDto"];
+      };
+    };
+    responses: {
+      201: {
+        content: {
+          "application/json": components["schemas"]["CreateWebhookResponseDto"];
+        };
+      };
+    };
+  };
+  WebhookController_get: {
+    parameters: {
+      path: {
+        webhookId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWebhookByIdResponseDto"];
+        };
+      };
+    };
+  };
+  WebhookController_update: {
+    parameters: {
+      path: {
+        projectId: number;
+        webhookId: number;
+      };
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateWebhookRequestDto"];
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["UpdateWebhookResponseDto"];
+        };
+      };
+    };
+  };
+  WebhookController_delete: {
+    parameters: {
+      path: {
+        webhookId: number;
+      };
+    };
+    responses: {
+      200: {
+        content: {
+          "application/json": components["schemas"]["GetWebhookByIdResponseDto"];
         };
       };
     };
