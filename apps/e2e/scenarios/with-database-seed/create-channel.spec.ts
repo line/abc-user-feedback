@@ -6,7 +6,7 @@ export default () => {
       await page.goto('http://localhost:3000');
       await page.getByText('SeededTestProject').click();
       await page.getByText('FeedbackIssueSetting').hover();
-      await page.getByRole('button', { name: 'Setting' }).click();
+      await page.getByRole('button', { name: 'Settings' }).click();
       await page.getByRole('button', { name: 'Create Channel' }).click();
       await page.getByPlaceholder('Please enter Channel Name.').click();
       await page

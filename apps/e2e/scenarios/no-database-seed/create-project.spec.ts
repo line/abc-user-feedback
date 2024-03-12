@@ -4,12 +4,12 @@ export default () => {
   test.afterEach(async ({ page }) => {
     await page.getByText('TestProject').click();
     await page.getByText('FeedbackIssueSetting').hover();
-    await page.getByRole('button', { name: 'Setting', exact: true }).click();
+    await page.getByRole('button', { name: 'Settings', exact: true }).click();
 
     await page.getByText('Delete Project').click();
     await page.getByRole('button', { name: 'Delete' }).click();
-    await page.getByPlaceholder('Please input').click();
-    await page.getByPlaceholder('Please input').fill('TestProject');
+    await page.getByPlaceholder('Enter Value').click();
+    await page.getByPlaceholder('Enter Value').fill('TestProject');
     await page.getByRole('button', { name: 'Delete' }).click();
     await expect(page.getByText('TestProject')).toHaveCount(0);
   });
@@ -30,12 +30,12 @@ export default () => {
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Complete' }).click();
-    await expect(page.getByText('Project creation is complete.')).toBeVisible();
+    await expect(page.getByText('Project Creation Complete')).toBeVisible();
     await expect(page.locator('#Project\\ Name')).toHaveValue('TestProject');
     await expect(page.locator('#Project\\ Description')).toHaveValue(
       'Project for test',
     );
-    await page.getByRole('button', { name: 'Next time' }).click();
+    await page.getByRole('button', { name: 'Later' }).click();
     await expect(page.getByText('TestProject')).toBeVisible();
   });
 
@@ -74,7 +74,7 @@ export default () => {
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Next' }).click();
     await page.getByRole('button', { name: 'Complete' }).click();
-    await expect(page.getByText('Project creation is complete.')).toBeVisible();
+    await expect(page.getByText('Project Creation Complete')).toBeVisible();
     await expect(page.locator('#Project\\ Name')).toHaveValue('TestProject');
     await expect(page.locator('#Project\\ Description')).toHaveValue(
       'Project for test',
@@ -91,7 +91,7 @@ export default () => {
         .getByRole('checkbox')
         .nth(3),
     ).toBeChecked();
-    await page.getByRole('button', { name: 'Next time' }).click();
+    await page.getByRole('button', { name: 'Later' }).click();
     await expect(page.getByText('TestProject')).toBeVisible();
   });
 };
