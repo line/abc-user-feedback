@@ -37,28 +37,34 @@ export class WebhookService {
     private readonly channelRepo: Repository<ChannelEntity>,
   ) {}
 
-  private async validateEvent(event: EventDto) {
+  private async validateEvent(event: EventDto): Promise<boolean> {
+    const requiresChannelIds = [
+      EventTypeEnum.FEEDBACK_CREATION,
+      EventTypeEnum.ISSUE_ADDITION,
+    ].includes(event.type);
+
     if (
-      [EventTypeEnum.FEEDBACK_CREATION, EventTypeEnum.ISSUE_ADDITION].includes(
-        event.type,
-      )
+      requiresChannelIds &&
+      (!event.channelIds || event.channelIds.length === 0)
     ) {
-      if (event.channelIds.length > 0) {
-        const channels = await this.channelRepo.findBy({
-          id: In(event.channelIds),
-        });
-        return channels.length === event.channelIds.length;
-      } else {
-        return true;
-      }
+      return false;
+    }
+
+    if (requiresChannelIds) {
+      const channels = await this.channelRepo.findBy({
+        id: In(event.channelIds),
+      });
+      return channels.length === event.channelIds.length;
     } else if (
       [
         EventTypeEnum.ISSUE_CREATION,
         EventTypeEnum.ISSUE_STATUS_CHANGE,
       ].includes(event.type)
     ) {
-      return event.channelIds.length === 0;
+      return !event.channelIds;
     }
+
+    return false;
   }
 
   @Transactional()
