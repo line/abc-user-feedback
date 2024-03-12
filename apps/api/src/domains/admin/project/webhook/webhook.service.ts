@@ -38,29 +38,27 @@ export class WebhookService {
   ) {}
 
   private async validateEvent(event: EventDto): Promise<boolean> {
-    const requiresChannelIds = [
+    const eventRequiresChannelIds = [
       EventTypeEnum.FEEDBACK_CREATION,
       EventTypeEnum.ISSUE_ADDITION,
-    ].includes(event.type);
+    ];
+    const eventExcludesChannelIds = [
+      EventTypeEnum.ISSUE_CREATION,
+      EventTypeEnum.ISSUE_STATUS_CHANGE,
+    ];
 
-    if (
-      requiresChannelIds &&
-      (!event.channelIds || event.channelIds.length === 0)
-    ) {
-      return false;
-    }
+    if (eventRequiresChannelIds.includes(event.type)) {
+      if (!event.channelIds) {
+        return false;
+      }
 
-    if (requiresChannelIds) {
       const channels = await this.channelRepo.findBy({
         id: In(event.channelIds),
       });
       return channels.length === event.channelIds.length;
-    } else if (
-      [
-        EventTypeEnum.ISSUE_CREATION,
-        EventTypeEnum.ISSUE_STATUS_CHANGE,
-      ].includes(event.type)
-    ) {
+    }
+
+    if (eventExcludesChannelIds.includes(event.type)) {
       return !event.channelIds || event.channelIds.length === 0;
     }
 
