@@ -94,6 +94,10 @@ const Opensearch = {
   LargeWindow: 'LargeWindow',
 };
 
+const Webhook = {
+  WebhookAlreadyExists: 'WebhookAlreadyExists',
+};
+
 export const ErrorCode = {
   Tenant,
   Role,
@@ -109,6 +113,7 @@ export const ErrorCode = {
   Option,
   Member,
   Opensearch,
+  Webhook,
 };
 
 export type ErrorCode = typeof ErrorCode;

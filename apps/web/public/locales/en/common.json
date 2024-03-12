@@ -228,7 +228,7 @@
     "sign-in": "Sign In",
     "sign-up": "Sign Up",
     "save": "Save",
-    "create": "Create",
+    "create": "Create {{name}}",
     "cancel": "Cancel",
     "delete": "Delete",
     "register": "Register",
@@ -287,7 +287,13 @@
     "feedback-detail": "Feedback Detail",
     "create-channel-in-progress": "There is a Channel being created.",
     "create-project-in-progress": "There is a Project being created.",
-    "days": "{{days}} days"
+    "days": "{{days}} days",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "Feedback Creation",
+      "ISSUE_CREATION": "Issue Creation",
+      "ISSUE_STATUS_CHANGE": "Issue Status Change",
+      "ISSUE_ADDITION": "Issue Addition"
+    }
   },
   "toast": {
     "sign-in": "Login Successful",
@@ -300,7 +306,6 @@
     "add": "Addition Complete",
     "copy": "Copy Complete"
   },
-  "placeholder": "Please enter {{name}}.",
   "dialog": {
     "continue": {
       "title": "Do you want to continue?",
@@ -309,6 +314,16 @@
         "continue": "Continue",
         "restart": "Restart"
       }
+    },
+    "create-webhook": {
+      "title": "Create Webhook"
+    },
+    "update-webhook": {
+      "title": "Edit Webhook"
+    },
+    "delete-webhook": {
+      "title": "Delete Webhook",
+      "description": "Deleting Webhook deletes all associated data."
     }
   },
   "dashboard-card": {
@@ -382,7 +397,11 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Number of feedbacks registered in the issue."
+    "issue-feedback-count": "Number of feedbacks registered in the issue.",
+    "webhook-feedback-creation": "This event is triggered whenever channel-specific feedback is collected.",
+    "webhook-issue-addition": "This event is triggered whenever an issue is registered in the channel-specific feedback.",
+    "webhook-issue-creation": "This event is triggered whenever an issue is generated, regardless of the channel.",
+    "webhook-issue-status-change": "This event is triggered whenever the issue status changes, regardless of the channel."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant Information",
@@ -395,6 +414,7 @@
     "role-mgmt": "Role Management",
     "api-key-mgmt": "API Key Management",
     "issue-tracker-mgmt": "Issue Tracker Management",
+    "webhook-integration": "Webhook Integration",
     "delete-project": "Delete Project"
   },
   "channel-setting-menu": {
@@ -417,7 +437,8 @@
     "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
     "field": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
     "image-setting": "When collecting feedback on the Image format, you can work with Image Storage and set up a whitelist for the Image URL domain.\nSee Image <icon></icon> <docs>Docs</docs>.",
-    "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
+    "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data.",
+    "webhook": "Webhook allows you to take advantage of a variety of events that occur in User Feedback. See Webhook <icon></icon> <docs>Docs</docs> for more information."
   },
   "hint": {
     "required": "Required",
@@ -426,7 +447,8 @@
     "invalid-domain": "Invalid domain format.",
     "image-format": "The format for entering the Image URL."
   },
-  "image-mgmt-setting": {
-    "image-storage-integration-setting": "Image Storage Integration Setting"
-  }
+  "title-box": {
+    "image-storage-integration": "Image Storage Integration"
+  },
+  "placeholder": "Please enter {{name}}."
 }

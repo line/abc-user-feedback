@@ -60,7 +60,13 @@ const ColumnSettingPopover: React.FC<IProps> = ({
     () =>
       columnOrder.length === 0
         ? (columns.map((v) => v.id) as string[])
-        : columnOrder,
+        : columnOrder.length === columns.length
+        ? columnOrder
+        : columnOrder.concat(
+            columns
+              .filter((v) => !columnOrder.includes(v.id as string))
+              .map((v) => v.id) as string[],
+          ),
     [columns, columnOrder],
   );
 

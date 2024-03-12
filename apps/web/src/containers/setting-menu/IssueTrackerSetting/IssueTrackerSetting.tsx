@@ -135,7 +135,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
         <TextInput
           {...register('ticketKey')}
           label="Project Key"
-          placeholder="Delivery"
+          placeholder="PROJECT"
           isValid={!formState.errors.ticketKey}
           hint={formState.errors.ticketKey?.message}
           isSubmitted={formState.isSubmitted}

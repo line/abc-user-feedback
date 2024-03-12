@@ -27,7 +27,7 @@ import {
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
 import { CreateRoleRequestDto, UpdateRoleRequestDto } from './dtos/requests';
-import { GetAllRoleResponseDto } from './dtos/responses';
+import { GetAllRolesResponseDto } from './dtos/responses';
 import { PermissionEnum } from './permission.enum';
 import { RequirePermission } from './require-permission.decorator';
 import { RoleService } from './role.service';
@@ -38,12 +38,12 @@ export class RoleController {
   constructor(private readonly roleService: RoleService) {}
 
   @RequirePermission(PermissionEnum.project_role_read)
-  @ApiOkResponse({ type: GetAllRoleResponseDto })
+  @ApiOkResponse({ type: GetAllRolesResponseDto })
   @Get('/')
   async getAllRolesByProjectId(
     @Param('projectId', ParseIntPipe) projectId: number,
   ) {
-    return GetAllRoleResponseDto.transform(
+    return GetAllRolesResponseDto.transform(
       await this.roleService.findByProjectId(projectId),
     );
   }

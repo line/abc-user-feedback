@@ -61,7 +61,6 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
       <PopoverContent
         className="border-fill-secondary flex flex-col gap-5 border p-5"
         onClick={(e) => e.stopPropagation()}
-        diabledDimmed
       >
         <div className="flex items-center justify-between">
           <h1 className="font-14-bold">{t('modal.image-preview.title')}</h1>

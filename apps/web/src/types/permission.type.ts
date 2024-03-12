@@ -29,7 +29,7 @@ export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
   feedback_download_read: 'Download Feedback',
   feedback_update: 'Edit Feedback',
   feedback_delete: 'Delete Feedback',
-  feedback_issue_update: 'Attach/Dettach Issue in Feedback',
+  feedback_issue_update: 'Attach/Detach Issue in Feedback',
   issue_create: 'Create Issue',
   issue_delete: 'Delete Issue',
 };
@@ -59,6 +59,10 @@ export const ProjectPermissionList = [
   'project_apikey_delete',
   'project_tracker_read',
   'project_tracker_update',
+  'project_webhook_read',
+  'project_webhook_create',
+  'project_webhook_update',
+  'project_webhook_delete',
 ] as const;
 
 export const ProjectInfoPermissionList = [
@@ -93,6 +97,13 @@ export const ProjectTrackerPermissionList = [
   'project_tracker_update',
 ] as const;
 
+export const ProjectWebhookPermissionList = [
+  'project_webhook_read',
+  'project_webhook_create',
+  'project_webhook_update',
+  'project_webhook_delete',
+] as const;
+
 export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
   project_read: 'Read Project Information',
   project_update: 'Edit Project Information',
@@ -111,6 +122,10 @@ export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
   project_apikey_delete: 'Delete API Key',
   project_tracker_read: 'Read Issue Tracker',
   project_tracker_update: 'Edit Issue Tracker',
+  project_webhook_read: 'Read Webhook',
+  project_webhook_create: 'Create Webhook',
+  project_webhook_update: 'Edit Webhook',
+  project_webhook_delete: 'Delete Webhook',
 };
 
 export const ChannelInfoPermissionList = [

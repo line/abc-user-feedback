@@ -31,3 +31,5 @@ export { default as SelectBox } from './SelectBox';
 export { default as DescriptionTooltip } from './DescriptionTooltip';
 export { default as Popper } from './Popper';
 export { default as TimezoneSelectBox } from './TimezoneSelectBox';
+
+export { default as HelpCardDocs } from './HelpCardDocs';

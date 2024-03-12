@@ -17,12 +17,12 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Badge, Icon, Input, TextInput, toast } from '@ufb/ui';
+import { Badge, Input, TextInput, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
+import { HelpCardDocs, SettingMenuTemplate } from '@/components';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 
 interface IForm {
@@ -210,37 +210,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          <Trans
-            i18nKey="help-card.image-setting"
-            components={{
-              icon: (
-                <Icon
-                  name="ExpandPopup"
-                  className="text-blue-primary cursor-pointer"
-                  size={12}
-                  onClick={() => {
-                    if (typeof window === 'undefined') return;
-                    window.open(
-                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
-                      '_blank',
-                    );
-                  }}
-                />
-              ),
-              docs: (
-                <span
-                  className="text-blue-primary cursor-pointer"
-                  onClick={() => {
-                    if (typeof window === 'undefined') return;
-                    window.open(
-                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md',
-                      '_blank',
-                    );
-                  }}
-                />
-              ),
-            }}
-          />
+          <HelpCardDocs i18nKey="help-card.image-setting" />
         </p>
         <div className="relative h-full w-[80px]">
           <Image
@@ -255,7 +225,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         <div className="mb-6 flex flex-col gap-2">
           <div className="flex items-center justify-between">
             <h2 className="font-20-bold">
-              {t('image-mgmt-setting.image-storage-integration-setting')}
+              {t('title-box.image-storage-integration')}
             </h2>
             <button
               type="button"
@@ -268,7 +238,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('accessKeyId')}
             label="Access Key ID"
-            placeholder="input"
+            placeholder={t('placeholder', { name: 'Access Key ID' })}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.accessKeyId}
             hint={formState.errors.accessKeyId?.message}
@@ -277,8 +247,8 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           />
           <TextInput
             {...register('secretAccessKey')}
-            label="Secret Access Key ID"
-            placeholder="input"
+            label="Secret Access Key"
+            placeholder={t('placeholder', { name: 'Secret Access Key' })}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.secretAccessKey}
             hint={formState.errors.secretAccessKey?.message}
@@ -288,7 +258,9 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('endpoint')}
             label="End Point"
-            placeholder="input"
+            placeholder={`${t('placeholder', {
+              name: 'End Point',
+            })} (ex: https://s3.ap-northeast-2.amazonaws.com)`}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.endpoint}
             hint={formState.errors.endpoint?.message}
@@ -298,7 +270,9 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('region')}
             label="Region"
-            placeholder="input"
+            placeholder={`${t('placeholder', {
+              name: 'Region',
+            })} (ex: ap-northeast-2)`}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.region}
             hint={formState.errors.region?.message}
@@ -308,7 +282,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           <TextInput
             {...register('bucket')}
             label="Bucket Name"
-            placeholder="input"
+            placeholder={t('placeholder', { name: 'Bucket Name' })}
             disabled={!perms.includes('channel_image_update')}
             isValid={!formState.errors.bucket}
             hint={formState.errors.bucket?.message}

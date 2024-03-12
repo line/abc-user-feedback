@@ -228,7 +228,7 @@
     "sign-in": "로그인",
     "sign-up": "회원가입",
     "save": "저장",
-    "create": "생성",
+    "create": "{{name}} 생성",
     "cancel": "취소",
     "delete": "삭제",
     "register": "등록",
@@ -287,7 +287,13 @@
     "feedback-detail": "피드백 상세",
     "create-channel-in-progress": "생성중인 Channel이 있습니다.",
     "create-project-in-progress": "생성중인 Project가 있습니다.",
-    "days": "{{days}}일"
+    "days": "{{days}}일",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "피드백 생성",
+      "ISSUE_CREATION": "이슈 생성",
+      "ISSUE_STATUS_CHANGE": "이슈 상태 변경",
+      "ISSUE_ADDITION": "이슈 등록"
+    }
   },
   "toast": {
     "sign-in": "로그인 성공",
@@ -300,7 +306,6 @@
     "add": "추가 완료",
     "copy": "복사 완료"
   },
-  "placeholder": "{{name}}을 입력해주세요.",
   "dialog": {
     "continue": {
       "title": "이어서 생성하시겠어요?",
@@ -309,6 +314,16 @@
         "continue": "이어서하기",
         "restart": "처음부터"
       }
+    },
+    "create-webhook": {
+      "title": "Webhook 생성"
+    },
+    "update-webhook": {
+      "title": "Webhook 편집"
+    },
+    "delete-webhook": {
+      "title": "Webhook 삭제",
+      "description": "Webhook를 삭제하면 연동된 데이터가 모두 삭제됩니다."
     }
   },
   "dashboard-card": {
@@ -382,7 +397,11 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다."
+    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다.",
+    "webhook-feedback-creation": "채널별 피드백이 수집될 때마다 해당 이벤트를 발동합니다.",
+    "webhook-issue-addition": "채널별 이슈를 등록할 때마다 해당 이벤트를 발동합니다.",
+    "webhook-issue-creation": "채널에 상관없이 이슈를 생성할 때마다 해당 이벤트를 발동합니다.",
+    "webhook-issue-status-change": "채널에 상관없이 이슈상태를 변경할 때마다 해당 이벤트를 발동합니다."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant 정보",
@@ -395,6 +414,7 @@
     "role-mgmt": "Role 관리",
     "api-key-mgmt": "API Key 관리",
     "issue-tracker-mgmt": "Issue Tracker 관리",
+    "webhook-integration": "Webhook 연동",
     "delete-project": "Project 삭제"
   },
   "channel-setting-menu": {
@@ -417,7 +437,8 @@
     "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
     "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
     "image-setting": "Image 포맷에 대해 피드백을 수집할 때 Image Storage와 연동할 수 있고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있습니다.\n자세한 내용은 Image <icon></icon> <docs>Docs</docs>를 참고해 주세요.",
-    "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다."
+    "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다.",
+    "webhook": "Webhook을 사용하면 User Feedback에서 발생하는 다양한 이벤트를 활용할 수 있습니다. 자세한 내용은 Webhook <icon></icon> <docs>Docs</docs>를 참고해 주세요."
   },
   "hint": {
     "required": "필수 입력 대상입니다.",
@@ -426,7 +447,8 @@
     "image-format": "Image URL을 입력하는 포맷입니다.",
     "invalid-domain": "도메인 형식이 아닙니다."
   },
-  "image-mgmt-setting": {
-    "image-storage-integration-setting": "Image Storage 연동 설정"
-  }
+  "title-box": {
+    "image-storage-integration": "Image Storage 연동"
+  },
+  "placeholder": "{{name}}을 입력해주세요."
 }
