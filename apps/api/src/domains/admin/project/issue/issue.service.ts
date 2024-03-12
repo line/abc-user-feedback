@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -28,6 +28,8 @@ import type { TimeRange } from '@/common/dtos';
 import { EventTypeEnum } from '@/common/enums';
 import type { CountByProjectIdDto } from '@/domains/admin/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
+import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
+import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import { ProjectEntity } from '../project/project.entity';
 import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
 import { CreateIssueDto, UpdateIssueDto } from './dtos';
@@ -40,6 +42,7 @@ import { IssueEntity } from './issue.entity';
 
 @Injectable()
 export class IssueService {
+  private logger = new Logger(IssueService.name);
   constructor(
     @InjectRepository(IssueEntity)
     private readonly repository: Repository<IssueEntity>,
@@ -47,6 +50,7 @@ export class IssueService {
     private readonly projectRepository: Repository<ProjectEntity>,
     private readonly issueStatisticsService: IssueStatisticsService,
     private readonly schedulerRegistry: SchedulerRegistry,
+    private readonly schedulerLockService: SchedulerLockService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
 
@@ -275,7 +279,24 @@ export class IssueService {
       const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
       const job = new CronJob(`30 ${cronHour} * * *`, async () => {
-        await this.calculateFeedbackCount(id);
+        if (
+          await this.schedulerLockService.acquireLock(
+            LockTypeEnum.FEEDBACK_COUNT,
+            1000 * 60 * 5,
+          )
+        ) {
+          try {
+            await this.calculateFeedbackCount(id);
+          } finally {
+            await this.schedulerLockService.releaseLock(
+              LockTypeEnum.FEEDBACK_COUNT,
+            );
+          }
+        } else {
+          this.logger.log({
+            message: 'Failed to acquire lock for feedback count calculation',
+          });
+        }
       });
       this.schedulerRegistry.addCronJob(`feedback-count-by-issue-${id}`, job);
       job.start();

@@ -14,17 +14,16 @@
  * under the License.
  */
 
-import { registerAs } from '@nestjs/config';
-import Joi from 'joi';
-import { v4 as uuidv4 } from 'uuid';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
-export const appConfigSchema = Joi.object({
-  APP_PORT: Joi.number().default(4000),
-  APP_ADDRESS: Joi.string().default('0.0.0.0'),
-});
+import { SchedulerLockEntity } from '@/domains/operation/scheduler-lock/scheduler-lock.entity';
+import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
+import { mockRepository } from '../util-functions';
 
-export const appConfig = registerAs('app', () => ({
-  port: process.env.APP_PORT,
-  address: process.env.APP_ADDRESS,
-  serverId: uuidv4(),
-}));
+export const SchedulerLockServiceProviders = [
+  SchedulerLockService,
+  {
+    provide: getRepositoryToken(SchedulerLockEntity),
+    useValue: mockRepository(),
+  },
+];

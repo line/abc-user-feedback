@@ -13,18 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import { registerAs } from '@nestjs/config';
-import Joi from 'joi';
-import { v4 as uuidv4 } from 'uuid';
-
-export const appConfigSchema = Joi.object({
-  APP_PORT: Joi.number().default(4000),
-  APP_ADDRESS: Joi.string().default('0.0.0.0'),
-});
-
-export const appConfig = registerAs('app', () => ({
-  port: process.env.APP_PORT,
-  address: process.env.APP_ADDRESS,
-  serverId: uuidv4(),
-}));
+export enum LockTypeEnum {
+  FEEDBACK_STATISTICS = 'FEEDBACK_STATISTICS',
+  ISSUE_STATISTICS = 'ISSUE_STATISTICS',
+  FEEDBACK_ISSUE_STATISTICS = 'FEEDBACK_ISSUE_STATISTICS',
+  FEEDBACK_COUNT = 'FEEDBACK_COUNT',
+}

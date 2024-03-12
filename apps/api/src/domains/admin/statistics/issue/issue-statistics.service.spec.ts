@@ -254,16 +254,11 @@ describe('IssueStatisticsService suite', () => {
       } as ProjectEntity);
       jest.spyOn(issueRepo, 'count').mockResolvedValueOnce(0);
       jest.spyOn(issueRepo, 'count').mockResolvedValue(1);
-      jest
-        .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+      jest.spyOn(issueStatsRepo.manager, 'transaction');
 
       await issueStatsService.createIssueStatistics(projectId, dayToCreate);
 
-      expect(issueRepo.count).toBeCalledTimes(dayToCreate);
-      expect(issueStatsRepo.createQueryBuilder).toBeCalledTimes(
-        dayToCreate - 1,
-      );
+      expect(issueStatsRepo.manager.transaction).toBeCalledTimes(dayToCreate);
     });
   });
 

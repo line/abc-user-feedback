@@ -24,6 +24,7 @@ import { FeedbackStatisticsEntity } from '@/domains/admin/statistics/feedback/fe
 import { FeedbackStatisticsService } from '@/domains/admin/statistics/feedback/feedback-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
 import { ChannelRepositoryStub, FeedbackRepositoryStub } from '../stubs';
+import { SchedulerLockServiceProviders } from './scheduler-lock.service.providers';
 
 export const FeedbackStatisticsServiceProviders = [
   FeedbackStatisticsService,
@@ -48,4 +49,5 @@ export const FeedbackStatisticsServiceProviders = [
     useValue: mockRepository(),
   },
   SchedulerRegistry,
+  ...SchedulerLockServiceProviders,
 ];

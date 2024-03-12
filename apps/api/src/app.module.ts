@@ -55,6 +55,7 @@ import { UserModule } from './domains/admin/user/user.module';
 import { APIModule } from './domains/api/api.module';
 import { HealthModule } from './domains/operation/health/health.module';
 import { MigrationModule } from './domains/operation/migration/migration.module';
+import { SchedulerLockModule } from './domains/operation/scheduler-lock/scheduler-lock.module';
 
 export const domainModules = [
   AuthModule,
@@ -78,6 +79,7 @@ export const domainModules = [
   IssueStatisticsModule,
   FeedbackIssueStatisticsModule,
   APIModule,
+  SchedulerLockModule,
 ] as any[];
 
 @Module({
