@@ -16,7 +16,7 @@
 import { faker } from '@faker-js/faker';
 
 import { eventFixture } from '../fixtures';
-import { createQueryBuilder } from '../util-functions';
+import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class EventRepositoryStub {
   event = eventFixture;
@@ -45,17 +45,17 @@ export class EventRepositoryStub {
   }
 
   save(event) {
-    if (Array.isArray(event)) {
-      return event.map((w) => ({
-        ...w,
+    const eventToSave = removeUndefinedValues(event);
+    if (Array.isArray(eventToSave)) {
+      return eventToSave.map((e) => ({
+        ...this.event,
+        ...e,
         id: faker.number.int(),
-        status: eventFixture.status,
       }));
     } else {
       return {
-        ...event,
-        id: eventFixture.id,
-        status: eventFixture.status,
+        ...this.event,
+        ...eventToSave,
       };
     }
   }

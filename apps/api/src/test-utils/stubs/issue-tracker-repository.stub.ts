@@ -15,47 +15,47 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { issueFixture } from '../fixtures';
+import { issueTrackerFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class IssueTrackerRepositoryStub {
+  issueTracker = issueTrackerFixture;
   findOne() {
-    return this.issue;
+    return this.issueTracker;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.issueTracker;
   }
 
   find() {
-    return [this.issue];
+    return [this.issueTracker];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.issueTracker];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.issueTracker], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.issueTracker], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(issueTracker) {
+    const issueTrackerToSave = removeUndefinedValues(issueTracker);
+    if (Array.isArray(issueTrackerToSave)) {
+      return issueTrackerToSave.map((e) => ({
+        ...this.issueTracker,
         ...e,
         id: faker.number.int(),
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
+        ...this.issueTracker,
+        ...issueTrackerToSave,
       };
     }
   }
@@ -69,11 +69,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.issueTracker = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [issueTrackerFixture];
     return createQueryBuilder;
   }
 }

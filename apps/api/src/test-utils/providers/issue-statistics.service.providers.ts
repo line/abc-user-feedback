@@ -21,6 +21,7 @@ import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { IssueStatisticsEntity } from '@/domains/admin/statistics/issue/issue-statistics.entity';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
+import { ProjectRepositoryStub } from '../stubs';
 import { SchedulerLockServiceProviders } from './scheduler-lock.service.providers';
 
 export const IssueStatisticsServiceProviders = [
@@ -35,7 +36,7 @@ export const IssueStatisticsServiceProviders = [
   },
   {
     provide: getRepositoryToken(ProjectEntity),
-    useValue: mockRepository(),
+    useClass: ProjectRepositoryStub,
   },
   SchedulerRegistry,
   ...SchedulerLockServiceProviders,

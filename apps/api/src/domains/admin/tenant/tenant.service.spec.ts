@@ -19,7 +19,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
 import { tenantFixture } from '@/test-utils/fixtures';
-import type { TenantRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import { TenantServiceProviders } from '../../../test-utils/providers/tenant.service.providers';
 import { FeedbackEntity } from '../feedback/feedback.entity';
@@ -38,7 +37,7 @@ import { TenantService } from './tenant.service';
 
 describe('TenantService', () => {
   let tenantService: TenantService;
-  let tenantRepo: TenantRepositoryStub;
+  let tenantRepo: Repository<TenantEntity>;
   let userRepo: Repository<UserEntity>;
   let feedbackRepo: Repository<FeedbackEntity>;
 
@@ -57,11 +56,10 @@ describe('TenantService', () => {
     it('creation succeeds with valid data', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
-      tenantRepo.setNull();
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
       jest.spyOn(userRepo, 'save');
 
       const tenant = await tenantService.create(dto);
-
       expect(tenant.id).toBeDefined();
       expect(tenant.siteName).toEqual(dto.siteName);
       expect(userRepo.save).toHaveBeenCalledTimes(1);
@@ -107,7 +105,7 @@ describe('TenantService', () => {
       expect(tenant.oauthConfig).toEqual(dto.oauthConfig);
     });
     it('update fails when there is no tenant', async () => {
-      tenantRepo.setNull();
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
 
       await expect(tenantService.update(dto)).rejects.toThrow(
         TenantNotFoundException,
@@ -120,8 +118,8 @@ describe('TenantService', () => {
 
       expect(tenant).toEqual({ ...tenantFixture, useEmailVerification: false });
     });
-    it('finding a tenant fails when there is a tenant', async () => {
-      tenantRepo.setNull();
+    it('finding a tenant fails when there is no tenant', async () => {
+      jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
 
       await expect(tenantService.findOne()).rejects.toThrow(
         TenantNotFoundException,

@@ -21,7 +21,7 @@ export class RoleAlreadyExistsException extends BadRequestException {
   constructor() {
     super({
       code: ErrorCode.Role.RoleAlreadyExists,
-      message: 'Role name is duplcated',
+      message: 'Role name is duplicated',
     });
   }
 }

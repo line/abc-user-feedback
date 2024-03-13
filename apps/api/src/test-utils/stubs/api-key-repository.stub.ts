@@ -15,47 +15,47 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { issueFixture } from '../fixtures';
+import { apiKeyFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class ApiKeyRepositoryStub {
+  apiKey = apiKeyFixture;
   findOne() {
-    return this.issue;
+    return this.apiKey;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.apiKey;
   }
 
   find() {
-    return [this.issue];
+    return [this.apiKey];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.apiKey];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.apiKey], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.apiKey], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(apiKey) {
+    const apiKeyToSave = removeUndefinedValues(apiKey);
+    if (Array.isArray(apiKeyToSave)) {
+      return apiKeyToSave.map((e) => ({
+        ...this.apiKey,
         ...e,
         id: faker.number.int(),
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
+        ...this.apiKey,
+        ...apiKeyToSave,
       };
     }
   }
@@ -69,11 +69,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.apiKey = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [apiKeyFixture];
     return createQueryBuilder;
   }
 }

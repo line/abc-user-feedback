@@ -77,7 +77,7 @@ export class RoleService {
     )
       throw new RoleAlreadyExistsException();
 
-    await this.roleRepo.save(
+    return await this.roleRepo.save(
       Object.assign(role, { name, permissions: [...new Set(permissions)] }),
     );
   }

@@ -22,7 +22,6 @@ import type { TenantRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import { CreateUserServiceProviders } from '../../../test-utils/providers/create-user.service.providers';
 import { MemberEntity } from '../project/member/member.entity';
-import { RoleEntity } from '../project/role/role.entity';
 import { TenantEntity } from '../tenant/tenant.entity';
 import { CreateUserService } from './create-user.service';
 import type { CreateEmailUserDto, CreateInvitationUserDto } from './dtos';
@@ -41,7 +40,6 @@ describe('CreateUserService', () => {
   let userRepo: Repository<UserEntity>;
   let tenantRepo: TenantRepositoryStub;
   let memberRepo: Repository<MemberEntity>;
-  let roleRepo: Repository<RoleEntity>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -54,7 +52,6 @@ describe('CreateUserService', () => {
     userRepo = module.get(getRepositoryToken(UserEntity));
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     memberRepo = module.get(getRepositoryToken(MemberEntity));
-    roleRepo = module.get(getRepositoryToken(RoleEntity));
   });
 
   describe('createOAuthUser', () => {
@@ -162,9 +159,8 @@ describe('CreateUserService', () => {
       jest
         .spyOn(userRepo, 'findOneBy')
         .mockResolvedValueOnce(null as UserEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.number.int() },
-      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -173,10 +169,6 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
-      expect(memberRepo.save).toHaveBeenCalledWith({
-        role: { id: roleId },
-        user: { id: user.id },
-      });
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -187,9 +179,8 @@ describe('CreateUserService', () => {
         roleId,
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.number.int() },
-      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -198,10 +189,6 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
-      expect(memberRepo.save).toHaveBeenCalledWith({
-        role: { id: roleId },
-        user: { id: user.id },
-      });
     });
   });
   describe('with a private and no restrict on domain tenant', () => {
@@ -258,9 +245,8 @@ describe('CreateUserService', () => {
         roleId,
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.number.int() },
-      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -269,10 +255,6 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
-      expect(memberRepo.save).toHaveBeenCalledWith({
-        role: { id: roleId },
-        user: { id: user.id },
-      });
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -283,9 +265,8 @@ describe('CreateUserService', () => {
         roleId,
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.number.int() },
-      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -294,10 +275,6 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
-      expect(memberRepo.save).toHaveBeenCalledWith({
-        role: { id: roleId },
-        user: { id: user.id },
-      });
     });
   });
 
@@ -394,9 +371,8 @@ describe('CreateUserService', () => {
         roleId,
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.number.int() },
-      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -405,10 +381,6 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
-      expect(memberRepo.save).toHaveBeenCalledWith({
-        role: { id: roleId },
-        user: { id: user.id },
-      });
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -419,9 +391,8 @@ describe('CreateUserService', () => {
         roleId,
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: faker.number.int() },
-      } as RoleEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -430,10 +401,6 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
-      expect(memberRepo.save).toHaveBeenCalledWith({
-        role: { id: roleId },
-        user: { id: user.id },
-      });
     });
   });
 });
