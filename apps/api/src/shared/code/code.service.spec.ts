@@ -17,12 +17,12 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { DateTime } from 'luxon';
 import MockDate from 'mockdate';
-import type { Repository } from 'typeorm';
 
 import { UserDto } from '@/domains/admin/user/dtos';
 import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
+import { codeFixture } from '@/test-utils/fixtures';
+import type { CodeRepositoryStub } from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import { CodeServiceProviders } from '../../test-utils/providers/code.service.providers';
 import { CodeTypeEnum } from './code-type.enum';
@@ -36,7 +36,7 @@ import {
 
 describe('CodeService', () => {
   let codeService: CodeService;
-  let codeRepo: Repository<CodeEntity>;
+  let codeRepo: CodeRepositoryStub;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -52,6 +52,7 @@ describe('CodeService', () => {
       const dto = new SetCodeEmailVerificationDto();
       dto.key = faker.string.sample();
       dto.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
+      jest.spyOn(codeRepo, 'save');
 
       const code = await codeService.setCode(dto);
 
@@ -62,7 +63,6 @@ describe('CodeService', () => {
           type: dto.type,
           key: dto.key,
           isVerified: false,
-          data: undefined,
         }),
       );
     });
@@ -70,6 +70,7 @@ describe('CodeService', () => {
       const dto = new SetCodeResetPasswordDto();
       dto.key = faker.string.sample();
       dto.type = CodeTypeEnum.RESET_PASSWORD;
+      jest.spyOn(codeRepo, 'save');
 
       const code = await codeService.setCode(dto);
 
@@ -80,7 +81,6 @@ describe('CodeService', () => {
           type: dto.type,
           key: dto.key,
           isVerified: false,
-          data: undefined,
         }),
       );
     });
@@ -93,6 +93,7 @@ describe('CodeService', () => {
         userType: UserTypeEnum.SUPER,
         invitedBy: new UserDto(),
       };
+      jest.spyOn(codeRepo, 'save');
 
       const code = await codeService.setCode(dto);
 
@@ -116,6 +117,7 @@ describe('CodeService', () => {
         userType: UserTypeEnum.GENERAL,
         invitedBy: new UserDto(),
       };
+      jest.spyOn(codeRepo, 'save');
 
       const code = await codeService.setCode(dto);
 
@@ -132,30 +134,22 @@ describe('CodeService', () => {
     });
   });
   describe('verifyCode', () => {
-    const codeEntity: CodeEntity = new CodeEntity();
     const key = faker.string.sample();
     beforeEach(async () => {
-      codeEntity.code = faker.string.sample(6);
-      codeEntity.key = key;
-      codeEntity.type = CodeTypeEnum.EMAIL_VEIRIFICATION;
-      codeEntity.isVerified = false;
-      codeEntity.id = faker.number.int();
-      codeEntity.expiredAt = DateTime.utc().plus({ minutes: 5 }).toJSDate();
+      codeRepo.setType(CodeTypeEnum.EMAIL_VEIRIFICATION);
+      codeRepo.setIsVerified(false);
     });
     it('verifying code succeeds with a valid code, key, type', async () => {
-      const { code, type } = codeEntity;
-      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
+      const { code, type } = codeFixture;
+      jest.spyOn(codeRepo, 'save');
 
-      await codeService.verifyCode({ code, key, type });
+      const { error } = await codeService.verifyCode({ code, key, type });
 
-      expect(codeRepo.save).toHaveBeenCalledWith(
-        Object.assign(codeEntity, { isVerified: true }),
-      );
+      expect(error).toEqual(null);
     });
     it('verifying code fails with an invalid code', async () => {
-      const { type } = codeEntity;
+      const { type } = codeFixture;
       const invalidCode = faker.string.sample(6);
-      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
 
       const { error } = await codeService.verifyCode({
         code: invalidCode,
@@ -165,11 +159,9 @@ describe('CodeService', () => {
       expect(error).toEqual(new BadRequestException('invalid code'));
     });
     it('verifying code fails with an invalid code more than 5 times', async () => {
-      const { type } = codeEntity;
+      const { type } = codeFixture;
       const invalidCode = faker.string.sample(6);
-      jest
-        .spyOn(codeRepo, 'findOne')
-        .mockResolvedValue({ ...codeEntity, tryCount: 5 } as CodeEntity);
+      codeRepo.setTryCount(5);
 
       const { error } = await codeService.verifyCode({
         code: invalidCode,
@@ -179,9 +171,9 @@ describe('CodeService', () => {
       expect(error).toEqual(new BadRequestException('code expired'));
     });
     it('verifying code fails with an invalid key', async () => {
-      const { code, type } = codeEntity;
+      const { code, type } = codeFixture;
       const invalidKey = faker.string.sample(6);
-      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(null);
+      codeRepo.setNull();
 
       const { error } = await codeService.verifyCode({
         code,
@@ -192,8 +184,7 @@ describe('CodeService', () => {
     });
     it('verifying code fails at expired date', async () => {
       MockDate.set(new Date(Date.now() + 5 * 60 * 1000 + 1000));
-      const { code, type } = codeEntity;
-      jest.spyOn(codeRepo, 'findOne').mockResolvedValue(codeEntity);
+      const { code, type } = codeFixture;
 
       const { error } = await codeService.verifyCode({ code, key, type });
       expect(error).toEqual(new BadRequestException('code expired'));

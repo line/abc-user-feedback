@@ -15,6 +15,7 @@
  */
 import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
+import { DateTime } from 'luxon';
 
 import {
   EventStatusEnum,
@@ -50,6 +51,8 @@ import {
   UserTypeEnum,
 } from '@/domains/admin/user/entities/enums';
 import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import type { CodeEntity } from '@/shared/code/code.entity';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
@@ -268,6 +271,17 @@ export const issueTrackerFixture = {
   data: {},
   project: projectFixture,
 } as IssueTrackerEntity;
+
+export const codeFixture = {
+  id: faker.number.int(),
+  type: getRandomEnumValue(CodeTypeEnum),
+  key: faker.string.sample(),
+  code: faker.string.sample(6),
+  data: {},
+  isVerified: faker.datatype.boolean(),
+  tryCount: faker.number.int(),
+  expiredAt: DateTime.utc().plus({ minutes: 5 }).toJSDate(),
+} as CodeEntity;
 
 export const channelFixture = {
   id: faker.number.int(),

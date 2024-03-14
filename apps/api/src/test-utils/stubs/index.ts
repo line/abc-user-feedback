@@ -15,6 +15,7 @@
  */
 export { ApiKeyRepositoryStub } from './api-key-repository.stub';
 export { ChannelRepositoryStub } from './channel-repository.stub';
+export { CodeRepositoryStub } from './code-repository.stub';
 export { EventRepositoryStub } from './event-repository.stub';
 export { FeedbackRepositoryStub } from './feedback-repository.stub';
 export { IssueRepositoryStub } from './issue-repository.stub';

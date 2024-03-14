@@ -16,11 +16,11 @@
 
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/test-utils/util-functions';
 import { CodeEntity } from '../../shared/code/code.entity';
 import { CodeService } from '../../shared/code/code.service';
+import { CodeRepositoryStub } from '../stubs';
 
 export const CodeServiceProviders = [
   CodeService,
-  { provide: getRepositoryToken(CodeEntity), useValue: mockRepository() },
+  { provide: getRepositoryToken(CodeEntity), useClass: CodeRepositoryStub },
 ];
