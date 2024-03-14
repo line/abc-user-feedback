@@ -24,7 +24,13 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '../admin/auth/guards';
 import { CreateIssueDto } from '../admin/project/issue/dtos';
@@ -47,6 +53,10 @@ import { IssueService } from '../admin/project/issue/issue.service';
 export class IssueController {
   constructor(private readonly issueService: IssueService) {}
 
+  @ApiOperation({
+    summary: 'Create Issue',
+    description: 'Creates a new issue for the specified project.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -67,6 +77,11 @@ export class IssueController {
     );
   }
 
+  @ApiOperation({
+    summary: 'Find Issue by ID',
+    description:
+      'Retrieves a specific issue by its id within the specified project.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -87,6 +102,11 @@ export class IssueController {
     );
   }
 
+  @ApiOperation({
+    summary: 'Search Issues by Project',
+    description:
+      'Searches for all issues within the specified project, with the various filters.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -107,6 +127,11 @@ export class IssueController {
     );
   }
 
+  @ApiOperation({
+    summary: 'Update Issue',
+    description:
+      'Updates an existing issue with new information within the specified project.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -128,6 +153,11 @@ export class IssueController {
     await this.issueService.update({ ...body, issueId, projectId });
   }
 
+  @ApiOperation({
+    summary: 'Delete Issue',
+    description:
+      'Deletes a specific issue by its id from the specified project.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -145,6 +175,11 @@ export class IssueController {
     await this.issueService.deleteById(issueId);
   }
 
+  @ApiOperation({
+    summary: 'Delete Multiple Issues',
+    description:
+      'Deletes multiple issues from the specified project, based on an array of issue ids.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
