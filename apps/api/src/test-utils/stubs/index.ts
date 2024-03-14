@@ -18,6 +18,7 @@ export { ChannelRepositoryStub } from './channel-repository.stub';
 export { CodeRepositoryStub } from './code-repository.stub';
 export { EventRepositoryStub } from './event-repository.stub';
 export { FeedbackRepositoryStub } from './feedback-repository.stub';
+export { FieldRepositoryStub } from './field-repository.stub';
 export { IssueRepositoryStub } from './issue-repository.stub';
 export { ProjectRepositoryStub } from './project-repository.stub';
 export { RoleRepositoryStub } from './role-repository.stub';
