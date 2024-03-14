@@ -15,67 +15,63 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import { memberFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class MemberRepositoryStub {
+  member = memberFixture;
   findOne() {
-    return this.issue;
+    return this.member;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.member;
   }
 
   find() {
-    return [this.issue];
+    return [this.member];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.member];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.member], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.member], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(member) {
+    const memberToSave = removeUndefinedValues(member);
+    if (Array.isArray(memberToSave)) {
+      return memberToSave.map((e) => ({
+        ...this.member,
         ...e,
+        role: {
+          ...this.member.role,
+          ...e.role,
+        },
+        user: {
+          ...this.member.user,
+          ...e.user,
+        },
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.member,
+        role: {
+          ...this.member.role,
+          ...memberToSave.role,
+        },
+        user: {
+          ...this.member.user,
+          ...memberToSave.user,
+        },
+        ...memberToSave,
       };
     }
   }
@@ -89,11 +85,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.member = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [memberFixture];
     return createQueryBuilder;
   }
 }

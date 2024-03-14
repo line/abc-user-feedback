@@ -15,67 +15,47 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import { projectFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class ProjectRepositoryStub {
+  project = projectFixture;
   findOne() {
-    return this.issue;
+    return this.project;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.project;
   }
 
   find() {
-    return [this.issue];
+    return [this.project];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.project];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.project], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.project], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(project) {
+    const projectToSave = removeUndefinedValues(project);
+    if (Array.isArray(projectToSave)) {
+      return projectToSave.map((e) => ({
+        ...this.project,
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.project,
+        ...projectToSave,
       };
     }
   }
@@ -89,11 +69,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.project = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [projectFixture];
     return createQueryBuilder;
   }
 }

@@ -15,67 +15,47 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import { optionFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class OptionRepositoryStub {
+  option = optionFixture;
   findOne() {
-    return this.issue;
+    return this.option;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.option;
   }
 
   find() {
-    return [this.issue];
+    return [this.option];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.option];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.option], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.option], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(option) {
+    const optionToSave = removeUndefinedValues(option);
+    if (Array.isArray(optionToSave)) {
+      return optionToSave.map((e) => ({
+        ...this.option,
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.option,
+        ...optionToSave,
       };
     }
   }
@@ -88,12 +68,14 @@ export class IssueRepositoryStub {
     return { id };
   }
 
+  query() {}
+
   setNull() {
-    this.issue = null;
+    this.option = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [optionFixture];
     return createQueryBuilder;
   }
 }

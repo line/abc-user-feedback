@@ -74,6 +74,8 @@ export class FieldService {
         mappings: this.fieldsToMapping(fields),
       });
     }
+
+    return fields;
   }
 
   async findByChannelId(dto: { channelId: number }) {

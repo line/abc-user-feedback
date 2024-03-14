@@ -15,6 +15,7 @@
  */
 import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
+import { DateTime } from 'luxon';
 
 import {
   EventStatusEnum,
@@ -32,10 +33,16 @@ import type {
   ReplaceFieldDto,
 } from '@/domains/admin/channel/field/dtos';
 import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import type { OptionEntity } from '@/domains/admin/channel/option/option.entity';
 import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import type { ApiKeyEntity } from '@/domains/admin/project/api-key/api-key.entity';
+import type { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/issue-tracker.entity';
 import type { CreateIssueDto } from '@/domains/admin/project/issue/dtos';
 import type { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
+import type { MemberEntity } from '@/domains/admin/project/member/member.entity';
 import type { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { PermissionEnum } from '@/domains/admin/project/role/permission.enum';
+import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import type { EventEntity } from '@/domains/admin/project/webhook/event.entity';
 import type { WebhookEntity } from '@/domains/admin/project/webhook/webhook.entity';
 import type { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
@@ -45,6 +52,8 @@ import {
   UserTypeEnum,
 } from '@/domains/admin/user/entities/enums';
 import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import type { CodeEntity } from '@/shared/code/code.entity';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
@@ -158,33 +167,13 @@ export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
 export const optionSort = (a, b) =>
   a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 
-export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
-  Object.values(FieldTypeEnum).flatMap((type) =>
-    Object.values(FieldStatusEnum).flatMap((status) => ({
-      id: faker.number.int(),
-      ...createFieldDto({
-        format,
-        type,
-        status,
-      }),
-    })),
-  ),
-) as FieldEntity[];
-
 export const passwordFixture = faker.internet.password();
 
 export const emailFixture = faker.internet.email();
 
-export const userFixture = {
-  id: faker.number.int(),
-  email: emailFixture,
-  name: faker.string.sample(),
-  department: faker.string.sample(),
-  state: getRandomEnumValue(UserStateEnum),
-  hashPassword: bcrypt.hashSync(passwordFixture, 0),
-  type: getRandomEnumValue(UserTypeEnum),
-  signUpMethod: getRandomEnumValue(SignUpMethodEnum),
-} as UserEntity;
+const memberId = faker.number.int();
+const roleId = faker.number.int();
+const userId = faker.number.int();
 
 export const tenantFixture = {
   id: faker.number.int(),
@@ -206,8 +195,94 @@ export const projectFixture = {
   description: faker.lorem.lines(2),
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
+  timezone: {
+    countryCode: 'KR',
+    name: 'Asia/Seoul',
+    offset: '+09:00',
+  },
   tenant: tenantFixture,
 } as ProjectEntity;
+
+export const userFixture = {
+  id: userId,
+  email: emailFixture,
+  name: faker.string.sample(),
+  department: faker.string.sample(),
+  state: getRandomEnumValue(UserStateEnum),
+  hashPassword: bcrypt.hashSync(passwordFixture, 0),
+  type: getRandomEnumValue(UserTypeEnum),
+  signUpMethod: getRandomEnumValue(SignUpMethodEnum),
+} as UserEntity;
+
+const roleName = faker.string.sample();
+export const roleFixture = {
+  id: roleId,
+  name: roleName,
+  permissions: getRandomEnumValues(PermissionEnum),
+  project: projectFixture,
+  members: [
+    {
+      id: memberId,
+      user: {
+        id: userId,
+        email: emailFixture,
+        name: faker.string.sample(),
+        department: faker.string.sample(),
+        state: getRandomEnumValue(UserStateEnum),
+        type: getRandomEnumValue(UserTypeEnum),
+        signUpMethod: getRandomEnumValue(SignUpMethodEnum),
+      },
+      role: {
+        id: roleId,
+        name: roleName,
+        permissions: getRandomEnumValues(PermissionEnum),
+        project: projectFixture,
+      },
+    },
+  ],
+} as RoleEntity;
+
+export const memberFixture = {
+  id: memberId,
+  user: userFixture,
+  role: roleFixture,
+} as MemberEntity;
+
+export const apiKeyFixture = {
+  id: faker.number.int(),
+  value: faker.string.sample(),
+  project: projectFixture,
+} as ApiKeyEntity;
+
+export const issueTrackerFixture = {
+  id: faker.number.int(),
+  data: {},
+  project: projectFixture,
+} as IssueTrackerEntity;
+
+export const codeFixture = {
+  id: faker.number.int(),
+  type: getRandomEnumValue(CodeTypeEnum),
+  key: faker.string.sample(),
+  code: faker.string.sample(6),
+  data: {},
+  isVerified: faker.datatype.boolean(),
+  tryCount: faker.number.int(),
+  expiredAt: DateTime.utc().plus({ minutes: 5 }).toJSDate(),
+} as CodeEntity;
+
+export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
+  Object.values(FieldTypeEnum).flatMap((type) =>
+    Object.values(FieldStatusEnum).flatMap((status) => ({
+      id: faker.number.int(),
+      ...createFieldDto({
+        format,
+        type,
+        status,
+      }),
+    })),
+  ),
+) as FieldEntity[];
 
 export const channelFixture = {
   id: faker.number.int(),
@@ -219,6 +294,17 @@ export const channelFixture = {
   project: projectFixture,
   fields: fieldsFixture,
 } as ChannelEntity;
+
+export const optionFixture = {
+  id: faker.number.int(),
+  key: faker.string.sample(),
+  name: faker.string.sample(),
+  field: fieldsFixture.filter((field) => {
+    return [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(
+      field.format,
+    );
+  })[0],
+} as OptionEntity;
 
 export const issueFixture = {
   id: faker.number.int(),

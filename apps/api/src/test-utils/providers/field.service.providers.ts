@@ -19,11 +19,11 @@ import { OpensearchRepository } from '@/common/repositories';
 import {
   getMockProvider,
   MockOpensearchRepository,
-  mockRepository,
 } from '@/test-utils/util-functions';
 import { FieldEntity } from '../../domains/admin/channel/field/field.entity';
 import { FieldMySQLService } from '../../domains/admin/channel/field/field.mysql.service';
 import { FieldService } from '../../domains/admin/channel/field/field.service';
+import { FieldRepositoryStub } from '../stubs';
 import { OptionServiceProviders } from './option.service.providers';
 
 export const FieldServiceProviders = [
@@ -32,7 +32,7 @@ export const FieldServiceProviders = [
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
   {
     provide: getRepositoryToken(FieldEntity),
-    useValue: mockRepository(),
+    useClass: FieldRepositoryStub,
   },
   ...OptionServiceProviders,
 ];

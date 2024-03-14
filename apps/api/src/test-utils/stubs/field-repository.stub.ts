@@ -15,67 +15,48 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import { fieldsFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class FieldRepositoryStub {
+  field = fieldsFixture[0];
+  fields = fieldsFixture;
   findOne() {
-    return this.issue;
+    return this.field;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.field;
   }
 
   find() {
-    return [this.issue];
+    return this.fields;
   }
 
   findBy() {
-    return [this.issue];
+    return this.fields;
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [this.fields, this.fields.length];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [this.fields, this.fields.length];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(field) {
+    const fieldToSave = removeUndefinedValues(field);
+    if (Array.isArray(fieldToSave)) {
+      return fieldToSave.map((e) => ({
+        ...this.field,
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.field,
+        ...fieldToSave,
       };
     }
   }
@@ -89,11 +70,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.field = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => fieldsFixture;
     return createQueryBuilder;
   }
 }

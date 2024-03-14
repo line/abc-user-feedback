@@ -15,67 +15,47 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import { apiKeyFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class ApiKeyRepositoryStub {
+  apiKey = apiKeyFixture;
   findOne() {
-    return this.issue;
+    return this.apiKey;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.apiKey;
   }
 
   find() {
-    return [this.issue];
+    return [this.apiKey];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.apiKey];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.apiKey], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.apiKey], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(apiKey) {
+    const apiKeyToSave = removeUndefinedValues(apiKey);
+    if (Array.isArray(apiKeyToSave)) {
+      return apiKeyToSave.map((e) => ({
+        ...this.apiKey,
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.apiKey,
+        ...apiKeyToSave,
       };
     }
   }
@@ -89,11 +69,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.apiKey = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [apiKeyFixture];
     return createQueryBuilder;
   }
 }

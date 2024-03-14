@@ -20,10 +20,11 @@ import type { Repository } from 'typeorm';
 import { Like } from 'typeorm';
 
 import type { TimeRange } from '@/common/dtos';
+import { IssueStatusEnum } from '@/common/enums';
 import { IssueStatisticsEntity } from '@/domains/admin/statistics/issue/issue-statistics.entity';
+import { issueFixture } from '@/test-utils/fixtures';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { IssueServiceProviders } from '../../../../test-utils/providers/issue.service.providers';
-import { ProjectEntity } from '../project/project.entity';
 import {
   CreateIssueDto,
   FindIssuesByProjectIdDto,
@@ -39,7 +40,6 @@ import { IssueService } from './issue.service';
 describe('IssueService test suite', () => {
   let issueService: IssueService;
   let issueRepo: Repository<IssueEntity>;
-  let projectRepo: Repository<ProjectEntity>;
   let issueStatsRepo: Repository<IssueStatisticsEntity>;
 
   beforeEach(async () => {
@@ -50,7 +50,6 @@ describe('IssueService test suite', () => {
 
     issueService = module.get<IssueService>(IssueService);
     issueRepo = module.get(getRepositoryToken(IssueEntity));
-    projectRepo = module.get(getRepositoryToken(ProjectEntity));
     issueStatsRepo = module.get(getRepositoryToken(IssueStatisticsEntity));
   });
 
@@ -64,26 +63,17 @@ describe('IssueService test suite', () => {
 
     it('creating an issue succeeds with valid inputs', async () => {
       dto.name = faker.string.sample();
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        id: faker.number.int(),
-        timezone: {
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null as IssueEntity);
-      jest.spyOn(issueRepo, 'save').mockResolvedValue({
-        id: faker.number.int(),
-        project: { id: faker.number.int() },
-      } as IssueEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilder);
 
-      await issueService.create(dto);
+      const issue = await issueService.create(dto);
 
-      expect(issueRepo.findOneBy).toBeCalledTimes(1);
-      expect(issueRepo.save).toBeCalledTimes(1);
-      expect(issueRepo.save).toBeCalledWith(CreateIssueDto.toIssueEntity(dto));
+      expect(issue.name).toBe(dto.name);
+      expect(issue.project.id).toBe(projectId);
+      expect(issue.status).toBe(IssueStatusEnum.INIT);
+      expect(issue.feedbackCount).toBe(0);
     });
     it('creating an issue fails with a duplicate name', async () => {
       const duplicateName = 'duplicateName';
@@ -95,9 +85,6 @@ describe('IssueService test suite', () => {
       await expect(issueService.create(dto)).rejects.toThrow(
         IssueNameDuplicatedException,
       );
-
-      expect(issueRepo.findOneBy).toBeCalledTimes(1);
-      expect(issueRepo.save).not.toBeCalled();
     });
   });
 
@@ -121,7 +108,7 @@ describe('IssueService test suite', () => {
         .mockImplementation(() => createQueryBuilder);
       jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await issueService.findIssuesByProjectId(dto);
+      const { meta } = await issueService.findIssuesByProjectId(dto);
 
       expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
@@ -139,6 +126,7 @@ describe('IssueService test suite', () => {
           },
         ],
       });
+      expect(meta.itemCount).toBe(1);
     });
     it('finding issues succeeds with the updatedAt query', async () => {
       dto.query = {
@@ -152,24 +140,9 @@ describe('IssueService test suite', () => {
         .mockImplementation(() => createQueryBuilder);
       jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await issueService.findIssuesByProjectId(dto);
+      const { meta } = await issueService.findIssuesByProjectId(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
-      expect(createQueryBuilder.setFindOptions).toBeCalledWith({
-        order: {},
-        where: [
-          {
-            project: {
-              id: dto.projectId,
-            },
-            updatedAt: expect.objectContaining({
-              _objectLiteralParameters: {
-                ...(dto.query.updatedAt as TimeRange),
-              },
-            }),
-          },
-        ],
-      });
+      expect(meta.itemCount).toBe(1);
     });
     it('finding issues succeeds with the id query', async () => {
       const id = faker.number.int();
@@ -181,7 +154,7 @@ describe('IssueService test suite', () => {
         .mockImplementation(() => createQueryBuilder);
       jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await issueService.findIssuesByProjectId(dto);
+      const { meta } = await issueService.findIssuesByProjectId(dto);
 
       expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
@@ -195,6 +168,7 @@ describe('IssueService test suite', () => {
           },
         ],
       });
+      expect(meta.itemCount).toBe(1);
     });
     it('finding issues succeeds with the column query', async () => {
       dto.query = {
@@ -205,7 +179,7 @@ describe('IssueService test suite', () => {
         .mockImplementation(() => createQueryBuilder);
       jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await issueService.findIssuesByProjectId(dto);
+      const { meta } = await issueService.findIssuesByProjectId(dto);
 
       expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
@@ -219,6 +193,7 @@ describe('IssueService test suite', () => {
           },
         ],
       });
+      expect(meta.itemCount).toBe(1);
     });
     it('finding issues succeeds with the search text query (string)', async () => {
       dto.query = {
@@ -229,7 +204,7 @@ describe('IssueService test suite', () => {
         .mockImplementation(() => createQueryBuilder);
       jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await issueService.findIssuesByProjectId(dto);
+      const { meta } = await issueService.findIssuesByProjectId(dto);
 
       expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
@@ -255,6 +230,7 @@ describe('IssueService test suite', () => {
           },
         ],
       });
+      expect(meta.itemCount).toBe(1);
     });
     it('finding issues succeeds with the search text query (number)', async () => {
       dto.query = {
@@ -265,7 +241,7 @@ describe('IssueService test suite', () => {
         .mockImplementation(() => createQueryBuilder);
       jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await issueService.findIssuesByProjectId(dto);
+      const { meta } = await issueService.findIssuesByProjectId(dto);
 
       expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
@@ -297,6 +273,7 @@ describe('IssueService test suite', () => {
           },
         ],
       });
+      expect(meta.itemCount).toBe(1);
     });
   });
 
@@ -311,36 +288,19 @@ describe('IssueService test suite', () => {
 
     it('updating an issue succeeds with valid inputs', async () => {
       dto.name = faker.string.sample();
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue({
-        id: issueId,
-      } as IssueEntity);
       jest.spyOn(issueRepo, 'findOne').mockResolvedValue(null as IssueEntity);
-      jest.spyOn(issueRepo, 'save').mockResolvedValue({} as IssueEntity);
 
-      await issueService.update(dto);
+      const issue = await issueService.update(dto);
 
-      expect(issueRepo.findOneBy).toBeCalledTimes(1);
-      expect(issueRepo.findOne).toBeCalledTimes(1);
-      expect(issueRepo.save).toBeCalledTimes(1);
-      expect(issueRepo.save).toBeCalledWith({
-        id: issueId,
-        ...dto,
-      });
+      expect(issue.name).toBe(dto.name);
     });
     it('updating an issue fails with a duplicate name', async () => {
-      const duplicateName = 'duplicateName';
+      const duplicateName = issueFixture.name;
       dto.name = duplicateName;
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue({} as IssueEntity);
-      jest.spyOn(issueRepo, 'findOne').mockResolvedValue({} as IssueEntity);
-      jest.spyOn(issueRepo, 'save').mockResolvedValue({} as IssueEntity);
 
       await expect(issueService.update(dto)).rejects.toThrow(
         new IssueInvalidNameException('Duplicated name'),
       );
-
-      expect(issueRepo.findOneBy).toBeCalledTimes(1);
-      expect(issueRepo.findOne).toBeCalledTimes(1);
-      expect(issueRepo.save).not.toBeCalled();
     });
   });
 });

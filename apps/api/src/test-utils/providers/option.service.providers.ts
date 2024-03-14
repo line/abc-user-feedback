@@ -15,14 +15,14 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/test-utils/util-functions';
 import { OptionEntity } from '../../domains/admin/channel/option/option.entity';
 import { OptionService } from '../../domains/admin/channel/option/option.service';
+import { OptionRepositoryStub } from '../stubs/option-repository.stub';
 
 export const OptionServiceProviders = [
   OptionService,
   {
     provide: getRepositoryToken(OptionEntity),
-    useValue: mockRepository(),
+    useClass: OptionRepositoryStub,
   },
 ];

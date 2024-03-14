@@ -15,67 +15,47 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import { roleFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class RoleRepositoryStub {
+  role = roleFixture;
   findOne() {
-    return this.issue;
+    return this.role;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.role;
   }
 
   find() {
-    return [this.issue];
+    return [this.role];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.role];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.role], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.role], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(role) {
+    const roleToSave = removeUndefinedValues(role);
+    if (Array.isArray(roleToSave)) {
+      return roleToSave.map((e) => ({
+        ...this.role,
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.role,
+        ...roleToSave,
       };
     }
   }
@@ -89,11 +69,11 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.role = null;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [roleFixture];
     return createQueryBuilder;
   }
 }

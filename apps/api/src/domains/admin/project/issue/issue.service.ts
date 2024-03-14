@@ -207,13 +207,15 @@ export class IssueService {
     const statusHasChanged = issue.status !== status;
     const previousStatus = issue.status;
 
-    await this.repository.save(Object.assign(issue, dto));
+    const updatedIssue = await this.repository.save(Object.assign(issue, dto));
 
     if (statusHasChanged)
       this.eventEmitter.emit(EventTypeEnum.ISSUE_STATUS_CHANGE, {
         issueId,
         previousStatus,
       });
+
+    return updatedIssue;
   }
 
   @Transactional()

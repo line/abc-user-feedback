@@ -15,67 +15,48 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { issueFixture } from '../fixtures';
+import type { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import { codeFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
-export class IssueRepositoryStub {
-  issue = issueFixture;
+export class CodeRepositoryStub {
+  code = codeFixture;
   findOne() {
-    return this.issue;
+    return this.code;
   }
 
   findOneBy() {
-    return this.issue;
+    return this.code;
   }
 
   find() {
-    return [this.issue];
+    return [this.code];
   }
 
   findBy() {
-    return [this.issue];
+    return [this.code];
   }
 
   findAndCount() {
-    return [[this.issue], 1];
+    return [[this.code], 1];
   }
 
   findAndCountBy() {
-    return [[this.issue], 1];
+    return [[this.code], 1];
   }
 
-  save(issue) {
-    const issueToSave = removeUndefinedValues(issue);
-    if (Array.isArray(issueToSave)) {
-      return issueToSave.map((e) => ({
-        ...this.issue,
+  save(code) {
+    const codeToSave = removeUndefinedValues(code);
+    if (Array.isArray(codeToSave)) {
+      return codeToSave.map((e) => ({
+        ...this.code,
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
-        ...this.issue,
-        ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
-      };
-    }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
+        ...this.code,
+        ...codeToSave,
       };
     }
   }
@@ -89,11 +70,23 @@ export class IssueRepositoryStub {
   }
 
   setNull() {
-    this.issue = null;
+    this.code = null;
+  }
+
+  setIsVerified(bool) {
+    this.code.isVerified = bool;
+  }
+
+  setType(type: CodeTypeEnum) {
+    this.code.type = type;
+  }
+
+  setTryCount(tryCount) {
+    this.code.tryCount = tryCount;
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
+    createQueryBuilder.getMany = () => [codeFixture];
     return createQueryBuilder;
   }
 }

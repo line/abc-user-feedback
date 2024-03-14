@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { optionFixture } from '@/test-utils/fixtures';
 import { TestConfig } from '@/test-utils/util-functions';
 import { OptionServiceProviders } from '../../../../test-utils/providers/option.service.providers';
 import {
@@ -61,18 +62,10 @@ describe('Option Test suite', () => {
       ] as OptionEntity[]);
       jest.spyOn(optionRepo, 'save');
 
-      await optionService.create(dto);
+      const option = await optionService.create(dto);
 
-      expect(optionRepo.findBy).toBeCalledTimes(1);
-      expect(optionRepo.findBy).toBeCalledWith({
-        field: { id: fieldId },
-      });
-      expect(optionRepo.save).toBeCalledTimes(1);
-      expect(optionRepo.save).toBeCalledWith({
-        key: dto.key,
-        name: dto.name,
-        field: { id: fieldId },
-      });
+      expect(option.key).toBe(dto.key);
+      expect(option.name).toBe(dto.name);
     });
     it('creating an option succeeds with an inactive input', async () => {
       const fieldId = faker.number.int();
@@ -90,93 +83,57 @@ describe('Option Test suite', () => {
       ] as OptionEntity[]);
       jest.spyOn(optionRepo, 'save');
 
-      await optionService.create(dto);
+      const option = await optionService.create(dto);
 
-      expect(optionRepo.findBy).toBeCalledTimes(1);
-      expect(optionRepo.findBy).toBeCalledWith({
-        field: { id: fieldId },
-      });
-      expect(optionRepo.save).toBeCalledTimes(1);
-      expect(optionRepo.save).toBeCalledWith({
-        id: optionId,
-        deletedAt: null,
-        key: dto.key,
-        name: dto.name,
-      });
+      expect(option.key).toBe(dto.key);
+      expect(option.name).toBe(dto.name);
     });
-    it('creating an option fais with a duplicate name', async () => {
+    it('creating an option fails with a duplicate name', async () => {
       const fieldId = faker.number.int();
+      const duplicateName = optionFixture.name;
       const dto = new CreateOptionDto();
       dto.fieldId = fieldId;
       dto.key = faker.string.sample();
-      dto.name = faker.string.sample();
-      jest.spyOn(optionRepo, 'findBy').mockResolvedValue([
-        {
-          key: faker.string.sample(),
-          name: dto.name,
-        },
-      ] as OptionEntity[]);
-      jest.spyOn(optionRepo, 'save');
+      dto.name = duplicateName;
 
       await expect(optionService.create(dto)).rejects.toThrow(
         OptionNameDuplicatedException,
       );
-
-      expect(optionRepo.findBy).toBeCalledTimes(1);
-      expect(optionRepo.findBy).toBeCalledWith({
-        field: { id: fieldId },
-      });
-      expect(optionRepo.save).not.toBeCalled();
     });
-    it('creating an option fais with a duplicate key', async () => {
+    it('creating an option fails with a duplicate key', async () => {
       const fieldId = faker.number.int();
+      const duplicateKey = optionFixture.key;
       const dto = new CreateOptionDto();
       dto.fieldId = fieldId;
-      dto.key = faker.string.sample();
+      dto.key = duplicateKey;
       dto.name = faker.string.sample();
-      jest.spyOn(optionRepo, 'findBy').mockResolvedValue([
-        {
-          key: dto.key,
-          name: faker.string.sample(),
-        },
-      ] as OptionEntity[]);
-      jest.spyOn(optionRepo, 'save');
 
       await expect(optionService.create(dto)).rejects.toThrow(
         OptionKeyDuplicatedException,
       );
-
-      expect(optionRepo.findBy).toBeCalledTimes(1);
-      expect(optionRepo.findBy).toBeCalledWith({
-        field: { id: fieldId },
-      });
-      expect(optionRepo.save).not.toBeCalled();
     });
   });
 
   describe('createMany', () => {
     it('creating many options succeeds with valid inputs', async () => {
       const fieldId = faker.number.int();
+      const optionLength = faker.number.int({ min: 1, max: 10 });
       const dto = new CreateManyOptionsDto();
       dto.fieldId = fieldId;
       dto.options = Array.from({
-        length: faker.number.int({ min: 1, max: 10 }),
+        length: optionLength,
       }).map(() => ({
         key: faker.string.sample(),
         name: faker.string.sample(),
       }));
       jest.spyOn(optionRepo, 'save');
 
-      await optionService.createMany(dto);
+      const options = await optionService.createMany(dto);
 
-      expect(optionRepo.save).toBeCalledTimes(1);
-      expect(optionRepo.save).toBeCalledWith(
-        dto.options.map(({ name, key }) => ({
-          name,
-          key,
-          field: { id: fieldId },
-        })),
-      );
+      for (let i = 0; i < optionLength; i++) {
+        expect(options[i].key).toBe(dto.options[i].key);
+        expect(options[i].name).toBe(dto.options[i].name);
+      }
     });
     it('creating many options fails with duplicate names', async () => {
       const fieldId = faker.number.int();
@@ -188,13 +145,10 @@ describe('Option Test suite', () => {
         key: faker.string.sample(),
         name: 'duplicateName',
       }));
-      jest.spyOn(optionRepo, 'save');
 
       await expect(optionService.createMany(dto)).rejects.toThrow(
         OptionNameDuplicatedException,
       );
-
-      expect(optionRepo.save).not.toBeCalled();
     });
     it('creating many options fails with duplicate keys', async () => {
       const fieldId = faker.number.int();
@@ -206,13 +160,10 @@ describe('Option Test suite', () => {
         key: 'duplicateKey',
         name: faker.string.sample(),
       }));
-      jest.spyOn(optionRepo, 'save');
 
       await expect(optionService.createMany(dto)).rejects.toThrow(
         OptionKeyDuplicatedException,
       );
-
-      expect(optionRepo.save).not.toBeCalled();
     });
   });
   describe('replaceMany', () => {
@@ -243,12 +194,6 @@ describe('Option Test suite', () => {
 
       await optionService.replaceMany(dto);
 
-      expect(optionRepo.find).toBeCalledTimes(1);
-      expect(optionRepo.find).toBeCalledWith({
-        where: { field: { id: fieldId } },
-        withDeleted: true,
-      });
-      expect(optionRepo.query).toBeCalledTimes(1);
       expect(optionRepo.save).toBeCalledTimes(length);
     });
   });

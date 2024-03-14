@@ -16,7 +16,7 @@
 import { faker } from '@faker-js/faker';
 
 import { webhookFixture } from '../fixtures';
-import { createQueryBuilder } from '../util-functions';
+import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class WebhookRepositoryStub {
   webhook = webhookFixture;
@@ -55,19 +55,17 @@ export class WebhookRepositoryStub {
   }
 
   save(webhook) {
-    if (Array.isArray(webhook)) {
-      return webhook.map((w) => ({
-        ...w,
+    const webhookToSave = removeUndefinedValues(webhook);
+    if (Array.isArray(webhookToSave)) {
+      return webhookToSave.map((e) => ({
+        ...this.webhook,
+        ...e,
         id: faker.number.int(),
-        status: webhookFixture.status,
-        project: { ...webhookFixture.project },
       }));
     } else {
       return {
-        ...webhook,
-        id: webhookFixture.id,
-        status: webhookFixture.status,
-        project: { ...webhookFixture.project },
+        ...this.webhook,
+        ...webhookToSave,
       };
     }
   }
