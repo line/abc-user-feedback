@@ -26,6 +26,7 @@ import { mockRepository } from '@/test-utils/util-functions';
 import {
   ChannelRepositoryStub,
   FeedbackRepositoryStub,
+  IssueRepositoryStub,
   ProjectRepositoryStub,
 } from '../stubs';
 import { SchedulerLockServiceProviders } from './scheduler-lock.service.providers';
@@ -42,7 +43,7 @@ export const FeedbackStatisticsServiceProviders = [
   },
   {
     provide: getRepositoryToken(IssueEntity),
-    useValue: mockRepository(),
+    useClass: IssueRepositoryStub,
   },
   {
     provide: getRepositoryToken(ChannelEntity),

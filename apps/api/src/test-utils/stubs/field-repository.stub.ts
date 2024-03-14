@@ -20,6 +20,7 @@ import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class FieldRepositoryStub {
   field = fieldsFixture[0];
+  fields = fieldsFixture;
   findOne() {
     return this.field;
   }
@@ -29,19 +30,19 @@ export class FieldRepositoryStub {
   }
 
   find() {
-    return [this.field];
+    return this.fields;
   }
 
   findBy() {
-    return [this.field];
+    return this.fields;
   }
 
   findAndCount() {
-    return [[this.field], 1];
+    return [this.fields, this.fields.length];
   }
 
   findAndCountBy() {
-    return [[this.field], 1];
+    return [this.fields, this.fields.length];
   }
 
   save(field) {

@@ -15,6 +15,7 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { IssueStatusEnum } from '@/common/enums';
 import { issueFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
@@ -51,11 +52,30 @@ export class IssueRepositoryStub {
         ...this.issue,
         ...e,
         id: faker.number.int(),
+        status: e.status || IssueStatusEnum.INIT,
+        feedbackCount: e.feedbackCount || 0,
       }));
     } else {
       return {
         ...this.issue,
         ...issueToSave,
+        status: issueToSave.status || IssueStatusEnum.INIT,
+        feedbackCount: issueToSave.feedbackCount || 0,
+      };
+    }
+  }
+
+  update(issue) {
+    const issueToUpdate = removeUndefinedValues(issue);
+    if (Array.isArray(issueToUpdate)) {
+      return issueToUpdate.map((e) => ({
+        ...this.issue,
+        ...e,
+      }));
+    } else {
+      return {
+        ...this.issue,
+        ...issueToUpdate,
       };
     }
   }
