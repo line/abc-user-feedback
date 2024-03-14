@@ -33,6 +33,7 @@ import type {
   ReplaceFieldDto,
 } from '@/domains/admin/channel/field/dtos';
 import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import type { OptionEntity } from '@/domains/admin/channel/option/option.entity';
 import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import type { ApiKeyEntity } from '@/domains/admin/project/api-key/api-key.entity';
 import type { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/issue-tracker.entity';
@@ -166,19 +167,6 @@ export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
 export const optionSort = (a, b) =>
   a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 
-export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
-  Object.values(FieldTypeEnum).flatMap((type) =>
-    Object.values(FieldStatusEnum).flatMap((status) => ({
-      id: faker.number.int(),
-      ...createFieldDto({
-        format,
-        type,
-        status,
-      }),
-    })),
-  ),
-) as FieldEntity[];
-
 export const passwordFixture = faker.internet.password();
 
 export const emailFixture = faker.internet.email();
@@ -283,6 +271,19 @@ export const codeFixture = {
   expiredAt: DateTime.utc().plus({ minutes: 5 }).toJSDate(),
 } as CodeEntity;
 
+export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
+  Object.values(FieldTypeEnum).flatMap((type) =>
+    Object.values(FieldStatusEnum).flatMap((status) => ({
+      id: faker.number.int(),
+      ...createFieldDto({
+        format,
+        type,
+        status,
+      }),
+    })),
+  ),
+) as FieldEntity[];
+
 export const channelFixture = {
   id: faker.number.int(),
   name: faker.string.sample(),
@@ -293,6 +294,17 @@ export const channelFixture = {
   project: projectFixture,
   fields: fieldsFixture,
 } as ChannelEntity;
+
+export const optionFixture = {
+  id: faker.number.int(),
+  key: faker.string.sample(),
+  name: faker.string.sample(),
+  field: fieldsFixture.filter((field) => {
+    return [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(
+      field.format,
+    );
+  })[0],
+} as OptionEntity;
 
 export const issueFixture = {
   id: faker.number.int(),
