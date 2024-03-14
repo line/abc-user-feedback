@@ -15,6 +15,7 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import { userFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
@@ -50,12 +51,14 @@ export class UserRepositoryStub {
       return userToSave.map((e) => ({
         ...this.user,
         ...e,
+        type: e.type || UserTypeEnum.GENERAL,
         id: faker.number.int(),
       }));
     } else {
       return {
         ...this.user,
         ...userToSave,
+        type: user.type || UserTypeEnum.GENERAL,
       };
     }
   }
