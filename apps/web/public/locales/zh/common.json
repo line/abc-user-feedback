@@ -15,11 +15,11 @@
         "auth-code": "认证码"
       },
       "placeholder": {
-        "auth-code": "请输入代码"
+        "auth-code": "请输入认证码"
       },
       "button": {
-        "request-auth-code": "请求",
-        "verify-auth-code": "验证"
+        "request-auth-code": "请求码",
+        "verify-auth-code": "验证码"
       }
     },
     "reset-password": {
@@ -39,26 +39,26 @@
   },
   "main": {
     "index": {
-      "total-project": "总项目",
-      "total-channel": "总频道",
-      "total-feedback": "总反馈",
+      "total-project": "项目总数",
+      "total-channel": "频道总数",
+      "total-feedback": "反馈总数",
       "create-project": "创建项目",
-      "no-project": "没有注册的项目。"
+      "no-project": "无注册项目。"
     },
     "profile": {
       "title": "个人资料",
-      "profile-info": "个人资料信息",
+      "profile-info": "个人信息",
       "change-password": "更改密码",
       "label": {
-        "user-type": "类型",
+        "user-type": "用户类型",
         "new-password": "新密码",
         "confirm-new-password": "确认新密码"
       },
       "placeholder": {
-        "name": "请输入姓名。",
-        "department": "请输入部门。",
+        "name": "请输入姓名",
+        "department": "请输入部门",
         "new-password": "请输入新密码",
-        "confirm-new-password": "请确认新密码。"
+        "confirm-new-password": "请确认新密码"
       },
       "button": {
         "delete-account": "删除账户"
@@ -66,13 +66,13 @@
       "dialog": {
         "delete-account": {
           "title": "删除账户",
-          "description1": "您确定要删除吗？",
-          "description2": "删除账户后将无法使用服务。"
+          "description1": "您确定要删除您的账户吗？",
+          "description2": "账户删除后将无法使用服务。"
         }
       }
     },
     "dashboard": {
-      "title": "仪表板"
+      "title": "仪表盘"
     },
     "feedback": {
       "title": "反馈",
@@ -86,22 +86,22 @@
       },
       "download": {
         "loading": "下载中...",
-        "success": "下载完成。",
-        "error": "下载失败。",
-        "loading-description": "共下载 {{count, number}} 个",
-        "success-description": "共下载 {{count, number}} 个",
-        "error-description": "共下载 {{count, number}} 个"
+        "success": "下载完成",
+        "error": "下载失败",
+        "loading-description": "正在下载{{count, number}}项",
+        "success-description": "已下载{{count, number}}项",
+        "error-description": "下载{{count, number}}项失败"
       },
       "button": {
-        "all-download": "下载全部",
-        "select-download": "下载 {{count, number}} 项",
-        "excel-download": "下载 Excel",
-        "csv-download": "下载 CSV"
+        "all-download": "全部下载",
+        "select-download": "下载选中项 ({{count, number}})",
+        "excel-download": "下载Excel",
+        "csv-download": "下载CSV"
       },
       "dialog": {
         "delete-feedback": {
           "title": "删除反馈",
-          "description": "您确定要删除所有选定的反馈吗？"
+          "description": "您确定要删除选中的反馈吗？"
         }
       }
     },
@@ -111,7 +111,7 @@
       "dialog": {
         "delete-issue": {
           "title": "删除问题",
-          "description": "您确定要删除所有选定的问题吗？"
+          "description": "您确定要删除选中的问题吗？"
         }
       }
     },
@@ -120,18 +120,18 @@
       "button": {
         "create-project": "创建项目",
         "create-channel": "创建频道",
-        "create-api-key": "创建密钥",
+        "create-api-key": "创建API密钥",
         "register-member": "注册成员"
       },
       "sign-up-mgmt": {
-        "ufb-login": "UFB 登录",
-        "oauth-login": "OAuth2.0 登录",
-        "all-login": "全部",
-        "possibility": "可以直接注册",
+        "ufb-login": "UFB登录",
+        "oauth-login": "OAuth 2.0 登录",
+        "all-login": "所有登录",
+        "possibility": "直接注册可能",
         "impossibility": "无法直接注册",
         "no-domain-restriction": "无域名限制",
         "domain-restriction": "域名限制",
-        "domain-restriction-tooltip": "您可以设置可以作为用户注册的电子邮件域名。"
+        "domain-restriction-tooltip": "设置允许用户注册的电子邮件域。"
       },
       "role-mgmt": {
         "edit-role": "编辑角色",
@@ -139,22 +139,22 @@
         "delete-role": "删除角色"
       },
       "api-key-status": {
-        "active": "激活",
-        "inactive": "未激活"
+        "active": "活跃",
+        "inactive": "不活跃"
       },
       "field-status": {
-        "active": "激活",
-        "inactive": "未激活"
+        "active": "活跃",
+        "inactive": "不活跃"
       },
-      "register-member": "请注册一个成员。",
-      "same-key": "输入与密钥相同的值",
+      "register-member": "请注册成员。",
+      "same-key": "输入与键值相同的内容",
       "feedback-request-code": "反馈请求码",
       "option-info": "选项信息",
       "field-mgmt": {
-        "description": "要保存，请先点击预览。",
+        "description": "点击'预览'以保存更改。",
         "preview": "预览",
-        "preview-caption": "预览是一个示例数据，帮助您理解。",
-        "preview-description": "选择 <preview>预览</preview> 后可以查看。"
+        "preview-caption": "预览显示示例数据以便清晰。",
+        "preview-description": "选择<preview>预览</preview>来检查配置。"
       },
       "dialog": {
         "edit-user": {
@@ -162,42 +162,42 @@
         },
         "delete-project": {
           "title": "删除项目",
-          "description": "删除项目将删除所有问题/反馈数据。\n请输入下面的文字以继续删除。"
+          "description": "删除项目将移除所有相关问题和反馈。\n请在下方输入项目名称以确认删除。"
         },
         "delete-channel": {
           "title": "删除频道",
-          "description": "删除频道将删除所有反馈数据。\n请输入下面的文字以继续删除。"
+          "description": "删除频道将移除所有相关反馈。\n请在下方输入频道名称以确认删除。"
         },
         "create-role": {
           "title": "创建角色",
-          "description": "请输入新的角色名称。"
+          "description": "请输入一个新的角色名称。"
         },
         "update-role-name": {
           "title": "更新角色名称",
           "description": "请输入角色名称。"
         },
         "edit-api-key": {
-          "title": "编辑 API 密钥",
-          "description": "如果您将 API 密钥更改为未激活状态，该密钥的 API 将不可用。\n如果您不使用 API 密钥，请仅将状态更改为未激活。"
+          "title": "编辑API密钥",
+          "description": "将API密钥更改为不活跃将禁用其关联的API。\n只有在您不再使用API密钥时，才将状态更改为不活跃。"
         },
         "delete-option": {
           "title": "删除选项",
-          "description": "不适用于之前反馈中的选项。"
+          "description": "这不会影响之前反馈中的选项。"
         },
         "delete-role": {
           "title": "删除角色",
-          "description": "您确定要删除角色吗？\n拥有该角色的成员也将被删除。"
+          "description": "您确定要删除这个角色吗？\n分配给这个角色的成员也将被移除。"
         },
         "edit-member": {
           "title": "编辑成员",
-          "description": "角色从可访问的菜单到可用的功能都有所不同。\n请检查成员并选择正确的角色。"
+          "description": "角色决定了对菜单和可用功能的访问。\n在选择正确的角色之前，请验证成员的详细信息。"
         },
         "register-member": {
           "title": "注册成员"
         },
         "delete-member": {
           "title": "删除成员",
-          "description": "您确定要删除该成员吗？"
+          "description": "您确定要删除这个成员吗？"
         },
         "add-field": {
           "title": "添加字段"
@@ -212,21 +212,21 @@
     },
     "create-project": {
       "title": "创建项目",
-      "complete-title": "项目创建完成。",
-      "error-member": "当前不存在的用户信息。",
-      "continue-channel-creation": "在 UserFeedback 可用之前必须创建到频道。\n您想继续创建频道吗？",
+      "complete-title": "项目创建完成",
+      "error-member": "用户信息不存在。",
+      "continue-channel-creation": "在使用用户反馈之前必须创建频道。\n您想要继续创建频道吗？",
       "guide": {
-        "invalid-member": "存在无效的成员列表。",
-        "invalid-role": "存在无效的角色信息。",
-        "invalid-project": "存在无效的项目信息。"
+        "invalid-member": "检测到无效的成员列表。",
+        "invalid-role": "检测到无效的角色信息。",
+        "invalid-project": "检测到无效的项目信息。"
       }
     },
     "create-channel": {
       "title": "创建频道",
-      "complete-title": "频道创建完成。",
-      "finish-channel-creation": "一切准备就绪。\n开始使用 UserFeedback！",
+      "complete-title": "频道创建完成",
+      "finish-channel-creation": "设置已完成。\n开始使用用户反馈！",
       "guide": {
-        "invalid-channel": "存在无效的频道信息。"
+        "invalid-channel": "检测到无效的频道信息。"
       }
     }
   },
@@ -240,7 +240,7 @@
     "sign-in": "登录",
     "sign-up": "注册",
     "save": "保存",
-    "create": "创建",
+    "create": "创建{{name}}",
     "cancel": "取消",
     "delete": "删除",
     "register": "注册",
@@ -248,8 +248,8 @@
     "reset": "重置",
     "confirm": "确认",
     "get-out": "退出",
-    "previous": "上一步",
-    "next": "下一步",
+    "previous": "上一个",
+    "next": "下一个",
     "complete": "完成",
     "next-time": "下次",
     "start": "开始"
@@ -260,132 +260,148 @@
       "confirm-password": "确认密码"
     },
     "placeholder": {
-      "input": "请输入",
-      "email": "请输入邮箱",
+      "input": "请输入值",
+      "email": "请输入电子邮件",
       "password": "请输入密码",
-      "confirm-password": "请确认密码"
+      "confirm-password": "确认密码"
     }
   },
   "text": {
     "search-result": "搜索结果",
-    "number-count": "{{count, number}} 项",
-    "no-data": "无数据",
-    "per-page": "每页",
-    "select-option": "选择 '{{name}}'",
-    "select-count": "选择 {{count,number}}",
-    "search-filter": "搜索字段",
+    "number-count": "{{count, number}}项",
+    "no-data": "没有可用数据",
+    "per-page": "每页项目数",
+    "select-option": "选择'{{name}}'",
+    "select-count": "已选择：{{count,number}}",
+    "search-filter": "搜索过滤器",
     "all": "全部",
     "issue": {
       "init": "新建",
       "onReview": "审核中",
       "inProgress": "进行中",
       "resolved": "已解决",
-      "pending": "暂不处理"
+      "pending": "待定"
     },
     "date": {
       "today": "今天",
       "yesterday": "昨天",
-      "before-days": "{{day, number}} 天前",
-      "date-range-over-max-days": "查询期限最多可输入 {{maxDays}} 天"
+      "before-days": "{{day, number}}天前",
+      "date-range-over-max-days": "查询期限限制为{{maxDays}}天"
     },
-    "equal-search": "等于",
-    "like-search": "类似",
+    "equal-search": "精确匹配",
+    "like-search": "包含",
     "helper": "帮助",
-    "warning-get-out": "您将离开创建{{type}}的过程吗？\n即使您离开，您稍后也可以继续进行。",
-    "no-channel": "没有注册的频道。",
+    "warning-get-out": "您确定要退出{{type}}的创建过程吗？\n您可以稍后继续此过程。",
+    "no-channel": "没有注册频道",
     "guide": "指南",
     "more": "更多",
     "shrink": "收起",
     "feedback-detail": "反馈详情",
-    "create-channel-in-progress": "有一个频道正在创建中。",
-    "create-project-in-progress": "有一个项目正在创建中。",
-    "days": "{{days}} 天"
+    "create-channel-in-progress": "频道创建中",
+    "create-project-in-progress": "项目创建中",
+    "days": "{{days}}天",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "反馈已创建",
+      "ISSUE_CREATION": "问题已创建",
+      "ISSUE_STATUS_CHANGE": "问题状态已更改",
+      "ISSUE_ADDITION": "已添加问题"
+    }
   },
   "toast": {
     "sign-in": "登录成功",
     "register": "注册完成",
     "delete": "删除成功",
-    "save": "保存成功",
-    "invite": "邀请完成",
+    "save": "保存更改",
+    "invite": "邀请已发送",
     "active": "已激活",
     "inactive": "已停用",
-    "add": "添加完成",
-    "copy": "复制完成"
+    "add": "添加成功",
+    "copy": "已复制到剪贴板"
   },
   "dialog": {
     "continue": {
-      "title": "您想要继续吗？",
-      "description": "当前正在创建一个{{type}}。您想要继续吗？（如果您从头开始，现有信息将会消失。）",
+      "title": "继续？",
+      "description": "当前正在创建{{type}}。您希望继续吗？（重新开始将丢弃所有现有信息。）",
       "button": {
         "continue": "继续",
         "restart": "重新开始"
       }
+    },
+    "create-webhook": {
+      "title": "创建Webhook"
+    },
+    "update-webhook": {
+      "title": "更新Webhook"
+    },
+    "delete-webhook": {
+      "title": "删除Webhook",
+      "description": "删除Webhook将移除所有相关数据。"
     }
   },
   "dashboard-card": {
     "total-feedback": {
-      "title": "反馈总数",
-      "description": "在特定时间段内创建的反馈数量。（{{targetDate}}）"
+      "title": "总反馈",
+      "description": "在特定时期内收到的总反馈（{{targetDate}}）。"
     },
     "total-issue": {
-      "title": "问题总数",
-      "description": "在特定时间段内创建的问题数量。（{{targetDate}}）"
+      "title": "总问题",
+      "description": "在特定时期内注册的总问题（{{targetDate}}）。"
     },
     "issue-ratio": {
       "title": "问题注册率",
-      "description": "在特定时间段内创建的反馈中的问题注册率。（{{targetDate}}）"
+      "description": "注册问题的反馈百分比（{{targetDate}}）。"
     },
     "today-feedback": {
-      "title": "今日反馈数量",
-      "description": "今天创建的反馈数量。（{{targetDate}}）\n增减率与下一时期相比。（{{compareDate}}）"
+      "title": "今日反馈",
+      "description": "今天收到的反馈（{{targetDate}}）。\n与前一时期相比增减率（{{compareDate}}）。"
     },
     "yesterday-feedback": {
-      "title": "昨日反馈数量",
-      "description": "昨天创建的反馈数量。（{{targetDate}}）\n增减率与下一时期相比。（{{compareDate}}）"
+      "title": "昨日反馈",
+      "description": "昨天收到的反馈（{{targetDate}}）。\n与前一时期相比增减率（{{compareDate}}）。"
     },
     "n-days-feedback": {
-      "title": "最近{{n}}天的反馈数量",
-      "description": "在最近{{n}}天内创建的反馈数量。（{{targetDate}}）\n增减率与下一时期相比。（{{compareDate}}）"
+      "title": "过去{{n}}天的反馈",
+      "description": "在过去{{n}}天内收到的反馈（{{targetDate}}）。\n与前一时期相比增减率（{{compareDate}}）。"
     },
     "today-issue": {
-      "title": "今日问题数量",
-      "description": "今天创建的问题数量。（{{targetDate}}）\n增减率与下一时期相比。（{{compareDate}}）"
+      "title": "今日问题",
+      "description": "今天报告的问题（{{targetDate}}）。\n与前一时期相比的增减率（{{compareDate}}）。"
     },
     "yesterday-issue": {
-      "title": "昨日问题数量",
-      "description": "昨天创建的问题数量。（{{targetDate}}）\n增减率与下一时期相比。（{{compareDate}}）"
+      "title": "昨日问题",
+      "description": "昨天报告的问题（{{targetDate}}）。\n与前一时期相比的增减率（{{compareDate}}）。"
     },
     "n-days-issue": {
-      "title": "最近{{n}}天的问题数量",
-      "description": "在最近{{n}}天内创建的问题数量。（{{targetDate}}）\n增减率与下一时期相比。（{{compareDate}}）"
+      "title": "过去{{n}}天的问题",
+      "description": "在过去{{n}}天内报告的问题（{{targetDate}}）。\n与前一时期相比的增减率（{{compareDate}}）。"
     }
   },
   "chart": {
     "feedback-trend": {
       "title": "反馈趋势",
-      "description": "显示特定时间段内反馈创建的趋势。"
+      "description": "显示特定时间段内收到的反馈趋势。"
     },
     "issue-trend": {
       "title": "问题趋势",
-      "description": "显示特定时间段内问题创建的趋势。"
+      "description": "显示特定时间段内报告的问题趋势。"
     },
     "issue-status-count": {
-      "title": "问题状态",
-      "description": "显示整个问题的当前状态。"
+      "title": "问题状态概览",
+      "description": "显示所有问题当前的状态分布。"
     },
     "issue-rank": {
-      "title": "问题排名",
-      "description": "显示问题数量较多的主要问题。"
+      "title": "问题排行",
+      "description": "列出报告次数最多的问题。"
     },
     "issue-comparison": {
-      "title": "问题比较",
-      "description": "比较并显示选定问题的反馈创建趋势。"
+      "title": "问题对比",
+      "description": "比较选定问题的反馈趋势。"
     }
   },
   "popover": {
     "select-issue": {
       "search-issue": "搜索问题",
-      "max-issue-count": "您最多可以选择五个问题。",
+      "max-issue-count": "最多可以选择五个问题。",
       "issue-list": "问题列表"
     },
     "select-issue-status": {
@@ -393,11 +409,15 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "问题中注册的反馈数量。"
+    "issue-feedback-count": "与此问题相关的反馈数量。",
+    "webhook-feedback-creation": "当特定频道收集到反馈时触发。",
+    "webhook-issue-addition": "当特定频道的反馈添加问题时触发。",
+    "webhook-issue-creation": "创建问题时触发，不论频道。",
+    "webhook-issue-status-change": "问题状态改变时触发，不论频道。"
   },
   "tenant-setting-menu": {
     "tenant-info": "租户信息",
-    "sign-up-mgmt": "登录与注册管理",
+    "sign-up-mgmt": "注册与登录管理",
     "user-mgmt": "用户管理"
   },
   "project-setting-menu": {
@@ -406,6 +426,7 @@
     "role-mgmt": "角色管理",
     "api-key-mgmt": "API密钥管理",
     "issue-tracker-mgmt": "问题跟踪管理",
+    "webhook-integration": "Webhook集成",
     "delete-project": "删除项目"
   },
   "channel-setting-menu": {
@@ -420,21 +441,22 @@
     }
   },
   "help-card": {
-    "project-info": "您可以按项目收集反馈。请根据您想要管理反馈的产品注册项目信息。（例如 产品名称）",
-    "role": "您可以设置访问和使用项目的权限。",
-    "member": "您可以注册或管理参与项目的成员。",
-    "api-key": "在反馈收集API中管理API密钥信息。如果您使用API收集反馈，请生成密钥信息。",
-    "issue-tracker": "UserFeedback反馈和问题跟踪系统可以链接并管理。请输入您的问题跟踪系统信息。",
-    "channel-info": "您可以定义通过频道收集的反馈字段。请在考虑反馈路径和特性的情况下注册频道信息。（例如 VOC、APP评论）",
-    "field": "根据注册的频道，定义您希望通过User Feedback收集的反馈字段。尝试预先设置您想要通过API收集或直接从ADMIN注册的字段。",
-    "image-setting": "在收集图像格式的反馈时，您可以与图像存储合作并设置图像URL域的白名单。\n查看图像<icon></icon> <docs>文档</docs>。",
-    "field-preview": "您可以预览在字段管理中设置的字段将呈现的样子。预览不是真实的，因为它们显示为任意数据。"
+    "project-info": "基于您希望管理反馈的产品，请注册项目信息（例如，产品名称）。",
+    "role": "设置访问和使用项目的权限。",
+    "member": "注册或管理参与项目的成员。",
+    "api-key": "管理反馈收集API的API密钥信息。如果您想通过API收集反馈，请生成一个API密钥。",
+    "issue-tracker": "将用户反馈与您的问题跟踪系统链接和管理。请输入您的问题跟踪系统详细信息。",
+    "channel-info": "定义通过频道收集的反馈字段。请注册考虑到反馈路径和特点的频道信息（例如，VOC，应用评价）。",
+    "field": "定义每个注册频道通过用户反馈收集的反馈字段。预先配置通过API收集或直接在ADMIN中注册的字段。",
+    "image-setting": "对于图片格式的反馈，与图片存储集成并建立图片URL域的白名单。\n有关详细信息，请参阅图片<icon></icon> <docs>文档</docs>。",
+    "field-preview": "在字段管理中预览配置的字段外观。预览显示示例数据以便说明。",
+    "webhook": "使用Webhooks来响应用户反馈中发生的各种事件。有关更多详细信息，请参阅Webhook<icon></icon> <docs>文档</docs>。"
   },
   "hint": {
     "required": "必填",
     "max-length": "请输入不超过{{length}}个字符。",
-    "name-already-exists": "{{name}}已经存在。",
-    "invalid-domain": "无效的域名格式。",
+    "name-already-exists": "名称'{{name}}'已被使用。",
+    "invalid-domain": "请使用有效的域名格式。",
     "image-format": "输入图片URL的格式。"
   },
   "title-box": {
