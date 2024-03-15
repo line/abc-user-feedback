@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useRef } from 'react';
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
@@ -31,9 +32,10 @@ const FeedbackDetailCell: React.FC<IProps> = ({ children }) => {
   return (
     <td className="pl-2" colSpan={3}>
       <div
-        className={`font-14-regular text-primary break-words break-all align-top ${
-          !isShowingMore && 'line-clamp-6'
-        }`}
+        className={clsx(
+          'font-14-regular text-primary whitespace-pre-wrap break-words break-all align-top',
+          { 'line-clamp-6': !isShowingMore },
+        )}
         ref={ref}
       >
         {children}
