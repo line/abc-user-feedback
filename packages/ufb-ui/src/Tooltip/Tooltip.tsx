@@ -19,7 +19,6 @@ import {
   autoUpdate,
   flip,
   FloatingArrow,
-  FloatingPortal,
   offset,
   shift,
   useDismiss,
@@ -208,27 +207,24 @@ export const TooltipContent = React.forwardRef<
     }, [color]);
 
   if (!context.open) return null;
-
   return (
-    <FloatingPortal>
-      <div
-        ref={ref}
-        style={{ ...context.floatingStyles, ...style }}
-        className={[
-          'font-12-regular z-40 min-w-[50px] rounded p-2',
-          bgCN,
-          textCN,
-          className,
-        ].join(' ')}
-        {...context.getFloatingProps(props)}
-      >
-        {props.children}
-        <FloatingArrow
-          ref={context.arrowRef}
-          context={context.context}
-          className={arrowCN}
-        />
-      </div>
-    </FloatingPortal>
+    <div
+      ref={ref}
+      style={{ ...context.floatingStyles, ...style }}
+      className={[
+        'font-12-regular z-40 min-w-[50px] rounded p-2',
+        bgCN,
+        textCN,
+        className,
+      ].join(' ')}
+      {...context.getFloatingProps(props)}
+    >
+      {props.children}
+      <FloatingArrow
+        ref={context.arrowRef}
+        context={context.context}
+        className={arrowCN}
+      />
+    </div>
   );
 });
