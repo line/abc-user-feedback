@@ -92,6 +92,7 @@ export default defineConfig({
         MYSQL_SECONDARY_URLS:
           '["mysql://userfeedback:userfeedback@localhost:13307/e2e"]',
         AUTO_MIGRATION: 'true',
+        MASTER_API_KEY: 'MASTER_API_KEY',
       },
     },
     {

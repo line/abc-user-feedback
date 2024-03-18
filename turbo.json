@@ -1,41 +1,72 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env"],
+  "globalDependencies": [
+    "**/.env"
+  ],
   "pipeline": {
     "topo": {
-      "dependsOn": ["^topo"]
+      "dependsOn": [
+        "^topo"
+      ]
     },
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "next-env.d.ts", "!.next/cache/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "next-env.d.ts",
+        "!.next/cache/**"
+      ]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "web#dev": {
-      "dependsOn": ["@ufb/tailwind#build", "@ufb/shared#build"]
+      "dependsOn": [
+        "@ufb/tailwind#build",
+        "@ufb/shared#build"
+      ]
     },
     "api#dev": {
-      "dependsOn": ["@ufb/shared#build"]
+      "dependsOn": [
+        "@ufb/shared#build"
+      ]
     },
     "@ufb/tailwind#build": {
-      "outputs": ["dist/**"]
+      "outputs": [
+        "dist/**"
+      ]
     },
     "format": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
+      "outputs": [
+        "node_modules/.cache/.prettiercache"
+      ],
       "outputMode": "new-only"
     },
     "lint": {
-      "dependsOn": ["topo"],
-      "outputs": ["node_modules/.cache/.eslintcache"]
+      "dependsOn": [
+        "topo"
+      ],
+      "outputs": [
+        "node_modules/.cache/.eslintcache"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["topo"],
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+      "dependsOn": [
+        "topo"
+      ],
+      "outputs": [
+        "node_modules/.cache/tsbuildinfo.json"
+      ]
     },
     "test": {
-      "dependsOn": ["topo", "@ufb/shared#build"]
+      "dependsOn": [
+        "topo",
+        "@ufb/shared#build"
+      ]
     },
     "clean": {
       "cache": false
@@ -49,10 +80,10 @@
     "SESSION_PASSWORD",
     "API_BASE_URL",
     "NEXT_PUBLIC_API_BASE_URL",
-    "OS_USE",
-    "OS_NODE",
-    "OS_USERNAME",
-    "OS_PASSWORD",
+    "OPENSEARCH_USE",
+    "OPENSEARCH_NODE",
+    "OPENSEARCH_USERNAME",
+    "OPENSEARCH_PASSWORD",
     "APP_PORT",
     "APP_ADDRESS",
     "JWT_SECRET",

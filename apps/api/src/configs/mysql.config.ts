@@ -21,22 +21,22 @@ dotenv.config();
 
 export const mysqlConfigSchema = Joi.object({
   MYSQL_PRIMARY_URL: Joi.string().required(),
-  MYSQL_SECONDARY_URLS: Joi.string()
-    .custom((value, helpers) => {
-      const urls = JSON.parse(value);
-      for (const url of urls) {
-        if (!url.startsWith('mysql://')) {
-          return helpers.error('any.invalid');
-        }
+  MYSQL_SECONDARY_URLS: Joi.string().custom((value, helpers) => {
+    const urls = JSON.parse(value);
+    for (const url of urls) {
+      if (!url.startsWith('mysql://')) {
+        return helpers.error('any.invalid');
       }
-      return value;
-    }, 'custom validation')
-    .required(),
-  AUTO_MIGRATION: Joi.boolean().default(false),
+    }
+    return value;
+  }, 'custom validation'),
+  AUTO_MIGRATION: Joi.boolean().default(true),
 });
 
 export const mysqlConfig = registerAs('mysql', () => ({
   main_url: process.env.MYSQL_PRIMARY_URL,
-  sub_urls: JSON.parse(process.env.MYSQL_SECONDARY_URLS),
+  sub_urls: process.env.MYSQL_SECONDARY_URLS
+    ? JSON.parse(process.env.MYSQL_SECONDARY_URLS)
+    : [],
   auto_migration: process.env.AUTO_MIGRATION === 'true',
 }));

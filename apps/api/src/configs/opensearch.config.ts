@@ -17,18 +17,18 @@ import { registerAs } from '@nestjs/config';
 import Joi from 'joi';
 
 export const opensearchConfigSchema = Joi.object({
-  OS_USE: Joi.boolean().default(false),
-  OS_NODE: Joi.string().when('OS_USE', {
+  OPENSEARCH_USE: Joi.boolean().default(false),
+  OPENSEARCH_NODE: Joi.string().when('OPENSEARCH_USE', {
     is: true,
     then: Joi.required(),
     otherwise: Joi.optional(),
   }),
-  OS_USERNAME: Joi.string().allow('').when('OS_USE', {
+  OPENSEARCH_USERNAME: Joi.string().allow('').when('OPENSEARCH_USE', {
     is: true,
     then: Joi.required(),
     otherwise: Joi.optional(),
   }),
-  OS_PASSWORD: Joi.string().allow('').when('OS_USE', {
+  OPENSEARCH_PASSWORD: Joi.string().allow('').when('OPENSEARCH_USE', {
     is: true,
     then: Joi.required(),
     otherwise: Joi.optional(),
@@ -36,8 +36,8 @@ export const opensearchConfigSchema = Joi.object({
 });
 
 export const opensearchConfig = registerAs('opensearch', () => ({
-  use: process.env.OS_USE === 'true',
-  node: process.env.OS_NODE,
-  username: process.env.OS_USERNAME,
-  password: process.env.OS_PASSWORD,
+  use: process.env.OPENSEARCH_USE === 'true',
+  node: process.env.OPENSEARCH_NODE,
+  username: process.env.OPENSEARCH_USERNAME,
+  password: process.env.OPENSEARCH_PASSWORD,
 }));
