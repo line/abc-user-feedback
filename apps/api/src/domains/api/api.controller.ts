@@ -14,7 +14,7 @@
  * under the License.
  */
 import { HttpService } from '@nestjs/axios';
-import { Controller, Get, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { lastValueFrom } from 'rxjs';
@@ -62,5 +62,12 @@ export class APIController {
       </body>
     </html>`;
     reply.type('text/html').send(html);
+  }
+
+  @Post('webhook-test')
+  async testWebhook(@Body() body: any) {
+    console.log('webhook test');
+    console.log(JSON.stringify(body));
+    return body;
   }
 }

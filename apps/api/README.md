@@ -68,29 +68,40 @@ npm run migration:run
 
 ## Environment Variables
 
-| Environment               | Description                                                                      | Default Value                                                      |
-| ------------------------- | -------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
-| JWT_SECRET                | JWT secret                                                                       | # required                                                         |
-| MYSQL_PRIMARY_URL         | mysql url                                                                        | mysql://userfeedback:userfeedback@localhost:13306/userfeedback     |
-| MYSQL_SECONDARY_URLS      | mysql sub urls (must be json array format)                                       | ["mysql://userfeedback:userfeedback@localhost:13306/userfeedback"] |
-| SMTP_USE                  | flag for using smtp server (for email verification on creating user)             | false                                                              |
-| SMTP_HOST                 | smtp server host                                                                 | localhost                                                          |
-| SMTP_PORT                 | smtp server port                                                                 | 25                                                                 |
-| SMTP_USERNAME             | smtp auth username                                                               |                                                                    |
-| SMTP_PASSWORD             | smtp auth password                                                               |                                                                    |
-| SMTP_SENDER               | mail sender email                                                                | noreplay@linecorp.com                                              |
-| SMTP_BASE_URL             | default UserFeedback URL for mail to be redirected                               | http://localhost:3000                                              |
-| APP_PORT                  | the post that the server is running on                                           | 4000                                                               |
-| APP_ADDRESS               | the address that the server is running on                                        | 0.0.0.0                                                            |
-| OS_USE                    | flag for using opensearch (for better performance on searching feedback)         | false                                                              |
-| OS_NODE                   | opensearch node url                                                              | http://localhost:9200                                              |
-| OS_USERNAME               | opensearch username if exists                                                    |                                                                    |
-| OS_PASSWORD               | opensearch password if exists                                                    |                                                                    |
-| AUTO_MIGRATION            | set 'true' if you want to make the database migration automatically              |                                                                    |
-| MASTER_API_KEY            | set a key if you want to make a master key for creating feedback                 |                                                                    |
-| NODE_OPTIONS              | set some options if you want to add for node execution (e.g. max_old_space_size) |                                                                    |
-| ACCESS_TOKEN_EXPIRED_TIME | set expired time of access token                                                 | 10m                                                                |
-| REFESH_TOKEN_EXPIRED_TIME | set expired time of refresh token                                                | 1h                                                                 |
+The following is a list of environment variables used by the application, along with their descriptions and default values.
+
+### Required Environment Variables
+
+| Environment                 | Description                                  | Default Value                                            |
+| --------------------------- | -------------------------------------------- | -------------------------------------------------------- |
+| `JWT_SECRET`                | Secret key for signing JSON Web Tokens (JWT) | _required_                                               |
+| `MYSQL_PRIMARY_URL`         | Primary MySQL connection URL                 | `mysql://userfeedback:userfeedback@localhost:13306/test` |
+| `BASE_URL`                  | Base URL of the application                  | `http://localhost:3000`                                  |
+| `ACCESS_TOKEN_EXPIRED_TIME` | Duration until the access token expires      | `10m`                                                    |
+| `REFESH_TOKEN_EXPIRED_TIME` | Duration until the refresh token expires     | `1h`                                                     |
+
+### Optional Environment Variables
+
+| Environment            | Description                                                    | Default Value                       |
+| ---------------------- | -------------------------------------------------------------- | ----------------------------------- |
+| `APP_PORT`             | The port that the server runs on                               | `4000`                              |
+| `APP_ADDRESS`          | The address that the server binds to                           | `0.0.0.0`                           |
+| `MYSQL_SECONDARY_URLS` | Secondary MySQL connection URLs (must be in JSON array format) | _optional_                          |
+| `SMTP_USE`             | Flag to enable SMTP server usage (for email verification)      | `false`                             |
+| `SMTP_HOST`            | SMTP server host                                               | _required if `SMTP_USE=true`_       |
+| `SMTP_PORT`            | SMTP server port                                               | _required if `SMTP_USE=true`_       |
+| `SMTP_USERNAME`        | SMTP server authentication username                            | _required if `SMTP_USE=true`_       |
+| `SMTP_PASSWORD`        | SMTP server authentication password                            | _required if `SMTP_USE=true`_       |
+| `SMTP_SENDER`          | Email address used as sender in emails                         | _required if `SMTP_USE=true`_       |
+| `SMTP_BASE_URL`        | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_       |
+| `OPENSEARCH_USE`       | Flag to enable OpenSearch integration                          | `false`                             |
+| `OPENSEARCH_NODE`      | OpenSearch node URL                                            | _required if `OPENSEARCH_USE=true`_ |
+| `OPENSEARCH_USERNAME`  | OpenSearch username (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_ |
+| `OPENSEARCH_PASSWORD`  | OpenSearch password (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_ |
+| `AUTO_MIGRATION`       | Automatically perform database migration on application start  | `true`                              |
+| `MASTER_API_KEY`       | Master API key for privileged operations                       | _none_                              |
+
+Please ensure that you set the required environment variables before starting the application. Optional variables can be set as needed based on your specific configuration and requirements.
 
 ## Swagger
 
