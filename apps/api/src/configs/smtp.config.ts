@@ -18,12 +18,36 @@ import Joi from 'joi';
 
 export const smtpConfigSchema = Joi.object({
   SMTP_USE: Joi.boolean().default(false),
-  SMTP_HOST: Joi.string().default('localhost'),
-  SMTP_PORT: Joi.number().default(25),
-  SMTP_USERNAME: Joi.string().default(''),
-  SMTP_PASSWORD: Joi.string().default(''),
-  SMTP_SENDER: Joi.string().default('noreplay@linecorp.com'),
-  SMTP_BASE_URL: Joi.string().default('http://localhost:3000'),
+  SMTP_HOST: Joi.string().when('SMTP_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  SMTP_PORT: Joi.number().when('SMTP_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  SMTP_USERNAME: Joi.string().when('SMTP_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  SMTP_PASSWORD: Joi.string().when('SMTP_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  SMTP_SENDER: Joi.string().when('SMTP_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
+  SMTP_BASE_URL: Joi.string().when('SMTP_USE', {
+    is: true,
+    then: Joi.required(),
+    otherwise: Joi.optional(),
+  }),
 });
 
 export const smtpConfig = registerAs('smtp', () => ({
