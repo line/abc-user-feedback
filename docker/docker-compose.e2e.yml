@@ -32,7 +32,7 @@ services:
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e
-      - MYSQL_SECONDARY_URLS=["mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e"]
+      - BASE_URL=http://host.docker.internal:3000
       - SMTP_HOST=localhost
       - SMTP_PORT=25
       - SMTP_SENDER=abc@feedback.user
