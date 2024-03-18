@@ -40,6 +40,7 @@ jobs:
       - name: Build and run
         run: |
           cd packages/ufb-shared
+          yarn
           yarn build
           docker-compose -f "./docker/docker-compose.e2e.yml" up -d
 
