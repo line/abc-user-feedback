@@ -18,15 +18,12 @@ import { z } from 'zod';
 
 export const env = createEnv({
   server: {
-    API_BASE_URL: z.string().url().default('http://127.0.0.1:4000'),
-    SESSION_PASSWORD: z
-      .string()
-      .min(32)
-      .default('complex_password_at_least_32_characters_long'),
+    API_BASE_URL: z.string().url(),
+    SESSION_PASSWORD: z.string().min(32),
   },
   client: {
     NEXT_PUBLIC_MAX_DAYS: z.coerce.number().default(90),
-    NEXT_PUBLIC_API_BASE_URL: z.string().url().default('http://localhost:4000'),
+    NEXT_PUBLIC_API_BASE_URL: z.string().url(),
   },
   runtimeEnv: {
     API_BASE_URL: process.env.API_BASE_URL,
