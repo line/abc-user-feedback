@@ -42,6 +42,7 @@ jobs:
           cd packages/ufb-shared
           yarn
           yarn build
+          cd ../../
           docker-compose -f "./docker/docker-compose.e2e.yml" up -d
 
       - name: Setup e2e test
