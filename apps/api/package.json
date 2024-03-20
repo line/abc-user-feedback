@@ -74,6 +74,9 @@
     "typeorm-naming-strategies": "^4.1.0",
     "typeorm-transactional": "^0.4.1"
   },
+  "optionalDependencies": {
+    "@node-rs/xxhash-linux-x64-gnu": "^1.7.0"
+  },
   "devDependencies": {
     "@faker-js/faker": "^8.2.0",
     "@nestjs/cli": "^10.2.0",

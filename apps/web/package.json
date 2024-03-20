@@ -8,7 +8,7 @@
     "dev": "next dev",
     "format": "prettier --check \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "generate-api-type": "openapi-typescript http://0.0.0.0:4000/admin-docs-json --output src/types/api.type.ts",
-    "lint": "SKIP_ENV_VALIDATION=1 next lint",
+    "lint": "set SKIP_ENV_VALIDATION=1 && next lint",
     "start": "next start",
     "test": "jest --passWithNoTests",
     "test:ci": "jest --ci --passWithNoTests",

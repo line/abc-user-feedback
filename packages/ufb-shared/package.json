@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rm -rf dist .turbo node_modules",
+    "clean": "rimraf dist .turbo node_modules",
     "format": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -26,6 +26,7 @@
     "@ufb/tsconfig": "^0.1.0",
     "eslint": "^8.51.0",
     "tsup": "^8.0.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "rimraf": "^5.0.5"
   }
 }
