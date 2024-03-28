@@ -37,6 +37,15 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@main
 
+      - name: Install Yarn to latest stable version
+        run: |
+          npx corepack enable
+          yarn set version stable
+          yarn cache clean
+
+      - name: Install Dependencies
+        run: yarn install
+
       - name: Build and run
         run: |
           cd packages/ufb-shared
