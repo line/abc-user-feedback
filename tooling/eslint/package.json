@@ -38,7 +38,7 @@
     "@ufb/prettier-config": "^0.1.0",
     "@ufb/tsconfig": "^0.1.0",
     "eslint": "^8.51.0",
-    "typescript": "^5.2.2",
-    "rimraf": "^5.0.5"
+    "rimraf": "^5.0.5",
+    "typescript": "^5.2.2"
   }
 }
