@@ -17,13 +17,10 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Enable CorePack for Yarn
-        run: npx corepack enable
-
       - name: Install Yarn to latest stable version
         run: |
-          yarn set version stable
-          yarn install
+        npx corepack enable
+        yarn set version stable
 
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --check-cache
