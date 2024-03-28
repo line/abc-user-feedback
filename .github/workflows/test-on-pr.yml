@@ -21,6 +21,7 @@ jobs:
         run: |
           npx corepack enable
           yarn set version stable
+          yarn cache clean
 
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --check-cache
