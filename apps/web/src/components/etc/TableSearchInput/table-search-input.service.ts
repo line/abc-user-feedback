@@ -85,8 +85,9 @@ export const objToStr = (
           }
         case 'issue':
           if (Array.isArray(value)) {
-            const issueName = column.options?.find((v) => v.id === value[0])
-              ?.name;
+            const issueName = column.options?.find(
+              (v) => v.id === value[0],
+            )?.name;
             return `${name}:${issueName}`;
           } else if (value?.name) {
             const issueName = value?.name;

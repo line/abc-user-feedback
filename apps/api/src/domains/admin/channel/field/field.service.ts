@@ -54,11 +54,11 @@ export class FieldService {
                 search_analyzer: 'ngram_analyzer',
               }
             : field.format === FieldFormatEnum.date
-            ? {
-                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
-                format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
-              }
-            : { type: FIELD_TYPES_TO_MAPPING_TYPES[field.format] },
+              ? {
+                  type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+                  format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
+                }
+              : { type: FIELD_TYPES_TO_MAPPING_TYPES[field.format] },
         }),
       {},
     );

@@ -48,8 +48,8 @@ export default function useOAIQuery<
 } & (TVariables extends undefined
   ? { variables?: undefined }
   : O.RequiredKeys<NonNullable<TVariables>> extends never
-  ? { variables?: TVariables }
-  : { variables: TVariables })) {
+    ? { variables?: TVariables }
+    : { variables: TVariables })) {
   return useQuery<
     TData,
     IFetchError,

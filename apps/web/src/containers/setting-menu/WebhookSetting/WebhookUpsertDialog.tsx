@@ -178,11 +178,10 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
 
   const getEventChannels = (type: WebhookEventEnum) => {
     const channels = data?.items ?? [];
-    return channels.filter(
-      (channel) =>
-        watch('events')
-          .find((e) => e.type === type)
-          ?.channelIds?.includes(channel.id),
+    return channels.filter((channel) =>
+      watch('events')
+        .find((e) => e.type === type)
+        ?.channelIds?.includes(channel.id),
     );
   };
 

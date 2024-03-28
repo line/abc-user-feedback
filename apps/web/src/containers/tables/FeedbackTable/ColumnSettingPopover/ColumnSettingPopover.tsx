@@ -61,12 +61,12 @@ const ColumnSettingPopover: React.FC<IProps> = ({
       columnOrder.length === 0
         ? (columns.map((v) => v.id) as string[])
         : columnOrder.length === columns.length
-        ? columnOrder
-        : columnOrder.concat(
-            columns
-              .filter((v) => !columnOrder.includes(v.id as string))
-              .map((v) => v.id) as string[],
-          ),
+          ? columnOrder
+          : columnOrder.concat(
+              columns
+                .filter((v) => !columnOrder.includes(v.id as string))
+                .map((v) => v.id) as string[],
+            ),
     [columns, columnOrder],
   );
 
@@ -77,8 +77,8 @@ const ColumnSettingPopover: React.FC<IProps> = ({
         (typeof columnVisibility[key] === 'undefined'
           ? 1
           : columnVisibility[key]
-          ? 1
-          : 0)
+            ? 1
+            : 0)
       );
     }, 0);
   }, [columnKeys, columnVisibility]);
