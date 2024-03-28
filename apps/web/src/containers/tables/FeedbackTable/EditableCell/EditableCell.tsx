@@ -51,15 +51,14 @@ const EditableCell: React.FC<IProps> = memo((props) => {
       field.format === 'select'
         ? field.options?.find((v) => v.key === value) ?? null
         : field.format === 'multiSelect'
-        ? (value ?? []).map(
-            (optionKey: string) =>
+          ? (value ?? []).map((optionKey: string) =>
               field.options?.find((v) => v.key === optionKey),
-          )
-        : field.format === 'number'
-        ? value
-          ? Number(value)
-          : null
-        : value,
+            )
+          : field.format === 'number'
+            ? value
+              ? Number(value)
+              : null
+            : value,
     );
   }, [value]);
 
@@ -71,16 +70,16 @@ const EditableCell: React.FC<IProps> = memo((props) => {
       field.format === 'text' || field.format === 'keyword'
         ? currentValue ?? ''
         : field.format === 'number'
-        ? Number(currentValue)
-        : field.format === 'date'
-        ? new Date(currentValue)
-        : field.format === 'select'
-        ? currentValue?.key ?? null
-        : field.format === 'multiSelect'
-        ? (currentValue ?? []).map(
-            (v: { id: number; key: string; name: string }) => v.key,
-          ) ?? null
-        : currentValue,
+          ? Number(currentValue)
+          : field.format === 'date'
+            ? new Date(currentValue)
+            : field.format === 'select'
+              ? currentValue?.key ?? null
+              : field.format === 'multiSelect'
+                ? (currentValue ?? []).map(
+                    (v: { id: number; key: string; name: string }) => v.key,
+                  ) ?? null
+                : currentValue,
     );
   }, [currentValue, editableState]);
 

@@ -75,27 +75,29 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             field.format === 'date'
               ? faker.date.anytime()
               : field.format === 'keyword'
-              ? faker.word.noun()
-              : field.format === 'multiSelect'
-              ? faker.helpers.arrayElements(
-                  (field.options ?? []).map((v) => v.name),
-                )
-              : field.format === 'select'
-              ? faker.helpers.arrayElement(
-                  (field.options ?? []).map((v) => v.name),
-                )
-              : field.format === 'number'
-              ? faker.number.int()
-              : field.format === 'text'
-              ? faker.lorem.text()
-              : field.format === 'images'
-              ? faker.helpers.arrayElements(
-                  Array.from(
-                    { length: faker.number.int({ min: 1, max: 15 }) },
-                    () => '/assets/images/sample_image.png',
-                  ),
-                )
-              : null;
+                ? faker.word.noun()
+                : field.format === 'multiSelect'
+                  ? faker.helpers.arrayElements(
+                      (field.options ?? []).map((v) => v.name),
+                    )
+                  : field.format === 'select'
+                    ? faker.helpers.arrayElement(
+                        (field.options ?? []).map((v) => v.name),
+                      )
+                    : field.format === 'number'
+                      ? faker.number.int()
+                      : field.format === 'text'
+                        ? faker.lorem.text()
+                        : field.format === 'images'
+                          ? faker.helpers.arrayElements(
+                              Array.from(
+                                {
+                                  length: faker.number.int({ min: 1, max: 15 }),
+                                },
+                                () => '/assets/images/sample_image.png',
+                              ),
+                            )
+                          : null;
         }
       }
       fakeRows.push(fakeData);

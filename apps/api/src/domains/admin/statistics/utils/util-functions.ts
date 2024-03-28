@@ -33,8 +33,8 @@ export function getIntervalDatesInFormat(
   } else {
     const intervalCount = Math.floor(
       DateTime.fromJSDate(new Date(inputDate))
-        .until(DateTime.fromJSDate(new Date(endDate)))
-        .length(interval) + 1,
+        .diff(DateTime.fromJSDate(new Date(endDate)), interval)
+        .as(`${interval}s`) + 1,
     );
     const startOfInterval =
       DateTime.fromJSDate(new Date(endDate))

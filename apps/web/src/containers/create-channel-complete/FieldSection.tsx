@@ -66,14 +66,14 @@ const columns = [
         getValue() === 'API'
           ? 'blue'
           : getValue() === 'ADMIN'
-          ? 'green'
-          : 'black';
+            ? 'green'
+            : 'black';
       const type =
         getValue() === 'API'
           ? 'primary'
           : getValue() === 'ADMIN'
-          ? 'primary'
-          : 'secondary';
+            ? 'primary'
+            : 'secondary';
       return (
         <Badge color={color} type={type}>
           {getValue()}

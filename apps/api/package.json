@@ -7,6 +7,7 @@
     "clean": "git clean -xdf dist .turbo node_modules",
     "dev": "nest start --watch",
     "format": "prettier --check \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
+    "format:fix": "prettier --write --list-different \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
     "lint": "eslint \"src/**/*.ts\"",
     "migration:generate": "npm run typeorm -- migration:generate src/configs/modules/typeorm-config/migrations/$npm_config_name",
     "migration:revert": "npm run typeorm -- migration:revert",

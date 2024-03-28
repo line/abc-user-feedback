@@ -58,8 +58,8 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
         {status === 'loading'
           ? 'Loading...'
           : status === 'error'
-          ? 'Error!!!'
-          : ''}
+            ? 'Error!!!'
+            : ''}
       </p>
     </div>
   );
