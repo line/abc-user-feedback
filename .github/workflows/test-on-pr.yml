@@ -12,10 +12,18 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Setup Node.js environment
+      - name: Setup Node.js v18
         uses: actions/setup-node@v2
         with:
           node-version: '18'
+
+      - name: Install Yarn v4.1.1
+        run: |
+          npm uninstall -g yarn
+          npm install -g yarn@4.1.1
+
+      - name: Enable CorePack for Yarn
+        run: npx corepack enable
 
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --check-cache

@@ -6820,6 +6820,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"abc-user-feedback@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "abc-user-feedback@workspace:."
+  dependencies:
+    "@manypkg/cli": "npm:^0.21.0"
+    "@ufb/prettier-config": "npm:^0.1.0"
+    husky: "npm:^8.0.3"
+    prettier: "npm:^3.0.3"
+    turbo: "npm:^1.10.16"
+    typescript: "npm:^5.2.2"
+  languageName: unknown
+  linkType: soft
+
 "abort-controller@npm:^3.0.0":
   version: 3.0.0
   resolution: "abort-controller@npm:3.0.0"
@@ -17812,19 +17825,6 @@ __metadata:
   checksum: 10c0/9a2f0bff3627ff5e6b539b3f0b1a3b74f4d7bb142530b5db11f2115b3df4a6bfe0ccfab0c2d3907ff9567f8c90ddc6d05f5194823bc401a590b4f839873f7d75
   languageName: node
   linkType: hard
-
-"root-workspace-0b6124@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "root-workspace-0b6124@workspace:."
-  dependencies:
-    "@manypkg/cli": "npm:^0.21.0"
-    "@ufb/prettier-config": "npm:^0.1.0"
-    husky: "npm:^8.0.3"
-    prettier: "npm:^3.0.3"
-    turbo: "npm:^1.10.16"
-    typescript: "npm:^5.2.2"
-  languageName: unknown
-  linkType: soft
 
 "rtl-css-js@npm:^1.16.1":
   version: 1.16.1
