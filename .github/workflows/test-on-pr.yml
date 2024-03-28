@@ -19,8 +19,8 @@ jobs:
 
       - name: Install Yarn to latest stable version
         run: |
-        npx corepack enable
-        yarn set version stable
+          npx corepack enable
+          yarn set version stable
 
       - name: Install Dependencies
         run: yarn install --immutable --immutable-cache --check-cache
