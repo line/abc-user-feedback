@@ -94,16 +94,14 @@ export const Badge: React.FC<IProps> = (props) => {
       case 'primary':
         return {
           textColorCN: 'text-above-primary',
-          rightIconColorCN: !right?.disabled
-            ? 'text-above-primary'
-            : 'text-above-tertiary',
+          rightIconColorCN:
+            !right?.disabled ? 'text-above-primary' : 'text-above-tertiary',
         };
       case 'secondary':
         return {
           textColorCN: textColor[color],
-          rightIconColorCN: !right?.disabled
-            ? textColor[color]
-            : disabledTextColor[color],
+          rightIconColorCN:
+            !right?.disabled ? textColor[color] : disabledTextColor[color],
         };
       case 'tertiary':
         return {
