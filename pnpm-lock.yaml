@@ -370,8 +370,8 @@ importers:
         specifier: ^13.1.1
         version: 13.1.1(react-dom@18.2.0)(react@18.2.0)
       react-datepicker:
-        specifier: ^4.25.0
-        version: 4.25.0(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^6.2.0
+        version: 6.6.0(react-dom@18.2.0)(react@18.2.0)
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
@@ -8052,6 +8052,7 @@ packages:
     engines: {node: '>=0.11'}
     dependencies:
       '@babel/runtime': 7.24.1
+    dev: true
 
   /date-fns@3.6.0:
     resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
@@ -13515,20 +13516,19 @@ packages:
       - react-native
     dev: false
 
-  /react-datepicker@4.25.0(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-zB7CSi44SJ0sqo8hUQ3BF1saE/knn7u25qEMTO1CQGofY1VAKahO8k9drZtp0cfW1DMfoYLR3uSY1/uMvbEzbg==}
+  /react-datepicker@6.6.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ERC0/Q4pPC9bNIcGUpdCbHc+oCxhkU3WI3UOGHkyJ3A9fqALCYpEmLc5S5xvAd7DuCDdbsyW97oRPM6pWWwjww==}
     peerDependencies:
       react: ^16.9.0 || ^17 || ^18
       react-dom: ^16.9.0 || ^17 || ^18
     dependencies:
-      '@popperjs/core': 2.11.8
-      classnames: 2.5.1
-      date-fns: 2.30.0
+      '@floating-ui/react': 0.26.10(react-dom@18.2.0)(react@18.2.0)
+      clsx: 2.1.0
+      date-fns: 3.6.0
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       react-onclickoutside: 6.13.0(react-dom@18.2.0)(react@18.2.0)
-      react-popper: 2.3.0(@popperjs/core@2.11.8)(react-dom@18.2.0)(react@18.2.0)
     dev: false
 
   /react-dom@18.2.0(react@18.2.0):
@@ -13542,6 +13542,7 @@ packages:
 
   /react-fast-compare@3.2.2:
     resolution: {integrity: sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==}
+    dev: true
 
   /react-hook-form@7.51.2(react@18.2.0):
     resolution: {integrity: sha512-y++lwaWjtzDt/XNnyGDQy6goHskFualmDlf+jzEZvjvz6KWDf7EboL7pUvRCzPTJd0EOPpdekYaQLEvvG6m6HA==}
@@ -13618,6 +13619,7 @@ packages:
       react-dom: 18.2.0(react@18.2.0)
       react-fast-compare: 3.2.2
       warning: 4.0.3
+    dev: true
 
   /react-redux@7.2.9(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-Gx4L3uM182jEEayZfRbI/G11ZpYdNAnBs70lFVMNdHJI76XYtR+7m0MN+eAs7UHBPhWXcnFPaS+9owSCJQHNpQ==}
@@ -15755,6 +15757,7 @@ packages:
     resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
     dependencies:
       loose-envify: 1.4.0
+    dev: true
 
   /watchpack@2.4.1:
     resolution: {integrity: sha512-8wrBCMtVhqcXP2Sup1ctSkga6uc2Bx0IIvKyT7yTFier5AXHooSI+QyQQAtTb7+E0IUCCKyTFmXqdqgum2XWGg==}

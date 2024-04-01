@@ -42,15 +42,9 @@ jobs:
           npx corepack enable
           pnpm install --frozen-lockfile
 
-      - name: Install Dependencies
-        run: yarn install
-
       - name: Build and run
         run: |
-          cd packages/ufb-shared
-          pnpm install --frozen-lockfile
           pnpm build
-          cd ../../
           docker-compose -f "./docker/docker-compose.e2e.yml" up -d
 
       - name: Setup e2e test
