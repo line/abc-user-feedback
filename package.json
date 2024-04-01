@@ -30,7 +30,7 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "test": "turbo run test",
     "test:e2e": "cd apps/e2e && pnpm test:e2e",
-    "postinstall": "husky install",
+    "postinstall": "husky install && pnpm lint:ws",
     "typecheck": "turbo typecheck"
   },
   "prettier": "@ufb/prettier-config",
