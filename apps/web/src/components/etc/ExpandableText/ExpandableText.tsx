@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import classNames from 'classnames';
+
 interface IProps extends React.PropsWithChildren {
   isExpanded?: boolean;
 }
@@ -21,10 +23,10 @@ interface IProps extends React.PropsWithChildren {
 const ExpandableText: React.FC<IProps> = ({ children, isExpanded }) => {
   return (
     <p
-      className={
-        'cursor-text ' +
-        (isExpanded ? 'whitespace-normal break-all' : 'truncate')
-      }
+      className={classNames('cursor-text', {
+        'whitespace-pre-wrap break-all': isExpanded,
+        truncate: !isExpanded,
+      })}
     >
       {children}
     </p>
