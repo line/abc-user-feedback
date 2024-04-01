@@ -27,7 +27,7 @@
     "autoprefixer": "^10.4.16",
     "eslint": "^8.51.0",
     "postcss": "^8.4.31",
-    "postcss-cli": "^10.1.0",
+    "postcss-cli": "^11.0.0",
     "postcss-import": "^15.1.0",
     "postcss-nesting": "^12.0.1",
     "prejss-cli": "^0.3.3",
