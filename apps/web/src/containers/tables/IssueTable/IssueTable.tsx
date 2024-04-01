@@ -116,7 +116,7 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
     header: 'Feedback Count',
     cell: ({ getValue }) => getValue().toLocaleString(),
     size: 160,
-    minSize: 150,
+    minSize: 100,
   }),
   columnHelper.accessor('description', {
     header: 'Description',
@@ -127,6 +127,7 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
     ),
     enableSorting: false,
     size: 300,
+    minSize: 100,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
