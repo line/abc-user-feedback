@@ -20,7 +20,7 @@
     "@types/node": "20.8.8",
     "@ufb/tsconfig": "workspace:*",
     "rimraf": "^5.0.5",
-    "typescript": "^5.4.3"
+    "typescript": "^5.2.2"
   },
   "prettier": "@ufb/prettier-config"
 }
