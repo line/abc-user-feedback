@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 @layer components {
-  .tabel-loading {
+  .table-loading {
     position: relative;
     overflow: hidden;
     @apply bg-blue-primary;
   }
 
-  .tabel-loading::after {
+  .table-loading::after {
     position: absolute;
     top: 0;
     right: 0;
@@ -22,12 +22,12 @@
       rgba(233, 233, 233, 0.9) 50%,
       rgba(233, 233, 233, 0.8) 100%
     );
-    animation: tabel-loading 1s ease-out infinite;
+    animation: table-loading 1s ease-out infinite;
     content: '';
   }
 }
 
-@keyframes tabel-loading {
+@keyframes table-loading {
   100% {
     transform: translateX(0%);
     opacity: 0;
