@@ -61,8 +61,8 @@ const DashboardCard: React.FC<IProps> = (props) => {
                 percentage === 0
                   ? 'text-secondary'
                   : percentage > 0
-                  ? 'text-blue-primary'
-                  : 'text-red-primary'
+                    ? 'text-blue-primary'
+                    : 'text-red-primary'
               }
             >
               {parseFloat(Math.abs(percentage).toFixed(1))}%

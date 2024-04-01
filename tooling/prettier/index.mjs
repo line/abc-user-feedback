@@ -9,6 +9,8 @@ const config = {
   singleQuote: true,
   trailingComma: 'all',
   endOfLine: 'auto',
+  tabWidth: 2,
+  useTabs: false,
   plugins: [
     '@ianvs/prettier-plugin-sort-imports',
     'prettier-plugin-tailwindcss',

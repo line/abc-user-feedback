@@ -36,10 +36,10 @@ const getSearchItemPriority = (a: SearchItemType) =>
   a.name === 'Created'
     ? 1
     : a.name === 'Updated'
-    ? 2
-    : a.name === 'Issue'
-    ? 3
-    : 4;
+      ? 2
+      : a.name === 'Issue'
+        ? 3
+        : 4;
 interface IProps {
   onChangeChannel: (channelId: number) => void;
   columns: ColumnDef<any, any>[];

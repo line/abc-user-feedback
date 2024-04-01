@@ -74,12 +74,8 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
         query: {
           ...query,
           createdAt: {
-            gte: dayjs(createdAtRange?.startDate)
-              .startOf('day')
-              .toISOString(),
-            lt: dayjs(createdAtRange?.endDate)
-              .endOf('day')
-              .toISOString(),
+            gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
+            lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
           },
         },
       }),
