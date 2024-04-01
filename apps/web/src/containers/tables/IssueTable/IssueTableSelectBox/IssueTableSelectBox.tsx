@@ -24,7 +24,7 @@ interface IProps extends React.PropsWithChildren {
   issueCountData: { key: string; count: number }[] | undefined;
 }
 
-const IssueTabelSelectBox: React.FC<IProps> = (props) => {
+const IssueTableSelectBox: React.FC<IProps> = (props) => {
   const { currentIssueKey, onChangeOption, issueCountData } = props;
 
   const { t } = useTranslation();
@@ -62,4 +62,4 @@ const IssueTabelSelectBox: React.FC<IProps> = (props) => {
   );
 };
 
-export default IssueTabelSelectBox;
+export default IssueTableSelectBox;

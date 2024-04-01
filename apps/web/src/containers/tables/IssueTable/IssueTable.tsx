@@ -61,7 +61,7 @@ import type { IssueTrackerType } from '@/types/issue-tracker.type';
 import type { IssueType } from '@/types/issue.type';
 import { FeedbackTableInIssue } from '../FeedbackTable';
 import IssueSettingPopover from './IssueSettingPopover';
-import IssueTabelSelectBox from './IssueTabelSelectBox';
+import IssueTableSelectBox from './IssueTableSelectBox';
 import { TableRow } from './TableRow';
 import TicketLink from './TicketLink';
 
@@ -348,7 +348,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <IssueTabelSelectBox
+      <IssueTableSelectBox
         currentIssueKey={currentIssueKey}
         issueCountData={issueCountData}
         onChangeOption={(status) => setQuery({ ...query, status })}
