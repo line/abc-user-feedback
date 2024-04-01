@@ -5,5 +5,3 @@
 !apps/web/.env.build
 docker
 volumes
-.turbo
-!.turbo/config.json
