@@ -24,14 +24,14 @@
   "devDependencies": {
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
-    "autoprefixer": "^10.4.16",
-    "eslint": "^8.51.0",
-    "postcss": "^8.4.31",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "postcss": "^8.4.38",
     "postcss-cli": "^10.1.0",
     "postcss-import": "^15.1.0",
-    "postcss-nesting": "^12.0.1",
+    "postcss-nesting": "^12.1.1",
     "prejss-cli": "^0.3.3",
-    "prettier": "^3.0.3",
-    "tailwindcss": "^3.3.3"
+    "prettier": "^3.2.5",
+    "tailwindcss": "^3.4.3"
   }
 }

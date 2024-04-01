@@ -30,16 +30,16 @@
     "lint:ws": "pnpm dlx sherif@latest",
     "test": "turbo run test",
     "test:e2e": "cd apps/e2e && pnpm test:e2e",
-    "postinstall": "husky install && pnpm lint:ws",
+    "postinstall": "husky install",
     "typecheck": "turbo typecheck"
   },
   "prettier": "@ufb/prettier-config",
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
     "husky": "^8.0.3",
-    "prettier": "^3.0.3",
+    "prettier": "^3.2.5",
     "turbo": "^1.13.0",
-    "typescript": "5.2.2"
+    "typescript": "^5.4.3"
   },
   "packageManager": "pnpm@8.15.5",
   "engines": {

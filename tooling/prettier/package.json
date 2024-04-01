@@ -12,15 +12,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.6"
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.13"
   },
   "devDependencies": {
     "@types/node": "20.8.8",
     "@ufb/tsconfig": "workspace:*",
     "rimraf": "^5.0.5",
-    "typescript": "5.2.2"
+    "typescript": "^5.4.3"
   },
   "prettier": "@ufb/prettier-config"
 }
