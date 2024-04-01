@@ -6265,12 +6265,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.18":
+"@types/react-dom@npm:^18.0.0":
   version: 18.2.22
   resolution: "@types/react-dom@npm:18.2.22"
   dependencies:
     "@types/react": "npm:*"
   checksum: 10c0/cd85b5f402126e44b8c7b573e74737389816abcc931b2b14d8f946ba81cce8637ea490419488fcae842efb1e2f69853bc30522e43fd8359e1007d4d14b8d8146
+  languageName: node
+  linkType: hard
+
+"@types/react-dom@npm:^18.2.23":
+  version: 18.2.23
+  resolution: "@types/react-dom@npm:18.2.23"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 10c0/9348e93558aa67b4b237bd0eab62e72e85f3e17a1c45fde04d874476269730f7c671b3d62390c4fca588da2a026e90cc74148abc349dbfd4ee5535a82ccdf38e
   languageName: node
   linkType: hard
 
@@ -6604,7 +6613,7 @@ __metadata:
     "@testing-library/jest-dom": "npm:^6.1.4"
     "@testing-library/react": "npm:^14.1.2"
     "@types/react": "npm:^18.2.55"
-    "@types/react-dom": "npm:^18.2.18"
+    "@types/react-dom": "npm:^18.2.23"
     "@ufb/eslint-config": "npm:^0.1.0"
     "@ufb/prettier-config": "npm:^0.1.0"
     "@ufb/tailwind": "npm:^0.1.0"
@@ -20317,7 +20326,7 @@ __metadata:
     "@types/react": "npm:^18.2.55"
     "@types/react-beautiful-dnd": "npm:^13.1.6"
     "@types/react-datepicker": "npm:^4.19.1"
-    "@types/react-dom": "npm:^18.2.18"
+    "@types/react-dom": "npm:^18.2.23"
     "@ufb/eslint-config": "npm:^0.1.0"
     "@ufb/prettier-config": "npm:^0.1.0"
     "@ufb/shared": "npm:^0.1.0"
