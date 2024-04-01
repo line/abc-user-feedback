@@ -66,7 +66,7 @@ module.exports = {
     '**/*.config.mjs',
     '.next',
     'dist',
-    'yarn.lock',
+    'pnpm-lock.yaml',
   ],
   reportUnusedDisableDirectives: true,
 };
