@@ -219,7 +219,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
             </colgroup>
             <thead>
               <tr>
-                {rowSelectionIds.length > 0 ? (
+                {rowSelectionIds.length > 0 ?
                   <CheckedTableHead
                     headerLength={columnLength}
                     count={rowSelectionIds.length}
@@ -236,8 +236,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                       fieldIds,
                     }}
                   />
-                ) : (
-                  table.getFlatHeaders().map((header) => (
+                : table.getFlatHeaders().map((header) => (
                     <th key={header.index} style={{ width: header.getSize() }}>
                       <div className="flex flex-nowrap items-center">
                         <span className="overflow-hidden text-ellipsis">
@@ -255,17 +254,16 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                       )}
                     </th>
                   ))
-                )}
+                }
               </tr>
               {feedbackLoading && <TableLoadingRow colSpan={columnLength} />}
             </thead>
             <tbody>
-              {data?.meta.itemCount === 0 ? (
+              {data?.meta.itemCount === 0 ?
                 <NoData columnLength={columnLength} />
-              ) : feedbackError ? (
+              : feedbackError ?
                 <FailedToQueryData columnLength={columnLength} />
-              ) : (
-                table.getRowModel().rows.map((row) => (
+              : table.getRowModel().rows.map((row) => (
                   <FeedbackTableRow
                     key={row.original.id}
                     row={row}
@@ -277,7 +275,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                     }}
                   />
                 ))
-              )}
+              }
             </tbody>
           </table>
         </div>

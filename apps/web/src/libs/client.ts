@@ -82,9 +82,9 @@ class client {
     pathParams,
     query,
     options,
-  }: { path: TPath } & (TPathParams extends undefined
-    ? { pathParams?: TPathParams }
-    : { pathParams: TPathParams }) &
+  }: { path: TPath } & (TPathParams extends undefined ?
+    { pathParams?: TPathParams }
+  : { pathParams: TPathParams }) &
     (TQuery extends undefined ? { query?: any } : { query: TQuery }) & {
       options?: Omit<AxiosRequestConfig, 'params'>;
     }) {
@@ -101,9 +101,9 @@ class client {
   >({
     path,
     pathParams,
-  }: { path: TPath } & (TPathParams extends undefined
-    ? { pathParams?: undefined }
-    : { pathParams: TPathParams })) {
+  }: { path: TPath } & (TPathParams extends undefined ?
+    { pathParams?: undefined }
+  : { pathParams: TPathParams })) {
     return this.axiosInstance.delete<TResponse>(
       getRequestUrl(path, pathParams),
     );
@@ -122,9 +122,8 @@ class client {
   }: {
     path: TPath;
     config?: AxiosRequestConfig;
-  } & (TPathParams extends undefined
-    ? { pathParams?: undefined }
-    : { pathParams: TPathParams }) &
+  } & (TPathParams extends undefined ? { pathParams?: undefined }
+  : { pathParams: TPathParams }) &
     (TBody extends undefined ? { body?: undefined } : { body: TBody })) {
     return this.axiosInstance.post<TResponse>(
       getRequestUrl(path, pathParams),
@@ -142,9 +141,9 @@ class client {
     path,
     pathParams,
     body,
-  }: { path: TPath } & (TPathParams extends undefined
-    ? { pathParams?: undefined }
-    : { pathParams: TPathParams }) &
+  }: { path: TPath } & (TPathParams extends undefined ?
+    { pathParams?: undefined }
+  : { pathParams: TPathParams }) &
     (TBody extends undefined ? { body?: undefined } : { body: TBody })) {
     return this.axiosInstance.put<TResponse>(
       getRequestUrl(path, pathParams),
@@ -161,9 +160,9 @@ class client {
     path,
     pathParams,
     body,
-  }: { path: TPath } & (TPathParams extends undefined
-    ? { pathParams?: undefined }
-    : { pathParams: TPathParams }) &
+  }: { path: TPath } & (TPathParams extends undefined ?
+    { pathParams?: undefined }
+  : { pathParams: TPathParams }) &
     (TBody extends undefined ? { body?: undefined } : { body: TBody })) {
     return this.axiosInstance.patch<TResponse>(
       getRequestUrl(path, pathParams),

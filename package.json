@@ -23,26 +23,26 @@
     "dev": "turbo run dev --parallel",
     "dev:api": "turbo run dev --filter=api",
     "dev:web": "turbo run dev --filter=web",
-    "format": "turbo format --continue -- --cache --cache-location='node_modules/.cache/.prettiercache'",
-    "format:fix": "turbo format --continue -- --write --cache --cache-location='node_modules/.cache/.prettiercache'",
-    "postinstall": "husky install",
-    "lint": "turbo lint --continue -- --cache --cache-location 'node_modules/.cache/.eslintcache'",
-    "lint:fix": "turbo lint --continue -- --fix --cache --cache-location 'node_modules/.cache/.eslintcache' && manypkg fix",
+    "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
+    "format:fix": "turbo format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
+    "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "lint:ws": "pnpm dlx sherif@latest",
     "test": "turbo run test",
-    "test:e2e": "cd apps/e2e && yarn test:e2e",
+    "test:e2e": "cd apps/e2e && pnpm test:e2e",
+    "postinstall": "husky install && pnpm lint:ws",
     "typecheck": "turbo typecheck"
   },
   "prettier": "@ufb/prettier-config",
-  "dependencies": {
-    "@manypkg/cli": "^0.21.0",
-    "@ufb/prettier-config": "^0.1.0",
+  "devDependencies": {
+    "@ufb/prettier-config": "workspace:*",
     "husky": "^8.0.3",
     "prettier": "^3.0.3",
-    "turbo": "^1.10.16",
-    "typescript": "^5.2.2"
+    "turbo": "^1.13.0",
+    "typescript": "^5.4.3"
   },
-  "packageManager": "yarn@4.1.1",
+  "packageManager": "pnpm@8.15.5",
   "engines": {
-    "node": ">=v18.0.0"
+    "node": ">=20.11.1"
   }
 }

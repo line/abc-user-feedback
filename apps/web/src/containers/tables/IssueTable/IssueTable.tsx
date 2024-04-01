@@ -144,15 +144,11 @@ const getColumns = (t: TFunction, issueTracker?: IssueTrackerType) => [
   columnHelper.accessor('externalIssueId', {
     header: 'Ticket',
     cell: ({ getValue }) =>
-      getValue() ? (
-        issueTracker ? (
+      getValue() ?
+        issueTracker ?
           <TicketLink value={getValue()} issueTracker={issueTracker} />
-        ) : (
-          getValue()
-        )
-      ) : (
-        '-'
-      ),
+        : getValue()
+      : '-',
     enableSorting: false,
     size: 100,
     minSize: 50,
@@ -246,8 +242,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const setDateRange = (dateRange: DateRangeType) => {
     setQuery({
       ...query,
-      createdAt: dateRange
-        ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
+      createdAt:
+        dateRange ?
+          `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
             dateRange.endDate,
           ).format(DATE_FORMAT)}`
         : undefined,
@@ -397,7 +394,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           </colgroup>
           <thead>
             <tr>
-              {rowSelectionIds.length > 0 ? (
+              {rowSelectionIds.length > 0 ?
                 <CheckedTableHead
                   headerLength={columns.length}
                   count={rowSelectionIds.length}
@@ -406,8 +403,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                   onClickDelete={() => setOpenDeleteDialog(true)}
                   disabled={!perms.includes('issue_delete')}
                 />
-              ) : (
-                table.getFlatHeaders().map((header, i) => (
+              : table.getFlatHeaders().map((header, i) => (
                   <th key={i} style={{ width: header.getSize() }}>
                     {flexRender(
                       header.column.columnDef.header,
@@ -421,12 +417,12 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                     )}
                   </th>
                 ))
-              )}
+              }
             </tr>
             {isLoading && <TableLoadingRow colSpan={columns.length} />}
           </thead>
           <tbody>
-            {table.getRowModel().rows.length === 0 ? (
+            {table.getRowModel().rows.length === 0 ?
               <tr>
                 <td colSpan={columns.length}>
                   <div className="my-60 flex flex-col items-center justify-center gap-3">
@@ -439,8 +435,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                   </div>
                 </td>
               </tr>
-            ) : (
-              table.getRowModel().rows.map((row) => (
+            : table.getRowModel().rows.map((row) => (
                 <Fragment key={row.id}>
                   <TableRow
                     isSelected={row.getIsExpanded()}
@@ -496,7 +491,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                   )}
                 </Fragment>
               ))
-            )}
+            }
           </tbody>
         </table>
       </div>

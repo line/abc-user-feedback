@@ -85,9 +85,9 @@ const IssueSetting: React.FC<IProps> = (props) => {
         <li
           className={[
             'hover:bg-fill-quaternary m-1 flex cursor-pointer items-center gap-2 rounded-sm p-2',
-            !perms.includes('issue_delete') || deleteIssuePending
-              ? 'text-tertiary cursor-not-allowed'
-              : 'text-primary cursor-pointer',
+            !perms.includes('issue_delete') || deleteIssuePending ?
+              'text-tertiary cursor-not-allowed'
+            : 'text-primary cursor-pointer',
           ].join(' ')}
           onClick={() => {
             if (!perms.includes('issue_delete') || deleteIssuePending) return;

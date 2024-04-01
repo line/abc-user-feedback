@@ -190,17 +190,17 @@ export class IssueStatisticsService {
             .into(IssueStatisticsEntity)
             .values({
               date:
-                offset >= 0
-                  ? DateTime.utc()
-                      .minus({ days: day })
-                      .endOf('day')
-                      .minus({ hours: offset })
-                      .toFormat('yyyy-MM-dd')
-                  : DateTime.utc()
-                      .minus({ days: day })
-                      .startOf('day')
-                      .minus({ hours: offset })
-                      .toFormat('yyyy-MM-dd'),
+                offset >= 0 ?
+                  DateTime.utc()
+                    .minus({ days: day })
+                    .endOf('day')
+                    .minus({ hours: offset })
+                    .toFormat('yyyy-MM-dd')
+                : DateTime.utc()
+                    .minus({ days: day })
+                    .startOf('day')
+                    .minus({ hours: offset })
+                    .toFormat('yyyy-MM-dd'),
               count: issueCount,
               project: { id },
             })

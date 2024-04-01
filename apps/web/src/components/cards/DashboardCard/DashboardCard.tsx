@@ -39,36 +39,33 @@ const DashboardCard: React.FC<IProps> = (props) => {
         <p className="font-24-bold">
           {typeof data === 'number' ? data.toLocaleString() : data}
         </p>
-        {typeof percentage === 'undefined' ? (
+        {typeof percentage === 'undefined' ?
           <></>
-        ) : isNaN(percentage) || !isFinite(percentage) ? (
+        : isNaN(percentage) || !isFinite(percentage) ?
           <Icon name="StableLine" className="text-secondary" size={16} />
-        ) : (
-          <div className="flex items-center gap-0.5">
-            {percentage === 0 ? (
+        : <div className="flex items-center gap-0.5">
+            {percentage === 0 ?
               <Icon name="StableLine" className="text-secondary" size={16} />
-            ) : percentage > 0 ? (
+            : percentage > 0 ?
               <Icon name="TriangleUp" className="text-blue-primary" size={16} />
-            ) : (
-              <Icon
+            : <Icon
                 name="TriangleDown"
                 className="text-red-primary"
                 size={16}
               />
-            )}
+            }
             <p
               className={
-                percentage === 0
-                  ? 'text-secondary'
-                  : percentage > 0
-                    ? 'text-blue-primary'
-                    : 'text-red-primary'
+                percentage === 0 ? 'text-secondary'
+                : percentage > 0 ?
+                  'text-blue-primary'
+                : 'text-red-primary'
               }
             >
               {parseFloat(Math.abs(percentage).toFixed(1))}%
             </p>
           </div>
-        )}
+        }
       </div>
     </div>
   );

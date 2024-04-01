@@ -29,8 +29,8 @@ export const ArrayDistinct = (
       options: validationOptions,
       validator: {
         validate(value: unknown): boolean {
-          return Array.isArray(value)
-            ? [...new Set(value)].length === value.length
+          return Array.isArray(value) ?
+              [...new Set(value)].length === value.length
             : false;
         },
         defaultMessage(args: ValidationArguments): string {

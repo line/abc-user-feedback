@@ -55,11 +55,11 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <p className="font-32-bold animate-bounce">
-        {status === 'loading'
-          ? 'Loading...'
-          : status === 'error'
-            ? 'Error!!!'
-            : ''}
+        {status === 'loading' ?
+          'Loading...'
+        : status === 'error' ?
+          'Error!!!'
+        : ''}
       </p>
     </div>
   );

@@ -49,17 +49,16 @@ const columns = (deleteMember: (index: number) => void, users: UserType[]) => [
       const { t } = useTranslation();
       return (
         <>
-          {users.some((v) => v.email === getValue()) ? (
+          {users.some((v) => v.email === getValue()) ?
             getValue()
-          ) : (
-            <div className="flex items-center gap-1">
+          : <div className="flex items-center gap-1">
               <span className="text-red-primary">{getValue()}</span>
               <DescriptionTooltip
                 color="red"
                 description={t('main.create-project.error-member')}
               />
             </div>
-          )}
+          }
         </>
       );
     },
@@ -174,7 +173,7 @@ const InputMember: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {table.getRowModel().rows.length === 0 ? (
+          {table.getRowModel().rows.length === 0 ?
             <tr>
               <td colSpan={table.getFlatHeaders().length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
@@ -187,8 +186,7 @@ const InputMember: React.FC = () => {
                 </div>
               </td>
             </tr>
-          ) : (
-            table.getRowModel().rows.map((row) => (
+          : table.getRowModel().rows.map((row) => (
               <Fragment key={row.index}>
                 <tr>
                   {row.getVisibleCells().map((cell) => (
@@ -206,7 +204,7 @@ const InputMember: React.FC = () => {
                 </tr>
               </Fragment>
             ))
-          )}
+          }
         </tbody>
       </table>
       <Popover modal open={open} onOpenChange={setOpen}>

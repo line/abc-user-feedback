@@ -149,15 +149,16 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
 
   const toggleEventType =
     (type: WebhookEventEnum) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      const status: WebhookStatusEnum = e.target.checked
-        ? 'ACTIVE'
-        : 'INACTIVE';
+      const status: WebhookStatusEnum =
+        e.target.checked ? 'ACTIVE' : 'INACTIVE';
 
       const channelIds =
-        status === 'ACTIVE' &&
-        (type === 'FEEDBACK_CREATION' || type === 'ISSUE_ADDITION')
-          ? data?.items.map((v) => v.id) ?? []
-          : [];
+        (
+          status === 'ACTIVE' &&
+          (type === 'FEEDBACK_CREATION' || type === 'ISSUE_ADDITION')
+        ) ?
+          data?.items.map((v) => v.id) ?? []
+        : [];
 
       setValue(
         'events',
@@ -169,9 +170,9 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
     };
 
   const onSubmit = (data: IWebhookForm) =>
-    isCreating
-      ? create({ ...data, status: 'ACTIVE' })
-      : update({ ...data, status: defaultValues.status });
+    isCreating ?
+      create({ ...data, status: 'ACTIVE' })
+    : update({ ...data, status: defaultValues.status });
 
   const getEventChecked = (type: WebhookEventEnum) =>
     watch('events').find((e) => e.type === type)?.status === 'ACTIVE';
@@ -216,9 +217,9 @@ const WebhookUpsertDialog: React.FC<IProps> = (props) => {
       </PopoverTrigger>
       <PopoverModalContent
         title={t(
-          isCreating
-            ? 'dialog.create-webhook.title'
-            : 'dialog.update-webhook.title',
+          isCreating ?
+            'dialog.create-webhook.title'
+          : 'dialog.update-webhook.title',
         )}
         cancelButton={{ children: t('button.cancel') }}
         submitButton={{

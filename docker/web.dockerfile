@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat
 
 # Set working directory
 WORKDIR /app
-RUN yarn global add turbo
+RUN pnpm global add turbo
 COPY . .
 RUN turbo prune --scope=web --docker
 
@@ -23,9 +23,9 @@ WORKDIR /app
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
-RUN yarn global add node-gyp
-RUN yarn install
+COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+RUN pnpm global add node-gyp
+RUN pnpm install
 
 # Build the project
 COPY --from=builder /app/out/full/ .
@@ -40,7 +40,7 @@ ARG TURBO_TEAM
 ENV TURBO_TEAM=${TURBO_TEAM}
 
 COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
-RUN SKIP_ENV_VALIDATION=1 yarn turbo run build --filter=web...
+RUN SKIP_ENV_VALIDATION=1 pnpm turbo run build --filter=web...
 
 FROM base AS runner
 WORKDIR /app

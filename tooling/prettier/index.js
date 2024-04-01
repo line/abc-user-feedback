@@ -8,6 +8,7 @@ import { fileURLToPath } from 'url';
 const config = {
   singleQuote: true,
   trailingComma: 'all',
+  experimentalTernaries: true,
   endOfLine: 'auto',
   tabWidth: 2,
   useTabs: false,

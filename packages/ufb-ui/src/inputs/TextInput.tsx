@@ -78,7 +78,7 @@ export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
         rightChildren={
           <>
             {!rest.disabled &&
-              (iconType === 'clear' ? (
+              (iconType === 'clear' ?
                 <button
                   type="button"
                   onClick={onClickClear}
@@ -90,21 +90,19 @@ export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
                     name="CloseCircleFill"
                   />
                 </button>
-              ) : iconType === 'success' ? (
+              : iconType === 'success' ?
                 <Icon
                   size={props.size === 'sm' ? 16 : 20}
                   name="CircleCheck"
                   className="text-blue-primary"
                 />
-              ) : iconType === 'fail' ? (
+              : iconType === 'fail' ?
                 <Icon
                   size={props.size === 'sm' ? 16 : 20}
                   name="WarningCircleFill"
                   className="text-red-primary"
                 />
-              ) : (
-                <></>
-              ))}
+              : <></>)}
             {rightChildren}
           </>
         }

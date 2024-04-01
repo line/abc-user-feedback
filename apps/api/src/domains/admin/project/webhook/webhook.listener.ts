@@ -70,8 +70,9 @@ export class WebhookListener {
               catchError((error: AxiosError) => {
                 this.logger.error({
                   message: 'Failed to send webhook',
-                  axiosError: error?.response?.data
-                    ? {
+                  axiosError:
+                    error?.response?.data ?
+                      {
                         data: error.response.data,
                         status: error.response.status,
                       }

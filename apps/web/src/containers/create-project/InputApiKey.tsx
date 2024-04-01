@@ -141,7 +141,7 @@ const InputApiKey: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {apiKeys.length === 0 ? (
+          {apiKeys.length === 0 ?
             <tr>
               <td colSpan={getColumns(t, onDelete).length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
@@ -154,8 +154,7 @@ const InputApiKey: React.FC = () => {
                 </div>
               </td>
             </tr>
-          ) : (
-            table.getRowModel().rows.map((row) => (
+          : table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
                 <tr>
                   {row.getVisibleCells().map((cell) => (
@@ -173,7 +172,7 @@ const InputApiKey: React.FC = () => {
                 </tr>
               </Fragment>
             ))
-          )}
+          }
         </tbody>
       </table>
     </CreateProjectInputTemplate>

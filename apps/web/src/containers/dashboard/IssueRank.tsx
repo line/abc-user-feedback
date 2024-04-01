@@ -167,11 +167,11 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
                       ({ key }) => key === issue.key,
                     )}
                     onChange={(e) =>
-                      e.currentTarget.checked
-                        ? setCurrentIssueStatusList((prev) => [...prev, issue])
-                        : setCurrentIssueStatusList((prev) =>
-                            prev.filter((v) => v.key !== issue.key),
-                          )
+                      e.currentTarget.checked ?
+                        setCurrentIssueStatusList((prev) => [...prev, issue])
+                      : setCurrentIssueStatusList((prev) =>
+                          prev.filter((v) => v.key !== issue.key),
+                        )
                     }
                   />
                   <p className="font-12-regular flex-1">{issue.name}</p>

@@ -63,17 +63,13 @@ const columns = [
     header: 'Type',
     cell: ({ getValue }) => {
       const color =
-        getValue() === 'API'
-          ? 'blue'
-          : getValue() === 'ADMIN'
-            ? 'green'
-            : 'black';
+        getValue() === 'API' ? 'blue'
+        : getValue() === 'ADMIN' ? 'green'
+        : 'black';
       const type =
-        getValue() === 'API'
-          ? 'primary'
-          : getValue() === 'ADMIN'
-            ? 'primary'
-            : 'secondary';
+        getValue() === 'API' ? 'primary'
+        : getValue() === 'ADMIN' ? 'primary'
+        : 'secondary';
       return (
         <Badge color={color} type={type}>
           {getValue()}
@@ -85,8 +81,14 @@ const columns = [
 ];
 
 const fieldSort = (a: FieldType, b: FieldType) => {
-  const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
-  const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
+  const aNum =
+    a.type === 'DEFAULT' ? 1
+    : a.type === 'API' ? 2
+    : 3;
+  const bNum =
+    b.type === 'DEFAULT' ? 1
+    : b.type === 'API' ? 2
+    : 3;
   return aNum - bNum;
 };
 

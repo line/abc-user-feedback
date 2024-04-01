@@ -121,7 +121,7 @@ const UserSetting: React.FC<IProps> = () => {
       columnHelper.accessor('members', {
         header: 'Project',
         cell: ({ getValue }) =>
-          getValue().length > 0 ? (
+          getValue().length > 0 ?
             <div className="flex flex-wrap gap-2">
               {getValue().map((member) => (
                 <Badge key={member.id} type="secondary">
@@ -129,9 +129,7 @@ const UserSetting: React.FC<IProps> = () => {
                 </Badge>
               ))}
             </div>
-          ) : (
-            '-'
-          ),
+          : '-',
         enableSorting: false,
       }),
       columnHelper.accessor('createdAt', {
@@ -239,7 +237,7 @@ const UserSetting: React.FC<IProps> = () => {
         <table className="table w-full">
           <thead>
             <tr>
-              {rowSelectionIds.length > 0 ? (
+              {rowSelectionIds.length > 0 ?
                 <CheckedTableHead
                   headerLength={columns.length}
                   count={rowSelectionIds.length}
@@ -247,8 +245,7 @@ const UserSetting: React.FC<IProps> = () => {
                   onClickCancle={table.resetRowSelection}
                   onClickDelete={() => mutate({ ids: rowSelectionIds })}
                 />
-              ) : (
-                table.getFlatHeaders().map((header, i) => (
+              : table.getFlatHeaders().map((header, i) => (
                   <th key={i} style={{ width: header.getSize() }}>
                     {flexRender(
                       header.column.columnDef.header,
@@ -259,12 +256,12 @@ const UserSetting: React.FC<IProps> = () => {
                     )}
                   </th>
                 ))
-              )}
+              }
             </tr>
             {isLoading && <TableLoadingRow colSpan={columns.length} />}
           </thead>
           <tbody>
-            {table.getRowModel().rows.length === 0 ? (
+            {table.getRowModel().rows.length === 0 ?
               <tr>
                 <td colSpan={columns.length}>
                   <div className="my-32 flex flex-col items-center justify-center gap-3">
@@ -277,8 +274,7 @@ const UserSetting: React.FC<IProps> = () => {
                   </div>
                 </td>
               </tr>
-            ) : (
-              table.getRowModel().rows.map((row) => (
+            : table.getRowModel().rows.map((row) => (
                 <Fragment key={row.index}>
                   <tr>
                     {row.getVisibleCells().map((cell) => (
@@ -296,7 +292,7 @@ const UserSetting: React.FC<IProps> = () => {
                   </tr>
                 </Fragment>
               ))
-            )}
+            }
           </tbody>
         </table>
       </div>

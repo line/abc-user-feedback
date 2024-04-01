@@ -108,9 +108,9 @@ export class FeedbackMySQLService {
             new Brackets((qb) => {
               for (let i = 0; i < stringFields.length; i++) {
                 const dataColumn =
-                  stringFields[i].type === FieldTypeEnum.API
-                    ? 'raw_data'
-                    : 'additional_data';
+                  stringFields[i].type === FieldTypeEnum.API ?
+                    'raw_data'
+                  : 'additional_data';
                 if (stringFields[i].format === FieldFormatEnum.keyword) {
                   if (i === 0) {
                     qb.where(
@@ -287,11 +287,11 @@ export class FeedbackMySQLService {
           let query = `JSON_SET(IFNULL(feedbacks.additional_data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
             query += `'$."${fieldKey}"', ${
-              Array.isArray(data[fieldKey])
-                ? data[fieldKey].length === 0
-                  ? 'JSON_ARRAY()'
-                  : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
-                : '"' + data[fieldKey] + '"'
+              Array.isArray(data[fieldKey]) ?
+                data[fieldKey].length === 0 ?
+                  'JSON_ARRAY()'
+                : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
+              : '"' + data[fieldKey] + '"'
             }`;
 
             if (parseInt(index) + 1 !== Object.entries(data).length) {

@@ -48,17 +48,16 @@ const EditableCell: React.FC<IProps> = memo((props) => {
   useEffect(() => {
     if (editableState === feedbackId) return;
     setCurrentValue(
-      field.format === 'select'
-        ? field.options?.find((v) => v.key === value) ?? null
-        : field.format === 'multiSelect'
-          ? (value ?? []).map((optionKey: string) =>
-              field.options?.find((v) => v.key === optionKey),
-            )
-          : field.format === 'number'
-            ? value
-              ? Number(value)
-              : null
-            : value,
+      field.format === 'select' ?
+        field.options?.find((v) => v.key === value) ?? null
+      : field.format === 'multiSelect' ?
+        (value ?? []).map((optionKey: string) =>
+          field.options?.find((v) => v.key === optionKey),
+        )
+      : field.format === 'number' ?
+        value ? Number(value)
+        : null
+      : value,
     );
   }, [value]);
 
@@ -67,19 +66,15 @@ const EditableCell: React.FC<IProps> = memo((props) => {
       return;
     onChangeEditInput(
       field.key,
-      field.format === 'text' || field.format === 'keyword'
-        ? currentValue ?? ''
-        : field.format === 'number'
-          ? Number(currentValue)
-          : field.format === 'date'
-            ? new Date(currentValue)
-            : field.format === 'select'
-              ? currentValue?.key ?? null
-              : field.format === 'multiSelect'
-                ? (currentValue ?? []).map(
-                    (v: { id: number; key: string; name: string }) => v.key,
-                  ) ?? null
-                : currentValue,
+      field.format === 'text' || field.format === 'keyword' ? currentValue ?? ''
+      : field.format === 'number' ? Number(currentValue)
+      : field.format === 'date' ? new Date(currentValue)
+      : field.format === 'select' ? currentValue?.key ?? null
+      : field.format === 'multiSelect' ?
+        (currentValue ?? []).map(
+          (v: { id: number; key: string; name: string }) => v.key,
+        ) ?? null
+      : currentValue,
     );
   }, [currentValue, editableState]);
 

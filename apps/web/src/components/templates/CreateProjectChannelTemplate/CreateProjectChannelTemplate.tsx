@@ -127,19 +127,17 @@ const Stepper: React.FC<IStepperProps> = (props) => {
             <div
               className={[
                 'font-16-bold flex items-center justify-center rounded-full',
-                i <= completeStepIndex
-                  ? 'bg-blue-primary text-above-primary'
-                  : 'bg-fill-secondary text-secondary',
-                i === currentStepIndex
-                  ? 'border-text-secondary h-10 w-10 border-2'
-                  : 'h-8 w-8',
+                i <= completeStepIndex ?
+                  'bg-blue-primary text-above-primary'
+                : 'bg-fill-secondary text-secondary',
+                i === currentStepIndex ?
+                  'border-text-secondary h-10 w-10 border-2'
+                : 'h-8 w-8',
               ].join(' ')}
             >
-              {i > completeStepIndex - 1 ? (
+              {i > completeStepIndex - 1 ?
                 i + 1
-              ) : (
-                <Icon name="Check" className="text-above-primary" size={16} />
-              )}
+              : <Icon name="Check" className="text-above-primary" size={16} />}
             </div>
             <div className="font-14-bold">{stepObj[item]}</div>
           </div>
@@ -147,9 +145,9 @@ const Stepper: React.FC<IStepperProps> = (props) => {
             <div
               className={[
                 'mt-5 flex-1 border-t-2',
-                i < completeStepIndex
-                  ? 'border-blue-primary'
-                  : 'border-fill-secondary',
+                i < completeStepIndex ?
+                  'border-blue-primary'
+                : 'border-fill-secondary',
               ].join(' ')}
             />
           )}

@@ -49,16 +49,16 @@ jobs:
       - name: Build and run
         run: |
           cd packages/ufb-shared
-          yarn
-          yarn build
+          pnpm install
+          pnpm build
           cd ../../
           docker-compose -f "./docker/docker-compose.e2e.yml" up -d
 
       - name: Setup e2e test
         run: |
           cd apps/e2e
-          yarn
-          yarn playwright install
+          pnpm install
+          pnpm playwright install
 
       - name: Run e2e tests
         run: |
