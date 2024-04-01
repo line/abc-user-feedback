@@ -63,7 +63,7 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.47.0",
     "react-hot-toast": "^2.4.1",
-    "react-i18next": "^13.3.1",
+    "react-i18next": "^14.1.0",
     "react-select": "^5.7.7",
     "react-use": "^17.4.0",
     "recharts": "^2.12.0",
