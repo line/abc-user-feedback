@@ -37,11 +37,10 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@main
 
-      - name: Install Yarn to latest stable version
+      - name: Install Dependencies
         run: |
           npx corepack enable
-          yarn set version stable
-          yarn cache clean
+          pnpm install --frozen-lockfile
 
       - name: Install Dependencies
         run: yarn install
@@ -49,7 +48,7 @@ jobs:
       - name: Build and run
         run: |
           cd packages/ufb-shared
-          pnpm install
+          pnpm install --frozen-lockfile
           pnpm build
           cd ../../
           docker-compose -f "./docker/docker-compose.e2e.yml" up -d
@@ -57,7 +56,7 @@ jobs:
       - name: Setup e2e test
         run: |
           cd apps/e2e
-          pnpm install
+          pnpm install --frozen-lockfile
           pnpm playwright install
 
       - name: Run e2e tests

@@ -14,9 +14,7 @@
  * under the License.
  */
 const fs = require('fs');
-const glob = require('glob');
-const util = require('util');
-const globAsync = util.promisify(glob);
+const { glob } = require('glob');
 const { exec } = require('child_process');
 
 function runCommand(command) {
@@ -34,7 +32,7 @@ function runCommand(command) {
 async function concatCssFiles(source, output) {
   try {
     // Use glob to match all css files in the source files
-    const files = await globAsync(source);
+    const files = await glob(source);
 
     // Concatenate the content of all matched CSS files
     const combinedCss = files
@@ -51,13 +49,21 @@ async function concatCssFiles(source, output) {
 
 async function executeCommands() {
   try {
+    console.log('Building base CSS files');
     await runCommand('npm run build:postcss-base');
+    console.log('Concatenating base CSS files');
     await concatCssFiles('dist/base/*.css', 'dist/base.css');
+    console.log('Building pre JSS base CSS files');
     await runCommand('npm run build:prejss-base');
+    console.log('Done building base CSS files');
 
+    console.log('Building utilities CSS files');
     await runCommand('npm run build:postcss-utilities');
+    console.log('Concatenating utilities CSS files');
     await concatCssFiles('dist/utilities/*.css', 'dist/utilities.css');
+    console.log('Building pre JSS utilities CSS files');
     await runCommand('npm run build:prejss-utilities');
+    console.log('Done building utilities CSS files');
 
     await runCommand('npm run build:postcss-components');
     await concatCssFiles('dist/components/*.css', 'dist/components.css');

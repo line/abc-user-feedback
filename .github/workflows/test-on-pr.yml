@@ -12,19 +12,15 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Setup Node.js v18
+      - name: Setup Node.js v20
         uses: actions/setup-node@v2
         with:
-          node-version: '18'
-
-      - name: Install Yarn to latest stable version
-        run: |
-          npx corepack enable
-          yarn set version stable
-          yarn cache clean
+          node-version: '20'
 
       - name: Install Dependencies
-        run: pnpm install --immutable --immutable-cache --check-cache
+        run: |
+          npx corepack enable
+          pnpm install --frozen-lockfile
 
       - name: setup environment variables (with opensearch)
         run: |

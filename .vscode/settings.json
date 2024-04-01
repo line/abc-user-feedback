@@ -17,6 +17,6 @@
     "*.css": "tailwindcss"
   },
   "[dockerfile]": {
-    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }

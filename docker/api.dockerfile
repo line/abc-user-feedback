@@ -46,4 +46,4 @@ USER nestjs
 
 COPY --from=installer --chown=nestjs:nodejs /app .
 
-CMD node -r source-map-support/register apps/api/dist/main.js
+CMD node apps/api/dist/main.js
