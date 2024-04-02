@@ -35,8 +35,9 @@ export const mysqlConfigSchema = Joi.object({
 
 export const mysqlConfig = registerAs('mysql', () => ({
   main_url: process.env.MYSQL_PRIMARY_URL,
-  sub_urls: process.env.MYSQL_SECONDARY_URLS
-    ? JSON.parse(process.env.MYSQL_SECONDARY_URLS)
+  sub_urls:
+    process.env.MYSQL_SECONDARY_URLS ?
+      JSON.parse(process.env.MYSQL_SECONDARY_URLS)
     : [],
   auto_migration: process.env.AUTO_MIGRATION === 'true',
 }));

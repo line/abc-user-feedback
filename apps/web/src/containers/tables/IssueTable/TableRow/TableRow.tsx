@@ -66,9 +66,9 @@ const TableRow: React.FC<IProps> = (props) => {
             className="left-30 absolute flex -translate-y-[102%] items-center gap-3 p-3"
             style={{
               background:
-                theme === 'light'
-                  ? 'linear-gradient(90deg, #F4F4F5 0%, #F4F4F5 83%, rgba(244, 244, 245, 0) 100%)'
-                  : 'linear-gradient(90deg, #151517 0%, #151517 83%, rgba(21, 21, 23, 0) 100%)',
+                theme === 'light' ?
+                  'linear-gradient(90deg, #F4F4F5 0%, #F4F4F5 83%, rgba(244, 244, 245, 0) 100%)'
+                : 'linear-gradient(90deg, #151517 0%, #151517 83%, rgba(21, 21, 23, 0) 100%)',
               height: rowHeight - 1,
               border: 'none',
             }}

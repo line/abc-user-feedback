@@ -87,17 +87,13 @@ const getColumns = (
     header: 'Type',
     cell: ({ getValue }) => {
       const color =
-        getValue() === 'API'
-          ? 'blue'
-          : getValue() === 'ADMIN'
-            ? 'green'
-            : 'black';
+        getValue() === 'API' ? 'blue'
+        : getValue() === 'ADMIN' ? 'green'
+        : 'black';
       const type =
-        getValue() === 'API'
-          ? 'primary'
-          : getValue() === 'ADMIN'
-            ? 'primary'
-            : 'secondary';
+        getValue() === 'API' ? 'primary'
+        : getValue() === 'ADMIN' ? 'primary'
+        : 'secondary';
       return (
         <Badge color={color} type={type}>
           {getValue()}
@@ -109,9 +105,9 @@ const getColumns = (
   columnHelper.accessor('createdAt', {
     header: 'CreatedAt',
     cell: ({ getValue }) =>
-      isNotEmptyStr(getValue())
-        ? dayjs(getValue()).format(DATE_TIME_FORMAT)
-        : '-',
+      isNotEmptyStr(getValue()) ?
+        dayjs(getValue()).format(DATE_TIME_FORMAT)
+      : '-',
     size: 100,
   }),
   columnHelper.display({
@@ -155,8 +151,14 @@ const fieldSortType = (
   a: FieldType | FieldRowType,
   b: FieldType | FieldRowType,
 ) => {
-  const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
-  const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
+  const aNum =
+    a.type === 'DEFAULT' ? 1
+    : a.type === 'API' ? 2
+    : 3;
+  const bNum =
+    b.type === 'DEFAULT' ? 1
+    : b.type === 'API' ? 2
+    : 3;
   return aNum - bNum;
 };
 
@@ -260,9 +262,9 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
           <button
             className="btn btn-primary btn-md min-w-[120px]"
             disabled={
-              (channelData
-                ? objectsEqual(channelData.fields.sort(fieldSortType), rows)
-                : true) ||
+              (channelData ?
+                objectsEqual(channelData.fields.sort(fieldSortType), rows)
+              : true) ||
               !showPreview ||
               !canUpdateField ||
               isPending ||
@@ -282,9 +284,9 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               <button
                 className={[
                   'btn btn-sm btn-rounded min-w-[64px] border',
-                  status !== 'ACTIVE'
-                    ? 'text-tertiary bg-fill-inverse'
-                    : 'text-primary bg-fill-quaternary',
+                  status !== 'ACTIVE' ?
+                    'text-tertiary bg-fill-inverse'
+                  : 'text-primary bg-fill-quaternary',
                 ].join(' ')}
                 onClick={() => table.setGlobalFilter('ACTIVE')}
               >
@@ -293,9 +295,9 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               <button
                 className={[
                   'btn btn-sm btn-rounded min-w-[64px] border',
-                  status !== 'INACTIVE'
-                    ? 'text-tertiary bg-fill-inverse'
-                    : 'text-primary bg-fill-quaternary',
+                  status !== 'INACTIVE' ?
+                    'text-tertiary bg-fill-inverse'
+                  : 'text-primary bg-fill-quaternary',
                 ].join(' ')}
                 onClick={() => table.setGlobalFilter('INACTIVE')}
               >
@@ -349,14 +351,13 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               {t('main.setting.field-mgmt.preview')}
             </h1>
           </div>
-          {showPreview ? (
+          {showPreview ?
             <div className="overflow-auto">
               <PreviewTable
                 fields={rows.filter((v) => v.status === 'ACTIVE')}
               />
             </div>
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center rounded border">
+          : <div className="flex h-full flex-col items-center justify-center rounded border">
               <Icon name="Search" className="text-quaternary mb-2" size={32} />
               <p>
                 <Trans
@@ -375,7 +376,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
                 {t('main.setting.field-mgmt.preview-caption')}
               </p>
             </div>
-          )}
+          }
         </div>
       </div>
     </SettingMenuTemplate>

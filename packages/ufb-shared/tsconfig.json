@@ -1,5 +1,5 @@
 {
-  "extends": "@ufb/tsconfig/react.json",
+  "extends": "@ufb/tsconfig/nestjs.json",
   "compilerOptions": {
     "tsBuildInfoFile": "node_modules/.cache/tsbuildinfo.json"
   },

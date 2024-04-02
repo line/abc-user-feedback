@@ -58,9 +58,9 @@ const ProfilePage: NextPageWithLayout = () => {
                   className={[
                     'mx-1 flex items-center gap-2 rounded p-2',
                     tabIndex === key ? 'bg-fill-tertiary' : '',
-                    isDisabled
-                      ? 'text-tertiary cursor-not-allowed'
-                      : 'hover:bg-fill-secondary cursor-pointer',
+                    isDisabled ?
+                      'text-tertiary cursor-not-allowed'
+                    : 'hover:bg-fill-secondary cursor-pointer',
                   ].join(' ')}
                 >
                   <Icon name={iconName} size={20} />

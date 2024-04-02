@@ -69,17 +69,13 @@ const getColumns = (
     header: 'Type',
     cell: ({ getValue }) => {
       const color =
-        getValue() === 'API'
-          ? 'blue'
-          : getValue() === 'ADMIN'
-            ? 'green'
-            : 'black';
+        getValue() === 'API' ? 'blue'
+        : getValue() === 'ADMIN' ? 'green'
+        : 'black';
       const type =
-        getValue() === 'API'
-          ? 'primary'
-          : getValue() === 'ADMIN'
-            ? 'primary'
-            : 'secondary';
+        getValue() === 'API' ? 'primary'
+        : getValue() === 'ADMIN' ? 'primary'
+        : 'secondary';
       return (
         <Badge color={color} type={type}>
           {getValue()}

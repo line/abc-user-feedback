@@ -102,7 +102,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
               indeterminate={row.getIsSomeSelected()}
               onChange={row.getToggleSelectedHandler()}
             />
-            {editableState !== row.original.id ? (
+            {editableState !== row.original.id ?
               <>
                 <button
                   className="icon-btn icon-btn-sm icon-btn-tertiary"
@@ -121,8 +121,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
                   )}`}
                 />
               </>
-            ) : (
-              <>
+            : <>
                 <button
                   className="icon-btn icon-btn-sm icon-btn-tertiary"
                   onClick={() => {
@@ -143,7 +142,7 @@ const FeedbackTableRow: React.FC<IProps> = ({
                   <Icon name="Check" size={16} className="text-blue-primary" />
                 </button>
               </>
-            )}
+            }
           </>
         }
       >

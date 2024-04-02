@@ -21,6 +21,10 @@ export function getIntervalDatesInFormat(
   inputDate: Date,
   interval: 'day' | 'week' | 'month',
 ) {
+  if (startDate > endDate) {
+    throw new Error('endDate must be later than startDate');
+  }
+
   if (interval === 'day') {
     return {
       startOfInterval: DateTime.fromJSDate(new Date(inputDate)).toFormat(
@@ -32,25 +36,25 @@ export function getIntervalDatesInFormat(
     };
   } else {
     const intervalCount = Math.floor(
-      Math.abs(
-        DateTime.fromJSDate(new Date(inputDate))
-          .diff(DateTime.fromJSDate(new Date(endDate)), interval)
-          .as(`${interval}s`),
-      ) + 1,
+      DateTime.fromJSDate(new Date(endDate))
+        .diff(DateTime.fromJSDate(new Date(inputDate)), interval)
+        .as(interval) + 1,
     );
     const startOfInterval =
-      DateTime.fromJSDate(new Date(endDate))
-        .minus({
-          [interval]: intervalCount === 0 ? 1 : intervalCount,
-        })
-        .plus({ day: 1 }) < DateTime.fromJSDate(new Date(startDate))
-        ? DateTime.fromJSDate(new Date(startDate)).toFormat('yyyy-MM-dd')
-        : DateTime.fromJSDate(new Date(endDate))
-            .minus({
-              [interval]: intervalCount === 0 ? 1 : intervalCount,
-            })
-            .plus({ day: 1 })
-            .toFormat('yyyy-MM-dd');
+      (
+        DateTime.fromJSDate(new Date(endDate))
+          .minus({
+            [interval]: intervalCount === 0 ? 1 : intervalCount,
+          })
+          .plus({ day: 1 }) < DateTime.fromJSDate(new Date(startDate))
+      ) ?
+        DateTime.fromJSDate(new Date(startDate)).toFormat('yyyy-MM-dd')
+      : DateTime.fromJSDate(new Date(endDate))
+          .minus({
+            [interval]: intervalCount === 0 ? 1 : intervalCount,
+          })
+          .plus({ day: 1 })
+          .toFormat('yyyy-MM-dd');
     const endOfInterval = DateTime.fromJSDate(new Date(endDate))
       .minus({
         [interval]: intervalCount === 0 ? 0 : intervalCount - 1,

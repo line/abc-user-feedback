@@ -156,7 +156,7 @@ const IssueCell: React.FC<IProps> = (props) => {
         placement="bottom-start"
         offset={0}
         buttonChildren={
-          issues?.length === 0 ? (
+          issues?.length === 0 ?
             <button
               className="btn btn-xs btn-secondary btn-rounded font-12-regular my-2"
               onClick={(e) => {
@@ -167,8 +167,7 @@ const IssueCell: React.FC<IProps> = (props) => {
             >
               {t('main.feedback.issue-cell.register-issue')}
             </button>
-          ) : (
-            <div
+          : <div
               className={[
                 'flex content-start items-center gap-1 py-2',
                 !isExpanded ? 'flex-nowrap' : 'flex-wrap',
@@ -205,7 +204,6 @@ const IssueCell: React.FC<IProps> = (props) => {
                 <Icon name="Plus" />
               </button>
             </div>
-          )
         }
       >
         <Combobox
@@ -259,9 +257,9 @@ const IssueCell: React.FC<IProps> = (props) => {
                       className={[
                         'flex h-[34px] cursor-pointer items-center justify-between rounded py-1 pl-2',
                         active ? 'bg-fill-secondary' : '',
-                        disabled
-                          ? 'bg-fill-tertiary cursor-auto'
-                          : 'cursor-pointer',
+                        disabled ?
+                          'bg-fill-tertiary cursor-auto'
+                        : 'cursor-pointer',
                       ].join(' ')}
                     >
                       <Badge

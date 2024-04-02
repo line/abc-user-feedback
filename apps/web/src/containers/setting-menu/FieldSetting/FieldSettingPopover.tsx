@@ -186,7 +186,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
         initialOpen={data?.id === 176}
       >
         <PopoverTrigger asChild>
-          {isEditing ? (
+          {isEditing ?
             <button
               className={[
                 'icon-btn icon-btn-sm icon-btn-tertiary',
@@ -197,8 +197,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             >
               <Icon name="EditFill" />
             </button>
-          ) : (
-            <button
+          : <button
               className={[
                 'btn btn-sm btn-secondary',
                 open ? 'bg-fill-tertiary' : '',
@@ -208,13 +207,13 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             >
               {t('main.setting.dialog.add-field.title')}
             </button>
-          )}
+          }
         </PopoverTrigger>
         <PopoverContent isPortal>
           <PopoverHeading>
-            {isEditing
-              ? t('main.setting.dialog.edit-field.title')
-              : t('main.setting.dialog.add-field.title')}
+            {isEditing ?
+              t('main.setting.dialog.edit-field.title')
+            : t('main.setting.dialog.add-field.title')}
           </PopoverHeading>
           <form
             className="m-5 w-[520px] space-y-5"

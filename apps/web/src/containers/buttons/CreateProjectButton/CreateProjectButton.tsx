@@ -68,16 +68,14 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
           </button>
         </TooltipTrigger>
         <TooltipContent color={step > 0 ? 'red' : 'blue'}>
-          {step > 0 ? (
+          {step > 0 ?
             <>
               {t('text.create-project-in-progress')}{' '}
               <b>
                 ({step + 1}/{PROJECT_STEPS.length})
               </b>
             </>
-          ) : (
-            t('main.index.no-project')
-          )}
+          : t('main.index.no-project')}
         </TooltipContent>
       </Tooltip>
       <Popover modal open={open} onOpenChange={setOpen}>

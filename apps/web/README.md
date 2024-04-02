@@ -20,19 +20,19 @@ The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
 ```
-yarn dev
+pnpm dev
 ```
 
 > **Note**
 > In order to run web properly, ui packages need to be built by the
-> `yarn build:ui` command in root directory or `yarn turbo run @ufb/ui#build` command in any directory.
+> `pnpm build:ui` command in root directory or `pnpm turbo run @ufb/ui#build` command in any directory.
 
 ### `generate-api-type`
 
 Generate api type using open api specification. This command can run after running on server. The type file is generated in `src/types/api.type.ts`
 
 ```
-yarn generate-api-type
+pnpm generate-api-type
 ```
 
 ### `lint`
@@ -40,7 +40,7 @@ yarn generate-api-type
 Performs a linting check using ESLint.
 
 ```
-yarn lint
+pnpm lint
 ```
 
 ### `format`
@@ -48,7 +48,7 @@ yarn lint
 Performs a formatting code using Prettier.
 
 ```
-yarn format
+pnpm format
 ```
 
 ### `build`
@@ -56,7 +56,7 @@ yarn format
 Builds the app. The distributable is expored to the `.next` folder.
 
 ```
-yarn build
+pnpm build
 ```
 
 ## Environment Variables

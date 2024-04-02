@@ -72,32 +72,28 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
           }
         } else if (field.type === 'API') {
           fakeData[field.name] =
-            field.format === 'date'
-              ? faker.date.anytime()
-              : field.format === 'keyword'
-                ? faker.word.noun()
-                : field.format === 'multiSelect'
-                  ? faker.helpers.arrayElements(
-                      (field.options ?? []).map((v) => v.name),
-                    )
-                  : field.format === 'select'
-                    ? faker.helpers.arrayElement(
-                        (field.options ?? []).map((v) => v.name),
-                      )
-                    : field.format === 'number'
-                      ? faker.number.int()
-                      : field.format === 'text'
-                        ? faker.lorem.text()
-                        : field.format === 'images'
-                          ? faker.helpers.arrayElements(
-                              Array.from(
-                                {
-                                  length: faker.number.int({ min: 1, max: 15 }),
-                                },
-                                () => '/assets/images/sample_image.png',
-                              ),
-                            )
-                          : null;
+            field.format === 'date' ? faker.date.anytime()
+            : field.format === 'keyword' ? faker.word.noun()
+            : field.format === 'multiSelect' ?
+              faker.helpers.arrayElements(
+                (field.options ?? []).map((v) => v.name),
+              )
+            : field.format === 'select' ?
+              faker.helpers.arrayElement(
+                (field.options ?? []).map((v) => v.name),
+              )
+            : field.format === 'number' ? faker.number.int()
+            : field.format === 'text' ? faker.lorem.text()
+            : field.format === 'images' ?
+              faker.helpers.arrayElements(
+                Array.from(
+                  {
+                    length: faker.number.int({ min: 1, max: 15 }),
+                  },
+                  () => '/assets/images/sample_image.png',
+                ),
+              )
+            : null;
         }
       }
       fakeRows.push(fakeData);
@@ -110,19 +106,22 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
     () =>
       fields.map((field) =>
         columnHelper.accessor(field.name, {
-          size: field.key === 'id' ? 50 : field.format === 'text' ? 200 : 150,
+          size:
+            field.key === 'id' ? 50
+            : field.format === 'text' ? 200
+            : 150,
           cell: (info) =>
-            field.type === 'ADMIN' ? (
+            field.type === 'ADMIN' ?
               <EditableCell
                 field={field as FieldType}
                 value={info.getValue()}
                 isExpanded={info.row.getIsExpanded()}
                 feedbackId={info.row.original.id}
               />
-            ) : typeof info.getValue() ===
-              'undefined' ? undefined : field.format === 'date' ? (
+            : typeof info.getValue() === 'undefined' ? undefined
+            : field.format === 'date' ?
               dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
-            ) : field.key === 'issues' ? (
+            : field.key === 'issues' ?
               <div className="scrollbar-hide flex items-center gap-1">
                 {(
                   info.getValue() as { status: IssueStatus; name: string }[]
@@ -136,17 +135,15 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   </Badge>
                 ))}
               </div>
-            ) : field.format === 'multiSelect' ? (
+            : field.format === 'multiSelect' ?
               ((info.getValue() ?? []) as string[]).join(', ')
-            ) : field.format === 'text' ? (
+            : field.format === 'text' ?
               <ExpandableText isExpanded={info.row.getIsExpanded()}>
                 {info.getValue() as string}
               </ExpandableText>
-            ) : field.format === 'images' ? (
+            : field.format === 'images' ?
               <ImagePreviewButton urls={(info.getValue() ?? []) as string[]} />
-            ) : (
-              String(info.getValue())
-            ),
+            : String(info.getValue()),
         }),
       ),
     [fields],

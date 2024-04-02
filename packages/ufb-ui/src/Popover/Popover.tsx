@@ -198,9 +198,9 @@ export const PopoverContent = React.forwardRef<
       <div
         ref={ref}
         style={{
-          ...(context.modal || disabledFloatingStyle
-            ? { position: 'absolute' }
-            : context.floatingStyles),
+          ...(context.modal || disabledFloatingStyle ?
+            { position: 'absolute' }
+          : context.floatingStyles),
           zIndex: 50,
           ...style,
         }}
@@ -217,17 +217,16 @@ export const PopoverContent = React.forwardRef<
     </FloatingFocusManager>
   );
 
-  const modalChild = context.modal ? (
-    <FloatingOverlay
-      lockScroll={context.modal}
-      className="bg-dim"
-      style={{ display: 'grid', placeItems: 'center', zIndex: 100 }}
-    >
-      {child}
-    </FloatingOverlay>
-  ) : (
-    child
-  );
+  const modalChild =
+    context.modal ?
+      <FloatingOverlay
+        lockScroll={context.modal}
+        className="bg-dim"
+        style={{ display: 'grid', placeItems: 'center', zIndex: 100 }}
+      >
+        {child}
+      </FloatingOverlay>
+    : child;
 
   return isPortal ? <FloatingPortal>{modalChild}</FloatingPortal> : modalChild;
 });

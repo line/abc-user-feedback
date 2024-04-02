@@ -81,9 +81,9 @@ function SelectBoxCreatable<IsMulti extends boolean = false>(
               type="secondary"
               size="sm"
               right={
-                !selectProps.isDisabled
-                  ? { iconName: 'Close', onClick: removeProps.onClick }
-                  : undefined
+                !selectProps.isDisabled ?
+                  { iconName: 'Close', onClick: removeProps.onClick }
+                : undefined
               }
             >
               {children}

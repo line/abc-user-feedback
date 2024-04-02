@@ -6,8 +6,8 @@
     "test:e2e": "playwright test"
   },
   "devDependencies": {
-    "@playwright/test": "^1.40.1",
-    "axios": "^1.6.7",
-    "mysql2": "^3.6.5"
+    "@playwright/test": "^1.42.1",
+    "axios": "^1.6.8",
+    "mysql2": "^3.9.3"
   }
 }

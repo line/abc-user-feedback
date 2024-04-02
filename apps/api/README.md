@@ -15,7 +15,7 @@ You can find a full list of targets in the [package.json](./package.json) file.
 Runs the app in development mode.
 
 ```
-yarn dev
+pnpm dev
 ```
 
 ### `test`
@@ -23,7 +23,7 @@ yarn dev
 Executes tests. This command applies to the environment variables in `.env.test` file.
 
 ```
-yarn test
+pnpm test
 ```
 
 ### `test:e2e`
@@ -31,7 +31,7 @@ yarn test
 Executes e2e tests. This command applies to the environment variables in `.env.test` file.
 
 ```
-yarn test:e2e
+pnpm test:e2e
 ```
 
 ### `lint`
@@ -39,7 +39,7 @@ yarn test:e2e
 Performs a linting check using ESLint.
 
 ```
-yarn lint
+pnpm lint
 ```
 
 ### `build`
@@ -47,7 +47,7 @@ yarn lint
 Builds the app for production. The distributable is expored to the `dist` folder in the repository's root folder.<br />
 
 ```
-yarn build
+pnpm build
 ```
 
 ### `migration:generate`

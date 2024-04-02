@@ -62,18 +62,17 @@ export const TenantProvider: React.FC<React.PropsWithChildren> = ({
 
   return (
     <TenantContext.Provider value={{ tenant, refetch: fetch }}>
-      {isLoading ? (
+      {isLoading ?
         <p className="font-32-bold flex h-screen items-center justify-center">
           Loading...
         </p>
-      ) : (
-        <>
+      : <>
           <Head>
             <title>User Feedback - {tenant?.siteName}</title>
           </Head>
           {children}
         </>
-      )}
+      }
     </TenantContext.Provider>
   );
 };

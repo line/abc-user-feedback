@@ -188,7 +188,7 @@ export class FeedbackStatisticsService {
     this.logger.log(`feedback-statistics-${projectId} cron job started`);
   }
 
-  async createFeedbackStatistics(projectId: number, dayToCreate: number = 1) {
+  async createFeedbackStatistics(projectId: number, dayToCreate = 1) {
     const { timezone } = await this.projectRepository.findOne({
       where: { id: projectId },
     });
@@ -230,17 +230,17 @@ export class FeedbackStatisticsService {
               .into(FeedbackStatisticsEntity)
               .values({
                 date:
-                  offset >= 0
-                    ? DateTime.utc()
-                        .minus({ days: day })
-                        .endOf('day')
-                        .minus({ hours: offset })
-                        .toFormat('yyyy-MM-dd')
-                    : DateTime.utc()
-                        .minus({ days: day })
-                        .startOf('day')
-                        .minus({ hours: offset })
-                        .toFormat('yyyy-MM-dd'),
+                  offset >= 0 ?
+                    DateTime.utc()
+                      .minus({ days: day })
+                      .endOf('day')
+                      .minus({ hours: offset })
+                      .toFormat('yyyy-MM-dd')
+                  : DateTime.utc()
+                      .minus({ days: day })
+                      .startOf('day')
+                      .minus({ hours: offset })
+                      .toFormat('yyyy-MM-dd'),
                 count: feedbackCount,
                 channel: { id: channel.id },
               })

@@ -29,13 +29,14 @@ const TableResizer: React.FC<IProps> = ({ table, header }) => {
       onTouchStart={header.getResizeHandler()}
       className={[
         'resizer hover:text-primary z-auto',
-        header.column.getIsResizing()
-          ? 'text-primary bg-secondary'
-          : 'text-tertiary',
+        header.column.getIsResizing() ?
+          'text-primary bg-secondary'
+        : 'text-tertiary',
       ].join(' ')}
       style={{
-        transform: header.column.getIsResizing()
-          ? `translateX(${table.getState().columnSizingInfo.deltaOffset}px)`
+        transform:
+          header.column.getIsResizing() ?
+            `translateX(${table.getState().columnSizingInfo.deltaOffset}px)`
           : 'translateX(0px)',
       }}
     >

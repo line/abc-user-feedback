@@ -83,7 +83,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'cd ../api && yarn start',
+      command: 'cd ../api && pnpm start',
       port: 4000,
       reuseExistingServer: true,
       env: {
@@ -96,7 +96,7 @@ export default defineConfig({
       },
     },
     {
-      command: 'cd ../web && yarn build && yarn start',
+      command: 'cd ../web && pnpm build && pnpm start',
       port: 3000,
       reuseExistingServer: true,
       env: {

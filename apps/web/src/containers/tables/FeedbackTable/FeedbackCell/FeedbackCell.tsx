@@ -32,9 +32,11 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
 
   return (
     <ExpandableText isExpanded={isExpanded}>
-      {typeof value === 'undefined' ? undefined : field.format === 'date' ? (
+      {typeof value === 'undefined' ?
+        undefined
+      : field.format === 'date' ?
         dayjs(value as string).format(DATE_TIME_FORMAT)
-      ) : field.format === 'multiSelect' ? (
+      : field.format === 'multiSelect' ?
         (value as string[])
           .sort(
             (aKey, bKey) =>
@@ -47,15 +49,13 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
               value,
           )
           .join(', ')
-      ) : field.format === 'select' ? (
+      : field.format === 'select' ?
         field.options?.find((option) => option.key === value)?.name ?? value
-      ) : field.format === 'images' ? (
+      : field.format === 'images' ?
         <ImagePreviewButton urls={value} />
-      ) : field.format === 'text' ? (
+      : field.format === 'text' ?
         (value as string)
-      ) : (
-        String(value)
-      )}
+      : String(value)}
     </ExpandableText>
   );
 });

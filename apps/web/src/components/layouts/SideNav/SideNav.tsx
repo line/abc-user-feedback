@@ -108,7 +108,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
   const router = useRouter();
   return (
     <li>
-      {disabled ? (
+      {disabled ?
         <button
           disabled
           className={[
@@ -121,14 +121,13 @@ const MenuItem: React.FC<IMenuItemProps> = ({
             {text}
           </span>
         </button>
-      ) : (
-        <Link href={href}>
+      : <Link href={href}>
           <button
             className={[
               'icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start',
-              activePathname === router.pathname
-                ? 'bg-fill-tertiary font-bold'
-                : '',
+              activePathname === router.pathname ?
+                'bg-fill-tertiary font-bold'
+              : '',
             ].join(' ')}
           >
             <Icon name={iconName} />
@@ -139,7 +138,7 @@ const MenuItem: React.FC<IMenuItemProps> = ({
             </span>
           </button>
         </Link>
-      )}
+      }
     </li>
   );
 };

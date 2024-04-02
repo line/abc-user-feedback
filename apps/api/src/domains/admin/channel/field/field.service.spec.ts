@@ -33,8 +33,8 @@ import { FieldEntity } from './field.entity';
 import { FieldService } from './field.service';
 
 const countSelect = (prev, curr) => {
-  return isSelectFieldFormat(curr.format) && curr.options.length > 0
-    ? prev + 1
+  return isSelectFieldFormat(curr.format) && curr.options.length > 0 ?
+      prev + 1
     : prev;
 };
 

@@ -77,9 +77,9 @@ const useLineChartData = (
         },
         {
           date:
-            dayCount > 50
-              ? `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
-              : currentDate.format('MM/DD'),
+            dayCount > 50 ?
+              `${prevDate.format('MM/DD')} - ${currentDate.format('MM/DD')}`
+            : currentDate.format('MM/DD'),
         },
       );
 

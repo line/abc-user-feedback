@@ -114,7 +114,7 @@ const ApiKeySection: React.FC<IProps> = ({ projectId }) => {
           </tr>
         </thead>
         <tbody>
-          {rows.length === 0 ? (
+          {rows.length === 0 ?
             <tr>
               <td colSpan={table.getFlatHeaders().length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
@@ -127,8 +127,7 @@ const ApiKeySection: React.FC<IProps> = ({ projectId }) => {
                 </div>
               </td>
             </tr>
-          ) : (
-            table.getRowModel().rows.map((row) => (
+          : table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
                 <tr>
                   {row.getVisibleCells().map((cell) => (
@@ -146,7 +145,7 @@ const ApiKeySection: React.FC<IProps> = ({ projectId }) => {
                 </tr>
               </Fragment>
             ))
-          )}
+          }
         </tbody>
       </table>
     </CreateSectionTemplate>

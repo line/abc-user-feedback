@@ -167,9 +167,9 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                         {field.name}
                       </th>
                       <FeedbackDetailCell>
-                        {typeof feedbackData[field.key] === 'undefined' ? (
+                        {typeof feedbackData[field.key] === 'undefined' ?
                           '-'
-                        ) : field.key === 'issues' ? (
+                        : field.key === 'issues' ?
                           <div className="flex flex-wrap gap-2">
                             {(
                               feedbackData[field.key] ?? ([] as IssueType[])
@@ -183,19 +183,17 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                               </Badge>
                             ))}
                           </div>
-                        ) : field.format === 'multiSelect' ? (
+                        : field.format === 'multiSelect' ?
                           (feedbackData[field.key] ?? ([] as string[])).join(
                             ', ',
                           )
-                        ) : field.format === 'date' ? (
+                        : field.format === 'date' ?
                           dayjs(feedbackData[field.key]).format(
                             DATE_TIME_FORMAT,
                           )
-                        ) : field.format === 'images' ? (
+                        : field.format === 'images' ?
                           <ImageSlider urls={feedbackData[field.key] ?? []} />
-                        ) : (
-                          feedbackData[field.key]
-                        )}
+                        : feedbackData[field.key]}
                       </FeedbackDetailCell>
                     </tr>
                   ))}
@@ -279,8 +277,14 @@ const ImageSlider: React.FC<IImageSliderProps> = ({ urls }) => {
 };
 
 const fieldSortType = (a: FieldType, b: FieldType) => {
-  const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
-  const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
+  const aNum =
+    a.type === 'DEFAULT' ? 1
+    : a.type === 'API' ? 2
+    : 3;
+  const bNum =
+    b.type === 'DEFAULT' ? 1
+    : b.type === 'API' ? 2
+    : 3;
   return aNum - bNum;
 };
 

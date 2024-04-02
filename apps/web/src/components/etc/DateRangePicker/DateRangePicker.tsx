@@ -121,17 +121,17 @@ const DateRangePicker: React.FC<IProps> = (props) => {
           onClick={() => setIsOpen(true)}
         >
           <p className="font-14-regular">
-            {currentValue
-              ? `${
-                  currentValue?.startDate
-                    ? dayjs(currentValue?.startDate).format(DATE_FORMAT)
-                    : ''
-                } ~ ${
-                  currentValue?.endDate
-                    ? dayjs(currentValue.endDate).format(DATE_FORMAT)
-                    : ''
-                }`
-              : 'YYYY-MM-DD ~ YYYY-MM-DD'}
+            {currentValue ?
+              `${
+                currentValue?.startDate ?
+                  dayjs(currentValue?.startDate).format(DATE_FORMAT)
+                : ''
+              } ~ ${
+                currentValue?.endDate ?
+                  dayjs(currentValue.endDate).format(DATE_FORMAT)
+                : ''
+              }`
+            : 'YYYY-MM-DD ~ YYYY-MM-DD'}
           </p>
           <div className="flex flex-row items-center gap-2">
             {isClearable && value && (
@@ -167,7 +167,10 @@ const DateRangePicker: React.FC<IProps> = (props) => {
           </ul>
           <ReactDatePicker
             locale={
-              i18n.language === 'ko' ? ko : i18n.language === 'ja' ? ja : enUS
+              i18n.language === 'ko' ? ko
+              : i18n.language === 'ja' ?
+                ja
+              : enUS
             }
             onChange={(v) => {
               setCurrentValue({ startDate: v[0], endDate: v[1] });
