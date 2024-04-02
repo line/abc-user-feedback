@@ -65,9 +65,13 @@ async function executeCommands() {
     await runCommand('npm run build:prejss-utilities');
     console.log('Done building utilities CSS files');
 
+    console.log('Building components CSS files');
     await runCommand('npm run build:postcss-components');
+    console.log('Concatenating components CSS files');
     await concatCssFiles('dist/components/*.css', 'dist/components.css');
+    console.log('Building pre JSS components CSS files');
     await runCommand('npm run build:prejss-components');
+    console.log('Done building components CSS files');
   } catch (error) {
     console.error('Error executing commands:', error);
   }

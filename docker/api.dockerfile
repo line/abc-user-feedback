@@ -21,6 +21,7 @@ COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 RUN corepack enable
 RUN pnpm install --frozen-lockfile
+RUN pnpm install -w source-map-support
 
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
@@ -46,4 +47,4 @@ USER nestjs
 
 COPY --from=installer --chown=nestjs:nodejs /app .
 
-CMD node apps/api/dist/main.js
+CMD node -r source-map-support/register apps/api/dist/main.js
