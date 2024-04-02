@@ -36,6 +36,11 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
         dayjs(value as string).format(DATE_TIME_FORMAT)
       ) : field.format === 'multiSelect' ? (
         (value as string[])
+          .sort(
+            (aKey, bKey) =>
+              (field.options ?? []).findIndex((option) => option.key === aKey) -
+              (field.options ?? []).findIndex((option) => option.key === bKey),
+          )
           .map(
             (key) =>
               field.options?.find((option) => option.key === key)?.name ??
