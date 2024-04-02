@@ -119,6 +119,9 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
               if (field.format === 'number') {
                 draft[key] = Number(value);
               }
+              if (field.format === 'multiSelect') {
+                draft[key] = [String(value)];
+              }
             }
           });
         }
