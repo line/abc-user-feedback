@@ -54,8 +54,8 @@ export const smtpConfig = registerAs('smtp', () => ({
   use: process.env.SMTP_USE === 'true',
   host: process.env.SMTP_HOST,
   port: +process.env.SMTP_PORT,
-  password: process.env.SMTP_USERNAME,
-  username: process.env.SMTP_PASSWORD,
+  username: process.env.SMTP_USERNAME,
+  password: process.env.SMTP_PASSWORD,
   sender: process.env.SMTP_SENDER,
   baseUrl: process.env.SMTP_BASE_URL,
 }));
