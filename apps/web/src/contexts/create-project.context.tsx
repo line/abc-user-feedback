@@ -34,20 +34,16 @@ const DEFAULT_ROLES: InputRoleType[] = [
   {
     id: 2,
     name: 'Editor',
-    permissions: [...PermissionList].filter(
-      (v) =>
-        v.includes('read') ||
-        v.includes('feedback') ||
-        v.includes('issue') ||
-        v.includes('member_create'),
+    permissions: PermissionList.filter(
+      (v) => v !== 'project_delete' && v !== 'channel_delete',
     ),
   },
   {
     id: 3,
     name: 'Viewer',
-    permissions: [...PermissionList].filter(
-      (v) => v.includes('read') && !v.includes('download'),
-    ),
+    permissions: [...PermissionList]
+      .filter((v) => v.includes('read') && !v.includes('download'))
+      .filter((v) => v !== 'project_apikey_read' && v !== 'channel_image_read'),
   },
 ];
 

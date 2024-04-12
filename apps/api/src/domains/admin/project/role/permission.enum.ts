@@ -15,18 +15,15 @@
  */
 
 export enum PermissionEnum {
-  feedback_read = 'feedback_read',
   feedback_download_read = 'feedback_download_read',
   feedback_update = 'feedback_update',
   feedback_delete = 'feedback_delete',
   feedback_issue_update = 'feedback_issue_update',
 
-  issue_read = 'issue_read',
   issue_create = 'issue_create',
   issue_update = 'issue_update',
   issue_delete = 'issue_delete',
 
-  project_read = 'project_read',
   project_update = 'project_update',
   project_delete = 'project_delete',
 
@@ -53,7 +50,6 @@ export enum PermissionEnum {
   project_webhook_update = 'project_webhook_update',
   project_webhook_delete = 'project_webhook_delete',
 
-  channel_read = 'channel_read',
   channel_create = 'channel_create',
   channel_update = 'channel_update',
   channel_delete = 'channel_delete',

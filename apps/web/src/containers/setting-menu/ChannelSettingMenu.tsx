@@ -74,7 +74,6 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
           name={t('channel-setting-menu.channel-info')}
           onClick={onClickSettingMenu('CHANNEL_INFO')}
           active={settingMenu === 'CHANNEL_INFO'}
-          disabled={!perms.includes('channel_read')}
         />
         <SettingMenuItem
           iconName="DocumentTermsFill"

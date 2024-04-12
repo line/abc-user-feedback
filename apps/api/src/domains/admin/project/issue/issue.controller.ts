@@ -22,9 +22,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '../../auth/guards';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
 import { CreateIssueDto } from './dtos';
@@ -47,7 +49,7 @@ export class IssueController {
   constructor(private readonly issueService: IssueService) {}
 
   @ApiParam({ name: 'projectId', type: Number })
-  @RequirePermission(PermissionEnum.issue_create)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: CreateIssueResponseDto })
   @Post()
   async create(
@@ -71,7 +73,7 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @RequirePermission(PermissionEnum.issue_read)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
   @Post('search')
   async findAllByProjectId(

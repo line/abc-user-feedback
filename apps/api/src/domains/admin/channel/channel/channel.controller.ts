@@ -70,7 +70,7 @@ export class ChannelController {
     );
   }
 
-  @RequirePermission(PermissionEnum.channel_read)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: FindChannelsByProjectIdResponseDto })
   @Get('/')
   async findAllByProjectId(
@@ -96,7 +96,7 @@ export class ChannelController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @RequirePermission(PermissionEnum.channel_read)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: FindChannelByIdResponseDto })
   @Get('/:channelId')
   async findOne(@Param('channelId', ParseIntPipe) channelId: number) {

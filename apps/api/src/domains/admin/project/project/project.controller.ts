@@ -91,7 +91,7 @@ export class ProjectController {
     return this.projectService.checkName(name);
   }
 
-  @RequirePermission(PermissionEnum.project_read)
+  @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: FindProjectByIdResponseDto })
   @Get('/:projectId')
   async findOne(@Param('projectId', ParseIntPipe) projectId: number) {

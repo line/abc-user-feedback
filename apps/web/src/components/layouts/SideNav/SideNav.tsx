@@ -23,7 +23,7 @@ import type { IconNameType } from '@ufb/ui';
 import { Icon } from '@ufb/ui';
 
 import { Path } from '@/constants/path';
-import { useCurrentProjectId, usePermissions } from '@/hooks';
+import { useCurrentProjectId } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
 
@@ -31,7 +31,6 @@ const SideNav: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { projectId } = useCurrentProjectId();
 
-  const perms = usePermissions(projectId);
   const ref = useRef<HTMLDivElement>(null);
 
   const [isHover, setIsHover] = useState(false);
@@ -60,7 +59,6 @@ const SideNav: React.FC<IProps> = () => {
           href={{ pathname: Path.FEEDBACK, query: { projectId } }}
           iconName="BubbleDotsStroke"
           activePathname={Path.FEEDBACK}
-          disabled={!perms.includes('feedback_read')}
           isHover={isHover}
           text={t('main.feedback.title')}
         />
@@ -68,7 +66,6 @@ const SideNav: React.FC<IProps> = () => {
           href={{ pathname: Path.ISSUE, query: { projectId } }}
           iconName="DocumentStroke"
           activePathname={Path.ISSUE}
-          disabled={!perms.includes('issue_read')}
           isHover={isHover}
           text={t('main.issue.title')}
         />
@@ -80,7 +77,6 @@ const SideNav: React.FC<IProps> = () => {
           }}
           iconName="SettingStroke"
           activePathname={Path.SETTINGS}
-          disabled={!perms.includes('issue_read')}
           isHover={isHover}
           text={t('main.setting.title')}
         />
