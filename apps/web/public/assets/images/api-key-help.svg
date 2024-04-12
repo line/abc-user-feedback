@@ -1,0 +1,39 @@
+<svg width="90" height="64" viewBox="0 0 90 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Illustration">
+<g id="Group 34">
+<g id="Group 27">
+<path id="Vector 5" d="M66 51H25C22.7909 51 21 49.2091 21 47V17C21 14.7909 22.7909 13 25 13H66C68.2091 13 70 14.7909 70 17V47C70 49.2091 68.2091 51 66 51Z" fill="#E1E6EA"/>
+<path id="Rectangle 572" d="M21 17C21 14.7909 22.7909 13 25 13H66C68.2091 13 70 14.7909 70 17V20H21V17Z" fill="#BEC5CC"/>
+</g>
+<g id="Group 31">
+<g id="Rectangle 573">
+<rect x="27" y="24" width="37" height="22" rx="2" fill="#007AFF"/>
+<rect x="28" y="25" width="35" height="20" rx="1" stroke="black" stroke-opacity="0.12" stroke-width="2"/>
+</g>
+<g id="API">
+<path id="Vector" d="M53.7233 39.6695C53.5915 39.6695 53.5195 39.5856 53.5195 39.4538V30.1279C53.5195 29.996 53.5915 29.9121 53.7233 29.9121H55.7851C55.9169 29.9121 56.0008 29.996 56.0008 30.1279V39.4538C56.0008 39.5856 55.9169 39.6695 55.7851 39.6695H53.7233Z" fill="white"/>
+<path id="Vector_2" d="M44.6764 39.6695C44.5446 39.6695 44.4727 39.5856 44.4727 39.4538V30.1279C44.4727 29.996 44.5446 29.9121 44.6764 29.9121H47.9369C50.634 29.9121 52.0365 31.1348 52.0365 33.4842C52.0365 35.8217 50.634 37.0683 47.9369 37.0683H46.918V39.4538C46.918 39.5856 46.8341 39.6695 46.7022 39.6695H44.6764ZM47.877 34.9946C48.8839 34.9946 49.5072 34.5751 49.5072 33.4603C49.5072 32.3934 48.8839 31.9859 47.877 31.9859H46.918V34.9946H47.877Z" fill="white"/>
+<path id="Vector_3" d="M33.642 39.6695C33.4861 39.6695 33.4142 39.5616 33.4742 39.4298L37.31 30.0679C37.346 29.9601 37.4419 29.9121 37.5497 29.9121H39.2279C39.3478 29.9121 39.4197 29.9601 39.4677 30.0679L43.3035 39.4298C43.3155 39.4657 43.3275 39.4897 43.3275 39.5137C43.3275 39.6096 43.2555 39.6695 43.1477 39.6695H40.9181C40.7982 39.6695 40.7143 39.6216 40.6783 39.5017L40.1389 37.9913H36.5908L36.0633 39.5017C36.0274 39.6216 35.9435 39.6695 35.8236 39.6695H33.642ZM37.298 35.9775H39.4197L38.3529 32.9688L37.298 35.9775Z" fill="white"/>
+</g>
+</g>
+<g id="Group 32">
+<rect id="Rectangle 575" x="14" y="28.5" width="13" height="1" fill="#0055B2"/>
+<rect id="Rectangle 576" x="17" y="34.5" width="10" height="1" fill="#0055B2"/>
+<rect id="Rectangle 577" x="15" y="40.5" width="12" height="1" fill="#0055B2"/>
+<circle id="Ellipse 31" cx="13" cy="29" r="1.5" fill="white" stroke="#007AFF"/>
+<circle id="Ellipse 32" cx="15" cy="41" r="1.5" fill="white" stroke="#007AFF"/>
+<circle id="Ellipse 30" cx="17" cy="35" r="1.5" fill="white" stroke="#007AFF"/>
+</g>
+<g id="Group 33">
+<rect id="Rectangle 575_2" width="13" height="1" transform="matrix(-1 0 0 1 77 28.5)" fill="#0055B2"/>
+<rect id="Rectangle 576_2" width="10" height="1" transform="matrix(-1 0 0 1 74 34.5)" fill="#0055B2"/>
+<rect id="Rectangle 577_2" width="12" height="1" transform="matrix(-1 0 0 1 76 40.5)" fill="#0055B2"/>
+<circle id="Ellipse 31_2" cx="2" cy="2" r="1.5" transform="matrix(-1 0 0 1 80 27)" fill="white" stroke="#007AFF"/>
+<circle id="Ellipse 32_2" cx="2" cy="2" r="1.5" transform="matrix(-1 0 0 1 78 39)" fill="white" stroke="#007AFF"/>
+<circle id="Ellipse 30_2" cx="2" cy="2" r="1.5" transform="matrix(-1 0 0 1 76 33)" fill="white" stroke="#007AFF"/>
+</g>
+<circle id="Ellipse 33" cx="25.5" cy="16.75" r="1.5" fill="#EBEBEB"/>
+<circle id="Ellipse 34" cx="29.5" cy="16.75" r="1.5" fill="#EBEBEB"/>
+</g>
+</g>
+</svg>

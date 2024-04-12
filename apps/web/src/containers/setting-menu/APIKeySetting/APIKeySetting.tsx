@@ -14,6 +14,7 @@
  * under the License.
  */
 import { Fragment, useEffect, useMemo, useState } from 'react';
+import Image from 'next/image';
 import {
   createColumnHelper,
   flexRender,
@@ -170,7 +171,20 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
           !perms.includes('project_apikey_create') || status === 'pending',
       }}
     >
-      <table className="table ">
+      <div className="flex items-center rounded border px-6 py-2">
+        <p className="flex-1 whitespace-pre-line py-5">
+          {t('help-card.api-key')}
+        </p>
+        <div className="relative h-full w-[90px]">
+          <Image
+            src="/assets/images/api-key-help.svg"
+            style={{ objectFit: 'contain' }}
+            alt="temp"
+            fill
+          />
+        </div>
+      </div>
+      <table className="table">
         <thead>
           <tr>
             {table.getFlatHeaders().map((header, i) => (
