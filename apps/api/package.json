@@ -55,7 +55,7 @@
     "fast-csv": "^5.0.1",
     "joi": "^17.11.0",
     "magic-bytes.js": "^1.8.0",
-    "mysql2": "^3.6.2",
+    "mysql2": "^3.9.4",
     "nestjs-cls": "^3.6.0",
     "nestjs-pino": "^3.5.0",
     "nestjs-typeorm-paginate": "^4.0.4",
