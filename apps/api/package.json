@@ -94,7 +94,7 @@
     "@types/luxon": "^3.4.2",
     "@types/node": "20.8.8",
     "@types/nodemailer": "^6.4.14",
-    "@types/supertest": "^2.0.16",
+    "@types/supertest": "^6.0.2",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
