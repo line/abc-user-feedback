@@ -123,8 +123,8 @@ importers:
         specifier: ^4.26.2
         version: 4.26.2
       joi:
-        specifier: ^17.12.2
-        version: 17.12.2
+        specifier: ^17.12.3
+        version: 17.12.3
       luxon:
         specifier: ^3.4.4
         version: 3.4.4
@@ -10947,8 +10947,8 @@ packages:
     engines: {node: '>= 0.6.0'}
     dev: false
 
-  /joi@17.12.2:
-    resolution: {integrity: sha512-RonXAIzCiHLc8ss3Ibuz45u28GOsWE1UpfDXLbN/9NKbL4tCJf8TWYVKsoYuuh+sAUt7fsSNpA+r2+TBA6Wjmw==}
+  /joi@17.12.3:
+    resolution: {integrity: sha512-2RRziagf555owrm9IRVtdKynOBeITiDpuZqIpgwqXShPncPKNiRQoiGsl/T8SQdq+8ugRzH2LqY67irr2y/d+g==}
     dependencies:
       '@hapi/hoek': 9.3.0
       '@hapi/topo': 5.1.0
