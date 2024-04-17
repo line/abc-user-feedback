@@ -24,7 +24,12 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { SortMethodEnum } from '@/common/enums';
 import { PermissionEnum } from '../role/permission.enum';
@@ -38,6 +43,7 @@ import { MemberService } from './member.service';
 
 @ApiTags('members')
 @Controller('/admin/projects/:projectId/members')
+@ApiBearerAuth()
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
 

@@ -57,6 +57,7 @@ async function bootstrap() {
     .setDescription('User feedback Admin API description')
     .setVersion('1.0.0')
     .addBearerAuth()
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
     .build();
   const excludeModules = [APIModule, HealthModule, MigrationModule];
   const adminDocument = SwaggerModule.createDocument(app, adminDocumentConfig, {
@@ -71,7 +72,7 @@ async function bootstrap() {
       `,
     )
     .setVersion('1.0.0')
-    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' })
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
     .build();
   const document = SwaggerModule.createDocument(app, documentConfig, {
     include: [APIModule],

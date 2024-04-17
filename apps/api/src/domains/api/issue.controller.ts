@@ -27,6 +27,7 @@ import {
 import {
   ApiBody,
   ApiOkResponse,
+  ApiSecurity,
   ApiOperation,
   ApiParam,
   ApiTags,
@@ -49,6 +50,7 @@ import { IssueService } from '../admin/project/issue/issue.service';
 
 @ApiTags('issues')
 @Controller('/projects/:projectId/issues')
+@ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class IssueController {
   constructor(private readonly issueService: IssueService) {}
