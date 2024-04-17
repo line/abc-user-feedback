@@ -17,12 +17,12 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
-import { Badge, Icon, Input, TextInput, toast } from '@ufb/ui';
+import { Badge, Input, TextInput, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
+import { HelpCardDocs, SettingMenuTemplate } from '@/components';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 
 interface IForm {
@@ -210,37 +210,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          <Trans
-            i18nKey="help-card.image-setting"
-            components={{
-              icon: (
-                <Icon
-                  name="ExpandPopup"
-                  className="text-blue-primary cursor-pointer"
-                  size={12}
-                  onClick={() => {
-                    if (typeof window === 'undefined') return;
-                    window.open(
-                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
-                      '_blank',
-                    );
-                  }}
-                />
-              ),
-              docs: (
-                <span
-                  className="text-blue-primary cursor-pointer"
-                  onClick={() => {
-                    if (typeof window === 'undefined') return;
-                    window.open(
-                      'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
-                      '_blank',
-                    );
-                  }}
-                />
-              ),
-            }}
-          />
+          <HelpCardDocs i18nKey="help-card.image-setting" />
         </p>
         <div className="relative h-full w-[80px]">
           <Image

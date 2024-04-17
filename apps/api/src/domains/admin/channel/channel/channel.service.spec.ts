@@ -18,13 +18,11 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
-import { createFieldDto } from '@/test-utils/fixtures';
+import { channelFixture, createFieldDto } from '@/test-utils/fixtures';
 import { TestConfig } from '@/test-utils/util-functions';
 import { ChannelServiceProviders } from '../../../../test-utils/providers/channel.service.providers';
-import { ProjectEntity } from '../../project/project/project.entity';
 import { FieldEntity } from '../field/field.entity';
 import { ChannelEntity } from './channel.entity';
-import { ChannelMySQLService } from './channel.mysql.service';
 import { ChannelService } from './channel.service';
 import { CreateChannelDto, FindByChannelIdDto, UpdateChannelDto } from './dtos';
 import {
@@ -33,17 +31,8 @@ import {
   ChannelNotFoundException,
 } from './exceptions';
 
-const channelFixture = new ChannelEntity();
-channelFixture.id = faker.number.int();
-channelFixture.name = faker.string.sample();
-channelFixture.description = faker.string.sample();
-channelFixture.project = new ProjectEntity();
-channelFixture.project.id = faker.number.int();
-channelFixture.fields = [];
-
 describe('ChannelService', () => {
   let channelService: ChannelService;
-  let projectRepo: Repository<ProjectEntity>;
   let channelRepo: Repository<ChannelEntity>;
   let fieldRepo: Repository<FieldEntity>;
 
@@ -54,7 +43,6 @@ describe('ChannelService', () => {
     }).compile();
 
     channelService = module.get<ChannelService>(ChannelService);
-    projectRepo = module.get(getRepositoryToken(ProjectEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
   });
@@ -67,18 +55,14 @@ describe('ChannelService', () => {
       dto.description = channelFixture.description;
       dto.projectId = channelFixture.project.id;
       dto.fields = Array.from({ length: fieldCount }).map(createFieldDto);
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValue({} as ProjectEntity);
       jest.spyOn(channelRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(channelRepo, 'save').mockResolvedValue(channelFixture);
       jest
         .spyOn(fieldRepo, 'save')
         .mockResolvedValue({ id: faker.number.int() } as FieldEntity);
 
       const channel = await channelService.create(dto);
 
-      expect(channel.id).toEqual(channelFixture.id);
+      expect(channel.id).toBeDefined();
     });
     it('creating a channel fails with a duplicate name', async () => {
       const fieldCount = faker.number.int({ min: 1, max: 10 });
@@ -87,12 +71,6 @@ describe('ChannelService', () => {
       dto.description = faker.string.sample();
       dto.projectId = faker.number.int();
       dto.fields = Array.from({ length: fieldCount }).map(createFieldDto);
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValue({} as ProjectEntity);
-      jest
-        .spyOn(channelRepo, 'findOneBy')
-        .mockResolvedValue({} as ChannelEntity);
 
       await expect(channelService.create(dto)).rejects.toThrow(
         ChannelAlreadyExistsException,
@@ -103,11 +81,10 @@ describe('ChannelService', () => {
     it('finding by an id succeeds with an existent id', async () => {
       const dto = new FindByChannelIdDto();
       dto.channelId = channelFixture.id;
-      jest.spyOn(channelRepo, 'findOne').mockResolvedValue(channelFixture);
 
       const result = await channelService.findById(dto);
 
-      expect(result).toEqual(channelFixture);
+      expect(result).toMatchObject(expect.objectContaining(channelFixture));
     });
     it('finding by an id fails with a nonexistent id', async () => {
       const dto = new FindByChannelIdDto();
@@ -141,13 +118,6 @@ describe('ChannelService', () => {
       const dto = new UpdateChannelDto();
       dto.name = channelFixture.name;
       dto.description = faker.string.sample();
-      jest
-        .spyOn(ChannelMySQLService.prototype, 'findById')
-        .mockResolvedValue(channelFixture);
-      jest.spyOn(channelRepo, 'findOne').mockResolvedValue({
-        ...channelFixture,
-        id: faker.number.int(),
-      } as ChannelEntity);
 
       await expect(channelService.updateInfo(channelId, dto)).rejects.toThrow(
         ChannelInvalidNameException,

@@ -117,11 +117,11 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
                       ({ id }) => id === channel.id,
                     )}
                     onChange={(e) =>
-                      e.currentTarget.checked
-                        ? setCurrentChannels((prev) => [...prev, channel])
-                        : setCurrentChannels((prev) =>
-                            prev.filter((v) => v.id !== channel.id),
-                          )
+                      e.currentTarget.checked ?
+                        setCurrentChannels((prev) => [...prev, channel])
+                      : setCurrentChannels((prev) =>
+                          prev.filter((v) => v.id !== channel.id),
+                        )
                     }
                   />
                   <p className="font-12-regular flex-1">{channel.name}</p>

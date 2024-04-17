@@ -12,7 +12,7 @@ export default () => {
       await page.getByRole('button', { name: 'Delete' }).click();
       await page.getByRole('button', { name: 'Delete' }).click();
 
-      await expect(page.getByText('Deletion Completed')).toBeVisible();
+      await expect(page.getByText('Deleted Successfully')).toBeVisible();
     });
 
     test('creating a feedback succeeds', async ({ page }) => {
@@ -20,7 +20,7 @@ export default () => {
       await page.getByText('SeededTestProject').click();
       await page.getByText('FeedbackIssueSetting').hover();
       await page.getByRole('button', { name: 'Feedback', exact: true }).click();
-      await page.getByRole('button', { name: 'Column Setting' }).hover();
+      await page.getByRole('button', { name: 'Column Settings' }).hover();
       await page.getByText('SeededTestChannel', { exact: true }).click();
       await page.waitForURL(/.*channelId.*/, { timeout: 1000 });
 

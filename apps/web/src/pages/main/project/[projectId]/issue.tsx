@@ -38,17 +38,15 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
   return (
     <>
       <h1 className="font-20-bold mb-3">{t('main.issue.title')}</h1>
-      {status === 'pending' ? (
+      {status === 'pending' ?
         <p className="font-32-bold animate-bounce">Loading...</p>
-      ) : status === 'error' ? (
+      : status === 'error' ?
         <p className="font-32-bold">Not Permission</p>
-      ) : data.meta.totalItems === 0 ? (
+      : data.meta.totalItems === 0 ?
         <div className="flex flex-1 items-center justify-center">
           <CreateChannelButton projectId={projectId} type="blue" />
         </div>
-      ) : (
-        <IssueTable projectId={projectId} />
-      )}
+      : <IssueTable projectId={projectId} />}
     </>
   );
 };

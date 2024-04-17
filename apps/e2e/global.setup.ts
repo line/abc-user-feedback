@@ -6,7 +6,7 @@ setup('tenant create and authenticate', async ({ page }) => {
   await page.goto('http://localhost:3000/en/tenant/create');
   await page.getByLabel('Site name').click();
   await page.getByLabel('Site name').fill('TestTenant');
-  await page.getByRole('button', { name: 'Setting', exact: true }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
 
   await page.goto('http://localhost:3000/en/auth/sign-in');
   await expect(page.getByRole('banner')).toHaveText(/TestTenant/, {

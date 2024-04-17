@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { faker } from '@faker-js/faker';
+
 import { tenantFixture } from '../fixtures';
-import { createQueryBuilder } from '../util-functions';
+import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class TenantRepositoryStub {
   tenant = tenantFixture;
@@ -43,7 +45,19 @@ export class TenantRepositoryStub {
   }
 
   save(tenant) {
-    return { ...tenant, id: tenantFixture.id };
+    const tenantToSave = removeUndefinedValues(tenant);
+    if (Array.isArray(tenantToSave)) {
+      return tenantToSave.map((e) => ({
+        ...this.tenant,
+        ...e,
+        id: faker.number.int(),
+      }));
+    } else {
+      return {
+        ...this.tenant,
+        ...tenantToSave,
+      };
+    }
   }
 
   count() {

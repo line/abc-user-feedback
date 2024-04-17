@@ -22,7 +22,12 @@ import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { FeedbackIssueStatisticsEntity } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.entity';
 import { FeedbackIssueStatisticsService } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.service';
 import { mockRepository } from '@/test-utils/util-functions';
-import { FeedbackRepositoryStub } from '../stubs';
+import {
+  FeedbackRepositoryStub,
+  IssueRepositoryStub,
+  ProjectRepositoryStub,
+} from '../stubs';
+import { SchedulerLockServiceProviders } from './scheduler-lock.service.providers';
 
 export const FeedbackIssueStatisticsServiceProviders = [
   FeedbackIssueStatisticsService,
@@ -36,11 +41,12 @@ export const FeedbackIssueStatisticsServiceProviders = [
   },
   {
     provide: getRepositoryToken(IssueEntity),
-    useValue: mockRepository(),
+    useClass: IssueRepositoryStub,
   },
   {
     provide: getRepositoryToken(ProjectEntity),
-    useValue: mockRepository(),
+    useClass: ProjectRepositoryStub,
   },
   SchedulerRegistry,
+  ...SchedulerLockServiceProviders,
 ];

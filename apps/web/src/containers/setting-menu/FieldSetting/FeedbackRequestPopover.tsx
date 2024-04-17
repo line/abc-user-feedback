@@ -110,11 +110,11 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
           }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${
             apiKey?.value ?? 'API_KEY'
           }' \\\n--data-raw '${
-            snippetBody
-              ? JSON.stringify(snippetBody, null, 4)
-                  .replace(/\"/g, '')
-                  .replace(/\'/g, '"')
-              : ''
+            snippetBody ?
+              JSON.stringify(snippetBody, null, 4)
+                .replace(/\"/g, '')
+                .replace(/\'/g, '"')
+            : ''
           }'`}
         </pre>
       </PopoverContent>

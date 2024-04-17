@@ -24,11 +24,9 @@ const SettingMenuTemplate: React.FC<IProps> = (props) => {
   return (
     <div className="border-fill-tertiary relative flex h-[calc(100vh-152px)] min-w-[300px] flex-col gap-6 overflow-auto rounded border p-6">
       <div className="flex h-10 items-center justify-between">
-        {typeof title === 'string' ? (
+        {typeof title === 'string' ?
           <h1 className="font-20-bold">{title}</h1>
-        ) : (
-          title
-        )}
+        : title}
         {actionBtn && (
           <button
             {...actionBtn}

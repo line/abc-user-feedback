@@ -16,6 +16,7 @@
 
 import { registerAs } from '@nestjs/config';
 import Joi from 'joi';
+import { v4 as uuidv4 } from 'uuid';
 
 export const appConfigSchema = Joi.object({
   APP_PORT: Joi.number().default(4000),
@@ -27,4 +28,5 @@ export const appConfig = registerAs('app', () => ({
   port: process.env.APP_PORT,
   address: process.env.APP_ADDRESS,
   baseUrl: process.env.APP_BASE_URL,
+  serverId: uuidv4(),
 }));

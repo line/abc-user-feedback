@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rm -rf dist .turbo node_modules",
+    "clean": "rimraf dist .turbo node_modules",
     "format": "prettier --check \"src/**/*.ts\"",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -21,11 +21,13 @@
     "root": true
   },
   "devDependencies": {
-    "@ufb/eslint-config": "^0.1.0",
-    "@ufb/prettier-config": "^0.1.0",
-    "@ufb/tsconfig": "^0.1.0",
-    "eslint": "^8.51.0",
-    "tsup": "^8.0.1",
-    "typescript": "^5.2.2"
+    "@ufb/eslint-config": "workspace:*",
+    "@ufb/prettier-config": "workspace:*",
+    "@ufb/tsconfig": "workspace:*",
+    "eslint": "^8.57.0",
+    "react": "^18.2.0",
+    "rimraf": "^5.0.5",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.3"
   }
 }

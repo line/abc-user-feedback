@@ -10,15 +10,17 @@ jobs:
 
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2
+      - name: Setup Node.js v20
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Dependencies
-        run: yarn install --immutable --immutable-cache --check-cache
+        run: |
+          npx corepack enable
+          pnpm install --frozen-lockfile
 
       - name: setup environment variables (with opensearch)
         run: |
@@ -29,7 +31,7 @@ jobs:
           echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env.test
 
       - name: Run Tests
-        run: yarn test
+        run: pnpm test
 
       - name: setup environment variables (without opensearch)
         run: |
@@ -38,4 +40,4 @@ jobs:
           echo "OPENSEARCH_USE=false" >> ./apps/api/.env.test
 
       - name: Run Tests
-        run: yarn test
+        run: pnpm test

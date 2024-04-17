@@ -13,7 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+export { ApiKeyRepositoryStub } from './api-key-repository.stub';
 export { ChannelRepositoryStub } from './channel-repository.stub';
+export { CodeRepositoryStub } from './code-repository.stub';
+export { EventRepositoryStub } from './event-repository.stub';
 export { FeedbackRepositoryStub } from './feedback-repository.stub';
+export { FieldRepositoryStub } from './field-repository.stub';
+export { IssueRepositoryStub } from './issue-repository.stub';
+export { ProjectRepositoryStub } from './project-repository.stub';
+export { RoleRepositoryStub } from './role-repository.stub';
 export { TenantRepositoryStub } from './tenant-repository.stub';
 export { UserRepositoryStub } from './user-repository.stub';
+export { WebhookRepositoryStub } from './webhook-repository.stub';

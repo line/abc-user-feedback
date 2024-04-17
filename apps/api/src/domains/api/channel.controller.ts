@@ -22,7 +22,13 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiSecurity, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '@/domains/admin/auth/guards';
 import { ChannelService } from '../admin/channel/channel/channel.service';
@@ -34,6 +40,11 @@ import { ChannelService } from '../admin/channel/channel/channel.service';
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 
+  @ApiOperation({
+    summary: 'Get Image Upload URL',
+    description:
+      'Generates a presigned URL for image upload to a specific channel within a project.',
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -45,6 +56,13 @@ export class ChannelController {
     type: Number,
     description: 'Channel id',
     example: 1,
+  })
+  @ApiQuery({
+    name: 'extension',
+    type: String,
+    required: true,
+    description: 'File extension for the image to be uploaded',
+    example: 'png',
   })
   @ApiOkResponse({
     type: String,

@@ -21,6 +21,7 @@ import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { SchedulerLockModule } from '@/domains/operation/scheduler-lock/scheduler-lock.module';
 import { FeedbackStatisticsController } from './feedback-statistics.controller';
 import { FeedbackStatisticsEntity } from './feedback-statistics.entity';
 import { FeedbackStatisticsService } from './feedback-statistics.service';
@@ -34,6 +35,7 @@ import { FeedbackStatisticsService } from './feedback-statistics.service';
       ChannelEntity,
       ProjectEntity,
     ]),
+    SchedulerLockModule,
   ],
   exports: [FeedbackStatisticsService],
   providers: [FeedbackStatisticsService],

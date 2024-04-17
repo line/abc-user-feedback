@@ -45,8 +45,9 @@ export class UserService {
   ) {}
 
   async findAll({ options, query, order }: FindAllUsersDto) {
-    const where = query
-      ? Object.entries(query).reduce((prev, [key, value]) => {
+    const where =
+      query ?
+        Object.entries(query).reduce((prev, [key, value]) => {
           if (key === 'projectId') {
             return { ...prev, members: { role: { project: { id: value } } } };
           }

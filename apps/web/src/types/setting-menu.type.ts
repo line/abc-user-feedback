@@ -22,6 +22,7 @@ type ProjectSetting =
   | 'ROLE_MANAGEMENT'
   | 'API_KEY_MANAGEMENT'
   | 'TICKET_MANAGEMENT'
+  | 'WEBHOOK_MANAGEMENT'
   | 'DELETE_PROJECT';
 
 type ChannelSetting =

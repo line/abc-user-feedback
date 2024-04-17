@@ -99,9 +99,9 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
             color={getValue() ? 'black' : 'blue'}
             type={getValue() ? 'secondary' : 'primary'}
           >
-            {getValue()
-              ? t('main.setting.api-key-status.inactive')
-              : t('main.setting.api-key-status.active')}
+            {getValue() ?
+              t('main.setting.api-key-status.inactive')
+            : t('main.setting.api-key-status.active')}
           </Badge>
         ),
         size: 50,
@@ -184,7 +184,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
           </tr>
         </thead>
         <tbody>
-          {rows.length === 0 ? (
+          {rows.length === 0 ?
             <tr className="h-[240px]">
               <td colSpan={5} className="border-none">
                 <div className="flex h-full flex-col items-center justify-center gap-2">
@@ -197,8 +197,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
                 </div>
               </td>
             </tr>
-          ) : (
-            table.getRowModel().rows.map((row) => (
+          : table.getRowModel().rows.map((row) => (
               <Fragment key={row.id}>
                 <tr>
                   {row.getVisibleCells().map((cell) => (
@@ -216,7 +215,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
                 </tr>
               </Fragment>
             ))
-          )}
+          }
         </tbody>
       </table>
     </SettingMenuTemplate>

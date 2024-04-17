@@ -64,8 +64,8 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
 
   const getDateValue = useCallback(
     (key: string) => {
-      return currentQuery[key]
-        ? {
+      return currentQuery[key] ?
+          {
             startDate: currentQuery[key].gte ?? null,
             endDate: currentQuery[key].lt ?? null,
           }

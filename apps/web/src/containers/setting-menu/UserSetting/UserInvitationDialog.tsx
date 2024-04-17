@@ -141,9 +141,9 @@ const UserInvitationDialog: React.FC<IProps> = () => {
               { label: 'GENERAL', value: 'GENERAL' },
             ]}
             defaultValue={
-              watch('type')
-                ? { label: watch('type'), value: watch('type') }
-                : undefined
+              watch('type') ?
+                { label: watch('type'), value: watch('type') }
+              : undefined
             }
             required
           />

@@ -28,11 +28,11 @@ export type OAIMethodPathKeys<TMethod extends OAIMethods> = O.SelectKeys<
 export type OAIPathParameters<
   TPath extends OAIPathKeys,
   TMethod extends OAIMethods,
-> = O.Path<paths, [TPath, TMethod, 'parameters', 'path']> extends Record<
-  string,
-  unknown
->
-  ? O.Path<paths, [TPath, TMethod, 'parameters', 'path']>
+> =
+  O.Path<paths, [TPath, TMethod, 'parameters', 'path']> extends (
+    Record<string, unknown>
+  ) ?
+    O.Path<paths, [TPath, TMethod, 'parameters', 'path']>
   : undefined;
 
 export type OAIQueryParameters<
@@ -51,17 +51,18 @@ export type OAIRequestBody<
 export type OAIParameters<
   TPath extends OAIPathKeys,
   TMethod extends OAIMethods,
-> = OAIPathParameters<TPath, TMethod> extends Record<string, unknown>
-  ? OAIQueryParameters<TPath, TMethod> extends Record<string, unknown>
-    ? O.Merge<
+> =
+  OAIPathParameters<TPath, TMethod> extends Record<string, unknown> ?
+    OAIQueryParameters<TPath, TMethod> extends Record<string, unknown> ?
+      O.Merge<
         OAIPathParameters<TPath, TMethod>,
         OAIQueryParameters<TPath, TMethod>
       >
     : OAIPathParameters<TPath, TMethod>
-  : OAIQueryParameters<TPath, TMethod> extends
-      | Record<string, unknown>
-      | undefined
-  ? OAIQueryParameters<TPath, TMethod>
+  : OAIQueryParameters<TPath, TMethod> extends (
+    Record<string, unknown> | undefined
+  ) ?
+    OAIQueryParameters<TPath, TMethod>
   : undefined;
 
 export type OAIResponse<

@@ -15,14 +15,14 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/test-utils/util-functions';
 import { IssueTrackerEntity } from '../../domains/admin/project/issue-tracker/issue-tracker.entity';
 import { IssueTrackerService } from '../../domains/admin/project/issue-tracker/issue-tracker.service';
+import { IssueTrackerRepositoryStub } from '../stubs/issue-tracker-repository.stub';
 
 export const IssueTrackerServiceProviders = [
   IssueTrackerService,
   {
     provide: getRepositoryToken(IssueTrackerEntity),
-    useValue: mockRepository(),
+    useClass: IssueTrackerRepositoryStub,
   },
 ];

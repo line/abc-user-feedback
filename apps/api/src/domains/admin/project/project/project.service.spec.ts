@@ -17,20 +17,17 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
-import { Like } from 'typeorm';
 
 import {
-  createQueryBuilder,
-  getRandomEnumValues,
-  TestConfig,
-} from '@/test-utils/util-functions';
+  projectFixture,
+  roleFixture,
+  userFixture,
+} from '@/test-utils/fixtures';
+import { getRandomEnumValues, TestConfig } from '@/test-utils/util-functions';
 import { ProjectServiceProviders } from '../../../../test-utils/providers/project.service.providers';
-import { ChannelEntity } from '../../channel/channel/channel.entity';
 import { UserDto } from '../../user/dtos';
 import { UserTypeEnum } from '../../user/entities/enums';
-import { UserEntity } from '../../user/entities/user.entity';
 import { ApiKeyEntity } from '../api-key/api-key.entity';
-import { IssueTrackerEntity } from '../issue-tracker/issue-tracker.entity';
 import { MemberEntity } from '../member/member.entity';
 import { PermissionEnum } from '../role/permission.enum';
 import { RoleEntity } from '../role/role.entity';
@@ -47,12 +44,9 @@ import { ProjectService } from './project.service';
 describe('ProjectService Test suite', () => {
   let projectService: ProjectService;
   let projectRepo: Repository<ProjectEntity>;
-  let channelRepo: Repository<ChannelEntity>;
   let roleRepo: Repository<RoleEntity>;
-  let userRepo: Repository<UserEntity>;
   let memberRepo: Repository<MemberEntity>;
   let apiKeyRepo: Repository<ApiKeyEntity>;
-  let issueRepo: Repository<IssueTrackerEntity>;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -62,17 +56,15 @@ describe('ProjectService Test suite', () => {
 
     projectService = module.get<ProjectService>(ProjectService);
     projectRepo = module.get(getRepositoryToken(ProjectEntity));
-    channelRepo = module.get(getRepositoryToken(ChannelEntity));
     roleRepo = module.get(getRepositoryToken(RoleEntity));
-    userRepo = module.get(getRepositoryToken(UserEntity));
     memberRepo = module.get(getRepositoryToken(MemberEntity));
     apiKeyRepo = module.get(getRepositoryToken(ApiKeyEntity));
-    issueRepo = module.get(getRepositoryToken(IssueTrackerEntity));
   });
 
   describe('create', () => {
     const name = faker.string.sample();
     const description = faker.string.sample();
+    const projectId = projectFixture.id;
     let dto: CreateProjectDto;
     beforeEach(() => {
       dto = new CreateProjectDto();
@@ -81,27 +73,16 @@ describe('ProjectService Test suite', () => {
     });
 
     it('creating a project succeeds with project data', async () => {
-      const projectId = faker.number.int();
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
-      jest
-        .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
+      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
 
-      const { id } = await projectService.create(dto);
+      const project = await projectService.create(dto);
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.save).toBeCalledTimes(1);
-      expect(id).toEqual(projectId);
+      expect(project.id).toEqual(projectId);
+      expect(project.name).toEqual(name);
+      expect(project.description).toEqual(description);
     });
     it('creating a project succeeds with project data and role data', async () => {
-      const projectId = faker.number.int();
       dto.roles = [
         {
           name: faker.string.sample(),
@@ -109,87 +90,56 @@ describe('ProjectService Test suite', () => {
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
-      jest
-        .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
 
-      const { id } = await projectService.create(dto);
+      const project = await projectService.create(dto);
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.save).toBeCalledTimes(1);
-      expect(id).toEqual(projectId);
+      expect(project.id).toEqual(projectId);
+      expect(project.name).toEqual(name);
+      expect(project.description).toEqual(description);
+      expect(project.roles).toMatchObject(dto.roles);
     });
     it('creating a project succeeds with project data and role data and member data', async () => {
-      const projectId = faker.number.int();
       dto.roles = [
         {
-          name: faker.string.sample(),
+          name: roleFixture.name,
           permissions: getRandomEnumValues(PermissionEnum),
         },
       ];
       dto.members = [
         {
-          roleName: dto.roles[0].name,
-          userId: faker.number.int(),
+          roleName: roleFixture.name,
+          userId: userFixture.id,
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue(null);
-      jest
-        .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(roleRepo, 'save').mockResolvedValue(
-        dto.roles.map((role) => ({
-          project: { id: projectId },
-          id: faker.number.int(),
-          ...role,
-        })) as any,
-      );
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: projectId },
-      } as RoleEntity);
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save').mockResolvedValue(
-        dto.members.map(({ userId }) => ({
-          ...MemberEntity.from({ roleId: faker.number.int(), userId }),
-        })) as any,
+
+      const project = await projectService.create(dto);
+
+      expect(project.id).toEqual(projectId);
+      expect(project.name).toEqual(name);
+      expect(project.description).toEqual(description);
+      expect(project.roles).toMatchObject(dto.roles);
+      expect(project.roles[0].members[0].role.name).toEqual(
+        dto.members[0].roleName,
       );
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-
-      const { id } = await projectService.create(dto);
-
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.save).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledTimes(1);
-      expect(id).toEqual(projectId);
+      expect(project.roles[0].members[0].user.id).toEqual(
+        dto.members[0].userId,
+      );
     });
     it('creating a project succeeds with project data and role data and member data and api key data', async () => {
-      const projectId = faker.number.int();
       dto.roles = [
         {
-          name: faker.string.sample(),
+          name: roleFixture.name,
           permissions: getRandomEnumValues(PermissionEnum),
         },
       ];
       dto.members = [
         {
-          roleName: dto.roles[0].name,
-          userId: faker.number.int(),
+          roleName: roleFixture.name,
+          userId: userFixture.id,
         },
       ];
       dto.apiKeys = [
@@ -198,62 +148,35 @@ describe('ProjectService Test suite', () => {
         },
       ];
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(projectRepo, 'save').mockResolvedValue({
-        id: projectId,
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(roleRepo, 'save').mockResolvedValue(
-        dto.roles.map((role) => ({
-          project: { id: projectId },
-          id: faker.number.int(),
-          ...role,
-        })) as any,
-      );
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: { id: projectId },
-      } as RoleEntity);
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save').mockResolvedValue(
-        dto.members.map(({ userId }) => ({
-          ...MemberEntity.from({ roleId: faker.number.int(), userId }),
-        })) as any,
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValue(null);
+
+      const project = await projectService.create(dto);
+
+      expect(project.id).toEqual(projectId);
+      expect(project.name).toEqual(name);
+      expect(project.description).toEqual(description);
+      expect(project.roles).toMatchObject(dto.roles);
+      expect(project.roles[0].members[0].role.name).toEqual(
+        dto.members[0].roleName,
       );
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValueOnce({} as ProjectEntity);
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-
-      const { id } = await projectService.create(dto);
-
-      expect(projectRepo.save).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledTimes(1);
-      expect(apiKeyRepo.save).toBeCalledTimes(1);
-      expect(id).toEqual(projectId);
+      expect(project.roles[0].members[0].user.id).toEqual(
+        dto.members[0].userId,
+      );
+      expect(project.apiKeys).toMatchObject(dto.apiKeys);
     });
     it('creating a project succeeds with project data and role data and member data and api key data and issue tracker data', async () => {
-      const projectId = faker.number.int();
       dto.roles = [
         {
-          name: faker.string.sample(),
+          name: roleFixture.name,
           permissions: getRandomEnumValues(PermissionEnum),
         },
       ];
       dto.members = [
         {
-          roleName: dto.roles[0].name,
-          userId: faker.number.int(),
+          roleName: roleFixture.name,
+          userId: userFixture.id,
         },
       ];
       dto.apiKeys = [
@@ -268,79 +191,30 @@ describe('ProjectService Test suite', () => {
         },
       };
       jest.spyOn(projectRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(projectRepo, 'save').mockResolvedValue({
-        id: projectId,
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as any);
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(roleRepo, 'save').mockResolvedValue(
-        dto.roles.map((role) => ({
-          project: { id: projectId },
-          id: faker.number.int(),
-          ...role,
-        })) as any,
-      );
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        project: {
-          id: projectId,
-          timezone: {
-            countryCode: 'KR',
-            name: 'Asia/Seoul',
-            offset: '+09:00',
-          },
-        },
-      } as RoleEntity);
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue({} as UserEntity);
       jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save').mockResolvedValue(
-        dto.members.map(({ userId }) => ({
-          ...MemberEntity.from({ roleId: faker.number.int(), userId }),
-        })) as any,
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValue(null);
+
+      const project = await projectService.create(dto);
+
+      expect(project.id).toEqual(projectId);
+      expect(project.name).toEqual(name);
+      expect(project.description).toEqual(description);
+      expect(project.roles).toMatchObject(dto.roles);
+      expect(project.roles[0].members[0].role.name).toEqual(
+        dto.members[0].roleName,
       );
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValueOnce({} as ProjectEntity);
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-
-      const { id } = await projectService.create(dto);
-
-      expect(projectRepo.save).toBeCalledTimes(1);
-      expect(memberRepo.save).toBeCalledTimes(1);
-      expect(apiKeyRepo.save).toBeCalledTimes(1);
-      expect(issueRepo.save).toBeCalledTimes(1);
-      expect(id).toEqual(projectId);
+      expect(project.roles[0].members[0].user.id).toEqual(
+        dto.members[0].userId,
+      );
+      expect(project.apiKeys).toMatchObject(dto.apiKeys);
+      expect(project.issueTracker).toMatchObject(dto.issueTracker);
     });
 
     it('creating a project fails with an existent project name', async () => {
-      const projectId = faker.number.int();
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValue({ name: dto.name } as ProjectEntity);
-      jest.spyOn(projectRepo, 'save').mockResolvedValue({
-        id: projectId,
-        timezone: {
-          countryCode: 'KR',
-          name: 'Asia/Seoul',
-          offset: '+09:00',
-        },
-      } as any);
-
       await expect(projectService.create(dto)).rejects.toThrowError(
         ProjectAlreadyExistsException,
       );
-
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.save).not.toBeCalled();
     });
   });
   describe('findAll', () => {
@@ -352,19 +226,10 @@ describe('ProjectService Test suite', () => {
     it('finding all projects succeds as a SUPER user', async () => {
       dto.user = new UserDto();
       dto.user.type = UserTypeEnum.SUPER;
-      dto.searchText = faker.string.sample();
-      jest
-        .spyOn(projectRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await projectService.findAll(dto);
+      const { meta } = await projectService.findAll(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
-      expect(createQueryBuilder.setFindOptions).toBeCalledWith({
-        where: { name: Like(`%${dto.searchText}%`) },
-        order: { createdAt: 'ASC' },
-      });
+      expect(meta.totalItems).toEqual(1);
     });
     it('finding all projects succeds as a GENERAL user', async () => {
       const userId = faker.number.int();
@@ -372,21 +237,10 @@ describe('ProjectService Test suite', () => {
       dto.user.type = UserTypeEnum.GENERAL;
       dto.user.id = userId;
       dto.searchText = faker.string.sample();
-      jest
-        .spyOn(projectRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
 
-      await projectService.findAll(dto);
+      const { meta } = await projectService.findAll(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
-      expect(createQueryBuilder.setFindOptions).toBeCalledWith({
-        where: {
-          name: Like(`%${dto.searchText}%`),
-          roles: { members: { user: { id: userId } } },
-        },
-        order: { createdAt: 'ASC' },
-      });
+      expect(meta.totalItems).toEqual(1);
     });
   });
   describe('findById', () => {
@@ -395,15 +249,10 @@ describe('ProjectService Test suite', () => {
       dto = new FindByProjectIdDto();
     });
     it('finding a project by an id succeeds with a valid id', async () => {
-      const projectId = faker.number.int();
-      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue({
-        id: projectId,
-      } as ProjectEntity);
+      const projectId = projectFixture.id;
 
       const project = await projectService.findById(dto);
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: dto.projectId });
       expect(project.id).toEqual(projectId);
     });
     it('finding a project by an id fails with an invalid id', async () => {
@@ -412,9 +261,6 @@ describe('ProjectService Test suite', () => {
       await expect(projectService.findById(dto)).rejects.toThrowError(
         ProjectNotFoundException,
       );
-
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: dto.projectId });
     });
   });
   describe('update ', () => {
@@ -425,57 +271,32 @@ describe('ProjectService Test suite', () => {
       dto.description = description;
     });
     it('updating a project succeeds with valid inputs', async () => {
-      const projectId = faker.number.int();
       const name = faker.string.sample();
       dto.name = name;
-      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue({
-        id: projectId,
-      } as ProjectEntity);
       jest
         .spyOn(projectRepo, 'findOne')
         .mockResolvedValue(null as ProjectEntity);
-      jest
-        .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(projectRepo, 'save');
 
       await projectService.update(dto);
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOne).toBeCalledTimes(1);
       expect(projectRepo.save).toBeCalledTimes(1);
     });
     it('updating a project fails with a duplicate name', async () => {
-      const projectId = faker.number.int();
       const name = 'DUPLICATE_NAME';
       dto.name = name;
-      jest.spyOn(projectRepo, 'findOneBy').mockResolvedValue({
-        id: projectId,
-      } as ProjectEntity);
-      jest
-        .spyOn(projectRepo, 'findOne')
-        .mockResolvedValue({ name } as ProjectEntity);
-      jest
-        .spyOn(projectRepo, 'save')
-        .mockResolvedValue({ id: projectId } as any);
+      jest.spyOn(projectRepo, 'save');
 
       await expect(projectService.update(dto)).rejects.toThrowError(
         new ProjectInvalidNameException('Duplicated name'),
       );
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOne).toBeCalledTimes(1);
       expect(projectRepo.save).not.toBeCalled();
     });
   });
   describe('deleteById', () => {
     it('deleting a project succeeds with a valid id', async () => {
       const projectId = faker.number.int();
-      const channelCount = faker.number.int({ min: 1, max: 10 });
-      jest.spyOn(channelRepo, 'find').mockResolvedValue(
-        Array(channelCount).fill({
-          id: faker.number.int(),
-        }) as ChannelEntity[],
-      );
       jest.spyOn(projectRepo, 'remove');
 
       await projectService.deleteById(projectId);

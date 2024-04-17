@@ -90,8 +90,9 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     (dateRange: DateRangeType) => {
       setQuery({
         ...query,
-        createdAt: dateRange
-          ? `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
+        createdAt:
+          dateRange ?
+            `${dayjs(dateRange.startDate).format(DATE_FORMAT)}~${dayjs(
               dateRange.endDate,
             ).format(DATE_FORMAT)}`
           : undefined,

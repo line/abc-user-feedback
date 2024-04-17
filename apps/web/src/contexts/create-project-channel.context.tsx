@@ -74,41 +74,41 @@ export const CreateProvider = <
   const FIRST_STEP = steps[0] as StepType;
 
   const [input, setInput] = useLocalStorage<InputType>(
-    type === 'project'
-      ? CREATE_PROJECT_INPUT_KEY
-      : CREATE_CHANNEL_INPUT_KEY(projectId),
+    type === 'project' ?
+      CREATE_PROJECT_INPUT_KEY
+    : CREATE_CHANNEL_INPUT_KEY(projectId),
     defaultInput,
   );
 
   const [currentStep, setCurrentStep] = useLocalStorage<StepType>(
-    type === 'project'
-      ? CREATE_PROJECT_CURRENT_STEP_KEY
-      : CREATE_CHANNEL_CURRENT_STEP_KEY(projectId),
+    type === 'project' ?
+      CREATE_PROJECT_CURRENT_STEP_KEY
+    : CREATE_CHANNEL_CURRENT_STEP_KEY(projectId),
     FIRST_STEP,
   );
 
   const [completeStepIndex, setCompleteStepIndex] = useLocalStorage(
-    type === 'project'
-      ? CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY
-      : CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
+    type === 'project' ?
+      CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY
+    : CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
     0,
   );
 
   const clearLocalStorage = useCallback(() => {
     localStorage.removeItem(
-      type === 'project'
-        ? CREATE_PROJECT_INPUT_KEY
-        : CREATE_CHANNEL_INPUT_KEY(projectId),
+      type === 'project' ?
+        CREATE_PROJECT_INPUT_KEY
+      : CREATE_CHANNEL_INPUT_KEY(projectId),
     );
     localStorage.removeItem(
-      type === 'project'
-        ? CREATE_PROJECT_CURRENT_STEP_KEY
-        : CREATE_CHANNEL_CURRENT_STEP_KEY(projectId),
+      type === 'project' ?
+        CREATE_PROJECT_CURRENT_STEP_KEY
+      : CREATE_CHANNEL_CURRENT_STEP_KEY(projectId),
     );
     localStorage.removeItem(
-      type === 'project'
-        ? CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY
-        : CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
+      type === 'project' ?
+        CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY
+      : CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY(projectId),
     );
   }, [type, projectId]);
 

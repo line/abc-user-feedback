@@ -58,15 +58,13 @@ const ColumnSettingPopover: React.FC<IProps> = ({
 
   const columnKeys = useMemo(
     () =>
-      columnOrder.length === 0
-        ? (columns.map((v) => v.id) as string[])
-        : columnOrder.length === columns.length
-        ? columnOrder
-        : columnOrder.concat(
-            columns
-              .filter((v) => !columnOrder.includes(v.id as string))
-              .map((v) => v.id) as string[],
-          ),
+      columnOrder.length === 0 ? (columns.map((v) => v.id) as string[])
+      : columnOrder.length === columns.length ? columnOrder
+      : columnOrder.concat(
+          columns
+            .filter((v) => !columnOrder.includes(v.id as string))
+            .map((v) => v.id) as string[],
+        ),
     [columns, columnOrder],
   );
 
@@ -74,11 +72,9 @@ const ColumnSettingPopover: React.FC<IProps> = ({
     return columnKeys.reduce((acc, key) => {
       return (
         acc +
-        (typeof columnVisibility[key] === 'undefined'
-          ? 1
-          : columnVisibility[key]
-          ? 1
-          : 0)
+        (typeof columnVisibility[key] === 'undefined' ? 1
+        : columnVisibility[key] ? 1
+        : 0)
       );
     }, 0);
   }, [columnKeys, columnVisibility]);
@@ -125,9 +121,9 @@ const ColumnSettingPopover: React.FC<IProps> = ({
                         index={index}
                         key={key}
                         isChecked={
-                          typeof columnVisibility[key] === 'undefined'
-                            ? true
-                            : !!columnVisibility[key]
+                          typeof columnVisibility[key] === 'undefined' ?
+                            true
+                          : !!columnVisibility[key]
                         }
                         onChange={(isChecked) =>
                           onChangeColumnVisibility((prev) => ({

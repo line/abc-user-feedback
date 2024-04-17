@@ -72,8 +72,8 @@ const TableSearchInput: React.FC<IProps> = ({
       startIndex + 1,
       startIndex === endIndex ? inputValue.length : endIndex,
     );
-    return value.indexOf(':') === -1
-      ? ''
+    return value.indexOf(':') === -1 ?
+        ''
       : value.slice(0, value.indexOf(':')).trim();
   }, [inputValue, inputRef]);
 
@@ -112,8 +112,9 @@ const TableSearchInput: React.FC<IProps> = ({
   const close = () => setIsOpenPopover(false);
 
   const onInputChangeQuery = (inputObject?: Record<string, any>) => {
-    const currentQuery = inputObject
-      ? removeEmptyValueInObject({ ...currentObj, ...inputObject })
+    const currentQuery =
+      inputObject ?
+        removeEmptyValueInObject({ ...currentObj, ...inputObject })
       : {};
 
     const inputText = objToStr(currentQuery, searchItems);
@@ -183,31 +184,32 @@ const TableSearchInput: React.FC<IProps> = ({
         />
       </button>
       <Combobox.Options className="bg-primary absolute left-0 top-full z-10 mt-2 w-full overflow-hidden rounded border">
-        {editingName === ''
-          ? searchItems
-              .filter(
-                (v) =>
-                  v.format === 'text' ||
-                  v.format === 'keyword' ||
-                  v.format === 'number',
-              )
-              .filter((v) => !Object.keys(currentObj).includes(v.key))
-              .map((searchItem) => (
-                <ComboboxOption
-                  key={searchItem.key}
-                  editingValue={editingValue}
-                  searchItem={searchItem}
-                />
-              ))
-          : searchItems
-              .filter((v) => v.name === editingName)
-              .map((searchItem) => (
-                <ComboboxOption
-                  key={searchItem.key}
-                  editingValue={editingValue}
-                  searchItem={searchItem}
-                />
-              ))}
+        {editingName === '' ?
+          searchItems
+            .filter(
+              (v) =>
+                v.format === 'text' ||
+                v.format === 'keyword' ||
+                v.format === 'number',
+            )
+            .filter((v) => !Object.keys(currentObj).includes(v.key))
+            .map((searchItem) => (
+              <ComboboxOption
+                key={searchItem.key}
+                editingValue={editingValue}
+                searchItem={searchItem}
+              />
+            ))
+        : searchItems
+            .filter((v) => v.name === editingName)
+            .map((searchItem) => (
+              <ComboboxOption
+                key={searchItem.key}
+                editingValue={editingValue}
+                searchItem={searchItem}
+              />
+            ))
+        }
       </Combobox.Options>
       {isOpenPopover && (
         <div

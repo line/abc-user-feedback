@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { randomBytes } from 'crypto';
 import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
@@ -47,35 +46,19 @@ describe('ApiKeyService', () => {
   describe('create', () => {
     it('creating an api key succeeds with a valid project id', async () => {
       const projectId = faker.number.int();
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValueOnce({ id: projectId } as ProjectEntity);
-      jest.spyOn(apiKeyRepo, 'save').mockResolvedValueOnce({
-        value: randomBytes(10).toString('hex').toUpperCase(),
-      } as ApiKeyEntity);
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValueOnce(null);
 
       const apiKey = await apiKeyService.create({ projectId });
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: projectId });
-      expect(apiKeyRepo.save).toBeCalledTimes(1);
       expect(apiKey.value).toHaveLength(20);
     });
     it('creating an api key succeeds with a valid project id and a key', async () => {
       const projectId = faker.number.int();
       const value = faker.string.alphanumeric(20);
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValueOnce({ id: projectId } as ProjectEntity);
-      jest.spyOn(apiKeyRepo, 'save').mockResolvedValueOnce({
-        value: randomBytes(10).toString('hex').toUpperCase(),
-      } as ApiKeyEntity);
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValueOnce(null);
 
       const apiKey = await apiKeyService.create({ projectId, value });
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: projectId });
-      expect(apiKeyRepo.save).toBeCalledTimes(1);
       expect(apiKey.value).toHaveLength(20);
     });
     it('creating an api key fails with an invalid project id', async () => {
@@ -83,17 +66,10 @@ describe('ApiKeyService', () => {
       jest
         .spyOn(projectRepo, 'findOneBy')
         .mockResolvedValueOnce(null as ProjectEntity);
-      jest.spyOn(apiKeyRepo, 'save').mockResolvedValueOnce({
-        value: randomBytes(10).toString('hex').toUpperCase(),
-      } as ApiKeyEntity);
 
       await expect(
         apiKeyService.create({ projectId: invalidProjectId }),
       ).rejects.toThrow(ProjectNotFoundException);
-
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: invalidProjectId });
-      expect(apiKeyRepo.save).toBeCalledTimes(0);
     });
     it('creating an api key fails with an invalid api key', async () => {
       const projectId = faker.number.int();
@@ -104,24 +80,14 @@ describe('ApiKeyService', () => {
       await expect(apiKeyService.create({ projectId, value })).rejects.toThrow(
         new BadRequestException('Invalid Api Key value'),
       );
-
-      expect(apiKeyRepo.save).toBeCalledTimes(0);
     });
     it('creating an api key fails with an existent api key', async () => {
       const projectId = faker.number.int();
       const value = faker.string.alphanumeric(20);
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValueOnce({ id: projectId } as ProjectEntity);
-      jest
-        .spyOn(apiKeyRepo, 'findOneBy')
-        .mockResolvedValue({ value } as ApiKeyEntity);
 
       await expect(apiKeyService.create({ projectId, value })).rejects.toThrow(
         new BadRequestException('Api Key already exists'),
       );
-
-      expect(apiKeyRepo.save).toBeCalledTimes(0);
     });
   });
 
@@ -137,23 +103,10 @@ describe('ApiKeyService', () => {
     });
 
     it('creating api keys succeeds with a valid project id', async () => {
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValue({ id: projectId } as ProjectEntity);
-      jest.spyOn(apiKeyRepo, 'save').mockResolvedValueOnce(
-        dtos.map(({ projectId }) =>
-          ApiKeyEntity.from({
-            projectId,
-            value: faker.string.alphanumeric(20),
-          }),
-        ) as any,
-      );
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValue(null);
 
       const apiKeys = await apiKeyService.createMany(dtos);
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(apiKeyCount);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: projectId });
-      expect(apiKeyRepo.save).toBeCalledTimes(1);
       expect(apiKeys).toHaveLength(apiKeyCount);
       for (const apiKey of apiKeys) {
         expect(apiKey.value).toHaveLength(20);
@@ -163,22 +116,10 @@ describe('ApiKeyService', () => {
       dtos.forEach((apiKey) => {
         apiKey.value = faker.string.alphanumeric(20);
       });
-      jest
-        .spyOn(projectRepo, 'findOneBy')
-        .mockResolvedValue({ id: projectId } as ProjectEntity);
-      jest
-        .spyOn(apiKeyRepo, 'save')
-        .mockResolvedValueOnce(
-          dtos.map(({ projectId, value }) =>
-            ApiKeyEntity.from({ projectId, value }),
-          ) as any,
-        );
+      jest.spyOn(apiKeyRepo, 'findOneBy').mockResolvedValue(null);
 
       const apiKeys = await apiKeyService.createMany(dtos);
 
-      expect(projectRepo.findOneBy).toBeCalledTimes(apiKeyCount);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: projectId });
-      expect(apiKeyRepo.save).toBeCalledTimes(1);
       expect(apiKeys).toHaveLength(apiKeyCount);
       for (const apiKey of apiKeys) {
         expect(apiKey.value).toHaveLength(20);
@@ -194,10 +135,6 @@ describe('ApiKeyService', () => {
       await expect(apiKeyService.createMany(dtos)).rejects.toThrow(
         ProjectNotFoundException,
       );
-
-      expect(projectRepo.findOneBy).toBeCalledTimes(1);
-      expect(projectRepo.findOneBy).toBeCalledWith({ id: invalidProjectId });
-      expect(apiKeyRepo.save).toBeCalledTimes(0);
     });
   });
 });

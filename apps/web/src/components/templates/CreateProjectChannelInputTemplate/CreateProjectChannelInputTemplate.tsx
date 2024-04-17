@@ -73,9 +73,9 @@ const CreateProjectChannelInputTemplate: React.FC<IProps> = (props) => {
           }}
           disabled={disableNextBtn}
         >
-          {currentStepIndex === lastStepIndex
-            ? t('button.complete')
-            : t('button.next')}
+          {currentStepIndex === lastStepIndex ?
+            t('button.complete')
+          : t('button.next')}
         </button>
       </div>
     </div>

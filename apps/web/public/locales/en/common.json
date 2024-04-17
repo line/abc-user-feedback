@@ -1,30 +1,32 @@
 {
   "tenant": {
     "create": {
-      "title": "Tenant Setting",
-      "site-name": "Site name"
+      "title": "Tenant Settings",
+      "site-name": "Site Name"
     }
   },
   "auth": {
     "sign-in": {
-      "reset-password": "Reset password"
+      "reset-password": "Reset Password"
     },
     "sign-up": {
-      "title": "Create a Account",
+      "title": "Create an Account",
       "label": {
         "auth-code": "Authentication Code"
       },
       "placeholder": {
-        "auth-code": "Please input code"
+        "auth-code": "Please Enter Authentication Code"
       },
       "button": {
-        "request-auth-code": "Request",
-        "verify-auth-code": "Verify"
+        "request-auth-code": "Request Code",
+        "verify-auth-code": "Verify Code"
       }
     },
     "reset-password": {
-      "title": "Resest Password",
-      "button": { "send-email": "Send email" }
+      "title": "Reset Password",
+      "button": {
+        "send-email": "Send Email"
+      }
     }
   },
   "link": {
@@ -32,40 +34,40 @@
       "title": "Reset Password"
     },
     "user-invitation": {
-      "title": "Create a Account"
+      "title": "Create an Account"
     }
   },
   "main": {
     "index": {
-      "total-project": "Total Project",
-      "total-channel": "Total Channel",
+      "total-project": "Total Projects",
+      "total-channel": "Total Channels",
       "total-feedback": "Total Feedback",
       "create-project": "Create Project",
-      "no-project": "There are no registered projects."
+      "no-project": "No registered projects."
     },
     "profile": {
       "title": "Profile",
       "profile-info": "Profile Information",
       "change-password": "Change Password",
       "label": {
-        "user-type": "Type",
+        "user-type": "User Type",
         "new-password": "New Password",
         "confirm-new-password": "Confirm New Password"
       },
       "placeholder": {
-        "name": "Please input name.",
-        "department": "Please input department.",
-        "new-password": "Please input new password",
-        "confirm-new-password": "Please input confirm new password."
+        "name": "Please Enter Name",
+        "department": "Please Enter Department",
+        "new-password": "Please Enter New Password",
+        "confirm-new-password": "Please Confirm New Password"
       },
       "button": {
-        "delete-account": "Delete a Account"
+        "delete-account": "Delete Account"
       },
       "dialog": {
         "delete-account": {
-          "title": "Delete a Account",
-          "description1": "Are you sure you want to delete it?",
-          "description2": "The service is no longer available after you delete the account."
+          "title": "Delete Account",
+          "description1": "Are you sure you want to delete your account?",
+          "description2": "The service will be unavailable after account deletion."
         }
       }
     },
@@ -74,62 +76,62 @@
     },
     "feedback": {
       "title": "Feedback",
-      "column-setting": "Column Setting",
+      "column-setting": "Column Settings",
       "issue-cell": {
-        "issue-list": "Issue list",
-        "register-issue": "Register issue",
-        "create-issue": "Create issue",
-        "input-issue": "Input issue",
-        "delete-issue": "Delete issue"
+        "issue-list": "Issue List",
+        "register-issue": "Register Issue",
+        "create-issue": "Create Issue",
+        "input-issue": "Input Issue",
+        "delete-issue": "Delete Issue"
       },
       "download": {
         "loading": "Downloading...",
-        "success": "Download completed.",
-        "error": "Download failed.",
-        "loading-description": "Download a total of {{count, number}}",
-        "success-description": "Download a total of {{count, number}}",
-        "error-description": "Download a total of {{count, number}}"
+        "success": "Download Complete",
+        "error": "Download Failed",
+        "loading-description": "Downloading {{count, number}} items",
+        "success-description": "Downloaded {{count, number}} items",
+        "error-description": "Failed to download {{count, number}} items"
       },
       "button": {
         "all-download": "Download All",
-        "select-download": "Download {{count, number}} items",
-        "excel-download": "Excel Download",
-        "csv-download": "CSV Download"
+        "select-download": "Download Selected ({{count, number}})",
+        "excel-download": "Download Excel",
+        "csv-download": "Download CSV"
       },
       "dialog": {
         "delete-feedback": {
-          "title": "Delete feedbacks",
-          "description": "Are you sure you want to delete all selected feedbacks?"
+          "title": "Delete Feedback",
+          "description": "Are you sure you want to delete the selected feedback?"
         }
       }
     },
     "issue": {
       "title": "Issue",
-      "setting": "Issue Setting",
+      "setting": "Issue Settings",
       "dialog": {
         "delete-issue": {
-          "title": "Delete issues",
-          "description": "Are you sure you want to delete all selected issues?"
+          "title": "Delete Issues",
+          "description": "Are you sure you want to delete the selected issues?"
         }
       }
     },
     "setting": {
-      "title": "Setting",
+      "title": "Settings",
       "button": {
         "create-project": "Create Project",
         "create-channel": "Create Channel",
-        "create-api-key": "Create Key",
+        "create-api-key": "Create API Key",
         "register-member": "Register Member"
       },
       "sign-up-mgmt": {
         "ufb-login": "UFB Login",
-        "oauth-login": "OAuth2.0 Login",
-        "all-login": "All",
-        "possibility": "Direct sign up possible",
-        "impossibility": "Direct sign up not possible",
-        "no-domain-restriction": "No domain restrictions",
-        "domain-restriction": "Domain restrictions",
-        "domain-restriction-tooltip": "You can set up the domain of the email that can be registered as a user."
+        "oauth-login": "OAuth 2.0 Login",
+        "all-login": "All Logins",
+        "possibility": "Direct Signup",
+        "impossibility": "No Direct Signup",
+        "no-domain-restriction": "No Domain Restrictions",
+        "domain-restriction": "Domain Restrictions",
+        "domain-restriction-tooltip": "Set the email domain allowed for user registration."
       },
       "role-mgmt": {
         "edit-role": "Edit Role",
@@ -144,77 +146,87 @@
         "active": "Active",
         "inactive": "Inactive"
       },
-      "register-member": "Please register a member.",
-      "same-key": "Input the same value as the key",
+      "register-member": "Please Register a Member.",
+      "same-key": "Enter the same value as the key",
       "feedback-request-code": "Feedback Request Code",
       "option-info": "Option Information",
       "field-mgmt": {
-        "description": "To save, click Preview first.",
+        "description": "Click 'Preview' to save changes.",
         "preview": "Preview",
-        "preview-caption": "Preview is an example data to help you understand.",
-        "preview-description": "You can check it after selecting <preview>Preview</preview>."
+        "preview-caption": "Preview shows example data for clarity.",
+        "preview-description": "Select <preview>Preview</preview> to check the configuration."
       },
       "dialog": {
-        "edit-user": { "title": "Edit User" },
+        "edit-user": {
+          "title": "Edit User"
+        },
         "delete-project": {
           "title": "Delete Project",
-          "description": "Deleting a project will delete all issue/feedback data.\nPlease enter the text below to proceed with the deletion."
+          "description": "Deleting a project will remove all related issues and feedback.\nPlease enter the project name below to confirm deletion."
         },
         "delete-channel": {
           "title": "Delete Channel",
-          "description": "Deleting a channel deletes all feedback data.\nPlease enter the text below to proceed with the deletion."
+          "description": "Deleting a channel will remove all related feedback.\nPlease enter the channel name below to confirm deletion."
         },
         "create-role": {
           "title": "Create Role",
-          "description": "Please enter a new Role Name."
+          "description": "Please enter a new role name."
         },
         "update-role-name": {
           "title": "Update Role Name",
-          "description": "Please enter Role Name."
+          "description": "Please enter the role name."
         },
         "edit-api-key": {
-          "title": "Edit API KEY",
-          "description": "If you change the API KEY to inactive, the API for that KEY will not be available.\nPlease change the status to inactive only if you don't use API KEY."
+          "title": "Edit API Key",
+          "description": "Changing the API Key to inactive will disable its associated API.\nChange the status to inactive only if you no longer use the API Key."
         },
         "delete-option": {
           "title": "Delete Option",
-          "description": "It does not apply to options in previous feedback."
+          "description": "This will not affect options in previous feedback."
         },
         "delete-role": {
           "title": "Delete Role",
-          "description": "Are you sure you want to delete Role?\nMembers with that Role will also disappear."
+          "description": "Are you sure you want to delete this role?\nMembers assigned to this role will also be removed."
         },
         "edit-member": {
           "title": "Edit Member",
-          "description": "Role varies from the menu accessible to functions available.\nPlease check the member and select the correct Role."
+          "description": "Roles determine access to menus and available functions.\nPlease verify the member's details before selecting the correct role."
         },
-        "register-member": { "title": "Register Member" },
+        "register-member": {
+          "title": "Register Member"
+        },
         "delete-member": {
           "title": "Delete Member",
-          "description": "Are you sure you want to delete the Member?"
+          "description": "Are you sure you want to delete this member?"
         },
-        "add-field": { "title": "Add Field" },
-        "edit-field": { "title": "Edit Field" },
-        "invite-user": { "title": "Invite User" }
+        "add-field": {
+          "title": "Add Field"
+        },
+        "edit-field": {
+          "title": "Edit Field"
+        },
+        "invite-user": {
+          "title": "Invite User"
+        }
       }
     },
     "create-project": {
       "title": "Create Project",
-      "complete-title": "Project creation is complete.",
-      "error-member": "User information that does not currently exist.",
-      "continue-channel-creation": "UserFeedback must be created up to the Channel before UserFeedback is available.\nWould you like to continue creating a channel?",
+      "complete-title": "Project Creation Complete",
+      "error-member": "User information does not exist.",
+      "continue-channel-creation": "A channel must be created before using User Feedback.\nWould you like to continue creating a channel?",
       "guide": {
-        "invalid-member": "Invalid Member List exists.",
-        "invalid-role": "Invalid Role information exists.",
-        "invalid-project": "Invalid Project information exists."
+        "invalid-member": "Invalid member list detected.",
+        "invalid-role": "Invalid role information detected.",
+        "invalid-project": "Invalid project information detected."
       }
     },
     "create-channel": {
       "title": "Create Channel",
-      "complete-title": "Channel creation is complete.",
-      "finish-channel-creation": "Everything is ready.\nStart Using UserFeedback!",
+      "complete-title": "Channel Creation Complete",
+      "finish-channel-creation": "Setup is complete.\nBegin using User Feedback!",
       "guide": {
-        "invalid-channel": "Invalid Channel information exists."
+        "invalid-channel": "Invalid channel information detected."
       }
     }
   },
@@ -223,23 +235,23 @@
     "sign-out": "Sign Out"
   },
   "button": {
-    "setting": "Setting",
+    "setting": "Settings",
     "back": "Back",
     "sign-in": "Sign In",
     "sign-up": "Sign Up",
     "save": "Save",
-    "create": "Create",
+    "create": "Create {{name}}",
     "cancel": "Cancel",
     "delete": "Delete",
     "register": "Register",
     "select-cancel": "Cancel",
     "reset": "Reset",
     "confirm": "OK",
-    "get-out": "Get out",
+    "get-out": "Exit",
     "previous": "Previous",
     "next": "Next",
     "complete": "Complete",
-    "next-time": "Next time",
+    "next-time": "Later",
     "start": "Start"
   },
   "input": {
@@ -248,132 +260,148 @@
       "confirm-password": "Confirm Password"
     },
     "placeholder": {
-      "input": "Please input",
-      "email": "Please input email",
-      "password": "Please input password",
-      "confirm-password": "Please input coonfirm password"
+      "input": "Enter Value",
+      "email": "Enter Email",
+      "password": "Enter Password",
+      "confirm-password": "Confirm Password"
     }
   },
   "text": {
-    "search-result": "Search Result",
-    "number-count": "{{count, number}} items",
-    "no-data": "No Data",
-    "per-page": "Per page",
+    "search-result": "Search Results",
+    "number-count": "{{count, number}} Items",
+    "no-data": "No Data Available",
+    "per-page": "Items Per Page",
     "select-option": "Select '{{name}}'",
-    "select-count": "Select {{count,number}}",
-    "search-filter": "Search Field",
+    "select-count": "Selected: {{count,number}}",
+    "search-filter": "Search Filters",
     "all": "All",
     "issue": {
       "init": "New",
-      "onReview": "In Review",
+      "onReview": "Under Review",
       "inProgress": "In Progress",
-      "resolved": "Done",
-      "pending": "Do not proceed"
+      "resolved": "Resolved",
+      "pending": "On Hold"
     },
     "date": {
       "today": "Today",
       "yesterday": "Yesterday",
-      "before-days": "Before {{day, number}} days",
-      "date-range-over-max-days": "The inquiry period can only be entered up to {{maxDays}} days"
+      "before-days": "{{day, number}} Days Ago",
+      "date-range-over-max-days": "Inquiry period is limited to {{maxDays}} days"
     },
-    "equal-search": "Equal",
-    "like-search": "Like",
+    "equal-search": "Exact Match",
+    "like-search": "Contains",
     "helper": "Help",
-    "warning-get-out": "Will you leave the process of creating a {{type}}?\nEven if you leave, you can proceed later.",
-    "no-channel": "There is no registered channel.",
-    "guide": "Guide",
-    "more": "more",
-    "shrink": "shrink",
-    "feedback-detail": "Feedback Detail",
-    "create-channel-in-progress": "There is a Channel being created.",
-    "create-project-in-progress": "There is a Project being created.",
-    "days": "{{days}} days"
+    "warning-get-out": "Are you sure you want to exit the creation process for a {{type}}?\nYou can resume this process later.",
+    "no-channel": "No Channels Registered",
+    "guide": "Guidelines",
+    "more": "More",
+    "shrink": "Less",
+    "feedback-detail": "Feedback Details",
+    "create-channel-in-progress": "Channel Creation in Progress",
+    "create-project-in-progress": "Project Creation in Progress",
+    "days": "{{days}} Days",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "Feedback Created",
+      "ISSUE_CREATION": "Issue Created",
+      "ISSUE_STATUS_CHANGE": "Issue Status Changed",
+      "ISSUE_ADDITION": "Issue Added"
+    }
   },
   "toast": {
-    "sign-in": "Login Successful",
-    "register": "Registration Completed",
-    "delete": "Deletion Completed",
-    "save": "Saved",
-    "invite": "Invitation Completed",
-    "active": "Activation",
-    "inactive": "Deactivation",
-    "add": "Addition Complete",
-    "copy": "Copy Complete"
+    "sign-in": "Logged In Successfully",
+    "register": "Registration Complete",
+    "delete": "Deleted Successfully",
+    "save": "Changes Saved",
+    "invite": "Invitation Sent",
+    "active": "Activated",
+    "inactive": "Deactivated",
+    "add": "Added Successfully",
+    "copy": "Copied to Clipboard"
   },
   "dialog": {
     "continue": {
-      "title": "Do you want to continue?",
-      "description": "There is a {{type}} currently being created. Do you want to continue? (If you do it from scratch, the existing information disappears.)",
+      "title": "Continue?",
+      "description": "A {{type}} is currently being created. Do you wish to continue? (Starting over will discard any existing information.)",
       "button": {
         "continue": "Continue",
-        "restart": "Restart"
+        "restart": "Start Over"
       }
+    },
+    "create-webhook": {
+      "title": "Create a Webhook"
+    },
+    "update-webhook": {
+      "title": "Edit a Webhook"
+    },
+    "delete-webhook": {
+      "title": "Delete a Webhook",
+      "description": "Deleting a webhook will remove all related data."
     }
   },
   "dashboard-card": {
     "total-feedback": {
-      "title": "Total number of feedbacks",
-      "description": "Number of feedback created in a specific period of time. ({{targetDate}})"
+      "title": "Total Feedback",
+      "description": "Total feedback received in a specific period ({{targetDate}})."
     },
     "total-issue": {
-      "title": "Total number of issues",
-      "description": "Number of issues created in a specific period of time. ({{targetDate}})"
+      "title": "Total Issues",
+      "description": "Total issues registered in a specific period ({{targetDate}})."
     },
     "issue-ratio": {
-      "title": "Register Issue rate",
-      "description": "Register Issue rate of feedback created in a specific period of time. ({{targetDate}})"
+      "title": "Issue Registration Rate",
+      "description": "Percentage of feedback with registered issues ({{targetDate}})."
     },
     "today-feedback": {
-      "title": "Number of today's feedback",
-      "description": "Number of feedback created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+      "title": "Today's Feedback",
+      "description": "Feedback received today ({{targetDate}}).\nThe increased/decreased rate is compared to the following period. ({{compareDate}})"
     },
     "yesterday-feedback": {
-      "title": "Number of yesterday's feedback",
-      "description": "Number of feedback created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+      "title": "Yesterday's Feedback",
+      "description": "Feedback received yesterday ({{targetDate}}).\nThe increased/decreased rate is compared to the following period. ({{compareDate}})"
     },
     "n-days-feedback": {
-      "title": "Number of feedbacks in the last {{n}} days",
-      "description": "Number of feedback created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+      "title": "Last {{n}} Days' Feedback",
+      "description": "Feedback received in the last {{n}} days ({{targetDate}}).\nThe increased/decreased rate is compared to the following period. ({{compareDate}})"
     },
     "today-issue": {
-      "title": "Number of today's issue",
-      "description": "Number of issue created today. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+      "title": "Today's Issues",
+      "description": "Issues reported today ({{targetDate}}).\nThe increased/decreased rate is compared to the following period. ({{compareDate}})"
     },
     "yesterday-issue": {
-      "title": "Number of yesterday's issue",
-      "description": "Number of issue created yesterday. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+      "title": "Yesterday's Issues",
+      "description": "Issues reported yesterday ({{targetDate}}).\nThe increased/decreased rate is compared to the following period. ({{compareDate}})"
     },
     "n-days-issue": {
-      "title": "Number of issue in the last {{n}} days",
-      "description": "Number of issue created in the last {{n}} days. ({{targetDate}})\nThe increase/decrease rate is compared to the following period. ({{compareDate}})"
+      "title": "Last {{n}} Days' Issues",
+      "description": "Issues reported in the last {{n}} days ({{targetDate}}).\nThe increased/decreased rate is compared to the following period. ({{compareDate}})"
     }
   },
   "chart": {
     "feedback-trend": {
-      "title": "Feedback Trend",
-      "description": "Display the trend of feedback creation over a specific period of time."
+      "title": "Feedback Trends",
+      "description": "Shows the trend of feedback received over a specific time period."
     },
     "issue-trend": {
-      "title": "Issue Trend",
-      "description": "Display the trend of Issue creation over a specific period of time."
+      "title": "Issue Trends",
+      "description": "Shows the trend of issues reported over a specific time period."
     },
     "issue-status-count": {
-      "title": "Issue Status",
-      "description": "Display the current status of the entire issue."
+      "title": "Issue Status Overview",
+      "description": "Shows the current status distribution of all issues."
     },
     "issue-rank": {
-      "title": "Top Issue",
-      "description": "Display the top issues with a large number of count."
+      "title": "Top Issues",
+      "description": "Lists the most reported issues."
     },
     "issue-comparison": {
-      "title": "Issue comparison",
-      "description": "Compare and display the trend of feedback creation for selected issues."
+      "title": "Issue Comparison",
+      "description": "Compares the trend of feedback for selected issues."
     }
   },
   "popover": {
     "select-issue": {
       "search-issue": "Search Issue",
-      "max-issue-count": "You can choose up to five issues.",
+      "max-issue-count": "Up to five issues can be selected.",
       "issue-list": "Issue List"
     },
     "select-issue-status": {
@@ -381,7 +409,11 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Number of feedbacks registered in the issue."
+    "issue-feedback-count": "Count of feedback associated with this issue.",
+    "webhook-feedback-creation": "Triggered when feedback is collected for a specific channel.",
+    "webhook-issue-addition": "Triggered when an issue is added to feedback in a specific channel.",
+    "webhook-issue-creation": "Triggered when an issue is created, regardless of the channel.",
+    "webhook-issue-status-change": "Triggered when the status of an issue changes, regardless of the channel."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant Information",
@@ -394,6 +426,7 @@
     "role-mgmt": "Role Management",
     "api-key-mgmt": "API Key Management",
     "issue-tracker-mgmt": "Issue Tracker Management",
+    "webhook-integration": "Webhook Integration",
     "delete-project": "Delete Project"
   },
   "channel-setting-menu": {
@@ -408,21 +441,22 @@
     }
   },
   "help-card": {
-    "project-info": "You can collect feedback on a project-by-project basis. Please register your Project information based on the product you want to manage your feedback on. (ex. Product Name)",
-    "role": "You can set permissions to access and use the Project.",
-    "member": "You can register or manage members to participate in the Project.",
-    "api-key": "Manage API Key information in the feedback collection API. If you collect feedback using API, please generate Key information.",
-    "issue-tracker": "UserFeedback feedback and Issue Tracking System can be linked and managed. Please enter your Issue Tracking System information.",
-    "channel-info": "You can define the feedback fields that you want to collect through the Channel. Please register the Channel information considering the feedback path and personality. (ex. VOC, APP Reivew)",
-    "field": "Define the feedback fields that you want to collect with User Feedback according to the registered channel. Try pre-setting the fields you want to collect through the API or the fields you want to register directly from the ADMIN.",
-    "image-setting": "When collecting feedback on the Image format, you can work with Image Storage and set up a whitelist for the Image URL domain.\nSee Image <icon></icon> <docs>Docs</docs>.",
-    "field-preview": "You can preview what the fields you set up in Field Management will look like. Previews are not real because they are shown as arbitrary data."
+    "project-info": "Collect feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
+    "role": "Set permissions for accessing and using the project.",
+    "member": "Register or manage members participating in the project.",
+    "api-key": "Manage API key information for the feedback collection API. Generate an API key if you want to collect feedback via API.",
+    "issue-tracker": "Link and manage User Feedback with your Issue Tracking System. Please enter your Issue Tracking System details.",
+    "channel-info": "Define the feedback fields to collect through the channel. Please register channel information considering the feedback path and characteristics (e.g., VOC, App Review).",
+    "field": "Define the feedback fields to be collected via User Feedback for each registered channel. Pre-configure fields to be collected through the API or those to be directly registered in the ADMIN.",
+    "image-setting": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Documentation</docs> for details.",
+    "field-preview": "Preview the appearance of fields configured in Field Management. Previews show sample data for illustration purposes.",
+    "webhook": "Utilize webhooks to respond to a variety of events occurring within User Feedback. For more details, refer to the Webhook <icon></icon> <docs>Documentation</docs>."
   },
   "hint": {
     "required": "Required",
-    "max-length": "Please enter {{length}} characters or less.",
-    "name-already-exists": "{{name}} already exists.",
-    "invalid-domain": "Invalid domain format.",
+    "max-length": "Please enter no more than {{length}} characters.",
+    "name-already-exists": "The name '{{name}}' is already in use.",
+    "invalid-domain": "Please use a valid domain format.",
     "image-format": "The format for entering the Image URL."
   },
   "title-box": {
