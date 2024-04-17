@@ -71,7 +71,7 @@ async function bootstrap() {
       `,
     )
     .setVersion('1.0.0')
-    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' })
+    .addApiKey({ type: 'apiKey', name: 'x-api-key', in: 'header' }, 'apiKey')
     .build();
   const document = SwaggerModule.createDocument(app, documentConfig, {
     include: [APIModule],

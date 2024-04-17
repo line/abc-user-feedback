@@ -24,7 +24,13 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBody,
+  ApiOkResponse,
+  ApiParam,
+  ApiSecurity,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '../admin/auth/guards';
 import { CreateIssueDto } from '../admin/project/issue/dtos';
@@ -43,6 +49,7 @@ import { IssueService } from '../admin/project/issue/issue.service';
 
 @ApiTags('issues')
 @Controller('/projects/:projectId/issues')
+@ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class IssueController {
   constructor(private readonly issueService: IssueService) {}

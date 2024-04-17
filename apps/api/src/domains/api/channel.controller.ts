@@ -22,13 +22,14 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiParam, ApiSecurity, ApiTags } from '@nestjs/swagger';
 
 import { ApiKeyAuthGuard } from '@/domains/admin/auth/guards';
 import { ChannelService } from '../admin/channel/channel/channel.service';
 
 @ApiTags('channels')
 @Controller('/projects/:projectId/channels/:channelId')
+@ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}

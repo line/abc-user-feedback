@@ -24,7 +24,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { CreateRoleRequestDto, UpdateRoleRequestDto } from './dtos/requests';
 import { GetAllRoleResponseDto } from './dtos/responses';
@@ -33,6 +38,7 @@ import { RequirePermission } from './require-permission.decorator';
 import { RoleService } from './role.service';
 
 @ApiTags('roles')
+@ApiBearerAuth()
 @Controller('/admin/projects/:projectId/roles')
 export class RoleController {
   constructor(private readonly roleService: RoleService) {}

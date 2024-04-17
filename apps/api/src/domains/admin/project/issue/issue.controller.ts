@@ -23,7 +23,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
@@ -48,6 +53,7 @@ export class IssueController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.issue_create)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: CreateIssueResponseDto })
   @Post()
   async create(
@@ -72,6 +78,7 @@ export class IssueController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.issue_read)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
   @Post('search')
   async findAllByProjectId(
@@ -88,6 +95,7 @@ export class IssueController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.issue_update)
+  @ApiBearerAuth()
   @Put(':issueId')
   async update(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -99,12 +107,14 @@ export class IssueController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.issue_delete)
+  @ApiBearerAuth()
   @Delete(':issueId')
   async delete(@Param('issueId', ParseIntPipe) issueId: number) {
     await this.issueService.deleteById(issueId);
   }
 
   @RequirePermission(PermissionEnum.issue_delete)
+  @ApiBearerAuth()
   @Delete('')
   async deleteMany(
     @Param('projectId', ParseIntPipe) _: number,

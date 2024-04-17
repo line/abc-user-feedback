@@ -25,7 +25,12 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { JwtAuthGuard } from '@/domains/admin/auth/guards';
 import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
@@ -60,6 +65,7 @@ export class ProjectController {
   ) {}
 
   @SuperUser()
+  @ApiBearerAuth()
   @ApiCreatedResponse({ type: CreateProjectResponseDto })
   @Post()
   async create(@Body() body: CreateProjectRequestDto) {
@@ -69,6 +75,7 @@ export class ProjectController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: FindProjectsResponseDto })
   @Get()
   async findAll(
@@ -86,12 +93,14 @@ export class ProjectController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('/name-check')
   async checkName(@Query('name') name: string) {
     return this.projectService.checkName(name);
   }
 
   @RequirePermission(PermissionEnum.project_read)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: FindProjectByIdResponseDto })
   @Get('/:projectId')
   async findOne(@Param('projectId', ParseIntPipe) projectId: number) {
@@ -117,6 +126,7 @@ export class ProjectController {
   }
 
   @RequirePermission(PermissionEnum.project_update)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: UpdateProjectResponseDto })
   @Put('/:projectId')
   async updateOne(
@@ -129,6 +139,7 @@ export class ProjectController {
   }
 
   @RequirePermission(PermissionEnum.project_delete)
+  @ApiBearerAuth()
   @Delete('/:projectId')
   async delete(@Param('projectId', ParseIntPipe) projectId: number) {
     await this.projectService.deleteById(projectId);
