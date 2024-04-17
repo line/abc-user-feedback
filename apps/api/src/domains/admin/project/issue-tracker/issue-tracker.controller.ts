@@ -22,7 +22,12 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
@@ -39,6 +44,7 @@ import { IssueTrackerService } from './issue-tracker.service';
 
 @ApiTags('issue-tracker')
 @Controller('/admin/projects/:projectId/issue-tracker')
+@ApiBearerAuth()
 export class IssueTrackerController {
   constructor(private readonly issueTrackerService: IssueTrackerService) {}
 

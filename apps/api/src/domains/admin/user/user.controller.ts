@@ -28,7 +28,12 @@ import {
   UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
-import { ApiBody, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { PaginationRequestDto } from '@/common/dtos';
 import { JwtAuthGuard } from '../auth/guards';
@@ -52,6 +57,7 @@ import { UserService } from './user.service';
 
 @ApiTags('users')
 @Controller('/admin/users')
+@ApiBearerAuth()
 export class UserController {
   constructor(
     private readonly userService: UserService,

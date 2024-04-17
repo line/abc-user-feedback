@@ -22,7 +22,12 @@ import {
   ParseIntPipe,
   Post,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
@@ -36,6 +41,7 @@ import {
 
 @ApiTags('api-keys')
 @Controller('/admin/projects/:projectId/api-keys')
+@ApiBearerAuth()
 export class ApiKeyController {
   constructor(private readonly apiKeyService: ApiKeyService) {}
 

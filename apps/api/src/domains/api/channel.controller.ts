@@ -35,6 +35,7 @@ import { ChannelService } from '../admin/channel/channel/channel.service';
 
 @ApiTags('channels')
 @Controller('/projects/:projectId/channels/:channelId')
+@ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}

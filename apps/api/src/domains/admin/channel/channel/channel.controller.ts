@@ -26,6 +26,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiParam,
@@ -53,6 +54,7 @@ import {
 
 @ApiTags('channel')
 @Controller('/admin/projects/:projectId/channels')
+@ApiBearerAuth()
 export class ChannelController {
   constructor(private readonly channelService: ChannelService) {}
 

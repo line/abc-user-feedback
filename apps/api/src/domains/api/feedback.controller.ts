@@ -32,6 +32,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import filetypemime from 'magic-bytes.js';
@@ -50,6 +51,7 @@ import { FeedbackService } from '../admin/feedback/feedback.service';
 
 @ApiTags('feedbacks')
 @Controller('/projects/:projectId/channels/:channelId')
+@ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class FeedbackController {
   constructor(
