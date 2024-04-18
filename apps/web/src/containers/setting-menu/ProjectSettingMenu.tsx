@@ -51,7 +51,6 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           onClick={onClickSettingMenu('PROJECT_INFO')}
           active={settingMenu === 'PROJECT_INFO'}
           name={t('project-setting-menu.project-info')}
-          disabled={!perms.includes('project_read')}
         />
         <SettingMenuItem
           iconName="ProfileCircleFill"

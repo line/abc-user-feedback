@@ -99,7 +99,7 @@ export class ProjectController {
     return this.projectService.checkName(name);
   }
 
-  @RequirePermission(PermissionEnum.project_read)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: FindProjectByIdResponseDto })
   @Get('/:projectId')

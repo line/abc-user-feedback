@@ -61,7 +61,7 @@ export default () => {
       .click();
     await page.locator('li').filter({ hasText: 'Edit Role' }).click();
     await page
-      .getByRole('row', { name: 'Read Feedback' })
+      .getByRole('row', { name: 'Edit Feedback' })
       .getByRole('checkbox')
       .nth(3)
       .check();
@@ -87,7 +87,7 @@ export default () => {
     await expect(page.getByText('Test Role')).toBeVisible();
     await expect(
       page
-        .getByRole('row', { name: 'Read Feedback' })
+        .getByRole('row', { name: 'Edit Feedback' })
         .getByRole('checkbox')
         .nth(3),
     ).toBeChecked();

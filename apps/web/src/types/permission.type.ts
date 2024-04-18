@@ -15,7 +15,6 @@
  */
 
 export const FeedbackPermissionList = [
-  'feedback_read',
   'feedback_download_read',
   'feedback_update',
   'feedback_delete',
@@ -25,7 +24,6 @@ export const FeedbackPermissionList = [
 ] as const;
 
 export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
-  feedback_read: 'Read Feedback',
   feedback_download_read: 'Download Feedback',
   feedback_update: 'Edit Feedback',
   feedback_delete: 'Delete Feedback',
@@ -34,15 +32,13 @@ export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
   issue_delete: 'Delete Issue',
 };
 
-export const IssuePermissionList = ['issue_read', 'issue_update'] as const;
+export const IssuePermissionList = ['issue_update'] as const;
 
 export const IssuePermissionText: Record<IssuePermissionType, string> = {
-  issue_read: 'Read Issue',
   issue_update: 'Edit Issue',
 };
 
 export const ProjectPermissionList = [
-  'project_read',
   'project_update',
   'project_delete',
   'project_member_read',
@@ -66,7 +62,6 @@ export const ProjectPermissionList = [
 ] as const;
 
 export const ProjectInfoPermissionList = [
-  'project_read',
   'project_update',
   'project_delete',
 ] as const;
@@ -105,7 +100,6 @@ export const ProjectWebhookPermissionList = [
 ] as const;
 
 export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
-  project_read: 'Read Project Information',
   project_update: 'Edit Project Information',
   project_delete: 'Delete Project',
   project_member_read: 'Read Project Member',
@@ -129,7 +123,6 @@ export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
 };
 
 export const ChannelInfoPermissionList = [
-  'channel_read',
   'channel_update',
   'channel_create',
   'channel_delete',
@@ -146,7 +139,6 @@ export const ChannelImageSettingPermissionList = [
 ] as const;
 
 export const ChannelPermissionList = [
-  'channel_read',
   'channel_create',
   'channel_update',
   'channel_delete',
@@ -157,7 +149,6 @@ export const ChannelPermissionList = [
 ] as const;
 
 export const ChannelPermissionText: Record<ChannelPermissionType, string> = {
-  channel_read: 'Read Channel Info',
   channel_update: 'Edit Channel Info',
   channel_field_read: 'Read Channel Field',
   channel_field_update: 'Edit Channel Field',

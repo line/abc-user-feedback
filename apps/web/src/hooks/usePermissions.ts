@@ -44,7 +44,7 @@ const usePermissions = (inputProjectId?: number | null) => {
     if (!data) return;
     const role = data.roles.find((v) => v.project.id === projectId);
     if (!role) setPermissions([]);
-    else setPermissions(role.permissions);
+    else setPermissions(role.permissions as PermissionType[]);
   }, [data, projectId]);
 
   return permissions;

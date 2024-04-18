@@ -474,7 +474,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                       </td>
                     ))}
                   </TableRow>
-                  {perms.includes('feedback_read') && row.getIsExpanded() && (
+                  {row.getIsExpanded() && (
                     <tr>
                       <td
                         colSpan={row.getVisibleCells().length}

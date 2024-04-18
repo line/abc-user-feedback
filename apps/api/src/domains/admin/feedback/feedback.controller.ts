@@ -34,7 +34,7 @@ import {
 import { FastifyReply } from 'fastify';
 import { DateTime } from 'luxon';
 
-import { ApiKeyAuthGuard } from '@/domains/admin/auth/guards';
+import { ApiKeyAuthGuard, JwtAuthGuard } from '@/domains/admin/auth/guards';
 import { ChannelService } from '../channel/channel/channel.service';
 import { HistoryActionEnum } from '../history/history-action.enum';
 import { EntityNameEnum } from '../history/history-entity.enum';
@@ -80,7 +80,7 @@ export class FeedbackController {
     return { id };
   }
 
-  @RequirePermission(PermissionEnum.feedback_read)
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiParam({ name: 'projectId', type: Number })
   @ApiOkResponse({ type: FindFeedbacksByChannelIdResponseDto })
