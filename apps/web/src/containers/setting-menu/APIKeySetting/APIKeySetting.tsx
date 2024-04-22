@@ -26,7 +26,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
+import { HelpCardDocs, SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 import type { ApiKeyType } from '@/types/api-key.type';
@@ -173,7 +173,7 @@ const APIKeySetting: React.FC<IProps> = ({ projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          {t('help-card.api-key')}
+          <HelpCardDocs i18nKey="help-card.api-key" />
         </p>
         <div className="relative h-full w-[90px]">
           <Image

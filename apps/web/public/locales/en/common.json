@@ -444,7 +444,7 @@
     "project-info": "Collect feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
     "role": "Set permissions for accessing and using the project.",
     "member": "Register or manage members participating in the project.",
-    "api-key": "Manage API key information for the feedback collection API. Generate an API key if you want to collect feedback via API.",
+    "api-key": "It manages the User Feedback API Key information. If you want to use the API, create and use the Key. (<icon></icon> <docs>Docs</docs>)",
     "issue-tracker": "Link and manage User Feedback with your Issue Tracking System. Please enter your Issue Tracking System details.",
     "channel-info": "Define the feedback fields to collect through the channel. Please register channel information considering the feedback path and characteristics (e.g., VOC, App Review).",
     "field": "Define the feedback fields to be collected via User Feedback for each registered channel. Pre-configure fields to be collected through the API or those to be directly registered in the ADMIN.",

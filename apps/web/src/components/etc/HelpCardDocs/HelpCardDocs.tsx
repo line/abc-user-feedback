@@ -13,26 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import { Trans } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-interface IProps {
-  i18nKey: 'help-card.image-setting' | 'help-card.webhook';
-}
+import { env } from '@/env.mjs';
 
+type I18nKey =
+  | 'help-card.image-setting'
+  | 'help-card.webhook'
+  | 'help-card.api-key';
+interface IProps {
+  i18nKey: I18nKey;
+}
+const urlMap: Record<I18nKey, string> = {
+  'help-card.api-key': `${env.NEXT_PUBLIC_API_BASE_URL}/docs/redoc`,
+  'help-card.image-setting':
+    'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration',
+  'help-card.webhook':
+    'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#webhook-feature',
+};
 const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
-  const url = useMemo(() => {
-    switch (i18nKey) {
-      case 'help-card.image-setting':
-        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#image-storage-integration';
-      case 'help-card.webhook':
-        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md#webhook-feature';
-      default:
-        return 'https://github.com/line/abc-user-feedback/blob/main/GUIDE.md';
-    }
-  }, [i18nKey]);
   return (
     <Trans
       i18nKey={i18nKey}
@@ -42,13 +43,13 @@ const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
             name="ExpandPopup"
             className="text-blue-primary cursor-pointer"
             size={12}
-            onClick={() => window.open(url, '_blank')}
+            onClick={() => window.open(urlMap[i18nKey], '_blank')}
           />
         ),
         docs: (
           <span
             className="text-blue-primary cursor-pointer"
-            onClick={() => window.open(url, '_blank')}
+            onClick={() => window.open(urlMap[i18nKey], '_blank')}
           />
         ),
       }}
