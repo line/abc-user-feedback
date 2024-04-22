@@ -22,7 +22,7 @@
     "root": true
   },
   "dependencies": {
-    "@next/eslint-plugin-next": "^14.1.4",
+    "@next/eslint-plugin-next": "^14.2.2",
     "@typescript-eslint/eslint-plugin": "^7.4.0",
     "@typescript-eslint/parser": "^7.4.0",
     "eslint-config-prettier": "^9.1.0",
