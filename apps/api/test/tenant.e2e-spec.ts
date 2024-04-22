@@ -23,12 +23,12 @@ import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
-import { AuthService } from '@/domains/auth/auth.service';
+import { AuthService } from '@/domains/admin/auth/auth.service';
 import {
   SetupTenantRequestDto,
   UpdateTenantRequestDto,
-} from '@/domains/tenant/dtos/requests';
-import { TenantEntity } from '@/domains/tenant/tenant.entity';
+} from '@/domains/admin/tenant/dtos/requests';
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
 

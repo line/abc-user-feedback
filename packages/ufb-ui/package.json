@@ -6,7 +6,7 @@
   "types": "./src/index.ts",
   "scripts": {
     "clean": "rimraf .turbo node_modules",
-    "format": "prettier --check \"src/**/*.ts\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
@@ -19,18 +19,18 @@
     "root": true
   },
   "dependencies": {
-    "@floating-ui/react": "^0.26.10",
+    "@floating-ui/react": "^0.26.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {
-    "@swc/core": "^1.4.11",
+    "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.36",
     "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.2.2",
-    "@types/react": "^18.2.78",
-    "@types/react-dom": "^18.2.23",
+    "@testing-library/react": "^14.3.1",
+    "@types/react": "^18.2.79",
+    "@types/react-dom": "^18.2.25",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tailwind": "workspace:*",

@@ -24,8 +24,8 @@ import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters';
-import { CreateProjectRequestDto } from '@/domains/project/project/dtos/requests';
-import { ProjectEntity } from '@/domains/project/project/project.entity';
+import { CreateProjectRequestDto } from '@/domains/admin/project/project/dtos/requests';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {

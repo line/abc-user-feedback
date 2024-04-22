@@ -23,10 +23,10 @@ import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
-import { AuthService } from '@/domains/auth/auth.service';
-import { UpdateRoleRequestDto } from '@/domains/project/role/dtos/requests';
-import { PermissionEnum } from '@/domains/project/role/permission.enum';
-import { RoleEntity } from '@/domains/project/role/role.entity';
+import { AuthService } from '@/domains/admin/auth/auth.service';
+import { UpdateRoleRequestDto } from '@/domains/admin/project/role/dtos/requests';
+import { PermissionEnum } from '@/domains/admin/project/role/permission.enum';
+import { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import {
   clearEntities,
   getRandomEnumValues,
