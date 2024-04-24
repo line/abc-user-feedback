@@ -19,19 +19,19 @@ import { ValidationPipe } from '@nestjs/common';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Client } from '@opensearch-project/opensearch/.';
+import { Client } from '@opensearch-project/opensearch';
 import request from 'supertest';
 import type { Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
 import { FieldFormatEnum } from '@/common/enums';
 import { HttpExceptionFilter } from '@/common/filters';
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
-import { ChannelService } from '@/domains/channel/channel/channel.service';
-import { FieldEntity } from '@/domains/channel/field/field.entity';
-import { FeedbackService } from '@/domains/feedback/feedback.service';
-import { ProjectEntity } from '@/domains/project/project/project.entity';
-import { ProjectService } from '@/domains/project/project/project.service';
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import { ChannelService } from '@/domains/admin/channel/channel/channel.service';
+import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { ProjectService } from '@/domains/admin/project/project/project.service';
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
 import { clearEntities } from '@/test-utils/util-functions';
 
@@ -82,6 +82,7 @@ describe('AppController (e2e)', () => {
     const { id: projectId } = await projectService.create({
       name: faker.random.word(),
       description: faker.lorem.lines(1),
+      timezone: null,
     });
 
     const { id: channelId } = await channelService.create({
@@ -91,6 +92,7 @@ describe('AppController (e2e)', () => {
       fields: Array.from({
         length: faker.number.int({ min: 1, max: 10 }),
       }).map(createFieldDto),
+      imageConfig: null,
     });
 
     const channel = await channelService.findById({ channelId });
@@ -182,9 +184,9 @@ describe('AppController (e2e)', () => {
         });
 
         expect(body._source[targetField.id]).toEqual(
-          targetField.format === FieldFormatEnum.select
-            ? targetField.options.find((v) => v.name === newValue).id
-            : newValue,
+          targetField.format === FieldFormatEnum.select ?
+            targetField.options.find((v) => v.name === newValue).id
+          : newValue,
         );
       });
   });
@@ -254,9 +256,9 @@ const toApi = (data: Record<string, any>, fields: FieldEntity[]) => {
     const field = fields.find((v) => v.name === key);
     return Object.assign(prev, {
       [field.id]:
-        field.format === FieldFormatEnum.select
-          ? field.options?.find((v) => v.name === value).id
-          : value,
+        field.format === FieldFormatEnum.select ?
+          field.options?.find((v) => v.name === value).id
+        : value,
     });
   }, {});
 };

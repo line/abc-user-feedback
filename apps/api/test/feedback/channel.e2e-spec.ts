@@ -19,7 +19,7 @@ import { ValidationPipe } from '@nestjs/common';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
-import { Client } from '@opensearch-project/opensearch/.';
+import { Client } from '@opensearch-project/opensearch';
 import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
@@ -30,16 +30,16 @@ import {
   FieldTypeEnum,
 } from '@/common/enums';
 import { HttpExceptionFilter } from '@/common/filters';
-import { ChannelEntity } from '@/domains/channel/channel/channel.entity';
-import { ChannelService } from '@/domains/channel/channel/channel.service';
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import { ChannelService } from '@/domains/admin/channel/channel/channel.service';
 import {
   CreateChannelRequestDto,
   UpdateChannelRequestDto,
-} from '@/domains/channel/channel/dtos/requests';
-import { FieldEntity } from '@/domains/channel/field/field.entity';
-import { FIELD_TYPES_TO_MAPPING_TYPES } from '@/domains/channel/field/field.mysql.service';
-import { OptionEntity } from '@/domains/channel/option/option.entity';
-import { ProjectEntity } from '@/domains/project/project/project.entity';
+} from '@/domains/admin/channel/channel/dtos/requests';
+import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import { FIELD_TYPES_TO_MAPPING_TYPES } from '@/domains/admin/channel/field/field.service';
+import { OptionEntity } from '@/domains/admin/channel/option/option.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { createFieldDto, optionSort } from '@/test-utils/fixtures';
 import {
   clearEntities,
@@ -213,6 +213,7 @@ describe('AppController (e2e)', () => {
       name: faker.string.sample(),
       description: faker.string.sample(),
       fields: Array.from({ length: fieldCount }).map((_) => createFieldDto({})),
+      imageConfig: null,
     });
 
     const originalFields = await fieldRepo.find({
@@ -293,7 +294,7 @@ const fieldEntityToDto2 = (field: FieldEntity) => ({
   status: field.status,
   description: field.description,
   options:
-    field.format === FieldFormatEnum.select
-      ? field.options.map(({ name }) => ({ name })).sort(optionSort)
-      : undefined,
+    field.format === FieldFormatEnum.select ?
+      field.options.map(({ name }) => ({ name })).sort(optionSort)
+    : undefined,
 });

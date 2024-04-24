@@ -7,7 +7,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "clean": "rimraf dist .turbo node_modules",
-    "format": "prettier --check \"src/**/*.ts\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "build": "tsup src/index.ts --format cjs,esm --dts"
@@ -28,6 +28,6 @@
     "react": "^18.2.0",
     "rimraf": "^5.0.5",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }

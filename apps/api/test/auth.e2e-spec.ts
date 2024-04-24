@@ -30,12 +30,15 @@ import {
   EmailVerificationCodeRequestDto,
   EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
-} from '@/domains/auth/dtos/requests';
-import type { RoleEntity } from '@/domains/project/role/role.entity';
-import { TenantEntity } from '@/domains/tenant/tenant.entity';
-import { UserStateEnum, UserTypeEnum } from '@/domains/user/entities/enums';
-import { UserEntity } from '@/domains/user/entities/user.entity';
-import { UserPasswordService } from '@/domains/user/user-password.service';
+} from '@/domains/admin/auth/dtos/requests';
+import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import {
+  UserStateEnum,
+  UserTypeEnum,
+} from '@/domains/admin/user/entities/enums';
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { UserPasswordService } from '@/domains/admin/user/user-password.service';
 import { CodeTypeEnum } from '@/shared/code/code-type.enum';
 import { CodeEntity } from '@/shared/code/code.entity';
 import { CodeService } from '@/shared/code/code.service';
@@ -259,7 +262,7 @@ describe('AppController (e2e)', () => {
       await codeService.setCode({
         type: CodeTypeEnum.USER_INVITATION,
         key: email,
-        data: { roleId: 1, userType: UserTypeEnum.GENERAL },
+        data: { roleId: 1, userType: UserTypeEnum.GENERAL, invitedBy: null },
       });
 
     beforeEach(() => {

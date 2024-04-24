@@ -38,8 +38,8 @@
     "@ufb/prettier-config": "workspace:*",
     "husky": "^8.0.3",
     "prettier": "^3.2.5",
-    "turbo": "^1.13.0",
-    "typescript": "^5.4.3"
+    "turbo": "^1.13.2",
+    "typescript": "^5.4.5"
   },
   "packageManager": "pnpm@8.15.5",
   "engines": {

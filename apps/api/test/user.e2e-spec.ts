@@ -24,10 +24,10 @@ import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
 import { AppModule } from '@/app.module';
-import { AuthService } from '@/domains/auth/auth.service';
-import { RoleEntity } from '@/domains/project/role/role.entity';
-import { UserStateEnum } from '@/domains/user/entities/enums';
-import { UserEntity } from '@/domains/user/entities/user.entity';
+import { AuthService } from '@/domains/admin/auth/auth.service';
+import { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import { UserStateEnum } from '@/domains/admin/user/entities/enums';
+import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import {
   clearEntities,
   getRandomEnumValue,

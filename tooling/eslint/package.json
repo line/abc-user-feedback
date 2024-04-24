@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "clean": "rimraf .turbo node_modules",
-    "format": "prettier --check \"**/*.{js,json}\"",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
@@ -22,9 +22,9 @@
     "root": true
   },
   "dependencies": {
-    "@next/eslint-plugin-next": "^14.1.4",
-    "@typescript-eslint/eslint-plugin": "^7.4.0",
-    "@typescript-eslint/parser": "^7.4.0",
+    "@next/eslint-plugin-next": "^14.2.2",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-turbo": "^1.13.2",
     "eslint-plugin-header": "^3.1.1",
@@ -38,6 +38,6 @@
     "@ufb/tsconfig": "workspace:^",
     "eslint": "^8.57.0",
     "rimraf": "^5.0.5",
-    "typescript": "^5.4.3"
+    "typescript": "^5.4.5"
   }
 }
