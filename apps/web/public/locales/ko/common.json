@@ -432,7 +432,7 @@
     "project-info": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
     "role": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
     "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
-    "api-key": "피드백 수집 API의 API Key 정보를 관리합니다. API를 활용해 피드백을 수집한다면 Key 정보를 생성해 주세요.",
+    "api-key": "User Feedback API Key 정보를 관리합니다. API를 활용하려면 Key를 생성해서 이용해 주세요. (<icon></icon> <docs>Docs</docs>)",
     "issue-tracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
     "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
     "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
