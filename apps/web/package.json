@@ -49,7 +49,7 @@
     "countries-and-timezones": "^3.6.0",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.10",
-    "framer-motion": "^10.18.0",
+    "framer-motion": "^11.1.7",
     "i18next": "^23.11.2",
     "immer": "^10.0.4",
     "iron-session": "^6.3.1",
