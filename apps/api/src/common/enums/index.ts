@@ -14,7 +14,7 @@
  * under the License.
  */
 export { FieldFormatEnum, isSelectFieldFormat } from './field-format.enum';
-export { FieldTypeEnum } from './field-type.enum';
+export { FieldPropertyEnum } from './field-property.enum';
 export { FieldStatusEnum } from './field-status.enum';
 export { IssueStatusEnum } from './issue-status.enum';
 export { SortMethodEnum } from './sort-method.enum';

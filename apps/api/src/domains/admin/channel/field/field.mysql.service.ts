@@ -20,8 +20,8 @@ import { Transactional } from 'typeorm-transactional';
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
   isSelectFieldFormat,
 } from '@/common/enums';
 import { validateUnique } from '@/utils/validate-unique';
@@ -95,7 +95,7 @@ export class FieldMySQLService {
         name: 'ID',
         key: 'id',
         format: FieldFormatEnum.number,
-        type: FieldTypeEnum.DEFAULT,
+        property: FieldPropertyEnum.READ_ONLY,
         status: FieldStatusEnum.ACTIVE,
         description: '',
       },
@@ -103,7 +103,7 @@ export class FieldMySQLService {
         name: 'Created',
         key: 'createdAt',
         format: FieldFormatEnum.date,
-        type: FieldTypeEnum.DEFAULT,
+        property: FieldPropertyEnum.READ_ONLY,
         status: FieldStatusEnum.ACTIVE,
         description: '',
       },
@@ -111,7 +111,7 @@ export class FieldMySQLService {
         name: 'Updated',
         key: 'updatedAt',
         format: FieldFormatEnum.date,
-        type: FieldTypeEnum.DEFAULT,
+        property: FieldPropertyEnum.READ_ONLY,
         status: FieldStatusEnum.ACTIVE,
         description: '',
       },
@@ -119,7 +119,7 @@ export class FieldMySQLService {
         name: 'Issue',
         key: 'issues',
         format: FieldFormatEnum.multiSelect,
-        type: FieldTypeEnum.DEFAULT,
+        property: FieldPropertyEnum.EDITABLE,
         status: FieldStatusEnum.ACTIVE,
         description: '',
       },

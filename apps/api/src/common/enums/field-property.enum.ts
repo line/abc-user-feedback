@@ -13,8 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export enum FieldTypeEnum {
-  DEFAULT = 'DEFAULT',
-  ADMIN = 'ADMIN',
-  API = 'API',
+export enum FieldPropertyEnum {
+  READ_ONLY = 'READ_ONLY',
+  EDITABLE = 'EDITABLE',
 }

@@ -28,8 +28,8 @@ import {
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '@/common/enums';
 import { IsNullable } from '@/domains/admin/user/decorators';
 import { ImageConfigRequestDto } from './image-config-request.dto';
@@ -69,9 +69,9 @@ export class CreateChannelRequestFieldDto {
   @IsEnum(FieldFormatEnum)
   format: FieldFormatEnum;
 
-  @ApiProperty({ enum: FieldTypeEnum, enumName: 'FieldTypeEnum' })
-  @IsEnum(FieldTypeEnum)
-  type: FieldTypeEnum;
+  @ApiProperty({ enum: FieldPropertyEnum, enumName: 'FieldPropertyEnum' })
+  @IsEnum(FieldPropertyEnum)
+  property: FieldPropertyEnum;
 
   @ApiProperty({ enum: FieldStatusEnum, enumName: 'FieldStatusEnum' })
   @IsEnum(FieldStatusEnum)

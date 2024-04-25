@@ -337,7 +337,7 @@ export class FeedbackController {
   @ApiOperation({
     summary: 'Update Feedback',
     description: `Updates an existing feedback with new information.
-    Only ADMIN fields can be updated.`,
+    Only Editable fields can be updated.`,
   })
   @ApiParam({
     name: 'projectId',
