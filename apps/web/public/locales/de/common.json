@@ -1,7 +1,7 @@
 {
   "tenant": {
     "create": {
-      "title": "Mandanten Einstellungen",
+      "title": "Mandanten-Einstellungen",
       "site-name": "Seitenname"
     }
   },
@@ -39,18 +39,18 @@
   },
   "main": {
     "index": {
-      "total-project": "Gesamtprojekte",
-      "total-channel": "Gesamtkanäle",
-      "total-feedback": "Gesamtrückmeldungen",
+      "total-project": "Projekte",
+      "total-channel": "Kanäle",
+      "total-feedback": "Rückmeldungen",
       "create-project": "Projekt erstellen",
       "no-project": "Keine registrierten Projekte."
     },
     "profile": {
       "title": "Profil",
-      "profile-info": "Profilinformationen",
+      "profile-info": "Profil-Informationen",
       "change-password": "Passwort ändern",
       "label": {
-        "user-type": "Benutzertyp",
+        "user-type": "Typ",
         "new-password": "Neues Passwort",
         "confirm-new-password": "Neues Passwort bestätigen"
       },
@@ -212,7 +212,7 @@
     },
     "create-project": {
       "title": "Projekt erstellen",
-      "complete-title": "Projekterstellung abgeschlossen",
+      "complete-title": "Projekt erstellt",
       "error-member": "Benutzerinformationen existieren nicht.",
       "continue-channel-creation": "Ein Kanal muss erstellt werden, bevor das User Feedback genutzt werden kann.\nMöchten Sie mit der Erstellung eines Kanals fortfahren?",
       "guide": {
@@ -223,7 +223,7 @@
     },
     "create-channel": {
       "title": "Kanal erstellen",
-      "complete-title": "Kanalerstellung abgeschlossen",
+      "complete-title": "Kanal erstellt",
       "finish-channel-creation": "Einrichtung ist abgeschlossen.\nBeginnen Sie mit der Nutzung des User Feedbacks!",
       "guide": {
         "invalid-channel": "Ungültige Kanalinformationen erkannt."
@@ -280,7 +280,7 @@
       "onReview": "In Überprüfung",
       "inProgress": "In Bearbeitung",
       "resolved": "Gelöst",
-      "pending": "Anstehend"
+      "pending": "Ausstehend"
     },
     "date": {
       "today": "Heute",
@@ -416,23 +416,23 @@
     "webhook-issue-status-change": "Wird ausgelöst, wenn sich der Status eines Problems ändert, unabhängig vom Kanal."
   },
   "tenant-setting-menu": {
-    "tenant-info": "Mandanteninformationen",
-    "sign-up-mgmt": "Anmeldung & Registrierungsverwaltung",
-    "user-mgmt": "Benutzerverwaltung"
+    "tenant-info": "Mandanten-Informationen",
+    "sign-up-mgmt": "Anmeldungs- und Registrierungsverwaltung",
+    "user-mgmt": "Benutzer-Verwaltung"
   },
   "project-setting-menu": {
-    "project-info": "Projektinformationen",
-    "member-mgmt": "Mitgliederverwaltung",
-    "role-mgmt": "Rollenverwaltung",
+    "project-info": "Projekt-Informationen",
+    "member-mgmt": "Mitglieder-Verwaltung",
+    "role-mgmt": "Rollen-Verwaltung",
     "api-key-mgmt": "API-Schlüsselverwaltung",
-    "issue-tracker-mgmt": "Problemverfolgungsverwaltung",
+    "issue-tracker-mgmt": "Problem-Verfolgungs-Verwaltung",
     "webhook-integration": "Webhook-Integration",
     "delete-project": "Projekt löschen"
   },
   "channel-setting-menu": {
-    "channel-info": "Kanalinformationen",
-    "field-mgmt": "Feldverwaltung",
-    "image-mgmt": "Bildverwaltung",
+    "channel-info": "Kanal-Informationen",
+    "field-mgmt": "Feld-Verwaltung",
+    "image-mgmt": "Bild-Verwaltung",
     "delete-channel": "Kanal löschen"
   },
   "modal": {
@@ -448,8 +448,8 @@
     "issue-tracker": "Verknüpfen und verwalten Sie User Feedback mit Ihrem Issue-Tracking-System. Bitte geben Sie die Details Ihres Issue-Tracking-Systems ein.",
     "channel-info": "Definieren Sie die Feedbackfelder, die über den Kanal gesammelt werden sollen. Bitte registrieren Sie Kanalinformationen unter Berücksichtigung des Feedbackwegs und der Eigenschaften (z.B. VOC, App-Bewertung).",
     "field": "Definieren Sie die Feedbackfelder, die über User Feedback für jeden registrierten Kanal gesammelt werden sollen. Konfigurieren Sie vorab die Felder, die über die API gesammelt oder direkt im ADMIN registriert werden sollen.",
-    "image-setting": "Für Feedback in Bildformat, integrieren Sie mit Bildspeicherung und richten Sie eine Whitelist für Bild-URL-Domänen ein.\nBeziehen Sie sich auf die Bild <icon></icon> <docs>Dokumentation</docs> für Details.",
-    "field-preview": "Vorschau der konfigurierten Felder in der Feldverwaltung. Vorschauen zeigen Beispieldaten zur Veranschaulichung.",
+    "image-setting": "Für Feedback in Bildformat, integrieren Sie einen Bild-Speicher und richten Sie eine Whitelist für Bild-URL-Domains ein.\nBeziehen Sie sich auf die Bild <icon></icon> <docs>Dokumentation</docs> für Details.",
+    "field-preview": "Vorschau der konfigurierten Felder in der Feldverwaltung. Die Vorschau zeigt Beispieldaten zur Veranschaulichung.",
     "webhook": "Nutzen Sie Webhooks, um auf eine Vielzahl von Ereignissen innerhalb von User Feedback zu reagieren. Für weitere Details, beziehen Sie sich auf die Webhook <icon></icon> <docs>Dokumentation</docs>."
   },
   "hint": {
@@ -460,7 +460,7 @@
     "image-format": "Das Format für die Eingabe der Bild-URL."
   },
   "title-box": {
-    "image-storage-integration": "Bildspeicherungsintegration"
+    "image-storage-integration": "Bild-Speicher-Integration"
   },
   "placeholder": "Bitte geben Sie {{name}} ein."
 }
