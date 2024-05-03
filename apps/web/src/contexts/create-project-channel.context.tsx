@@ -151,7 +151,9 @@ export const CreateProvider = <
 
   useEffect(() => {
     if (completeStepIndex === 0) return;
-    const confirmMsg = t('text.warning-get-out', { type });
+    const confirmMsg = t('system-popup.create-project/channel-get-out', {
+      type,
+    });
 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.returnValue = confirmMsg;

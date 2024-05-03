@@ -153,8 +153,8 @@
       "field-mgmt": {
         "description": "Klicken Sie auf 'Vorschau', um Änderungen zu speichern.",
         "preview": "Vorschau",
-        "preview-caption": "Die Vorschau zeigt Beispielwerte zur Veranschaulichung.",
-        "preview-description": "Wählen Sie <preview>Vorschau</preview>, um die Konfiguration zu überprüfen."
+        "preview-caption": "Die Vorschau wird als Beispieldaten angezeigt.",
+        "preview-description": "Hier können Sie sehen, wie die registrierten Felder aussehen werden."
       },
       "dialog": {
         "edit-user": {
@@ -291,7 +291,6 @@
     "equal-search": "Exakte Übereinstimmung",
     "like-search": "Enthält",
     "helper": "Hilfe",
-    "warning-get-out": "Sind Sie sicher, dass Sie den Erstellungsprozess für einen {{type}} verlassen möchten?\nSie können diesen Prozess später fortsetzen.",
     "no-channel": "Keine Kanäle registriert",
     "guide": "Richtlinien",
     "more": "Mehr",
@@ -413,7 +412,9 @@
     "webhook-feedback-creation": "Wird ausgelöst, wenn Feedback für einen bestimmten Kanal gesammelt wird.",
     "webhook-issue-addition": "Wird ausgelöst, wenn einem Feedback in einem bestimmten Kanal ein Problem hinzugefügt wird.",
     "webhook-issue-creation": "Wird ausgelöst, wenn unabhängig vom Kanal ein Problem erstellt wird.",
-    "webhook-issue-status-change": "Wird ausgelöst, wenn sich der Status eines Problems ändert, unabhängig vom Kanal."
+    "webhook-issue-status-change": "Wird ausgelöst, wenn sich der Status eines Problems ändert, unabhängig vom Kanal.",
+    "field-property": "Wenn Sie den Inhalt des Feldes als Original behalten möchten, dann setzen Sie ihn bitte auf Editable, wenn Sie nur den Inhalt des Feldes ändern möchten.",
+    "field-status": "Gibt an, ob ein Feld verwendet werden soll oder nicht. Bitte ändern Sie die Felder, die Sie nicht verwenden, auf Inactive."
   },
   "tenant-setting-menu": {
     "tenant-info": "Mandanteninformationen",
@@ -438,6 +439,10 @@
   "modal": {
     "image-preview": {
       "title": "Bildvorschau"
+    },
+    "save-field": {
+      "title": "Speichern von Feldmanagement",
+      "description": "Möchten Sie zusätzliche oder modifizierte Feldinformationen speichern?"
     }
   },
   "help-card": {
@@ -462,5 +467,9 @@
   "title-box": {
     "image-storage-integration": "Bildspeicherungsintegration"
   },
-  "placeholder": "Bitte geben Sie {{name}} ein."
+  "placeholder": "Bitte geben Sie {{name}} ein.",
+  "system-popup": {
+    "create-project/channel-get-out": "Sind Sie sicher, dass Sie den Erstellungsprozess für einen {{type}} verlassen möchten?\nSie können diesen Prozess später fortsetzen.",
+    "field-setting-get-out": "Bitte beachten Sie, dass die Feldinformationen noch nicht gespeichert sind. Trotzdem würden Sie rausgehen."
+  }
 }

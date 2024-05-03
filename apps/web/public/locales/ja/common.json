@@ -151,8 +151,8 @@
       "field-mgmt": {
         "description": "保存するにはプレビューを先に押してください。",
         "preview": "プレビュー",
-        "preview-caption": "プレビューは、理解を助けるためのサンプルデータです。",
-        "preview-description": "<preview>プレビュー</preview>を選択した後に確認することができます。"
+        "preview-caption": "プレビューは、例示データとして表示されます。",
+        "preview-description": "登録したフィールドがどのような姿なのか確認することができます。"
       },
       "dialog": {
         "edit-user": { "title": "User 編集" },
@@ -279,7 +279,6 @@
     "equal-search": "完全一致",
     "like-search": "部分一致",
     "helper": "ヘルプ",
-    "warning-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
     "no-channel": "登録されたチャンネルがありません。",
     "guide": "案内",
     "more": "もっと",
@@ -401,7 +400,9 @@
     "webhook-feedback-creation": "このイベントは、チャネル固有のフィードバックが収集されるたびにトリガーされます。",
     "webhook-issue-addition": "このイベントは、チャネル固有のフィードバックに問題が登録されるたびにトリガーされます。",
     "webhook-issue-creation": "このイベントは、チャネルに関係なく、問題が発生するたびにトリガーされます。",
-    "webhook-issue-status-change": "このイベントは、チャネルに関係なく、イシューステータスが変更されるたびにトリガーされます。"
+    "webhook-issue-status-change": "このイベントは、チャネルに関係なく、イシューステータスが変更されるたびにトリガーされます。",
+    "field-property": "フィールド内容の原本を維持したいならRead Only内容を修正したいならEditibleに設定してください。",
+    "field-status": "フィールドを使用するかどうかを意味します。 使用しないフィールドはInactiveに変更してください。"
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant情報",
@@ -426,6 +427,10 @@
   "modal": {
     "image-preview": {
       "title": "Imageプレビュー"
+    },
+    "save-field": {
+      "title": "Field管理ストレージ",
+      "description": "追加または修正したフィールド情報を保存しますか？"
     }
   },
   "help-card": {
@@ -450,5 +455,9 @@
   "title-box": {
     "image-storage-integration": "Image Storageの連動"
   },
-  "placeholder": "{{name}}を入力してください。"
+  "placeholder": "{{name}}を入力してください。",
+  "system-popup": {
+    "create-project/channel-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
+    "field-setting-get-out": "まだ保存されていないフィールド情報があります。 それでも出られますか。"
+  }
 }

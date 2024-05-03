@@ -30,7 +30,7 @@ import {
 const DEFAULT_FIELDS: InputFieldType[] = [
   {
     format: 'number',
-    type: 'DEFAULT',
+    property: 'READ_ONLY',
     status: 'ACTIVE',
     name: 'ID',
     key: 'id',
@@ -38,7 +38,7 @@ const DEFAULT_FIELDS: InputFieldType[] = [
   },
   {
     format: 'date',
-    type: 'DEFAULT',
+    property: 'READ_ONLY',
     status: 'ACTIVE',
     name: 'Created',
     key: 'createdAt',
@@ -46,7 +46,7 @@ const DEFAULT_FIELDS: InputFieldType[] = [
   },
   {
     format: 'date',
-    type: 'DEFAULT',
+    property: 'READ_ONLY',
     status: 'ACTIVE',
     name: 'Updated',
     key: 'updatedAt',
@@ -54,7 +54,7 @@ const DEFAULT_FIELDS: InputFieldType[] = [
   },
   {
     format: 'multiSelect',
-    type: 'DEFAULT',
+    property: 'EDITABLE',
     status: 'ACTIVE',
     name: 'Issue',
     key: 'issues',
