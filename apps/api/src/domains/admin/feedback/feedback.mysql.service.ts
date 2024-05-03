@@ -22,7 +22,7 @@ import { Brackets, In, QueryFailedError, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
-import { FieldFormatEnum, FieldTypeEnum, SortMethodEnum } from '@/common/enums';
+import { FieldFormatEnum, SortMethodEnum } from '@/common/enums';
 import type { ClsServiceType } from '@/types/cls-service.type';
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import type { FieldEntity } from '../channel/field/field.entity';
@@ -62,7 +62,11 @@ export class FeedbackMySQLService {
     const feedback = new FeedbackEntity();
     feedback.channel = new ChannelEntity();
     feedback.channel.id = channelId;
-    feedback.rawData = data;
+    if (data.createdAt) {
+      feedback.createdAt = data.createdAt;
+      delete data.createdAt;
+    }
+    feedback.data = data;
 
     await this.feedbackStatisticsService.updateCount({
       channelId,
@@ -107,31 +111,27 @@ export class FeedbackMySQLService {
           queryBuilder.andWhere(
             new Brackets((qb) => {
               for (let i = 0; i < stringFields.length; i++) {
-                const dataColumn =
-                  stringFields[i].type === FieldTypeEnum.API ?
-                    'raw_data'
-                  : 'additional_data';
                 if (stringFields[i].format === FieldFormatEnum.keyword) {
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${stringFields[i].id}"') = :value`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') = :value`,
                       { value },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${stringFields[i].id}"') = :value`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') = :value`,
                       { value },
                     );
                   }
                 } else {
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${stringFields[i].id}"') like :likeValue`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
                       { likeValue: `%${value}%` },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${stringFields[i].id}"') like :likeValue`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
                       { likeValue: `%${value}%` },
                     );
                   }
@@ -156,10 +156,7 @@ export class FeedbackMySQLService {
         queryBuilder.andWhere('feedbacks.updated_at >= :gte', { gte });
         queryBuilder.andWhere('feedbacks.updated_at < :lt', { lt });
       } else {
-        const { id, format, type } = fields.find((v) => v.key === fieldKey);
-
-        const dataColumn =
-          type === FieldTypeEnum.API ? 'raw_data' : 'additional_data';
+        const { id, format } = fields.find((v) => v.key === fieldKey);
 
         if (format === FieldFormatEnum.select) {
           const options = await this.optionRepository.find({
@@ -168,7 +165,7 @@ export class FeedbackMySQLService {
           const option = options.find((option) => option.key === value);
 
           queryBuilder.andWhere(
-            `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"') = :optionId`,
+            `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
             { optionId: option.key },
           );
         } else if (format === FieldFormatEnum.multiSelect) {
@@ -180,7 +177,7 @@ export class FeedbackMySQLService {
             const option = options.find((option) => option.key === optionKey);
             queryBuilder.andWhere(
               `JSON_CONTAINS(
-                JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"'),
+                JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
                 '"${option.key}"',
                 '$')`,
             );
@@ -189,22 +186,22 @@ export class FeedbackMySQLService {
           [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
         ) {
           queryBuilder.andWhere(
-            `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"') like :value`,
+            `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :value`,
             { value: `%${value}%` },
           );
         } else if (format === FieldFormatEnum.date) {
           const { gte, lt } = value as TimeRange;
           queryBuilder.andWhere(
-            `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"') >= :gte`,
+            `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') >= :gte`,
             { gte },
           );
           queryBuilder.andWhere(
-            `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"') < :lt`,
+            `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') < :lt`,
             { lt },
           );
         } else {
           queryBuilder.andWhere(
-            `JSON_EXTRACT(feedbacks.${dataColumn}, '$."${fieldKey}"') = :value`,
+            `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :value`,
             {
               value,
             },
@@ -242,22 +239,12 @@ export class FeedbackMySQLService {
     const total = await queryBuilder.getCount();
 
     const feedbacks = items.map((item) => {
-      if (item.additionalData) {
-        return {
-          ...item.rawData,
-          ...item.additionalData,
-          id: item.id,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        };
-      } else {
-        return {
-          ...item.rawData,
-          id: item.id,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        };
-      }
+      return {
+        ...item.data,
+        id: item.id,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
     });
 
     return {
@@ -280,18 +267,18 @@ export class FeedbackMySQLService {
       .createQueryBuilder('feedbacks')
       .update('feedbacks')
       .set({
-        additionalData: () => {
+        data: () => {
           if (Object.keys(data).length === 0) {
-            return 'additional_data';
+            return 'data';
           }
-          let query = `JSON_SET(IFNULL(feedbacks.additional_data,'{}'), `;
+          let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
             query += `'$."${fieldKey}"', ${
-              Array.isArray(data[fieldKey]) ?
-                data[fieldKey].length === 0 ?
-                  'JSON_ARRAY()'
-                : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
-              : '"' + data[fieldKey] + '"'
+              Array.isArray(data[fieldKey])
+                ? data[fieldKey].length === 0
+                  ? 'JSON_ARRAY()'
+                  : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
+                : '"' + data[fieldKey] + '"'
             }`;
 
             if (parseInt(index) + 1 !== Object.entries(data).length) {
@@ -434,8 +421,7 @@ export class FeedbackMySQLService {
       throw new BadRequestException('unknown id');
     }
     return {
-      ...feedback.rawData,
-      ...feedback.additionalData,
+      ...feedback.data,
       id: feedback.id,
       createdAt: feedback.createdAt,
       updatedAt: feedback.updatedAt,

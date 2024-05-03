@@ -31,10 +31,7 @@ import { IssueEntity } from '../project/issue/issue.entity';
 @Index(['createdAt'])
 export class FeedbackEntity extends CommonEntity {
   @Column({ type: 'json' })
-  rawData: object;
-
-  @Column({ type: 'json', nullable: true })
-  additionalData: object;
+  data: Record<string, any>;
 
   @ManyToOne(() => ChannelEntity, (channel) => channel.feedbacks, {
     onDelete: 'CASCADE',

@@ -17,8 +17,8 @@ import { Expose, Type } from 'class-transformer';
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '../../../../../common/enums';
 
 export class CreateFieldDto {
@@ -35,7 +35,7 @@ export class CreateFieldDto {
   format: FieldFormatEnum;
 
   @Expose()
-  type: FieldTypeEnum;
+  property: FieldPropertyEnum;
 
   @Expose()
   status: FieldStatusEnum;

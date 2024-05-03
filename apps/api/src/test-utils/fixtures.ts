@@ -21,8 +21,8 @@ import {
   EventStatusEnum,
   EventTypeEnum,
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
   isSelectFieldFormat,
   IssueStatusEnum,
   WebhookStatusEnum,
@@ -57,35 +57,34 @@ import type { CodeEntity } from '@/shared/code/code.entity';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
-  const type = input?.type ?? getRandomEnumValue(FieldTypeEnum);
+  const property = input?.property ?? getRandomEnumValue(FieldPropertyEnum);
   const status = input?.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
     name: faker.string.alphanumeric(20),
     description: faker.lorem.lines(2),
     format,
-    type,
+    property,
     status,
     options:
-      format === FieldFormatEnum.select ?
-        getRandomOptionEntities().sort(optionSort)
-      : undefined,
+      format === FieldFormatEnum.select
+        ? getRandomOptionEntities().sort(optionSort)
+        : undefined,
     ...input,
   };
 };
 export const createFieldDto = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
-  const type = input?.type ?? getRandomEnumValue(FieldTypeEnum);
+  const property = input?.property ?? getRandomEnumValue(FieldPropertyEnum);
   const status = input?.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
     name: faker.string.alphanumeric(20),
     key: faker.string.alphanumeric(20),
     description: faker.lorem.lines(2),
     format,
-    type,
+    property,
     status,
-    options:
-      isSelectFieldFormat(format) ?
-        getRandomOptionDtos().sort(optionSort)
+    options: isSelectFieldFormat(format)
+      ? getRandomOptionDtos().sort(optionSort)
       : undefined,
     ...input,
   };
@@ -116,12 +115,12 @@ export const getRandomValue = (
     case FieldFormatEnum.number:
       return faker.number.int();
     case FieldFormatEnum.select:
-      return options.length === 0 ?
-          undefined
+      return options.length === 0
+        ? undefined
         : options[faker.number.int({ min: 0, max: options.length - 1 })].key;
     case FieldFormatEnum.multiSelect:
-      return options.length === 0 ?
-          []
+      return options.length === 0
+        ? []
         : faker.helpers
             .shuffle(options)
             .slice(0, faker.number.int({ min: 0, max: options.length - 1 }))
@@ -166,9 +165,7 @@ export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
 };
 
 export const optionSort = (a, b) =>
-  a.name < b.name ? -1
-  : a.name > b.name ? 1
-  : 0;
+  a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 
 export const passwordFixture = faker.internet.password();
 
@@ -275,12 +272,12 @@ export const codeFixture = {
 } as CodeEntity;
 
 export const fieldsFixture = Object.values(FieldFormatEnum).flatMap((format) =>
-  Object.values(FieldTypeEnum).flatMap((type) =>
+  Object.values(FieldPropertyEnum).flatMap((property) =>
     Object.values(FieldStatusEnum).flatMap((status) => ({
       id: faker.number.int(),
       ...createFieldDto({
         format,
-        type,
+        property,
         status,
       }),
     })),
@@ -320,7 +317,6 @@ export const issueFixture = {
 } as IssueEntity;
 
 export const feedbackDataFixture = fieldsFixture.reduce((prev, curr) => {
-  if (curr.type === FieldTypeEnum.ADMIN) return prev;
   if (curr.status === FieldStatusEnum.INACTIVE) return prev;
   const value = getRandomValue(curr.format, curr.options);
   return {
@@ -331,8 +327,7 @@ export const feedbackDataFixture = fieldsFixture.reduce((prev, curr) => {
 
 export const feedbackFixture = {
   id: faker.number.int(),
-  rawData: feedbackDataFixture,
-  additionalData: {},
+  data: feedbackDataFixture,
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
   channel: channelFixture,

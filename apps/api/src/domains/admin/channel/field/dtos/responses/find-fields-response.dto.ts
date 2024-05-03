@@ -18,8 +18,8 @@ import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '@/common/enums';
 
 export class FindFieldsResponseSelectOptionDto {
@@ -46,8 +46,8 @@ export class FindFieldsResponseDto {
   format: FieldFormatEnum;
 
   @Expose()
-  @ApiProperty({ enum: FieldTypeEnum })
-  type: FieldFormatEnum;
+  @ApiProperty({ enum: FieldPropertyEnum })
+  property: FieldFormatEnum;
 
   @Expose()
   @ApiProperty({ enum: FieldStatusEnum })

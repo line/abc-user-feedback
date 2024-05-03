@@ -60,8 +60,7 @@ export class MigrationService {
     const documents = feedbacks.map((feedback) => {
       return {
         id: feedback.id,
-        ...feedback.rawData,
-        ...feedback.additionalData,
+        ...feedback.data,
         createdAt: DateTime.fromJSDate(feedback.createdAt).toFormat(
           'yyyy-MM-dd HH:mm:ssZZ',
         ),
