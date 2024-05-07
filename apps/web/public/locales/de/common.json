@@ -449,7 +449,7 @@
     "project-info": "Sammeln Sie Feedback für jedes Projekt einzeln. Bitte registrieren Sie die Projektinformationen basierend auf dem Produkt, für das Sie Feedback verwalten möchten (z.B. Produktname).",
     "role": "Legen Sie Berechtigungen für den Zugriff und die Nutzung des Projekts fest.",
     "member": "Registrieren oder verwalten Sie Mitglieder, die am Projekt teilnehmen.",
-    "api-key": "Es verwaltet die User Feedback API Key Informationen. Wenn Sie die API verwenden wollen, erstellen und verwenden Sie den Schlüssel. (<icon></icon> <docs>Docs</docs>)",
+    "api-key": "Es verwaltet die User Feedback API Key Informationen. Wenn Sie die API verwenden wollen, erstellen und verwenden Sie den Schlüssel. Weitere Informationen finden Sie unter API <icon></icon> <docs>Docs</docs>.",
     "issue-tracker": "Verknüpfen und verwalten Sie User Feedback mit Ihrem Issue-Tracking-System. Bitte geben Sie die Details Ihres Issue-Tracking-Systems ein.",
     "channel-info": "Definieren Sie die Feedbackfelder, die über den Kanal gesammelt werden sollen. Bitte registrieren Sie Kanalinformationen unter Berücksichtigung des Feedbackwegs und der Eigenschaften (z.B. VOC, App-Bewertung).",
     "field": "Definieren Sie die Feedbackfelder, die über User Feedback für jeden registrierten Kanal gesammelt werden sollen. Konfigurieren Sie vorab die Felder, die über die API gesammelt oder direkt im ADMIN registriert werden sollen.",

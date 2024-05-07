@@ -437,7 +437,7 @@
     "project-info": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
     "role": "Projectにfアクセスして使用する権限を設定できます。",
     "member": "Projectに参加する Memberを登録または管理することができます。",
-    "api-key": "ユーザーフィードバックAPIキー情報を管理します。 API を使用する場合は、キーを作成して使用します。 (<icon></icon> <docs>Docs</docs>)",
+    "api-key": "ユーザーフィードバックAPIキー情報を管理します。 API を使用する場合は、キーを作成して使用します。 詳細については、API <icon></icon> <docs>Docs</docs>をご参考ください。",
     "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
     "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
     "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
