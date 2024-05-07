@@ -675,7 +675,7 @@ export interface components {
       | 'date'
       | 'images';
     /** @enum {string} */
-    FieldTypeEnum: 'DEFAULT' | 'ADMIN' | 'API';
+    FieldPropertyEnum: 'READ_ONLY' | 'EDITABLE';
     /** @enum {string} */
     FieldStatusEnum: 'ACTIVE' | 'INACTIVE';
     CreateChannelRequestFieldSelectOptionDto: {
@@ -688,7 +688,7 @@ export interface components {
       key: string;
       description: string | null;
       format: components['schemas']['FieldFormatEnum'];
-      type: components['schemas']['FieldTypeEnum'];
+      property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
     };
@@ -740,7 +740,7 @@ export interface components {
         | 'date'
         | 'images';
       /** @enum {string} */
-      type: 'DEFAULT' | 'ADMIN' | 'API';
+      property: 'READ_ONLY' | 'EDITABLE';
       /** @enum {string} */
       status: 'ACTIVE' | 'INACTIVE';
       name: string;
@@ -773,7 +773,7 @@ export interface components {
       key: string;
       description: string | null;
       format: components['schemas']['FieldFormatEnum'];
-      type: components['schemas']['FieldTypeEnum'];
+      property: components['schemas']['FieldPropertyEnum'];
       status: components['schemas']['FieldStatusEnum'];
       options?: components['schemas']['CreateChannelRequestFieldSelectOptionDto'][];
       id?: number;

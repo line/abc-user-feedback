@@ -150,9 +150,10 @@ export class FeedbackService {
   ) {
     const convertedFeedback: Record<string, any> = {};
     for (const key of Object.keys(feedback)) {
-      convertedFeedback[fieldsByKey[key].name] = Array.isArray(feedback[key])
-        ? key === 'issues'
-          ? feedback[key].map((issue) => issue.name).join(', ')
+      convertedFeedback[fieldsByKey[key].name] =
+        Array.isArray(feedback[key]) ?
+          key === 'issues' ?
+            feedback[key].map((issue) => issue.name).join(', ')
           : feedback[key].join(', ')
         : feedback[key];
     }
@@ -422,8 +423,9 @@ export class FeedbackService {
 
     this.validateQuery(dto.query || {}, fields);
 
-    const feedbacksByPagination = this.configService.get('opensearch.use')
-      ? await this.feedbackOSService.findByChannelId(dto)
+    const feedbacksByPagination =
+      this.configService.get('opensearch.use') ?
+        await this.feedbackOSService.findByChannelId(dto)
       : await this.feedbackMySQLService.findByChannelId(dto);
 
     const issuesByFeedbackIds = await this.issueService.findIssuesByFeedbackIds(

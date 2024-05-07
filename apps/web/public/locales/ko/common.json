@@ -151,8 +151,8 @@
       "field-mgmt": {
         "description": "저장을 하려면 미리보기를 먼저 눌러주세요.",
         "preview": "미리보기",
-        "preview-caption": "미리보기는 이해를 돕기 위한 예시 데이터입니다.",
-        "preview-description": "<preview>미리보기</preview> 선택 후 확인가능합니다."
+        "preview-caption": "미리보기는 예시 데이터로 나타납니다.",
+        "preview-description": "등록한 필드가 어떤 모습일지 확인할 수 있어요."
       },
       "dialog": {
         "edit-user": { "title": "User 편집" },
@@ -279,7 +279,6 @@
     "equal-search": "완전 일치",
     "like-search": "부분 일치",
     "helper": "도움말",
-    "warning-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.",
     "no-channel": "등록된 Channel이 없습니다.",
     "guide": "안내",
     "more": "더보기",
@@ -401,7 +400,9 @@
     "webhook-feedback-creation": "채널별 피드백이 수집될 때마다 해당 이벤트를 발동합니다.",
     "webhook-issue-addition": "채널별 이슈를 등록할 때마다 해당 이벤트를 발동합니다.",
     "webhook-issue-creation": "채널에 상관없이 이슈를 생성할 때마다 해당 이벤트를 발동합니다.",
-    "webhook-issue-status-change": "채널에 상관없이 이슈상태를 변경할 때마다 해당 이벤트를 발동합니다."
+    "webhook-issue-status-change": "채널에 상관없이 이슈상태를 변경할 때마다 해당 이벤트를 발동합니다.",
+    "field-property": "필드 내용의 원본을 유지하고 싶다면 Read Only 내용을 수정하고 싶다면 Editible로 설정해 주세요.",
+    "field-status": "필드 사용 여부를 의미합니다. 사용하지 않는 필드는 Inactive로 변경해 주세요."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant 정보",
@@ -426,13 +427,17 @@
   "modal": {
     "image-preview": {
       "title": "Image 미리보기"
+    },
+    "save-field": {
+      "title": "Field 관리 저장",
+      "description": "추가 또는 수정한 필드 정보를 저장하시겠어요?"
     }
   },
   "help-card": {
     "project-info": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
     "role": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
     "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
-    "api-key": "User Feedback API Key 정보를 관리합니다. API를 활용하려면 Key를 생성해서 이용해 주세요. (<icon></icon> <docs>Docs</docs>)",
+    "api-key": "User Feedback API Key 정보를 관리합니다. API를 활용하려면 Key를 생성해서 이용해 주세요. 자세한 내용은 API <icon></icon> <docs>Docs</docs>참고해 주세요.",
     "issue-tracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
     "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
     "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
@@ -450,5 +455,9 @@
   "title-box": {
     "image-storage-integration": "Image Storage 연동"
   },
-  "placeholder": "{{name}}을 입력해주세요."
+  "placeholder": "{{name}}을 입력해주세요.",
+  "system-popup": {
+    "create-project/channel-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.",
+    "field-setting-get-out": "아직 저장되지 않은 필드 정보가 있어요. 그래도 나가시겠어요."
+  }
 }

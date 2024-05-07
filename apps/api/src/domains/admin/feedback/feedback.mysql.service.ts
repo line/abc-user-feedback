@@ -274,11 +274,11 @@ export class FeedbackMySQLService {
           let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
             query += `'$."${fieldKey}"', ${
-              Array.isArray(data[fieldKey])
-                ? data[fieldKey].length === 0
-                  ? 'JSON_ARRAY()'
-                  : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
-                : '"' + data[fieldKey] + '"'
+              Array.isArray(data[fieldKey]) ?
+                data[fieldKey].length === 0 ?
+                  'JSON_ARRAY()'
+                : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
+              : '"' + data[fieldKey] + '"'
             }`;
 
             if (parseInt(index) + 1 !== Object.entries(data).length) {

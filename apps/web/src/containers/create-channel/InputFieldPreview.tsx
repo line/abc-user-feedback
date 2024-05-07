@@ -23,6 +23,7 @@ import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 import { Path } from '@/constants/path';
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import { useOAIMutation } from '@/hooks';
+import { isDefaultField } from '@/utils/field-utils';
 import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
 import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
@@ -67,7 +68,7 @@ const InputFieldPreview: React.FC<IProps> = () => {
   const onComplete = () => {
     mutate({
       ...input.channelInfo,
-      fields: input.fields.filter((v) => v.type !== 'DEFAULT'),
+      fields: input.fields.filter((v) => !isDefaultField(v)),
       imageConfig: input.imageConfig,
     });
   };

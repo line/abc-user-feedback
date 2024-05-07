@@ -26,6 +26,7 @@ import { Badge } from '@ufb/ui';
 
 import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
 import type { FieldType } from '@/types/field.type';
+import { fieldProperty, sortField } from '@/utils/field-utils';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
 import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
 
@@ -59,38 +60,14 @@ const columns = [
     },
     size: 100,
   }),
-  columnHelper.accessor('type', {
-    header: 'Type',
+  columnHelper.accessor('property', {
+    header: 'Property',
     cell: ({ getValue }) => {
-      const color =
-        getValue() === 'API' ? 'blue'
-        : getValue() === 'ADMIN' ? 'green'
-        : 'black';
-      const type =
-        getValue() === 'API' ? 'primary'
-        : getValue() === 'ADMIN' ? 'primary'
-        : 'secondary';
-      return (
-        <Badge color={color} type={type}>
-          {getValue()}
-        </Badge>
-      );
+      return <Badge type="secondary">{fieldProperty[getValue()]}</Badge>;
     },
-    size: 100,
+    size: 120,
   }),
 ];
-
-const fieldSort = (a: FieldType, b: FieldType) => {
-  const aNum =
-    a.type === 'DEFAULT' ? 1
-    : a.type === 'API' ? 2
-    : 3;
-  const bNum =
-    b.type === 'DEFAULT' ? 1
-    : b.type === 'API' ? 2
-    : 3;
-  return aNum - bNum;
-};
 
 interface IProps {
   fields: FieldType[];
@@ -101,7 +78,7 @@ const FieldSection: React.FC<IProps> = ({ fields }) => {
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
     columns,
-    data: fields.sort(fieldSort),
+    data: fields.sort(sortField),
   });
 
   return (

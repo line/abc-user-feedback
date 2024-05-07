@@ -28,11 +28,11 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { SelectBox } from '@/components/etc';
+import { DescriptionTooltip, SelectBox } from '@/components/etc';
 import {
   FieldFormatEnumList,
+  FieldPropertyEnumList,
   FieldStatusEnumList,
-  FieldTypeEnumList,
 } from '@/types/field.type';
 import type { FieldRowType } from './FieldSetting';
 import OptionDeletePopover from './OptionBadge';
@@ -61,7 +61,7 @@ const schema = (otherFields: FieldRowType[]): Zod.ZodType<FieldRowType> =>
       ),
     description: z.string().nullable(),
     format: z.enum(FieldFormatEnumList),
-    type: z.enum(FieldTypeEnumList),
+    property: z.enum(FieldPropertyEnumList),
     status: z.enum(FieldStatusEnumList),
     options: z
       .array(
@@ -80,7 +80,7 @@ const defaultValues: FieldRowType = {
   name: '',
   key: '',
   status: 'ACTIVE',
-  type: 'API',
+  property: 'READ_ONLY',
 };
 
 interface IProps extends React.PropsWithChildren {
@@ -312,21 +312,24 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               </div>
             )}
             <div>
-              <p className="input-label">Field Property</p>
-              <div className="mt-2 flex items-center">
-                <span className="font-10-regular w-[120px] ">Field Type</span>
+              <div className="flex items-center">
+                <span className="font-10-regular w-[120px]">
+                  Field Property
+                  <DescriptionTooltip
+                    description={t('tooltip.field-property')}
+                  />
+                </span>
                 <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-type"
                     className="radio radio-sm"
                     onChange={(e) =>
-                      e.target.checked ? setValue('type', 'API') : {}
+                      e.target.checked ? setValue('property', 'READ_ONLY') : {}
                     }
-                    checked={watch('type') === 'API'}
-                    disabled={isOriginalData}
+                    checked={watch('property') === 'READ_ONLY'}
                   />
-                  API
+                  Read Only
                 </label>
                 <label className="radio-label h-[36px] w-[120px]">
                   <input
@@ -334,16 +337,18 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                     name="radio-type"
                     className="radio radio-sm"
                     onChange={(e) =>
-                      e.target.checked ? setValue('type', 'ADMIN') : {}
+                      e.target.checked ? setValue('property', 'EDITABLE') : {}
                     }
-                    checked={watch('type') === 'ADMIN'}
-                    disabled={isOriginalData || watch('format') === 'images'}
+                    checked={watch('property') === 'EDITABLE'}
                   />
-                  ADMIN
+                  Editable
                 </label>
               </div>
               <div className="flex items-center">
-                <span className="font-10-regular w-[120px] ">Field Status</span>
+                <span className="font-10-regular w-[120px]">
+                  Field Status
+                  <DescriptionTooltip description={t('tooltip.field-status')} />
+                </span>
                 <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
