@@ -470,6 +470,6 @@
   "placeholder": "Please enter {{name}}.",
   "system-popup": {
     "create-project/channel-get-out": "Are you sure you want to exit the creation process for a {{type}}?\nYou can resume this process later.",
-    "field-setting-get-out": "I still have some field information that hasn't been saved. You still want to leave."
+    "field-setting-get-out": "You have some field information that has not been saved. You can still leave if you want."
   }
 }

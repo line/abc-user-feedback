@@ -213,6 +213,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       onSuccess: async () => {
         await getChannelData();
         toast.positive({ title: t('toast.save') });
+        setOpenSavePopover(false);
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });
@@ -392,7 +393,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
           }}
           cancelButton={{
             children: t('button.cancel'),
-            onClick: () => {},
+            onClick: () => setOpenSavePopover(false),
           }}
         />
       </Popover>
