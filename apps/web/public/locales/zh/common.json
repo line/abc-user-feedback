@@ -178,7 +178,7 @@
         },
         "edit-api-key": {
           "title": "编辑API密钥",
-          "description": "将API密钥更改为不活跃将禁用其关联的API。\n只有在您不再使用API密钥时，才将状态更改为不活跃。"
+          "description": "如果禁用API KEY，API将无法作为相应的KEY使用。 仅当不使用API KEY时，请更改为非活动。"
         },
         "delete-option": {
           "title": "删除选项",

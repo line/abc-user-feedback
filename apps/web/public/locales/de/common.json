@@ -178,7 +178,7 @@
         },
         "edit-api-key": {
           "title": "API-Schlüssel bearbeiten",
-          "description": "Das Ändern des API-Schlüssels auf inaktiv deaktiviert die zugehörige API.\nÄndern Sie den Status nur auf inaktiv, wenn Sie den API-Schlüssel nicht mehr verwenden."
+          "description": "Wenn Sie API KEY deaktivieren, wird die API mit diesem Schlüssel deaktiviert. Bitte ändern Sie diese Option nur, wenn Sie den API-Schlüssel nicht verwenden."
         },
         "delete-option": {
           "title": "Option löschen",

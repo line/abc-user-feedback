@@ -159,6 +159,13 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
     () => perms.includes('channel_field_update'),
     [perms],
   );
+  const isDirty = useMemo(
+    () =>
+      !(channelData ?
+        objectsEqual(channelData.fields.sort(sortField), rows)
+      : true),
+    [channelData, rows],
+  );
 
   const getChannelData = async () => {
     setChannelDataLoading(true);
@@ -227,6 +234,8 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   };
 
   useEffect(() => {
+    if (!isDirty) return;
+
     const confirmMsg = t('system-popup.field-setting-get-out');
 
     // 닫기, 새로고침
@@ -249,7 +258,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       router.events.off('routeChangeStart', handleBeforeChangeRoute);
     };
-  }, []);
+  }, [isDirty]);
 
   return (
     <>
@@ -264,12 +273,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
             <button
               className="btn btn-primary btn-md "
               disabled={
-                (channelData ?
-                  objectsEqual(channelData.fields.sort(sortField), rows)
-                : true) ||
-                !canUpdateField ||
-                isPending ||
-                channelDataLoading
+                !isDirty || !canUpdateField || isPending || channelDataLoading
               }
               onClick={() => setOpenSavePopover(true)}
             >

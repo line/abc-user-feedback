@@ -174,7 +174,7 @@
         },
         "edit-api-key": {
           "title": "API KEY 編集",
-          "description": "API KEY を非アクティブに変更すると、その KEY の API は使用できなくなります。\nAPI KEY を使用しない場合のみ、ステータスを非アクティブに変更してください。"
+          "description": "API KEYを無効にすると、そのKEYでAPIが使用できなくなります。 API KEYを使用しない場合のみ、無効に変更してください。"
         },
         "delete-option": {
           "title": "オプションの削除",

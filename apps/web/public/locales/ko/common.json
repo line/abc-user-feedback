@@ -174,7 +174,7 @@
         },
         "edit-api-key": {
           "title": "API KEY 편집",
-          "description": "API KEY를 비활성 상태로 변경하면\n해당 KEY 정보의 API를 이용할 수 없습니다.\nAPI KEY를 사용하지 않는 경우에만 비활성 상태로 변경 해주세요."
+          "description": "API KEY를 비활성화하면 해당 KEY로 API를 사용할 수 없게 됩니다. API KEY를 사용하지 않는 경우에만 비활성으로 변경해 주세요."
         },
         "delete-option": {
           "title": "옵선 삭제",

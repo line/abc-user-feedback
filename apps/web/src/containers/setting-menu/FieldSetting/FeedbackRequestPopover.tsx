@@ -57,6 +57,7 @@ const FeedbackRequestPopover: React.FC<IProps> = ({ channelId, projectId }) => {
     const body: Record<string, any> = {};
     for (const field of channelData.fields) {
       if (field.status === 'INACTIVE') continue;
+      if (field.key === 'id') continue;
       const key = `'${field.key}'`;
       switch (field.format) {
         case 'number':

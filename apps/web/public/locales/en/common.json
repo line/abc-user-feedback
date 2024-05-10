@@ -178,7 +178,7 @@
         },
         "edit-api-key": {
           "title": "Edit API Key",
-          "description": "Changing the API Key to inactive will disable its associated API.\nChange the status to inactive only if you no longer use the API Key."
+          "description": "If you disable API KEY, you will not be able to use the API with that KEY. Please only disable API KEY if you are not using it."
         },
         "delete-option": {
           "title": "Delete Option",
