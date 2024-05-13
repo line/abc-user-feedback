@@ -100,7 +100,9 @@ describe('FeedbackService Test Suite', () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const reservedFieldKey = faker.helpers.arrayElement(RESERVED_FIELD_KEYS);
+      const reservedFieldKey = faker.helpers.arrayElement(
+        RESERVED_FIELD_KEYS.filter((key) => key !== 'createdAt'),
+      );
       dto.data[reservedFieldKey] = faker.string.sample();
 
       await expect(feedbackService.create(dto)).rejects.toThrow(

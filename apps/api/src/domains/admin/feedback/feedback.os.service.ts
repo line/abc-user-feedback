@@ -212,15 +212,10 @@ export class FeedbackOSService {
   }
 
   async create({ channelId, feedback }: CreateFeedbackOSDto) {
-    let createdAt = DateTime.utc().toISO();
-    if (feedback.data.createdAt) {
-      createdAt = feedback.data.createdAt;
-      delete feedback.data.createdAt;
-    }
     const osFeedbackData = {
       ...feedback.data,
       id: feedback.id,
-      createdAt,
+      createdAt: feedback.createdAt,
       updatedAt: DateTime.utc().toISO(),
     };
 
