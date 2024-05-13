@@ -455,7 +455,7 @@
     "field": "定义每个注册频道通过用户反馈收集的反馈字段。预先配置通过API收集或直接在ADMIN中注册的字段。",
     "image-setting": "对于图片格式的反馈，与图片存储集成并建立图片URL域的白名单。\n有关详细信息，请参阅图片<icon></icon> <docs>文档</docs>。",
     "field-preview": "在字段管理中预览配置的字段外观。预览显示示例数据以便说明。",
-    "webhook": "使用Webhooks来响应用户反馈中发生的各种事件。有关更多详细信息，请参阅Webhook<icon></icon> <docs>文档</docs>。"
+    "webhook": "Webhook 用于在 User Feedback 中发生的各种事件。 有关更多详细信息，请参阅Webhook<icon></icon> <docs>文档</docs>。"
   },
   "hint": {
     "required": "必填",

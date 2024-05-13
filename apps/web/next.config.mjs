@@ -9,7 +9,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
+  reactStrictMode: process.env.NODE_ENV === 'production',
   swcMinify: true,
   i18n: i18nConfig.i18n,
   output: 'standalone',

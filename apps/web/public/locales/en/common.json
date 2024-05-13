@@ -446,16 +446,16 @@
     }
   },
   "help-card": {
-    "project-info": "Collect feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
+    "project-info": "It collects feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
     "role": "Set permissions for accessing and using the project.",
     "member": "Register or manage members participating in the project.",
     "api-key": "It manages the User Feedback API Key information. If you want to use the API, create and use the Key. See API <icon></icon> <docs>Docs</docs> for more information.",
     "issue-tracker": "Link and manage User Feedback with your Issue Tracking System. Please enter your Issue Tracking System details.",
     "channel-info": "Define the feedback fields to collect through the channel. Please register channel information considering the feedback path and characteristics (e.g., VOC, App Review).",
     "field": "Define the feedback fields to be collected via User Feedback for each registered channel. Pre-configure fields to be collected through the API or those to be directly registered in the ADMIN.",
-    "image-setting": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Documentation</docs> for details.",
+    "image-setting": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Docs</docs> for details.",
     "field-preview": "Preview the appearance of fields configured in Field Management. Previews show sample data for illustration purposes.",
-    "webhook": "Utilize webhooks to respond to a variety of events occurring within User Feedback. For more details, refer to the Webhook <icon></icon> <docs>Documentation</docs>."
+    "webhook": "Webhook is used for various events that occur within User Feedback. For more details, refer to the Webhook <icon></icon> <docs>Docs</docs>."
   },
   "hint": {
     "required": "Required",

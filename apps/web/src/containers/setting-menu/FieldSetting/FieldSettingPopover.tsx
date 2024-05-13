@@ -137,6 +137,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     setOptionInput('');
+    setValue('property', 'READ_ONLY');
     setValue('options', undefined);
   }, [watch('format')]);
 
@@ -324,9 +325,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                     type="radio"
                     name="radio-type"
                     className="radio radio-sm"
-                    onChange={(e) =>
-                      e.target.checked ? setValue('property', 'READ_ONLY') : {}
-                    }
+                    onChange={() => setValue('property', 'READ_ONLY')}
                     checked={watch('property') === 'READ_ONLY'}
                   />
                   Read Only
@@ -336,10 +335,9 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                     type="radio"
                     name="radio-type"
                     className="radio radio-sm"
-                    onChange={(e) =>
-                      e.target.checked ? setValue('property', 'EDITABLE') : {}
-                    }
+                    onChange={() => setValue('property', 'EDITABLE')}
                     checked={watch('property') === 'EDITABLE'}
+                    disabled={watch('format') === 'images'}
                   />
                   Editable
                 </label>
