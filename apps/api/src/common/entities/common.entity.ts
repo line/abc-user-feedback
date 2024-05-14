@@ -38,7 +38,9 @@ export abstract class CommonEntity {
 
   @BeforeInsert()
   beforeInsertHook() {
-    this.createdAt = DateTime.utc().toJSDate();
+    if (!this.createdAt) {
+      this.createdAt = DateTime.utc().toJSDate();
+    }
     this.updatedAt = DateTime.utc().toJSDate();
   }
 

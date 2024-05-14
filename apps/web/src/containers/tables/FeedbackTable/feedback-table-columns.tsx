@@ -92,7 +92,7 @@ export const getColumns = (
             minSize: 75,
             header: field.name,
             cell: (info) =>
-              field.type === 'ADMIN' ?
+              field.property === 'EDITABLE' ?
                 <EditableCell
                   field={field}
                   value={info.getValue()}

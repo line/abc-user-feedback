@@ -118,8 +118,7 @@ export class WebhookListener {
         id: feedback.id,
         createdAt: feedback.createdAt,
         updatedAt: feedback.updatedAt,
-        ...feedback.rawData,
-        ...feedback.additionalData,
+        ...feedback.data,
         issues: feedback.issues.map((issue) => ({
           id: issue.id,
           createdAt: issue.createdAt,
@@ -191,8 +190,7 @@ export class WebhookListener {
         id: feedback.id,
         createdAt: feedback.createdAt,
         updatedAt: feedback.updatedAt,
-        ...feedback.rawData,
-        ...feedback.additionalData,
+        ...feedback.data,
         issues,
       },
       channel: {

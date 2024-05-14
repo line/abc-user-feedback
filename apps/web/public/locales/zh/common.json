@@ -153,8 +153,8 @@
       "field-mgmt": {
         "description": "点击'预览'以保存更改。",
         "preview": "预览",
-        "preview-caption": "预览显示示例数据以便清晰。",
-        "preview-description": "选择<preview>预览</preview>来检查配置。"
+        "preview-caption": "预览显示为示例数据。",
+        "preview-description": "可以确认注册的场地是什么样子。"
       },
       "dialog": {
         "edit-user": {
@@ -178,7 +178,7 @@
         },
         "edit-api-key": {
           "title": "编辑API密钥",
-          "description": "将API密钥更改为不活跃将禁用其关联的API。\n只有在您不再使用API密钥时，才将状态更改为不活跃。"
+          "description": "如果禁用API KEY，API将无法作为相应的KEY使用。 仅当不使用API KEY时，请更改为非活动。"
         },
         "delete-option": {
           "title": "删除选项",
@@ -291,7 +291,6 @@
     "equal-search": "精确匹配",
     "like-search": "包含",
     "helper": "帮助",
-    "warning-get-out": "您确定要退出{{type}}的创建过程吗？\n您可以稍后继续此过程。",
     "no-channel": "没有注册频道",
     "guide": "指南",
     "more": "更多",
@@ -413,7 +412,9 @@
     "webhook-feedback-creation": "当特定频道收集到反馈时触发。",
     "webhook-issue-addition": "当特定频道的反馈添加问题时触发。",
     "webhook-issue-creation": "创建问题时触发，不论频道。",
-    "webhook-issue-status-change": "问题状态改变时触发，不论频道。"
+    "webhook-issue-status-change": "问题状态改变时触发，不论频道。",
+    "field-property": "如果您想保留字段内容的原始文本， 如果您想修改 Read Only 内容， 请设置为 Editible 。",
+    "field-status": "表示是否使用字段。 请将禁用的字段更改为Inactive。"
   },
   "tenant-setting-menu": {
     "tenant-info": "租户信息",
@@ -438,19 +439,23 @@
   "modal": {
     "image-preview": {
       "title": "图片预览"
+    },
+    "save-field": {
+      "title": "保存现场管理",
+      "description": "确定要保存添加或修改的字段信息吗？"
     }
   },
   "help-card": {
     "project-info": "基于您希望管理反馈的产品，请注册项目信息（例如，产品名称）。",
     "role": "设置访问和使用项目的权限。",
     "member": "注册或管理参与项目的成员。",
-    "api-key": "它管理用户反馈 API Key 信息。 如果您想使用 API，请创建并使用 Key。 (<icon></icon> <docs>Docs</docs>)",
+    "api-key": "它管理用户反馈 API Key 信息。 如果您想使用 API，请创建并使用 Key。 详细内容请参考API <icon></icon> <docs>Docs</docs>。",
     "issue-tracker": "将用户反馈与您的问题跟踪系统链接和管理。请输入您的问题跟踪系统详细信息。",
     "channel-info": "定义通过频道收集的反馈字段。请注册考虑到反馈路径和特点的频道信息（例如，VOC，应用评价）。",
     "field": "定义每个注册频道通过用户反馈收集的反馈字段。预先配置通过API收集或直接在ADMIN中注册的字段。",
     "image-setting": "对于图片格式的反馈，与图片存储集成并建立图片URL域的白名单。\n有关详细信息，请参阅图片<icon></icon> <docs>文档</docs>。",
     "field-preview": "在字段管理中预览配置的字段外观。预览显示示例数据以便说明。",
-    "webhook": "使用Webhooks来响应用户反馈中发生的各种事件。有关更多详细信息，请参阅Webhook<icon></icon> <docs>文档</docs>。"
+    "webhook": "Webhook 用于在 User Feedback 中发生的各种事件。 有关更多详细信息，请参阅Webhook<icon></icon> <docs>文档</docs>。"
   },
   "hint": {
     "required": "必填",
@@ -462,5 +467,9 @@
   "title-box": {
     "image-storage-integration": "图片存储集成"
   },
-  "placeholder": "请输入{{name}}。"
+  "placeholder": "请输入{{name}}。",
+  "system-popup": {
+    "create-project/channel-get-out": "您确定要退出{{type}}的创建过程吗？\n您可以稍后继续此过程。",
+    "field-setting-get-out": "还有未保存的字段信息。 你还是要出去吗。"
+  }
 }

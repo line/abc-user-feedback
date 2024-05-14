@@ -13,48 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, Type } from 'class-transformer';
-
-import {
-  FieldFormatEnum,
-  FieldPropertyEnum,
-  FieldStatusEnum,
-} from '../../../../../common/enums';
-
-export class ReplaceFieldDto {
-  @Expose()
-  id?: number;
-
-  @Expose()
-  name: string;
-
-  @Expose()
-  key: string;
-
-  @Expose()
-  description: string;
-
-  @Expose()
-  format: FieldFormatEnum;
-
-  @Expose()
-  property: FieldPropertyEnum;
-
-  @Expose()
-  status: FieldStatusEnum;
-
-  @Expose()
-  @Type(() => Option)
-  options?: Option[];
-}
-
-class Option {
-  @Expose()
-  id?: number;
-
-  @Expose()
-  name: string;
-
-  @Expose()
-  key: string;
+export enum FieldPropertyEnum {
+  READ_ONLY = 'READ_ONLY',
+  EDITABLE = 'EDITABLE',
 }

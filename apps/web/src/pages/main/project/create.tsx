@@ -18,7 +18,7 @@ import type { GetStaticProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { CreateProjectChannelTemplate } from '@/components';
+import { CreateProjectChannelTemplate, HelpCardDocs } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import {
   InputApiKey,
@@ -45,15 +45,16 @@ const CreateProject: React.FC = () => {
   const { completeStepIndex, currentStepIndex, currentStep, stepperText } =
     useCreateProject();
 
-  const HELP_TEXT: Record<ProjectStepType, string> = useMemo(() => {
-    return {
-      projectInfo: t('help-card.project-info'),
-      roles: t('help-card.role'),
-      members: t('help-card.member'),
-      apiKeys: t('help-card.api-key'),
-      issueTracker: t('help-card.issue-tracker'),
-    };
-  }, []);
+  const HELP_TEXT: Record<ProjectStepType, string | React.ReactNode> =
+    useMemo(() => {
+      return {
+        projectInfo: t('help-card.project-info'),
+        roles: t('help-card.role'),
+        members: t('help-card.member'),
+        apiKeys: <HelpCardDocs i18nKey="help-card.api-key" />,
+        issueTracker: t('help-card.issue-tracker'),
+      };
+    }, []);
 
   return (
     <CreateProjectChannelTemplate

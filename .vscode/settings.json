@@ -16,9 +16,6 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
-  "[dockerfile]": {
-    "editor.defaultFormatter": "foxundermoon.shell-format"
-  },
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }

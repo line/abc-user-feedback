@@ -22,14 +22,10 @@ import type { Repository } from 'typeorm';
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '@/common/enums';
-import {
-  createFieldDto,
-  feedbackDataFixture,
-  fieldsFixture,
-} from '@/test-utils/fixtures';
+import { createFieldDto, feedbackDataFixture } from '@/test-utils/fixtures';
 import type { ChannelRepositoryStub } from '@/test-utils/stubs';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { FeedbackServiceProviders } from '../../../test-utils/providers/feedback.service.providers';
@@ -104,7 +100,9 @@ describe('FeedbackService Test Suite', () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const reservedFieldKey = faker.helpers.arrayElement(RESERVED_FIELD_KEYS);
+      const reservedFieldKey = faker.helpers.arrayElement(
+        RESERVED_FIELD_KEYS.filter((key) => key !== 'createdAt'),
+      );
       dto.data[reservedFieldKey] = faker.string.sample();
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
@@ -124,25 +122,7 @@ describe('FeedbackService Test Suite', () => {
         new BadRequestException('invalid field key: ' + invalidFieldKey),
       );
     });
-    it('creating a feedback fails with an admin field', async () => {
-      const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const adminFieldKey = 'adminFieldKey';
-      dto.data[adminFieldKey] = faker.string.sample();
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue([
-        ...fieldsFixture,
-        createFieldDto({
-          key: adminFieldKey,
-          type: FieldTypeEnum.ADMIN,
-        }) as FieldEntity,
-      ]);
-
-      await expect(feedbackService.create(dto)).rejects.toThrow(
-        new BadRequestException('this field is for admin: ' + adminFieldKey),
-      );
-    });
-    it('creating a feedback fails with an invalid value for field type', async () => {
+    it('creating a feedback fails with an invalid value for a field format', async () => {
       const formats = [
         {
           format: FieldFormatEnum.text,
@@ -177,7 +157,7 @@ describe('FeedbackService Test Suite', () => {
         for (const invalidValue of invalidValues) {
           const field = createFieldDto({
             format,
-            type: FieldTypeEnum.API,
+            property: FieldPropertyEnum.EDITABLE,
             status: FieldStatusEnum.ACTIVE,
           });
           const dto = new CreateFeedbackDto();

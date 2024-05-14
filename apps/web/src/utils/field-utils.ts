@@ -13,8 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export enum FieldTypeEnum {
-  DEFAULT = 'DEFAULT',
-  ADMIN = 'ADMIN',
-  API = 'API',
-}
+import type {
+  FieldPropertyEnumType,
+  FieldType,
+  InputFieldType,
+} from '@/types/field.type';
+
+export const isDefaultField = (field: FieldType | InputFieldType) =>
+  field.key === 'id' ||
+  field.key === 'createdAt' ||
+  field.key === 'updatedAt' ||
+  field.key === 'issues';
+
+export const sortField = (
+  a: FieldType | InputFieldType,
+  b: FieldType | InputFieldType,
+) => {
+  const aNum = isDefaultField(a) ? 1 : 2;
+  const bNum = isDefaultField(b) ? 1 : 2;
+  return aNum - bNum;
+};
+
+export const fieldProperty: Record<FieldPropertyEnumType, string> = {
+  READ_ONLY: 'Read Only',
+  EDITABLE: 'Editable',
+};

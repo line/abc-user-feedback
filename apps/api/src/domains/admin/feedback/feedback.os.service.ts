@@ -213,9 +213,9 @@ export class FeedbackOSService {
 
   async create({ channelId, feedback }: CreateFeedbackOSDto) {
     const osFeedbackData = {
-      ...feedback.rawData,
+      ...feedback.data,
       id: feedback.id,
-      createdAt: DateTime.utc().toISO(),
+      createdAt: feedback.createdAt,
       updatedAt: DateTime.utc().toISO(),
     };
 

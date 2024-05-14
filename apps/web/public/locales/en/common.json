@@ -153,8 +153,8 @@
       "field-mgmt": {
         "description": "Click 'Preview' to save changes.",
         "preview": "Preview",
-        "preview-caption": "Preview shows example data for clarity.",
-        "preview-description": "Select <preview>Preview</preview> to check the configuration."
+        "preview-caption": "The preview appears as example data.",
+        "preview-description": "You can see what the field you registered will look like."
       },
       "dialog": {
         "edit-user": {
@@ -178,7 +178,7 @@
         },
         "edit-api-key": {
           "title": "Edit API Key",
-          "description": "Changing the API Key to inactive will disable its associated API.\nChange the status to inactive only if you no longer use the API Key."
+          "description": "If you disable API KEY, you will not be able to use the API with that KEY. Please only disable API KEY if you are not using it."
         },
         "delete-option": {
           "title": "Delete Option",
@@ -291,7 +291,6 @@
     "equal-search": "Exact Match",
     "like-search": "Contains",
     "helper": "Help",
-    "warning-get-out": "Are you sure you want to exit the creation process for a {{type}}?\nYou can resume this process later.",
     "no-channel": "No Channels Registered",
     "guide": "Guidelines",
     "more": "More",
@@ -413,7 +412,9 @@
     "webhook-feedback-creation": "Triggered when feedback is collected for a specific channel.",
     "webhook-issue-addition": "Triggered when an issue is added to feedback in a specific channel.",
     "webhook-issue-creation": "Triggered when an issue is created, regardless of the channel.",
-    "webhook-issue-status-change": "Triggered when the status of an issue changes, regardless of the channel."
+    "webhook-issue-status-change": "Triggered when the status of an issue changes, regardless of the channel.",
+    "field-property": "If you want to retain the original source of the field content, set it to Editable if you want to modify the Read Only content.",
+    "field-status": "Indicates whether fields are used. Please change unused fields to Inactive."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant Information",
@@ -438,19 +439,23 @@
   "modal": {
     "image-preview": {
       "title": "Image Preview"
+    },
+    "save-field": {
+      "title": "Save Field Management",
+      "description": "Do you want to save the field information that you added or modified?"
     }
   },
   "help-card": {
-    "project-info": "Collect feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
+    "project-info": "It collects feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
     "role": "Set permissions for accessing and using the project.",
     "member": "Register or manage members participating in the project.",
-    "api-key": "It manages the User Feedback API Key information. If you want to use the API, create and use the Key. (<icon></icon> <docs>Docs</docs>)",
+    "api-key": "It manages the User Feedback API Key information. If you want to use the API, create and use the Key. See API <icon></icon> <docs>Docs</docs> for more information.",
     "issue-tracker": "Link and manage User Feedback with your Issue Tracking System. Please enter your Issue Tracking System details.",
     "channel-info": "Define the feedback fields to collect through the channel. Please register channel information considering the feedback path and characteristics (e.g., VOC, App Review).",
     "field": "Define the feedback fields to be collected via User Feedback for each registered channel. Pre-configure fields to be collected through the API or those to be directly registered in the ADMIN.",
-    "image-setting": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Documentation</docs> for details.",
+    "image-setting": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Docs</docs> for details.",
     "field-preview": "Preview the appearance of fields configured in Field Management. Previews show sample data for illustration purposes.",
-    "webhook": "Utilize webhooks to respond to a variety of events occurring within User Feedback. For more details, refer to the Webhook <icon></icon> <docs>Documentation</docs>."
+    "webhook": "Webhook is used for various events that occur within User Feedback. For more details, refer to the Webhook <icon></icon> <docs>Docs</docs>."
   },
   "hint": {
     "required": "Required",
@@ -462,5 +467,9 @@
   "title-box": {
     "image-storage-integration": "Image Storage Integration"
   },
-  "placeholder": "Please enter {{name}}."
+  "placeholder": "Please enter {{name}}.",
+  "system-popup": {
+    "create-project/channel-get-out": "Are you sure you want to exit the creation process for a {{type}}?\nYou can resume this process later.",
+    "field-setting-get-out": "You have some field information that has not been saved. You can still leave if you want."
+  }
 }

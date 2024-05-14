@@ -57,20 +57,16 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
     for (let i = 1; i <= 8; i++) {
       const fakeData: Record<string, any> = {};
       for (const field of fields) {
-        if (field.type === 'DEFAULT') {
-          if (field.key === 'id') {
-            fakeData[field.name] = i;
-          } else if (field.key === 'createdAt' || field.key === 'updatedAt') {
-            fakeData[field.name] = dayjs().add(i, 'hour');
-          } else if (field.key === 'issues') {
-            fakeData[field.name] = faker.helpers.arrayElements(issues, {
-              min: 0,
-              max: 4,
-            });
-          } else {
-            fakeData[field.name] = null;
-          }
-        } else if (field.type === 'API') {
+        if (field.key === 'id') {
+          fakeData[field.name] = i;
+        } else if (field.key === 'createdAt' || field.key === 'updatedAt') {
+          fakeData[field.name] = dayjs().add(i, 'hour');
+        } else if (field.key === 'issues') {
+          fakeData[field.name] = faker.helpers.arrayElements(issues, {
+            min: 0,
+            max: 4,
+          });
+        } else {
           fakeData[field.name] =
             field.format === 'date' ? faker.date.anytime()
             : field.format === 'keyword' ? faker.word.noun()
@@ -111,7 +107,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             : field.format === 'text' ? 200
             : 150,
           cell: (info) =>
-            field.type === 'ADMIN' ?
+            field.property === 'EDITABLE' ?
               <EditableCell
                 field={field as FieldType}
                 value={info.getValue()}

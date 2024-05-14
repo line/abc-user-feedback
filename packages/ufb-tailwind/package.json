@@ -6,6 +6,7 @@
   "types": "index.d.ts",
   "typings": "index.d.ts",
   "scripts": {
+    "clean": "git clean -xdf dist .turbo node_modules",
     "build": "node src/build",
     "build:postcss-base": "postcss --config src/base src/base/*.css --base src --dir dist",
     "build:prejss-base": "prejss-cli dist/base.css --format commonjs",
