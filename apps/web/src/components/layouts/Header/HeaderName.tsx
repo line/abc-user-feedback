@@ -18,14 +18,14 @@ import { useRouter } from 'next/router';
 
 import { Icon } from '@ufb/ui';
 
-import { useTenant } from '@/contexts/tenant.context';
+import { useTenantState } from '@/entities/tenant';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
 
 const HeaderName: React.FC<IProps> = () => {
   const router = useRouter();
-  const { tenant } = useTenant();
+  const tenant = useTenantState();
 
   const projectId = useMemo(() => {
     if (!router.query?.projectId) return -1;

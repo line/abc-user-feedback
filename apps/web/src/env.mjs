@@ -17,6 +17,11 @@ import { createEnv } from '@t3-oss/env-nextjs';
 import { z } from 'zod';
 
 export const env = createEnv({
+  shared: {
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
+  },
   server: {
     API_BASE_URL: z.string().url(),
     SESSION_PASSWORD: z.string().min(32),
@@ -30,6 +35,7 @@ export const env = createEnv({
     SESSION_PASSWORD: process.env.SESSION_PASSWORD,
     NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
   },
   skipValidation:
     !!process.env.CI ||

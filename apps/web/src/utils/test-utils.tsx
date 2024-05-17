@@ -13,16 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import type { ReactElement } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { RenderOptions } from '@testing-library/react';
-import { render } from '@testing-library/react';
-
-const queryClient = new QueryClient();
+import { render, within } from '@testing-library/react';
+import { setupServer } from 'msw/node';
+import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
+  const [queryClient] = useState(
+    () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
+  );
+
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <MemoryRouterProvider>
+      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    </MemoryRouterProvider>
   );
 };
 
@@ -31,5 +38,8 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>,
 ) => render(ui, { wrapper: AllTheProviders, ...options });
 
+const customScreen = within(document?.body);
+
+export const server = setupServer();
 export * from '@testing-library/react';
-export { customRender as render };
+export { customScreen as screen, customRender as render };

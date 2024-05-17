@@ -22,7 +22,7 @@ import { z } from 'zod';
 import { TextInput, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
-import { useTenant } from '@/contexts/tenant.context';
+import { useTenantActions, useTenantState } from '@/entities/tenant';
 import { useOAIMutation } from '@/hooks';
 
 interface IForm {
@@ -38,7 +38,8 @@ interface IProps extends React.PropsWithChildren {}
 
 const TenantInfoSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { tenant: data, refetch } = useTenant();
+  const tenant = useTenantState();
+  const { refetchTenant } = useTenantActions();
   const { reset, register, handleSubmit, formState } = useForm<IForm>({
     resolver: zodResolver(scheme),
   });
@@ -48,7 +49,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
     path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
-        await refetch();
+        await refetchTenant();
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
@@ -58,13 +59,13 @@ const TenantInfoSetting: React.FC<IProps> = () => {
   });
 
   useEffect(() => {
-    if (!data) return;
-    reset(data);
-  }, [data]);
+    if (!tenant) return;
+    reset(tenant);
+  }, [tenant]);
 
   const onSubmit = (input: IForm) => {
-    if (!data) return;
-    mutate({ ...data, ...input });
+    if (!tenant) return;
+    mutate({ ...tenant, ...input });
   };
   return (
     <SettingMenuTemplate
@@ -78,7 +79,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
       }}
     >
       <form id="form" className="flex flex-col gap-6">
-        <TextInput value={data?.id} label="Tenant ID" disabled />
+        <TextInput value={tenant?.id} label="Tenant ID" disabled />
         <TextInput
           {...register('siteName')}
           label="Tenant Name"

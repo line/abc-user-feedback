@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -26,7 +27,7 @@ import { toast } from '@ufb/ui';
 import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useTenant } from '@/contexts/tenant.context';
+import { useTenantActions, useTenantState } from '@/entities/tenant';
 import { useOAIMutation } from '@/hooks';
 import type { NextPageWithLayout } from '../_app';
 
@@ -44,9 +45,14 @@ const defaultValues: IForm = {
 
 const CreatePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-
   const router = useRouter();
-  const { refetch } = useTenant();
+
+  const tenant = useTenantState();
+  const { refetchTenant } = useTenantActions();
+  useEffect(() => {
+    if (!tenant) return;
+    router.replace(Path.SIGN_IN);
+  }, [tenant]);
 
   const { register, handleSubmit } = useForm({
     resolver: zodResolver(schema),
@@ -63,8 +69,8 @@ const CreatePage: NextPageWithLayout = () => {
           title: 'create Default Super User',
           description: 'email: user@feedback.com \n password: 12345678',
         });
-        router.push(Path.SIGN_IN);
-        refetch();
+        router.replace(Path.SIGN_IN);
+        await refetchTenant();
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });

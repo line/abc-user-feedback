@@ -23,12 +23,13 @@ import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
-import { TenantProvider } from '@/contexts/tenant.context';
 import { UserProvider } from '@/contexts/user.context';
 // NOTE: DON'T Change the following import order
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/react-datepicker.css';
 import './_app.css';
+
+import { TenantGuard } from '@/entities/tenant';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -50,12 +51,12 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <TenantProvider>
+        <TenantGuard>
           <UserProvider>
             {getLayout(<Component {...pageProps} />)}
             <Toaster />
           </UserProvider>
-        </TenantProvider>
+        </TenantGuard>
       </QueryClientProvider>
     </>
   );

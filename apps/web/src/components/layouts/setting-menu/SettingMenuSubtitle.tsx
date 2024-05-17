@@ -17,7 +17,7 @@ import { Fragment, useMemo } from 'react';
 
 import { Icon } from '@ufb/ui';
 
-import { useTenant } from '@/contexts/tenant.context';
+import { useTenantState } from '@/entities/tenant';
 import { useChannels, useProjects } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
@@ -29,7 +29,7 @@ interface IProps extends React.PropsWithChildren {
 
 const SettingMenuSubtitle: React.FC<IProps> = (props) => {
   const { settingMenu, channelId, projectId } = props;
-  const { tenant: tenantData } = useTenant();
+  const tenant = useTenantState();
   const { data: projectData } = useProjects();
   const { data: channelData } = useChannels(projectId);
 
@@ -47,20 +47,20 @@ const SettingMenuSubtitle: React.FC<IProps> = (props) => {
     switch (settingMenu) {
       case 'TENANT_INFO':
       case 'SIGNUP_SETTING':
-        return [tenantData?.siteName];
+        return [tenant?.siteName];
       case 'PROJECT_INFO':
       case 'API_KEY_MANAGEMENT':
       case 'TICKET_MANAGEMENT':
       case 'DELETE_PROJECT':
-        return [tenantData?.siteName, projectName];
+        return [tenant?.siteName, projectName];
       case 'CHANNEL_INFO':
       case 'FIELD_MANAGEMENT':
       case 'DELETE_CHANNEL':
-        return [tenantData?.siteName, projectName, channelName];
+        return [tenant?.siteName, projectName, channelName];
       default:
         return [];
     }
-  }, [settingMenu, tenantData, projectName, channelName]);
+  }, [settingMenu, tenant, projectName, channelName]);
 
   return (
     <h2 className="flex items-center gap-1">

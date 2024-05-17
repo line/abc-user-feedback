@@ -18,7 +18,7 @@ import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import { useTenant } from '@/contexts/tenant.context';
+import { useTenantState } from '@/entities/tenant';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {}
@@ -26,7 +26,7 @@ interface IProps {}
 const OAuthLoginButton: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { tenant } = useTenant();
+  const tenant = useTenantState();
 
   const callback_url = useMemo(
     () =>

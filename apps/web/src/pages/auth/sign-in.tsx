@@ -29,8 +29,8 @@ import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { OAuthLoginButton } from '@/containers/buttons';
-import { useTenant } from '@/contexts/tenant.context';
 import { useUser } from '@/contexts/user.context';
+import { useTenantState } from '@/entities/tenant';
 import type { NextPageWithLayout } from '@/pages/_app';
 import type { IFetchError } from '@/types/fetch-error.type';
 
@@ -51,7 +51,7 @@ const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { signIn } = useUser();
-  const { tenant } = useTenant();
+  const tenant = useTenantState();
 
   const { handleSubmit, register, formState, setError } = useForm({
     resolver: zodResolver(schema),
@@ -142,7 +142,7 @@ const SignInPage: NextPageWithLayout = () => {
 };
 
 const ResetPassword: React.FC = () => {
-  const { tenant } = useTenant();
+  const tenant = useTenantState();
   const { t } = useTranslation();
   if (!tenant?.useEmail || tenant.isPrivate) return <></>;
   return (

@@ -13,10 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import '@testing-library/jest-dom';
+import JSDOMEnvironment from 'jest-environment-jsdom';
 
-jest.mock('react-i18next', () => ({
-  useTranslation: () => {
-    return { t: (str) => str };
-  },
-}));
+// https://github.com/facebook/jest/blob/v29.4.3/website/versioned_docs/version-29.4/Configuration.md#testenvironment-string
+export default class FixJSDOMEnvironment extends JSDOMEnvironment {
+  constructor(...args: ConstructorParameters<typeof JSDOMEnvironment>) {
+    super(...args);
+
+    // FIXME https://github.com/jsdom/jsdom/issues/3363
+    this.global.structuredClone = structuredClone;
+  }
+}

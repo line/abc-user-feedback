@@ -16,6 +16,9 @@
   "files.associations": {
     "*.css": "tailwindcss"
   },
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "@testing-library/react"
+  ],
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }

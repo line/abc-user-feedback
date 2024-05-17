@@ -14,18 +14,18 @@
  * under the License.
  */
 import { TenantProjectCard } from '@/components';
-import { useTenant } from '@/contexts/tenant.context';
+import { useTenantState } from '@/entities/tenant';
 import { useOAIQuery, useProjects } from '@/hooks';
 
 const TenantCardWrapper: React.FC = () => {
-  const { tenant } = useTenant();
+  const tenant = useTenantState();
 
   if (!tenant) return null;
 
   return <TenantCard tenantId={tenant?.id} />;
 };
 const TenantCard: React.FC<{ tenantId: number }> = ({ tenantId }) => {
-  const { tenant } = useTenant();
+  const tenant = useTenantState();
   const { data } = useProjects();
 
   const { data: feedbackCount } = useOAIQuery({
