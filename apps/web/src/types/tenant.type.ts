@@ -22,15 +22,3 @@ export type OAuthConfigType = {
   userProfileRequestURL: string;
   emailKey: string;
 };
-
-export type TenantType = {
-  id: number;
-  siteName: string;
-  description: string | null;
-  useEmail: boolean;
-  useOAuth: boolean;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[];
-  oauthConfig: OAuthConfigType | null;
-};

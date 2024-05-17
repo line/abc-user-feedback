@@ -41,9 +41,7 @@ describe('TenantGuard', () => {
     });
   });
   test('Found tenant', async () => {
-    const MOCK_TENANT_DATA = {
-      id: 1,
-    };
+    const MOCK_TENANT_DATA = { id: 1 };
 
     server.use(
       http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
