@@ -32,7 +32,7 @@ describe('TenantGuard', () => {
   test('Not found tenant', async () => {
     server.use(
       http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
-        return HttpResponse.json({}, { status: 404 });
+        return HttpResponse.json({ statusCode: 404 }, { status: 404 });
       }),
     );
     render(<TenantGuard />);

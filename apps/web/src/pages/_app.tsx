@@ -24,12 +24,11 @@ import { appWithTranslation } from 'next-i18next';
 import { Toaster } from '@ufb/ui';
 
 import { UserProvider } from '@/contexts/user.context';
+import { TenantGuard } from '@/entities/tenant';
 // NOTE: DON'T Change the following import order
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/react-datepicker.css';
 import './_app.css';
-
-import { TenantGuard } from '@/entities/tenant';
 
 export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

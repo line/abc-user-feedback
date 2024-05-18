@@ -13,29 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { Icon } from '@ufb/ui';
+
 import { Path } from '@/constants/path';
-import { useOAIQuery } from '@/hooks';
-import { useTenantActions } from '../tenant.model';
 
-interface IProps extends React.PropsWithChildren {}
+interface IProps {}
 
-export const TenantGuard: React.FC<IProps> = ({ children }) => {
+const Logo: React.FC<IProps> = () => {
   const router = useRouter();
-  const { setTenant } = useTenantActions();
-
-  const { data, status, error } = useOAIQuery({
-    path: '/api/admin/tenants',
-    queryOptions: { retry: 0 },
-  });
-
-  useEffect(() => {
-    if (error?.statusCode === 404) void router.push(Path.CREATE_TENANT);
-    if (data) setTenant(data);
-  }, [data, error]);
-
-  if (status === 'pending') return <div>Loading...</div>;
-  return children;
+  return (
+    <Link
+      className="flex cursor-pointer items-center gap-1"
+      href={Path.isProtectPage(router.pathname) ? Path.MAIN : Path.SIGN_IN}
+    >
+      <Image src="/assets/images/logo.svg" alt="logo" width={24} height={24} />
+      <Icon name="Title" className="h-[24px] w-[123px]" />
+    </Link>
+  );
 };
+
+export default Logo;

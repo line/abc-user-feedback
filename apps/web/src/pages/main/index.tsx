@@ -54,6 +54,9 @@ const MainIndexPage: NextPageWithLayout = () => {
 MainIndexPage.getLayout = (page) => {
   return <MainTemplate>{page}</MainTemplate>;
 };
+// MainIndexPage.getLayout = (page) => {
+//   return <MainTemplate>{page}</MainTemplate>;
+// };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

@@ -13,4 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ImagePreviewButton } from './ImagePreviewButton';
+export { default as Logo } from './logo.ui';
+export { default as LocaleSelectBox } from './locale-select-box.ui';

@@ -13,28 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { persist } from 'zustand/middleware';
 
-import client from '@/libs/client';
 import { create, createZustandFactory } from '@/libs/zustand';
-import type { Tenant } from './tenant.type';
 
-type State = Tenant | null;
+type State = { theme: 'light' | 'dark' };
 
-type Action = {
-  setTenant: (tenant: Tenant) => void;
-  refetchTenant: () => Promise<void>;
-};
+type Action = { toggle: () => void };
 
-const initialState: State = null;
+const initialState: State = { theme: 'light' };
 
-const tenantStore = create<State, Action>((set) => ({
-  state: initialState,
-  setTenant: (tenant) => set({ state: tenant }),
-  refetchTenant: async () => {
-    const { data } = await client.get({ path: '/api/admin/tenants' });
-    set({ state: data });
-  },
-}));
+const themeStore = create<State, Action>()(
+  persist(
+    (set) => ({
+      state: initialState,
+      toggle: () =>
+        set(({ state }) => ({
+          state: { theme: state.theme === 'light' ? 'dark' : 'light' },
+        })),
+    }),
+    { name: 'theme' },
+  ),
+);
 
-export const [useTenantState, useTenantActions] =
-  createZustandFactory(tenantStore);
+export const [useThemeState, useThemeActions] =
+  createZustandFactory(themeStore);
