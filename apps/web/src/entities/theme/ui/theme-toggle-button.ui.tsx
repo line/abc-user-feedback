@@ -31,7 +31,7 @@ const ThemeToggleButton: React.FC = () => {
   return (
     <button
       className="icon-btn icon-btn-sm icon-btn-secondary"
-      onClick={() => toggle()}
+      onClick={toggle}
     >
       <Icon
         name={theme === 'light' ? 'MoonStroke' : 'SunStroke'}

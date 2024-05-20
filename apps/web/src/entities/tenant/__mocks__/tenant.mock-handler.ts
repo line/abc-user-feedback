@@ -13,25 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type Tenant = {
-  id: number;
-  siteName: string;
-  description: string | null;
-  useEmail: boolean;
-  useOAuth: boolean;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[];
-  useEmailVerification: boolean;
-  oauthConfig: OAuthConfig | null;
-};
-export type OAuthConfig = {
-  oauthUse: boolean;
-  clientId: string;
-  clientSecret: string;
-  authCodeRequestURL: string;
-  scopeString: string;
-  accessTokenRequestURL: string;
-  userProfileRequestURL: string;
-  emailKey: string;
-};
+import { http, HttpResponse } from 'msw';
+
+import { env } from '@/env.mjs';
+
+export const tenantMockHandlers = [
+  http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/tenants`, () => {
+    return HttpResponse.json({}, { status: 201 });
+  }),
+];

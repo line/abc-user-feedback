@@ -14,25 +14,46 @@
  * under the License.
  */
 import userEvent from '@testing-library/user-event';
-import toast from 'react-hot-toast';
+import { http, HttpResponse } from 'msw';
+import mockRouter from 'next-router-mock';
 
+import { Path } from '@/constants/path';
+import { env } from '@/env.mjs';
+import { server } from '@/msw';
 import { act, render, screen, waitFor } from '@/utils/test-utils';
+import CreateTenantForm from './create-tenant-form.ui';
+import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
 
-const TestComponent = () => {
-  const onClick = () => {
-    toast.success('Success');
-  };
-  return <button onClick={onClick}>test</button>;
-};
 describe('CreateTenantForm', () => {
-  test('test ', async () => {
-    render(<TestComponent />);
-    const btn = screen.getByRole('button');
+  test('should render the form', async () => {
+    server.use(
+      http.post(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
+        return HttpResponse.json({ statusCode: 200 }, { status: 201 });
+      }),
+      http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
+        return HttpResponse.json({ statusCode: 200 }, { status: 201 });
+      }),
+    );
+    render(<CreateTenantForm />);
+
+    const button = screen.getByRole('button');
+    const input = screen.getByPlaceholderText('Please enter the site name');
+
+    await userEvent.type(input, 'test');
+
     await act(async () => {
-      await userEvent.click(btn);
+      await userEvent.click(button);
     });
 
-    await waitFor(() => screen.getByText('Success'));
-    expect(screen.queryByText('Success')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockRouter).toMatchObject({ pathname: Path.SIGN_IN });
+      expect(screen.getByText('Success')).toBeInTheDocument();
+      expect(
+        screen.getByText(new RegExp(DEFAULT_SUPER_ACCOUNT.email, 'i')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(new RegExp(DEFAULT_SUPER_ACCOUNT.password, 'i')),
+      ).toBeInTheDocument();
+    });
   });
 });

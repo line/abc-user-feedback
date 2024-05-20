@@ -18,7 +18,6 @@ import type { ReactElement } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { RenderOptions } from '@testing-library/react';
 import { render, within } from '@testing-library/react';
-import { setupServer } from 'msw/node';
 import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 
 import { Toaster } from '@ufb/ui';
@@ -43,6 +42,5 @@ const customRender = (
 
 const customScreen = within(document?.body);
 
-export const server = setupServer();
 export * from '@testing-library/react';
 export { customScreen as screen, customRender as render };

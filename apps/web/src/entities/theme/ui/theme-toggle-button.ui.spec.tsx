@@ -13,25 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type Tenant = {
-  id: number;
-  siteName: string;
-  description: string | null;
-  useEmail: boolean;
-  useOAuth: boolean;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[];
-  useEmailVerification: boolean;
-  oauthConfig: OAuthConfig | null;
-};
-export type OAuthConfig = {
-  oauthUse: boolean;
-  clientId: string;
-  clientSecret: string;
-  authCodeRequestURL: string;
-  scopeString: string;
-  accessTokenRequestURL: string;
-  userProfileRequestURL: string;
-  emailKey: string;
-};
+import userEvent from '@testing-library/user-event';
+
+import { act, render, screen } from '@/utils/test-utils';
+import ThemeToggleButton from './theme-toggle-button.ui';
+
+describe('ThemeToggleButton', () => {
+  it('toggle theme using document className', async () => {
+    render(<ThemeToggleButton />);
+    const button = screen.getByRole('button');
+
+    expect(document.documentElement.className).toBe('light');
+
+    await act(async () => {
+      await userEvent.click(button);
+    });
+
+    expect(document.documentElement.className).toBe('dark');
+  });
+});

@@ -439,7 +439,7 @@ export interface components {
     GetTenantResponseDto: {
       id: number;
       siteName: string;
-      description: string;
+      description: string | null;
       useEmail: boolean;
       useOAuth: boolean;
       isPrivate: boolean;

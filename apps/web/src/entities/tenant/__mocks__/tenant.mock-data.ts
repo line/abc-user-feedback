@@ -13,25 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type Tenant = {
-  id: number;
-  siteName: string;
-  description: string | null;
-  useEmail: boolean;
-  useOAuth: boolean;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[];
-  useEmailVerification: boolean;
-  oauthConfig: OAuthConfig | null;
-};
-export type OAuthConfig = {
-  oauthUse: boolean;
-  clientId: string;
-  clientSecret: string;
-  authCodeRequestURL: string;
-  scopeString: string;
-  accessTokenRequestURL: string;
-  userProfileRequestURL: string;
-  emailKey: string;
+import { faker } from '@faker-js/faker';
+
+import type { Tenant } from '../tenant.type';
+
+export const MOCK_TENANT: Tenant = {
+  id: faker.number.int(),
+  siteName: faker.string.sample(),
+  description: null,
+  useEmail: false,
+  useOAuth: false,
+  isPrivate: false,
+  isRestrictDomain: false,
+  allowDomains: [],
+  useEmailVerification: false,
+  oauthConfig: null,
 };

@@ -16,7 +16,7 @@
 
 import nextRouterMock from 'next-router-mock';
 
-import { server } from '@/utils/test-utils';
+import { server } from './src/msw';
 
 import '@testing-library/jest-dom';
 
