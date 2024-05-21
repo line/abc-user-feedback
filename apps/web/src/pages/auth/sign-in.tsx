@@ -27,12 +27,13 @@ import { TextInput, toast } from '@ufb/ui';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantState } from '@/entities/tenant';
+import { useUserActions } from '@/entities/user';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { OAuthLoginButton } from '@/containers/buttons';
-import { useUser } from '@/contexts/user.context';
+// import { useUser } from '@/contexts/user.context';
 import type { IFetchError } from '@/types/fetch-error.type';
 
 interface IForm {
@@ -51,8 +52,9 @@ const defaultValues: IForm = { email: '', password: '', remember: true };
 const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { signIn } = useUser();
+  // const { signIn } = useUser();
   const tenant = useTenantState();
+  const { signInByEmailAndPassword } = useUserActions();
 
   const { handleSubmit, register, formState, setError } = useForm({
     resolver: zodResolver(schema),
@@ -65,7 +67,7 @@ const SignInPage: NextPageWithLayout = () => {
 
   const onSubmit = async (data: IForm) => {
     try {
-      await signIn(data);
+      await signInByEmailAndPassword(data);
     } catch (error) {
       const { message } = error as IFetchError;
       setError('email', { message: 'invalid email' });
