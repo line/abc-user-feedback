@@ -19,8 +19,6 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon } from '@ufb/ui';
 
-import type { PrimitiveFieldFormatEnumType } from '@/types/field.type';
-import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
 import {
   objToQuery,
   objToStr,
@@ -28,6 +26,9 @@ import {
   strValueToObj,
 } from './table-search-input.service';
 import TableSearchInputPopover from './TableSearchInputPopover';
+
+import type { PrimitiveFieldFormatEnumType } from '@/types/field.type';
+import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
 
 export type SearchItemType = {
   key: string;

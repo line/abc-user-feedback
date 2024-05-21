@@ -13,4 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as MaintLayout } from './main-layout.ui';
+import type { NextPage } from 'next';
+
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
+};

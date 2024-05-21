@@ -21,14 +21,15 @@ import { useClickAway } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
+import useFeedbackTable from '../feedback-table.context';
+import IssueSetting from './IssueSetting';
+
 import { Popper } from '@/components';
 import { getStatusColor } from '@/constants/issues';
 import { useIssueSearch, useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { IFetchError } from '@/types/fetch-error.type';
 import type { IssueType } from '@/types/issue.type';
-import useFeedbackTable from '../feedback-table.context';
-import IssueSetting from './IssueSetting';
 
 interface IProps extends React.PropsWithChildren {
   issues?: IssueType[];

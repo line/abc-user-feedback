@@ -16,12 +16,13 @@
 import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { MainTemplate } from '@/components';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { CreateProjectButton } from '@/containers/buttons';
 import { ProjectCard, TenantCard } from '@/containers/main';
 import { useProjects } from '@/hooks';
-import type { NextPageWithLayout } from '../_app';
 
 const CARD_BORDER_CSS =
   'border-fill-tertiary h-[204px] w-[452px] rounded border';
@@ -52,11 +53,8 @@ const MainIndexPage: NextPageWithLayout = () => {
 };
 
 MainIndexPage.getLayout = (page) => {
-  return <MainTemplate>{page}</MainTemplate>;
+  return <MainLayout>{page}</MainLayout>;
 };
-// MainIndexPage.getLayout = (page) => {
-//   return <MainTemplate>{page}</MainTemplate>;
-// };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

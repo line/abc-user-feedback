@@ -15,6 +15,7 @@
  */
 
 import { ThemeToggleButton } from '@/entities/theme';
+
 import HeaderName from './HeaderName';
 import LocaleSelectBox from './LocaleSelectBox';
 import Logo from './Logo';

@@ -19,11 +19,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Input } from '@ufb/ui';
 
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
+
 import { TimezoneSelectBox } from '@/components';
 import { useCreateProject } from '@/contexts/create-project.context';
 import client from '@/libs/client';
 import type { InputProjectInfoType } from '@/types/project.type';
-import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 const defaultInputError = {};
 

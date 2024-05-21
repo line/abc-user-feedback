@@ -15,11 +15,12 @@
  */
 import { useCallback, useMemo } from 'react';
 
+import RoleSettingTable from '../setting-menu/RoleSetting/RoleSettingTable';
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
+
 import { CreateRolePopover } from '@/components/popovers';
 import { useCreateProject } from '@/contexts/create-project.context';
 import type { RoleType } from '@/types/role.type';
-import RoleSettingTable from '../setting-menu/RoleSetting/RoleSettingTable';
-import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 interface IProps {}
 

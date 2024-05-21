@@ -21,13 +21,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
+import { TableRow } from '../../IssueTable/TableRow';
+import FeedbackDetail from '../FeedbackDetail';
+
 import { TableCheckbox } from '@/components';
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { ShareButton } from '@/containers/buttons';
 import { useOAIMutation, usePermissions } from '@/hooks';
 import useTableStore from '@/zustand/table.store';
-import { TableRow } from '../../IssueTable/TableRow';
-import FeedbackDetail from '../FeedbackDetail';
 
 interface IProps {
   row: Row<any>;

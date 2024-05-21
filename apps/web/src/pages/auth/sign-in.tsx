@@ -25,14 +25,15 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import type { NextPageWithLayout } from '@/shared/types';
+import { useTenantState } from '@/entities/tenant';
+import { MainLayout } from '@/widgets';
+
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { OAuthLoginButton } from '@/containers/buttons';
 import { useUser } from '@/contexts/user.context';
-import { useTenantState } from '@/entities/tenant';
-import type { NextPageWithLayout } from '@/pages/_app';
 import type { IFetchError } from '@/types/fetch-error.type';
-import { MaintLayout } from '@/widgets';
 
 interface IForm {
   email: string;
@@ -159,10 +160,10 @@ const ResetPassword: React.FC = () => {
 
 function Layout(page: React.ReactNode) {
   return (
-    <MaintLayout hasFooter center>
+    <MainLayout hasFooter center>
       {page}
       <ResetPassword />
-    </MaintLayout>
+    </MainLayout>
   );
 }
 

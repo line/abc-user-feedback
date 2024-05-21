@@ -14,17 +14,16 @@
  * under the License.
  */
 
-import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
 import mockRouter from 'next-router-mock';
+
+import { useTenantState } from '../tenant.model';
+import { TenantGuard } from './tenant-guard.ui';
 
 import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import { server } from '@/msw';
 import { render, screen, waitFor } from '@/utils/test-utils';
-import { useTenantState } from '../tenant.model';
-import type { Tenant } from '../tenant.type';
-import { TenantGuard } from './tenant-guard.ui';
 
 const INITIAL_PATH = '/';
 
@@ -35,7 +34,7 @@ describe('TenantGuard', () => {
   test('Not found tenant', async () => {
     server.use(
       http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
-        return HttpResponse.json({ statusCode: 404 } as any, { status: 404 });
+        return HttpResponse.json({ statusCode: 404 }, { status: 404 });
       }),
     );
     render(<TenantGuard />);
@@ -44,18 +43,7 @@ describe('TenantGuard', () => {
     });
   });
   test('Found tenant', async () => {
-    const MOCK_TENANT_DATA: Tenant = {
-      id: faker.number.int(),
-      siteName: 'test',
-      description: null,
-      useEmail: false,
-      useOAuth: false,
-      isPrivate: false,
-      isRestrictDomain: false,
-      allowDomains: [],
-      useEmailVerification: false,
-      oauthConfig: null,
-    };
+    const MOCK_TENANT_DATA = { id: 1 };
 
     server.use(
       http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {

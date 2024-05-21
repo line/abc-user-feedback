@@ -12,11 +12,12 @@
     "lint": "set SKIP_ENV_VALIDATION=1 && eslint",
     "start": "next start",
     "test": "jest --passWithNoTests",
+    "test:snapshot": "jest -u",
     "test:ci": "jest --ci --passWithNoTests",
     "test:dev": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@ufb/prettier-config",
+  "prettier": "@ufb/prettier-config/nextjs",
   "eslintConfig": {
     "extends": [
       "@ufb/eslint-config/base",
@@ -96,7 +97,6 @@
     "jest-environment-jsdom": "^29.7.0",
     "msw": "^2.3.0",
     "next-router-mock": "^0.9.13",
-    "openapi-msw": "^0.4.0",
     "openapi-typescript": "^6.7.5",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",

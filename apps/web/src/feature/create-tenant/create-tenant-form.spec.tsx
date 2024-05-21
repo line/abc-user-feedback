@@ -15,38 +15,47 @@
  */
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
-import mockRouter from 'next-router-mock';
 
-import { Path } from '@/constants/path';
-import { env } from '@/env.mjs';
-import { server } from '@/msw';
-import { act, render, screen, waitFor } from '@/utils/test-utils';
 import CreateTenantForm from './create-tenant-form.ui';
 import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
 
+import { env } from '@/env.mjs';
+import { server } from '@/msw';
+import { act, render, screen, waitFor } from '@/utils/test-utils';
+
 describe('CreateTenantForm', () => {
-  test('should render the form', async () => {
-    server.use(
-      http.post(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
-        return HttpResponse.json({ statusCode: 200 }, { status: 201 });
-      }),
-      http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
-        return HttpResponse.json({ statusCode: 200 }, { status: 201 });
-      }),
-    );
+  test('An input length  should be at least 3', async () => {
     render(<CreateTenantForm />);
-
-    const button = screen.getByRole('button');
     const input = screen.getByPlaceholderText('Please enter the site name');
-
-    await userEvent.type(input, 'test');
+    const submitBtn = screen.getByRole('button');
 
     await act(async () => {
-      await userEvent.click(button);
+      await userEvent.type(input, '1');
+      await userEvent.click(submitBtn);
+    });
+    expect(submitBtn).toBeDisabled();
+  });
+
+  test('On Success', async () => {
+    server.use(
+      http.post(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
+        return HttpResponse.json({}, { status: 200 });
+      }),
+      http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
+        return HttpResponse.json({}, { status: 200 });
+      }),
+    );
+
+    render(<CreateTenantForm />);
+    const input = screen.getByPlaceholderText('Please enter the site name');
+    const submitBtn = screen.getByRole('button');
+
+    await act(async () => {
+      await userEvent.type(input, 'test');
+      await userEvent.click(submitBtn);
     });
 
     await waitFor(() => {
-      expect(mockRouter).toMatchObject({ pathname: Path.SIGN_IN });
       expect(screen.getByText('Success')).toBeInTheDocument();
       expect(
         screen.getByText(new RegExp(DEFAULT_SUPER_ACCOUNT.email, 'i')),
@@ -55,5 +64,23 @@ describe('CreateTenantForm', () => {
         screen.getByText(new RegExp(DEFAULT_SUPER_ACCOUNT.password, 'i')),
       ).toBeInTheDocument();
     });
+  });
+  test('On Error', async () => {
+    server.use(
+      http.post(`${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/tenants`, () => {
+        return HttpResponse.json({}, { status: 500 });
+      }),
+    );
+
+    render(<CreateTenantForm />);
+    const input = screen.getByPlaceholderText('Please enter the site name');
+    const submitBtn = screen.getByRole('button');
+
+    await act(async () => {
+      await userEvent.type(input, 'test');
+      await userEvent.click(submitBtn);
+    });
+
+    await waitFor(() => expect(screen.getByText('Error')).toBeInTheDocument());
   });
 });

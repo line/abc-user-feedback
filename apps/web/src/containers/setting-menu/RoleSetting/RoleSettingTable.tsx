@@ -16,6 +16,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import PermissionRows from './PermissionRows';
+import RoleSettingHead from './RoleSettingHead';
+import RoleTitleRow from './RoleTitleRow';
+
 import type { PermissionType } from '@/types/permission.type';
 import {
   ChannelFieldPermissionList,
@@ -36,9 +40,6 @@ import {
   ProjectWebhookPermissionList,
 } from '@/types/permission.type';
 import type { RoleType } from '@/types/role.type';
-import PermissionRows from './PermissionRows';
-import RoleSettingHead from './RoleSettingHead';
-import RoleTitleRow from './RoleTitleRow';
 
 interface IProps {
   projectId?: number;

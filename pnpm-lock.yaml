@@ -475,9 +475,6 @@ importers:
       next-router-mock:
         specifier: ^0.9.13
         version: 0.9.13(next@14.2.2)(react@18.2.0)
-      openapi-msw:
-        specifier: ^0.4.0
-        version: 0.4.0(msw@2.3.0)
       openapi-typescript:
         specifier: ^6.7.5
         version: 6.7.5
@@ -12682,19 +12679,6 @@ packages:
       is-docker: 2.2.1
       is-wsl: 2.2.0
     dev: false
-
-  /openapi-msw@0.4.0(msw@2.3.0):
-    resolution: {integrity: sha512-qRpsURj/FTtUkrOYioOLeW2Wp2Xe5YQEs2RpTyvI+2sKTEr7vdop5QmkrSADWQlaFZt9TlbARCwHnxhiVNtoFw==}
-    peerDependencies:
-      msw: ^2.0.0
-    dependencies:
-      msw: 2.3.0(typescript@5.4.5)
-      openapi-typescript-helpers: 0.0.7
-    dev: true
-
-  /openapi-typescript-helpers@0.0.7:
-    resolution: {integrity: sha512-7nwlAtdA1fULipibFRBWE/rnF114q6ejRYzNvhdA/x+qTWAZhXGLc/368dlwMlyJDvCQMCnADjpzb5BS5ZmNSA==}
-    dev: true
 
   /openapi-typescript@6.7.5:
     resolution: {integrity: sha512-ZD6dgSZi0u1QCP55g8/2yS5hNJfIpgqsSGHLxxdOjvY7eIrXzj271FJEQw33VwsZ6RCtO/NOuhxa7GBWmEudyA==}

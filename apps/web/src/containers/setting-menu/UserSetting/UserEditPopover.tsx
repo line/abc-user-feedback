@@ -29,10 +29,11 @@ import {
   toast,
 } from '@ufb/ui';
 
+import type { UserDataType } from './UserSetting';
+
 import { SelectBox } from '@/components';
 import type { UserTypeEnum } from '@/contexts/user.context';
 import { useOAIMutation } from '@/hooks';
-import type { UserDataType } from './UserSetting';
 
 interface IProps {
   data: UserDataType;

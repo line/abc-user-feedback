@@ -20,12 +20,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { DescriptionTooltip, MainTemplate } from '@/components';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
+import { DescriptionTooltip } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
 import MyProfileForm from '@/containers/my-profile/MyProfileForm';
 import { useUser } from '@/contexts/user.context';
-import type { NextPageWithLayout } from '../_app';
 
 const menuItems = [
   { key: 'profile-info', iconName: 'InfoCircleFill' },
@@ -81,8 +83,8 @@ const ProfilePage: NextPageWithLayout = () => {
   );
 };
 
-ProfilePage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+ProfilePage.getLayout = (page) => {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

@@ -17,6 +17,8 @@ import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
+import sessionStorage from './session-storage';
+
 import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import type {
@@ -28,7 +30,6 @@ import type {
   OAIResponse,
 } from '@/types/openapi.type';
 import { getRequestUrl } from '@/utils/path-parsing';
-import sessionStorage from './session-storage';
 
 class client {
   private axiosInstance = axios.create({

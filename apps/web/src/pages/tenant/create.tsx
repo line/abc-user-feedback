@@ -18,12 +18,13 @@ import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import AuthTemplate from '@/components/templates/AuthTemplate';
+import type { NextPageWithLayout } from '@/shared/types';
+import { useTenantState } from '@/entities/tenant';
+import { MainLayout } from '@/widgets';
+
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useTenantState } from '@/entities/tenant';
 import { CreateTenantForm } from '@/feature/create-tenant';
-import type { NextPageWithLayout } from '../_app';
 
 const CreateTenantPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -36,14 +37,16 @@ const CreateTenantPage: NextPageWithLayout = () => {
   }, [tenant]);
 
   return (
-    <AuthTemplate>
-      <div className="flex h-screen w-screen items-center justify-center">
-        <div className="w-full max-w-[400px] rounded border p-4 shadow">
-          <CreateTenantForm />
-        </div>
+    <div className="flex h-screen w-screen items-center justify-center">
+      <div className="w-full max-w-[400px] rounded border p-4 shadow">
+        <CreateTenantForm />
       </div>
-    </AuthTemplate>
+    </div>
   );
+};
+
+CreateTenantPage.getLayout = (page) => {
+  return <MainLayout center> {page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

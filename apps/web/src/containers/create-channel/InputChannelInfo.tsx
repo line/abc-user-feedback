@@ -20,10 +20,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Input } from '@ufb/ui';
 
+import CreateChannelInputTemplate from './CreateChannelInputTemplate';
+
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import client from '@/libs/client';
 import type { InputChannelInfoType } from '@/types/channel.type';
-import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 const defaultInputError = {};
 

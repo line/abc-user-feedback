@@ -15,10 +15,11 @@
  */
 import { useTranslation } from 'next-i18next';
 
+import { useTenantState } from '@/entities/tenant';
+
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import { useUser } from '@/contexts/user.context';
-import { useTenantState } from '@/entities/tenant';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {

@@ -18,6 +18,7 @@ import { Fragment, useMemo } from 'react';
 import { Icon } from '@ufb/ui';
 
 import { useTenantState } from '@/entities/tenant';
+
 import { useChannels, useProjects } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 

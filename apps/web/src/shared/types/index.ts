@@ -13,4 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './AuthTemplate';
+export type { NextPageWithLayout } from './page-with-layout.type';

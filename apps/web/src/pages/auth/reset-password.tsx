@@ -24,11 +24,12 @@ import { z } from 'zod';
 
 import { Icon, TextInput, toast } from '@ufb/ui';
 
-import AuthTemplate from '@/components/templates/AuthTemplate';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
-import type { NextPageWithLayout } from '../_app';
 
 interface IForm {
   email: string;
@@ -116,8 +117,8 @@ const ResetPasswordPage: NextPageWithLayout = () => {
   );
 };
 
-ResetPasswordPage.getLayout = function getLayout(page) {
-  return <AuthTemplate>{page}</AuthTemplate>;
+ResetPasswordPage.getLayout = (page) => {
+  return <MainLayout center>{page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

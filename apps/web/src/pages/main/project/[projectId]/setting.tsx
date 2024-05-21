@@ -21,7 +21,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Icon } from '@ufb/ui';
 
-import { MainTemplate } from '@/components';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
 import { SettingMenuBox } from '@/components/layouts/setting-menu';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
@@ -45,7 +47,6 @@ import {
   WebhookSetting,
 } from '@/containers/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
-import type { NextPageWithLayout } from '../../../_app';
 
 interface IProps {
   projectId: number;
@@ -186,8 +187,8 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-SettingPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+SettingPage.getLayout = (page) => {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({

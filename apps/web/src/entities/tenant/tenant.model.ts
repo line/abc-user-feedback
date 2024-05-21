@@ -14,9 +14,10 @@
  * under the License.
  */
 
+import type { Tenant } from './tenant.type';
+
 import client from '@/libs/client';
 import { create, createZustandFactory } from '@/libs/zustand';
-import type { Tenant } from './tenant.type';
 
 type State = Tenant | null;
 

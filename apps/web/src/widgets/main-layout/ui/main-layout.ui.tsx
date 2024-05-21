@@ -13,10 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useRouter } from 'next/router';
 import clsx from 'clsx';
 
-import { ThemeToggleButton } from '@/entities/theme';
 import { LocaleSelectBox, Logo } from '@/shared';
+import { ThemeToggleButton } from '@/entities/theme';
+
+import SideNav from './side-nav.ui';
+import UserBox from './user-box.ui';
+
+import { Path } from '@/constants/path';
 
 interface IProps extends React.PropsWithChildren {
   hasFooter?: boolean;
@@ -25,7 +31,9 @@ interface IProps extends React.PropsWithChildren {
 
 const MainLayout: React.FC<IProps> = (props) => {
   const { children, hasFooter, center } = props;
-  console.log('center: ', center);
+
+  const router = useRouter();
+
   return (
     <div className="min-w-[960px]">
       <header className="relative flex h-[48px] items-center justify-between px-4">
@@ -33,6 +41,7 @@ const MainLayout: React.FC<IProps> = (props) => {
           <Logo />
         </div>
         <div className="flex items-center gap-2 self-stretch">
+          <UserBox />
           <LocaleSelectBox />
           <ThemeToggleButton />
         </div>
@@ -44,7 +53,8 @@ const MainLayout: React.FC<IProps> = (props) => {
           'flex min-h-[calc(100vh-48px)] items-stretch': !center,
         })}
       >
-        {children}
+        {Path.hasSideNav(router.pathname) && <SideNav />}
+        <div className="w-full px-4 py-6">{children}</div>
       </main>
       {hasFooter && (
         <footer className="font-14-bold text-secondary absolute bottom-[7%] left-1/2 z-10 -translate-x-1/2">

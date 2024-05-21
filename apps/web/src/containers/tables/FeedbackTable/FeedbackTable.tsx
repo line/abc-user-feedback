@@ -26,6 +26,12 @@ import { useTranslation } from 'next-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
+import { getColumns } from './feedback-table-columns';
+import useFeedbackTable from './feedback-table.context';
+import FeedbackDeleteDialog from './FeedbackDeleteDialog';
+import FeedbackTableBar from './FeedbackTableBar';
+import FeedbackTableRow from './FeedbackTableRow';
+
 import {
   CheckedTableHead,
   TableLoadingRow,
@@ -38,11 +44,6 @@ import {
   usePermissions,
   useSort,
 } from '@/hooks';
-import { getColumns } from './feedback-table-columns';
-import useFeedbackTable from './feedback-table.context';
-import FeedbackDeleteDialog from './FeedbackDeleteDialog';
-import FeedbackTableBar from './FeedbackTableBar';
-import FeedbackTableRow from './FeedbackTableRow';
 
 export interface IFeedbackTableProps {
   issueId?: number;

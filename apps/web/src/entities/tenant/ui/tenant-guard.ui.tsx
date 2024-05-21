@@ -16,9 +16,10 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
+import { useTenantActions } from '../tenant.model';
+
 import { Path } from '@/constants/path';
 import { useOAIQuery } from '@/hooks';
-import { useTenantActions } from '../tenant.model';
 
 interface IProps extends React.PropsWithChildren {}
 

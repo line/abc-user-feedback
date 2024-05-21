@@ -25,11 +25,12 @@ import { z } from 'zod';
 
 import { Icon, TextInput, toast } from '@ufb/ui';
 
-import { MainTemplate } from '@/components';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
-import type { NextPageWithLayout } from '../_app';
 
 interface IForm {
   password: string;
@@ -78,7 +79,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
     mutate({ code, email, password });
 
   return (
-    <MainTemplate>
+    <MainLayout>
       <div className="border-fill-secondary m-auto w-[100%] max-w-[440px] rounded border p-10">
         <div className="mb-12">
           <div className="mb-2 flex gap-0.5">
@@ -129,8 +130,12 @@ const ResetPasswordPage: NextPageWithLayout = () => {
           </div>
         </form>
       </div>
-    </MainTemplate>
+    </MainLayout>
   );
+};
+
+ResetPasswordPage.getLayout = (page) => {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

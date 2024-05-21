@@ -22,9 +22,10 @@ import { z } from 'zod';
 
 import { Input, toast } from '@ufb/ui';
 
+import DeleteMyAccountButton from './DeleteMyAccountButton';
+
 import { useUser } from '@/contexts/user.context';
 import client from '@/libs/client';
-import DeleteMyAccountButton from './DeleteMyAccountButton';
 
 type IForm = {
   name: string | null;

@@ -23,7 +23,7 @@ import { useUser } from '@/contexts/user.context';
 
 interface IProps {}
 
-const ProfileBox: React.FC<IProps> = () => {
+const UserBox: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { user, signOut } = useUser();
   const router = useRouter();
@@ -78,4 +78,4 @@ const ProfileBox: React.FC<IProps> = () => {
   );
 };
 
-export default ProfileBox;
+export default UserBox;

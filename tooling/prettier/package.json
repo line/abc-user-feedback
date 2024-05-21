@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./nextjs": "./nextjs.js"
   },
   "scripts": {
     "clean": "rimraf .turbo node_modules",

@@ -31,13 +31,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon } from '@ufb/ui';
 
+import FeedbackDetailCell from './FeedbackDetailCell';
+import FeedbackDetailIssueCell from './FeedbackDetailIssueCell';
+
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor } from '@/constants/issues';
 import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
 import type { IssueType } from '@/types/issue.type';
 import { isDefaultField, sortField } from '@/utils/field-utils';
-import FeedbackDetailCell from './FeedbackDetailCell';
-import FeedbackDetailIssueCell from './FeedbackDetailIssueCell';
 
 interface IProps {
   id: number;

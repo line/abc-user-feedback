@@ -21,7 +21,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { DateRangePicker, MainTemplate } from '@/components';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
+import { DateRangePicker } from '@/components';
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import {
@@ -43,7 +46,6 @@ import {
 } from '@/containers/dashboard';
 import FeedbackLineChart from '@/containers/dashboard/FeedbackLineChart';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
-import type { NextPageWithLayout } from '@/pages/_app';
 import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps {
@@ -298,8 +300,8 @@ export const getServerSideProps: GetServerSideProps = async ({
     },
   };
 };
-DashboardPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+DashboardPage.getLayout = (page) => {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default DashboardPage;

@@ -21,10 +21,12 @@ import { z } from 'zod';
 
 import { toast } from '@ufb/ui';
 
-import { Path } from '@/constants/path';
 import { useTenantActions } from '@/entities/tenant';
-import { useOAIMutation } from '@/hooks';
+
 import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
+
+import { Path } from '@/constants/path';
+import { useOAIMutation } from '@/hooks';
 
 interface IForm {
   siteName: string;
@@ -40,7 +42,7 @@ const CreateTenantForm: React.FC<IProps> = () => {
   const router = useRouter();
 
   const { refetchTenant } = useTenantActions();
-  const { register, handleSubmit } = useForm<IForm>({
+  const { register, handleSubmit, formState } = useForm<IForm>({
     resolver: zodResolver(scheme),
   });
 
@@ -79,7 +81,11 @@ const CreateTenantForm: React.FC<IProps> = () => {
         />
       </label>
 
-      <button className="btn btn-primary" type="submit" disabled={isPending}>
+      <button
+        className="btn btn-primary"
+        type="submit"
+        disabled={isPending || !formState.isValid}
+      >
         {t('button.setting')}
       </button>
     </form>

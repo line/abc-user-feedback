@@ -19,6 +19,7 @@ import { useRouter } from 'next/router';
 import { Icon } from '@ufb/ui';
 
 import { useTenantState } from '@/entities/tenant';
+
 import { useOAIQuery } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}

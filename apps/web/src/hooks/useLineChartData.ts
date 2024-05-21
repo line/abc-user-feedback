@@ -17,8 +17,9 @@ import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
 
-import { CHART_FIVE_COLORS } from '@/constants/chart-colors';
 import useDayCount from './useDayCount';
+
+import { CHART_FIVE_COLORS } from '@/constants/chart-colors';
 
 dayjs.extend(minMax);
 

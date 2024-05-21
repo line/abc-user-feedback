@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { TenantProjectCard } from '@/components';
 import { useTenantState } from '@/entities/tenant';
+
+import { TenantProjectCard } from '@/components';
 import { useOAIQuery, useProjects } from '@/hooks';
 
 const TenantCardWrapper: React.FC = () => {

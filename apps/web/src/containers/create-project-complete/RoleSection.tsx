@@ -16,9 +16,10 @@
 
 import { useTranslation } from 'react-i18next';
 
+import { RoleSettingTable } from '../setting-menu/RoleSetting/';
+
 import { CreateSectionTemplate } from '@/components/templates';
 import { useOAIQuery } from '@/hooks';
-import { RoleSettingTable } from '../setting-menu/RoleSetting/';
 
 interface IProps {
   projectId: number;

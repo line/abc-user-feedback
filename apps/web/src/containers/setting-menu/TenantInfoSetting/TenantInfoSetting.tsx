@@ -21,8 +21,9 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate } from '@/components';
 import { useTenantActions, useTenantState } from '@/entities/tenant';
+
+import { SettingMenuTemplate } from '@/components';
 import { useOAIMutation } from '@/hooks';
 
 interface IForm {
