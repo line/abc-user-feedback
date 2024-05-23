@@ -29,9 +29,7 @@ import client from '@/libs/client';
 import sessionStorage from '@/libs/session-storage';
 import { create, createZustandFactory } from '@/libs/zustand';
 
-type State = {
-  user: User | null;
-};
+type State = User | null;
 type Action = {
   signInByEmailAndPassword: (input: {
     email: string;
@@ -45,7 +43,7 @@ type Action = {
   setUser: () => void;
   _signIn: (jwt: Jwt) => void;
 };
-const initialState: State = { user: null };
+const initialState: State = null;
 
 const userStore = create<State, Action>((set, get) => ({
   state: initialState,
@@ -77,7 +75,7 @@ const userStore = create<State, Action>((set, get) => ({
         pathParams: { id: parseInt(sub) },
         options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } }, // session storage delay
       });
-      set({ state: { user: data } });
+      set({ state: data });
     }
   },
 

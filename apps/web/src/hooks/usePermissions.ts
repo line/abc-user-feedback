@@ -24,7 +24,7 @@ import type { PermissionType } from '@/types/permission.type';
 import { PermissionList } from '@/types/permission.type';
 
 const usePermissions = (inputProjectId?: number | null) => {
-  const { user } = useUserState();
+  const user = useUserState();
   const [permissions, setPermissions] = useState<readonly PermissionType[]>([]);
 
   const router = useRouter();

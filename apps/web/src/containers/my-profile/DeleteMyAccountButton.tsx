@@ -28,7 +28,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const { user } = useUserState();
+  const user = useUserState();
   const { signOut } = useUserActions();
 
   const { mutate, isPending } = useOAIMutation({

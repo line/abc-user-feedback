@@ -20,7 +20,7 @@ type DataType = 'id';
 
 export const CurrentUser = createParamDecorator(
   (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
+    const user = ctx.switchToHttp().getRequest();
     if (!user) return null;
     return data ? user[data] : user;
   },

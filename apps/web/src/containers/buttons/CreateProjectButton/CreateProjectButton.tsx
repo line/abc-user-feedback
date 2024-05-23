@@ -48,7 +48,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const { user } = useUserState();
+  const user = useUserState();
 
   const goToCreateProjectPage = () => router.push(Path.CREATE_PROJECT);
 

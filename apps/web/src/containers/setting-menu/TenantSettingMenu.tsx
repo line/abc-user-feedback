@@ -29,7 +29,7 @@ interface IProps extends React.PropsWithChildren {
 
 const TenantSettingMenu: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
-  const { user } = useUserState();
+  const user = useUserState();
   const { onClickSettingMenu, settingMenu } = props;
 
   const tenant = useTenantState();

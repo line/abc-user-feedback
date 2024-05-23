@@ -49,7 +49,7 @@ interface IProps extends React.PropsWithChildren {}
 const MyProfileForm: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { user } = useUserState();
+  const user = useUserState();
 
   const { register, handleSubmit, reset } = useForm<IForm>({
     resolver: zodResolver(schema),

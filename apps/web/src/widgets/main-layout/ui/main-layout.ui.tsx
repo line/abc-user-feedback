@@ -18,10 +18,10 @@ import clsx from 'clsx';
 
 import { LocaleSelectBox, Logo } from '@/shared';
 import { ThemeToggleButton } from '@/entities/theme';
+import { UserBox } from '@/entities/user';
 
 import Breadcrumb from './breadcrumb';
 import SideNav from './side-nav.ui';
-import UserBox from './user-box.ui';
 
 import { Path } from '@/constants/path';
 

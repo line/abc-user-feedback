@@ -36,7 +36,7 @@ const menuItems = [
 
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const { user } = useUserState();
+  const user = useUserState();
   const [tabIndex, setTabIndex] = useState<'profile-info' | 'change-password'>(
     menuItems[0].key,
   );

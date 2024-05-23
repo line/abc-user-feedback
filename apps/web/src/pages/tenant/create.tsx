@@ -20,11 +20,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantState } from '@/entities/tenant';
+import { CreateTenantForm } from '@/features/create-tenant';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { CreateTenantForm } from '@/feature/create-tenant';
 
 const CreateTenantPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -36,13 +36,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
     router.replace(Path.SIGN_IN);
   }, [tenant]);
 
-  return (
-    <div className="flex h-screen w-screen items-center justify-center">
-      <div className="w-full max-w-[400px] rounded border p-4 shadow">
-        <CreateTenantForm />
-      </div>
-    </div>
-  );
+  return <CreateTenantForm />;
 };
 
 CreateTenantPage.getLayout = (page) => {
