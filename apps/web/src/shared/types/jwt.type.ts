@@ -13,5 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as SideNav } from './SideNav';
-export { default as Header } from './Header';
+export type Jwt = {
+  accessToken: string;
+  refreshToken: string;
+};

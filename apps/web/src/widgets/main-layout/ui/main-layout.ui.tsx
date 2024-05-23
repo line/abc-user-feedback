@@ -19,6 +19,7 @@ import clsx from 'clsx';
 import { LocaleSelectBox, Logo } from '@/shared';
 import { ThemeToggleButton } from '@/entities/theme';
 
+import Breadcrumb from './breadcrumb';
 import SideNav from './side-nav.ui';
 import UserBox from './user-box.ui';
 
@@ -39,6 +40,7 @@ const MainLayout: React.FC<IProps> = (props) => {
       <header className="relative flex h-[48px] items-center justify-between px-4">
         <div className="flex flex-1 items-center gap-6">
           <Logo />
+          <Breadcrumb />
         </div>
         <div className="flex items-center gap-2 self-stretch">
           <UserBox />

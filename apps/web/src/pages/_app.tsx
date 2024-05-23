@@ -13,23 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
+import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
+import { useUserActions } from '@/entities/user';
 
-import { UserProvider } from '@/contexts/user.context';
+import sessionStorage from '@/libs/session-storage';
 // NOTE: DON'T Change the following import order
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
-
-import type { NextPageWithLayout } from '@/shared/types';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -39,6 +40,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(() => new QueryClient());
 
   const getLayout = Component.getLayout ?? ((page) => page);
+  const { setUser } = useUserActions();
+
+  const initializeJwt = async () => {
+    const { data } = await axios.get('/api/jwt');
+    if (!data?.jwt) return;
+    sessionStorage.setItem('jwt', data.jwt);
+    setUser();
+  };
+
+  useEffect(() => {
+    initializeJwt();
+  }, []);
 
   return (
     <>
@@ -48,10 +61,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <TenantGuard>
-          <UserProvider>
-            {getLayout(<Component {...pageProps} />)}
-            <Toaster />
-          </UserProvider>
+          {getLayout(<Component {...pageProps} />)}
+          <Toaster />
         </TenantGuard>
       </QueryClientProvider>
     </>

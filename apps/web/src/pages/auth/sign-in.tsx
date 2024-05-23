@@ -33,7 +33,6 @@ import { MainLayout } from '@/widgets';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 import { OAuthLoginButton } from '@/containers/buttons';
-// import { useUser } from '@/contexts/user.context';
 import type { IFetchError } from '@/types/fetch-error.type';
 
 interface IForm {
@@ -52,8 +51,8 @@ const defaultValues: IForm = { email: '', password: '', remember: true };
 const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  // const { signIn } = useUser();
   const tenant = useTenantState();
+
   const { signInByEmailAndPassword } = useUserActions();
 
   const { handleSubmit, register, formState, setError } = useForm({

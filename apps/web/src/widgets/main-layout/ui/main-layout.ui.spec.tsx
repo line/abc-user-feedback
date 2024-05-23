@@ -14,12 +14,16 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
+import mockRouter from 'next-router-mock';
 
 import MainLayout from './main-layout.ui';
 
 import { render, screen } from '@/utils/test-utils';
 
 describe('MainLayout', () => {
+  beforeEach(() => {
+    mockRouter.pathname = '/';
+  });
   test('snapshot default', () => {
     const { container } = render(<MainLayout />);
     expect(container).toMatchSnapshot();
@@ -41,6 +45,12 @@ describe('MainLayout', () => {
 
   test('snapshot center footer', () => {
     const { container } = render(<MainLayout center hasFooter />);
+    expect(container).toMatchSnapshot();
+  });
+  test('snapshot with sidenav', () => {
+    mockRouter.pathname = '/main/project/[projectId]';
+    const { container } = render(<MainLayout />);
+
     expect(container).toMatchSnapshot();
   });
 

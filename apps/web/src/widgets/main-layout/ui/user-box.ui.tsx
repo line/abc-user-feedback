@@ -19,13 +19,16 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
-import { useUser } from '@/contexts/user.context';
+import { useUserActions, useUserState } from '@/entities/user';
 
 interface IProps {}
 
 const UserBox: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { user, signOut } = useUser();
+
+  const { user } = useUserState();
+  const { signOut } = useUserActions();
+
   const router = useRouter();
   const [open, setOpen] = useState(false);
 

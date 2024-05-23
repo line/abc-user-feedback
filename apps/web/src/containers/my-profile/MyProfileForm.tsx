@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -22,9 +23,10 @@ import { z } from 'zod';
 
 import { Input, toast } from '@ufb/ui';
 
+import { useUserState } from '@/entities/user';
+
 import DeleteMyAccountButton from './DeleteMyAccountButton';
 
-import { useUser } from '@/contexts/user.context';
 import client from '@/libs/client';
 
 type IForm = {
@@ -36,6 +38,7 @@ const schema: Zod.ZodType<IForm> = z.object({
   name: z.string().nullable(),
   department: z.string().nullable(),
 });
+
 const defaultValues: IForm = {
   name: null,
   department: null,
@@ -45,7 +48,8 @@ interface IProps extends React.PropsWithChildren {}
 
 const MyProfileForm: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { user, refetch } = useUser();
+  const router = useRouter();
+  const { user } = useUserState();
 
   const { register, handleSubmit, reset } = useForm<IForm>({
     resolver: zodResolver(schema),
@@ -68,7 +72,7 @@ const MyProfileForm: React.FC<IProps> = () => {
       });
     },
     async onSuccess() {
-      await refetch();
+      router.reload();
       toast.positive({ title: t('toast.save') });
     },
   });

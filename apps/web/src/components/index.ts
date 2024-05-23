@@ -15,5 +15,4 @@
  */
 export * from './cards';
 export * from './etc';
-export * from './layouts';
 export * from './templates';

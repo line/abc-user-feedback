@@ -26,6 +26,8 @@ import {
   TooltipTrigger,
 } from '@ufb/ui';
 
+import { useUserState } from '@/entities/user';
+
 import {
   CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
   CREATE_PROJECT_CURRENT_STEP_KEY,
@@ -33,7 +35,6 @@ import {
 } from '@/constants/local-storage-key';
 import { Path } from '@/constants/path';
 import { PROJECT_STEPS } from '@/contexts/create-project.context';
-import { useUser } from '@/contexts/user.context';
 import { useLocalStorage } from '@/hooks';
 
 interface IProps {
@@ -47,7 +48,7 @@ const CreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const { user } = useUser();
+  const { user } = useUserState();
 
   const goToCreateProjectPage = () => router.push(Path.CREATE_PROJECT);
 

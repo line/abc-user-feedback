@@ -16,10 +16,10 @@
 import { useTranslation } from 'next-i18next';
 
 import { useTenantState } from '@/entities/tenant';
+import { useUserState } from '@/entities/user';
 
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
-import { useUser } from '@/contexts/user.context';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
@@ -29,7 +29,7 @@ interface IProps extends React.PropsWithChildren {
 
 const TenantSettingMenu: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  const { user } = useUserState();
   const { onClickSettingMenu, settingMenu } = props;
 
   const tenant = useTenantState();

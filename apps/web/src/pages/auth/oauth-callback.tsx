@@ -19,8 +19,9 @@ import { useRouter } from 'next/router';
 
 import { toast } from '@ufb/ui';
 
+import { useUserActions } from '@/entities/user';
+
 import { Path } from '@/constants/path';
-import { useUser } from '@/contexts/user.context';
 
 interface IQuery {
   code: string;
@@ -30,7 +31,7 @@ interface IQuery {
 interface IProps {}
 
 const OAuthCallbackPage: NextPage<IProps> = () => {
-  const { signInOAuth } = useUser();
+  const { signInByOAuth } = useUserActions();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const router = useRouter();
@@ -45,7 +46,7 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
 
   useEffect(() => {
     if (!query) return;
-    signInOAuth(query).catch(() => {
+    signInByOAuth(query).catch(() => {
       toast.negative({ title: 'OAuth2.0 Login Error' });
       router.replace(Path.SIGN_IN);
       setStatus('error');

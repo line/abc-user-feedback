@@ -32,7 +32,7 @@ import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useUser } from '@/contexts/user.context';
+import { useOAIMutation } from '@/hooks';
 import client from '@/libs/client';
 import type { IFetchError } from '@/types/fetch-error.type';
 
@@ -71,8 +71,6 @@ const SignUpPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { signUp } = useUser();
-
   const {
     handleSubmit,
     register,
@@ -98,17 +96,23 @@ const SignUpPage: NextPageWithLayout = () => {
   const [emailInputStatus, setEmailInputStatus] = useState<
     'isSubmitting' | 'isSubmitted'
   >();
+  const { mutate: signUp } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/auth/signUp/email',
+    queryOptions: {
+      onSuccess() {
+        router.push(Path.SIGN_IN);
+        toast.positive({ title: 'Success' });
+      },
+      onError(error) {
+        const { code, message } = error;
+        toast.negative({ title: message, description: code });
+      },
+    },
+  });
 
-  const onSubmit = async (data: IForm) => {
-    const { email, password } = data;
-    try {
-      await signUp({ email, password });
-      router.push(Path.SIGN_IN);
-      toast.positive({ title: 'Success' });
-    } catch (error) {
-      const { code, message } = error as IFetchError;
-      toast.negative({ title: message, description: code });
-    }
+  const onSubmit = async ({ email, password }: IForm) => {
+    signUp({ email, password });
   };
 
   useInterval(

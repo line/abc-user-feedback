@@ -53,14 +53,14 @@ const CreateTenantForm: React.FC<IProps> = () => {
       async onSuccess() {
         toast.positive({ title: 'Success' });
         toast.positive({
-          title: 'create Default Super User',
+          title: 'Default Super User',
           description: `email: ${DEFAULT_SUPER_ACCOUNT.email} \n password: ${DEFAULT_SUPER_ACCOUNT.password}`,
         });
         router.replace(Path.SIGN_IN);
-        await refetchTenant();
+        refetchTenant();
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: 'Error', description: error?.message });
       },
     },
   });

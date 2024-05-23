@@ -31,6 +31,26 @@ exports[`MainLayout snapshot center 1`] = `
             width="24"
           />
         </a>
+        <div
+          class="flex items-center gap-2"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <div
+              class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
+            >
+              <div
+                class="inline-block text-secondary"
+                height="12"
+                width="12"
+              />
+            </div>
+            <span
+              class="font-12-regular"
+            />
+          </div>
+        </div>
       </div>
       <div
         class="flex items-center gap-2 self-stretch"
@@ -113,6 +133,26 @@ exports[`MainLayout snapshot center footer 1`] = `
             width="24"
           />
         </a>
+        <div
+          class="flex items-center gap-2"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <div
+              class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
+            >
+              <div
+                class="inline-block text-secondary"
+                height="12"
+                width="12"
+              />
+            </div>
+            <span
+              class="font-12-regular"
+            />
+          </div>
+        </div>
       </div>
       <div
         class="flex items-center gap-2 self-stretch"
@@ -200,6 +240,26 @@ exports[`MainLayout snapshot default 1`] = `
             width="24"
           />
         </a>
+        <div
+          class="flex items-center gap-2"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <div
+              class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
+            >
+              <div
+                class="inline-block text-secondary"
+                height="12"
+                width="12"
+              />
+            </div>
+            <span
+              class="font-12-regular"
+            />
+          </div>
+        </div>
       </div>
       <div
         class="flex items-center gap-2 self-stretch"
@@ -282,6 +342,26 @@ exports[`MainLayout snapshot hasFooter 1`] = `
             width="24"
           />
         </a>
+        <div
+          class="flex items-center gap-2"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <div
+              class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
+            >
+              <div
+                class="inline-block text-secondary"
+                height="12"
+                width="12"
+              />
+            </div>
+            <span
+              class="font-12-regular"
+            />
+          </div>
+        </div>
       </div>
       <div
         class="flex items-center gap-2 self-stretch"
@@ -331,6 +411,201 @@ exports[`MainLayout snapshot hasFooter 1`] = `
     >
       © ABC Studio All rights reserved
     </footer>
+  </div>
+  <div
+    style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
+  />
+</div>
+`;
+
+exports[`MainLayout snapshot with sidenav 1`] = `
+<div>
+  <div
+    class="min-w-[960px]"
+  >
+    <header
+      class="relative flex h-[48px] items-center justify-between px-4"
+    >
+      <div
+        class="flex flex-1 items-center gap-6"
+      >
+        <a
+          class="flex cursor-pointer items-center gap-1"
+          href="/main"
+        >
+          <img
+            alt="logo"
+            data-nimg="1"
+            decoding="async"
+            height="24"
+            loading="lazy"
+            src="/assets/images/logo.svg"
+            style="color: transparent;"
+            width="24"
+          />
+          <div
+            class="inline-block h-[24px] w-[123px]"
+            height="24"
+            width="24"
+          />
+        </a>
+        <div
+          class="flex items-center gap-2"
+        >
+          <div
+            class="flex items-center gap-2"
+          >
+            <div
+              class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
+            >
+              <div
+                class="inline-block text-secondary"
+                height="12"
+                width="12"
+              />
+            </div>
+            <span
+              class="font-12-regular"
+            />
+          </div>
+        </div>
+      </div>
+      <div
+        class="flex items-center gap-2 self-stretch"
+      >
+        <div
+          class="relative"
+          data-headlessui-state=""
+        >
+          <button
+            aria-expanded="false"
+            aria-haspopup="listbox"
+            class="btn btn-sm btn-secondary min-w-0 px-2"
+            data-headlessui-state=""
+            id="headlessui-listbox-button-:r8:"
+            type="button"
+          >
+            <div
+              class="inline-block mr-1"
+              height="16"
+              width="16"
+            />
+            <span
+              class="font-12-bold uppercase"
+            />
+          </button>
+        </div>
+        <button
+          class="icon-btn icon-btn-sm icon-btn-secondary"
+        >
+          <div
+            class="inline-block text-primary"
+            height="24"
+            width="24"
+          />
+        </button>
+      </div>
+    </header>
+    <main
+      class="flex min-h-[calc(100vh-48px)] items-stretch"
+    >
+      <nav
+        class="relative"
+      >
+        <div
+          class="h-full w-[72px]"
+        />
+        <ul
+          class="absolute left-0 top-0 z-20 h-full space-y-1 p-4"
+        >
+          <li>
+            <a
+              href="/main/project/-1/dashboard"
+            >
+              <button
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+              >
+                <div
+                  class="inline-block "
+                  height="24"
+                  width="24"
+                />
+                <span
+                  class="ml-2 hidden"
+                >
+                  main.dashboard.title
+                </span>
+              </button>
+            </a>
+          </li>
+          <hr />
+          <li>
+            <a
+              href="/main/project/-1/feedback"
+            >
+              <button
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+              >
+                <div
+                  class="inline-block "
+                  height="24"
+                  width="24"
+                />
+                <span
+                  class="ml-2 hidden"
+                >
+                  main.feedback.title
+                </span>
+              </button>
+            </a>
+          </li>
+          <li>
+            <a
+              href="/main/project/-1/issue"
+            >
+              <button
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+              >
+                <div
+                  class="inline-block "
+                  height="24"
+                  width="24"
+                />
+                <span
+                  class="ml-2 hidden"
+                >
+                  main.issue.title
+                </span>
+              </button>
+            </a>
+          </li>
+          <hr />
+          <li>
+            <a
+              href="/main/project/-1/setting"
+            >
+              <button
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+              >
+                <div
+                  class="inline-block "
+                  height="24"
+                  width="24"
+                />
+                <span
+                  class="ml-2 hidden"
+                >
+                  main.setting.title
+                </span>
+              </button>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <div
+        class="w-full px-4 py-6"
+      />
+    </main>
   </div>
   <div
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"

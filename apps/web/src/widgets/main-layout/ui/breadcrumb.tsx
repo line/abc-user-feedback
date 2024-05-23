@@ -24,7 +24,7 @@ import { useOAIQuery } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}
 
-const HeaderName: React.FC<IProps> = () => {
+const Breadcrumb: React.FC<IProps> = () => {
   const router = useRouter();
   const tenant = useTenantState();
 
@@ -68,4 +68,4 @@ const HeaderName: React.FC<IProps> = () => {
   );
 };
 
-export default HeaderName;
+export default Breadcrumb;

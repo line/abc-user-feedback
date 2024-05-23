@@ -21,13 +21,13 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@ufb/ui';
 
 import type { NextPageWithLayout } from '@/shared/types';
+import { useUserState } from '@/entities/user';
 import { MainLayout } from '@/widgets';
 
 import { DescriptionTooltip } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
 import MyProfileForm from '@/containers/my-profile/MyProfileForm';
-import { useUser } from '@/contexts/user.context';
 
 const menuItems = [
   { key: 'profile-info', iconName: 'InfoCircleFill' },
@@ -36,7 +36,7 @@ const menuItems = [
 
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  const { user } = useUserState();
   const [tabIndex, setTabIndex] = useState<'profile-info' | 'change-password'>(
     menuItems[0].key,
   );
