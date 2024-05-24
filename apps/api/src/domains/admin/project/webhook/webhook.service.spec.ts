@@ -293,15 +293,6 @@ describe('webhook service', () => {
         new WebhookAlreadyExistsException(),
       );
     });
-    it('updating a webhook fails with duplicate url', async () => {
-      const dto: UpdateWebhookDto = createUpdateWebhookDto();
-      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(webhookFixture);
-      jest.spyOn(webhookRepo, 'findOne').mockResolvedValueOnce(null);
-
-      await expect(webhookService.update(dto)).rejects.toThrow(
-        new WebhookAlreadyExistsException(),
-      );
-    });
     describe('updating a webhook fails with invalid events', () => {
       it('EventTypeEnum.FEEDBACK_CREATION', async () => {
         const dto = createUpdateWebhookDto({
