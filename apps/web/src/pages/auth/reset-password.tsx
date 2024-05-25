@@ -15,59 +15,20 @@
  */
 import type { GetStaticProps } from 'next';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Icon, TextInput, toast } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
 
 import type { NextPageWithLayout } from '@/shared/types';
+import { ResetPasswordWithEmailForm } from '@/features/auth/reset-password-with-email';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
-import { useOAIMutation } from '@/hooks';
-
-interface IForm {
-  email: string;
-}
-const defaultValues: IForm = {
-  email: '',
-};
-
-const schema = z.object({
-  email: z.string().email(),
-});
 
 const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
-  const router = useRouter();
-
-  const { register, handleSubmit, formState, setError } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
-  });
-
-  const { mutate, isPending } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/users/password/reset/code',
-    queryOptions: {
-      async onSuccess() {
-        toast.positive({ title: 'Success' });
-        router.push(Path.SIGN_IN);
-      },
-      onError(error) {
-        toast.negative({ title: error.message });
-        setError('email', { message: error.message });
-      },
-    },
-  });
-
-  const onSubmit = (data: IForm) => mutate(data);
   return (
     <div className="m-auto w-[360px]">
       <div className="mb-12">
@@ -82,37 +43,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
         </div>
         <p className="font-24-bold">{t('auth.reset-password.title')}</p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-12 space-y-4">
-          <TextInput
-            type="email"
-            label="Email"
-            placeholder={t('input.placeholder.email')}
-            isSubmitted={formState.isSubmitted}
-            isSubmitting={formState.isSubmitting}
-            isValid={!formState.errors.email}
-            hint={formState.errors.email?.message}
-            {...register('email')}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <button
-            type="submit"
-            className="btn btn-primary"
-            disabled={!formState.isValid || isPending}
-          >
-            {t('auth.reset-password.button.send-email')}
-          </button>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={router.back}
-          >
-            {t('button.back')}
-          </button>
-        </div>
-      </form>
+      <ResetPasswordWithEmailForm />
     </div>
   );
 };

@@ -17,66 +17,28 @@ import type { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
-
-import { TextInput, toast } from '@ufb/ui';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantState } from '@/entities/tenant';
-import { useUserActions } from '@/entities/user';
+import {
+  SignInWithEmailButton,
+  SignInWithEmailForm,
+} from '@/features/auth/sign-in-with-email';
+import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { OAuthLoginButton } from '@/containers/buttons';
-import type { IFetchError } from '@/types/fetch-error.type';
-
-interface IForm {
-  email: string;
-  password: string;
-  remember: boolean;
-}
-
-const schema: Zod.ZodType<IForm> = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  remember: z.boolean(),
-});
-const defaultValues: IForm = { email: '', password: '', remember: true };
 
 const SignInPage: NextPageWithLayout = () => {
-  const { t } = useTranslation();
   const router = useRouter();
+  const { t } = useTranslation();
   const tenant = useTenantState();
 
-  const { signInByEmailAndPassword } = useUserActions();
-
-  const { handleSubmit, register, formState, setError } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
-    mode: 'onSubmit',
-    reValidateMode: 'onSubmit',
-  });
-
-  const { isSubmitted, errors, isSubmitting } = formState;
-
-  const onSubmit = async (data: IForm) => {
-    try {
-      await signInByEmailAndPassword(data);
-    } catch (error) {
-      const { message } = error as IFetchError;
-      setError('email', { message: 'invalid email' });
-      setError('password', { message: 'invalid password' });
-      toast.negative({ title: message, description: message });
-    }
-  };
-
   return (
-    <form className="m-auto w-[360px]" onSubmit={handleSubmit(onSubmit)}>
+    <div className="relative">
       <div className="mb-8 flex flex-col items-center gap-1">
         <Image
           src="/assets/images/logo-horizontal.svg"
@@ -88,38 +50,9 @@ const SignInPage: NextPageWithLayout = () => {
           {tenant?.siteName}
         </div>
       </div>
-      {tenant?.useEmail && (
-        <>
-          <div className="mb-6 space-y-3">
-            <TextInput
-              placeholder="ID"
-              leftIconName="ProfileCircleFill"
-              type="email"
-              {...register('email')}
-              isSubmitted={isSubmitted}
-              isSubmitting={isSubmitting}
-              isValid={!errors.email}
-              size="lg"
-            />
-            <TextInput
-              placeholder="Password"
-              leftIconName="LockFill"
-              type="password"
-              {...register('password')}
-              isSubmitted={isSubmitted}
-              isSubmitting={isSubmitting}
-              isValid={!errors.password}
-              size="lg"
-            />
-          </div>
-        </>
-      )}
-      <div className="flex flex-col gap-1">
-        {tenant?.useEmail && (
-          <button type="submit" className="btn btn-lg btn-primary">
-            {t('button.sign-in')}
-          </button>
-        )}
+      {tenant?.useEmail && <SignInWithEmailForm />}
+      <div className="my-4 flex flex-col gap-1">
+        {tenant?.useEmail && <SignInWithEmailButton />}
         {tenant?.useEmail && !tenant?.isPrivate && (
           <button
             type="button"
@@ -137,38 +70,29 @@ const SignInPage: NextPageWithLayout = () => {
             <hr />
           </div>
         )}
-        {tenant?.useOAuth && <OAuthLoginButton />}
+        {tenant?.useOAuth && <SignInWithOAuthButton />}
       </div>
-    </form>
-  );
-};
-
-const ResetPassword: React.FC = () => {
-  const tenant = useTenantState();
-  const { t } = useTranslation();
-  if (!tenant?.useEmail || tenant.isPrivate) return <></>;
-  return (
-    <div className="absolute -bottom-16 left-1/2 mb-6 flex -translate-x-1/2 justify-end">
-      <Link
-        href={Path.PASSWORD_RESET}
-        className="text-blue-primary font-14-regular"
-      >
-        {t('auth.sign-in.reset-password')}
-      </Link>
+      {tenant?.useEmail && !tenant.isPrivate && (
+        <div className="absolute -bottom-28 left-1/2 -translate-x-1/2">
+          <Link
+            href={Path.PASSWORD_RESET}
+            className="text-blue-primary font-14-regular"
+          >
+            {t('auth.sign-in.reset-password')}
+          </Link>
+        </div>
+      )}
     </div>
   );
 };
 
-function Layout(page: React.ReactNode) {
+SignInPage.getLayout = (page) => {
   return (
     <MainLayout hasFooter center>
       {page}
-      <ResetPassword />
     </MainLayout>
   );
-}
-
-SignInPage.getLayout = Layout;
+};
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {

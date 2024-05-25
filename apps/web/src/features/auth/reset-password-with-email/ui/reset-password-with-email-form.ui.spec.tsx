@@ -13,15 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ExecutionContext } from '@nestjs/common';
-import { createParamDecorator } from '@nestjs/common';
+import ResetPasswordWithEmailForm from './reset-password-with-email-form.ui';
 
-type DataType = 'id';
+import { render } from '@/utils/test-utils';
 
-export const CurrentUser = createParamDecorator(
-  (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
-    if (!user) return null;
-    return data ? user[data] : user;
-  },
-);
+describe('ResetPasswordWithEmailForm', () => {
+  test('snapshot renders', () => {
+    const component = render(<ResetPasswordWithEmailForm />);
+    expect(component.container).toMatchSnapshot();
+  });
+});

@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignInWithOAuthButton snapshot renders 1`] = `
+<div>
+  <button
+    class="btn btn-lg btn-blue"
+    type="button"
+  >
+    OAuth2.0 
+    button.sign-in
+  </button>
+  <div
+    style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
+  />
+</div>
+`;

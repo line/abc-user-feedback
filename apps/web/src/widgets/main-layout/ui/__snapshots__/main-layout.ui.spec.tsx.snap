@@ -89,7 +89,7 @@ exports[`MainLayout snapshot center 1`] = `
       </div>
     </header>
     <main
-      class="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-10"
+      class="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-4"
     >
       <div
         class="w-full px-4 py-6"
@@ -191,7 +191,7 @@ exports[`MainLayout snapshot center footer 1`] = `
       </div>
     </header>
     <main
-      class="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-10"
+      class="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-4"
     >
       <div
         class="w-full px-4 py-6"

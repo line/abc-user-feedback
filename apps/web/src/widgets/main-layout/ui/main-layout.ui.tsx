@@ -50,7 +50,7 @@ const MainLayout: React.FC<IProps> = (props) => {
       </header>
       <main
         className={clsx({
-          'bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-10':
+          'bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-4':
             center,
           'flex min-h-[calc(100vh-48px)] items-stretch': !center,
         })}

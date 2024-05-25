@@ -13,15 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ExecutionContext } from '@nestjs/common';
-import { createParamDecorator } from '@nestjs/common';
+import { z } from 'zod';
 
-type DataType = 'id';
-
-export const CurrentUser = createParamDecorator(
-  (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
-    if (!user) return null;
-    return data ? user[data] : user;
-  },
-);
+export const signUpWithEmailSchema = z
+  .object({
+    email: z.string().email(),
+    emailState: z.enum(['NOT_VERIFIED', 'VERIFING', 'EXPIRED', 'VERIFIED']),
+    code: z.string().length(6),
+    password: z.string().min(8),
+    confirmPassword: z.string().min(8),
+  })
+  .refine(
+    (schema) => schema.password === schema.confirmPassword,
+    'Password not matched',
+  );

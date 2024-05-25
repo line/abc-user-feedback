@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ExecutionContext } from '@nestjs/common';
-import { createParamDecorator } from '@nestjs/common';
 
-type DataType = 'id';
+import SignInWithEmailForm from './sign-in-with-email-form.ui';
 
-export const CurrentUser = createParamDecorator(
-  (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
-    if (!user) return null;
-    return data ? user[data] : user;
-  },
-);
+import { render } from '@/utils/test-utils';
+
+describe('SignInWithEmailForm', () => {
+  test('snapshot renders', () => {
+    const component = render(<SignInWithEmailForm />);
+    expect(component.container).toMatchSnapshot();
+  });
+});

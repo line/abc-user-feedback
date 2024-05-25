@@ -13,174 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 import type { GetStaticProps } from 'next';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
-import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useForm } from 'react-hook-form';
-import { useInterval } from 'react-use';
-import { z } from 'zod';
 
-import { Icon, TextInput, toast } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
 
 import type { NextPageWithLayout } from '@/shared/types';
+import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
-import { useOAIMutation } from '@/hooks';
-import client from '@/libs/client';
-import type { IFetchError } from '@/types/fetch-error.type';
-
-type EmailState = 'NOT_VERIFIED' | 'VERIFING' | 'EXPIRED' | 'VERIFIED';
-
-interface IForm {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  code?: string;
-  emailState: EmailState;
-}
-
-const schema = z
-  .object({
-    email: z.string().email(),
-    emailState: z.enum(['NOT_VERIFIED', 'VERIFING', 'EXPIRED', 'VERIFIED']),
-    code: z.string().length(6),
-    password: z.string().min(8),
-    confirmPassword: z.string().min(8),
-  })
-  .refine(
-    (schema) => schema.password === schema.confirmPassword,
-    'Password not matched',
-  );
-
-const defaultValues: IForm = {
-  email: '',
-  emailState: 'NOT_VERIFIED',
-  password: '',
-  confirmPassword: '',
-  code: '',
-};
 
 const SignUpPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const router = useRouter();
-
-  const {
-    handleSubmit,
-    register,
-    formState,
-    getValues,
-    setValue,
-    watch,
-    setError,
-    clearErrors,
-  } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
-    mode: 'onSubmit',
-  });
-
-  const { isValid } = formState;
-
-  const [expiredTime, setExpiredTime] = useState<string>();
-  const [leftTime, setLeftTime] = useState('');
-  const [codeStatus, setCodeStatus] = useState<
-    'isSubmitting' | 'isSubmitted'
-  >();
-  const [emailInputStatus, setEmailInputStatus] = useState<
-    'isSubmitting' | 'isSubmitted'
-  >();
-  const { mutate: signUp } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/auth/signUp/email',
-    queryOptions: {
-      onSuccess() {
-        router.push(Path.SIGN_IN);
-        toast.positive({ title: 'Success' });
-      },
-      onError(error) {
-        const { code, message } = error;
-        toast.negative({ title: message, description: code });
-      },
-    },
-  });
-
-  const onSubmit = async ({ email, password }: IForm) => {
-    signUp({ email, password });
-  };
-
-  useInterval(
-    () => {
-      const seconds = dayjs(expiredTime).diff(dayjs(), 'seconds');
-
-      if (seconds < 0) {
-        setLeftTime(`00:00`);
-        setValue('emailState', 'EXPIRED');
-      } else {
-        const m = Math.floor(seconds / 60)
-          .toString()
-          .padStart(2, '0');
-        const s = Math.floor(seconds % 60)
-          .toString()
-          .padStart(2, '0');
-
-        setLeftTime(`${m}:${s}`);
-      }
-    },
-    watch('emailState') === 'VERIFING' ? 1000 : null,
-  );
-
-  const getVerificationCode = async () => {
-    setEmailInputStatus('isSubmitting');
-
-    try {
-      const { data } = await client.post({
-        path: '/api/admin/auth/email/code',
-        body: { email: getValues('email') },
-      });
-      setValue('emailState', 'VERIFING');
-      setExpiredTime(data?.expiredAt);
-      clearErrors('email');
-      toast.positive({ title: 'Success' });
-    } catch (error) {
-      const { message } = error as IFetchError;
-      setError('email', { message });
-      toast.negative({ title: message });
-    } finally {
-      setEmailInputStatus('isSubmitted');
-    }
-  };
-
-  const verifyCode = async () => {
-    const code = getValues('code');
-    setCodeStatus('isSubmitting');
-    if (!code) return;
-    if (code.length !== 6) return;
-    try {
-      await client.post({
-        path: '/api/admin/auth/email/code/verify',
-        body: { code, email: getValues('email') },
-      });
-      setValue('emailState', 'VERIFIED');
-      clearErrors('code');
-      toast.positive({ title: 'Success' });
-    } catch (error) {
-      const { message } = error as IFetchError;
-      setError('code', { message });
-      toast.negative({ title: message });
-    } finally {
-      setCodeStatus('isSubmitted');
-    }
-  };
 
   return (
-    <div className="m-auto w-[360px]">
+    <div>
       <div className="mb-12">
         <div className="mb-2 flex gap-0.5">
           <Image
@@ -193,107 +43,7 @@ const SignUpPage: NextPageWithLayout = () => {
         </div>
         <p className="font-24-bold">{t('auth.sign-up.title')}</p>
       </div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="mb-12 space-y-4">
-          <TextInput
-            size="lg"
-            type="email"
-            {...register('email')}
-            label="Email"
-            placeholder={t('input.placeholder.email')}
-            disabled={watch('emailState') === 'VERIFIED'}
-            isValid={!formState.errors.email}
-            isSubmitted={emailInputStatus === 'isSubmitted'}
-            isSubmitting={emailInputStatus === 'isSubmitting'}
-            hint={formState.errors.email?.message}
-            rightChildren={
-              <button
-                type="button"
-                className="btn btn-secondary btn-xs btn-rounded"
-                onClick={getVerificationCode}
-                disabled={watch('emailState') === 'VERIFIED'}
-              >
-                {t('auth.sign-up.button.request-auth-code')}
-              </button>
-            }
-            required
-          />
-          {watch('emailState') !== 'NOT_VERIFIED' && (
-            <TextInput
-              size="lg"
-              type="code"
-              label={t('auth.sign-up.label.auth-code')}
-              {...register('code')}
-              disabled={watch('emailState') === 'VERIFIED'}
-              placeholder={t('auth.sign-up.placeholder.auth-code')}
-              isValid={!formState.errors.code}
-              isSubmitted={codeStatus === 'isSubmitted'}
-              isSubmitting={codeStatus === 'isSubmitting'}
-              hint={formState.errors.code?.message}
-              rightChildren={
-                <div className="flex items-center gap-2">
-                  {(watch('emailState') === 'VERIFING' ||
-                    watch('emailState') === 'EXPIRED') && (
-                    <p className="font-16-regular">{leftTime}</p>
-                  )}
-                  <button
-                    type="button"
-                    className="btn btn-secondary btn-xs btn-rounded"
-                    disabled={
-                      watch('emailState') === 'VERIFIED' ||
-                      watch('code')?.length !== 6
-                    }
-                    onClick={verifyCode}
-                  >
-                    {t('auth.sign-up.button.verify-auth-code')}
-                  </button>
-                </div>
-              }
-              required
-            />
-          )}
-          <TextInput
-            size="lg"
-            type="password"
-            label={t('input.label.password')}
-            placeholder={t('input.placeholder.password')}
-            isSubmitted={formState.isSubmitted}
-            isSubmitting={formState.isSubmitting}
-            isValid={!formState.errors.password}
-            hint={formState.errors.password?.message}
-            {...register('password')}
-            required
-          />
-          <TextInput
-            size="lg"
-            type="password"
-            label={t('input.label.confirm-password')}
-            placeholder={t('input.placeholder.confirm-password')}
-            isSubmitted={formState.isSubmitted}
-            isSubmitting={formState.isSubmitting}
-            isValid={!formState.errors.confirmPassword}
-            hint={formState.errors.confirmPassword?.message}
-            {...register('confirmPassword')}
-            required
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <button
-            type="submit"
-            className="btn btn-lg btn-primary"
-            disabled={!isValid}
-          >
-            {t('button.sign-up')}
-          </button>
-          <button
-            type="button"
-            className="btn btn-lg btn-secondary"
-            onClick={router.back}
-          >
-            {t('button.back')}
-          </button>
-        </div>
-      </form>
+      <SignUpWithEmailForm />
     </div>
   );
 };

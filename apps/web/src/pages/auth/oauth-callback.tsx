@@ -13,45 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
 import type { NextPage } from 'next';
-import { useRouter } from 'next/router';
 
-import { toast } from '@ufb/ui';
-
-import { useUserActions } from '@/entities/user';
-
-import { Path } from '@/constants/path';
-
-interface IQuery {
-  code: string;
-  callback_url?: string;
-}
+import { useOAuthCallback } from '@/features/auth/sign-in-with-oauth';
 
 interface IProps {}
 
 const OAuthCallbackPage: NextPage<IProps> = () => {
-  const { signInByOAuth } = useUserActions();
-  const [status, setStatus] = useState<'loading' | 'error'>('loading');
-
-  const router = useRouter();
-
-  const query = useMemo(() => {
-    if (!router.query) return null;
-    const { code, callback_url } = router.query;
-
-    if (!code) return null;
-    return { code, callback_url } as IQuery;
-  }, [router.query]);
-
-  useEffect(() => {
-    if (!query) return;
-    signInByOAuth(query).catch(() => {
-      toast.negative({ title: 'OAuth2.0 Login Error' });
-      router.replace(Path.SIGN_IN);
-      setStatus('error');
-    });
-  }, [query]);
+  const { status } = useOAuthCallback();
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">

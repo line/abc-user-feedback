@@ -13,15 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ExecutionContext } from '@nestjs/common';
-import { createParamDecorator } from '@nestjs/common';
-
-type DataType = 'id';
-
-export const CurrentUser = createParamDecorator(
-  (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
-    if (!user) return null;
-    return data ? user[data] : user;
-  },
-);
+export const DEFAULT_SUPER_ACCOUNT = {
+  email: 'user@feedback.com',
+  password: '12345678',
+};

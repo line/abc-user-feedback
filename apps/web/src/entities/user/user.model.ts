@@ -31,11 +31,11 @@ import { create, createZustandFactory } from '@/libs/zustand';
 
 type State = User | null;
 type Action = {
-  signInByEmailAndPassword: (input: {
+  signInWithEmail: (input: {
     email: string;
     password: string;
   }) => Promise<void>;
-  signInByOAuth: (input: {
+  signInWithOAuth: (input: {
     code: string;
     callback_url?: string;
   }) => Promise<void>;
@@ -47,11 +47,11 @@ const initialState: State = null;
 
 const userStore = create<State, Action>((set, get) => ({
   state: initialState,
-  signInByEmailAndPassword: async ({ email, password }) => {
+  signInWithEmail: async ({ email, password }) => {
     const { data: jwt } = await axios.post('/api/login', { email, password });
     get()._signIn(jwt);
   },
-  signInByOAuth: async ({ code, callback_url }) => {
+  signInWithOAuth: async ({ code, callback_url }) => {
     const { data: jwt } = await axios.post('/api/oauth', {
       code,
       callback_url,

@@ -30,6 +30,7 @@ export class EmailVerificationMailingService {
     this.baseUrl = this.configService.get('smtp', { infer: true }).baseUrl;
   }
   async send({ code, email }: SendMailDto) {
+    console.log('code, email: ', code, email);
     await this.mailerService.sendMail({
       to: email,
       subject: `User feedback Email Verification`,

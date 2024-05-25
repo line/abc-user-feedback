@@ -13,15 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ExecutionContext } from '@nestjs/common';
-import { createParamDecorator } from '@nestjs/common';
+import { useTranslation } from 'react-i18next';
 
-type DataType = 'id';
+import { SIGN_IN_WITH_EMAIL_FORM_ID } from '../sign-in-with-email.constant';
 
-export const CurrentUser = createParamDecorator(
-  (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
-    if (!user) return null;
-    return data ? user[data] : user;
-  },
-);
+interface IProps {}
+
+const SignInWithEmailButton: React.FC<IProps> = () => {
+  const { t } = useTranslation();
+  return (
+    <button
+      type="submit"
+      form={SIGN_IN_WITH_EMAIL_FORM_ID}
+      className="btn btn-lg btn-primary"
+    >
+      {t('button.sign-in')}
+    </button>
+  );
+};
+
+export default SignInWithEmailButton;
