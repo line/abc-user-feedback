@@ -249,6 +249,8 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
     const handleBeforeChangeRoute = (url: string) => {
       if (router.pathname !== url && !confirm(confirmMsg)) {
         router.events.emit('routeChangeError');
+        console.log('channelId: ', channelId);
+
         throw `사이트 변경 취소`;
       }
     };
