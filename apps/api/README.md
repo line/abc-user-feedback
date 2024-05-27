@@ -90,8 +90,8 @@ The following is a list of environment variables used by the application, along 
 | `SMTP_USE`             | Flag to enable SMTP server usage (for email verification)      | `false`                             |
 | `SMTP_HOST`            | SMTP server host                                               | _required if `SMTP_USE=true`_       |
 | `SMTP_PORT`            | SMTP server port                                               | _required if `SMTP_USE=true`_       |
-| `SMTP_USERNAME`        | SMTP server authentication username                            | _required if `SMTP_USE=true`_       |
-| `SMTP_PASSWORD`        | SMTP server authentication password                            | _required if `SMTP_USE=true`_       |
+| `SMTP_USERNAME`        | SMTP server authentication username                            | _optional_                          |
+| `SMTP_PASSWORD`        | SMTP server authentication password                            | _optional_                          |
 | `SMTP_SENDER`          | Email address used as sender in emails                         | _required if `SMTP_USE=true`_       |
 | `SMTP_BASE_URL`        | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_       |
 | `OPENSEARCH_USE`       | Flag to enable OpenSearch integration                          | `false`                             |
