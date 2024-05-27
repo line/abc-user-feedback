@@ -85,7 +85,7 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
           onClick={onClickSettingMenu('WEBHOOK_MANAGEMENT')}
           active={settingMenu === 'WEBHOOK_MANAGEMENT'}
           name={t('project-setting-menu.webhook-integration')}
-          disabled={!perms.includes('project_tracker_read')}
+          disabled={!perms.includes('project_webhook_read')}
         />
         <SettingMenuItem
           iconName="TrashFill"
