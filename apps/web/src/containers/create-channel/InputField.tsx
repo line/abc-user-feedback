@@ -14,13 +14,14 @@
  * under the License.
  */
 
-import { Fragment, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import clsx from 'clsx';
 
 import { Badge, Icon } from '@ufb/ui';
 
@@ -156,19 +157,19 @@ const InputField: React.FC<IProps> = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <Fragment key={row.index}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={`${cell.id} ${cell.row.index}`}
-                    className="border-none"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
+            <tr key={row.index}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={`${cell.id} ${cell.row.index}`}
+                  className={clsx('border-none', {
+                    'text-secondary': isDefaultField(row.original),
+                  })}
+                  style={{ width: cell.column.getSize() }}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
           ))}
         </tbody>
       </table>
