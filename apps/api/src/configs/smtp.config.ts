@@ -30,12 +30,12 @@ export const smtpConfigSchema = Joi.object({
   }),
   SMTP_USERNAME: Joi.string().when('SMTP_USE', {
     is: true,
-    then: Joi.required(),
+    then: Joi.optional(),
     otherwise: Joi.optional(),
   }),
   SMTP_PASSWORD: Joi.string().when('SMTP_USE', {
     is: true,
-    then: Joi.required(),
+    then: Joi.optional(),
     otherwise: Joi.optional(),
   }),
   SMTP_SENDER: Joi.string().when('SMTP_USE', {

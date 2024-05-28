@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
@@ -54,7 +54,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 1; i <= 1; i++) {
       const fakeData: Record<string, any> = {};
       for (const field of fields) {
         if (field.key === 'id') {
@@ -83,18 +83,16 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             : field.format === 'images' ?
               faker.helpers.arrayElements(
                 Array.from(
-                  {
-                    length: faker.number.int({ min: 1, max: 15 }),
-                  },
+                  { length: faker.number.int({ min: 1, max: 15 }) },
                   () => '/assets/images/sample_image.png',
                 ),
               )
             : null;
         }
       }
+
       fakeRows.push(fakeData);
     }
-
     setRows(fakeRows);
   }, [fields]);
 
@@ -107,17 +105,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             : field.format === 'text' ? 200
             : 150,
           cell: (info) =>
-            field.property === 'EDITABLE' ?
-              <EditableCell
-                field={field as FieldType}
-                value={info.getValue()}
-                isExpanded={info.row.getIsExpanded()}
-                feedbackId={info.row.original.id}
-              />
-            : typeof info.getValue() === 'undefined' ? undefined
-            : field.format === 'date' ?
-              dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
-            : field.key === 'issues' ?
+            field.key === 'issues' ?
               <div className="scrollbar-hide flex items-center gap-1">
                 {(
                   info.getValue() as { status: IssueStatus; name: string }[]
@@ -131,6 +119,16 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   </Badge>
                 ))}
               </div>
+            : field.property === 'EDITABLE' ?
+              <EditableCell
+                field={field as FieldType}
+                value={info.getValue()}
+                isExpanded={info.row.getIsExpanded()}
+                feedbackId={info.row.original.id}
+              />
+            : typeof info.getValue() === 'undefined' ? undefined
+            : field.format === 'date' ?
+              dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
             : field.format === 'multiSelect' ?
               ((info.getValue() ?? []) as string[]).join(', ')
             : field.format === 'text' ?
@@ -184,19 +182,17 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <Fragment key={row.id}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    style={{ width: cell.column.getSize(), border: 'none' }}
-                    className="overflow-hidden"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  style={{ width: cell.column.getSize(), border: 'none' }}
+                  className="overflow-hidden"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
           ))}
         </tbody>
       </table>
