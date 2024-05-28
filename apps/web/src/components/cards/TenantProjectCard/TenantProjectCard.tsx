@@ -68,16 +68,16 @@ const TenantProjectCard: React.FC<IProps> = ({
       <div className="flex gap-16">
         <div>
           <p className="font-12-regular mb-1">
-            {type === 'tenant'
-              ? t('main.index.total-project')
-              : t('main.index.total-channel')}
+            {type === 'tenant' ?
+              t('main.index.total-project')
+            : t('main.index.total-channel')}
           </p>
           <p
             className={[
               'font-24-bold',
-              typeof total === 'undefined'
-                ? 'bg-secondary w-15 h-7 animate-pulse rounded-sm'
-                : '',
+              typeof total === 'undefined' ?
+                'bg-secondary w-15 h-7 animate-pulse rounded-sm'
+              : '',
             ].join(' ')}
           >
             {total?.toLocaleString()}
@@ -90,9 +90,9 @@ const TenantProjectCard: React.FC<IProps> = ({
           <p
             className={[
               'font-24-bold',
-              typeof feedbackCount === 'undefined'
-                ? 'bg-secondary w-15 h-7 animate-pulse rounded-sm'
-                : '',
+              typeof feedbackCount === 'undefined' ?
+                'bg-secondary w-15 h-7 animate-pulse rounded-sm'
+              : '',
             ].join(' ')}
           >
             {feedbackCount?.toLocaleString()}

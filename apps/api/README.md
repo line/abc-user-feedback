@@ -15,7 +15,7 @@ You can find a full list of targets in the [package.json](./package.json) file.
 Runs the app in development mode.
 
 ```
-yarn dev
+pnpm dev
 ```
 
 ### `test`
@@ -23,7 +23,7 @@ yarn dev
 Executes tests. This command applies to the environment variables in `.env.test` file.
 
 ```
-yarn test
+pnpm test
 ```
 
 ### `test:e2e`
@@ -31,7 +31,7 @@ yarn test
 Executes e2e tests. This command applies to the environment variables in `.env.test` file.
 
 ```
-yarn test:e2e
+pnpm test:e2e
 ```
 
 ### `lint`
@@ -39,7 +39,7 @@ yarn test:e2e
 Performs a linting check using ESLint.
 
 ```
-yarn lint
+pnpm lint
 ```
 
 ### `build`
@@ -47,7 +47,7 @@ yarn lint
 Builds the app for production. The distributable is expored to the `dist` folder in the repository's root folder.<br />
 
 ```
-yarn build
+pnpm build
 ```
 
 ### `migration:generate`
@@ -90,8 +90,8 @@ The following is a list of environment variables used by the application, along 
 | `SMTP_USE`             | Flag to enable SMTP server usage (for email verification)      | `false`                             |
 | `SMTP_HOST`            | SMTP server host                                               | _required if `SMTP_USE=true`_       |
 | `SMTP_PORT`            | SMTP server port                                               | _required if `SMTP_USE=true`_       |
-| `SMTP_USERNAME`        | SMTP server authentication username                            | _required if `SMTP_USE=true`_       |
-| `SMTP_PASSWORD`        | SMTP server authentication password                            | _required if `SMTP_USE=true`_       |
+| `SMTP_USERNAME`        | SMTP server authentication username                            | _optional_                          |
+| `SMTP_PASSWORD`        | SMTP server authentication password                            | _optional_                          |
 | `SMTP_SENDER`          | Email address used as sender in emails                         | _required if `SMTP_USE=true`_       |
 | `SMTP_BASE_URL`        | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_       |
 | `OPENSEARCH_USE`       | Flag to enable OpenSearch integration                          | `false`                             |

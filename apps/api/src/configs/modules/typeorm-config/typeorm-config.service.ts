@@ -41,8 +41,9 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       type: 'mysql',
       replication: {
         master: { url: main_url },
-        slaves: sub_urls.length
-          ? sub_urls.map((url) => ({ url }))
+        slaves:
+          sub_urls.length ?
+            sub_urls.map((url) => ({ url }))
           : [{ url: main_url }],
       },
       entities: [join(__dirname, '../../../**/*.entity.{ts,js}')],

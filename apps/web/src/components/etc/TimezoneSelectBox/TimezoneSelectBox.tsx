@@ -41,11 +41,11 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
 
   const filteredOptions = useMemo(
     () =>
-      query === ''
-        ? options
-        : options.filter((option) =>
-            getLabel(option).toLowerCase().includes(query.toLowerCase()),
-          ),
+      query === '' ? options : (
+        options.filter((option) =>
+          getLabel(option).toLowerCase().includes(query.toLowerCase()),
+        )
+      ),
     [query, options],
   );
 

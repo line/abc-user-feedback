@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository } from 'typeorm';
 
+import { roleFixture } from '@/test-utils/fixtures';
 import { getRandomEnumValues, TestConfig } from '@/test-utils/util-functions';
 import { RoleServiceProviders } from '../../../../test-utils/providers/role.service.providers';
 import { CreateRoleDto, UpdateRoleDto } from './dtos';
@@ -50,19 +51,11 @@ describe('RoleService', () => {
       dto.projectId = faker.number.int();
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
 
-      await roleService.create(dto);
+      const role = await roleService.create(dto);
 
-      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOneBy).toHaveBeenCalledWith({
-        name: dto.name,
-        project: { id: dto.projectId },
-      });
-      expect(roleRepo.save).toHaveBeenCalledTimes(1);
-      expect(roleRepo.save).toHaveBeenCalledWith({
-        name: dto.name,
-        permissions: dto.permissions,
-        project: { id: dto.projectId },
-      });
+      expect(role.name).toEqual(dto.name);
+      expect(role.permissions).toEqual(dto.permissions);
+      expect(role.project.id).toEqual(dto.projectId);
     });
     it('creating a role fails with duplicate inputs', async () => {
       const dto = new CreateRoleDto();
@@ -101,25 +94,14 @@ describe('RoleService', () => {
     it('creating roles succeeds with valid inputs', async () => {
       jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue(null);
 
-      await roleService.createMany(dtos);
+      const roles = await roleService.createMany(dtos);
 
-      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(roleCount);
-      expect(roleRepo.save).toHaveBeenCalledTimes(1);
-      expect(roleRepo.save).toHaveBeenCalledWith(
-        dtos.map((role) => RoleEntity.from(role)),
-      );
+      expect(roles).toHaveLength(roleCount);
     });
     it('creating roles fails with duplicate inputs', async () => {
-      jest
-        .spyOn(roleRepo, 'findOneBy')
-        .mockResolvedValue({ id: faker.number.int() } as RoleEntity);
-
       await expect(roleService.createMany(dtos)).rejects.toThrow(
         RoleAlreadyExistsException,
       );
-
-      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
-      expect(roleRepo.save).not.toHaveBeenCalled();
     });
   });
 
@@ -130,21 +112,12 @@ describe('RoleService', () => {
       const dto = new UpdateRoleDto();
       dto.name = faker.string.sample();
       dto.permissions = getRandomEnumValues(PermissionEnum);
-      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue({
-        id: roleId,
-        name: dto.name,
-      } as RoleEntity);
       jest.spyOn(roleRepo, 'findOne').mockResolvedValue(null);
 
-      await roleService.update(roleId, projectId, dto);
+      const role = await roleService.update(roleId, projectId, dto);
 
-      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
-      expect(roleRepo.save).toHaveBeenCalledTimes(1);
-      expect(roleRepo.save).toHaveBeenCalledWith({
-        id: roleId,
-        name: dto.name,
-        permissions: dto.permissions,
-      });
+      expect(role.name).toEqual(dto.name);
+      expect(role.permissions).toEqual(dto.permissions);
     });
     it('updating a role fails with a duplicate name', async () => {
       const roleId = faker.number.int();
@@ -152,38 +125,19 @@ describe('RoleService', () => {
       const dto = new UpdateRoleDto();
       dto.name = faker.string.sample();
       dto.permissions = getRandomEnumValues(PermissionEnum);
-      jest.spyOn(roleRepo, 'findOneBy').mockResolvedValue({
-        id: roleId,
-        name: dto.name,
-      } as RoleEntity);
-      jest.spyOn(roleRepo, 'findOne').mockResolvedValue({
-        id: faker.number.int(),
-        name: dto.name,
-      } as RoleEntity);
 
       await expect(roleService.update(roleId, projectId, dto)).rejects.toThrow(
         RoleAlreadyExistsException,
       );
-
-      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
-      expect(roleRepo.save).not.toHaveBeenCalled();
     });
   });
 
   describe('findById', () => {
     it('finding a role succeeds with a valid role id', async () => {
-      const roleId = faker.number.int();
-      jest
-        .spyOn(roleRepo, 'findOne')
-        .mockResolvedValue({ id: roleId } as RoleEntity);
+      const roleId = roleFixture.id;
 
       const result = await roleService.findById(roleId);
 
-      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOne).toHaveBeenCalledWith({
-        where: { id: roleId },
-        relations: { project: true },
-      });
       expect(result.id).toEqual(roleId);
     });
     it('finding a role fails with a nonexistent role id', async () => {
@@ -193,34 +147,20 @@ describe('RoleService', () => {
       await expect(roleService.findById(nonexistentRoleId)).rejects.toThrow(
         RoleNotFoundException,
       );
-
-      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOne).toHaveBeenCalledWith({
-        where: { id: nonexistentRoleId },
-        relations: { project: true },
-      });
     });
   });
 
   describe('findByProjectNameAndRoleName', () => {
     it('finding a role succeeds with a valid project name and a role name', async () => {
-      const roleId = faker.number.int();
+      const roleId = roleFixture.id;
       const projectName = faker.string.sample();
       const roleName = faker.string.sample();
-      jest
-        .spyOn(roleRepo, 'findOne')
-        .mockResolvedValue({ id: roleId } as RoleEntity);
 
       const result = await roleService.findByProjectNameAndRoleName(
         projectName,
         roleName,
       );
 
-      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOne).toHaveBeenCalledWith({
-        where: { project: { name: projectName }, name: roleName },
-        relations: { project: true },
-      });
       expect(result.id).toEqual(roleId);
     });
     it('finding a role fails with an invalid project name and an invalid role name', async () => {
@@ -231,12 +171,6 @@ describe('RoleService', () => {
       await expect(
         roleService.findByProjectNameAndRoleName(projectName, roleName),
       ).rejects.toThrow(RoleNotFoundException);
-
-      expect(roleRepo.findOne).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOne).toHaveBeenCalledWith({
-        where: { project: { name: projectName }, name: roleName },
-        relations: { project: true },
-      });
     });
   });
 });

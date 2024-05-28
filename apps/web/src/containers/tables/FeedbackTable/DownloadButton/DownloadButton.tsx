@@ -74,12 +74,8 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
         query: {
           ...query,
           createdAt: {
-            gte: dayjs(createdAtRange?.startDate)
-              .startOf('day')
-              .toISOString(),
-            lt: dayjs(createdAtRange?.endDate)
-              .endOf('day')
-              .toISOString(),
+            gte: dayjs(createdAtRange?.startDate).startOf('day').toISOString(),
+            lt: dayjs(createdAtRange?.endDate).endOf('day').toISOString(),
           },
         },
       }),
@@ -112,9 +108,9 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
       >
         <div className="flex gap-1">
           <Icon name="Download" size={16} />
-          {isHead
-            ? t('main.feedback.button.select-download', { count })
-            : t('main.feedback.button.all-download')}
+          {isHead ?
+            t('main.feedback.button.select-download', { count })
+          : t('main.feedback.button.all-download')}
         </div>
         <Icon name="ChevronDown" size={12} />
       </PopoverTrigger>

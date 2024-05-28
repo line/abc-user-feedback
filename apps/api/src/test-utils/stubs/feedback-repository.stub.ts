@@ -13,36 +13,51 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { faker } from '@faker-js/faker';
+
 import { feedbackFixture } from '../fixtures';
-import { createQueryBuilder } from '../util-functions';
+import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class FeedbackRepositoryStub {
+  feedback = feedbackFixture;
   findOne() {
-    return feedbackFixture;
+    return this.feedback;
   }
 
   findOneBy() {
-    return feedbackFixture;
+    return this.feedback;
   }
 
   find() {
-    return [feedbackFixture];
+    return [this.feedback];
   }
 
   findBy() {
-    return [feedbackFixture];
+    return [this.feedback];
   }
 
   findAndCount() {
-    return [[feedbackFixture], 1];
+    return [[this.feedback], 1];
   }
 
   findAndCountBy() {
-    return [[feedbackFixture], 1];
+    return [[this.feedback], 1];
   }
 
   save(feedback) {
-    return { ...feedback, id: feedbackFixture.id };
+    const feedbackToSave = removeUndefinedValues(feedback);
+    if (Array.isArray(feedbackToSave)) {
+      return feedbackToSave.map((e) => ({
+        ...this.feedback,
+        ...e,
+        id: faker.number.int(),
+      }));
+    } else {
+      return {
+        ...this.feedback,
+        ...feedbackToSave,
+      };
+    }
   }
 
   count() {
@@ -50,7 +65,7 @@ export class FeedbackRepositoryStub {
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [feedbackFixture];
+    createQueryBuilder.getMany = () => [this.feedback];
     return createQueryBuilder;
   }
 }

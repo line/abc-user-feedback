@@ -26,7 +26,10 @@ import {
   passwordFixture,
   userFixture,
 } from '@/test-utils/fixtures';
-import type { TenantRepositoryStub } from '@/test-utils/stubs';
+import type {
+  CodeRepositoryStub,
+  TenantRepositoryStub,
+} from '@/test-utils/stubs';
 import { TestConfig } from '@/test-utils/util-functions';
 import {
   AuthServiceProviders,
@@ -54,7 +57,7 @@ describe('auth service ', () => {
   let authService: AuthService;
   let userRepo: Repository<UserEntity>;
   let tenantRepo: TenantRepositoryStub;
-  let codeRepo: Repository<CodeEntity>;
+  let codeRepo: CodeRepositoryStub;
   let apiKeyRepo: Repository<ApiKeyEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -79,30 +82,23 @@ describe('auth service ', () => {
       dto.email = validEmail;
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
       tenantRepo.setIsRestrictDomain(false);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue({} as CodeEntity);
-      jest.spyOn(codeRepo, 'save').mockResolvedValue({} as CodeEntity);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
 
       const timeoutTime = await authService.sendEmailCode(dto);
 
       expect(new Date(timeoutTime) > new Date()).toEqual(true);
-      expect(codeRepo.findOneBy).toBeCalledTimes(1);
-      expect(codeRepo.save).toBeCalledTimes(1);
       expect(MockEmailVerificationMailingService.send).toBeCalledTimes(1);
     });
     it('sending a code by email succeeds with a duplicate email', async () => {
       const duplicateEmail = emailFixture;
       dto.email = duplicateEmail;
       tenantRepo.setIsRestrictDomain(false);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue({} as CodeEntity);
-      jest.spyOn(codeRepo, 'save').mockResolvedValue({} as CodeEntity);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
 
       await expect(authService.sendEmailCode(dto)).rejects.toThrowError(
         UserAlreadyExistsException,
       );
 
-      expect(codeRepo.save).not.toBeCalled();
       expect(MockEmailVerificationMailingService.send).not.toBeCalled();
     });
   });
@@ -151,9 +147,7 @@ describe('auth service ', () => {
       dto.password = faker.internet.password();
       tenantRepo.setIsRestrictDomain(false);
       tenantRepo.setIsPrivate(false);
-      jest
-        .spyOn(codeRepo, 'findOneBy')
-        .mockResolvedValue({ isVerified: true } as CodeEntity);
+      codeRepo.setIsVerified(true);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
 
       const user = await authService.signUpEmailUser(dto);
@@ -166,9 +160,7 @@ describe('auth service ', () => {
       dto.password = faker.internet.password();
       tenantRepo.setIsRestrictDomain(false);
       tenantRepo.setIsPrivate(false);
-      jest
-        .spyOn(codeRepo, 'findOneBy')
-        .mockResolvedValue({ isVerified: false } as CodeEntity);
+      codeRepo.setIsVerified(false);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
       jest.spyOn(userRepo, 'save');
 
@@ -184,7 +176,7 @@ describe('auth service ', () => {
       dto.password = faker.internet.password();
       tenantRepo.setIsRestrictDomain(false);
       tenantRepo.setIsPrivate(false);
-      jest.spyOn(codeRepo, 'findOneBy').mockResolvedValue(null as CodeEntity);
+      codeRepo.setNull();
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
       jest.spyOn(userRepo, 'save');
 
@@ -236,7 +228,6 @@ describe('auth service ', () => {
     it('validating an api key succeeds with a valid api key', async () => {
       const apiKey = faker.string.uuid();
       const projectId = faker.number.int();
-      jest.spyOn(apiKeyRepo, 'find').mockResolvedValue([{}] as ApiKeyEntity[]);
 
       const result = await authService.validateApiKey(apiKey, projectId);
 

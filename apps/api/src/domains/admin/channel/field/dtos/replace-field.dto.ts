@@ -17,8 +17,8 @@ import { Expose, Type } from 'class-transformer';
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '../../../../../common/enums';
 
 export class ReplaceFieldDto {
@@ -38,7 +38,7 @@ export class ReplaceFieldDto {
   format: FieldFormatEnum;
 
   @Expose()
-  type: FieldTypeEnum;
+  property: FieldPropertyEnum;
 
   @Expose()
   status: FieldStatusEnum;

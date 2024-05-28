@@ -69,7 +69,7 @@ const RoleSettingHead: React.FC<IProps> = ({
     <>
       <div className="flex items-center justify-center gap-1">
         <p className="text-center">{role.name}</p>
-        {isEdit ? (
+        {isEdit ?
           <div className="flex gap-1">
             <button
               className="icon-btn icon-btn-xs icon-btn-tertiary"
@@ -84,8 +84,7 @@ const RoleSettingHead: React.FC<IProps> = ({
               <Icon name="Check" className="text-blue-primary" />
             </button>
           </div>
-        ) : (
-          <Popover placement="bottom-start">
+        : <Popover placement="bottom-start">
             <PopoverTrigger className="icon-btn icon-btn-xs icon-btn-tertiary">
               <Icon name="Dots" className="rotate-90" />
             </PopoverTrigger>
@@ -94,9 +93,9 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'mb-1 flex items-center gap-2 rounded p-2',
-                    !hasUpdateRolePerm
-                      ? 'text-tertiary cursor-not-allowed'
-                      : 'hover:bg-fill-tertiary cursor-pointer',
+                    !hasUpdateRolePerm ?
+                      'text-tertiary cursor-not-allowed'
+                    : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
                     if (!hasUpdateRolePerm) return;
@@ -112,9 +111,9 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'mb-1 flex items-center gap-2 rounded p-2',
-                    !hasUpdateRolePerm
-                      ? 'text-tertiary cursor-not-allowed'
-                      : 'hover:bg-fill-tertiary cursor-pointer',
+                    !hasUpdateRolePerm ?
+                      'text-tertiary cursor-not-allowed'
+                    : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
                     if (!hasUpdateRolePerm) return;
@@ -129,9 +128,9 @@ const RoleSettingHead: React.FC<IProps> = ({
                 <li
                   className={[
                     'flex items-center gap-2 rounded p-2',
-                    !hasDeleteRolePerm || roles.length === 1
-                      ? 'text-tertiary cursor-not-allowed'
-                      : 'hover:bg-fill-tertiary cursor-pointer',
+                    !hasDeleteRolePerm || roles.length === 1 ?
+                      'text-tertiary cursor-not-allowed'
+                    : 'hover:bg-fill-tertiary cursor-pointer',
                   ].join(' ')}
                   onClick={() => {
                     if (!hasDeleteRolePerm || roles.length === 1) return;
@@ -146,7 +145,7 @@ const RoleSettingHead: React.FC<IProps> = ({
               </ul>
             </PopoverContent>
           </Popover>
-        )}
+        }
       </div>
       <DeleteRolePopover
         open={deletePopupOpen}

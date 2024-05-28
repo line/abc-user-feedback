@@ -32,8 +32,8 @@ export type PrimitiveFieldFormatEnumType =
   (typeof PrimitiveFieldFormatEnumList)[number];
 export type FieldFormatEnumType = (typeof FieldFormatEnumList)[number];
 
-export const FieldTypeEnumList = ['DEFAULT', 'ADMIN', 'API'] as const;
-export type FieldTypeEnumType = (typeof FieldTypeEnumList)[number];
+export const FieldPropertyEnumList = ['READ_ONLY', 'EDITABLE'] as const;
+export type FieldPropertyEnumType = (typeof FieldPropertyEnumList)[number];
 
 export const FieldStatusEnumList = ['ACTIVE', 'INACTIVE'] as const;
 export type FieldStatusEnumType = (typeof FieldStatusEnumList)[number];
@@ -44,7 +44,7 @@ export type FieldType = {
   name: string;
   description: string | null;
   format: FieldFormatEnumType;
-  type: FieldTypeEnumType;
+  property: FieldPropertyEnumType;
   status: FieldStatusEnumType;
   options?: OptionType[];
   createdAt: string;

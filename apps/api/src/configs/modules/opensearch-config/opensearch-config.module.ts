@@ -31,8 +31,8 @@ import type { ConfigServiceType } from '@/types/config-service.type';
             infer: true,
           },
         );
-        return use
-          ? new Client({ node, auth: { username, password } })
+        return use ?
+            new Client({ node, auth: { username, password } })
           : undefined;
       },
       inject: [ConfigService],

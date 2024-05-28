@@ -26,12 +26,14 @@ import {
   FeedbackPermissionText,
   IssuePermissionList,
   IssuePermissionText,
+  PermissionList,
   ProjectApiKeyPermissionList,
   ProjectInfoPermissionList,
   ProjectMemberPermissionList,
   ProjectPermissionText,
   ProjectRolePermissionList,
   ProjectTrackerPermissionList,
+  ProjectWebhookPermissionList,
 } from '@/types/permission.type';
 import type { RoleType } from '@/types/role.type';
 import PermissionRows from './PermissionRows';
@@ -65,6 +67,7 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
   }, [editRoleId]);
 
   const colSpan = useMemo(() => (roles.length ?? 0) + 2, [roles]);
+
   const onSubmitEdit = async () => {
     if (!editName || !editRoleId) return;
     const newRole = roles.find((v) => v.id === editRoleId);
@@ -75,13 +78,12 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
       boolean,
     ][];
 
-    const newPermissions = permEntires.reduce<PermissionType[]>(
-      (prev, [perm, checked]) => {
+    const newPermissions = permEntires
+      .reduce<PermissionType[]>((prev, [perm, checked]) => {
         if (checked) return prev.includes(perm) ? prev : prev.concat(perm);
         else return prev.includes(perm) ? prev.filter((v) => v !== perm) : prev;
-      },
-      newRole.permissions,
-    );
+      }, newRole.permissions)
+      .filter((v) => PermissionList.includes(v));
 
     await updateRole({
       name: editName,
@@ -90,8 +92,45 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
     });
     setEditRoleId(undefined);
   };
+
   const onChecked = (perm: PermissionType, checked: boolean) => {
     setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
+    if (
+      checked &&
+      (perm.includes('create') ||
+        perm.includes('update') ||
+        perm.includes('delete'))
+    ) {
+      const permPrefix = perm.split('_').slice(0, -1).join('_');
+
+      const relatedPerms = PermissionList.filter((v) => {
+        const vPrefix = v.split('_').slice(0, -1).join('_');
+        return (
+          vPrefix === permPrefix &&
+          v.includes('read') &&
+          !v.includes('download')
+        );
+      });
+      relatedPerms.forEach((v) => {
+        setEditPermissions((prev) => ({ ...prev, [v]: true }));
+      });
+    }
+    if (!checked && perm.includes('read') && !perm.includes('download')) {
+      const permprefix = perm.split('_').slice(0, -1).join('_');
+
+      const relatedPerms = PermissionList.filter((v) => {
+        const vPrefix = v.split('_').slice(0, -1).join('_');
+
+        return (
+          vPrefix === permprefix &&
+          (v.includes('create') || v.includes('update') || v.includes('delete'))
+        );
+      });
+
+      relatedPerms.forEach((v) => {
+        setEditPermissions((prev) => ({ ...prev, [v]: false }));
+      });
+    }
   };
 
   return (
@@ -191,6 +230,16 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
           editPermissions={editPermissions}
           permText={ProjectPermissionText}
           permissions={ProjectTrackerPermissionList}
+          onChecked={onChecked}
+          roles={roles ?? []}
+          depth={3}
+        />
+        <RoleTitleRow title="Webhook" colspan={colSpan} depth={2} />
+        <PermissionRows
+          editRoleId={editRoleId}
+          editPermissions={editPermissions}
+          permText={ProjectPermissionText}
+          permissions={ProjectWebhookPermissionList}
           onChecked={onChecked}
           roles={roles ?? []}
           depth={3}

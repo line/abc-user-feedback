@@ -23,11 +23,10 @@ import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
-import 'react-datepicker/dist/react-datepicker.css';
-
 import { TenantProvider } from '@/contexts/tenant.context';
 import { UserProvider } from '@/contexts/user.context';
-
+// NOTE: DON'T Change the following import order
+import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/react-datepicker.css';
 import './_app.css';
 

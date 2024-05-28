@@ -15,5 +15,8 @@
   "css.lint.unknownAtRules": "ignore",
   "files.associations": {
     "*.css": "tailwindcss"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }

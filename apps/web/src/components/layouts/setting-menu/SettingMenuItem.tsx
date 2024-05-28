@@ -35,9 +35,9 @@ const SettingMenuItem: React.FC<IItemProps> = ({
       className={[
         'mx-1 my-2 flex items-center gap-2 rounded px-2 py-1.5',
         active ? 'bg-fill-tertiary' : '',
-        disabled
-          ? 'text-tertiary cursor-not-allowed'
-          : 'hover:bg-fill-secondary cursor-pointer',
+        disabled ?
+          'text-tertiary cursor-not-allowed'
+        : 'hover:bg-fill-secondary cursor-pointer',
       ].join(' ')}
       {...props}
       onClick={(e) => (!disabled && props.onClick ? props.onClick(e) : {})}

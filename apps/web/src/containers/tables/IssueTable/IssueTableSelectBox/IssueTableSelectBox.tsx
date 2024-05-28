@@ -24,7 +24,7 @@ interface IProps extends React.PropsWithChildren {
   issueCountData: { key: string; count: number }[] | undefined;
 }
 
-const IssueTabelSelectBox: React.FC<IProps> = (props) => {
+const IssueTableSelectBox: React.FC<IProps> = (props) => {
   const { currentIssueKey, onChangeOption, issueCountData } = props;
 
   const { t } = useTranslation();
@@ -36,10 +36,12 @@ const IssueTabelSelectBox: React.FC<IProps> = (props) => {
           key={issue.key}
           className={[
             'flex min-w-[136px] cursor-pointer items-center justify-between rounded border px-3 py-2.5',
-            currentIssueKey === issue.key ||
-            (currentIssueKey === undefined && issue.key === 'total')
-              ? 'border-fill-primary'
-              : 'opacity-50',
+            (
+              currentIssueKey === issue.key ||
+              (currentIssueKey === undefined && issue.key === 'total')
+            ) ?
+              'border-fill-primary'
+            : 'opacity-50',
           ].join(' ')}
           onClick={() => onChangeOption(issue.key)}
         >
@@ -62,4 +64,4 @@ const IssueTabelSelectBox: React.FC<IProps> = (props) => {
   );
 };
 
-export default IssueTabelSelectBox;
+export default IssueTableSelectBox;

@@ -151,8 +151,8 @@
       "field-mgmt": {
         "description": "保存するにはプレビューを先に押してください。",
         "preview": "プレビュー",
-        "preview-caption": "プレビューは、理解を助けるためのサンプルデータです。",
-        "preview-description": "<preview>プレビュー</preview>を選択した後に確認することができます。"
+        "preview-caption": "プレビューは、例示データとして表示されます。",
+        "preview-description": "登録したフィールドがどのような姿なのか確認することができます。"
       },
       "dialog": {
         "edit-user": { "title": "User 編集" },
@@ -174,7 +174,7 @@
         },
         "edit-api-key": {
           "title": "API KEY 編集",
-          "description": "API KEY を非アクティブに変更すると、その KEY の API は使用できなくなります。\nAPI KEY を使用しない場合のみ、ステータスを非アクティブに変更してください。"
+          "description": "API KEYを無効にすると、そのKEYでAPIが使用できなくなります。 API KEYを使用しない場合のみ、無効に変更してください。"
         },
         "delete-option": {
           "title": "オプションの削除",
@@ -228,7 +228,7 @@
     "sign-in": "ログイン",
     "sign-up": "会員加入",
     "save": "保存",
-    "create": "生成",
+    "create": "{{name}}生成",
     "cancel": "キャンセル",
     "delete": "削除",
     "register": "登錄",
@@ -279,7 +279,6 @@
     "equal-search": "完全一致",
     "like-search": "部分一致",
     "helper": "ヘルプ",
-    "warning-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
     "no-channel": "登録されたチャンネルがありません。",
     "guide": "案内",
     "more": "もっと",
@@ -287,7 +286,13 @@
     "feedback-detail": "フィードバック詳細",
     "create-channel-in-progress": "作成中のChannelがあります。",
     "create-project-in-progress": "作成中のProjectがあります。",
-    "days": "{{days}} 日"
+    "days": "{{days}}日",
+    "webhook-type": {
+      "FEEDBACK_CREATION": "フィードバックの作成",
+      "ISSUE_CREATION": "イシュー作成",
+      "ISSUE_STATUS_CHANGE": "イシューステータス変更",
+      "ISSUE_ADDITION": "イシュー追加"
+    }
   },
   "toast": {
     "sign-in": "ログイン成功",
@@ -308,6 +313,16 @@
         "continue": "続行",
         "restart": "再起動"
       }
+    },
+    "create-webhook": {
+      "title": "Webhook生成"
+    },
+    "update-webhook": {
+      "title": "Webhook編集"
+    },
+    "delete-webhook": {
+      "title": "Webhook削除",
+      "description": "Webhookを削除すると、連動したデータがすべて削除されます。"
     }
   },
   "dashboard-card": {
@@ -381,7 +396,13 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
+    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。",
+    "webhook-feedback-creation": "このイベントは、チャネル固有のフィードバックが収集されるたびにトリガーされます。",
+    "webhook-issue-addition": "このイベントは、チャネル固有のフィードバックに問題が登録されるたびにトリガーされます。",
+    "webhook-issue-creation": "このイベントは、チャネルに関係なく、問題が発生するたびにトリガーされます。",
+    "webhook-issue-status-change": "このイベントは、チャネルに関係なく、イシューステータスが変更されるたびにトリガーされます。",
+    "field-property": "フィールド内容の原本を維持したいならRead Only内容を修正したいならEditibleに設定してください。",
+    "field-status": "フィールドを使用するかどうかを意味します。 使用しないフィールドはInactiveに変更してください。"
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant情報",
@@ -394,6 +415,7 @@
     "role-mgmt": "Role管理",
     "api-key-mgmt": "API Key管理",
     "issue-tracker-mgmt": "Issue Tracker管理",
+    "webhook-integration": "Webhook連動",
     "delete-project": "Project削除"
   },
   "channel-setting-menu": {
@@ -405,18 +427,23 @@
   "modal": {
     "image-preview": {
       "title": "Imageプレビュー"
+    },
+    "save-field": {
+      "title": "Field管理ストレージ",
+      "description": "追加または修正したフィールド情報を保存しますか？"
     }
   },
   "help-card": {
     "project-info": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
     "role": "Projectにfアクセスして使用する権限を設定できます。",
     "member": "Projectに参加する Memberを登録または管理することができます。",
-    "api-key": "フィードバック収集APIのAPI Key情報を管理します。 APIを活用してフィードバックを収集するなら、Key情報を生成してください。",
+    "api-key": "ユーザーフィードバックAPIキー情報を管理します。 API を使用する場合は、キーを作成して使用します。 詳細については、API <icon></icon> <docs>Docs</docs>をご参考ください。",
     "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
     "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
     "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
     "image-setting": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。",
-    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。"
+    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。",
+    "webhook": "Webhook は、User Feedback 内で発生するさまざまなイベントに使用されます。 詳細はWebhook <icon></icon> <docs>Docs</docs> をご覧ください。"
   },
   "hint": {
     "required": "必須入力対象です。",
@@ -428,5 +455,9 @@
   "title-box": {
     "image-storage-integration": "Image Storageの連動"
   },
-  "placeholder": "{{name}}を入力してください。"
+  "placeholder": "{{name}}を入力してください。",
+  "system-popup": {
+    "create-project/channel-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
+    "field-setting-get-out": "まだ保存されていないフィールド情報があります。 それでも出られますか。"
+  }
 }

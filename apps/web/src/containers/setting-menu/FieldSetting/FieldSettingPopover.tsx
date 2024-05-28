@@ -28,11 +28,11 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { SelectBox } from '@/components/etc';
+import { DescriptionTooltip, SelectBox } from '@/components/etc';
 import {
   FieldFormatEnumList,
+  FieldPropertyEnumList,
   FieldStatusEnumList,
-  FieldTypeEnumList,
 } from '@/types/field.type';
 import type { FieldRowType } from './FieldSetting';
 import OptionDeletePopover from './OptionBadge';
@@ -61,7 +61,7 @@ const schema = (otherFields: FieldRowType[]): Zod.ZodType<FieldRowType> =>
       ),
     description: z.string().nullable(),
     format: z.enum(FieldFormatEnumList),
-    type: z.enum(FieldTypeEnumList),
+    property: z.enum(FieldPropertyEnumList),
     status: z.enum(FieldStatusEnumList),
     options: z
       .array(
@@ -80,7 +80,7 @@ const defaultValues: FieldRowType = {
   name: '',
   key: '',
   status: 'ACTIVE',
-  type: 'API',
+  property: 'READ_ONLY',
 };
 
 interface IProps extends React.PropsWithChildren {
@@ -137,6 +137,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     setOptionInput('');
+    setValue('property', 'READ_ONLY');
     setValue('options', undefined);
   }, [watch('format')]);
 
@@ -186,7 +187,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
         initialOpen={data?.id === 176}
       >
         <PopoverTrigger asChild>
-          {isEditing ? (
+          {isEditing ?
             <button
               className={[
                 'icon-btn icon-btn-sm icon-btn-tertiary',
@@ -197,8 +198,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             >
               <Icon name="EditFill" />
             </button>
-          ) : (
-            <button
+          : <button
               className={[
                 'btn btn-sm btn-secondary',
                 open ? 'bg-fill-tertiary' : '',
@@ -208,13 +208,13 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             >
               {t('main.setting.dialog.add-field.title')}
             </button>
-          )}
+          }
         </PopoverTrigger>
         <PopoverContent isPortal>
           <PopoverHeading>
-            {isEditing
-              ? t('main.setting.dialog.edit-field.title')
-              : t('main.setting.dialog.add-field.title')}
+            {isEditing ?
+              t('main.setting.dialog.edit-field.title')
+            : t('main.setting.dialog.add-field.title')}
           </PopoverHeading>
           <form
             className="m-5 w-[520px] space-y-5"
@@ -313,38 +313,40 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               </div>
             )}
             <div>
-              <p className="input-label">Field Property</p>
-              <div className="mt-2 flex items-center">
-                <span className="font-10-regular w-[120px] ">Field Type</span>
+              <div className="flex items-center">
+                <span className="font-10-regular w-[120px]">
+                  Field Property
+                  <DescriptionTooltip
+                    description={t('tooltip.field-property')}
+                  />
+                </span>
                 <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-type"
                     className="radio radio-sm"
-                    onChange={(e) =>
-                      e.target.checked ? setValue('type', 'API') : {}
-                    }
-                    checked={watch('type') === 'API'}
-                    disabled={isOriginalData}
+                    onChange={() => setValue('property', 'READ_ONLY')}
+                    checked={watch('property') === 'READ_ONLY'}
                   />
-                  API
+                  Read Only
                 </label>
                 <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"
                     name="radio-type"
                     className="radio radio-sm"
-                    onChange={(e) =>
-                      e.target.checked ? setValue('type', 'ADMIN') : {}
-                    }
-                    checked={watch('type') === 'ADMIN'}
-                    disabled={isOriginalData || watch('format') === 'images'}
+                    onChange={() => setValue('property', 'EDITABLE')}
+                    checked={watch('property') === 'EDITABLE'}
+                    disabled={watch('format') === 'images'}
                   />
-                  ADMIN
+                  Editable
                 </label>
               </div>
               <div className="flex items-center">
-                <span className="font-10-regular w-[120px] ">Field Status</span>
+                <span className="font-10-regular w-[120px]">
+                  Field Status
+                  <DescriptionTooltip description={t('tooltip.field-status')} />
+                </span>
                 <label className="radio-label h-[36px] w-[120px]">
                   <input
                     type="radio"

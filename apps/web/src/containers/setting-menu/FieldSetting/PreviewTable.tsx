@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, memo, useEffect, useMemo, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
@@ -54,53 +54,45 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
-    for (let i = 1; i <= 8; i++) {
+    for (let i = 1; i <= 1; i++) {
       const fakeData: Record<string, any> = {};
       for (const field of fields) {
-        if (field.type === 'DEFAULT') {
-          if (field.key === 'id') {
-            fakeData[field.name] = i;
-          } else if (field.key === 'createdAt' || field.key === 'updatedAt') {
-            fakeData[field.name] = dayjs().add(i, 'hour');
-          } else if (field.key === 'issues') {
-            fakeData[field.name] = faker.helpers.arrayElements(issues, {
-              min: 0,
-              max: 4,
-            });
-          } else {
-            fakeData[field.name] = null;
-          }
-        } else if (field.type === 'API') {
+        if (field.key === 'id') {
+          fakeData[field.name] = i;
+        } else if (field.key === 'createdAt' || field.key === 'updatedAt') {
+          fakeData[field.name] = dayjs().add(i, 'hour');
+        } else if (field.key === 'issues') {
+          fakeData[field.name] = faker.helpers.arrayElements(issues, {
+            min: 0,
+            max: 4,
+          });
+        } else {
           fakeData[field.name] =
-            field.format === 'date'
-              ? faker.date.anytime()
-              : field.format === 'keyword'
-              ? faker.word.noun()
-              : field.format === 'multiSelect'
-              ? faker.helpers.arrayElements(
-                  (field.options ?? []).map((v) => v.name),
-                )
-              : field.format === 'select'
-              ? faker.helpers.arrayElement(
-                  (field.options ?? []).map((v) => v.name),
-                )
-              : field.format === 'number'
-              ? faker.number.int()
-              : field.format === 'text'
-              ? faker.lorem.text()
-              : field.format === 'images'
-              ? faker.helpers.arrayElements(
-                  Array.from(
-                    { length: faker.number.int({ min: 1, max: 15 }) },
-                    () => '/assets/images/sample_image.png',
-                  ),
-                )
-              : null;
+            field.format === 'date' ? faker.date.anytime()
+            : field.format === 'keyword' ? faker.word.noun()
+            : field.format === 'multiSelect' ?
+              faker.helpers.arrayElements(
+                (field.options ?? []).map((v) => v.name),
+              )
+            : field.format === 'select' ?
+              faker.helpers.arrayElement(
+                (field.options ?? []).map((v) => v.name),
+              )
+            : field.format === 'number' ? faker.number.int()
+            : field.format === 'text' ? faker.lorem.text()
+            : field.format === 'images' ?
+              faker.helpers.arrayElements(
+                Array.from(
+                  { length: faker.number.int({ min: 1, max: 15 }) },
+                  () => '/assets/images/sample_image.png',
+                ),
+              )
+            : null;
         }
       }
+
       fakeRows.push(fakeData);
     }
-
     setRows(fakeRows);
   }, [fields]);
 
@@ -108,19 +100,12 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
     () =>
       fields.map((field) =>
         columnHelper.accessor(field.name, {
-          size: field.key === 'id' ? 50 : field.format === 'text' ? 200 : 150,
+          size:
+            field.key === 'id' ? 50
+            : field.format === 'text' ? 200
+            : 150,
           cell: (info) =>
-            field.type === 'ADMIN' ? (
-              <EditableCell
-                field={field as FieldType}
-                value={info.getValue()}
-                isExpanded={info.row.getIsExpanded()}
-                feedbackId={info.row.original.id}
-              />
-            ) : typeof info.getValue() ===
-              'undefined' ? undefined : field.format === 'date' ? (
-              dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
-            ) : field.key === 'issues' ? (
+            field.key === 'issues' ?
               <div className="scrollbar-hide flex items-center gap-1">
                 {(
                   info.getValue() as { status: IssueStatus; name: string }[]
@@ -134,17 +119,25 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   </Badge>
                 ))}
               </div>
-            ) : field.format === 'multiSelect' ? (
+            : field.property === 'EDITABLE' ?
+              <EditableCell
+                field={field as FieldType}
+                value={info.getValue()}
+                isExpanded={info.row.getIsExpanded()}
+                feedbackId={info.row.original.id}
+              />
+            : typeof info.getValue() === 'undefined' ? undefined
+            : field.format === 'date' ?
+              dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)
+            : field.format === 'multiSelect' ?
               ((info.getValue() ?? []) as string[]).join(', ')
-            ) : field.format === 'text' ? (
+            : field.format === 'text' ?
               <ExpandableText isExpanded={info.row.getIsExpanded()}>
                 {info.getValue() as string}
               </ExpandableText>
-            ) : field.format === 'images' ? (
+            : field.format === 'images' ?
               <ImagePreviewButton urls={(info.getValue() ?? []) as string[]} />
-            ) : (
-              String(info.getValue())
-            ),
+            : String(info.getValue()),
         }),
       ),
     [fields],
@@ -189,19 +182,17 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <Fragment key={row.id}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={cell.id}
-                    style={{ width: cell.column.getSize(), border: 'none' }}
-                    className="overflow-hidden"
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={cell.id}
+                  style={{ width: cell.column.getSize(), border: 'none' }}
+                  className="overflow-hidden"
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
           ))}
         </tbody>
       </table>

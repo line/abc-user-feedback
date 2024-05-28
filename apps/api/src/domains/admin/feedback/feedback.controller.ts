@@ -25,11 +25,16 @@ import {
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiParam,
+  ApiSecurity,
+} from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 import { DateTime } from 'luxon';
 
-import { ApiKeyAuthGuard } from '@/domains/admin/auth/guards';
+import { ApiKeyAuthGuard, JwtAuthGuard } from '@/domains/admin/auth/guards';
 import { ChannelService } from '../channel/channel/channel.service';
 import { HistoryActionEnum } from '../history/history-action.enum';
 import { EntityNameEnum } from '../history/history-entity.enum';
@@ -58,6 +63,7 @@ export class FeedbackController {
   ) {}
 
   @ApiParam({ name: 'projectId', type: Number })
+  @ApiSecurity('apiKey')
   @UseGuards(ApiKeyAuthGuard)
   @Post()
   async create(
@@ -74,7 +80,8 @@ export class FeedbackController {
     return { id };
   }
 
-  @RequirePermission(PermissionEnum.feedback_read)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiParam({ name: 'projectId', type: Number })
   @ApiOkResponse({ type: FindFeedbacksByChannelIdResponseDto })
   @Post('search')
@@ -88,6 +95,7 @@ export class FeedbackController {
   }
 
   @RequirePermission(PermissionEnum.feedback_issue_update)
+  @ApiBearerAuth()
   @ApiParam({ name: 'projectId', type: Number })
   @ApiOkResponse({ type: AddIssueResponseDto })
   @Post(':feedbackId/issue/:issueId')
@@ -104,6 +112,7 @@ export class FeedbackController {
   }
 
   @RequirePermission(PermissionEnum.feedback_issue_update)
+  @ApiBearerAuth()
   @ApiParam({ name: 'projectId', type: Number })
   @ApiOkResponse({ type: AddIssueResponseDto })
   @Delete(':feedbackId/issue/:issueId')
@@ -121,6 +130,7 @@ export class FeedbackController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.feedback_download_read)
+  @ApiBearerAuth()
   @Post('export')
   async exportFeedbacks(
     @Param('channelId', ParseIntPipe) channelId: number,
@@ -168,6 +178,7 @@ export class FeedbackController {
   }
 
   @RequirePermission(PermissionEnum.feedback_update)
+  @ApiBearerAuth()
   @ApiParam({ name: 'projectId', type: Number })
   @Put(':feedbackId')
   async updateFeedback(
@@ -183,6 +194,7 @@ export class FeedbackController {
   }
 
   @RequirePermission(PermissionEnum.feedback_delete)
+  @ApiBearerAuth()
   @ApiParam({ name: 'projectId', type: Number })
   @Delete()
   async deleteMany(

@@ -14,18 +14,20 @@
  * under the License.
  */
 
-import { Fragment, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import clsx from 'clsx';
 
 import { Badge, Icon } from '@ufb/ui';
 
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import type { InputFieldType } from '@/types/field.type';
+import { fieldProperty, isDefaultField } from '@/utils/field-utils';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
 import FieldSettingPopover from '../setting-menu/FieldSetting/FieldSettingPopover';
 import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
@@ -65,28 +67,12 @@ const getColumns = (
     },
     size: 100,
   }),
-  columnHelper.accessor('type', {
-    header: 'Type',
+  columnHelper.accessor('property', {
+    header: 'Property',
     cell: ({ getValue }) => {
-      const color =
-        getValue() === 'API'
-          ? 'blue'
-          : getValue() === 'ADMIN'
-          ? 'green'
-          : 'black';
-      const type =
-        getValue() === 'API'
-          ? 'primary'
-          : getValue() === 'ADMIN'
-          ? 'primary'
-          : 'secondary';
-      return (
-        <Badge color={color} type={type}>
-          {getValue()}
-        </Badge>
-      );
+      return <Badge type="secondary">{fieldProperty[getValue()]}</Badge>;
     },
-    size: 100,
+    size: 120,
   }),
   columnHelper.display({
     id: 'delete',
@@ -95,7 +81,7 @@ const getColumns = (
       <div className="text-center">
         <button
           className="icon-btn icon-btn-sm icon-btn-tertiary"
-          disabled={row.original.type === 'DEFAULT'}
+          disabled={isDefaultField(row.original)}
           onClick={() => deleteField(row.index)}
         >
           <Icon name="TrashFill" />
@@ -112,7 +98,7 @@ const getColumns = (
         <FieldSettingPopover
           onSave={(input) => modifyField(input, row.index)}
           data={row.original}
-          disabled={row.original.type === 'DEFAULT'}
+          disabled={isDefaultField(row.original)}
           fieldRows={fieldRows}
         />
       </div>
@@ -171,19 +157,19 @@ const InputField: React.FC<IProps> = () => {
         </thead>
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <Fragment key={row.index}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={`${cell.id} ${cell.row.index}`}
-                    className="border-none"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
+            <tr key={row.index}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={`${cell.id} ${cell.row.index}`}
+                  className={clsx('border-none', {
+                    'text-secondary': isDefaultField(row.original),
+                  })}
+                  style={{ width: cell.column.getSize() }}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
           ))}
         </tbody>
       </table>

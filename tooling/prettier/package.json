@@ -2,20 +2,25 @@
   "name": "@ufb/prettier-config",
   "version": "0.1.0",
   "private": true,
-  "main": "index.mjs",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
   "scripts": {
-    "clean": "rm -rf .turbo node_modules",
-    "format": "prettier --check \"**/*.{mjs,ts,md,json}\"",
+    "clean": "rimraf .turbo node_modules",
+    "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@ufb/prettier-config",
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.1.1",
-    "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.6"
+    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
+    "prettier": "^3.2.5",
+    "prettier-plugin-tailwindcss": "^0.5.14"
   },
   "devDependencies": {
-    "@ufb/tsconfig": "^0.1.0",
-    "typescript": "^5.2.2"
-  }
+    "@types/node": "20.12.12",
+    "@ufb/tsconfig": "workspace:*",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.4.5"
+  },
+  "prettier": "@ufb/prettier-config"
 }

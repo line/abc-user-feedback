@@ -34,18 +34,16 @@ const TicketLink: React.FC<IProps> = ({ value, issueTracker }) => {
     }
   }, [issueTracker, value]);
 
-  return value ? (
-    <a
-      className="text-blue-primary"
-      href={link}
-      target="_blank"
-      rel="noreferrer"
-    >
-      {`${issueTracker?.ticketKey}-${value}`}
-    </a>
-  ) : (
-    <>-</>
-  );
+  return value ?
+      <a
+        className="text-blue-primary"
+        href={link}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {`${issueTracker?.ticketKey}-${value}`}
+      </a>
+    : <>-</>;
 };
 
 export default TicketLink;

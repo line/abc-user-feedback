@@ -13,18 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/test-utils/util-functions';
 import { IssueEntity } from '../../domains/admin/project/issue/issue.entity';
 import { IssueService } from '../../domains/admin/project/issue/issue.service';
+import { IssueRepositoryStub } from '../stubs';
 import { IssueStatisticsServiceProviders } from './issue-statistics.service.providers';
 
 export const IssueServiceProviders = [
   IssueService,
   {
     provide: getRepositoryToken(IssueEntity),
-    useValue: mockRepository(),
+    useValue: IssueRepositoryStub,
   },
   ...IssueStatisticsServiceProviders,
+  EventEmitter2,
 ];

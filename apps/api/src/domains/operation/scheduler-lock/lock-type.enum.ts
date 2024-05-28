@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export enum FieldTypeEnum {
-  DEFAULT = 'DEFAULT',
-  ADMIN = 'ADMIN',
-  API = 'API',
+export enum LockTypeEnum {
+  FEEDBACK_STATISTICS = 'FEEDBACK_STATISTICS',
+  ISSUE_STATISTICS = 'ISSUE_STATISTICS',
+  FEEDBACK_ISSUE_STATISTICS = 'FEEDBACK_ISSUE_STATISTICS',
+  FEEDBACK_COUNT = 'FEEDBACK_COUNT',
 }

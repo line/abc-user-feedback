@@ -49,9 +49,8 @@ export default function useOAIMutation<
     >,
     'queryKey' | 'queryFn'
   >;
-} & (TPathParams extends undefined
-  ? { pathParams?: undefined }
-  : { pathParams: TPathParams })) {
+} & (TPathParams extends undefined ? { pathParams?: undefined }
+: { pathParams: TPathParams })) {
   return useMutation<
     TResponse,
     IFetchError,

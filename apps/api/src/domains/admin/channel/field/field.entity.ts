@@ -26,8 +26,8 @@ import {
 import { CommonEntity } from '@/common/entities';
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '../../../../common/enums';
 import { ChannelEntity } from '../channel/channel.entity';
 import { OptionEntity } from '../option/option.entity';
@@ -49,8 +49,8 @@ export class FieldEntity extends CommonEntity {
   @Column('enum', { enum: FieldFormatEnum })
   format: FieldFormatEnum;
 
-  @Column('enum', { enum: FieldTypeEnum })
-  type: FieldTypeEnum;
+  @Column('enum', { enum: FieldPropertyEnum })
+  property: FieldPropertyEnum;
 
   @Column('enum', { enum: FieldStatusEnum })
   status: FieldStatusEnum;
@@ -73,7 +73,7 @@ export class FieldEntity extends CommonEntity {
     key,
     description,
     format,
-    type,
+    property,
     status,
   }: {
     channelId: number;
@@ -81,7 +81,7 @@ export class FieldEntity extends CommonEntity {
     key: string;
     description: string;
     format: FieldFormatEnum;
-    type: FieldTypeEnum;
+    property: FieldPropertyEnum;
     status: FieldStatusEnum;
   }) {
     const field = new FieldEntity();
@@ -91,7 +91,7 @@ export class FieldEntity extends CommonEntity {
     field.key = key;
     field.description = description;
     field.format = format;
-    field.type = type;
+    field.property = property;
     field.status = status;
 
     return field;

@@ -32,6 +32,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiSecurity,
   ApiTags,
 } from '@nestjs/swagger';
 import filetypemime from 'magic-bytes.js';
@@ -50,6 +51,7 @@ import { FeedbackService } from '../admin/feedback/feedback.service';
 
 @ApiTags('feedbacks')
 @Controller('/projects/:projectId/channels/:channelId')
+@ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class FeedbackController {
   constructor(
@@ -57,6 +59,13 @@ export class FeedbackController {
     private readonly channelService: ChannelService,
   ) {}
 
+  @ApiOperation({
+    summary: 'Create Feedback',
+    description: `Creates a new feedback for the specified channel with json data.
+    You can include 'issueNames' to associate issues with the feedback.
+    You can put an array of image urls in the 'images format field' in the request data.
+    Make sure to set image domain whitelist in the channel settings.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -91,13 +100,6 @@ export class FeedbackController {
       },
     },
   })
-  @ApiOperation({
-    summary: 'Create Feedback',
-    description: `Create feedback by json data. If you want to create feedback with issues, you can add 'issueNames' in the request data.
-      You can put an array of image urls in the 'images format field' in the request data.
-      Make sure to set image domain whitelist in the channel settings.
-      `,
-  })
   @Post('feedbacks')
   async create(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -114,6 +116,10 @@ export class FeedbackController {
     return { id };
   }
 
+  @ApiOperation({
+    summary: 'Create Feedback with Image Files',
+    description: `Create feedback with data and image files by multi-part. If you want to create feedback with issues, you can add 'issueNames' in the request data.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -149,10 +155,6 @@ export class FeedbackController {
         id: 1,
       },
     },
-  })
-  @ApiOperation({
-    summary: 'Create Feedback with Image Files',
-    description: `Create feedback with data and image files by multi-part. If you want to create feedback with issues, you can add 'issueNames' in the request data.`,
   })
   @Post('feedbacks-with-images')
   async createWithImageFiles(
@@ -220,6 +222,10 @@ export class FeedbackController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Search Feedbacks by Channel',
+    description: `Searches for feedback entries by channel ID with various filters.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -244,6 +250,10 @@ export class FeedbackController {
     );
   }
 
+  @ApiOperation({
+    summary: 'Add Issue to Feedback',
+    description: `Adds an issue to an existing feedback by specifying the feedback id and issue id.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -282,6 +292,10 @@ export class FeedbackController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Remove Issue from Feedback',
+    description: `Removes an issue from an existing feedback.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -320,6 +334,11 @@ export class FeedbackController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Update Feedback',
+    description: `Updates an existing feedback with new information.
+    Only Editable fields can be updated.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -364,6 +383,10 @@ export class FeedbackController {
     });
   }
 
+  @ApiOperation({
+    summary: 'Delete Multiple Feedbacks',
+    description: `Deletes multiple feedback entries based on the provided array of feedback ids.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,
@@ -385,6 +408,10 @@ export class FeedbackController {
     await this.feedbackService.deleteByIds({ channelId, feedbackIds });
   }
 
+  @ApiOperation({
+    summary: 'Get Feedback by ID',
+    description: `Retrieves a specific feedback by its id.`,
+  })
   @ApiParam({
     name: 'projectId',
     type: Number,

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { memo, useEffect, useMemo, useState } from 'react';
+import { memo, useMemo } from 'react';
 import dayjs from 'dayjs';
 import ReactDatePicker from 'react-datepicker';
 
@@ -31,58 +31,30 @@ interface IProps extends React.PropsWithChildren {
 const EditableCell: React.FC<IProps> = memo((props) => {
   const { field, value, isExpanded, feedbackId } = props;
 
-  const { editableState, onChangeEditInput } = useTableStore(
-    ({ editableState, onChangeEditInput }) => ({
-      editableState,
-      onChangeEditInput,
-    }),
-  );
+  const { editableState, onChangeEditInput, editInput } = useTableStore();
 
-  const isEditable = useMemo(
-    () => editableState === props.feedbackId,
-    [editableState],
-  );
+  const isEditable = editableState === feedbackId;
 
-  const [currentValue, setCurrentValue] = useState<any>();
+  const currentRowValue = useMemo(() => {
+    return !isEditable ? value : editInput[field.key] ?? value;
+  }, [isEditable, field, value, editInput]);
 
-  useEffect(() => {
-    if (editableState === feedbackId) return;
-    setCurrentValue(
-      field.format === 'select'
-        ? field.options?.find((v) => v.key === value) ?? null
-        : field.format === 'multiSelect'
-        ? (value ?? []).map(
-            (optionKey: string) =>
-              field.options?.find((v) => v.key === optionKey),
-          )
-        : field.format === 'number'
-        ? value
-          ? Number(value)
-          : null
-        : value,
-    );
-  }, [value]);
-
-  useEffect(() => {
-    if (editableState !== feedbackId || typeof currentValue === 'undefined')
-      return;
-    onChangeEditInput(
-      field.key,
-      field.format === 'text' || field.format === 'keyword'
-        ? currentValue ?? ''
-        : field.format === 'number'
-        ? Number(currentValue)
-        : field.format === 'date'
-        ? new Date(currentValue)
-        : field.format === 'select'
-        ? currentValue?.key ?? null
-        : field.format === 'multiSelect'
-        ? (currentValue ?? []).map(
-            (v: { id: number; key: string; name: string }) => v.key,
-          ) ?? null
-        : currentValue,
-    );
-  }, [currentValue, editableState]);
+  const currentValue = useMemo(() => {
+    if (field.format === 'date') {
+      return currentRowValue ?
+          dayjs(currentRowValue).format('YYYY/MM/DD')
+        : undefined;
+    }
+    if (field.format === 'select') {
+      return (field.options ?? []).find((v) => v.key === currentRowValue);
+    }
+    if (field.format === 'multiSelect') {
+      return (field.options ?? []).filter((v) =>
+        ((currentRowValue ?? []) as string[]).includes(v.key),
+      );
+    }
+    return currentRowValue;
+  }, [currentRowValue]);
 
   return (
     <div className="overflow-hidden">
@@ -92,7 +64,7 @@ const EditableCell: React.FC<IProps> = memo((props) => {
           className="input input-sm"
           placeholder="input"
           value={currentValue ?? ''}
-          onChange={(e) => setCurrentValue(e.target.value)}
+          onChange={(e) => onChangeEditInput(field.key, e.target.value)}
           disabled={!isEditable}
         />
       )}
@@ -102,25 +74,27 @@ const EditableCell: React.FC<IProps> = memo((props) => {
           className="input input-sm"
           placeholder="input"
           disabled={!isEditable}
-          value={currentValue ?? ''}
-          onChange={(e) => setCurrentValue(e.target.value)}
+          value={currentValue ?? 0}
+          onChange={(e) => onChangeEditInput(field.key, Number(e.target.value))}
         />
       )}
       {field.format === 'date' && (
         <ReactDatePicker
-          onChange={(v) => setCurrentValue(v)}
+          onChange={(v) => onChangeEditInput(field.key, dayjs(v).toISOString())}
           dateFormat="yyyy/MM/dd"
           className="input input-sm"
           placeholderText="input"
           disabled={!isEditable}
-          value={currentValue ? dayjs(currentValue).format('YYYY/MM/DD') : ''}
+          value={currentValue}
         />
       )}
       {field.format === 'select' && (
         <SelectBoxCreatable
           options={field.options ?? []}
-          value={currentValue ?? null}
-          onChange={(v) => setCurrentValue(v)}
+          value={currentValue}
+          onChange={(v) => {
+            onChangeEditInput(field.key, v?.key);
+          }}
           isExpand={isExpanded}
           isDisabled={!isEditable}
           isClearable
@@ -129,8 +103,13 @@ const EditableCell: React.FC<IProps> = memo((props) => {
       {field.format === 'multiSelect' && (
         <SelectBoxCreatable
           options={field.options ?? []}
-          value={currentValue ?? []}
-          onChange={(v) => setCurrentValue(v)}
+          value={currentValue}
+          onChange={(v) =>
+            onChangeEditInput(
+              field.key,
+              v?.map((option) => option.key),
+            )
+          }
           isExpand={isExpanded}
           isDisabled={!isEditable}
           isClearable

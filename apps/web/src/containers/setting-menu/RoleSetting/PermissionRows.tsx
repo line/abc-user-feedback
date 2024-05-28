@@ -53,9 +53,9 @@ function PermissionRows<T extends PermissionType>(props: IProps<T>) {
                   type="checkbox"
                   disabled={editRoleId !== role.id}
                   checked={
-                    editRoleId === role.id
-                      ? editPermissions[perm] ?? role.permissions.includes(perm)
-                      : role.permissions.includes(perm)
+                    editRoleId === role.id ?
+                      editPermissions[perm] ?? role.permissions.includes(perm)
+                    : role.permissions.includes(perm)
                   }
                   onChange={(e) => onChecked(perm, e.target.checked)}
                 />

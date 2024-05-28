@@ -96,8 +96,9 @@ export class FeedbackOSService {
     );
 
     return {
-      query: query
-        ? Object.keys(query).reduce(
+      query:
+        query ?
+          Object.keys(query).reduce(
             (osQuery, fieldKey) => {
               if (fieldKey === 'ids') {
                 osQuery.bool.must.push({
@@ -189,34 +190,32 @@ export class FeedbackOSService {
           )
         : { bool: { must: [] } },
       sort:
-        Object.keys(sort).length !== 0
-          ? Object.keys(sort).map((fieldKey) => {
-              if (
-                !Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)
-              ) {
-                throw new BadRequestException('bad key in sort');
-              }
-              const { key, format } = fieldsByKey[fieldKey];
-              if (this.isUnsortableFormat(format)) {
-                throw new BadRequestException('unsortable format', format);
-              }
-              if (isInvalidSortMethod(sort[fieldKey])) {
-                throw new BadRequestException('invalid sort method');
-              }
+        Object.keys(sort).length !== 0 ?
+          Object.keys(sort).map((fieldKey) => {
+            if (!Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)) {
+              throw new BadRequestException('bad key in sort');
+            }
+            const { key, format } = fieldsByKey[fieldKey];
+            if (this.isUnsortableFormat(format)) {
+              throw new BadRequestException('unsortable format', format);
+            }
+            if (isInvalidSortMethod(sort[fieldKey])) {
+              throw new BadRequestException('invalid sort method');
+            }
 
-              const sortMethod =
-                sort[fieldKey] === SortMethodEnum.ASC ? 'asc' : 'desc';
-              return key + ':' + sortMethod;
-            })
-          : ['id:desc'],
+            const sortMethod =
+              sort[fieldKey] === SortMethodEnum.ASC ? 'asc' : 'desc';
+            return key + ':' + sortMethod;
+          })
+        : ['id:desc'],
     };
   }
 
   async create({ channelId, feedback }: CreateFeedbackOSDto) {
     const osFeedbackData = {
-      ...feedback.rawData,
+      ...feedback.data,
       id: feedback.id,
-      createdAt: DateTime.utc().toISO(),
+      createdAt: feedback.createdAt,
       updatedAt: DateTime.utc().toISO(),
     };
 

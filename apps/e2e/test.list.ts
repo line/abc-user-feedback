@@ -37,23 +37,23 @@ async function seedDatabase() {
     )) as ResultSetHeader[];
 
     await connection.query(
-      `INSERT INTO fields (name, \`key\`, format, type, status, channel_id) VALUES ?`,
+      `INSERT INTO fields (\`name\`, \`key\`, \`format\`, \`property\`, \`status\`, \`channel_id\`) VALUES ?`,
       [
         [
           [
             'SeededTestTextField',
             'SeededTestTextField',
             'text',
-            'API',
+            'READ_ONLY',
             'ACTIVE',
             channels[0].insertId,
           ],
-          ['ID', 'id', 'number', 'DEFAULT', 'ACTIVE', channels[0].insertId],
+          ['ID', 'id', 'number', 'READ_ONLY', 'ACTIVE', channels[0].insertId],
           [
             'Created',
             'createdAt',
             'date',
-            'DEFAULT',
+            'READ_ONLY',
             'ACTIVE',
             channels[0].insertId,
           ],
@@ -61,7 +61,7 @@ async function seedDatabase() {
             'Updated',
             'updatedAt',
             'date',
-            'DEFAULT',
+            'READ_ONLY',
             'ACTIVE',
             channels[0].insertId,
           ],
@@ -69,7 +69,7 @@ async function seedDatabase() {
             'Issue',
             'issues',
             'multiSelect',
-            'DEFAULT',
+            'EDITABLE',
             'ACTIVE',
             channels[0].insertId,
           ],

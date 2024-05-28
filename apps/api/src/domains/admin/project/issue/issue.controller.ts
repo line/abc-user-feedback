@@ -22,9 +22,16 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiParam, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 
+import { JwtAuthGuard } from '../../auth/guards';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
 import { CreateIssueDto } from './dtos';
@@ -47,7 +54,8 @@ export class IssueController {
   constructor(private readonly issueService: IssueService) {}
 
   @ApiParam({ name: 'projectId', type: Number })
-  @RequirePermission(PermissionEnum.issue_create)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: CreateIssueResponseDto })
   @Post()
   async create(
@@ -71,7 +79,8 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @RequirePermission(PermissionEnum.issue_read)
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
   @Post('search')
   async findAllByProjectId(
@@ -88,6 +97,7 @@ export class IssueController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.issue_update)
+  @ApiBearerAuth()
   @Put(':issueId')
   async update(
     @Param('projectId', ParseIntPipe) projectId: number,
@@ -99,12 +109,14 @@ export class IssueController {
 
   @ApiParam({ name: 'projectId', type: Number })
   @RequirePermission(PermissionEnum.issue_delete)
+  @ApiBearerAuth()
   @Delete(':issueId')
   async delete(@Param('issueId', ParseIntPipe) issueId: number) {
     await this.issueService.deleteById(issueId);
   }
 
   @RequirePermission(PermissionEnum.issue_delete)
+  @ApiBearerAuth()
   @Delete('')
   async deleteMany(
     @Param('projectId', ParseIntPipe) _: number,

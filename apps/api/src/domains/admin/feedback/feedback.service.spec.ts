@@ -22,14 +22,10 @@ import type { Repository } from 'typeorm';
 
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '@/common/enums';
-import {
-  createFieldDto,
-  feedbackDataFixture,
-  fieldsFixture,
-} from '@/test-utils/fixtures';
+import { createFieldDto, feedbackDataFixture } from '@/test-utils/fixtures';
 import type { ChannelRepositoryStub } from '@/test-utils/stubs';
 import { createQueryBuilder, TestConfig } from '@/test-utils/util-functions';
 import { FeedbackServiceProviders } from '../../../test-utils/providers/feedback.service.providers';
@@ -37,7 +33,6 @@ import { ChannelEntity } from '../channel/channel/channel.entity';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import { FieldEntity } from '../channel/field/field.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
-import { ProjectEntity } from '../project/project/project.entity';
 import { FeedbackIssueStatisticsEntity } from '../statistics/feedback-issue/feedback-issue-statistics.entity';
 import { FeedbackStatisticsEntity } from '../statistics/feedback/feedback-statistics.entity';
 import { IssueStatisticsEntity } from '../statistics/issue/issue-statistics.entity';
@@ -50,7 +45,6 @@ describe('FeedbackService Test Suite', () => {
   let fieldRepo: Repository<FieldEntity>;
   let issueRepo: Repository<IssueEntity>;
   let channelRepo: ChannelRepositoryStub;
-  let projectRepo: Repository<ProjectEntity>;
   let feedbackStatsRepo: Repository<FeedbackStatisticsEntity>;
   let issueStatsRepo: Repository<IssueStatisticsEntity>;
   let feedbackIssueStatsRepo: Repository<FeedbackIssueStatisticsEntity>;
@@ -65,7 +59,6 @@ describe('FeedbackService Test Suite', () => {
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
     issueRepo = module.get(getRepositoryToken(IssueEntity));
     channelRepo = module.get(getRepositoryToken(ChannelEntity));
-    projectRepo = module.get(getRepositoryToken(ProjectEntity));
     feedbackStatsRepo = module.get(
       getRepositoryToken(FeedbackStatisticsEntity),
     );
@@ -85,13 +78,6 @@ describe('FeedbackService Test Suite', () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        id: faker.number.int(),
-        timezone: {
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
@@ -114,9 +100,10 @@ describe('FeedbackService Test Suite', () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const reservedFieldKey = faker.helpers.arrayElement(RESERVED_FIELD_KEYS);
+      const reservedFieldKey = faker.helpers.arrayElement(
+        RESERVED_FIELD_KEYS.filter((key) => key !== 'createdAt'),
+      );
       dto.data[reservedFieldKey] = faker.string.sample();
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
         new BadRequestException(
@@ -130,31 +117,12 @@ describe('FeedbackService Test Suite', () => {
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       const invalidFieldKey = 'invalidFieldKey';
       dto.data[invalidFieldKey] = faker.string.sample();
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
         new BadRequestException('invalid field key: ' + invalidFieldKey),
       );
     });
-    it('creating a feedback fails with an admin field', async () => {
-      const dto = new CreateFeedbackDto();
-      dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
-      const adminFieldKey = 'adminFieldKey';
-      dto.data[adminFieldKey] = faker.string.sample();
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue([
-        ...fieldsFixture,
-        createFieldDto({
-          key: adminFieldKey,
-          type: FieldTypeEnum.ADMIN,
-        }) as FieldEntity,
-      ]);
-
-      await expect(feedbackService.create(dto)).rejects.toThrow(
-        new BadRequestException('this field is for admin: ' + adminFieldKey),
-      );
-    });
-    it('creating a feedback fails with an invalid value for field type', async () => {
+    it('creating a feedback fails with an invalid value for a field format', async () => {
       const formats = [
         {
           format: FieldFormatEnum.text,
@@ -189,7 +157,7 @@ describe('FeedbackService Test Suite', () => {
         for (const invalidValue of invalidValues) {
           const field = createFieldDto({
             format,
-            type: FieldTypeEnum.API,
+            property: FieldPropertyEnum.EDITABLE,
             status: FieldStatusEnum.ACTIVE,
           });
           const dto = new CreateFeedbackDto();
@@ -221,24 +189,7 @@ describe('FeedbackService Test Suite', () => {
         length: faker.number.int({ min: 1, max: 1 }),
       }).map(() => faker.string.sample());
       dto.data.issueNames = [...issueNames, faker.string.sample()];
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        id: faker.number.int(),
-        timezone: {
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce({
-        id: faker.number.int(),
-        name: issueNames[0],
-      } as IssueEntity);
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(issueRepo, 'save').mockResolvedValue({
-        id: faker.number.int(),
-        project: {
-          id: faker.number.int(),
-        },
-      } as IssueEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
@@ -253,9 +204,6 @@ describe('FeedbackService Test Suite', () => {
       const feedback = await feedbackService.create(dto);
 
       expect(feedback.id).toBeDefined();
-      expect(fieldRepo.find).toBeCalledTimes(1);
-      expect(issueRepo.findOneBy).toBeCalledTimes(3);
-      expect(issueRepo.save).toBeCalledTimes(1);
     });
     it('creating a feedback succeeds with valid inputs and an existent issue name', async () => {
       const dto = new CreateFeedbackDto();
@@ -265,52 +213,28 @@ describe('FeedbackService Test Suite', () => {
         length: faker.number.int({ min: 1, max: 1 }),
       }).map(() => faker.string.sample());
       dto.data.issueNames = [...issueNames];
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        id: faker.number.int(),
-        timezone: {
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce({
-        id: faker.number.int(),
-        name: issueNames[0],
-      } as IssueEntity);
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
         .mockImplementation(() => createQueryBuilder);
+      jest
+        .spyOn(issueStatsRepo, 'createQueryBuilder')
+        .mockImplementation(() => createQueryBuilder);
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);
 
       expect(feedback.id).toBeDefined();
-      expect(fieldRepo.find).toBeCalledTimes(1);
-      expect(issueRepo.findOneBy).toBeCalledTimes(1);
     });
     it('creating a feedback succeeds with valid inputs and a nonexistent issue name', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
       dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
       dto.data.issueNames = [faker.string.sample()];
-      jest.spyOn(projectRepo, 'findOne').mockResolvedValue({
-        id: faker.number.int(),
-        timezone: {
-          offset: '+09:00',
-        },
-      } as ProjectEntity);
-      jest.spyOn(fieldRepo, 'find').mockResolvedValue(fieldsFixture);
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValueOnce(null);
-      jest.spyOn(issueRepo, 'save').mockResolvedValue({
-        id: faker.number.int(),
-        project: {
-          id: faker.number.int(),
-        },
-      } as IssueEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
@@ -325,8 +249,6 @@ describe('FeedbackService Test Suite', () => {
       const feedback = await feedbackService.create(dto);
 
       expect(feedback.id).toBeDefined();
-      expect(issueRepo.findOneBy).toBeCalledTimes(2);
-      expect(issueRepo.save).toBeCalledTimes(1);
     });
   });
 });

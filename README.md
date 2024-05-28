@@ -27,7 +27,7 @@ The frontend is built with NextJS and the backend is built with NestJS. We provi
 
 **Required**
 
-- [Node.js v18 or above](https://nodejs.org/en/download/)
+- [Node.js v20 or above](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
 - [MySQL v8](https://www.mysql.com/downloads/)
 
@@ -79,7 +79,7 @@ Follow the instructions below to set up a local development environment.
 ```bash
 git clone https://github.com/line/abc-user-feedback
 cd abc-user-feedback
-yarn install
+pnpm install
 ```
 
 2. Spin up all required infrastructure (Mysql, OpenSearch, etc.) using Docker Compose:
@@ -100,17 +100,17 @@ npm run migration:run
 5. To start developing, run the `dev` target of both of apps in root directory:
 
 ```bash
-yarn dev
+pnpm dev
 ```
 
 6. Also, you can run the `dev` target of one of apps in root directory:
 
 ```bash
 # web
-yarn turbo run dev --filter=web
+pnpm turbo run dev --filter=web
 
 # api
-yarn turbo run dev --filter=api
+pnpm turbo run dev --filter=api
 ```
 
 ### ADMIN WEB GUIDE

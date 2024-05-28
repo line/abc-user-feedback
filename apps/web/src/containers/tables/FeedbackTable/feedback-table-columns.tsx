@@ -28,88 +28,86 @@ export const getColumns = (
   fieldData: FieldType[],
   refetch: () => Promise<any>,
 ): ColumnDef<any, any>[] =>
-  fieldData
-    ? [
-        columnHelper.display({
-          id: 'select',
-          header: ({ table }) => (
-            <TableCheckbox
-              {...{
-                checked: table.getIsAllRowsSelected(),
-                indeterminate: table.getIsSomeRowsSelected(),
-                onChange: table.getToggleAllRowsSelectedHandler(),
-              }}
-            />
-          ),
-          cell: ({ row }) => (
-            <TableCheckbox
-              {...{
-                checked: row.getIsSelected(),
-                disabled: !row.getCanSelect(),
-                indeterminate: row.getIsSomeSelected(),
-                onChange: row.getToggleSelectedHandler(),
-              }}
-            />
-          ),
-          size: 50,
-          enableResizing: false,
-        }),
-        columnHelper.accessor('id', {
-          id: 'id',
-          size: 100,
-          minSize: 100,
-          header: fieldData?.find((v) => v.key === 'id')?.name,
-          cell: (info) => (
-            <ExpandableText isExpanded={info.row.getIsExpanded()}>
-              {info.getValue()}
-            </ExpandableText>
-          ),
-          enableSorting: false,
-        }),
-        columnHelper.accessor('issues', {
-          id: 'issues',
-          size: 150,
-          minSize: 150,
-          header: 'Issue',
-          cell: (info) => (
-            <IssueCell
-              refetch={refetch}
-              issues={info.getValue()}
-              feedbackId={info.row.original.id}
-              isExpanded={info.row.getIsExpanded()}
-              cellWidth={info.column.getSize()}
-            />
-          ),
-          enableSorting: false,
-        }),
-      ].concat(
-        fieldData
-          .filter((v) => v.key !== 'id' && v.key !== 'issues')
-          .map((field) =>
-            columnHelper.accessor(field.key, {
-              id: field.key,
-              size: field.format === 'text' ? 200 : 150,
-              minSize: 75,
-              header: field.name,
-              cell: (info) =>
-                field.type === 'ADMIN' ? (
-                  <EditableCell
-                    field={field}
-                    value={info.getValue()}
-                    isExpanded={info.row.getIsExpanded()}
-                    feedbackId={info.row.original.id}
-                  />
-                ) : (
-                  <FeedbackCell
-                    field={field}
-                    isExpanded={info.row.getIsExpanded()}
-                    value={info.getValue()}
-                  />
-                ),
-              enableSorting:
-                field.format === 'date' &&
-                (field.name === 'Created' || field.name === 'Updated'),
-            }),
-          ),
-      )
-    : [];
+  fieldData ?
+    [
+      columnHelper.display({
+        id: 'select',
+        header: ({ table }) => (
+          <TableCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+        ),
+        cell: ({ row }) => (
+          <TableCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+        ),
+        size: 50,
+        enableResizing: false,
+      }),
+      columnHelper.accessor('id', {
+        id: 'id',
+        size: 100,
+        minSize: 100,
+        header: fieldData?.find((v) => v.key === 'id')?.name,
+        cell: (info) => (
+          <ExpandableText isExpanded={info.row.getIsExpanded()}>
+            {info.getValue()}
+          </ExpandableText>
+        ),
+        enableSorting: false,
+      }),
+      columnHelper.accessor('issues', {
+        id: 'issues',
+        size: 150,
+        minSize: 150,
+        header: 'Issue',
+        cell: (info) => (
+          <IssueCell
+            refetch={refetch}
+            issues={info.getValue()}
+            feedbackId={info.row.original.id}
+            isExpanded={info.row.getIsExpanded()}
+            cellWidth={info.column.getSize()}
+          />
+        ),
+        enableSorting: false,
+      }),
+    ].concat(
+      fieldData
+        .filter((v) => v.key !== 'id' && v.key !== 'issues')
+        .map((field) =>
+          columnHelper.accessor(field.key, {
+            id: field.key,
+            size: field.format === 'text' ? 200 : 150,
+            minSize: 75,
+            header: field.name,
+            cell: (info) =>
+              field.property === 'EDITABLE' ?
+                <EditableCell
+                  field={field}
+                  value={info.getValue()}
+                  isExpanded={info.row.getIsExpanded()}
+                  feedbackId={info.row.original.id}
+                />
+              : <FeedbackCell
+                  field={field}
+                  isExpanded={info.row.getIsExpanded()}
+                  value={info.getValue()}
+                />,
+            enableSorting:
+              field.format === 'date' &&
+              (field.name === 'Created' || field.name === 'Updated'),
+          }),
+        ),
+    )
+  : [];

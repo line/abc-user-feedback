@@ -14,7 +14,7 @@
  * under the License.
  */
 import { channelFixture } from '../fixtures';
-import { createQueryBuilder } from '../util-functions';
+import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class ChannelRepositoryStub {
   channel = channelFixture;
@@ -43,7 +43,11 @@ export class ChannelRepositoryStub {
   }
 
   save(channel) {
-    return { ...channel, id: channelFixture.id };
+    const channelToSave = removeUndefinedValues(channel);
+    return {
+      ...this.channel,
+      ...channelToSave,
+    };
   }
 
   count() {

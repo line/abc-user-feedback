@@ -100,7 +100,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
           </tr>
         </thead>
         <tbody>
-          {table.getRowModel().rows.length === 0 ? (
+          {table.getRowModel().rows.length === 0 ?
             <tr>
               <td colSpan={columns.length}>
                 <div className="my-32 flex flex-col items-center justify-center gap-3">
@@ -113,8 +113,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
                 </div>
               </td>
             </tr>
-          ) : (
-            table.getRowModel().rows.map((row) => (
+          : table.getRowModel().rows.map((row) => (
               <Fragment key={row.index}>
                 <tr>
                   {row.getVisibleCells().map((cell) => (
@@ -132,7 +131,7 @@ const MemberSection: React.FC<IProps> = ({ projectId }) => {
                 </tr>
               </Fragment>
             ))
-          )}
+          }
         </tbody>
       </table>
     </CreateSectionTemplate>

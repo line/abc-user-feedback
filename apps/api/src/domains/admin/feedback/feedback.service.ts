@@ -25,6 +25,7 @@ import {
   StreamableFile,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import * as ExcelJS from 'exceljs';
 import * as fastcsv from 'fast-csv';
 import { DateTime } from 'luxon';
@@ -32,9 +33,10 @@ import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
 import {
+  EventTypeEnum,
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '@/common/enums';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
@@ -69,6 +71,7 @@ export class FeedbackService {
     private readonly optionService: OptionService,
     private readonly channelService: ChannelService,
     private readonly configService: ConfigService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   private validateQuery(
@@ -147,9 +150,10 @@ export class FeedbackService {
   ) {
     const convertedFeedback: Record<string, any> = {};
     for (const key of Object.keys(feedback)) {
-      convertedFeedback[fieldsByKey[key].name] = Array.isArray(feedback[key])
-        ? key === 'issues'
-          ? feedback[key].map((issue) => issue.name).join(', ')
+      convertedFeedback[fieldsByKey[key].name] =
+        Array.isArray(feedback[key]) ?
+          key === 'issues' ?
+            feedback[key].map((issue) => issue.name).join(', ')
           : feedback[key].join(', ')
         : feedback[key];
     }
@@ -327,7 +331,11 @@ export class FeedbackService {
     }
 
     for (const fieldKey of Object.keys(feedbackData)) {
-      if (RESERVED_FIELD_KEYS.includes(fieldKey)) {
+      if (
+        RESERVED_FIELD_KEYS.filter((key) => key !== 'createdAt').includes(
+          fieldKey,
+        )
+      ) {
         throw new BadRequestException(
           'reserved field key is unavailable: ' + fieldKey,
         );
@@ -338,10 +346,6 @@ export class FeedbackService {
 
       if (!field) {
         throw new BadRequestException('invalid field key: ' + fieldKey);
-      }
-
-      if (field.type === FieldTypeEnum.ADMIN) {
-        throw new BadRequestException('this field is for admin: ' + fieldKey);
       }
 
       if (!validateValue(field, value)) {
@@ -399,6 +403,10 @@ export class FeedbackService {
       await this.feedbackOSService.create({ channelId, feedback });
     }
 
+    this.eventEmitter.emit(EventTypeEnum.FEEDBACK_CREATION, {
+      feedbackId: feedback.id,
+    });
+
     return { id: feedback.id };
   }
 
@@ -415,8 +423,9 @@ export class FeedbackService {
 
     this.validateQuery(dto.query || {}, fields);
 
-    const feedbacksByPagination = this.configService.get('opensearch.use')
-      ? await this.feedbackOSService.findByChannelId(dto)
+    const feedbacksByPagination =
+      this.configService.get('opensearch.use') ?
+        await this.feedbackOSService.findByChannelId(dto)
       : await this.feedbackMySQLService.findByChannelId(dto);
 
     const issuesByFeedbackIds = await this.issueService.findIssuesByFeedbackIds(
@@ -446,18 +455,17 @@ export class FeedbackService {
     for (const fieldKey of Object.keys(data)) {
       const field = fieldsByKey[fieldKey];
 
-      if (!field || field.type === FieldTypeEnum.DEFAULT) {
+      if (!field) {
         throw new BadRequestException('invalid field name');
       }
 
-      if (field.type !== FieldTypeEnum.ADMIN) {
-        throw new BadRequestException('this field is not for admin');
+      if (field.property === FieldPropertyEnum.READ_ONLY) {
+        throw new BadRequestException('this field is read-only');
       }
 
       if (field.status === FieldStatusEnum.INACTIVE) {
         throw new BadRequestException('this field is disabled');
       }
-      // create option
 
       if (field.format === FieldFormatEnum.multiSelect) {
         const values = data[fieldKey] as string[];
@@ -517,6 +525,11 @@ export class FeedbackService {
         data: { updatedAt: DateTime.utc().toISO() },
       });
     }
+
+    this.eventEmitter.emit(EventTypeEnum.ISSUE_ADDITION, {
+      feedbackId: dto.feedbackId,
+      issueId: dto.issueId,
+    });
   }
 
   @Transactional()

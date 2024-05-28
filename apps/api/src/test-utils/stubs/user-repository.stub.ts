@@ -13,41 +13,54 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { faker } from '@faker-js/faker';
+
 import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import { userFixture } from '../fixtures';
-import { createQueryBuilder } from '../util-functions';
+import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class UserRepositoryStub {
+  user = userFixture;
   findOne({ where: { email, signUpMethod } }) {
-    return { ...userFixture, email, signUpMethod };
+    return { ...this.user, email, signUpMethod };
   }
 
   findOneBy({ email, signUpMethod }) {
-    return { ...userFixture, email, signUpMethod };
+    return { ...this.user, email, signUpMethod };
   }
 
   find({ where: { email, signUpMethod } }) {
-    return [{ ...userFixture, email, signUpMethod }];
+    return [{ ...this.user, email, signUpMethod }];
   }
 
   findBy({ email, signUpMethod }) {
-    return [{ ...userFixture, email, signUpMethod }];
+    return [{ ...this.user, email, signUpMethod }];
   }
 
   findAndCount({ where: { email, signUpMethod } }) {
-    return [[{ ...userFixture, email, signUpMethod }], 1];
+    return [[{ ...this.user, email, signUpMethod }], 1];
   }
 
   findAndCountBy({ where: { email, signUpMethod } }) {
-    return [[{ ...userFixture, email, signUpMethod }], 1];
+    return [[{ ...this.user, email, signUpMethod }], 1];
   }
 
   save(user) {
-    return {
-      ...user,
-      id: userFixture.id,
-      type: user.type || UserTypeEnum.GENERAL,
-    };
+    const userToSave = removeUndefinedValues(user);
+    if (Array.isArray(userToSave)) {
+      return userToSave.map((e) => ({
+        ...this.user,
+        ...e,
+        type: e.type || UserTypeEnum.GENERAL,
+        id: faker.number.int(),
+      }));
+    } else {
+      return {
+        ...this.user,
+        ...userToSave,
+        type: user.type || UserTypeEnum.GENERAL,
+      };
+    }
   }
 
   count() {
@@ -55,7 +68,7 @@ export class UserRepositoryStub {
   }
 
   createQueryBuilder() {
-    createQueryBuilder.getMany = () => [userFixture];
+    createQueryBuilder.getMany = () => [this.user];
     return createQueryBuilder;
   }
 }

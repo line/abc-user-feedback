@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
@@ -42,6 +42,7 @@ import {
   TenantInfoSetting,
   TenantSettingMenu,
   UserSetting,
+  WebhookSetting,
 } from '@/containers/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 import type { NextPageWithLayout } from '../../../_app';
@@ -54,49 +55,52 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const [showList, setShowList] = useState<number[]>([0, 1, 2]);
-  const [channelId, setChannelId] = useState<number | null>(null);
-  const settingMenu = useMemo(() => {
-    if (router.query?.menu) return router.query.menu as SettingMenuType;
-    else return null;
-  }, [router.query]);
+  const channelId =
+    router.query?.channelId ? (Number(router.query.channelId) as number) : null;
 
-  const setSettingMenu = (input: SettingMenuType | null) =>
+  const setChannelId = (channelId: number | null) =>
     router.push({
       pathname: Path.SETTINGS,
-      query: { menu: input ?? undefined, projectId },
+      query: { ...router.query, channelId },
+    });
+
+  const settingMenu =
+    router.query?.menu ? (router.query.menu as SettingMenuType) : null;
+
+  const setSettingMenu = (menu: SettingMenuType | null) =>
+    router.push({
+      pathname: Path.SETTINGS,
+      query: { ...router.query, menu },
     });
 
   const onClickReset = () => {
-    setShowList([0, 1, 2]);
     setSettingMenu(null);
   };
-  useEffect(() => {
+  const showList = useMemo(() => {
     switch (settingMenu) {
       case 'TENANT_INFO':
       case 'SIGNUP_SETTING':
       case 'USER_MANAGEMENT':
-        setShowList([0, 3]);
-        break;
+        return [0, 3];
       case 'PROJECT_INFO':
       case 'API_KEY_MANAGEMENT':
       case 'MEMBER_MANAGEMENT':
       case 'ROLE_MANAGEMENT':
       case 'TICKET_MANAGEMENT':
+      case 'WEBHOOK_MANAGEMENT':
       case 'DELETE_PROJECT':
-        setShowList([1, 3]);
-        break;
+        return [1, 3];
       case 'CHANNEL_INFO':
       case 'FIELD_MANAGEMENT':
       case 'IMAGE_UPLOAD_SETTING':
       case 'DELETE_CHANNEL':
-        setShowList([2, 3]);
-        break;
+        return [2, 3];
       default:
-        setShowList([0, 1, 2]);
-        break;
+        return [0, 1, 2];
     }
-  }, [router.query]);
+  }, [settingMenu]);
+
+  useEffect(() => {}, [router.query]);
 
   const onClickTarget = (target: SettingMenuType | null) => () => {
     setSettingMenu(target);
@@ -155,6 +159,9 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             )}
             {settingMenu === 'TICKET_MANAGEMENT' && (
               <IssueTrackerSetting projectId={projectId} />
+            )}
+            {settingMenu === 'WEBHOOK_MANAGEMENT' && (
+              <WebhookSetting projectId={projectId} />
             )}
             {settingMenu === 'DELETE_PROJECT' && (
               <ProjectDeleteSetting projectId={projectId} />

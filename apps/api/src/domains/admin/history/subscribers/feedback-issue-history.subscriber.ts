@@ -47,9 +47,9 @@ export class FeedbackIssueHistorySubscriber
     const userId = this.cls.get('userId');
     if (!userId) return;
     const data =
-      action === HistoryActionEnum.Create
-        ? this.cls.get('addIssueInFeedback')
-        : this.cls.get('removeIssueInFeedback');
+      action === HistoryActionEnum.Create ?
+        this.cls.get('addIssueInFeedback')
+      : this.cls.get('removeIssueInFeedback');
     if (!data) return;
 
     this.historyService.createHistory({

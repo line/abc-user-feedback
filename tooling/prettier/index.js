@@ -8,6 +8,10 @@ import { fileURLToPath } from 'url';
 const config = {
   singleQuote: true,
   trailingComma: 'all',
+  experimentalTernaries: true,
+  endOfLine: 'auto',
+  tabWidth: 2,
+  useTabs: false,
   plugins: [
     '@ianvs/prettier-plugin-sort-imports',
     'prettier-plugin-tailwindcss',

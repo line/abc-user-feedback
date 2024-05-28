@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import {
   createColumnHelper,
   flexRender,
@@ -21,11 +22,12 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import clsx from 'clsx';
 import dayjs from 'dayjs';
 import { produce } from 'immer';
-import { Trans, useTranslation } from 'next-i18next';
+import { useTranslation } from 'next-i18next';
 
-import { Badge, Icon, toast } from '@ufb/ui';
+import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import { SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
@@ -33,6 +35,7 @@ import { useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { ChannelType } from '@/types/channel.type';
 import type { FieldType } from '@/types/field.type';
+import { fieldProperty, isDefaultField, sortField } from '@/utils/field-utils';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
 import FeedbackRequestPopover from './FeedbackRequestPopover';
 import FieldSettingPopover from './FieldSettingPopover';
@@ -83,35 +86,19 @@ const getColumns = (
     },
     size: 100,
   }),
-  columnHelper.accessor('type', {
-    header: 'Type',
+  columnHelper.accessor('property', {
+    header: 'Property',
     cell: ({ getValue }) => {
-      const color =
-        getValue() === 'API'
-          ? 'blue'
-          : getValue() === 'ADMIN'
-          ? 'green'
-          : 'black';
-      const type =
-        getValue() === 'API'
-          ? 'primary'
-          : getValue() === 'ADMIN'
-          ? 'primary'
-          : 'secondary';
-      return (
-        <Badge color={color} type={type}>
-          {getValue()}
-        </Badge>
-      );
+      return <Badge type="secondary">{fieldProperty[getValue()]}</Badge>;
     },
-    size: 100,
+    size: 120,
   }),
   columnHelper.accessor('createdAt', {
     header: 'CreatedAt',
     cell: ({ getValue }) =>
-      isNotEmptyStr(getValue())
-        ? dayjs(getValue()).format(DATE_TIME_FORMAT)
-        : '-',
+      isNotEmptyStr(getValue()) ?
+        dayjs(getValue()).format(DATE_TIME_FORMAT)
+      : '-',
     size: 100,
   }),
   columnHelper.display({
@@ -122,7 +109,7 @@ const getColumns = (
         <button
           className="icon-btn icon-btn-sm icon-btn-tertiary"
           disabled={
-            row.original.type === 'DEFAULT' ||
+            isDefaultField(row.original) ||
             !!row.original.createdAt ||
             !canUpdateField
           }
@@ -142,7 +129,7 @@ const getColumns = (
         <FieldSettingPopover
           onSave={(input) => modifyField(input, row.index)}
           data={row.original}
-          disabled={row.original.type === 'DEFAULT' || !canUpdateField}
+          disabled={isDefaultField(row.original) || !canUpdateField}
           fieldRows={fieldRows}
         />
       </div>
@@ -150,15 +137,6 @@ const getColumns = (
     size: 125,
   }),
 ];
-
-const fieldSortType = (
-  a: FieldType | FieldRowType,
-  b: FieldType | FieldRowType,
-) => {
-  const aNum = a.type === 'DEFAULT' ? 1 : a.type === 'API' ? 2 : 3;
-  const bNum = b.type === 'DEFAULT' ? 1 : b.type === 'API' ? 2 : 3;
-  return aNum - bNum;
-};
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
@@ -168,16 +146,25 @@ interface IProps extends React.PropsWithChildren {
 const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
+  const router = useRouter();
 
   const [status, setStatus] = useState<'ACTIVE' | 'INACTIVE'>('ACTIVE');
   const [rows, setRows] = useState<FieldRowType[]>([]);
   const [showPreview, setShowPreview] = useState(false);
+  const [openSavePopover, setOpenSavePopover] = useState(false);
   const [channelData, setChannelData] = useState<ChannelType>();
   const [channelDataLoading, setChannelDataLoading] = useState<boolean>(true);
 
   const canUpdateField = useMemo(
     () => perms.includes('channel_field_update'),
     [perms],
+  );
+  const isDirty = useMemo(
+    () =>
+      !(channelData ?
+        objectsEqual(channelData.fields.sort(sortField), rows)
+      : true),
+    [channelData, rows],
   );
 
   const getChannelData = async () => {
@@ -187,8 +174,9 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       path: '/api/admin/projects/{projectId}/channels/{channelId}',
       pathParams: { channelId, projectId },
     });
+
     setChannelData(data);
-    setRows(data.fields.sort(fieldSortType));
+    setRows(data.fields.sort(sortField));
 
     setChannelDataLoading(false);
   };
@@ -221,7 +209,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
   });
 
   const addField = (input: FieldRowType) => {
-    setRows((v) => v.concat(input).sort(fieldSortType));
+    setRows((v) => v.concat(input).sort(sortField));
   };
 
   const { mutate, isPending } = useOAIMutation({
@@ -232,6 +220,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
       onSuccess: async () => {
         await getChannelData();
         toast.positive({ title: t('toast.save') });
+        setOpenSavePopover(false);
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });
@@ -244,92 +233,112 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
     mutate({ ...channelData, fields: rows });
   };
 
-  return (
-    <SettingMenuTemplate
-      title={t('channel-setting-menu.field-mgmt')}
-      action={
-        <div className="flex gap-2">
-          <FeedbackRequestPopover projectId={projectId} channelId={channelId} />
-          <button
-            className="btn btn-primary btn-md min-w-[120px]"
-            onClick={() => setShowPreview(true)}
-            disabled={showPreview}
-          >
-            {t('main.setting.field-mgmt.preview')}
-          </button>
-          <button
-            className="btn btn-primary btn-md min-w-[120px]"
-            disabled={
-              (channelData
-                ? objectsEqual(channelData.fields.sort(fieldSortType), rows)
-                : true) ||
-              !showPreview ||
-              !canUpdateField ||
-              isPending ||
-              channelDataLoading
-            }
-            onClick={onSave}
-          >
-            {t('button.save')}
-          </button>
-        </div>
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const confirmMsg = t('system-popup.field-setting-get-out');
+
+    // 닫기, 새로고침
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.returnValue = confirmMsg;
+      return confirmMsg;
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Browser 뒤로가기, 나가기 버튼
+    const handleBeforeChangeRoute = (url: string) => {
+      if (router.pathname !== url && !confirm(confirmMsg)) {
+        router.events.emit('routeChangeError');
+
+        throw `사이트 변경 취소`;
       }
-    >
-      <div className="h-[calc(100%-120px)]">
-        <div className="mb-4 flex h-1/2 flex-col gap-3">
-          <div className="flex justify-between">
-            <div className="flex gap-2">
-              <button
-                className={[
-                  'btn btn-sm btn-rounded min-w-[64px] border',
-                  status !== 'ACTIVE'
-                    ? 'text-tertiary bg-fill-inverse'
-                    : 'text-primary bg-fill-quaternary',
-                ].join(' ')}
-                onClick={() => table.setGlobalFilter('ACTIVE')}
-              >
-                {t('main.setting.field-status.active')}
-              </button>
-              <button
-                className={[
-                  'btn btn-sm btn-rounded min-w-[64px] border',
-                  status !== 'INACTIVE'
-                    ? 'text-tertiary bg-fill-inverse'
-                    : 'text-primary bg-fill-quaternary',
-                ].join(' ')}
-                onClick={() => table.setGlobalFilter('INACTIVE')}
-              >
-                {t('main.setting.field-status.inactive')}
-              </button>
-            </div>
-            <FieldSettingPopover
-              onSave={addField}
-              fieldRows={rows}
-              disabled={!canUpdateField}
+    };
+    router.events.on('routeChangeStart', handleBeforeChangeRoute);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      router.events.off('routeChangeStart', handleBeforeChangeRoute);
+    };
+  }, [isDirty]);
+
+  return (
+    <>
+      <SettingMenuTemplate
+        title={t('channel-setting-menu.field-mgmt')}
+        action={
+          <div className="flex gap-2">
+            <FeedbackRequestPopover
+              projectId={projectId}
+              channelId={channelId}
             />
+            <button
+              className="btn btn-primary btn-md "
+              disabled={
+                !isDirty || !canUpdateField || isPending || channelDataLoading
+              }
+              onClick={() => setOpenSavePopover(true)}
+            >
+              {t('button.save')}
+            </button>
           </div>
-          <div className="overflow-auto rounded border">
-            <table className="table w-full table-fixed border-hidden">
-              <thead>
-                <tr>
-                  {table.getFlatHeaders().map((header, i) => (
-                    <th key={i} style={{ width: header.getSize() }}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {table.getRowModel().rows.map((row) => (
-                  <Fragment key={row.index}>
-                    <tr>
+        }
+      >
+        <div className="h-[calc(100%-120px)]">
+          <div className="mb-4 flex h-1/2 flex-col gap-3">
+            <div className="flex justify-between">
+              <div className="flex gap-2">
+                <button
+                  className={[
+                    'btn btn-sm btn-rounded min-w-[64px] border',
+                    status !== 'ACTIVE' ?
+                      'text-tertiary bg-fill-inverse'
+                    : 'text-primary bg-fill-quaternary',
+                  ].join(' ')}
+                  onClick={() => table.setGlobalFilter('ACTIVE')}
+                >
+                  {t('main.setting.field-status.active')}
+                </button>
+                <button
+                  className={[
+                    'btn btn-sm btn-rounded min-w-[64px] border',
+                    status !== 'INACTIVE' ?
+                      'text-tertiary bg-fill-inverse'
+                    : 'text-primary bg-fill-quaternary',
+                  ].join(' ')}
+                  onClick={() => table.setGlobalFilter('INACTIVE')}
+                >
+                  {t('main.setting.field-status.inactive')}
+                </button>
+              </div>
+              <FieldSettingPopover
+                onSave={addField}
+                fieldRows={rows}
+                disabled={!canUpdateField}
+              />
+            </div>
+            <div className="overflow-auto rounded border">
+              <table className="table w-full table-fixed border-hidden">
+                <thead>
+                  <tr>
+                    {table.getFlatHeaders().map((header, i) => (
+                      <th key={i} style={{ width: header.getSize() }}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {table.getRowModel().rows.map((row) => (
+                    <tr key={row.index}>
                       {row.getVisibleCells().map((cell) => (
                         <td
                           key={`${cell.id} ${cell.row.index}`}
-                          className="border-none"
+                          className={clsx('border-none', {
+                            'text-secondary': isDefaultField(row.original),
+                          })}
                           style={{ width: cell.column.getSize() }}
                         >
                           {flexRender(
@@ -339,48 +348,61 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
                         </td>
                       ))}
                     </tr>
-                  </Fragment>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div className="flex h-1/2 flex-col gap-3">
-          <div>
-            <h1 className="font-20-bold">
-              {t('main.setting.field-mgmt.preview')}
-            </h1>
-          </div>
-          {showPreview ? (
-            <div className="overflow-auto">
-              <PreviewTable
-                fields={rows.filter((v) => v.status === 'ACTIVE')}
-              />
+                  ))}
+                </tbody>
+              </table>
             </div>
-          ) : (
-            <div className="flex h-full flex-col items-center justify-center rounded border">
-              <Icon name="Search" className="text-quaternary mb-2" size={32} />
-              <p>
-                <Trans
-                  i18nKey="main.setting.field-mgmt.preview-description"
-                  components={{
-                    preview: (
-                      <span
-                        className="text-blue-primary cursor-pointer underline"
-                        onClick={() => setShowPreview(true)}
-                      />
-                    ),
-                  }}
+          </div>
+          <div className="flex h-1/2 flex-col gap-3">
+            <div>
+              <h1 className="font-20-bold">
+                {t('main.setting.field-mgmt.preview')}
+              </h1>
+            </div>
+            {showPreview ?
+              <div className="overflow-auto">
+                <PreviewTable
+                  fields={rows.filter((v) => v.status === 'ACTIVE')}
                 />
-              </p>
-              <p className="text-secondary">
-                {t('main.setting.field-mgmt.preview-caption')}
-              </p>
-            </div>
-          )}
+              </div>
+            : <div className="flex h-full flex-col items-center justify-center rounded border">
+                <Icon
+                  name="Search"
+                  className="text-quaternary mb-2"
+                  size={32}
+                />
+                <p className="text-primary font-14-bold">
+                  {t('main.setting.field-mgmt.preview-description')}
+                </p>
+                <p className="text-secondary">
+                  {t('main.setting.field-mgmt.preview-caption')}
+                </p>
+                <button
+                  className="btn btn-blue mt-2 min-w-[120px]"
+                  onClick={() => setShowPreview(true)}
+                >
+                  {t('main.setting.field-mgmt.preview')}
+                </button>
+              </div>
+            }
+          </div>
         </div>
-      </div>
-    </SettingMenuTemplate>
+      </SettingMenuTemplate>
+      <Popover modal open={openSavePopover} onOpenChange={setOpenSavePopover}>
+        <PopoverModalContent
+          title={t('modal.save-field.title')}
+          description={t('modal.save-field.description')}
+          submitButton={{
+            children: t('button.save'),
+            onClick: onSave,
+          }}
+          cancelButton={{
+            children: t('button.cancel'),
+            onClick: () => setOpenSavePopover(false),
+          }}
+        />
+      </Popover>
+    </>
   );
 };
 

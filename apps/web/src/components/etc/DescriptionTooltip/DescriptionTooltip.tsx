@@ -30,10 +30,10 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
   color,
 }) => {
   return (
-    <Tooltip placement={placement ?? 'right'}>
+    <Tooltip placement={placement ?? 'bottom'}>
       <TooltipTrigger className="ml-1 align-middle">
         <Icon
-          name="QuestionCircleStroke"
+          name="InfoCircleFill"
           size={16}
           className={color === 'red' ? 'text-red-primary' : 'text-tertiary'}
         />

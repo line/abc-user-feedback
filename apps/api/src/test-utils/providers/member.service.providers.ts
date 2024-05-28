@@ -15,9 +15,9 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { mockRepository } from '@/test-utils/util-functions';
 import { MemberEntity } from '../../domains/admin/project/member/member.entity';
 import { MemberService } from '../../domains/admin/project/member/member.service';
+import { MemberRepositoryStub } from '../stubs/member-repository.stub';
 import { RoleServiceProviders } from './role.service.providers';
 import { UserServiceProviders } from './user.service.providers';
 
@@ -25,7 +25,7 @@ export const MemberServiceProviders = [
   MemberService,
   {
     provide: getRepositoryToken(MemberEntity),
-    useValue: mockRepository(),
+    useClass: MemberRepositoryStub,
   },
   ...RoleServiceProviders,
   ...UserServiceProviders,

@@ -140,7 +140,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                 />
               </Badge>
             ))}
-            {showInput ? (
+            {showInput ?
               <input
                 className="input-sm h-[28px] w-[90px]"
                 onChange={(e) => setSearchName(e.target.value)}
@@ -148,8 +148,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                 onBlur={() => setShowInput(false)}
                 autoFocus
               />
-            ) : (
-              <div
+            : <div
                 className="border-fill-tertiary flex cursor-pointer items-center gap-1 rounded-[20px] border px-3 py-1"
                 onClick={() => setShowInput(true)}
               >
@@ -158,7 +157,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                   {t('popover.select-issue.search-issue')}
                 </span>
               </div>
-            )}
+            }
           </div>
           <p className="font-14-regular text-secondary px-3 py-2">
             {t('popover.select-issue.issue-list')}

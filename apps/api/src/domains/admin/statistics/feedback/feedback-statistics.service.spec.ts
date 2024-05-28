@@ -320,18 +320,15 @@ describe('FeedbackStatisticsService suite', () => {
         .mockResolvedValue(channels as ChannelEntity[]);
       jest.spyOn(feedbackRepo, 'count').mockResolvedValueOnce(0);
       jest.spyOn(feedbackRepo, 'count').mockResolvedValue(1);
-      jest
-        .spyOn(feedbackStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+      jest.spyOn(feedbackStatsRepo.manager, 'transaction');
 
       await feedbackStatsService.createFeedbackStatistics(
         projectId,
         dayToCreate,
       );
 
-      expect(feedbackRepo.count).toBeCalledTimes(dayToCreate * channelCount);
-      expect(feedbackStatsRepo.createQueryBuilder).toBeCalledTimes(
-        dayToCreate * channelCount - 1,
+      expect(feedbackStatsRepo.manager.transaction).toBeCalledTimes(
+        dayToCreate * channelCount,
       );
     });
   });
