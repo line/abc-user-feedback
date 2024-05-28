@@ -93,7 +93,7 @@
     "@types/jest": "^29.5.12",
     "@types/luxon": "^3.4.2",
     "@types/node": "20.12.12",
-    "@types/nodemailer": "^6.4.14",
+    "@types/nodemailer": "^6.4.15",
     "@types/supertest": "^6.0.2",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
