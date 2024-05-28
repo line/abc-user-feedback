@@ -54,7 +54,6 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
-    console.log('fields: ', fields);
     for (let i = 1; i <= 1; i++) {
       const fakeData: Record<string, any> = {};
       for (const field of fields) {
@@ -91,7 +90,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
             : null;
         }
       }
-      console.log('fakeData: ', fakeData);
+
       fakeRows.push(fakeData);
     }
     setRows(fakeRows);
