@@ -52,3 +52,31 @@ jobs:
 
       - name: Typecheck
         run: pnpm typecheck
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup
+        uses: ./tooling/github/setup
+
+      - name: setup environment variables (with opensearch)
+        run: |
+          echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
+          echo "OPENSEARCH_USE=true" >> ./apps/api/.env.test
+          echo "OPENSEARCH_NODE=http://localhost:9200" >> ./apps/api/.env.test
+          echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env.test
+          echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env.test
+
+      - name: Run Tests
+        run: pnpm test
+
+      - name: setup environment variables (without opensearch)
+        run: |
+          rm ./apps/api/.env.test
+          echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
+          echo "OPENSEARCH_USE=false" >> ./apps/api/.env.test
+
+      - name: Run Tests
+        run: pnpm test

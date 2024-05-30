@@ -11,7 +11,7 @@
     "generate-api-type": "openapi-typescript http://0.0.0.0:4000/admin-docs-json --output src/types/api.type.ts",
     "lint": "eslint",
     "start": "next start",
-    "test": "jest --passWithNoTests",
+    "test": "SKIP_ENV_VALIDATION=true jest --passWithNoTests",
     "test:ci": "jest --ci --passWithNoTests",
     "test:dev": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
