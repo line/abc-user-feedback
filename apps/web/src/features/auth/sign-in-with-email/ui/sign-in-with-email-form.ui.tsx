@@ -14,17 +14,20 @@
  * under the License.
  */
 
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { useTenantState } from '@/entities/tenant';
 import { useUserActions } from '@/entities/user';
 
-import { SIGN_IN_WITH_EMAIL_FORM_ID } from '../sign-in-with-email.constant';
 import { SignInWithEmailSchema } from '../sign-in-with-email.schema';
 
+import { Path } from '@/constants/path';
 import type { IFetchError } from '@/types/fetch-error.type';
 
 type FormType = z.infer<typeof SignInWithEmailSchema>;
@@ -32,6 +35,10 @@ type FormType = z.infer<typeof SignInWithEmailSchema>;
 interface IProps {}
 
 const SignInWithEmailForm: React.FC<IProps> = () => {
+  const tenant = useTenantState();
+  const { t } = useTranslation();
+  const router = useRouter();
+
   const { signInWithEmail } = useUserActions();
 
   const { handleSubmit, register, formState, setError } = useForm<FormType>({
@@ -50,31 +57,43 @@ const SignInWithEmailForm: React.FC<IProps> = () => {
   };
 
   return (
-    <form
-      id={SIGN_IN_WITH_EMAIL_FORM_ID}
-      className="flex flex-col gap-3"
-      onSubmit={handleSubmit(onSubmit)}
-    >
-      <TextInput
-        placeholder="ID"
-        leftIconName="ProfileCircleFill"
-        type="email"
-        {...register('email')}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        isValid={!formState.errors.email}
-        size="lg"
-      />
-      <TextInput
-        placeholder="Password"
-        leftIconName="LockFill"
-        type="password"
-        {...register('password')}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        isValid={!formState.errors.password}
-        size="lg"
-      />
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="mb-6 flex flex-col gap-3">
+        <TextInput
+          placeholder="ID"
+          leftIconName="ProfileCircleFill"
+          type="email"
+          {...register('email')}
+          isSubmitted={formState.isSubmitted}
+          isSubmitting={formState.isSubmitting}
+          isValid={!formState.errors.email}
+          size="lg"
+        />
+        <TextInput
+          placeholder="Password"
+          leftIconName="LockFill"
+          type="password"
+          {...register('password')}
+          isSubmitted={formState.isSubmitted}
+          isSubmitting={formState.isSubmitting}
+          isValid={!formState.errors.password}
+          size="lg"
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <button type="submit" className="btn btn-lg btn-primary">
+          {t('button.sign-in')}
+        </button>
+        {!tenant?.isPrivate && (
+          <button
+            type="button"
+            className="btn btn-lg btn-secondary"
+            onClick={() => router.push(Path.SIGN_UP)}
+          >
+            {t('button.sign-up')}
+          </button>
+        )}
+      </div>
     </form>
   );
 };

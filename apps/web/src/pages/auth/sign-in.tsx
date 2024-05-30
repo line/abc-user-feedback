@@ -16,16 +16,12 @@
 import type { GetStaticProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantState } from '@/entities/tenant';
-import {
-  SignInWithEmailButton,
-  SignInWithEmailForm,
-} from '@/features/auth/sign-in-with-email';
+import { SignInWithEmailForm } from '@/features/auth/sign-in-with-email';
 import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
 import { MainLayout } from '@/widgets';
 
@@ -33,7 +29,6 @@ import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
 
 const SignInPage: NextPageWithLayout = () => {
-  const router = useRouter();
   const { t } = useTranslation();
   const tenant = useTenantState();
 
@@ -51,17 +46,7 @@ const SignInPage: NextPageWithLayout = () => {
         </div>
       </div>
       {tenant?.useEmail && <SignInWithEmailForm />}
-      <div className="my-4 flex flex-col gap-1">
-        {tenant?.useEmail && <SignInWithEmailButton />}
-        {tenant?.useEmail && !tenant?.isPrivate && (
-          <button
-            type="button"
-            className="btn btn-lg btn-secondary"
-            onClick={() => router.push(Path.SIGN_UP)}
-          >
-            {t('button.sign-up')}
-          </button>
-        )}
+      <div className="my-1 flex flex-col gap-1">
         {tenant?.useEmail && tenant?.useOAuth && (
           <div className="relative my-5">
             <span className="absolute-center text-secondary bg-primary absolute px-2 py-1">

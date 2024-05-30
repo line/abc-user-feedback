@@ -15,14 +15,18 @@
  */
 import 'i18next';
 
+import de from '../../public/locales/de/common.json';
 import en from '../../public/locales/en/common.json';
-import jp from '../../public/locales/jp/common.json';
+import ja from '../../public/locales/ja/common.json';
 import ko from '../../public/locales/ko/common.json';
+import zh from '../../public/locales/zh/common.json';
 
 export const resources = {
+  en: { common: de },
   en: { common: en },
   ko: { common: ko },
-  jp: { common: jp },
+  ja: { common: ja },
+  ja: { common: zh },
 } as const;
 
 declare module 'i18next' {

@@ -13,13 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import ResetPasswordWithEmailForm from './reset-password-with-email-form.ui';
-
+import { Path } from '@/constants/path';
+import IndexPage, { getServerSideProps } from '@/pages';
 import { render } from '@/utils/test-utils';
 
-describe('ResetPasswordWithEmailForm', () => {
-  test('match snapshot', () => {
-    const component = render(<ResetPasswordWithEmailForm />);
-    expect(component.container).toMatchSnapshot();
+describe('Index Page', () => {
+  test('should render without crashing', async () => {
+    render(<IndexPage />);
+    const value = (await getServerSideProps({} as any)) as any;
+    expect(value).toMatchObject({ redirect: { destination: Path.SIGN_IN } });
   });
 });

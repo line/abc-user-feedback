@@ -13,5 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as SignInWithEmailButton } from './sign-in-with-email-button.ui';
 export { default as SignInWithEmailForm } from './sign-in-with-email-form.ui';

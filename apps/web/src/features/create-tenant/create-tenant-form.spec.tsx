@@ -31,7 +31,7 @@ describe('CreateTenantForm', () => {
     const submitBtn = screen.getByRole('button');
 
     await act(async () => {
-      await userEvent.type(input, faker.string.sample(1));
+      await userEvent.type(input, faker.string.alphanumeric(1));
     });
 
     expect(submitBtn).toBeDisabled();

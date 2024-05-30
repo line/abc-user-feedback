@@ -19,7 +19,7 @@ import SignUpWithEmailForm from './sign-up-with-email-form.ui';
 import { render } from '@/utils/test-utils';
 
 describe('SignUpWithEmailForm', () => {
-  test('snapshot renders', () => {
+  test('match snapshot', () => {
     const component = render(<SignUpWithEmailForm />);
     expect(component.container).toMatchSnapshot();
   });

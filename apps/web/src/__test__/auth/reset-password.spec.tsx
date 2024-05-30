@@ -14,13 +14,8 @@
  * under the License.
  */
 
-import SignInWithEmailButton from './sign-in-with-email-button.ui';
-
-import { render } from '@/utils/test-utils';
-
-describe('SignInWithEmailButton', () => {
-  test('snapshot renders', () => {
-    const component = render(<SignInWithEmailButton />);
-    expect(component.container).toMatchSnapshot();
+describe('Sign Up Page', () => {
+  test('', () => {
+    expect(2).toBe(2);
   });
 });

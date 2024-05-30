@@ -28,7 +28,7 @@ type Action = {
 
 const initialState: State = null;
 
-const tenantStore = create<State, Action>((set) => ({
+export const useTenantStore = create<State, Action>((set) => ({
   state: initialState,
   setTenant: (tenant) => set({ state: tenant }),
   refetchTenant: async () => {
@@ -38,4 +38,4 @@ const tenantStore = create<State, Action>((set) => ({
 }));
 
 export const [useTenantState, useTenantActions] =
-  createZustandFactory(tenantStore);
+  createZustandFactory(useTenantStore);

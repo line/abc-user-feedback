@@ -53,6 +53,7 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
 
   const [expiredTime, setExpiredTime] = useState<string>();
   const [leftTime, setLeftTime] = useState('');
+
   const { mutate: signUp } = useOAIMutation({
     method: 'post',
     path: '/api/admin/auth/signUp/email',
@@ -67,6 +68,7 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
       },
     },
   });
+
   const { mutate: fetchCode, status: fetchCodeStatus } = useOAIMutation({
     method: 'post',
     path: '/api/admin/auth/email/code',

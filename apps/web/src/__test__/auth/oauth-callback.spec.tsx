@@ -13,4 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const SIGN_IN_WITH_EMAIL_FORM_ID = 'sign-in-with-email-form';
+
+describe('Sign Up Page', () => {
+  test('', () => {
+    expect(2).toBe(2);
+  });
+});

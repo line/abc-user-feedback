@@ -13,23 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useTranslation } from 'react-i18next';
 
-import { SIGN_IN_WITH_EMAIL_FORM_ID } from '../sign-in-with-email.constant';
-
-interface IProps {}
-
-const SignInWithEmailButton: React.FC<IProps> = () => {
-  const { t } = useTranslation();
-  return (
-    <button
-      type="submit"
-      form={SIGN_IN_WITH_EMAIL_FORM_ID}
-      className="btn btn-lg btn-primary"
-    >
-      {t('button.sign-in')}
-    </button>
-  );
-};
-
-export default SignInWithEmailButton;
+describe('Sign Up Page', () => {
+  test('', () => {
+    expect(2).toBe(2);
+  });
+});

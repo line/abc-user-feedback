@@ -19,7 +19,7 @@ import SignInWithOAuthButton from './sign-in-with-oauth-button.ui';
 import { render } from '@/utils/test-utils';
 
 describe('SignInWithOAuthButton', () => {
-  test('snapshot renders', () => {
+  test('match snapshot', () => {
     const component = render(<SignInWithOAuthButton />);
     expect(component.container).toMatchSnapshot();
   });

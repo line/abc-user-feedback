@@ -45,7 +45,7 @@ type Action = {
 };
 const initialState: State = null;
 
-const userStore = create<State, Action>((set, get) => ({
+export const useUserStore = create<State, Action>((set, get) => ({
   state: initialState,
   signInWithEmail: async ({ email, password }) => {
     const { data: jwt } = await axios.post('/api/login', { email, password });
@@ -90,4 +90,5 @@ const userStore = create<State, Action>((set, get) => ({
   },
 }));
 
-export const [useUserState, useUserActions] = createZustandFactory(userStore);
+export const [useUserState, useUserActions] =
+  createZustandFactory(useUserStore);
