@@ -132,8 +132,8 @@ importers:
         specifier: ^1.10.0
         version: 1.10.0
       mysql2:
-        specifier: ^3.9.7
-        version: 3.9.7
+        specifier: ^3.9.8
+        version: 3.9.8
       nestjs-cls:
         specifier: ^3.6.0
         version: 3.6.0(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
@@ -178,7 +178,7 @@ importers:
         version: 0.5.21
       typeorm:
         specifier: ^0.3.20
-        version: 0.3.20(mysql2@3.9.7)(ts-node@10.9.2)
+        version: 0.3.20(mysql2@3.9.8)(ts-node@10.9.2)
       typeorm-naming-strategies:
         specifier: ^4.1.0
         version: 4.1.0(typeorm@0.3.20)
@@ -274,8 +274,8 @@ importers:
         specifier: ^1.7.2
         version: 1.7.2
       mysql2:
-        specifier: ^3.9.7
-        version: 3.9.7
+        specifier: ^3.9.8
+        version: 3.9.8
 
   apps/web:
     dependencies:
@@ -4168,7 +4168,7 @@ packages:
       check-disk-space: 3.4.0
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
-      typeorm: 0.3.20(mysql2@3.9.7)(ts-node@10.9.2)
+      typeorm: 0.3.20(mysql2@3.9.8)(ts-node@10.9.2)
     dev: false
 
   /@nestjs/testing@10.3.8(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(@nestjs/platform-express@10.3.8):
@@ -4203,7 +4203,7 @@ packages:
       '@nestjs/core': 10.3.8(@nestjs/common@10.3.8)(@nestjs/platform-express@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
-      typeorm: 0.3.20(mysql2@3.9.7)(ts-node@10.9.2)
+      typeorm: 0.3.20(mysql2@3.9.8)(ts-node@10.9.2)
       uuid: 9.0.1
     dev: false
 
@@ -12135,8 +12135,8 @@ packages:
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
     dev: true
 
-  /mysql2@3.9.7:
-    resolution: {integrity: sha512-KnJT8vYRcNAZv73uf9zpXqNbvBG7DJrs+1nACsjZP1HMJ1TgXEy8wnNilXAn/5i57JizXKtrUtwDB7HxT9DDpw==}
+  /mysql2@3.9.8:
+    resolution: {integrity: sha512-+5JKNjPuks1FNMoy9TYpl77f+5frbTklz7eb3XDwbpsERRLEeXiW2PDEkakYF50UuKU2qwfGnyXpKYvukv8mGA==}
     engines: {node: '>= 8.0'}
     dependencies:
       denque: 2.1.0
@@ -12232,7 +12232,7 @@ packages:
       typeorm: ^0.3.0
     dependencies:
       '@nestjs/common': 10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      typeorm: 0.3.20(mysql2@3.9.7)(ts-node@10.9.2)
+      typeorm: 0.3.20(mysql2@3.9.8)(ts-node@10.9.2)
     dev: false
 
   /next-i18next@14.0.3(i18next@23.11.2)(next@14.2.2)(react-i18next@13.5.0)(react@18.2.0):
@@ -15434,7 +15434,7 @@ packages:
     peerDependencies:
       typeorm: ^0.2.0 || ^0.3.0
     dependencies:
-      typeorm: 0.3.20(mysql2@3.9.7)(ts-node@10.9.2)
+      typeorm: 0.3.20(mysql2@3.9.8)(ts-node@10.9.2)
     dev: false
 
   /typeorm-transactional@0.4.1(reflect-metadata@0.2.2)(typeorm@0.3.20):
@@ -15447,10 +15447,10 @@ packages:
       '@types/cls-hooked': 4.3.8
       cls-hooked: 4.2.2
       reflect-metadata: 0.2.2
-      typeorm: 0.3.20(mysql2@3.9.7)(ts-node@10.9.2)
+      typeorm: 0.3.20(mysql2@3.9.8)(ts-node@10.9.2)
     dev: false
 
-  /typeorm@0.3.20(mysql2@3.9.7)(ts-node@10.9.2):
+  /typeorm@0.3.20(mysql2@3.9.8)(ts-node@10.9.2):
     resolution: {integrity: sha512-sJ0T08dV5eoZroaq9uPKBoNcGslHBR4E4y+EBHs//SiGbblGe7IeduP/IH4ddCcj0qp3PHwDwGnuvqEAnKlq/Q==}
     engines: {node: '>=16.13.0'}
     hasBin: true
@@ -15518,7 +15518,7 @@ packages:
       dotenv: 16.4.5
       glob: 10.3.12
       mkdirp: 2.1.6
-      mysql2: 3.9.7
+      mysql2: 3.9.8
       reflect-metadata: 0.2.2
       sha.js: 2.4.11
       ts-node: 10.9.2(@swc/core@1.4.16)(@types/node@20.12.12)(typescript@5.4.5)
