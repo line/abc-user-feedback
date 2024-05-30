@@ -16,22 +16,22 @@
     ]
   },
   "scripts": {
-    "build": "turbo run build",
-    "build:ui": "turbo run @ufb/ui#build",
+    "build": "turbo build",
+    "build:ui": "turbo @ufb/ui#build",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo clean",
-    "dev": "turbo run dev --parallel",
-    "dev:api": "turbo run dev --filter=api",
-    "dev:web": "turbo run dev --filter=web",
+    "dev": "turbo dev --parallel",
+    "dev:api": "turbo dev --filter=api",
+    "dev:web": "turbo dev --filter=web",
     "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
     "format:fix": "turbo format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
     "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
-    "test": "turbo run test",
-    "test:e2e": "cd apps/e2e && pnpm test:e2e",
     "postinstall": "pnpm lint:ws",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:e2e": "cd apps/e2e && pnpm test:e2e"
   },
   "prettier": "@ufb/prettier-config",
   "devDependencies": {
