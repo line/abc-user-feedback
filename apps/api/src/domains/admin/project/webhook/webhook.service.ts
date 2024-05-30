@@ -71,10 +71,6 @@ export class WebhookService {
       where: { project: { id: dto.projectId }, name: dto.name },
     });
     if (webhookWithSameName) throw new WebhookAlreadyExistsException();
-    const webhookWithSameURL = await this.repository.findOne({
-      where: { project: { id: dto.projectId }, url: dto.url },
-    });
-    if (webhookWithSameURL) throw new WebhookAlreadyExistsException();
 
     const events = (
       await Promise.all(
@@ -132,16 +128,6 @@ export class WebhookService {
       await this.repository.findOne({
         where: {
           name: dto.name,
-          project: { id: dto.projectId },
-          id: Not(dto.id),
-        },
-      })
-    )
-      throw new WebhookAlreadyExistsException();
-    if (
-      await this.repository.findOne({
-        where: {
-          url: dto.url,
           project: { id: dto.projectId },
           id: Not(dto.id),
         },

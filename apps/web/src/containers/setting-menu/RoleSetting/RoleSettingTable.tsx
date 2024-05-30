@@ -68,6 +68,7 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
   }, [editRoleId]);
 
   const colSpan = useMemo(() => (roles.length ?? 0) + 2, [roles]);
+
   const onSubmitEdit = async () => {
     if (!editName || !editRoleId) return;
     const newRole = roles.find((v) => v.id === editRoleId);
@@ -78,13 +79,12 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
       boolean,
     ][];
 
-    const newPermissions = permEntires.reduce<PermissionType[]>(
-      (prev, [perm, checked]) => {
+    const newPermissions = permEntires
+      .reduce<PermissionType[]>((prev, [perm, checked]) => {
         if (checked) return prev.includes(perm) ? prev : prev.concat(perm);
         else return prev.includes(perm) ? prev.filter((v) => v !== perm) : prev;
-      },
-      newRole.permissions,
-    );
+      }, newRole.permissions)
+      .filter((v) => PermissionList.includes(v));
 
     await updateRole({
       name: editName,
@@ -93,6 +93,7 @@ const RoleSettingTable: React.FC<IProps> = (props) => {
     });
     setEditRoleId(undefined);
   };
+
   const onChecked = (perm: PermissionType, checked: boolean) => {
     setEditPermissions((prev) => ({ ...prev, [perm]: checked }));
     if (
