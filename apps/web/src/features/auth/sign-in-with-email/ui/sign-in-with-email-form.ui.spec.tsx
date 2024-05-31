@@ -14,12 +14,19 @@
  * under the License.
  */
 
+import { faker } from '@faker-js/faker';
+import userEvent from '@testing-library/user-event';
+import { act } from 'react-dom/test-utils';
+
 import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
+import * as user from '@/entities/user';
 
 import SignInWithEmailForm from './sign-in-with-email-form.ui';
 
-import { render, screen } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/utils/test-utils';
+
+jest.mock('@/entities/user');
 
 const DEFAULT_TENANT: Tenant = {
   allowDomains: [],
@@ -35,10 +42,20 @@ const DEFAULT_TENANT: Tenant = {
 };
 
 describe('SignInWithEmailForm', () => {
+  beforeEach(() => {
+    useTenantStore.setState({ state: DEFAULT_TENANT });
+    jest.spyOn(user, 'useUserActions').mockReturnValue({
+      signInWithEmail: jest.fn(),
+      _signIn: jest.fn(),
+      setUser: jest.fn(),
+      signInWithOAuth: jest.fn(),
+      signOut: jest.fn(),
+    });
+  });
   test('match snapshot when tenant is not private', () => {
     useTenantStore.setState({ state: { ...DEFAULT_TENANT, isPrivate: false } });
-    const component = render(<SignInWithEmailForm />);
-    expect(component.container).toMatchSnapshot();
+    const { container } = render(<SignInWithEmailForm />);
+    expect(container).toMatchSnapshot();
 
     expect(screen.getByText('button.sign-in')).toBeInTheDocument();
 
@@ -46,10 +63,105 @@ describe('SignInWithEmailForm', () => {
   });
   test('match snapshot when tenant is private', () => {
     useTenantStore.setState({ state: { ...DEFAULT_TENANT, isPrivate: true } });
-    const component = render(<SignInWithEmailForm />);
-    expect(component.container).toMatchSnapshot();
+    const { container } = render(<SignInWithEmailForm />);
+    expect(container).toMatchSnapshot();
 
     expect(screen.getByText('button.sign-in')).toBeInTheDocument();
     expect(screen.queryByText('button.sign-up')).not.toBeInTheDocument();
+  });
+
+  test('validation', async () => {
+    render(<SignInWithEmailForm />);
+
+    const signInBtn = screen.getByRole('button', {
+      name: 'button.sign-in',
+    });
+    const idInput = screen.getByPlaceholderText('ID');
+    const passwordInput = screen.getByPlaceholderText('Password');
+
+    await act(async () => {
+      await userEvent.type(idInput, faker.internet.email());
+      await userEvent.type(passwordInput, faker.string.alphanumeric(9));
+    });
+
+    expect(signInBtn).not.toBeDisabled();
+
+    await act(async () => {
+      await userEvent.clear(idInput);
+      await userEvent.clear(passwordInput);
+
+      await userEvent.type(idInput, faker.string.alphanumeric(8));
+      await userEvent.type(passwordInput, faker.string.alphanumeric(8));
+    });
+
+    expect(signInBtn).toBeDisabled();
+
+    await act(async () => {
+      await userEvent.clear(idInput);
+      await userEvent.clear(passwordInput);
+
+      await userEvent.type(idInput, faker.internet.email());
+      await userEvent.type(passwordInput, faker.string.alphanumeric(7));
+    });
+
+    expect(signInBtn).toBeDisabled();
+  });
+
+  describe('Submittion', () => {
+    test('on Success', async () => {
+      jest.spyOn(user, 'useUserActions').mockImplementation(() => ({
+        signInWithEmail: jest.fn(),
+        _signIn: jest.fn(),
+        setUser: jest.fn(),
+        signInWithOAuth: jest.fn(),
+        signOut: jest.fn(),
+      }));
+      render(<SignInWithEmailForm />);
+
+      const idInput = screen.getByPlaceholderText('ID');
+      const passwordInput = screen.getByPlaceholderText('Password');
+
+      await act(async () => {
+        await userEvent.type(idInput, faker.internet.email());
+        await userEvent.type(passwordInput, faker.string.alphanumeric(9));
+      });
+
+      const submitBtn = screen.getByRole('button', {
+        name: 'button.sign-in',
+      });
+      await act(() => userEvent.click(submitBtn));
+
+      await waitFor(() =>
+        expect(
+          screen.getByText(new RegExp('success', 'i')),
+        ).toBeInTheDocument(),
+      );
+    });
+    test('on Error', async () => {
+      jest.spyOn(user, 'useUserActions').mockImplementation(() => ({
+        signInWithEmail: jest.fn().mockRejectedValue(new Error()),
+        _signIn: jest.fn(),
+        setUser: jest.fn(),
+        signInWithOAuth: jest.fn(),
+        signOut: jest.fn(),
+      }));
+      render(<SignInWithEmailForm />);
+
+      const idInput = screen.getByPlaceholderText('ID');
+      const passwordInput = screen.getByPlaceholderText('Password');
+
+      await act(async () => {
+        await userEvent.type(idInput, faker.internet.email());
+        await userEvent.type(passwordInput, faker.string.alphanumeric(9));
+      });
+      const submitBtn = screen.getByRole('button', {
+        name: 'button.sign-in',
+      });
+      await act(() => userEvent.click(submitBtn));
+
+      await waitFor(() =>
+        expect(screen.getByText(new RegExp('error', 'i'))).toBeInTheDocument(),
+      );
+    });
   });
 });

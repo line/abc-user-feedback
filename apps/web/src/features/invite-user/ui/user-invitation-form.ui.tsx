@@ -21,30 +21,31 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { resetPasswordWithEmailSchema } from '../reset-password-with-email.schema';
+import { userInvitationSchema } from '../user-invitation.schema';
 
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
 
-type FormType = z.infer<typeof resetPasswordWithEmailSchema>;
+type FormType = z.infer<typeof userInvitationSchema>;
 
 interface IProps {
   code: string;
   email: string;
 }
 
-const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
+const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
   const { t } = useTranslation();
+
   const router = useRouter();
 
   const { handleSubmit, register, formState } = useForm<FormType>({
-    resolver: zodResolver(resetPasswordWithEmailSchema),
+    resolver: zodResolver(userInvitationSchema),
     defaultValues: { code, email },
   });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/admin/users/password/reset',
+    path: '/api/admin/auth/signUp/invitation',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: 'Success' });
@@ -56,16 +57,16 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
     },
   });
 
-  const onSubmit = async ({ password }: FormType) =>
+  const onSubmit = async ({ password, code, email }: FormType) =>
     mutate({ code, email, password });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-12 space-y-4">
+      <div className="mb-6 space-y-4">
         <TextInput
-          type="email"
           label="Email"
           placeholder={t('input.placeholder.email')}
+          type="email"
           value={email}
           disabled
         />
@@ -73,22 +74,22 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
           type="password"
           label={t('input.label.password')}
           placeholder={t('input.placeholder.password')}
+          {...register('password')}
           isSubmitted={formState.isSubmitted}
           isSubmitting={formState.isSubmitting}
           isValid={!formState.errors.password}
           hint={formState.errors.password?.message}
-          {...register('password')}
           required
         />
         <TextInput
           type="password"
           label={t('input.label.confirm-password')}
           placeholder={t('input.placeholder.confirm-password')}
+          {...register('confirmPassword')}
           isSubmitted={formState.isSubmitted}
           isSubmitting={formState.isSubmitting}
           isValid={!formState.errors.confirmPassword}
           hint={formState.errors.confirmPassword?.message}
-          {...register('confirmPassword')}
           required
         />
       </div>
@@ -100,16 +101,9 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
         >
           {t('button.setting')}
         </button>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={() => router.push(Path.SIGN_IN)}
-        >
-          {t('button.back')}
-        </button>
       </div>
     </form>
   );
 };
 
-export default ResetPasswordWithEmailForm;
+export default UserInvitationForm;

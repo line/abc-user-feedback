@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sign Up Page should render all allow 1`] = `
+exports[`Sign Up Page snapshot test 1`] = `
 <div>
   <div
     class="min-w-[960px]"
@@ -94,7 +94,9 @@ exports[`Sign Up Page should render all allow 1`] = `
       <div
         class="w-full px-4 py-6"
       >
-        <div>
+        <div
+          class="relative"
+        >
           <div
             class="mb-12"
           >
@@ -117,11 +119,11 @@ exports[`Sign Up Page should render all allow 1`] = `
                 width="24"
               />
             </div>
-            <p
+            <h1
               class="font-24-bold"
             >
               auth.sign-up.title
-            </p>
+            </h1>
           </div>
           <form>
             <div

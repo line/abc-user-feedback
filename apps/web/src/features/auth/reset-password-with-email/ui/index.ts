@@ -13,4 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+export { default as RequestResetPasswordWithEmail } from './request-reset-password-with-email.ui';
 export { default as ResetPasswordWithEmailForm } from './reset-password-with-email-form.ui';

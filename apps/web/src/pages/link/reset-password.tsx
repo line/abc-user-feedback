@@ -15,127 +15,40 @@
  */
 import { useMemo } from 'react';
 import type { GetStaticProps } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-import { Icon, TextInput, toast } from '@ufb/ui';
-
+import { LogoWithTitle } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { ResetPasswordWithEmailForm } from '@/features/auth/reset-password-with-email';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
-import { useOAIMutation } from '@/hooks';
-
-interface IForm {
-  password: string;
-  confirmPassword: string;
-}
-
-const schema = z
-  .object({
-    password: z.string().min(8),
-    confirmPassword: z.string().min(8),
-  })
-  .refine(
-    (schema) => schema.password === schema.confirmPassword,
-    'Password not matched',
-  );
-
-const defaultValues = { password: '', confirmPassword: '' };
 
 const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const code = useMemo(() => router.query?.code as string, [router.query]);
-  const email = useMemo(() => router.query?.email as string, [router.query]);
-
-  const { handleSubmit, register, formState } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
-  });
-
-  const { mutate, isPending } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/users/password/reset',
-    queryOptions: {
-      async onSuccess() {
-        toast.positive({ title: 'Success' });
-        router.push(Path.SIGN_IN);
-      },
-      onError(error) {
-        toast.negative({ title: error.message });
-      },
-    },
-  });
-
-  const onSubmit = async ({ password }: IForm) =>
-    mutate({ code, email, password });
+  const code = useMemo(
+    () => (router.query?.code ?? '') as string,
+    [router.query],
+  );
+  const email = useMemo(
+    () => (router.query?.email ?? '') as string,
+    [router.query],
+  );
 
   return (
-    <MainLayout>
-      <div className="border-fill-secondary m-auto w-[100%] max-w-[440px] rounded border p-10">
-        <div className="mb-12">
-          <div className="mb-2 flex gap-0.5">
-            <Image
-              src="/assets/images/logo.svg"
-              alt="logo"
-              width={12}
-              height={12}
-            />
-            <Icon name="Title" className="h-[12px] w-[62px]" />
-          </div>
-          <p className="font-24-bold">{t('link.reset-password.title')}</p>
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mb-12 space-y-4">
-            <TextInput type="email" label="Email" value={email} disabled />
-            <TextInput
-              type="password"
-              label={t('input.label.password')}
-              placeholder={t('input.placeholder.password')}
-              isSubmitted={formState.isSubmitted}
-              isSubmitting={formState.isSubmitting}
-              isValid={!formState.errors.password}
-              hint={formState.errors.password?.message}
-              {...register('password')}
-              required
-            />
-            <TextInput
-              type="password"
-              label={t('input.label.confirm-password')}
-              placeholder={t('input.placeholder.confirm-password')}
-              isSubmitted={formState.isSubmitted}
-              isSubmitting={formState.isSubmitting}
-              isValid={!formState.errors.confirmPassword}
-              hint={formState.errors.confirmPassword?.message}
-              {...register('confirmPassword')}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-2">
-            <button
-              type="submit"
-              className="btn btn-primary"
-              disabled={!formState.isValid || isPending}
-            >
-              {t('button.setting')}
-            </button>
-          </div>
-        </form>
-      </div>
-    </MainLayout>
+    <div className="relative">
+      <LogoWithTitle title={t('link.reset-password.title')} />
+      <ResetPasswordWithEmailForm code={code} email={email} />
+    </div>
   );
 };
 
 ResetPasswordPage.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>;
+  return <MainLayout center>{page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

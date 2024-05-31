@@ -14,12 +14,10 @@
  * under the License.
  */
 import type { GetStaticProps } from 'next';
-import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Icon } from '@ufb/ui';
-
+import { LogoWithTitle } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
 import { MainLayout } from '@/widgets';
@@ -30,19 +28,8 @@ const SignUpPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
   return (
-    <div>
-      <div className="mb-12">
-        <div className="mb-2 flex gap-0.5">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="logo"
-            width={12}
-            height={12}
-          />
-          <Icon name="Title" className="h-[12px] w-[62px]" />
-        </div>
-        <p className="font-24-bold">{t('auth.sign-up.title')}</p>
-      </div>
+    <div className="relative">
+      <LogoWithTitle title={t('auth.sign-up.title')} />
       <SignUpWithEmailForm />
     </div>
   );

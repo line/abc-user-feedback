@@ -180,6 +180,7 @@ exports[`Sign In Page should render all allow 1`] = `
             >
               <button
                 class="btn btn-lg btn-primary"
+                disabled=""
                 type="submit"
               >
                 button.sign-in
@@ -418,6 +419,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
             >
               <button
                 class="btn btn-lg btn-primary"
+                disabled=""
                 type="submit"
               >
                 button.sign-in
@@ -784,6 +786,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
             >
               <button
                 class="btn btn-lg btn-primary"
+                disabled=""
                 type="submit"
               >
                 button.sign-in

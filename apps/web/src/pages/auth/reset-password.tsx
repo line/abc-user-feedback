@@ -14,14 +14,12 @@
  * under the License.
  */
 import type { GetStaticProps } from 'next';
-import Image from 'next/image';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Icon } from '@ufb/ui';
-
+import { LogoWithTitle } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { ResetPasswordWithEmailForm } from '@/features/auth/reset-password-with-email';
+import { RequestResetPasswordWithEmail } from '@/features/auth/reset-password-with-email';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
@@ -30,20 +28,9 @@ const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="m-auto w-[360px]">
-      <div className="mb-12">
-        <div className="mb-2 flex gap-0.5">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="logo"
-            width={12}
-            height={12}
-          />
-          <Icon name="Title" className="h-[12px] w-[62px]" />
-        </div>
-        <p className="font-24-bold">{t('auth.reset-password.title')}</p>
-      </div>
-      <ResetPasswordWithEmailForm />
+    <div className="relative">
+      <LogoWithTitle title={t('auth.reset-password.title')} />
+      <RequestResetPasswordWithEmail />
     </div>
   );
 };

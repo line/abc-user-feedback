@@ -21,30 +21,27 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { resetPasswordWithEmailSchema } from '../reset-password-with-email.schema';
+import { requestResetPasswordWithEmailSchema } from '../request-reset-password-with-email.schema';
 
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
 
-type FormType = z.infer<typeof resetPasswordWithEmailSchema>;
+type FormType = z.infer<typeof requestResetPasswordWithEmailSchema>;
 
-interface IProps {
-  code: string;
-  email: string;
-}
+interface IProps {}
 
-const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
+const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
   const { t } = useTranslation();
+
   const router = useRouter();
 
-  const { handleSubmit, register, formState } = useForm<FormType>({
-    resolver: zodResolver(resetPasswordWithEmailSchema),
-    defaultValues: { code, email },
+  const { register, handleSubmit, formState } = useForm<FormType>({
+    resolver: zodResolver(requestResetPasswordWithEmailSchema),
   });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
-    path: '/api/admin/users/password/reset',
+    path: '/api/admin/users/password/reset/code',
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: 'Success' });
@@ -56,39 +53,18 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
     },
   });
 
-  const onSubmit = async ({ password }: FormType) =>
-    mutate({ code, email, password });
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit((data) => mutate(data))}>
       <div className="mb-12 space-y-4">
         <TextInput
           type="email"
           label="Email"
           placeholder={t('input.placeholder.email')}
-          value={email}
-          disabled
-        />
-        <TextInput
-          type="password"
-          label={t('input.label.password')}
-          placeholder={t('input.placeholder.password')}
           isSubmitted={formState.isSubmitted}
           isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.password}
-          hint={formState.errors.password?.message}
-          {...register('password')}
-          required
-        />
-        <TextInput
-          type="password"
-          label={t('input.label.confirm-password')}
-          placeholder={t('input.placeholder.confirm-password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.confirmPassword}
-          hint={formState.errors.confirmPassword?.message}
-          {...register('confirmPassword')}
+          isValid={!formState.errors.email}
+          hint={formState.errors.email?.message}
+          {...register('email')}
           required
         />
       </div>
@@ -98,12 +74,12 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
           className="btn btn-primary"
           disabled={!formState.isValid || isPending}
         >
-          {t('button.setting')}
+          {t('auth.reset-password.button.send-email')}
         </button>
         <button
           type="button"
           className="btn btn-secondary"
-          onClick={() => router.push(Path.SIGN_IN)}
+          onClick={router.back}
         >
           {t('button.back')}
         </button>
@@ -112,4 +88,4 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
   );
 };
 
-export default ResetPasswordWithEmailForm;
+export default RequestResetPasswordWithEmail;

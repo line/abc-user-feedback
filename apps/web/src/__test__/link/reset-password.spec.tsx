@@ -13,26 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { env } from 'process';
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
 
-import type { OAIMethodPathKeys, OAIMethods } from './types/openapi.type';
+import ResetPasswordPage from '@/pages/link/reset-password';
+import { render } from '@/utils/test-utils';
 
-export const server = setupServer();
+describe('Reset Password Page', () => {
+  test('snapshot test', () => {
+    const resetPasswordPage = ResetPasswordPage.getLayout!(
+      <ResetPasswordPage />,
+    );
 
-const TYPE_STATUS_MAP = {
-  success: 200,
-  error: 500,
-} as const;
-
-export const simpleMockHttp = <M extends OAIMethods>(
-  method: M,
-  path: OAIMethodPathKeys<M>,
-  type: 'success' | 'error',
-) =>
-  server.use(
-    http[method](`${env.NEXT_PUBLIC_API_BASE_URL}${path}`, () =>
-      HttpResponse.json({}, { status: TYPE_STATUS_MAP[type] }),
-    ),
-  );
+    const { container } = render(<>{resetPasswordPage}</>);
+    expect(container).toMatchSnapshot();
+  });
+});

@@ -13,26 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { env } from 'process';
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
+import { z } from 'zod';
 
-import type { OAIMethodPathKeys, OAIMethods } from './types/openapi.type';
-
-export const server = setupServer();
-
-const TYPE_STATUS_MAP = {
-  success: 200,
-  error: 500,
-} as const;
-
-export const simpleMockHttp = <M extends OAIMethods>(
-  method: M,
-  path: OAIMethodPathKeys<M>,
-  type: 'success' | 'error',
-) =>
-  server.use(
-    http[method](`${env.NEXT_PUBLIC_API_BASE_URL}${path}`, () =>
-      HttpResponse.json({}, { status: TYPE_STATUS_MAP[type] }),
-    ),
-  );
+export const requestResetPasswordWithEmailSchema = z.object({
+  email: z.string().email(),
+});

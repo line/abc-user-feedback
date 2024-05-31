@@ -64,6 +64,7 @@ exports[`SignInWithEmailForm match snapshot when tenant is not private 1`] = `
     >
       <button
         class="btn btn-lg btn-primary"
+        disabled=""
         type="submit"
       >
         button.sign-in
@@ -146,6 +147,7 @@ exports[`SignInWithEmailForm match snapshot when tenant is private 1`] = `
     >
       <button
         class="btn btn-lg btn-primary"
+        disabled=""
         type="submit"
       >
         button.sign-in

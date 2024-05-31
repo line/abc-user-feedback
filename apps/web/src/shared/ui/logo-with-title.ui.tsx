@@ -13,26 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { env } from 'process';
-import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
+import Image from 'next/image';
 
-import type { OAIMethodPathKeys, OAIMethods } from './types/openapi.type';
+import { Icon } from '@ufb/ui';
 
-export const server = setupServer();
+interface IProps {
+  title: string;
+}
 
-const TYPE_STATUS_MAP = {
-  success: 200,
-  error: 500,
-} as const;
-
-export const simpleMockHttp = <M extends OAIMethods>(
-  method: M,
-  path: OAIMethodPathKeys<M>,
-  type: 'success' | 'error',
-) =>
-  server.use(
-    http[method](`${env.NEXT_PUBLIC_API_BASE_URL}${path}`, () =>
-      HttpResponse.json({}, { status: TYPE_STATUS_MAP[type] }),
-    ),
+const LogoWithTitle: React.FC<IProps> = ({ title }) => {
+  return (
+    <div className="mb-12">
+      <div className="mb-2 flex gap-0.5">
+        <Image
+          src="/assets/images/logo.svg"
+          alt="logo"
+          width={12}
+          height={12}
+        />
+        <Icon name="Title" className="h-[12px] w-[62px]" />
+      </div>
+      <h1 className="font-24-bold">{title}</h1>
+    </div>
   );
+};
+
+export default LogoWithTitle;

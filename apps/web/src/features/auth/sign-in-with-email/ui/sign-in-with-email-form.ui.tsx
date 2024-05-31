@@ -40,7 +40,6 @@ const SignInWithEmailForm: React.FC<IProps> = () => {
   const router = useRouter();
 
   const { signInWithEmail } = useUserActions();
-
   const { handleSubmit, register, formState, setError } = useForm<FormType>({
     resolver: zodResolver(SignInWithEmailSchema),
   });
@@ -48,11 +47,12 @@ const SignInWithEmailForm: React.FC<IProps> = () => {
   const onSubmit = async (data: FormType) => {
     try {
       await signInWithEmail(data);
+      toast.positive({ title: 'Success' });
     } catch (error) {
       const { message } = error as IFetchError;
       setError('email', { message: 'invalid email' });
       setError('password', { message: 'invalid password' });
-      toast.negative({ title: message, description: message });
+      toast.negative({ title: 'Error', description: message });
     }
   };
 
@@ -81,7 +81,11 @@ const SignInWithEmailForm: React.FC<IProps> = () => {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <button type="submit" className="btn btn-lg btn-primary">
+        <button
+          type="submit"
+          className="btn btn-lg btn-primary"
+          disabled={!formState.isValid}
+        >
           {t('button.sign-in')}
         </button>
         {!tenant?.isPrivate && (
