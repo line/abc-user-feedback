@@ -25,9 +25,9 @@ import { render, screen } from '@/utils/test-utils';
 const DEFAULT_TENANT: Tenant = {
   id: 1,
   siteName: faker.string.sample(),
+  description: null,
   allowDomains: [],
   isPrivate: false,
-  description: null,
   useEmail: true,
   isRestrictDomain: false,
   oauthConfig: null,
@@ -36,9 +36,68 @@ const DEFAULT_TENANT: Tenant = {
 };
 
 describe('Sign In Page', () => {
-  test('should render without crashing', () => {
-    // useTenantStore.setState({ state: { ...DEFAULT_TENANT } });
-    // const Res = SignInPage.getLayout!(<SignInPage />);
-    // expect(screen.getByText(DEFAULT_TENANT.siteName)).toBeInTheDocument();
+  test('should render all allow', () => {
+    useTenantStore.setState({ state: { ...DEFAULT_TENANT } });
+    const signInPage = SignInPage.getLayout!(<SignInPage />);
+
+    const { container } = render(<>{signInPage}</>);
+    expect(container).toMatchSnapshot();
+
+    const signInBtn = screen.queryByRole('button', { name: 'button.sign-in' });
+    expect(signInBtn).toBeInTheDocument();
+
+    const signUpBtn = screen.queryByRole('button', { name: 'button.sign-up' });
+    expect(signUpBtn).toBeInTheDocument();
+
+    const oauthBtn = screen.queryByRole('button', { name: /OAuth2.0/ });
+    expect(oauthBtn).toBeInTheDocument();
+  });
+  test('should render when isPrivate is false', () => {
+    useTenantStore.setState({ state: { ...DEFAULT_TENANT, isPrivate: true } });
+    const signInPage = SignInPage.getLayout!(<SignInPage />);
+
+    const { container } = render(<>{signInPage}</>);
+    expect(container).toMatchSnapshot();
+
+    const signInBtn = screen.queryByRole('button', { name: 'button.sign-in' });
+    expect(signInBtn).toBeInTheDocument();
+
+    const signUpBtn = screen.queryByRole('button', { name: 'button.sign-up' });
+    expect(signUpBtn).not.toBeInTheDocument();
+
+    const oauthBtn = screen.queryByRole('button', { name: /OAuth2.0/ });
+    expect(oauthBtn).toBeInTheDocument();
+  });
+  test('should render when useOAuth is false', () => {
+    useTenantStore.setState({ state: { ...DEFAULT_TENANT, useOAuth: false } });
+    const signInPage = SignInPage.getLayout!(<SignInPage />);
+
+    const { container } = render(<>{signInPage}</>);
+    expect(container).toMatchSnapshot();
+
+    const signInBtn = screen.queryByRole('button', { name: 'button.sign-in' });
+    expect(signInBtn).toBeInTheDocument();
+
+    const signUpBtn = screen.queryByRole('button', { name: 'button.sign-up' });
+    expect(signUpBtn).toBeInTheDocument();
+
+    const oauthBtn = screen.queryByRole('button', { name: /OAuth2.0/ });
+    expect(oauthBtn).not.toBeInTheDocument();
+  });
+  test('should render when useEmail is false', () => {
+    useTenantStore.setState({ state: { ...DEFAULT_TENANT, useEmail: false } });
+    const signInPage = SignInPage.getLayout!(<SignInPage />);
+
+    const { container } = render(<>{signInPage}</>);
+    expect(container).toMatchSnapshot();
+
+    const signInBtn = screen.queryByRole('button', { name: 'button.sign-in' });
+    expect(signInBtn).not.toBeInTheDocument();
+
+    const signUpBtn = screen.queryByRole('button', { name: 'button.sign-up' });
+    expect(signUpBtn).not.toBeInTheDocument();
+
+    const oauthBtn = screen.queryByRole('button', { name: /OAuth2.0/ });
+    expect(oauthBtn).toBeInTheDocument();
   });
 });

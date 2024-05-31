@@ -14,7 +14,7 @@
     "test": "jest --passWithNoTests",
     "test:snapshot": "jest -u",
     "test:ci": "jest --ci --passWithNoTests",
-    "test:watch": "jest --watch --passWithNoTests",
+    "test:watch": "SKIP_ENV_VALIDATION=1 jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "prettier": "@ufb/prettier-config/nextjs",

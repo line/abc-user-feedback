@@ -20,6 +20,8 @@ import { server } from './src/msw';
 
 import '@testing-library/jest-dom';
 
+import { faker } from '@faker-js/faker';
+
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
@@ -48,3 +50,5 @@ afterAll(() => server.close());
 jest.mock('next/router', () => ({
   useRouter: () => nextRouterMock,
 }));
+
+faker.seed(100);
