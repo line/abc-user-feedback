@@ -14,8 +14,16 @@
  * under the License.
  */
 
-describe('Sign Up Page', () => {
-  test('', () => {
-    expect(2).toBe(2);
+import ResetPasswordPage from '@/pages/auth/reset-password';
+import { render } from '@/utils/test-utils';
+
+describe('Reset Password Page', () => {
+  test('snapshot test', () => {
+    const resetPasswordPage = ResetPasswordPage.getLayout!(
+      <ResetPasswordPage />,
+    );
+
+    const { container } = render(<>{resetPasswordPage}</>);
+    expect(container).toMatchSnapshot();
   });
 });

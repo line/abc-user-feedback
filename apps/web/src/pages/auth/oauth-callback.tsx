@@ -14,23 +14,30 @@
  * under the License.
  */
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 
 import { useOAuthCallback } from '@/features/auth/sign-in-with-oauth';
+
+import { Path } from '@/constants/path';
 
 interface IProps {}
 
 const OAuthCallbackPage: NextPage<IProps> = () => {
   const { status } = useOAuthCallback();
-
+  const router = useRouter();
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <p className="font-32-bold animate-bounce">
-        {status === 'loading' ?
-          'Loading...'
-        : status === 'error' ?
-          'Error!!!'
-        : ''}
-      </p>
+      {status === 'loading' && (
+        <p className="font-32-bold animate-bounce">Loading...</p>
+      )}
+      {status === 'error' && (
+        <div>
+          <p className="font-32-bold">Error!!!</p>
+          <button className="btn" onClick={() => router.replace(Path.SIGN_IN)}>
+            Go to home
+          </button>
+        </div>
+      )}
     </div>
   );
 };

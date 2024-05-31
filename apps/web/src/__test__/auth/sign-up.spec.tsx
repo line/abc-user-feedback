@@ -14,8 +14,14 @@
  * under the License.
  */
 
+import SignUpPage from '@/pages/auth/sign-up';
+import { render } from '@/utils/test-utils';
+
 describe('Sign Up Page', () => {
-  test('', () => {
-    expect(2).toBe(2);
+  test('snapshot test', () => {
+    const signUpPage = SignUpPage.getLayout!(<SignUpPage />);
+
+    const { container } = render(<>{signUpPage}</>);
+    expect(container).toMatchSnapshot();
   });
 });

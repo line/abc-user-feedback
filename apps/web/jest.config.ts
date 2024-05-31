@@ -14,11 +14,12 @@
  * under the License.
  */
 import nextJest from 'next/jest.js';
+import type { Config } from 'jest';
 
 const createJestConfig = nextJest({ dir: './' });
 
 // Add any custom config to be passed to Jest
-/** @type {import('jest').Config} */
+// /** @type {import('jest').Config} */
 const jestConfig = {
   coverageProvider: 'v8',
   testEnvironment: './JSDOMEnvironment.ts',
@@ -34,7 +35,12 @@ const jestConfig = {
   transform: {
     '^.+\\.(t|j)sx?$': '@swc/jest',
   },
-};
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/index.ts',
+  ],
+} satisfies Config;
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 export default createJestConfig(jestConfig);

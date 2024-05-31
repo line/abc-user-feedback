@@ -14,8 +14,36 @@
  * under the License.
  */
 
-describe('Sign Up Page', () => {
-  test('', () => {
-    expect(2).toBe(2);
+import userEvent from '@testing-library/user-event';
+import mockRouter from 'next-router-mock';
+
+import * as signInWithOAuth from '@/features/auth/sign-in-with-oauth';
+
+import { Path } from '@/constants/path';
+import OAuthCallbackPage from '@/pages/auth/oauth-callback';
+import { render, screen, waitFor } from '@/utils/test-utils';
+
+jest.mock('@/features/auth/sign-in-with-oauth');
+
+describe('OAuthCallback Page', () => {
+  test('status loading', () => {
+    jest.spyOn(signInWithOAuth, 'useOAuthCallback').mockReturnValue({
+      status: 'loading',
+    });
+    render(<OAuthCallbackPage />);
+    expect(screen.queryByText('Loading...')).toBeInTheDocument();
+  });
+  test('status error', async () => {
+    jest.spyOn(signInWithOAuth, 'useOAuthCallback').mockReturnValue({
+      status: 'error',
+    });
+    render(<OAuthCallbackPage />);
+
+    expect(screen.queryByText('Error!!!')).toBeInTheDocument();
+
+    await waitFor(async () => {
+      await userEvent.click(screen.getByRole('button'));
+    });
+    expect(mockRouter).toMatchObject({ pathname: Path.SIGN_IN });
   });
 });

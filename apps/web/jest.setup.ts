@@ -47,6 +47,8 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
+afterEach(() => jest.resetAllMocks());
+
 jest.mock('next/router', () => ({
   useRouter: () => nextRouterMock,
 }));

@@ -27,9 +27,12 @@ describe('Create Tenant Page', () => {
     const { container } = render(<CreateTenantPage />);
     expect(container).toMatchSnapshot();
   });
+
   test('should route sign-in page when tenant is defined', async () => {
     useTenantStore.setState({ state: {} as Tenant });
-    render(<CreateTenantPage />);
+    const createTenantPage = CreateTenantPage.getLayout!(<CreateTenantPage />);
+
+    render(<>{createTenantPage}</>);
     await waitFor(() =>
       expect(mockRouter).toMatchObject({ pathname: Path.SIGN_IN }),
     );
