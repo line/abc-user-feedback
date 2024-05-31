@@ -471,7 +471,7 @@ importers:
         version: 29.7.0
       openapi-typescript:
         specifier: ^6.7.5
-        version: 6.7.5
+        version: 6.7.6
       postcss:
         specifier: ^8.4.38
         version: 8.4.38
@@ -12686,8 +12686,8 @@ packages:
       is-wsl: 2.2.0
     dev: false
 
-  /openapi-typescript@6.7.5:
-    resolution: {integrity: sha512-ZD6dgSZi0u1QCP55g8/2yS5hNJfIpgqsSGHLxxdOjvY7eIrXzj271FJEQw33VwsZ6RCtO/NOuhxa7GBWmEudyA==}
+  /openapi-typescript@6.7.6:
+    resolution: {integrity: sha512-c/hfooPx+RBIOPM09GSxABOZhYPblDoyaGhqBkD/59vtpN21jEuWKDlM0KYTvqJVlSYjKs0tBcIdeXKChlSPtw==}
     hasBin: true
     dependencies:
       ansi-colors: 4.1.3
