@@ -423,7 +423,7 @@ importers:
         version: 0.2.36(@swc/core@1.4.16)
       '@testing-library/jest-dom':
         specifier: ^6.4.2
-        version: 6.4.2(@types/jest@29.5.12)(jest@29.7.0)
+        version: 6.4.5(@types/jest@29.5.12)(jest@29.7.0)
       '@testing-library/react':
         specifier: ^14.3.1
         version: 14.3.1(react-dom@18.2.0)(react@18.2.0)
@@ -574,7 +574,7 @@ importers:
         version: 0.2.36(@swc/core@1.4.16)
       '@testing-library/jest-dom':
         specifier: ^6.4.2
-        version: 6.4.2(@types/jest@29.5.12)(jest@29.7.0)
+        version: 6.4.5(@types/jest@29.5.12)(jest@29.7.0)
       '@testing-library/react':
         specifier: ^14.3.1
         version: 14.3.1(react-dom@18.2.0)(react@18.2.0)
@@ -2703,7 +2703,6 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.14.1
-    dev: true
 
   /@babel/template@7.24.6:
     resolution: {integrity: sha512-3vgazJlLwNXi9jhrR1ef8qiB65L1RK90+lEQwv4OxveHnqC3BfmnHdgySwRLzf6akhlOYenT+b7AfWq+a//AHw==}
@@ -5719,8 +5718,8 @@ packages:
       pretty-format: 27.5.1
     dev: true
 
-  /@testing-library/jest-dom@6.4.2(@types/jest@29.5.12)(jest@29.7.0):
-    resolution: {integrity: sha512-CzqH0AFymEMG48CpzXFriYYkOjk6ZGPCLMhW9e9jg3KMCn5OfJecF8GtGW7yGfR/IgCe3SX8BSwjdzI6BBbZLw==}
+  /@testing-library/jest-dom@6.4.5(@types/jest@29.5.12)(jest@29.7.0):
+    resolution: {integrity: sha512-AguB9yvTXmCnySBP1lWjfNNUwpbElsaQ567lt2VdGqAdHtpieLgjmcVyv1q7PMIvLbgpDdkWV5Ydv3FEejyp2A==}
     engines: {node: '>=14', npm: '>=6', yarn: '>=1'}
     peerDependencies:
       '@jest/globals': '>= 28'
@@ -5741,7 +5740,7 @@ packages:
         optional: true
     dependencies:
       '@adobe/css-tools': 4.3.3
-      '@babel/runtime': 7.24.4
+      '@babel/runtime': 7.24.6
       '@types/jest': 29.5.12
       aria-query: 5.3.0
       chalk: 3.0.0
@@ -14055,7 +14054,7 @@ packages:
   /regenerator-transform@0.15.2:
     resolution: {integrity: sha512-hfMp2BoF0qOk3uc5V20ALGDS2ddjQaLrdl7xrGXvAIow7qeWRM2VA2HuCHkUKk9slq3VwEwLNK3DFBqDfPGYtg==}
     dependencies:
-      '@babel/runtime': 7.24.4
+      '@babel/runtime': 7.24.6
     dev: true
 
   /regexp.prototype.flags@1.5.2:
@@ -14234,7 +14233,7 @@ packages:
   /rtl-css-js@1.16.1:
     resolution: {integrity: sha512-lRQgou1mu19e+Ya0LsTvKrVJ5TYUbqCVPAiImX3UfLTenarvPUl1QFdvu5Z3PYmHT9RCcwIfbjRQBntExyj3Zg==}
     dependencies:
-      '@babel/runtime': 7.24.4
+      '@babel/runtime': 7.24.6
     dev: false
 
   /run-applescript@3.2.0:
