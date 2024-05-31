@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-pnpm install
-pnpm typecheck
-pnpm format
-pnpm lint
