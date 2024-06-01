@@ -323,7 +323,7 @@ importers:
         version: 2.5.1
       clsx:
         specifier: ^2.1.0
-        version: 2.1.0
+        version: 2.1.1
       cookies-next:
         specifier: ^4.1.1
         version: 4.1.1
@@ -3856,7 +3856,7 @@ packages:
       '@mui/utils': 5.15.14(@types/react@18.2.79)(react@18.2.0)
       '@popperjs/core': 2.11.8
       '@types/react': 18.2.79
-      clsx: 2.1.0
+      clsx: 2.1.1
       prop-types: 15.8.1
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
@@ -7668,8 +7668,8 @@ packages:
       semver: 5.7.2
     dev: false
 
-  /clsx@2.1.0:
-    resolution: {integrity: sha512-m3iNNWpd9rl3jvvcBnu70ylMdrXt8Vlq4HYadnU5fwcOtvkSQWPmj7amUcDT2qYI7risszBjI5AUIUox9D16pg==}
+  /clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
     dev: false
 
@@ -13747,7 +13747,7 @@ packages:
       react-dom: ^16.9.0 || ^17 || ^18
     dependencies:
       '@floating-ui/react': 0.26.16(react-dom@18.2.0)(react@18.2.0)
-      clsx: 2.1.0
+      clsx: 2.1.1
       date-fns: 3.6.0
       prop-types: 15.8.1
       react: 18.2.0
@@ -14020,7 +14020,7 @@ packages:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      clsx: 2.1.0
+      clsx: 2.1.1
       eventemitter3: 4.0.7
       lodash: 4.17.21
       react: 18.2.0
