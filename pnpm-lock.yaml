@@ -392,7 +392,7 @@ importers:
         version: 17.5.0(react-dom@18.2.0)(react@18.2.0)
       recharts:
         specifier: ^2.12.6
-        version: 2.12.6(react-dom@18.2.0)(react@18.2.0)
+        version: 2.12.7(react-dom@18.2.0)(react@18.2.0)
       sharp:
         specifier: ^0.32.6
         version: 0.32.6
@@ -14024,8 +14024,8 @@ packages:
       decimal.js-light: 2.5.1
     dev: false
 
-  /recharts@2.12.6(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-D+7j9WI+D0NHauah3fKHuNNcRK8bOypPW7os1DERinogGBGaHI7i6tQKJ0aUF3JXyBZ63dyfKIW2WTOPJDxJ8w==}
+  /recharts@2.12.7(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-hlLJMhPQfv4/3NBSAyq3gzGg4h2v69RJh6KU7b3pXYNNAELs9kEoXOjbkxdXpALqKBoVmVptGfLpxdaVYqjmXQ==}
     engines: {node: '>=14'}
     peerDependencies:
       react: ^16.0.0 || ^17.0.0 || ^18.0.0
