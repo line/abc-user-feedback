@@ -54,9 +54,9 @@ class client {
     createAuthRefreshInterceptor(this.axiosInstance, async (failedRequest) => {
       try {
         const { data } = await axios.get('/api/refresh-jwt');
-        sessionStorage.setItem('jwt', data.jwt);
+        sessionStorage.setItem('jwt', data);
         failedRequest.response.config.headers.setAuthorization(
-          `Bearer ${data.jwt.accessToken}`,
+          `Bearer ${data.accessToken}`,
         );
       } catch (error) {
         await axios.get('/api/logout');

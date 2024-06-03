@@ -21,18 +21,14 @@ import type { OAIMethodPathKeys, OAIMethods } from './types/openapi.type';
 
 export const server = setupServer();
 
-const TYPE_STATUS_MAP = {
-  success: 200,
-  error: 500,
-} as const;
-
 export const simpleMockHttp = <M extends OAIMethods>(
   method: M,
   path: OAIMethodPathKeys<M>,
-  type: 'success' | 'error',
+  status: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 500 = 200,
+  body: Record<string, unknown> = {},
 ) =>
   server.use(
     http[method](`${env.NEXT_PUBLIC_API_BASE_URL}${path}`, () =>
-      HttpResponse.json({}, { status: TYPE_STATUS_MAP[type] }),
+      HttpResponse.json(body, { status }),
     ),
   );

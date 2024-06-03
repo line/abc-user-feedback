@@ -20,6 +20,7 @@ const getLogger = (name: string) =>
   pino({
     name,
     base: { env: process.env.NODE_ENV },
+    enabled: process.env.NODE_ENV !== 'test',
   });
 
 export default getLogger;

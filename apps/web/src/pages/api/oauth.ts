@@ -13,36 +13,45 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import axios from 'axios';
 import { withIronSessionApiRoute } from 'iron-session/next';
+import { z } from 'zod';
 
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
+import { createNextApiHandler, procedure } from '@/server/api-handler';
 
-export default withIronSessionApiRoute(async (req, res) => {
-  const { code } = req.body;
+const handler = createNextApiHandler({
+  POST: procedure
+    .input(z.object({ code: z.string() }))
+    .handle(async (req, res) => {
+      const { code } = req.body;
 
-  try {
-    const params = new URLSearchParams({ code });
-    const response = await fetch(
-      `${env.API_BASE_URL}/api/admin/auth/signIn/oauth?${params}`,
-    );
+      try {
+        const params = new URLSearchParams({ code });
+        const { status, data } = await axios.get(
+          `${env.API_BASE_URL}/api/admin/auth/signIn/oauth?${params}`,
+        );
 
-    const data = await response.json();
+        if (status !== 200) {
+          return res.status(status).send(data);
+        }
 
-    if (response.status !== 200) {
-      return res.status(response.status).send(data);
-    }
+        req.session.jwt = data;
+        await req.session.save();
 
-    req.session.jwt = data;
-    await req.session.save();
+        return res.send(data);
+      } catch (error) {
+        getLogger('/api/oauth').error(error);
+        if (error instanceof TypeError) {
+          return res
+            .status(500)
+            .send({ message: error.message, code: error.name });
+        }
+        return res.status(500).send({ message: 'Unknown Error' });
+      }
+    }),
+});
 
-    return res.send(data);
-  } catch (error) {
-    getLogger('/api/oauth').error(error);
-    if (error instanceof TypeError) {
-      return res.status(500).send({ message: error.message, code: error.name });
-    }
-    return res.status(500).send({ message: 'Unknown Error' });
-  }
-}, ironOption);
+export default withIronSessionApiRoute(handler, ironOption);

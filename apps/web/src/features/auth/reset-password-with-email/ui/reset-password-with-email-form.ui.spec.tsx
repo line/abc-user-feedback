@@ -84,7 +84,7 @@ describe('ResetPasswordWithEmailForm', () => {
       });
     });
     test('on Success', async () => {
-      simpleMockHttp('post', '/api/admin/users/password/reset', 'success');
+      simpleMockHttp('post', '/api/admin/users/password/reset');
 
       const submitBtn = screen.getByRole('button', {
         name: 'button.setting',
@@ -98,7 +98,7 @@ describe('ResetPasswordWithEmailForm', () => {
       );
     });
     test('on Error', async () => {
-      simpleMockHttp('post', '/api/admin/users/password/reset', 'error');
+      simpleMockHttp('post', '/api/admin/users/password/reset', 500);
 
       const submitBtn = screen.getByRole('button', {
         name: 'button.setting',

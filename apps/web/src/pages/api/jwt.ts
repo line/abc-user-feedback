@@ -13,10 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+// import { withIronSessionApiRoute } from 'iron-session/next';
+import type { NextApiHandler } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
 
 import { ironOption } from '@/constants/iron-option';
+import { createNextApiHandler } from '@/server/api-handler';
 
-export default withIronSessionApiRoute((req, res) => {
-  res.send({ jwt: req.session?.jwt ?? null });
-}, ironOption);
+const handler: NextApiHandler = createNextApiHandler({
+  GET: (req, res) => {
+    res.send({ jwt: req.session?.jwt ?? null });
+  },
+});
+
+export default withIronSessionApiRoute(handler, ironOption);

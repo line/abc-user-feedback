@@ -13,17 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { withIronSessionApiRoute } from 'iron-session/next';
-
-import { ironOption } from '@/constants/iron-option';
-import { createNextApiHandler } from '@/server/api-handler';
-
-const handler = createNextApiHandler({
-  GET: async (req, res) => {
-    req.session.destroy();
-    await req.session.save();
-    res.send({ ok: true });
-  },
-});
-
-export default withIronSessionApiRoute(handler, ironOption);
+const withIronSessionApiRoute = (handler: any) => handler;
+export { withIronSessionApiRoute };

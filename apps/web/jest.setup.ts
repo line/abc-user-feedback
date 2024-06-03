@@ -53,4 +53,14 @@ jest.mock('next/router', () => ({
   useRouter: () => nextRouterMock,
 }));
 
+jest.mock('@t3-oss/env-nextjs', () => ({
+  createEnv: () => ({
+    API_BASE_URL: process.env.API_BASE_URL,
+    SESSION_PASSWORD: process.env.SESSION_PASSWORD,
+    NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
+    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    NODE_ENV: process.env.NODE_ENV,
+  }),
+}));
+
 faker.seed(100);

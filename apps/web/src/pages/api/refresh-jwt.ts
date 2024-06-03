@@ -19,32 +19,39 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
+import { createNextApiHandler } from '@/server/api-handler';
 
-export default withIronSessionApiRoute(async (req, res) => {
-  const { jwt } = req.session;
-  if (!jwt) return res.status(400).end();
+const handler = createNextApiHandler({
+  POST: async (req, res) => {
+    const { jwt } = req.session;
+    if (!jwt) return res.status(400).end();
 
-  try {
-    const response = await axios.get(
-      `${env.API_BASE_URL}/api/admin/auth/refresh`,
-      { headers: { Authorization: `Bearer ${jwt?.refreshToken}` } },
-    );
+    try {
+      const { status, data } = await axios.get(
+        `${env.API_BASE_URL}/api/admin/auth/refresh`,
+        { headers: { Authorization: `Bearer ${jwt?.refreshToken}` } },
+      );
 
-    if (response.status !== 200) {
-      return res.status(response.status).send(response.data);
+      if (status !== 200) {
+        return res.status(status).send(data);
+      }
+
+      req.session.jwt = data;
+      await req.session.save();
+      return res.send(data);
+    } catch (error) {
+      getLogger('/api/refrech-jwt').error(error);
+      if (error instanceof TypeError) {
+        return res
+          .status(500)
+          .send({ message: error.message, code: error.name });
+      } else if (error instanceof AxiosError && error.response) {
+        const { status, data } = error.response;
+        return res.status(status).send(data);
+      }
+      return res.status(500).send({ message: 'Unknown Error' });
     }
+  },
+});
 
-    req.session.jwt = response.data;
-    await req.session.save();
-    return res.send({ jwt: response.data });
-  } catch (error) {
-    getLogger('/api/refrech-jwt').error(error);
-    if (error instanceof TypeError) {
-      return res.status(500).send({ message: error.message, code: error.name });
-    } else if (error instanceof AxiosError && error.response) {
-      const { status, data } = error.response;
-      return res.status(status).send(data);
-    }
-    return res.status(500).send({ message: 'Unknown Error' });
-  }
-}, ironOption);
+export default withIronSessionApiRoute(handler, ironOption);
