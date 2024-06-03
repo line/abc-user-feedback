@@ -55,7 +55,7 @@ services:
 
   # optional for better performance on searching feedbacks
   opensearch-node:
-    image: opensearchproject/opensearch:2.4.1
+    image: opensearchproject/opensearch:2.14.0
     restart: always
     container_name: opensearch-node
     environment:
