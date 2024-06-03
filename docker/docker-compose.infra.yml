@@ -82,7 +82,7 @@ services:
 
   # optional for opensearch
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:2.4.1
+    image: opensearchproject/opensearch-dashboards:2.14.0
     restart: always
     container_name: opensearch-dashboards
     ports:
