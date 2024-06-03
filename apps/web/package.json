@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "clean": "git clean -xdf .next .turbo node_modules",
+    "clean": "git clean -xdf .next .turbo node_modules coverage .swc",
     "dev": "next dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --write --list-different \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",

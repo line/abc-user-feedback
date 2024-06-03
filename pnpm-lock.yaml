@@ -508,9 +508,6 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
-      rimraf:
-        specifier: ^5.0.5
-        version: 5.0.7
       tsup:
         specifier: ^8.0.2
         version: 8.0.2(typescript@5.4.5)
@@ -611,9 +608,6 @@ importers:
       jest-environment-jsdom:
         specifier: ^29.7.0
         version: 29.7.0
-      rimraf:
-        specifier: ^5.0.5
-        version: 5.0.7
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.3
@@ -660,9 +654,6 @@ importers:
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
-      rimraf:
-        specifier: ^5.0.5
-        version: 5.0.7
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -687,9 +678,6 @@ importers:
       '@ufb/tsconfig':
         specifier: workspace:*
         version: link:../typescript
-      rimraf:
-        specifier: ^5.0.5
-        version: 5.0.7
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
@@ -11267,7 +11255,7 @@ packages:
     dependencies:
       config-chain: 1.1.13
       editorconfig: 1.0.4
-      glob: 10.3.10
+      glob: 10.4.1
       js-cookie: 3.0.5
       nopt: 7.2.0
     dev: false
@@ -12027,7 +12015,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.24.6
       chokidar: 3.6.0
-      glob: 10.3.10
+      glob: 10.4.1
       html-minifier: 4.0.0
       js-beautify: 1.15.1
       lodash: 4.17.21
@@ -14390,14 +14378,6 @@ packages:
     hasBin: true
     dependencies:
       glob: 9.3.5
-    dev: true
-
-  /rimraf@5.0.7:
-    resolution: {integrity: sha512-nV6YcJo5wbLW77m+8KjH8aB/7/rxQy9SZ0HY5shnwULfS+9nmTtVXAJET5NdZmCzA4fPI/Hm1wo/Po/4mopOdg==}
-    engines: {node: '>=14.18'}
-    hasBin: true
-    dependencies:
-      glob: 10.4.1
     dev: true
 
   /rollup@4.16.2:
