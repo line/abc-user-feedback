@@ -13,6 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ShareButton } from './ShareButton';
-export { default as CreateChannelButton } from './CreateChannelButton';
-export { default as CreateProjectButton } from './CreateProjectButton';
+interface IProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+const SectionTemplate: React.FC<IProps> = ({ children, title }) => {
+  return (
+    <section>
+      <h1 className="font-20-bold mb-4">{title}</h1>
+      {children}
+    </section>
+  );
+};
+
+export default SectionTemplate;

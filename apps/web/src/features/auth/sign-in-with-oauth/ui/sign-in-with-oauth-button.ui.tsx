@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
@@ -29,11 +28,7 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
   const router = useRouter();
   const tenant = useTenantState();
 
-  const callback_url = useMemo(
-    () =>
-      router.query.callback_url ? (router.query.callback_url as string) : '',
-    [router.query],
-  );
+  const callback_url = (router.query.callback_url ?? '') as string;
 
   const { data } = useOAIQuery({
     path: '/api/admin/auth/signIn/oauth/loginURL',
@@ -45,6 +40,7 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
     <button
       type="button"
       className="btn btn-lg btn-blue"
+      disabled={!data?.url}
       onClick={() => router.push(data?.url ?? '')}
     >
       OAuth2.0 {t('button.sign-in')}

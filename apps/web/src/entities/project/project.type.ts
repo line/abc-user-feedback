@@ -13,6 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ShareButton } from './ShareButton';
-export { default as CreateChannelButton } from './CreateChannelButton';
-export { default as CreateProjectButton } from './CreateProjectButton';
+import type { TimezoneInfo } from '@/types/timezone-info';
+
+export type Project = {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  timezone: TimezoneInfo;
+};

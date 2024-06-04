@@ -14,13 +14,41 @@
  * under the License.
  */
 
+import { faker } from '@faker-js/faker';
+import userEvent from '@testing-library/user-event';
+import mockRouter from 'next-router-mock';
+import { act } from 'react-dom/test-utils';
+
+import type { Tenant } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
+
 import SignInWithOAuthButton from './sign-in-with-oauth-button.ui';
 
-import { render } from '@/utils/test-utils';
+import { simpleMockHttp } from '@/msw';
+import { render, screen, waitFor } from '@/utils/test-utils';
 
 describe('SignInWithOAuthButton', () => {
   test('match snapshot', () => {
     const component = render(<SignInWithOAuthButton />);
     expect(component.container).toMatchSnapshot();
+  });
+  test('loginUrl', async () => {
+    useTenantStore.setState({ state: { useOAuth: true } as Tenant });
+    const pathname = `/${Array.from({
+      length: faker.number.int({ min: 1, max: 5 }),
+    })
+      .map(() => faker.string.alphanumeric({ length: { min: 1, max: 5 } }))
+      .join('/')}`;
+
+    simpleMockHttp('get', '/api/admin/auth/signIn/oauth/loginURL', 200, {
+      url: pathname,
+    });
+
+    render(<SignInWithOAuthButton />);
+
+    await waitFor(() => expect(screen.getByRole('button')).not.toBeDisabled());
+    await act(() => userEvent.click(screen.getByRole('button')));
+
+    expect(mockRouter).toMatchObject({ asPath: pathname });
   });
 });

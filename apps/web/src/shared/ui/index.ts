@@ -16,3 +16,6 @@
 export { default as Logo } from './logo.ui';
 export { default as LocaleSelectBox } from './locale-select-box.ui';
 export { default as LogoWithTitle } from './logo-with-title.ui';
+
+export { default as SectionTemplate } from './section-template.ui';
+export { default as MainCard } from './main-card.ui';

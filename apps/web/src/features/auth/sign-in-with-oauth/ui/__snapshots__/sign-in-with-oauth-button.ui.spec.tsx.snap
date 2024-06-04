@@ -4,6 +4,7 @@ exports[`SignInWithOAuthButton match snapshot 1`] = `
 <div>
   <button
     class="btn btn-lg btn-blue"
+    disabled=""
     type="button"
   >
     OAuth2.0 

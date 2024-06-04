@@ -16,38 +16,42 @@
 import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { SectionTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { ProjectCard } from '@/entities/project';
+import { TenantCard, useTenantState } from '@/entities/tenant';
+import { CreateProjectButton } from '@/features/create-project';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { CreateProjectButton } from '@/containers/buttons';
-import { ProjectCard, TenantCard } from '@/containers/main';
-import { useProjects } from '@/hooks';
-
-const CARD_BORDER_CSS =
-  'border-fill-tertiary h-[204px] w-[452px] rounded border';
+import { useOAIQuery } from '@/hooks';
 
 const MainIndexPage: NextPageWithLayout = () => {
-  const { data } = useProjects();
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000, page: 1 },
+  });
+  const tenant = useTenantState();
 
   return (
-    <div className="mx-4 my-2">
-      <h1 className="font-20-bold mb-4">Tenant</h1>
-      <div className="flex flex-wrap gap-2">
-        <TenantCard />
-      </div>
-      <h1 className="font-20-bold my-6 mb-4">Project</h1>
-      <div className="flex flex-wrap gap-2">
-        {data?.items.map(({ id }) => <ProjectCard key={id} projectId={id} />)}
-        <div
-          className={[
-            CARD_BORDER_CSS,
-            'flex flex-col items-center justify-center',
-          ].join(' ')}
-        >
-          <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
+    <div className="mx-4 my-2 flex flex-col gap-8">
+      <SectionTemplate title="Tenant">
+        {tenant && <TenantCard tenant={tenant} />}
+      </SectionTemplate>
+      <SectionTemplate title="Project">
+        <div className="flex flex-wrap gap-4">
+          {data?.items.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
+          <div
+            className={
+              'border-fill-tertiary flex h-[204px] w-[452px] flex-col items-center justify-center rounded border'
+            }
+          >
+            <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
+          </div>
         </div>
-      </div>
+      </SectionTemplate>
     </div>
   );
 };

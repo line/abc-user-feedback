@@ -14,13 +14,12 @@
  * under the License.
  */
 
+import { faker } from '@faker-js/faker';
 import nextRouterMock from 'next-router-mock';
 
 import { server } from './src/msw';
 
 import '@testing-library/jest-dom';
-
-import { faker } from '@faker-js/faker';
 
 Object.defineProperty(window, 'matchMedia', {
   writable: true,

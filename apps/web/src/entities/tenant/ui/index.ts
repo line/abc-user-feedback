@@ -14,3 +14,4 @@
  * under the License.
  */
 export { TenantGuard } from './tenant-guard.ui';
+export { default as TenantCard } from './tenant-card.ui';

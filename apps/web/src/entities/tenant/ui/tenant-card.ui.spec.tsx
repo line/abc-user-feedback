@@ -13,4 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './OAuthLoginButton';
+describe('TenantCard', () => {
+  test('snapshot', async () => {
+    expect(2).toBe(2);
+  });
+});

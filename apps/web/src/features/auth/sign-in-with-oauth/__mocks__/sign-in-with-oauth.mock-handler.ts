@@ -13,23 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { env } from 'process';
+import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
-import { setupServer } from 'msw/node';
 
-import { signInWithOAuthMockHandlers } from './features/auth/sign-in-with-oauth/__mocks__/sign-in-with-oauth.mock-handler';
-import type { OAIMethodPathKeys, OAIMethods } from './types/openapi.type';
+import { env } from '@/env.mjs';
 
-export const server = setupServer(...signInWithOAuthMockHandlers);
-
-export const simpleMockHttp = <M extends OAIMethods>(
-  method: M,
-  path: OAIMethodPathKeys<M>,
-  status: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 500 = 200,
-  body: Record<string, unknown> = {},
-) =>
-  server.use(
-    http[method](`${env.NEXT_PUBLIC_API_BASE_URL}${path}`, () =>
-      HttpResponse.json(body, { status }),
-    ),
-  );
+export const signInWithOAuthMockHandlers = [
+  http.get(
+    `${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/auth/signIn/oauth/loginURL`,
+    () => {
+      return HttpResponse.json({ url: faker.internet.url() }, { status: 200 });
+    },
+  ),
+];
