@@ -295,8 +295,8 @@ importers:
         specifier: 5.0.0-beta.40
         version: 5.0.0-beta.40(@types/react@18.3.3)(react-dom@18.3.1)(react@18.3.1)
       '@t3-oss/env-nextjs':
-        specifier: ^0.7.3
-        version: 0.7.3(typescript@5.4.5)(zod@3.23.8)
+        specifier: ^0.10.0
+        version: 0.10.1(typescript@5.4.5)(zod@3.23.8)
       '@tanstack/react-query':
         specifier: ^5.31.0
         version: 5.40.1(react@18.3.1)
@@ -5648,10 +5648,10 @@ packages:
     dependencies:
       '@swc/counter': 0.1.3
 
-  /@t3-oss/env-core@0.7.3(typescript@5.4.5)(zod@3.23.8):
-    resolution: {integrity: sha512-hhtj59TKC6TKVdwJ0CcbKsvkr9R8Pc/SNKd4IgGUIC9T9X6moB8EZZ3FTJdABA/h9UABCK4J+KsF8gzmvMvHPg==}
+  /@t3-oss/env-core@0.10.1(typescript@5.4.5)(zod@3.23.8):
+    resolution: {integrity: sha512-GcKZiCfWks5CTxhezn9k5zWX3sMDIYf6Kaxy2Gx9YEQftFcz8hDRN56hcbylyAO3t4jQnQ5ifLawINsNgCDpOg==}
     peerDependencies:
-      typescript: '>=4.7.2'
+      typescript: '>=5.0.0'
       zod: ^3.0.0
     peerDependenciesMeta:
       typescript:
@@ -5661,16 +5661,16 @@ packages:
       zod: 3.23.8
     dev: false
 
-  /@t3-oss/env-nextjs@0.7.3(typescript@5.4.5)(zod@3.23.8):
-    resolution: {integrity: sha512-90TNffS17vjkQwfYyMUb4Zw9yqHwFV40f78qFug4JiQa5+N6DydTdlLOpzOcj8Cna/qpAVDwMSypofF/TVQDuA==}
+  /@t3-oss/env-nextjs@0.10.1(typescript@5.4.5)(zod@3.23.8):
+    resolution: {integrity: sha512-iy2qqJLnFh1RjEWno2ZeyTu0ufomkXruUsOZludzDIroUabVvHsrSjtkHqwHp1/pgPUzN3yBRHMILW162X7x2Q==}
     peerDependencies:
-      typescript: '>=4.7.2'
+      typescript: '>=5.0.0'
       zod: ^3.0.0
     peerDependenciesMeta:
       typescript:
         optional: true
     dependencies:
-      '@t3-oss/env-core': 0.7.3(typescript@5.4.5)(zod@3.23.8)
+      '@t3-oss/env-core': 0.10.1(typescript@5.4.5)(zod@3.23.8)
       typescript: 5.4.5
       zod: 3.23.8
     dev: false
@@ -14785,7 +14785,7 @@ packages:
       queue-tick: 1.0.1
       text-decoder: 1.1.0
     optionalDependencies:
-      bare-events: 2.2.2
+      bare-events: 2.3.1
     dev: false
     optional: true
 
