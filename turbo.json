@@ -1,47 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "experimentalUI": true,
   "globalDependencies": ["**/.env"],
-  "pipeline": {
-    "topo": {
-      "dependsOn": ["^topo"]
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "next-env.d.ts", "!.next/cache/**"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true
-    },
-    "web#dev": {
-      "dependsOn": ["@ufb/tailwind#build", "@ufb/shared#build"]
-    },
-    "api#dev": {
-      "dependsOn": ["@ufb/shared#build"]
-    },
-    "format": {
-      "outputs": ["node_modules/.cache/.prettiercache"],
-      "outputMode": "new-only"
-    },
-    "lint": {
-      "dependsOn": ["^topo", "^build"],
-      "outputs": ["node_modules/.cache/.eslintcache"]
-    },
-    "typecheck": {
-      "dependsOn": ["^topo", "^build"],
-      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
-    },
-    "test": {
-      "dependsOn": ["^topo", "^build"]
-    },
-    "clean": {
-      "cache": false
-    },
-    "//#clean": {
-      "cache": false
-    }
-  },
   "globalEnv": [
     "NODE_ENV",
     "SESSION_PASSWORD",
@@ -67,5 +26,45 @@
     "MASTER_API_KEY",
     "BASE_URL",
     "NEXT_PUBLIC_MAX_DAYS"
-  ]
+  ],
+  "tasks": {
+    "topo": {
+      "dependsOn": ["^topo"]
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "next-env.d.ts", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "web#dev": {
+      "dependsOn": ["@ufb/tailwind#build", "@ufb/shared#build"]
+    },
+    "api#dev": {
+      "dependsOn": ["@ufb/shared#build"]
+    },
+    "format": {
+      "outputs": ["node_modules/.cache/.prettiercache"],
+      "outputLogs": "new-only"
+    },
+    "lint": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": ["node_modules/.cache/.eslintcache"]
+    },
+    "typecheck": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": ["node_modules/.cache/tsbuildinfo.json"]
+    },
+    "test": {
+      "dependsOn": ["^topo", "^build"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "//#clean": {
+      "cache": false
+    }
+  }
 }
