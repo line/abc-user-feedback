@@ -25,10 +25,10 @@ importers:
     dependencies:
       '@aws-sdk/client-s3':
         specifier: ^3.556.0
-        version: 3.590.0
+        version: 3.591.0
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.556.0
-        version: 3.590.0
+        version: 3.591.0
       '@fastify/multipart':
         specifier: ^8.2.0
         version: 8.2.0
@@ -826,8 +826,8 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@aws-sdk/client-s3@3.590.0:
-    resolution: {integrity: sha512-so+pNua0ihsHaSdskw8HCwruoYTAfYSEs3ix4GD1++83C96KaJp3udAutYiCA+84JXg9zitFa7eK7ORJAVZmTw==}
+  /@aws-sdk/client-s3@3.591.0:
+    resolution: {integrity: sha512-YmMQpOdBak+0OZh0LfbK+3u1MA0csAok9yDP5/tD1am7hCg1+zPimHSmpjLBHoKELVpsW5QRuBdCi0dn95uxmg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 3.0.0
@@ -1293,8 +1293,8 @@ packages:
       tslib: 2.6.3
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.590.0:
-    resolution: {integrity: sha512-bb8NEG2IUHqFQJsLzr1nlkTZYyokeo3bGbHwMBKZHbdF+OXrQx0kQUcaDCXYWmeydSfHXxweQEJ2U5i1YEvT/A==}
+  /@aws-sdk/s3-request-presigner@3.591.0:
+    resolution: {integrity: sha512-MDkPKrVC63XxED/vaWa2xkBfUPwKXqP/nVg4TUdjlUCIlP+xSouAYxkQ1aclinCbx8+E932C9kf4kNRQIxhafA==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.587.0
@@ -4675,14 +4675,14 @@ packages:
     dependencies:
       asn1js: 3.0.5
       pvtsutils: 1.3.5
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: false
 
   /@peculiar/json-schema@1.1.12:
     resolution: {integrity: sha512-coUfuoMeIB7B8/NMekxaDzLhaYmp0HZNPEjYRm9goRou8UZIC3z21s0sL9AWoCw4EG876QyO3kYrc61WNF9B/w==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: false
 
   /@peculiar/webcrypto@1.4.6:
@@ -4692,7 +4692,7 @@ packages:
       '@peculiar/asn1-schema': 2.3.8
       '@peculiar/json-schema': 1.1.12
       pvtsutils: 1.3.5
-      tslib: 2.6.2
+      tslib: 2.6.3
       webcrypto-core: 1.7.9
     dev: false
 
@@ -6987,7 +6987,7 @@ packages:
     dependencies:
       pvtsutils: 1.3.5
       pvutils: 1.1.3
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: false
 
   /assert-never@1.2.1:
@@ -13751,7 +13751,7 @@ packages:
   /pvtsutils@1.3.5:
     resolution: {integrity: sha512-ARvb14YB9Nm2Xi6nBq1ZX6dAM0FsJnuk+31aUp4TrcZEdKUlSqOqsxJHUPJDNE3qiIp+iUPEIeR6Je/tgV7zsA==}
     dependencies:
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: false
 
   /pvutils@1.1.3:
@@ -16150,7 +16150,7 @@ packages:
       '@peculiar/json-schema': 1.1.12
       asn1js: 3.0.5
       pvtsutils: 1.3.5
-      tslib: 2.6.2
+      tslib: 2.6.3
     dev: false
 
   /webidl-conversions@3.0.1:
