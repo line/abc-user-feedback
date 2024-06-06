@@ -91,7 +91,7 @@ importers:
         version: 6.0.0(@nestjs/common@10.3.8)(prom-client@15.1.2)
       aws-sdk:
         specifier: ^2.1604.0
-        version: 2.1604.0
+        version: 2.1635.0
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -7048,8 +7048,8 @@ packages:
       - supports-color
     dev: false
 
-  /aws-sdk@2.1604.0:
-    resolution: {integrity: sha512-JSXNwKylbSZR2AL/jczOGJmPCZ/QpTys6SP89rhgy5LN677PJ6weQx5ShpPfGIcczGXjAeJDm8faWT53fYPCCw==}
+  /aws-sdk@2.1635.0:
+    resolution: {integrity: sha512-zab4y8ftjgcctYao33c1fr8Yx1wMuRlEbZT7hwEXcK8Ta3+LAEXJs1wKjPpium+KUwl6zw7wxhaIdEibiz6InA==}
     engines: {node: '>= 10.0.0'}
     requiresBuild: true
     dependencies:
