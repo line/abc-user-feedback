@@ -88,7 +88,7 @@ importers:
         version: link:../../packages/ufb-shared
       '@willsoto/nestjs-prometheus':
         specifier: ^6.0.0
-        version: 6.0.0(@nestjs/common@10.3.8)(prom-client@15.1.2)
+        version: 6.0.1(@nestjs/common@10.3.8)(prom-client@15.1.2)
       aws-sdk:
         specifier: ^2.1604.0
         version: 2.1635.0
@@ -6557,8 +6557,8 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
-  /@willsoto/nestjs-prometheus@6.0.0(@nestjs/common@10.3.8)(prom-client@15.1.2):
-    resolution: {integrity: sha512-Krmda5CT9xDPjab8Eqdqiwi7xkZSX60A5rEGVLEDjUG6J6Rw5SCZ/BPaRk+MxNGWzUrRkM7K5FtTg38vWIOt1Q==}
+  /@willsoto/nestjs-prometheus@6.0.1(@nestjs/common@10.3.8)(prom-client@15.1.2):
+    resolution: {integrity: sha512-4N3N6/EE9Qxyo/efOmj5XIQPLjCaYEtFcSvs4OM6hRFoxEWa96adGkoQnzYGsJ6GM+txMCx+w6NfOEOxLjlzPQ==}
     peerDependencies:
       '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
       prom-client: ^15.0.0
