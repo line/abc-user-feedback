@@ -31,7 +31,7 @@ importers:
         version: 3.592.0
       '@fastify/multipart':
         specifier: ^8.2.0
-        version: 8.2.0
+        version: 8.3.0
       '@fastify/static':
         specifier: ^7.0.3
         version: 7.0.4
@@ -3422,8 +3422,8 @@ packages:
       reusify: 1.0.4
     dev: false
 
-  /@fastify/multipart@8.2.0:
-    resolution: {integrity: sha512-OZ8nsyyoS2TV7Yeu3ZdrdDGsKUTAbfjrKC9jSxGgT2qdgek+BxpWX31ZubTrWMNZyU5xwk4ox6AvTjAbYWjrWg==}
+  /@fastify/multipart@8.3.0:
+    resolution: {integrity: sha512-A8h80TTyqUzaMVH0Cr9Qcm6RxSkVqmhK/MVBYHYeRRSUbUYv08WecjWKSlG2aSnD4aGI841pVxAjC+G1GafUeQ==}
     dependencies:
       '@fastify/busboy': 2.1.1
       '@fastify/deepmerge': 1.3.0
