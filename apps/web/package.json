@@ -75,7 +75,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
-    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-commonjs": "^26.0.0",
     "@svgr/webpack": "^8.1.0",
     "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.36",
