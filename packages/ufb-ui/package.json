@@ -28,7 +28,7 @@
     "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.36",
     "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^14.3.1",
+    "@testing-library/react": "^16.0.0",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@ufb/eslint-config": "workspace:*",
