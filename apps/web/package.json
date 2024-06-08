@@ -35,7 +35,7 @@
     "@headlessui/tailwindcss": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@mui/base": "5.0.0-beta.40",
-    "@t3-oss/env-nextjs": "^0.7.3",
+    "@t3-oss/env-nextjs": "^0.10.0",
     "@tanstack/react-query": "^5.31.0",
     "@tanstack/react-table": "^8.16.0",
     "@ufb/shared": "workspace:*",
