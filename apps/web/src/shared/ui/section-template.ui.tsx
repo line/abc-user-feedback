@@ -13,15 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface IProps {
-  title: string;
+interface IProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'title' | 'children'> {
+  title: React.ReactNode;
   children: React.ReactNode;
 }
 
-const SectionTemplate: React.FC<IProps> = ({ children, title }) => {
+const SectionTemplate: React.FC<IProps> = ({ children, title, ...props }) => {
   return (
-    <section>
-      <h1 className="font-20-bold mb-4">{title}</h1>
+    <section {...props}>
+      <h1 className="font-24-bold mb-4">{title}</h1>
       {children}
     </section>
   );

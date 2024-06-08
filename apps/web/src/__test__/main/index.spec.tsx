@@ -13,11 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Tenant } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
+
+import { simpleMockHttp } from '@/msw';
 import MainIndexPage from '@/pages/main';
 import { render } from '@/utils/test-utils';
 
 describe('MainIndexPage', () => {
   test('should render without crashing', async () => {
-    render(<MainIndexPage />);
+    useTenantStore.setState({ state: {} as Tenant });
+    simpleMockHttp('get', '/api/admin/projects', 200);
+    const page = MainIndexPage.getLayout!(<MainIndexPage />);
+    render(<>{page}</>);
   });
 });

@@ -48,7 +48,7 @@ const MainLayout: React.FC<IProps> = (props) => {
           <ThemeToggleButton />
         </div>
       </header>
-      <main
+      <div
         className={clsx({
           'bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-4':
             center,
@@ -56,8 +56,8 @@ const MainLayout: React.FC<IProps> = (props) => {
         })}
       >
         {Path.hasSideNav(router.pathname) && <SideNav />}
-        <div className="w-full px-4 py-6">{children}</div>
-      </main>
+        <main className="mx-4 my-6 w-full">{children}</main>
+      </div>
       {hasFooter && (
         <footer className="font-14-bold text-secondary absolute bottom-[7%] left-1/2 z-10 -translate-x-1/2">
           © ABC Studio All rights reserved

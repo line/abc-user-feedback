@@ -18,68 +18,66 @@ import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
-
+import { SectionTemplate, SubMenu } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useUserState } from '@/entities/user';
+import { DeleteAccountButton } from '@/features/delete-user';
+import { ChangePasswordForm, UserProfileForm } from '@/features/update-user';
 import { MainLayout } from '@/widgets';
 
 import { DescriptionTooltip } from '@/components';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import ChangePasswordForm from '@/containers/my-profile/ChangePasswordForm';
-import MyProfileForm from '@/containers/my-profile/MyProfileForm';
 
-const menuItems = [
+const MENU_ITEMS = [
   { key: 'profile-info', iconName: 'InfoCircleFill' },
   { key: 'change-password', iconName: 'LockFill' },
 ] as const;
 
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
+
   const user = useUserState();
-  const [tabIndex, setTabIndex] = useState<'profile-info' | 'change-password'>(
-    menuItems[0].key,
+
+  const [tabKey, setTabKey] = useState<(typeof MENU_ITEMS)[number]['key']>(
+    MENU_ITEMS[0].key,
   );
 
   return (
-    <>
-      <h1 className="font-24-bold mb-4">
-        {t('main.profile.title')}
-        <DescriptionTooltip description="Profile Description" />
-      </h1>
-      <div className="flex h-[calc(100vh-144px)] items-stretch gap-4">
+    <SectionTemplate
+      className="flex h-full flex-col"
+      title={
+        <>
+          {t('main.profile.title')}
+          <DescriptionTooltip description="Profile Description" />
+        </>
+      }
+    >
+      <div className="flex flex-1 items-stretch gap-4">
         <div className="border-fill-tertiary w-[400px] rounded border p-6">
-          <ul className="space-y-2">
-            {menuItems.map(({ key, iconName }) => {
-              const isDisabled =
-                user?.signUpMethod === 'OAUTH' && key === 'change-password';
-              return (
-                <li
-                  key={key}
-                  onClick={() => !isDisabled && setTabIndex(key)}
-                  className={[
-                    'mx-1 flex items-center gap-2 rounded p-2',
-                    tabIndex === key ? 'bg-fill-tertiary' : '',
-                    isDisabled ?
-                      'text-tertiary cursor-not-allowed'
-                    : 'hover:bg-fill-secondary cursor-pointer',
-                  ].join(' ')}
-                >
-                  <Icon name={iconName} size={20} />
-                  <span className="font-12-regular">
-                    {t(`main.profile.${key}`)}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
+          <SubMenu
+            items={MENU_ITEMS.map(({ key, iconName }) => ({
+              iconName,
+              name: t(`main.profile.${key}`),
+              active: tabKey === key,
+              onClick: () => setTabKey(key),
+              disabled:
+                key === 'change-password' && user?.signUpMethod === 'OAUTH',
+            }))}
+          />
         </div>
         <div className="border-fill-tertiary flex-1 rounded border p-6">
-          {tabIndex === menuItems[0].key && <MyProfileForm />}
-          {tabIndex === menuItems[1].key && <ChangePasswordForm />}
+          {tabKey === MENU_ITEMS[0].key && user && (
+            <>
+              <UserProfileForm user={user} />
+              <div className="mt-6 flex justify-end">
+                <DeleteAccountButton user={user} />
+              </div>
+            </>
+          )}
+          {tabKey === MENU_ITEMS[1].key && <ChangePasswordForm />}
         </div>
       </div>
-    </>
+    </SectionTemplate>
   );
 };
 
