@@ -200,7 +200,7 @@ importers:
         version: 10.3.8(@nestjs/common@10.3.8)(@nestjs/core@10.3.8)(@nestjs/platform-express@10.3.8)
       '@swc-node/jest':
         specifier: ^1.8.0
-        version: 1.8.1(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5)
+        version: 1.8.2(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5)
       '@swc/core':
         specifier: ^1.4.16
         version: 1.5.25(@swc/helpers@0.5.11)
@@ -5734,8 +5734,8 @@ packages:
       '@swc/types': 0.1.7
     dev: true
 
-  /@swc-node/jest@1.8.1(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5):
-    resolution: {integrity: sha512-U+v64MBgSMrhMXObQQMa4kfhXoNCSudicfofK5jk7YGA6woaFECfdv1MZJmbYReqnQVOQkUC4aZn1PjS3rWDMQ==}
+  /@swc-node/jest@1.8.2(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5):
+    resolution: {integrity: sha512-IkPPdlI2gqHOM1jQDtlRUx1pvVuGYvEJ3NPBbp/sHa31ZlugldK/G9acIzmKgc17ff7kj0fPB8Nw3TkDVnInTg==}
     peerDependencies:
       '@swc/core': '>= 1.4.13'
       '@swc/types': '>= 0.1'
@@ -5743,7 +5743,7 @@ packages:
     dependencies:
       '@node-rs/xxhash': 1.7.3
       '@swc-node/core': 1.13.1(@swc/core@1.5.25)(@swc/types@0.1.7)
-      '@swc-node/register': 1.9.1(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5)
+      '@swc-node/register': 1.9.2(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5)
       '@swc/core': 1.5.25(@swc/helpers@0.5.11)
       '@swc/types': 0.1.7
       typescript: 5.4.5
@@ -5751,8 +5751,8 @@ packages:
       - supports-color
     dev: true
 
-  /@swc-node/register@1.9.1(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5):
-    resolution: {integrity: sha512-z//TBXJdRWXoISCXlQmVz+NMm8Qm/UvcfKiGC0tSJdfeVYf5EZkGqvk2OiRH4SIJ6OGFfS9T0YrvA2pDKzWtPA==}
+  /@swc-node/register@1.9.2(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.4.5):
+    resolution: {integrity: sha512-BBjg0QNuEEmJSoU/++JOXhrjWdu3PTyYeJWsvchsI0Aqtj8ICkz/DqlwtXbmZVZ5vuDPpTfFlwDBZe81zgShMA==}
     peerDependencies:
       '@swc/core': '>= 1.4.13'
       typescript: '>= 4.3'
@@ -5763,7 +5763,7 @@ packages:
       colorette: 2.0.20
       debug: 4.3.5
       pirates: 4.0.6
-      tslib: 2.6.2
+      tslib: 2.6.3
       typescript: 5.4.5
     transitivePeerDependencies:
       - '@swc/types'
