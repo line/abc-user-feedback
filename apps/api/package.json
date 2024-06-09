@@ -63,7 +63,7 @@
     "magic-bytes.js": "^1.10.0",
     "mysql2": "^3.9.7",
     "nestjs-cls": "^3.6.0",
-    "nestjs-pino": "^3.5.0",
+    "nestjs-pino": "^4.0.0",
     "nestjs-typeorm-paginate": "^4.0.4",
     "nodemailer": "^6.9.13",
     "passport": "^0.7.0",
