@@ -150,7 +150,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         </div>
       </PopoverTrigger>
       <PopoverContent isPortal className="bg-tertiary">
-        <div className="border-fill-secondary  flex border-b">
+        <div className="border-fill-secondary flex border-b">
           <ul className="border-fill-secondary border-r p-2">
             {(options ?? items).map(({ label, startDate, endDate }, index) => (
               <li
