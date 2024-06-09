@@ -55,7 +55,7 @@
     "iron-session": "^6.3.1",
     "jwt-decode": "^4.0.0",
     "next": "^14.2.2",
-    "next-i18next": "^14.0.3",
+    "next-i18next": "^15.0.0",
     "nuqs": "^1.17.4",
     "pino": "^8.20.0",
     "react": "^18.2.0",
