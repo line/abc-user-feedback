@@ -135,8 +135,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.8(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)
       nestjs-pino:
-        specifier: ^3.5.0
-        version: 3.5.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@8.6.1)
+        specifier: ^4.0.0
+        version: 4.1.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@8.6.1)
       nestjs-typeorm-paginate:
         specifier: ^4.0.4
         version: 4.0.4(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(typeorm@0.3.20(mysql2@3.10.0)(ts-node@10.9.2(@swc/core@1.5.25(@swc/helpers@0.5.11))(@types/node@20.14.2)(typescript@5.4.5)))
@@ -6733,12 +6733,12 @@ packages:
       reflect-metadata: '*'
       rxjs: '>= 7'
 
-  nestjs-pino@3.5.0:
-    resolution: {integrity: sha512-IWJ3dzLVjg5istcd3Cz3rVO+gmvabfVAT1YmQgzL1HnC2hkc0H6qA6k6SZ7OIwQfewuRejYfPu3TlkxwRrqxHQ==}
+  nestjs-pino@4.1.0:
+    resolution: {integrity: sha512-I6zcddauD2TNMRbsraEIxNUvHcz0El5QRUYH5eY1+pBzj7R17U+Yoyypoc+akVdSLWJ1r0kDYAZPy2mlhXv6vw==}
     engines: {node: '>= 14'}
     peerDependencies:
       '@nestjs/common': ^8.0.0 || ^9.0.0 || ^10.0.0
-      pino-http: ^6.4.0 || ^7.0.0 || ^8.0.0
+      pino-http: ^6.4.0 || ^7.0.0 || ^8.0.0 || ^9.0.0 || ^10.0.0
 
   nestjs-typeorm-paginate@4.0.4:
     resolution: {integrity: sha512-arinWDc78wPV/EYWMmLYyeMSE5Lae1FHWD/2QpOdTmHaOVqK4PYf19EqZBqT9gbbPugkNW9JAMz3G2WmvSgR/A==}
@@ -16646,7 +16646,7 @@ snapshots:
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
 
-  nestjs-pino@3.5.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@8.6.1):
+  nestjs-pino@4.1.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@8.6.1):
     dependencies:
       '@nestjs/common': 10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       pino-http: 8.6.1
