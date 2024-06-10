@@ -136,7 +136,7 @@ importers:
         version: 3.6.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.8(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1))(reflect-metadata@0.2.2)(rxjs@7.8.1)
       nestjs-pino:
         specifier: ^4.0.0
-        version: 4.1.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@8.6.1)
+        version: 4.1.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@10.1.0)
       nestjs-typeorm-paginate:
         specifier: ^4.0.4
         version: 4.0.4(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(typeorm@0.3.20(mysql2@3.10.0)(ts-node@10.9.2(@swc/core@1.5.25(@swc/helpers@0.5.11))(@types/node@20.14.2)(typescript@5.4.5)))
@@ -156,8 +156,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       pino-http:
-        specifier: ^8.6.1
-        version: 8.6.1
+        specifier: ^10.0.0
+        version: 10.1.0
       pino-pretty:
         specifier: ^10.3.1
         version: 10.3.1
@@ -7104,8 +7104,8 @@ packages:
   pino-abstract-transport@1.2.0:
     resolution: {integrity: sha512-Guhh8EZfPCfH+PMXAb6rKOjGQEoy0xlAIn+irODG5kgfYV+BQ0rGYYWTIel3P5mmyXqkYkPmdIkywsn6QKUR1Q==}
 
-  pino-http@8.6.1:
-    resolution: {integrity: sha512-J0hiJgUExtBXP2BjrK4VB305tHXS31sCmWJ9XJo2wPkLHa1NFPuW4V9wjG27PAc2fmBCigiNhQKpvrx+kntBPA==}
+  pino-http@10.1.0:
+    resolution: {integrity: sha512-rQgRaVfmZnDcOZXvZUUkiG3wDYVTSyYWAhxkGUgw3py3Y1nFXucRSLYPB5HKgG64oy9gLiDARiQxxWXnI1u3zA==}
 
   pino-pretty@10.3.1:
     resolution: {integrity: sha512-az8JbIYeN/1iLj2t0jR9DV48/LQ3RC6hZPpapKPkb84Q+yTidMCpgWxIT3N0flnBDilyBQ1luWNpOeJptjdp/g==}
@@ -16652,10 +16652,10 @@ snapshots:
       reflect-metadata: 0.2.2
       rxjs: 7.8.1
 
-  nestjs-pino@4.1.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@8.6.1):
+  nestjs-pino@4.1.0(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(pino-http@10.1.0):
     dependencies:
       '@nestjs/common': 10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
-      pino-http: 8.6.1
+      pino-http: 10.1.0
 
   nestjs-typeorm-paginate@4.0.4(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(typeorm@0.3.20(mysql2@3.10.0)(ts-node@10.9.2(@swc/core@1.5.25(@swc/helpers@0.5.11))(@types/node@20.14.2)(typescript@5.4.5))):
     dependencies:
@@ -17036,11 +17036,11 @@ snapshots:
       readable-stream: 4.5.2
       split2: 4.2.0
 
-  pino-http@8.6.1:
+  pino-http@10.1.0:
     dependencies:
       get-caller-file: 2.0.5
-      pino: 8.20.0
-      pino-std-serializers: 6.2.2
+      pino: 9.1.0
+      pino-std-serializers: 7.0.0
       process-warning: 3.0.0
 
   pino-pretty@10.3.1:
