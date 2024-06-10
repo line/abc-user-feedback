@@ -13,13 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { withIronSessionApiRoute } from 'iron-session/next';
+import type { NextApiHandler } from 'next';
+import { getIronSession } from 'iron-session';
 
+import type { JwtSession } from '@/constants/iron-option';
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
 
-export default withIronSessionApiRoute(async (req, res) => {
+const handler: NextApiHandler = async (req, res) => {
   const { code } = req.body;
 
   try {
@@ -33,9 +35,10 @@ export default withIronSessionApiRoute(async (req, res) => {
     if (response.status !== 200) {
       return res.status(response.status).send(data);
     }
+    const session = await getIronSession<JwtSession>(req, res, ironOption);
 
-    req.session.jwt = data;
-    await req.session.save();
+    session.jwt = data;
+    await session.save();
 
     return res.send(data);
   } catch (error) {
@@ -45,4 +48,6 @@ export default withIronSessionApiRoute(async (req, res) => {
     }
     return res.status(500).send({ message: 'Unknown Error' });
   }
-}, ironOption);
+};
+
+export default handler;

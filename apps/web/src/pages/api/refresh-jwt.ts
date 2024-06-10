@@ -13,15 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { NextApiHandler } from 'next';
 import axios, { AxiosError } from 'axios';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 
+import type { JwtSession } from '@/constants/iron-option';
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
 
-export default withIronSessionApiRoute(async (req, res) => {
-  const { jwt } = req.session;
+const handler: NextApiHandler = async (req, res) => {
+  const session = await getIronSession<JwtSession>(req, res, ironOption);
+
+  const { jwt } = session;
   if (!jwt) return res.status(400).end();
 
   try {
@@ -34,8 +38,8 @@ export default withIronSessionApiRoute(async (req, res) => {
       return res.status(response.status).send(response.data);
     }
 
-    req.session.jwt = response.data;
-    await req.session.save();
+    session.jwt = response.data;
+    await session.save();
     return res.send({ jwt: response.data });
   } catch (error) {
     getLogger('/api/refrech-jwt').error(error);
@@ -47,4 +51,6 @@ export default withIronSessionApiRoute(async (req, res) => {
     }
     return res.status(500).send({ message: 'Unknown Error' });
   }
-}, ironOption);
+};
+
+export default handler;
