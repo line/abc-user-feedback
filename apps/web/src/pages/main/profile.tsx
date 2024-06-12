@@ -53,7 +53,7 @@ const ProfilePage: NextPageWithLayout = () => {
       }
     >
       <div className="flex flex-1 items-stretch gap-4">
-        <div className="border-fill-tertiary w-[400px] rounded border p-6">
+        <div className="card w-[400px]">
           <SubMenu
             items={MENU_ITEMS.map(({ key, iconName }) => ({
               iconName,
@@ -65,7 +65,7 @@ const ProfilePage: NextPageWithLayout = () => {
             }))}
           />
         </div>
-        <div className="border-fill-tertiary flex-1 rounded border p-6">
+        <div className="card flex-1">
           {tabKey === MENU_ITEMS[0].key && user && (
             <>
               <UserProfileForm user={user} />

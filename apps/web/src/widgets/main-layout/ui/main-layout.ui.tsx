@@ -14,7 +14,6 @@
  * under the License.
  */
 import { useRouter } from 'next/router';
-import clsx from 'clsx';
 
 import { LocaleSelectBox, Logo } from '@/shared';
 import { ThemeToggleButton } from '@/entities/theme';
@@ -26,12 +25,11 @@ import SideNav from './side-nav.ui';
 import { Path } from '@/constants/path';
 
 interface IProps extends React.PropsWithChildren {
-  hasFooter?: boolean;
   center?: boolean;
 }
 
 const MainLayout: React.FC<IProps> = (props) => {
-  const { children, hasFooter, center } = props;
+  const { children, center } = props;
 
   const router = useRouter();
 
@@ -48,21 +46,20 @@ const MainLayout: React.FC<IProps> = (props) => {
           <ThemeToggleButton />
         </div>
       </header>
-      <div
-        className={clsx({
-          'bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-4':
-            center,
-          'flex min-h-[calc(100vh-48px)] items-stretch': !center,
-        })}
-      >
-        {Path.hasSideNav(router.pathname) && <SideNav />}
-        <main className="mx-4 my-6 w-full">{children}</main>
-      </div>
-      {hasFooter && (
-        <footer className="font-14-bold text-secondary absolute bottom-[7%] left-1/2 z-10 -translate-x-1/2">
-          © ABC Studio All rights reserved
-        </footer>
-      )}
+      {center ?
+        <>
+          <div className="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-8">
+            {children}
+          </div>
+          <footer className="font-14-bold text-secondary absolute bottom-[7%] left-1/2 z-10 -translate-x-1/2">
+            © ABC Studio All rights reserved
+          </footer>
+        </>
+      : <div className="flex min-h-[calc(100vh-48px)] items-stretch">
+          {Path.hasSideNav(router.pathname) && <SideNav />}
+          <main className="mx-4 my-6 w-full">{children}</main>
+        </div>
+      }
     </div>
   );
 };

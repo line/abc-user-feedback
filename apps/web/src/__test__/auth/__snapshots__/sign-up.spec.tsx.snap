@@ -88,169 +88,170 @@ exports[`Sign Up Page snapshot test 1`] = `
         </button>
       </div>
     </header>
-    <main
-      class="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-4"
+    <div
+      class="bg-primary border-fill-secondary absolute left-1/2 top-1/2 min-w-[440px] -translate-x-1/2 -translate-y-1/2 rounded border p-8"
     >
       <div
-        class="w-full px-4 py-6"
+        class="relative"
       >
         <div
-          class="relative"
+          class="mb-12"
         >
           <div
-            class="mb-12"
+            class="mb-2 flex gap-0.5"
+          >
+            <img
+              alt="logo"
+              data-nimg="1"
+              decoding="async"
+              height="12"
+              loading="lazy"
+              src="/assets/images/logo.svg"
+              style="color: transparent;"
+              width="12"
+            />
+            <div
+              class="inline-block h-[12px] w-[62px]"
+              height="24"
+              width="24"
+            />
+          </div>
+          <h1
+            class="font-24-bold"
+          >
+            auth.sign-up.title
+          </h1>
+        </div>
+        <form>
+          <div
+            class="mb-12 space-y-4"
           >
             <div
-              class="mb-2 flex gap-0.5"
+              class="flex flex-col gap-2"
             >
-              <img
-                alt="logo"
-                data-nimg="1"
-                decoding="async"
-                height="12"
-                loading="lazy"
-                src="/assets/images/logo.svg"
-                style="color: transparent;"
-                width="12"
-              />
-              <div
-                class="inline-block h-[12px] w-[62px]"
-                height="24"
-                width="24"
-              />
-            </div>
-            <h1
-              class="font-24-bold"
-            >
-              auth.sign-up.title
-            </h1>
-          </div>
-          <form>
-            <div
-              class="mb-12 space-y-4"
-            >
-              <div
-                class="flex flex-col gap-2"
+              <label
+                class="input-label"
+                for="Email"
               >
-                <label
-                  class="input-label"
-                  for="Email"
+                Email
+                 
+                <span
+                  class="text-red-primary"
                 >
-                  Email
-                   
-                  <span
-                    class="text-red-primary"
-                  >
-                    *
-                  </span>
-                </label>
-                <div
-                  class="relative"
-                >
-                  <input
-                    class="input  input-lg  pr-10 "
-                    id="Email"
-                    name="email"
-                    placeholder="input.placeholder.email"
-                    required=""
-                    type="email"
-                  />
-                  <div
-                    class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                  >
-                    <button
-                      class="btn btn-secondary btn-xs btn-rounded"
-                      type="button"
-                    >
-                      auth.sign-up.button.request-auth-code
-                    </button>
-                  </div>
-                </div>
-              </div>
+                  *
+                </span>
+              </label>
               <div
-                class="flex flex-col gap-2"
+                class="relative"
               >
-                <label
-                  class="input-label"
-                  for="input.label.password"
-                >
-                  input.label.password
-                   
-                  <span
-                    class="text-red-primary"
-                  >
-                    *
-                  </span>
-                </label>
+                <input
+                  class="input  input-lg  pr-10 "
+                  id="Email"
+                  name="email"
+                  placeholder="input.placeholder.email"
+                  required=""
+                  type="email"
+                />
                 <div
-                  class="relative"
+                  class="absolute-y-center absolute right-[14px] flex items-center gap-2"
                 >
-                  <input
-                    class="input  input-lg  pr-10 "
-                    id="input.label.password"
-                    name="password"
-                    placeholder="input.placeholder.password"
-                    required=""
-                    type="password"
-                  />
-                  <div
-                    class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                  />
-                </div>
-              </div>
-              <div
-                class="flex flex-col gap-2"
-              >
-                <label
-                  class="input-label"
-                  for="input.label.confirm-password"
-                >
-                  input.label.confirm-password
-                   
-                  <span
-                    class="text-red-primary"
+                  <button
+                    class="btn btn-secondary btn-xs btn-rounded"
+                    type="button"
                   >
-                    *
-                  </span>
-                </label>
-                <div
-                  class="relative"
-                >
-                  <input
-                    class="input  input-lg  pr-10 "
-                    id="input.label.confirm-password"
-                    name="confirmPassword"
-                    placeholder="input.placeholder.confirm-password"
-                    required=""
-                    type="password"
-                  />
-                  <div
-                    class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                  />
+                    auth.sign-up.button.request-auth-code
+                  </button>
                 </div>
               </div>
             </div>
             <div
               class="flex flex-col gap-2"
             >
-              <button
-                class="btn btn-lg btn-primary"
-                disabled=""
-                type="submit"
+              <label
+                class="input-label"
+                for="input.label.password"
               >
-                button.sign-up
-              </button>
-              <button
-                class="btn btn-lg btn-secondary"
-                type="button"
+                input.label.password
+                 
+                <span
+                  class="text-red-primary"
+                >
+                  *
+                </span>
+              </label>
+              <div
+                class="relative"
               >
-                button.back
-              </button>
+                <input
+                  class="input  input-lg  pr-10 "
+                  id="input.label.password"
+                  name="password"
+                  placeholder="input.placeholder.password"
+                  required=""
+                  type="password"
+                />
+                <div
+                  class="absolute-y-center absolute right-[14px] flex items-center gap-2"
+                />
+              </div>
             </div>
-          </form>
-        </div>
+            <div
+              class="flex flex-col gap-2"
+            >
+              <label
+                class="input-label"
+                for="input.label.confirm-password"
+              >
+                input.label.confirm-password
+                 
+                <span
+                  class="text-red-primary"
+                >
+                  *
+                </span>
+              </label>
+              <div
+                class="relative"
+              >
+                <input
+                  class="input  input-lg  pr-10 "
+                  id="input.label.confirm-password"
+                  name="confirmPassword"
+                  placeholder="input.placeholder.confirm-password"
+                  required=""
+                  type="password"
+                />
+                <div
+                  class="absolute-y-center absolute right-[14px] flex items-center gap-2"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="flex flex-col gap-2"
+          >
+            <button
+              class="btn btn-lg btn-primary"
+              disabled=""
+              type="submit"
+            >
+              button.sign-up
+            </button>
+            <button
+              class="btn btn-lg btn-secondary"
+              type="button"
+            >
+              button.back
+            </button>
+          </div>
+        </form>
       </div>
-    </main>
+    </div>
+    <footer
+      class="font-14-bold text-secondary absolute bottom-[7%] left-1/2 z-10 -translate-x-1/2"
+    >
+      © ABC Studio All rights reserved
+    </footer>
   </div>
   <div
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"

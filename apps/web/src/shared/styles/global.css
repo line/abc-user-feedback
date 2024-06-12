@@ -25,6 +25,9 @@
     animation: table-loading 1s ease-out infinite;
     content: '';
   }
+  .card {
+    @apply border-fill-tertiary rounded border p-6;
+  }
 }
 
 @keyframes table-loading {

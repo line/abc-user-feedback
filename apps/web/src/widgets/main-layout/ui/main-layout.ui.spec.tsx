@@ -34,19 +34,6 @@ describe('MainLayout', () => {
     expect(container).toMatchSnapshot();
   });
 
-  test('snapshot hasFooter', () => {
-    const { container } = render(<MainLayout hasFooter />);
-    expect(container).toMatchSnapshot();
-
-    expect(
-      screen.getByText('© ABC Studio All rights reserved'),
-    ).toBeInTheDocument();
-  });
-
-  test('snapshot center footer', () => {
-    const { container } = render(<MainLayout center hasFooter />);
-    expect(container).toMatchSnapshot();
-  });
   test('snapshot with sidenav', () => {
     mockRouter.pathname = '/main/project/[projectId]';
     const { container } = render(<MainLayout />);

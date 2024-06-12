@@ -72,11 +72,7 @@ const SignInPage: NextPageWithLayout = () => {
 };
 
 SignInPage.getLayout = (page) => {
-  return (
-    <MainLayout hasFooter center>
-      {page}
-    </MainLayout>
-  );
+  return <MainLayout center>{page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
