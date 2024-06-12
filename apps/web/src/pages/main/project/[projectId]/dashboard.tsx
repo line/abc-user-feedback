@@ -75,8 +75,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 
   const dateRange = useMemo(() => {
-    const queryStr =
-      query['createdAt'] ?? DEFAULT_DATE_RANGE_STRING['createdAt'];
+    const queryStr = query.createdAt ?? DEFAULT_DATE_RANGE_STRING.createdAt;
 
     const [startDateStr, endDateStr] = queryStr.split('~');
 
@@ -141,7 +140,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     ];
   }, [t]);
 
-  if (!dateRange || !dateRange.startDate || !dateRange.endDate) return <></>;
+  if (!dateRange.startDate || !dateRange.endDate) return <></>;
 
   return (
     <div className="flex flex-col gap-6">
@@ -225,7 +224,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-interface ICardSliderProps extends React.PropsWithChildren {}
+type ICardSliderProps = React.PropsWithChildren;
 
 const CardSlider: React.FC<ICardSliderProps> = ({ children }) => {
   const containerRef = useRef<HTMLDivElement>(null);

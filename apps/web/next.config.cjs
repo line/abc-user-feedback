@@ -3,7 +3,8 @@ import './src/env.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import i18nConfig from './next-i18next.config.js';
+// import i18nConfig from './next-i18next.config.js';
+const i18nConfig = require('./next-i18next.config.js');
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -19,6 +20,7 @@ const nextConfig = {
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
   webpack(config) {
+    // @ts-ignore
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),
     );
@@ -38,7 +40,6 @@ const nextConfig = {
       },
     );
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
     return config;

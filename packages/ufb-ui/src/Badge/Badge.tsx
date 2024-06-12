@@ -13,8 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { MouseEventHandler } from 'react';
-import { useMemo } from 'react';
+import { MouseEventHandler, useMemo } from 'react';
 
 import type { IconNameType } from '../Icon';
 import { Icon } from '../Icon';

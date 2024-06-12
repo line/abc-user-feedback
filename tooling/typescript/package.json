@@ -1,9 +1,8 @@
 {
   "name": "@ufb/tsconfig",
-  "version": "0.1.0",
   "private": true,
+  "version": "0.1.0",
   "files": [
-    "react.json",
-    "nestjs.json"
+    "*.json"
   ]
 }

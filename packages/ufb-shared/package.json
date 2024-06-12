@@ -13,13 +13,6 @@
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },
   "prettier": "@ufb/prettier-config",
-  "eslintConfig": {
-    "extends": [
-      "@ufb/eslint-config/base",
-      "@ufb/eslint-config/react"
-    ],
-    "root": true
-  },
   "devDependencies": {
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
