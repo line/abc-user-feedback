@@ -35,7 +35,7 @@
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tailwind": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
-    "eslint": "^8.57.0",
+    "eslint": "^9.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "rimraf": "^5.0.5",
