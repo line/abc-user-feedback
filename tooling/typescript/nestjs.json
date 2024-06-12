@@ -11,6 +11,7 @@
     "sourceMap": true,
     "incremental": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "outDir": "./dist"
   }
 }

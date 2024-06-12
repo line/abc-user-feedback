@@ -16,4 +16,4 @@
 import i18nConfig from '../../next-i18next.config.js';
 
 export const DEFAULT_LOCALE = 'en';
-export const LOCALES = i18nConfig.i18n?.locales;
+export const LOCALES = i18nConfig.i18n.locales;
