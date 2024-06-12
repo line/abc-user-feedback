@@ -85,7 +85,7 @@ pnpm install
 2. Spin up all required infrastructure (Mysql, OpenSearch, etc.) using Docker Compose:
 
 ```bash
-docker-compose -f docker-compose.infra.yml up -d
+docker-compose -f docker/docker-compose.infra.yml up -d
 ```
 
 3. Make an `.env` file in `apps/api` and `apps/web` by referring to `.env.example` ([web environment variables](./apps/web/README.md), [api environment variables](./apps/api/README.md))

@@ -246,7 +246,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               <label className="flex items-center gap-1">
                 <input
                   type="checkbox"
-                  className="checkbox my-2 mr-2 "
+                  className="checkbox my-2 mr-2"
                   checked={isSameKey}
                   onChange={(e) => setIsSameKey(e.target.checked)}
                 />

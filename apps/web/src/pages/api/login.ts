@@ -13,14 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { NextApiHandler } from 'next';
 import axios, { AxiosError } from 'axios';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 
+import type { JwtSession } from '@/constants/iron-option';
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
 
-export default withIronSessionApiRoute(async (req, res) => {
+const handler: NextApiHandler = async (req, res) => {
   const { email, password } = req.body;
   try {
     const response = await axios.post(
@@ -31,8 +33,10 @@ export default withIronSessionApiRoute(async (req, res) => {
     if (response.status !== 201) {
       return res.status(response.status).send(response.data);
     }
-    req.session.jwt = response.data;
-    await req.session.save();
+    const session = await getIronSession<JwtSession>(req, res, ironOption);
+
+    session.jwt = response.data;
+    await session.save();
 
     return res.send(response.data);
   } catch (error) {
@@ -49,10 +53,6 @@ export default withIronSessionApiRoute(async (req, res) => {
     }
     return res.status(500).send({ message: 'Unknown Error' });
   }
-}, ironOption);
+};
 
-declare module 'iron-session' {
-  interface IronSessionData {
-    jwt?: { accessToken: string; refreshToken: string };
-  }
-}
+export default handler;

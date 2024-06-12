@@ -32,7 +32,7 @@ const MainTemplate: React.FC<IProps> = ({ children }) => {
           className={[
             'mx-4 my-6 flex flex-col overflow-x-auto',
             Path.hasSideNav(router.pathname) ?
-              'w-[calc(100%-104px)] '
+              'w-[calc(100%-104px)]'
             : 'w-full',
           ].join(' ')}
         >

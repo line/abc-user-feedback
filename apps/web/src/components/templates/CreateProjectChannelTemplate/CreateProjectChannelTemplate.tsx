@@ -161,7 +161,7 @@ const Helper: React.FC<{ text: string | React.ReactNode }> = ({ text }) => {
   const { t } = useTranslation();
   return (
     <div className="border-fill-secondary rounded border px-6 py-4">
-      <div className="mb-1 flex items-center  gap-2">
+      <div className="mb-1 flex items-center gap-2">
         <Icon name="IdeaColor" size={16} />
         <h2 className="font-14-bold">{t('text.helper')}</h2>
       </div>

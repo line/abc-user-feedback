@@ -57,7 +57,7 @@ export const ToastPromiseBox: React.FC<IToastInfoBoxProps> = ({
   }, [status]);
 
   return (
-    <div className="bg-tertiary border-fill-secondary flex items-center gap-4 rounded border px-5 py-4 ">
+    <div className="bg-tertiary border-fill-secondary flex items-center gap-4 rounded border px-5 py-4">
       <Icon
         name={iconName}
         size={24}

@@ -28,16 +28,12 @@ const SettingMenuBox: React.FC<IBoxProps> = ({
   show,
   last = false,
 }) => {
-  const flexCN = useMemo(() => (last ? 'flex-0' : 'flex-1'), [last]);
-  const transitionFlexCN = useMemo(
-    () => (last ? 'flex-[2]' : 'flex-0'),
-    [last],
-  );
+  const flexCN = last ? 'flex-0' : 'flex-1';
+  const transitionFlexCN = last ? 'flex-[2]' : 'flex-0';
 
   return (
     <Transition
       show={show}
-      className={`${boxCN} ${flexCN}`}
       enter="transition-all duration-500"
       enterTo={['px-3 opacity-100 overflow-hidden', transitionFlexCN].join(' ')}
       enterFrom="flex-[0] px-0 opacity-0 overflow-hidden"
@@ -47,7 +43,7 @@ const SettingMenuBox: React.FC<IBoxProps> = ({
       )}
       leaveTo="flex-[0] px-0 opacity-0 overflow-hidden"
     >
-      {children}
+      <div className={`${boxCN} ${flexCN}`}>{children}</div>
     </Transition>
   );
 };
