@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { IronSessionOptions } from 'iron-session';
+import type { SessionOptions } from 'iron-session';
 
 import { env } from '@/env.mjs';
 
-export const ironOption: IronSessionOptions = {
+export const ironOption: SessionOptions = {
   cookieName: 'user-feedback',
   password: env.SESSION_PASSWORD,
   cookieOptions: {
@@ -25,4 +25,7 @@ export const ironOption: IronSessionOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
   },
+};
+export type JwtSession = {
+  jwt?: { accessToken: string; refreshToken: string };
 };

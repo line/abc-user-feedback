@@ -273,7 +273,7 @@ const FieldSetting: React.FC<IProps> = ({ projectId, channelId }) => {
               channelId={channelId}
             />
             <button
-              className="btn btn-primary btn-md "
+              className="btn btn-primary btn-md"
               disabled={
                 !isDirty || !canUpdateField || isPending || channelDataLoading
               }

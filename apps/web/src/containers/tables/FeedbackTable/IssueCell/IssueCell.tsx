@@ -245,7 +245,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 {t('main.feedback.issue-cell.issue-list')}
               </span>
             </div>
-            <div className=" max-h-[300px] overflow-y-auto">
+            <div className="max-h-[300px] overflow-y-auto">
               {filteredIssues?.map((item) => (
                 <Combobox.Option
                   key={item.id}

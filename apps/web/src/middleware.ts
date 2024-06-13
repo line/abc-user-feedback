@@ -15,9 +15,10 @@
  */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getIronSession } from 'iron-session/edge';
+import { getIronSession } from 'iron-session';
 
 import { DEFAULT_LOCALE } from './constants/i18n';
+import type { JwtSession } from './constants/iron-option';
 import { ironOption } from './constants/iron-option';
 import { Path } from './constants/path';
 
@@ -26,7 +27,7 @@ export async function middleware(req: NextRequest) {
 
   if (Path.isErrorPage(req.nextUrl.pathname)) return res;
 
-  const session = await getIronSession(req, res, ironOption);
+  const session = await getIronSession<JwtSession>(req, res, ironOption);
 
   const isProtected = Path.isProtectPage(req.nextUrl.pathname);
 

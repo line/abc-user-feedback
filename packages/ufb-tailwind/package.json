@@ -29,7 +29,7 @@
     "eslint": "^8.57.0",
     "glob": "^10.3.12",
     "postcss": "^8.4.38",
-    "postcss-cli": "^10.1.0",
+    "postcss-cli": "^11.0.0",
     "postcss-import": "^16.1.0",
     "postcss-nesting": "^12.1.2",
     "prejss-cli": "^0.3.3",

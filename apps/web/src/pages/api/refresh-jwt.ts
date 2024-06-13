@@ -14,8 +14,9 @@
  * under the License.
  */
 import axios, { AxiosError } from 'axios';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 
+import type { JwtSession } from '@/constants/iron-option';
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
@@ -23,21 +24,21 @@ import { createNextApiHandler } from '@/server/api-handler';
 
 const handler = createNextApiHandler({
   POST: async (req, res) => {
-    const { jwt } = req.session;
-    if (!jwt) return res.status(400).end();
+    const session = await getIronSession<JwtSession>(req, res, ironOption);
+    if (!session.jwt) return res.status(400).end();
 
     try {
       const { status, data } = await axios.get(
         `${env.API_BASE_URL}/api/admin/auth/refresh`,
-        { headers: { Authorization: `Bearer ${jwt?.refreshToken}` } },
+        { headers: { Authorization: `Bearer ${session.jwt?.refreshToken}` } },
       );
 
       if (status !== 200) {
         return res.status(status).send(data);
       }
 
-      req.session.jwt = data;
-      await req.session.save();
+      session.jwt = data;
+      await session.save();
       return res.send(data);
     } catch (error) {
       getLogger('/api/refrech-jwt').error(error);
@@ -54,4 +55,4 @@ const handler = createNextApiHandler({
   },
 });
 
-export default withIronSessionApiRoute(handler, ironOption);
+export default handler;

@@ -14,9 +14,10 @@
  * under the License.
  */
 import axios from 'axios';
-import { withIronSessionApiRoute } from 'iron-session/next';
+import { getIronSession } from 'iron-session';
 import { z } from 'zod';
 
+import type { JwtSession } from '@/constants/iron-option';
 import { ironOption } from '@/constants/iron-option';
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
@@ -38,8 +39,10 @@ const handler = createNextApiHandler({
           return res.status(status).send(data);
         }
 
-        req.session.jwt = data;
-        await req.session.save();
+        const session = await getIronSession<JwtSession>(req, res, ironOption);
+
+        session.jwt = data;
+        await session.save();
 
         return res.send(data);
       } catch (error) {
@@ -54,4 +57,4 @@ const handler = createNextApiHandler({
     }),
 });
 
-export default withIronSessionApiRoute(handler, ironOption);
+export default handler;
