@@ -22,7 +22,7 @@ import { createNextApiHandler } from '@/server/api-handler';
 const handler = createNextApiHandler({
   GET: async (req, res) => {
     const session = await getIronSession<JwtSession>(req, res, ironOption);
-    console.log('session: ', session);
+
     session.destroy();
     await session.save();
     res.send({ ok: true });

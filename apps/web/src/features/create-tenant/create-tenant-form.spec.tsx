@@ -22,7 +22,7 @@ import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
 
 import { env } from '@/env.mjs';
 import { server } from '@/msw';
-import { act, render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/utils/test-utils';
 
 describe('CreateTenantForm', () => {
   test('An input length  should be at least 3', async () => {
@@ -30,9 +30,7 @@ describe('CreateTenantForm', () => {
     const input = screen.getByPlaceholderText('Please enter the site name');
     const submitBtn = screen.getByRole('button');
 
-    await act(async () => {
-      await userEvent.type(input, faker.string.alphanumeric(1));
-    });
+    await userEvent.type(input, faker.string.alphanumeric(1));
 
     expect(submitBtn).toBeDisabled();
   });
@@ -51,15 +49,11 @@ describe('CreateTenantForm', () => {
     const input = screen.getByPlaceholderText('Please enter the site name');
     const submitBtn = screen.getByRole('button');
 
-    await act(async () => {
-      await userEvent.type(input, 'test');
-    });
+    await userEvent.type(input, 'test');
 
     expect(submitBtn).not.toBeDisabled();
 
-    await act(async () => {
-      await userEvent.click(submitBtn);
-    });
+    await userEvent.click(submitBtn);
 
     await waitFor(() => {
       expect(screen.getByText(new RegExp('success', 'i'))).toBeInTheDocument();
@@ -82,12 +76,8 @@ describe('CreateTenantForm', () => {
     const input = screen.getByPlaceholderText('Please enter the site name');
     const submitBtn = screen.getByRole('button');
 
-    await act(async () => {
-      await userEvent.type(input, 'test');
-    });
-    await act(async () => {
-      await userEvent.click(submitBtn);
-    });
+    await userEvent.type(input, 'test');
+    await userEvent.click(submitBtn);
 
     await waitFor(() => expect(screen.getByText('Error')).toBeInTheDocument());
   });

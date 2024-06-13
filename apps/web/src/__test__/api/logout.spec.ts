@@ -15,9 +15,20 @@
  */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { faker } from '@faker-js/faker';
+import * as IronSession from 'iron-session';
 import { createMocks } from 'node-mocks-http';
 
 import handler from '@/pages/api/logout';
+
+jest.mock('iron-session');
+const mockDestory = jest.fn();
+const mockSave = jest.fn();
+
+jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+  destroy: mockDestory,
+  save: mockSave,
+  updateConfig: jest.fn(),
+}));
 
 describe('Logout API', () => {
   test('logout', async () => {
@@ -25,12 +36,10 @@ describe('Logout API', () => {
       method: 'GET',
     });
 
-    req.session = { destroy: jest.fn(), save: jest.fn() };
-
     await handler(req, res);
 
-    expect(req.session.destroy).toHaveBeenCalled();
-    expect(req.session.save).toHaveBeenCalled();
+    expect(mockDestory).toHaveBeenCalled();
+    expect(mockSave).toHaveBeenCalled();
     expect(res._getData()).toEqual({ ok: true });
   });
   test('method not allowed', async () => {

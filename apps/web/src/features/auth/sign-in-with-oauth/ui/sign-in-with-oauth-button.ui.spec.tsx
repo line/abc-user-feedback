@@ -50,7 +50,7 @@ describe('SignInWithOAuthButton', () => {
     render(<SignInWithOAuthButton />);
 
     await waitFor(() => expect(screen.getByRole('button')).not.toBeDisabled());
-    await act(() => userEvent.click(screen.getByRole('button')));
+    await userEvent.click(screen.getByRole('button'));
 
     expect(mockRouter).toMatchObject({ asPath: pathname });
   });

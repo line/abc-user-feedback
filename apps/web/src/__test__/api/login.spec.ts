@@ -15,10 +15,13 @@
  */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { faker } from '@faker-js/faker';
+import * as IronSession from 'iron-session';
 import { createMocks } from 'node-mocks-http';
 
 import { simpleMockHttp } from '@/msw';
 import handler from '@/pages/api/login';
+
+jest.mock('iron-session');
 
 describe('Login API', () => {
   test('success', async () => {
@@ -32,6 +35,13 @@ describe('Login API', () => {
       status: 201,
       data: jwt,
     });
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+      jwt: jwt,
+    }));
 
     const body = {
       email: faker.internet.email(),
@@ -42,22 +52,26 @@ describe('Login API', () => {
       body,
     });
 
-    req.session = { destroy: jest.fn(), save: jest.fn() };
-
     await handler(req, res);
 
     expect(res._getData()).toEqual(jwt);
-    expect(req.session.save).toHaveBeenCalled();
+    expect(mockSave).toHaveBeenCalled();
   });
   test('error', async () => {
     const data = { message: 'error' };
-
     simpleMockHttp({
       method: 'post',
       path: '/api/admin/auth/signIn/email',
       status: 500,
       data: data,
     });
+
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+    }));
 
     const body = {
       email: faker.internet.email(),
@@ -72,6 +86,7 @@ describe('Login API', () => {
     await handler(req, res);
 
     expect(res._getData()).toEqual(data);
+    expect(mockSave).not.toHaveBeenCalled();
   });
   test('invalid input', async () => {
     const body = {};

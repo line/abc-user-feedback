@@ -17,7 +17,7 @@ import userEvent from '@testing-library/user-event';
 
 import ThemeToggleButton from './theme-toggle-button.ui';
 
-import { act, render, screen } from '@/utils/test-utils';
+import { render, screen } from '@/utils/test-utils';
 
 describe('ThemeToggleButton', () => {
   it('toggle theme using document className', async () => {
@@ -26,9 +26,7 @@ describe('ThemeToggleButton', () => {
 
     expect(document.documentElement.className).toBe('light');
 
-    await act(async () => {
-      await userEvent.click(button);
-    });
+    await userEvent.click(button);
 
     expect(document.documentElement.className).toBe('dark');
   });

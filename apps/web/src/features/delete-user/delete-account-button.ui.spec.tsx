@@ -23,7 +23,7 @@ import * as user from '@/entities/user';
 import DeleteAccountButton from './delete-account-button.ui';
 
 import { server, simpleMockHttp } from '@/msw';
-import { act, render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/utils/test-utils';
 
 jest.mock('@/entities/user');
 
@@ -65,7 +65,7 @@ describe('DeleteAccountButton', () => {
       const btn = screen.getByRole('button', {
         name: 'main.profile.button.delete-account',
       });
-      await act(async () => userEvent.click(btn));
+      await userEvent.click(btn);
     });
 
     test('on Success', async () => {
@@ -78,7 +78,7 @@ describe('DeleteAccountButton', () => {
       const deleteBtn = screen.getByRole('button', {
         name: 'button.delete',
       });
-      await act(() => userEvent.click(deleteBtn));
+      await userEvent.click(deleteBtn);
       await waitFor(() => expect(mockSignOut).toHaveBeenCalled());
     });
     test('on Error', async () => {
@@ -92,7 +92,7 @@ describe('DeleteAccountButton', () => {
       const deleteBtn = screen.getByRole('button', {
         name: 'button.delete',
       });
-      await act(() => userEvent.click(deleteBtn));
+      await userEvent.click(deleteBtn);
 
       await waitFor(() =>
         expect(screen.getByText(new RegExp('error', 'i'))).toBeInTheDocument(),

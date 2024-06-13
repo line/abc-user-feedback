@@ -15,10 +15,13 @@
  */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { faker } from '@faker-js/faker';
+import * as IronSession from 'iron-session';
 import { createMocks } from 'node-mocks-http';
 
 import { simpleMockHttp } from '@/msw';
 import handler from '@/pages/api/oauth';
+
+jest.mock('iron-session');
 
 describe('OAuth API', () => {
   test('success', async () => {
@@ -33,16 +36,21 @@ describe('OAuth API', () => {
       data: jwt,
     });
 
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+    }));
+
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
       body: { code: faker.string.nanoid() },
     });
 
-    req.session = { destroy: jest.fn(), save: jest.fn() };
-
     await handler(req, res);
 
-    expect(req.session.save).toHaveBeenCalled();
+    expect(mockSave).toHaveBeenCalled();
     expect(res._getData()).toEqual(jwt);
   });
 
@@ -58,16 +66,21 @@ describe('OAuth API', () => {
       status: 500,
     });
 
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+    }));
+
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
       body: { code: faker.string.nanoid() },
     });
 
-    req.session = { destroy: jest.fn(), save: jest.fn() };
-
     await handler(req, res);
 
-    expect(req.session.save).not.toHaveBeenCalled();
+    expect(mockSave).not.toHaveBeenCalled();
     expect(res._getData()).not.toEqual(jwt);
   });
 

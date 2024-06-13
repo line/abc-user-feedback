@@ -66,7 +66,7 @@ exports[`Sign In Page should render all allow 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r0:"
+            id="headlessui-listbox-button-:r1:"
             type="button"
           >
             <div
@@ -302,7 +302,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r2:"
+            id="headlessui-listbox-button-:r4:"
             type="button"
           >
             <div
@@ -522,7 +522,7 @@ exports[`Sign In Page should render when useEmail is false 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r6:"
+            id="headlessui-listbox-button-:ra:"
             type="button"
           >
             <div
@@ -663,7 +663,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r4:"
+            id="headlessui-listbox-button-:r7:"
             type="button"
           >
             <div

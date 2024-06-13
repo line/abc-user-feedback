@@ -34,11 +34,20 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
+// headless-ui
+global.ResizeObserver = require('resize-observer-polyfill');
+
+// iron-session
+const crypto = require('crypto');
+
+Object.defineProperty(globalThis, 'crypto', {
+  value: {
+    getRandomValues: (arr: any[]) => crypto.randomBytes(arr.length),
+  },
+});
 
 jest.mock('react-i18next', () => ({
-  useTranslation: () => {
-    return { t: (str: string) => str };
-  },
+  useTranslation: () => ({ t: (str: string) => str }),
 }));
 
 // msw

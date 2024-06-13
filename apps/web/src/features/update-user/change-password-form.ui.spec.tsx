@@ -19,7 +19,7 @@ import userEvent from '@testing-library/user-event';
 import ChangePasswordForm from './change-password-form.ui';
 
 import { simpleMockHttp } from '@/msw';
-import { act, render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/utils/test-utils';
 
 describe('ResetPasswordWithEmailForm', () => {
   test('match snapshot', () => {
@@ -43,22 +43,18 @@ describe('ResetPasswordWithEmailForm', () => {
       'main.profile.placeholder.confirm-new-password',
     );
 
-    await act(async () => {
-      await userEvent.type(passwordInput, faker.string.alphanumeric(8));
-      await userEvent.type(newPasswordInput, faker.string.alphanumeric(9));
-      await userEvent.type(confirmPasswordInput, faker.string.alphanumeric(9));
-    });
+    await userEvent.type(passwordInput, faker.string.alphanumeric(8));
+    await userEvent.type(newPasswordInput, faker.string.alphanumeric(9));
+    await userEvent.type(confirmPasswordInput, faker.string.alphanumeric(9));
 
     expect(saveBtn).toBeDisabled();
 
-    await act(async () => {
-      await userEvent.clear(newPasswordInput);
-      await userEvent.clear(confirmPasswordInput);
+    await userEvent.clear(newPasswordInput);
+    await userEvent.clear(confirmPasswordInput);
 
-      const password = faker.string.alphanumeric(8);
-      await userEvent.type(newPasswordInput, password);
-      await userEvent.type(confirmPasswordInput, password);
-    });
+    const password = faker.string.alphanumeric(8);
+    await userEvent.type(newPasswordInput, password);
+    await userEvent.type(confirmPasswordInput, password);
 
     await waitFor(() => expect(saveBtn).not.toBeDisabled());
   });
@@ -75,13 +71,11 @@ describe('ResetPasswordWithEmailForm', () => {
       const confirmPasswordInput = screen.getByPlaceholderText(
         'main.profile.placeholder.confirm-new-password',
       );
-      await act(async () => {
-        await userEvent.type(passwordInput, faker.string.alphanumeric(8));
+      await userEvent.type(passwordInput, faker.string.alphanumeric(8));
 
-        const password = faker.string.alphanumeric(8);
-        await userEvent.type(newPasswordInput, password);
-        await userEvent.type(confirmPasswordInput, password);
-      });
+      const password = faker.string.alphanumeric(8);
+      await userEvent.type(newPasswordInput, password);
+      await userEvent.type(confirmPasswordInput, password);
     });
     test('on Success', async () => {
       simpleMockHttp({
@@ -92,7 +86,7 @@ describe('ResetPasswordWithEmailForm', () => {
       const submitBtn = screen.getByRole('button', {
         name: 'button.save',
       });
-      await act(() => userEvent.click(submitBtn));
+      await userEvent.click(submitBtn);
 
       await waitFor(() =>
         expect(
@@ -110,7 +104,7 @@ describe('ResetPasswordWithEmailForm', () => {
       const submitBtn = screen.getByRole('button', {
         name: 'button.save',
       });
-      await act(() => userEvent.click(submitBtn));
+      await userEvent.click(submitBtn);
 
       await waitFor(() =>
         expect(screen.getByText(new RegExp('error', 'i'))).toBeInTheDocument(),

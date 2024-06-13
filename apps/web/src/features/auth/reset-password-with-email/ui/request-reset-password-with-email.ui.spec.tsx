@@ -19,7 +19,7 @@ import userEvent from '@testing-library/user-event';
 import RequestResetPasswordWithEmail from './request-reset-password-with-email.ui';
 
 import { simpleMockHttp } from '@/msw';
-import { act, render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/utils/test-utils';
 
 describe('RequestResetPasswordWithEmail', () => {
   test('match snapshot', () => {
@@ -31,7 +31,7 @@ describe('RequestResetPasswordWithEmail', () => {
     render(<RequestResetPasswordWithEmail />);
     const backBtn = screen.getByRole('button', { name: 'button.back' });
 
-    await act(() => userEvent.click(backBtn));
+    await userEvent.click(backBtn);
     // next-router-mock is not supported to back yet
     // await waitFor(() => expect(mockRouter).toMatchObject({ pathname: '/' }));
   });
@@ -46,14 +46,12 @@ describe('RequestResetPasswordWithEmail', () => {
 
     expect(submitBtn).toBeDisabled();
 
-    await act(() => userEvent.type(emailInput, faker.string.sample()));
+    await userEvent.type(emailInput, faker.string.sample());
 
     expect(submitBtn).toBeDisabled();
 
-    await act(async () => {
-      await userEvent.clear(emailInput);
-      await userEvent.type(emailInput, faker.internet.email());
-    });
+    await userEvent.clear(emailInput);
+    await userEvent.type(emailInput, faker.internet.email());
 
     expect(submitBtn).not.toBeDisabled();
   });
@@ -62,7 +60,7 @@ describe('RequestResetPasswordWithEmail', () => {
     beforeEach(async () => {
       render(<RequestResetPasswordWithEmail />);
       const emailInput = screen.getByPlaceholderText('input.placeholder.email');
-      await act(() => userEvent.type(emailInput, faker.internet.email()));
+      await userEvent.type(emailInput, faker.internet.email());
     });
 
     test('on Success', async () => {
@@ -74,7 +72,7 @@ describe('RequestResetPasswordWithEmail', () => {
       const submitBtn = screen.getByRole('button', {
         name: 'auth.reset-password.button.send-email',
       });
-      await act(() => userEvent.click(submitBtn));
+      await userEvent.click(submitBtn);
       await waitFor(() =>
         expect(
           screen.getByText(new RegExp('success', 'i')),
@@ -91,7 +89,7 @@ describe('RequestResetPasswordWithEmail', () => {
       const submitBtn = screen.getByRole('button', {
         name: 'auth.reset-password.button.send-email',
       });
-      await act(() => userEvent.click(submitBtn));
+      await userEvent.click(submitBtn);
       await waitFor(() =>
         expect(screen.getByText(new RegExp('error', 'i'))).toBeInTheDocument(),
       );

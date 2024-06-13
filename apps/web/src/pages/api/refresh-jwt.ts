@@ -25,6 +25,7 @@ import { createNextApiHandler } from '@/server/api-handler';
 const handler = createNextApiHandler({
   POST: async (req, res) => {
     const session = await getIronSession<JwtSession>(req, res, ironOption);
+
     if (!session.jwt) return res.status(400).end();
 
     try {

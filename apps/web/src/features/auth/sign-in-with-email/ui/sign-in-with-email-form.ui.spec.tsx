@@ -16,7 +16,6 @@
 
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
-import { act } from 'react-dom/test-utils';
 
 import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
@@ -79,30 +78,24 @@ describe('SignInWithEmailForm', () => {
     const idInput = screen.getByPlaceholderText('ID');
     const passwordInput = screen.getByPlaceholderText('Password');
 
-    await act(async () => {
-      await userEvent.type(idInput, faker.internet.email());
-      await userEvent.type(passwordInput, faker.string.alphanumeric(9));
-    });
+    await userEvent.type(idInput, faker.internet.email());
+    await userEvent.type(passwordInput, faker.string.alphanumeric(9));
 
     expect(signInBtn).not.toBeDisabled();
 
-    await act(async () => {
-      await userEvent.clear(idInput);
-      await userEvent.clear(passwordInput);
+    await userEvent.clear(idInput);
+    await userEvent.clear(passwordInput);
 
-      await userEvent.type(idInput, faker.string.alphanumeric(8));
-      await userEvent.type(passwordInput, faker.string.alphanumeric(8));
-    });
+    await userEvent.type(idInput, faker.string.alphanumeric(8));
+    await userEvent.type(passwordInput, faker.string.alphanumeric(8));
 
     expect(signInBtn).toBeDisabled();
 
-    await act(async () => {
-      await userEvent.clear(idInput);
-      await userEvent.clear(passwordInput);
+    await userEvent.clear(idInput);
+    await userEvent.clear(passwordInput);
 
-      await userEvent.type(idInput, faker.internet.email());
-      await userEvent.type(passwordInput, faker.string.alphanumeric(7));
-    });
+    await userEvent.type(idInput, faker.internet.email());
+    await userEvent.type(passwordInput, faker.string.alphanumeric(7));
 
     expect(signInBtn).toBeDisabled();
   });
@@ -121,15 +114,13 @@ describe('SignInWithEmailForm', () => {
       const idInput = screen.getByPlaceholderText('ID');
       const passwordInput = screen.getByPlaceholderText('Password');
 
-      await act(async () => {
-        await userEvent.type(idInput, faker.internet.email());
-        await userEvent.type(passwordInput, faker.string.alphanumeric(9));
-      });
+      await userEvent.type(idInput, faker.internet.email());
+      await userEvent.type(passwordInput, faker.string.alphanumeric(9));
 
       const submitBtn = screen.getByRole('button', {
         name: 'button.sign-in',
       });
-      await act(() => userEvent.click(submitBtn));
+      await userEvent.click(submitBtn);
 
       await waitFor(() =>
         expect(
@@ -150,14 +141,12 @@ describe('SignInWithEmailForm', () => {
       const idInput = screen.getByPlaceholderText('ID');
       const passwordInput = screen.getByPlaceholderText('Password');
 
-      await act(async () => {
-        await userEvent.type(idInput, faker.internet.email());
-        await userEvent.type(passwordInput, faker.string.alphanumeric(9));
-      });
+      await userEvent.type(idInput, faker.internet.email());
+      await userEvent.type(passwordInput, faker.string.alphanumeric(9));
       const submitBtn = screen.getByRole('button', {
         name: 'button.sign-in',
       });
-      await act(() => userEvent.click(submitBtn));
+      await userEvent.click(submitBtn);
 
       await waitFor(() =>
         expect(screen.getByText(new RegExp('error', 'i'))).toBeInTheDocument(),

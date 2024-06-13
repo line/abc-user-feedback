@@ -15,10 +15,13 @@
  */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { faker } from '@faker-js/faker';
+import * as IronSession from 'iron-session';
 import { createMocks } from 'node-mocks-http';
 
 import { simpleMockHttp } from '@/msw';
 import handler from '@/pages/api/refresh-jwt';
+
+jest.mock('iron-session');
 
 describe('Refresh Jwt API', () => {
   test('success', async () => {
@@ -32,21 +35,26 @@ describe('Refresh Jwt API', () => {
       status: 200,
       data: newJwt,
     });
-
     const originalJwt = {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
 
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+      jwt: originalJwt,
+    }));
+
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
     });
 
-    req.session = { destroy: jest.fn(), save: jest.fn(), jwt: originalJwt };
-
     await handler(req, res);
 
-    expect(req.session.save).toHaveBeenCalled();
+    expect(mockSave).toHaveBeenCalled();
     expect(res._getData()).toEqual(newJwt);
   });
 
@@ -62,15 +70,20 @@ describe('Refresh Jwt API', () => {
       data: newJwt,
     });
 
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+    }));
+
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
     });
 
-    req.session = { destroy: jest.fn(), save: jest.fn() };
-
     await handler(req, res);
 
-    expect(req.session.save).not.toHaveBeenCalled();
+    expect(mockSave).not.toHaveBeenCalled();
     expect(res._getStatusCode()).toEqual(400);
   });
   test('error', async () => {
@@ -85,20 +98,19 @@ describe('Refresh Jwt API', () => {
       data: newJwt,
     });
 
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+    }));
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
     });
 
-    const originalJwt = {
-      accessToken: faker.string.nanoid(),
-      refreshToken: faker.string.nanoid(),
-    };
-
-    req.session = { destroy: jest.fn(), save: jest.fn(), jwt: originalJwt };
-
     await handler(req, res);
 
-    expect(req.session.save).not.toHaveBeenCalled();
+    expect(mockSave).not.toHaveBeenCalled();
     expect(res._getStatusCode()).not.toEqual(200);
   });
 
