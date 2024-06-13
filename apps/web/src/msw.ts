@@ -13,23 +13,37 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { env } from 'process';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { signInWithOAuthMockHandlers } from './features/auth/sign-in-with-oauth/__mocks__/sign-in-with-oauth.mock-handler';
-import type { OAIMethodPathKeys, OAIMethods } from './types/openapi.type';
+import type {
+  OAIMethodPathKeys,
+  OAIMethods,
+  OAIPathParameters,
+} from './types/openapi.type';
+import { convertToColonPath, getRequestUrl } from './utils/path-parsing';
 
 export const server = setupServer(...signInWithOAuthMockHandlers);
 
-export const simpleMockHttp = <M extends OAIMethods>(
-  method: M,
-  path: OAIMethodPathKeys<M>,
-  status: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 500 = 200,
-  body: Record<string, unknown> = {},
-) =>
+export const simpleMockHttp = <
+  TMethod extends OAIMethods,
+  TPath extends OAIMethodPathKeys<TMethod>,
+>({
+  method,
+  path,
+  status = 200,
+  params,
+  data = {},
+}: {
+  method: TMethod;
+  path: TPath;
+  status?: 200 | 201 | 204 | 400 | 401 | 403 | 404 | 500;
+  params?: OAIPathParameters<TPath, TMethod>;
+  data?: Record<string, unknown>;
+}) =>
   server.use(
-    http[method](`${env.NEXT_PUBLIC_API_BASE_URL}${path}`, () =>
-      HttpResponse.json(body, { status }),
+    http[method](`${convertToColonPath(getRequestUrl(path, params))}`, () =>
+      HttpResponse.json(data, { status }),
     ),
   );

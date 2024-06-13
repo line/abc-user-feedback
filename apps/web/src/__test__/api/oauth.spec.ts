@@ -26,7 +26,12 @@ describe('OAuth API', () => {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
-    simpleMockHttp('get', '/api/admin/auth/signIn/oauth', 200, jwt);
+    simpleMockHttp({
+      method: 'get',
+      path: '/api/admin/auth/signIn/oauth',
+      status: 200,
+      data: jwt,
+    });
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
@@ -46,7 +51,12 @@ describe('OAuth API', () => {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
-    simpleMockHttp('get', '/api/admin/auth/signIn/oauth', 500, jwt);
+
+    simpleMockHttp({
+      method: 'get',
+      path: '/api/admin/auth/signIn/oauth',
+      status: 500,
+    });
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
@@ -75,7 +85,7 @@ describe('OAuth API', () => {
   });
 
   test('method not allowed', async () => {
-    simpleMockHttp('get', '/api/admin/auth/signIn/oauth');
+    simpleMockHttp({ method: 'get', path: '/api/admin/auth/signIn/oauth' });
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: faker.helpers.arrayElement(['GET', 'PUT', 'PATCH', 'DELETE']),

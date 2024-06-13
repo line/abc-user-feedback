@@ -16,23 +16,19 @@
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 
-import ResetPasswordWithEmailForm from './reset-password-with-email-form.ui';
+import UserInvitationForm from './user-invitation-form.ui';
 
 import { simpleMockHttp } from '@/msw';
 import { act, render, screen, waitFor } from '@/utils/test-utils';
 
 describe('ResetPasswordWithEmailForm', () => {
   test('match snapshot', () => {
-    const component = render(
-      <ResetPasswordWithEmailForm code="code" email="email" />,
-    );
+    const component = render(<UserInvitationForm code="code" email="email" />);
     expect(component.container).toMatchSnapshot();
   });
 
   test('validation', async () => {
-    render(
-      <ResetPasswordWithEmailForm code="code" email={faker.internet.email()} />,
-    );
+    render(<UserInvitationForm code="code" email={faker.internet.email()} />);
 
     const sendEmailBtn = screen.getByRole('button', {
       name: 'button.setting',
@@ -64,12 +60,7 @@ describe('ResetPasswordWithEmailForm', () => {
   });
   describe('Submittion', () => {
     beforeEach(async () => {
-      render(
-        <ResetPasswordWithEmailForm
-          code="code"
-          email={faker.internet.email()}
-        />,
-      );
+      render(<UserInvitationForm code="code" email={faker.internet.email()} />);
 
       const passwordInput = screen.getByPlaceholderText(
         'input.placeholder.password',
@@ -86,7 +77,7 @@ describe('ResetPasswordWithEmailForm', () => {
     test('on Success', async () => {
       simpleMockHttp({
         method: 'post',
-        path: '/api/admin/users/password/reset',
+        path: '/api/admin/auth/signUp/invitation',
       });
 
       const submitBtn = screen.getByRole('button', {
@@ -103,7 +94,7 @@ describe('ResetPasswordWithEmailForm', () => {
     test('on Error', async () => {
       simpleMockHttp({
         method: 'post',
-        path: '/api/admin/users/password/reset',
+        path: '/api/admin/auth/signUp/invitation',
         status: 500,
       });
 

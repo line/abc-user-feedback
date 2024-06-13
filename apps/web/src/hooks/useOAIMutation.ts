@@ -47,7 +47,7 @@ export default function useOAIMutation<
       TBody,
       (Record<string, unknown> | TPath | undefined)[]
     >,
-    'queryKey' | 'queryFn'
+    'mutationKey' | 'mutationFn'
   >;
 } & (TPathParams extends undefined ? { pathParams?: undefined }
 : { pathParams: TPathParams })) {

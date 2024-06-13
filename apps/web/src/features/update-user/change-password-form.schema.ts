@@ -13,4 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as DeleteAccountButton } from './delete-account-button.ui';
+
+import { z } from 'zod';
+
+export const changePasswordFormSchema = z
+  .object({
+    password: z.string().min(8),
+    newPassword: z.string().min(8),
+    confirmNewPassword: z.string().min(8),
+  })
+  .refine(({ password, newPassword }) => password !== newPassword, {
+    message: 'must not equal Password',
+    path: ['newPassword'],
+  })
+  .refine(
+    ({ newPassword, confirmNewPassword }) => newPassword === confirmNewPassword,
+    {
+      message: 'must equal New Password',
+      path: ['confirmNewPassword'],
+    },
+  );

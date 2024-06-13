@@ -13,5 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as UserProfileForm } from './user-profile-form.ui';
-export { default as ChangePasswordForm } from './change-password-form.ui';
+
+import ProfilePage from '@/pages/main/profile';
+import { render } from '@/utils/test-utils';
+
+describe('MainIndexPage', () => {
+  test('should render without crashing', async () => {
+    const page = ProfilePage.getLayout!(<ProfilePage />);
+    const { container } = render(<>{page}</>);
+    expect(container).toMatchSnapshot();
+  });
+});

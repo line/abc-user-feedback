@@ -21,7 +21,7 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { userInvitationSchema } from '../user-invitation.schema';
+import { userInvitationSchema } from './user-invitation.schema';
 
 import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';

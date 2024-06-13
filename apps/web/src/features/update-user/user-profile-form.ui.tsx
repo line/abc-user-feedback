@@ -13,49 +13,47 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
 import type { User } from '@/entities/user';
 
+import { userProfileFormSchema } from './user-profile-form.schema';
+
 import { useOAIMutation } from '@/hooks';
 
-type IForm = {
-  name: string | null;
-  department: string | null;
-};
+type FormType = z.infer<typeof userProfileFormSchema>;
 
-const schema: Zod.ZodType<IForm> = z.object({
-  name: z.string().nullable(),
-  department: z.string().nullable(),
-});
-
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   user: User;
 }
 
-const UserProfileForm: React.FC<IProps> = ({ user }) => {
+const UserProfileForm: React.FC<IProps> = (props) => {
+  const { user } = props;
+
   const { t } = useTranslation();
-  const router = useRouter();
 
-  const { register, handleSubmit, formState } = useForm<IForm>({
-    resolver: zodResolver(schema),
-    defaultValues: user,
-  });
+  const { register, handleSubmit, formState, reset, getValues } =
+    useForm<FormType>({
+      resolver: zodResolver(userProfileFormSchema),
+      defaultValues: user,
+    });
 
-  const { mutate } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/admin/users/{id}',
     pathParams: { id: user.id },
     queryOptions: {
       async onSuccess() {
-        router.reload();
         toast.positive({ title: t('toast.save') });
+        reset(getValues());
+      },
+      onError(error) {
+        toast.negative({ title: 'Error', description: error.message });
       },
     },
   });
@@ -67,6 +65,7 @@ const UserProfileForm: React.FC<IProps> = ({ user }) => {
         <button
           form="profileInfo"
           className="btn btn-md btn-primary min-w-[120px]"
+          disabled={isPending || !formState.isDirty}
         >
           {t('button.save')}
         </button>

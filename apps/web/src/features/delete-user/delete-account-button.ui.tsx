@@ -18,8 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
-import type { User } from '@/entities/user';
 import { useUserActions } from '@/entities/user';
+import type { User } from '@/entities/user';
 
 import { useOAIMutation } from '@/hooks';
 
@@ -43,7 +43,7 @@ const DeleteAccountButton: React.FC<IProps> = ({ user }) => {
         setOpen(false);
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: 'Error', description: error?.message });
       },
     },
   });

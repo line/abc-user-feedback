@@ -15,17 +15,19 @@
  */
 import { faker } from '@faker-js/faker';
 
-import type { Tenant } from '../tenant.type';
+import type { Project } from '../project.type';
 
-export const MOCK_TENANT: Tenant = {
-  id: faker.number.int(),
-  siteName: faker.string.sample(),
-  description: null,
-  useEmail: false,
-  useOAuth: false,
-  isPrivate: false,
-  isRestrictDomain: false,
-  allowDomains: [],
-  useEmailVerification: false,
-  oauthConfig: null,
-};
+export const MOCK_PROJECTS: Project[] = [
+  {
+    id: faker.number.int(),
+    createdAt: faker.date.recent().toISOString(),
+    description: faker.lorem.sentence(),
+    name: faker.lorem.word(),
+    timezone: {
+      countryCode: 'US',
+      name: 'America/New_York',
+      offset: '-05:00',
+    },
+    updatedAt: faker.date.recent().toISOString(),
+  },
+];

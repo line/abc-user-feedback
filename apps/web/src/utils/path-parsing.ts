@@ -58,3 +58,10 @@ export const parseSearchParams = (
     return result;
   }
 };
+
+export const convertToColonPath = (path: string, baseUrl?: string): string => {
+  const resolvedPath = path.replaceAll('{', ':').replaceAll('}', '');
+  if (!baseUrl) return resolvedPath;
+
+  return baseUrl + resolvedPath;
+};

@@ -13,4 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as UserInvitationForm } from './user-invitation-form.ui';
+import { z } from 'zod';
+
+export const userProfileFormSchema = z.object({
+  name: z.string().nullable(),
+  department: z.string().nullable(),
+});

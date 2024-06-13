@@ -17,7 +17,7 @@ export type User = {
   id: number;
   email: string;
   type: UserTypeEnum;
-  name: string;
+  name: string | null;
   department: string | null;
   signUpMethod: 'OAUTH' | 'EMAIL';
 };

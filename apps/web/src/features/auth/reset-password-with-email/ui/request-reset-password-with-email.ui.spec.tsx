@@ -66,7 +66,10 @@ describe('RequestResetPasswordWithEmail', () => {
     });
 
     test('on Success', async () => {
-      simpleMockHttp('post', '/api/admin/users/password/reset/code');
+      simpleMockHttp({
+        method: 'post',
+        path: '/api/admin/users/password/reset/code',
+      });
 
       const submitBtn = screen.getByRole('button', {
         name: 'auth.reset-password.button.send-email',
@@ -79,7 +82,11 @@ describe('RequestResetPasswordWithEmail', () => {
       );
     });
     test('on Error', async () => {
-      simpleMockHttp('post', '/api/admin/users/password/reset/code', 500);
+      simpleMockHttp({
+        method: 'post',
+        path: '/api/admin/users/password/reset/code',
+        status: 500,
+      });
 
       const submitBtn = screen.getByRole('button', {
         name: 'auth.reset-password.button.send-email',

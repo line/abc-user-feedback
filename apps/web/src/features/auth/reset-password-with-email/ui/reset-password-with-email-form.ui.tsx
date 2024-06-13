@@ -66,7 +66,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
           type="email"
           label="Email"
           placeholder={t('input.placeholder.email')}
-          value={email}
+          {...register('email')}
           disabled
         />
         <TextInput

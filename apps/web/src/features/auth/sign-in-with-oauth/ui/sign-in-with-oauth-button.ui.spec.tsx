@@ -40,8 +40,11 @@ describe('SignInWithOAuthButton', () => {
       .map(() => faker.string.alphanumeric({ length: { min: 1, max: 5 } }))
       .join('/')}`;
 
-    simpleMockHttp('get', '/api/admin/auth/signIn/oauth/loginURL', 200, {
-      url: pathname,
+    simpleMockHttp({
+      method: 'get',
+      path: '/api/admin/auth/signIn/oauth/loginURL',
+      status: 200,
+      data: { url: pathname },
     });
 
     render(<SignInWithOAuthButton />);

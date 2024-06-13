@@ -2,9 +2,29 @@
 
 exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
 <div>
-  <form>
+  <div
+    class="flex flex-col gap-6"
+  >
     <div
-      class="mb-12 space-y-4"
+      class="flex items-center justify-between"
+    >
+      <h1
+        class="font-20-bold"
+      >
+        main.profile.profile-info
+      </h1>
+      <button
+        class="btn btn-md btn-primary min-w-[120px]"
+        disabled=""
+        form="profileInfo"
+      >
+        button.save
+      </button>
+    </div>
+    <hr />
+    <form
+      class="flex flex-col gap-6"
+      id="profileInfo"
     >
       <div
         class="flex flex-col gap-2"
@@ -23,9 +43,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
             class="input  input-md  pr-10 "
             disabled=""
             id="Email"
-            name="email"
-            placeholder="input.placeholder.email"
-            type="email"
+            value="Dudley_Kassulke@hotmail.com"
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
@@ -37,26 +55,19 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
       >
         <label
           class="input-label"
-          for="input.label.password"
+          for="main.profile.label.user-type"
         >
-          input.label.password
+          main.profile.label.user-type
            
-          <span
-            class="text-red-primary"
-          >
-            *
-          </span>
         </label>
         <div
           class="relative"
         >
           <input
             class="input  input-md  pr-10 "
-            id="input.label.password"
-            name="password"
-            placeholder="input.placeholder.password"
-            required=""
-            type="password"
+            disabled=""
+            id="main.profile.label.user-type"
+            value="GENERAL"
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
@@ -68,51 +79,51 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
       >
         <label
           class="input-label"
-          for="input.label.confirm-password"
+          for="Name"
         >
-          input.label.confirm-password
+          Name
            
-          <span
-            class="text-red-primary"
-          >
-            *
-          </span>
         </label>
         <div
           class="relative"
         >
           <input
             class="input  input-md  pr-10 "
-            id="input.label.confirm-password"
-            name="confirmPassword"
-            placeholder="input.placeholder.confirm-password"
-            required=""
-            type="password"
+            id="Name"
+            name="name"
+            placeholder="main.profile.placeholder.name"
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
           />
         </div>
       </div>
-    </div>
-    <div
-      class="flex flex-col gap-2"
-    >
-      <button
-        class="btn btn-primary"
-        disabled=""
-        type="submit"
+      <div
+        class="flex flex-col gap-2"
       >
-        button.setting
-      </button>
-      <button
-        class="btn btn-secondary"
-        type="button"
-      >
-        button.back
-      </button>
-    </div>
-  </form>
+        <label
+          class="input-label"
+          for="Department"
+        >
+          Department
+           
+        </label>
+        <div
+          class="relative"
+        >
+          <input
+            class="input  input-md  pr-10 "
+            id="Department"
+            name="department"
+            placeholder="main.profile.placeholder.department"
+          />
+          <div
+            class="absolute-y-center absolute right-[14px] flex items-center gap-2"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
   <div
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />

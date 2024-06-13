@@ -16,83 +16,99 @@
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 
-import UserInvitationForm from './user-invitation-form.ui';
+import ChangePasswordForm from './change-password-form.ui';
 
 import { simpleMockHttp } from '@/msw';
 import { act, render, screen, waitFor } from '@/utils/test-utils';
 
 describe('ResetPasswordWithEmailForm', () => {
   test('match snapshot', () => {
-    const component = render(<UserInvitationForm code="code" email="email" />);
+    const component = render(<ChangePasswordForm />);
     expect(component.container).toMatchSnapshot();
   });
 
   test('validation', async () => {
-    render(<UserInvitationForm code="code" email={faker.internet.email()} />);
+    render(<ChangePasswordForm />);
 
-    const sendEmailBtn = screen.getByRole('button', {
-      name: 'button.setting',
+    const saveBtn = screen.getByRole('button', {
+      name: 'button.save',
     });
     const passwordInput = screen.getByPlaceholderText(
       'input.placeholder.password',
     );
+    const newPasswordInput = screen.getByPlaceholderText(
+      'main.profile.placeholder.new-password',
+    );
     const confirmPasswordInput = screen.getByPlaceholderText(
-      'input.placeholder.confirm-password',
+      'main.profile.placeholder.confirm-new-password',
     );
 
     await act(async () => {
       await userEvent.type(passwordInput, faker.string.alphanumeric(8));
+      await userEvent.type(newPasswordInput, faker.string.alphanumeric(9));
       await userEvent.type(confirmPasswordInput, faker.string.alphanumeric(9));
     });
 
-    expect(sendEmailBtn).toBeDisabled();
+    expect(saveBtn).toBeDisabled();
 
     await act(async () => {
-      await userEvent.clear(passwordInput);
+      await userEvent.clear(newPasswordInput);
       await userEvent.clear(confirmPasswordInput);
 
       const password = faker.string.alphanumeric(8);
-      await userEvent.type(passwordInput, password);
+      await userEvent.type(newPasswordInput, password);
       await userEvent.type(confirmPasswordInput, password);
     });
 
-    await waitFor(() => expect(sendEmailBtn).not.toBeDisabled());
+    await waitFor(() => expect(saveBtn).not.toBeDisabled());
   });
   describe('Submittion', () => {
     beforeEach(async () => {
-      render(<UserInvitationForm code="code" email={faker.internet.email()} />);
+      render(<ChangePasswordForm />);
 
       const passwordInput = screen.getByPlaceholderText(
         'input.placeholder.password',
       );
+      const newPasswordInput = screen.getByPlaceholderText(
+        'main.profile.placeholder.new-password',
+      );
       const confirmPasswordInput = screen.getByPlaceholderText(
-        'input.placeholder.confirm-password',
+        'main.profile.placeholder.confirm-new-password',
       );
       await act(async () => {
+        await userEvent.type(passwordInput, faker.string.alphanumeric(8));
+
         const password = faker.string.alphanumeric(8);
-        await userEvent.type(passwordInput, password);
+        await userEvent.type(newPasswordInput, password);
         await userEvent.type(confirmPasswordInput, password);
       });
     });
     test('on Success', async () => {
-      simpleMockHttp('post', '/api/admin/auth/signUp/invitation');
+      simpleMockHttp({
+        method: 'post',
+        path: '/api/admin/users/password/change',
+      });
 
       const submitBtn = screen.getByRole('button', {
-        name: 'button.setting',
+        name: 'button.save',
       });
       await act(() => userEvent.click(submitBtn));
 
       await waitFor(() =>
         expect(
-          screen.getByText(new RegExp('success', 'i')),
+          screen.getByText(new RegExp('toast.save', 'i')),
         ).toBeInTheDocument(),
       );
     });
     test('on Error', async () => {
-      simpleMockHttp('post', '/api/admin/auth/signUp/invitation', 500);
+      simpleMockHttp({
+        method: 'post',
+        path: '/api/admin/users/password/change',
+        status: 500,
+      });
 
       const submitBtn = screen.getByRole('button', {
-        name: 'button.setting',
+        name: 'button.save',
       });
       await act(() => userEvent.click(submitBtn));
 

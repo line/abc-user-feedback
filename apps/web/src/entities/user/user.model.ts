@@ -61,7 +61,7 @@ export const useUserStore = create<State, Action>((set, get) => ({
   signOut: async () => {
     await axios.get('/api/logout');
     sessionStorage.removeItem('jwt');
-    router.reload();
+    router.replace(Path.SIGN_IN);
   },
   setUser: async () => {
     const jwt = sessionStorage.getItem('jwt');

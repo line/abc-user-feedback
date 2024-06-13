@@ -13,9 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
-import type { GetStaticProps } from 'next';
-import { useRouter } from 'next/router';
+import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
@@ -26,18 +24,13 @@ import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 
-const ResetPasswordPage: NextPageWithLayout = () => {
+interface IProps {
+  code: string;
+  email: string;
+}
+const ResetPasswordPage: NextPageWithLayout<IProps> = (props) => {
+  const { code, email } = props;
   const { t } = useTranslation();
-  const router = useRouter();
-
-  const code = useMemo(
-    () => (router.query?.code ?? '') as string,
-    [router.query],
-  );
-  const email = useMemo(
-    () => (router.query?.email ?? '') as string,
-    [router.query],
-  );
 
   return (
     <div className="relative">
@@ -51,10 +44,15 @@ ResetPasswordPage.getLayout = (page) => {
   return <MainLayout center>{page}</MainLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<IProps> = async ({
+  locale,
+  query,
+}) => {
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      code: (query.code ?? '') as string,
+      email: (query.email ?? '') as string,
     },
   };
 };

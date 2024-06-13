@@ -13,12 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { http, HttpResponse } from 'msw';
+import { faker } from '@faker-js/faker';
 
-import { env } from '@/env.mjs';
+import type { Project } from '../project.type';
 
-export const tenantMockHandlers = [
-  http.get(`${env.NEXT_PUBLIC_API_BASE_URL}/api/tenants`, () => {
-    return HttpResponse.json({}, { status: 201 });
-  }),
+export const MOCK_PROJECTS: Project[] = [
+  {
+    id: faker.number.int(),
+    createdAt: faker.date.recent().toISOString(),
+    description: faker.lorem.sentence(),
+    name: faker.lorem.word(),
+    timezone: {
+      countryCode: 'US',
+      name: 'America/New_York',
+      offset: '-05:00',
+    },
+    updatedAt: faker.date.recent().toISOString(),
+  },
 ];

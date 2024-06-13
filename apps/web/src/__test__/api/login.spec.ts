@@ -26,7 +26,12 @@ describe('Login API', () => {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
-    simpleMockHttp('post', '/api/admin/auth/signIn/email', 201, jwt);
+    simpleMockHttp({
+      method: 'post',
+      path: '/api/admin/auth/signIn/email',
+      status: 201,
+      data: jwt,
+    });
 
     const body = {
       email: faker.internet.email(),
@@ -47,7 +52,12 @@ describe('Login API', () => {
   test('error', async () => {
     const data = { message: 'error' };
 
-    simpleMockHttp('post', '/api/admin/auth/signIn/email', 500, data);
+    simpleMockHttp({
+      method: 'post',
+      path: '/api/admin/auth/signIn/email',
+      status: 500,
+      data: data,
+    });
 
     const body = {
       email: faker.internet.email(),

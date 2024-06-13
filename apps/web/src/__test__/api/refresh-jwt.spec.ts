@@ -26,7 +26,12 @@ describe('Refresh Jwt API', () => {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
-    simpleMockHttp('get', '/api/admin/auth/refresh', 200, newJwt);
+    simpleMockHttp({
+      method: 'get',
+      path: '/api/admin/auth/refresh',
+      status: 200,
+      data: newJwt,
+    });
 
     const originalJwt = {
       accessToken: faker.string.nanoid(),
@@ -50,7 +55,12 @@ describe('Refresh Jwt API', () => {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
-    simpleMockHttp('get', '/api/admin/auth/refresh', 200, newJwt);
+    simpleMockHttp({
+      method: 'get',
+      path: '/api/admin/auth/refresh',
+      status: 200,
+      data: newJwt,
+    });
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',
@@ -68,7 +78,12 @@ describe('Refresh Jwt API', () => {
       accessToken: faker.string.nanoid(),
       refreshToken: faker.string.nanoid(),
     };
-    simpleMockHttp('get', '/api/admin/auth/refresh', 500, newJwt);
+    simpleMockHttp({
+      method: 'get',
+      path: '/api/admin/auth/refresh',
+      status: 500,
+      data: newJwt,
+    });
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'POST',

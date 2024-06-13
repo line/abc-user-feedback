@@ -16,64 +16,50 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import { ErrorCode } from '@ufb/shared';
 import { TextInput, toast } from '@ufb/ui';
 
+import { changePasswordFormSchema } from './change-password-form.schema';
+
 import { useOAIMutation } from '@/hooks';
 
-type IForm = {
-  password: string;
-  newPassword: string;
-  confirmNewPassword: string;
+type FormType = z.infer<typeof changePasswordFormSchema>;
+
+const DEFAULT_VALUES: FormType = {
+  confirmNewPassword: '',
+  newPassword: '',
+  password: '',
 };
 
-const schema: Zod.ZodType<IForm> = z
-  .object({
-    password: z.string(),
-    newPassword: z.string(),
-    confirmNewPassword: z.string(),
-  })
-  .refine(({ password, newPassword }) => password !== newPassword, {
-    message: 'must not equal Password',
-    path: ['newPassword'],
-  })
-  .refine(
-    ({ newPassword, confirmNewPassword }) => newPassword === confirmNewPassword,
-    {
-      message: 'must equal New Password',
-      path: ['confirmNewPassword'],
-    },
-  );
-
-interface IProps extends React.PropsWithChildren {}
+interface IProps {}
 
 const ChangePasswordForm: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { register, handleSubmit, setError, formState, reset } = useForm<IForm>(
-    { resolver: zodResolver(schema) },
-  );
+  const { register, handleSubmit, setError, formState, reset } =
+    useForm<FormType>({
+      resolver: zodResolver(changePasswordFormSchema),
+      defaultValues: DEFAULT_VALUES,
+    });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/users/password/change',
     queryOptions: {
       async onSuccess() {
-        toast.accent({ title: t('toast.save') });
-        reset({ confirmNewPassword: '', newPassword: '', password: '' });
+        toast.positive({ title: t('toast.save') });
+        reset();
       },
       onError(error) {
-        if (typeof error.message === 'string') {
-          if (error.code === ErrorCode.User.InvalidPassword) {
-            setError('password', { message: 'Invalid Password' });
-          }
-          toast.negative({ title: error.message as string });
-        }
-        if (Array.isArray(error.message)) {
-          error.message.forEach((message) =>
-            toast.negative({ title: message }),
-          );
+        if (error.code === ErrorCode.User.InvalidPassword) {
+          setError('password', { message: 'Invalid Password' });
+          toast.negative({
+            title: 'Error',
+            description: error.message as string,
+          });
+        } else {
+          toast.negative({ title: 'Error', description: error.message });
         }
       },
     },
@@ -86,7 +72,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
         <button
           form="reset_password"
           className="btn btn-md btn-primary min-w-[120px]"
-          disabled={isPending}
+          disabled={!formState.isValid || isPending}
         >
           {t('button.save')}
         </button>

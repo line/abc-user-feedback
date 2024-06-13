@@ -13,4 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ui';
+export { default as ChangePasswordForm } from './change-password-form.ui';
+export { default as UserProfileForm } from './user-profile-form.ui';
