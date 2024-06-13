@@ -25,13 +25,14 @@ import clsx from 'clsx';
 
 import { Badge, Icon } from '@ufb/ui';
 
+import FieldSettingPopover from '../setting-menu/FieldSetting/FieldSettingPopover';
+import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
+import CreateChannelInputTemplate from './CreateChannelInputTemplate';
+
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import type { InputFieldType } from '@/types/field.type';
 import { fieldProperty, isDefaultField } from '@/utils/field-utils';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-import FieldSettingPopover from '../setting-menu/FieldSetting/FieldSettingPopover';
-import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
-import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 const columnHelper = createColumnHelper<InputFieldType>();
 

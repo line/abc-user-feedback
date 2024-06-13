@@ -21,12 +21,14 @@ import { z } from 'zod';
 
 import { Badge, Input, toast } from '@ufb/ui';
 
-import { DescriptionTooltip, SettingMenuTemplate } from '@/components';
-import { useTenant } from '@/contexts/tenant.context';
-import { useOAIMutation } from '@/hooks';
-import type { OAuthConfigType } from '@/types/tenant.type';
+import { useTenantActions, useTenantState } from '@/entities/tenant';
+
 import OAuthInput from './OAuthInput';
 import RadioGroup from './RadioGroup';
+
+import { DescriptionTooltip, SettingMenuTemplate } from '@/components';
+import { useOAIMutation } from '@/hooks';
+import type { OAuthConfigType } from '@/types/tenant.type';
 
 export interface ISignUpInfoForm {
   siteName: string;
@@ -71,7 +73,8 @@ interface IProps extends React.PropsWithChildren {}
 const SignUpSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
 
-  const { tenant: data, refetch } = useTenant();
+  const tenant = useTenantState();
+  const { refetchTenant } = useTenantActions();
 
   const methods = useForm<ISignUpInfoForm>({
     resolver: zodResolver(scheme),
@@ -90,7 +93,7 @@ const SignUpSetting: React.FC<IProps> = () => {
     path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
-        await refetch();
+        await refetchTenant();
         toast.positive({ title: t('toast.save') });
         setDomainState({ isSubmitted: false, isValid: false });
       },
@@ -101,9 +104,9 @@ const SignUpSetting: React.FC<IProps> = () => {
   });
 
   useEffect(() => {
-    if (!data) return;
-    reset(data);
-  }, [data]);
+    if (!tenant) return;
+    reset(tenant);
+  }, [tenant]);
 
   const onClickDelete = (targetIndex: number) => () => {
     setValue(
@@ -144,7 +147,7 @@ const SignUpSetting: React.FC<IProps> = () => {
   };
 
   const onSubmit = (input: ISignUpInfoForm) => {
-    if (!data) return;
+    if (!tenant) return;
     if (input.isRestrictDomain) {
       input.allowDomains = (input.allowDomains ?? []).filter(
         (v) => v && v.length > 0,
@@ -152,7 +155,7 @@ const SignUpSetting: React.FC<IProps> = () => {
     } else {
       input.allowDomains = [];
     }
-    mutate({ ...data, ...input });
+    mutate({ ...tenant, ...input });
   };
 
   return (

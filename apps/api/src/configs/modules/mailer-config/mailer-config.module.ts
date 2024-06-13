@@ -37,7 +37,7 @@ import type { ConfigServiceType } from '@/types/config-service.type';
             auth: username && password && { user: username, pass: password },
             secure: port === 465,
           },
-          defaults: { from: `"User feedback" <${sender}>`, sdd: '' },
+          defaults: { from: `"User feedback" <${sender}>` },
           template: {
             dir: __dirname + '/templates/',
             adapter: new HandlebarsAdapter(),

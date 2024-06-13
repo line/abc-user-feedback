@@ -29,8 +29,9 @@ import {
   toast,
 } from '@ufb/ui';
 
+import type { UserTypeEnum } from '@/entities/user';
+
 import { SelectBox } from '@/components';
-import type { UserTypeEnum } from '@/contexts/user.context';
 import { useOAIMutation, useOAIQuery, useProjects } from '@/hooks';
 
 interface IProps {}

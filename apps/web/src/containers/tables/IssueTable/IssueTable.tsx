@@ -31,6 +31,12 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
+import { FeedbackTableInIssue } from '../FeedbackTable';
+import IssueSettingPopover from './IssueSettingPopover';
+import IssueTableSelectBox from './IssueTableSelectBox';
+import { TableRow } from './TableRow';
+import TicketLink from './TicketLink';
+
 import {
   CheckedTableHead,
   DateRangePicker,
@@ -59,11 +65,6 @@ import useQueryParamsState from '@/hooks/useQueryParamsState';
 import type { DateRangeType } from '@/types/date-range.type';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 import type { IssueType } from '@/types/issue.type';
-import { FeedbackTableInIssue } from '../FeedbackTable';
-import IssueSettingPopover from './IssueSettingPopover';
-import IssueTableSelectBox from './IssueTableSelectBox';
-import { TableRow } from './TableRow';
-import TicketLink from './TicketLink';
 
 const columnHelper = createColumnHelper<IssueType>();
 

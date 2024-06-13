@@ -15,9 +15,10 @@
  */
 import { useEffect, useState } from 'react';
 
-import { useChannels } from '@/hooks';
 import { FeedbackTableProvider } from './feedback-table.context';
 import FeedbackTable from './FeedbackTable';
+
+import { useChannels } from '@/hooks';
 
 interface IProps {
   issueId: number;

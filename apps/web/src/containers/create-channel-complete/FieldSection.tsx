@@ -24,11 +24,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
+import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
+
 import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
 import type { FieldType } from '@/types/field.type';
 import { fieldProperty, sortField } from '@/utils/field-utils';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-import OptionInfoPopover from '../setting-menu/FieldSetting/OptionInfoPopover';
 
 const columnHelper = createColumnHelper<FieldType>();
 

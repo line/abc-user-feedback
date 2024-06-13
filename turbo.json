@@ -24,6 +24,12 @@
       "outputs": ["node_modules/.cache/.prettiercache"],
       "outputMode": "new-only"
     },
+    "@ufb/tailwind#build": {
+      "outputs": ["dist/**"]
+    },
+    "@ufb/shared#build": {
+      "outputs": ["dist/**"]
+    },
     "lint": {
       "dependsOn": ["^topo", "^build"],
       "outputs": ["node_modules/.cache/.eslintcache"]

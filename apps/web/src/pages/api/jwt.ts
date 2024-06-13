@@ -18,10 +18,14 @@ import { getIronSession } from 'iron-session';
 
 import type { JwtSession } from '@/constants/iron-option';
 import { ironOption } from '@/constants/iron-option';
+import { createNextApiHandler } from '@/server/api-handler';
 
-const handler: NextApiHandler = async (req, res) => {
-  const session = await getIronSession<JwtSession>(req, res, ironOption);
-  res.send({ jwt: session.jwt ?? null });
-};
+const handler: NextApiHandler = createNextApiHandler({
+  GET: async (req, res) => {
+    const session = await getIronSession<JwtSession>(req, res, ironOption);
+
+    res.send({ jwt: session?.jwt ?? null });
+  },
+});
 
 export default handler;

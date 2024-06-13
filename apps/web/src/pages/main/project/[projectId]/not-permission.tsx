@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { MainTemplate } from '@/components';
-import type { NextPageWithLayout } from '@/pages/_app';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
 
 const NotPermissionPage: NextPageWithLayout = () => {
   return <div>Not Permissions</div>;
 };
 
-NotPermissionPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+NotPermissionPage.getLayout = (page) => {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export default NotPermissionPage;

@@ -19,10 +19,11 @@ import { useTranslation } from 'next-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import type { DateRangeType } from '@/types/date-range.type';
 import DateRangePicker from '../DateRangePicker';
 import SelectBox from '../SelectBox';
 import type { SearchItemType } from './TableSearchInput';
+
+import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps extends React.PropsWithChildren {
   columns: SearchItemType[];

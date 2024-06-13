@@ -28,14 +28,15 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import type { FieldRowType } from './FieldSetting';
+import OptionDeletePopover from './OptionBadge';
+
 import { DescriptionTooltip, SelectBox } from '@/components/etc';
 import {
   FieldFormatEnumList,
   FieldPropertyEnumList,
   FieldStatusEnumList,
 } from '@/types/field.type';
-import type { FieldRowType } from './FieldSetting';
-import OptionDeletePopover from './OptionBadge';
 
 const schema = (otherFields: FieldRowType[]): Zod.ZodType<FieldRowType> =>
   z.object({

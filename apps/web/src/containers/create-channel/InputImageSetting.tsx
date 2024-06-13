@@ -20,10 +20,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Input, toast } from '@ufb/ui';
 
+import CreateChannelInputTemplate from './CreateChannelInputTemplate';
+
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import { useOAIMutation } from '@/hooks';
 import type { InputImageConfigType } from '@/types/channel.type';
-import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 type InputErrorType = {
   accessKeyId?: string;

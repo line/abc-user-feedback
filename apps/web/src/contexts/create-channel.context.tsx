@@ -17,15 +17,16 @@ import { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import {
+  CreateContext,
+  CreateProvider,
+} from './create-project-channel.context';
+
 import type {
   InputChannelInfoType,
   InputImageConfigType,
 } from '@/types/channel.type';
 import type { InputFieldType } from '@/types/field.type';
-import {
-  CreateContext,
-  CreateProvider,
-} from './create-project-channel.context';
 
 const DEFAULT_FIELDS: InputFieldType[] = [
   {

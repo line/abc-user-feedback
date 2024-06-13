@@ -20,12 +20,13 @@ import { useTranslation } from 'react-i18next';
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
+import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
+import CreateChannelInputTemplate from './CreateChannelInputTemplate';
+
 import { Path } from '@/constants/path';
 import { useCreateChannel } from '@/contexts/create-channel.context';
 import { useOAIMutation } from '@/hooks';
 import { isDefaultField } from '@/utils/field-utils';
-import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
-import CreateChannelInputTemplate from './CreateChannelInputTemplate';
 
 interface IProps {}
 

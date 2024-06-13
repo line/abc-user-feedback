@@ -13,35 +13,50 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ReactElement, ReactNode } from 'react';
-import { useState } from 'react';
-import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
-import { TenantProvider } from '@/contexts/tenant.context';
-import { UserProvider } from '@/contexts/user.context';
+import type { NextPageWithLayout } from '@/shared/types';
+import { TenantGuard } from '@/entities/tenant';
+import { useUserActions } from '@/entities/user';
+
+import sessionStorage from '@/libs/session-storage';
 // NOTE: DON'T Change the following import order
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/react-datepicker.css';
-import './_app.css';
-
-export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+import '@/shared/styles/global.css';
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: { queries: { staleTime: 60 * 1000 } },
+      }),
+  );
 
   const getLayout = Component.getLayout ?? ((page) => page);
+  const { setUser } = useUserActions();
+
+  const initializeJwt = async () => {
+    const { data } = await axios.get('/api/jwt');
+    if (!data?.jwt) return;
+    sessionStorage.setItem('jwt', data.jwt);
+    setUser();
+  };
+
+  useEffect(() => {
+    initializeJwt();
+  }, []);
 
   return (
     <>
@@ -50,12 +65,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <TenantProvider>
-          <UserProvider>
-            {getLayout(<Component {...pageProps} />)}
-            <Toaster />
-          </UserProvider>
-        </TenantProvider>
+        <TenantGuard>
+          {getLayout(<Component {...pageProps} />)}
+          <Toaster />
+        </TenantGuard>
       </QueryClientProvider>
     </>
   );

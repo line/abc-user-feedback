@@ -26,6 +26,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
+import type { FieldRowType } from './FieldSetting';
+
 import { ImagePreviewButton } from '@/components/buttons';
 import { ExpandableText, TableResizer } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
@@ -33,7 +35,6 @@ import { getStatusColor, ISSUES } from '@/constants/issues';
 import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
 import type { FieldType } from '@/types/field.type';
 import type { IssueStatus } from '@/types/issue.type';
-import type { FieldRowType } from './FieldSetting';
 
 const columnHelper = createColumnHelper<any>();
 

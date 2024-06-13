@@ -16,10 +16,11 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { Path } from '@/constants/path';
-import { useChannels } from '@/hooks';
 import { FeedbackTableProvider } from './feedback-table.context';
 import FeedbackTable from './FeedbackTable';
+
+import { Path } from '@/constants/path';
+import { useChannels } from '@/hooks';
 
 interface IProps {
   issueId?: number;

@@ -16,11 +16,12 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
 
-import { ExpandableText, TableCheckbox } from '@/components';
-import type { FieldType } from '@/types/field.type';
 import EditableCell from './EditableCell';
 import FeedbackCell from './FeedbackCell';
 import IssueCell from './IssueCell';
+
+import { ExpandableText, TableCheckbox } from '@/components';
+import type { FieldType } from '@/types/field.type';
 
 const columnHelper = createColumnHelper<any>();
 

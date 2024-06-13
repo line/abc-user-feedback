@@ -20,10 +20,11 @@ import { useStore } from 'zustand';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
+import useFeedbackTable from '../feedback-table.context';
+
 import { useDownload, usePermissions } from '@/hooks';
 import type { IFetchError } from '@/types/fetch-error.type';
 import useThemeStore from '@/zustand/theme.store';
-import useFeedbackTable from '../feedback-table.context';
 
 export interface IDownloadButtonProps {
   query: any;

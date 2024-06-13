@@ -39,6 +39,7 @@ const CreatePage: NextPage = () => {
     </CreateChannelProvider>
   );
 };
+
 const CreateChannel: NextPage = () => {
   const { t } = useTranslation();
   const { completeStepIndex, currentStepIndex, currentStep, stepperText } =

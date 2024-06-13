@@ -170,6 +170,7 @@ export class AuthService {
 
   async signIn(user: UserDto): Promise<JwtDto> {
     const { email, id, department, name, type } = user;
+
     const { state } = await this.userService.findById(id);
 
     if (state === UserStateEnum.Blocked) throw new UserBlockedException();

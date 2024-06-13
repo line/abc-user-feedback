@@ -29,6 +29,11 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
+import FeedbackRequestPopover from './FeedbackRequestPopover';
+import FieldSettingPopover from './FieldSettingPopover';
+import OptionInfoPopover from './OptionInfoPopover';
+import PreviewTable from './PreviewTable';
+
 import { SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, usePermissions } from '@/hooks';
@@ -37,10 +42,6 @@ import type { ChannelType } from '@/types/channel.type';
 import type { FieldType } from '@/types/field.type';
 import { fieldProperty, isDefaultField, sortField } from '@/utils/field-utils';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-import FeedbackRequestPopover from './FeedbackRequestPopover';
-import FieldSettingPopover from './FieldSettingPopover';
-import OptionInfoPopover from './OptionInfoPopover';
-import PreviewTable from './PreviewTable';
 
 export type FieldRowType = Omit<FieldType, 'id' | 'createdAt' | 'updatedAt'> & {
   id?: number;

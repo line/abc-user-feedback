@@ -27,10 +27,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
+
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useCreateProject } from '@/contexts/create-project.context';
 import type { InputApiKeyType } from '@/types/api-key.type';
-import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 const columnHelper = createColumnHelper<InputApiKeyType>();
 const getColumns = (t: TFunction, onDelete: (index: number) => void) => [

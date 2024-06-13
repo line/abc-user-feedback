@@ -15,10 +15,11 @@
  */
 import { Icon } from '@ufb/ui';
 
+import useFeedbackTable from '../feedback-table.context';
+
 import { DescriptionTooltip } from '@/components';
 import { useChannels } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
-import useFeedbackTable from '../feedback-table.context';
 
 interface IProps extends React.PropsWithChildren {
   onChangeChannel: (channelId: number) => void;

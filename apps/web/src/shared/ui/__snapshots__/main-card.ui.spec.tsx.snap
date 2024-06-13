@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MainCard snapshot 1`] = `
+<div>
+  <div
+    class="border-fill-tertiary h-[204px] w-[452px] rounded border p-8"
+  >
+    <div
+      class="mb-10 flex gap-5"
+    >
+      <div
+        class="flex h-10 w-10 items-center justify-center rounded"
+        style="background-color: rgb(72, 222, 204);"
+      >
+        <div
+          class="inline-block text-inverse"
+          height="20"
+          width="20"
+        />
+      </div>
+      <div
+        class="flex-1"
+      >
+        <p
+          class="font-16-bold mb-1"
+        >
+          est
+        </p>
+        <p
+          class="font-12-regular text-secondary line-clamp-1 break-all"
+        >
+          tutamen arcesso abeo
+        </p>
+      </div>
+    </div>
+    <div
+      class="flex gap-16"
+    >
+      <div>
+        <p
+          class="font-12-regular mb-1"
+        >
+          speciosus
+        </p>
+        <p
+          class="font-24-bold"
+        >
+          2,507,328,496,599,040
+        </p>
+      </div>
+      <div>
+        <p
+          class="font-12-regular mb-1"
+        >
+          cupiditas
+        </p>
+        <p
+          class="font-24-bold"
+        >
+          3,823,714,539,929,600
+        </p>
+      </div>
+    </div>
+  </div>
+  <div
+    style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
+  />
+</div>
+`;

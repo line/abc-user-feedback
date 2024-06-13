@@ -17,6 +17,11 @@ import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import {
+  CreateContext,
+  CreateProvider,
+} from './create-project-channel.context';
+
 import type { InputApiKeyType } from '@/types/api-key.type';
 import type { InputIssueTrackerType } from '@/types/issue-tracker.type';
 import type { InputMemberType } from '@/types/member.type';
@@ -24,10 +29,6 @@ import { PermissionList } from '@/types/permission.type';
 import type { InputProjectInfoType } from '@/types/project.type';
 import type { InputRoleType } from '@/types/role.type';
 import { getDefaultTimezone } from '@/utils/timezone';
-import {
-  CreateContext,
-  CreateProvider,
-} from './create-project-channel.context';
 
 const DEFAULT_ROLES: InputRoleType[] = [
   { id: 1, name: 'Admin', permissions: [...PermissionList] },

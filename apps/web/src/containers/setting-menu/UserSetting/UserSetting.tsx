@@ -26,6 +26,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
+import UserEditPopover from './UserEditPopover';
+import UserInvitationDialog from './UserInvitationDialog';
+
 import {
   CheckedTableHead,
   SettingMenuTemplate,
@@ -39,8 +42,6 @@ import type { SearchItemType } from '@/components/etc/TableSearchInput';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, useOAIQuery, useSort, useUserSearch } from '@/hooks';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
-import UserEditPopover from './UserEditPopover';
-import UserInvitationDialog from './UserInvitationDialog';
 
 export type UserDataType = {
   id: number;

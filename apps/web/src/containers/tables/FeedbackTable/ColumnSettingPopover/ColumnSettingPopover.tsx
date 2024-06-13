@@ -31,9 +31,10 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import DraggableColumnItem from './DraggableColumnItem';
+
 import type { FieldType } from '@/types/field.type';
 import { reorder } from '@/utils/reorder';
-import DraggableColumnItem from './DraggableColumnItem';
 
 interface IProps extends React.PropsWithChildren {
   columns: ColumnDef<any, any>[];

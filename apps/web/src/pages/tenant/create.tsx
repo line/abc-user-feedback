@@ -13,92 +13,34 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
-import { toast } from '@ufb/ui';
+import type { NextPageWithLayout } from '@/shared/types';
+import { useTenantState } from '@/entities/tenant';
+import { CreateTenantForm } from '@/features/create-tenant';
+import { MainLayout } from '@/widgets';
 
-import AuthTemplate from '@/components/templates/AuthTemplate';
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { Path } from '@/constants/path';
-import { useTenant } from '@/contexts/tenant.context';
-import { useOAIMutation } from '@/hooks';
-import type { NextPageWithLayout } from '../_app';
 
-interface IForm {
-  siteName: string;
-}
+const CreateTenantPage: NextPageWithLayout = () => {
+  const router = useRouter();
 
-const schema: Zod.ZodType<IForm> = z.object({
-  siteName: z.string(),
-});
+  const tenant = useTenantState();
 
-const defaultValues: IForm = {
-  siteName: '',
+  useEffect(() => {
+    if (!tenant) return;
+    router.replace(Path.SIGN_IN);
+  }, [tenant]);
+
+  return <CreateTenantForm />;
 };
 
-const CreatePage: NextPageWithLayout = () => {
-  const { t } = useTranslation();
-
-  const router = useRouter();
-  const { refetch } = useTenant();
-
-  const { register, handleSubmit } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
-  });
-
-  const { mutate, isPending } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/tenants',
-    queryOptions: {
-      async onSuccess() {
-        toast.positive({ title: 'Success' });
-        toast.positive({
-          title: 'create Default Super User',
-          description: 'email: user@feedback.com \n password: 12345678',
-        });
-        router.push(Path.SIGN_IN);
-        refetch();
-      },
-      onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
-      },
-    },
-  });
-  const onSubmit = (data: IForm) => mutate(data);
-
-  return (
-    <AuthTemplate>
-      <div className="flex h-screen w-screen items-center justify-center">
-        <div className="w-full max-w-[400px] rounded border p-4 shadow">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col gap-4"
-          >
-            <h1 className="font-20-bold">{t('tenant.create.title')}</h1>
-            <label>
-              <span>{t('tenant.create.site-name')}</span>
-              <input className="input" type="text" {...register('siteName')} />
-            </label>
-
-            <button
-              className="btn btn-primary"
-              type="submit"
-              disabled={isPending}
-            >
-              {t('button.setting')}
-            </button>
-          </form>
-        </div>
-      </div>
-    </AuthTemplate>
-  );
+CreateTenantPage.getLayout = (page) => {
+  return <MainLayout center> {page}</MainLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
@@ -109,4 +51,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default CreatePage;
+export default CreateTenantPage;

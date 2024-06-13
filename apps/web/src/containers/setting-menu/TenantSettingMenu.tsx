@@ -15,10 +15,11 @@
  */
 import { useTranslation } from 'next-i18next';
 
+import { useTenantState } from '@/entities/tenant';
+import { useUserState } from '@/entities/user';
+
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
-import { useTenant } from '@/contexts/tenant.context';
-import { useUser } from '@/contexts/user.context';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
@@ -28,16 +29,16 @@ interface IProps extends React.PropsWithChildren {
 
 const TenantSettingMenu: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
-  const { user } = useUser();
+  const user = useUserState();
   const { onClickSettingMenu, settingMenu } = props;
 
-  const { tenant: data } = useTenant();
+  const tenant = useTenantState();
 
   return (
     <SettingMenuTemplate title="Tenant">
       <input
         className="input input-md"
-        value={data?.siteName}
+        value={tenant?.siteName}
         disabled
         style={{ color: 'var(--text-color-primary)' }}
       />

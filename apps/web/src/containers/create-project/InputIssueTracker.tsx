@@ -21,6 +21,8 @@ import { ZodError } from 'zod';
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, TextInput, toast } from '@ufb/ui';
 
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
+
 import { SelectBox } from '@/components';
 import { Path } from '@/constants/path';
 import {
@@ -29,7 +31,6 @@ import {
 } from '@/contexts/create-project.context';
 import { useOAIMutation } from '@/hooks';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
-import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 interface IProps {}
 

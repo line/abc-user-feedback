@@ -30,13 +30,14 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import CreateProjectInputTemplate from './CreateProjectInputTemplate';
+
 import { DescriptionTooltip, SelectBox, TableSortIcon } from '@/components';
 import { useCreateProject } from '@/contexts/create-project.context';
 import { useUserSearch } from '@/hooks';
 import type { InputMemberType } from '@/types/member.type';
 import type { InputRoleType } from '@/types/role.type';
 import type { UserType } from '@/types/user.type';
-import CreateProjectInputTemplate from './CreateProjectInputTemplate';
 
 const columnHelper = createColumnHelper<InputMemberType>();
 

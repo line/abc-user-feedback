@@ -15,9 +15,10 @@
  */
 import { useTranslation } from 'react-i18next';
 
+import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
+
 import { CreateSectionTemplate } from '@/components/templates/CreateSectionTemplate';
 import type { FieldType } from '@/types/field.type';
-import PreviewTable from '../setting-menu/FieldSetting/PreviewTable';
 
 interface IProps {
   fields: FieldType[];

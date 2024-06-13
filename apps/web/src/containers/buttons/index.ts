@@ -14,6 +14,5 @@
  * under the License.
  */
 export { default as ShareButton } from './ShareButton';
-export { default as OAuthLoginButton } from './OAuthLoginButton';
 export { default as CreateChannelButton } from './CreateChannelButton';
 export { default as CreateProjectButton } from './CreateProjectButton';

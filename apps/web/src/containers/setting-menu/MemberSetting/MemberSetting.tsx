@@ -26,6 +26,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
+import MemberDeleteDialog from './MemberDeleteDialog';
+import MemberInvitationDialog from './MemberInvitationDialog';
+import MemberUpdatePopover from './MemberUpdatePopover';
+
 import {
   SettingMenuTemplate,
   TableLoadingRow,
@@ -34,9 +38,6 @@ import {
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIQuery, usePermissions, useSort } from '@/hooks';
 import type { PermissionType } from '@/types/permission.type';
-import MemberDeleteDialog from './MemberDeleteDialog';
-import MemberInvitationDialog from './MemberInvitationDialog';
-import MemberUpdatePopover from './MemberUpdatePopover';
 
 export type MemberType = {
   id: number;

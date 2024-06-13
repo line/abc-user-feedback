@@ -121,6 +121,7 @@ const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
     </div>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
     props: {

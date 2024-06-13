@@ -17,12 +17,13 @@ import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate } from '@/components';
+import type { NextPageWithLayout } from '@/shared/types';
+import { MainLayout } from '@/widgets';
+
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { CreateChannelButton } from '@/containers/buttons';
 import { IssueTable } from '@/containers/tables';
 import { useOAIQuery } from '@/hooks';
-import type { NextPageWithLayout } from '../../../_app';
 
 interface IProps {
   projectId: number;
@@ -51,8 +52,8 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
   );
 };
 
-IssueMangementPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+IssueMangementPage.getLayout = (page) => {
+  return <MainLayout>{page}</MainLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({
