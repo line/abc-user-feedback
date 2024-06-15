@@ -91,7 +91,7 @@ importers:
         version: 6.0.1(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(prom-client@15.1.2)
       aws-sdk:
         specifier: ^2.1604.0
-        version: 2.1641.0
+        version: 2.1642.0
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -3940,8 +3940,8 @@ packages:
   avvio@8.3.0:
     resolution: {integrity: sha512-VBVH0jubFr9LdFASy/vNtm5giTrnbVquWBhT0fyizuNK2rQ7e7ONU2plZQWUNqtE1EmxFEb+kbSkFRkstiaS9Q==}
 
-  aws-sdk@2.1641.0:
-    resolution: {integrity: sha512-XkKbVu4VKFjY7wsTSWEYxBR2fVN8gUovAvRrHuJt9mMDdDh/wPkBZ04ayGT+Bd5bgmmIeE3sk3UMokKQEudJEQ==}
+  aws-sdk@2.1642.0:
+    resolution: {integrity: sha512-xTqRcLbb7F3GadFQN1+m25nP1twA2Lmlmhpt5gbYb3VCR91lb+c9EnsEr7U60zLv4AR2ip/GkDtSpKS/EzLOzA==}
     engines: {node: '>= 10.0.0'}
 
   aws4@1.13.0:
@@ -12998,7 +12998,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  aws-sdk@2.1641.0:
+  aws-sdk@2.1642.0:
     dependencies:
       buffer: 4.9.2
       events: 1.1.1
