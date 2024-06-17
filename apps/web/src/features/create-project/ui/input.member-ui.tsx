@@ -13,12 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as Logo } from './logo.ui';
-export { default as LocaleSelectBox } from './locale-select-box.ui';
-export { default as LogoWithTitle } from './logo-with-title.ui';
+interface IProps {}
 
-export { default as SectionTemplate } from './section-template.ui';
-export { default as MainCard } from './main-card.ui';
+const InputMember: React.FC<IProps> = () => {
+  return <div>InputMember</div>;
+};
 
-export { default as SubMenu } from './sub-menu.ui';
-export { default as CreateTemplate } from './create-template.ui';
+export default InputMember;

@@ -13,12 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as Logo } from './logo.ui';
-export { default as LocaleSelectBox } from './locale-select-box.ui';
-export { default as LogoWithTitle } from './logo-with-title.ui';
+type CreateProject = {};
 
-export { default as SectionTemplate } from './section-template.ui';
-export { default as MainCard } from './main-card.ui';
+export const CREATE_PROJEC_STEP_KEY_LIST = [
+  'project-info',
+  'role',
+  'member',
+  'issue-tracker',
+  'api-key',
+] as const;
 
-export { default as SubMenu } from './sub-menu.ui';
-export { default as CreateTemplate } from './create-template.ui';
+export const LAST_CREATE_PROJECT_STEP = CREATE_PROJEC_STEP_KEY_LIST.length;
+export const FIRST_CREATE_PROJECT_STEP = 0;
+
+export type CreateProjectStepKey = (typeof CREATE_PROJEC_STEP_KEY_LIST)[number];
