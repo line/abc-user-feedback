@@ -39,10 +39,3 @@ export const create = (<State, Action>(
   initializer ?
     createZustand<ZustandState<State, Action>>(initializer)
   : createZustand<ZustandState<State, Action>>()) as Create;
-
-export const createZustandFactory = <State, Action>(
-  input: UseBoundStore<StoreApi<ZustandState<State, Action>>>,
-): [() => State, () => Action] => [
-  () => input(({ state }) => state),
-  () => input(({ state: _, ...actions }) => actions) as Action,
-];

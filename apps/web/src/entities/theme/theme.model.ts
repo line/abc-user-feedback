@@ -15,26 +15,19 @@
  */
 import { persist } from 'zustand/middleware';
 
-import { create, createZustandFactory } from '@/libs/zustand';
+import { create } from '@/libs/zustand';
 
 type State = { theme: 'light' | 'dark' };
 
 type Action = { toggle: () => void };
 
-const initialState: State = { theme: 'light' };
-
-const themeStore = create<State, Action>()(
+export const useThemeStore = create<State, Action>()(
   persist(
     (set) => ({
-      state: initialState,
+      theme: 'light',
       toggle: () =>
-        set(({ state }) => ({
-          state: { theme: state.theme === 'light' ? 'dark' : 'light' },
-        })),
+        set(({ theme }) => ({ theme: theme === 'light' ? 'dark' : 'light' })),
     }),
     { name: 'theme' },
   ),
 );
-
-export const [useThemeState, useThemeActions] =
-  createZustandFactory(themeStore);

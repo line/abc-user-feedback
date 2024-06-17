@@ -17,11 +17,10 @@ import { useEffect } from 'react';
 
 import { Icon } from '@ufb/ui';
 
-import { useThemeActions, useThemeState } from '../theme.model';
+import { useThemeStore } from '../theme.model';
 
 const ThemeToggleButton: React.FC = () => {
-  const { theme } = useThemeState();
-  const { toggle } = useThemeActions();
+  const { theme, toggle } = useThemeStore();
 
   useEffect(() => {
     if (typeof document === 'undefined') return;

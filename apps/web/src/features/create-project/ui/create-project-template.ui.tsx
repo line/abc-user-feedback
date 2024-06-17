@@ -17,10 +17,7 @@ import { Trans } from 'react-i18next';
 
 import { CreateTemplate } from '@/shared';
 
-import {
-  useCreateProjectActions,
-  useCreateProjectState,
-} from '../create-project-model';
+import { useCreateProjectStore } from '../create-project-model';
 import type { CreateProjectStepKey } from '../create-project-type';
 import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
 import InputApiKey from './input-api-key.ui';
@@ -55,8 +52,8 @@ const PROJECT_HELP_TEXT: Record<CreateProjectStepKey, React.ReactNode> = {
 interface IProps {}
 
 const CreateProjectTemplate: React.FC<IProps> = () => {
-  const { currentStep, editingStep } = useCreateProjectState();
-  const { nextStep, prevStep, getCurrentStepKey } = useCreateProjectActions();
+  const { currentStep, editingStep, nextStep, prevStep, getCurrentStepKey } =
+    useCreateProjectStore();
   const currentStepKey = getCurrentStepKey();
 
   return (
