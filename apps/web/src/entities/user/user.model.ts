@@ -27,7 +27,7 @@ import type { User } from './user.type';
 import { Path } from '@/constants/path';
 import client from '@/libs/client';
 import sessionStorage from '@/libs/session-storage';
-import { create, createZustandFactory } from '@/libs/zustand';
+import { create } from '@/libs/zustand';
 
 type State = { user: User | null };
 
@@ -89,6 +89,3 @@ export const useUserStore = create<State, Action>((set, get) => ({
     }
   },
 }));
-
-export const [useUserState, useUserActions] =
-  createZustandFactory(useUserStore);
