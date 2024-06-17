@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 
 import { toast } from '@ufb/ui';
 
-import { useUserActions } from '@/entities/user';
+import { useUserStore } from '@/entities/user';
 
 import { Path } from '@/constants/path';
 
@@ -28,7 +28,7 @@ interface IQuery {
 }
 
 export const useOAuthCallback = () => {
-  const { signInWithOAuth } = useUserActions();
+  const { signInWithOAuth } = useUserStore();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const router = useRouter();

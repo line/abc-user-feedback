@@ -24,7 +24,7 @@ import { Toaster } from '@ufb/ui';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
-import { useUserActions } from '@/entities/user';
+import { useUserStore } from '@/entities/user';
 
 import sessionStorage from '@/libs/session-storage';
 // NOTE: DON'T Change the following import order
@@ -45,7 +45,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   );
 
   const getLayout = Component.getLayout ?? ((page) => page);
-  const { setUser } = useUserActions();
+  const { setUser } = useUserStore();
 
   const initializeJwt = async () => {
     const { data } = await axios.get('/api/jwt');

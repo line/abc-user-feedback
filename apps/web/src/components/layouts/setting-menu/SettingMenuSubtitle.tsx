@@ -17,7 +17,7 @@ import { Fragment, useMemo } from 'react';
 
 import { Icon } from '@ufb/ui';
 
-import { useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 
 import { useChannels, useProjects } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
@@ -30,7 +30,7 @@ interface IProps extends React.PropsWithChildren {
 
 const SettingMenuSubtitle: React.FC<IProps> = (props) => {
   const { settingMenu, channelId, projectId } = props;
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
   const { data: projectData } = useProjects();
   const { data: channelData } = useChannels(projectId);
 

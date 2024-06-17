@@ -21,7 +21,7 @@ import { z } from 'zod';
 
 import { Badge, Input, toast } from '@ufb/ui';
 
-import { useTenantActions, useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 
 import OAuthInput from './OAuthInput';
 import RadioGroup from './RadioGroup';
@@ -73,8 +73,7 @@ interface IProps extends React.PropsWithChildren {}
 const SignUpSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
 
-  const tenant = useTenantState();
-  const { refetchTenant } = useTenantActions();
+  const { tenant, refetchTenant } = useTenantStore();
 
   const methods = useForm<ISignUpInfoForm>({
     resolver: zodResolver(scheme),

@@ -19,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { SectionTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectCard } from '@/entities/project';
-import { TenantCard, useTenantState } from '@/entities/tenant';
+import { TenantCard, useTenantStore } from '@/entities/tenant';
 import { CreateProjectButton } from '@/features/create-project';
 import { MainLayout } from '@/widgets';
 
@@ -31,7 +31,7 @@ const MainIndexPage: NextPageWithLayout = () => {
     path: '/api/admin/projects',
     variables: { limit: 1000, page: 1 },
   });
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
 
   return (
     <div className="mx-4 my-2 flex flex-col gap-8">

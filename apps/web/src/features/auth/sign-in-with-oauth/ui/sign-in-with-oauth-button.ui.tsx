@@ -17,7 +17,7 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
-import { useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 
 import { useOAIQuery } from '@/hooks';
 
@@ -26,7 +26,7 @@ interface IProps {}
 const SignInWithOAuthButton: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
 
   const callback_url = (router.query.callback_url ?? '') as string;
 

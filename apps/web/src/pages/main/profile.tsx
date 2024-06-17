@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SectionTemplate, SubMenu } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { useUserState } from '@/entities/user';
+import { useUserStore } from '@/entities/user';
 import { DeleteAccountButton } from '@/features/delete-user';
 import { ChangePasswordForm, UserProfileForm } from '@/features/update-user';
 import { MainLayout } from '@/widgets';
@@ -36,7 +36,7 @@ const MENU_ITEMS = [
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
-  const user = useUserState();
+  const { user } = useUserStore();
 
   const [tabKey, setTabKey] = useState<(typeof MENU_ITEMS)[number]['key']>(
     MENU_ITEMS[0].key,

@@ -29,7 +29,8 @@ import client from '@/libs/client';
 import sessionStorage from '@/libs/session-storage';
 import { create, createZustandFactory } from '@/libs/zustand';
 
-type State = User | null;
+type State = { user: User | null };
+
 type Action = {
   signInWithEmail: (input: {
     email: string;
@@ -43,10 +44,9 @@ type Action = {
   setUser: () => void;
   _signIn: (jwt: Jwt) => void;
 };
-const initialState: State = null;
 
 export const useUserStore = create<State, Action>((set, get) => ({
-  state: initialState,
+  user: null,
   signInWithEmail: async ({ email, password }) => {
     const { data: jwt } = await axios.post('/api/login', { email, password });
     get()._signIn(jwt);
@@ -75,7 +75,7 @@ export const useUserStore = create<State, Action>((set, get) => ({
         pathParams: { id: parseInt(sub) },
         options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } }, // session storage delay
       });
-      set({ state: data });
+      set({ user: data });
     }
   },
 

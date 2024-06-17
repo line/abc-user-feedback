@@ -29,7 +29,7 @@ describe('Create Tenant Page', () => {
   });
 
   test('should route sign-in page when tenant is defined', async () => {
-    useTenantStore.setState({ state: {} as Tenant });
+    useTenantStore.setState({ tenant: {} as Tenant });
     const createTenantPage = CreateTenantPage.getLayout!(<CreateTenantPage />);
 
     render(<>{createTenantPage}</>);

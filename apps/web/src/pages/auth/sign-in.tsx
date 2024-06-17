@@ -20,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
 import type { NextPageWithLayout } from '@/shared/types';
-import { useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 import { SignInWithEmailForm } from '@/features/auth/sign-in-with-email';
 import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
 import { MainLayout } from '@/widgets';
@@ -30,7 +30,7 @@ import { Path } from '@/constants/path';
 
 const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
 
   return (
     <div className="relative">

@@ -21,7 +21,7 @@ import type { z } from 'zod';
 
 import { toast } from '@ufb/ui';
 
-import { useTenantActions } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 
 import { createTenantFormSchema } from './create-tenant-form.schema';
 import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
@@ -37,7 +37,7 @@ const CreateTenantForm: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { refetchTenant } = useTenantActions();
+  const { refetchTenant } = useTenantStore();
   const { register, handleSubmit, formState } = useForm<FormType>({
     resolver: zodResolver(createTenantFormSchema),
   });

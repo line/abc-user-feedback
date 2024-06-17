@@ -22,7 +22,7 @@ import type {
 } from 'zustand';
 import { create as createZustand } from 'zustand';
 
-type ZustandState<State, Action> = { state: State } & Action;
+type ZustandState<State, Action> = State & Action;
 
 type Create = {
   <State, Action, Mos extends [StoreMutatorIdentifier, unknown][] = []>(

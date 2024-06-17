@@ -25,7 +25,7 @@ import { render } from '@/utils/test-utils';
 
 describe('MainIndexPage', () => {
   test('should render without crashing', async () => {
-    useTenantStore.setState({ state: {} as Tenant });
+    useTenantStore.setState({ tenant: {} as Tenant });
     simpleMockHttp({
       method: 'get',
       path: '/api/admin/projects',

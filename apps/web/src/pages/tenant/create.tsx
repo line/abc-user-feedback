@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import type { NextPageWithLayout } from '@/shared/types';
-import { useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 import { CreateTenantForm } from '@/features/create-tenant';
 import { MainLayout } from '@/widgets';
 
@@ -29,7 +29,7 @@ import { Path } from '@/constants/path';
 const CreateTenantPage: NextPageWithLayout = () => {
   const router = useRouter();
 
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
 
   useEffect(() => {
     if (!tenant) return;

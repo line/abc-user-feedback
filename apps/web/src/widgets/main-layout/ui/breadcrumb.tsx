@@ -18,7 +18,7 @@ import { useRouter } from 'next/router';
 
 import { Icon } from '@ufb/ui';
 
-import { useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 
 import { useOAIQuery } from '@/hooks';
 
@@ -26,7 +26,7 @@ interface IProps extends React.PropsWithChildren {}
 
 const Breadcrumb: React.FC<IProps> = () => {
   const router = useRouter();
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
 
   const projectId = useMemo(() => {
     if (!router.query?.projectId) return -1;

@@ -24,7 +24,7 @@ import { render, screen, waitFor } from '@/utils/test-utils';
 
 describe('UserBox', () => {
   test('no logged in user', () => {
-    useUserStore.setState({ state: null });
+    useUserStore.setState({ user: null });
     render(<UserBox />);
   });
   test('logged in user', async () => {
@@ -36,7 +36,7 @@ describe('UserBox', () => {
       signUpMethod: 'EMAIL',
       type: 'GENERAL',
     };
-    useUserStore.setState({ state: user });
+    useUserStore.setState({ user: user });
     render(<UserBox />);
     const userBox = screen.getByText(user.email);
 
@@ -57,7 +57,7 @@ describe('UserBox', () => {
       signUpMethod: 'EMAIL',
       type: 'GENERAL',
     };
-    useUserStore.setState({ state: user });
+    useUserStore.setState({ user: user });
     const { container } = render(<UserBox />);
     expect(container).toMatchSnapshot();
   });
@@ -70,7 +70,7 @@ describe('UserBox', () => {
       signUpMethod: 'EMAIL',
       type: 'GENERAL',
     };
-    useUserStore.setState({ state: user });
+    useUserStore.setState({ user: user });
     const { container } = render(<UserBox />);
     const userBox = screen.getByText(user.email);
     await waitFor(async () => {

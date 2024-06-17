@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
-import { useUserActions, useUserState } from '@/entities/user';
+import { useUserStore } from '@/entities/user';
 
 import { useOAIMutation } from '@/hooks';
 
@@ -28,8 +28,7 @@ const DeleteMyAccountButton: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const user = useUserState();
-  const { signOut } = useUserActions();
+  const { signOut, user } = useUserStore();
 
   const { mutate, isPending } = useOAIMutation({
     method: 'delete',

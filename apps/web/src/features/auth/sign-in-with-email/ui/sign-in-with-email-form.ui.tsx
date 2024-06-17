@@ -22,8 +22,8 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { useTenantState } from '@/entities/tenant';
-import { useUserActions } from '@/entities/user';
+import { useTenantStore } from '@/entities/tenant';
+import { useUserStore } from '@/entities/user';
 
 import { SignInWithEmailSchema } from '../sign-in-with-email.schema';
 
@@ -35,11 +35,11 @@ type FormType = z.infer<typeof SignInWithEmailSchema>;
 interface IProps {}
 
 const SignInWithEmailForm: React.FC<IProps> = () => {
-  const tenant = useTenantState();
+  const { tenant } = useTenantStore();
   const { t } = useTranslation();
   const router = useRouter();
 
-  const { signInWithEmail } = useUserActions();
+  const { signInWithEmail } = useUserStore();
   const { handleSubmit, register, formState, setError } = useForm<FormType>({
     resolver: zodResolver(SignInWithEmailSchema),
   });

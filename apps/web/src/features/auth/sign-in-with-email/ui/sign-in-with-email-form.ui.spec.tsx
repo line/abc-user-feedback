@@ -42,8 +42,8 @@ const DEFAULT_TENANT: Tenant = {
 
 describe('SignInWithEmailForm', () => {
   beforeEach(() => {
-    useTenantStore.setState({ state: DEFAULT_TENANT });
-    jest.spyOn(user, 'useUserActions').mockReturnValue({
+    useTenantStore.setState({ tenant: DEFAULT_TENANT });
+    jest.spyOn(user, 'useUserStore').mockReturnValue({
       signInWithEmail: jest.fn(),
       _signIn: jest.fn(),
       setUser: jest.fn(),
@@ -52,7 +52,9 @@ describe('SignInWithEmailForm', () => {
     });
   });
   test('match snapshot when tenant is not private', () => {
-    useTenantStore.setState({ state: { ...DEFAULT_TENANT, isPrivate: false } });
+    useTenantStore.setState({
+      tenant: { ...DEFAULT_TENANT, isPrivate: false },
+    });
     const { container } = render(<SignInWithEmailForm />);
     expect(container).toMatchSnapshot();
 
@@ -61,7 +63,7 @@ describe('SignInWithEmailForm', () => {
     expect(screen.queryByText('button.sign-up')).toBeInTheDocument();
   });
   test('match snapshot when tenant is private', () => {
-    useTenantStore.setState({ state: { ...DEFAULT_TENANT, isPrivate: true } });
+    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, isPrivate: true } });
     const { container } = render(<SignInWithEmailForm />);
     expect(container).toMatchSnapshot();
 
@@ -102,7 +104,7 @@ describe('SignInWithEmailForm', () => {
 
   describe('Submittion', () => {
     test('on Success', async () => {
-      jest.spyOn(user, 'useUserActions').mockImplementation(() => ({
+      jest.spyOn(user, 'useUserStore').mockImplementation(() => ({
         signInWithEmail: jest.fn(),
         _signIn: jest.fn(),
         setUser: jest.fn(),
@@ -129,7 +131,7 @@ describe('SignInWithEmailForm', () => {
       );
     });
     test('on Error', async () => {
-      jest.spyOn(user, 'useUserActions').mockImplementation(() => ({
+      jest.spyOn(user, 'useUserStore').mockImplementation(() => ({
         signInWithEmail: jest.fn().mockRejectedValue(new Error()),
         _signIn: jest.fn(),
         setUser: jest.fn(),

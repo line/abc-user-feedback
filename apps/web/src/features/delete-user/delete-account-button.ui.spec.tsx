@@ -40,7 +40,7 @@ server.use(http.get('/api/logout', () => {}));
 
 describe('DeleteAccountButton', () => {
   test('match snapshot', async () => {
-    jest.spyOn(user, 'useUserActions').mockImplementation(() => ({
+    jest.spyOn(user, 'useUserStore').mockImplementation(() => ({
       signInWithEmail: jest.fn(),
       _signIn: jest.fn(),
       setUser: jest.fn(),
@@ -54,7 +54,7 @@ describe('DeleteAccountButton', () => {
   describe('Submittion', () => {
     const mockSignOut = jest.fn();
     beforeEach(async () => {
-      jest.spyOn(user, 'useUserActions').mockImplementation(() => ({
+      jest.spyOn(user, 'useUserStore').mockImplementation(() => ({
         signInWithEmail: jest.fn(),
         _signIn: jest.fn(),
         setUser: jest.fn(),

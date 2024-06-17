@@ -16,7 +16,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { useUserState } from '@/entities/user';
+import { useUserStore } from '@/entities/user';
 
 import useOAIQuery from './useOAIQuery';
 
@@ -24,7 +24,7 @@ import type { PermissionType } from '@/types/permission.type';
 import { PermissionList } from '@/types/permission.type';
 
 const usePermissions = (inputProjectId?: number | null) => {
-  const user = useUserState();
+  const { user } = useUserStore();
   const [permissions, setPermissions] = useState<readonly PermissionType[]>([]);
 
   const router = useRouter();

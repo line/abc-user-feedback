@@ -37,7 +37,7 @@ const DEFAULT_TENANT: Tenant = {
 
 describe('Sign In Page', () => {
   test('should render all allow', () => {
-    useTenantStore.setState({ state: { ...DEFAULT_TENANT } });
+    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT } });
     const signInPage = SignInPage.getLayout!(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
@@ -53,7 +53,7 @@ describe('Sign In Page', () => {
     expect(oauthBtn).toBeInTheDocument();
   });
   test('should render when isPrivate is false', () => {
-    useTenantStore.setState({ state: { ...DEFAULT_TENANT, isPrivate: true } });
+    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, isPrivate: true } });
     const signInPage = SignInPage.getLayout!(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
@@ -69,7 +69,7 @@ describe('Sign In Page', () => {
     expect(oauthBtn).toBeInTheDocument();
   });
   test('should render when useOAuth is false', () => {
-    useTenantStore.setState({ state: { ...DEFAULT_TENANT, useOAuth: false } });
+    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, useOAuth: false } });
     const signInPage = SignInPage.getLayout!(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
@@ -85,7 +85,7 @@ describe('Sign In Page', () => {
     expect(oauthBtn).not.toBeInTheDocument();
   });
   test('should render when useEmail is false', () => {
-    useTenantStore.setState({ state: { ...DEFAULT_TENANT, useEmail: false } });
+    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, useEmail: false } });
     const signInPage = SignInPage.getLayout!(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);

@@ -21,7 +21,7 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { useTenantActions, useTenantState } from '@/entities/tenant';
+import { useTenantStore } from '@/entities/tenant';
 
 import { SettingMenuTemplate } from '@/components';
 import { useOAIMutation } from '@/hooks';
@@ -39,8 +39,7 @@ interface IProps extends React.PropsWithChildren {}
 
 const TenantInfoSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const tenant = useTenantState();
-  const { refetchTenant } = useTenantActions();
+  const { tenant, refetchTenant } = useTenantStore();
   const { reset, register, handleSubmit, formState } = useForm<IForm>({
     resolver: zodResolver(scheme),
   });

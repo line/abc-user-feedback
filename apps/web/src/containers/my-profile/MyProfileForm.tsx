@@ -23,7 +23,7 @@ import { z } from 'zod';
 
 import { Input, toast } from '@ufb/ui';
 
-import { useUserState } from '@/entities/user';
+import { useUserStore } from '@/entities/user';
 
 import DeleteMyAccountButton from './DeleteMyAccountButton';
 
@@ -49,7 +49,7 @@ interface IProps extends React.PropsWithChildren {}
 const MyProfileForm: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const user = useUserState();
+  const { user } = useUserStore();
 
   const { register, handleSubmit, reset } = useForm<IForm>({
     resolver: zodResolver(schema),

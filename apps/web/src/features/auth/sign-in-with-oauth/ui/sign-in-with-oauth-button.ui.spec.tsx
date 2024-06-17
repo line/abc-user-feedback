@@ -33,7 +33,7 @@ describe('SignInWithOAuthButton', () => {
     expect(component.container).toMatchSnapshot();
   });
   test('loginUrl', async () => {
-    useTenantStore.setState({ state: { useOAuth: true } as Tenant });
+    useTenantStore.setState({ tenant: { useOAuth: true } as Tenant });
     const pathname = `/${Array.from({
       length: faker.number.int({ min: 1, max: 5 }),
     })

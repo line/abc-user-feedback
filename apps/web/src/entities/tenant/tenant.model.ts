@@ -17,25 +17,20 @@
 import type { Tenant } from './tenant.type';
 
 import client from '@/libs/client';
-import { create, createZustandFactory } from '@/libs/zustand';
+import { create } from '@/libs/zustand';
 
-type State = Tenant | null;
+type State = { tenant: Tenant | null };
 
 type Action = {
   setTenant: (tenant: Tenant) => void;
   refetchTenant: () => Promise<void>;
 };
 
-const initialState: State = null;
-
 export const useTenantStore = create<State, Action>((set) => ({
-  state: initialState,
-  setTenant: (tenant) => set({ state: tenant }),
+  tenant: null,
+  setTenant: (tenant) => set({ tenant }),
   refetchTenant: async () => {
     const { data } = await client.get({ path: '/api/admin/tenants' });
-    set({ state: data });
+    set({ tenant: data });
   },
 }));
-
-export const [useTenantState, useTenantActions] =
-  createZustandFactory(useTenantStore);

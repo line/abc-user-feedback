@@ -17,7 +17,7 @@
 import { http, HttpResponse } from 'msw';
 import mockRouter from 'next-router-mock';
 
-import { useTenantState } from '../tenant.model';
+import { useTenantStore } from '../tenant.model';
 import { TenantGuard } from './tenant-guard.ui';
 
 import { Path } from '@/constants/path';
@@ -52,7 +52,7 @@ describe('TenantGuard', () => {
     );
 
     const TenantTestComponent = () => {
-      const tenant = useTenantState();
+      const { tenant } = useTenantStore();
       return (
         <TenantGuard>
           <p>{tenant?.id}</p>

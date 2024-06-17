@@ -17,7 +17,7 @@ import type React from 'react';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { useTenantActions } from '../tenant.model';
+import { useTenantStore } from '../tenant.model';
 
 import { Path } from '@/constants/path';
 import { useOAIQuery } from '@/hooks';
@@ -26,7 +26,7 @@ interface IProps extends React.PropsWithChildren {}
 
 export const TenantGuard: React.FC<IProps> = ({ children }) => {
   const router = useRouter();
-  const { setTenant } = useTenantActions();
+  const { setTenant } = useTenantStore();
 
   const { data, status, error } = useOAIQuery({
     path: '/api/admin/tenants',
