@@ -121,7 +121,7 @@ importers:
         version: 4.26.2
       joi:
         specifier: ^17.12.3
-        version: 17.13.1
+        version: 17.13.2
       luxon:
         specifier: ^3.4.4
         version: 3.4.4
@@ -6076,8 +6076,8 @@ packages:
     resolution: {integrity: sha512-9FzQjJ7MATs1tSpnco1K6ayiYE3figslrXA72G2HQ/n76RzvYlofyi5QM+iX4YRs/pu3yzxlVQSST23+dMDknw==}
     engines: {node: '>= 0.6.0'}
 
-  joi@17.13.1:
-    resolution: {integrity: sha512-vaBlIKCyo4FCUtCm7Eu4QZd/q02bWcxfUO6YSXAZOWF6gzcLBeba8kwotUdYJjDLW8Cz8RywsSOqiNJZW0mNvg==}
+  joi@17.13.2:
+    resolution: {integrity: sha512-QJQKY10YowIi6yUpDQG9YpeWLD+OHYlY/La8gk7VitrXfy34quHwCu4QKNlBV1rpgQj0YpnWWl4JM+3DU6GapQ==}
 
   joycon@3.1.1:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
@@ -15762,7 +15762,7 @@ snapshots:
 
   jmespath@0.16.0: {}
 
-  joi@17.13.1:
+  joi@17.13.2:
     dependencies:
       '@hapi/hoek': 9.3.0
       '@hapi/topo': 5.1.0
