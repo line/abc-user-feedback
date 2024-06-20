@@ -13,13 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { TimezoneInfo } from '@/types/timezone-info';
+import { i18n } from 'next-i18next';
+import { z } from 'zod';
 
-export type Project = {
-  id: number;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  timezone: TimezoneInfo;
-};
+export const projectSchema = z.object({
+  id: z.number(),
+  name: z
+    .string()
+    .min(1, { message: i18n?.t('hint.required') })
+    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
+  description: z
+    .string()
+    .min(1, { message: i18n?.t('hint.required') })
+    .max(50, { message: i18n?.t('hint.max-length', { length: 50 }) })
+    .nullable(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  timezone: z.object({
+    countryCode: z.string(),
+    name: z.string(),
+    offset: z.string(),
+  }),
+});
+
+export type Project = z.infer<typeof projectSchema>;

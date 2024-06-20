@@ -14,3 +14,4 @@
  * under the License.
  */
 export { default as ProjectCard } from './project-card.ui';
+export { default as ProjectInfoForm } from './project-info-form.ui';

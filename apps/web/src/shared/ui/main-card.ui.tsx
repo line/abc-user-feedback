@@ -34,10 +34,9 @@ const MainCard: React.FC<IProps> = (props) => {
 
   return (
     <div
-      className={clsx(
-        'border-fill-tertiary h-[204px] w-[452px] rounded border p-8',
-        { 'hover:cursor-pointer hover:opacity-50': !!onClick },
-      )}
+      className={clsx('card h-[204px] w-[452px] rounded border p-8', {
+        'hover:cursor-pointer hover:opacity-50': !!onClick,
+      })}
       onClick={onClick}
     >
       <div className="mb-10 flex gap-5">

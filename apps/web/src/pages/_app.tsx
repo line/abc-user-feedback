@@ -16,7 +16,14 @@
 import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { DehydratedState } from '@tanstack/react-query';
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { OverlayProvider } from '@toss/use-overlay';
 import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 
@@ -32,7 +39,12 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '@/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
 
+type PageProps = Record<string, unknown> & {
+  dehydratedState?: DehydratedState;
+};
+
 type AppPropsWithLayout = AppProps & {
+  pageProps: PageProps;
   Component: NextPageWithLayout;
 };
 
@@ -64,12 +76,17 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <title>User Feedback</title>
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
-      <QueryClientProvider client={queryClient}>
-        <TenantGuard>
-          {getLayout(<Component {...pageProps} />)}
-          <Toaster />
-        </TenantGuard>
-      </QueryClientProvider>
+      <OverlayProvider>
+        <QueryClientProvider client={queryClient}>
+          <HydrationBoundary state={pageProps.dehydratedState}>
+            <TenantGuard>
+              {getLayout(<Component {...pageProps} />)}
+              <Toaster />
+            </TenantGuard>
+          </HydrationBoundary>
+          {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
+        </QueryClientProvider>
+      </OverlayProvider>
     </>
   );
 }

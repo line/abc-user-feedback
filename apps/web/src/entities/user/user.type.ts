@@ -13,13 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type User = {
-  id: number;
-  email: string;
-  type: UserTypeEnum;
-  name: string | null;
-  department: string | null;
-  signUpMethod: 'OAUTH' | 'EMAIL';
-};
+
+import { z } from 'zod';
+
+export const userSchema = z.object({
+  id: z.number(),
+  email: z.string().email(),
+  type: z.union([z.literal('SUPER'), z.literal('GENERAL')]),
+  name: z.string().nullable(),
+  department: z.string().nullable(),
+  signUpMethod: z.union([z.literal('OAUTH'), z.literal('EMAIL')]),
+});
+
+export type User = z.infer<typeof userSchema>;
 
 export type UserTypeEnum = 'SUPER' | 'GENERAL';

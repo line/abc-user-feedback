@@ -21,7 +21,7 @@ import { UserTypeEnum } from './entities/enums';
 @Injectable()
 export class SuperUserGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    const user = context.switchToHttp().getRequest();
+    const { user } = context.switchToHttp().getRequest();
 
     if (!user) return false;
 

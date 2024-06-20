@@ -26,7 +26,7 @@
     content: '';
   }
   .card {
-    @apply border-fill-tertiary rounded border p-6;
+    @apply border-fill-tertiary bg-tertiary rounded border p-6;
   }
 }
 

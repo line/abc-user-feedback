@@ -17,7 +17,6 @@
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 import mockRouter from 'next-router-mock';
-import { act } from 'react-dom/test-utils';
 
 import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';

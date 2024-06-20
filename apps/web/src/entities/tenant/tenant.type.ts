@@ -13,25 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type Tenant = {
-  id: number;
-  siteName: string;
-  description: string | null;
-  useEmail: boolean;
-  useOAuth: boolean;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[];
-  useEmailVerification: boolean;
-  oauthConfig: OAuthConfig | null;
-};
-export type OAuthConfig = {
-  oauthUse: boolean;
-  clientId: string;
-  clientSecret: string;
-  authCodeRequestURL: string;
-  scopeString: string;
-  accessTokenRequestURL: string;
-  userProfileRequestURL: string;
-  emailKey: string;
-};
+
+import { z } from 'zod';
+
+const oauthConfigSchema = z.object({
+  oauthUse: z.boolean(),
+  clientId: z.string(),
+  clientSecret: z.string(),
+  authCodeRequestURL: z.string(),
+  scopeString: z.string(),
+  accessTokenRequestURL: z.string(),
+  userProfileRequestURL: z.string(),
+  emailKey: z.string(),
+});
+
+const tenantSchema = z.object({
+  id: z.number(),
+  siteName: z.string(),
+  description: z.string().nullable(),
+  useEmail: z.boolean(),
+  useOAuth: z.boolean(),
+  isPrivate: z.boolean(),
+  isRestrictDomain: z.boolean(),
+  allowDomains: z.array(z.string()),
+  useEmailVerification: z.boolean(),
+  oauthConfig: oauthConfigSchema.nullable(),
+});
+
+export type Tenant = z.infer<typeof tenantSchema>;
+
+export type OAuthConfig = z.infer<typeof oauthConfigSchema>;

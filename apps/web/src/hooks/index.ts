@@ -28,7 +28,5 @@ export { default as useCurrentProjectId } from './useCurrentProjectId';
 export { default as useDownload } from './useDownload';
 export { default as useTruncatedElement } from './useTruncatedElement';
 export { default as useIssueCount } from './useIssueCount';
-export { default as useLineChartData } from './useLineChartData';
-export { default as useDayCount } from './useDayCount';
 
 export { default as useHorizontalScroll } from './useHorizontalScroll';

@@ -36,7 +36,7 @@ interface IProps {
   maxDays?: number;
   isClearable?: boolean;
   options?: {
-    label: string;
+    label: string | React.ReactNode;
     startDate: Date;
     endDate: Date;
   }[];
@@ -47,6 +47,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     props;
 
   const { t, i18n } = useTranslation();
+
   const items = useMemo(() => {
     return [
       {
@@ -76,6 +77,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       },
     ];
   }, [t]);
+
   const [currentValue, setCurrentValue] = useState<DateRangeType | null>(value);
 
   const [isOpen, setIsOpen] = useState(false);

@@ -22,3 +22,9 @@ export { default as MainCard } from './main-card.ui';
 
 export { default as SubMenu } from './sub-menu.ui';
 export { default as CreateTemplate } from './create-template.ui';
+export { default as CreateInputTemplate } from './create-input-template.ui';
+export { default as CreateSectionTemplate } from './create-section-template.ui.tsx';
+export { default as CardSlider } from './card-slider.ui';
+export { default as DashboardCard } from './dashboard-card';
+export * from './tables';
+export * from './charts';

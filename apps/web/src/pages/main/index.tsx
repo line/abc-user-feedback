@@ -20,7 +20,7 @@ import { SectionTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectCard } from '@/entities/project';
 import { TenantCard, useTenantStore } from '@/entities/tenant';
-import { CreateProjectButton } from '@/features/create-project';
+import { RouteCreateProjectButton } from '@/features/create-project';
 import { MainLayout } from '@/widgets';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
@@ -48,7 +48,9 @@ const MainIndexPage: NextPageWithLayout = () => {
               'border-fill-tertiary flex h-[204px] w-[452px] flex-col items-center justify-center rounded border'
             }
           >
-            <CreateProjectButton hasProject={data?.meta.totalItems !== 0} />
+            <RouteCreateProjectButton
+              hasProject={data?.meta.totalItems !== 0}
+            />
           </div>
         </div>
       </SectionTemplate>

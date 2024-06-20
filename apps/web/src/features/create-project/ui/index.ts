@@ -13,4 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as CreateProjectButton } from './create-project-button.ui';
+export { default as RouteCreateProjectButton } from './route-create-project-button.ui';
+export { default as CreateProject } from './create-project.ui';

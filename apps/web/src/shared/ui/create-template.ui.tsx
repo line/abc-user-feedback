@@ -16,10 +16,11 @@
 import React, { Fragment } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
+
+import { cn } from '../utils';
 
 import { Path } from '@/constants/path';
 
@@ -45,69 +46,7 @@ const CreateTemplate = <T extends string>(props: IProps<T>) => {
     stepTitle,
     helpText,
   } = props;
-  const { t } = useTranslation();
 
-  return (
-    <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
-      <Header type={type} />
-      <h1 className="font-24-bold text-center">
-        {type === 'project' && t('main.create-project.title')}
-        {type === 'channel' && t('main.create-channel.title')}
-      </h1>
-      <div className="border-fill-secondary relative flex rounded border px-10 py-4">
-        {steps.map((step, i) => (
-          <Fragment key={i}>
-            <div
-              className={clsx([
-                'group flex flex-col items-center',
-                i === currentStep ? 'gap-3' : 'gap-4 pt-1',
-              ])}
-            >
-              <div
-                className={clsx([
-                  'font-16-bold flex items-center justify-center rounded-full',
-                  i <= editingStep ?
-                    'bg-blue-primary text-above-primary'
-                  : 'bg-fill-secondary text-secondary',
-                  i === currentStep ?
-                    'border-text-secondary h-10 w-10 border-2'
-                  : 'h-8 w-8',
-                ])}
-              >
-                {i > editingStep - 1 ?
-                  i + 1
-                : <Icon name="Check" className="text-above-primary" size={16} />
-                }
-              </div>
-              <div className="font-14-bold">{stepTitle[step]}</div>
-            </div>
-            {steps.length - 1 !== i && (
-              <div
-                className={[
-                  'mt-5 flex-1 border-t-2',
-                  i < editingStep ?
-                    'border-blue-primary'
-                  : 'border-fill-secondary',
-                ].join(' ')}
-              />
-            )}
-          </Fragment>
-        ))}
-      </div>
-      <div className="border-fill-secondary rounded border px-6 py-4">
-        <div className="mb-1 flex items-center gap-2">
-          <Icon name="IdeaColor" size={16} />
-          <h2 className="font-14-bold">{t('text.helper')}</h2>
-        </div>
-        <p className="font-12-regular">{helpText}</p>
-      </div>
-
-      {children}
-    </div>
-  );
-};
-
-const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const ROUTE: Record<Target, () => void> = {
@@ -120,24 +59,78 @@ const Header: React.FC<{ type: 'project' | 'channel' }> = ({ type }) => {
   };
 
   return (
-    <div className="flex h-12 items-center justify-between">
-      <div className="flex items-center gap-1">
-        <Image
-          src="/assets/images/logo.svg"
-          alt="logo"
-          width={24}
-          height={24}
-        />
-        <Icon name="Title" className="h-[24px] w-[123px]" />
+    <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
+      {/* header */}
+      <div className="flex h-12 items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Image
+            src="/assets/images/logo.svg"
+            alt="logo"
+            width={24}
+            height={24}
+          />
+          <Icon name="Title" className="h-[24px] w-[123px]" />
+        </div>
+        <button
+          className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
+          onClick={() => ROUTE[type]()}
+        >
+          <Icon name="Out" size={16} />
+          <span className="font-12-bold uppercase">{t('button.get-out')}</span>
+        </button>
       </div>
-      <button
-        className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
-        onClick={() => ROUTE[type]()}
-      >
-        <Icon name="Out" size={16} />
-        <span className="font-12-bold uppercase">{t('button.get-out')}</span>
-      </button>
+      {/* title */}
+      <h1 className="font-24-bold text-center">
+        {type === 'project' && t('main.create-project.title')}
+        {type === 'channel' && t('main.create-channel.title')}
+      </h1>
+      {/* stepper */}
+      <div className="border-fill-secondary relative flex rounded border px-10 py-4">
+        {steps.map((step, i) => (
+          <Fragment key={i}>
+            <div
+              className={cn([
+                'group flex flex-col items-center gap-3',
+                i !== currentStep && 'gap-4 pt-1',
+              ])}
+            >
+              <div
+                className={cn([
+                  'font-16-bold bg-fill-secondary text-secondary flex h-8 w-8 items-center justify-center rounded-full',
+                  i <= editingStep && 'bg-blue-primary text-above-primary',
+                  i === currentStep &&
+                    'border-text-secondary h-10 w-10 border-2',
+                ])}
+              >
+                {i + 1 > editingStep ?
+                  i + 1
+                : <Icon name="Check" className="text-above-primary" size={16} />
+                }
+              </div>
+              <div className="font-14-bold">{stepTitle[step]}</div>
+            </div>
+            {steps.length - 1 !== i && (
+              <div
+                className={cn([
+                  'border-fill-secondary mt-5 flex-1 border-t-2',
+                  i < editingStep && 'border-blue-primary',
+                ])}
+              />
+            )}
+          </Fragment>
+        ))}
+      </div>
+      {/* helper box */}
+      <div className="border-fill-secondary rounded border px-6 py-4">
+        <div className="mb-1 flex items-center gap-2">
+          <Icon name="IdeaColor" size={16} />
+          <h2 className="font-14-bold">{t('text.helper')}</h2>
+        </div>
+        <p className="font-12-regular">{helpText}</p>
+      </div>
+      {children}
     </div>
   );
 };
+
 export default CreateTemplate;

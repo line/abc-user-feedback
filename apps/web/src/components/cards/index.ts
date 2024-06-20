@@ -14,4 +14,3 @@
  * under the License.
  */
 export { default as ChannelCard } from './ChannelCard';
-export { default as DashboardCard } from './DashboardCard';

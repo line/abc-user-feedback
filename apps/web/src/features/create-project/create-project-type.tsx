@@ -13,14 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-type CreateProject = {};
-
 export const CREATE_PROJEC_STEP_KEY_LIST = [
   'project-info',
-  'role',
-  'member',
+  'roles',
+  'members',
   'issue-tracker',
-  'api-key',
+  'api-keys',
 ] as const;
 
 export const LAST_CREATE_PROJECT_STEP = CREATE_PROJEC_STEP_KEY_LIST.length;
