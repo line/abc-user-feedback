@@ -13,18 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { Dispatch, SetStateAction } from 'react';
-import { createContext, useContext, useMemo, useState } from 'react';
-import type {
-  ColumnOrderState,
-  SortingState,
-  VisibilityState,
-} from '@tanstack/react-table';
+import { createContext, useContext, useMemo } from 'react';
 import dayjs from 'dayjs';
 
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { env } from '@/env.mjs';
-import { useLocalColumnSetting, useLocalStorage } from '@/hooks';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
 import type { DateRangeType } from '@/types/date-range.type';
 
@@ -40,20 +33,10 @@ const DEFAULT_DATE_RANGE_STRING = {
 };
 
 const DEFAULT_FN = () => {};
+
 interface IFeedbackTableContext {
   query: Record<string, any>;
   setQuery: (_: Record<string, any>) => void;
-  page: number;
-  setPage: Dispatch<SetStateAction<number>>;
-  limit: number;
-  setLimit: Dispatch<SetStateAction<number>>;
-  sorting: SortingState;
-  setSorting: Dispatch<SetStateAction<SortingState>>;
-  columnVisibility: VisibilityState;
-  setColumnVisibility: Dispatch<SetStateAction<VisibilityState>>;
-  columnOrder: ColumnOrderState;
-  setColumnOrder: Dispatch<SetStateAction<ColumnOrderState>>;
-  resetColumnSetting: () => void;
   projectId: number;
   channelId: number;
   createdAtRange: DateRangeType;
@@ -62,17 +45,6 @@ interface IFeedbackTableContext {
 export const FeedbackTableContext = createContext<IFeedbackTableContext>({
   query: {},
   setQuery: DEFAULT_FN,
-  page: 1,
-  setPage: DEFAULT_FN,
-  limit: 50,
-  setLimit: DEFAULT_FN,
-  columnOrder: [],
-  setColumnOrder: DEFAULT_FN,
-  columnVisibility: {},
-  setColumnVisibility: DEFAULT_FN,
-  sorting: [{ id: 'createdAt', desc: false }],
-  setSorting: DEFAULT_FN,
-  resetColumnSetting: DEFAULT_FN,
   projectId: 0,
   channelId: 0,
   createdAtRange: DEFAULT_DATE_RANGE,
@@ -81,17 +53,13 @@ export const FeedbackTableContext = createContext<IFeedbackTableContext>({
 interface IProps extends React.PropsWithChildren {
   projectId: number;
   channelId: number;
-  fixedLimit?: number;
 }
 
 export const FeedbackTableProvider: React.FC<IProps> = ({
   children,
   channelId,
   projectId,
-  fixedLimit,
 }) => {
-  const [page, setPage] = useState(1);
-
   const { query, setQuery } = useQueryParamsState(
     { projectId, channelId },
     DEFAULT_DATE_RANGE_STRING,
@@ -105,31 +73,6 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
       );
     },
   );
-
-  const [limit, setLimit] = useLocalStorage<number>(`limit`, 50);
-
-  const [sorting, setSorting] = useLocalColumnSetting<SortingState>({
-    channelId,
-    key: 'sort',
-    projectId,
-    initialValue: [{ id: 'createdAt', desc: true }],
-  });
-
-  const [columnVisibility, setColumnVisibility, resetColumnVisibility] =
-    useLocalColumnSetting<VisibilityState>({
-      channelId,
-      key: 'ColumnVisibility',
-      projectId,
-      initialValue: {},
-    });
-
-  const [columnOrder, setColumnOrder, resetColumnOrder] =
-    useLocalColumnSetting<ColumnOrderState>({
-      channelId,
-      key: 'ColumnOrder',
-      projectId,
-      initialValue: [],
-    });
 
   const createdAtRange = useMemo(() => {
     const queryStr = query['createdAt'];
@@ -158,20 +101,6 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
   return (
     <FeedbackTableContext.Provider
       value={{
-        page,
-        setPage,
-        limit: fixedLimit ?? limit,
-        sorting,
-        columnVisibility,
-        columnOrder,
-        setColumnOrder,
-        setColumnVisibility,
-        setLimit,
-        setSorting,
-        resetColumnSetting: () => {
-          resetColumnVisibility();
-          resetColumnOrder();
-        },
         query,
         setQuery,
         projectId,

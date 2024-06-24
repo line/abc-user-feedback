@@ -31,14 +31,14 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { FeedbackTableInIssue } from '../FeedbackTable';
+import { FeedbackTableInIssue } from '@/widgets/feedback-table';
+
 import IssueSettingPopover from './IssueSettingPopover';
 import IssueTableSelectBox from './IssueTableSelectBox';
 import { TableRow } from './TableRow';
 import TicketLink from './TicketLink';
 
 import {
-  CheckedTableHead,
   DateRangePicker,
   ExpandableText,
   IssueCircle,
@@ -395,30 +395,20 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           </colgroup>
           <thead>
             <tr>
-              {rowSelectionIds.length > 0 ?
-                <CheckedTableHead
-                  headerLength={columns.length}
-                  count={rowSelectionIds.length}
-                  header={table.getFlatHeaders().find((v) => v.id === 'select')}
-                  onClickCancle={table.resetRowSelection}
-                  onClickDelete={() => setOpenDeleteDialog(true)}
-                  disabled={!perms.includes('issue_delete')}
-                />
-              : table.getFlatHeaders().map((header, i) => (
-                  <th key={i} style={{ width: header.getSize() }}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
-                    {header.column.getCanResize() && (
-                      <TableResizer header={header} table={table} />
-                    )}
-                  </th>
-                ))
-              }
+              {table.getFlatHeaders().map((header, i) => (
+                <th key={i} style={{ width: header.getSize() }}>
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
+                  )}
+                  {header.column.getCanSort() && (
+                    <TableSortIcon column={header.column} />
+                  )}
+                  {header.column.getCanResize() && (
+                    <TableResizer header={header} table={table} />
+                  )}
+                </th>
+              ))}
             </tr>
             {isLoading && <TableLoadingRow colSpan={columns.length} />}
           </thead>

@@ -14,14 +14,14 @@
  * under the License.
  */
 import { useEffect, useMemo } from 'react';
-import type { ColumnDef, Table, VisibilityState } from '@tanstack/react-table';
+import type { Table, VisibilityState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
-import AllExpandButton from '../AllExpandButton';
-import ChannelSelectBox from '../ChannelSelectBox';
-import ColumnSettingPopover from '../ColumnSettingPopover';
-import DownloadButton from '../DownloadButton';
-import useFeedbackTable from '../feedback-table.context';
+import ChannelSelectBox from './channel-select-box';
+import ColumnSettingPopover from './ColumnSettingPopover';
+import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
+import FeedbackTableExpandButtonGroup from './feedback-table-expand-button-group.ui';
+import useFeedbackTable from './feedback-table.context';
 
 import {
   DateRangePicker,
@@ -39,8 +39,6 @@ const getSearchItemPriority = (a: SearchItemType) =>
   : a.name === 'Issue' ? 3
   : 4;
 interface IProps {
-  onChangeChannel: (channelId: number) => void;
-  columns: ColumnDef<any, any>[];
   fieldData?: FieldType[];
   table: Table<any>;
   meta:
@@ -54,63 +52,42 @@ interface IProps {
     | undefined;
   sub?: boolean;
   formattedQuery: Record<string, any>;
+  onChangeChannel: (channelId: number) => void;
 }
 
 const FeedbackTableBar: React.FC<IProps> = (props) => {
   const {
     onChangeChannel,
-    columns,
-    fieldData,
+    fieldData = [],
     table,
     sub,
     meta,
     formattedQuery,
   } = props;
 
-  const count = useMemo(() => meta?.totalItems ?? 0, [meta]);
-  const {
-    columnOrder,
-    columnVisibility,
-    setColumnVisibility,
-    limit,
-    resetColumnSetting,
-    page,
-    setPage,
-    query,
-    setQuery,
-    setLimit,
-    projectId,
-    createdAtRange,
-    setCreatedAtRange,
-  } = useFeedbackTable();
+  const { t } = useTranslation();
+  const { columnVisibility } = table.getState();
+
+  const { query, setQuery, projectId, createdAtRange, setCreatedAtRange } =
+    useFeedbackTable();
+
+  const { pagination } = table.getState();
 
   useEffect(() => {
-    if (!fieldData) return;
+    if (Object.keys(columnVisibility).length === 0) return;
+    const initialVisibility = fieldData.reduce((acc, v) => {
+      return {
+        ...acc,
+        [v.key]: v.status !== 'INACTIVE' || columnVisibility[v.key] === true,
+      };
+    }, {} as VisibilityState);
 
-    const inactiveKeys = fieldData
-      .filter((v) => v.status === 'INACTIVE')
-      .map((v) => v.key);
-
-    const keys = Object.keys(columnVisibility);
-    const newInactiveKeys = inactiveKeys.filter((v) => !keys.includes(v));
-
-    if (newInactiveKeys.length === 0) return;
-
-    const initialVisibility = newInactiveKeys.reduce(
-      (acc, v) => ({ ...acc, [v]: false }),
-      {} as VisibilityState,
-    );
-
-    setColumnVisibility(initialVisibility);
+    table.setColumnVisibility(initialVisibility);
   }, [fieldData]);
-
-  const { t } = useTranslation();
 
   const { data: issues } = useIssueSearch(projectId, { limit: 1000 });
 
   const searchItems = useMemo(() => {
-    if (!fieldData) return [];
-
     const items: SearchItemType[] = [
       {
         key: 'issueIds',
@@ -133,38 +110,35 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
       .sort((a, b) => getSearchItemPriority(a) - getSearchItemPriority(b));
   }, [fieldData, issues, t]);
 
-  const fieldIds = useMemo(() => {
-    return (
-      fieldData
-        ?.filter((v) => columnVisibility[v.key] !== false)
-        .sort((a, b) => columnOrder.indexOf(a.key) - columnOrder.indexOf(b.key))
-        .map((v) => v.id) ?? []
-    );
-  }, [columnOrder, columnVisibility, fieldData]);
+  const count = meta?.totalItems ?? 0;
 
   if (sub) {
     return (
       <div className="flex justify-between">
-        <ChannelSelectBox onChangeChannel={onChangeChannel} />
+        <ChannelSelectBox
+          onChangeChannel={(cid) => {
+            onChangeChannel(cid);
+            table.reset();
+          }}
+        />
         <div className="flex h-10 items-center justify-end gap-3">
           <TablePagination
-            limit={limit}
-            nextPage={() => setPage((prev) => prev + 1)}
-            prevPage={() => setPage((prev) => prev - 1)}
-            disabledNextPage={page >= (meta?.totalPages ?? 1)}
-            disabledPrevPage={page <= 1}
+            limit={pagination.pageSize}
+            nextPage={() => table.setPageIndex((page) => page + 1)}
+            prevPage={() => table.setPageIndex((page) => page - 1)}
+            disabledNextPage={pagination.pageIndex >= (meta?.totalPages ?? 1)}
+            disabledPrevPage={pagination.pageIndex <= 1}
             short
           />
           <div className="bg-fill-tertiary h-4 w-[1px]" />
-          <AllExpandButton
-            isAllExpanded={table.getIsAllRowsExpanded()}
-            toggleAllRowsExpanded={table.toggleAllRowsExpanded}
-          />
+          <FeedbackTableExpandButtonGroup table={table} />
+
           <div className="bg-fill-tertiary h-4 w-[1px]" />
-          <DownloadButton
+          <FeedbackTableDownloadButton
             count={count}
             query={formattedQuery}
-            fieldIds={fieldIds}
+            table={table}
+            fieldData={fieldData}
           />
         </div>
       </div>
@@ -174,25 +148,20 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-between">
-        <ChannelSelectBox onChangeChannel={onChangeChannel} />
+        <ChannelSelectBox
+          onChangeChannel={(cid) => {
+            onChangeChannel(cid);
+            table.reset();
+          }}
+        />
         <div className="flex h-10 items-center justify-end gap-2">
-          <ColumnSettingPopover
-            columns={columns.filter((v) => v.id !== 'select')}
-            fieldData={fieldData ?? []}
-            columnOrder={columnOrder.filter((v) => v !== 'select')}
-            onChangeColumnOrder={table.setColumnOrder}
-            columnVisibility={columnVisibility}
-            onChangeColumnVisibility={table.setColumnVisibility}
-            onClickReset={resetColumnSetting}
-          />
-          <AllExpandButton
-            isAllExpanded={table.getIsAllRowsExpanded()}
-            toggleAllRowsExpanded={table.toggleAllRowsExpanded}
-          />
-          <DownloadButton
+          <ColumnSettingPopover table={table} fieldData={fieldData ?? []} />
+          <FeedbackTableExpandButtonGroup table={table} />
+          <FeedbackTableDownloadButton
             count={count}
             query={formattedQuery}
-            fieldIds={fieldIds}
+            table={table}
+            fieldData={fieldData}
           />
         </div>
       </div>
@@ -205,12 +174,12 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
         </h2>
         <div className="flex h-10 items-center justify-end gap-4">
           <TablePagination
-            limit={limit}
-            nextPage={() => setPage((prev) => prev + 1)}
-            prevPage={() => setPage((prev) => prev - 1)}
-            setLimit={setLimit}
-            disabledNextPage={page >= (meta?.totalPages ?? 1)}
-            disabledPrevPage={page <= 1}
+            limit={pagination.pageSize}
+            nextPage={() => table.setPageIndex((page) => page + 1)}
+            prevPage={() => table.setPageIndex((page) => page - 1)}
+            setLimit={table.setPageSize}
+            disabledNextPage={pagination.pageIndex >= (meta?.totalPages ?? 1)}
+            disabledPrevPage={pagination.pageIndex <= 1}
           />
           <div className="w-[272px]">
             <DateRangePicker

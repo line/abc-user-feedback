@@ -17,29 +17,59 @@ import { Fragment } from 'react';
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
-import { TableSortIcon } from '@/components';
+import {
+  CheckedTableHead,
+  TableLoadingRow,
+  TableResizer,
+  TableSortIcon,
+} from '@/components';
 
 interface IProps<T> {
   table: ReactTable<T>;
   emptyComponent: React.ReactNode;
+  resiable?: boolean;
+  isLoading?: boolean;
+  onClickDelete?: () => void;
 }
 
 const BasicTable = <T extends object>(props: IProps<T>) => {
-  const { table, emptyComponent } = props;
+  const {
+    table,
+    emptyComponent,
+    resiable = false,
+    isLoading = false,
+    onClickDelete,
+  } = props;
 
   return (
     <table className="table">
       <thead>
         <tr>
-          {table.getFlatHeaders().map((header, i) => (
-            <th key={i} style={{ width: header.getSize() }}>
-              {flexRender(header.column.columnDef.header, header.getContext())}
-              {header.column.getCanSort() && (
-                <TableSortIcon column={header.column} />
-              )}
-            </th>
-          ))}
+          {table.getIsSomeRowsSelected() ?
+            <CheckedTableHead table={table} onClickDelete={onClickDelete} />
+          : table.getFlatHeaders().map((header, i) => (
+              <th key={i} style={{ width: header.getSize() }}>
+                <div className="flex flex-nowrap items-center">
+                  <span className="overflow-hidden text-ellipsis">
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </span>
+                  {header.column.getCanSort() && (
+                    <TableSortIcon column={header.column} />
+                  )}
+                </div>
+                {resiable && header.column.getCanResize() && (
+                  <TableResizer header={header} table={table} />
+                )}
+              </th>
+            ))
+          }
         </tr>
+        {isLoading && (
+          <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
+        )}
       </thead>
       <tbody>
         {table.getRowModel().rows.length === 0 ?

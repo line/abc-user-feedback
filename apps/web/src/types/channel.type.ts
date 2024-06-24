@@ -22,13 +22,14 @@ export type ChannelType = {
   fields: FieldType[];
   createdAt: string;
   updatedAt: string;
+  imageConfig: ImageConfig;
 };
 export type InputChannelInfoType = Omit<
   ChannelType,
   'id' | 'fields' | 'updatedAt' | 'createdAt'
 >;
 
-export type InputImageConfigType = {
+export type ImageConfig = {
   accessKeyId: string;
   secretAccessKey: string;
   endpoint: string;

@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { i18n } from 'next-i18next';
+
+import { i18n, Trans } from 'next-i18next';
 
 import type { CreateProjectStepKey } from './create-project-type';
 import InputApiKeysStep from './ui/input-api-keys-step.ui';
@@ -39,20 +40,20 @@ export const CREATE_PROJECT_STEPPER_TEXT: Record<
   CreateProjectStepKey,
   React.ReactNode
 > = {
-  'project-info': i18n?.t('project-setting-menu.project-info'),
-  roles: i18n?.t('project-setting-menu.role-mgmt'),
-  members: i18n?.t('project-setting-menu.member-mgmt'),
-  'api-keys': i18n?.t('project-setting-menu.api-key-mgmt'),
-  'issue-tracker': i18n?.t('project-setting-menu.issue-tracker-mgmt'),
+  'project-info': <Trans i18nKey="project-setting-menu.project-info" />,
+  roles: <Trans i18nKey="project-setting-menu.role-mgmt" />,
+  members: <Trans i18nKey="project-setting-menu.member-mgmt" />,
+  'api-keys': <Trans i18nKey="project-setting-menu.api-key-mgmt" />,
+  'issue-tracker': <Trans i18nKey="project-setting-menu.issue-tracker-mgmt" />,
 };
 
 export const CREATE_PROJECT_HELP_TEXT: Record<
   CreateProjectStepKey,
   React.ReactNode
 > = {
-  'project-info': i18n?.t('help-card.project-info'),
-  roles: i18n?.t('help-card.role'),
-  members: i18n?.t('help-card.member'),
+  'project-info': <Trans i18nKey="help-card.project-info" />,
+  roles: <Trans i18nKey="help-card.role" />,
+  members: <Trans i18nKey="help-card.member" />,
   'api-keys': <HelpCardDocs i18nKey="help-card.api-key" />,
-  'issue-tracker': i18n?.t('help-card.issue-tracker'),
+  'issue-tracker': <Trans i18nKey="help-card.issue-tracker" />,
 };

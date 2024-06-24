@@ -16,17 +16,17 @@
 import type { ColumnDef } from '@tanstack/react-table';
 import { createColumnHelper } from '@tanstack/react-table';
 
-import EditableCell from './EditableCell';
-import FeedbackCell from './FeedbackCell';
-import IssueCell from './IssueCell';
+import type { Field } from '@/entities/field';
 
 import { ExpandableText, TableCheckbox } from '@/components';
-import type { FieldType } from '@/types/field.type';
+import EditableCell from '@/containers/tables/FeedbackTable/EditableCell';
+import FeedbackCell from '@/containers/tables/FeedbackTable/FeedbackCell';
+import IssueCell from '@/containers/tables/FeedbackTable/IssueCell';
 
 const columnHelper = createColumnHelper<any>();
 
 export const getColumns = (
-  fieldData: FieldType[],
+  fieldData: Field[],
   refetch: () => Promise<any>,
 ): ColumnDef<any, any>[] =>
   fieldData ?
@@ -35,21 +35,17 @@ export const getColumns = (
         id: 'select',
         header: ({ table }) => (
           <TableCheckbox
-            {...{
-              checked: table.getIsAllRowsSelected(),
-              indeterminate: table.getIsSomeRowsSelected(),
-              onChange: table.getToggleAllRowsSelectedHandler(),
-            }}
+            checked={table.getIsAllRowsSelected()}
+            indeterminate={table.getIsSomeRowsSelected()}
+            onChange={table.getToggleAllRowsSelectedHandler()}
           />
         ),
         cell: ({ row }) => (
           <TableCheckbox
-            {...{
-              checked: row.getIsSelected(),
-              disabled: !row.getCanSelect(),
-              indeterminate: row.getIsSomeSelected(),
-              onChange: row.getToggleSelectedHandler(),
-            }}
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            indeterminate={row.getIsSomeSelected()}
+            onChange={row.getToggleSelectedHandler()}
           />
         ),
         size: 50,

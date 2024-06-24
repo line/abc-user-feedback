@@ -14,11 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import type {
-  ColumnDef,
-  Updater,
-  VisibilityState,
-} from '@tanstack/react-table';
+import type { Table } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next';
 import type { DroppableProps, OnDragEndResponder } from 'react-beautiful-dnd';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -37,24 +33,14 @@ import type { FieldType } from '@/types/field.type';
 import { reorder } from '@/utils/reorder';
 
 interface IProps extends React.PropsWithChildren {
-  columns: ColumnDef<any, any>[];
   fieldData: FieldType[];
-  columnOrder: string[];
-  onChangeColumnOrder: (columns: string[]) => void;
-  columnVisibility: VisibilityState;
-  onChangeColumnVisibility: (visibility: Updater<VisibilityState>) => void;
-  onClickReset: () => void;
+  table: Table<any>;
 }
 
-const ColumnSettingPopover: React.FC<IProps> = ({
-  columnOrder,
-  onChangeColumnOrder,
-  columnVisibility,
-  onChangeColumnVisibility,
-  fieldData,
-  columns,
-  onClickReset,
-}) => {
+const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {
+  const columns = table.getAllColumns().filter((v) => v.id !== 'select');
+  const { columnOrder, columnVisibility } = table.getState();
+
   const { t } = useTranslation();
 
   const columnKeys = useMemo(
@@ -68,6 +54,11 @@ const ColumnSettingPopover: React.FC<IProps> = ({
         ),
     [columns, columnOrder],
   );
+
+  const onClickReset = () => {
+    table.resetColumnOrder();
+    table.resetColumnVisibility();
+  };
 
   const checkedNum = useMemo(() => {
     return columnKeys.reduce((acc, key) => {
@@ -92,7 +83,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
       source.index,
       destination.index,
     );
-    onChangeColumnOrder(['select'].concat(newFields));
+    table.setColumnOrder(newFields);
   };
 
   return (
@@ -127,7 +118,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({
                           : !!columnVisibility[key]
                         }
                         onChange={(isChecked) =>
-                          onChangeColumnVisibility((prev) => ({
+                          table.setColumnVisibility((prev) => ({
                             ...prev,
                             [key]: isChecked,
                           }))

@@ -25,7 +25,7 @@ interface IProps {
   issue: IssueType;
   projectId: number;
   onClose: () => void;
-  refetch: () => void;
+  refetch: () => void | Promise<void>;
 }
 
 const IssueSetting: React.FC<IProps> = (props) => {

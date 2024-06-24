@@ -13,4 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './FeedbackTableBar';
+export { default as FeedbackTable } from './FeedbackTableWrapper';
+export { default as FeedbackTableInIssue } from './feedback-table-in-issue';

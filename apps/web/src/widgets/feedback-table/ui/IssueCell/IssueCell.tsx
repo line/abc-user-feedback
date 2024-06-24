@@ -15,7 +15,7 @@
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Combobox } from '@headlessui/react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
 import { useClickAway } from 'react-use';
 
@@ -34,13 +34,21 @@ import type { IssueType } from '@/types/issue.type';
 interface IProps extends React.PropsWithChildren {
   issues?: IssueType[];
   feedbackId: number;
-  refetch: () => Promise<any>;
   isExpanded: boolean;
   cellWidth: number;
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { issues, feedbackId, refetch, isExpanded, cellWidth } = props;
+  const { issues, feedbackId, isExpanded, cellWidth } = props;
+  const queryClient = useQueryClient();
+
+  const refetch = () => {
+    queryClient.invalidateQueries({
+      queryKey: [
+        '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+      ],
+    });
+  };
 
   const { projectId, channelId } = useFeedbackTable();
   const { t } = useTranslation();

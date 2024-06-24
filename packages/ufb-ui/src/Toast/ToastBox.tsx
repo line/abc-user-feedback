@@ -22,7 +22,7 @@ import { Icon } from '../Icon';
 
 interface IProps {
   type: 'positive' | 'negative' | 'accent';
-  title?: string;
+  title?: React.ReactNode;
   description?: string;
   iconName?: IconNameType;
   t: Toast;

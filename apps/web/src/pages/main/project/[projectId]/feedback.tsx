@@ -19,9 +19,9 @@ import { useTranslation } from 'react-i18next';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { MainLayout } from '@/widgets';
+import { FeedbackTable } from '@/widgets/feedback-table';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { FeedbackTable } from '@/containers';
 import { CreateChannelButton } from '@/containers/buttons';
 import { useOAIQuery } from '@/hooks';
 
@@ -49,7 +49,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       {status === 'pending' ?
         <p className="font-32-bold animate-bounce">Loading...</p>
       : status === 'error' ?
-        <p className="font-32-bold">Not Permission</p>
+        <p className="font-32-bold">Error</p>
       : data.meta.totalItems === 0 ?
         <div className="flex flex-1 items-center justify-center">
           <CreateChannelButton projectId={projectId} type="blue" />

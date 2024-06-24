@@ -13,15 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { Icon } from '@ufb/ui';
 
-import useFeedbackTable from '../feedback-table.context';
+import useFeedbackTable from './feedback-table.context';
 
 import { DescriptionTooltip } from '@/components';
 import { useChannels } from '@/hooks';
 import { getDescriptionStr } from '@/utils/description-string';
 
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   onChangeChannel: (channelId: number) => void;
 }
 
@@ -29,6 +30,7 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
   const { channelId, projectId } = useFeedbackTable();
 
   const { data: channels } = useChannels(projectId);
+
   return (
     <div className="flex flex-wrap items-center gap-2">
       {channels?.items.map((channel) => (

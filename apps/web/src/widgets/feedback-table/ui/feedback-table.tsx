@@ -14,22 +14,29 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import type {
+  ColumnOrderState,
+  SortingState,
+  VisibilityState,
+} from '@tanstack/react-table';
 import {
   flexRender,
   getCoreRowModel,
   getExpandedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
 import { produce } from 'immer';
 import { useTranslation } from 'next-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
+import FeedbackDeleteDialog from './feedback-delete-dialog';
+import FeedbackTableBar from './feedback-table-bar';
 import { getColumns } from './feedback-table-columns';
+import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import useFeedbackTable from './feedback-table.context';
-import FeedbackDeleteDialog from './FeedbackDeleteDialog';
-import FeedbackTableBar from './FeedbackTableBar';
 import FeedbackTableRow from './FeedbackTableRow';
 
 import {
@@ -40,6 +47,8 @@ import {
 } from '@/components';
 import {
   useFeedbackSearch,
+  useLocalColumnSetting,
+  useOAIMutation,
   useOAIQuery,
   usePermissions,
   useSort,
@@ -53,35 +62,13 @@ export interface IFeedbackTableProps {
 
 const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   const { sub = false, issueId, onChangeChannel } = props;
-  const {
-    projectId,
-    channelId,
-    columnOrder,
-    columnVisibility,
-    limit,
-    setColumnOrder,
-    setColumnVisibility,
-    setSorting,
-    sorting,
-    page,
-    setPage,
-    query,
-    createdAtRange,
-  } = useFeedbackTable();
-
   const { t } = useTranslation();
+  const overlay = useOverlay();
+
   const perms = usePermissions();
-
   const [rows, setRows] = useState<Record<string, any>[]>([]);
-  const [rowSelection, setRowSelection] = useState({});
-  const sort = useSort(sorting);
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
-
-  useEffect(() => {
-    setPage(1);
-    setRowSelection({});
-  }, [limit, query]);
+  const { projectId, channelId, query } = useFeedbackTable();
 
   const { data: channelData, refetch: refetchChannelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
@@ -95,6 +82,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       produce(query, (draft) => {
         if (sub) {
           if (issueId) draft['issueIds'] = [issueId];
+          console.log('draft: ', draft['issueIds']);
 
           Object.keys(draft).forEach((key) => {
             if (key === 'issueIds') return;
@@ -107,28 +95,75 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
           if (draft['issueIds']) {
             draft['issueIds'] = [draft['issueIds']].map((v) => +v);
           }
+
           Object.entries(draft).forEach(([key, value]) => {
             const field = fieldData.find((v) => v.key === key);
-            if (field) {
-              if (field.format === 'date') {
-                const [gte, lt] = value.split('~');
-                draft[key] = {
-                  gte: dayjs(gte).startOf('day').toISOString(),
-                  lt: dayjs(lt).endOf('day').toISOString(),
-                };
-              }
-              if (field.format === 'number') {
-                draft[key] = Number(value);
-              }
-              if (field.format === 'multiSelect') {
-                draft[key] = [String(value)];
-              }
+
+            if (field?.format === 'date') {
+              const [gte, lt] = value.split('~');
+              draft[key] = {
+                gte: dayjs(gte).startOf('day').toISOString(),
+                lt: dayjs(lt).endOf('day').toISOString(),
+              };
+            }
+            if (field?.format === 'number') {
+              draft[key] = Number(value);
+            }
+            if (field?.format === 'multiSelect') {
+              draft[key] = [String(value)];
             }
           });
         }
       }),
-    [issueId, query, createdAtRange, sub, fieldData],
+    [issueId, query, sub, fieldData],
   );
+
+  const [sorting, setSorting] = useLocalColumnSetting<SortingState>({
+    channelId,
+    key: 'sort',
+    projectId,
+    initialValue: [{ id: 'createdAt', desc: true }],
+  });
+
+  const [columnVisibility, setColumnVisibility] =
+    useLocalColumnSetting<VisibilityState>({
+      channelId,
+      key: 'ColumnVisibility',
+      projectId,
+      initialValue: {},
+    });
+
+  const [columnOrder, setColumnOrder] = useLocalColumnSetting<ColumnOrderState>(
+    {
+      channelId,
+      key: 'ColumnOrder',
+      projectId,
+      initialValue: [],
+    },
+  );
+
+  const table = useReactTable({
+    data: rows,
+    state: { columnVisibility, columnOrder, sorting },
+    columns: getColumns(fieldData),
+    enableExpanding: true,
+    columnResizeMode: 'onEnd',
+    onColumnOrderChange: setColumnOrder,
+    onColumnVisibilityChange: setColumnVisibility,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    manualSorting: true,
+    getRowId: (row) => row.id,
+    manualPagination: true,
+    initialState: {
+      pagination: { pageSize: 20 },
+      sorting: [{ id: 'createdAt', desc: true }],
+    },
+  });
+
+  const { rowSelection, pagination } = table.getState();
+  const sort = useSort(sorting);
 
   const {
     data,
@@ -138,77 +173,80 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   } = useFeedbackSearch(
     projectId,
     channelId,
-    { page, limit, sort: sort as Record<string, never>, query: formattedQuery },
-    { enabled: channelId !== -1 },
+    {
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      sort: sort as Record<string, never>,
+      query: formattedQuery,
+    },
+    {
+      enabled: channelId !== -1,
+      throwOnError(error) {
+        if (error.code === 'LargeWindow') {
+          toast.negative({
+            title: 'Failed to search',
+            description: 'Please narrow down the search range.',
+          });
+        }
+        return false;
+      },
+    },
   );
 
   useEffect(() => {
-    if (!feedbackError) return;
-    if (feedbackError.code === 'LargeWindow') {
-      toast.negative({
-        title: 'Failed to search',
-        description: 'Please narrow down the search range.',
-      });
-    }
-  }, [feedbackError]);
-
-  useEffect(() => {
-    if (!data) setRows([]);
-    else setRows(data.items);
+    setRows(data?.items ?? []);
   }, [data]);
 
-  const columns = useMemo(
-    () => getColumns(fieldData, refetchFeedbackData),
-    [fieldData, refetchFeedbackData],
-  );
-
-  const table = useReactTable({
-    data: rows,
-    columns,
-    state: { columnOrder, columnVisibility, sorting, rowSelection },
-    enableExpanding: true,
-    columnResizeMode: 'onEnd',
-    onRowSelectionChange: setRowSelection,
-    onColumnOrderChange: setColumnOrder,
-    onColumnVisibilityChange: setColumnVisibility,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    manualSorting: true,
-    getRowId: (row) => row.id,
-  });
+  useEffect(() => {
+    table.resetRowSelection();
+    table.resetPageIndex();
+  }, [query, channelId]);
 
   const columnLength = table.getVisibleFlatColumns().length;
 
+  const { mutate: deleteFeedback } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks',
+    pathParams: { projectId, channelId },
+    queryOptions: {
+      async onSuccess() {
+        await refetchFeedbackData();
+        toast.negative({ title: t('toast.delete') });
+        table.resetRowSelection();
+        close();
+      },
+      onError(error) {
+        toast.negative({ title: error?.message ?? 'Error' });
+      },
+    },
+  });
+
+  const openUpdateRoleNameModal = () => {
+    return overlay.open(({ isOpen, close }) => (
+      <FeedbackDeleteDialog
+        open={isOpen}
+        close={close}
+        onClickDelete={() => {
+          deleteFeedback({
+            feedbackIds: Object.keys(rowSelection).map((id) => parseInt(id)),
+          });
+        }}
+      />
+    ));
+  };
   const rowSelectionIds = useMemo(
     () => Object.keys(rowSelection).map((id) => parseInt(id)),
     [rowSelection],
   );
-
-  const fieldIds = useMemo(() => {
-    if (!fieldData) return [];
-    if (columnOrder.length === 0) return fieldData.map((v) => v.id);
-
-    return fieldData
-      .filter((v) => columnVisibility[v.key] !== false)
-      .sort((a, b) => columnOrder.indexOf(a.key) - columnOrder.indexOf(b.key))
-      .map((v) => v.id);
-  }, [columnOrder, columnVisibility, fieldData]);
-
   return (
     <div className="flex flex-col gap-2">
       <FeedbackTableBar
-        columns={columns}
-        onChangeChannel={(channelId) => {
-          setPage(1);
-          setRowSelection({});
-          onChangeChannel(channelId);
-        }}
         table={table}
         fieldData={fieldData}
         meta={data?.meta}
         sub={sub}
         formattedQuery={formattedQuery}
+        onChangeChannel={onChangeChannel}
       />
       {fieldData && (
         <div className="overflow-x-auto">
@@ -223,22 +261,20 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
             </colgroup>
             <thead>
               <tr>
-                {rowSelectionIds.length > 0 ?
+                {table.getIsSomePageRowsSelected() ?
                   <CheckedTableHead
-                    headerLength={columnLength}
-                    count={rowSelectionIds.length}
-                    header={table
-                      .getFlatHeaders()
-                      .find((v) => v.id === 'select')}
-                    onClickCancle={table.resetRowSelection}
-                    onClickDelete={() => setOpenDeleteDialog(true)}
+                    table={table}
+                    onClickDelete={openUpdateRoleNameModal}
                     disabled={!perms.includes('feedback_delete')}
-                    download={{
-                      channelId,
-                      projectId,
-                      ids: rowSelectionIds,
-                      fieldIds,
-                    }}
+                    button={
+                      <FeedbackTableDownloadButton
+                        query={{ ids: rowSelectionIds }}
+                        count={rowSelectionIds.length}
+                        fieldData={fieldData}
+                        table={table}
+                        isHead
+                      />
+                    }
                   />
                 : table.getFlatHeaders().map((header) => (
                     <th key={header.index} style={{ width: header.getSize() }}>
@@ -271,8 +307,6 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                   <FeedbackTableRow
                     key={row.original.id}
                     row={row}
-                    channelId={channelId}
-                    projectId={projectId}
                     refetch={async () => {
                       await refetchChannelData();
                       await refetchFeedbackData();
@@ -284,18 +318,6 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
           </table>
         </div>
       )}
-      <FeedbackDeleteDialog
-        open={openDeleteDialog}
-        close={() => setOpenDeleteDialog(false)}
-        channelId={channelId}
-        handleSuccess={async () => {
-          await refetchFeedbackData();
-          toast.negative({ title: t('toast.delete') });
-          table.resetRowSelection();
-        }}
-        projectId={projectId}
-        rowSelectionIds={rowSelectionIds}
-      />
     </div>
   );
 };

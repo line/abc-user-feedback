@@ -13,21 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Table } from '@tanstack/react-table';
+
 import { Icon } from '@ufb/ui';
 
 interface IProps {
-  isAllExpanded: boolean;
-  toggleAllRowsExpanded: () => void;
+  table: Table<any>;
 }
 
-const AllExpandButton: React.FC<IProps> = ({
-  isAllExpanded,
-  toggleAllRowsExpanded,
-}) => {
+const FeedbackTableExpandButtonGroup: React.FC<IProps> = ({ table }) => {
+  const isAllExpanded = table.getIsAllRowsExpanded();
+
   return (
     <div
       className="bg-fill-quaternary relative z-0 flex rounded p-0.5"
-      onClick={() => toggleAllRowsExpanded()}
+      onClick={() => table.toggleAllRowsExpanded()}
     >
       <div
         className={[
@@ -53,4 +53,4 @@ const AllExpandButton: React.FC<IProps> = ({
   );
 };
 
-export default AllExpandButton;
+export default FeedbackTableExpandButtonGroup;

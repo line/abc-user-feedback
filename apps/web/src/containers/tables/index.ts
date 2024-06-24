@@ -14,4 +14,3 @@
  * under the License.
  */
 export { default as IssueTable } from './IssueTable';
-export { default as FeedbackTable } from './FeedbackTable';

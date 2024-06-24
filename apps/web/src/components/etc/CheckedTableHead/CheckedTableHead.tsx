@@ -13,39 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { Header } from '@tanstack/react-table';
+import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
-import { useTranslation } from 'next-i18next';
-
-import DownloadButton from '@/containers/tables/FeedbackTable/DownloadButton';
+import { useTranslation } from 'react-i18next';
 
 interface IProps {
-  header?: Header<any, unknown>;
-  headerLength: number;
-  onClickDelete: () => void;
-  onClickCancle: () => void;
-  count: number;
-  download?: {
-    projectId: number;
-    channelId: number;
-    ids: number[];
-    fieldIds: number[];
-  };
+  table: Table<any>;
+  onClickDelete?: () => void;
   disabled?: boolean;
+  button?: React.ReactNode;
 }
 
 const CheckedTableHead: React.FC<IProps> = (props) => {
-  const {
-    header,
-    headerLength,
-    onClickCancle,
-    onClickDelete,
-    count,
-    disabled,
-    download,
-  } = props;
+  const { table, onClickDelete, disabled, button } = props;
 
   const { t } = useTranslation();
+
+  const header = table.getFlatHeaders().find((v) => v.id === 'select');
+
+  const { rowSelection } = table.getState();
 
   return (
     <>
@@ -53,7 +39,7 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
         {header &&
           flexRender(header?.column.columnDef.header, header.getContext())}
       </th>
-      <th colSpan={headerLength - 1}>
+      <th colSpan={table.getVisibleFlatColumns().length - 1}>
         <div className="flex items-center gap-5">
           <button
             className="btn btn-tertiary btn-sm text-red-primary min-w-0"
@@ -64,24 +50,21 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
           </button>
           <button
             className="btn btn-tertiary btn-sm min-w-0"
-            onClick={onClickCancle}
+            onClick={() => table.resetRowSelection()}
           >
             {t('button.select-cancel')}
           </button>
           <div className="border-r-fill-secondary h-4 border-r-[1px]" />
-          {download && (
+          {button && (
             <>
-              <DownloadButton
-                query={{ ids: download.ids }}
-                count={download.ids.length}
-                fieldIds={download.fieldIds}
-                isHead
-              />
+              {button}
               <div className="border-r-fill-secondary h-4 border-r-[1px]" />
             </>
           )}
           <span className="font-12-bold text-blue-primary">
-            {t('text.select-count', { count })}
+            {t('text.select-count', {
+              count: Object.keys(rowSelection).length,
+            })}
           </span>
         </div>
       </th>

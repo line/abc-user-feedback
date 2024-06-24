@@ -15,8 +15,8 @@
  */
 import { useEffect, useState } from 'react';
 
+import FeedbackTable from './feedback-table';
 import { FeedbackTableProvider } from './feedback-table.context';
-import FeedbackTable from './FeedbackTable';
 
 import { useChannels } from '@/hooks';
 
@@ -31,18 +31,13 @@ const FeedbackTableInIssue: React.FC<IProps> = (props) => {
   const [currentChannelId, setCurrentChannelId] = useState<number>(0);
 
   useEffect(() => {
-    if (!channels) return;
-    setCurrentChannelId(channels.items?.[0]?.id ?? 0);
+    setCurrentChannelId(channels?.items?.[0]?.id ?? 0);
   }, [channels]);
 
   if (!currentChannelId) return <div>Loading...</div>;
 
   return (
-    <FeedbackTableProvider
-      projectId={projectId}
-      channelId={currentChannelId}
-      fixedLimit={20}
-    >
+    <FeedbackTableProvider projectId={projectId} channelId={currentChannelId}>
       <FeedbackTable
         issueId={issueId}
         onChangeChannel={setCurrentChannelId}

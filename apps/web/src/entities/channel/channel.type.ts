@@ -13,4 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './FeedbackDeleteDialog';
+
+import type { Field } from '../field';
+
+export type Channel = {
+  id: number;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+};
+// fields: Field[];
+
+export type InputChannelInfoType = Omit<
+  Channel,
+  'id' | 'fields' | 'updatedAt' | 'createdAt'
+>;
+
+export type InputImageConfigType = {
+  accessKeyId: string;
+  secretAccessKey: string;
+  endpoint: string;
+  region: string;
+  bucket: string;
+  domainWhiteList: string[] | null;
+};

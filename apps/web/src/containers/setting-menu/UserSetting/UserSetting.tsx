@@ -13,11 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { RowSelectionState, SortingState } from '@tanstack/react-table';
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -26,17 +25,16 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
+import { BasicTable } from '@/shared';
+
 import UserEditPopover from './UserEditPopover';
 import UserInvitationDialog from './UserInvitationDialog';
 
 import {
-  CheckedTableHead,
   SettingMenuTemplate,
   TableCheckbox,
-  TableLoadingRow,
   TablePagination,
   TableSearchInput,
-  TableSortIcon,
 } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
@@ -235,67 +233,21 @@ const UserSetting: React.FC<IProps> = () => {
             />
           </div>
         </div>
-        <table className="table w-full">
-          <thead>
-            <tr>
-              {rowSelectionIds.length > 0 ?
-                <CheckedTableHead
-                  headerLength={columns.length}
-                  count={rowSelectionIds.length}
-                  header={table.getFlatHeaders().find((v) => v.id === 'select')}
-                  onClickCancle={table.resetRowSelection}
-                  onClickDelete={() => mutate({ ids: rowSelectionIds })}
-                />
-              : table.getFlatHeaders().map((header, i) => (
-                  <th key={i} style={{ width: header.getSize() }}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
-                  </th>
-                ))
-              }
-            </tr>
-            {isLoading && <TableLoadingRow colSpan={columns.length} />}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows.length === 0 ?
-              <tr>
-                <td colSpan={columns.length}>
-                  <div className="my-32 flex flex-col items-center justify-center gap-3">
-                    <Icon
-                      name="WarningTriangleFill"
-                      className="text-tertiary"
-                      size={56}
-                    />
-                    <p>No Items.</p>
-                  </div>
-                </td>
-              </tr>
-            : table.getRowModel().rows.map((row) => (
-                <Fragment key={row.index}>
-                  <tr>
-                    {row.getVisibleCells().map((cell) => (
-                      <td
-                        key={`${cell.id} ${cell.row.index}`}
-                        className="border-none"
-                        style={{ width: cell.column.getSize() }}
-                      >
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                </Fragment>
-              ))
-            }
-          </tbody>
-        </table>
+        <BasicTable
+          table={table}
+          onClickDelete={() => mutate({ ids: rowSelectionIds })}
+          isLoading={isLoading}
+          emptyComponent={
+            <div className="my-32 flex flex-col items-center justify-center gap-3">
+              <Icon
+                name="WarningTriangleFill"
+                className="text-tertiary"
+                size={56}
+              />
+              <p>No Items.</p>
+            </div>
+          }
+        />
       </div>
     </SettingMenuTemplate>
   );

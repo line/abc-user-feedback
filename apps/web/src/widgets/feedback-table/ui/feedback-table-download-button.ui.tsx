@@ -14,35 +14,45 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import type { Table } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { useTranslation } from 'next-i18next';
-import { useStore } from 'zustand';
+import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
-import useFeedbackTable from '../feedback-table.context';
+import type { Field } from '@/entities/field';
+import { useThemeStore } from '@/entities/theme/theme.model';
+
+import useFeedbackTable from './feedback-table.context';
 
 import { useDownload, usePermissions } from '@/hooks';
 import type { IFetchError } from '@/types/fetch-error.type';
-import useThemeStore from '@/zustand/theme.store';
 
-export interface IDownloadButtonProps {
+interface IProps {
   query: any;
-  fieldIds: number[];
+  fieldData: Field[];
   count?: number;
   isHead?: boolean;
+  table: Table<any>;
 }
 
-const DownloadButton: React.FC<IDownloadButtonProps> = ({
-  query,
-  fieldIds,
-  count,
-  isHead = false,
-}) => {
+const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
+  const { query, table, fieldData, count, isHead = false } = props;
+
   const { channelId, projectId, createdAtRange } = useFeedbackTable();
 
+  const { columnOrder, columnVisibility } = table.getState();
+  const fieldIds = useMemo(() => {
+    if (columnOrder.length === 0) return fieldData.map((v) => v.id);
+
+    return fieldData
+      .filter((v) => columnVisibility[v.key] !== false)
+      .sort((a, b) => columnOrder.indexOf(a.key) - columnOrder.indexOf(b.key))
+      .map((v) => v.id);
+  }, [columnOrder, columnVisibility, fieldData]);
+
   const [open, setOpen] = useState(false);
-  const { theme } = useStore(useThemeStore);
+  const { theme } = useThemeStore();
   const perms = usePermissions(projectId);
 
   const { t } = useTranslation();
@@ -96,14 +106,13 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
     );
   };
 
-  const btnCls = useMemo(
-    () => (isHead ? 'btn-tertiary' : 'btn-secondary'),
-    [isHead],
-  );
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        className={['btn btn-sm gap-2', btnCls].join(' ')}
+        className={[
+          'btn btn-sm gap-2',
+          isHead ? 'btn-tertiary' : 'btn-secondary',
+        ].join(' ')}
         disabled={!perms.includes('feedback_download_read')}
         onClick={() => setOpen((prev) => !prev)}
       >
@@ -150,4 +159,4 @@ const DownloadButton: React.FC<IDownloadButtonProps> = ({
   );
 };
 
-export default DownloadButton;
+export default FeedbackTableDownloadButton;

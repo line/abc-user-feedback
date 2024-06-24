@@ -21,7 +21,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { TableRow } from '../../IssueTable/TableRow';
+import { TableRow } from '@/shared';
+
+import useFeedbackTable from '../feedback-table.context';
 import FeedbackDetail from '../FeedbackDetail';
 
 import { TableCheckbox } from '@/components';
@@ -32,24 +34,19 @@ import useTableStore from '@/zustand/table.store';
 
 interface IProps {
   row: Row<any>;
-  channelId: number;
   refetch: () => Promise<any>;
-  projectId: number;
 }
 
-const FeedbackTableRow: React.FC<IProps> = ({
-  projectId,
-  row,
-  channelId,
-  refetch,
-}) => {
+const FeedbackTableRow: React.FC<IProps> = ({ row, refetch }) => {
   const { t } = useTranslation();
   const [openId, setOpenId] = useState<number>();
+  const { channelId, projectId } = useFeedbackTable();
 
   const { disableEditState, enableEditState, editableState, editInput } =
     useTableStore();
 
-  const perms = usePermissions();
+  const perms = usePermissions(projectId);
+
   useEffect(() => {
     disableEditState();
   }, [channelId]);

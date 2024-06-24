@@ -15,10 +15,9 @@
  */
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
-import { i18n } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 import { CardSlider, parseAsDateRange } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
@@ -57,32 +56,32 @@ const DEFAULT_DATE_RANGE = {
 
 const options = [
   {
-    label: i18n?.t('text.date.yesterday'),
+    label: <Trans i18nKey="text.date.yesterday" />,
     startDate: dayjs().subtract(1, 'days').startOf('day').toDate(),
     endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: i18n?.t('text.date.before-days', { day: 7 }),
+    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 7 }} />,
     startDate: dayjs().subtract(8, 'days').toDate(),
     endDate: dayjs().subtract(1, 'days').toDate(),
   },
   {
-    label: i18n?.t('text.date.before-days', { day: 30 }),
+    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 30 }} />,
     startDate: dayjs().subtract(31, 'days').toDate(),
     endDate: dayjs().subtract(1, 'days').toDate(),
   },
   {
-    label: i18n?.t('text.date.before-days', { day: 90 }),
+    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 90 }} />,
     startDate: dayjs().subtract(91, 'days').toDate(),
     endDate: dayjs().subtract(1, 'days').toDate(),
   },
   {
-    label: i18n?.t('text.date.before-days', { day: 180 }),
+    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 180 }} />,
     startDate: dayjs().subtract(181, 'days').toDate(),
     endDate: dayjs().subtract(1, 'days').toDate(),
   },
   {
-    label: i18n?.t('text.date.before-days', { day: 365 }),
+    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 365 }} />,
     startDate: dayjs().subtract(366, 'days').toDate(),
     endDate: dayjs().subtract(1, 'days').toDate(),
   },

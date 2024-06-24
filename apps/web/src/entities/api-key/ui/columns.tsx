@@ -16,7 +16,7 @@
 
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { i18n } from 'next-i18next';
+import { Trans } from 'next-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
@@ -38,7 +38,7 @@ export const columns = (onDelete?: (id: number) => void) => [
             try {
               navigator.clipboard.writeText(getValue());
               toast.positive({
-                title: i18n?.t('toast.copy'),
+                title: <Trans i18nKey="toast.copy" />,
                 iconName: 'CopyFill',
               });
             } catch (error) {
@@ -63,7 +63,7 @@ export const columns = (onDelete?: (id: number) => void) => [
     header: 'Status',
     cell: () => (
       <Badge color="blue" type="primary">
-        {i18n?.t('main.setting.api-key-status.active')}
+        <Trans i18nKey="main.setting.api-key-status.active" />
       </Badge>
     ),
     size: 150,

@@ -17,12 +17,12 @@ import React from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { CreateProjectTemplate } from '@/features/create-project';
+import { CreateProject } from '@/features/create-project';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 
 const CreateProjectPage: NextPage = () => {
-  return <CreateProjectTemplate />;
+  return <CreateProject />;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

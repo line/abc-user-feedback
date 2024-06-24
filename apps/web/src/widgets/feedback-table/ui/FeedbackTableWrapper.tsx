@@ -16,8 +16,8 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
+import FeedbackTable from './feedback-table';
 import { FeedbackTableProvider } from './feedback-table.context';
-import FeedbackTable from './FeedbackTable';
 
 import { Path } from '@/constants/path';
 import { useChannels } from '@/hooks';
@@ -30,14 +30,14 @@ interface IProps {
 
 const FeedbackTableWrapper: React.FC<IProps> = (props) => {
   const { projectId, issueId, channelId } = props;
+
   const router = useRouter();
   const { data: channels } = useChannels(projectId);
 
-  const currentChannelId = useMemo(() => {
-    if (channelId) return channelId;
-    if (!channels) return null;
-    return channels.items?.[0]?.id ?? null;
-  }, [channelId, channels]);
+  const currentChannelId = useMemo(
+    () => channelId ?? channels?.items?.[0]?.id ?? null,
+    [channelId, channels],
+  );
 
   if (!currentChannelId) return <div>Invalid Channel Id</div>;
 
