@@ -17,22 +17,20 @@ import { Fragment } from 'react';
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
-import {
-  CheckedTableHead,
-  TableLoadingRow,
-  TableResizer,
-  TableSortIcon,
-} from '@/components';
+import CheckedTableHead from './checked-table-head';
+import TableLoadingRow from './table-loading-row';
+import TableResizer from './table-resizer';
+import TableSortIcon from './table-sort-icon';
 
 interface IProps<T> {
   table: ReactTable<T>;
-  emptyComponent: React.ReactNode;
+  emptyComponent?: React.ReactNode;
   resiable?: boolean;
   isLoading?: boolean;
   onClickDelete?: () => void;
 }
 
-const BasicTable = <T extends object>(props: IProps<T>) => {
+function BasicTable<T>(props: IProps<T>) {
   const {
     table,
     emptyComponent,
@@ -95,6 +93,6 @@ const BasicTable = <T extends object>(props: IProps<T>) => {
       </tbody>
     </table>
   );
-};
+}
 
 export default BasicTable;

@@ -31,8 +31,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon } from '@ufb/ui';
 
-import FeedbackDetailCell from './FeedbackDetailCell';
-import FeedbackDetailIssueCell from './FeedbackDetailIssueCell';
+import FeedbackDetailCell from './feedback-detail-cell';
+import FeedbackDetailIssueCell from './feedback-detail-issue-cell';
 
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor } from '@/constants/issues';

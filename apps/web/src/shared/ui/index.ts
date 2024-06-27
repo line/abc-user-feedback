@@ -28,5 +28,3 @@ export { default as CardSlider } from './card-slider.ui';
 export { default as DashboardCard } from './dashboard-card';
 export * from './tables';
 export * from './charts';
-
-export { default as TableRow } from './table-row';

@@ -22,7 +22,7 @@ import { useClickAway } from 'react-use';
 import { Badge, Icon, toast } from '@ufb/ui';
 
 import useFeedbackTable from '../feedback-table.context';
-import IssueSetting from './IssueSetting';
+import IssueSetting from './issue-setting';
 
 import { Popper } from '@/components';
 import { getStatusColor } from '@/constants/issues';
@@ -42,8 +42,8 @@ const IssueCell: React.FC<IProps> = (props) => {
   const { issues, feedbackId, isExpanded, cellWidth } = props;
   const queryClient = useQueryClient();
 
-  const refetch = () => {
-    queryClient.invalidateQueries({
+  const refetch = async () => {
+    await queryClient.invalidateQueries({
       queryKey: [
         '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
       ],

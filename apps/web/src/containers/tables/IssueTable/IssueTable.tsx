@@ -31,6 +31,13 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
+import {
+  TableCheckbox,
+  TableLoadingRow,
+  TablePagination,
+  TableResizer,
+  TableSortIcon,
+} from '@/shared';
 import { FeedbackTableInIssue } from '@/widgets/feedback-table';
 
 import IssueSettingPopover from './IssueSettingPopover';
@@ -42,12 +49,7 @@ import {
   DateRangePicker,
   ExpandableText,
   IssueCircle,
-  TableCheckbox,
-  TableLoadingRow,
-  TablePagination,
-  TableResizer,
   TableSearchInput,
-  TableSortIcon,
 } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
 import { DATE_FORMAT, DATE_TIME_FORMAT } from '@/constants/dayjs-format';

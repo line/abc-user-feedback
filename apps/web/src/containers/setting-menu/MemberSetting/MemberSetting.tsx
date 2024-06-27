@@ -13,11 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { SortingState } from '@tanstack/react-table';
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -26,15 +25,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
+import { BasicTable } from '@/shared';
+
 import MemberDeleteDialog from './MemberDeleteDialog';
 import MemberInvitationDialog from './MemberInvitationDialog';
 import MemberUpdatePopover from './MemberUpdatePopover';
 
-import {
-  SettingMenuTemplate,
-  TableLoadingRow,
-  TableSortIcon,
-} from '@/components';
+import { SettingMenuTemplate } from '@/components';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIQuery, usePermissions, useSort } from '@/hooks';
 import type { PermissionType } from '@/types/permission.type';
@@ -156,58 +153,20 @@ const MemberSetting: React.FC<IProps> = ({ projectId }) => {
         disabled: !perms.includes('project_member_create'),
       }}
     >
-      <table className="table">
-        <thead>
-          <tr>
-            {table.getFlatHeaders().map((header, i) => (
-              <th key={i} style={{ width: header.getSize() }}>
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext(),
-                )}
-                {header.column.getCanSort() && (
-                  <TableSortIcon column={header.column} />
-                )}
-              </th>
-            ))}
-          </tr>
-          {isLoading && <TableLoadingRow colSpan={columns.length} />}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.length === 0 ?
-            <tr>
-              <td colSpan={columns.length}>
-                <div className="my-32 flex flex-col items-center justify-center gap-3">
-                  <Icon
-                    name="DriverRegisterFill"
-                    className="text-tertiary"
-                    size={56}
-                  />
-                  <p>{t('main.setting.register-member')}</p>
-                </div>
-              </td>
-            </tr>
-          : table.getRowModel().rows.map((row) => (
-              <Fragment key={row.index}>
-                <tr>
-                  {row.getVisibleCells().map((cell) => (
-                    <td
-                      key={`${cell.id} ${cell.row.index}`}
-                      className="border-none"
-                      style={{ width: cell.column.getSize() }}
-                    >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              </Fragment>
-            ))
-          }
-        </tbody>
-      </table>
+      <BasicTable
+        emptyComponent={
+          <div className="my-32 flex flex-col items-center justify-center gap-3">
+            <Icon
+              name="DriverRegisterFill"
+              className="text-tertiary"
+              size={56}
+            />
+            <p>{t('main.setting.register-member')}</p>
+          </div>
+        }
+        table={table}
+        isLoading={isLoading}
+      />
       <MemberInvitationDialog
         open={openDialog}
         projectId={projectId}

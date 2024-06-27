@@ -26,13 +26,15 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/ui';
 
+import { TableResizer } from '@/shared';
+import EditableCell from '@/widgets/feedback-table/ui/editable-cell';
+
 import type { FieldRowType } from './FieldSetting';
 
 import { ImagePreviewButton } from '@/components/buttons';
-import { ExpandableText, TableResizer } from '@/components/etc';
+import { ExpandableText } from '@/components/etc';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { getStatusColor, ISSUES } from '@/constants/issues';
-import EditableCell from '@/containers/tables/FeedbackTable/EditableCell/EditableCell';
 import type { FieldType } from '@/types/field.type';
 import type { IssueStatus } from '@/types/issue.type';
 

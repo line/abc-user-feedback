@@ -17,8 +17,9 @@ import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 
 import ChartFilter from '../charts/chart-filter';
+import TableSortIcon from './table-sort-icon';
 
-import { DescriptionTooltip, TableSortIcon } from '@/components';
+import { DescriptionTooltip } from '@/components';
 import type { ISelectBoxProps } from '@/components/etc/SelectBox';
 import SelectBox from '@/components/etc/SelectBox';
 

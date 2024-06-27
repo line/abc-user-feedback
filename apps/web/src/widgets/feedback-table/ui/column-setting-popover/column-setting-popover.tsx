@@ -27,7 +27,7 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import DraggableColumnItem from './DraggableColumnItem';
+import DraggableColumnItem from './draggable-column-item';
 
 import type { FieldType } from '@/types/field.type';
 import { reorder } from '@/utils/reorder';

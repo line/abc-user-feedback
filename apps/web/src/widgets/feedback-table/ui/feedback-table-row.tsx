@@ -21,12 +21,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { TableRow } from '@/shared';
+import { TableCheckbox, TableRow } from '@/shared';
 
-import useFeedbackTable from '../feedback-table.context';
-import FeedbackDetail from '../FeedbackDetail';
+import FeedbackDetail from './feedback-detail';
+import useFeedbackTable from './feedback-table.context';
 
-import { TableCheckbox } from '@/components';
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { ShareButton } from '@/containers/buttons';
 import { useOAIMutation, usePermissions } from '@/hooks';

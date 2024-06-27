@@ -15,3 +15,11 @@
  */
 export { default as DashboardTable } from './dashboard-table';
 export { default as BasicTable } from './basic-table.ui';
+export { default as TableRow } from './table-row';
+export { default as CheckedTableHead } from './checked-table-head';
+
+export { default as TableCheckbox } from './table-checkbox';
+export { default as TableLoadingRow } from './table-loading-row';
+export { default as TablePagination } from './table-pagination';
+export { default as TableResizer } from './table-resizer';
+export { default as TableSortIcon } from './table-sort-icon';

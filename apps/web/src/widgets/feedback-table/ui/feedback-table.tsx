@@ -32,19 +32,20 @@ import { useTranslation } from 'next-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import FeedbackDeleteDialog from './feedback-delete-dialog';
-import FeedbackTableBar from './feedback-table-bar';
-import { getColumns } from './feedback-table-columns';
-import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
-import useFeedbackTable from './feedback-table.context';
-import FeedbackTableRow from './FeedbackTableRow';
-
 import {
   CheckedTableHead,
   TableLoadingRow,
   TableResizer,
   TableSortIcon,
-} from '@/components';
+} from '@/shared';
+
+import FeedbackDeleteDialog from './feedback-delete-dialog';
+import FeedbackTableBar from './feedback-table-bar';
+import { getColumns } from './feedback-table-columns';
+import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
+import FeedbackTableRow from './feedback-table-row';
+import useFeedbackTable from './feedback-table.context';
+
 import {
   useFeedbackSearch,
   useLocalColumnSetting,

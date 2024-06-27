@@ -14,13 +14,7 @@
  * under the License.
  */
 export { default as TableSearchInput } from './TableSearchInput';
-export { default as TableSortIcon } from './TableSortIcon';
-export { default as TablePagination } from './TablePagination';
-export { default as TableCheckbox } from './TableCheckbox';
-export { default as TableLoadingRow } from './TableLoadingRow';
-export { default as TableResizer } from './TableResizer';
 export { default as ExpandableText } from './ExpandableText';
-export { default as CheckedTableHead } from './CheckedTableHead';
 
 export { default as DateRangePicker } from './DateRangePicker';
 export { default as SelectBoxWithIcon } from './SelectBoxWithIcon';
