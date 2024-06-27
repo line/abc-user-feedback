@@ -2,7 +2,7 @@ services:
   mysql:
     hostname: mysql
     image: mysql:8.4.0
-    platform: linux/arm64/v8
+    platform: linux/amd64
     restart: always
     command: [--mysql-native-password=ON]
     environment:
@@ -22,7 +22,7 @@ services:
   mysql-for-e2e:
     hostname: mysql
     image: mysql:8.4.0
-    platform: linux/arm64/v8
+    platform: linux/amd64
     restart: always
     command: [--mysql-native-password=ON]
     environment:
@@ -63,7 +63,7 @@ services:
       - bootstrap.memory_lock=true
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
       - plugins.security.disabled=true
-      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=AIotplatform9((
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=userfeedback
     ulimits:
       memlock:
         soft: -1
