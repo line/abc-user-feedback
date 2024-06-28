@@ -200,7 +200,7 @@ importers:
         version: 10.3.8(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.8(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.8)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/platform-express@10.3.8(@nestjs/common@10.3.8(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@10.3.8))
       '@swc-node/jest':
         specifier: ^1.8.0
-        version: 1.8.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)
+        version: 1.8.3(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)
       '@swc/core':
         specifier: ^1.4.16
         version: 1.6.5(@swc/helpers@0.5.11)
@@ -3113,15 +3113,15 @@ packages:
       '@swc/core': '>= 1.4.13'
       '@swc/types': '>= 0.1'
 
-  '@swc-node/jest@1.8.2':
-    resolution: {integrity: sha512-IkPPdlI2gqHOM1jQDtlRUx1pvVuGYvEJ3NPBbp/sHa31ZlugldK/G9acIzmKgc17ff7kj0fPB8Nw3TkDVnInTg==}
+  '@swc-node/jest@1.8.3':
+    resolution: {integrity: sha512-PQBEjFxgPFC2xuUe7Bsg7YooLa87fwxo26l9nzVg0zq3ARKK3tgXvMsFXpB2Yzz/2zyhj4kI5ZaPG57Gx1+rVQ==}
     peerDependencies:
       '@swc/core': '>= 1.4.13'
       '@swc/types': '>= 0.1'
       typescript: '>= 5.0'
 
-  '@swc-node/register@1.9.2':
-    resolution: {integrity: sha512-BBjg0QNuEEmJSoU/++JOXhrjWdu3PTyYeJWsvchsI0Aqtj8ICkz/DqlwtXbmZVZ5vuDPpTfFlwDBZe81zgShMA==}
+  '@swc-node/register@1.10.0':
+    resolution: {integrity: sha512-38w10C3fWLi5nd1BltCjj75p5JUn35o8Qvp9yg4y59WrOMLqJ2vzjUva/v7E5IxpY7irE9RMovoxI6uF8/QXJg==}
     peerDependencies:
       '@swc/core': '>= 1.4.13'
       typescript: '>= 4.3'
@@ -12073,18 +12073,18 @@ snapshots:
       '@swc/core': 1.6.5(@swc/helpers@0.5.11)
       '@swc/types': 0.1.9
 
-  '@swc-node/jest@1.8.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)':
+  '@swc-node/jest@1.8.3(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)':
     dependencies:
       '@node-rs/xxhash': 1.7.3
       '@swc-node/core': 1.13.1(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)
-      '@swc-node/register': 1.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)
+      '@swc-node/register': 1.10.0(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)
       '@swc/core': 1.6.5(@swc/helpers@0.5.11)
       '@swc/types': 0.1.9
       typescript: 5.4.5
     transitivePeerDependencies:
       - supports-color
 
-  '@swc-node/register@1.9.2(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)':
+  '@swc-node/register@1.10.0(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)(typescript@5.4.5)':
     dependencies:
       '@swc-node/core': 1.13.1(@swc/core@1.6.5(@swc/helpers@0.5.11))(@swc/types@0.1.9)
       '@swc-node/sourcemap-support': 0.5.0
