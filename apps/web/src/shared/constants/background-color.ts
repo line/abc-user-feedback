@@ -13,20 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { ColorType } from '@ufb/ui';
 
-export type IssueStatus =
-  | 'INIT'
-  | 'ON_REVIEW'
-  | 'IN_PROGRESS'
-  | 'RESOLVED'
-  | 'PENDING';
-export type IssueType = {
-  id: number;
-  name: string;
-  description: string | null;
-  feedbackCount: number;
-  status: IssueStatus;
-  createdAt: string;
-  updatedAt: string;
-  externalIssueId: string;
+export const BACKGROUND_COLOR_MAP: Record<ColorType, string> = {
+  red: 'bg-red-primary',
+  blue: 'bg-blue-primary',
+  yellow: 'bg-yellow-primary',
+  green: 'bg-green-primary',
+  purple: 'bg-purple-primary',
+  navy: 'bg-navy-primary',
+  orange: 'bg-orange-primary',
 };

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Fragment } from 'react';
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
@@ -75,19 +74,17 @@ function BasicTable<T>(props: IProps<T>) {
             <td colSpan={table.getFlatHeaders().length}>{emptyComponent}</td>
           </tr>
         : table.getRowModel().rows.map((row) => (
-            <Fragment key={row.index}>
-              <tr>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={`${cell.id} ${cell.row.index}`}
-                    className="border-none"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            </Fragment>
+            <tr key={row.index}>
+              {row.getVisibleCells().map((cell) => (
+                <td
+                  key={`${cell.id} ${cell.row.index}`}
+                  className="border-none"
+                  style={{ width: cell.column.getSize() }}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </td>
+              ))}
+            </tr>
           ))
         }
       </tbody>

@@ -16,8 +16,8 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
+import { FeedbackTableProvider } from '../model';
 import FeedbackTable from './feedback-table';
-import { FeedbackTableProvider } from './feedback-table.context';
 
 import { Path } from '@/constants/path';
 import { useChannels } from '@/hooks';

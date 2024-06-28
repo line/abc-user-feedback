@@ -13,22 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import type { BadgeProps } from '@ufb/ui';
+import { Badge } from '@ufb/ui';
 
-interface ThemeState {
-  theme: 'light' | 'dark';
-  toggle: () => void;
+import { ISSUE_COLOR_MAP } from '../issue-color.constant';
+import type { Issue } from '../issue.type';
+
+interface IProps extends Omit<BadgeProps, 'color' | 'type'> {
+  issue: Issue;
 }
 
-const useThemeStore = create<ThemeState>()(
-  persist(
-    (set) => ({
-      theme: 'light',
-      toggle: () =>
-        set((prev) => ({ theme: prev.theme === 'light' ? 'dark' : 'light' })),
-    }),
-    { name: 'theme' },
-  ),
-);
-export default useThemeStore;
+const IssueBadge: React.FC<IProps> = ({ issue, ...props }) => {
+  return (
+    <Badge color={ISSUE_COLOR_MAP[issue.status]} type="secondary" {...props}>
+      {issue.name}
+    </Badge>
+  );
+};
+
+export default IssueBadge;

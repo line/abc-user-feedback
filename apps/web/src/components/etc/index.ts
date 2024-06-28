@@ -14,7 +14,6 @@
  * under the License.
  */
 export { default as TableSearchInput } from './TableSearchInput';
-export { default as ExpandableText } from './ExpandableText';
 
 export { default as DateRangePicker } from './DateRangePicker';
 export { default as SelectBoxWithIcon } from './SelectBoxWithIcon';

@@ -13,10 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './Icon';
-export * from './inputs';
-export * from './Toast';
-export * from './Badge';
-export * from './Tooltip';
-export * from './Popover';
-export * from './types';
+import type { ColorType } from '@ufb/ui';
+
+import type { IssueStatus } from './issue.type';
+
+export const ISSUE_COLOR_MAP: Record<IssueStatus, ColorType> = {
+  INIT: 'red',
+  ON_REVIEW: 'blue',
+  IN_PROGRESS: 'yellow',
+  RESOLVED: 'green',
+  PENDING: 'purple',
+};

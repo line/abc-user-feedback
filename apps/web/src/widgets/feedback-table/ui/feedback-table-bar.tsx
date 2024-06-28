@@ -19,11 +19,11 @@ import { useTranslation } from 'react-i18next';
 
 import { TablePagination } from '@/shared';
 
+import { useFeedbackTable } from '../model';
 import ChannelSelectBox from './channel-select-box';
 import ColumnSettingPopover from './column-setting-popover';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableExpandButtonGroup from './feedback-table-expand-button-group.ui';
-import useFeedbackTable from './feedback-table.context';
 
 import { DateRangePicker, TableSearchInput } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';

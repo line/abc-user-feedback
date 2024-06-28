@@ -55,11 +55,9 @@ interface IProps extends React.PropsWithChildren {
   channelId: number;
 }
 
-export const FeedbackTableProvider: React.FC<IProps> = ({
-  children,
-  channelId,
-  projectId,
-}) => {
+export const FeedbackTableProvider: React.FC<IProps> = (props) => {
+  const { children, projectId, channelId } = props;
+
   const { query, setQuery } = useQueryParamsState(
     { projectId, channelId },
     DEFAULT_DATE_RANGE_STRING,
@@ -113,6 +111,7 @@ export const FeedbackTableProvider: React.FC<IProps> = ({
     </FeedbackTableContext.Provider>
   );
 };
-export default function useFeedbackTable() {
+
+export function useFeedbackTable() {
   return useContext(FeedbackTableContext);
 }

@@ -38,7 +38,8 @@ interface IProps extends React.PropsWithChildren {
 }
 
 const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {
-  const columns = table.getAllColumns().filter((v) => v.id !== 'select');
+  const columns = table.getAllColumns();
+
   const { columnOrder, columnVisibility } = table.getState();
 
   const { t } = useTranslation();
@@ -80,9 +81,10 @@ const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {
 
     const newFields: string[] = reorder(
       columnKeys,
-      source.index,
-      destination.index,
+      source.index + 1,
+      destination.index + 1,
     );
+
     table.setColumnOrder(newFields);
   };
 
@@ -107,25 +109,29 @@ const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {
                     {...provided.droppableProps}
                     className="min-w-[200px] space-y-1"
                   >
-                    {columnKeys?.map((key, index) => (
-                      <DraggableColumnItem
-                        name={fieldData.find((v) => v.key === key)?.name ?? ''}
-                        index={index}
-                        key={key}
-                        isChecked={
-                          typeof columnVisibility[key] === 'undefined' ?
-                            true
-                          : !!columnVisibility[key]
-                        }
-                        onChange={(isChecked) =>
-                          table.setColumnVisibility((prev) => ({
-                            ...prev,
-                            [key]: isChecked,
-                          }))
-                        }
-                        isDisabled={key === 'id' || key === 'issues'}
-                      />
-                    ))}
+                    {columnKeys
+                      .filter((v) => v !== 'select')
+                      .map((key, index) => (
+                        <DraggableColumnItem
+                          name={
+                            fieldData.find((v) => v.key === key)?.name ?? ''
+                          }
+                          index={index}
+                          key={key}
+                          isChecked={
+                            typeof columnVisibility[key] === 'undefined' ?
+                              true
+                            : !!columnVisibility[key]
+                          }
+                          onChange={(isChecked) =>
+                            table.setColumnVisibility((prev) => ({
+                              ...prev,
+                              [key]: isChecked,
+                            }))
+                          }
+                          isDisabled={key === 'id' || key === 'issues'}
+                        />
+                      ))}
                     {provided.placeholder}
                   </div>
                 )}

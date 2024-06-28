@@ -39,12 +39,12 @@ import {
   TableSortIcon,
 } from '@/shared';
 
+import { getColumns } from '../feedback-table-columns';
+import { useFeedbackTable } from '../model';
 import FeedbackDeleteDialog from './feedback-delete-dialog';
 import FeedbackTableBar from './feedback-table-bar';
-import { getColumns } from './feedback-table-columns';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableRow from './feedback-table-row';
-import useFeedbackTable from './feedback-table.context';
 
 import {
   useFeedbackSearch,
@@ -63,10 +63,12 @@ export interface IFeedbackTableProps {
 
 const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   const { sub = false, issueId, onChangeChannel } = props;
+
   const { t } = useTranslation();
   const overlay = useOverlay();
 
   const perms = usePermissions();
+
   const [rows, setRows] = useState<Record<string, any>[]>([]);
 
   const { projectId, channelId, query } = useFeedbackTable();
@@ -83,8 +85,6 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
       produce(query, (draft) => {
         if (sub) {
           if (issueId) draft['issueIds'] = [issueId];
-          console.log('draft: ', draft['issueIds']);
-
           Object.keys(draft).forEach((key) => {
             if (key === 'issueIds') return;
             delete draft[key];
@@ -154,8 +154,8 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
-    manualSorting: true,
     getRowId: (row) => row.id,
+    manualSorting: true,
     manualPagination: true,
     initialState: {
       pagination: { pageSize: 20 },
@@ -222,7 +222,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     },
   });
 
-  const openUpdateRoleNameModal = () => {
+  const openFeedbackDeleteDialog = () => {
     return overlay.open(({ isOpen, close }) => (
       <FeedbackDeleteDialog
         open={isOpen}
@@ -239,6 +239,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     () => Object.keys(rowSelection).map((id) => parseInt(id)),
     [rowSelection],
   );
+
   return (
     <div className="flex flex-col gap-2">
       <FeedbackTableBar
@@ -265,7 +266,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
                 {table.getIsSomePageRowsSelected() ?
                   <CheckedTableHead
                     table={table}
-                    onClickDelete={openUpdateRoleNameModal}
+                    onClickDelete={openFeedbackDeleteDialog}
                     disabled={!perms.includes('feedback_delete')}
                     button={
                       <FeedbackTableDownloadButton

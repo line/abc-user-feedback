@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { i18n, Trans } from 'next-i18next';
+import { Trans } from 'next-i18next';
 
 import type { CreateProjectStepKey } from './create-project-type';
 import InputApiKeysStep from './ui/input-api-keys-step.ui';

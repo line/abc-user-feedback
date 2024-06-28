@@ -15,8 +15,8 @@
  */
 import { useEffect, useState } from 'react';
 
+import { FeedbackTableProvider } from '../model';
 import FeedbackTable from './feedback-table';
-import { FeedbackTableProvider } from './feedback-table.context';
 
 import { useChannels } from '@/hooks';
 

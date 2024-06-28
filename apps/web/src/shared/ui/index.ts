@@ -26,5 +26,8 @@ export { default as CreateInputTemplate } from './create-input-template.ui';
 export { default as CreateSectionTemplate } from './create-section-template.ui.tsx';
 export { default as CardSlider } from './card-slider.ui';
 export { default as DashboardCard } from './dashboard-card';
+
+export { default as ExpandableText } from './expandable-text.ui';
+
 export * from './tables';
 export * from './charts';

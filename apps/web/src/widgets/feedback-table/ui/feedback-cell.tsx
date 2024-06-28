@@ -16,7 +16,8 @@
 import { memo } from 'react';
 import dayjs from 'dayjs';
 
-import { ExpandableText } from '@/components';
+import { ExpandableText } from '@/shared';
+
 import { ImagePreviewButton } from '@/components/buttons';
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import type { FieldType } from '@/types/field.type';

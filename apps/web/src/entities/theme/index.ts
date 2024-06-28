@@ -14,3 +14,4 @@
  * under the License.
  */
 export * from './ui';
+export { useThemeStore } from './theme.model';

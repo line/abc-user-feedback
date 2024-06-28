@@ -13,37 +13,47 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { useMemo } from 'react';
 
-import type { IssueTrackerType } from '@/types/issue-tracker.type';
+import { useOAIQuery } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {
   value?: string;
-  issueTracker: IssueTrackerType;
+  projectId: number;
 }
 
-const TicketLink: React.FC<IProps> = ({ value, issueTracker }) => {
+const TicketLink: React.FC<IProps> = ({ value, projectId }) => {
+  const { data: issueTracker } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/issue-tracker',
+    variables: { projectId },
+  });
+
   const link = useMemo(() => {
     try {
-      return new URL(
-        `/browse/${issueTracker?.ticketKey}-${value}`,
-        issueTracker?.ticketDomain,
+      new URL(
+        `/browse/${issueTracker?.data.ticketKey}-${value}`,
+        issueTracker?.data.ticketDomain,
       ).toString();
     } catch (error) {
       return '';
     }
-  }, [issueTracker, value]);
+  }, [issueTracker]);
 
-  return value ?
-      <a
-        className="text-blue-primary"
-        href={link}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {`${issueTracker?.ticketKey}-${value}`}
-      </a>
-    : <>-</>;
+  return (
+    value ?
+      issueTracker ?
+        <a
+          className="text-blue-primary"
+          href={link}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {`${issueTracker?.data.ticketKey}-${value}`}
+        </a>
+      : value
+    : <>-</>
+  );
 };
 
 export default TicketLink;

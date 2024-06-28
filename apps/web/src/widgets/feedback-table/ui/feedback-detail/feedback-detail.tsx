@@ -29,15 +29,16 @@ import {
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { Badge, Icon } from '@ufb/ui';
+import { Icon } from '@ufb/ui';
+
+import { IssueBadge } from '@/entities/issue';
+import type { Issue } from '@/entities/issue';
 
 import FeedbackDetailCell from './feedback-detail-cell';
 import FeedbackDetailIssueCell from './feedback-detail-issue-cell';
 
 import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { getStatusColor } from '@/constants/issues';
 import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
-import type { IssueType } from '@/types/issue.type';
 import { isDefaultField, sortField } from '@/utils/field-utils';
 
 interface IProps {
@@ -137,10 +138,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                     </th>
                     <td width="260" className="overflow-hidden">
                       <FeedbackDetailIssueCell
-                        issues={
-                          feedbackData[issuesField?.key ?? ''] ??
-                          ([] as IssueType[])
-                        }
+                        issues={feedbackData[issuesField?.key ?? ''] ?? []}
                       />
                     </td>
                   </tr>
@@ -172,17 +170,11 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           '-'
                         : field.key === 'issues' ?
                           <div className="flex flex-wrap gap-2">
-                            {(
-                              feedbackData[field.key] ?? ([] as IssueType[])
-                            ).map((v) => (
-                              <Badge
-                                key={v.id}
-                                color={getStatusColor(v.status)}
-                                type="secondary"
-                              >
-                                {v.name}
-                              </Badge>
-                            ))}
+                            {((feedbackData[field.key] ?? []) as Issue[]).map(
+                              (v) => (
+                                <IssueBadge key={v.id} issue={v} />
+                              ),
+                            )}
                           </div>
                         : field.format === 'multiSelect' ?
                           (feedbackData[field.key] ?? ([] as string[])).join(

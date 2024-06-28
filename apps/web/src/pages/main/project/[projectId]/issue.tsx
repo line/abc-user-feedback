@@ -19,10 +19,10 @@ import { useTranslation } from 'react-i18next';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { MainLayout } from '@/widgets';
+import { IssueTable } from '@/widgets/issue-table';
 
 import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { CreateChannelButton } from '@/containers/buttons';
-import { IssueTable } from '@/containers/tables';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {

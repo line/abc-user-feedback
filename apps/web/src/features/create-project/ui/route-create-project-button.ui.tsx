@@ -28,13 +28,14 @@ import {
 
 import { useUserStore } from '@/entities/user';
 
+import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
+
 import {
   CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
   CREATE_PROJECT_CURRENT_STEP_KEY,
   CREATE_PROJECT_INPUT_KEY,
 } from '@/constants/local-storage-key';
 import { Path } from '@/constants/path';
-import { PROJECT_STEPS } from '@/contexts/create-project.context';
 import { useLocalStorage } from '@/hooks';
 
 interface IProps {
@@ -73,7 +74,7 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             <>
               {t('text.create-project-in-progress')}{' '}
               <b>
-                ({step + 1}/{PROJECT_STEPS.length})
+                ({step + 1}/{CREATE_PROJEC_STEP_KEY_LIST.length})
               </b>
             </>
           : t('main.index.no-project')}

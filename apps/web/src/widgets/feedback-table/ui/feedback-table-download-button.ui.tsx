@@ -21,9 +21,9 @@ import { useTranslation } from 'react-i18next';
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import type { Field } from '@/entities/field';
-import { useThemeStore } from '@/entities/theme/theme.model';
+import { useThemeStore } from '@/entities/theme';
 
-import useFeedbackTable from './feedback-table.context';
+import { useFeedbackTable } from '../model';
 
 import { useDownload, usePermissions } from '@/hooks';
 import type { IFetchError } from '@/types/fetch-error.type';

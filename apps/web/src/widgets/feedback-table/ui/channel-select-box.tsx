@@ -16,7 +16,7 @@
 
 import { Icon } from '@ufb/ui';
 
-import useFeedbackTable from './feedback-table.context';
+import { useFeedbackTable } from '../model';
 
 import { DescriptionTooltip } from '@/components';
 import { useChannels } from '@/hooks';

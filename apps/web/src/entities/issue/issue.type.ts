@@ -13,4 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as IssueTable } from './IssueTable';
+export type IssueStatus =
+  | 'INIT'
+  | 'ON_REVIEW'
+  | 'IN_PROGRESS'
+  | 'RESOLVED'
+  | 'PENDING';
+
+export type Issue = {
+  id: number;
+  name: string;
+  description: string | null;
+  feedbackCount: number;
+  status: IssueStatus;
+  createdAt: string;
+  updatedAt: string;
+  externalIssueId: string;
+};

@@ -18,11 +18,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
+import type { Issue } from '@/entities/issue';
+
 import { useOAIMutation, usePermissions } from '@/hooks';
-import type { IssueType } from '@/types/issue.type';
 
 interface IProps {
-  issue: IssueType;
+  issue: Issue;
   projectId: number;
   onClose: () => void;
   refetch: () => void | Promise<void>;

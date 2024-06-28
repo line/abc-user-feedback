@@ -23,13 +23,13 @@ import { Icon, toast } from '@ufb/ui';
 
 import { TableCheckbox, TableRow } from '@/shared';
 
+import { useFeedbackTable } from '../model';
+import useFeedbackRowStore from '../model/feedback-row.store';
 import FeedbackDetail from './feedback-detail';
-import useFeedbackTable from './feedback-table.context';
 
 import { DATE_FORMAT } from '@/constants/dayjs-format';
 import { ShareButton } from '@/containers/buttons';
 import { useOAIMutation, usePermissions } from '@/hooks';
-import useTableStore from '@/zustand/table.store';
 
 interface IProps {
   row: Row<any>;
@@ -42,7 +42,7 @@ const FeedbackTableRow: React.FC<IProps> = ({ row, refetch }) => {
   const { channelId, projectId } = useFeedbackTable();
 
   const { disableEditState, enableEditState, editableState, editInput } =
-    useTableStore();
+    useFeedbackRowStore();
 
   const perms = usePermissions(projectId);
 

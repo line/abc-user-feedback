@@ -76,8 +76,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <title>User Feedback</title>
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
-      <OverlayProvider>
-        <QueryClientProvider client={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <OverlayProvider>
           <HydrationBoundary state={pageProps.dehydratedState}>
             <TenantGuard>
               {getLayout(<Component {...pageProps} />)}
@@ -85,8 +85,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
             </TenantGuard>
           </HydrationBoundary>
           {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
-        </QueryClientProvider>
-      </OverlayProvider>
+        </OverlayProvider>
+      </QueryClientProvider>
     </>
   );
 }

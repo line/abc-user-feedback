@@ -13,10 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './Icon';
-export * from './inputs';
-export * from './Toast';
-export * from './Badge';
-export * from './Tooltip';
-export * from './Popover';
-export * from './types';
+export * from './feedback-row.store';
+export * from './feedback-table.context';

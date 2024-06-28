@@ -15,8 +15,9 @@
  */
 import type { TFunction } from 'next-i18next';
 
+import type { IssueStatus } from '@/entities/issue';
+
 import type { ColorType } from '@/types/color.type';
-import type { IssueStatus } from '@/types/issue.type';
 
 export type IssuesItemType = {
   key: IssueStatus;
@@ -31,19 +32,3 @@ export const ISSUES: (t: TFunction) => IssuesItemType[] = (t) => [
   { key: 'RESOLVED', name: t('text.issue.resolved'), color: 'green' },
   { key: 'PENDING', name: t('text.issue.pending'), color: 'purple' },
 ];
-export const getStatusColor = (status: IssueStatus): ColorType => {
-  switch (status) {
-    case 'INIT':
-      return 'red';
-    case 'ON_REVIEW':
-      return 'blue';
-    case 'IN_PROGRESS':
-      return 'yellow';
-    case 'RESOLVED':
-      return 'green';
-    case 'PENDING':
-      return 'purple';
-    default:
-      return 'red';
-  }
-};

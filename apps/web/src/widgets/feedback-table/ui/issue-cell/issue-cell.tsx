@@ -21,18 +21,19 @@ import { useClickAway } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import useFeedbackTable from '../feedback-table.context';
+import { IssueBadge } from '@/entities/issue';
+import type { Issue } from '@/entities/issue';
+
+import { useFeedbackTable } from '../../model';
 import IssueSetting from './issue-setting';
 
 import { Popper } from '@/components';
-import { getStatusColor } from '@/constants/issues';
 import { useIssueSearch, useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { IFetchError } from '@/types/fetch-error.type';
-import type { IssueType } from '@/types/issue.type';
 
 interface IProps extends React.PropsWithChildren {
-  issues?: IssueType[];
+  issues?: Issue[];
   feedbackId: number;
   isExpanded: boolean;
   cellWidth: number;
@@ -146,7 +147,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     },
   });
 
-  const addIssue = async (issue: IssueType | undefined) => {
+  const addIssue = async (issue?: Issue) => {
     let issueId = issue?.id;
     if (!issueId) {
       const data = await createIssue({ name: inputValue });
@@ -189,15 +190,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   !isExpanded ? 'overflow-x-hidden' : 'flex-wrap',
                 ].join(' ')}
               >
-                {issues?.map((v) => (
-                  <Badge
-                    key={v.id}
-                    color={getStatusColor(v.status)}
-                    type="secondary"
-                  >
-                    {v.name}
-                  </Badge>
-                ))}
+                {issues?.map((v) => <IssueBadge key={v.id} issue={v} />)}
               </div>
               {overflow && !isExpanded && (
                 <Icon name="Dots" size={20} className="flex-shrink-0" />
@@ -222,19 +215,16 @@ const IssueCell: React.FC<IProps> = (props) => {
           onClick={(e) => e.stopPropagation()}
         >
           <label className="bg-primary flex cursor-text flex-wrap items-center gap-1 rounded px-3 py-2">
-            {issues?.map(({ id, name, status }) => (
-              <Badge
-                key={id}
-                color={getStatusColor(status)}
-                type="secondary"
+            {issues?.map((issue) => (
+              <IssueBadge
+                key={issue.id}
+                issue={issue}
                 right={{
                   iconName: 'Close',
-                  onClick: () => detecthIssue({ issueId: id }),
+                  onClick: () => detecthIssue({ issueId: issue.id }),
                   disabled: !perms.includes('feedback_issue_update'),
                 }}
-              >
-                {name}
-              </Badge>
+              />
             ))}
             <Combobox.Input
               className="input-sm bg-transparent"
@@ -271,12 +261,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                         : 'cursor-pointer',
                       ].join(' ')}
                     >
-                      <Badge
-                        color={getStatusColor(item.status)}
-                        type="secondary"
-                      >
-                        {item.name}
-                      </Badge>
+                      <IssueBadge issue={item} />
                       <div onClick={(e) => e.stopPropagation()}>
                         <button
                           className="icon-btn icon-btn-sm icon-btn-tertiary hover:bg-secondary"

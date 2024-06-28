@@ -13,4 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './IssueTableSelectBox';
+import clsx from 'clsx';
+
+import { BACKGROUND_COLOR_MAP } from '@/shared';
+
+import { ISSUE_COLOR_MAP } from '../issue-color.constant';
+import type { IssueStatus } from '../issue.type';
+
+interface IProps {
+  issueKey: IssueStatus;
+}
+
+const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
+  return (
+    <div
+      className={clsx([
+        'border-fill-secondary bg- mr-1.5 h-1.5 w-1.5 rounded-full border',
+        BACKGROUND_COLOR_MAP[ISSUE_COLOR_MAP[issueKey]],
+      ])}
+    />
+  );
+};
+
+export default IssueCircle;

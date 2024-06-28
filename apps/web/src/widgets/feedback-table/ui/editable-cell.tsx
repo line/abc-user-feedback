@@ -17,9 +17,10 @@ import { memo, useMemo } from 'react';
 import dayjs from 'dayjs';
 import ReactDatePicker from 'react-datepicker';
 
+import useFeedbackRowStore from '../model/feedback-row.store';
+
 import { SelectBoxCreatable } from '@/components/etc/SelectBox';
 import type { FieldType } from '@/types/field.type';
-import useTableStore from '@/zustand/table.store';
 
 interface IProps extends React.PropsWithChildren {
   field: FieldType;
@@ -31,7 +32,7 @@ interface IProps extends React.PropsWithChildren {
 const EditableCell: React.FC<IProps> = memo((props) => {
   const { field, value, isExpanded, feedbackId } = props;
 
-  const { editableState, onChangeEditInput, editInput } = useTableStore();
+  const { editableState, onChangeEditInput, editInput } = useFeedbackRowStore();
 
   const isEditable = editableState === feedbackId;
 

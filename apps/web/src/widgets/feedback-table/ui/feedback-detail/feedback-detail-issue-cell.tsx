@@ -15,13 +15,13 @@
  */
 import { useEffect, useRef, useState } from 'react';
 
-import { Badge, Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
+import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
-import { getStatusColor } from '@/constants/issues';
-import type { IssueType } from '@/types/issue.type';
+import type { Issue } from '@/entities/issue';
+import { IssueBadge } from '@/entities/issue';
 
 interface IProps {
-  issues: IssueType[];
+  issues: Issue[];
 }
 
 const FeedbackDetailIssueCell: React.FC<IProps> = ({ issues }) => {
@@ -38,9 +38,7 @@ const FeedbackDetailIssueCell: React.FC<IProps> = ({ issues }) => {
   return (
     <div className="relative flex w-[260px] gap-1 overflow-hidden" ref={ref}>
       {issues.map((v) => (
-        <Badge key={v.id} color={getStatusColor(v.status)} type="secondary">
-          {v.name}
-        </Badge>
+        <IssueBadge key={v.id} issue={v} />
       ))}
       {isOverflow && (
         <div className="bg-primary absolute -top-1 right-0 pl-2">
@@ -56,9 +54,7 @@ const FeedbackDetailIssueCell: React.FC<IProps> = ({ issues }) => {
                 <ul>
                   {issues.map((v) => (
                     <li key={v.id} className="px-3 py-2">
-                      <Badge color={getStatusColor(v.status)} type="secondary">
-                        {v.name}
-                      </Badge>
+                      <IssueBadge issue={v} />
                     </li>
                   ))}
                 </ul>

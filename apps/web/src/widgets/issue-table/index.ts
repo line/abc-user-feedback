@@ -13,23 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import classNames from 'classnames';
-
-interface IProps extends React.PropsWithChildren {
-  isExpanded?: boolean;
-}
-
-const ExpandableText: React.FC<IProps> = ({ children, isExpanded }) => {
-  return (
-    <p
-      className={classNames('cursor-text', {
-        'whitespace-pre-wrap break-all': isExpanded,
-        truncate: !isExpanded,
-      })}
-    >
-      {children}
-    </p>
-  );
-};
-export default ExpandableText;
+export * from './ui';

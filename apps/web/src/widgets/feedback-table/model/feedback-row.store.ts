@@ -13,17 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { create } from 'zustand';
 
-interface ITableState {
+import { create } from '@/libs/zustand';
+
+type State = {
   editableState?: number;
   editInput: Record<string, any>;
+};
+type Action = {
   enableEditState: (id?: number) => void;
   disableEditState: () => void;
   onChangeEditInput: (key: string, input: any) => void;
-}
+};
 
-const useTableStore = create<ITableState>((set) => ({
+const useFeedbackRowStore = create<State, Action>((set) => ({
   editableState: undefined,
   editInput: {},
   enableEditState: (id?: number) => set({ editableState: id }),
@@ -32,4 +35,4 @@ const useTableStore = create<ITableState>((set) => ({
     set(({ editInput }) => ({ editInput: { ...editInput, [key]: input } })),
 }));
 
-export default useTableStore;
+export default useFeedbackRowStore;

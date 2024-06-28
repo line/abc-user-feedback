@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useMemo } from 'react';
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import { ISSUES } from '@/constants/issues';
@@ -43,12 +44,13 @@ const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
         return '';
     }
   }, [t, issueKey]);
+
   return (
     <div
-      className={[
+      className={clsx([
         'border-fill-secondary bg- mr-1.5 h-1.5 w-1.5 rounded-full border',
         circleColor,
-      ].join(' ')}
+      ])}
     />
   );
 };

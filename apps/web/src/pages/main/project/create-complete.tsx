@@ -74,6 +74,7 @@ const CreateCompletePage: NextPage = () => {
   const issueTrackerFormMethods = useForm<IssueTracker>({
     defaultValues: issueTracker?.data ?? {},
   });
+
   useEffect(() => {
     if (!project || !issueTracker) return;
     projectInfoFormMethods.reset(project);
