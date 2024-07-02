@@ -25,14 +25,18 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { BasicTable, TableCheckbox, TablePagination } from '@/shared';
+import {
+  BasicTable,
+  DATE_TIME_FORMAT,
+  TableCheckbox,
+  TablePagination,
+} from '@/shared';
 
 import UserEditPopover from './UserEditPopover';
 import UserInvitationDialog from './UserInvitationDialog';
 
 import { SettingMenuTemplate, TableSearchInput } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput';
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useOAIMutation, useOAIQuery, useSort, useUserSearch } from '@/hooks';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
 

@@ -15,10 +15,10 @@
  */
 import mockRouter from 'next-router-mock';
 
+import { Path } from '@/shared';
 import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
 
-import { Path } from '@/constants/path';
 import CreateTenantPage from '@/pages/tenant/create';
 import { render, waitFor } from '@/utils/test-utils';
 

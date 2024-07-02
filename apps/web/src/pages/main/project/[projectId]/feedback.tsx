@@ -17,11 +17,11 @@ import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
+import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { MainLayout } from '@/widgets';
 import { FeedbackTable } from '@/widgets/feedback-table';
 
-import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { CreateChannelButton } from '@/containers/buttons';
 import { useOAIQuery } from '@/hooks';
 

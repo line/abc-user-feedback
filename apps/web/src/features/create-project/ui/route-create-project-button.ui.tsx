@@ -26,16 +26,16 @@ import {
   TooltipTrigger,
 } from '@ufb/ui';
 
-import { useUserStore } from '@/entities/user';
-
-import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
-
 import {
   CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
   CREATE_PROJECT_CURRENT_STEP_KEY,
   CREATE_PROJECT_INPUT_KEY,
-} from '@/constants/local-storage-key';
-import { Path } from '@/constants/path';
+  Path,
+} from '@/shared';
+import { useUserStore } from '@/entities/user';
+
+import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
+
 import { useLocalStorage } from '@/hooks';
 
 interface IProps {

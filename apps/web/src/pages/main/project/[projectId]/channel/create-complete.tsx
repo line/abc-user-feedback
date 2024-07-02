@@ -22,8 +22,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
+import { DEFAULT_LOCALE, Path } from '@/shared';
+
 import {
   ChannelInfoSection,
   FieldPreviewSection,

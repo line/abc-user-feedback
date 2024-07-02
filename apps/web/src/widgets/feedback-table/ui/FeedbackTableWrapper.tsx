@@ -16,10 +16,11 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
+import { Path } from '@/shared';
+
 import { FeedbackTableProvider } from '../model';
 import FeedbackTable from './feedback-table';
 
-import { Path } from '@/constants/path';
 import { useChannels } from '@/hooks';
 
 interface IProps {

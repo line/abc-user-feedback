@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import { Transition } from '@headlessui/react';
 
 const boxCN = 'px-3 relative first:pl-0 last:pr-0 ';

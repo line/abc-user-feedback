@@ -18,9 +18,8 @@ import { useRouter } from 'next/router';
 
 import { toast } from '@ufb/ui';
 
+import { Path } from '@/shared';
 import { useUserStore } from '@/entities/user';
-
-import { Path } from '@/constants/path';
 
 interface IQuery {
   code: string;

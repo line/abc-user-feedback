@@ -15,10 +15,8 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { SimpleBarChart } from '@/shared';
+import { ISSUES, Path, SimpleBarChart } from '@/shared';
 
-import { ISSUES } from '@/constants/issues';
-import { Path } from '@/constants/path';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {

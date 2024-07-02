@@ -15,14 +15,12 @@
  */
 import { useRouter } from 'next/router';
 
-import { LocaleSelectBox, Logo } from '@/shared';
+import { LocaleSelectBox, Logo, Path } from '@/shared';
 import { ThemeToggleButton } from '@/entities/theme';
 import { UserBox } from '@/entities/user';
 
 import Breadcrumb from './breadcrumb';
 import SideNav from './side-nav.ui';
-
-import { Path } from '@/constants/path';
 
 interface IProps extends React.PropsWithChildren {
   center?: boolean;

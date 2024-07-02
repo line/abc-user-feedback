@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { CreateSectionTemplate } from '@/shared';
+import { CreateSectionTemplate, DEFAULT_LOCALE, Path } from '@/shared';
 import { ApiKeyTable } from '@/entities/api-key';
 import type { IssueTracker } from '@/entities/issue-tracker';
 import { IssueTrackerForm } from '@/entities/issue-tracker';
@@ -32,8 +32,6 @@ import type { ProjectInfoFormSchema } from '@/entities/project';
 import { ProjectInfoForm } from '@/entities/project';
 import { RoleTable } from '@/entities/role';
 
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
 import { useOAIQuery } from '@/hooks';
 
 const CreateCompletePage: NextPage = () => {

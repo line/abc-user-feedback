@@ -17,9 +17,7 @@ import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import minMax from 'dayjs/plugin/minMax';
 
-import { getDayCount } from '@/shared';
-
-import { CHART_FIVE_COLORS } from '@/constants/chart-colors';
+import { CHART_FIVE_COLORS, getDayCount } from '@/shared';
 
 dayjs.extend(minMax);
 
@@ -43,9 +41,9 @@ const useLineChartData = (
 ) => {
   const dataKeys = useMemo(
     () =>
-      targetData.map((v, i) => ({
+      targetData.map(({ name }, i) => ({
         color: CHART_FIVE_COLORS[i] ?? getDarkColor(),
-        name: v.name,
+        name,
       })),
     [targetData],
   );

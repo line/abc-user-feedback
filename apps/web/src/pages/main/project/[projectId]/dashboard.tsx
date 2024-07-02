@@ -19,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { CardSlider, parseAsDateRange } from '@/shared';
+import { CardSlider, DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import {
   CreateFeedbackPerIssueCard,
@@ -42,7 +42,6 @@ import {
 import { MainLayout } from '@/widgets';
 
 import { DateRangePicker } from '@/components';
-import { DEFAULT_LOCALE } from '@/constants/i18n';
 import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps {

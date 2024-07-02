@@ -21,9 +21,10 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { Path } from '@/shared';
+
 import { requestResetPasswordWithEmailSchema } from '../request-reset-password-with-email.schema';
 
-import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
 
 type FormType = z.infer<typeof requestResetPasswordWithEmailSchema>;

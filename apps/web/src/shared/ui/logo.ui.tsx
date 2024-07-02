@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 
 import { Icon } from '@ufb/ui';
 
-import { Path } from '@/constants/path';
+import { Path } from '@/shared';
 
 interface IProps {}
 

@@ -14,3 +14,10 @@
  * under the License.
  */
 export * from './background-color';
+export * from './chart-colors';
+export * from './date-format';
+export * from './i18n';
+export * from './iron-option';
+export * from './path';
+export * from './local-storage-key';
+export * from './issues';

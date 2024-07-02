@@ -17,7 +17,7 @@ import { useMemo } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
-import { ISSUES } from '@/constants/issues';
+import { ISSUES } from '@/shared';
 
 interface IProps {
   issueKey?: string;

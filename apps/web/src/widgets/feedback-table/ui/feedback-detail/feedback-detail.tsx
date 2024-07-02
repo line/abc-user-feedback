@@ -31,13 +31,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
+import { DATE_TIME_FORMAT } from '@/shared';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import FeedbackDetailCell from './feedback-detail-cell';
 import FeedbackDetailIssueCell from './feedback-detail-issue-cell';
 
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
 import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
 import { isDefaultField, sortField } from '@/utils/field-utils';
 

@@ -16,11 +16,11 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import { Path } from '@/shared';
 import { MainCard } from '@/shared/ui';
 
 import type { Project } from '../project.type';
 
-import { Path } from '@/constants/path';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {

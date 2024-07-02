@@ -18,13 +18,11 @@ import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { DEFAULT_LOCALE, Path } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
 import { CreateTenantForm } from '@/features/create-tenant';
 import { MainLayout } from '@/widgets';
-
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
 
 const CreateTenantPage: NextPageWithLayout = () => {
   const router = useRouter();

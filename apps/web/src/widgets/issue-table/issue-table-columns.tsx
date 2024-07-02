@@ -18,14 +18,16 @@ import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import type { TFunction } from 'next-i18next';
 
-import { ExpandableText, TableCheckbox } from '@/shared';
+import {
+  DATE_TIME_FORMAT,
+  ExpandableText,
+  ISSUES,
+  TableCheckbox,
+} from '@/shared';
 import type { Issue } from '@/entities/issue';
 import { IssueBadge, IssueCircle } from '@/entities/issue';
 
 import TicketLink from './ui/ticket-link.ui';
-
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { ISSUES } from '@/constants/issues';
 
 const columnHelper = createColumnHelper<Issue>();
 

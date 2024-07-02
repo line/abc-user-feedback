@@ -16,14 +16,13 @@
 import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { SectionTemplate } from '@/shared';
+import { DEFAULT_LOCALE, SectionTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectCard } from '@/entities/project';
 import { TenantCard, useTenantStore } from '@/entities/tenant';
 import { RouteCreateProjectButton } from '@/features/create-project';
 import { MainLayout } from '@/widgets';
 
-import { DEFAULT_LOCALE } from '@/constants/i18n';
 import { useOAIQuery } from '@/hooks';
 
 const MainIndexPage: NextPageWithLayout = () => {

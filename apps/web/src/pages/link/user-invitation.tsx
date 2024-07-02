@@ -19,12 +19,10 @@ import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { LogoWithTitle } from '@/shared';
+import { DEFAULT_LOCALE, LogoWithTitle } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { UserInvitationForm } from '@/features/invite-user';
 import { MainLayout } from '@/widgets';
-
-import { DEFAULT_LOCALE } from '@/constants/i18n';
 
 const UserInvitationPage: NextPageWithLayout = () => {
   const { t } = useTranslation();

@@ -20,9 +20,9 @@ import { Trans } from 'next-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import type { ApiKey } from '../api-key.type';
+import { DATE_TIME_FORMAT } from '@/shared';
 
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
+import type { ApiKey } from '../api-key.type';
 
 const columnHelper = createColumnHelper<ApiKey>();
 

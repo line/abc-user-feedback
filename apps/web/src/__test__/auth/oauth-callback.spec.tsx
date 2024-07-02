@@ -17,9 +17,9 @@
 import userEvent from '@testing-library/user-event';
 import mockRouter from 'next-router-mock';
 
+import { Path } from '@/shared';
 import * as signInWithOAuth from '@/features/auth/sign-in-with-oauth';
 
-import { Path } from '@/constants/path';
 import OAuthCallbackPage from '@/pages/auth/oauth-callback';
 import { render, screen, waitFor } from '@/utils/test-utils';
 

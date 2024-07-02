@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Path } from '@/constants/path';
+import { Path } from '@/shared';
+
 import IndexPage, { getServerSideProps } from '@/pages';
 import { render } from '@/utils/test-utils';
 

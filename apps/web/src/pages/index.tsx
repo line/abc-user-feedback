@@ -15,7 +15,7 @@
  */
 import type { GetServerSideProps, NextPage } from 'next';
 
-import { Path } from '@/constants/path';
+import { Path } from '@/shared';
 
 const IndexPage: NextPage = () => {
   return <></>;

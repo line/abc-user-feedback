@@ -21,12 +21,12 @@ import type { z } from 'zod';
 
 import { toast } from '@ufb/ui';
 
+import { Path } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 
 import { createTenantFormSchema } from './create-tenant-form.schema';
 import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
 
-import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
 
 type FormType = z.infer<typeof createTenantFormSchema>;

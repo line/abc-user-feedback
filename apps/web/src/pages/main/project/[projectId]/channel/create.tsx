@@ -18,8 +18,9 @@ import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
+import { DEFAULT_LOCALE } from '@/shared';
+
 import { CreateProjectChannelTemplate, HelpCardDocs } from '@/components';
-import { DEFAULT_LOCALE } from '@/constants/i18n';
 import {
   InputChannelInfo,
   InputField,

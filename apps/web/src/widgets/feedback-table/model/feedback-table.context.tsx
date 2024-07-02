@@ -16,7 +16,8 @@
 import { createContext, useContext, useMemo } from 'react';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/constants/dayjs-format';
+import { DATE_FORMAT } from '@/shared';
+
 import { env } from '@/env.mjs';
 import useQueryParamsState from '@/hooks/useQueryParamsState';
 import type { DateRangeType } from '@/types/date-range.type';

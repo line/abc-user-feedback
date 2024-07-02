@@ -16,8 +16,9 @@
 import axios, { AxiosError } from 'axios';
 import { getIronSession } from 'iron-session';
 
-import type { JwtSession } from '@/constants/iron-option';
-import { ironOption } from '@/constants/iron-option';
+import { ironOption } from '@/shared';
+import type { JwtSession } from '@/shared';
+
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
 import { createNextApiHandler } from '@/server/api-handler';

@@ -20,11 +20,11 @@ import dayjs from 'dayjs';
 import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
 
+import { Path } from '@/shared';
 import type { Jwt } from '@/shared/types';
 
 import type { User } from './user.type';
 
-import { Path } from '@/constants/path';
 import client from '@/libs/client';
 import sessionStorage from '@/libs/session-storage';
 import { create } from '@/libs/zustand';

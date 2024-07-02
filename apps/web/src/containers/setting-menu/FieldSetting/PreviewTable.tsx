@@ -24,7 +24,12 @@ import {
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { ExpandableText, TableResizer } from '@/shared';
+import {
+  DATE_TIME_FORMAT,
+  ExpandableText,
+  ISSUES,
+  TableResizer,
+} from '@/shared';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import EditableCell from '@/widgets/feedback-table/ui/editable-cell';
@@ -32,8 +37,6 @@ import EditableCell from '@/widgets/feedback-table/ui/editable-cell';
 import type { FieldRowType } from './FieldSetting';
 
 import { ImagePreviewButton } from '@/components/buttons';
-import { DATE_TIME_FORMAT } from '@/constants/dayjs-format';
-import { ISSUES } from '@/constants/issues';
 import type { FieldType } from '@/types/field.type';
 
 const columnHelper = createColumnHelper<any>();

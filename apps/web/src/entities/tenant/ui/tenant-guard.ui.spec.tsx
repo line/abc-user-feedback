@@ -17,10 +17,11 @@
 import { http, HttpResponse } from 'msw';
 import mockRouter from 'next-router-mock';
 
+import { Path } from '@/shared';
+
 import { useTenantStore } from '../tenant.model';
 import { TenantGuard } from './tenant-guard.ui';
 
-import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import { server } from '@/msw';
 import { render, screen, waitFor } from '@/utils/test-utils';

@@ -16,8 +16,9 @@
 import type { NextApiHandler } from 'next';
 import { getIronSession } from 'iron-session';
 
-import type { JwtSession } from '@/constants/iron-option';
-import { ironOption } from '@/constants/iron-option';
+import { ironOption } from '@/shared';
+import type { JwtSession } from '@/shared';
+
 import { createNextApiHandler } from '@/server/api-handler';
 
 const handler: NextApiHandler = createNextApiHandler({

@@ -22,12 +22,12 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { Path } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
 import { SignInWithEmailSchema } from '../sign-in-with-email.schema';
 
-import { Path } from '@/constants/path';
 import type { IFetchError } from '@/types/fetch-error.type';
 
 type FormType = z.infer<typeof SignInWithEmailSchema>;

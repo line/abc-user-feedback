@@ -17,12 +17,10 @@ import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { LogoWithTitle } from '@/shared';
+import { DEFAULT_LOCALE, LogoWithTitle } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
 import { MainLayout } from '@/widgets';
-
-import { DEFAULT_LOCALE } from '@/constants/i18n';
 
 const SignUpPage: NextPageWithLayout = () => {
   const { t } = useTranslation();

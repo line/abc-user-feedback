@@ -27,11 +27,10 @@ import { useTranslation } from 'next-i18next';
 
 import { Icon, PopoverCloseButton } from '@ufb/ui';
 
+import { ISSUES, Path } from '@/shared';
 import { DashboardTable } from '@/shared/ui';
 
 import { DescriptionTooltip } from '@/components';
-import { ISSUES } from '@/constants/issues';
-import { Path } from '@/constants/path';
 import { useIssueSearch } from '@/hooks';
 
 interface IssueTableData {

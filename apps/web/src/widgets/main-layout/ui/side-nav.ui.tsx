@@ -22,7 +22,8 @@ import { useTranslation } from 'react-i18next';
 import type { IconNameType } from '@ufb/ui';
 import { Icon } from '@ufb/ui';
 
-import { Path } from '@/constants/path';
+import { Path } from '@/shared';
+
 import { useCurrentProjectId } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {}

@@ -15,9 +15,9 @@
  */
 import dayjs from 'dayjs';
 
-import type { SearchItemType } from './TableSearchInput';
+import { DATE_FORMAT } from '@/shared';
 
-import { DATE_FORMAT } from '@/constants/dayjs-format';
+import type { SearchItemType } from './TableSearchInput';
 
 export const strToObj = (input: string, searchItems: SearchItemType[]) => {
   const splitValues = input.split(',');

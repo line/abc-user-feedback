@@ -21,12 +21,11 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Icon } from '@ufb/ui';
 
+import { DEFAULT_LOCALE, Path } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { MainLayout } from '@/widgets';
 
 import { SettingMenuBox } from '@/components/layouts/setting-menu';
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
 import {
   APIKeySetting,
   ChannelDeleteSetting,

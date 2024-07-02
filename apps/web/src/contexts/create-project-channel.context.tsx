@@ -24,7 +24,8 @@ import {
   CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
   CREATE_PROJECT_CURRENT_STEP_KEY,
   CREATE_PROJECT_INPUT_KEY,
-} from '@/constants/local-storage-key';
+} from '@/shared';
+
 import { useLocalStorage } from '@/hooks';
 
 type OnChangeInputType<InputType> = (

@@ -17,10 +17,8 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getIronSession } from 'iron-session';
 
-import { DEFAULT_LOCALE } from './constants/i18n';
-import type { JwtSession } from './constants/iron-option';
-import { ironOption } from './constants/iron-option';
-import { Path } from './constants/path';
+import { DEFAULT_LOCALE, ironOption, Path } from '@/shared';
+import type { JwtSession } from '@/shared';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
@@ -56,7 +54,7 @@ export async function middleware(req: NextRequest) {
 
   if (req.nextUrl.locale === 'default') {
     const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
-    const locale = req.cookies.get('NEXT_LOCALE')?.value || DEFAULT_LOCALE;
+    const locale = req.cookies.get('NEXT_LOCALE')?.value ?? DEFAULT_LOCALE;
     return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
   }
 

@@ -21,13 +21,12 @@ import { useTranslation } from 'react-i18next';
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { CreateInputTemplate } from '@/shared';
+import { CreateInputTemplate, Path } from '@/shared';
 
 import { useCreateProjectStore } from '../create-project-model';
 import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
 import { CREATE_PROJECT_STEPPER_TEXT } from '../create-project.constant';
 
-import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {

@@ -30,8 +30,9 @@ import {
   CREATE_CHANNEL_COMPLETE_STEP_INDEX_KEY,
   CREATE_CHANNEL_CURRENT_STEP_KEY,
   CREATE_CHANNEL_INPUT_KEY,
-} from '@/constants/local-storage-key';
-import { Path } from '@/constants/path';
+  Path,
+} from '@/shared';
+
 import { CHANNEL_STEPS } from '@/contexts/create-channel.context';
 import { useLocalStorage, usePermissions } from '@/hooks';
 

@@ -15,8 +15,9 @@
  */
 import { useTranslation } from 'react-i18next';
 
+import { ISSUES } from '@/shared';
+
 import { IssueCircle } from '@/components';
-import { ISSUES } from '@/constants/issues';
 
 interface IProps extends React.PropsWithChildren {
   onChangeOption: (status: string) => void;

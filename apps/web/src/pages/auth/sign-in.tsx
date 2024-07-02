@@ -19,14 +19,12 @@ import Link from 'next/link';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
+import { DEFAULT_LOCALE, Path } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
 import { SignInWithEmailForm } from '@/features/auth/sign-in-with-email';
 import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
 import { MainLayout } from '@/widgets';
-
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
 
 const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();

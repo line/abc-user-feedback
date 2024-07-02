@@ -26,10 +26,11 @@ import {
   toast,
 } from '@ufb/ui';
 
+import { Path } from '@/shared';
+
 import ChannelCardList from './ChannelCardList';
 
 import { ChannelCard, SettingMenuTemplate } from '@/components';
-import { Path } from '@/constants/path';
 import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {

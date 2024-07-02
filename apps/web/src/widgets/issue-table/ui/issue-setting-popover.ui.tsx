@@ -22,10 +22,10 @@ import { z } from 'zod';
 
 import { Icon, Input, toast } from '@ufb/ui';
 
+import { ISSUES } from '@/shared';
 import type { Issue, IssueStatus } from '@/entities/issue';
 
 import { Popper } from '@/components';
-import { ISSUES } from '@/constants/issues';
 import { useOAIMutation } from '@/hooks';
 import useCurrentProjectId from '@/hooks/useCurrentProjectId';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';

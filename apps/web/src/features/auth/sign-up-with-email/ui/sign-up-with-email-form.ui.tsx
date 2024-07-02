@@ -24,9 +24,10 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { Path } from '@/shared';
+
 import { signUpWithEmailSchema } from '../sign-up-with-email.schema';
 
-import { Path } from '@/constants/path';
 import { useOAIMutation } from '@/hooks';
 
 type FormType = z.infer<typeof signUpWithEmailSchema>;

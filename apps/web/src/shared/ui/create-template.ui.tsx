@@ -20,9 +20,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { cn } from '../utils';
+import { Path } from '@/shared';
 
-import { Path } from '@/constants/path';
+import { cn } from '../utils';
 
 type Target = 'project' | 'channel';
 

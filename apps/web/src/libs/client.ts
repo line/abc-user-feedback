@@ -17,9 +17,10 @@ import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
+import { Path } from '@/shared';
+
 import sessionStorage from './session-storage';
 
-import { Path } from '@/constants/path';
 import { env } from '@/env.mjs';
 import type {
   OAIMethodPathKeys,

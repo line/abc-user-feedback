@@ -16,9 +16,8 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
+import { Path } from '@/shared';
 import { useOAuthCallback } from '@/features/auth/sign-in-with-oauth';
-
-import { Path } from '@/constants/path';
 
 interface IProps {}
 

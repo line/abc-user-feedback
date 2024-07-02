@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { Path } from '@/constants/path';
+import { Path } from '@/shared';
 
 interface IProps<T extends string> extends React.PropsWithChildren {
   type: 'project' | 'channel';

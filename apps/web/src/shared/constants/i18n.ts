@@ -13,12 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import dayjs from 'dayjs';
 
-import { env } from '@/env.mjs';
-import type { DateRangeType } from '@/types/date-range.type';
-
-export const DEFAULT_DATE_RANGE: DateRangeType = {
-  startDate: dayjs().subtract(env.NEXT_PUBLIC_MAX_DAYS, 'day').toDate(),
-  endDate: dayjs().toDate(),
-};
+export const DEFAULT_LOCALE = 'en';
