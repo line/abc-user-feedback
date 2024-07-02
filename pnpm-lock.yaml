@@ -471,7 +471,7 @@ importers:
         version: 29.7.0
       openapi-typescript:
         specifier: ^7.0.0
-        version: 7.0.0(typescript@5.4.5)
+        version: 7.0.1(typescript@5.4.5)
       postcss:
         specifier: ^8.4.38
         version: 8.4.39
@@ -2707,11 +2707,11 @@ packages:
   '@redocly/ajv@8.11.0':
     resolution: {integrity: sha512-9GWx27t7xWhDIR02PA18nzBdLcKQRgc46xNQvjFkrYk4UOmvKhJ/dawwiX0cCOeetN5LcaaiqQbVOWYK62SGHw==}
 
-  '@redocly/config@0.6.0':
-    resolution: {integrity: sha512-hNVN3eTxFj2nHYX0gGzZxxXwdE0DXWeWou1TIK3HYf0S9VKVxTxjO9EZbMB7iVUqaHkeqy4PSjlBQcEgD0Ftjg==}
+  '@redocly/config@0.6.2':
+    resolution: {integrity: sha512-c3K5u64eMnr2ootPcpEI0ioIRLE8QP8ptvLxG9MwAmb2sU8HMRfVwXDU3AZiMVY2w4Ts0mDc+Xv4HTIk8DRqFw==}
 
-  '@redocly/openapi-core@1.16.0':
-    resolution: {integrity: sha512-z06h+svyqbUcdAaePq8LPSwTPlm6Ig7j2VlL8skPBYnJvyaQ2IN7x/JkOvRL4ta+wcOCBdAex5JWnZbKaNktJg==}
+  '@redocly/openapi-core@1.17.0':
+    resolution: {integrity: sha512-XoNIuksnOGAzAcfpyJkHrMxwurXaQfglnovNE7/pTx4OEjik3OT91+tKAyRCkklVCdMtAA3YokGMZzdhjViUWA==}
     engines: {node: '>=14.19.0', npm: '>=7.0.0'}
 
   '@rollup/plugin-commonjs@26.0.1':
@@ -5599,8 +5599,8 @@ packages:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
     engines: {node: '>= 6'}
 
-  https-proxy-agent@7.0.4:
-    resolution: {integrity: sha512-wlwpilI7YdjSkWaQ/7omYBMTliDcmCN8OLihO6I9B86g06lMyAoqgoDpV0XqoaPOKj+0DIdAvnsWfyAAhmimcg==}
+  https-proxy-agent@7.0.5:
+    resolution: {integrity: sha512-1e4Wqeblerz+tMKPIq2EMGiiWW1dIjZOksyHWSUm1rmuvw/how9hBHZ38lAGj5ID4Ik6EdkOw7NmWPy6LAwalw==}
     engines: {node: '>= 14'}
 
   human-signals@2.1.0:
@@ -6920,8 +6920,8 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
-  openapi-typescript@7.0.0:
-    resolution: {integrity: sha512-5NobO3pavTUVmErRVjnfiIIqCNjCrZeva4ElOA3nNKcSo4Jm5G7zv4WLcw6S+jDVnGGRkchxnJ2yIJBp9ULUAg==}
+  openapi-typescript@7.0.1:
+    resolution: {integrity: sha512-RrjgCRTIpJzJGKZ2Fg7ERuOVXvmLcSAC8KRi165QyueW+0u3HSOpAhZDUpAPNlJ0ubd+bkjFTMWIwoXn0hHbtg==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
@@ -8469,8 +8469,8 @@ packages:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
 
-  type-fest@4.20.1:
-    resolution: {integrity: sha512-R6wDsVsoS9xYOpy8vgeBlqpdOyzJ12HNfQhC/aAKWM3YoCV9TtunJzh/QpkMgeDhkoynDcw5f1y+qF9yc/HHyg==}
+  type-fest@4.21.0:
+    resolution: {integrity: sha512-ADn2w7hVPcK6w1I0uWnM//y1rLXZhzB9mr0a3OirzclKF1Wp6VzevUmzz/NRAWunOT6E8HrnpGY7xOfc6K57fA==}
     engines: {node: '>=16'}
 
   type-is@1.6.18:
@@ -11561,14 +11561,14 @@ snapshots:
       require-from-string: 2.0.2
       uri-js: 4.4.1
 
-  '@redocly/config@0.6.0': {}
+  '@redocly/config@0.6.2': {}
 
-  '@redocly/openapi-core@1.16.0(supports-color@9.4.0)':
+  '@redocly/openapi-core@1.17.0(supports-color@9.4.0)':
     dependencies:
       '@redocly/ajv': 8.11.0
-      '@redocly/config': 0.6.0
+      '@redocly/config': 0.6.2
       colorette: 1.4.0
-      https-proxy-agent: 7.0.4(supports-color@9.4.0)
+      https-proxy-agent: 7.0.5(supports-color@9.4.0)
       js-levenshtein: 1.1.6
       js-yaml: 4.1.0
       lodash.isequal: 4.5.0
@@ -15033,7 +15033,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  https-proxy-agent@7.0.4(supports-color@9.4.0):
+  https-proxy-agent@7.0.5(supports-color@9.4.0):
     dependencies:
       agent-base: 7.1.1(supports-color@9.4.0)
       debug: 4.3.5(supports-color@9.4.0)
@@ -16862,9 +16862,9 @@ snapshots:
       is-wsl: 2.2.0
     optional: true
 
-  openapi-typescript@7.0.0(typescript@5.4.5):
+  openapi-typescript@7.0.1(typescript@5.4.5):
     dependencies:
-      '@redocly/openapi-core': 1.16.0(supports-color@9.4.0)
+      '@redocly/openapi-core': 1.17.0(supports-color@9.4.0)
       ansi-colors: 4.1.3
       parse-json: 8.1.0
       supports-color: 9.4.0
@@ -16968,7 +16968,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.24.7
       index-to-position: 0.1.2
-      type-fest: 4.20.1
+      type-fest: 4.21.0
 
   parse5-htmlparser2-tree-adapter@6.0.1:
     dependencies:
@@ -18700,7 +18700,7 @@ snapshots:
 
   type-fest@0.21.3: {}
 
-  type-fest@4.20.1: {}
+  type-fest@4.21.0: {}
 
   type-is@1.6.18:
     dependencies:
