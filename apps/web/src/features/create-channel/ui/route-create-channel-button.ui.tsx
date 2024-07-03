@@ -27,12 +27,11 @@ import {
   TooltipTrigger,
 } from '@ufb/ui';
 
-import { Path } from '@/shared';
+import { Path, usePermissions } from '@/shared';
 
 import { useCreateChannelStore } from '../create-channel-model';
 
 import { CHANNEL_STEPS } from '@/contexts/create-channel.context';
-import { usePermissions } from '@/hooks';
 
 interface IProps {
   projectId: number;

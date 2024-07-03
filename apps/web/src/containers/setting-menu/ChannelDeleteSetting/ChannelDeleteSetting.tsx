@@ -26,13 +26,10 @@ import {
   toast,
 } from '@ufb/ui';
 
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import { useFeedbackSearch } from '@/entities/feedback';
+
 import { ChannelCard, SettingMenuTemplate } from '@/components';
-import {
-  useFeedbackSearch,
-  useOAIMutation,
-  useOAIQuery,
-  usePermissions,
-} from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;

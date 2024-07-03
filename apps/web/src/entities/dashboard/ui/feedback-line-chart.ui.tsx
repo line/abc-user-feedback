@@ -19,11 +19,9 @@ import { useTranslation } from 'react-i18next';
 
 import { PopoverCloseButton } from '@ufb/ui';
 
-import { SimpleLineChart } from '@/shared';
+import { SimpleLineChart, useOAIQuery } from '@/shared';
 
 import { useLineChartData } from '../lib';
-
-import { useOAIQuery } from '@/hooks';
 
 interface IProps {
   projectId: number;

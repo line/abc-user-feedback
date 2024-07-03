@@ -29,7 +29,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { DATE_TIME_FORMAT } from '@/shared';
+import { DATE_TIME_FORMAT, useOAIMutation, usePermissions } from '@/shared';
 
 import FeedbackRequestPopover from './FeedbackRequestPopover';
 import FieldSettingPopover from './FieldSettingPopover';
@@ -37,7 +37,6 @@ import OptionInfoPopover from './OptionInfoPopover';
 import PreviewTable from './PreviewTable';
 
 import { SettingMenuTemplate } from '@/components';
-import { useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { ChannelType } from '@/types/channel.type';
 import type { FieldType } from '@/types/field.type';

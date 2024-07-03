@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { useTruncatedElement } from '@/hooks';
+import { useTruncatedElement } from '../../lib';
 
 interface IProps extends React.PropsWithChildren {}
 

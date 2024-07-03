@@ -16,14 +16,14 @@
 
 import { Trans } from 'next-i18next';
 
+import { HelpCardDocs } from '@/shared';
+
 import type { CreateProjectStepKey } from './create-project-type';
 import InputApiKeysStep from './ui/input-api-keys-step.ui';
 import InputIssueTrackerStep from './ui/input-issue-tracker-step.ui';
 import InputMembersStep from './ui/input-members-step.ui';
 import InputProjectInfoStep from './ui/input-project-info-step.ui';
 import InputRolesStep from './ui/input-roles-step.ui';
-
-import { HelpCardDocs } from '@/components';
 
 export const CREATE_PROJECT_COMPONENTS: Record<
   CreateProjectStepKey,

@@ -16,8 +16,8 @@
 import { useTranslation } from 'react-i18next';
 
 import { ISSUES } from '@/shared';
-
-import { IssueCircle } from '@/components';
+import type { IssueStatus } from '@/entities/issue';
+import { IssueCircle } from '@/entities/issue';
 
 interface IProps extends React.PropsWithChildren {
   onChangeOption: (status: string) => void;
@@ -47,7 +47,11 @@ const IssueTableSelectBox: React.FC<IProps> = (props) => {
           onClick={() => onChangeOption(issue.key)}
         >
           <div className="flex flex-1 items-center gap-2">
-            <IssueCircle issueKey={issue.key} />
+            <IssueCircle
+              issueKey={
+                issue.key === 'total' ? undefined : (issue.key as IssueStatus)
+              }
+            />
             <span className="whitespace-nowrap">
               {ISSUES(t).find((v) => v.key === issue.key)?.name ??
                 t('text.all')}

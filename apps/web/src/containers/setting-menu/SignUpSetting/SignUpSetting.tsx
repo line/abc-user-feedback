@@ -21,13 +21,13 @@ import { z } from 'zod';
 
 import { Badge, Input, toast } from '@ufb/ui';
 
+import { DescriptionTooltip, useOAIMutation } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 
 import OAuthInput from './OAuthInput';
 import RadioGroup from './RadioGroup';
 
-import { DescriptionTooltip, SettingMenuTemplate } from '@/components';
-import { useOAIMutation } from '@/hooks';
+import { SettingMenuTemplate } from '@/components';
 import type { OAuthConfigType } from '@/types/tenant.type';
 
 export interface ISignUpInfoForm {

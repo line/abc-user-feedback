@@ -15,9 +15,7 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { ISSUES, Path, SimpleBarChart } from '@/shared';
-
-import { useOAIQuery } from '@/hooks';
+import { ISSUES, Path, SimpleBarChart, useOAIQuery } from '@/shared';
 
 interface IProps {
   projectId: number;

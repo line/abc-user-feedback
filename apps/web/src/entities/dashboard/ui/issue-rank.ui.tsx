@@ -27,11 +27,9 @@ import { useTranslation } from 'next-i18next';
 
 import { Icon, PopoverCloseButton } from '@ufb/ui';
 
-import { ISSUES, Path } from '@/shared';
+import { DescriptionTooltip, ISSUES, Path } from '@/shared';
 import { DashboardTable } from '@/shared/ui';
-
-import { DescriptionTooltip } from '@/components';
-import { useIssueSearch } from '@/hooks';
+import { useIssueSearch } from '@/entities/issue';
 
 interface IssueTableData {
   id: number;

@@ -13,8 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useFeedbackSearch } from '@/entities/feedback';
+
 import { ChannelCard } from '@/components/cards';
-import { useFeedbackSearch } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;

@@ -15,3 +15,4 @@
  */
 export type { NextPageWithLayout } from './page-with-layout.type';
 export * from './jwt.type';
+export * from './date-range.type';

@@ -24,7 +24,7 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { useOAIMutation, usePermissions } from '@/hooks';
+import { useOAIMutation, usePermissions } from '@/shared';
 
 interface IProps {
   projectId: number;

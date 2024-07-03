@@ -19,3 +19,4 @@ import type { projectInfoSchema, projectSchema } from './project.schema';
 
 export type Project = z.infer<typeof projectSchema>;
 export type ProjectInfo = z.infer<typeof projectInfoSchema>;
+export type Timezone = Project['timezone'];

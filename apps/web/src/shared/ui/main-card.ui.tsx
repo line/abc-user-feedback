@@ -18,7 +18,7 @@ import clsx from 'clsx';
 import { Icon } from '@ufb/ui';
 import type { IconNameType } from '@ufb/ui';
 
-import { displayString } from '@/utils/description-string';
+import { displayString } from '../utils';
 
 interface IProps {
   onClick?: () => void;

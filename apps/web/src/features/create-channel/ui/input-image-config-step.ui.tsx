@@ -22,14 +22,13 @@ import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
 
+import { useOAIMutation } from '@/shared';
 import type { ChannelImageConfig } from '@/entities/channel';
 import { channelImageConfigSchema } from '@/entities/channel';
 import { ImageConfigForm } from '@/entities/channel/ui';
 
 import { useCreateChannelStore } from '../create-channel-model';
 import CreateChannelInputTemplate from './create-channel-input-template.ui';
-
-import { useOAIMutation } from '@/hooks';
 
 interface IProps {}
 

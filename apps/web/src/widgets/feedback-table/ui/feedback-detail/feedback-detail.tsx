@@ -14,7 +14,6 @@
  * under the License.
  */
 import { useMemo } from 'react';
-import Image from 'next/image';
 import {
   autoUpdate,
   FloatingFocusManager,
@@ -31,15 +30,14 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { DATE_TIME_FORMAT } from '@/shared';
+import { DATE_TIME_FORMAT, ImageSlider, useOAIQuery } from '@/shared';
+import { useFeedbackSearch } from '@/entities/feedback';
+import { isDefaultField, sortField } from '@/entities/field';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import FeedbackDetailCell from './feedback-detail-cell';
 import FeedbackDetailIssueCell from './feedback-detail-issue-cell';
-
-import { useFeedbackSearch, useHorizontalScroll, useOAIQuery } from '@/hooks';
-import { isDefaultField, sortField } from '@/utils/field-utils';
 
 interface IProps {
   id: number;
@@ -197,75 +195,6 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
         </FloatingOverlay>
       </FloatingFocusManager>
     </FloatingPortal>
-  );
-};
-
-interface IImageSliderProps {
-  urls: string[];
-}
-const ImageSlider: React.FC<IImageSliderProps> = ({ urls }) => {
-  const {
-    containerRef,
-    scrollLeft,
-    scrollRight,
-    showLeftButton,
-    showRightButton,
-  } = useHorizontalScroll({
-    defaultRightButtonShown: urls.length > 4,
-    scrollGap: 140,
-  });
-  return (
-    <div className="relative w-full overflow-hidden">
-      <div className="top-0 w-full">
-        {showRightButton && (
-          <button
-            onClick={scrollRight}
-            className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute right-0 z-10"
-          >
-            <Icon name="ArrowRight" />
-          </button>
-        )}
-        {showLeftButton && (
-          <button
-            onClick={scrollLeft}
-            className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute left-0 z-10"
-          >
-            <Icon name="ArrowLeft" />
-          </button>
-        )}
-      </div>
-      <div
-        className="overflow-hidden"
-        ref={containerRef}
-        style={{ width: 580 }}
-      >
-        <div className="flex gap-2">
-          {urls?.map((url) => (
-            <div
-              key={url}
-              className="relative shrink-0 cursor-pointer overflow-hidden rounded"
-              style={{ width: 140, height: 80 }}
-              onClick={() => window.open(url, '_blank')}
-            >
-              <div
-                style={{ background: 'var(--text-color-quaternary)' }}
-                className="absolute left-0 top-0 z-10 h-full w-full"
-              />
-              <Icon
-                name="Search"
-                className="text-above-primary absolute-center absolute left-1/2 top-1/2 z-20 text-white"
-              />
-              <Image
-                src={url}
-                alt="preview"
-                className="h-full w-full object-cover"
-                fill
-              />
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
   );
 };
 

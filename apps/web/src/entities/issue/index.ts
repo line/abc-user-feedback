@@ -15,3 +15,4 @@
  */
 export * from './issue.type';
 export * from './ui';
+export * from './lib';

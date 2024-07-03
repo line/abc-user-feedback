@@ -28,10 +28,11 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import { DescriptionTooltip, SelectBox } from '@/shared';
+
 import type { FieldRowType } from './FieldSetting';
 import OptionDeletePopover from './OptionBadge';
 
-import { DescriptionTooltip, SelectBox } from '@/components/etc';
 import {
   FieldFormatEnumList,
   FieldPropertyEnumList,

@@ -16,11 +16,11 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 
+import { SelectBox, useOAIQuery, usePermissions } from '@/shared';
 import { RouteCreateChannelButton } from '@/features/create-channel';
 
-import { SelectBox, SettingMenuTemplate } from '@/components';
+import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
-import { useChannels, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
@@ -42,7 +42,10 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
-  const { data: channelData } = useChannels(projectId);
+  const { data: channelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   useEffect(() => {
     if (!channelData || channelData.items.length === 0) return;

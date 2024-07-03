@@ -23,13 +23,17 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { CreateSectionTemplate, DEFAULT_LOCALE, Path } from '@/shared';
+import {
+  CreateSectionTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  useOAIQuery,
+} from '@/shared';
 import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, ImageConfigForm } from '@/entities/channel/ui';
 import { FieldTable } from '@/entities/field';
 
 import PreviewTable from '@/containers/setting-menu/FieldSetting/PreviewTable';
-import { useOAIQuery } from '@/hooks';
 
 const CompleteChannelCreationPage: NextPage = () => {
   const { t } = useTranslation();

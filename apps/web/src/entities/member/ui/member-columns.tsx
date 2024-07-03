@@ -16,13 +16,13 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
+import { DescriptionTooltip } from '@/shared';
 import type { Role } from '@/entities/role';
 
 import type { Member } from '../member.type';
 import DeleteMemberModal from './delete-member-modal.ui';
 import UpdateMemberModal from './update-member-modal.ui';
 
-import { DescriptionTooltip } from '@/components';
 import type { UserType } from '@/types/user.type';
 
 const columnHelper = createColumnHelper<Member>();

@@ -16,3 +16,4 @@
 export * from './cn';
 export * from './parse-as-date-range';
 export * from './get-day-count';
+export * from './display-string';

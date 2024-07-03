@@ -21,14 +21,13 @@ import { useClickAway } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { IssueBadge } from '@/entities/issue';
+import { Popper, useOAIMutation, usePermissions } from '@/shared';
+import { IssueBadge, useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackTable } from '../../model';
 import IssueSetting from './issue-setting';
 
-import { Popper } from '@/components';
-import { useIssueSearch, useOAIMutation, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { IFetchError } from '@/types/fetch-error.type';
 

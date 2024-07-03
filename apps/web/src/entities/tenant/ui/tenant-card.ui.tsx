@@ -15,17 +15,16 @@
  */
 import { useTranslation } from 'react-i18next';
 
+import { useOAIQuery } from '@/shared';
 import MainCard from '@/shared/ui/main-card.ui';
 import type { Tenant } from '@/entities/tenant';
-
-import { useOAIQuery, useProjects } from '@/hooks';
 
 interface IProps {
   tenant: Tenant;
 }
 const TenantCard: React.FC<IProps> = ({ tenant }) => {
   const { t } = useTranslation();
-  const { data } = useProjects();
+  const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
   const { data: feedbackCount } = useOAIQuery({
     path: '/api/admin/tenants/{tenantId}/feedback-count',

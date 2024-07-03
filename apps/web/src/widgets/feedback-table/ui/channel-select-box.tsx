@@ -16,11 +16,9 @@
 
 import { Icon } from '@ufb/ui';
 
-import { useFeedbackTable } from '../model';
+import { DescriptionTooltip, useOAIQuery } from '@/shared';
 
-import { DescriptionTooltip } from '@/components';
-import { useChannels } from '@/hooks';
-import { displayString } from '@/utils/description-string';
+import { useFeedbackTable } from '../model';
 
 interface IProps {
   onChangeChannel: (channelId: number) => void;
@@ -29,7 +27,10 @@ interface IProps {
 const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
   const { channelId, projectId } = useFeedbackTable();
 
-  const { data: channels } = useChannels(projectId);
+  const { data: channels } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   return (
     <div className="flex flex-wrap items-center gap-2">
@@ -48,9 +49,7 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
             </div>
             <span>{channel.name}</span>
           </div>
-          <DescriptionTooltip
-            description={displayString(channel.description)}
-          />
+          <DescriptionTooltip description={channel.description} />
         </div>
       ))}
     </div>

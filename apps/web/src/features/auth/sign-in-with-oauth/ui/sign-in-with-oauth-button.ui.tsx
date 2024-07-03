@@ -17,9 +17,8 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import { useOAIQuery } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
-
-import { useOAIQuery } from '@/hooks';
 
 interface IProps {}
 

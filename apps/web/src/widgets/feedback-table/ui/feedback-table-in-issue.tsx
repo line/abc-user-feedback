@@ -15,10 +15,10 @@
  */
 import { useEffect, useState } from 'react';
 
+import { useOAIQuery } from '@/shared';
+
 import { FeedbackTableProvider } from '../model';
 import FeedbackTable from './feedback-table';
-
-import { useChannels } from '@/hooks';
 
 interface IProps {
   issueId: number;
@@ -27,7 +27,10 @@ interface IProps {
 
 const FeedbackTableInIssue: React.FC<IProps> = (props) => {
   const { projectId, issueId } = props;
-  const { data: channels } = useChannels(projectId);
+  const { data: channels } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
   const [currentChannelId, setCurrentChannelId] = useState<number>(0);
 
   useEffect(() => {

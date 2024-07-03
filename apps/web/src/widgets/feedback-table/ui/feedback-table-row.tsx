@@ -21,13 +21,18 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { DATE_FORMAT, ShareButton, TableCheckbox, TableRow } from '@/shared';
+import {
+  DATE_FORMAT,
+  ShareButton,
+  TableCheckbox,
+  TableRow,
+  useOAIMutation,
+  usePermissions,
+} from '@/shared';
 
 import { useFeedbackTable } from '../model';
 import useFeedbackRowStore from '../model/feedback-row.store';
 import FeedbackDetail from './feedback-detail';
-
-import { useOAIMutation, usePermissions } from '@/hooks';
 
 interface IProps {
   row: Row<any>;

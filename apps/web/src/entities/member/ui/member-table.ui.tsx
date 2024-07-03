@@ -20,11 +20,10 @@ import { Icon } from '@ufb/ui';
 
 import { BasicTable } from '@/shared';
 import type { Role } from '@/entities/role';
+import { useUserSearch } from '@/entities/user';
 
 import type { Member } from '../member.type';
 import { MemberColumns } from './member-columns';
-
-import { useUserSearch } from '@/hooks';
 
 interface IProps {
   members: Member[];

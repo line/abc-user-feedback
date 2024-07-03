@@ -19,9 +19,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
+import { useOAIMutation } from '@/shared';
 import type { Issue } from '@/entities/issue';
-
-import { useOAIMutation } from '@/hooks';
 
 interface IProps {
   open: boolean;

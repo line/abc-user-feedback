@@ -29,6 +29,12 @@ export { default as DashboardCard } from './dashboard-card';
 export { default as ExpandableText } from './expandable-text.ui';
 export { default as ImagePreviewButton } from './image-preview-button';
 export { default as ShareButton } from './share-button';
+export { default as DateRangePicker } from './date-range-picker';
+export { default as DescriptionTooltip } from './description-tooltip';
+export { default as HelpCardDocs } from './help-card-docs';
+export { default as Popper } from './popper.ui';
+export { default as ImageSlider } from './image-slider.ui';
 
 export * from './tables';
 export * from './charts';
+export * from './select-box';

@@ -19,8 +19,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
-import type { NextPageWithLayout } from '@/shared/types';
+import { DateRangePicker, DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
+import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
 import {
   FeedbackLineChart,
   IssueBarChart,
@@ -30,9 +30,6 @@ import {
 } from '@/entities/dashboard';
 import { MainLayout } from '@/widgets';
 import { DashbaordCardSlider } from '@/widgets/dashboard-card-slider';
-
-import { DateRangePicker } from '@/components';
-import type { DateRangeType } from '@/types/date-range.type';
 
 interface IProps {
   projectId: number;

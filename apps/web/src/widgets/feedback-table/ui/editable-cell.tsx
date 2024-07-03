@@ -17,9 +17,10 @@ import { memo, useMemo } from 'react';
 import dayjs from 'dayjs';
 import ReactDatePicker from 'react-datepicker';
 
+import { SelectBoxCreatable } from '@/shared';
+
 import useFeedbackRowStore from '../model/feedback-row.store';
 
-import { SelectBoxCreatable } from '@/components/etc/SelectBox';
 import type { FieldType } from '@/types/field.type';
 
 interface IProps extends React.PropsWithChildren {

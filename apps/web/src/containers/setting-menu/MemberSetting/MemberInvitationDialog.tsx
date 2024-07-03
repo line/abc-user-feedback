@@ -21,8 +21,8 @@ import { z } from 'zod';
 
 import { Input, Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { SelectBox } from '@/components';
-import { useOAIMutation, useOAIQuery, useUserSearch } from '@/hooks';
+import { SelectBox, useOAIMutation, useOAIQuery } from '@/shared';
+import { useUserSearch } from '@/entities/user';
 
 interface IForm {
   roleId: number;

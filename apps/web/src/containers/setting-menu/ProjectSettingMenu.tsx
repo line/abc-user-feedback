@@ -15,9 +15,10 @@
  */
 import { useTranslation } from 'next-i18next';
 
+import { useOAIQuery, usePermissions } from '@/shared';
+
 import { SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
-import { useOAIQuery, usePermissions } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps {

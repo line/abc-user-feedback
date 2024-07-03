@@ -27,8 +27,13 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { DescriptionTooltip, SelectBox } from '@/components';
-import { useOAIMutation, useOAIQuery } from '@/hooks';
+import {
+  DescriptionTooltip,
+  SelectBox,
+  useOAIMutation,
+  useOAIQuery,
+} from '@/shared';
+
 import type {
   WebhookEventEnum,
   WebhookStatusEnum,

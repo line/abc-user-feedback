@@ -16,3 +16,5 @@
 export * from './ui';
 export * from './utils';
 export * from './constants';
+export * from './types';
+export * from './lib';

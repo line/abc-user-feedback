@@ -20,12 +20,13 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
+import { usePermissions } from '@/shared';
 import type { Field } from '@/entities/field';
 import { useThemeStore } from '@/entities/theme';
 
+import { useFeedbackDownload } from '../lib';
 import { useFeedbackTable } from '../model';
 
-import { useDownload, usePermissions } from '@/hooks';
 import type { IFetchError } from '@/types/fetch-error.type';
 
 interface IProps {
@@ -61,7 +62,7 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
     setIsClicked(false);
   }, [query]);
 
-  const { mutateAsync } = useDownload({
+  const { mutateAsync } = useFeedbackDownload({
     params: { channelId, projectId },
     options: {
       onSuccess: async () => {

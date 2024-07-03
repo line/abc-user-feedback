@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
-import { useHorizontalScroll } from '@/hooks';
+import { useHorizontalScroll } from '@/shared';
 
 interface IProps {
   urls: string[];

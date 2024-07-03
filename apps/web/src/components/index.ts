@@ -14,5 +14,4 @@
  * under the License.
  */
 export * from './cards';
-export * from './etc';
 export * from './templates';

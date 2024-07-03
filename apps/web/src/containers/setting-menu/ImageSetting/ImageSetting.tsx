@@ -22,8 +22,14 @@ import { z } from 'zod';
 
 import { Badge, Input, TextInput, toast } from '@ufb/ui';
 
-import { HelpCardDocs, SettingMenuTemplate } from '@/components';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
+import {
+  HelpCardDocs,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
+
+import { SettingMenuTemplate } from '@/components';
 
 interface IForm {
   accessKeyId: string;
@@ -210,7 +216,7 @@ const ImageSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
-          <HelpCardDocs i18nKey="help-card.image-setting" />
+          <HelpCardDocs i18nKey="help-card.image-config" />
         </p>
         <div className="relative h-full w-[80px]">
           <Image

@@ -21,13 +21,9 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+
 import { SettingMenuTemplate } from '@/components';
-import {
-  useChannels,
-  useOAIMutation,
-  useOAIQuery,
-  usePermissions,
-} from '@/hooks';
 
 interface IForm {
   name: string;
@@ -57,7 +53,10 @@ const ChannelInfoSetting: React.FC<IProps> = ({ projectId, channelId }) => {
     resolver: zodResolver(scheme),
   });
 
-  const { refetch: refetchChannelList } = useChannels(projectId);
+  const { refetch: refetchChannelList } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',

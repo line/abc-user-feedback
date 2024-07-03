@@ -19,17 +19,16 @@ import { useTranslation } from 'react-i18next';
 
 import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
+import { SelectBox } from '@/shared';
 import type { Member } from '@/entities/member';
 import { MemberTable } from '@/entities/member';
 import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
+import { useUserSearch } from '@/entities/user';
 import type { User } from '@/entities/user';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
-
-import { SelectBox } from '@/components';
-import { useUserSearch } from '@/hooks';
 
 interface IProps {}
 

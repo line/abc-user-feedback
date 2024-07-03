@@ -16,12 +16,10 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { Path } from '@/shared';
+import { Path, useOAIQuery } from '@/shared';
 
 import { FeedbackTableProvider } from '../model';
 import FeedbackTable from './feedback-table';
-
-import { useChannels } from '@/hooks';
 
 interface IProps {
   issueId?: number;
@@ -33,7 +31,11 @@ const FeedbackTableWrapper: React.FC<IProps> = (props) => {
   const { projectId, issueId, channelId } = props;
 
   const router = useRouter();
-  const { data: channels } = useChannels(projectId);
+
+  const { data: channels } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   const currentChannelId = useMemo(
     () => channelId ?? channels?.items?.[0]?.id ?? null,

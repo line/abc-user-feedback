@@ -18,11 +18,10 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
+import { SelectBox } from '@/shared';
 import type { Role } from '@/entities/role';
 
 import type { Member } from '../member.type';
-
-import { SelectBox } from '@/components';
 
 interface IProps {
   roles: Role[];

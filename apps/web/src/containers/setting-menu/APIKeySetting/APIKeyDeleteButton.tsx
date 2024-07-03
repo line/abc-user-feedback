@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { useOAIMutation } from '@/hooks';
+import { useOAIMutation } from '@/shared';
 
 interface IProps {
   apiKeyId: number;

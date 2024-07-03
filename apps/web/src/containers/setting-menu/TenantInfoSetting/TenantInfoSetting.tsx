@@ -21,10 +21,10 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { useOAIMutation } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 
 import { SettingMenuTemplate } from '@/components';
-import { useOAIMutation } from '@/hooks';
 
 interface IForm {
   siteName: string;

@@ -18,8 +18,8 @@ import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 
 import { BasicTable } from '@/shared';
 
+import { getFieldColumns } from '../field-columns';
 import type { FieldInfo } from '../field.type';
-import { getColumns } from './field-columns';
 
 interface IProps {
   fields: FieldInfo[];
@@ -32,7 +32,7 @@ const FieldTable: React.FC<IProps> = (props) => {
 
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
-    columns: getColumns(fields, onDeleteField, onModifyField),
+    columns: getFieldColumns(fields, onDeleteField, onModifyField),
     data: fields,
     enableSorting: false,
   });

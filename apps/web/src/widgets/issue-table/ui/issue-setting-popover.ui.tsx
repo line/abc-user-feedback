@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Listbox } from '@headlessui/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
@@ -22,12 +23,9 @@ import { z } from 'zod';
 
 import { Icon, Input, toast } from '@ufb/ui';
 
-import { ISSUES } from '@/shared';
+import { ISSUES, Popper, useOAIMutation } from '@/shared';
 import type { Issue, IssueStatus } from '@/entities/issue';
 
-import { Popper } from '@/components';
-import { useOAIMutation } from '@/hooks';
-import useCurrentProjectId from '@/hooks/useCurrentProjectId';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 
 type UpdateIssueType = {
@@ -61,8 +59,9 @@ const IssueSettingPopover: React.FC<IProps> = ({
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
-  const { projectId } = useCurrentProjectId();
+  const projectId = Number(router.query.projectId);
 
   const { register, handleSubmit, formState, reset, control } =
     useForm<UpdateIssueType>({

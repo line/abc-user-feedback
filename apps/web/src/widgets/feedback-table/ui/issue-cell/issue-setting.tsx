@@ -18,9 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
+import { useOAIMutation, usePermissions } from '@/shared';
 import type { Issue } from '@/entities/issue';
-
-import { useOAIMutation, usePermissions } from '@/hooks';
 
 interface IProps {
   issue: Issue;

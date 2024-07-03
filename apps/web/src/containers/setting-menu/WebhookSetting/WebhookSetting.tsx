@@ -27,14 +27,19 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { DATE_TIME_FORMAT } from '@/shared';
+import {
+  DATE_TIME_FORMAT,
+  HelpCardDocs,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 
 import WebhookDeleteDialog from './WebhookDeleteDialog';
 import WebhookEventTableCell from './WebhookEventTableCell';
 import WebhookUpsertDialog from './WebhookUpsertDialog';
 
-import { HelpCardDocs, SettingMenuTemplate } from '@/components';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
+import { SettingMenuTemplate } from '@/components';
 import type { WebhookType } from '@/types/webhook.type';
 
 const columnHelper = createColumnHelper<WebhookType>();

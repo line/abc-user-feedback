@@ -25,34 +25,32 @@ import { useTranslation } from 'next-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
+import type { SearchItemType } from '@/shared';
 import {
   CheckedTableHead,
+  DateRangePicker,
   ShareButton,
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
   TableResizer,
   TableRow,
+  TableSearchInput,
   TableSortIcon,
+  useOAIQuery,
+  usePermissions,
+  useSort,
 } from '@/shared';
+import { useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import { FeedbackTableInIssue } from '@/widgets/feedback-table';
 
 import { getColumns } from '../issue-table-columns';
-import { useIssueQuery } from '../lib';
+import { useIssueCount, useIssueQuery } from '../lib';
 import IssueDeletionPopover from './issue-deletion-popover.ui';
 import IssueTableSelectBox from './issue-select-box.ui';
 import IssueSettingPopover from './issue-setting-popover.ui';
 
-import { DateRangePicker, TableSearchInput } from '@/components';
-import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import {
-  useIssueCount,
-  useIssueSearch,
-  useOAIQuery,
-  usePermissions,
-  useSort,
-} from '@/hooks';
 import type { IssueTrackerType } from '@/types/issue-tracker.type';
 
 interface IProps extends React.PropsWithChildren {

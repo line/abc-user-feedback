@@ -26,12 +26,11 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { Path } from '@/shared';
+import { Path, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
 
 import ChannelCardList from './ChannelCardList';
 
 import { ChannelCard, SettingMenuTemplate } from '@/components';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;

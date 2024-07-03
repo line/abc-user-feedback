@@ -20,14 +20,12 @@ import { useTranslation } from 'react-i18next';
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { CreateInputTemplate, Path } from '@/shared';
+import { CreateInputTemplate, Path, useOAIMutation } from '@/shared';
 import { isDefaultField } from '@/entities/field';
 
 import { useCreateChannelStore } from '../create-channel-model';
 import { CREATE_CHANNEL_STEP_KEY_LIST } from '../create-channel-type';
 import { CREATE_CHANNEL_STEPPER_TEXT } from '../create-channel.constant';
-
-import { useOAIMutation } from '@/hooks';
 
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;

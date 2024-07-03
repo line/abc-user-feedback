@@ -18,6 +18,8 @@ import type { Placement } from '@floating-ui/react';
 
 import { Icon, Tooltip, TooltipContent, TooltipTrigger } from '@ufb/ui';
 
+import { displayString } from '../utils';
+
 export interface ITooltipProps {
   description: string;
   placement?: Placement;
@@ -39,7 +41,7 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
         />
       </TooltipTrigger>
       <TooltipContent className="whitespace-pre-line">
-        {description}
+        {displayString(description)}
       </TooltipContent>
     </Tooltip>
   );

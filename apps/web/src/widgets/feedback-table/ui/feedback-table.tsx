@@ -37,7 +37,13 @@ import {
   TableLoadingRow,
   TableResizer,
   TableSortIcon,
+  useLocalColumnSetting,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+  useSort,
 } from '@/shared';
+import { useFeedbackSearch } from '@/entities/feedback';
 
 import { getColumns } from '../feedback-table-columns';
 import { useFeedbackTable } from '../model';
@@ -45,15 +51,6 @@ import FeedbackDeleteDialog from './feedback-delete-dialog';
 import FeedbackTableBar from './feedback-table-bar';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableRow from './feedback-table-row';
-
-import {
-  useFeedbackSearch,
-  useLocalColumnSetting,
-  useOAIMutation,
-  useOAIQuery,
-  usePermissions,
-  useSort,
-} from '@/hooks';
 
 export interface IFeedbackTableProps {
   issueId?: number;

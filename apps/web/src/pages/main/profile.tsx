@@ -18,14 +18,17 @@ import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { DEFAULT_LOCALE, SectionTemplate, SubMenu } from '@/shared';
+import {
+  DEFAULT_LOCALE,
+  DescriptionTooltip,
+  SectionTemplate,
+  SubMenu,
+} from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useUserStore } from '@/entities/user';
 import { DeleteAccountButton } from '@/features/delete-user';
 import { ChangePasswordForm, UserProfileForm } from '@/features/update-user';
 import { MainLayout } from '@/widgets';
-
-import { DescriptionTooltip } from '@/components';
 
 const MENU_ITEMS = [
   { key: 'profile-info', iconName: 'InfoCircleFill' },

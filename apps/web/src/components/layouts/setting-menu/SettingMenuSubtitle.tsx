@@ -17,9 +17,9 @@ import { Fragment, useMemo } from 'react';
 
 import { Icon } from '@ufb/ui';
 
+import { useOAIQuery } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 
-import { useChannels, useProjects } from '@/hooks';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
@@ -31,8 +31,11 @@ interface IProps extends React.PropsWithChildren {
 const SettingMenuSubtitle: React.FC<IProps> = (props) => {
   const { settingMenu, channelId, projectId } = props;
   const { tenant } = useTenantStore();
-  const { data: projectData } = useProjects();
-  const { data: channelData } = useChannels(projectId);
+  const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
+  const { data: channelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   const projectName = useMemo(
     () => projectData?.items.find((v) => v.id === projectId)?.name ?? '',

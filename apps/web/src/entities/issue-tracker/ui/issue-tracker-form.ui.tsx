@@ -17,9 +17,9 @@ import { useFormContext } from 'react-hook-form';
 
 import { TextInput } from '@ufb/ui';
 
-import type { IssueTracker } from '../issue-tracker.type';
+import { SelectBox } from '@/shared';
 
-import { SelectBox } from '@/components';
+import type { IssueTracker } from '../issue-tracker.type';
 
 interface IProps {
   readOnly?: boolean;

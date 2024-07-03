@@ -16,7 +16,7 @@
 
 import { useMemo } from 'react';
 
-import { useOAIQuery } from '@/hooks';
+import { useOAIQuery } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
   value?: string;

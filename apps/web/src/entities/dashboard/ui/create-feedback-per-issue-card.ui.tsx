@@ -16,9 +16,7 @@
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { DashboardCard } from '@/shared';
-
-import { useOAIQuery } from '@/hooks';
+import { DashboardCard, useOAIQuery } from '@/shared';
 
 interface IProps {
   projectId: number;

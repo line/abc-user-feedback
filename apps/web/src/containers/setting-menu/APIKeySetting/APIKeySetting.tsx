@@ -26,13 +26,18 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { DATE_TIME_FORMAT } from '@/shared';
+import {
+  DATE_TIME_FORMAT,
+  HelpCardDocs,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 
 import APIKeyDeleteButton from './APIKeyDeleteButton';
 import APIKeyEditButton from './APIKeyEditButton';
 
-import { HelpCardDocs, SettingMenuTemplate } from '@/components';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
+import { SettingMenuTemplate } from '@/components';
 import type { ApiKeyType } from '@/types/api-key.type';
 
 const columnHelper = createColumnHelper<ApiKeyType>();

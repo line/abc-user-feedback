@@ -16,11 +16,9 @@
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { getDayCount, SimpleLineChart } from '@/shared';
+import { getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
 
 import { useLineChartData } from '../lib';
-
-import { useOAIQuery } from '@/hooks';
 
 interface IProps {
   projectId: number;

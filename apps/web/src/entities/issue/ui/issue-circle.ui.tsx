@@ -21,7 +21,7 @@ import { ISSUE_COLOR_MAP } from '../issue-color.constant';
 import type { IssueStatus } from '../issue.type';
 
 interface IProps {
-  issueKey: IssueStatus;
+  issueKey?: IssueStatus;
 }
 
 const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
@@ -29,7 +29,7 @@ const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
     <div
       className={clsx([
         'border-fill-secondary bg- mr-1.5 h-1.5 w-1.5 rounded-full border',
-        BACKGROUND_COLOR_MAP[ISSUE_COLOR_MAP[issueKey]],
+        issueKey && BACKGROUND_COLOR_MAP[ISSUE_COLOR_MAP[issueKey]],
       ])}
     />
   );

@@ -24,7 +24,7 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { useOAIMutation } from '@/hooks';
+import { useOAIMutation } from '@/shared';
 
 interface IProps {
   memberId: number;

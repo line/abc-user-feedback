@@ -18,8 +18,7 @@ import { useFormContext } from 'react-hook-form';
 import { TextInput } from '@ufb/ui';
 
 import type { ProjectInfo } from '../project.type';
-
-import { TimezoneSelectBox } from '@/components';
+import TimezoneSelectBox from './timezone-select-box';
 
 interface IProps {
   type?: 'create' | 'update';

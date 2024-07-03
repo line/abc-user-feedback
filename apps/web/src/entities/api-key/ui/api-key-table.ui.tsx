@@ -20,18 +20,21 @@ import { Icon } from '@ufb/ui';
 
 import { BasicTable } from '@/shared';
 
+import { getApiKeyColumns } from '../api-key-columns';
 import type { ApiKey } from '../api-key.type';
-import { columns } from './columns';
 
 interface IProps {
   apiKeys: ApiKey[];
   onClickDelete?: (id: number) => void;
 }
 
-const ApiKeyTable: React.FC<IProps> = ({ apiKeys, onClickDelete }) => {
+const ApiKeyTable: React.FC<IProps> = (props) => {
+  const { apiKeys, onClickDelete } = props;
+
   const { t } = useTranslation();
+
   const table = useReactTable({
-    columns: columns(onClickDelete),
+    columns: getApiKeyColumns(onClickDelete),
     data: apiKeys,
     getCoreRowModel: getCoreRowModel(),
   });

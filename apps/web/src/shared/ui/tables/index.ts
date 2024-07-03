@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+export * from './table-search-input';
+
 export { default as DashboardTable } from './dashboard-table';
 export { default as BasicTable } from './basic-table.ui';
 export { default as TableRow } from './table-row';

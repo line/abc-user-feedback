@@ -24,8 +24,8 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { SelectBox } from '@/components';
-import { useOAIMutation, useOAIQuery } from '@/hooks';
+import { SelectBox, useOAIMutation, useOAIQuery } from '@/shared';
+
 import type { RoleType } from '@/types/role.type';
 
 interface IProps {

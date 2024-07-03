@@ -27,11 +27,12 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import { DescriptionTooltip, SelectBox } from '@/shared';
+
 import { fieldInfoSchema } from '../field.schema';
 import type { FieldInfo } from '../field.type';
-import FieldOptionDeletionPopover from './field-option-deletion-popover.ui';
+import DeleteFieldOptionPopover from './delete-field-option-popover.ui';
 
-import { DescriptionTooltip, SelectBox } from '@/components/etc';
 import { FieldFormatEnumList } from '@/types/field.type';
 
 const defaultValues: FieldInfo = {
@@ -276,7 +277,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 {(watch('options') ?? []).length > 0 && (
                   <div className="mt-4 flex flex-wrap gap-2">
                     {watch('options')?.map((v, i) => (
-                      <FieldOptionDeletionPopover
+                      <DeleteFieldOptionPopover
                         key={i}
                         option={v}
                         index={i}

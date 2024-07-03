@@ -25,19 +25,23 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
+import type { SearchItemType } from '@/shared';
 import {
   BasicTable,
   DATE_TIME_FORMAT,
   TableCheckbox,
   TablePagination,
+  TableSearchInput,
+  useOAIMutation,
+  useOAIQuery,
+  useSort,
 } from '@/shared';
+import { useUserSearch } from '@/entities/user';
 
 import UserEditPopover from './UserEditPopover';
 import UserInvitationDialog from './UserInvitationDialog';
 
-import { SettingMenuTemplate, TableSearchInput } from '@/components';
-import type { SearchItemType } from '@/components/etc/TableSearchInput';
-import { useOAIMutation, useOAIQuery, useSort, useUserSearch } from '@/hooks';
+import { SettingMenuTemplate } from '@/components';
 import isNotEmptyStr from '@/utils/is-not-empty-string';
 
 export type UserDataType = {

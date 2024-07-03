@@ -17,7 +17,10 @@ import { useEffect, useMemo } from 'react';
 import type { Table, VisibilityState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
-import { TablePagination } from '@/shared';
+import type { SearchItemType } from '@/shared';
+import { DateRangePicker, TablePagination, TableSearchInput } from '@/shared';
+import type { Field } from '@/entities/field';
+import { useIssueSearch } from '@/entities/issue';
 
 import { useFeedbackTable } from '../model';
 import ChannelSelectBox from './channel-select-box';
@@ -25,11 +28,7 @@ import ColumnSettingPopover from './column-setting-popover';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableExpandButtonGroup from './feedback-table-expand-button-group.ui';
 
-import { DateRangePicker, TableSearchInput } from '@/components';
-import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
 import { env } from '@/env.mjs';
-import { useIssueSearch } from '@/hooks';
-import type { FieldType } from '@/types/field.type';
 
 const getSearchItemPriority = (a: SearchItemType) =>
   a.name === 'Created' ? 1
@@ -37,7 +36,7 @@ const getSearchItemPriority = (a: SearchItemType) =>
   : a.name === 'Issue' ? 3
   : 4;
 interface IProps {
-  fieldData?: FieldType[];
+  fieldData?: Field[];
   table: Table<any>;
   meta:
     | {

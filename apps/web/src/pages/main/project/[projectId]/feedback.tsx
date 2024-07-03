@@ -17,13 +17,11 @@ import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { DEFAULT_LOCALE } from '@/shared';
+import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { RouteCreateChannelButton } from '@/features/create-channel';
 import { MainLayout } from '@/widgets';
 import { FeedbackTable } from '@/widgets/feedback-table';
-
-import { useOAIQuery } from '@/hooks';
 
 interface IProps {
   projectId: number;

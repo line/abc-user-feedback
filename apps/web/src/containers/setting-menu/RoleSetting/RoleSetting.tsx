@@ -18,11 +18,12 @@ import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
 
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+
 import RoleSettingTable from './RoleSettingTable';
 
 import { SettingMenuTemplate } from '@/components';
 import { CreateRolePopover } from '@/components/popovers';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 import client from '@/libs/client';
 import type { PermissionType } from '@/types/permission.type';
 

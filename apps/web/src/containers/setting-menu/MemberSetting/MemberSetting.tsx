@@ -25,14 +25,19 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { BasicTable, DATE_TIME_FORMAT } from '@/shared';
+import {
+  BasicTable,
+  DATE_TIME_FORMAT,
+  useOAIQuery,
+  usePermissions,
+  useSort,
+} from '@/shared';
 
 import MemberDeleteDialog from './MemberDeleteDialog';
 import MemberInvitationDialog from './MemberInvitationDialog';
 import MemberUpdatePopover from './MemberUpdatePopover';
 
 import { SettingMenuTemplate } from '@/components';
-import { useOAIQuery, usePermissions, useSort } from '@/hooks';
 import type { PermissionType } from '@/types/permission.type';
 
 export type MemberType = {

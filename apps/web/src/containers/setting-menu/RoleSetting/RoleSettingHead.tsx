@@ -18,8 +18,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
+import { usePermissions } from '@/shared';
+
 import { DeleteRolePopover, UpdateRolePopover } from '@/components/popovers';
-import { usePermissions } from '@/hooks';
 import type { RoleType } from '@/types/role.type';
 
 interface IProps {

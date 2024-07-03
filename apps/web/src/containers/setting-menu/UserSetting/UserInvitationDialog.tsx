@@ -29,10 +29,8 @@ import {
   toast,
 } from '@ufb/ui';
 
+import { SelectBox, useOAIMutation, useOAIQuery } from '@/shared';
 import type { UserTypeEnum } from '@/entities/user';
-
-import { SelectBox } from '@/components';
-import { useOAIMutation, useOAIQuery, useProjects } from '@/hooks';
 
 interface IProps {}
 
@@ -73,7 +71,7 @@ const UserInvitationDialog: React.FC<IProps> = () => {
     reset({ roleId: undefined }, { keepValues: true });
   }, [watch('projectId')]);
 
-  const { data: projectData } = useProjects();
+  const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
 
   const { data: roleData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',

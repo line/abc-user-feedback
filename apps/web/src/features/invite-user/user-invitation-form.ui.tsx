@@ -21,11 +21,9 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { Path } from '@/shared';
+import { Path, useOAIMutation } from '@/shared';
 
 import { userInvitationSchema } from './user-invitation.schema';
-
-import { useOAIMutation } from '@/hooks';
 
 type FormType = z.infer<typeof userInvitationSchema>;
 

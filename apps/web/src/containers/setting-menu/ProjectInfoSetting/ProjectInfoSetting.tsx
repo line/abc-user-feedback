@@ -21,13 +21,9 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
-import { SettingMenuTemplate, TimezoneSelectBox } from '@/components';
-import {
-  useOAIMutation,
-  useOAIQuery,
-  usePermissions,
-  useProjects,
-} from '@/hooks';
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+
+import { SettingMenuTemplate } from '@/components';
 import type { TimezoneInfo } from '@/types/timezone-info';
 
 interface IForm {
@@ -53,15 +49,18 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
-  const { refetch: refetchProjects } = useProjects();
+  const { refetch: refetchProjects } = useOAIQuery({
+    path: '/api/admin/projects',
+  });
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
 
-  const { reset, register, handleSubmit, formState, setValue, watch } =
-    useForm<IForm>({ resolver: zodResolver(scheme) });
+  const { reset, register, handleSubmit, formState } = useForm<IForm>({
+    resolver: zodResolver(scheme),
+  });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -114,11 +113,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
           label="Project Description"
           disabled={!perms.includes('project_update')}
         />
-        <TimezoneSelectBox
+        {/* <TimezoneSelectBox
           value={watch('timezone')}
           onChange={(value) => setValue('timezone', value)}
           disabled
-        />
+        /> */}
       </form>
     </SettingMenuTemplate>
   );

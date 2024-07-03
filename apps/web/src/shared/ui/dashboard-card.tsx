@@ -15,9 +15,7 @@
  */
 import { Icon } from '@ufb/ui';
 
-import { cn } from '@/shared';
-
-import { DescriptionTooltip } from '@/components/etc';
+import { cn, DescriptionTooltip } from '@/shared';
 
 interface IProps {
   title: string;

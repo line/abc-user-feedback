@@ -18,10 +18,9 @@ import { useTranslation } from 'react-i18next';
 
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
+import { useOAIMutation } from '@/shared';
 import { useUserStore } from '@/entities/user';
 import type { User } from '@/entities/user';
-
-import { useOAIMutation } from '@/hooks';
 
 interface IProps {
   user: User;

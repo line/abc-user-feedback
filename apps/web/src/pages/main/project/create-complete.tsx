@@ -23,7 +23,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { CreateSectionTemplate, DEFAULT_LOCALE, Path } from '@/shared';
+import {
+  CreateSectionTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  useOAIQuery,
+} from '@/shared';
 import { ApiKeyTable } from '@/entities/api-key';
 import type { IssueTracker } from '@/entities/issue-tracker';
 import { IssueTrackerForm } from '@/entities/issue-tracker';
@@ -31,8 +36,6 @@ import { MemberTable } from '@/entities/member';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm } from '@/entities/project';
 import { RoleTable } from '@/entities/role';
-
-import { useOAIQuery } from '@/hooks';
 
 const CompleteProjectCreationPage: NextPage = () => {
   const { t } = useTranslation();

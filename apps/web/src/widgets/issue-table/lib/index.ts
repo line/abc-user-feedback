@@ -13,4 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './useIssueQuery';
+export { default as useIssueQuery } from './use-issue-query';
+export { default as useIssueCount } from './use-issue-count';

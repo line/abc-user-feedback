@@ -24,14 +24,13 @@ import { Icon } from '@ufb/ui';
 
 import { Path } from '@/shared';
 
-import { useCurrentProjectId } from '@/hooks';
-
 interface IProps extends React.PropsWithChildren {}
 
 const SideNav: React.FC<IProps> = () => {
   const { t } = useTranslation();
-  const { projectId } = useCurrentProjectId();
+  const router = useRouter();
 
+  const projectId = Number(router.query.projectId);
   const ref = useRef<HTMLDivElement>(null);
 
   const [isHover, setIsHover] = useState(false);

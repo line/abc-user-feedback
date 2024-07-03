@@ -20,11 +20,10 @@ import type { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import { useOAIMutation } from '@/shared';
 import type { User } from '@/entities/user';
 
 import { userProfileFormSchema } from './user-profile-form.schema';
-
-import { useOAIMutation } from '@/hooks';
 
 type FormType = z.infer<typeof userProfileFormSchema>;
 

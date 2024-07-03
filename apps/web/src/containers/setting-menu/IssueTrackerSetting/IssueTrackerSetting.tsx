@@ -22,9 +22,14 @@ import { z } from 'zod';
 
 import { TextInput, toast } from '@ufb/ui';
 
+import {
+  SelectBox,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
+
 import { SettingMenuTemplate } from '@/components';
-import { SelectBox } from '@/components/etc';
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/hooks';
 
 interface IForm {
   ticketDomain: string;

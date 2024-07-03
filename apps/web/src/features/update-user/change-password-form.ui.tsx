@@ -21,9 +21,9 @@ import type { z } from 'zod';
 import { ErrorCode } from '@ufb/shared';
 import { TextInput, toast } from '@ufb/ui';
 
-import { changePasswordFormSchema } from './change-password-form.schema';
+import { useOAIMutation } from '@/shared';
 
-import { useOAIMutation } from '@/hooks';
+import { changePasswordFormSchema } from './change-password-form.schema';
 
 type FormType = z.infer<typeof changePasswordFormSchema>;
 

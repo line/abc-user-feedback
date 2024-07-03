@@ -16,12 +16,11 @@
 import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 
+import type { ISelectBoxProps } from '@/shared';
+import { DescriptionTooltip, SelectBox } from '@/shared';
+
 import ChartFilter from '../charts/chart-filter';
 import TableSortIcon from './table-sort-icon';
-
-import { DescriptionTooltip } from '@/components';
-import type { ISelectBoxProps } from '@/components/etc/SelectBox';
-import SelectBox from '@/components/etc/SelectBox';
 
 interface IProps<T> {
   title: string;
