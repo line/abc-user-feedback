@@ -26,17 +26,11 @@ import {
   TooltipTrigger,
 } from '@ufb/ui';
 
-import {
-  CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY,
-  CREATE_PROJECT_CURRENT_STEP_KEY,
-  CREATE_PROJECT_INPUT_KEY,
-  Path,
-} from '@/shared';
+import { Path } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
-import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
-
-import { useLocalStorage } from '@/hooks';
+import { useCreateProjectStore } from '../create-project-model';
+import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
 
 interface IProps {
   hasProject?: boolean;
@@ -45,23 +39,22 @@ interface IProps {
 const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
   const { t } = useTranslation();
 
-  const [step] = useLocalStorage(CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY, 0);
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const { user } = useUserStore();
 
-  const goToCreateProjectPage = () => router.push(Path.CREATE_PROJECT);
+  const { editingStep, reset, jumpStep } = useCreateProjectStore();
 
   return (
     <>
-      <Tooltip open={!hasProject || step > 0} placement="bottom">
+      <Tooltip open={!hasProject || editingStep > 0} placement="bottom">
         <TooltipTrigger asChild>
           <button
             className="btn btn-lg btn-primary w-[200px] gap-2"
             onClick={() => {
-              if (step > 0) setOpen(true);
-              else goToCreateProjectPage();
+              if (editingStep > 0) setOpen(true);
+              else router.push(Path.CREATE_PROJECT);
             }}
             disabled={user?.type !== 'SUPER'}
           >
@@ -69,12 +62,12 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             {t('main.index.create-project')}
           </button>
         </TooltipTrigger>
-        <TooltipContent color={step > 0 ? 'red' : 'blue'}>
-          {step > 0 ?
+        <TooltipContent color={editingStep > 0 ? 'red' : 'blue'}>
+          {editingStep > 0 ?
             <>
               {t('text.create-project-in-progress')}{' '}
               <b>
-                ({step + 1}/{CREATE_PROJEC_STEP_KEY_LIST.length})
+                ({editingStep + 1}/{CREATE_PROJECT_STEP_KEY_LIST.length})
               </b>
             </>
           : t('main.index.no-project')}
@@ -87,15 +80,16 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
           submitButton={{
             children: t('dialog.continue.button.continue'),
             className: 'btn-red',
-            onClick: () => goToCreateProjectPage(),
+            onClick: () => {
+              jumpStep(editingStep);
+              router.push(Path.CREATE_PROJECT);
+            },
           }}
           cancelButton={{
             children: t('dialog.continue.button.restart'),
             onClick: () => {
-              localStorage.removeItem(CREATE_PROJECT_INPUT_KEY);
-              localStorage.removeItem(CREATE_PROJECT_CURRENT_STEP_KEY);
-              localStorage.removeItem(CREATE_PROJECT_COMPLETE_STEP_INDEX_KEY);
-              goToCreateProjectPage();
+              reset();
+              router.push(Path.CREATE_PROJECT);
             },
           }}
         />

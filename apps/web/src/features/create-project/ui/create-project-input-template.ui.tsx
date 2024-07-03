@@ -24,7 +24,7 @@ import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 import { CreateInputTemplate, Path } from '@/shared';
 
 import { useCreateProjectStore } from '../create-project-model';
-import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
+import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
 import { CREATE_PROJECT_STEPPER_TEXT } from '../create-project.constant';
 
 import { useOAIMutation } from '@/hooks';
@@ -47,12 +47,12 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
     prevStep,
     getCurrentStepKey,
     input,
-    jumpStep,
+    jumpStepByKey,
     reset,
   } = useCreateProjectStore();
 
-  const overlay = useOverlay();
   const router = useRouter();
+  const overlay = useOverlay();
 
   const openMemberError = () => {
     return overlay.open(({ isOpen, close }) => (
@@ -62,7 +62,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
           description={t('main.create-project.guide.invalid-member')}
           submitButton={{
             children: t('button.confirm'),
-            onClick: () => jumpStep('members'),
+            onClick: () => jumpStepByKey('members'),
           }}
         />
       </Popover>
@@ -76,7 +76,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
           description={t('main.create-project.guide.invalid-project')}
           submitButton={{
             children: t('button.confirm'),
-            onClick: () => jumpStep('project-info'),
+            onClick: () => jumpStepByKey('project-info'),
           }}
         />
       </Popover>
@@ -122,7 +122,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
   return (
     <CreateInputTemplate
       currentStep={currentStep}
-      lastStep={CREATE_PROJEC_STEP_KEY_LIST.length - 1}
+      lastStep={CREATE_PROJECT_STEP_KEY_LIST.length - 1}
       onNext={nextStep}
       onPrev={prevStep}
       title={CREATE_PROJECT_STEPPER_TEXT[getCurrentStepKey()]}

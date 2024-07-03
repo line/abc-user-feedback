@@ -17,8 +17,8 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import type { ProjectInfoFormSchema } from '@/entities/project';
-import { ProjectInfoForm, projectInfoFormSchema } from '@/entities/project';
+import type { ProjectInfo } from '@/entities/project';
+import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
@@ -28,14 +28,14 @@ interface IProps {}
 const InputProjectInfo: React.FC<IProps> = () => {
   const { onChangeInput, input } = useCreateProjectStore();
 
-  const methods = useForm<ProjectInfoFormSchema>({
-    resolver: zodResolver(projectInfoFormSchema),
+  const methods = useForm<ProjectInfo>({
+    resolver: zodResolver(projectInfoSchema),
     defaultValues: input.projectInfo,
   });
 
   useEffect(() => {
     const subscription = methods.watch((values) => {
-      const newValues = projectInfoFormSchema.safeParse(values);
+      const newValues = projectInfoSchema.safeParse(values);
       if (!newValues.data) return;
       onChangeInput('projectInfo', newValues.data);
     });

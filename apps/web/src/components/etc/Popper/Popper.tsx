@@ -37,6 +37,7 @@ const Popper: React.FC<IProps> = (props) => {
     placement,
     offset = 6,
   } = props;
+
   const buttonRef = useRef(null);
   const containerRef = useRef<HTMLDivElement>(null);
 

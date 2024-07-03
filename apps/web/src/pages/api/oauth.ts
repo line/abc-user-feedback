@@ -17,12 +17,11 @@ import axios from 'axios';
 import { getIronSession } from 'iron-session';
 import { z } from 'zod';
 
-import { ironOption } from '@/shared';
-import type { JwtSession } from '@/shared';
-
 import { env } from '@/env.mjs';
 import getLogger from '@/libs/logger';
 import { createNextApiHandler, procedure } from '@/server/api-handler';
+import type { JwtSession } from '@/server/iron-option';
+import { ironOption } from '@/server/iron-option';
 
 const handler = createNextApiHandler({
   POST: procedure

@@ -27,6 +27,7 @@ import { Icon, toast } from '@ufb/ui';
 
 import {
   CheckedTableHead,
+  ShareButton,
   TableCheckbox,
   TableLoadingRow,
   TablePagination,
@@ -45,7 +46,6 @@ import IssueSettingPopover from './issue-setting-popover.ui';
 
 import { DateRangePicker, TableSearchInput } from '@/components';
 import type { SearchItemType } from '@/components/etc/TableSearchInput/TableSearchInput';
-import { ShareButton } from '@/containers/buttons';
 import {
   useIssueCount,
   useIssueSearch,

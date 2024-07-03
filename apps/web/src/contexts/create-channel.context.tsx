@@ -17,15 +17,13 @@ import { useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
+
 import {
   CreateContext,
   CreateProvider,
 } from './create-project-channel.context';
 
-import type {
-  InputChannelInfoType,
-  InputImageConfigType,
-} from '@/types/channel.type';
 import type { InputFieldType } from '@/types/field.type';
 
 const DEFAULT_FIELDS: InputFieldType[] = [
@@ -65,10 +63,10 @@ const DEFAULT_FIELDS: InputFieldType[] = [
 ];
 
 interface ChannelInputType {
-  channelInfo: InputChannelInfoType;
+  channelInfo: ChannelInfo;
   fields: InputFieldType[];
   fieldPreview: null;
-  imageConfig: InputImageConfigType;
+  imageConfig: ChannelImageConfig;
 }
 
 const CHANNEL_DEFAULT_INPUT: ChannelInputType = {

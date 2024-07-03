@@ -13,74 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useMemo } from 'react';
 import type { GetServerSideProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_LOCALE } from '@/shared';
-
-import { CreateProjectChannelTemplate, HelpCardDocs } from '@/components';
-import {
-  InputChannelInfo,
-  InputField,
-  InputFieldPreview,
-  InputImageSetting,
-} from '@/containers/create-channel';
-import {
-  CreateChannelProvider,
-  useCreateChannel,
-} from '@/contexts/create-channel.context';
-import type { ChannelStepType } from '@/contexts/create-channel.context';
+import { CreateChannel } from '@/features/create-channel';
 
 const CreatePage: NextPage = () => {
-  return (
-    <CreateChannelProvider>
-      <CreateChannel />
-    </CreateChannelProvider>
-  );
+  return <CreateChannel />;
 };
 
-const CreateChannel: NextPage = () => {
-  const { t } = useTranslation();
-  const { completeStepIndex, currentStepIndex, currentStep, stepperText } =
-    useCreateChannel();
-
-  const HELP_TEXT: Record<ChannelStepType, React.ReactNode> = useMemo(() => {
-    return {
-      channelInfo: t('help-card.channel-info'),
-      fields: t('help-card.field'),
-      imageUpload: <HelpCardDocs i18nKey="help-card.image-setting" />,
-      fieldPreview: t('help-card.field-preview'),
-    };
-  }, [t]);
-
-  return (
-    <CreateProjectChannelTemplate
-      completeStepIndex={completeStepIndex}
-      currentStepIndex={currentStepIndex}
-      helpText={HELP_TEXT}
-      stepObj={stepperText}
-      type="channel"
-      currentStep={currentStep}
-    >
-      <Contents />
-    </CreateProjectChannelTemplate>
-  );
-};
-
-const Contents: React.FC = () => {
-  const { currentStep } = useCreateChannel();
-
-  return (
-    <>
-      {currentStep === 'channelInfo' && <InputChannelInfo />}
-      {currentStep === 'fields' && <InputField />}
-      {currentStep === 'imageUpload' && <InputImageSetting />}
-      {currentStep === 'fieldPreview' && <InputFieldPreview />}
-    </>
-  );
-};
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   return {
     props: {

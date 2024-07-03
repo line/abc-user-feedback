@@ -17,7 +17,7 @@
 import { CreateTemplate } from '@/shared';
 
 import { useCreateProjectStore } from '../create-project-model';
-import { CREATE_PROJEC_STEP_KEY_LIST } from '../create-project-type';
+import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
 import {
   CREATE_PROJECT_COMPONENTS,
   CREATE_PROJECT_HELP_TEXT,
@@ -36,7 +36,7 @@ const CreateProject: React.FC<IProps> = () => {
     <CreateTemplate
       type="project"
       currentStep={currentStep}
-      steps={CREATE_PROJEC_STEP_KEY_LIST}
+      steps={CREATE_PROJECT_STEP_KEY_LIST}
       editingStep={editingStep}
       stepTitle={CREATE_PROJECT_STEPPER_TEXT}
       helpText={CREATE_PROJECT_HELP_TEXT[currentStepKey]}

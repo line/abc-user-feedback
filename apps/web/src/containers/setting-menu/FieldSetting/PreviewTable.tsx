@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import {
   DATE_TIME_FORMAT,
   ExpandableText,
+  ImagePreviewButton,
   ISSUES,
   TableResizer,
 } from '@/shared';
@@ -36,7 +37,6 @@ import EditableCell from '@/widgets/feedback-table/ui/editable-cell';
 
 import type { FieldRowType } from './FieldSetting';
 
-import { ImagePreviewButton } from '@/components/buttons';
 import type { FieldType } from '@/types/field.type';
 
 const columnHelper = createColumnHelper<any>();

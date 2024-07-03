@@ -16,3 +16,4 @@
 export { default as RoleTable } from './role-table.ui';
 export { default as UpdateRoleNameModal } from './update-role-name-modal.ui';
 export { default as DeleteRoleModal } from './delete-role-modal.ui';
+export { default as CreateRolePopover } from './create-role-popover';

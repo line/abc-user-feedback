@@ -16,7 +16,7 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { CreateChannelButton } from '../buttons';
+import { RouteCreateChannelButton } from '@/features/create-channel';
 
 import { SelectBox, SettingMenuTemplate } from '@/components';
 import { SettingMenuItem } from '@/components/layouts/setting-menu';
@@ -53,7 +53,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     return (
       <SettingMenuTemplate title="Channel">
         <div className="flex flex-1 items-center justify-center">
-          <CreateChannelButton projectId={projectId} type="blue" />
+          <RouteCreateChannelButton projectId={projectId} type="blue" />
         </div>
       </SettingMenuTemplate>
     );
@@ -98,7 +98,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
           disabled={!perms.includes('channel_delete')}
         />
       </ul>
-      <CreateChannelButton
+      <RouteCreateChannelButton
         projectId={projectId}
         type="primary"
         placement="top"

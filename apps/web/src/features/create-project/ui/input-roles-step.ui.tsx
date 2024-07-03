@@ -13,12 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { RoleTable } from '@/entities/role';
+import { CreateRolePopover, RoleTable } from '@/entities/role';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
 
-import { CreateRolePopover } from '@/components/popovers';
 import type { RoleType } from '@/types/role.type';
 
 interface IProps {}

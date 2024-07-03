@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const CREATE_PROJEC_STEP_KEY_LIST = [
+export const CREATE_PROJECT_STEP_KEY_LIST = [
   'project-info',
   'roles',
   'members',
@@ -21,7 +21,8 @@ export const CREATE_PROJEC_STEP_KEY_LIST = [
   'api-keys',
 ] as const;
 
-export const LAST_CREATE_PROJECT_STEP = CREATE_PROJEC_STEP_KEY_LIST.length;
+export const LAST_CREATE_PROJECT_STEP = CREATE_PROJECT_STEP_KEY_LIST.length;
 export const FIRST_CREATE_PROJECT_STEP = 0;
 
-export type CreateProjectStepKey = (typeof CREATE_PROJEC_STEP_KEY_LIST)[number];
+export type CreateProjectStepKey =
+  (typeof CREATE_PROJECT_STEP_KEY_LIST)[number];

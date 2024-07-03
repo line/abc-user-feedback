@@ -18,7 +18,7 @@ import clsx from 'clsx';
 import { Icon } from '@ufb/ui';
 import type { IconNameType } from '@ufb/ui';
 
-import { getDescriptionStr } from '@/utils/description-string';
+import { displayString } from '@/utils/description-string';
 
 interface IProps {
   onClick?: () => void;
@@ -49,7 +49,7 @@ const MainCard: React.FC<IProps> = (props) => {
         <div className="flex-1">
           <p className="font-16-bold mb-1">{title}</p>
           <p className="font-12-regular text-secondary line-clamp-1 break-all">
-            {getDescriptionStr(description)}
+            {displayString(description)}
           </p>
         </div>
       </div>

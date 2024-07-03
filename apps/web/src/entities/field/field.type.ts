@@ -14,47 +14,17 @@
  * under the License.
  */
 
-export const PrimitiveFieldFormatEnumList = [
-  'text',
-  'keyword',
-  'number',
-  'date',
-] as const;
+import type { z } from 'zod';
 
-export const FieldFormatEnumList = [
-  ...PrimitiveFieldFormatEnumList,
-  'select',
-  'multiSelect',
-  'images',
-] as const;
+import type { fieldInfoSchema, fieldSchema } from './field.schema';
 
-export type PrimitiveFieldFormatEnumType =
-  (typeof PrimitiveFieldFormatEnumList)[number];
-export type FieldFormatEnumType = (typeof FieldFormatEnumList)[number];
+export type Field = z.infer<typeof fieldSchema>;
+export type FieldInfo = z.infer<typeof fieldInfoSchema>;
+export type FieldFormat = Field['format'];
+export type FieldProperty = Field['property'];
+export type FieldStatus = Field['status'];
+export type FieldOption = Field['options'][number];
 
-export const FieldPropertyEnumList = ['READ_ONLY', 'EDITABLE'] as const;
-export type FieldPropertyEnumType = (typeof FieldPropertyEnumList)[number];
-
-export const FieldStatusEnumList = ['ACTIVE', 'INACTIVE'] as const;
-export type FieldStatusEnumType = (typeof FieldStatusEnumList)[number];
-
-export type Field = {
-  id: number;
-  key: string;
-  name: string;
-  description: string | null;
-  format: FieldFormatEnumType;
-  property: FieldPropertyEnumType;
-  status: FieldStatusEnumType;
-  options?: OptionType[];
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type OptionType = {
+export type FieldOptionInfo = Omit<FieldOption, 'id'> & {
   id?: number;
-  name: string;
-  key: string;
 };
-
-export type InputField = Omit<Field, 'id' | 'createdAt' | 'updatedAt'>;

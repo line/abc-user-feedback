@@ -14,4 +14,5 @@
  * under the License.
  */
 export * from './ui';
-export * from './project-info-form.schema';
+export * from './project.schema';
+export * from './project.type';

@@ -19,27 +19,17 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
 
-import { CardSlider, DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
+import { DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import {
-  CreateFeedbackPerIssueCard,
   FeedbackLineChart,
   IssueBarChart,
   IssueFeedbackLineChart,
   IssueLineChart,
   IssueRank,
-  SevenDaysFeedbackCard,
-  SevenDaysIssueCard,
-  ThirtyDaysFeedbackCard,
-  ThirtyDaysIssueCard,
-  TodayFeedbackCard,
-  TodayIssueCard,
-  TotalFeedbackCard,
-  TotalIssueCard,
-  YesterdayFeedbackCard,
-  YesterdayIssueCard,
 } from '@/entities/dashboard';
 import { MainLayout } from '@/widgets';
+import { DashbaordCardSlider } from '@/widgets/dashboard-card-slider';
 
 import { DateRangePicker } from '@/components';
 import type { DateRangeType } from '@/types/date-range.type';
@@ -120,33 +110,12 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           />
         </div>
       </div>
-      <CardSlider>
-        <TotalFeedbackCard
-          projectId={projectId}
-          from={dateRange.startDate}
-          to={dateRange.endDate}
-        />
-        <TotalIssueCard
-          projectId={projectId}
-          from={dateRange.startDate}
-          to={dateRange.endDate}
-        />
-        <CreateFeedbackPerIssueCard
-          projectId={projectId}
-          from={dateRange.startDate}
-          to={dateRange.endDate}
-        />
+      <DashbaordCardSlider
+        projectId={projectId}
+        from={dateRange.startDate}
+        to={dateRange.endDate}
+      />
 
-        <TodayFeedbackCard projectId={projectId} />
-        <YesterdayFeedbackCard projectId={projectId} />
-        <SevenDaysFeedbackCard projectId={projectId} />
-        <ThirtyDaysFeedbackCard projectId={projectId} />
-
-        <TodayIssueCard projectId={projectId} />
-        <YesterdayIssueCard projectId={projectId} />
-        <SevenDaysIssueCard projectId={projectId} />
-        <ThirtyDaysIssueCard projectId={projectId} />
-      </CardSlider>
       <FeedbackLineChart
         from={dateRange.startDate}
         to={dateRange.endDate}

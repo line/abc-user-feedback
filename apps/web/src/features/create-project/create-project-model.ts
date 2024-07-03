@@ -13,14 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { persist } from 'zustand/middleware';
+
 import type { ApiKey } from '@/entities/api-key';
 import type { IssueTracker } from '@/entities/issue-tracker/issue-tracker.type';
 import type { Member } from '@/entities/member';
-import type { ProjectInfoFormSchema } from '@/entities/project';
+import type { ProjectInfo } from '@/entities/project';
 
 import type { CreateProjectStepKey } from './create-project-type';
 import {
-  CREATE_PROJEC_STEP_KEY_LIST,
+  CREATE_PROJECT_STEP_KEY_LIST,
   FIRST_CREATE_PROJECT_STEP,
   LAST_CREATE_PROJECT_STEP,
 } from './create-project-type';
@@ -31,7 +33,7 @@ import type { PermissionType } from '@/types/permission.type';
 import type { InputRoleType } from '@/types/role.type';
 import { getDefaultTimezone } from '@/utils/timezone';
 
-export const DEFAULT_ROLES: InputRoleType[] = [
+const DEFAULT_ROLES: InputRoleType[] = [
   { id: 1, name: 'Admin', permissions: [...PermissionList] },
   {
     id: 2,
@@ -50,7 +52,7 @@ export const DEFAULT_ROLES: InputRoleType[] = [
 ];
 
 type Input = {
-  projectInfo: ProjectInfoFormSchema;
+  projectInfo: ProjectInfo;
   roles: {
     id: number;
     name: string;
@@ -68,13 +70,15 @@ type State = {
 };
 
 type Action = {
-  jumpStep: (key: CreateProjectStepKey) => void;
+  jumpStepByKey: (key: CreateProjectStepKey) => void;
+  jumpStep: (step: number) => void;
   prevStep: () => void;
   nextStep: () => void;
   reset: () => void;
   getCurrentStepKey: () => CreateProjectStepKey;
   onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => void;
 };
+
 const DEFAULT_STATE: State = {
   editingStep: 0,
   currentStep: 0,
@@ -94,32 +98,41 @@ const DEFAULT_STATE: State = {
   },
 };
 
-export const useCreateProjectStore = create<State, Action>((set, get) => ({
-  ...DEFAULT_STATE,
-  onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => {
-    set(({ input }) => ({ input: { ...input, [key]: value } }));
-  },
-  getCurrentStepKey() {
-    const { currentStep } = get();
-    return (
-      CREATE_PROJEC_STEP_KEY_LIST[currentStep] ?? CREATE_PROJEC_STEP_KEY_LIST[0]
-    );
-  },
-  jumpStep(key) {
-    set({ currentStep: CREATE_PROJEC_STEP_KEY_LIST.indexOf(key) });
-  },
-  nextStep() {
-    set(({ currentStep, editingStep }) => ({
-      currentStep: Math.min(currentStep + 1, LAST_CREATE_PROJECT_STEP),
-      editingStep: Math.max(editingStep, currentStep + 1),
-    }));
-  },
-  prevStep() {
-    set(({ currentStep }) => ({
-      currentStep: Math.max(currentStep - 1, FIRST_CREATE_PROJECT_STEP),
-    }));
-  },
-  reset() {
-    set({ ...DEFAULT_STATE });
-  },
-}));
+export const useCreateProjectStore = create<State, Action>()(
+  persist(
+    (set, get) => ({
+      ...DEFAULT_STATE,
+      onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => {
+        set(({ input }) => ({ input: { ...input, [key]: value } }));
+      },
+      getCurrentStepKey() {
+        const { currentStep } = get();
+        return (
+          CREATE_PROJECT_STEP_KEY_LIST[currentStep] ??
+          CREATE_PROJECT_STEP_KEY_LIST[0]
+        );
+      },
+      jumpStepByKey(key) {
+        set({ currentStep: CREATE_PROJECT_STEP_KEY_LIST.indexOf(key) });
+      },
+      jumpStep(step: number) {
+        set({ currentStep: step });
+      },
+      nextStep() {
+        set(({ currentStep, editingStep }) => ({
+          currentStep: Math.min(currentStep + 1, LAST_CREATE_PROJECT_STEP),
+          editingStep: Math.max(editingStep, currentStep + 1),
+        }));
+      },
+      prevStep() {
+        set(({ currentStep }) => ({
+          currentStep: Math.max(currentStep - 1, FIRST_CREATE_PROJECT_STEP),
+        }));
+      },
+      reset() {
+        set({ ...DEFAULT_STATE });
+      },
+    }),
+    { name: 'create-project' },
+  ),
+);

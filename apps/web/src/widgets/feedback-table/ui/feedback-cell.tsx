@@ -16,9 +16,8 @@
 import { memo } from 'react';
 import dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT, ExpandableText } from '@/shared';
+import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
 
-import { ImagePreviewButton } from '@/components/buttons';
 import type { FieldType } from '@/types/field.type';
 
 interface IProps extends React.PropsWithChildren {

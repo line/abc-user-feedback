@@ -20,7 +20,7 @@ import { useFeedbackTable } from '../model';
 
 import { DescriptionTooltip } from '@/components';
 import { useChannels } from '@/hooks';
-import { getDescriptionStr } from '@/utils/description-string';
+import { displayString } from '@/utils/description-string';
 
 interface IProps {
   onChangeChannel: (channelId: number) => void;
@@ -49,7 +49,7 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
             <span>{channel.name}</span>
           </div>
           <DescriptionTooltip
-            description={getDescriptionStr(channel.description)}
+            description={displayString(channel.description)}
           />
         </div>
       ))}

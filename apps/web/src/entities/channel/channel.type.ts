@@ -14,27 +14,14 @@
  * under the License.
  */
 
-import type { Field } from '../field';
+import type { z } from 'zod';
 
-export type Channel = {
-  id: number;
-  name: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-};
-// fields: Field[];
+import type {
+  channelImageConfigSchema,
+  channelInfoSchema,
+  channelSchema,
+} from './channel.schema';
 
-export type InputChannelInfoType = Omit<
-  Channel,
-  'id' | 'fields' | 'updatedAt' | 'createdAt'
->;
-
-export type InputImageConfigType = {
-  accessKeyId: string;
-  secretAccessKey: string;
-  endpoint: string;
-  region: string;
-  bucket: string;
-  domainWhiteList: string[] | null;
-};
+export type Channel = z.infer<typeof channelSchema>;
+export type ChannelInfo = z.infer<typeof channelInfoSchema>;
+export type ChannelImageConfig = z.infer<typeof channelImageConfigSchema>;

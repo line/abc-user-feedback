@@ -21,7 +21,7 @@ import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
 import type { Member } from '@/entities/member';
 import { MemberTable } from '@/entities/member';
-import type { ProjectInfoFormSchema } from '@/entities/project';
+import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
 import type { User } from '@/entities/user';
 
@@ -122,7 +122,7 @@ const InputMembersStep: React.FC<IProps> = () => {
 interface ICreateMemberButtonProps {
   members: Member[];
   onCreate: (user: User, role: Role) => void;
-  project: ProjectInfoFormSchema;
+  project: ProjectInfo;
   roles: Role[];
 }
 

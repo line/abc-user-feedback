@@ -14,3 +14,4 @@
  * under the License.
  */
 export * from './channel.type';
+export * from './channel.schema';

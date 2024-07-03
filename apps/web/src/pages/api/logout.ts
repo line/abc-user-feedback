@@ -15,10 +15,9 @@
  */
 import { getIronSession } from 'iron-session';
 
-import { ironOption } from '@/shared';
-import type { JwtSession } from '@/shared';
-
 import { createNextApiHandler } from '@/server/api-handler';
+import type { JwtSession } from '@/server/iron-option';
+import { ironOption } from '@/server/iron-option';
 
 const handler = createNextApiHandler({
   GET: async (req, res) => {

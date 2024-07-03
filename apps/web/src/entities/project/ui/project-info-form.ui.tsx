@@ -17,7 +17,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { TextInput } from '@ufb/ui';
 
-import type { ProjectInfoFormSchema } from '../project-info-form.schema';
+import type { ProjectInfo } from '../project.type';
 
 import { TimezoneSelectBox } from '@/components';
 
@@ -31,7 +31,7 @@ const ProjectInfoForm: React.FC<IProps> = ({
   readOnly = false,
 }) => {
   const { register, setValue, watch, formState } =
-    useFormContext<ProjectInfoFormSchema>();
+    useFormContext<ProjectInfo>();
 
   return (
     <div className="flex flex-col gap-6">

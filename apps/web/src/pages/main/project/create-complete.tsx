@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -28,21 +28,16 @@ import { ApiKeyTable } from '@/entities/api-key';
 import type { IssueTracker } from '@/entities/issue-tracker';
 import { IssueTrackerForm } from '@/entities/issue-tracker';
 import { MemberTable } from '@/entities/member';
-import type { ProjectInfoFormSchema } from '@/entities/project';
+import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm } from '@/entities/project';
 import { RoleTable } from '@/entities/role';
 
 import { useOAIQuery } from '@/hooks';
 
-const CreateCompletePage: NextPage = () => {
+const CompleteProjectCreationPage: NextPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { projectId } = useMemo(
-    () => ({
-      projectId: Number(router.query.projectId),
-    }),
-    [router.query],
-  );
+  const projectId = Number(router.query.projectId);
 
   const { data: project } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
@@ -66,12 +61,8 @@ const CreateCompletePage: NextPage = () => {
     variables: { projectId, createdAt: 'ASC' },
   });
 
-  const projectInfoFormMethods = useForm<ProjectInfoFormSchema>({
-    defaultValues: project ?? {},
-  });
-  const issueTrackerFormMethods = useForm<IssueTracker>({
-    defaultValues: issueTracker?.data ?? {},
-  });
+  const projectInfoFormMethods = useForm<ProjectInfo>();
+  const issueTrackerFormMethods = useForm<IssueTracker>();
 
   useEffect(() => {
     if (!project || !issueTracker) return;
@@ -186,4 +177,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default CreateCompletePage;
+export default CompleteProjectCreationPage;

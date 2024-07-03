@@ -17,8 +17,11 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getIronSession } from 'iron-session';
 
-import { DEFAULT_LOCALE, ironOption, Path } from '@/shared';
-import type { JwtSession } from '@/shared';
+import { DEFAULT_LOCALE, Path } from '@/shared';
+
+import { ironOption } from './server/iron-option';
+
+import type { JwtSession } from '@/server/iron-option';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();

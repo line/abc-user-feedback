@@ -19,10 +19,10 @@ import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { RouteCreateChannelButton } from '@/features/create-channel';
 import { MainLayout } from '@/widgets';
 import { FeedbackTable } from '@/widgets/feedback-table';
 
-import { CreateChannelButton } from '@/containers/buttons';
 import { useOAIQuery } from '@/hooks';
 
 interface IProps {
@@ -52,7 +52,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         <p className="font-32-bold">Error</p>
       : data.meta.totalItems === 0 ?
         <div className="flex flex-1 items-center justify-center">
-          <CreateChannelButton projectId={projectId} type="blue" />
+          <RouteCreateChannelButton projectId={projectId} type="blue" />
         </div>
       : <FeedbackTable projectId={projectId} channelId={channelId} />}
     </>
