@@ -16,6 +16,8 @@
 
 import { z } from 'zod';
 
+import type { userMemberSchema } from './user.schema';
+
 export const userSchema = z.object({
   id: z.number(),
   email: z.string().email(),
@@ -26,5 +28,5 @@ export const userSchema = z.object({
 });
 
 export type User = z.infer<typeof userSchema>;
-
-export type UserTypeEnum = 'SUPER' | 'GENERAL';
+export type UserMember = z.infer<typeof userMemberSchema>;
+export type UserTypeEnum = User['type'];

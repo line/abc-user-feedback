@@ -23,7 +23,7 @@ import { useTenantStore } from '../tenant.model';
 
 interface IProps extends React.PropsWithChildren {}
 
-export const TenantGuard: React.FC<IProps> = ({ children }) => {
+const TenantGuard: React.FC<IProps> = ({ children }) => {
   const router = useRouter();
   const { setTenant } = useTenantStore();
 
@@ -40,3 +40,5 @@ export const TenantGuard: React.FC<IProps> = ({ children }) => {
   if (status === 'pending') return <div>Loading...</div>;
   return children;
 };
+
+export default TenantGuard;

@@ -39,7 +39,7 @@ function BasicTable<T>(props: IProps<T>) {
   } = props;
 
   return (
-    <table className="table">
+    <table className="table w-full">
       <thead>
         <tr>
           {table.getIsSomeRowsSelected() ?

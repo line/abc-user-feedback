@@ -123,7 +123,9 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             limit={pagination.pageSize}
             nextPage={() => table.setPageIndex((page) => page + 1)}
             prevPage={() => table.setPageIndex((page) => page - 1)}
-            disabledNextPage={pagination.pageIndex >= (meta?.totalPages ?? 1)}
+            disabledNextPage={
+              pagination.pageIndex + 1 >= (meta?.totalPages ?? 1)
+            }
             disabledPrevPage={pagination.pageIndex <= 1}
             short
           />
@@ -175,7 +177,9 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             nextPage={() => table.setPageIndex((page) => page + 1)}
             prevPage={() => table.setPageIndex((page) => page - 1)}
             setLimit={table.setPageSize}
-            disabledNextPage={pagination.pageIndex >= (meta?.totalPages ?? 1)}
+            disabledNextPage={
+              pagination.pageIndex + 1 >= (meta?.totalPages ?? 1)
+            }
             disabledPrevPage={pagination.pageIndex <= 1}
           />
           <div className="w-[272px]">

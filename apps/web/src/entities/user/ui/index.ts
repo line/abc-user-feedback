@@ -14,3 +14,5 @@
  * under the License.
  */
 export { default as UserBox } from './user-box.ui';
+export { default as UserManagementTable } from './user-management-table.ui';
+export { default as InviteUserPopover } from './invite-user-popover';

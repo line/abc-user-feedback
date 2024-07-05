@@ -13,7 +13,32 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as TenantGuard } from './tenant-guard.ui';
-export { default as TenantCard } from './tenant-card.ui';
-export { default as TenantInfoForm } from './tenant-info-form.ui';
-export { default as OAuthConfigForm } from './oauth-config-form.ui';
+
+import { z } from 'zod';
+
+export const userSchema = z.object({
+  id: z.number(),
+  email: z.string().email(),
+  type: z.union([z.literal('SUPER'), z.literal('GENERAL')]),
+  name: z.string().nullable(),
+  department: z.string().nullable(),
+  signUpMethod: z.union([z.literal('OAUTH'), z.literal('EMAIL')]),
+});
+
+export const memberSchema = z.object({
+  id: z.number(),
+  role: z.object({
+    name: z.string(),
+    project: z.object({
+      id: z.number(),
+      name: z.string(),
+    }),
+  }),
+});
+
+export const userMemberSchema = userSchema.merge(
+  z.object({
+    members: z.array(memberSchema),
+    createdAt: z.string(),
+  }),
+);

@@ -16,16 +16,15 @@
 import { useEffect } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { SelectBox, useOAIQuery, usePermissions } from '@/shared';
+import { SelectBox, SubMenu, useOAIQuery, usePermissions } from '@/shared';
 import { RouteCreateChannelButton } from '@/features/create-channel';
 
 import { SettingMenuTemplate } from '@/components';
-import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   projectId: number;
-  onClickSettingMenu: (input: SettingMenuType) => () => void;
+  onClickSettingMenu: (input: SettingMenuType) => void;
   settingMenu: SettingMenuType | null;
   setChannelId: (id: number) => void;
   channelId: number | null;
@@ -39,6 +38,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
     channelId,
     setChannelId,
   } = props;
+
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
@@ -72,35 +72,38 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
         getOptionLabel={(option) => option.name}
       />
       <hr className="border-fill-tertiary basis" />
-      <ul className="flex-1">
-        <SettingMenuItem
-          iconName="InfoCircleFill"
-          name={t('channel-setting-menu.channel-info')}
-          onClick={onClickSettingMenu('CHANNEL_INFO')}
-          active={settingMenu === 'CHANNEL_INFO'}
-        />
-        <SettingMenuItem
-          iconName="DocumentTermsFill"
-          name={t('channel-setting-menu.field-mgmt')}
-          onClick={onClickSettingMenu('FIELD_MANAGEMENT')}
-          active={settingMenu === 'FIELD_MANAGEMENT'}
-          disabled={!perms.includes('channel_field_read')}
-        />
-        <SettingMenuItem
-          iconName="MediaImageFill"
-          name={t('channel-setting-menu.image-mgmt')}
-          onClick={onClickSettingMenu('IMAGE_UPLOAD_SETTING')}
-          active={settingMenu === 'IMAGE_UPLOAD_SETTING'}
-          disabled={!perms.includes('channel_field_read')}
-        />
-        <SettingMenuItem
-          iconName="TrashFill"
-          name={t('channel-setting-menu.delete-channel')}
-          onClick={onClickSettingMenu('DELETE_CHANNEL')}
-          active={settingMenu === 'DELETE_CHANNEL'}
-          disabled={!perms.includes('channel_delete')}
-        />
-      </ul>
+      <SubMenu
+        className="flex-1"
+        items={[
+          {
+            iconName: 'InfoCircleFill',
+            name: t('channel-setting-menu.channel-info'),
+            active: settingMenu === 'CHANNEL_INFO',
+            onClick: () => onClickSettingMenu('CHANNEL_INFO'),
+          },
+          {
+            iconName: 'DocumentTermsFill',
+            name: t('channel-setting-menu.field-mgmt'),
+            active: settingMenu === 'FIELD_MANAGEMENT',
+            onClick: () => onClickSettingMenu('FIELD_MANAGEMENT'),
+            disabled: !perms.includes('channel_field_read'),
+          },
+          {
+            iconName: 'MediaImageFill',
+            name: t('channel-setting-menu.image-mgmt'),
+            active: settingMenu === 'IMAGE_UPLOAD_SETTING',
+            onClick: () => onClickSettingMenu('IMAGE_UPLOAD_SETTING'),
+            disabled: !perms.includes('channel_field_read'),
+          },
+          {
+            iconName: 'TrashFill',
+            name: t('channel-setting-menu.delete-channel'),
+            active: settingMenu === 'DELETE_CHANNEL',
+            onClick: () => onClickSettingMenu('DELETE_CHANNEL'),
+            disabled: !perms.includes('channel_delete'),
+          },
+        ]}
+      />
       <RouteCreateChannelButton
         projectId={projectId}
         type="primary"

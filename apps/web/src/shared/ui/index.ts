@@ -34,6 +34,7 @@ export { default as DescriptionTooltip } from './description-tooltip';
 export { default as HelpCardDocs } from './help-card-docs';
 export { default as Popper } from './popper.ui';
 export { default as ImageSlider } from './image-slider.ui';
+export { default as RadioGroup } from './radio-group';
 
 export * from './tables';
 export * from './charts';

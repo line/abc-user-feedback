@@ -16,3 +16,4 @@
 export * from './ui';
 export * from './tenant.model';
 export * from './tenant.type';
+export * from './tenant.schema';

@@ -13,36 +13,38 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { Icon } from '@ufb/ui';
 
-import { DEFAULT_LOCALE, Path } from '@/shared';
+import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { MainLayout } from '@/widgets';
+import {
+  AuthSetting,
+  ChannelSettingMenu,
+  ProjectSettingMenu,
+  SettingMenuBox,
+  TenantInfoSetting,
+  TenantSettingMenu,
+  UserManagementSetting,
+} from '@/widgets/setting-menu';
 
-import { SettingMenuBox } from '@/components/layouts/setting-menu';
 import {
   APIKeySetting,
   ChannelDeleteSetting,
   ChannelInfoSetting,
-  ChannelSettingMenu,
   FieldSetting,
   ImageSetting,
   IssueTrackerSetting,
   MemberSetting,
   ProjectDeleteSetting,
   ProjectInfoSetting,
-  ProjectSettingMenu,
   RoleSetting,
-  SignUpSetting,
-  TenantInfoSetting,
-  TenantSettingMenu,
-  UserSetting,
   WebhookSetting,
 } from '@/containers/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
@@ -53,29 +55,20 @@ interface IProps {
 
 const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
-  const router = useRouter();
 
-  const channelId =
-    router.query?.channelId ? (Number(router.query.channelId) as number) : null;
-
-  const setChannelId = (channelId: number | null) =>
-    router.push({
-      pathname: Path.SETTINGS,
-      query: { ...router.query, channelId },
-    });
-
-  const settingMenu =
-    router.query?.menu ? (router.query.menu as SettingMenuType) : null;
-
-  const setSettingMenu = (menu: SettingMenuType | null) =>
-    router.push({
-      pathname: Path.SETTINGS,
-      query: { ...router.query, menu },
-    });
+  const [channelId, setChannelId] = useQueryState('channelId', parseAsInteger);
+  const [settingMenu, setSettingMenu] = useQueryState<SettingMenuType | null>(
+    'menu',
+    {
+      defaultValue: null,
+      parse: (value) => value as SettingMenuType,
+    },
+  );
 
   const onClickReset = () => {
     setSettingMenu(null);
   };
+
   const showList = useMemo(() => {
     switch (settingMenu) {
       case 'TENANT_INFO':
@@ -100,12 +93,6 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     }
   }, [settingMenu]);
 
-  useEffect(() => {}, [router.query]);
-
-  const onClickTarget = (target: SettingMenuType | null) => () => {
-    setSettingMenu(target);
-  };
-
   return (
     <>
       <h1 className="font-20-bold mb-6">{t('main.setting.title')}</h1>
@@ -113,26 +100,24 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <SettingMenuBox show={showList.includes(0)}>
           <TenantSettingMenu
             settingMenu={settingMenu}
-            onClickSettingMenu={onClickTarget}
+            onClickSettingMenu={setSettingMenu}
           />
         </SettingMenuBox>
         <SettingMenuBox show={showList.includes(1)}>
           <ProjectSettingMenu
             settingMenu={settingMenu}
-            onClickSettingMenu={onClickTarget}
+            onClickSettingMenu={setSettingMenu}
             projectId={projectId}
           />
         </SettingMenuBox>
         <SettingMenuBox show={showList.includes(2)}>
-          {projectId && (
-            <ChannelSettingMenu
-              settingMenu={settingMenu}
-              projectId={projectId}
-              onClickSettingMenu={onClickTarget}
-              setChannelId={setChannelId}
-              channelId={channelId}
-            />
-          )}
+          <ChannelSettingMenu
+            settingMenu={settingMenu}
+            projectId={projectId}
+            onClickSettingMenu={setSettingMenu}
+            setChannelId={setChannelId}
+            channelId={channelId}
+          />
         </SettingMenuBox>
         {projectId && (
           <SettingMenuBox show={showList.includes(3)} last>
@@ -143,8 +128,8 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <Icon name="ArrowRight" />
             </button>
             {settingMenu === 'TENANT_INFO' && <TenantInfoSetting />}
-            {settingMenu === 'SIGNUP_SETTING' && <SignUpSetting />}
-            {settingMenu === 'USER_MANAGEMENT' && <UserSetting />}
+            {settingMenu === 'SIGNUP_SETTING' && <AuthSetting />}
+            {settingMenu === 'USER_MANAGEMENT' && <UserManagementSetting />}
             {settingMenu === 'PROJECT_INFO' && (
               <ProjectInfoSetting projectId={projectId} />
             )}

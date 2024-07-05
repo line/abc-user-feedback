@@ -13,6 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as SettingMenuBox } from './SettingMenuBox';
-export { default as SettingMenuItem } from './SettingMenuItem';
-export { default as SettingMenuSubtitle } from './SettingMenuSubtitle';
+interface IProps {}
+
+const ApiKeySetting: React.FC<IProps> = () => {
+  return <div></div>;
+};
+
+export default ApiKeySetting;

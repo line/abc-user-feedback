@@ -15,15 +15,15 @@
  */
 import { useTranslation } from 'next-i18next';
 
+import { SubMenu } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
 import { SettingMenuTemplate } from '@/components';
-import { SettingMenuItem } from '@/components/layouts/setting-menu';
 import type { SettingMenuType } from '@/types/setting-menu.type';
 
 interface IProps extends React.PropsWithChildren {
-  onClickSettingMenu: (input: SettingMenuType) => () => void;
+  onClickSettingMenu: (input: SettingMenuType) => void;
   settingMenu: SettingMenuType | null;
 }
 
@@ -43,29 +43,32 @@ const TenantSettingMenu: React.FC<IProps> = (props) => {
         style={{ color: 'var(--text-color-primary)' }}
       />
       <hr className="border-fill-tertiary" />
-      <ul>
-        <SettingMenuItem
-          iconName="InfoCircleFill"
-          name={t('tenant-setting-menu.tenant-info')}
-          onClick={onClickSettingMenu('TENANT_INFO')}
-          active={settingMenu === 'TENANT_INFO'}
-          disabled={user?.type !== 'SUPER'}
-        />
-        <SettingMenuItem
-          iconName="ProfileSettingFill"
-          name={t('tenant-setting-menu.sign-up-mgmt')}
-          onClick={onClickSettingMenu('SIGNUP_SETTING')}
-          active={settingMenu === 'SIGNUP_SETTING'}
-          disabled={user?.type !== 'SUPER'}
-        />
-        <SettingMenuItem
-          iconName="ProfileCircleFill"
-          name={t('tenant-setting-menu.user-mgmt')}
-          onClick={onClickSettingMenu('USER_MANAGEMENT')}
-          active={settingMenu === 'USER_MANAGEMENT'}
-          disabled={user?.type !== 'SUPER'}
-        />
-      </ul>
+      <SubMenu
+        className="flex-1"
+        items={[
+          {
+            iconName: 'InfoCircleFill',
+            name: t('tenant-setting-menu.tenant-info'),
+            active: settingMenu === 'TENANT_INFO',
+            onClick: () => onClickSettingMenu('TENANT_INFO'),
+            disabled: user?.type !== 'SUPER',
+          },
+          {
+            iconName: 'ProfileSettingFill',
+            name: t('tenant-setting-menu.sign-up-mgmt'),
+            active: settingMenu === 'SIGNUP_SETTING',
+            onClick: () => onClickSettingMenu('SIGNUP_SETTING'),
+            disabled: user?.type !== 'SUPER',
+          },
+          {
+            iconName: 'ProfileCircleFill',
+            name: t('tenant-setting-menu.user-mgmt'),
+            active: settingMenu === 'USER_MANAGEMENT',
+            onClick: () => onClickSettingMenu('USER_MANAGEMENT'),
+            disabled: user?.type !== 'SUPER',
+          },
+        ]}
+      />
     </SettingMenuTemplate>
   );
 };

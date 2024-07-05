@@ -22,8 +22,8 @@ import { BasicTable } from '@/shared';
 import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
 
+import { getMemberColumns } from '../member-columns';
 import type { Member } from '../member.type';
-import { MemberColumns } from './member-columns';
 
 interface IProps {
   members: Member[];
@@ -42,7 +42,7 @@ const MemberTable: React.FC<IProps> = (props) => {
   });
 
   const table = useReactTable({
-    columns: MemberColumns(
+    columns: getMemberColumns(
       userData?.items ?? [],
       roles,
       onDeleteMember,

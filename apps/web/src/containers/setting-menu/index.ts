@@ -18,7 +18,6 @@ export { default as ChannelDeleteSetting } from './ChannelDeleteSetting';
 export { default as FieldSetting } from './FieldSetting/FieldSetting';
 export { default as ProjectDeleteSetting } from './ProjectDeleteSetting';
 export { default as ProjectInfoSetting } from './ProjectInfoSetting';
-export { default as SignUpSetting } from './SignUpSetting';
 export { default as TenantInfoSetting } from './TenantInfoSetting';
 export { default as IssueTrackerSetting } from './IssueTrackerSetting';
 export { default as RoleSetting } from './RoleSetting';
@@ -27,7 +26,3 @@ export { default as MemberSetting } from './MemberSetting';
 export { default as UserSetting } from './UserSetting';
 export { default as ImageSetting } from './ImageSetting';
 export { default as WebhookSetting } from './WebhookSetting';
-
-export { default as TenantSettingMenu } from './TenantSettingMenu';
-export { default as ProjectSettingMenu } from './ProjectSettingMenu';
-export { default as ChannelSettingMenu } from './ChannelSettingMenu';

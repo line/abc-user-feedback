@@ -19,15 +19,15 @@ import { useTranslation } from 'react-i18next';
 import { DescriptionTooltip } from '@/shared';
 import type { Role } from '@/entities/role';
 
-import type { Member } from '../member.type';
-import DeleteMemberModal from './delete-member-modal.ui';
-import UpdateMemberModal from './update-member-modal.ui';
+import type { Member } from './member.type';
+import DeleteMemberModal from './ui/delete-member-modal.ui';
+import UpdateMemberModal from './ui/update-member-modal.ui';
 
 import type { UserType } from '@/types/user.type';
 
 const columnHelper = createColumnHelper<Member>();
 
-export const MemberColumns = (
+export const getMemberColumns = (
   users: UserType[],
   roles?: Role[],
   onClickDelete?: (index: number) => void,

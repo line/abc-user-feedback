@@ -22,11 +22,9 @@ interface IBoxProps extends React.PropsWithChildren {
   last?: boolean;
 }
 
-const SettingMenuBox: React.FC<IBoxProps> = ({
-  children,
-  show,
-  last = false,
-}) => {
+const SettingMenuBox: React.FC<IBoxProps> = (props) => {
+  const { children, show, last = false } = props;
+
   const flexCN = last ? 'flex-0' : 'flex-1';
   const transitionFlexCN = last ? 'flex-[2]' : 'flex-0';
 

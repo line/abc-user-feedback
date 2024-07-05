@@ -13,32 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface IProps {
-  name: string;
-  radios: {
-    checked: boolean;
-    onChecked: (iChecked: boolean) => void;
-    label: string;
-  }[];
-}
+import { useTranslation } from 'react-i18next';
 
-const RadioGroup: React.FC<IProps> = ({ name, radios }) => {
+import { InviteUserPopover, UserManagementTable } from '@/entities/user';
+
+import SettingMenuTemplate from '../setting-menu-template';
+
+interface IProps {}
+
+const UserManagementSetting: React.FC<IProps> = () => {
+  const { t } = useTranslation();
   return (
-    <div className="mb-4 flex gap-10">
-      {radios.map((radio, index) => (
-        <label key={index} className="radio-label">
-          <input
-            name={name}
-            type="radio"
-            className="radio radio-sm"
-            checked={radio.checked}
-            onChange={(e) => radio.onChecked(e.currentTarget.checked)}
-          />
-          {radio.label}
-        </label>
-      ))}
-    </div>
+    <SettingMenuTemplate
+      title={t('tenant-setting-menu.user-mgmt')}
+      action={<InviteUserPopover />}
+    >
+      <UserManagementTable />
+    </SettingMenuTemplate>
   );
 };
 
-export default RadioGroup;
+export default UserManagementSetting;

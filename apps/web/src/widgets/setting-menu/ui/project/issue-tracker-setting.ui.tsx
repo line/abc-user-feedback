@@ -13,4 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default } from './SignUpSetting';
+interface IProps {}
+
+const IssueTrackerSetting: React.FC<IProps> = () => {
+  return <div></div>;
+};
+
+export default IssueTrackerSetting;

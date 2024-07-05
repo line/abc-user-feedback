@@ -14,32 +14,15 @@
  * under the License.
  */
 
-import { z } from 'zod';
+import type { z } from 'zod';
 
-const oauthConfigSchema = z.object({
-  oauthUse: z.boolean(),
-  clientId: z.string(),
-  clientSecret: z.string(),
-  authCodeRequestURL: z.string(),
-  scopeString: z.string(),
-  accessTokenRequestURL: z.string(),
-  userProfileRequestURL: z.string(),
-  emailKey: z.string(),
-});
-
-const tenantSchema = z.object({
-  id: z.number(),
-  siteName: z.string(),
-  description: z.string().nullable(),
-  useEmail: z.boolean(),
-  useOAuth: z.boolean(),
-  isPrivate: z.boolean(),
-  isRestrictDomain: z.boolean(),
-  allowDomains: z.array(z.string()),
-  useEmailVerification: z.boolean(),
-  oauthConfig: oauthConfigSchema.nullable(),
-});
+import type {
+  authInfoScema,
+  tenantInfoSchema,
+  tenantSchema,
+} from './tenant.schema';
 
 export type Tenant = z.infer<typeof tenantSchema>;
+export type TenantInfo = z.infer<typeof tenantInfoSchema>;
 
-export type OAuthConfig = z.infer<typeof oauthConfigSchema>;
+export type AuthInfo = z.infer<typeof authInfoScema>;

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as TenantGuard } from './tenant-guard.ui';
-export { default as TenantCard } from './tenant-card.ui';
-export { default as TenantInfoForm } from './tenant-info-form.ui';
-export { default as OAuthConfigForm } from './oauth-config-form.ui';
+export { default as TenantInfoSetting } from './tenant-info-setting.ui';
+export { default as AuthSetting } from './auth-setting.ui';
+export { default as UserManagementSetting } from './user-management-setting.ui';

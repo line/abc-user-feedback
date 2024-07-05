@@ -30,8 +30,7 @@ import {
 import { Path, usePermissions } from '@/shared';
 
 import { useCreateChannelStore } from '../create-channel-model';
-
-import { CHANNEL_STEPS } from '@/contexts/create-channel.context';
+import { CREATE_CHANNEL_STEP_KEY_LIST } from '../create-channel-type';
 
 interface IProps {
   projectId: number;
@@ -80,7 +79,7 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
         <TooltipContent color="red">
           {t('text.create-channel-in-progress')}{' '}
           <b>
-            ({editingStep + 1}/{CHANNEL_STEPS.length})
+            ({editingStep + 1}/{CREATE_CHANNEL_STEP_KEY_LIST.length})
           </b>
         </TooltipContent>
       </Tooltip>

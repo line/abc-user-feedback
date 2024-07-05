@@ -17,50 +17,18 @@ import { useEffect, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Badge, Input, toast } from '@ufb/ui';
 
-import { DescriptionTooltip, useOAIMutation } from '@/shared';
-import { useTenantStore } from '@/entities/tenant';
-
-import OAuthInput from './OAuthInput';
-import RadioGroup from './RadioGroup';
+import { DescriptionTooltip, RadioGroup, useOAIMutation } from '@/shared';
+import type { AuthInfo } from '@/entities/tenant';
+import {
+  authInfoScema,
+  OAuthConfigForm,
+  useTenantStore,
+} from '@/entities/tenant';
 
 import { SettingMenuTemplate } from '@/components';
-import type { OAuthConfigType } from '@/types/tenant.type';
-
-export interface ISignUpInfoForm {
-  siteName: string;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
-  allowDomains: string[] | null;
-  oauthConfig: OAuthConfigType | null;
-  useOAuth: boolean;
-  useEmail: boolean;
-}
-
-const scheme: Zod.ZodType<ISignUpInfoForm> = z.object({
-  siteName: z.string(),
-  isPrivate: z.boolean(),
-  isRestrictDomain: z.boolean(),
-  allowDomains: z
-    .array(z.string().refine((v) => /[a-z]+\.[a-z]{2,3}/.test(v)))
-    .nullable(),
-  useOAuth: z.boolean(),
-  useEmail: z.boolean(),
-  oauthConfig: z
-    .object({
-      clientId: z.string(),
-      emailKey: z.string(),
-      scopeString: z.string(),
-      clientSecret: z.string(),
-      authCodeRequestURL: z.string(),
-      accessTokenRequestURL: z.string(),
-      userProfileRequestURL: z.string(),
-    })
-    .nullable(),
-});
 
 type DomainStateType = {
   isSubmitted: boolean;
@@ -68,16 +36,17 @@ type DomainStateType = {
   hint?: string;
 };
 
-interface IProps extends React.PropsWithChildren {}
+interface IProps {}
 
-const SignUpSetting: React.FC<IProps> = () => {
+const AuthSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
 
   const { tenant, refetchTenant } = useTenantStore();
 
-  const methods = useForm<ISignUpInfoForm>({
-    resolver: zodResolver(scheme),
+  const methods = useForm<AuthInfo>({
+    resolver: zodResolver(authInfoScema),
   });
+
   const { reset, handleSubmit, watch, setValue, formState } = methods;
 
   const [domainState, setDomainState] = useState<DomainStateType>({
@@ -145,7 +114,7 @@ const SignUpSetting: React.FC<IProps> = () => {
     setDomainState((prev) => ({ ...prev, isValid: true }));
   };
 
-  const onSubmit = (input: ISignUpInfoForm) => {
+  const onSubmit = (input: AuthInfo) => {
     if (!tenant) return;
     if (input.isRestrictDomain) {
       input.allowDomains = (input.allowDomains ?? []).filter(
@@ -170,10 +139,8 @@ const SignUpSetting: React.FC<IProps> = () => {
     >
       <FormProvider {...methods}>
         <form id="form" className="flex flex-col gap-6">
-          <div>
-            <p className="input-label mb-2 flex items-center gap-1">
-              Login Method
-            </p>
+          <div className="flex flex-col gap-4">
+            <p className="input-label flex items-center gap-1">Login Method</p>
             <RadioGroup
               name="signUpMethod"
               radios={[
@@ -206,10 +173,10 @@ const SignUpSetting: React.FC<IProps> = () => {
                 },
               ]}
             />
-            {watch('useOAuth') && <OAuthInput />}
+            {watch('useOAuth') && <OAuthConfigForm />}
           </div>
-          <div>
-            <p className="input-label mb-2 flex items-center gap-1">
+          <div className="flex flex-col gap-4">
+            <p className="input-label flex items-center gap-1">
               Sign Up Method
             </p>
             <RadioGroup
@@ -234,8 +201,8 @@ const SignUpSetting: React.FC<IProps> = () => {
               ]}
             />
           </div>
-          <div>
-            <p className="input-label mb-2 flex items-center gap-1">
+          <div className="flex flex-col gap-4">
+            <p className="input-label flex items-center gap-1">
               Email domain WhiteList
               <DescriptionTooltip
                 description={t(
@@ -308,4 +275,4 @@ const SignUpSetting: React.FC<IProps> = () => {
   );
 };
 
-export default SignUpSetting;
+export default AuthSetting;
