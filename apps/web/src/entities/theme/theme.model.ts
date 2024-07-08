@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-import { create } from '@/libs/zustand';
 
 type State = { theme: 'light' | 'dark' };
 
 type Action = { toggle: () => void };
 
-export const useThemeStore = create<State, Action>()(
+export const useThemeStore = create<State & Action>()(
   persist(
     (set) => ({
       theme: 'light',

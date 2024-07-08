@@ -14,11 +14,11 @@
  * under the License.
  */
 
+import { create } from 'zustand';
+
 import { PermissionList } from './permission.type';
 import type { PermissionType } from './permission.type';
 import type { Role } from './role.type';
-
-import { create } from '@/libs/zustand';
 
 type State = {
   editingRole: Role | null;
@@ -31,7 +31,7 @@ type Action = {
   checkPermission: (perm: PermissionType, isChecked: boolean) => void;
 };
 
-export const useInputRoleStore = create<State, Action>((set) => ({
+export const useInputRoleStore = create<State & Action>((set) => ({
   editingRole: null,
   editPermissions: {},
   checkPermission: (perm: PermissionType, checked: boolean) => {

@@ -19,13 +19,11 @@ import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
 
-import { useOAIMutation, useOAIQuery } from '@/shared';
+import { client, useOAIMutation, useOAIQuery } from '@/shared';
 import type { WebhookInput } from '@/entities/webhook';
 import { WebhookTable, WebhookUpsertPopover } from '@/entities/webhook';
 
 import SettingMenuTemplate from '../setting-menu-template';
-
-import client from '@/libs/client';
 
 interface IProps {
   projectId: number;

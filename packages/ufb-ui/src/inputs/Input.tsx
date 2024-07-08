@@ -63,8 +63,6 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
         return 'input-md';
     }
   }, [size]);
-  console.log('rest.placeholder: ', rest.placeholder);
-  console.log('rest.disabled: ', rest.disabled);
 
   return (
     <div className="flex flex-col gap-2">

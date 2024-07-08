@@ -3,7 +3,7 @@
 exports[`MainCard snapshot 1`] = `
 <div>
   <div
-    class="border-fill-tertiary h-[204px] w-[452px] rounded border p-8"
+    class="card h-[204px] w-[452px] rounded border p-8"
   >
     <div
       class="mb-10 flex gap-5"

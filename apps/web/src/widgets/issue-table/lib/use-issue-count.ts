@@ -16,9 +16,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { ISSUES } from '@/shared';
-
-import client from '@/libs/client';
+import { client, ISSUES } from '@/shared';
 
 const useIssueCount = (projectId: number, query: Record<string, any>) => {
   const { t } = useTranslation();

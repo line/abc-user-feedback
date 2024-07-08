@@ -23,3 +23,6 @@ export { default as useLocalColumnSetting } from './use-local-column-setting';
 export { default as usePermissions } from './use-permissions';
 
 export { default as useHorizontalScroll } from './use-horizontal-scroll';
+
+export { default as sessionStorage } from './session-storage';
+export { default as client } from './client';

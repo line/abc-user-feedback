@@ -33,11 +33,12 @@ import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
-import sessionStorage from '@/libs/session-storage';
 // NOTE: DON'T Change the following import order
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
+
+import { sessionStorage } from '@/shared';
 
 type PageProps = Record<string, unknown> & {
   dehydratedState?: DehydratedState;

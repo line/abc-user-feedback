@@ -21,8 +21,7 @@ import type {
   OAIMutationResponse,
   OAIRequestBody,
 } from '@/shared';
-
-import client from '@/libs/client';
+import { client } from '@/shared';
 
 type TData = OAIMutationResponse<
   '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',

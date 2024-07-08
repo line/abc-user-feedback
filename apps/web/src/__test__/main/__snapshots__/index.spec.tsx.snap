@@ -92,7 +92,7 @@ exports[`MainIndexPage should render without crashing 1`] = `
       class="flex min-h-[calc(100vh-48px)] items-stretch"
     >
       <main
-        class="mx-4 my-6 w-full"
+        class="mx-4 my-6 w-full overflow-x-auto"
       >
         <div
           class="mx-4 my-2 flex flex-col gap-8"
@@ -104,7 +104,7 @@ exports[`MainIndexPage should render without crashing 1`] = `
               Tenant
             </h1>
             <div
-              class="border-fill-tertiary h-[204px] w-[452px] rounded border p-8"
+              class="card h-[204px] w-[452px] rounded border p-8"
             >
               <div
                 class="mb-10 flex gap-5"

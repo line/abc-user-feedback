@@ -14,10 +14,11 @@
  * under the License.
  */
 
-import type { Tenant } from './tenant.type';
+import { create } from 'zustand';
 
-import client from '@/libs/client';
-import { create } from '@/libs/zustand';
+import { client } from '@/shared';
+
+import type { Tenant } from './tenant.type';
 
 type State = { tenant: Tenant | null };
 
@@ -26,7 +27,7 @@ type Action = {
   refetchTenant: () => Promise<void>;
 };
 
-export const useTenantStore = create<State, Action>((set) => ({
+export const useTenantStore = create<State & Action>((set) => ({
   tenant: null,
   setTenant: (tenant) => set({ tenant }),
   refetchTenant: async () => {

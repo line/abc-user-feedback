@@ -195,7 +195,7 @@ exports[`MainLayout snapshot default 1`] = `
       class="flex min-h-[calc(100vh-48px)] items-stretch"
     >
       <main
-        class="mx-4 my-6 w-full"
+        class="mx-4 my-6 w-full overflow-x-auto"
       />
     </div>
   </div>
@@ -307,7 +307,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
         >
           <li>
             <a
-              href="/main/project/-1/dashboard"
+              href="/main/project//dashboard"
             >
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
@@ -328,7 +328,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
           <hr />
           <li>
             <a
-              href="/main/project/-1/feedback"
+              href="/main/project//feedback"
             >
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
@@ -348,7 +348,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
           </li>
           <li>
             <a
-              href="/main/project/-1/issue"
+              href="/main/project//issue"
             >
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
@@ -369,7 +369,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
           <hr />
           <li>
             <a
-              href="/main/project/-1/setting"
+              href="/main/project//setting"
             >
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
@@ -390,7 +390,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
         </ul>
       </nav>
       <main
-        class="mx-4 my-6 w-full"
+        class="mx-4 my-6 w-full overflow-x-auto"
       />
     </div>
   </div>

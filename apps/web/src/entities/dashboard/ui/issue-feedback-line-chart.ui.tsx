@@ -20,12 +20,10 @@ import { useThrottle } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
+import { client, getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
 import { useIssueSearch } from '@/entities/issue';
 
 import { useLineChartData } from '../lib';
-
-import client from '@/libs/client';
 
 interface IProps {
   projectId: number;

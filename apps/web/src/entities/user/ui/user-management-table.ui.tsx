@@ -91,7 +91,6 @@ const UserManagementTable: React.FC<IProps> = () => {
       },
     ] as SearchItemType[];
   }, [projectData]);
-  console.log('pagination.pageIndex: ', pagination.pageIndex);
 
   return (
     <div>

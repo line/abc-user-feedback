@@ -23,9 +23,7 @@ import type {
   OAIPathParameters,
   OAIRequestBody,
 } from '@/shared';
-import { getRequestUrl } from '@/shared';
-
-import client from '@/libs/client';
+import { client, getRequestUrl } from '@/shared';
 
 export default function useOAIMutation<
   TMethods extends 'post' | 'put' | 'patch' | 'delete',

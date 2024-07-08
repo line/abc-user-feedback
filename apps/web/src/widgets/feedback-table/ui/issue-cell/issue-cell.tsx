@@ -21,14 +21,12 @@ import { useClickAway } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { Popper, useOAIMutation, usePermissions } from '@/shared';
+import { client, Popper, useOAIMutation, usePermissions } from '@/shared';
 import { IssueBadge, useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackTable } from '../../model';
 import IssueSetting from './issue-setting';
-
-import client from '@/libs/client';
 
 interface IProps extends React.PropsWithChildren {
   issues?: Issue[];

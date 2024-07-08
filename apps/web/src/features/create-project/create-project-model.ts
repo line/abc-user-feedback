@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import type { ApiKey } from '@/entities/api-key';
@@ -29,8 +30,6 @@ import {
   FIRST_CREATE_PROJECT_STEP,
   LAST_CREATE_PROJECT_STEP,
 } from './create-project-type';
-
-import { create } from '@/libs/zustand';
 
 const DEFAULT_ROLES: Role[] = [
   { id: 1, name: 'Admin', permissions: [...PermissionList] },
@@ -97,7 +96,7 @@ const DEFAULT_STATE: State = {
   },
 };
 
-export const useCreateProjectStore = create<State, Action>()(
+export const useCreateProjectStore = create<State & Action>()(
   persist(
     (set, get) => ({
       ...DEFAULT_STATE,

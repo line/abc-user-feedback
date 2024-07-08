@@ -18,12 +18,10 @@ import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
 
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import { client, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
 import { CreateMemberPopover, MemberTable } from '@/entities/member';
 
 import SettingMenuTemplate from '../setting-menu-template';
-
-import client from '@/libs/client';
 
 interface IProps {
   projectId: number;

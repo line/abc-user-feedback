@@ -92,7 +92,7 @@ exports[`MainIndexPage should render without crashing 1`] = `
       class="flex min-h-[calc(100vh-48px)] items-stretch"
     >
       <main
-        class="mx-4 my-6 w-full"
+        class="mx-4 my-6 w-full overflow-x-auto"
       >
         <section
           class="flex h-full flex-col"

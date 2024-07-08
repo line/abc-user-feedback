@@ -43,6 +43,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
             class="input  input-md  pr-10 "
             disabled=""
             id="Email"
+            placeholder=""
             value="Dudley_Kassulke@hotmail.com"
           />
           <div
@@ -67,6 +68,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
             class="input  input-md  pr-10 "
             disabled=""
             id="main.profile.label.user-type"
+            placeholder=""
             value="GENERAL"
           />
           <div

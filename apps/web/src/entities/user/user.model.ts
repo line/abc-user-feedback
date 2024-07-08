@@ -19,15 +19,12 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
+import { create } from 'zustand';
 
-import { Path } from '@/shared';
+import { client, Path, sessionStorage } from '@/shared';
 import type { Jwt } from '@/shared/types';
 
 import type { User } from './user.type';
-
-import client from '@/libs/client';
-import sessionStorage from '@/libs/session-storage';
-import { create } from '@/libs/zustand';
 
 type State = { user: User | null };
 
@@ -45,7 +42,7 @@ type Action = {
   _signIn: (jwt: Jwt) => void;
 };
 
-export const useUserStore = create<State, Action>((set, get) => ({
+export const useUserStore = create<State & Action>((set, get) => ({
   user: null,
   signInWithEmail: async ({ email, password }) => {
     const { data: jwt } = await axios.post('/api/login', { email, password });

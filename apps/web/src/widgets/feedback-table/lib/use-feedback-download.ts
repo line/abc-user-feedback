@@ -17,8 +17,7 @@ import type { UseMutationOptions } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
 import type { IFetchError, OAIPathParameters, OAIRequestBody } from '@/shared';
-
-import client from '@/libs/client';
+import { client } from '@/shared';
 
 type IPath = OAIPathParameters<
   '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',

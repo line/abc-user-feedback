@@ -144,7 +144,7 @@ exports[`Reset Password Page snapshot test 1`] = `
                   class="input  input-md  pr-10 "
                   disabled=""
                   id="Email"
-                  placeholder="input.placeholder.email"
+                  placeholder=""
                   type="email"
                   value=""
                 />

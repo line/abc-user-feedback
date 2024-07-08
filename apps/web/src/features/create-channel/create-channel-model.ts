@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
@@ -24,8 +25,6 @@ import {
   FIRST_CREATE_CHANNEL_STEP,
   LAST_CREATE_CHANNEL_STEP,
 } from './create-channel-type';
-
-import { create } from '@/libs/zustand';
 
 const DEFAULT_FIELDS: FieldInfo[] = [
   {
@@ -104,7 +103,7 @@ const DEFAULT_STATE: State = {
   },
 };
 
-export const useCreateChannelStore = create<State, Action>()(
+export const useCreateChannelStore = create<State & Action>()(
   persist(
     (set, get) => ({
       ...DEFAULT_STATE,

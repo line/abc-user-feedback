@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from '@ufb/ui';
 
 import {
+  client,
   HelpCardDocs,
   useOAIMutation,
   useOAIQuery,
@@ -30,8 +31,6 @@ import type { ApiKeyUpdateType } from '@/entities/api-key';
 import { ApiKeyTable } from '@/entities/api-key';
 
 import SettingMenuTemplate from '../setting-menu-template';
-
-import client from '@/libs/client';
 
 interface IProps {
   projectId: number;

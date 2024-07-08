@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { create } from '@/libs/zustand';
+import { create } from 'zustand';
 
 type State = {
   editableState?: number;
@@ -26,7 +26,7 @@ type Action = {
   onChangeEditInput: (key: string, input: any) => void;
 };
 
-const useFeedbackRowStore = create<State, Action>((set) => ({
+const useFeedbackRowStore = create<State & Action>((set) => ({
   editableState: undefined,
   editInput: {},
   enableEditState: (id?: number) => set({ editableState: id }),
