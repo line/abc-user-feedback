@@ -16,7 +16,7 @@
 
 import DescriptionTooltip from '../description-tooltip';
 import ChartFilter from './chart-filter';
-import Legend from './Legend';
+import Legend from './legend';
 
 interface IProps extends React.PropsWithChildren {
   title: string;

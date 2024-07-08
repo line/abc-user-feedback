@@ -19,7 +19,7 @@ import userEvent from '@testing-library/user-event';
 import RequestResetPasswordWithEmail from './request-reset-password-with-email.ui';
 
 import { simpleMockHttp } from '@/msw';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 describe('RequestResetPasswordWithEmail', () => {
   test('match snapshot', () => {

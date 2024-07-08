@@ -17,12 +17,11 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 
 import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
-
-import type { FieldType } from '@/types/field.type';
+import type { Field } from '@/entities/field';
 
 interface IProps extends React.PropsWithChildren {
   isExpanded: boolean;
-  field: FieldType;
+  field: Field;
   value: any;
 }
 

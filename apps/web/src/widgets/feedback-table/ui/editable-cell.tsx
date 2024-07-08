@@ -18,13 +18,12 @@ import dayjs from 'dayjs';
 import ReactDatePicker from 'react-datepicker';
 
 import { SelectBoxCreatable } from '@/shared';
+import type { FieldInfo } from '@/entities/field';
 
 import useFeedbackRowStore from '../model/feedback-row.store';
 
-import type { FieldType } from '@/types/field.type';
-
 interface IProps extends React.PropsWithChildren {
-  field: FieldType;
+  field: FieldInfo;
   value: any;
   isExpanded: boolean;
   feedbackId: number;

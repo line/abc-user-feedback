@@ -19,7 +19,7 @@ import { IconNames } from '@ufb/ui';
 
 import MainCard from './main-card.ui';
 
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('MainCard', () => {
   test('snapshot', async () => {

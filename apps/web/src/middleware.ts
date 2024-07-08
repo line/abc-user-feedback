@@ -17,7 +17,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getIronSession } from 'iron-session';
 
-import { DEFAULT_LOCALE, Path } from '@/shared';
+import { DEFAULT_LOCALE, Path } from '@/shared/constants';
 
 import { ironOption } from './server/iron-option';
 

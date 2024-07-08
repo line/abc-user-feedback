@@ -21,14 +21,14 @@ import { z } from 'zod';
 
 import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
-import type { RoleType } from '@/types/role.type';
+import type { Role } from '../role.type';
 
 interface IForm {
   roleName: string;
 }
 
 interface IProps {
-  roles: RoleType[];
+  roles: Role[];
   disabled?: boolean;
   onCreate: (name: string) => Promise<void> | void;
 }

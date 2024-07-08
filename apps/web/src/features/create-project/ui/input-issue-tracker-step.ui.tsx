@@ -17,9 +17,8 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { IssueTrackerForm } from '@/entities/issue-tracker';
-import type { IssueTracker } from '@/entities/issue-tracker/issue-tracker.type';
-import { issueTrackerSchema } from '@/entities/issue-tracker/issue-tracker.type';
+import { IssueTrackerForm, issueTrackerSchema } from '@/entities/issue-tracker';
+import type { IssueTracker } from '@/entities/issue-tracker';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';

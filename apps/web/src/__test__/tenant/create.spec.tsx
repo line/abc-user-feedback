@@ -20,7 +20,7 @@ import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
 
 import CreateTenantPage from '@/pages/tenant/create';
-import { render, waitFor } from '@/utils/test-utils';
+import { render, waitFor } from '@/test-utils';
 
 describe('Create Tenant Page', () => {
   test('match snapshot', async () => {

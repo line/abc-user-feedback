@@ -14,5 +14,4 @@
  * under the License.
  */
 export { default as ChannelInfoForm } from './channel-info-form.ui';
-
 export { default as ImageConfigForm } from './image-config-form.ui';

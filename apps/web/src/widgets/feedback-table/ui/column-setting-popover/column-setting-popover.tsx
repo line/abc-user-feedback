@@ -27,13 +27,13 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import { reorder } from '@/shared';
+import type { Field } from '@/entities/field';
+
 import DraggableColumnItem from './draggable-column-item';
 
-import type { FieldType } from '@/types/field.type';
-import { reorder } from '@/utils/reorder';
-
 interface IProps extends React.PropsWithChildren {
-  fieldData: FieldType[];
+  fieldData: Field[];
   table: Table<any>;
 }
 

@@ -29,7 +29,6 @@ import { useFeedbackTable } from '../../model';
 import IssueSetting from './issue-setting';
 
 import client from '@/libs/client';
-import type { IFetchError } from '@/types/fetch-error.type';
 
 interface IProps extends React.PropsWithChildren {
   issues?: Issue[];
@@ -126,7 +125,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       setInputValue('');
       toast.positive({ title: t('toast.save') });
     },
-    onError: (error: IFetchError) => {
+    onError: (error) => {
       toast.negative({ title: error.message });
     },
   });
@@ -153,7 +152,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       if (!data) return;
       issueId = data?.id;
     }
-    await attatchIssue({ issueId });
+    attatchIssue({ issueId });
     setInputValue('');
   };
 

@@ -23,7 +23,7 @@ import * as user from '@/entities/user';
 
 import SignInWithEmailForm from './sign-in-with-email-form.ui';
 
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 jest.mock('@/entities/user');
 

@@ -19,17 +19,16 @@ import { useTranslation } from 'react-i18next';
 import { DescriptionTooltip } from '@/shared';
 import type { Role } from '@/entities/role';
 
+import type { User } from '../user';
 import type { Member } from './member.type';
 import DeleteMemberModal from './ui/delete-member-modal.ui';
 import UpdateMemberModal from './ui/update-member-modal.ui';
 
-import type { UserType } from '@/types/user.type';
-
 const columnHelper = createColumnHelper<Member>();
 
 export const getMemberColumns = (
-  users: UserType[],
-  roles?: Role[],
+  users: User[],
+  roles: Role[],
   onClickDelete?: (index: number) => void,
   onClickUpdate?: (member: Member) => void,
 ) => [
@@ -70,7 +69,7 @@ export const getMemberColumns = (
     cell: ({ getValue }) => getValue(),
     enableSorting: false,
   }),
-  ...(onClickUpdate && roles ?
+  ...(onClickUpdate ?
     [
       columnHelper.display({
         id: 'edit',

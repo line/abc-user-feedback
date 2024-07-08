@@ -20,7 +20,7 @@ import { useUserStore } from '../user.model';
 import type { User } from '../user.type';
 import UserBox from './user-box.ui';
 
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 describe('UserBox', () => {
   test('no logged in user', () => {

@@ -29,11 +29,9 @@ import {
   Path,
   useOAIQuery,
 } from '@/shared';
+import { ChannelInfoForm, ImageConfigForm } from '@/entities/channel';
 import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
-import { ChannelInfoForm, ImageConfigForm } from '@/entities/channel/ui';
-import { FieldTable } from '@/entities/field';
-
-import PreviewTable from '@/containers/setting-menu/FieldSetting/PreviewTable';
+import { FieldTable, PreviewFieldTable } from '@/entities/field';
 
 const CompleteChannelCreationPage: NextPage = () => {
   const { t } = useTranslation();
@@ -91,7 +89,7 @@ const CompleteChannelCreationPage: NextPage = () => {
         </FormProvider>
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('main.setting.field-mgmt.preview')}>
-        <PreviewTable fields={data?.fields ?? []} />
+        <PreviewFieldTable fields={data?.fields ?? []} />
       </CreateSectionTemplate>
 
       <div className="border-fill-tertiary flex rounded border p-6">

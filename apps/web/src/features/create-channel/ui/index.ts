@@ -15,3 +15,4 @@
  */
 export { default as RouteCreateChannelButton } from './route-create-channel-button.ui';
 export { default as CreateChannel } from './create-channel.ui';
+export { default as DeleteChannelPopover } from './delete-channel-popover.ui';

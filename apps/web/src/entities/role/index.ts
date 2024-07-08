@@ -15,3 +15,5 @@
  */
 export * from './ui';
 export * from './role.type';
+export * from './permission.type';
+export * from './role.schema';

@@ -15,7 +15,7 @@
  */
 
 import UserInvitationPage from '@/pages/link/user-invitation';
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('Reset Password Page', () => {
   test('snapshot test', () => {

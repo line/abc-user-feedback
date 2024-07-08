@@ -19,8 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import type { ChannelInfo } from '@/entities/channel';
-import { channelInfoSchema } from '@/entities/channel';
-import { ChannelInfoForm } from '@/entities/channel/ui';
+import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
 
 import { useCreateChannelStore } from '../create-channel-model';
 import CreateChannelInputTemplate from './create-channel-input-template.ui';

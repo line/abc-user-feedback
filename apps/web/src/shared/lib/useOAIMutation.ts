@@ -16,15 +16,16 @@
 import type { UseMutationOptions } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
-import client from '@/libs/client';
-import type { IFetchError } from '@/types/fetch-error.type';
 import type {
+  IFetchError,
   OAIMethodPathKeys,
   OAIMutationResponse,
   OAIPathParameters,
   OAIRequestBody,
-} from '@/types/openapi.type';
-import { getRequestUrl } from '@/utils/path-parsing';
+} from '@/shared';
+import { getRequestUrl } from '@/shared';
+
+import client from '@/libs/client';
 
 export default function useOAIMutation<
   TMethods extends 'post' | 'put' | 'patch' | 'delete',

@@ -16,10 +16,12 @@
 import { persist } from 'zustand/middleware';
 
 import type { ApiKey } from '@/entities/api-key';
-import type { IssueTracker } from '@/entities/issue-tracker/issue-tracker.type';
+import type { IssueTracker } from '@/entities/issue-tracker';
 import type { Member } from '@/entities/member';
 import { getDefaultTimezone } from '@/entities/project';
 import type { ProjectInfo } from '@/entities/project';
+import { PermissionList } from '@/entities/role';
+import type { PermissionType, Role } from '@/entities/role';
 
 import type { CreateProjectStepKey } from './create-project-type';
 import {
@@ -29,11 +31,8 @@ import {
 } from './create-project-type';
 
 import { create } from '@/libs/zustand';
-import { PermissionList } from '@/types/permission.type';
-import type { PermissionType } from '@/types/permission.type';
-import type { InputRoleType } from '@/types/role.type';
 
-const DEFAULT_ROLES: InputRoleType[] = [
+const DEFAULT_ROLES: Role[] = [
   { id: 1, name: 'Admin', permissions: [...PermissionList] },
   {
     id: 2,

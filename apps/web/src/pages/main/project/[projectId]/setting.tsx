@@ -24,30 +24,27 @@ import { Icon } from '@ufb/ui';
 import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { MainLayout } from '@/widgets';
+import type { SettingMenuType } from '@/widgets/setting-menu';
 import {
+  ApiKeySetting,
   AuthSetting,
+  ChannelDeletionSetting,
+  ChannelInfoSetting,
   ChannelSettingMenu,
+  FieldSetting,
+  ImageConfigSetting,
+  IssueTrackerSetting,
+  MemberSetting,
+  ProjectDeletionSetting,
+  ProjectInfoSetting,
   ProjectSettingMenu,
+  RoleSetting,
   SettingMenuBox,
   TenantInfoSetting,
   TenantSettingMenu,
   UserManagementSetting,
-} from '@/widgets/setting-menu';
-
-import {
-  APIKeySetting,
-  ChannelDeleteSetting,
-  ChannelInfoSetting,
-  FieldSetting,
-  ImageSetting,
-  IssueTrackerSetting,
-  MemberSetting,
-  ProjectDeleteSetting,
-  ProjectInfoSetting,
-  RoleSetting,
   WebhookSetting,
-} from '@/containers/setting-menu';
-import type { SettingMenuType } from '@/types/setting-menu.type';
+} from '@/widgets/setting-menu';
 
 interface IProps {
   projectId: number;
@@ -140,7 +137,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <RoleSetting projectId={projectId} />
             )}
             {settingMenu === 'API_KEY_MANAGEMENT' && (
-              <APIKeySetting projectId={projectId} />
+              <ApiKeySetting projectId={projectId} />
             )}
             {settingMenu === 'TICKET_MANAGEMENT' && (
               <IssueTrackerSetting projectId={projectId} />
@@ -149,7 +146,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <WebhookSetting projectId={projectId} />
             )}
             {settingMenu === 'DELETE_PROJECT' && (
-              <ProjectDeleteSetting projectId={projectId} />
+              <ProjectDeletionSetting projectId={projectId} />
             )}
             {settingMenu === 'CHANNEL_INFO' && channelId && (
               <ChannelInfoSetting projectId={projectId} channelId={channelId} />
@@ -158,10 +155,10 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <FieldSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'IMAGE_UPLOAD_SETTING' && channelId && (
-              <ImageSetting projectId={projectId} channelId={channelId} />
+              <ImageConfigSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'DELETE_CHANNEL' && channelId && (
-              <ChannelDeleteSetting
+              <ChannelDeletionSetting
                 projectId={projectId}
                 channelId={channelId}
               />

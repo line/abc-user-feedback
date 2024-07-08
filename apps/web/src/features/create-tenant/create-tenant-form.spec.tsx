@@ -22,7 +22,7 @@ import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
 
 import { env } from '@/env.mjs';
 import { server } from '@/msw';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 describe('CreateTenantForm', () => {
   test('An input length  should be at least 3', async () => {

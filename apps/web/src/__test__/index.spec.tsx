@@ -16,7 +16,7 @@
 import { Path } from '@/shared';
 
 import IndexPage, { getServerSideProps } from '@/pages';
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('Index Page', () => {
   test('should render without crashing', async () => {

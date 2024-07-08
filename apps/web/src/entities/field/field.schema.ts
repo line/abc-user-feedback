@@ -17,6 +17,8 @@
 import { i18n } from 'next-i18next';
 import { z } from 'zod';
 
+import { FIELD_FORMAT_LIST } from './field.constant';
+
 export const fieldSchema = z.object({
   id: z.number(),
   key: z
@@ -31,15 +33,7 @@ export const fieldSchema = z.object({
     .string()
     .max(50, { message: i18n?.t('hint.max-length', { length: 50 }) })
     .nullable(),
-  format: z.enum([
-    'text',
-    'keyword',
-    'number',
-    'date',
-    'select',
-    'multiSelect',
-    'images',
-  ]),
+  format: z.enum(FIELD_FORMAT_LIST),
   property: z.enum(['READ_ONLY', 'EDITABLE']),
   status: z.enum(['ACTIVE', 'INACTIVE']),
   options: z.array(

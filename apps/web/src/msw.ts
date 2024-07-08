@@ -21,8 +21,8 @@ import type {
   OAIMethodPathKeys,
   OAIMethods,
   OAIPathParameters,
-} from './types/openapi.type';
-import { convertToColonPath, getRequestUrl } from './utils/path-parsing';
+} from './shared';
+import { convertToColonPath, getRequestUrl } from './shared';
 
 export const server = setupServer(...signInWithOAuthMockHandlers);
 

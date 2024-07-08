@@ -98,7 +98,10 @@ const CompleteProjectCreationPage: NextPage = () => {
         <RoleTable roles={roles?.roles ?? []} />
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
-        <MemberTable members={members?.members ?? []} />
+        <MemberTable
+          members={members?.members ?? []}
+          roles={roles?.roles ?? []}
+        />
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
         <ApiKeyTable apiKeys={apiKeys?.items ?? []} />

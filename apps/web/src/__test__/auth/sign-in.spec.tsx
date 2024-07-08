@@ -20,7 +20,7 @@ import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
 
 import SignInPage from '@/pages/auth/sign-in';
-import { render, screen } from '@/utils/test-utils';
+import { render, screen } from '@/test-utils';
 
 const DEFAULT_TENANT: Tenant = {
   id: 1,

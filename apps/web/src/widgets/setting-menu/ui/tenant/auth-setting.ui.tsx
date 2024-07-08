@@ -28,7 +28,7 @@ import {
   useTenantStore,
 } from '@/entities/tenant';
 
-import { SettingMenuTemplate } from '@/components';
+import SettingMenuTemplate from '../setting-menu-template';
 
 type DomainStateType = {
   isSubmitted: boolean;

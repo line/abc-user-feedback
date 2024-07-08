@@ -21,7 +21,7 @@ import type { User } from '@/entities/user';
 import UserProfileForm from './user-profile-form.ui';
 
 import { simpleMockHttp } from '@/msw';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 const TEST_USER: User = {
   id: faker.number.int(),

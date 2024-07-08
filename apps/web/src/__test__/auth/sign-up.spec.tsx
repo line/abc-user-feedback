@@ -15,7 +15,7 @@
  */
 
 import SignUpPage from '@/pages/auth/sign-up';
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('Sign Up Page', () => {
   test('snapshot test', () => {

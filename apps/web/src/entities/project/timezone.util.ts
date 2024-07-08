@@ -15,10 +15,10 @@
  */
 import { getAllTimezones } from 'countries-and-timezones';
 
-import type { TimezoneInfo } from '@/types/timezone-info';
+import type { Timezone } from './project.type';
 
 export const getTimezoneOptions = () => {
-  const result: TimezoneInfo[] = [];
+  const result: Timezone[] = [];
   Object.values(getAllTimezones()).forEach((timezone) => {
     const { utcOffsetStr, countries, name } = timezone;
     countries.forEach((countryCode) => {

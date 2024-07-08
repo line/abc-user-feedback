@@ -13,12 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { z } from 'zod';
 
-export const apiKeyTypeSchema = z.object({
-  id: z.number(),
-  value: z.string(),
-  createdAt: z.string(),
-});
+import { apiKeyTypeSchema } from './api-key.schema';
 
 export type ApiKey = z.infer<typeof apiKeyTypeSchema>;
+export type ApiKeyUpdateType = 'recover' | 'softDelete';

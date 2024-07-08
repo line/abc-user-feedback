@@ -27,8 +27,6 @@ import { useThemeStore } from '@/entities/theme';
 import { useFeedbackDownload } from '../lib';
 import { useFeedbackTable } from '../model';
 
-import type { IFetchError } from '@/types/fetch-error.type';
-
 interface IProps {
   query: any;
   fieldData: Field[];
@@ -68,9 +66,8 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
       onSuccess: async () => {
         setIsClicked(false);
       },
-      onError: (err) => {
+      onError: (error) => {
         setIsClicked(false);
-        const error = err as IFetchError;
         toast.negative({ title: error.message });
       },
     },

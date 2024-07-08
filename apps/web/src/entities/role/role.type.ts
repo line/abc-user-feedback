@@ -14,16 +14,9 @@
  * under the License.
  */
 
-import { i18n } from 'next-i18next';
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import { PermissionList } from './permission.type';
-
-export const roleSchema = z.object({
-  id: z.number(),
-  name: z.string().min(1, i18n?.t('hint.required')).max(20),
-  permissions: z.array(z.enum(PermissionList)),
-});
+import { roleSchema } from './role.schema';
 
 export const updateRoleNameSchema = roleSchema.pick({ name: true });
 

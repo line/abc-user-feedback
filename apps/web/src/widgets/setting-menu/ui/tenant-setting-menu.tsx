@@ -19,8 +19,8 @@ import { SubMenu } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
-import { SettingMenuTemplate } from '@/components';
-import type { SettingMenuType } from '@/types/setting-menu.type';
+import type { SettingMenuType } from '../setting-menu.type';
+import SettingMenuTemplate from './setting-menu-template';
 
 interface IProps extends React.PropsWithChildren {
   onClickSettingMenu: (input: SettingMenuType) => void;

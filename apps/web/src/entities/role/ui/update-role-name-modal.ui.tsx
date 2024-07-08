@@ -21,18 +21,17 @@ import type { z } from 'zod';
 
 import { Input, Popover, PopoverModalContent } from '@ufb/ui';
 
+import type { Role } from '../role.type';
 import { updateRoleNameSchema } from '../role.type';
-
-import type { RoleType } from '@/types/role.type';
 
 type FormType = z.infer<typeof updateRoleNameSchema>;
 
 interface IProps {
   open: boolean;
   onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
-  onClickUpdate: (newRole: RoleType) => void;
-  role: RoleType;
-  roles: RoleType[];
+  onClickUpdate: (newRole: Role) => void;
+  role: Role;
+  roles: Role[];
 }
 
 const UpdateRoleNameModal: React.FC<IProps> = (props) => {

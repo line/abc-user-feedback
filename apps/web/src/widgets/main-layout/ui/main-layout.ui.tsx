@@ -55,7 +55,7 @@ const MainLayout: React.FC<IProps> = (props) => {
         </>
       : <div className="flex min-h-[calc(100vh-48px)] items-stretch">
           {Path.hasSideNav(router.pathname) && <SideNav />}
-          <main className="mx-4 my-6 w-full">{children}</main>
+          <main className="mx-4 my-6 w-full overflow-x-auto">{children}</main>
         </div>
       }
     </div>

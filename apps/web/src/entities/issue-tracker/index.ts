@@ -15,3 +15,4 @@
  */
 export * from './ui';
 export * from './issue-tracker.type';
+export * from './issue-tracker.schema';

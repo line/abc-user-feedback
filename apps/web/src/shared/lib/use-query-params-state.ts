@@ -17,9 +17,7 @@ import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT } from '@/shared';
-
-import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
+import { DATE_FORMAT, removeEmptyValueInObject } from '@/shared';
 
 const useQueryParamsState = (
   defaultNextQuery: Record<string, any>,

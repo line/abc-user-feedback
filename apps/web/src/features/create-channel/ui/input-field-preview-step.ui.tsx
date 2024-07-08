@@ -14,10 +14,10 @@
  * under the License.
  */
 
+import { PreviewFieldTable } from '@/entities/field';
+
 import { useCreateChannelStore } from '../create-channel-model';
 import CreateChannelInputTemplate from './create-channel-input-template.ui';
-
-import PreviewTable from '@/containers/setting-menu/FieldSetting/PreviewTable';
 
 interface IProps {}
 
@@ -26,7 +26,7 @@ const InputFieldPreviewStep: React.FC<IProps> = () => {
 
   return (
     <CreateChannelInputTemplate>
-      <PreviewTable
+      <PreviewFieldTable
         fields={input.fields.filter((v) => v.status === 'ACTIVE')}
       />
     </CreateChannelInputTemplate>

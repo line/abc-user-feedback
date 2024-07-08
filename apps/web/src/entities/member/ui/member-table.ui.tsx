@@ -27,7 +27,7 @@ import type { Member } from '../member.type';
 
 interface IProps {
   members: Member[];
-  roles?: Role[];
+  roles: Role[];
   onDeleteMember?: (id: number) => void;
   onUpdateMember?: (newMember: Member) => void;
 }

@@ -17,14 +17,15 @@ import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 import type { O } from 'ts-toolbelt';
 
-import client from '@/libs/client';
-import type { IFetchError } from '@/types/fetch-error.type';
+import { getRequestUrl } from '@/shared';
 import type {
+  IFetchError,
   OAIMethodPathKeys,
   OAIParameters,
   OAIResponse,
-} from '@/types/openapi.type';
-import { getRequestUrl } from '@/utils/path-parsing';
+} from '@/shared';
+
+import client from '@/libs/client';
 
 export default function useOAIQuery<
   TPath extends OAIMethodPathKeys<'get'>,

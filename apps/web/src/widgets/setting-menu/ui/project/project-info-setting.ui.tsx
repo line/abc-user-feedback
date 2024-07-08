@@ -13,10 +13,85 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface IProps {}
 
-const ProjectInfoSetting: React.FC<IProps> = () => {
-  return <div></div>;
+import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
+import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+
+import { toast } from '@ufb/ui';
+
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import type { ProjectInfo } from '@/entities/project';
+import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
+
+import SettingMenuTemplate from '../setting-menu-template';
+
+interface IProps {
+  projectId: number;
+}
+
+const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
+  const perms = usePermissions(projectId);
+  const client = useQueryClient();
+
+  const methods = useForm<ProjectInfo>({
+    resolver: zodResolver(projectInfoSchema),
+  });
+
+  const { data, refetch } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}',
+    variables: { projectId },
+  });
+
+  useEffect(() => {
+    if (!data) return;
+    methods.reset(data);
+  }, [data]);
+
+  const { mutate, isPending } = useOAIMutation({
+    method: 'put',
+    path: '/api/admin/projects/{projectId}',
+    pathParams: { projectId },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        await client.invalidateQueries({ queryKey: ['/api/admin/projects'] });
+        toast.positive({ title: t('toast.save') });
+      },
+      onError(error) {
+        toast.negative({ title: error?.message ?? 'Error' });
+      },
+    },
+  });
+
+  const onSubmit = (input: ProjectInfo) => {
+    if (!data) return;
+    mutate({ ...data, ...input });
+  };
+
+  return (
+    <SettingMenuTemplate
+      title={t('tenant-setting-menu.tenant-info')}
+      actionBtn={{
+        form: 'form',
+        type: 'submit',
+        children: t('button.save'),
+        disabled:
+          !perms.includes('project_update') ||
+          !methods.formState.isDirty ||
+          isPending,
+      }}
+    >
+      <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
+        <FormProvider {...methods}>
+          <ProjectInfoForm type="update" />
+        </FormProvider>
+      </form>
+    </SettingMenuTemplate>
+  );
 };
 
 export default ProjectInfoSetting;

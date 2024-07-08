@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
@@ -51,6 +52,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
 
   const router = useRouter();
   const projectId = Number(router.query?.projectId);
+  const queryClient = useQueryClient();
 
   const overlay = useOverlay();
 
@@ -74,19 +76,22 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
     path: '/api/admin/projects/{projectId}/channels',
     pathParams: { projectId },
     queryOptions: {
-      onError(error) {
-        if (error.code === ErrorCode.Channel.ChannelAlreadyExists) {
-          openCreateChannelError();
-        } else {
-          toast.negative({ title: error?.message ?? 'Error' });
-        }
-      },
       async onSuccess(data) {
         await router.replace({
           pathname: Path.CREATE_CHANNEL_COMPLETE,
           query: { projectId, channelId: data?.id },
         });
         reset();
+        queryClient.invalidateQueries({
+          queryKey: ['/api/admin/projects/{projectId}/channels'],
+        });
+      },
+      onError(error) {
+        if (error.code === ErrorCode.Channel.ChannelAlreadyExists) {
+          openCreateChannelError();
+        } else {
+          toast.negative({ title: error?.message ?? 'Error' });
+        }
       },
     },
   });

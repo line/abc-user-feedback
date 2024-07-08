@@ -15,7 +15,7 @@
  */
 
 import ProfilePage from '@/pages/main/profile';
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('MainIndexPage', () => {
   test('should render without crashing', async () => {

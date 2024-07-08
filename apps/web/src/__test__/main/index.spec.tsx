@@ -21,7 +21,7 @@ import { useTenantStore } from '@/entities/tenant';
 
 import { simpleMockHttp } from '@/msw';
 import MainIndexPage from '@/pages/main';
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('MainIndexPage', () => {
   test('should render without crashing', async () => {

@@ -25,10 +25,9 @@ interface IProps {
   readOnly?: boolean;
 }
 
-const ProjectInfoForm: React.FC<IProps> = ({
-  type = 'create',
-  readOnly = false,
-}) => {
+const ProjectInfoForm: React.FC<IProps> = (props) => {
+  const { type = 'create', readOnly = false } = props;
+
   const { register, setValue, watch, formState } =
     useFormContext<ProjectInfo>();
 
@@ -58,7 +57,7 @@ const ProjectInfoForm: React.FC<IProps> = ({
       />
       <TimezoneSelectBox
         value={watch('timezone')}
-        onChange={(value) => setValue('timezone', value)}
+        onChange={(value) => setValue('timezone', value, { shouldDirty: true })}
         disabled={readOnly}
       />
     </div>

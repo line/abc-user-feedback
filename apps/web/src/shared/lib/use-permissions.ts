@@ -16,12 +16,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 
+import { PermissionList } from '@/entities/role';
+import type { PermissionType } from '@/entities/role';
 import { useUserStore } from '@/entities/user';
 
 import useOAIQuery from './useOAIQuery';
-
-import type { PermissionType } from '@/types/permission.type';
-import { PermissionList } from '@/types/permission.type';
 
 const usePermissions = (inputProjectId?: number | null) => {
   const { user } = useUserStore();

@@ -36,6 +36,8 @@ export { default as Popper } from './popper.ui';
 export { default as ImageSlider } from './image-slider.ui';
 export { default as RadioGroup } from './radio-group';
 
+export { default as SmallCard } from './small-card.ui';
+
 export * from './tables';
 export * from './charts';
 export * from './select-box';

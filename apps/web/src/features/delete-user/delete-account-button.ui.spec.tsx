@@ -23,7 +23,7 @@ import * as user from '@/entities/user';
 import DeleteAccountButton from './delete-account-button.ui';
 
 import { server, simpleMockHttp } from '@/msw';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 jest.mock('@/entities/user');
 

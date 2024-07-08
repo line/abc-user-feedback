@@ -43,6 +43,7 @@ import {
 } from '@/shared';
 import { useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
+import type { IssueTracker } from '@/entities/issue-tracker';
 import { FeedbackTableInIssue } from '@/widgets/feedback-table';
 
 import { getColumns } from '../issue-table-columns';
@@ -50,8 +51,6 @@ import { useIssueCount, useIssueQuery } from '../lib';
 import IssueDeletionPopover from './issue-deletion-popover.ui';
 import IssueTableSelectBox from './issue-select-box.ui';
 import IssueSettingPopover from './issue-setting-popover.ui';
-
-import type { IssueTrackerType } from '@/types/issue-tracker.type';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
@@ -268,7 +267,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           issue={row.original}
                           refetch={refetch}
                           issueTracker={
-                            issueTracker?.data as IssueTrackerType | undefined
+                            issueTracker?.data as IssueTracker | undefined
                           }
                           disabled={!perms.includes('issue_update')}
                         />

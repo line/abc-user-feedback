@@ -13,11 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { z } from 'zod';
+import type { z } from 'zod';
 
-export const issueTrackerSchema = z.object({
-  ticketDomain: z.string(),
-  ticketKey: z.string(),
-});
+import type { issueTrackerSchema } from './issue-tracker.schema';
 
 export type IssueTracker = z.infer<typeof issueTrackerSchema>;

@@ -15,9 +15,9 @@
  */
 import type { TFunction } from 'next-i18next';
 
-import type { IssueStatus } from '@/entities/issue';
+import type { ColorType } from '@ufb/ui';
 
-import type { ColorType } from '@/types/color.type';
+import type { IssueStatus } from '@/entities/issue';
 
 export type IssuesItemType = {
   key: IssueStatus;

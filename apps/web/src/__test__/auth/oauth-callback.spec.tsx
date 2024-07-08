@@ -21,7 +21,7 @@ import { Path } from '@/shared';
 import * as signInWithOAuth from '@/features/auth/sign-in-with-oauth';
 
 import OAuthCallbackPage from '@/pages/auth/oauth-callback';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 jest.mock('@/features/auth/sign-in-with-oauth');
 

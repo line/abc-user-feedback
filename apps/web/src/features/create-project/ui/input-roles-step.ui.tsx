@@ -13,12 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Role } from '@/entities/role';
 import { CreateRolePopover, RoleTable } from '@/entities/role';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
-
-import type { RoleType } from '@/types/role.type';
 
 interface IProps {}
 
@@ -36,14 +35,14 @@ const InputRolesStep: React.FC<IProps> = () => {
     );
   };
 
-  const onUpdateRole = (role: RoleType) => {
+  const onUpdateRole = (role: Role) => {
     onChangeInput(
       'roles',
       input.roles.map((v) => (v.id === role.id ? role : v)),
     );
   };
 
-  const onDeleteRole = (role: RoleType) => {
+  const onDeleteRole = (role: Role) => {
     onChangeInput(
       'roles',
       input.roles.filter((v) => v.id !== role.id),

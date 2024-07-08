@@ -21,22 +21,24 @@ import { Icon } from '@ufb/ui';
 import { BasicTable } from '@/shared';
 
 import { getApiKeyColumns } from '../api-key-columns';
-import type { ApiKey } from '../api-key.type';
+import type { ApiKey, ApiKeyUpdateType } from '../api-key.type';
 
 interface IProps {
   apiKeys: ApiKey[];
   onClickDelete?: (id: number) => void;
+  onClickUpdate?: (type: ApiKeyUpdateType, id: number) => void;
 }
 
 const ApiKeyTable: React.FC<IProps> = (props) => {
-  const { apiKeys, onClickDelete } = props;
+  const { apiKeys, onClickDelete, onClickUpdate } = props;
 
   const { t } = useTranslation();
 
   const table = useReactTable({
-    columns: getApiKeyColumns(onClickDelete),
+    columns: getApiKeyColumns(onClickDelete, onClickUpdate),
     data: apiKeys,
     getCoreRowModel: getCoreRowModel(),
+    enableSorting: false,
   });
 
   return (

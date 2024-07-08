@@ -25,8 +25,7 @@ import { Icon, Input, toast } from '@ufb/ui';
 
 import { ISSUES, Popper, useOAIMutation } from '@/shared';
 import type { Issue, IssueStatus } from '@/entities/issue';
-
-import type { IssueTrackerType } from '@/types/issue-tracker.type';
+import type { IssueTracker } from '@/entities/issue-tracker';
 
 type UpdateIssueType = {
   name: string;
@@ -46,7 +45,7 @@ const schema = z.object({
 interface IProps {
   issue: Issue;
   refetch: () => Promise<any>;
-  issueTracker?: IssueTrackerType;
+  issueTracker?: IssueTracker;
   disabled: boolean;
 }
 

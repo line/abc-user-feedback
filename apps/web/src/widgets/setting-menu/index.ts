@@ -14,3 +14,4 @@
  * under the License.
  */
 export * from './ui';
+export * from './setting-menu.type';

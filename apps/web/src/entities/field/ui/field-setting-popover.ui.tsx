@@ -29,11 +29,10 @@ import {
 
 import { DescriptionTooltip, SelectBox } from '@/shared';
 
+import { FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
 import type { FieldInfo } from '../field.type';
 import DeleteFieldOptionPopover from './delete-field-option-popover.ui';
-
-import { FieldFormatEnumList } from '@/types/field.type';
 
 const defaultValues: FieldInfo = {
   description: '',
@@ -235,7 +234,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 onChange={(value) =>
                   value?.key && setValue('format', value?.key)
                 }
-                options={FieldFormatEnumList.map((v) => ({ key: v, name: v }))}
+                options={FIELD_FORMAT_LIST.map((v) => ({ key: v, name: v }))}
                 value={{ key: watch('format'), name: watch('format') }}
                 isDisabled={isOriginalData}
                 getOptionValue={(option) => option.key}

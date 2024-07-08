@@ -19,8 +19,8 @@ import { useTranslation } from 'next-i18next';
 import { SelectBox, SubMenu, useOAIQuery, usePermissions } from '@/shared';
 import { RouteCreateChannelButton } from '@/features/create-channel';
 
-import { SettingMenuTemplate } from '@/components';
-import type { SettingMenuType } from '@/types/setting-menu.type';
+import type { SettingMenuType } from '../setting-menu.type';
+import SettingMenuTemplate from './setting-menu-template';
 
 interface IProps {
   projectId: number;

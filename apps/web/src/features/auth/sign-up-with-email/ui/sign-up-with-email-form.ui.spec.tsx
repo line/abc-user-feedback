@@ -16,7 +16,7 @@
 
 import SignUpWithEmailForm from './sign-up-with-email-form.ui';
 
-import { render } from '@/utils/test-utils';
+import { render } from '@/test-utils';
 
 describe('SignUpWithEmailForm', () => {
   test('match snapshot', () => {

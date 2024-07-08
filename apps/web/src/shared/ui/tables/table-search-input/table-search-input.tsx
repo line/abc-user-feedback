@@ -19,6 +19,9 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon } from '@ufb/ui';
 
+import { removeEmptyValueInObject } from '@/shared';
+import type { FieldFormat } from '@/entities/field';
+
 import TableSearchInputPopover from './table-search-input-popover';
 import {
   objToQuery,
@@ -27,21 +30,13 @@ import {
   strValueToObj,
 } from './table-search-input.service';
 
-import type { PrimitiveFieldFormatEnumType } from '@/types/field.type';
-import { removeEmptyValueInObject } from '@/utils/remove-empty-value-in-object';
-
 export type SearchItemType = {
   key: string;
   name: string;
-} & (
-  | {
-      format: PrimitiveFieldFormatEnumType;
-    }
-  | {
-      format: 'issue' | 'issue_status' | 'multiSelect' | 'select';
-      options: { id?: number; name: string; key: string }[];
-    }
-);
+} & {
+  format: FieldFormat | 'issue' | 'issue_status';
+  options?: { id?: number; name: string; key: string }[];
+};
 
 interface IProps {
   onChangeQuery: (query: Record<string, any>) => void;
@@ -50,11 +45,9 @@ interface IProps {
   defaultQuery?: Record<string, any>;
 }
 
-const TableSearchInput: React.FC<IProps> = ({
-  onChangeQuery,
-  searchItems,
-  query,
-}) => {
+const TableSearchInput: React.FC<IProps> = (props) => {
+  const { onChangeQuery, searchItems, query } = props;
+
   const inputRef = useRef<HTMLInputElement>(null);
   const popoverRef = useRef<HTMLDivElement>(null);
 

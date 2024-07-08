@@ -16,8 +16,9 @@
 import type { UseMutationOptions } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
+import type { IFetchError, OAIPathParameters, OAIRequestBody } from '@/shared';
+
 import client from '@/libs/client';
-import type { OAIPathParameters, OAIRequestBody } from '@/types/openapi.type';
 
 type IPath = OAIPathParameters<
   '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',
@@ -31,16 +32,12 @@ type IBody = OAIRequestBody<
 interface IInput {
   params: IPath;
   options?: Omit<
-    UseMutationOptions<void, unknown, IBody, unknown>,
+    UseMutationOptions<void, IFetchError, IBody, unknown>,
     'mutationKey' | 'mutationFn'
   >;
 }
 const useFeedbackDownload = ({ params, options }: IInput) => {
   return useMutation({
-    mutationKey: [
-      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',
-      params,
-    ],
     mutationFn: async (body: IBody) => {
       const { data, headers } = await client.post({
         path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export',

@@ -16,8 +16,9 @@
 import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 
+import type { OAIMutationResponse, OAIRequestBody } from '@/shared';
+
 import client from '@/libs/client';
-import type { OAIMutationResponse, OAIRequestBody } from '@/types/openapi.type';
 
 type TData = OAIMutationResponse<
   '/api/admin/projects/{projectId}/issues/search',

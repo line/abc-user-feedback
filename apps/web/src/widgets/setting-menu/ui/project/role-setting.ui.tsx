@@ -13,10 +13,112 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-interface IProps {}
 
-const RoleSetting: React.FC<IProps> = () => {
-  return <div></div>;
+import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+
+import { toast } from '@ufb/ui';
+
+import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import type { PermissionType } from '@/entities/role';
+import { CreateRolePopover, RoleTable } from '@/entities/role';
+
+import SettingMenuTemplate from '../setting-menu-template';
+
+import client from '@/libs/client';
+
+interface IProps {
+  projectId: number;
+}
+
+const RoleSetting: React.FC<IProps> = ({ projectId }) => {
+  const { t } = useTranslation();
+  const perms = usePermissions(projectId);
+
+  const { data, refetch } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/roles',
+    variables: { projectId },
+  });
+
+  const { mutateAsync: createRole } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/roles',
+    pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        refetch();
+        toast.positive({ title: t('toast.add') });
+      },
+      onError(error) {
+        if (!error) return;
+        toast.negative({ title: error.message });
+      },
+    },
+  });
+
+  const { mutate: deleteRole } = useMutation({
+    mutationFn: async (input: { roleId: number }) => {
+      return client.delete({
+        path: '/api/admin/projects/{projectId}/roles/{roleId}',
+        pathParams: { projectId, roleId: input.roleId },
+      });
+    },
+    async onSuccess() {
+      toast.negative({ title: t('toast.delete') });
+      refetch();
+    },
+    onError(error) {
+      toast.negative({ title: error?.message ?? 'Error' });
+    },
+  });
+
+  const { mutate: updateRole } = useMutation({
+    mutationFn: async (input: {
+      roleId: number;
+      name: string;
+      permissions: PermissionType[];
+    }) => {
+      const { name, permissions, roleId } = input;
+      return client.put({
+        path: '/api/admin/projects/{projectId}/roles/{roleId}',
+        pathParams: { projectId, roleId },
+        body: { name, permissions },
+      });
+    },
+    async onSuccess() {
+      toast.positive({ title: t('toast.save') });
+      refetch();
+    },
+    onError(error) {
+      toast.negative({ title: error?.message ?? 'Error' });
+    },
+  });
+
+  return (
+    <SettingMenuTemplate
+      title={t('project-setting-menu.role-mgmt')}
+      action={
+        <CreateRolePopover
+          onCreate={(name) => createRole({ name, permissions: [] })}
+          roles={data?.roles ?? []}
+          disabled={!perms.includes('project_role_create')}
+        />
+      }
+    >
+      <div className="overflow-auto">
+        <RoleTable
+          roles={data?.roles ?? []}
+          onUpdateRole={async (input) => {
+            const { name, permissions, id: roleId } = input;
+            const targetRole = data?.roles.find((v) => v.id === roleId);
+            if (!targetRole) return;
+            updateRole({ name, permissions, roleId });
+          }}
+          onDeleteRole={(role) => deleteRole({ roleId: role.id })}
+        />
+      </div>
+    </SettingMenuTemplate>
+  );
 };
 
 export default RoleSetting;

@@ -24,7 +24,7 @@ import { useTenantStore } from '@/entities/tenant';
 import SignInWithOAuthButton from './sign-in-with-oauth-button.ui';
 
 import { simpleMockHttp } from '@/msw';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 describe('SignInWithOAuthButton', () => {
   test('match snapshot', () => {

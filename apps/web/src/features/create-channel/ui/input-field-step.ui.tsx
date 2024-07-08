@@ -21,13 +21,10 @@ import FieldTable from '@/entities/field/ui/field-table.ui';
 import { useCreateChannelStore } from '../create-channel-model';
 import CreateChannelInputTemplate from './create-channel-input-template.ui';
 
-import type { InputFieldType } from '@/types/field.type';
-
 interface IProps {}
 
 const InputFieldStep: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannelStore();
-  console.log('input: ', input.fields);
 
   const createField = (field: FieldInfo) => {
     onChangeInput('fields', input.fields.concat(field));
@@ -38,7 +35,7 @@ const InputFieldStep: React.FC<IProps> = () => {
     index,
   }: {
     index: number;
-    field: InputFieldType;
+    field: FieldInfo;
   }) => {
     onChangeInput(
       'fields',

@@ -17,11 +17,7 @@ import type { AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-import { Path } from '@/shared';
-
-import sessionStorage from './session-storage';
-
-import { env } from '@/env.mjs';
+import { getRequestUrl, Path } from '@/shared';
 import type {
   OAIMethodPathKeys,
   OAIMutationResponse,
@@ -29,8 +25,11 @@ import type {
   OAIQueryParameters,
   OAIRequestBody,
   OAIResponse,
-} from '@/types/openapi.type';
-import { getRequestUrl } from '@/utils/path-parsing';
+} from '@/shared';
+
+import sessionStorage from './session-storage';
+
+import { env } from '@/env.mjs';
 
 class client {
   private axiosInstance = axios.create({

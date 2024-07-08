@@ -19,7 +19,7 @@ import userEvent from '@testing-library/user-event';
 import UserInvitationForm from './user-invitation-form.ui';
 
 import { simpleMockHttp } from '@/msw';
-import { render, screen, waitFor } from '@/utils/test-utils';
+import { render, screen, waitFor } from '@/test-utils';
 
 describe('ResetPasswordWithEmailForm', () => {
   test('match snapshot', () => {

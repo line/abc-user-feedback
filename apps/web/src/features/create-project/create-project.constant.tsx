@@ -19,7 +19,7 @@ import { Trans } from 'next-i18next';
 import { HelpCardDocs } from '@/shared';
 
 import type { CreateProjectStepKey } from './create-project-type';
-import InputApiKeysStep from './ui/input-api-keys-step.ui';
+import InputApiKeyStep from './ui/input-api-key-step.ui';
 import InputIssueTrackerStep from './ui/input-issue-tracker-step.ui';
 import InputMembersStep from './ui/input-members-step.ui';
 import InputProjectInfoStep from './ui/input-project-info-step.ui';
@@ -31,7 +31,7 @@ export const CREATE_PROJECT_COMPONENTS: Record<
 > = {
   'project-info': <InputProjectInfoStep />,
   roles: <InputRolesStep />,
-  'api-keys': <InputApiKeysStep />,
+  'api-keys': <InputApiKeyStep />,
   'issue-tracker': <InputIssueTrackerStep />,
   members: <InputMembersStep />,
 };

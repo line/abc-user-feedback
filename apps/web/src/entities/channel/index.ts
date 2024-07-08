@@ -15,3 +15,4 @@
  */
 export * from './channel.type';
 export * from './channel.schema';
+export * from './ui';

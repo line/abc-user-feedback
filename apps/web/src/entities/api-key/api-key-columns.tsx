@@ -23,10 +23,14 @@ import { Badge, Icon, toast } from '@ufb/ui';
 import { DATE_TIME_FORMAT } from '@/shared';
 
 import type { ApiKey } from './api-key.type';
+import UpdateApiKeyPopover from './ui/update-api-key-popover.ui';
 
 const columnHelper = createColumnHelper<ApiKey>();
 
-export const getApiKeyColumns = (onDelete?: (id: number) => void) => [
+export const getApiKeyColumns = (
+  onDelete?: (id: number) => void,
+  onUpdate?: (type: 'recover' | 'softDelete', apiKeyId: number) => void,
+) => [
   columnHelper.accessor('value', {
     header: 'API KEY',
     cell: ({ getValue }) => (
@@ -52,22 +56,46 @@ export const getApiKeyColumns = (onDelete?: (id: number) => void) => [
     ),
     size: 300,
   }),
-  columnHelper.display({
+
+  columnHelper.accessor('createdAt', {
     header: 'Created',
-    cell: () => (
-      <p className="text-primary">{dayjs().format(DATE_TIME_FORMAT)}</p>
+    cell: ({ getValue, row }) => (
+      <p className={row.original.deletedAt !== null ? 'text-tertiary' : ''}>
+        {dayjs(getValue()).format(DATE_TIME_FORMAT)}
+      </p>
     ),
-    size: 150,
+    size: 100,
   }),
-  columnHelper.display({
+  columnHelper.accessor('deletedAt', {
     header: 'Status',
-    cell: () => (
-      <Badge color="blue" type="primary">
-        <Trans i18nKey="main.setting.api-key-status.active" />
+    cell: ({ getValue }) => (
+      <Badge
+        color={getValue() ? 'black' : 'blue'}
+        type={getValue() ? 'secondary' : 'primary'}
+      >
+        {getValue() ?
+          <Trans i18nKey="main.setting.api-key-status.inactive" />
+        : <Trans i18nKey="main.setting.api-key-status.active" />}
       </Badge>
     ),
-    size: 150,
+    size: 50,
   }),
+  ...(onUpdate ?
+    [
+      columnHelper.display({
+        id: 'edit',
+        header: 'Edit',
+        cell: ({ row }) => (
+          <UpdateApiKeyPopover
+            apiKeyId={row.original.id}
+            deletedAt={row.original.deletedAt}
+            onClickUpdate={onUpdate}
+          />
+        ),
+        size: 50,
+      }),
+    ]
+  : []),
   ...(onDelete ?
     [
       columnHelper.display({

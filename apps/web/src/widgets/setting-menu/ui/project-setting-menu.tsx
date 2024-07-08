@@ -17,8 +17,8 @@ import { useTranslation } from 'next-i18next';
 
 import { SubMenu, useOAIQuery, usePermissions } from '@/shared';
 
-import { SettingMenuTemplate } from '@/components';
-import type { SettingMenuType } from '@/types/setting-menu.type';
+import type { SettingMenuType } from '../setting-menu.type';
+import SettingMenuTemplate from './setting-menu-template';
 
 interface IProps {
   projectId: number;
@@ -74,6 +74,13 @@ const ProjectSettingMenu: React.FC<IProps> = (props) => {
             active: settingMenu === 'API_KEY_MANAGEMENT',
             name: t('project-setting-menu.api-key-mgmt'),
             disabled: !perms.includes('project_apikey_read'),
+          },
+          {
+            iconName: 'TicketFill',
+            onClick: () => onClickSettingMenu('TICKET_MANAGEMENT'),
+            active: settingMenu === 'TICKET_MANAGEMENT',
+            name: t('project-setting-menu.issue-tracker-mgmt'),
+            disabled: !perms.includes('project_tracker_read'),
           },
           {
             iconName: 'TicketFill',

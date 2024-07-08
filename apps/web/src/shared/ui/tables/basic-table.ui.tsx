@@ -39,56 +39,58 @@ function BasicTable<T>(props: IProps<T>) {
   } = props;
 
   return (
-    <table className="table w-full">
-      <thead>
-        <tr>
-          {table.getIsSomeRowsSelected() ?
-            <CheckedTableHead table={table} onClickDelete={onClickDelete} />
-          : table.getFlatHeaders().map((header, i) => (
-              <th key={i} style={{ width: header.getSize() }}>
-                <div className="flex flex-nowrap items-center">
-                  <span className="overflow-hidden text-ellipsis">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
+    <div className="overflow-auto">
+      <table className="table w-full table-fixed">
+        <thead>
+          <tr>
+            {table.getIsSomeRowsSelected() ?
+              <CheckedTableHead table={table} onClickDelete={onClickDelete} />
+            : table.getFlatHeaders().map((header, i) => (
+                <th key={i} style={{ width: header.getSize() }}>
+                  <div className="flex flex-nowrap items-center">
+                    <span className="overflow-hidden text-ellipsis">
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                    </span>
+                    {header.column.getCanSort() && (
+                      <TableSortIcon column={header.column} />
                     )}
-                  </span>
-                  {header.column.getCanSort() && (
-                    <TableSortIcon column={header.column} />
+                  </div>
+                  {resiable && header.column.getCanResize() && (
+                    <TableResizer header={header} table={table} />
                   )}
-                </div>
-                {resiable && header.column.getCanResize() && (
-                  <TableResizer header={header} table={table} />
-                )}
-              </th>
+                </th>
+              ))
+            }
+          </tr>
+          {isLoading && (
+            <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
+          )}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.length === 0 ?
+            <tr>
+              <td colSpan={table.getFlatHeaders().length}>{emptyComponent}</td>
+            </tr>
+          : table.getRowModel().rows.map((row) => (
+              <tr key={row.index}>
+                {row.getVisibleCells().map((cell) => (
+                  <td
+                    key={`${cell.id} ${cell.row.index}`}
+                    className="border-none"
+                    style={{ width: cell.column.getSize() }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
             ))
           }
-        </tr>
-        {isLoading && (
-          <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
-        )}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.length === 0 ?
-          <tr>
-            <td colSpan={table.getFlatHeaders().length}>{emptyComponent}</td>
-          </tr>
-        : table.getRowModel().rows.map((row) => (
-            <tr key={row.index}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={`${cell.id} ${cell.row.index}`}
-                  className="border-none"
-                  style={{ width: cell.column.getSize() }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   );
 }
 
