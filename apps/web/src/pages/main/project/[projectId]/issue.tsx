@@ -42,7 +42,7 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
       : status === 'error' ?
         <p className="font-32-bold">Not Permission</p>
       : data.meta.totalItems === 0 ?
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex min-h-[500px] flex-1 items-center justify-center">
           <RouteCreateChannelButton projectId={projectId} type="blue" />
         </div>
       : <IssueTable projectId={projectId} />}

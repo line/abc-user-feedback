@@ -14,7 +14,8 @@
  * under the License.
  */
 import { Transition } from '@headlessui/react';
-import clsx from 'clsx';
+
+import { cn } from '@/shared';
 
 const boxCN = 'px-3 relative first:pl-0 last:pr-0 ';
 
@@ -34,14 +35,12 @@ const SettingMenuBox: React.FC<IBoxProps> = (props) => {
       show={show}
       enter="transition-all duration-500"
       enterFrom="flex-[0] px-0 opacity-0 overflow-hidden"
-      enterTo={['px-3 opacity-100 overflow-hidden', transitionFlexCN].join(' ')}
+      enterTo={cn(['px-3 opacity-100 overflow-hidden', transitionFlexCN])}
       leave="transition-all duration-500"
-      leaveFrom={['px-3 opacity-100 overflow-hidden', transitionFlexCN].join(
-        ' ',
-      )}
+      leaveFrom={cn(['px-3 opacity-100 overflow-hidden', transitionFlexCN])}
       leaveTo="flex-[0] px-0 opacity-0 overflow-hidden"
     >
-      <div className={clsx(boxCN, flexCN, { 'overflow-hidden': show && last })}>
+      <div className={cn(boxCN, flexCN, show ? transitionFlexCN : '')}>
         {children}
       </div>
     </Transition>

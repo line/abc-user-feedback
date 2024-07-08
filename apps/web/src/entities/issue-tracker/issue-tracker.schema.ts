@@ -16,6 +16,6 @@
 import { z } from 'zod';
 
 export const issueTrackerSchema = z.object({
-  ticketDomain: z.string().url(),
-  ticketKey: z.string(),
+  ticketDomain: z.string().url().optional().or(z.literal('')),
+  ticketKey: z.string().optional(),
 });

@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
@@ -191,8 +192,11 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
 
-  const { editingRole, clearEditingRole, setEditingRole, editPermissions } =
+  const { editingRole, clear, setEditingRole, editPermissions } =
     useInputRoleStore();
+  useEffect(() => {
+    clear();
+  }, []);
 
   const openUpdateRoleNameModal = (role: Role) => {
     return (
@@ -237,8 +241,9 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
       .filter((v) => PermissionList.includes(v));
 
     onUpdateRole?.({ ...editingRole, permissions: newPermissions });
-    clearEditingRole();
+    clear();
   };
+
   type MenuType = {
     icon: IconNameType;
     label: string;
@@ -283,7 +288,7 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
                 <div className="flex gap-1">
                   <button
                     className="icon-btn icon-btn-xs icon-btn-tertiary"
-                    onClick={clearEditingRole}
+                    onClick={clear}
                   >
                     <Icon name="Close" className="text-red-primary" />
                   </button>

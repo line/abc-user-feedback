@@ -26,7 +26,7 @@ type State = {
 };
 type Action = {
   changeEditingRole: <T extends keyof Role>(key: T, value: Role[T]) => void;
-  clearEditingRole: () => void;
+  clear: () => void;
   setEditingRole: (edit: Role) => void;
   checkPermission: (perm: PermissionType, isChecked: boolean) => void;
 };
@@ -79,7 +79,7 @@ export const useInputRoleStore = create<State & Action>((set) => ({
       });
     }
   },
-  clearEditingRole: () => set({ editingRole: null }),
+  clear: () => set({ editingRole: null, editPermissions: {} }),
   setEditingRole: (role) => set({ editingRole: role }),
   changeEditingRole: (key, value) =>
     set(({ editingRole }) =>
