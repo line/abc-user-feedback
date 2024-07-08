@@ -21,7 +21,7 @@ import { useClickAway } from 'react-use';
 
 import { Badge, Icon, toast } from '@ufb/ui';
 
-import { client, Popper, useOAIMutation, usePermissions } from '@/shared';
+import { client, cn, Popper, useOAIMutation, usePermissions } from '@/shared';
 import { IssueBadge, useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
@@ -174,17 +174,17 @@ const IssueCell: React.FC<IProps> = (props) => {
               {t('main.feedback.issue-cell.register-issue')}
             </button>
           : <div
-              className={[
+              className={cn([
                 'flex content-start items-center gap-1 py-2',
                 !isExpanded ? 'flex-nowrap' : 'flex-wrap',
-              ].join(' ')}
+              ])}
             >
               <div
                 ref={ref}
-                className={[
+                className={cn([
                   'scrollbar-hide flex items-center gap-1',
                   !isExpanded ? 'overflow-x-hidden' : 'flex-wrap',
-                ].join(' ')}
+                ])}
               >
                 {issues?.map((v) => <IssueBadge key={v.id} issue={v} />)}
               </div>
@@ -249,13 +249,13 @@ const IssueCell: React.FC<IProps> = (props) => {
                 >
                   {({ active, disabled }) => (
                     <div
-                      className={[
+                      className={cn([
                         'flex h-[34px] cursor-pointer items-center justify-between rounded py-1 pl-2',
-                        active ? 'bg-fill-secondary' : '',
                         disabled ?
                           'bg-fill-tertiary cursor-auto'
                         : 'cursor-pointer',
-                      ].join(' ')}
+                        { 'bg-fill-secondary': active },
+                      ])}
                     >
                       <IssueBadge issue={item} />
                       <div onClick={(e) => e.stopPropagation()}>

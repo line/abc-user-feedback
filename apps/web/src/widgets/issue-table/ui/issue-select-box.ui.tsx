@@ -15,7 +15,7 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { ISSUES } from '@/shared';
+import { cn, ISSUES } from '@/shared';
 import type { IssueStatus } from '@/entities/issue';
 import { IssueCircle } from '@/entities/issue';
 
@@ -35,7 +35,7 @@ const IssueTableSelectBox: React.FC<IProps> = (props) => {
       {[{ key: 'total' }, ...ISSUES(t)].map((issue) => (
         <div
           key={issue.key}
-          className={[
+          className={cn([
             'flex min-w-[136px] cursor-pointer items-center justify-between rounded border px-3 py-2.5',
             (
               currentIssueKey === issue.key ||
@@ -43,7 +43,7 @@ const IssueTableSelectBox: React.FC<IProps> = (props) => {
             ) ?
               'border-fill-primary'
             : 'opacity-50',
-          ].join(' ')}
+          ])}
           onClick={() => onChangeOption(issue.key)}
         >
           <div className="flex flex-1 items-center gap-2">

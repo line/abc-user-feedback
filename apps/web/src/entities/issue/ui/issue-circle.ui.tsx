@@ -13,9 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import clsx from 'clsx';
 
-import { BACKGROUND_COLOR_MAP } from '@/shared';
+import { BACKGROUND_COLOR_MAP, cn } from '@/shared';
 
 import { ISSUE_COLOR_MAP } from '../issue-color.constant';
 import type { IssueStatus } from '../issue.type';
@@ -27,7 +26,7 @@ interface IProps {
 const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
   return (
     <div
-      className={clsx([
+      className={cn([
         'border-fill-secondary bg- mr-1.5 h-1.5 w-1.5 rounded-full border',
         issueKey && BACKGROUND_COLOR_MAP[ISSUE_COLOR_MAP[issueKey]],
       ])}

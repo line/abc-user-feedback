@@ -24,7 +24,7 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import { cn, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
 import type { FieldInfo, FieldStatus } from '@/entities/field';
 import {
   FeedbackRequestCodePopover,
@@ -178,23 +178,25 @@ const StatusButtonGroup: React.FC<IStatusButtonGroupProps> = (props) => {
   return (
     <div className="flex gap-2">
       <button
-        className={[
+        className={cn([
           'btn btn-sm btn-rounded min-w-[64px] border',
-          status !== 'ACTIVE' ?
-            'text-tertiary bg-fill-inverse'
-          : 'text-primary bg-fill-quaternary',
-        ].join(' ')}
+          {
+            'text-tertiary bg-fill-inverse': status === 'INACTIVE',
+            'text-primary bg-fill-quaternary': status === 'ACTIVE',
+          },
+        ])}
         onClick={() => setStatus('ACTIVE')}
       >
         {t('main.setting.field-status.active')}
       </button>
       <button
-        className={[
+        className={cn([
           'btn btn-sm btn-rounded min-w-[64px] border',
-          status !== 'INACTIVE' ?
-            'text-tertiary bg-fill-inverse'
-          : 'text-primary bg-fill-quaternary',
-        ].join(' ')}
+          {
+            'text-tertiary bg-fill-inverse': status === 'ACTIVE',
+            'text-primary bg-fill-quaternary': status === 'INACTIVE',
+          },
+        ])}
         onClick={() => setStatus('INACTIVE')}
       >
         {t('main.setting.field-status.inactive')}

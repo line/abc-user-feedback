@@ -27,7 +27,7 @@ import {
   TooltipTrigger,
 } from '@ufb/ui';
 
-import { Path, usePermissions } from '@/shared';
+import { cn, Path, usePermissions } from '@/shared';
 
 import { useCreateChannelStore } from '../create-channel-model';
 import { CREATE_CHANNEL_STEP_KEY_LIST } from '../create-channel-type';
@@ -62,10 +62,10 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
       <Tooltip open={editingStep > 0} placement={placement ?? 'bottom'}>
         <TooltipTrigger asChild>
           <button
-            className={[
-              type === 'primary' ? 'btn-primary' : 'btn-blue',
+            className={cn([
               'btn btn-lg gap-2',
-            ].join(' ')}
+              type === 'primary' ? 'btn-primary' : 'btn-blue',
+            ])}
             onClick={() => {
               if (editingStep > 0) setOpen(true);
               else goToCreateChannel();

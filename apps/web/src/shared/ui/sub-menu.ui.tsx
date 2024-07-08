@@ -13,10 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import clsx from 'clsx';
 
 import { Icon } from '@ufb/ui';
 import type { IconNameType } from '@ufb/ui';
+
+import { cn } from '../utils';
 
 interface Item {
   iconName: IconNameType;
@@ -35,7 +36,7 @@ const SubMenu: React.FC<IProps> = ({ items, ...props }) => {
       {items.map(({ active, iconName, name, disabled, onClick }, index) => (
         <li
           key={index}
-          className={clsx(
+          className={cn(
             'mx-1 my-2 flex items-center gap-2 rounded px-2 py-1.5',
             {
               'bg-fill-tertiary': active,

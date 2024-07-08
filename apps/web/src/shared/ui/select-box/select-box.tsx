@@ -18,6 +18,8 @@ import ReactSelect from 'react-select';
 
 import { Badge, Icon } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 export interface ISelectBoxProps<Option, IsMulti extends boolean>
   extends Props<Option, IsMulti> {
   isExpand?: boolean;
@@ -43,21 +45,23 @@ function SelectBox<Option = unknown, IsMulti extends boolean = false>(
     <ReactSelect
       classNames={{
         control: ({ isFocused, isDisabled }) =>
-          [
+          cn([
             'border rounded py-2 px-3 gap-2 min-h-10 min-w-[120px]',
             isFocused ? 'border-fill-primary' : 'border-fill-tertiary',
             isDisabled ? 'bg-fill-tertiary' : 'bg-primary',
-          ].join(' '),
+          ]),
         dropdownIndicator: ({ isFocused }) =>
           isFocused ? 'text-primary' : 'text-secondary',
         placeholder: () => 'text-secondary',
         menu: () => 'border rounded mt-2 bg-primary shadow overflow-hidden',
         option: ({ isFocused, isSelected }) =>
-          [
+          cn([
             'px-3 py-2',
-            isFocused ? 'bg-fill-tertiary' : '',
-            isSelected ? 'bg-fill-secondary font-bold' : '',
-          ].join(' '),
+            {
+              'bg-fill-tertiary': isFocused,
+              'bg-fill-secondary font-bold': isSelected,
+            },
+          ]),
         noOptionsMessage: () => 'p-3 text-secondary',
         singleValue: () => 'font-12-regular',
         valueContainer: () => 'gap-1',

@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, toast } from '@ufb/ui';
 
-import { useOAIMutation, usePermissions } from '@/shared';
+import { cn, useOAIMutation, usePermissions } from '@/shared';
 import type { Issue } from '@/entities/issue';
 
 interface IProps {
@@ -83,12 +83,12 @@ const IssueSetting: React.FC<IProps> = (props) => {
           />
         </li>
         <li
-          className={[
+          className={cn([
             'hover:bg-fill-quaternary m-1 flex cursor-pointer items-center gap-2 rounded-sm p-2',
             !perms.includes('issue_delete') || deleteIssuePending ?
               'text-tertiary cursor-not-allowed'
             : 'text-primary cursor-pointer',
-          ].join(' ')}
+          ])}
           onClick={() => {
             if (!perms.includes('issue_delete') || deleteIssuePending) return;
             deleteIssue(undefined);

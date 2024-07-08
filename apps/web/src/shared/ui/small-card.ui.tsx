@@ -14,10 +14,10 @@
  * under the License.
  */
 
-import clsx from 'clsx';
-
 import type { ColorType, IconNameType } from '@ufb/ui';
 import { Icon } from '@ufb/ui';
+
+import { cn } from '../utils';
 
 const COLORS: Record<ColorType, { bgColor: string; iconColor: string }> = {
   blue: {
@@ -63,7 +63,7 @@ const SmallCard: React.FC<IProps> = (props) => {
   return (
     <div className="flex w-[360px] items-center gap-4 rounded border p-2">
       <div
-        className={clsx(
+        className={cn(
           'flex h-14 w-14 items-center justify-center rounded',
           COLORS[color].bgColor,
         )}

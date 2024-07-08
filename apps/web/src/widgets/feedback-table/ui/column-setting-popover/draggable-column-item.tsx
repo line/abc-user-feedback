@@ -17,6 +17,8 @@ import { Draggable } from 'react-beautiful-dnd';
 
 import { Icon } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 interface IProps {
   name: string;
   index: number;
@@ -41,10 +43,10 @@ const DraggableColumnItem: React.FC<IProps> = ({
       {(provided) => (
         <label
           ref={provided.innerRef}
-          className={[
+          className={cn([
             'flex items-center gap-2 py-1',
-            isDisabled ? 'cursor-not-allowed' : '',
-          ].join(' ')}
+            { 'cursor-not-allowed': isDisabled },
+          ])}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >

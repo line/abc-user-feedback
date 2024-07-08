@@ -17,6 +17,8 @@ import type { Table } from '@tanstack/react-table';
 
 import { Icon } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 interface IProps {
   table: Table<any>;
 }
@@ -30,10 +32,10 @@ const FeedbackTableExpandButtonGroup: React.FC<IProps> = ({ table }) => {
       onClick={() => table.toggleAllRowsExpanded()}
     >
       <div
-        className={[
+        className={cn([
           'bg-primary absolute h-[28px] w-[28px] rounded',
           !isAllExpanded ? 'left-0.5' : 'right-0.5',
-        ].join(' ')}
+        ])}
       />
       <button className="z-20 flex h-[28px] w-[28px] items-center justify-center">
         <Icon

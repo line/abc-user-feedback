@@ -25,7 +25,7 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { useOAIQuery } from '@/shared';
+import { cn, useOAIQuery } from '@/shared';
 
 import { env } from '@/env.mjs';
 
@@ -90,10 +90,10 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
     <Popover onOpenChange={setOpen} open={open} placement="bottom-end">
       <PopoverTrigger asChild>
         <button
-          className={[
+          className={cn([
             'btn btn-secondary btn-md min-w-[120px]',
-            open ? 'bg-fill-tertiary' : '',
-          ].join(' ')}
+            { 'bg-fill-tertiary': open },
+          ])}
           onClick={() => setOpen(true)}
         >
           {t('main.setting.feedback-request-code')}

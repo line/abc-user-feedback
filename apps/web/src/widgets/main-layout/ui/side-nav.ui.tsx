@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import type { IconNameType } from '@ufb/ui';
 import { Icon } from '@ufb/ui';
 
-import { Path } from '@/shared';
+import { cn, Path } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {}
 
@@ -107,29 +107,28 @@ const MenuItem: React.FC<IMenuItemProps> = ({
       {disabled ?
         <button
           disabled
-          className={[
+          className={cn([
             'icon-btn icon-btn-tertiary icon-btn-md w-full justify-start',
             activePathname === router.pathname ? 'bg-fill-tertiary' : '',
-          ].join(' ')}
+          ])}
         >
           <Icon name={iconName} />
-          <span className={['ml-2', isHover ? 'visible' : 'hidden'].join(' ')}>
+          <span className={cn(['ml-2', isHover ? 'visible' : 'hidden'])}>
             {text}
           </span>
         </button>
       : <Link href={href}>
           <button
-            className={[
+            className={cn([
               'icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start',
-              activePathname === router.pathname ?
-                'bg-fill-tertiary font-bold'
-              : '',
-            ].join(' ')}
+              {
+                'bg-fill-tertiary font-bold':
+                  activePathname === router.pathname,
+              },
+            ])}
           >
             <Icon name={iconName} />
-            <span
-              className={['ml-2', isHover ? 'visible' : 'hidden'].join(' ')}
-            >
+            <span className={cn(['ml-2', isHover ? 'visible' : 'hidden'])}>
               {text}
             </span>
           </button>

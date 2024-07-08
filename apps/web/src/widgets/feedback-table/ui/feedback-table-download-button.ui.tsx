@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
-import { usePermissions } from '@/shared';
+import { cn, usePermissions } from '@/shared';
 import type { Field } from '@/entities/field';
 import { useThemeStore } from '@/entities/theme';
 
@@ -107,10 +107,10 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        className={[
+        className={cn([
           'btn btn-sm gap-2',
           isHead ? 'btn-tertiary' : 'btn-secondary',
-        ].join(' ')}
+        ])}
         disabled={!perms.includes('feedback_download_read')}
         onClick={() => setOpen((prev) => !prev)}
       >

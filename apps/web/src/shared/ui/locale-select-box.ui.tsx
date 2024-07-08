@@ -20,6 +20,8 @@ import { setCookie } from 'cookies-next';
 
 import { Icon } from '@ufb/ui';
 
+import { cn } from '../utils';
+
 interface IProps extends React.PropsWithChildren {}
 
 const LocaleSelectBox: React.FC<IProps> = () => {
@@ -56,10 +58,10 @@ const LocaleSelectBox: React.FC<IProps> = () => {
               key={v}
               value={v}
               className={({ selected }) =>
-                [
+                cn([
                   'hover:bg-secondary cursor-pointer select-none p-2 text-center font-extrabold uppercase',
                   selected ? 'font-bold' : 'font-normal',
-                ].join(' ')
+                ])
               }
             >
               {v}

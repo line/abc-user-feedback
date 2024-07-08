@@ -16,6 +16,8 @@
 import type { IconNameType } from '@ufb/ui';
 import { Icon } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 interface IItemProps extends React.LiHTMLAttributes<HTMLLIElement> {
   iconName: IconNameType;
   name: string;
@@ -32,13 +34,13 @@ const SettingMenuItem: React.FC<IItemProps> = ({
 }) => {
   return (
     <li
-      className={[
+      className={cn([
         'mx-1 my-2 flex items-center gap-2 rounded px-2 py-1.5',
-        active ? 'bg-fill-tertiary' : '',
+        { 'bg-fill-tertiary': active },
         disabled ?
           'text-tertiary cursor-not-allowed'
         : 'hover:bg-fill-secondary cursor-pointer',
-      ].join(' ')}
+      ])}
       {...props}
       onClick={(e) => (!disabled && props.onClick ? props.onClick(e) : {})}
     >

@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import type { DateRangeType } from '../types/date-range.type';
+import { cn } from '../utils';
 
 dayjs.extend(weekday);
 
@@ -115,11 +116,11 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <div
-          className={[
+          className={cn([
             'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded border px-3.5 py-[9.5px]',
             currentValue ? 'text-primary' : 'text-tertiary',
             isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
-          ].join(' ')}
+          ])}
           onClick={() => setIsOpen(true)}
         >
           <p className="font-14-regular">
@@ -156,10 +157,10 @@ const DateRangePicker: React.FC<IProps> = (props) => {
           <ul className="border-fill-secondary border-r p-2">
             {(options ?? items).map(({ label, startDate, endDate }, index) => (
               <li
-                className={[
+                className={cn([
                   'font-14-regular hover:bg-fill-secondary m-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
-                  activeIdx === index ? 'bg-fill-tertiary' : '',
-                ].join(' ')}
+                  { 'bg-fill-tertiary': activeIdx === index },
+                ])}
                 key={index}
                 onClick={handleChangeDateRange(index, startDate, endDate)}
               >

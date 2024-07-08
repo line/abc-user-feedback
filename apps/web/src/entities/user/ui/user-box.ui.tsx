@@ -19,6 +19,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 import { useUserStore } from '../user.model';
 
 interface IProps {}
@@ -48,10 +50,10 @@ const UserBox: React.FC<IProps> = () => {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger className="h-full" onClick={() => setOpen((v) => !v)}>
           <div
-            className={[
+            className={cn([
               'flex h-full cursor-pointer items-center gap-3 px-3',
-              open ? 'bg-fill-quaternary' : '',
-            ].join(' ')}
+              { 'bg-fill-quaternary': open },
+            ])}
           >
             <div className="flex items-center gap-2">
               <Icon name="ProfileCircleFill" size={16} />

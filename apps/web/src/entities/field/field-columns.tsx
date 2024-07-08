@@ -15,11 +15,10 @@
  */
 
 import { createColumnHelper } from '@tanstack/react-table';
-import clsx from 'clsx';
 
 import { Badge, Icon } from '@ufb/ui';
 
-import { displayString } from '@/shared';
+import { cn, displayString } from '@/shared';
 
 import { FIELD_PROPERTY_TEXT, isDefaultField } from './field-utils';
 import type { FieldInfo } from './field.type';
@@ -36,9 +35,7 @@ export const getFieldColumns = (
   columnHelper.accessor('key', {
     header: 'Key',
     cell: ({ getValue, row }) => (
-      <span
-        className={clsx({ 'text-secondary': isDefaultField(row.original) })}
-      >
+      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
         {displayString(getValue())}
       </span>
     ),
@@ -47,9 +44,7 @@ export const getFieldColumns = (
   columnHelper.accessor('name', {
     header: 'Display Name',
     cell: ({ getValue, row }) => (
-      <span
-        className={clsx({ 'text-secondary': isDefaultField(row.original) })}
-      >
+      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
         {displayString(getValue())}
       </span>
     ),
@@ -58,9 +53,7 @@ export const getFieldColumns = (
   columnHelper.accessor('format', {
     header: 'Format',
     cell: ({ getValue, row }) => (
-      <span
-        className={clsx({ 'text-secondary': isDefaultField(row.original) })}
-      >
+      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
         {displayString(getValue())}
       </span>
     ),
@@ -69,9 +62,7 @@ export const getFieldColumns = (
   columnHelper.accessor('description', {
     header: 'Description',
     cell: ({ getValue, row }) => (
-      <span
-        className={clsx({ 'text-secondary': isDefaultField(row.original) })}
-      >
+      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
         {displayString(getValue())}
       </span>
     ),

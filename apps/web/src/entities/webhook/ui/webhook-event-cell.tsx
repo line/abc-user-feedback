@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -24,6 +23,7 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import { cn } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import type { WebhookEventType, WebhookStatus } from '../webhook.type';
@@ -52,7 +52,7 @@ const WebhookEventCell: React.FC<IProps> = (props) => {
     <Popover>
       <PopoverTrigger disabled={webhookStatus === 'INACTIVE'}>
         <span
-          className={clsx(
+          className={cn(
             'text-blue-primary font-12-regular cursor-pointer underline',
             { 'text-tertiary': webhookStatus === 'INACTIVE' },
           )}

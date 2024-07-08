@@ -17,6 +17,8 @@ import type { Header, Table } from '@tanstack/react-table';
 
 import { Icon } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 interface IProps {
   table: Table<any>;
   header: Header<any, unknown>;
@@ -27,12 +29,12 @@ const TableResizer: React.FC<IProps> = ({ table, header }) => {
     <div
       onMouseDown={header.getResizeHandler()}
       onTouchStart={header.getResizeHandler()}
-      className={[
+      className={cn([
         'resizer hover:text-primary z-auto',
         header.column.getIsResizing() ?
           'text-primary bg-secondary'
         : 'text-tertiary',
-      ].join(' ')}
+      ])}
       style={{
         transform:
           header.column.getIsResizing() ?

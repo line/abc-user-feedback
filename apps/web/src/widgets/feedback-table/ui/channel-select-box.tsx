@@ -16,7 +16,7 @@
 
 import { Icon } from '@ufb/ui';
 
-import { DescriptionTooltip, useOAIQuery } from '@/shared';
+import { cn, DescriptionTooltip, useOAIQuery } from '@/shared';
 
 import { useFeedbackTable } from '../model';
 
@@ -38,10 +38,10 @@ const ChannelSelectBox: React.FC<IProps> = ({ onChangeChannel }) => {
         <div
           key={channel.id}
           onClick={() => onChangeChannel(channel.id)}
-          className={[
+          className={cn([
             'flex h-10 min-w-[136px] cursor-pointer items-center justify-between gap-2 rounded border px-3 py-2.5',
             channel.id === channelId ? 'border-fill-primary' : 'opacity-50',
-          ].join(' ')}
+          ])}
         >
           <div className="flex items-center gap-2">
             <div className="bg-fill-tertiary inline-flex rounded-sm p-1">

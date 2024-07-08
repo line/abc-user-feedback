@@ -17,6 +17,8 @@ import { useState } from 'react';
 
 import { Icon } from '@ufb/ui';
 
+import { cn } from '../utils';
+
 interface IProps extends React.PropsWithChildren {
   title: string;
   defaultOpen?: boolean;
@@ -39,18 +41,18 @@ const CreateSectionTemplate: React.FC<IProps> = ({
         <button className="icon-btn icon-btn-sm icon-btn-tertiary icon-btn-rounded">
           <Icon
             name="ChevronDown"
-            className={[
+            className={cn([
               'transform transition-transform',
               open ? 'rotate-180' : 'rotate-0',
-            ].join(' ')}
+            ])}
           />
         </button>
       </div>
       <div
-        className={[
+        className={cn([
           'flex flex-col gap-5',
           open ? 'visible h-fit p-6' : 'hidden min-h-0',
-        ].join(' ')}
+        ])}
       >
         {children}
       </div>

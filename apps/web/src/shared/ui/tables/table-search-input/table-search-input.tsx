@@ -19,7 +19,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon } from '@ufb/ui';
 
-import { removeEmptyValueInObject } from '@/shared';
+import { cn, removeEmptyValueInObject } from '@/shared';
 import type { FieldFormat } from '@/entities/field';
 
 import TableSearchInputPopover from './table-search-input-popover';
@@ -135,10 +135,10 @@ const TableSearchInput: React.FC<IProps> = (props) => {
       <Icon
         name="Search"
         size={20}
-        className={[
+        className={cn([
           'absolute left-3 top-0 translate-y-1/2',
           inputValue.length > 0 ? 'text-primary' : 'text-tertiary',
-        ].join(' ')}
+        ])}
         onClick={() => inputRef.current?.focus()}
       />
       <Combobox.Input
@@ -163,7 +163,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
           <Icon
             name="CloseCircleFill"
             size={20}
-            className={[filterIconCN, 'flex-shrink-0'].join(' ')}
+            className={cn([filterIconCN, 'flex-shrink-0'])}
           />
         </button>
       )}
@@ -244,7 +244,7 @@ const ComboboxOption: React.FC<IComboboxOption> = ({
     <Combobox.Option
       key={key}
       className={({ active }) =>
-        ['cursor-pointer p-3', active ? 'bg-secondary' : 'bg-primary'].join(' ')
+        cn(['cursor-pointer p-3', active ? 'bg-secondary' : 'bg-primary'])
       }
       value={{ [key]: strValueToObj(editingValue, searchItem) }}
     >

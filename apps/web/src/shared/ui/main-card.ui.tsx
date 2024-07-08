@@ -13,12 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import clsx from 'clsx';
 
 import { Icon } from '@ufb/ui';
 import type { IconNameType } from '@ufb/ui';
 
-import { displayString } from '../utils';
+import { cn, displayString } from '../utils';
 
 interface IProps {
   onClick?: () => void;
@@ -34,7 +33,7 @@ const MainCard: React.FC<IProps> = (props) => {
 
   return (
     <div
-      className={clsx('card h-[204px] w-[452px] rounded border p-8', {
+      className={cn('card h-[204px] w-[452px] rounded border p-8', {
         'hover:cursor-pointer hover:opacity-50': !!onClick,
       })}
       onClick={onClick}

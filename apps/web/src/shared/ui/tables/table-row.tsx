@@ -15,6 +15,7 @@
  */
 import { useEffect, useRef, useState } from 'react';
 
+import { cn } from '@/shared';
 import { useThemeStore } from '@/entities/theme';
 
 interface IProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
@@ -46,11 +47,11 @@ const TableRow: React.FC<IProps> = (props) => {
         ref={ref}
         onMouseOver={() => setIsHover(true)}
         onMouseOut={() => setIsHover(false)}
-        className={[
+        className={cn([
           'hover:bg-fill-quaternary',
-          isSelected ? 'bg-fill-quaternary' : '',
-          otherProps.onClick ? 'cursor-pointer' : '',
-        ].join(' ')}
+          { 'bg-fill-quaternary': isSelected },
+          { 'cursor-pointer': otherProps.onClick },
+        ])}
         {...otherProps}
       >
         {children}
@@ -59,7 +60,7 @@ const TableRow: React.FC<IProps> = (props) => {
         <tr
           onMouseEnter={() => setIsHover(true)}
           onMouseLeave={() => setIsHover(false)}
-          className={[isHover ? 'visible' : 'hidden'].join(' ')}
+          className={cn([isHover ? 'visible' : 'hidden'])}
         >
           <td
             className="left-30 absolute flex -translate-y-[102%] items-center gap-3 p-3"

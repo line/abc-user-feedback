@@ -27,7 +27,7 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
-import { DescriptionTooltip, SelectBox } from '@/shared';
+import { cn, DescriptionTooltip, SelectBox } from '@/shared';
 
 import { FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
@@ -164,20 +164,20 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
         <PopoverTrigger asChild>
           {isEditing ?
             <button
-              className={[
+              className={cn([
                 'icon-btn icon-btn-sm icon-btn-tertiary',
-                open ? 'bg-fill-tertiary' : '',
-              ].join(' ')}
+                { 'bg-fill-tertiary': open },
+              ])}
               disabled={disabled}
               onClick={() => setOpen(true)}
             >
               <Icon name="EditFill" />
             </button>
           : <button
-              className={[
+              className={cn([
                 'btn btn-sm btn-secondary',
-                open ? 'bg-fill-tertiary' : '',
-              ].join(' ')}
+                { 'bg-fill-tertiary': open },
+              ])}
               disabled={disabled}
               onClick={() => setOpen(true)}
             >

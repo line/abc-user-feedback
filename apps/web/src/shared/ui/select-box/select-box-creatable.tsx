@@ -19,6 +19,8 @@ import ReactSelect from 'react-select/creatable';
 
 import { Badge, Icon } from '@ufb/ui';
 
+import { cn } from '@/shared/utils';
+
 export interface ISelectBoxProps<IsMulti extends boolean>
   extends Props<
     { key: string; name: string },
@@ -37,21 +39,23 @@ function SelectBoxCreatable<IsMulti extends boolean = false>(
       classNames={{
         container: () => 'min-w-[120px]',
         control: ({ isFocused, isDisabled }) =>
-          [
+          cn([
             'border rounded py-2 px-3 gap-2 min-h-10',
             isFocused ? 'border-fill-primary' : 'border-fill-tertiary',
             isDisabled ? 'bg-fill-tertiary' : 'bg-primary',
-          ].join(' '),
+          ]),
         dropdownIndicator: ({ isFocused }) =>
           isFocused ? 'text-primary' : 'text-secondary',
         placeholder: () => 'text-secondary',
         menu: () => 'border rounded mt-2 bg-primary shadow overflow-hidden',
         option: ({ isFocused, isSelected }) =>
-          [
+          cn([
             'px-3 py-2',
-            isFocused ? 'bg-fill-tertiary' : '',
-            isSelected ? 'bg-fill-secondary font-bold' : '',
-          ].join(' '),
+            {
+              'bg-fill-tertiary': isFocused,
+              'bg-fill-secondary font-bold': isSelected,
+            },
+          ]),
         noOptionsMessage: () => 'p-3 text-secondary',
         singleValue: () => 'font-12-regular',
         valueContainer: () => 'gap-1',

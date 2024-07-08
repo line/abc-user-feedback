@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { cn } from '@/shared';
+
 interface IProps extends React.PropsWithChildren {
   title: string | React.ReactNode;
   actionBtn?: React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -31,10 +33,10 @@ const SettingMenuTemplate: React.FC<IProps> = (props) => {
         {actionBtn && (
           <button
             {...actionBtn}
-            className={[
+            className={cn([
               'btn btn-md btn-primary min-w-[120px]',
-              actionBtn.className ?? '',
-            ].join(' ')}
+              actionBtn.className,
+            ])}
           />
         )}
         {action}

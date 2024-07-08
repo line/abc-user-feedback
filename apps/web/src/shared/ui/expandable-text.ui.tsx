@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import clsx from 'clsx';
+import { cn } from '../utils';
 
 interface IProps extends React.PropsWithChildren {
   isExpanded?: boolean;
@@ -23,7 +23,7 @@ interface IProps extends React.PropsWithChildren {
 const ExpandableText: React.FC<IProps> = ({ children, isExpanded }) => {
   return (
     <p
-      className={clsx('cursor-text', {
+      className={cn('cursor-text', {
         'whitespace-pre-wrap break-all': isExpanded,
         truncate: !isExpanded,
       })}
