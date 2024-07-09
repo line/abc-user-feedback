@@ -15,6 +15,7 @@
  */
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
@@ -34,6 +35,7 @@ interface IProps {}
 const CreateTenantForm: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const { refetchTenant } = useTenantStore();
   const { register, handleSubmit, formState } = useForm<FormType>({
@@ -45,13 +47,13 @@ const CreateTenantForm: React.FC<IProps> = () => {
     path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
-        toast.positive({ title: 'Success' });
-
+        queryClient.invalidateQueries({
+          queryKey: ['/api/admin/tenants'],
+        });
         toast.positive({
           title: 'Default Super User',
           description: `email: ${DEFAULT_SUPER_ACCOUNT.email} \n password: ${DEFAULT_SUPER_ACCOUNT.password}`,
         });
-
         router.replace(Path.SIGN_IN);
         await refetchTenant();
       },

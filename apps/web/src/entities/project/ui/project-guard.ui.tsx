@@ -31,6 +31,7 @@ const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
 
   useEffect(() => {
     if (!data) return;
+    console.log('data: ', data.items);
     const project = data.items.find((v) => v.id === projectId);
     if (!project) {
       alert('You do not have permission for this project');
@@ -38,7 +39,7 @@ const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
     }
   }, [data]);
 
-  return <div>{!isPending && children}</div>;
+  return <>{!isPending && children}</>;
 };
 
 export default ProjectGuard;

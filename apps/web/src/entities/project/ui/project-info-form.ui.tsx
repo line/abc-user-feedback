@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { TextInput } from '@ufb/ui';
 
@@ -27,6 +28,7 @@ interface IProps {
 
 const ProjectInfoForm: React.FC<IProps> = (props) => {
   const { type = 'create', readOnly = false } = props;
+  const { t } = useTranslation();
 
   const { register, setValue, watch, formState } =
     useFormContext<ProjectInfo>();
@@ -39,6 +41,7 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
       <TextInput
         {...register('name')}
         label="Project Name"
+        placeholder={t('placeholder', { name: 'Project Name' })}
         isSubmitting={formState.isSubmitting}
         isSubmitted={formState.isSubmitted}
         hint={formState.errors.name?.message}
@@ -49,6 +52,7 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
       <TextInput
         {...register('description')}
         label="Project Description"
+        placeholder={t('placeholder', { name: 'Project Description' })}
         isSubmitting={formState.isSubmitting}
         isSubmitted={formState.isSubmitted}
         hint={formState.errors.description?.message}

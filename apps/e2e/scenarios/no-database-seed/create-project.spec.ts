@@ -17,6 +17,7 @@ export default () => {
   test('creating a project succeeds', async ({ page }) => {
     await page.goto('http://localhost:3000');
     await page.getByRole('button', { name: 'Create Project' }).click();
+
     await page.getByPlaceholder('Please enter Project Name.').click();
     await page
       .getByPlaceholder('Please enter Project Name.')
@@ -25,11 +26,21 @@ export default () => {
     await page
       .getByPlaceholder('Please enter Project Description.')
       .fill('Project for test');
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Complete' }).click();
+
     await expect(page.getByText('Project Creation Complete')).toBeVisible();
     await expect(page.locator('#Project\\ Name')).toHaveValue('TestProject');
     await expect(page.locator('#Project\\ Description')).toHaveValue(

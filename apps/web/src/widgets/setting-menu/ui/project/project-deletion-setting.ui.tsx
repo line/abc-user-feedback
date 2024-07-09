@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { TextInput, toast } from '@ufb/ui';
@@ -33,6 +34,8 @@ const ProjectDeletionSetting: React.FC<IProps> = ({ projectId }) => {
 
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
     variables: { projectId },
@@ -43,6 +46,9 @@ const ProjectDeletionSetting: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: ['/api/admin/projects'],
+        });
         toast.negative({ title: t('toast.delete') });
         router.push(Path.MAIN);
       },
