@@ -14,6 +14,6 @@
  * under the License.
  */
 export { default as RoleTable } from './role-table.ui';
-export { default as UpdateRoleNameModal } from './update-role-name-modal.ui';
-export { default as DeleteRoleModal } from './delete-role-modal.ui';
+export { default as UpdateRoleNamePopover } from './update-role-name-popover.ui';
+export { default as DeleteRolePopover } from './delete-role-popover.ui';
 export { default as CreateRolePopover } from './create-role-popover';

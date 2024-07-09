@@ -13,50 +13,42 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
-
-import { usePermissions } from '@/shared';
+import { Popover, PopoverModalContent } from '@ufb/ui';
 
 interface IProps {
+  open: boolean;
+  onOpenChange: React.Dispatch<React.SetStateAction<boolean>>;
   onClickDelete: () => void;
 }
 
-const DeleteMemberModal: React.FC<IProps> = ({ onClickDelete }) => {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
-  const perms = usePermissions();
+const DeleteRolePopover: React.FC<IProps> = (props) => {
+  const { open, onOpenChange, onClickDelete } = props;
 
+  const { t } = useTranslation();
   return (
-    <Popover open={open} onOpenChange={setOpen} modal>
-      <PopoverTrigger
-        onClick={() => setOpen((prev) => !prev)}
-        className="icon-btn icon-btn-sm icon-btn-tertiary"
-        disabled={!perms.includes('project_member_delete')}
-      >
-        <Icon name="TrashFill" />
-      </PopoverTrigger>
+    <Popover open={open} onOpenChange={onOpenChange} modal>
       <PopoverModalContent
-        title={t('main.setting.dialog.delete-member.title')}
-        description={t('main.setting.dialog.delete-member.description')}
+        title={t('main.setting.dialog.delete-role.title')}
+        description={t('main.setting.dialog.delete-role.description')}
         cancelButton={{ children: t('button.cancel') }}
         icon={{
-          name: 'WarningTriangleFill',
+          name: 'WarningCircleFill',
           className: 'text-red-primary',
           size: 56,
         }}
         submitButton={{
-          className: 'bg-red-primary',
           children: t('button.delete'),
+          className: 'bg-red-primary',
           onClick: () => {
             onClickDelete();
-            setOpen(false);
+            onOpenChange(false);
           },
         }}
       />
     </Popover>
   );
 };
-export default DeleteMemberModal;
+
+export default DeleteRolePopover;

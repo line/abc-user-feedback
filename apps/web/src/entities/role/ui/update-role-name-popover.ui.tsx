@@ -34,7 +34,7 @@ interface IProps {
   roles: Role[];
 }
 
-const UpdateRoleNameModal: React.FC<IProps> = (props) => {
+const UpdateRoleNamePopover: React.FC<IProps> = (props) => {
   const { open, onOpenChange, role, roles, onClickUpdate } = props;
 
   const { t } = useTranslation();
@@ -92,4 +92,4 @@ const UpdateRoleNameModal: React.FC<IProps> = (props) => {
     </Popover>
   );
 };
-export default UpdateRoleNameModal;
+export default UpdateRoleNamePopover;

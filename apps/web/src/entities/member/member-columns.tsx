@@ -21,8 +21,8 @@ import type { Role } from '@/entities/role';
 
 import type { User } from '../user';
 import type { Member } from './member.type';
-import DeleteMemberModal from './ui/delete-member-modal.ui';
-import UpdateMemberModal from './ui/update-member-modal.ui';
+import DeleteMemberPopover from './ui/delete-member-popover.ui';
+import UpdateMemberPopover from './ui/update-member-popover.ui';
 
 const columnHelper = createColumnHelper<Member>();
 
@@ -75,7 +75,7 @@ export const getMemberColumns = (
         id: 'edit',
         header: 'Edit',
         cell: ({ row }) => (
-          <UpdateMemberModal
+          <UpdateMemberPopover
             roles={roles}
             member={row.original}
             onClickUpdate={onClickUpdate}
@@ -91,7 +91,7 @@ export const getMemberColumns = (
         id: 'delete',
         header: 'Delete',
         cell: ({ row }) => (
-          <DeleteMemberModal
+          <DeleteMemberPopover
             onClickDelete={() => onClickDelete(row.original.id)}
           />
         ),

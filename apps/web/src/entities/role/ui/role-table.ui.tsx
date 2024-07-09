@@ -43,8 +43,8 @@ import {
 } from '../permission.type';
 import type { PermissionType } from '../permission.type';
 import type { Role } from '../role.type';
-import DeleteRoleModal from './delete-role-modal.ui';
-import UpdateRoleNameModal from './update-role-name-modal.ui';
+import DeleteRolePopover from './delete-role-popover.ui';
+import UpdateRoleNamePopover from './update-role-name-popover.ui';
 
 interface IProps {
   roles: Role[];
@@ -202,7 +202,7 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
     return (
       onUpdateRole &&
       overlay.open(({ isOpen, close }) => (
-        <UpdateRoleNameModal
+        <UpdateRoleNamePopover
           open={isOpen}
           onOpenChange={() => close()}
           onClickUpdate={onUpdateRole}
@@ -212,11 +212,11 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
       ))
     );
   };
-  const openDeleteRoleModal = (role: Role) => {
+  const openDeleteRolePopover = (role: Role) => {
     return (
       onDeleteRole &&
       overlay.open(({ isOpen, close }) => (
-        <DeleteRoleModal
+        <DeleteRolePopover
           open={isOpen}
           onOpenChange={() => close()}
           onClickDelete={() => onDeleteRole(role)}
@@ -270,7 +270,7 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
         {
           icon: 'TrashFill',
           label: t('main.setting.role-mgmt.delete-role'),
-          onClick: (role: Role) => openDeleteRoleModal(role),
+          onClick: (role: Role) => openDeleteRolePopover(role),
         },
       ]
     : []) as MenuType[]),
