@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
-import { SelectBox } from '@/shared';
+import { SelectBox, usePermissions } from '@/shared';
 import type { Role } from '@/entities/role';
 
 import type { Member } from '../member.type';
@@ -32,6 +32,8 @@ interface IProps {
 const UpdateMemberModal: React.FC<IProps> = (props) => {
   const { roles, member, onClickUpdate } = props;
 
+  const perms = usePermissions();
+
   const { t } = useTranslation();
   const [role, setRole] = useState<Role | null>(
     roles.find((v) => v.id === member.role.id) ?? null,
@@ -43,6 +45,7 @@ const UpdateMemberModal: React.FC<IProps> = (props) => {
       <PopoverTrigger
         className="icon-btn icon-btn-sm icon-btn-tertiary"
         onClick={() => setOpen(true)}
+        disabled={!perms.includes('project_member_update')}
       >
         <Icon name="EditFill" />
       </PopoverTrigger>

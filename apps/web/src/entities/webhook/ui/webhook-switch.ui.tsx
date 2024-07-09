@@ -14,17 +14,18 @@
  * under the License.
  */
 
-import { cn } from '@/shared';
+import { cn, usePermissions } from '@/shared';
 
-import type { Webhook, WebhookInput } from '../webhook.type';
+import type { Webhook, WebhookInfo } from '../webhook.type';
 
 interface IProps {
   webhook: Webhook;
-  onChangeUpdate: (webhookId: number, webhook: WebhookInput) => void;
+  onChangeUpdate: (webhookId: number, webhook: WebhookInfo) => void;
 }
 
 const WebhookSwitch: React.FC<IProps> = (props) => {
   const { webhook, onChangeUpdate } = props;
+  const perms = usePermissions();
 
   return (
     <input
@@ -43,6 +44,7 @@ const WebhookSwitch: React.FC<IProps> = (props) => {
           status: e.target.checked ? 'ACTIVE' : 'INACTIVE',
         });
       }}
+      disabled={!perms.includes('project_webhook_update')}
     />
   );
 };

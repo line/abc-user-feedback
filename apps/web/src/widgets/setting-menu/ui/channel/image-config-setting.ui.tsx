@@ -49,7 +49,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
     variables: { channelId, projectId },
   });
 
-  const { mutate } = useOAIMutation({
+  const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
@@ -140,7 +140,9 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
       actionBtn={{
         children: t('button.save'),
         disabled:
-          !perms.includes('channel_image_update') || !methods.formState.isDirty, // TODO: 권한 추가후 수정해야함.
+          !perms.includes('channel_image_update') ||
+          !methods.formState.isDirty ||
+          isPending,
         onClick: methods.handleSubmit(onSubmit),
         form: 'form',
       }}

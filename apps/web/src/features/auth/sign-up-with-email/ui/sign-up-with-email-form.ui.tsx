@@ -53,7 +53,7 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
   const [expiredTime, setExpiredTime] = useState<string>();
   const [leftTime, setLeftTime] = useState('');
 
-  const { mutate: signUp } = useOAIMutation({
+  const { mutate: signUp, status: signUpStatus } = useOAIMutation({
     method: 'post',
     path: '/api/admin/auth/signUp/email',
     queryOptions: {
@@ -145,7 +145,10 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
               type="button"
               className="btn btn-secondary btn-xs btn-rounded"
               onClick={() => fetchCode({ email: getValues('email') })}
-              disabled={watch('emailState') === 'VERIFIED'}
+              disabled={
+                watch('emailState') === 'VERIFIED' ||
+                fetchCodeStatus === 'pending'
+              }
             >
               {t('auth.sign-up.button.request-auth-code')}
             </button>
@@ -177,7 +180,8 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
                   className="btn btn-secondary btn-xs btn-rounded"
                   disabled={
                     watch('emailState') === 'VERIFIED' ||
-                    watch('code')?.length !== 6
+                    watch('code')?.length !== 6 ||
+                    verifyCodeStatus === 'pending'
                   }
                   onClick={() => {
                     const code = getValues('code');
@@ -221,7 +225,7 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
         <button
           type="submit"
           className="btn btn-lg btn-primary"
-          disabled={!formState.isValid}
+          disabled={!formState.isValid || signUpStatus === 'pending'}
         >
           {t('button.sign-up')}
         </button>

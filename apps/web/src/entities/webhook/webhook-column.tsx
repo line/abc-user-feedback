@@ -22,14 +22,14 @@ import DeleteWebhookPopover from './ui/delete-webhook-popover.ui';
 import WebhookEventCell from './ui/webhook-event-cell';
 import WebhookSwitch from './ui/webhook-switch.ui';
 import WebhookUpsertPopover from './ui/webhook-upsert-popover';
-import type { Webhook, WebhookInput } from './webhook.type';
+import type { Webhook, WebhookInfo } from './webhook.type';
 
 const columnHelper = createColumnHelper<Webhook>();
 
 export const getWebhookColumns = (
   projectId: number,
   onDelete: (webhookId: number) => void,
-  onUpdate: (webhookId: number, input: WebhookInput) => void,
+  onUpdate: (webhookId: number, input: WebhookInfo) => void,
 ) => [
   columnHelper.accessor('status', {
     header: '',
@@ -94,7 +94,6 @@ export const getWebhookColumns = (
     header: 'Delete',
     cell: ({ row }) => (
       <DeleteWebhookPopover
-        projectId={projectId}
         webhookId={row.original.id}
         onClickDelete={onDelete}
       />

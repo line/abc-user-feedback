@@ -29,6 +29,9 @@ import type {
 
 import { env } from '@/env.mjs';
 
+function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 class client {
   private axiosInstance = axios.create({
     baseURL: env.NEXT_PUBLIC_API_BASE_URL,
@@ -40,8 +43,9 @@ class client {
   }
 
   constructor() {
-    this.axiosInstance.interceptors.request.use((config) => {
+    this.axiosInstance.interceptors.request.use(async (config) => {
       const token = sessionStorage.getItem('jwt');
+      await delay(1000);
 
       if (token) {
         config.headers.setAuthorization(`Bearer ${token.accessToken}`);

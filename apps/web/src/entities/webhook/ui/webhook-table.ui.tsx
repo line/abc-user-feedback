@@ -21,17 +21,18 @@ import { Icon } from '@ufb/ui';
 import { BasicTable } from '@/shared';
 
 import { getWebhookColumns } from '../webhook-column';
-import type { Webhook, WebhookInput } from '../webhook.type';
+import type { Webhook, WebhookInfo } from '../webhook.type';
 
 interface IProps {
+  isLoading?: boolean;
   webhooks: Webhook[];
   projectId: number;
-  onUpdate: (webhookId: number, webhook: WebhookInput) => void;
+  onUpdate: (webhookId: number, webhook: WebhookInfo) => void;
   onDelete: (webhookId: number) => void;
 }
 
 const WebhookTable: React.FC<IProps> = (props) => {
-  const { webhooks, projectId, onDelete, onUpdate } = props;
+  const { isLoading, webhooks, projectId, onDelete, onUpdate } = props;
   const { t } = useTranslation();
 
   const table = useReactTable({
@@ -43,6 +44,7 @@ const WebhookTable: React.FC<IProps> = (props) => {
 
   return (
     <BasicTable
+      isLoading={isLoading}
       table={table}
       emptyComponent={
         <div className="my-32 flex flex-col items-center justify-center gap-3">

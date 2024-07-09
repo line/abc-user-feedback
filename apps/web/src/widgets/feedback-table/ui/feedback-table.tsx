@@ -260,7 +260,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
             </colgroup>
             <thead>
               <tr>
-                {table.getIsSomePageRowsSelected() ?
+                {rowSelectionIds.length > 0 ?
                   <CheckedTableHead
                     table={table}
                     onClickDelete={openFeedbackDeleteDialog}

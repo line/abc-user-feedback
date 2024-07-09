@@ -21,15 +21,14 @@ import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 import { usePermissions } from '@/shared';
 
 interface IProps {
-  projectId: number;
   webhookId: number;
   onClickDelete: (webhookId: number) => void;
 }
 
 const DeleteWebhookPopover: React.FC<IProps> = (props) => {
-  const { projectId, webhookId, onClickDelete } = props;
+  const { webhookId, onClickDelete } = props;
   const { t } = useTranslation();
-  const perms = usePermissions(projectId);
+  const perms = usePermissions();
   const [open, setOpen] = useState(false);
 
   return (

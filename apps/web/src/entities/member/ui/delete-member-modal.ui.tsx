@@ -18,6 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
+import { usePermissions } from '@/shared';
+
 interface IProps {
   onClickDelete: () => void;
 }
@@ -25,12 +27,14 @@ interface IProps {
 const DeleteMemberModal: React.FC<IProps> = ({ onClickDelete }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const perms = usePermissions();
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
       <PopoverTrigger
         onClick={() => setOpen((prev) => !prev)}
         className="icon-btn icon-btn-sm icon-btn-tertiary"
+        disabled={!perms.includes('project_member_delete')}
       >
         <Icon name="TrashFill" />
       </PopoverTrigger>

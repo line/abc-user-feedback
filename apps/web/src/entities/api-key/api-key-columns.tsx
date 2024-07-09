@@ -23,6 +23,7 @@ import { Badge, Icon, toast } from '@ufb/ui';
 import { DATE_TIME_FORMAT } from '@/shared';
 
 import type { ApiKey } from './api-key.type';
+import DeleteApiKeyButton from './ui/delete-api-key-button.ui';
 import UpdateApiKeyPopover from './ui/update-api-key-popover.ui';
 
 const columnHelper = createColumnHelper<ApiKey>();
@@ -102,12 +103,7 @@ export const getApiKeyColumns = (
         id: 'delete',
         header: 'Delete',
         cell: ({ row }) => (
-          <button
-            className="icon-btn icon-btn-tertiary icon-btn-sm"
-            onClick={() => onDelete(row.original.id)}
-          >
-            <Icon name="TrashFill" />
-          </button>
+          <DeleteApiKeyButton onClickDelete={() => onDelete(row.original.id)} />
         ),
         size: 100,
       }),

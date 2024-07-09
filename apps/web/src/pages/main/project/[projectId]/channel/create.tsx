@@ -13,22 +13,38 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import type { NextPageWithLayout } from '@/shared';
 import { DEFAULT_LOCALE } from '@/shared';
+import { ProjectGuard } from '@/entities/project';
 import { CreateChannel } from '@/features/create-channel';
 
-const CreatePage: NextPage = () => {
+interface IProps {
+  projectId: number;
+}
+
+const CreateChannelPage: NextPageWithLayout<IProps> = () => {
   return <CreateChannel />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+CreateChannelPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>;
+};
+
+export const getServerSideProps: GetServerSideProps = async ({
+  locale,
+  query,
+}) => {
+  const projectId = parseInt(query.projectId as string);
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      projectId,
     },
   };
 };
 
-export default CreatePage;
+export default CreateChannelPage;

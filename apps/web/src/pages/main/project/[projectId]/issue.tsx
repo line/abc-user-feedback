@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { ProjectGuard } from '@/entities/project';
 import { RouteCreateChannelButton } from '@/features/create-channel';
 import { MainLayout } from '@/widgets';
 import { IssueTable } from '@/widgets/issue-table';
@@ -50,8 +51,12 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
   );
 };
 
-IssueMangementPage.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>;
+IssueMangementPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return (
+    <MainLayout>
+      <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({

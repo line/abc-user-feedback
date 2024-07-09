@@ -24,13 +24,14 @@ import { getApiKeyColumns } from '../api-key-columns';
 import type { ApiKey, ApiKeyUpdateType } from '../api-key.type';
 
 interface IProps {
+  isLoading?: boolean;
   apiKeys: ApiKey[];
   onClickDelete?: (id: number) => void;
   onClickUpdate?: (type: ApiKeyUpdateType, id: number) => void;
 }
 
 const ApiKeyTable: React.FC<IProps> = (props) => {
-  const { apiKeys, onClickDelete, onClickUpdate } = props;
+  const { isLoading, apiKeys, onClickDelete, onClickUpdate } = props;
 
   const { t } = useTranslation();
 
@@ -43,6 +44,7 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
 
   return (
     <BasicTable
+      isLoading={isLoading}
       table={table}
       emptyComponent={
         <div className="my-32 flex flex-col items-center justify-center gap-3">

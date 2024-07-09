@@ -15,14 +15,16 @@
  */
 import { useMemo } from 'react';
 import type { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { Icon } from '@ufb/ui';
 
-import { DEFAULT_LOCALE } from '@/shared';
+import { DEFAULT_LOCALE, Path } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import { ProjectGuard } from '@/entities/project';
 import { MainLayout } from '@/widgets';
 import type { SettingMenuType } from '@/widgets/setting-menu';
 import {
@@ -52,19 +54,16 @@ interface IProps {
 
 const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const router = useRouter();
 
   const [channelId, setChannelId] = useQueryState('channelId', parseAsInteger);
-  const [settingMenu, setSettingMenu] = useQueryState<SettingMenuType | null>(
-    'menu',
-    {
-      defaultValue: null,
-      parse: (value) => value as SettingMenuType,
-    },
-  );
+  const settingMenu =
+    router.query?.menu ? (router.query.menu as SettingMenuType) : null;
 
-  const onClickReset = () => {
-    setSettingMenu(null);
-  };
+  const setSettingMenu = (menu: SettingMenuType | null) =>
+    router.push({ pathname: Path.SETTINGS, query: { ...router.query, menu } });
+
+  const onClickReset = () => setSettingMenu(null);
 
   const showList = useMemo(() => {
     switch (settingMenu) {
@@ -170,8 +169,12 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-SettingPage.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>;
+SettingPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return (
+    <MainLayout>
+      <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({

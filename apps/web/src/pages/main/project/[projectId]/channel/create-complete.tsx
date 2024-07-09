@@ -14,7 +14,7 @@
  * under the License.
  */
 import { useEffect } from 'react';
-import type { GetServerSideProps, NextPage } from 'next';
+import type { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
+import type { NextPageWithLayout } from '@/shared';
 import {
   CreateSectionTemplate,
   DEFAULT_LOCALE,
@@ -32,8 +33,13 @@ import {
 import { ChannelInfoForm, ImageConfigForm } from '@/entities/channel';
 import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
 import { FieldTable, PreviewFieldTable } from '@/entities/field';
+import { ProjectGuard } from '@/entities/project';
 
-const CompleteChannelCreationPage: NextPage = () => {
+interface IProps {
+  projectId: number;
+}
+
+const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
   const { channelId, projectId } = {
@@ -139,10 +145,20 @@ const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+CompleteChannelCreationPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>;
+};
+
+export const getServerSideProps: GetServerSideProps<IProps> = async ({
+  locale,
+  query,
+}) => {
+  const projectId = parseInt(query.projectId as string);
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      projectId,
     },
   };
 };

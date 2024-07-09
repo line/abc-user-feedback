@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
@@ -32,6 +32,7 @@ interface IProps {
 const RoleSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
+  const queryClient = useQueryClient();
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',
@@ -84,8 +85,11 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
       });
     },
     async onSuccess() {
+      await queryClient.invalidateQueries({
+        queryKey: ['/api/admin/users/{userId}/roles'],
+      });
+      await refetch();
       toast.positive({ title: t('toast.save') });
-      refetch();
     },
     onError(error) {
       toast.negative({ title: error?.message ?? 'Error' });

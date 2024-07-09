@@ -57,6 +57,7 @@ const InputFieldStep: React.FC<IProps> = () => {
       }
     >
       <FieldTable
+        isInputStep
         fields={input.fields}
         onDeleteField={deleteField}
         onModifyField={updateField}

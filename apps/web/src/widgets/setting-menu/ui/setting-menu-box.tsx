@@ -28,7 +28,7 @@ const SettingMenuBox: React.FC<IBoxProps> = (props) => {
   const { children, show, last = false } = props;
 
   const flexCN = last ? 'flex-0' : 'flex-1';
-  const transitionFlexCN = last ? 'flex-[2]' : 'flex-0';
+  const transitionFlexCN = last ? 'flex-[2] overflow-hidden' : 'flex-0';
 
   return (
     <Transition

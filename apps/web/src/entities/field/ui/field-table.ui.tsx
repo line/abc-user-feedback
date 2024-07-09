@@ -22,17 +22,18 @@ import { getFieldColumns } from '../field-columns';
 import type { FieldInfo } from '../field.type';
 
 interface IProps {
+  isInputStep?: boolean;
   fields: FieldInfo[];
   onDeleteField?: (input: { index: number }) => void;
   onModifyField?: (input: { index: number; field: FieldInfo }) => void;
 }
 
 const FieldTable: React.FC<IProps> = (props) => {
-  const { fields, onDeleteField, onModifyField } = props;
+  const { isInputStep, fields, onDeleteField, onModifyField } = props;
 
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
-    columns: getFieldColumns(fields, onDeleteField, onModifyField),
+    columns: getFieldColumns(fields, onDeleteField, onModifyField, isInputStep),
     data: fields,
     enableSorting: false,
   });

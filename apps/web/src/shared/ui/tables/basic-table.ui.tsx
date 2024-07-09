@@ -16,6 +16,8 @@
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
+import { cn } from '@/shared/utils';
+
 import CheckedTableHead from './checked-table-head';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
@@ -47,13 +49,16 @@ function BasicTable<T>(props: IProps<T>) {
               <CheckedTableHead table={table} onClickDelete={onClickDelete} />
             : table.getFlatHeaders().map((header, i) => (
                 <th key={i} style={{ width: header.getSize() }}>
-                  <div className="flex flex-nowrap items-center">
-                    <span className="overflow-hidden text-ellipsis">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                    </span>
+                  <div
+                    className={cn('flex flex-nowrap items-center', {
+                      'overflow-hidden text-ellipsis':
+                        resiable && header.column.getCanResize(),
+                    })}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
                     {header.column.getCanSort() && (
                       <TableSortIcon column={header.column} />
                     )}

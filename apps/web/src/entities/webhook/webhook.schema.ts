@@ -39,7 +39,7 @@ export const webhookSchema = z.object({
   createdAt: z.string(),
 });
 
-export const webhookInputSchema = webhookSchema
+export const webhookInfoSchema = webhookSchema
   .omit({
     id: true,
     createdAt: true,

@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from '@ufb/ui';
 
 import { client, useOAIMutation, useOAIQuery } from '@/shared';
-import type { WebhookInput } from '@/entities/webhook';
+import type { WebhookInfo } from '@/entities/webhook';
 import { WebhookTable, WebhookUpsertPopover } from '@/entities/webhook';
 
 import SettingMenuTemplate from '../setting-menu-template';
@@ -32,7 +32,7 @@ interface IProps {
 const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isPending } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/webhooks',
     variables: { projectId },
   });
@@ -52,7 +52,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
   const { mutate: updateWebhook } = useMutation({
-    mutationFn: (input: { webhookId: number; body: WebhookInput }) =>
+    mutationFn: (input: { webhookId: number; body: WebhookInfo }) =>
       client.put({
         path: '/api/admin/projects/{projectId}/webhooks/{webhookId}',
         pathParams: { projectId, webhookId: input.webhookId },
@@ -67,7 +67,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
-  const { mutate: create } = useOAIMutation({
+  const { mutate: create, status: createStatus } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/webhooks',
     pathParams: { projectId },
@@ -86,10 +86,15 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     <SettingMenuTemplate
       title={t('project-setting-menu.webhook-integration')}
       action={
-        <WebhookUpsertPopover projectId={projectId} onClickCreate={create} />
+        <WebhookUpsertPopover
+          projectId={projectId}
+          onClickCreate={create}
+          disabled={createStatus === 'pending'}
+        />
       }
     >
       <WebhookTable
+        isLoading={isPending}
         projectId={projectId}
         webhooks={data?.items ?? []}
         onDelete={(webhookId) => deleteWebhook({ webhookId })}

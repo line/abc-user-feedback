@@ -64,6 +64,9 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
   });
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     methods.reset(data);

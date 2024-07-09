@@ -20,7 +20,7 @@ import { TextInput, toast } from '@ufb/ui';
 
 import { SmallCard, useOAIMutation, useOAIQuery } from '@/shared';
 import { useFeedbackSearch } from '@/entities/feedback';
-import { DeleteChannelPopover } from '@/features/create-channel';
+import { DeleteChannelPopover } from '@/features/delete-channel';
 
 import SettingMenuTemplate from '../setting-menu-template';
 

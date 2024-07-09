@@ -16,13 +16,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Icon,
-  Popover,
-  PopoverModalContent,
-  PopoverTrigger,
-  toast,
-} from '@ufb/ui';
+import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
+
+import { usePermissions } from '@/shared';
 
 interface IProps {
   apiKeyId: number;
@@ -32,6 +28,8 @@ interface IProps {
 
 const UpdateApiKeyPopover: React.FC<IProps> = (props) => {
   const { apiKeyId, deletedAt, onClickUpdate } = props;
+
+  const perms = usePermissions();
 
   const { t } = useTranslation();
 
@@ -50,6 +48,7 @@ const UpdateApiKeyPopover: React.FC<IProps> = (props) => {
       <PopoverTrigger
         className="icon-btn icon-btn-tertiary icon-btn-sm"
         onClick={handleOpen}
+        disabled={!perms.includes('project_apikey_update')}
       >
         <Icon name="SettingFill" />
       </PopoverTrigger>

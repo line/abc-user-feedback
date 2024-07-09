@@ -23,7 +23,7 @@ import type { Channel } from '@/entities/channel';
 
 import type {
   WebhookEventType,
-  WebhookInput,
+  WebhookInfo,
   WebhookStatus,
 } from '../webhook.type';
 
@@ -35,7 +35,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
   const { channels } = props;
   const { t } = useTranslation();
   const { register, setValue, getValues, watch, formState } =
-    useFormContext<WebhookInput>();
+    useFormContext<WebhookInfo>();
 
   const getEventChecked = (type: WebhookEventType) =>
     watch('events').find((e) => e.type === type)?.status === 'ACTIVE';

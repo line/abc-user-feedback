@@ -26,6 +26,7 @@ import { getMemberColumns } from '../member-columns';
 import type { Member } from '../member.type';
 
 interface IProps {
+  isLoading?: boolean;
   members: Member[];
   roles: Role[];
   onDeleteMember?: (id: number) => void;
@@ -33,7 +34,7 @@ interface IProps {
 }
 
 const MemberTable: React.FC<IProps> = (props) => {
-  const { members, roles, onDeleteMember, onUpdateMember } = props;
+  const { isLoading, members, roles, onDeleteMember, onUpdateMember } = props;
   const { t } = useTranslation();
 
   const { data: userData } = useUserSearch({
@@ -55,6 +56,7 @@ const MemberTable: React.FC<IProps> = (props) => {
   return (
     <BasicTable
       table={table}
+      isLoading={isLoading}
       emptyComponent={
         <div className="my-32 flex flex-col items-center justify-center gap-3">
           <Icon name="DriverRegisterFill" className="text-tertiary" size={56} />

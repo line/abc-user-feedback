@@ -13,6 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ProjectCard } from './project-card.ui';
-export { default as ProjectInfoForm } from './project-info-form.ui';
-export { default as ProjectGuard } from './project-guard.ui';
+
+import { Icon } from '@ufb/ui';
+
+import { usePermissions } from '@/shared';
+
+interface IProps {
+  onClickDelete: () => void;
+}
+
+const DeleteApiKeyButton: React.FC<IProps> = ({ onClickDelete }) => {
+  const perms = usePermissions();
+  return (
+    <button
+      className="icon-btn icon-btn-tertiary icon-btn-sm"
+      onClick={onClickDelete}
+      disabled={!perms.includes('project_apikey_delete')}
+    >
+      <Icon name="TrashFill" />
+    </button>
+  );
+};
+
+export default DeleteApiKeyButton;

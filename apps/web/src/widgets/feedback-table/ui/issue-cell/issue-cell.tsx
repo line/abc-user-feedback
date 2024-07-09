@@ -57,9 +57,8 @@ const IssueCell: React.FC<IProps> = (props) => {
   const comboBoxRef = useRef(null);
   const [openIssueId, setOpenIssueId] = useState<number | null>(null);
 
-  useClickAway(comboBoxRef, () => setIsEditing(false), ['click']);
-
   const [inputValue, setInputValue] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
 
   const { data: allIssues, refetch: allIssuesRefetch } = useIssueSearch(
     projectId,
@@ -72,15 +71,6 @@ const IssueCell: React.FC<IProps> = (props) => {
       ) ?? [],
     [allIssues, inputValue, issues],
   );
-
-  useEffect(() => {
-    if (!ref.current) return;
-    const newState = ref.current.clientWidth < ref.current.scrollWidth;
-    if (newState === overflow) return;
-    setOverflow(newState);
-  }, [ref.current, cellWidth, issues]);
-
-  const [isEditing, setIsEditing] = useState(false);
 
   const { mutateAsync: attatchIssue } = useMutation({
     mutationKey: [
@@ -100,6 +90,9 @@ const IssueCell: React.FC<IProps> = (props) => {
     onSuccess: async () => {
       await refetch();
       toast.positive({ title: t('toast.save') });
+    },
+    onError: (error) => {
+      toast.negative({ title: error.message });
     },
   });
 
@@ -142,6 +135,15 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
+
+  useClickAway(comboBoxRef, () => setIsEditing(false), ['click']);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const newState = ref.current.clientWidth < ref.current.scrollWidth;
+    if (newState === overflow) return;
+    setOverflow(newState);
+  }, [ref.current, cellWidth, issues]);
 
   const addIssue = async (issue?: Issue) => {
     let issueId = issue?.id;
@@ -240,7 +242,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               </span>
             </div>
             <div className="max-h-[300px] overflow-y-auto">
-              {filteredIssues?.map((item) => (
+              {filteredIssues.map((item) => (
                 <Combobox.Option
                   key={item.id}
                   value={item}

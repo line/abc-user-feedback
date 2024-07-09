@@ -93,7 +93,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
             name: t('channel-setting-menu.image-mgmt'),
             active: settingMenu === 'IMAGE_UPLOAD_SETTING',
             onClick: () => onClickSettingMenu('IMAGE_UPLOAD_SETTING'),
-            disabled: !perms.includes('channel_field_read'),
+            disabled: !perms.includes('channel_image_read'),
           },
           {
             iconName: 'TrashFill',

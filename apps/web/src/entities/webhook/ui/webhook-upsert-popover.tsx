@@ -22,19 +22,23 @@ import { Icon, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
 import { useOAIQuery, usePermissions } from '@/shared';
 
-import { webhookInputSchema } from '../webhook.schema';
-import type { Webhook, WebhookInput } from '../webhook.type';
+import { webhookInfoSchema } from '../webhook.schema';
+import type { Webhook, WebhookInfo } from '../webhook.type';
 import WebhookForm from './webhook-form.ui';
 
 interface IProps {
+  disabled?: boolean;
   projectId: number;
   webhook?: Webhook;
-  onClickUpdate?: (webhookId: number, input: WebhookInput) => void;
-  onClickCreate?: (input: WebhookInput) => void;
+  onClickUpdate?: (
+    webhookId: number,
+    input: WebhookInfo,
+  ) => Promise<void> | void;
+  onClickCreate?: (input: WebhookInfo) => void;
 }
 
 const WebhookUpsertPopover: React.FC<IProps> = (props) => {
-  const { projectId, webhook, onClickCreate, onClickUpdate } = props;
+  const { disabled, projectId, webhook, onClickCreate, onClickUpdate } = props;
 
   const isCreating = !webhook;
 
@@ -48,8 +52,8 @@ const WebhookUpsertPopover: React.FC<IProps> = (props) => {
 
   const [open, setOpen] = useState(false);
 
-  const methods = useForm<WebhookInput>({
-    resolver: zodResolver(webhookInputSchema),
+  const methods = useForm<WebhookInfo>({
+    resolver: zodResolver(webhookInfoSchema),
     defaultValues: {
       status: 'ACTIVE',
       events: [
@@ -75,13 +79,18 @@ const WebhookUpsertPopover: React.FC<IProps> = (props) => {
     );
   }, [open, webhook]);
 
-  const onSubmit = (data: WebhookInput) => {
-    isCreating ?
-      onClickCreate?.({ ...data, status: 'ACTIVE' })
-    : onClickUpdate?.(webhook.id, {
+  const onSubmit = (data: WebhookInfo) => {
+    if (isCreating && onClickCreate) {
+      onClickCreate({ ...data, status: 'ACTIVE' });
+    } else if (!isCreating && webhook && onClickUpdate) {
+      onClickUpdate?.(webhook.id, {
         ...data,
         status: webhook.status,
       });
+    } else {
+      throw new Error('Invalid props');
+    }
+    setOpen(false);
   };
 
   return (
@@ -94,11 +103,14 @@ const WebhookUpsertPopover: React.FC<IProps> = (props) => {
         {isCreating ?
           <button
             className="btn btn-primary"
-            disabled={!perms.includes('project_webhook_create')}
+            disabled={!perms.includes('project_webhook_create') || disabled}
           >
             {t('button.create', { name: 'Webhook' })}
           </button>
-        : <button className="icon-btn icon-btn-sm icon-btn-tertiary">
+        : <button
+            className="icon-btn icon-btn-sm icon-btn-tertiary"
+            disabled={!perms.includes('project_webhook_update') || disabled}
+          >
             <Icon name="EditFill" />
           </button>
         }

@@ -28,6 +28,7 @@ import {
   IssueLineChart,
   IssueRank,
 } from '@/entities/dashboard';
+import { ProjectGuard } from '@/entities/project';
 import { MainLayout } from '@/widgets';
 import { DashbaordCardSlider } from '@/widgets/dashboard-card-slider';
 
@@ -149,8 +150,12 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-DashboardPage.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>;
+DashboardPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return (
+    <MainLayout>
+      <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({

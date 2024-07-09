@@ -13,17 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import {
+import type {
   webhookEventSchema,
-  webhookInputSchema,
+  webhookInfoSchema,
   webhookSchema,
 } from './webhook.schema';
 
 export type Webhook = z.infer<typeof webhookSchema>;
 export type WebhookEvent = z.infer<typeof webhookEventSchema>;
-export type WebhookInput = z.infer<typeof webhookInputSchema>;
-
 export type WebhookStatus = Webhook['status'];
 export type WebhookEventType = WebhookEvent['type'];
+
+export type WebhookInfo = z.infer<typeof webhookInfoSchema>;

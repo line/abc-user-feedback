@@ -66,6 +66,7 @@ export const fieldInfoSchema = fieldSchema
   .merge(
     z.object({
       id: z.number().optional(),
+      createdAt: z.string().optional(),
       options: z
         .array(
           fieldSchema.shape.options.element

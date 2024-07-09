@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -50,6 +51,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
 
   const [status, setStatus] = useState<FieldStatus>('ACTIVE');
   const [showPreview, setShowPreview] = useState(false);
+  const router = useRouter();
 
   const [currentFields, setCurrentFields] = useState<FieldInfo[]>([]);
 
@@ -79,7 +81,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   );
 
   useEffect(() => {
-    setCurrentFields(data?.fields ?? []);
+    setCurrentFields(data?.fields.sort(sortField) ?? []);
   }, [data]);
 
   const saveFields = async () => {
@@ -97,6 +99,34 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const deleteField = ({ index }: { index: number }) => {
     setCurrentFields((prev) => prev.filter((_, i) => i !== index));
   };
+
+  useEffect(() => {
+    if (!isDirty) return;
+
+    const confirmMsg = t('system-popup.field-setting-get-out');
+
+    // 닫기, 새로고침
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      e.returnValue = confirmMsg;
+      return confirmMsg;
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Browser 뒤로가기, 나가기 버튼
+    const handleBeforeChangeRoute = (url: string) => {
+      if (router.pathname !== url && !confirm(confirmMsg)) {
+        router.events.emit('routeChangeError');
+
+        throw `사이트 변경 취소`;
+      }
+    };
+    router.events.on('routeChangeStart', handleBeforeChangeRoute);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      router.events.off('routeChangeStart', handleBeforeChangeRoute);
+    };
+  }, [isDirty]);
 
   return (
     <SettingMenuTemplate
@@ -124,13 +154,11 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
               disabled={!perms.includes('channel_field_update')}
             />
           </div>
-          <div className="overflow-auto">
-            <FieldTable
-              fields={currentFields.filter((v) => v.status === status)}
-              onDeleteField={deleteField}
-              onModifyField={updateField}
-            />
-          </div>
+          <FieldTable
+            fields={currentFields.filter((v) => v.status === status)}
+            onDeleteField={deleteField}
+            onModifyField={updateField}
+          />
         </div>
         <div className="flex h-1/2 flex-col gap-3">
           <div>
@@ -215,11 +243,12 @@ const SaveFieldPopover: React.FC<ISaveFieldPopoverProps> = (props) => {
   const { t } = useTranslation();
 
   const [isOpen, setIsOpen] = useState(false);
+
   return (
     <Popover modal open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <button
-          className="btn btn-primary btn-md"
+          className="btn btn-primary btn-md min-w-[120px]"
           disabled={disabled}
           onClick={() => setIsOpen(true)}
         >

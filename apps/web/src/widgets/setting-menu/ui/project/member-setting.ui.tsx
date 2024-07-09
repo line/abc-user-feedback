@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
@@ -32,8 +32,13 @@ const MemberSetting: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
+  const queryClient = useQueryClient();
 
-  const { data: memberData, refetch } = useOAIQuery({
+  const {
+    data: memberData,
+    refetch,
+    isPending,
+  } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/members',
     variables: { projectId, createdAt: 'ASC' },
   });
@@ -85,8 +90,11 @@ const MemberSetting: React.FC<IProps> = (props) => {
         body: { roleId: input.roleId },
       }),
     async onSuccess() {
+      await refetch();
+      await queryClient.invalidateQueries({
+        queryKey: ['/api/admin/users/{userId}/roles'],
+      });
       toast.positive({ title: t('toast.save') });
-      refetch();
     },
     onError(error) {
       toast.negative({ title: error?.message ?? 'Error' });
@@ -115,6 +123,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
       }
     >
       <MemberTable
+        isLoading={isPending}
         members={memberData?.members ?? []}
         roles={rolesData?.roles ?? []}
         onDeleteMember={(memberId) => deleteMember({ memberId })}
