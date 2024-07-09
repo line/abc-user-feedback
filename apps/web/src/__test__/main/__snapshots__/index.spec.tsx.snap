@@ -64,7 +64,7 @@ exports[`MainIndexPage should render without crashing 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r1:"
+            id="headlessui-listbox-button-:r2:"
             type="button"
           >
             <div

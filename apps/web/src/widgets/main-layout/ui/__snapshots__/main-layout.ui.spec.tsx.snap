@@ -64,7 +64,7 @@ exports[`MainLayout snapshot center 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r4:"
+            id="headlessui-listbox-button-:r8:"
             type="button"
           >
             <div
@@ -167,7 +167,7 @@ exports[`MainLayout snapshot default 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r1:"
+            id="headlessui-listbox-button-:r2:"
             type="button"
           >
             <div
@@ -269,7 +269,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
             aria-haspopup="listbox"
             class="btn btn-sm btn-secondary min-w-0 px-2"
             data-headlessui-state=""
-            id="headlessui-listbox-button-:r7:"
+            id="headlessui-listbox-button-:re:"
             type="button"
           >
             <div
@@ -310,7 +310,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               href="/main/project//dashboard"
             >
               <button
-                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
                 <div
                   class="inline-block "
@@ -331,7 +331,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               href="/main/project//feedback"
             >
               <button
-                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
                 <div
                   class="inline-block "
@@ -351,7 +351,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               href="/main/project//issue"
             >
               <button
-                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
                 <div
                   class="inline-block "
@@ -372,7 +372,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               href="/main/project//setting"
             >
               <button
-                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start "
+                class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
                 <div
                   class="inline-block "

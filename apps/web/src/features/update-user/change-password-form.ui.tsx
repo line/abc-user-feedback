@@ -81,7 +81,9 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       <form
         id="reset_password"
         className="flex flex-col gap-6"
-        onSubmit={handleSubmit((data) => mutate(data))}
+        onSubmit={handleSubmit((data) => {
+          mutate(data);
+        })}
       >
         <TextInput
           type="password"
