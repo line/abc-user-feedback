@@ -16,12 +16,12 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from '@/shared';
+import { cn, DATE_TIME_FORMAT } from '@/shared';
 
+import { UpdateWebhookPopover } from './ui';
 import DeleteWebhookPopover from './ui/delete-webhook-popover.ui';
 import WebhookEventCell from './ui/webhook-event-cell';
 import WebhookSwitch from './ui/webhook-switch.ui';
-import WebhookUpsertPopover from './ui/webhook-upsert-popover';
 import type { Webhook, WebhookInfo } from './webhook.type';
 
 const columnHelper = createColumnHelper<Webhook>();
@@ -44,20 +44,36 @@ export const getWebhookColumns = (
   }),
   columnHelper.accessor('name', {
     header: 'Name',
-    cell: ({ getValue }) => getValue(),
+    cell: ({ getValue, row }) => (
+      <span
+        className={cn({ 'text-tertiary': row.original.status === 'INACTIVE' })}
+      >
+        {getValue()}
+      </span>
+    ),
     size: 75,
   }),
   columnHelper.accessor('url', {
     header: 'URL',
-    cell: ({ getValue }) => (
-      <p className="line-clamp-2 break-all">{getValue()}</p>
+    cell: ({ getValue, row }) => (
+      <span
+        className={cn('line-clamp-2 break-all', {
+          'text-tertiary': row.original.status === 'INACTIVE',
+        })}
+      >
+        {getValue()}
+      </span>
     ),
     size: 100,
   }),
   columnHelper.accessor('events', {
     header: 'Event',
     cell: ({ getValue, row }) => (
-      <div className="my-1 flex flex-wrap gap-x-2.5 gap-y-1">
+      <div
+        className={cn('my-1 flex flex-wrap gap-x-2.5 gap-y-1', {
+          'text-tertiary': row.original.status === 'INACTIVE',
+        })}
+      >
         {getValue()
           .filter((v) => v.status === 'ACTIVE')
           .map((v) => (
@@ -74,14 +90,20 @@ export const getWebhookColumns = (
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
-    cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
+    cell: ({ getValue, row }) => (
+      <span
+        className={cn({ 'text-tertiary': row.original.status === 'INACTIVE' })}
+      >
+        {dayjs(getValue()).format(DATE_TIME_FORMAT)}
+      </span>
+    ),
     size: 150,
   }),
   columnHelper.display({
     id: 'edit',
     header: 'Edit',
     cell: ({ row }) => (
-      <WebhookUpsertPopover
+      <UpdateWebhookPopover
         projectId={projectId}
         webhook={row.original}
         onClickUpdate={onUpdate}

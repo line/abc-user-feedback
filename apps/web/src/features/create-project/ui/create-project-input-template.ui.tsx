@@ -15,14 +15,18 @@
  */
 
 import { useRouter } from 'next/router';
-import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import { ErrorCode } from '@ufb/shared';
 import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
-import { CreateInputTemplate, Path, useOAIMutation } from '@/shared';
+import {
+  CreateInputTemplate,
+  Path,
+  useOAIMutation,
+  useOAIQuery,
+} from '@/shared';
 
 import { useCreateProjectStore } from '../create-project-model';
 import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
@@ -52,7 +56,10 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
 
   const router = useRouter();
   const overlay = useOverlay();
-  const queryClient = useQueryClient();
+  const { refetch } = useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000, page: 1 },
+  });
 
   const openMemberError = () => {
     return overlay.open(({ isOpen, close }) => (
@@ -88,17 +95,14 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
     path: '/api/admin/projects',
     queryOptions: {
       async onSuccess(data) {
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/projects'],
-        });
-        await router.replace({
+        await refetch();
+        await router.push({
           pathname: Path.CREATE_PROJECT_COMPLETE,
           query: { projectId: data?.id },
         });
         reset();
       },
       onError(error) {
-        console.log('error: ', error);
         if (error.code === ErrorCode.Member.MemberInvalidUser) {
           openMemberError();
         } else if (error.code === ErrorCode.Project.ProjectAlreadyExists) {

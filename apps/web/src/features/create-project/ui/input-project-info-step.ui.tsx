@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { client } from '@/shared';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
 
@@ -42,14 +43,22 @@ const InputProjectInfo: React.FC<IProps> = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const validate = async () => {
+    const isValid = await methods.trigger();
+    await methods.handleSubmit(() => {})();
+    const { data: isDuplicated } = await client.get({
+      path: '/api/admin/projects/name-check',
+      query: { name: methods.getValues('name') },
+    });
+    if (isDuplicated) {
+      methods.setError('name', { message: 'Duplicated name' });
+      return false;
+    }
+    return isValid;
+  };
+
   return (
-    <CreateProjectInputTemplate
-      validate={async () => {
-        const isValid = await methods.trigger();
-        methods.handleSubmit(() => {})();
-        return isValid;
-      }}
-    >
+    <CreateProjectInputTemplate validate={validate}>
       <FormProvider {...methods}>
         <ProjectInfoForm type="create" />
       </FormProvider>

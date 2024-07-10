@@ -29,18 +29,12 @@ import WebhookForm from './webhook-form.ui';
 interface IProps {
   disabled?: boolean;
   projectId: number;
-  webhook?: Webhook;
-  onClickUpdate?: (
-    webhookId: number,
-    input: WebhookInfo,
-  ) => Promise<void> | void;
-  onClickCreate?: (input: WebhookInfo) => void;
+  webhook: Webhook;
+  onClickUpdate: (webhookId: number, input: WebhookInfo) => Promise<any> | any;
 }
 
-const WebhookUpsertPopover: React.FC<IProps> = (props) => {
-  const { disabled, projectId, webhook, onClickCreate, onClickUpdate } = props;
-
-  const isCreating = !webhook;
+const UpdateWebhookPopover: React.FC<IProps> = (props) => {
+  const { disabled, projectId, webhook, onClickUpdate } = props;
 
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
@@ -54,42 +48,14 @@ const WebhookUpsertPopover: React.FC<IProps> = (props) => {
 
   const methods = useForm<WebhookInfo>({
     resolver: zodResolver(webhookInfoSchema),
-    defaultValues: {
-      status: 'ACTIVE',
-      events: [
-        { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
-        { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },
-        { type: 'ISSUE_STATUS_CHANGE', channelIds: [], status: 'INACTIVE' },
-        { type: 'ISSUE_CREATION', channelIds: [], status: 'INACTIVE' },
-      ],
-    },
   });
 
   useEffect(() => {
-    methods.reset(
-      convertDefatulValuesToFormValues(webhook) ?? {
-        status: 'ACTIVE',
-        events: [
-          { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
-          { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },
-          { type: 'ISSUE_STATUS_CHANGE', channelIds: [], status: 'INACTIVE' },
-          { type: 'ISSUE_CREATION', channelIds: [], status: 'INACTIVE' },
-        ],
-      },
-    );
+    methods.reset(convertDefatulValuesToFormValues(webhook));
   }, [open, webhook]);
 
-  const onSubmit = (data: WebhookInfo) => {
-    if (isCreating && onClickCreate) {
-      onClickCreate({ ...data, status: 'ACTIVE' });
-    } else if (!isCreating && webhook && onClickUpdate) {
-      onClickUpdate?.(webhook.id, {
-        ...data,
-        status: webhook.status,
-      });
-    } else {
-      throw new Error('Invalid props');
-    }
+  const onSubmit = async (data: WebhookInfo) => {
+    await onClickUpdate(webhook.id, { ...data, status: webhook.status });
     setOpen(false);
   };
 
@@ -100,27 +66,15 @@ const WebhookUpsertPopover: React.FC<IProps> = (props) => {
         className="icon-btn icon-btn-sm icon-btn-tertiary"
         asChild
       >
-        {isCreating ?
-          <button
-            className="btn btn-primary"
-            disabled={!perms.includes('project_webhook_create') || disabled}
-          >
-            {t('button.create', { name: 'Webhook' })}
-          </button>
-        : <button
-            className="icon-btn icon-btn-sm icon-btn-tertiary"
-            disabled={!perms.includes('project_webhook_update') || disabled}
-          >
-            <Icon name="EditFill" />
-          </button>
-        }
+        <button
+          className="icon-btn icon-btn-sm icon-btn-tertiary"
+          disabled={!perms.includes('project_webhook_update') || disabled}
+        >
+          <Icon name="EditFill" />
+        </button>
       </PopoverTrigger>
       <PopoverModalContent
-        title={t(
-          isCreating ?
-            'dialog.create-webhook.title'
-          : 'dialog.update-webhook.title',
-        )}
+        title={t('dialog.update-webhook.title')}
         cancelButton={{ children: t('button.cancel') }}
         submitButton={{
           children: t('button.confirm'),
@@ -139,8 +93,7 @@ const WebhookUpsertPopover: React.FC<IProps> = (props) => {
   );
 };
 
-const convertDefatulValuesToFormValues = (defaultValues?: Webhook) => {
-  if (!defaultValues) return undefined;
+const convertDefatulValuesToFormValues = (defaultValues: Webhook) => {
   return {
     name: defaultValues.name,
     url: defaultValues.url,
@@ -153,4 +106,4 @@ const convertDefatulValuesToFormValues = (defaultValues?: Webhook) => {
   };
 };
 
-export default WebhookUpsertPopover;
+export default UpdateWebhookPopover;

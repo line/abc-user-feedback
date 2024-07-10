@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 
 import { Icon } from '@ufb/ui';
@@ -27,12 +26,7 @@ const Breadcrumb: React.FC<IProps> = () => {
   const router = useRouter();
   const { tenant } = useTenantStore();
 
-  const projectId = useMemo(() => {
-    if (!router.query?.projectId) return -1;
-    const id = +router.query?.projectId;
-    if (isNaN(id)) return -1;
-    return id;
-  }, [router]);
+  const projectId = +(router.query?.projectId ?? -1);
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',

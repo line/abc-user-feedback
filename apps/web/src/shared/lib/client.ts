@@ -45,7 +45,6 @@ class client {
       if (token) {
         config.headers.setAuthorization(`Bearer ${token.accessToken}`);
       }
-
       return config;
     });
     createAuthRefreshInterceptor(this.axiosInstance, async (failedRequest) => {

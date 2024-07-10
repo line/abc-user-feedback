@@ -40,7 +40,7 @@ interface IProps {
 
 const UpdateUserPopover: React.FC<IProps> = (props) => {
   const { user } = props;
-  const query = useQueryClient();
+  const queryClient = useQueryClient();
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
@@ -59,7 +59,7 @@ const UpdateUserPopover: React.FC<IProps> = (props) => {
     pathParams: { id: user.id },
     queryOptions: {
       async onSuccess() {
-        await query.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ['/api/admin/users/search'],
         });
         toast.positive({ title: t('toast.save') });

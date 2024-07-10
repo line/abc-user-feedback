@@ -46,11 +46,11 @@ const ProjectDeletionSetting: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        await router.push(Path.MAIN);
         await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects'],
         });
         toast.negative({ title: t('toast.delete') });
-        router.push(Path.MAIN);
       },
       onError(error) {
         toast.negative({ title: error?.message ?? 'Error' });
