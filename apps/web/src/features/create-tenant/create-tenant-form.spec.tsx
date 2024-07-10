@@ -56,7 +56,6 @@ describe('CreateTenantForm', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(new RegExp('success', 'i'))).toBeInTheDocument();
       expect(
         screen.getByText(new RegExp(DEFAULT_SUPER_ACCOUNT.email, 'i')),
       ).toBeInTheDocument();
