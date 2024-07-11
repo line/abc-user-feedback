@@ -70,7 +70,7 @@ export const useUserStore = create<State & Action>((set, get) => ({
       const { data } = await client.get({
         path: '/api/admin/users/{id}',
         pathParams: { id: parseInt(sub) },
-        options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } }, // session storage delay
+        options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } },
       });
       set({ user: data });
     }

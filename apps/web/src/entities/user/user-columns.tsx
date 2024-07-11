@@ -47,11 +47,15 @@ export const getUserColumns = () => [
     size: 50,
     enableSorting: false,
   }),
-  columnHelper.accessor('email', { header: 'Email', enableSorting: false }),
+  columnHelper.accessor('email', {
+    header: 'Email',
+    enableSorting: false,
+    size: 220,
+  }),
   columnHelper.accessor('type', {
     header: 'Type',
     enableSorting: false,
-    size: 85,
+    size: 80,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
@@ -88,6 +92,6 @@ export const getUserColumns = () => [
     id: 'edit',
     header: 'Edit',
     cell: ({ row }) => <UpdateUserPopover user={row.original} />,
-    size: 75,
+    size: 60,
   }),
 ];
