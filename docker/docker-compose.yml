@@ -3,7 +3,12 @@ version: '3'
 services:
   web:
     hostname: web
-    image: web:refactoring1
+    build:
+      context: ..
+      dockerfile: docker/web.dockerfile
+      args:
+        - TURBO_TOKEN=TURBO_TOKEN
+        - TURBO_TEAM=TURBO_TEAM
     restart: always
     ports:
       - 3000:3000
@@ -19,7 +24,13 @@ services:
 
   api:
     hostname: api
-    image: api:refactoring1
+    build:
+      context: ..
+      dockerfile: docker/api.dockerfile
+      args:
+        - TURBO_TOKEN=TURBO_TOKEN
+        - TURBO_TEAM=TURBO_TEAM
+    restart: always
     ports:
       - 4000:4000
     environment:
