@@ -90,7 +90,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
     };
 
   return (
-    <form className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5">
       <TextInput
         label="Name"
         placeholder={t('placeholder', { name: 'Name' })}
@@ -203,7 +203,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
           </label>
         </div>
       </div>
-    </form>
+    </div>
   );
 };
 

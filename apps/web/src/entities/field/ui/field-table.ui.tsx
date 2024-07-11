@@ -14,28 +14,39 @@
  * under the License.
  */
 
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 
 import { BasicTable } from '@/shared';
 
 import { getFieldColumns } from '../field-columns';
-import type { FieldInfo } from '../field.type';
+import type { FieldInfo, FieldStatus } from '../field.type';
 
 interface IProps {
   isInputStep?: boolean;
   fields: FieldInfo[];
   onDeleteField?: (input: { index: number }) => void;
   onModifyField?: (input: { index: number; field: FieldInfo }) => void;
+  fieldStatus?: FieldStatus;
 }
 
 const FieldTable: React.FC<IProps> = (props) => {
-  const { isInputStep, fields, onDeleteField, onModifyField } = props;
+  const { isInputStep, fields, onDeleteField, onModifyField, fieldStatus } =
+    props;
 
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
     columns: getFieldColumns(fields, onDeleteField, onModifyField, isInputStep),
     data: fields,
     enableSorting: false,
+    state: { globalFilter: fieldStatus },
+    enableGlobalFilter: true,
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: (row, _, value) =>
+      fieldStatus ? row.original.status === value : true,
   });
 
   return <BasicTable table={table} />;

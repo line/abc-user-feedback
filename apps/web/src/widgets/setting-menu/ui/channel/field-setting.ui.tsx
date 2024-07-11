@@ -49,7 +49,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
 
-  const [status, setStatus] = useState<FieldStatus>('ACTIVE');
+  const [fieldStatus, setFieldStatus] = useState<FieldStatus>('ACTIVE');
   const [showPreview, setShowPreview] = useState(false);
   const router = useRouter();
 
@@ -91,6 +91,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const addField = (input: FieldInfo) => {
     setCurrentFields((v) => v.concat(input).sort(sortField));
   };
+
   const updateField = (input: { index: number; field: FieldInfo }) => {
     setCurrentFields((prev) =>
       prev.map((v, i) => (i === input.index ? input.field : v)),
@@ -147,7 +148,10 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
       <div className="h-[calc(100%-120px)]">
         <div className="mb-4 flex h-1/2 flex-col gap-3">
           <div className="flex justify-between">
-            <StatusButtonGroup setStatus={setStatus} status={status} />
+            <StatusButtonGroup
+              setStatus={setFieldStatus}
+              status={fieldStatus}
+            />
             <FieldSettingPopover
               onSave={addField}
               fieldRows={currentFields}
@@ -155,9 +159,10 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
             />
           </div>
           <FieldTable
-            fields={currentFields.filter((v) => v.status === status)}
+            fields={currentFields}
             onDeleteField={deleteField}
             onModifyField={updateField}
+            fieldStatus={fieldStatus}
           />
         </div>
         <div className="flex h-1/2 flex-col gap-3">
