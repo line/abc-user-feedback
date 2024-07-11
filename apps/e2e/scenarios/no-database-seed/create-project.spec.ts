@@ -62,6 +62,8 @@ export default () => {
       .getByPlaceholder('Please enter Project Description.')
       .fill('Project for test');
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Create Role' }).click();
     await page.getByLabel('Role Name').click();
     await page.getByLabel('Role Name').fill('Test Role');
@@ -82,8 +84,14 @@ export default () => {
       .nth(1)
       .click();
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Complete' }).click();
     await expect(page.getByText('Project Creation Complete')).toBeVisible();
     await expect(page.locator('#Project\\ Name')).toHaveValue('TestProject');

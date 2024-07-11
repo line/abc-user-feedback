@@ -20,6 +20,8 @@ export default () => {
 
     test('creating a feedback succeeds', async ({ page }) => {
       await page.goto('http://localhost:3000');
+      await page.waitForTimeout(1000);
+
       await page.getByText('SeededTestProject').click();
       await page.getByText('FeedbackIssueSetting').hover();
       await page.getByRole('button', { name: 'Feedback', exact: true }).click();

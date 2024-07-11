@@ -48,16 +48,22 @@ export const getUserColumns = () => [
     enableSorting: false,
   }),
   columnHelper.accessor('email', { header: 'Email', enableSorting: false }),
-  columnHelper.accessor('type', { header: 'Type', enableSorting: false }),
+  columnHelper.accessor('type', {
+    header: 'Type',
+    enableSorting: false,
+    size: 85,
+  }),
   columnHelper.accessor('name', {
     header: 'Name',
     enableSorting: false,
     cell: ({ getValue }) => displayString(getValue()),
+    size: 120,
   }),
   columnHelper.accessor('department', {
     header: 'Department',
     cell: ({ getValue }) => displayString(getValue()),
     enableSorting: false,
+    size: 120,
   }),
   columnHelper.accessor('members', {
     header: 'Project',

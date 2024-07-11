@@ -46,9 +46,7 @@ const UserManagementTable: React.FC<IProps> = () => {
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
     getRowId: (row) => String(row.id),
-    initialState: {
-      sorting: [{ id: 'createdAt', desc: false }],
-    },
+    initialState: { sorting: [{ id: 'createdAt', desc: false }] },
   });
 
   const { sorting, pagination } = table.getState();
