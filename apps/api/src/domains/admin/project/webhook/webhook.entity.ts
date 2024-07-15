@@ -28,6 +28,9 @@ export class WebhookEntity extends CommonEntity {
   @Column('varchar')
   url: string;
 
+  @Column('varchar')
+  token: string | null;
+
   @Column('enum', {
     enum: WebhookStatusEnum,
     default: WebhookStatusEnum.ACTIVE,
@@ -45,12 +48,13 @@ export class WebhookEntity extends CommonEntity {
   })
   events: Relation<EventEntity>[];
 
-  static from({ projectId, name, url, status, events }) {
+  static from({ projectId, name, url, token, status, events }) {
     const webhook = new WebhookEntity();
     webhook.project = new ProjectEntity();
     webhook.project.id = projectId;
     webhook.name = name;
     webhook.url = url;
+    webhook.token = token;
     webhook.status = status;
     webhook.events = events;
 

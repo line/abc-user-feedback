@@ -92,6 +92,7 @@ export class WebhookService {
       projectId: dto.projectId,
       name: dto.name,
       url: dto.url,
+      token: dto.token,
       status: dto.status,
       events,
     });
@@ -137,6 +138,7 @@ export class WebhookService {
 
     webhook.name = dto.name;
     webhook.url = dto.url;
+    webhook.token = dto.token;
     webhook.status = dto.status;
     webhook.events = (
       await Promise.all(

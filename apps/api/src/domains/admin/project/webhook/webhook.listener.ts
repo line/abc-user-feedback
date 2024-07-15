@@ -63,6 +63,7 @@ export class WebhookListener {
               {
                 headers: {
                   'Content-Type': 'application/json',
+                  'x-webhook-token': webhook.token,
                 },
               },
             )
