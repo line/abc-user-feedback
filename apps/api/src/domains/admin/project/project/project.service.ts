@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
@@ -44,6 +44,8 @@ import { ProjectEntity } from './project.entity';
 
 @Injectable()
 export class ProjectService {
+  private logger = new Logger(ProjectService.name);
+
   constructor(
     @InjectRepository(ProjectEntity)
     private readonly projectRepo: Repository<ProjectEntity>,
@@ -155,7 +157,7 @@ export class ProjectService {
         savedProject.id,
       );
     } catch (error) {
-      console.log('error: ', error);
+      this.logger.error(error);
     }
 
     return savedProject;
