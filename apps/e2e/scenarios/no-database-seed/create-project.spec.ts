@@ -16,6 +16,8 @@ export default () => {
 
   test('creating a project succeeds', async ({ page }) => {
     await page.goto('http://localhost:3000');
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Create Project' }).click();
 
     await page.getByPlaceholder('Please enter Project Name.').click();
@@ -52,7 +54,10 @@ export default () => {
 
   test('creating a project with a new role succeeds', async ({ page }) => {
     await page.goto('http://localhost:3000');
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Create Project' }).click();
+
     await page.getByPlaceholder('Please enter Project Name.').click();
     await page
       .getByPlaceholder('Please enter Project Name.')

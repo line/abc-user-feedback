@@ -4,6 +4,8 @@ export default () => {
   test.describe('create-channel suite', () => {
     test('creating a channel succeeds', async ({ page }) => {
       await page.goto('http://localhost:3000');
+      await page.waitForTimeout(1000);
+
       await page.getByText('SeededTestProject').click();
       await page.getByText('FeedbackIssueSetting').hover();
       await page.getByRole('button', { name: 'Settings' }).click();
