@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { BadRequestException, Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
@@ -44,8 +44,6 @@ import { ProjectEntity } from './project.entity';
 
 @Injectable()
 export class ProjectService {
-  private logger = new Logger(ProjectService.name);
-
   constructor(
     @InjectRepository(ProjectEntity)
     private readonly projectRepo: Repository<ProjectEntity>,
@@ -148,17 +146,11 @@ export class ProjectService {
       });
       savedProject.issueTracker = savedIssueTracker;
     }
-    try {
-      await this.feedbackStatisticsService.addCronJobByProjectId(
-        savedProject.id,
-      );
-      await this.issueStatisticsService.addCronJobByProjectId(savedProject.id);
-      await this.feedbackIssueStatisticsService.addCronJobByProjectId(
-        savedProject.id,
-      );
-    } catch (error) {
-      this.logger.error(error);
-    }
+    await this.feedbackStatisticsService.addCronJobByProjectId(savedProject.id);
+    await this.issueStatisticsService.addCronJobByProjectId(savedProject.id);
+    await this.feedbackIssueStatisticsService.addCronJobByProjectId(
+      savedProject.id,
+    );
 
     return savedProject;
   }
