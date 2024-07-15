@@ -34,8 +34,8 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
 
   const {
     containerRef,
-    scrollLeft,
-    scrollRight,
+    scrollToLeft: scrollLeft,
+    scrollToRight: scrollRight,
     showLeftButton,
     showRightButton,
   } = useHorizontalScroll({

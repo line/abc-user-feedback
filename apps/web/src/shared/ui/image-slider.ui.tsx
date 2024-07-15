@@ -27,8 +27,8 @@ interface IProps {
 const ImageSlider: React.FC<IProps> = ({ urls }) => {
   const {
     containerRef,
-    scrollLeft,
-    scrollRight,
+    scrollToLeft,
+    scrollToRight,
     showLeftButton,
     showRightButton,
   } = useHorizontalScroll({
@@ -41,7 +41,7 @@ const ImageSlider: React.FC<IProps> = ({ urls }) => {
       <div className="top-0 w-full">
         {showRightButton && (
           <button
-            onClick={scrollRight}
+            onClick={scrollToRight}
             className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute right-0 z-10"
           >
             <Icon name="ArrowRight" />
@@ -49,7 +49,7 @@ const ImageSlider: React.FC<IProps> = ({ urls }) => {
         )}
         {showLeftButton && (
           <button
-            onClick={scrollLeft}
+            onClick={scrollToLeft}
             className="icon-btn icon-btn-secondary icon-btn-sm icon-btn-rounded absolute-y-center shadow-floating-depth-2 absolute left-0 z-10"
           >
             <Icon name="ArrowLeft" />

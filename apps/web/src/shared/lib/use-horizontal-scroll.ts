@@ -39,7 +39,8 @@ const useHorizontalScroll = (input: {
     });
   }, [containerRef]);
 
-  const scrollLeft = () => {
+  const scrollToLeft = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
     if (!containerRef.current) return;
     const { scrollWidth, scrollLeft } = containerRef.current;
 
@@ -50,7 +51,9 @@ const useHorizontalScroll = (input: {
     containerRef.current.scrollTo({ left, behavior: 'smooth' });
   };
 
-  const scrollRight = () => {
+  const scrollToRight = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+
     if (!containerRef.current) return;
     const { scrollWidth, scrollLeft } = containerRef.current;
 
@@ -63,8 +66,8 @@ const useHorizontalScroll = (input: {
 
   return {
     containerRef,
-    scrollLeft,
-    scrollRight,
+    scrollToLeft,
+    scrollToRight,
     showLeftButton,
     showRightButton,
   };
