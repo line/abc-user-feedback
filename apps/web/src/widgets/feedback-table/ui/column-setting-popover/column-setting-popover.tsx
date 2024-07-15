@@ -14,7 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import type { Table } from '@tanstack/react-table';
+import type { Table, VisibilityState } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next';
 import type { DroppableProps, OnDragEndResponder } from 'react-beautiful-dnd';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
@@ -46,19 +46,22 @@ const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {
 
   const columnKeys = useMemo(
     () =>
-      columnOrder.length === 0 ? (columns.map((v) => v.id) as string[])
+      columnOrder.length === 0 ? columns.map((v) => v.id)
       : columnOrder.length === columns.length ? columnOrder
       : columnOrder.concat(
-          columns
-            .filter((v) => !columnOrder.includes(v.id as string))
-            .map((v) => v.id) as string[],
+          columns.filter((v) => !columnOrder.includes(v.id)).map((v) => v.id),
         ),
     [columns, columnOrder],
   );
 
   const onClickReset = () => {
     table.resetColumnOrder();
-    table.resetColumnVisibility();
+    table.setColumnVisibility(
+      fieldData.reduce(
+        (acc, v) => ({ ...acc, [v.key]: v.status !== 'INACTIVE' }),
+        {} as VisibilityState,
+      ),
+    );
   };
 
   const checkedNum = useMemo(() => {
