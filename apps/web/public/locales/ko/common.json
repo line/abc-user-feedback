@@ -441,7 +441,7 @@
     "issue-tracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
     "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
     "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
-    "image-setting": "Image 포맷에 대해 피드백을 수집할 때 Image Storage와 연동할 수 있고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있습니다.\n자세한 내용은 Image <icon></icon> <docs>Docs</docs>를 참고해 주세요.",
+    "image-config": "Image 포맷에 대해 피드백을 수집할 때 Image Storage와 연동할 수 있고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있습니다.\n자세한 내용은 Image <icon></icon> <docs>Docs</docs>를 참고해 주세요.",
     "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다.",
     "webhook": "Webhook을 사용하면 User Feedback에서 발생하는 다양한 이벤트를 활용할 수 있습니다. 자세한 내용은 Webhook <icon></icon> <docs>Docs</docs>를 참고해 주세요."
   },

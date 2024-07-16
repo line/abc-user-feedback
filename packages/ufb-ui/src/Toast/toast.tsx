@@ -21,7 +21,7 @@ import type { IToastInfoBoxProps } from './ToastPromiseBox';
 import { ToastPromiseBox } from './ToastPromiseBox';
 
 interface IToastProps {
-  title?: string;
+  title?: React.ReactNode;
   description?: string;
   iconName?: IconNameType;
 }

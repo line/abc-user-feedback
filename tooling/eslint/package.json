@@ -9,7 +9,7 @@
     "./react.js"
   ],
   "scripts": {
-    "clean": "rimraf .turbo node_modules",
+    "clean": "git clean -xdf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
@@ -37,7 +37,6 @@
     "@ufb/prettier-config": "workspace:^",
     "@ufb/tsconfig": "workspace:^",
     "eslint": "^8.57.0",
-    "rimraf": "^5.0.5",
     "typescript": "^5.4.5"
   }
 }

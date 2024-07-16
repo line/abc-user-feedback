@@ -16,7 +16,10 @@ export default () => {
 
   test('creating a project succeeds', async ({ page }) => {
     await page.goto('http://localhost:3000');
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Create Project' }).click();
+
     await page.getByPlaceholder('Please enter Project Name.').click();
     await page
       .getByPlaceholder('Please enter Project Name.')
@@ -25,11 +28,21 @@ export default () => {
     await page
       .getByPlaceholder('Please enter Project Description.')
       .fill('Project for test');
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Complete' }).click();
+
     await expect(page.getByText('Project Creation Complete')).toBeVisible();
     await expect(page.locator('#Project\\ Name')).toHaveValue('TestProject');
     await expect(page.locator('#Project\\ Description')).toHaveValue(
@@ -41,7 +54,10 @@ export default () => {
 
   test('creating a project with a new role succeeds', async ({ page }) => {
     await page.goto('http://localhost:3000');
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Create Project' }).click();
+
     await page.getByPlaceholder('Please enter Project Name.').click();
     await page
       .getByPlaceholder('Please enter Project Name.')
@@ -51,6 +67,8 @@ export default () => {
       .getByPlaceholder('Please enter Project Description.')
       .fill('Project for test');
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Create Role' }).click();
     await page.getByLabel('Role Name').click();
     await page.getByLabel('Role Name').fill('Test Role');
@@ -71,8 +89,14 @@ export default () => {
       .nth(1)
       .click();
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Next' }).click();
+    await page.waitForTimeout(1000);
+
     await page.getByRole('button', { name: 'Complete' }).click();
     await expect(page.getByText('Project Creation Complete')).toBeVisible();
     await expect(page.locator('#Project\\ Name')).toHaveValue('TestProject');

@@ -235,7 +235,7 @@
     "sign-out": "Sign Out"
   },
   "button": {
-    "setting": "Settings",
+    "setting": "Setting",
     "back": "Back",
     "sign-in": "Sign In",
     "sign-up": "Sign Up",
@@ -453,7 +453,7 @@
     "issue-tracker": "Link and manage User Feedback with your Issue Tracking System. Please enter your Issue Tracking System details.",
     "channel-info": "Define the feedback fields to collect through the channel. Please register channel information considering the feedback path and characteristics (e.g., VOC, App Review).",
     "field": "Define the feedback fields to be collected via User Feedback for each registered channel. Pre-configure fields to be collected through the API or those to be directly registered in the ADMIN.",
-    "image-setting": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Docs</docs> for details.",
+    "image-config": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <icon></icon> <docs>Docs</docs> for details.",
     "field-preview": "Preview the appearance of fields configured in Field Management. Previews show sample data for illustration purposes.",
     "webhook": "Webhook is used for various events that occur within User Feedback. For more details, refer to the Webhook <icon></icon> <docs>Docs</docs>."
   },
