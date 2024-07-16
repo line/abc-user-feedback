@@ -13,76 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useMemo } from 'react';
+import React from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
 
-import { CreateProjectChannelTemplate, HelpCardDocs } from '@/components';
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import {
-  InputApiKey,
-  InputIssueTracker,
-  InputMember,
-  InputProjectInfo,
-  InputRole,
-} from '@/containers/create-project';
-import type { ProjectStepType } from '@/contexts/create-project.context';
-import {
-  CreateProjectProvider,
-  useCreateProject,
-} from '@/contexts/create-project.context';
+import { DEFAULT_LOCALE } from '@/shared';
+import { CreateProject } from '@/features/create-project';
 
-const CreatePage: NextPage = () => {
-  return (
-    <CreateProjectProvider>
-      <CreateProject />
-    </CreateProjectProvider>
-  );
-};
-const CreateProject: React.FC = () => {
-  const { t } = useTranslation();
-  const { completeStepIndex, currentStepIndex, currentStep, stepperText } =
-    useCreateProject();
-
-  const HELP_TEXT: Record<ProjectStepType, string | React.ReactNode> =
-    useMemo(() => {
-      return {
-        projectInfo: t('help-card.project-info'),
-        roles: t('help-card.role'),
-        members: t('help-card.member'),
-        apiKeys: <HelpCardDocs i18nKey="help-card.api-key" />,
-        issueTracker: t('help-card.issue-tracker'),
-      };
-    }, []);
-
-  return (
-    <CreateProjectChannelTemplate
-      completeStepIndex={completeStepIndex}
-      currentStepIndex={currentStepIndex}
-      helpText={HELP_TEXT}
-      type="project"
-      currentStep={currentStep}
-      stepObj={stepperText}
-    >
-      <Contents />
-    </CreateProjectChannelTemplate>
-  );
+const CreateProjectPage: NextPage = () => {
+  return <CreateProject />;
 };
 
-const Contents: React.FC = () => {
-  const { currentStep } = useCreateProject();
-
-  return (
-    <>
-      {currentStep === 'projectInfo' && <InputProjectInfo />}
-      {currentStep === 'roles' && <InputRole />}
-      {currentStep === 'members' && <InputMember />}
-      {currentStep === 'apiKeys' && <InputApiKey />}
-      {currentStep === 'issueTracker' && <InputIssueTracker />}
-    </>
-  );
-};
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
@@ -91,4 +32,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default CreatePage;
+export default CreateProjectPage;

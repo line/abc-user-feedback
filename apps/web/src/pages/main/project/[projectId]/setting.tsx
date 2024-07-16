@@ -13,39 +13,40 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { Icon } from '@ufb/ui';
 
-import { MainTemplate } from '@/components';
-import { SettingMenuBox } from '@/components/layouts/setting-menu';
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
+import { DEFAULT_LOCALE, Path } from '@/shared';
+import type { NextPageWithLayout } from '@/shared/types';
+import { ProjectGuard } from '@/entities/project';
+import { MainLayout } from '@/widgets';
+import type { SettingMenuType } from '@/widgets/setting-menu';
 import {
-  APIKeySetting,
-  ChannelDeleteSetting,
+  ApiKeySetting,
+  AuthSetting,
+  ChannelDeletionSetting,
   ChannelInfoSetting,
   ChannelSettingMenu,
   FieldSetting,
-  ImageSetting,
+  ImageConfigSetting,
   IssueTrackerSetting,
   MemberSetting,
-  ProjectDeleteSetting,
+  ProjectDeletionSetting,
   ProjectInfoSetting,
   ProjectSettingMenu,
   RoleSetting,
-  SignUpSetting,
+  SettingMenuBox,
   TenantInfoSetting,
   TenantSettingMenu,
-  UserSetting,
+  UserManagementSetting,
   WebhookSetting,
-} from '@/containers/setting-menu';
-import type { SettingMenuType } from '@/types/setting-menu.type';
-import type { NextPageWithLayout } from '../../../_app';
+} from '@/widgets/setting-menu';
 
 interface IProps {
   projectId: number;
@@ -55,27 +56,15 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
-  const channelId =
-    router.query?.channelId ? (Number(router.query.channelId) as number) : null;
-
-  const setChannelId = (channelId: number | null) =>
-    router.push({
-      pathname: Path.SETTINGS,
-      query: { ...router.query, channelId },
-    });
-
+  const [channelId, setChannelId] = useQueryState('channelId', parseAsInteger);
   const settingMenu =
     router.query?.menu ? (router.query.menu as SettingMenuType) : null;
 
   const setSettingMenu = (menu: SettingMenuType | null) =>
-    router.push({
-      pathname: Path.SETTINGS,
-      query: { ...router.query, menu },
-    });
+    router.push({ pathname: Path.SETTINGS, query: { ...router.query, menu } });
 
-  const onClickReset = () => {
-    setSettingMenu(null);
-  };
+  const onClickReset = () => setSettingMenu(null);
+
   const showList = useMemo(() => {
     switch (settingMenu) {
       case 'TENANT_INFO':
@@ -100,12 +89,6 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     }
   }, [settingMenu]);
 
-  useEffect(() => {}, [router.query]);
-
-  const onClickTarget = (target: SettingMenuType | null) => () => {
-    setSettingMenu(target);
-  };
-
   return (
     <>
       <h1 className="font-20-bold mb-6">{t('main.setting.title')}</h1>
@@ -113,26 +96,24 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         <SettingMenuBox show={showList.includes(0)}>
           <TenantSettingMenu
             settingMenu={settingMenu}
-            onClickSettingMenu={onClickTarget}
+            onClickSettingMenu={setSettingMenu}
           />
         </SettingMenuBox>
         <SettingMenuBox show={showList.includes(1)}>
           <ProjectSettingMenu
             settingMenu={settingMenu}
-            onClickSettingMenu={onClickTarget}
+            onClickSettingMenu={setSettingMenu}
             projectId={projectId}
           />
         </SettingMenuBox>
         <SettingMenuBox show={showList.includes(2)}>
-          {projectId && (
-            <ChannelSettingMenu
-              settingMenu={settingMenu}
-              projectId={projectId}
-              onClickSettingMenu={onClickTarget}
-              setChannelId={setChannelId}
-              channelId={channelId}
-            />
-          )}
+          <ChannelSettingMenu
+            settingMenu={settingMenu}
+            projectId={projectId}
+            onClickSettingMenu={setSettingMenu}
+            setChannelId={setChannelId}
+            channelId={channelId}
+          />
         </SettingMenuBox>
         {projectId && (
           <SettingMenuBox show={showList.includes(3)} last>
@@ -143,8 +124,8 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <Icon name="ArrowRight" />
             </button>
             {settingMenu === 'TENANT_INFO' && <TenantInfoSetting />}
-            {settingMenu === 'SIGNUP_SETTING' && <SignUpSetting />}
-            {settingMenu === 'USER_MANAGEMENT' && <UserSetting />}
+            {settingMenu === 'SIGNUP_SETTING' && <AuthSetting />}
+            {settingMenu === 'USER_MANAGEMENT' && <UserManagementSetting />}
             {settingMenu === 'PROJECT_INFO' && (
               <ProjectInfoSetting projectId={projectId} />
             )}
@@ -155,7 +136,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <RoleSetting projectId={projectId} />
             )}
             {settingMenu === 'API_KEY_MANAGEMENT' && (
-              <APIKeySetting projectId={projectId} />
+              <ApiKeySetting projectId={projectId} />
             )}
             {settingMenu === 'TICKET_MANAGEMENT' && (
               <IssueTrackerSetting projectId={projectId} />
@@ -164,7 +145,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <WebhookSetting projectId={projectId} />
             )}
             {settingMenu === 'DELETE_PROJECT' && (
-              <ProjectDeleteSetting projectId={projectId} />
+              <ProjectDeletionSetting projectId={projectId} />
             )}
             {settingMenu === 'CHANNEL_INFO' && channelId && (
               <ChannelInfoSetting projectId={projectId} channelId={channelId} />
@@ -173,10 +154,10 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               <FieldSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'IMAGE_UPLOAD_SETTING' && channelId && (
-              <ImageSetting projectId={projectId} channelId={channelId} />
+              <ImageConfigSetting projectId={projectId} channelId={channelId} />
             )}
             {settingMenu === 'DELETE_CHANNEL' && channelId && (
-              <ChannelDeleteSetting
+              <ChannelDeletionSetting
                 projectId={projectId}
                 channelId={channelId}
               />
@@ -188,8 +169,12 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 };
 
-SettingPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+SettingPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return (
+    <MainLayout>
+      <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({

@@ -10,7 +10,7 @@
     "./react": "./react.js"
   },
   "scripts": {
-    "clean": "rimraf .turbo node_modules",
+    "clean": "git clean -xdf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },

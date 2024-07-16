@@ -146,7 +146,6 @@ export class ProjectService {
       });
       savedProject.issueTracker = savedIssueTracker;
     }
-
     await this.feedbackStatisticsService.addCronJobByProjectId(savedProject.id);
     await this.issueStatisticsService.addCronJobByProjectId(savedProject.id);
     await this.feedbackIssueStatisticsService.addCronJobByProjectId(
@@ -187,7 +186,7 @@ export class ProjectService {
 
   @Transactional()
   async update(dto: UpdateProjectDto) {
-    const { projectId, name, description } = dto;
+    const { projectId, name, description, timezone } = dto;
 
     const project = await this.findById({ projectId });
     if (
@@ -199,7 +198,9 @@ export class ProjectService {
       throw new ProjectInvalidNameException('Duplicated name');
     }
 
-    await this.projectRepo.save(Object.assign(project, { name, description }));
+    await this.projectRepo.save(
+      Object.assign(project, { name, description, timezone }),
+    );
   }
 
   @Transactional()

@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.js"
+    ".": "./index.js",
+    "./nextjs": "./nextjs.js"
   },
   "scripts": {
-    "clean": "rimraf .turbo node_modules",
+    "clean": "git clean -xdf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
@@ -17,9 +18,8 @@
     "prettier-plugin-tailwindcss": "^0.6.0"
   },
   "devDependencies": {
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.9",
     "@ufb/tsconfig": "workspace:*",
-    "rimraf": "^5.0.5",
     "typescript": "^5.4.5"
   },
   "prettier": "@ufb/prettier-config"

@@ -1,7 +1,11 @@
 /** @type {import('next-i18next').UserConfig} */
 export default {
   i18n: {
-    defaultLocale: 'default',
-    locales: ['default', 'de', 'en', 'ja', 'ko', 'zh'],
+    defaultLocale: 'en',
+    locales: ['de', 'en', 'ja', 'ko', 'zh'],
   },
+  fallbackLng: {
+    default: ['en'],
+  },
+  nonExplicitSupportedLngs: true,
 };

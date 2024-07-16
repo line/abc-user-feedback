@@ -17,12 +17,12 @@ import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
 
-import { MainTemplate } from '@/components';
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { CreateChannelButton } from '@/containers/buttons';
-import { IssueTable } from '@/containers/tables';
-import { useOAIQuery } from '@/hooks';
-import type { NextPageWithLayout } from '../../../_app';
+import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
+import type { NextPageWithLayout } from '@/shared/types';
+import { ProjectGuard } from '@/entities/project';
+import { RouteCreateChannelButton } from '@/features/create-channel';
+import { MainLayout } from '@/widgets';
+import { IssueTable } from '@/widgets/issue-table';
 
 interface IProps {
   projectId: number;
@@ -43,16 +43,20 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
       : status === 'error' ?
         <p className="font-32-bold">Not Permission</p>
       : data.meta.totalItems === 0 ?
-        <div className="flex flex-1 items-center justify-center">
-          <CreateChannelButton projectId={projectId} type="blue" />
+        <div className="flex min-h-[500px] flex-1 items-center justify-center">
+          <RouteCreateChannelButton projectId={projectId} type="blue" />
         </div>
       : <IssueTable projectId={projectId} />}
     </>
   );
 };
 
-IssueMangementPage.getLayout = function getLayout(page) {
-  return <MainTemplate>{page}</MainTemplate>;
+IssueMangementPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return (
+    <MainLayout>
+      <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
+    </MainLayout>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({

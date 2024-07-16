@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "clean": "git clean -xdf .next .turbo node_modules",
+    "clean": "git clean -xdf .next .turbo node_modules coverage .swc",
     "dev": "next dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --write --list-different \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
@@ -13,21 +13,34 @@
     "lint": "eslint",
     "start": "next start",
     "test": "SKIP_ENV_VALIDATION=true jest --passWithNoTests",
+    "test:snapshot": "jest -u",
     "test:ci": "jest --ci --passWithNoTests",
-    "test:dev": "jest --watch --passWithNoTests",
+    "test:watch": "SKIP_ENV_VALIDATION=1 jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@ufb/prettier-config",
+  "prettier": "@ufb/prettier-config/nextjs",
+  "eslintConfig": {
+    "extends": [
+      "@ufb/eslint-config/base",
+      "@ufb/eslint-config/react",
+      "@ufb/eslint-config/nextjs"
+    ],
+    "ignorePatterns": [
+      "api.type.ts"
+    ],
+    "root": true
+  },
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@floating-ui/react": "^0.26.12",
-    "@headlessui/react": "2.0.4",
+    "@headlessui/react": "2.1.1",
     "@headlessui/tailwindcss": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@mui/base": "5.0.0-beta.40",
     "@t3-oss/env-nextjs": "^0.10.0",
     "@tanstack/react-query": "^5.31.0",
     "@tanstack/react-table": "^8.16.0",
+    "@toss/use-overlay": "^1.4.0",
     "@ufb/shared": "workspace:*",
     "@ufb/tailwind": "workspace:*",
     "@ufb/ui": "workspace:*",
@@ -59,6 +72,7 @@
     "react-use": "^17.5.0",
     "recharts": "^2.12.6",
     "sharp": "^0.33.0",
+    "tailwind-merge": "^2.3.0",
     "tailwind-scrollbar-hide": "^1.1.7",
     "zod": "^3.23.0",
     "zustand": "^4.5.2"
@@ -69,11 +83,12 @@
     "@svgr/webpack": "^8.1.0",
     "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.36",
+    "@tanstack/react-query-devtools": "^5.45.1",
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.14.2",
+    "@types/node": "20.14.9",
     "@types/react": "^18.2.79",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-datepicker": "^6.0.0",
@@ -85,10 +100,14 @@
     "eslint": "^9.0.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "openapi-typescript": "^6.7.5",
+    "msw": "^2.3.0",
+    "next-router-mock": "^0.9.13",
+    "node-mocks-http": "^1.14.1",
+    "openapi-typescript": "^7.0.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "undici": "~5.28.4"
   }
 }

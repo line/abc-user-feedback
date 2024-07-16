@@ -19,7 +19,7 @@ import type { IconNameType } from '../Icon';
 import { Icon } from '../Icon';
 import type { ColorType } from '../types/color.type';
 
-interface IProps extends React.PropsWithChildren {
+export interface BadgeProps extends React.PropsWithChildren {
   left?: {
     iconName: IconNameType;
     onClick?: MouseEventHandler<HTMLOrSVGElement>;
@@ -78,7 +78,7 @@ const disabledTextColor = {
   purple: 'text-purple-tertiary',
 };
 
-export const Badge: React.FC<IProps> = (props) => {
+export const Badge: React.FC<BadgeProps> = (props) => {
   const {
     children,
     left,

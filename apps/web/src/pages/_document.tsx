@@ -20,10 +20,19 @@ class MyDocument extends Document {
   static async getInitialProps(
     ctx: DocumentContext,
   ): Promise<DocumentInitialProps> {
+    const originalRenderPage = ctx.renderPage;
+
+    ctx.renderPage = () =>
+      originalRenderPage({
+        enhanceApp: (App) => App,
+        enhanceComponent: (Component) => Component,
+      });
+
     const initialProps = await Document.getInitialProps(ctx);
     return initialProps;
   }
-  render(): JSX.Element {
+
+  render() {
     return (
       <Html>
         <Head>

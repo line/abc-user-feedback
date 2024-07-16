@@ -1,10 +1,6 @@
 {
   "name": "abc-user-feedback",
   "private": true,
-  "engines": {
-    "node": ">=20.11.1"
-  },
-  "packageManager": "pnpm@8.15.8",
   "scripts": {
     "build": "turbo build",
     "build:ui": "turbo @ufb/ui#build",
@@ -29,5 +25,8 @@
     "turbo": "^1.13.2",
     "typescript": "^5.4.5"
   },
-  "prettier": "@ufb/prettier-config"
+  "packageManager": "pnpm@9.4.0",
+  "engines": {
+    "node": ">=20.11.1"
+  }
 }

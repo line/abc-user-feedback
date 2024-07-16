@@ -14,3 +14,4 @@
  * under the License.
  */
 export * from './Badge';
+export { type BadgeProps } from './Badge';

@@ -36,7 +36,9 @@ The frontend is built with NextJS and the backend is built with NestJS. We provi
 - SMTP - for mail verification during making accounts
 - [OpenSearch v7](https://opensearch.org/) - for performance on searching feedback
 
-You can use [docker-compose.infra.yml](/docker/docker-compose.infra.yml) file for requirements.
+You can use [docker-compose.infra-amd64.yml](/docker/docker-compose.infra-amd64.yml) file for requirements.
+
+for arm architecture, use [docker-compose.infra-arm64.yml](/docker/docker-compose.infra-arm64.yml) file
 
 ### Docker Hub Images
 
@@ -85,7 +87,7 @@ pnpm install
 2. Spin up all required infrastructure (Mysql, OpenSearch, etc.) using Docker Compose:
 
 ```bash
-docker-compose -f docker/docker-compose.infra.yml up -d
+docker-compose -f docker/docker-compose.infra-amd64.yml up -d
 ```
 
 3. Make an `.env` file in `apps/api` and `apps/web` by referring to `.env.example` ([web environment variables](./apps/web/README.md), [api environment variables](./apps/api/README.md))

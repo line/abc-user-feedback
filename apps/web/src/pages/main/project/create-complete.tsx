@@ -13,40 +13,65 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useMemo } from 'react';
+import React, { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
 import {
-  ApiKeySection,
-  IssueTrackerSection,
-  MemberSection,
-  ProjectInfoSection,
-  RoleSection,
-} from '@/containers/create-project-complete';
-import { useOAIQuery } from '@/hooks';
+  CreateSectionTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  useOAIQuery,
+} from '@/shared';
+import { ApiKeyTable } from '@/entities/api-key';
+import type { IssueTracker } from '@/entities/issue-tracker';
+import { IssueTrackerForm } from '@/entities/issue-tracker';
+import { MemberTable } from '@/entities/member';
+import type { ProjectInfo } from '@/entities/project';
+import { ProjectInfoForm } from '@/entities/project';
+import { RoleTable } from '@/entities/role';
 
-const CreateCompletePage: NextPage = () => {
+const CompleteProjectCreationPage: NextPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { projectId } = useMemo(
-    () => ({
-      projectId: Number(router.query.projectId),
-    }),
-    [router.query],
-  );
+  const projectId = Number(router.query.projectId);
 
-  const { data } = useOAIQuery({
+  const { data: project } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
+
+  const { data: apiKeys } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/api-keys',
+    variables: { projectId },
+  });
+  const { data: roles } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/roles',
+    variables: { projectId },
+  });
+  const { data: issueTracker } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/issue-tracker',
+    variables: { projectId },
+  });
+  const { data: members } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/members',
+    variables: { projectId, createdAt: 'ASC' },
+  });
+
+  const projectInfoFormMethods = useForm<ProjectInfo>();
+  const issueTrackerFormMethods = useForm<IssueTracker>();
+
+  useEffect(() => {
+    if (!project || !issueTracker) return;
+    projectInfoFormMethods.reset(project);
+    issueTrackerFormMethods.reset(issueTracker.data);
+  }, [project, issueTracker]);
 
   return (
     <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
@@ -61,15 +86,33 @@ const CreateCompletePage: NextPage = () => {
           {t('main.create-project.complete-title')}
         </p>
       </div>
-      {data && (
-        <>
-          <ProjectInfoSection {...data} />
-          <RoleSection projectId={projectId} />
-          <MemberSection projectId={projectId} />
-          <ApiKeySection projectId={projectId} />
-          <IssueTrackerSection projectId={projectId} />
-        </>
-      )}
+      <CreateSectionTemplate
+        title={t('project-setting-menu.project-info')}
+        defaultOpen
+      >
+        <FormProvider {...projectInfoFormMethods}>
+          <ProjectInfoForm type="update" readOnly />
+        </FormProvider>
+      </CreateSectionTemplate>
+      <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
+        <RoleTable roles={roles?.roles ?? []} />
+      </CreateSectionTemplate>
+      <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
+        <MemberTable
+          members={members?.members ?? []}
+          roles={roles?.roles ?? []}
+        />
+      </CreateSectionTemplate>
+      <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
+        <ApiKeyTable apiKeys={apiKeys?.items ?? []} />
+      </CreateSectionTemplate>
+      <CreateSectionTemplate
+        title={t('project-setting-menu.issue-tracker-mgmt')}
+      >
+        <FormProvider {...issueTrackerFormMethods}>
+          <IssueTrackerForm readOnly />
+        </FormProvider>
+      </CreateSectionTemplate>
       <div className="border-fill-tertiary flex rounded border p-6">
         <div className="flex flex-1 items-center gap-2.5">
           <Icon
@@ -140,4 +183,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => {
   };
 };
 
-export default CreateCompletePage;
+export default CompleteProjectCreationPage;

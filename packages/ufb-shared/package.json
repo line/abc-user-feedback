@@ -6,7 +6,7 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "rimraf dist .turbo node_modules",
+    "clean": "git clean -xdf dist .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -19,7 +19,6 @@
     "@ufb/tsconfig": "workspace:*",
     "eslint": "^9.0.0",
     "react": "^18.2.0",
-    "rimraf": "^5.0.5",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5"
   }
