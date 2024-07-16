@@ -45,6 +45,8 @@ export default () => {
       await page.goto(
         `http://localhost:3000/main/project/${projectId}/feedback?channelId=${channelId}`,
       );
+      await page.waitForTimeout(1000);
+
       await expect(page.locator('tbody')).toContainText('test text');
     });
   });
