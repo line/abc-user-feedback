@@ -32,7 +32,8 @@ export const Icon: React.FC<IIconProps> = ({
   className,
   ...props
 }) => {
-  return React.createElement(svg[name], {
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  return React.createElement(svg[name] ?? 'svg', {
     width: size,
     height: size,
     className: ['inline-block', className].join(' '),

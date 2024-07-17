@@ -25,7 +25,7 @@ exports[`MainLayout snapshot center 1`] = `
             style="color: transparent;"
             width="24"
           />
-          <div
+          <svg
             class="inline-block h-[24px] w-[123px]"
             height="24"
             width="24"
@@ -40,7 +40,7 @@ exports[`MainLayout snapshot center 1`] = `
             <div
               class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
             >
-              <div
+              <svg
                 class="inline-block text-secondary"
                 height="12"
                 width="12"
@@ -67,7 +67,7 @@ exports[`MainLayout snapshot center 1`] = `
             id="headlessui-listbox-button-:r8:"
             type="button"
           >
-            <div
+            <svg
               class="inline-block mr-1"
               height="16"
               width="16"
@@ -80,7 +80,7 @@ exports[`MainLayout snapshot center 1`] = `
         <button
           class="icon-btn icon-btn-sm icon-btn-secondary"
         >
-          <div
+          <svg
             class="inline-block text-primary"
             height="24"
             width="24"
@@ -128,7 +128,7 @@ exports[`MainLayout snapshot default 1`] = `
             style="color: transparent;"
             width="24"
           />
-          <div
+          <svg
             class="inline-block h-[24px] w-[123px]"
             height="24"
             width="24"
@@ -143,7 +143,7 @@ exports[`MainLayout snapshot default 1`] = `
             <div
               class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
             >
-              <div
+              <svg
                 class="inline-block text-secondary"
                 height="12"
                 width="12"
@@ -170,7 +170,7 @@ exports[`MainLayout snapshot default 1`] = `
             id="headlessui-listbox-button-:r2:"
             type="button"
           >
-            <div
+            <svg
               class="inline-block mr-1"
               height="16"
               width="16"
@@ -183,7 +183,7 @@ exports[`MainLayout snapshot default 1`] = `
         <button
           class="icon-btn icon-btn-sm icon-btn-secondary"
         >
-          <div
+          <svg
             class="inline-block text-primary"
             height="24"
             width="24"
@@ -230,7 +230,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
             style="color: transparent;"
             width="24"
           />
-          <div
+          <svg
             class="inline-block h-[24px] w-[123px]"
             height="24"
             width="24"
@@ -245,7 +245,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
             <div
               class="bg-fill-tertiary inline-flex rounded-sm p-1.5"
             >
-              <div
+              <svg
                 class="inline-block text-secondary"
                 height="12"
                 width="12"
@@ -272,7 +272,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
             id="headlessui-listbox-button-:re:"
             type="button"
           >
-            <div
+            <svg
               class="inline-block mr-1"
               height="16"
               width="16"
@@ -285,7 +285,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
         <button
           class="icon-btn icon-btn-sm icon-btn-secondary"
         >
-          <div
+          <svg
             class="inline-block text-primary"
             height="24"
             width="24"
@@ -312,7 +312,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
-                <div
+                <svg
                   class="inline-block "
                   height="24"
                   width="24"
@@ -333,7 +333,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
-                <div
+                <svg
                   class="inline-block "
                   height="24"
                   width="24"
@@ -353,7 +353,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
-                <div
+                <svg
                   class="inline-block "
                   height="24"
                   width="24"
@@ -374,7 +374,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
               <button
                 class="icon-btn icon-btn-tertiary icon-btn-md w-full flex-nowrap justify-start"
               >
-                <div
+                <svg
                   class="inline-block "
                   height="24"
                   width="24"

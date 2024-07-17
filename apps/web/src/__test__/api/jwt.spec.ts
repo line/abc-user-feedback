@@ -26,6 +26,16 @@ jest.mock('iron-session');
 
 describe('JWT API', () => {
   test('jwt null', async () => {
+    const jwt = null;
+
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+      jwt,
+    }));
+
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'GET',
     });
@@ -33,8 +43,7 @@ describe('JWT API', () => {
     await handler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
-    const { jwt } = res._getData() as { jwt: Jwt };
-    expect(jwt).toBeNull();
+    expect(res._getData().jwt).toBeNull();
   });
   test('jwt not null', async () => {
     const jwt = {
