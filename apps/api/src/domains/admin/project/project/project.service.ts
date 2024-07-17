@@ -146,11 +146,15 @@ export class ProjectService {
       });
       savedProject.issueTracker = savedIssueTracker;
     }
-    await this.feedbackStatisticsService.addCronJobByProjectId(savedProject.id);
-    await this.issueStatisticsService.addCronJobByProjectId(savedProject.id);
-    await this.feedbackIssueStatisticsService.addCronJobByProjectId(
-      savedProject.id,
-    );
+    try {
+      await this.feedbackStatisticsService.addCronJobByProjectId(
+        savedProject.id,
+      );
+      await this.issueStatisticsService.addCronJobByProjectId(savedProject.id);
+      await this.feedbackIssueStatisticsService.addCronJobByProjectId(
+        savedProject.id,
+      );
+    } catch (error) {}
 
     return savedProject;
   }

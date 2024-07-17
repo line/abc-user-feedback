@@ -108,7 +108,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
           cell: (info) =>
             field.key === 'issues' ?
               <div className="scrollbar-hide flex items-center gap-1">
-                {(info.getValue() as Issue[]).map((v, i) => (
+                {(info.getValue() as Issue[] | undefined)?.map((v, i) => (
                   <IssueBadge key={i} issue={v} />
                 ))}
               </div>
