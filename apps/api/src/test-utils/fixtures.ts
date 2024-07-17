@@ -357,6 +357,7 @@ export const webhookFixture = {
   id: faker.number.int(),
   name: faker.string.sample(),
   url: faker.internet.url(),
+  token: 'TEST-TOKEN',
   status: WebhookStatusEnum.ACTIVE,
   project: projectFixture,
   events: getAllEvents(),
