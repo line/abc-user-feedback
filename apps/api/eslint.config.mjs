@@ -8,6 +8,7 @@ import globals from 'globals';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 const compat = new FlatCompat({
   baseDirectory: __dirname,
   recommendedConfig: js.configs.recommended,
@@ -25,10 +26,10 @@ export default [
     )
     .map((config) => ({
       ...config,
-      files: ['**/*.ts'],
+      files: ['src/**/*.ts'],
     })),
   {
-    files: ['**/*.ts'],
+    files: ['src/**/*.ts'],
     plugins: {
       '@typescript-eslint': tseslint,
     },
@@ -39,8 +40,7 @@ export default [
       sourceType: 'module',
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir:
-          '/Users/user/workspace/line/abc-user-feedback/apps/api',
+        tsconfigRootDir: __dirname,
       },
     },
     rules: {
