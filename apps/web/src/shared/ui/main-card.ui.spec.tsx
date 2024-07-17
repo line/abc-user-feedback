@@ -21,7 +21,7 @@ import { render } from '@/test-utils';
 import MainCard from './main-card.ui';
 
 describe('MainCard', () => {
-  test('snapshot', async () => {
+  test('snapshot', () => {
     const { container } = render(
       <MainCard
         icon={{

@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "git clean -xdf dist .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint .",
+    "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "build": "tsup src/index.ts --format cjs,esm --dts"
   },

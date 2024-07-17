@@ -24,7 +24,7 @@ import MainIndexPage from '@/pages/main';
 import { render } from '@/test-utils';
 
 describe('MainIndexPage', () => {
-  test('should render without crashing', async () => {
+  test('should render without crashing', () => {
     useTenantStore.setState({ tenant: {} as Tenant });
     simpleMockHttp({
       method: 'get',
@@ -52,7 +52,7 @@ describe('MainIndexPage', () => {
         },
       });
     }
-    const page = MainIndexPage.getLayout!(<MainIndexPage />);
+    const page = MainIndexPage.getLayout?.(<MainIndexPage />);
     const { container } = render(<>{page}</>);
     expect(container).toMatchSnapshot();
   });

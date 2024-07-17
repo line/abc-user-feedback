@@ -38,7 +38,7 @@ const DEFAULT_TENANT: Tenant = {
 describe('Sign In Page', () => {
   test('should render all allow', () => {
     useTenantStore.setState({ tenant: { ...DEFAULT_TENANT } });
-    const signInPage = SignInPage.getLayout!(<SignInPage />);
+    const signInPage = SignInPage.getLayout?.(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
     expect(container).toMatchSnapshot();
@@ -54,7 +54,7 @@ describe('Sign In Page', () => {
   });
   test('should render when isPrivate is false', () => {
     useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, isPrivate: true } });
-    const signInPage = SignInPage.getLayout!(<SignInPage />);
+    const signInPage = SignInPage.getLayout?.(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
     expect(container).toMatchSnapshot();
@@ -70,7 +70,7 @@ describe('Sign In Page', () => {
   });
   test('should render when useOAuth is false', () => {
     useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, useOAuth: false } });
-    const signInPage = SignInPage.getLayout!(<SignInPage />);
+    const signInPage = SignInPage.getLayout?.(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
     expect(container).toMatchSnapshot();
@@ -86,7 +86,7 @@ describe('Sign In Page', () => {
   });
   test('should render when useEmail is false', () => {
     useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, useEmail: false } });
-    const signInPage = SignInPage.getLayout!(<SignInPage />);
+    const signInPage = SignInPage.getLayout?.(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);
     expect(container).toMatchSnapshot();

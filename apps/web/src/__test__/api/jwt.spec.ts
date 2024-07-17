@@ -18,6 +18,8 @@ import { faker } from '@faker-js/faker';
 import * as IronSession from 'iron-session';
 import { createMocks } from 'node-mocks-http';
 
+import type { Jwt } from '@/shared';
+
 import handler from '@/pages/api/jwt';
 
 jest.mock('iron-session');
@@ -31,7 +33,8 @@ describe('JWT API', () => {
     await handler(req, res);
 
     expect(res._getStatusCode()).toBe(200);
-    expect(res._getData().jwt).toBeNull();
+    const { jwt } = res._getData() as { jwt: Jwt };
+    expect(jwt).toBeNull();
   });
   test('jwt not null', async () => {
     const jwt = {
