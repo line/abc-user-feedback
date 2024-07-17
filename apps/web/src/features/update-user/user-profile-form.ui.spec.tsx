@@ -18,10 +18,9 @@ import userEvent from '@testing-library/user-event';
 
 import type { User } from '@/entities/user';
 
-import UserProfileForm from './user-profile-form.ui';
-
 import { simpleMockHttp } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import UserProfileForm from './user-profile-form.ui';
 
 const TEST_USER: User = {
   id: faker.number.int(),

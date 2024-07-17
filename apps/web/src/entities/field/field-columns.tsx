@@ -88,7 +88,6 @@ export const getFieldColumns = (
         id: 'delete',
         header: () => <p className="w-full text-center">Delete</p>,
         cell: ({ row }) => {
-           
           const perms = usePermissions();
           return (
             <div className="text-center">
@@ -116,7 +115,6 @@ export const getFieldColumns = (
         id: 'edit',
         header: () => <p className="text-center">Edit</p>,
         cell: ({ row }) => {
-           
           const perms = usePermissions();
 
           return (

@@ -17,14 +17,14 @@ import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
-interface IProps {
-  table: Table<any>;
+interface IProps<T> {
+  table: Table<T>;
   onClickDelete?: () => void;
   disabled?: boolean;
   button?: React.ReactNode;
 }
 
-const CheckedTableHead: React.FC<IProps> = (props) => {
+const CheckedTableHead = <T,>(props: IProps<T>) => {
   const { table, onClickDelete, disabled, button } = props;
 
   const { t } = useTranslation();

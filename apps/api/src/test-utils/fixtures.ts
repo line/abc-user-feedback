@@ -17,6 +17,9 @@ import { faker } from '@faker-js/faker';
 import * as bcrypt from 'bcrypt';
 import { DateTime } from 'luxon';
 
+import { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import type { CodeEntity } from '@/shared/code/code.entity';
+
 import {
   EventStatusEnum,
   EventTypeEnum,
@@ -52,8 +55,6 @@ import {
   UserTypeEnum,
 } from '@/domains/admin/user/entities/enums';
 import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
-import { CodeTypeEnum } from '@/shared/code/code-type.enum';
-import type { CodeEntity } from '@/shared/code/code.entity';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
   const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);

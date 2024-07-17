@@ -56,7 +56,7 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
     },
   });
 
-  const onSubmit = async ({ password, code, email }: FormType) =>
+  const onSubmit = ({ password, code, email }: FormType) =>
     mutate({ code, email, password });
 
   return (

@@ -21,10 +21,9 @@ import mockRouter from 'next-router-mock';
 import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
 
-import SignInWithOAuthButton from './sign-in-with-oauth-button.ui';
-
 import { simpleMockHttp } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import SignInWithOAuthButton from './sign-in-with-oauth-button.ui';
 
 describe('SignInWithOAuthButton', () => {
   test('match snapshot', () => {

@@ -5,7 +5,14 @@ const reactConfig = require('@ufb/eslint-config/react');
 /** @type {import('typescript-eslint').Config} */
 module.exports = [
   {
-    ignores: ['.next/**', '**/*.spec.ts', '**/*.spec.tsx', 'jest.setup.ts'],
+    ignores: [
+      '.next/**',
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      'jest.setup.ts',
+      'next-env.d.ts',
+      'jest.polyfills.js',
+    ],
   },
   ...baseConfig,
   ...reactConfig,

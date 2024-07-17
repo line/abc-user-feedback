@@ -67,7 +67,7 @@ describe('Login API', () => {
     });
 
     const mockSave = jest.fn();
-    jest.spyOn(IronSession, 'getIronSession').mockImplementation(() => ({
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
       destroy: jest.fn(),
       save: mockSave,
       updateConfig: jest.fn(),

@@ -20,6 +20,7 @@ import { In, Like, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
+
 import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
 import { TenantService } from '../tenant/tenant.service';

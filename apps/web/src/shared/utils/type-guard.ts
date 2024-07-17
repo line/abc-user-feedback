@@ -13,5 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export default 'SvgrURL';
-export const ReactComponent = 'div';
+interface Comparison {
+  gte: string | Date;
+  lt: string | Date;
+}
+
+export function isDateQuery(value: unknown): value is Comparison {
+  if (typeof value !== 'object' || !value) return false;
+  if (!('gte' in value) || !('lt' in value)) return false;
+  return (
+    (typeof value.gte === 'string' && typeof value.lt === 'string') ||
+    (value.gte instanceof Date && value.lt instanceof Date)
+  );
+}

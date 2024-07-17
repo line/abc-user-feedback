@@ -20,7 +20,9 @@ import { client } from '@/shared';
 
 import type { Tenant } from './tenant.type';
 
-interface State { tenant: Tenant | null }
+interface State {
+  tenant: Tenant | null;
+}
 
 interface Action {
   setTenant: (tenant: Tenant) => void;

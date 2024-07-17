@@ -20,10 +20,9 @@ import { http } from 'msw';
 
 import * as user from '@/entities/user';
 
-import DeleteAccountButton from './delete-account-button.ui';
-
 import { server, simpleMockHttp } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import DeleteAccountButton from './delete-account-button.ui';
 
 jest.mock('@/entities/user');
 

@@ -32,7 +32,7 @@ export const Icon: React.FC<IIconProps> = ({
   className,
   ...props
 }) => {
-  return React.createElement(svg[name] ?? 'div', {
+  return React.createElement(svg[name], {
     width: size,
     height: size,
     className: ['inline-block', className].join(' '),

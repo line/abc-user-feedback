@@ -16,9 +16,8 @@
 import { faker } from '@faker-js/faker';
 import mockRouter from 'next-router-mock';
 
-import MainLayout from './main-layout.ui';
-
 import { render, screen } from '@/test-utils';
+import MainLayout from './main-layout.ui';
 
 describe('MainLayout', () => {
   beforeEach(() => {

@@ -17,7 +17,7 @@
     "test:watch": "SKIP_ENV_VALIDATION=1 jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
-  "prettier": "@ufb/prettier-config/nextjs",
+  "prettier": "@ufb/prettier-config",
   "eslintConfig": {
     "extends": [
       "@ufb/eslint-config/base",

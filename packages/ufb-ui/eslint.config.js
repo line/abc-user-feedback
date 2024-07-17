@@ -4,7 +4,7 @@ import reactConfig from '@ufb/eslint-config/react';
 /** @type {import('typescript-eslint').Config} */
 export default [
   {
-    ignores: [],
+    ignores: ['postcss.js'],
   },
   ...baseConfig,
   ...reactConfig,

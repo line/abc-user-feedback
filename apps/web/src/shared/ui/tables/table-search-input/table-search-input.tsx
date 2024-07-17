@@ -34,7 +34,7 @@ export type SearchItemType = {
   key: string;
   name: string;
 } & {
-  format: FieldFormat | 'issue' | 'issue_status';
+  format: FieldFormat | 'issue';
   options?: { id?: number; name: string; key: string }[];
 };
 
@@ -93,7 +93,9 @@ const TableSearchInput: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     if (!query) return;
+
     const inputValue = objToStr(query, searchItems);
+
     setInputValue(inputValue);
   }, [searchItems, query]);
 
@@ -114,11 +116,11 @@ const TableSearchInput: React.FC<IProps> = (props) => {
     const inputText = objToStr(currentQuery, searchItems);
     setInputValue(inputText);
 
-    const newQUery = removeEmptyValueInObject(
+    const newQuery = removeEmptyValueInObject(
       objToQuery(currentQuery, searchItems),
     );
 
-    onChangeQuery(newQUery);
+    onChangeQuery(newQuery);
   };
 
   const reset = () => {
@@ -216,8 +218,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
                 v.format === 'select' ||
                 v.format === 'multiSelect' ||
                 v.format === 'date' ||
-                v.format === 'issue' ||
-                v.format === 'issue_status',
+                v.format === 'issue',
             )}
             close={close}
             query={currentObj}

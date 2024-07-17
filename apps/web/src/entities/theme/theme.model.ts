@@ -16,9 +16,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-interface State { theme: 'light' | 'dark' }
+interface State {
+  theme: 'light' | 'dark';
+}
 
-interface Action { toggle: () => void }
+interface Action {
+  toggle: () => void;
+}
 
 export const useThemeStore = create<State & Action>()(
   persist(

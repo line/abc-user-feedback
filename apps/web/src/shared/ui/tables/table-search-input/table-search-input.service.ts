@@ -16,7 +16,7 @@
 import dayjs from 'dayjs';
 
 import type { SearchItemType } from '@/shared';
-import { DATE_FORMAT } from '@/shared';
+import { DATE_FORMAT, isDateQuery } from '@/shared';
 
 export const strToObj = (input: string, searchItems: SearchItemType[]) => {
   const splitValues = input.split(',');
@@ -52,7 +52,6 @@ export const strValueToObj = (value: string, searchItems: SearchItemType) => {
       return { gte, lt };
     }
     case 'issue':
-    case 'issue_status':
     case 'select':
     case 'multiSelect':
       return searchItems.options?.find((v) => v.name === value) ?? value;
@@ -76,7 +75,7 @@ export const objToStr = (
         case 'date':
           if (typeof value === 'string') {
             return `${name}:${value}`;
-          } else if (typeof value === 'object') {
+          } else if (isDateQuery(value)) {
             return `${name}:${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
               value.lt,
             ).format(DATE_FORMAT)}`;
@@ -89,21 +88,24 @@ export const objToStr = (
               (v) => v.id === value[0],
             )?.name;
             return `${name}:${issueName}`;
-          } else if (value?.name) {
-            const issueName = value.name;
-            return `${name}:${issueName}`;
-          } else {
-            const issueName =
-              column.options?.find((v) => v.id === parseInt(value))?.name ??
-              value;
+          } else if (hasNameOfKey(value)) {
+            return `${name}:${value.name}`;
+          } else if (typeof value === 'string') {
+            const issueName = column.options?.find(
+              (v) => v.id === parseInt(String(value)),
+            )?.name;
             return `${name}:${issueName}`;
           }
-        case 'issue_status':
+          return `${name}:${String(value)}`;
         case 'select':
         case 'multiSelect':
-          return `${name}:${value?.name ?? value}`;
+          if (hasNameOfKey(value)) {
+            console.log('value: ', value.name);
+            return `${name}:${value.name}`;
+          }
+          return `${name}:${String(value)}`;
         default:
-          return `${name}:${value}`;
+          return `${name}:${String(value)}`;
       }
     })
     .filter((v) => !!v)
@@ -115,7 +117,6 @@ export const objToQuery = (
   searchItems: SearchItemType[],
 ) => {
   const result: Record<string, unknown> = {};
-  if (!query) return result;
   for (const [key, value] of Object.entries(query)) {
     const column = searchItems.find((column) => column.key === key);
 
@@ -135,35 +136,38 @@ export const objToQuery = (
                 gte: dayjs(gte).startOf('day').toISOString(),
                 lt: dayjs(lt).endOf('day').toISOString(),
               };
-            } else if (typeof value === 'object') {
+            } else if (isDateQuery(value)) {
               result[key] = {
                 gte: dayjs(value.gte).startOf('day').toISOString(),
                 lt: dayjs(value.lt).endOf('day').toISOString(),
               };
             }
             break;
-          case 'issue_status': {
-            const statusId =
-              value?.id ?? column.options?.find((v) => v.name === value)?.key;
-            result[key] = statusId;
-            break;
-          }
           case 'issue': {
             const issueId =
-              value?.id ?? column.options?.find((v) => v.name === value)?.id;
+              hasIdOfKey(value) ?
+                value.id
+              : column.options?.find((v) => v.name === value)?.id;
             result[key] = [issueId];
             break;
           }
           case 'multiSelect': {
             const optionKey1 =
-              value?.key ?? column.options?.find((v) => v.name === value)?.key;
+              hasKeyOfKey(value) ?
+                value.key
+              : column.options?.find((v) => v.name === value)?.key;
             if (!optionKey1) break;
             result[key] = [optionKey1];
             break;
           }
           case 'select': {
+            console.log('value: ', value);
             const optionKey2 =
-              value?.key ?? column.options?.find((v) => v.name === value)?.key;
+              hasKeyOfKey(value) ?
+                value.key
+              : column.options?.find((v) => v.name === value)?.key;
+            console.log('optionKey2: ', optionKey2);
+
             if (!optionKey2) break;
             result[key] = optionKey2;
             break;
@@ -178,4 +182,30 @@ export const objToQuery = (
     }
   }
   return result;
+};
+
+const hasNameOfKey = (value: unknown): value is { name: string } => {
+  return (
+    typeof value === 'object' &&
+    !!value &&
+    'name' in value &&
+    typeof value.name === 'string'
+  );
+};
+
+const hasIdOfKey = (value: unknown): value is { id: number } => {
+  return (
+    typeof value === 'object' &&
+    !!value &&
+    'id' in value &&
+    typeof value.id === 'number'
+  );
+};
+const hasKeyOfKey = (value: unknown): value is { key: string } => {
+  return (
+    typeof value === 'object' &&
+    !!value &&
+    'key' in value &&
+    typeof value.key === 'string'
+  );
 };

@@ -19,12 +19,12 @@ import { Icon } from '@ufb/ui';
 
 import { cn } from '@/shared';
 
-interface IProps {
-  table: Table<any>;
-  header: Header<any, unknown>;
+interface IProps<T> {
+  table: Table<T>;
+  header: Header<T, unknown>;
 }
 
-const TableResizer: React.FC<IProps> = ({ table, header }) => {
+const TableResizer = <T,>({ table, header }: IProps<T>) => {
   return (
     <div
       onMouseDown={header.getResizeHandler()}

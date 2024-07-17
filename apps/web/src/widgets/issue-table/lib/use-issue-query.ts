@@ -24,7 +24,7 @@ const useIssueQuery = (projectId: number) => {
     { projectId: String(projectId) },
     { status: 'total' },
     (input) => {
-      if (!input.createdAt) return true;
+      if (!input.createdAt || typeof input.createdAt !== 'string') return true;
       const [starDate, endDate] = input.createdAt.split('~');
       if (dayjs(endDate).isAfter(dayjs(), 'day')) return false;
       if (dayjs(endDate).isBefore(dayjs(starDate), 'day')) return false;
@@ -34,9 +34,9 @@ const useIssueQuery = (projectId: number) => {
 
   const dateRange = useMemo(() => {
     const queryStr = query.createdAt;
-    if (!queryStr) return null;
+    if (!queryStr || typeof queryStr !== 'string') return null;
 
-    const [startDateStr, endDateStr] = queryStr.split('~') as [string, string];
+    const [startDateStr, endDateStr] = queryStr.split('~');
 
     return {
       startDate: dayjs(startDateStr).toDate(),
@@ -59,7 +59,10 @@ const useIssueQuery = (projectId: number) => {
   const formattedQuery = useMemo(() => {
     return Object.entries(query).reduce((prev, [key, value]) => {
       if (key === 'status' && value === 'total') return prev;
-      if (key === 'createdAt' || key === 'updatedAt') {
+      if (
+        (key === 'createdAt' || key === 'updatedAt') &&
+        typeof value === 'string'
+      ) {
         const [startDate, endDate] = value.split('~');
         return {
           ...prev,

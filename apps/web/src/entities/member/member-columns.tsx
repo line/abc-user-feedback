@@ -36,7 +36,6 @@ export const getMemberColumns = (
     header: 'Email',
     enableSorting: false,
     cell: ({ getValue }) => {
-       
       const { t } = useTranslation();
       return (
         <>

@@ -66,7 +66,7 @@ const CreateTenantForm: React.FC<IProps> = () => {
   return (
     <form
       className="flex flex-col gap-4"
-      onSubmit={handleSubmit(({ siteName }) => createTenant({ siteName }))}
+      onSubmit={handleSubmit((data) => createTenant(data))}
     >
       <h1 className="font-20-bold">{t('tenant.create.title')}</h1>
       <label>

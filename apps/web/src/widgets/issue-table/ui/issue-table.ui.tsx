@@ -158,7 +158,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   return (
     <div className="flex flex-col gap-2">
       <IssueTableSelectBox
-        currentIssueKey={query.status}
+        currentIssueKey={query.status ? String(query.status) : undefined}
         issueCountData={issueCountData}
         onChangeOption={(status) => setQuery({ ...query, status })}
       />

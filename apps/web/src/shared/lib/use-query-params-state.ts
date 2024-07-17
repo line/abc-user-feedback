@@ -17,11 +17,11 @@ import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT, removeEmptyValueInObject } from '@/shared';
+import { DATE_FORMAT, isDateQuery, removeEmptyValueInObject } from '@/shared';
 
 const useQueryParamsState = (
-  defaultNextQuery: Record<string, unknown>,
-  defaultQuery?: Record<string, unknown>,
+  defaultNextQuery: Record<string, string>,
+  defaultQuery?: Record<string, string>,
   validate?: (input: Record<string, unknown>) => boolean,
 ) => {
   const router = useRouter();
@@ -51,7 +51,7 @@ const useQueryParamsState = (
       const newQuery: Record<string, string> = Object.entries(
         removeEmptyValueInObject(input),
       ).reduce((acc, [key, value]) => {
-        if (typeof value === 'object' && isDate(value)) {
+        if (typeof value === 'object' && isDateQuery(value)) {
           value = `${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
             value.lt,
           ).format(DATE_FORMAT)}`;
@@ -74,7 +74,3 @@ const useQueryParamsState = (
 };
 
 export default useQueryParamsState;
-
-const isDate = (value: Record<'gte' | 'lt', string>): boolean => {
-  return 'gte' in value && 'lt' in value;
-};

@@ -16,10 +16,9 @@
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 
-import ChangePasswordForm from './change-password-form.ui';
-
 import { simpleMockHttp } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import ChangePasswordForm from './change-password-form.ui';
 
 describe('ResetPasswordWithEmailForm', () => {
   // test('match snapshot', () => {

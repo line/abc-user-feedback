@@ -16,11 +16,10 @@
 import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 
+import { render, screen, waitFor } from '@/test-utils';
 import { useUserStore } from '../user.model';
 import type { User } from '../user.type';
 import UserBox from './user-box.ui';
-
-import { render, screen, waitFor } from '@/test-utils';
 
 describe('UserBox', () => {
   test('no logged in user', () => {

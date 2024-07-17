@@ -27,10 +27,10 @@ interface IProps extends React.PropsWithChildren {}
 const LocaleSelectBox: React.FC<IProps> = () => {
   const router = useRouter();
   const onToggleLanguageClick = useCallback(
-    (newLocale: string) => {
+    async (newLocale: string) => {
       const { pathname, asPath, query } = router;
       setCookie('NEXT_LOCALE', newLocale);
-      router.push({ pathname, query }, asPath, { locale: newLocale });
+      await router.push({ pathname, query }, asPath, { locale: newLocale });
     },
     [router],
   );

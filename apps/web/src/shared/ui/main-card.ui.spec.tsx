@@ -17,9 +17,8 @@ import { faker } from '@faker-js/faker';
 
 import { IconNames } from '@ufb/ui';
 
-import MainCard from './main-card.ui';
-
 import { render } from '@/test-utils';
+import MainCard from './main-card.ui';
 
 describe('MainCard', () => {
   test('snapshot', async () => {

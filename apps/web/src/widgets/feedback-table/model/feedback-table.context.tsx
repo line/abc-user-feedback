@@ -61,7 +61,8 @@ export const FeedbackTableProvider: React.FC<IProps> = (props) => {
     { projectId: String(projectId), channelId: String(channelId) },
     DEFAULT_DATE_RANGE_STRING,
     (input) => {
-      if (!input.createdAt) return false;
+      if (!input.createdAt || typeof input.createdAt !== 'string') return false;
+
       const [starDate, endDate] = input.createdAt.split('~');
       if (dayjs(endDate).isAfter(dayjs(), 'day')) return false;
       if (dayjs(endDate).isBefore(dayjs(starDate), 'day')) return false;
@@ -73,7 +74,7 @@ export const FeedbackTableProvider: React.FC<IProps> = (props) => {
 
   const createdAtRange = useMemo(() => {
     const queryStr = query.createdAt;
-    if (!queryStr) return null;
+    if (!queryStr || typeof queryStr !== 'string') return null;
 
     const [startDateStr, endDateStr] = queryStr.split('~');
 

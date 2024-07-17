@@ -22,14 +22,13 @@ import { DateRangePicker, TablePagination, TableSearchInput } from '@/shared';
 import type { Field } from '@/entities/field';
 import { useIssueSearch } from '@/entities/issue';
 
+import { env } from '@/env.mjs';
 import type { FeedbackColumnType } from '../feedback-table-columns';
 import { useFeedbackTable } from '../model';
 import ChannelSelectBox from './channel-select-box';
 import ColumnSettingPopover from './column-setting-popover';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableExpandButtonGroup from './feedback-table-expand-button-group.ui';
-
-import { env } from '@/env.mjs';
 
 const getSearchItemPriority = (a: SearchItemType) =>
   a.name === 'Created' ? 1

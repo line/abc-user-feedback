@@ -29,6 +29,7 @@ import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
+import { sessionStorage } from '@/shared';
 import type { Jwt, NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
@@ -38,24 +39,16 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
 
-import { sessionStorage } from '@/shared';
-
-type PageProps = Record<string, unknown> & {
+interface PageProps {
   dehydratedState?: DehydratedState;
-};
+}
 
-type AppPropsWithLayout = AppProps & {
-  pageProps: PageProps;
+type AppPropsWithLayout = AppProps<PageProps> & {
   Component: NextPageWithLayout;
 };
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: { queries: { staleTime: 60 * 1000 } },
-      }),
-  );
+  const [queryClient] = useState(() => new QueryClient());
 
   const getLayout = Component.getLayout ?? ((page) => page);
   const { setUser } = useUserStore();
