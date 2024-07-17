@@ -57,7 +57,7 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
 
   const snippetBody = useMemo(() => {
     if (!channelData?.fields) return null;
-    const body: Record<string, any> = {};
+    const body: Record<string, unknown> = {};
     for (const field of channelData.fields) {
       if (field.status === 'INACTIVE') continue;
       if (field.key === 'id') continue;

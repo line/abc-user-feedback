@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import { apiKeyTypeSchema } from './api-key.schema';
+import type { apiKeyTypeSchema } from './api-key.schema';
 
 export type ApiKey = z.infer<typeof apiKeyTypeSchema>;
 export type ApiKeyUpdateType = 'recover' | 'softDelete';

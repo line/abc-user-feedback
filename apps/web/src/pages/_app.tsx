@@ -29,7 +29,7 @@ import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
-import type { NextPageWithLayout } from '@/shared/types';
+import type { Jwt, NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
@@ -61,14 +61,14 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const { setUser } = useUserStore();
 
   const initializeJwt = async () => {
-    const { data } = await axios.get('/api/jwt');
-    if (!data?.jwt) return;
+    const { data } = await axios.get<{ jwt?: Jwt }>('/api/jwt');
+    if (!data.jwt) return;
     sessionStorage.setItem('jwt', data.jwt);
     setUser();
   };
 
   useEffect(() => {
-    initializeJwt();
+    void initializeJwt();
   }, []);
 
   return (

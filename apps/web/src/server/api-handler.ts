@@ -35,14 +35,14 @@ type CustomNextApiRequest<T = Record<string, unknown>> = Omit<
 type CustomNextApiHandler<T extends Zod.ZodType> = (
   req: CustomNextApiRequest<T['_output']>,
   res: NextApiResponse,
-) => unknown | Promise<unknown>;
+) => unknown;
 
 const handler =
-  <T extends Zod.ZodType>(schema?: T) =>
+  <T extends Zod.ZodType<unknown>>(schema?: T) =>
   (input: CustomNextApiHandler<T>) => {
     if (!schema) return input;
 
-    return async (req: NextApiRequest, res: NextApiResponse) => {
+    return (req: NextApiRequest, res: NextApiResponse) => {
       const { success, error, data } = schema.safeParse(req.body);
       req.body = data;
       if (success) return input(req, res);
@@ -61,7 +61,7 @@ export const procedure = {
 export const createNextApiHandler = (
   input: Partial<Record<Method, NextApiHandler>>,
 ) => {
-  return (async (req, res) => {
+  return ((req, res) => {
     const handler = input[req.method?.toUpperCase() as Method];
 
     if (!handler) return res.status(405).send('Method not allowed');

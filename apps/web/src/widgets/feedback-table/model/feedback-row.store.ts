@@ -16,22 +16,22 @@
 
 import { create } from 'zustand';
 
-type State = {
+interface State {
   editableState?: number;
-  editInput: Record<string, any>;
-};
-type Action = {
+  editInput: Record<string, unknown>;
+}
+interface Action {
   enableEditState: (id?: number) => void;
   disableEditState: () => void;
-  onChangeEditInput: (key: string, input: any) => void;
-};
+  onChangeEditInput: (key: string, input: unknown) => void;
+}
 
 const useFeedbackRowStore = create<State & Action>((set) => ({
   editableState: undefined,
   editInput: {},
   enableEditState: (id?: number) => set({ editableState: id }),
   disableEditState: () => set({ editableState: undefined, editInput: {} }),
-  onChangeEditInput: (key: string, input: any) =>
+  onChangeEditInput: (key: string, input: unknown) =>
     set(({ editInput }) => ({ editInput: { ...editInput, [key]: input } })),
 }));
 

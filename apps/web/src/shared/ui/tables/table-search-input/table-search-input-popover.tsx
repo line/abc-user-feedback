@@ -24,9 +24,9 @@ import { DateRangePicker, SelectBox } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
   columns: SearchItemType[];
-  onSubmit: (query: Record<string, any>) => void;
+  onSubmit: (query: Record<string, unknown>) => void;
   close: () => void;
-  query: Record<string, any>;
+  query: Record<string, unknown>;
 }
 
 const TableSearchInputPopover: React.FC<IProps> = (props) => {
@@ -34,7 +34,8 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const [currentQuery, setCurrentQuery] = useState<Record<string, any>>(query);
+  const [currentQuery, setCurrentQuery] =
+    useState<Record<string, unknown>>(query);
 
   const onSave = () => {
     const result = produce(currentQuery, (query) => {

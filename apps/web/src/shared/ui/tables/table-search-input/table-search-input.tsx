@@ -39,10 +39,10 @@ export type SearchItemType = {
 };
 
 interface IProps {
-  onChangeQuery: (query: Record<string, any>) => void;
+  onChangeQuery: (query: Record<string, unknown>) => void;
   searchItems: SearchItemType[];
-  query?: Record<string, any>;
-  defaultQuery?: Record<string, any>;
+  query?: Record<string, unknown>;
+  defaultQuery?: Record<string, unknown>;
 }
 
 const TableSearchInput: React.FC<IProps> = (props) => {
@@ -55,7 +55,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
   const [inputValue, setInputValue] = useState('');
 
   const editingName = useMemo(() => {
-    if (!inputRef.current || !inputRef.current.selectionEnd) return '';
+    if (!inputRef.current?.selectionEnd) return '';
     const { selectionEnd } = inputRef.current;
 
     const targetInput = inputValue.slice(0, selectionEnd);
@@ -72,7 +72,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
   }, [inputValue, inputRef]);
 
   const editingValue = useMemo(() => {
-    if (!inputRef.current || !inputRef.current.selectionEnd) return '';
+    if (!inputRef.current?.selectionEnd) return '';
     const { selectionEnd } = inputRef.current;
 
     const targetInput = inputValue.slice(0, selectionEnd);
@@ -105,7 +105,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
   const openPopover = () => setIsOpenPopover(true);
   const close = () => setIsOpenPopover(false);
 
-  const onInputChangeQuery = (inputObject?: Record<string, any>) => {
+  const onInputChangeQuery = (inputObject?: Record<string, unknown>) => {
     const currentQuery =
       inputObject ?
         removeEmptyValueInObject({ ...currentObj, ...inputObject })
@@ -149,7 +149,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
         displayValue={() => inputValue}
         onFocus={() => close()}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' && (e.target as any).value.length === 0) {
+          if (e.key === 'Enter' && e.currentTarget.value.length === 0) {
             onInputChangeQuery({});
           }
         }}

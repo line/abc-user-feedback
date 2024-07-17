@@ -69,7 +69,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={FeedbackPermissionText}
           permissions={FeedbackPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={1}
         />
 
@@ -77,7 +77,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={IssuePermissionText}
           permissions={IssuePermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={1}
         />
 
@@ -89,7 +89,7 @@ const RoleTable: React.FC<IProps> = (props) => {
           permissions={ProjectInfoPermissionList.filter(
             (v) => v !== 'project_delete',
           )}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -97,7 +97,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={ProjectMemberPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -105,7 +105,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={ProjectRolePermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -113,7 +113,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={ProjectApiKeyPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -121,7 +121,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={ProjectTrackerPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -129,13 +129,13 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={ProjectWebhookPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
         <PermissionRows
           permText={ProjectPermissionText}
           permissions={['project_delete']}
-          roles={roles ?? []}
+          roles={roles}
           depth={2}
         />
 
@@ -146,7 +146,7 @@ const RoleTable: React.FC<IProps> = (props) => {
           permissions={ChannelInfoPermissionList.filter(
             (v) => v !== 'channel_create' && v !== 'channel_delete',
           )}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -154,7 +154,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ChannelPermissionText}
           permissions={ChannelFieldPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
 
@@ -166,13 +166,13 @@ const RoleTable: React.FC<IProps> = (props) => {
         <PermissionRows
           permText={ChannelPermissionText}
           permissions={ChannelImageSettingPermissionList}
-          roles={roles ?? []}
+          roles={roles}
           depth={3}
         />
         <PermissionRows
           permText={ChannelPermissionText}
           permissions={['channel_create', 'channel_delete']}
-          roles={roles ?? []}
+          roles={roles}
           depth={2}
         />
       </tbody>
@@ -225,7 +225,7 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
     );
   };
 
-  const onEditPermission = async () => {
+  const onEditPermission = () => {
     if (!editingRole) return;
 
     const permEntires = Object.entries(editPermissions) as [
@@ -244,11 +244,11 @@ const TableHead: React.FC<ITableHeadProps> = (props) => {
     clear();
   };
 
-  type MenuType = {
+  interface MenuType {
     icon: IconNameType;
     label: string;
     onClick: (role: Role) => void;
-  };
+  }
 
   const MENU_ITEMS: MenuType[] = [
     ...((onUpdateRole ?
@@ -391,7 +391,7 @@ const PermissionRows = <T extends PermissionType>(
                   disabled={editingRole?.id !== role.id}
                   checked={
                     editingRole?.id === role.id ?
-                      editPermissions[perm] ?? role.permissions.includes(perm)
+                      (editPermissions[perm] ?? role.permissions.includes(perm))
                     : role.permissions.includes(perm)
                   }
                   onChange={(e) => checkPermission(perm, e.target.checked)}

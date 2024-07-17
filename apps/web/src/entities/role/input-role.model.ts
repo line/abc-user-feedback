@@ -20,16 +20,16 @@ import { PermissionList } from './permission.type';
 import type { PermissionType } from './permission.type';
 import type { Role } from './role.type';
 
-type State = {
+interface State {
   editingRole: Role | null;
   editPermissions: Partial<Record<PermissionType, boolean>>;
-};
-type Action = {
+}
+interface Action {
   changeEditingRole: <T extends keyof Role>(key: T, value: Role[T]) => void;
   clear: () => void;
   setEditingRole: (edit: Role) => void;
   checkPermission: (perm: PermissionType, isChecked: boolean) => void;
-};
+}
 
 export const useInputRoleStore = create<State & Action>((set) => ({
   editingRole: null,

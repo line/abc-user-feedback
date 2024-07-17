@@ -24,15 +24,16 @@ import { cn, usePermissions } from '@/shared';
 import type { Field } from '@/entities/field';
 import { useThemeStore } from '@/entities/theme';
 
+import type { FeedbackColumnType } from '../feedback-table-columns';
 import { useFeedbackDownload } from '../lib';
 import { useFeedbackTable } from '../model';
 
 interface IProps {
-  query: any;
+  query: Record<string, unknown>;
   fieldData: Field[];
   count?: number;
   isHead?: boolean;
-  table: Table<any>;
+  table: Table<FeedbackColumnType>;
 }
 
 const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
@@ -63,7 +64,7 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
   const { mutateAsync } = useFeedbackDownload({
     params: { channelId, projectId },
     options: {
-      onSuccess: async () => {
+      onSuccess() {
         setIsClicked(false);
       },
       onError: (error) => {
@@ -76,7 +77,7 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {
     setIsClicked(true);
     setOpen(false);
-    toast.promise(
+    void toast.promise(
       mutateAsync({
         type,
         fieldIds,

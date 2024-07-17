@@ -30,11 +30,11 @@ const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (!data || isPending) return;
+    if (!data) return;
     const project = data.items.find((v) => v.id === projectId);
     if (!project) {
       alert('You do not have permission for this project');
-      router.replace('/main');
+      void router.replace('/main');
     }
   }, [data]);
 

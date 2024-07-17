@@ -57,8 +57,8 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
     method: 'post',
     path: '/api/admin/auth/signUp/email',
     queryOptions: {
-      onSuccess() {
-        router.push(Path.SIGN_IN);
+      async onSuccess() {
+        await router.push(Path.SIGN_IN);
         toast.positive({ title: 'Success' });
       },
       onError(error) {
@@ -180,7 +180,7 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
                   className="btn btn-secondary btn-xs btn-rounded"
                   disabled={
                     watch('emailState') === 'VERIFIED' ||
-                    watch('code')?.length !== 6 ||
+                    watch('code').length !== 6 ||
                     verifyCodeStatus === 'pending'
                   }
                   onClick={() => {

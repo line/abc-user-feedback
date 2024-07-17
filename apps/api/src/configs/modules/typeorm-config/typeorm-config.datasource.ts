@@ -23,7 +23,8 @@ import { TypeOrmConfigService } from './typeorm-config.service';
 const env = mysqlConfig();
 console.log('env: ', env);
 const configService = new ConfigService({ mysql: env });
-const typeormConfigService = new TypeOrmConfigService(configService);
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+const typeormConfigService = new TypeOrmConfigService(configService as any);
 const typeormConfig =
   typeormConfigService.createTypeOrmOptions() as DataSourceOptions;
 

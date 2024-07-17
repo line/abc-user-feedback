@@ -1,6 +1,5 @@
 {
   "name": "@ufb/eslint-plugin-header",
   "private": true,
-  "main": "./index.js",
-  "type": "module"
+  "main": "./index.js"
 }

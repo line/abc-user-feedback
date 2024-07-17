@@ -19,13 +19,13 @@ import type { ColorType } from '@ufb/ui';
 
 import type { IssueStatus } from '@/entities/issue';
 
-export type IssuesItemType = {
+export interface IssuesItem {
   key: IssueStatus;
   name: string;
   color: ColorType;
-};
+}
 
-export const ISSUES: (t: TFunction) => IssuesItemType[] = (t) => [
+export const ISSUES: (t: TFunction) => IssuesItem[] = (t) => [
   { key: 'INIT', name: t('text.issue.init'), color: 'red' },
   { key: 'ON_REVIEW', name: t('text.issue.onReview'), color: 'blue' },
   { key: 'IN_PROGRESS', name: t('text.issue.inProgress'), color: 'yellow' },

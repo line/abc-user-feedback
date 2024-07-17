@@ -30,11 +30,12 @@ import {
 import { reorder } from '@/shared';
 import type { Field } from '@/entities/field';
 
+import type { FeedbackColumnType } from '../../feedback-table-columns';
 import DraggableColumnItem from './draggable-column-item';
 
 interface IProps extends React.PropsWithChildren {
   fieldData: Field[];
-  table: Table<any>;
+  table: Table<FeedbackColumnType>;
 }
 
 const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {

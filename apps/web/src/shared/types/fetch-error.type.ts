@@ -16,7 +16,7 @@
 
 export interface IFetchError {
   code: string;
-  message: string;
+  message?: string;
   statusCode: number;
   path: string;
 }

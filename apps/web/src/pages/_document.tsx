@@ -13,25 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { DocumentContext, DocumentInitialProps } from 'next/document';
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 
 class MyDocument extends Document {
-  static async getInitialProps(
-    ctx: DocumentContext,
-  ): Promise<DocumentInitialProps> {
-    const originalRenderPage = ctx.renderPage;
-
-    ctx.renderPage = () =>
-      originalRenderPage({
-        enhanceApp: (App) => App,
-        enhanceComponent: (Component) => Component,
-      });
-
-    const initialProps = await Document.getInitialProps(ctx);
-    return initialProps;
-  }
-
   render() {
     return (
       <Html>

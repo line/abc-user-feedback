@@ -15,11 +15,11 @@
  */
 import 'i18next';
 
-import de from '../../public/locales/de/common.json';
-import en from '../../public/locales/en/common.json';
-import ja from '../../public/locales/ja/common.json';
-import ko from '../../public/locales/ko/common.json';
-import zh from '../../public/locales/zh/common.json';
+import de from '../../../public/locales/de/common.json';
+import en from '../../../public/locales/en/common.json';
+import ja from '../../../public/locales/ja/common.json';
+import ko from '../../../public/locales/ko/common.json';
+import zh from '../../../public/locales/zh/common.json';
 
 export const resources = {
   en: { common: de },

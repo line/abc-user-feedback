@@ -25,7 +25,7 @@ export const strToObj = (input: string, searchItems: SearchItemType[]) => {
     if (splitValue.includes(':')) mergedValues.push(splitValue);
   }
 
-  const result: Record<string, any> = {};
+  const result: Record<string, unknown> = {};
 
   for (const mergedValue of mergedValues) {
     const [name, value] = mergedValue.split(':').map((v) => v.trim());
@@ -62,7 +62,7 @@ export const strValueToObj = (value: string, searchItems: SearchItemType) => {
 };
 
 export const objToStr = (
-  query: Record<string, any>,
+  query: Record<string, unknown>,
   searchItems: SearchItemType[],
 ) => {
   return Object.entries(query)
@@ -90,7 +90,7 @@ export const objToStr = (
             )?.name;
             return `${name}:${issueName}`;
           } else if (value?.name) {
-            const issueName = value?.name;
+            const issueName = value.name;
             return `${name}:${issueName}`;
           } else {
             const issueName =
@@ -111,10 +111,10 @@ export const objToStr = (
 };
 
 export const objToQuery = (
-  query: Record<string, any>,
+  query: Record<string, unknown>,
   searchItems: SearchItemType[],
 ) => {
-  const result: Record<string, any> = {};
+  const result: Record<string, unknown> = {};
   if (!query) return result;
   for (const [key, value] of Object.entries(query)) {
     const column = searchItems.find((column) => column.key === key);

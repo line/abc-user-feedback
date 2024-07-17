@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 
 import type { DateRangeType } from '@/shared';
 import { DATE_FORMAT, useQueryParamsState } from '@/shared';
+import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 
 import { env } from '@/env.mjs';
 
@@ -32,11 +33,9 @@ const DEFAULT_DATE_RANGE_STRING = {
   )}~${dayjs(DEFAULT_DATE_RANGE.endDate).format('YYYY-MM-DD')}`,
 };
 
-const DEFAULT_FN = () => {};
-
 interface IFeedbackTableContext {
-  query: Record<string, any>;
-  setQuery: (_: Record<string, any>) => void;
+  query: Record<string, unknown>;
+  setQuery: (_: Record<string, unknown>) => void;
   projectId: number;
   channelId: number;
   createdAtRange: DateRangeType;
@@ -44,11 +43,11 @@ interface IFeedbackTableContext {
 }
 export const FeedbackTableContext = createContext<IFeedbackTableContext>({
   query: {},
-  setQuery: DEFAULT_FN,
+  setQuery: EMPTY_FUNCTION,
   projectId: 0,
   channelId: 0,
   createdAtRange: DEFAULT_DATE_RANGE,
-  setCreatedAtRange: DEFAULT_FN,
+  setCreatedAtRange: EMPTY_FUNCTION,
 });
 interface IProps extends React.PropsWithChildren {
   projectId: number;
@@ -59,7 +58,7 @@ export const FeedbackTableProvider: React.FC<IProps> = (props) => {
   const { children, projectId, channelId } = props;
 
   const { query, setQuery } = useQueryParamsState(
-    { projectId, channelId },
+    { projectId: String(projectId), channelId: String(channelId) },
     DEFAULT_DATE_RANGE_STRING,
     (input) => {
       if (!input.createdAt) return false;
@@ -73,7 +72,7 @@ export const FeedbackTableProvider: React.FC<IProps> = (props) => {
   );
 
   const createdAtRange = useMemo(() => {
-    const queryStr = query['createdAt'];
+    const queryStr = query.createdAt;
     if (!queryStr) return null;
 
     const [startDateStr, endDateStr] = queryStr.split('~');

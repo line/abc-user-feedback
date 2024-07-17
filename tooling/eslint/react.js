@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import reactPlugin from 'eslint-plugin-react';
-import hooksPlugin from 'eslint-plugin-react-hooks';
+const reactPlugin = require('eslint-plugin-react');
+const hooksPlugin = require('eslint-plugin-react-hooks');
 
 /** @type {Awaited<import('typescript-eslint').Config>} */
-export default [
+module.exports = [
   {
     files: ['**/*.ts', '**/*.tsx'],
     plugins: {

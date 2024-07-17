@@ -18,7 +18,7 @@ import type { Column } from '@tanstack/react-table';
 import { Icon } from '@ufb/ui';
 
 interface IProps extends React.PropsWithChildren {
-  column: Column<any, any>;
+  column: Column<unknown, unknown>;
 }
 
 const TableSortIcon: React.FC<IProps> = ({ column }) => {

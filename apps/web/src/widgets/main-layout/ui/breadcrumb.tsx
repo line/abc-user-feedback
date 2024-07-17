@@ -26,7 +26,7 @@ const Breadcrumb: React.FC<IProps> = () => {
   const router = useRouter();
   const { tenant } = useTenantStore();
 
-  const projectId = +(router.query?.projectId ?? -1);
+  const projectId = +(router.query.projectId ?? -1);
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
@@ -53,7 +53,7 @@ const Breadcrumb: React.FC<IProps> = () => {
                 className="text-secondary"
               />
             </div>
-            <span className="font-12-regular">{data?.name}</span>
+            <span className="font-12-regular">{data.name}</span>
           </div>
         </>
       )}

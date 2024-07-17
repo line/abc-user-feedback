@@ -26,6 +26,6 @@ export const ironOption: SessionOptions = {
     secure: process.env.NODE_ENV === 'production',
   },
 };
-export type JwtSession = {
+export interface JwtSession {
   jwt?: { accessToken: string; refreshToken: string };
-};
+}

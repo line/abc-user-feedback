@@ -90,6 +90,7 @@ export class ChannelController {
   }
   @UseGuards(JwtAuthGuard)
   @Get('/name-check')
+  @ApiOkResponse({ type: Boolean })
   async checkName(
     @Param('projectId', ParseIntPipe) projectId: number,
     @Query('name') name: string,

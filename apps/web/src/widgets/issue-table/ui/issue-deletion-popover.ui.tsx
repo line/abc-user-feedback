@@ -42,7 +42,7 @@ const IssueDeletionPopover: React.FC<IProps> = (props) => {
       queryOptions: {
         onSuccess,
         onError(error) {
-          toast.negative({ title: error?.message ?? 'Error' });
+          toast.negative({ title: error.message });
         },
       },
     });

@@ -21,7 +21,7 @@ import { DATE_FORMAT, useQueryParamsState } from '@/shared';
 
 const useIssueQuery = (projectId: number) => {
   const { query, setQuery } = useQueryParamsState(
-    { projectId },
+    { projectId: String(projectId) },
     { status: 'total' },
     (input) => {
       if (!input.createdAt) return true;
@@ -33,10 +33,10 @@ const useIssueQuery = (projectId: number) => {
   );
 
   const dateRange = useMemo(() => {
-    const queryStr = query['createdAt'];
+    const queryStr = query.createdAt;
     if (!queryStr) return null;
 
-    const [startDateStr, endDateStr] = queryStr.split('~');
+    const [startDateStr, endDateStr] = queryStr.split('~') as [string, string];
 
     return {
       startDate: dayjs(startDateStr).toDate(),

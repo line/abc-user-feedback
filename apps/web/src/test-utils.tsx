@@ -40,7 +40,7 @@ const customRender = (
   options?: Omit<RenderOptions, 'wrapper'>,
 ) => render(ui, { wrapper: AllTheProviders, ...options });
 
-const customScreen = within(document?.body);
+const customScreen = within(document.body);
 
 export * from '@testing-library/react';
 export { customScreen as screen, customRender as render };

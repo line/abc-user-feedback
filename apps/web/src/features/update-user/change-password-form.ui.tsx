@@ -47,7 +47,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
     method: 'post',
     path: '/api/admin/users/password/change',
     queryOptions: {
-      async onSuccess() {
+      onSuccess() {
         toast.positive({ title: t('toast.save') });
         reset();
       },
@@ -56,7 +56,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
           setError('password', { message: 'Invalid Password' });
           toast.negative({
             title: 'Error',
-            description: error.message as string,
+            description: error.message,
           });
         } else {
           toast.negative({ title: 'Error', description: error.message });

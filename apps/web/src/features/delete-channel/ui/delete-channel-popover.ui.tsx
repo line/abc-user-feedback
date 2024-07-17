@@ -59,12 +59,12 @@ const DeleteChannelPopover: React.FC<IProps> = (props) => {
         }}
         submitButton={{
           children: t('button.delete'),
-          disabled: inputChannelName !== channel?.name,
+          disabled: inputChannelName !== channel.name,
           className: 'btn-red',
           onClick: () => onClickDelete(channel.id),
         }}
       >
-        <p className="font-16-bold mb-3 text-center">{channel?.name}</p>
+        <p className="font-16-bold mb-3 text-center">{channel.name}</p>
         <TextInput
           placeholder={t('input.placeholder.input')}
           onChange={(e) => setInputChannelName(e.target.value)}

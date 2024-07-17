@@ -14,15 +14,14 @@
  * under the License.
  */
 
-import eslint from '@eslint/js';
-import importPlugin from 'eslint-plugin-import';
-import tseslint from 'typescript-eslint';
+const eslint = require('@eslint/js');
+const importPlugin = require('eslint-plugin-import');
+const tseslint = require('typescript-eslint');
+const headerPlugin = require('@ufb/eslint-plugin-header');
 
-import headerPlugin from '@ufb/eslint-plugin-header';
-
-export default tseslint.config(
+module.exports = tseslint.config(
   {
-    ignores: ['**/*.config.*'],
+    ignores: ['**/*.config.*', 'dist/**'],
   },
   {
     files: ['**/*.js', '**/*.ts', '**/*.tsx'],
@@ -47,7 +46,7 @@ export default tseslint.config(
       ],
       '@typescript-eslint/no-misused-promises': [
         2,
-        { checksVoidReturn: { attributes: false } },
+        { checksVoidReturn: false },
       ],
       '@typescript-eslint/no-unnecessary-condition': [
         'error',
@@ -79,6 +78,7 @@ export default tseslint.config(
         ],
         1,
       ],
+      '@typescript-eslint/no-empty-interface': 'off',
     },
   },
   {

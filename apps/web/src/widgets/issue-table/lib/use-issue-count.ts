@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { client, ISSUES } from '@/shared';
 
-const useIssueCount = (projectId: number, query: Record<string, any>) => {
+const useIssueCount = (projectId: number, query: Record<string, unknown>) => {
   const { t } = useTranslation();
   const { status: _, ...otherQuery } = query;
   return useQuery({
@@ -33,12 +33,12 @@ const useIssueCount = (projectId: number, query: Record<string, any>) => {
           body: {
             limit: 1,
             page: 1,
-            query: { ...otherQuery, status: issue.key } as any,
+            query: { ...otherQuery, status: issue.key },
           },
         });
         result.push({ ...issue, count: data?.meta.totalItems ?? 0 });
       }
-      const total = result?.reduce((prev, curr) => prev + curr.count, 0);
+      const total = result.reduce((prev, curr) => prev + curr.count, 0);
       return [{ key: 'total', count: total }].concat(result);
     },
   });

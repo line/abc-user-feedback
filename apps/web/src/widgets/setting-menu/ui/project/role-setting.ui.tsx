@@ -45,11 +45,10 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
-        refetch();
+        await refetch();
         toast.positive({ title: t('toast.add') });
       },
       onError(error) {
-        if (!error) return;
         toast.negative({ title: error.message });
       },
     },
@@ -63,11 +62,11 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
       });
     },
     async onSuccess() {
+      await refetch();
       toast.negative({ title: t('toast.delete') });
-      refetch();
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 
@@ -92,7 +91,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
       toast.positive({ title: t('toast.save') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 
@@ -110,7 +109,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
       <div className="overflow-auto">
         <RoleTable
           roles={data?.roles ?? []}
-          onUpdateRole={async (input) => {
+          onUpdateRole={(input) => {
             const { name, permissions, id: roleId } = input;
             const targetRole = data?.roles.find((v) => v.id === roleId);
             if (!targetRole) return;

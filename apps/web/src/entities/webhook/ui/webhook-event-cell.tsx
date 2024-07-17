@@ -30,7 +30,7 @@ import type { WebhookEventType, WebhookStatus } from '../webhook.type';
 
 const toCamelCase = (str: string) => {
   return str
-    .replace(/\b(\w)/g, (_, capture) => capture.toUpperCase())
+    .replace(/\b(\w)/g, (_, capture: string) => capture.toUpperCase())
     .replace(/\s+/g, '');
 };
 

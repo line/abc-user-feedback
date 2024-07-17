@@ -42,7 +42,7 @@ const DeleteAccountButton: React.FC<IProps> = ({ user }) => {
         setOpen(false);
       },
       onError(error) {
-        toast.negative({ title: 'Error', description: error?.message });
+        toast.negative({ title: 'Error', description: error.message });
       },
     },
   });
@@ -51,7 +51,7 @@ const DeleteAccountButton: React.FC<IProps> = ({ user }) => {
     <Popover modal open={open} onOpenChange={setOpen}>
       <PopoverTrigger
         className="btn btn-md btn-secondary text-red-primary min-w-[120px]"
-        disabled={user?.signUpMethod === 'OAUTH'}
+        disabled={user.signUpMethod === 'OAUTH'}
         onClick={() => setOpen(true)}
       >
         {t('main.profile.button.delete-account')}

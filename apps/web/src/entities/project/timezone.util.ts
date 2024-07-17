@@ -36,5 +36,5 @@ export const getDefaultTimezone = () => {
     (option) =>
       option.name === Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
-  return tz ?? getTimezoneOptions()[0]!;
+  return tz ?? getTimezoneOptions()[0];
 };

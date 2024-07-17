@@ -22,7 +22,7 @@ import type { Field } from '@/entities/field';
 interface IProps extends React.PropsWithChildren {
   isExpanded: boolean;
   field: Field;
-  value: any;
+  value: unknown;
 }
 
 const FeedbackCell: React.FC<IProps> = memo((props) => {
@@ -48,9 +48,9 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           )
           .join(', ')
       : field.format === 'select' ?
-        field.options?.find((option) => option.key === value)?.name ?? value
+        (field.options?.find((option) => option.key === value)?.name ?? '')
       : field.format === 'images' ?
-        <ImagePreviewButton urls={value} />
+        <ImagePreviewButton urls={value as string[]} />
       : field.format === 'text' ?
         (value as string)
       : String(value)}

@@ -16,14 +16,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance } from 'class-transformer';
 
+import { IssueTrackerDataDto } from '../issue-tracker-data.dto';
+
 export class CreateIssueTrackerResponseDto {
   @Expose()
   @ApiProperty()
   id: number;
 
   @Expose()
-  @ApiProperty()
-  data: object;
+  @ApiProperty({ type: IssueTrackerDataDto })
+  data: IssueTrackerDataDto;
 
   @Expose()
   @ApiProperty()

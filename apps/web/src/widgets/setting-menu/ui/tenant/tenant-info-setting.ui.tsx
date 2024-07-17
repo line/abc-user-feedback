@@ -49,7 +49,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message ?? 'Error' });
       },
     },
   });

@@ -49,7 +49,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     if (!channelData || channelData.items.length === 0) return;
-    setChannelId(channelData.items?.[0]?.id ?? 0);
+    setChannelId(channelData.items[0]?.id ?? 0);
   }, [channelData]);
 
   if (!channelId) {
@@ -67,7 +67,7 @@ const ChannelSettingMenu: React.FC<IProps> = (props) => {
       <SelectBox
         options={channelData?.items ?? []}
         value={channelData?.items.find((v) => v.id === channelId) ?? null}
-        onChange={(input) => (input && input.id ? setChannelId(input.id) : {})}
+        onChange={(input) => (input?.id ? setChannelId(input.id) : {})}
         getOptionValue={(option) => String(option.id)}
         getOptionLabel={(option) => option.name}
       />

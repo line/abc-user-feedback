@@ -13,8 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { AxiosResponse } from 'axios';
 import axios, { AxiosError } from 'axios';
 import { getIronSession } from 'iron-session';
+
+import type { Jwt } from '@/shared';
 
 import { env } from '@/env.mjs';
 import { createNextApiHandler } from '@/server/api-handler';
@@ -29,17 +32,16 @@ const handler = createNextApiHandler({
     if (!session.jwt) return res.status(400).end();
 
     try {
-      const { status, data } = await axios.get(
+      const { status, data } = await axios.get<Jwt>(
         `${env.API_BASE_URL}/api/admin/auth/refresh`,
-        { headers: { Authorization: `Bearer ${session.jwt?.refreshToken}` } },
+        { headers: { Authorization: `Bearer ${session.jwt.refreshToken}` } },
       );
 
-      if (status !== 200) {
-        return res.status(status).send(data);
-      }
+      if (status !== 200) return res.status(status).send(data);
 
       session.jwt = data;
       await session.save();
+
       return res.send(data);
     } catch (error) {
       getLogger('/api/refrech-jwt').error(error);
@@ -48,7 +50,10 @@ const handler = createNextApiHandler({
           .status(500)
           .send({ message: error.message, code: error.name });
       } else if (error instanceof AxiosError && error.response) {
-        const { status, data } = error.response;
+        const { status, data } = error.response as AxiosResponse<
+          unknown,
+          unknown
+        >;
         return res.status(status).send(data);
       }
       return res.status(500).send({ message: 'Unknown Error' });

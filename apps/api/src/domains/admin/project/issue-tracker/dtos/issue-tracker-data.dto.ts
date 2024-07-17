@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { produce } from 'immer';
 
-export const removeEmptyValueInObject = (input: Record<string, unknown>) =>
-  produce(input, (draft) => {
-    for (const key of Object.keys(draft)) {
-      if (
-        typeof draft[key] === 'undefined' ||
-        draft[key] === null ||
-        draft[key] === ''
-      )
-        delete draft[key];
-    }
-  });
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose } from 'class-transformer';
+
+export class IssueTrackerDataDto {
+  @ApiProperty({ nullable: true })
+  @Expose()
+  ticketDomain: string | null;
+
+  @ApiProperty({ nullable: true })
+  @Expose()
+  ticketKey: string | null;
+}

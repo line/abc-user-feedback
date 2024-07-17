@@ -62,7 +62,7 @@ const ImageSlider: React.FC<IProps> = ({ urls }) => {
         style={{ width: 580 }}
       >
         <div className="flex gap-2">
-          {urls?.map((url) => (
+          {urls.map((url) => (
             <div
               key={url}
               className="relative shrink-0 cursor-pointer overflow-hidden rounded"

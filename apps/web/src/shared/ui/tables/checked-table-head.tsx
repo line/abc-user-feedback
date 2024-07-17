@@ -37,7 +37,7 @@ const CheckedTableHead: React.FC<IProps> = (props) => {
     <>
       <th style={{ width: header?.getSize() }}>
         {header &&
-          flexRender(header?.column.columnDef.header, header.getContext())}
+          flexRender(header.column.columnDef.header, header.getContext())}
       </th>
       <th colSpan={table.getVisibleFlatColumns().length - 1}>
         <div className="flex items-center gap-5">

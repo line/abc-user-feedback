@@ -31,7 +31,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (!tenant) return;
-    router.replace(Path.SIGN_IN);
+    void router.replace(Path.SIGN_IN);
   }, [tenant]);
 
   return <CreateTenantForm />;

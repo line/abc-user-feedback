@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
 
@@ -47,7 +48,7 @@ const InputChannelInfoStep: React.FC<IProps> = () => {
     <CreateChannelInputTemplate
       validate={async () => {
         const isValid = await methods.trigger();
-        methods.handleSubmit(() => {})();
+        await methods.handleSubmit(EMPTY_FUNCTION)();
         return isValid;
       }}
     >

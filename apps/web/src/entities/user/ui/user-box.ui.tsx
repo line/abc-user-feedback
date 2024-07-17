@@ -33,13 +33,13 @@ const UserBox: React.FC<IProps> = () => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
-  const handleClickProfile = () => {
-    router.push('/main/profile');
+  const handleClickProfile = async () => {
+    await router.push('/main/profile');
     setOpen(false);
   };
 
   const handleClickSignout = () => {
-    signOut();
+    void signOut();
     setOpen(false);
   };
 
@@ -57,7 +57,7 @@ const UserBox: React.FC<IProps> = () => {
           >
             <div className="flex items-center gap-2">
               <Icon name="ProfileCircleFill" size={16} />
-              <p className="font-12-regular">{user?.email}</p>
+              <p className="font-12-regular">{user.email}</p>
             </div>
           </div>
         </PopoverTrigger>

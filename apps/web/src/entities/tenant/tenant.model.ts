@@ -20,12 +20,12 @@ import { client } from '@/shared';
 
 import type { Tenant } from './tenant.type';
 
-type State = { tenant: Tenant | null };
+interface State { tenant: Tenant | null }
 
-type Action = {
+interface Action {
   setTenant: (tenant: Tenant) => void;
   refetchTenant: () => Promise<void>;
-};
+}
 
 export const useTenantStore = create<State & Action>((set) => ({
   tenant: null,

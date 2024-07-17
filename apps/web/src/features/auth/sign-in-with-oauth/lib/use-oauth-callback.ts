@@ -33,7 +33,7 @@ export const useOAuthCallback = () => {
   const router = useRouter();
 
   const query = useMemo(() => {
-    if (!router.query) return null;
+    if (!router.query.callback_url) return null;
     const { code, callback_url } = router.query;
 
     return code ? ({ code, callback_url } as IQuery) : null;
@@ -43,7 +43,7 @@ export const useOAuthCallback = () => {
     if (!query) return;
     signInWithOAuth(query).catch(() => {
       toast.negative({ title: 'OAuth2.0 Login Error' });
-      router.replace(Path.SIGN_IN);
+      void router.replace(Path.SIGN_IN);
       setStatus('error');
     });
   }, [query]);

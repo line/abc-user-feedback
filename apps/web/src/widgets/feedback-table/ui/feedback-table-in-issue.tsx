@@ -34,7 +34,7 @@ const FeedbackTableInIssue: React.FC<IProps> = (props) => {
   const [currentChannelId, setCurrentChannelId] = useState<number>(0);
 
   useEffect(() => {
-    setCurrentChannelId(channels?.items?.[0]?.id ?? 0);
+    setCurrentChannelId(channels?.items[0]?.id ?? 0);
   }, [channels]);
 
   if (!currentChannelId) return <div>Loading...</div>;

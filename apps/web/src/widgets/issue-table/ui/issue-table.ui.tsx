@@ -128,7 +128,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     [t],
   );
 
-  const onChangeInputSearch = (input: Record<string, any>) => {
+  const onChangeInputSearch = (input: Record<string, unknown>) => {
     const { status, createdAt } = query;
     setQuery({ status, createdAt, ...input });
   };

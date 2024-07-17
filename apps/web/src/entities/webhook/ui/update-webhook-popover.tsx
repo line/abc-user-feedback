@@ -30,7 +30,7 @@ interface IProps {
   disabled?: boolean;
   projectId: number;
   webhook: Webhook;
-  onClickUpdate: (webhookId: number, input: WebhookInfo) => Promise<any> | any;
+  onClickUpdate: (webhookId: number, input: WebhookInfo) => unknown;
 }
 
 const UpdateWebhookPopover: React.FC<IProps> = (props) => {

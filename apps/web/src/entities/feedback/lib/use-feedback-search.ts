@@ -36,7 +36,7 @@ interface IBody
     >,
     'query'
   > {
-  query: any;
+  query: Record<string, unknown>;
 }
 
 const useFeedbackSearch = (

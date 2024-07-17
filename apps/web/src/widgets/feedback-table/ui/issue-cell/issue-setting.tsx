@@ -44,7 +44,7 @@ const IssueSetting: React.FC<IProps> = (props) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -56,11 +56,11 @@ const IssueSetting: React.FC<IProps> = (props) => {
       pathParams: { projectId, issueId: issue.id },
       queryOptions: {
         async onSuccess() {
-          refetch();
+          await refetch();
           toast.negative({ title: t('toast.delete') });
         },
         onError(error) {
-          toast.negative({ title: error?.message ?? 'Error' });
+          toast.negative({ title: error.message });
         },
       },
     },

@@ -101,7 +101,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   };
 
   const handleApply = () => {
-    if (!currentValue?.startDate || !currentValue?.endDate) return;
+    if (!currentValue?.startDate || !currentValue.endDate) return;
     if (maxDays && isOverMaxDays(currentValue, maxDays)) {
       toast.negative({
         title: t('text.date.date-range-over-max-days', { maxDays }),
@@ -126,11 +126,11 @@ const DateRangePicker: React.FC<IProps> = (props) => {
           <p className="font-14-regular">
             {currentValue ?
               `${
-                currentValue?.startDate ?
-                  dayjs(currentValue?.startDate).format(DATE_FORMAT)
+                currentValue.startDate ?
+                  dayjs(currentValue.startDate).format(DATE_FORMAT)
                 : ''
               } ~ ${
-                currentValue?.endDate ?
+                currentValue.endDate ?
                   dayjs(currentValue.endDate).format(DATE_FORMAT)
                 : ''
               }`
@@ -196,7 +196,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
           </button>
           <button
             className="btn btn-md btn-primary"
-            disabled={!currentValue?.startDate || !currentValue?.endDate}
+            disabled={!currentValue?.startDate || !currentValue.endDate}
             onClick={handleApply}
           >
             {t('button.save')}

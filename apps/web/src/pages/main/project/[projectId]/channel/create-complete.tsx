@@ -61,9 +61,8 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
     imageConfigFormMethods.reset(data.imageConfig);
   }, [data]);
 
-  const gotoFeedback = () => {
+  const gotoFeedback = () =>
     router.push({ pathname: Path.FEEDBACK, query: { channelId, projectId } });
-  };
 
   return (
     <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">

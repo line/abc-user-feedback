@@ -43,8 +43,8 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
     path: '/api/admin/users/password/reset/code',
     queryOptions: {
       async onSuccess() {
+        await router.push(Path.SIGN_IN);
         toast.positive({ title: 'Success' });
-        router.push(Path.SIGN_IN);
       },
       onError(error) {
         toast.negative({ title: 'Error', description: error.message });

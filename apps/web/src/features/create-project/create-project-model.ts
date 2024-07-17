@@ -49,7 +49,7 @@ const DEFAULT_ROLES: Role[] = [
   },
 ];
 
-type Input = {
+interface Input {
   projectInfo: ProjectInfo;
   roles: {
     id: number;
@@ -59,15 +59,15 @@ type Input = {
   members: Member[];
   issueTracker: IssueTracker;
   apiKeys: ApiKey[];
-};
+}
 
-type State = {
+interface State {
   editingStep: number;
   currentStep: number;
   input: Input;
-};
+}
 
-type Action = {
+interface Action {
   jumpStepByKey: (key: CreateProjectStepKey) => void;
   jumpStep: (step: number) => void;
   prevStep: () => void;
@@ -75,7 +75,7 @@ type Action = {
   reset: () => void;
   getCurrentStepKey: () => CreateProjectStepKey;
   onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => void;
-};
+}
 
 const DEFAULT_STATE: State = {
   editingStep: 0,

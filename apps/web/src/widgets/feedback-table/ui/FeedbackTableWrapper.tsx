@@ -38,7 +38,7 @@ const FeedbackTableWrapper: React.FC<IProps> = (props) => {
   });
 
   const currentChannelId = useMemo(
-    () => channelId ?? channels?.items?.[0]?.id ?? null,
+    () => channelId ?? channels?.items[0]?.id ?? null,
     [channelId, channels],
   );
 

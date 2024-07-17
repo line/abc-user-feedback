@@ -126,12 +126,12 @@ const IssueCell: React.FC<IProps> = (props) => {
     path: '/api/admin/projects/{projectId}/issues',
     pathParams: { projectId },
     queryOptions: {
-      onSuccess: async () => {
-        allIssuesRefetch();
+      async onSuccess() {
+        await allIssuesRefetch();
         toast.positive({ title: t('toast.register') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -150,9 +150,9 @@ const IssueCell: React.FC<IProps> = (props) => {
     if (!issueId) {
       const data = await createIssue({ name: inputValue });
       if (!data) return;
-      issueId = data?.id;
+      issueId = data.id;
     }
-    attatchIssue({ issueId });
+    await attatchIssue({ issueId });
     setInputValue('');
   };
 
@@ -276,9 +276,9 @@ const IssueCell: React.FC<IProps> = (props) => {
                             issue={item}
                             projectId={projectId}
                             onClose={() => setOpenIssueId(null)}
-                            refetch={() => {
-                              refetch();
-                              allIssuesRefetch();
+                            refetch={async () => {
+                              await refetch();
+                              await allIssuesRefetch();
                             }}
                           />
                         )}

@@ -39,9 +39,9 @@ export const getApiKeyColumns = (
         {getValue()}
         <button
           className="icon-btn icon-btn-sm icon-btn-tertiary"
-          onClick={() => {
+          onClick={async () => {
             try {
-              navigator.clipboard.writeText(getValue());
+              await navigator.clipboard.writeText(getValue());
               toast.positive({
                 title: <Trans i18nKey="toast.copy" />,
                 iconName: 'CopyFill',

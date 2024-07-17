@@ -37,8 +37,10 @@ import {
 
 import SettingMenuTemplate from '../setting-menu-template';
 
-const objectsEqual = (o1: Record<string, any>, o2: Record<string, any>) =>
-  JSON.stringify(o1) === JSON.stringify(o2);
+const objectsEqual = (
+  o1: Record<string, unknown>[],
+  o2: Record<string, unknown>[],
+) => JSON.stringify(o1) === JSON.stringify(o2);
 
 interface IProps {
   projectId: number;
@@ -69,7 +71,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -104,7 +106,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   useEffect(() => {
     if (!isDirty) return;
 
-    const confirmMsg = t('system-popup.field-setting-get-out');
+    const confirmMsg: string = t('system-popup.field-setting-get-out');
 
     // 닫기, 새로고침
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {

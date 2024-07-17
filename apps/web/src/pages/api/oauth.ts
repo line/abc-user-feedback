@@ -17,6 +17,8 @@ import axios from 'axios';
 import { getIronSession } from 'iron-session';
 import { z } from 'zod';
 
+import type { Jwt } from '@/shared';
+
 import { env } from '@/env.mjs';
 import { createNextApiHandler, procedure } from '@/server/api-handler';
 import type { JwtSession } from '@/server/iron-option';
@@ -31,8 +33,8 @@ const handler = createNextApiHandler({
 
       try {
         const params = new URLSearchParams({ code });
-        const { status, data } = await axios.get(
-          `${env.API_BASE_URL}/api/admin/auth/signIn/oauth?${params}`,
+        const { status, data } = await axios.get<Jwt>(
+          `${env.API_BASE_URL}/api/admin/auth/signIn/oauth?${params.toString()}`,
         );
 
         if (status !== 200) {

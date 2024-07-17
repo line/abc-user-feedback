@@ -28,6 +28,7 @@ import {
   useOAIQuery,
   usePermissions,
 } from '@/shared';
+import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelImageConfig } from '@/entities/channel';
 import { channelImageConfigSchema, ImageConfigForm } from '@/entities/channel';
 
@@ -59,7 +60,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -90,7 +91,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
 
   const handleTestConnection = async () => {
     let isError = false;
-    await methods.handleSubmit(() => {})();
+    await methods.handleSubmit(EMPTY_FUNCTION)();
     const { accessKeyId, bucket, endpoint, region, secretAccessKey } =
       methods.getValues();
     if (accessKeyId.length === 0) {
@@ -124,7 +125,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
   useEffect(() => {
     methods.reset({
       ...data?.imageConfig,
-      domainWhiteList: data?.imageConfig?.domainWhiteList ?? null,
+      domainWhiteList: data?.imageConfig.domainWhiteList ?? null,
     });
   }, [data]);
 

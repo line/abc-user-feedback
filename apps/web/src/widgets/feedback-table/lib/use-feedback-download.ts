@@ -45,12 +45,15 @@ const useFeedbackDownload = ({ params, options }: IInput) => {
         config: { responseType: 'arraybuffer' },
       });
 
-      const filename = (headers as any)?.['content-disposition'].split(
+      const filename = ((headers['content-disposition'] ?? '') as string).split(
         'filename=',
       )[1];
+
+      if (!filename || typeof data !== 'object') return;
+
       const decodedFilename = decodeURI(filename.slice(1, filename.length - 1));
 
-      const url = window.URL.createObjectURL(new Blob([data as any]));
+      const url = window.URL.createObjectURL(new Blob([data]));
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', decodedFilename);

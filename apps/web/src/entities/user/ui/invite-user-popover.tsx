@@ -87,12 +87,12 @@ const InviteUserPopover: React.FC<IProps> = () => {
     method: 'post',
     path: '/api/admin/users/invite',
     queryOptions: {
-      async onSuccess() {
+      onSuccess() {
         toast.positive({ title: t('toast.invite'), iconName: 'MailFill' });
         setOpen(false);
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -141,11 +141,7 @@ const InviteUserPopover: React.FC<IProps> = () => {
               { label: 'SUPER', value: 'SUPER' },
               { label: 'GENERAL', value: 'GENERAL' },
             ]}
-            defaultValue={
-              watch('type') ?
-                { label: watch('type'), value: watch('type') }
-              : undefined
-            }
+            defaultValue={{ label: watch('type'), value: watch('type') }}
             required
           />
           {watch('type') === 'GENERAL' && (

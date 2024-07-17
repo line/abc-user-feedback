@@ -45,7 +45,7 @@ const SignInPage: NextPageWithLayout = () => {
       </div>
       {tenant?.useEmail && <SignInWithEmailForm />}
       <div className="my-1 flex flex-col gap-1">
-        {tenant?.useEmail && tenant?.useOAuth && (
+        {tenant?.useEmail && tenant.useOAuth && (
           <div className="relative my-5">
             <span className="absolute-center text-secondary bg-primary absolute px-2 py-1">
               OR

@@ -639,7 +639,7 @@ importers:
         specifier: ^7.7.1
         version: 7.16.1(eslint@9.7.0)(typescript@5.5.3)
       '@ufb/eslint-plugin-header':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../eslint-plugin-header
       eslint-config-prettier:
         specifier: ^9.1.0
@@ -664,10 +664,10 @@ importers:
         version: 7.16.1(eslint@9.7.0)(typescript@5.5.3)
     devDependencies:
       '@ufb/prettier-config':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../prettier
       '@ufb/tsconfig':
-        specifier: workspace:^
+        specifier: workspace:*
         version: link:../typescript
       eslint:
         specifier: ^9.0.0

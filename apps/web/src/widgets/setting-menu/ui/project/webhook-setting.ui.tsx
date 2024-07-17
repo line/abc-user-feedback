@@ -47,7 +47,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       toast.positive({ title: t('toast.save') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
   const { mutateAsync: updateWebhook } = useMutation({
@@ -62,7 +62,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       toast.positive({ title: t('toast.save') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 
@@ -76,7 +76,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });

@@ -37,7 +37,7 @@ const usePermissions = (inputProjectId?: number | null) => {
   const projectId = useMemo(() => {
     if (inputProjectId) return inputProjectId;
     if (!router.query.projectId) return null;
-    return +router.query.projectId as number;
+    return Number(router.query.projectId);
   }, [router, inputProjectId]);
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const usePermissions = (inputProjectId?: number | null) => {
     if (!data) return;
     const role = data.roles.find((v) => v.project.id === projectId);
     if (!role) setPermissions([]);
-    else setPermissions(role.permissions as PermissionType[]);
+    else setPermissions(role.permissions);
   }, [data, projectId]);
 
   return permissions;

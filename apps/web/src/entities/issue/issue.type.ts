@@ -20,7 +20,7 @@ export type IssueStatus =
   | 'RESOLVED'
   | 'PENDING';
 
-export type Issue = {
+export interface Issue {
   id: number;
   name: string;
   description: string | null;
@@ -28,5 +28,5 @@ export type Issue = {
   status: IssueStatus;
   createdAt: string;
   updatedAt: string;
-  externalIssueId: string;
-};
+  externalIssueId?: string;
+}

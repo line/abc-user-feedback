@@ -20,7 +20,7 @@ interface IProps {
 const Legend: React.FC<IProps> = ({ dataKeys }) => {
   return (
     <div className="flex gap-2">
-      {dataKeys?.map((v, i) => (
+      {dataKeys.map((v, i) => (
         <div className="flex items-center gap-2" key={i}>
           <div
             className="h-2 w-2 rounded-full"
