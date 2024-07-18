@@ -47,18 +47,18 @@ const CreateTenantForm: React.FC<IProps> = () => {
     path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ['/api/admin/tenants'],
         });
+        await router.replace(Path.SIGN_IN);
+        await refetchTenant();
         toast.positive({
           title: 'Default Super User',
           description: `email: ${DEFAULT_SUPER_ACCOUNT.email} \n password: ${DEFAULT_SUPER_ACCOUNT.password}`,
         });
-        router.replace(Path.SIGN_IN);
-        await refetchTenant();
       },
       onError(error) {
-        toast.negative({ title: 'Error', description: error?.message });
+        toast.negative({ title: 'Error', description: error.message });
       },
     },
   });
@@ -66,7 +66,7 @@ const CreateTenantForm: React.FC<IProps> = () => {
   return (
     <form
       className="flex flex-col gap-4"
-      onSubmit={handleSubmit(({ siteName }) => createTenant({ siteName }))}
+      onSubmit={handleSubmit((data) => createTenant(data))}
     >
       <h1 className="font-20-bold">{t('tenant.create.title')}</h1>
       <label>

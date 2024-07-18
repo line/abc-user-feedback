@@ -17,12 +17,11 @@ import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 
-import CreateTenantForm from './create-tenant-form.ui';
-import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
-
 import { env } from '@/env.mjs';
 import { server } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import CreateTenantForm from './create-tenant-form.ui';
+import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
 
 describe('CreateTenantForm', () => {
   test('An input length  should be at least 3', async () => {

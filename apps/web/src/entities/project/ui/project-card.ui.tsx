@@ -42,9 +42,9 @@ const ProjectCard: React.FC<IProps> = ({ project }) => {
 
   return (
     <MainCard
-      title={project?.name ?? ''}
+      title={project.name}
       icon={{ bgColor: '#48DECC', iconName: 'CollectionFill' }}
-      description={project?.description}
+      description={project.description}
       leftContent={{
         title: t('main.index.total-channel'),
         count: channels?.meta.totalItems ?? 0,

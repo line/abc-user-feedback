@@ -52,9 +52,9 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
         <TooltipTrigger asChild>
           <button
             className="btn btn-lg btn-primary w-[200px] gap-2"
-            onClick={() => {
+            onClick={async () => {
               if (editingStep > 0) setOpen(true);
-              else router.push(Path.CREATE_PROJECT);
+              else await router.push(Path.CREATE_PROJECT);
             }}
             disabled={user?.type !== 'SUPER'}
           >
@@ -80,16 +80,16 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
           submitButton={{
             children: t('dialog.continue.button.continue'),
             className: 'btn-red',
-            onClick: () => {
+            onClick: async () => {
               jumpStep(editingStep);
-              router.push(Path.CREATE_PROJECT);
+              await router.push(Path.CREATE_PROJECT);
             },
           }}
           cancelButton={{
             children: t('dialog.continue.button.restart'),
-            onClick: () => {
+            onClick: async () => {
               reset();
-              router.push(Path.CREATE_PROJECT);
+              await router.push(Path.CREATE_PROJECT);
             },
           }}
         />

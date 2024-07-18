@@ -15,7 +15,7 @@
  */
 import { produce } from 'immer';
 
-export const removeEmptyValueInObject = (input: Record<string, any>) =>
+export const removeEmptyValueInObject = (input: Record<string, unknown>) =>
   produce(input, (draft) => {
     for (const key of Object.keys(draft)) {
       if (

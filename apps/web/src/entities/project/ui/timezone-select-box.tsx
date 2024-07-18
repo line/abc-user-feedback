@@ -62,7 +62,7 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
         <Listbox.Button className="input">
           {({ open }) => (
             <div className="flex w-full justify-between">
-              {getLabel(value) ?? 'Select'}
+              {getLabel(value)}
               <Icon name={open ? 'ChevronUp' : 'ChevronDown'} size={20} />
             </div>
           )}

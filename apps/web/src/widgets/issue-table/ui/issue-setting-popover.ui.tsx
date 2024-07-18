@@ -27,13 +27,13 @@ import { ISSUES, Popper, useOAIMutation } from '@/shared';
 import type { Issue, IssueStatus } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
-type UpdateIssueType = {
+interface UpdateIssueType {
   name: string;
   description: string | null;
   status: IssueStatus;
   color: string;
   externalIssueId: string;
-};
+}
 
 const schema = z.object({
   name: z.string(),
@@ -44,7 +44,7 @@ const schema = z.object({
 
 interface IProps {
   issue: Issue;
-  refetch: () => Promise<any>;
+  refetch: () => Promise<void>;
   issueTracker?: IssueTracker;
   disabled: boolean;
 }
@@ -75,7 +75,6 @@ const IssueSettingPopover: React.FC<IProps> = ({
   }, [issue]);
 
   useEffect(() => {
-    if (!errors) return;
     Object.entries(errors).forEach(([key, value]) => {
       toast.negative({ title: key, description: value.message });
     });
@@ -91,14 +90,14 @@ const IssueSettingPopover: React.FC<IProps> = ({
         toast.positive({ title: t('toast.save') });
         close();
       },
-      async onError({ message }) {
+      onError({ message }) {
         toast.negative({ title: message });
       },
     },
   });
 
   const close = () => setOpen(false);
-  const onSubmit = async (data: UpdateIssueType) => mutate(data);
+  const onSubmit = (data: UpdateIssueType) => mutate(data);
 
   return (
     <Popper
@@ -189,7 +188,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
             <div className="flex items-center gap-2">
               <input
                 className="input w-[120px]"
-                value={issueTracker?.ticketKey}
+                value={issueTracker?.ticketKey ?? ''}
                 disabled
               />
               -

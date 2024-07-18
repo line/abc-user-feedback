@@ -1,20 +1,6 @@
 {
   "name": "abc-user-feedback",
-  "version": "0.0.0",
   "private": true,
-  "workspaces": {
-    "packages": [
-      "apps/*",
-      "packages/*",
-      "tooling/*"
-    ],
-    "nohoist": [
-      "**/typeorm*/**",
-      "**/typeorm*",
-      "**/*nestjs*/**",
-      "**/*nestjs*"
-    ]
-  },
   "scripts": {
     "build": "turbo build",
     "build:ui": "turbo @ufb/ui#build",
@@ -33,7 +19,6 @@
     "test": "turbo test",
     "test:e2e": "cd apps/e2e && pnpm test:e2e"
   },
-  "prettier": "@ufb/prettier-config",
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
     "prettier": "^3.2.5",

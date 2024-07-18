@@ -17,12 +17,11 @@ import { faker } from '@faker-js/faker';
 
 import { IconNames } from '@ufb/ui';
 
+import { render } from '@/test-utils';
 import MainCard from './main-card.ui';
 
-import { render } from '@/test-utils';
-
 describe('MainCard', () => {
-  test('snapshot', async () => {
+  test('snapshot', () => {
     const { container } = render(
       <MainCard
         icon={{

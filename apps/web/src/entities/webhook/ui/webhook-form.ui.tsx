@@ -44,7 +44,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
     return channels.filter((channel) =>
       watch('events')
         .find((e) => e.type === type)
-        ?.channelIds?.includes(channel.id),
+        ?.channelIds.includes(channel.id),
     );
   };
 
@@ -77,7 +77,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
           status === 'ACTIVE' &&
           (type === 'FEEDBACK_CREATION' || type === 'ISSUE_ADDITION')
         ) ?
-          channels.map((v) => v.id) ?? []
+          channels.map((v) => v.id)
         : [];
 
       setValue(

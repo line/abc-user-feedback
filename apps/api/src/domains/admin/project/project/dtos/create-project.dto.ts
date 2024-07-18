@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import type { IssueTrackerDataDto } from '../../issue-tracker/dtos/issue-tracker-data.dto';
 import type { CreateRoleDto } from '../../role/dtos';
 import type { Timezone } from '../project.entity';
 
@@ -30,6 +31,6 @@ export class CreateProjectDto {
     value: string;
   }[];
   issueTracker?: {
-    data: Record<string, any>;
+    data: IssueTrackerDataDto;
   };
 }

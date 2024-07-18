@@ -15,9 +15,8 @@
  */
 import userEvent from '@testing-library/user-event';
 
-import ThemeToggleButton from './theme-toggle-button.ui';
-
 import { render, screen } from '@/test-utils';
+import ThemeToggleButton from './theme-toggle-button.ui';
 
 describe('ThemeToggleButton', () => {
   it('toggle theme using document className', async () => {

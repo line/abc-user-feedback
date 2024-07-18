@@ -26,9 +26,11 @@ import type { Jwt } from '@/shared/types';
 
 import type { User } from './user.type';
 
-type State = { user: User | null };
+interface State {
+  user: User | null;
+}
 
-type Action = {
+interface Action {
   signInWithEmail: (input: {
     email: string;
     password: string;
@@ -40,16 +42,19 @@ type Action = {
   signOut: () => Promise<void>;
   setUser: () => void;
   _signIn: (jwt: Jwt) => void;
-};
+}
 
 export const useUserStore = create<State & Action>((set, get) => ({
   user: null,
   signInWithEmail: async ({ email, password }) => {
-    const { data: jwt } = await axios.post('/api/login', { email, password });
+    const { data: jwt } = await axios.post<Jwt>('/api/login', {
+      email,
+      password,
+    });
     get()._signIn(jwt);
   },
   signInWithOAuth: async ({ code, callback_url }) => {
-    const { data: jwt } = await axios.post('/api/oauth', {
+    const { data: jwt } = await axios.post<Jwt>('/api/oauth', {
       code,
       callback_url,
     });
@@ -65,7 +70,7 @@ export const useUserStore = create<State & Action>((set, get) => ({
     if (!jwt) return;
 
     const { sub, exp } = jwtDecode<JwtPayload>(jwt.accessToken);
-    if (!sub || dayjs().isBefore(dayjs(exp))) get().signOut();
+    if (!sub || dayjs().isBefore(dayjs(exp))) void get().signOut();
     else {
       const { data } = await client.get({
         path: '/api/admin/users/{id}',
@@ -80,9 +85,9 @@ export const useUserStore = create<State & Action>((set, get) => ({
     sessionStorage.setItem('jwt', jwt);
     get().setUser();
     if (router.query.callback_url) {
-      router.push(router.query.callback_url as string);
+      await router.push(router.query.callback_url as string);
     } else {
-      router.push({ pathname: Path.MAIN });
+      await router.push({ pathname: Path.MAIN });
     }
   },
 }));

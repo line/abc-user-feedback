@@ -15,6 +15,6 @@
  */
 import { z } from 'zod';
 
-export const createTenantFormSchema: Zod.ZodType = z.object({
+export const createTenantFormSchema = z.object({
   siteName: z.string().min(2),
 });

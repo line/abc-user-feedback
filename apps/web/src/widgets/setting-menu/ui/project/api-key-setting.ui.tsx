@@ -50,7 +50,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       toast.positive({ title: t('toast.inactive') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 
@@ -65,7 +65,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       toast.positive({ title: t('toast.active') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 
@@ -80,7 +80,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       toast.negative({ title: t('toast.delete') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 

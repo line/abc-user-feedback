@@ -30,13 +30,14 @@ import {
   usePermissions,
 } from '@/shared';
 
+import type { FeedbackColumnType } from '../feedback-table-columns';
 import { useFeedbackTable } from '../model';
 import useFeedbackRowStore from '../model/feedback-row.store';
 import FeedbackDetail from './feedback-detail';
 
 interface IProps {
-  row: Row<any>;
-  refetch: () => Promise<any>;
+  row: Row<FeedbackColumnType>;
+  refetch: () => Promise<void>;
 }
 
 const FeedbackTableRow: React.FC<IProps> = ({ row, refetch }) => {
@@ -63,7 +64,7 @@ const FeedbackTableRow: React.FC<IProps> = ({ row, refetch }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -81,7 +82,7 @@ const FeedbackTableRow: React.FC<IProps> = ({ row, refetch }) => {
   }, [row, toggleRow]);
 
   const onSubmit = () => {
-    mutate(editInput as any);
+    mutate(editInput as never);
     disableEditState();
   };
   const onOpenChange = (open: boolean) =>

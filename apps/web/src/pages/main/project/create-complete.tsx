@@ -127,20 +127,18 @@ const CompleteProjectCreationPage: NextPage = () => {
         <div className="flex gap-2">
           <button
             className="btn btn-lg btn-secondary w-[160px]"
-            onClick={() => {
-              router.push({ pathname: Path.MAIN });
-            }}
+            onClick={() => router.push({ pathname: Path.MAIN })}
           >
             {t('button.next-time')}
           </button>
           <button
             className="btn btn-lg btn-blue w-[160px]"
-            onClick={() => {
+            onClick={() =>
               router.push({
                 pathname: Path.CREATE_CHANNEL,
                 query: { projectId },
-              });
-            }}
+              })
+            }
           >
             {t('main.setting.button.create-channel')}
           </button>

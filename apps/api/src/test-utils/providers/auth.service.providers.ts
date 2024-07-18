@@ -18,6 +18,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ClsService } from 'nestjs-cls';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
+
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
 import { getMockProvider } from '@/test-utils/util-functions';
 import { AuthService } from '../../domains/admin/auth/auth.service';

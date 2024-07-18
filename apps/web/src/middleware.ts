@@ -19,9 +19,8 @@ import { getIronSession } from 'iron-session';
 
 import { DEFAULT_LOCALE, Path } from '@/shared/constants';
 
-import { ironOption } from './server/iron-option';
-
 import type { JwtSession } from '@/server/iron-option';
+import { ironOption } from './server/iron-option';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();

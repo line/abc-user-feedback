@@ -24,7 +24,7 @@ import useFeedbackRowStore from '../model/feedback-row.store';
 
 interface IProps extends React.PropsWithChildren {
   field: FieldInfo;
-  value: any;
+  value: unknown;
   isExpanded: boolean;
   feedbackId: number;
 }
@@ -37,13 +37,13 @@ const EditableCell: React.FC<IProps> = memo((props) => {
   const isEditable = editableState === feedbackId;
 
   const currentRowValue = useMemo(() => {
-    return !isEditable ? value : editInput[field.key] ?? value;
+    return !isEditable ? value : (editInput[field.key] ?? value);
   }, [isEditable, field, value, editInput]);
 
   const currentValue = useMemo(() => {
     if (field.format === 'date') {
       return currentRowValue ?
-          dayjs(currentRowValue).format('YYYY/MM/DD')
+          dayjs(currentRowValue as string).format('YYYY/MM/DD')
         : undefined;
     }
     if (field.format === 'select') {
@@ -64,7 +64,7 @@ const EditableCell: React.FC<IProps> = memo((props) => {
           type="text"
           className="input input-sm"
           placeholder="input"
-          value={currentValue ?? ''}
+          value={(currentValue ?? '') as string}
           onChange={(e) => onChangeEditInput(field.key, e.target.value)}
           disabled={!isEditable}
         />
@@ -75,7 +75,7 @@ const EditableCell: React.FC<IProps> = memo((props) => {
           className="input input-sm"
           placeholder="input"
           disabled={!isEditable}
-          value={currentValue ?? 0}
+          value={(currentValue ?? 0) as number}
           onChange={(e) => onChangeEditInput(field.key, Number(e.target.value))}
         />
       )}
@@ -86,13 +86,13 @@ const EditableCell: React.FC<IProps> = memo((props) => {
           className="input input-sm"
           placeholderText="input"
           disabled={!isEditable}
-          value={currentValue}
+          value={currentValue as string}
         />
       )}
       {field.format === 'select' && (
         <SelectBoxCreatable
           options={field.options ?? []}
-          value={currentValue}
+          value={currentValue as { key: string; name: string } | undefined}
           onChange={(v) => {
             onChangeEditInput(field.key, v?.key);
           }}
@@ -104,11 +104,11 @@ const EditableCell: React.FC<IProps> = memo((props) => {
       {field.format === 'multiSelect' && (
         <SelectBoxCreatable
           options={field.options ?? []}
-          value={currentValue}
+          value={currentValue as { key: string; name: string }[] | undefined}
           onChange={(v) =>
             onChangeEditInput(
               field.key,
-              v?.map((option) => option.key),
+              v.map((option) => option.key),
             )
           }
           isExpand={isExpanded}

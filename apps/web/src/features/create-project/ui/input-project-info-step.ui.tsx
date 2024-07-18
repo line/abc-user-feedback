@@ -18,6 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { client } from '@/shared';
+import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
 
@@ -45,11 +46,14 @@ const InputProjectInfo: React.FC<IProps> = () => {
 
   const validate = async () => {
     const isValid = await methods.trigger();
-    await methods.handleSubmit(() => {})();
-    const { data: isDuplicated } = await client.get({
+    await methods.handleSubmit(EMPTY_FUNCTION)();
+    const response = await client.get({
       path: '/api/admin/projects/name-check',
       query: { name: methods.getValues('name') },
     });
+
+    const isDuplicated = response.data as unknown as boolean;
+
     if (isDuplicated) {
       methods.setError('name', { message: 'Duplicated name' });
       return false;

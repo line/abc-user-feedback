@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import { IssueTrackerForm, issueTrackerSchema } from '@/entities/issue-tracker';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
@@ -46,7 +47,7 @@ const InputIssueTrackerStep: React.FC<IProps> = () => {
     <CreateProjectInputTemplate
       validate={async () => {
         const isValid = await methods.trigger();
-        methods.handleSubmit(() => {})();
+        await methods.handleSubmit(EMPTY_FUNCTION)();
         return isValid;
       }}
     >

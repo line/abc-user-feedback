@@ -51,7 +51,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
   } = useCreateChannelStore();
 
   const router = useRouter();
-  const projectId = Number(router.query?.projectId);
+  const projectId = Number(router.query.projectId);
   const queryClient = useQueryClient();
 
   const overlay = useOverlay();
@@ -82,7 +82,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
           query: { projectId, channelId: data?.id },
         });
         reset();
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects/{projectId}/channels'],
         });
       },
@@ -90,7 +90,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
         if (error.code === ErrorCode.Channel.ChannelAlreadyExists) {
           openCreateChannelError();
         } else {
-          toast.negative({ title: error?.message ?? 'Error' });
+          toast.negative({ title: error.message });
         }
       },
     },
@@ -119,7 +119,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
       actionButton={actionButton}
       onComplete={onComplete}
       validate={validate}
-      disableNextBtn={disableNextBtn || isLoading}
+      disableNextBtn={disableNextBtn ?? isLoading}
     >
       {children}
     </CreateInputTemplate>

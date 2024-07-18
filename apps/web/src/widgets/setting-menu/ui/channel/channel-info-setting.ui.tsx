@@ -56,7 +56,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -64,17 +64,16 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
   });
+
   useEffect(() => {
-    refetch();
+    void refetch();
   }, []);
 
   useEffect(() => {
     methods.reset(data);
   }, [data]);
 
-  const onSubmit = async (values: ChannelInfo) => {
-    updateChannel(values);
-  };
+  const onSubmit = (values: ChannelInfo) => updateChannel(values);
 
   return (
     <SettingMenuTemplate

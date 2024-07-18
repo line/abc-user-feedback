@@ -128,7 +128,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     [t],
   );
 
-  const onChangeInputSearch = (input: Record<string, any>) => {
+  const onChangeInputSearch = (input: Record<string, unknown>) => {
     const { status, createdAt } = query;
     setQuery({ status, createdAt, ...input });
   };
@@ -158,7 +158,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   return (
     <div className="flex flex-col gap-2">
       <IssueTableSelectBox
-        currentIssueKey={query.status}
+        currentIssueKey={query.status ? String(query.status) : undefined}
         issueCountData={issueCountData}
         onChangeOption={(status) => setQuery({ ...query, status })}
       />

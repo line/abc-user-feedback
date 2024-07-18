@@ -17,11 +17,11 @@ import type { Column } from '@tanstack/react-table';
 
 import { Icon } from '@ufb/ui';
 
-interface IProps extends React.PropsWithChildren {
-  column: Column<any, any>;
+interface IProps<T> {
+  column: Column<T, unknown>;
 }
 
-const TableSortIcon: React.FC<IProps> = ({ column }) => {
+const TableSortIcon = <T,>({ column }: IProps<T>) => {
   if (!column.getCanSort()) return <></>;
   return (
     <span

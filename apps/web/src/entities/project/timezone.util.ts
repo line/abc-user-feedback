@@ -32,9 +32,13 @@ export const getTimezoneOptions = () => {
   return result;
 };
 export const getDefaultTimezone = () => {
-  const tz = getTimezoneOptions().find(
+  const options = getTimezoneOptions();
+  const tz = options.find(
     (option) =>
       option.name === Intl.DateTimeFormat().resolvedOptions().timeZone,
   );
-  return tz ?? getTimezoneOptions()[0]!;
+  if (!options[0]) {
+    throw new Error("Can't find default timezone");
+  }
+  return tz ?? options[0];
 };

@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 import { getRequestUrl, Path, sessionStorage } from '@/shared';
 import type {
+  Jwt,
   OAIMethodPathKeys,
   OAIMutationResponse,
   OAIPathParameters,
@@ -36,37 +37,43 @@ class client {
 
   private static instance: client;
   public static get Instance(): client {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return this.instance || (this.instance = new this());
   }
 
   constructor() {
-    this.axiosInstance.interceptors.request.use(async (config) => {
+    this.axiosInstance.interceptors.request.use((config) => {
       const token = sessionStorage.getItem('jwt');
       if (token) {
         config.headers.setAuthorization(`Bearer ${token.accessToken}`);
       }
       return config;
     });
-    createAuthRefreshInterceptor(this.axiosInstance, async (failedRequest) => {
-      try {
-        const { data } = await axios.get('/api/refresh-jwt');
-        sessionStorage.setItem('jwt', data);
-        failedRequest.response.config.headers.setAuthorization(
-          `Bearer ${data.accessToken}`,
-        );
-      } catch (error) {
-        await axios.get('/api/logout');
-        sessionStorage.removeItem('jwt');
-        window.location.assign(Path.SIGN_IN);
-      }
-    });
+    createAuthRefreshInterceptor(
+      this.axiosInstance,
+      async (failedRequest: { response: AxiosResponse }) => {
+        try {
+          const { data } = await axios.get<Jwt>('/api/refresh-jwt');
+          sessionStorage.setItem('jwt', data);
+
+          failedRequest.response.config.headers.setAuthorization(
+            `Bearer ${data.accessToken}`,
+          );
+        } catch (error) {
+          await axios.get('/api/logout');
+          sessionStorage.removeItem('jwt');
+          window.location.assign(Path.SIGN_IN);
+        }
+      },
+    );
     this.axiosInstance.interceptors.response.use(
       (response) => response,
-      (error) => Promise.reject(error.response?.data ?? error),
+      (error: { response?: AxiosResponse }) =>
+        Promise.reject(error.response?.data ?? error),
     );
   }
-  request<D>(config: AxiosRequestConfig<D>) {
-    return this.axiosInstance.request(config);
+  request<D, T = unknown>(config: AxiosRequestConfig<D>) {
+    return this.axiosInstance.request<T>(config);
   }
 
   get<
@@ -82,7 +89,7 @@ class client {
   }: { path: TPath } & (TPathParams extends undefined ?
     { pathParams?: TPathParams }
   : { pathParams: TPathParams }) &
-    (TQuery extends undefined ? { query?: any } : { query: TQuery }) & {
+    (TQuery extends undefined ? { query?: unknown } : { query: TQuery }) & {
       options?: Omit<AxiosRequestConfig, 'params'>;
     }) {
     return this.axiosInstance.get<TResponse>(getRequestUrl(path, pathParams), {

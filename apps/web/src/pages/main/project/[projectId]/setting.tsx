@@ -58,7 +58,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
   const [channelId, setChannelId] = useQueryState('channelId', parseAsInteger);
   const settingMenu =
-    router.query?.menu ? (router.query.menu as SettingMenuType) : null;
+    router.query.menu ? (router.query.menu as SettingMenuType) : null;
 
   const setSettingMenu = (menu: SettingMenuType | null) =>
     router.push({ pathname: Path.SETTINGS, query: { ...router.query, menu } });

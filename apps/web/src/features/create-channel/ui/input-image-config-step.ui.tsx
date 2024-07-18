@@ -23,6 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from '@ufb/ui';
 
 import { useOAIMutation } from '@/shared';
+import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelImageConfig } from '@/entities/channel';
 import { channelImageConfigSchema } from '@/entities/channel';
 import { ImageConfigForm } from '@/entities/channel/ui';
@@ -79,7 +80,7 @@ const InputImageConfigStep: React.FC<IProps> = () => {
 
   const handleTestConnection = async () => {
     let isError = false;
-    await methods.handleSubmit(() => {})();
+    await methods.handleSubmit(EMPTY_FUNCTION)();
     const { accessKeyId, bucket, endpoint, region, secretAccessKey } =
       methods.getValues();
     if (accessKeyId.length === 0) {
@@ -108,7 +109,7 @@ const InputImageConfigStep: React.FC<IProps> = () => {
 
   const validate = async () => {
     const isValid = await methods.trigger();
-    await methods.handleSubmit(() => {})();
+    await methods.handleSubmit(EMPTY_FUNCTION)();
     return isValid;
   };
 

@@ -108,7 +108,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
         } else if (error.code === ErrorCode.Project.ProjectAlreadyExists) {
           openProjectError();
         } else {
-          toast.negative({ title: error?.message ?? 'Error' });
+          toast.negative({ title: error.message });
         }
       },
     },
@@ -119,7 +119,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
       ...input.projectInfo,
       roles: input.roles,
       apiKeys: input.apiKeys,
-      issueTracker: { data: input.issueTracker as any },
+      issueTracker: { data: input.issueTracker },
       members: input.members.map((v) => ({
         roleName: v.role.name,
         userId: v.user.id,
@@ -137,7 +137,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
       actionButton={actionButton}
       onComplete={onComplete}
       validate={validate}
-      disableNextBtn={disableNextBtn || isLoading}
+      disableNextBtn={disableNextBtn ?? isLoading}
     >
       {children}
     </CreateInputTemplate>

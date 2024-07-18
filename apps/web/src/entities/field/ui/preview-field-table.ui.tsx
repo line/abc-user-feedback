@@ -33,64 +33,63 @@ import {
 } from '@/shared';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
+import type { FeedbackColumnType } from '@/widgets/feedback-table/feedback-table-columns';
 import EditableCell from '@/widgets/feedback-table/ui/editable-cell';
 
 import type { FieldInfo } from '../field.type';
 
-const columnHelper = createColumnHelper<any>();
+const columnHelper = createColumnHelper<FeedbackColumnType>();
 
 interface IProps {
   fields: FieldInfo[];
 }
 
 const PreviewTable: React.FC<IProps> = ({ fields }) => {
-  const [rows, setRows] = useState<Record<string, any>[]>([]);
+  const [rows, setRows] = useState<FeedbackColumnType[]>([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fakeRows: Record<string, any>[] = [];
-    const issues = faker.helpers
-      .uniqueArray(faker.word.sample, 10)
+    const fakeRows: FeedbackColumnType[] = [];
+    const issues: Issue[] = faker.helpers
+      .uniqueArray(() => faker.word.sample(), 10)
       .map((v) => ({
+        id: faker.number.int(),
+        createdAt: faker.date.recent().toString(),
+        description: faker.lorem.sentence(),
+        feedbackCount: faker.number.int(),
+        updatedAt: faker.date.recent().toString(),
         name: v,
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
     for (let i = 1; i <= 10; i++) {
-      const fakeData: Record<string, any> = {};
+      const fakeData: FeedbackColumnType = {
+        id: i,
+        createdAt: dayjs().add(i, 'hour').toString(),
+        updatedAt: dayjs().add(i, 'hour').toString(),
+        issues: faker.helpers.arrayElements(issues, {
+          min: 0,
+          max: 4,
+        }),
+      };
       for (const field of fields) {
-        if (field.key === 'id') {
-          fakeData[field.name] = i;
-        } else if (field.key === 'createdAt' || field.key === 'updatedAt') {
-          fakeData[field.name] = dayjs().add(i, 'hour');
-        } else if (field.key === 'issues') {
-          fakeData[field.name] = faker.helpers.arrayElements(issues, {
-            min: 0,
-            max: 4,
-          });
-        } else {
-          fakeData[field.name] =
-            field.format === 'date' ? faker.date.anytime()
-            : field.format === 'keyword' ? faker.word.noun()
-            : field.format === 'multiSelect' ?
-              faker.helpers.arrayElements(
-                (field.options ?? []).map((v) => v.name),
-              )
-            : field.format === 'select' ?
-              faker.helpers.arrayElement(
-                (field.options ?? []).map((v) => v.name),
-              )
-            : field.format === 'number' ? faker.number.int()
-            : field.format === 'text' ? faker.lorem.text()
-            : field.format === 'images' ?
-              faker.helpers.arrayElements(
-                Array.from(
-                  { length: faker.number.int({ min: 1, max: 15 }) },
-                  () => '/assets/images/sample_image.png',
-                ),
-              )
-            : null;
-        }
+        fakeData[field.name] =
+          field.format === 'date' ? faker.date.anytime()
+          : field.format === 'keyword' ? faker.word.noun()
+          : field.format === 'multiSelect' ?
+            faker.helpers.arrayElements(
+              (field.options ?? []).map((v) => v.name),
+            )
+          : field.format === 'select' ?
+            faker.helpers.arrayElement((field.options ?? []).map((v) => v.name))
+          : field.format === 'number' ? faker.number.int()
+          : field.format === 'text' ? faker.lorem.text()
+          : faker.helpers.arrayElements(
+              Array.from(
+                { length: faker.number.int({ min: 1, max: 15 }) },
+                () => '/assets/images/sample_image.png',
+              ),
+            );
       }
 
       fakeRows.push(fakeData);
@@ -109,14 +108,14 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
           cell: (info) =>
             field.key === 'issues' ?
               <div className="scrollbar-hide flex items-center gap-1">
-                {(info.getValue() as Issue[])?.map((v, i) => (
+                {(info.getValue() as Issue[] | undefined)?.map((v, i) => (
                   <IssueBadge key={i} issue={v} />
                 ))}
               </div>
             : field.property === 'EDITABLE' ?
               <EditableCell
                 field={field}
-                value={info.getValue()}
+                value={info.getValue() as unknown}
                 isExpanded={info.row.getIsExpanded()}
                 feedbackId={info.row.original.id}
               />

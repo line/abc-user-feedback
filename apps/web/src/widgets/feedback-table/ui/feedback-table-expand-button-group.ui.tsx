@@ -19,8 +19,10 @@ import { Icon } from '@ufb/ui';
 
 import { cn } from '@/shared';
 
+import type { FeedbackColumnType } from '../feedback-table-columns';
+
 interface IProps {
-  table: Table<any>;
+  table: Table<FeedbackColumnType>;
 }
 
 const FeedbackTableExpandButtonGroup: React.FC<IProps> = ({ table }) => {

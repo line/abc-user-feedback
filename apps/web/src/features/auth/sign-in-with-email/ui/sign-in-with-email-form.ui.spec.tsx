@@ -21,9 +21,8 @@ import type { Tenant } from '@/entities/tenant';
 import { useTenantStore } from '@/entities/tenant';
 import * as user from '@/entities/user';
 
-import SignInWithEmailForm from './sign-in-with-email-form.ui';
-
 import { render, screen, waitFor } from '@/test-utils';
+import SignInWithEmailForm from './sign-in-with-email-form.ui';
 
 jest.mock('@/entities/user');
 

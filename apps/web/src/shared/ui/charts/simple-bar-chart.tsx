@@ -26,13 +26,18 @@ import {
 
 import ChartContainer from './chart-container';
 
+interface Data {
+  name: string;
+  value: number;
+}
+
 interface IProps {
   title: string;
   description?: string;
   height?: number;
-  data: { name: string; value: number }[];
+  data: Data[];
   showLegend?: boolean;
-  onClick?: (data?: { name: string; value: number }) => void;
+  onClick?: (data?: Data) => void;
 }
 
 const SimpleBarChart: React.FC<IProps> = (props) => {
@@ -50,7 +55,9 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           data={data}
           margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
           barSize={16}
-          onClick={(e) => onClick?.(e.activePayload?.[0].payload)}
+          onClick={(e: { activePayload?: { payload: Data }[] }) =>
+            onClick?.(e.activePayload?.[0]?.payload)
+          }
         >
           <CartesianGrid
             strokeDasharray="3 3"
@@ -77,7 +84,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
             tickLine={false}
           />
           <YAxis
-            tickFormatter={(v) => v.toLocaleString()}
+            tickFormatter={(v: string) => v.toLocaleString()}
             className="font-10-regular text-secondary"
             tickSize={15}
             tickLine={false}

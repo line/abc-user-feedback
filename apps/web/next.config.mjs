@@ -3,7 +3,7 @@ import './src/env.mjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import i18nConfig from './next-i18next.config.js';
+import * as i18nConfig from './next-i18next.config.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
@@ -11,7 +11,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'production',
   swcMinify: true,
-  i18n: i18nConfig.i18n,
+  i18n: i18nConfig.default.i18n,
   output: 'standalone',
   experimental: { outputFileTracingRoot: path.join(__dirname, '../../') },
   eslint: { ignoreDuringBuilds: true },
@@ -19,6 +19,7 @@ const nextConfig = {
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
   webpack(config) {
+    // @ts-ignore
     const fileLoaderRule = config.module.rules.find((rule) =>
       rule.test?.test?.('.svg'),
     );
@@ -38,7 +39,6 @@ const nextConfig = {
       },
     );
 
-    // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
     return config;

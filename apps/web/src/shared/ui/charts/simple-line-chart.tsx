@@ -38,7 +38,7 @@ interface IProps {
   title: string;
   description?: string;
   height?: number;
-  data: any[];
+  data: unknown[];
   dataKeys: { color: string; name: string }[];
   showLegend?: boolean;
   filterContent?: React.ReactNode;
@@ -88,7 +88,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
             interval="equidistantPreserveStart"
           />
           <YAxis
-            tickFormatter={(v) => v.toLocaleString()}
+            tickFormatter={(v: string) => v.toLocaleString()}
             className="font-10-regular text-secondary"
             tickSize={15}
             tickLine={false}
@@ -114,8 +114,10 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
   );
 };
 
-interface ICustomTooltipProps extends TooltipProps<ValueType, NameType> {
+interface ICustomTooltipProps
+  extends Omit<TooltipProps<ValueType, NameType>, 'label'> {
   noLabel: boolean;
+  label?: string;
 }
 
 const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {

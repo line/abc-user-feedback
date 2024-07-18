@@ -19,6 +19,18 @@ import { z } from 'zod';
 
 import { FIELD_FORMAT_LIST } from './field.constant';
 
+export const fieldOptionSchema = z.object({
+  id: z.number(),
+  key: z
+    .string()
+    .min(1, { message: i18n?.t('hint.required') })
+    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
+  name: z
+    .string()
+    .min(1, { message: i18n?.t('hint.required') })
+    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
+});
+
 export const fieldSchema = z.object({
   id: z.number(),
   key: z
@@ -36,19 +48,7 @@ export const fieldSchema = z.object({
   format: z.enum(FIELD_FORMAT_LIST),
   property: z.enum(['READ_ONLY', 'EDITABLE']),
   status: z.enum(['ACTIVE', 'INACTIVE']),
-  options: z.array(
-    z.object({
-      id: z.number(),
-      name: z
-        .string()
-        .min(1, { message: i18n?.t('hint.required') })
-        .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
-      key: z
-        .string()
-        .min(1, { message: i18n?.t('hint.required') })
-        .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
-    }),
-  ),
+  options: z.array(fieldOptionSchema).optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
 });
@@ -69,7 +69,7 @@ export const fieldInfoSchema = fieldSchema
       createdAt: z.string().optional(),
       options: z
         .array(
-          fieldSchema.shape.options.element
+          fieldOptionSchema
             .pick({ key: true, name: true })
             .merge(z.object({ id: z.number().optional() })),
         )

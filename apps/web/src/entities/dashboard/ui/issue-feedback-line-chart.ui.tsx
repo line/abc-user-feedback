@@ -48,7 +48,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       query: { name: throttledSearchName },
       page: 0,
       limit: 1000,
-      sort: { feedbackCount: 'desc' } as any,
+      sort: { feedbackCount: 'desc' },
     },
     {
       refetchOnMount: false,
@@ -63,7 +63,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     variables: {
       startDate: dayjs(from).startOf('day').format('YYYY-MM-DD'),
       endDate: dayjs(to).endOf('day').format('YYYY-MM-DD'),
-      issueIds: (currentIssues.map((issue) => issue.id) ?? []).join(','),
+      issueIds: currentIssues.map((issue) => issue.id).join(','),
       interval: getDayCount(from, to) > 50 ? 'week' : 'day',
     },
     queryOptions: {
@@ -75,10 +75,10 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   });
 
   useEffect(() => {
-    client
+    void client
       .post({
         path: '/api/admin/projects/{projectId}/issues/search',
-        body: { sort: { feedbackCount: 'DESC' } as any, limit: 5 },
+        body: { sort: { feedbackCount: 'DESC' }, limit: 5 },
         pathParams: { projectId },
       })
       .then(({ data }) => setCurrentIssues(data?.items ?? []));

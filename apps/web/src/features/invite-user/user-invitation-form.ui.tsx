@@ -47,8 +47,8 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
     path: '/api/admin/auth/signUp/invitation',
     queryOptions: {
       async onSuccess() {
+        await router.push(Path.SIGN_IN);
         toast.positive({ title: 'Success' });
-        router.push(Path.SIGN_IN);
       },
       onError(error) {
         toast.negative({ title: 'Error', description: error.message });
@@ -56,7 +56,7 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
     },
   });
 
-  const onSubmit = async ({ password, code, email }: FormType) =>
+  const onSubmit = ({ password, code, email }: FormType) =>
     mutate({ code, email, password });
 
   return (

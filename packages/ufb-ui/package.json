@@ -7,17 +7,10 @@
   "scripts": {
     "clean": "git clean -xdf .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "prettier": "@ufb/prettier-config",
-  "eslintConfig": {
-    "extends": [
-      "@ufb/eslint-config/base",
-      "@ufb/eslint-config/react"
-    ],
-    "root": true
-  },
   "dependencies": {
     "@floating-ui/react": "^0.26.12",
     "react": "^18.2.0",
@@ -27,17 +20,13 @@
   "devDependencies": {
     "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.36",
-    "@testing-library/jest-dom": "^6.4.2",
-    "@testing-library/react": "^16.0.0",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tailwind": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
-    "eslint": "^8.57.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
+    "eslint": "^9.0.0",
     "tailwindcss": "^3.4.3"
   }
 }

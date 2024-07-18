@@ -62,7 +62,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });

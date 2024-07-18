@@ -19,7 +19,7 @@ import { render } from '@/test-utils';
 
 describe('Reset Password Page', () => {
   test('snapshot test', () => {
-    const resetPasswordPage = ResetPasswordPage.getLayout!(
+    const resetPasswordPage = ResetPasswordPage.getLayout?.(
       <ResetPasswordPage />,
     );
 

@@ -53,7 +53,7 @@ const ProjectDeletionSetting: React.FC<IProps> = ({ projectId }) => {
         toast.negative({ title: t('toast.delete') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -122,6 +122,7 @@ const ChannelCard: React.FC<IChannelProps> = (props) => {
   const { data: feedbackData } = useFeedbackSearch(projectId, channelId, {
     query: {},
     limit: 0,
+    page: 1,
   });
 
   return (

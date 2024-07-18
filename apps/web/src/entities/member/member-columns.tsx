@@ -36,7 +36,6 @@ export const getMemberColumns = (
     header: 'Email',
     enableSorting: false,
     cell: ({ getValue }) => {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       const { t } = useTranslation();
       return (
         <>

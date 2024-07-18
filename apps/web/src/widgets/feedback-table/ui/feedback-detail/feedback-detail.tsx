@@ -54,7 +54,8 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
     query: { ids: [id] },
   });
 
-  const feedbackData = data?.items?.[0] ?? {};
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const feedbackData = (data?.items[0] ?? {}) as Record<string, any>;
 
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
@@ -73,28 +74,28 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
   const { getFloatingProps } = useInteractions([click, dismiss, role]);
 
   const idField = useMemo(
-    () => channelData?.fields.find((field) => field.key === 'id') ?? null,
+    () => channelData?.fields.find((field) => field.key === 'id'),
     [channelData?.fields],
   );
   const issuesField = useMemo(
-    () => channelData?.fields.find((field) => field.key === 'issues') ?? null,
+    () => channelData?.fields.find((field) => field.key === 'issues'),
     [channelData?.fields],
   );
   const createdField = useMemo(
-    () =>
-      channelData?.fields.find((field) => field.key === 'createdAt') ?? null,
+    () => channelData?.fields.find((field) => field.key === 'createdAt'),
     [channelData?.fields],
   );
   const updatedField = useMemo(
-    () =>
-      channelData?.fields.find((field) => field.key === 'updatedAt') ?? null,
+    () => channelData?.fields.find((field) => field.key === 'updatedAt'),
     [channelData?.fields],
   );
 
   const feedbackFields = useMemo(() => {
     if (!channelData?.fields) return [];
-    return channelData?.fields.filter((field) => !isDefaultField(field));
+    return channelData.fields.filter((field) => !isDefaultField(field));
   }, [channelData?.fields]);
+
+  if (!(idField && issuesField && createdField && updatedField)) return <></>;
 
   return (
     <FloatingPortal>
@@ -126,34 +127,36 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                 <tbody>
                   <tr>
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
-                      {idField?.name}
+                      {idField.name}
                     </th>
                     <td width="260" className="align-text-top">
-                      {JSON.stringify(feedbackData[idField?.key ?? ''])}
+                      {JSON.stringify(feedbackData[idField.key])}
                     </td>
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
-                      {issuesField?.name}
+                      {issuesField.name}
                     </th>
                     <td width="260" className="overflow-hidden">
                       <FeedbackDetailIssueCell
-                        issues={feedbackData[issuesField?.key ?? ''] ?? []}
+                        issues={
+                          (feedbackData[issuesField.key] ?? []) as Issue[]
+                        }
                       />
                     </td>
                   </tr>
                   <tr>
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
-                      {createdField?.name}
+                      {createdField.name}
                     </th>
                     <td>
-                      {dayjs(feedbackData[createdField?.key ?? '']).format(
+                      {dayjs(feedbackData[createdField.key] as string).format(
                         DATE_TIME_FORMAT,
                       )}
                     </td>
                     <th className="font-14-regular text-secondary w-20 break-words text-left align-text-top">
-                      {updatedField?.name}
+                      {updatedField.name}
                     </th>
                     <td>
-                      {dayjs(feedbackData[updatedField?.key ?? '']).format(
+                      {dayjs(feedbackData[updatedField.key] as string).format(
                         DATE_TIME_FORMAT,
                       )}
                     </td>
@@ -175,15 +178,17 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                             )}
                           </div>
                         : field.format === 'multiSelect' ?
-                          (feedbackData[field.key] ?? ([] as string[])).join(
+                          ((feedbackData[field.key] ?? []) as string[]).join(
                             ', ',
                           )
                         : field.format === 'date' ?
-                          dayjs(feedbackData[field.key]).format(
+                          dayjs(feedbackData[field.key] as string).format(
                             DATE_TIME_FORMAT,
                           )
                         : field.format === 'images' ?
-                          <ImageSlider urls={feedbackData[field.key] ?? []} />
+                          <ImageSlider
+                            urls={(feedbackData[field.key] ?? []) as string[]}
+                          />
                         : feedbackData[field.key]}
                       </FeedbackDetailCell>
                     </tr>

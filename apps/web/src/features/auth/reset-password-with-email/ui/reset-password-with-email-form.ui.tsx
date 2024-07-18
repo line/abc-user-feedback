@@ -47,7 +47,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
     queryOptions: {
       async onSuccess() {
         toast.positive({ title: 'Success' });
-        router.push(Path.SIGN_IN);
+        await router.push(Path.SIGN_IN);
       },
       onError(error) {
         toast.negative({ title: 'Error', description: error.message });
@@ -55,7 +55,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
     },
   });
 
-  const onSubmit = async ({ password }: FormType) =>
+  const onSubmit = ({ password }: FormType) =>
     mutate({ code, email, password });
 
   return (

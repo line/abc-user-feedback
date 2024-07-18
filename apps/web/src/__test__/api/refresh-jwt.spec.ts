@@ -49,7 +49,7 @@ describe('Refresh Jwt API', () => {
     }));
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+      method: 'GET',
     });
 
     await handler(req, res);
@@ -78,7 +78,7 @@ describe('Refresh Jwt API', () => {
     }));
 
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+      method: 'GET',
     });
 
     await handler(req, res);
@@ -105,7 +105,7 @@ describe('Refresh Jwt API', () => {
       updateConfig: jest.fn(),
     }));
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: 'POST',
+      method: 'GET',
     });
 
     await handler(req, res);
@@ -116,7 +116,7 @@ describe('Refresh Jwt API', () => {
 
   test('method not allowed', async () => {
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
-      method: faker.helpers.arrayElement(['GET', 'PUT', 'PATCH', 'DELETE']),
+      method: faker.helpers.arrayElement(['POST', 'PUT', 'PATCH', 'DELETE']),
     });
 
     await handler(req, res);

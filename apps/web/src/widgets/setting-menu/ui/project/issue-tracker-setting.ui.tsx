@@ -55,7 +55,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -70,7 +70,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
         toast.positive({ title: t('toast.save') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -80,7 +80,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   }, [data]);
 
   const onSubmit = (input: IssueTracker) =>
-    data ? modify({ data: input as any }) : create({ data: input as any });
+    data ? modify({ data: input }) : create({ data: input });
 
   return (
     <SettingMenuTemplate

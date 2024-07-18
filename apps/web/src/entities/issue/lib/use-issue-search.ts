@@ -29,7 +29,7 @@ interface IBody
     OAIRequestBody<'/api/admin/projects/{projectId}/issues/search', 'post'>,
     'query'
   > {
-  query?: any;
+  query?: Record<string, unknown>;
 }
 
 const useIssueSearch = (

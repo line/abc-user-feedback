@@ -19,7 +19,7 @@ import { render } from '@/test-utils';
 
 describe('Sign Up Page', () => {
   test('snapshot test', () => {
-    const signUpPage = SignUpPage.getLayout!(<SignUpPage />);
+    const signUpPage = SignUpPage.getLayout?.(<SignUpPage />);
 
     const { container } = render(<>{signUpPage}</>);
     expect(container).toMatchSnapshot();

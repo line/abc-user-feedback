@@ -14,7 +14,7 @@
  * under the License.
  */
 describe('TenantCard', () => {
-  test('snapshot', async () => {
+  test('snapshot', () => {
     expect(2).toBe(2);
   });
 });

@@ -66,9 +66,9 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
               'btn btn-lg gap-2',
               type === 'primary' ? 'btn-primary' : 'btn-blue',
             ])}
-            onClick={() => {
+            onClick={async () => {
               if (editingStep > 0) setOpen(true);
-              else goToCreateChannel();
+              else await goToCreateChannel();
             }}
             disabled={!perms.includes('channel_create')}
           >
@@ -90,16 +90,16 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
           submitButton={{
             children: t('dialog.continue.button.continue'),
             className: 'btn-red',
-            onClick: () => {
+            onClick: async () => {
               jumpStep(editingStep);
-              goToCreateChannel();
+              await goToCreateChannel();
             },
           }}
           cancelButton={{
             children: t('dialog.continue.button.restart'),
-            onClick: () => {
+            onClick: async () => {
               reset();
-              goToCreateChannel();
+              await goToCreateChannel();
             },
           }}
         />

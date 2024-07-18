@@ -45,6 +45,7 @@ import {
 } from '@/shared';
 import { useFeedbackSearch } from '@/entities/feedback';
 
+import type { FeedbackColumnType } from '../feedback-table-columns';
 import { getColumns } from '../feedback-table-columns';
 import { useFeedbackTable } from '../model';
 import FeedbackDeleteDialog from './feedback-delete-dialog';
@@ -52,13 +53,13 @@ import FeedbackTableBar from './feedback-table-bar';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableRow from './feedback-table-row';
 
-export interface IFeedbackTableProps {
+export interface IProps {
   issueId?: number;
   sub?: boolean;
   onChangeChannel: (channelId: number) => void;
 }
 
-const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
+const FeedbackTable: React.FC<IProps> = (props) => {
   const { sub = false, issueId, onChangeChannel } = props;
 
   const { t } = useTranslation();
@@ -66,7 +67,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
 
   const perms = usePermissions();
 
-  const [rows, setRows] = useState<Record<string, any>[]>([]);
+  const [rows, setRows] = useState<FeedbackColumnType[]>([]);
 
   const { projectId, channelId, query } = useFeedbackTable();
 
@@ -81,23 +82,23 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     () =>
       produce(query, (draft) => {
         if (sub) {
-          if (issueId) draft['issueIds'] = [issueId];
+          if (issueId) draft.issueIds = [issueId];
           Object.keys(draft).forEach((key) => {
             if (key === 'issueIds') return;
             delete draft[key];
           });
         } else {
-          if (draft['ids']) {
-            draft['ids'] = [draft['ids']].map((v) => +v);
+          if (draft.ids) {
+            draft.ids = [draft.ids].map((v) => +v);
           }
-          if (draft['issueIds']) {
-            draft['issueIds'] = [draft['issueIds']].map((v) => +v);
+          if (draft.issueIds) {
+            draft.issueIds = [draft.issueIds].map((v) => +v);
           }
 
           Object.entries(draft).forEach(([key, value]) => {
             const field = fieldData.find((v) => v.key === key);
 
-            if (field?.format === 'date') {
+            if (field?.format === 'date' && typeof value === 'string') {
               const [gte, lt] = value.split('~');
               draft[key] = {
                 gte: dayjs(gte).startOf('day').toISOString(),
@@ -151,7 +152,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getExpandedRowModel: getExpandedRowModel(),
-    getRowId: (row) => row.id,
+    getRowId: (row) => String((row as { id: number }).id),
     manualSorting: true,
     manualPagination: true,
     initialState: {
@@ -192,7 +193,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
   );
 
   useEffect(() => {
-    setRows(data?.items ?? []);
+    setRows((data?.items ?? []) as FeedbackColumnType[]);
   }, [data]);
 
   useEffect(() => {
@@ -214,7 +215,7 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
         close();
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -247,76 +248,74 @@ const FeedbackTable: React.FC<IFeedbackTableProps> = (props) => {
         formattedQuery={formattedQuery}
         onChangeChannel={onChangeChannel}
       />
-      {fieldData && (
-        <div className="overflow-x-auto">
-          <table
-            className="mb-2 table table-fixed"
-            style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
-          >
-            <colgroup>
-              {table.getFlatHeaders().map((header) => (
-                <col key={header.index} width={header.getSize()} />
-              ))}
-            </colgroup>
-            <thead>
-              <tr>
-                {rowSelectionIds.length > 0 ?
-                  <CheckedTableHead
-                    table={table}
-                    onClickDelete={openFeedbackDeleteDialog}
-                    disabled={!perms.includes('feedback_delete')}
-                    button={
-                      <FeedbackTableDownloadButton
-                        query={{ ids: rowSelectionIds }}
-                        count={rowSelectionIds.length}
-                        fieldData={fieldData}
-                        table={table}
-                        isHead
-                      />
-                    }
-                  />
-                : table.getFlatHeaders().map((header) => (
-                    <th key={header.index} style={{ width: header.getSize() }}>
-                      <div className="flex flex-nowrap items-center">
-                        <span className="overflow-hidden text-ellipsis">
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                        </span>
-                        {header.column.getCanSort() && (
-                          <TableSortIcon column={header.column} />
+      <div className="overflow-x-auto">
+        <table
+          className="mb-2 table table-fixed"
+          style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
+        >
+          <colgroup>
+            {table.getFlatHeaders().map((header) => (
+              <col key={header.index} width={header.getSize()} />
+            ))}
+          </colgroup>
+          <thead>
+            <tr>
+              {rowSelectionIds.length > 0 ?
+                <CheckedTableHead
+                  table={table}
+                  onClickDelete={openFeedbackDeleteDialog}
+                  disabled={!perms.includes('feedback_delete')}
+                  button={
+                    <FeedbackTableDownloadButton
+                      query={{ ids: rowSelectionIds }}
+                      count={rowSelectionIds.length}
+                      fieldData={fieldData}
+                      table={table}
+                      isHead
+                    />
+                  }
+                />
+              : table.getFlatHeaders().map((header) => (
+                  <th key={header.index} style={{ width: header.getSize() }}>
+                    <div className="flex flex-nowrap items-center">
+                      <span className="overflow-hidden text-ellipsis">
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
                         )}
-                      </div>
-                      {header.column.getCanResize() && (
-                        <TableResizer header={header} table={table} />
+                      </span>
+                      {header.column.getCanSort() && (
+                        <TableSortIcon column={header.column} />
                       )}
-                    </th>
-                  ))
-                }
-              </tr>
-              {feedbackLoading && <TableLoadingRow colSpan={columnLength} />}
-            </thead>
-            <tbody>
-              {data?.meta.itemCount === 0 ?
-                <NoData columnLength={columnLength} />
-              : feedbackError ?
-                <FailedToQueryData columnLength={columnLength} />
-              : table.getRowModel().rows.map((row) => (
-                  <FeedbackTableRow
-                    key={row.original.id}
-                    row={row}
-                    refetch={async () => {
-                      await refetchChannelData();
-                      await refetchFeedbackData();
-                    }}
-                  />
+                    </div>
+                    {header.column.getCanResize() && (
+                      <TableResizer header={header} table={table} />
+                    )}
+                  </th>
                 ))
               }
-            </tbody>
-          </table>
-        </div>
-      )}
+            </tr>
+            {feedbackLoading && <TableLoadingRow colSpan={columnLength} />}
+          </thead>
+          <tbody>
+            {data?.meta.itemCount === 0 ?
+              <NoData columnLength={columnLength} />
+            : feedbackError ?
+              <FailedToQueryData columnLength={columnLength} />
+            : table.getRowModel().rows.map((row) => (
+                <FeedbackTableRow
+                  key={row.original.id}
+                  row={row}
+                  refetch={async () => {
+                    await refetchChannelData();
+                    await refetchFeedbackData();
+                  }}
+                />
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

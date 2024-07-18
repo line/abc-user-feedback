@@ -18,8 +18,8 @@ import ProfilePage from '@/pages/main/profile';
 import { render } from '@/test-utils';
 
 describe('MainIndexPage', () => {
-  test('should render without crashing', async () => {
-    const page = ProfilePage.getLayout!(<ProfilePage />);
+  test('should render without crashing', () => {
+    const page = ProfilePage.getLayout?.(<ProfilePage />);
     const { container } = render(<>{page}</>);
     expect(container).toMatchSnapshot();
   });

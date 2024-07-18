@@ -82,9 +82,9 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     parseAsDateRange.withDefault(DEFAULT_DATE_RANGE),
   );
 
-  const onChangeDateRange = (v: DateRangeType) => {
-    if (!v?.startDate || !v?.endDate) return;
-    setDateRange({ startDate: v.startDate, endDate: v.endDate });
+  const onChangeDateRange = async (v: DateRangeType) => {
+    if (!v?.startDate || !v.endDate) return;
+    await setDateRange({ startDate: v.startDate, endDate: v.endDate });
   };
 
   const currentDate = dayjs().format('YYYY-MM-DD HH:mm');

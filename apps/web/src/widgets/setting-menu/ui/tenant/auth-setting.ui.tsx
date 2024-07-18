@@ -30,11 +30,11 @@ import {
 
 import SettingMenuTemplate from '../setting-menu-template';
 
-type DomainStateType = {
+interface DomainState {
   isSubmitted: boolean;
   isValid: boolean;
   hint?: string;
-};
+}
 
 interface IProps {}
 
@@ -49,7 +49,7 @@ const AuthSetting: React.FC<IProps> = () => {
 
   const { reset, handleSubmit, watch, setValue, formState } = methods;
 
-  const [domainState, setDomainState] = useState<DomainStateType>({
+  const [domainState, setDomainState] = useState<DomainState>({
     isSubmitted: false,
     isValid: false,
   });
@@ -66,7 +66,7 @@ const AuthSetting: React.FC<IProps> = () => {
         setDomainState({ isSubmitted: false, isValid: false });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message ?? 'Error' });
       },
     },
   });

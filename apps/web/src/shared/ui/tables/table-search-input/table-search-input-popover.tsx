@@ -14,19 +14,20 @@
  * under the License.
  */
 import { useCallback, useState } from 'react';
+import dayjs from 'dayjs';
 import { produce } from 'immer';
 import { useTranslation } from 'next-i18next';
 
 import { Icon } from '@ufb/ui';
 
 import type { DateRangeType, SearchItemType } from '@/shared';
-import { DateRangePicker, SelectBox } from '@/shared';
+import { DateRangePicker, isDateQuery, SelectBox } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
   columns: SearchItemType[];
-  onSubmit: (query: Record<string, any>) => void;
+  onSubmit: (query: Record<string, unknown>) => void;
   close: () => void;
-  query: Record<string, any>;
+  query: Record<string, unknown>;
 }
 
 const TableSearchInputPopover: React.FC<IProps> = (props) => {
@@ -34,7 +35,8 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const [currentQuery, setCurrentQuery] = useState<Record<string, any>>(query);
+  const [currentQuery, setCurrentQuery] =
+    useState<Record<string, unknown>>(query);
 
   const onSave = () => {
     const result = produce(currentQuery, (query) => {
@@ -62,10 +64,10 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
 
   const getDateValue = useCallback(
     (key: string) => {
-      return currentQuery[key] ?
+      return isDateQuery(currentQuery[key]) ?
           {
-            startDate: currentQuery[key].gte ?? null,
-            endDate: currentQuery[key].lt ?? null,
+            startDate: dayjs(currentQuery[key].gte).toDate(),
+            endDate: dayjs(currentQuery[key].lt).toDate(),
           }
         : null;
     },
@@ -101,18 +103,18 @@ const TableSearchInputPopover: React.FC<IProps> = (props) => {
               </div>
             </div>
           )}
+
           {(item.format === 'issue' ||
             item.format === 'select' ||
-            item.format === 'multiSelect' ||
-            item.format === 'issue_status') && (
+            item.format === 'multiSelect') && (
             <SelectBox
               label={item.name}
-              value={currentQuery[item.key]}
+              value={currentQuery[item.key] as { key: string; name: string }}
               onChange={(v) =>
                 setCurrentQuery((prev) => ({ ...prev, [item.key]: v }))
               }
               options={item.options}
-              getOptionValue={(option) => option.key ?? option.id}
+              getOptionValue={(option) => option.key}
               getOptionLabel={(option) => option.name}
               isClearable
             />

@@ -66,7 +66,7 @@ const UpdateUserPopover: React.FC<IProps> = (props) => {
         setOpen(false);
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });

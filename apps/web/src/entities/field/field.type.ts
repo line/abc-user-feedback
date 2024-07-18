@@ -16,14 +16,18 @@
 
 import type { z } from 'zod';
 
-import type { fieldInfoSchema, fieldSchema } from './field.schema';
+import type {
+  fieldInfoSchema,
+  fieldOptionSchema,
+  fieldSchema,
+} from './field.schema';
 
 export type Field = z.infer<typeof fieldSchema>;
 export type FieldInfo = z.infer<typeof fieldInfoSchema>;
 export type FieldFormat = Field['format'];
 export type FieldProperty = Field['property'];
 export type FieldStatus = Field['status'];
-export type FieldOption = Field['options'][number];
+export type FieldOption = z.infer<typeof fieldOptionSchema>;
 
 export type FieldOptionInfo = Omit<FieldOption, 'id'> & {
   id?: number;

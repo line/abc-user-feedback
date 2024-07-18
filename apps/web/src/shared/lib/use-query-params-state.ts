@@ -17,50 +17,49 @@ import { useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import dayjs from 'dayjs';
 
-import { DATE_FORMAT, removeEmptyValueInObject } from '@/shared';
+import { DATE_FORMAT, isDateQuery, removeEmptyValueInObject } from '@/shared';
 
 const useQueryParamsState = (
-  defaultNextQuery: Record<string, any>,
+  defaultNextQuery: Record<string, string>,
   defaultQuery?: Record<string, string>,
-  validate?: (input: Record<string, string>) => boolean,
+  validate?: (input: Record<string, unknown>) => boolean,
 ) => {
   const router = useRouter();
 
-  const query = useMemo(() => {
+  const query: Record<string, unknown> = useMemo(() => {
     const newQuery = Object.entries(router.query).reduce(
-      (acc, [key, value]) => {
-        if (key in defaultNextQuery) return acc;
-        return { ...acc, [key]: value };
-      },
-      {} as Record<string, any>,
+      (acc, [key, value]) =>
+        key in defaultNextQuery ? acc : { ...acc, [key]: value },
+      {},
     );
-    const result = {
-      ...defaultQuery,
-      ...removeEmptyValueInObject(newQuery),
-    };
+
+    const result = { ...defaultQuery, ...removeEmptyValueInObject(newQuery) };
+
     if (validate && !validate(result)) {
-      router.replace({ pathname: router.pathname, query: defaultNextQuery });
+      void router.replace({
+        pathname: router.pathname,
+        query: defaultNextQuery,
+      });
+
       return defaultQuery ?? {};
     }
     return result;
   }, [router.query]);
 
   const setQuery = useCallback(
-    (input: Record<string, any>) => {
+    (input: Record<string, unknown>) => {
       const newQuery: Record<string, string> = Object.entries(
         removeEmptyValueInObject(input),
-      ).reduce(
-        (acc, [key, value]) => {
-          if (typeof value === 'object' && isDate(value)) {
-            value = `${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
-              value.lt,
-            ).format(DATE_FORMAT)}`;
-          }
-          return { ...acc, [key]: value };
-        },
-        {} as Record<string, any>,
-      );
-      router.push(
+      ).reduce((acc, [key, value]) => {
+        if (typeof value === 'object' && isDateQuery(value)) {
+          value = `${dayjs(value.gte).format(DATE_FORMAT)}~${dayjs(
+            value.lt,
+          ).format(DATE_FORMAT)}`;
+        }
+
+        return { ...acc, [key]: value };
+      }, {});
+      void router.push(
         {
           pathname: router.pathname,
           query: { ...defaultNextQuery, ...defaultQuery, ...newQuery },
@@ -75,7 +74,3 @@ const useQueryParamsState = (
 };
 
 export default useQueryParamsState;
-
-const isDate = (value: any) => {
-  return 'gte' in value && 'lt' in value;
-};

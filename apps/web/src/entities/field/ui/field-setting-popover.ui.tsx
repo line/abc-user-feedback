@@ -232,7 +232,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               <SelectBox
                 label="Field Format"
                 onChange={(value) =>
-                  value?.key && setValue('format', value?.key)
+                  value?.key && setValue('format', value.key)
                 }
                 options={FIELD_FORMAT_LIST.map((v) => ({ key: v, name: v }))}
                 value={{ key: watch('format'), name: watch('format') }}

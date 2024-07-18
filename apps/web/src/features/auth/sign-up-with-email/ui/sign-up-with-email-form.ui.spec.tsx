@@ -14,9 +14,8 @@
  * under the License.
  */
 
-import SignUpWithEmailForm from './sign-up-with-email-form.ui';
-
 import { render } from '@/test-utils';
+import SignUpWithEmailForm from './sign-up-with-email-form.ui';
 
 describe('SignUpWithEmailForm', () => {
   test('match snapshot', () => {

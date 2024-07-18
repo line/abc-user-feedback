@@ -35,7 +35,7 @@ const TableRow: React.FC<IProps> = (props) => {
     if (!ref.current) return;
     const resizeObserver = new ResizeObserver(() => {
       if (!ref.current) return;
-      setRowHeight(ref.current?.scrollHeight);
+      setRowHeight(ref.current.scrollHeight);
     });
     resizeObserver.observe(ref.current);
     return () => resizeObserver.disconnect();

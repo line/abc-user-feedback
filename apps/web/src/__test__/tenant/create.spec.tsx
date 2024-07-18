@@ -23,14 +23,14 @@ import CreateTenantPage from '@/pages/tenant/create';
 import { render, waitFor } from '@/test-utils';
 
 describe('Create Tenant Page', () => {
-  test('match snapshot', async () => {
+  test('match snapshot', () => {
     const { container } = render(<CreateTenantPage />);
     expect(container).toMatchSnapshot();
   });
 
   test('should route sign-in page when tenant is defined', async () => {
     useTenantStore.setState({ tenant: {} as Tenant });
-    const createTenantPage = CreateTenantPage.getLayout!(<CreateTenantPage />);
+    const createTenantPage = CreateTenantPage.getLayout?.(<CreateTenantPage />);
 
     render(<>{createTenantPage}</>);
     await waitFor(() =>

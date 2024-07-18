@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { GetServerSidePropsContext } from 'next';
+
 import { Path } from '@/shared';
 
 import IndexPage, { getServerSideProps } from '@/pages';
@@ -21,7 +23,7 @@ import { render } from '@/test-utils';
 describe('Index Page', () => {
   test('should render without crashing', async () => {
     render(<IndexPage />);
-    const value = (await getServerSideProps({} as any)) as any;
+    const value = await getServerSideProps({} as GetServerSidePropsContext);
     expect(value).toMatchObject({ redirect: { destination: Path.SIGN_IN } });
   });
 });

@@ -46,7 +46,6 @@ const columns = (t: TFunction) => [
     header: 'Issue',
     enableSorting: false,
     cell({ getValue, row }) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
       const router = useRouter();
       return (
         <div className="flex items-center gap-1">
@@ -107,7 +106,7 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
 
   const { data } = useIssueSearch(projectId, {
-    sort: { feedbackCount: 'DESC' } as any,
+    sort: { feedbackCount: 'DESC' },
     limit,
     query: { statuses: currentIssueStatusList.map((v) => v.key) },
   });

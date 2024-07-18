@@ -15,6 +15,8 @@
  */
 import type { O } from 'ts-toolbelt';
 
+import { EMPTY_FUNCTION } from '../utils/empty-function';
+
 interface IData {
   jwt: {
     accessToken: string;
@@ -31,6 +33,7 @@ class sessionStorage {
 
   private static instance: sessionStorage;
   public static get Instance(): sessionStorage {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     return this.instance || (this.instance = new this());
   }
 
@@ -48,7 +51,7 @@ class sessionStorage {
     key: T,
     value: SessionStorageValueType<T>,
   ) {
-    this.storage.setItem(key, JSON.stringify(value) as any);
+    this.storage.setItem(key, JSON.stringify(value));
   }
 
   removeItem<T extends SessionStorageKeyType>(key: T) {
@@ -61,7 +64,9 @@ class sessionStorage {
 
   parseJSON<T>(value: string | null): T | string | undefined | null {
     try {
-      return value === 'undefined' ? undefined : JSON.parse(value ?? '');
+      return value === 'undefined' ? undefined : (
+          (JSON.parse(value ?? '') as T | string | undefined | null)
+        );
     } catch {
       return value;
     }
@@ -70,9 +75,9 @@ class sessionStorage {
 
 const severSessionStorage: Storage = {
   getItem: (_: string) => null,
-  setItem: () => {},
-  removeItem: () => {},
-  clear: () => {},
+  setItem: EMPTY_FUNCTION,
+  removeItem: EMPTY_FUNCTION,
+  clear: EMPTY_FUNCTION,
   key: (_: number) => null,
   length: 0,
 };

@@ -20,3 +20,4 @@ export * from './display-string';
 export * from './path-parsing';
 export * from './remove-empty-value-in-object';
 export * from './reorder';
+export * from './type-guard';

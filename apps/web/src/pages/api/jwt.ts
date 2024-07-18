@@ -24,7 +24,7 @@ const handler: NextApiHandler = createNextApiHandler({
   GET: async (req, res) => {
     const session = await getIronSession<JwtSession>(req, res, ironOption);
 
-    res.send({ jwt: session?.jwt ?? null });
+    res.send({ jwt: session.jwt ?? null });
   },
 });
 

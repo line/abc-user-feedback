@@ -18,12 +18,24 @@ import { faker } from '@faker-js/faker';
 import * as IronSession from 'iron-session';
 import { createMocks } from 'node-mocks-http';
 
+import type { Jwt } from '@/shared';
+
 import handler from '@/pages/api/jwt';
 
 jest.mock('iron-session');
 
 describe('JWT API', () => {
   test('jwt null', async () => {
+    const jwt = null;
+
+    const mockSave = jest.fn();
+    jest.spyOn(IronSession, 'getIronSession').mockImplementation(async () => ({
+      destroy: jest.fn(),
+      save: mockSave,
+      updateConfig: jest.fn(),
+      jwt,
+    }));
+
     const { req, res } = createMocks<NextApiRequest, NextApiResponse>({
       method: 'GET',
     });

@@ -45,12 +45,12 @@ const ChannelDeletionSetting: React.FC<IProps> = (props) => {
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
     queryOptions: {
-      async onSuccess() {
+      onSuccess() {
         toast.negative({ title: t('toast.delete') });
         router.reload();
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });

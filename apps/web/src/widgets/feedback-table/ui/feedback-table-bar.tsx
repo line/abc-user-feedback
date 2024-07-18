@@ -22,13 +22,13 @@ import { DateRangePicker, TablePagination, TableSearchInput } from '@/shared';
 import type { Field } from '@/entities/field';
 import { useIssueSearch } from '@/entities/issue';
 
+import { env } from '@/env.mjs';
+import type { FeedbackColumnType } from '../feedback-table-columns';
 import { useFeedbackTable } from '../model';
 import ChannelSelectBox from './channel-select-box';
 import ColumnSettingPopover from './column-setting-popover';
 import FeedbackTableDownloadButton from './feedback-table-download-button.ui';
 import FeedbackTableExpandButtonGroup from './feedback-table-expand-button-group.ui';
-
-import { env } from '@/env.mjs';
 
 const getSearchItemPriority = (a: SearchItemType) =>
   a.name === 'Created' ? 1
@@ -37,7 +37,7 @@ const getSearchItemPriority = (a: SearchItemType) =>
   : 4;
 interface IProps {
   fieldData?: Field[];
-  table: Table<any>;
+  table: Table<FeedbackColumnType>;
   meta:
     | {
         itemCount: number;
@@ -48,7 +48,7 @@ interface IProps {
       }
     | undefined;
   sub?: boolean;
-  formattedQuery: Record<string, any>;
+  formattedQuery: Record<string, unknown>;
   onChangeChannel: (channelId: number) => void;
 }
 
@@ -154,7 +154,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
           }}
         />
         <div className="flex h-10 items-center justify-end gap-2">
-          <ColumnSettingPopover table={table} fieldData={fieldData ?? []} />
+          <ColumnSettingPopover table={table} fieldData={fieldData} />
           <FeedbackTableExpandButtonGroup table={table} />
           <FeedbackTableDownloadButton
             count={count}
@@ -168,7 +168,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
         <h2 className="font-18-regular flex h-10 items-center gap-2">
           {t('text.search-result')}
           <span className="font-18-bold">
-            {t('text.number-count', { count: count ?? 0 })}
+            {t('text.number-count', { count })}
           </span>
         </h2>
         <div className="flex h-10 items-center justify-end gap-4">
@@ -190,16 +190,14 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
               maxDays={env.NEXT_PUBLIC_MAX_DAYS}
             />
           </div>
-          {fieldData && (
-            <TableSearchInput
-              searchItems={searchItems}
-              onChangeQuery={(input) => {
-                const { createdAt } = query;
-                setQuery({ createdAt, ...input });
-              }}
-              query={query}
-            />
-          )}
+          <TableSearchInput
+            searchItems={searchItems}
+            onChangeQuery={(input) => {
+              const { createdAt } = query;
+              setQuery({ createdAt, ...input });
+            }}
+            query={query}
+          />
         </div>
       </div>
     </div>

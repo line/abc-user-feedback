@@ -18,6 +18,7 @@ import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
 import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
+import { IssueTrackerDataDto } from './dtos/issue-tracker-data.dto';
 import { IssueTrackerController } from './issue-tracker.controller';
 import { IssueTrackerService } from './issue-tracker.service';
 
@@ -47,7 +48,9 @@ describe('IssueTrackerController', () => {
       jest.spyOn(MockIssueTrackerService, 'create');
       const projectId = faker.number.int();
 
-      await issueTrackerController.create(projectId, { data: {} });
+      await issueTrackerController.create(projectId, {
+        data: {} as IssueTrackerDataDto,
+      });
       expect(MockIssueTrackerService.create).toBeCalledTimes(1);
     });
   });
@@ -65,7 +68,9 @@ describe('IssueTrackerController', () => {
       jest.spyOn(MockIssueTrackerService, 'update');
       const projectId = faker.number.int();
 
-      await issueTrackerController.updateOne(projectId, { data: {} });
+      await issueTrackerController.updateOne(projectId, {
+        data: {} as IssueTrackerDataDto,
+      });
       expect(MockIssueTrackerService.update).toBeCalledTimes(1);
     });
   });

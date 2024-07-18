@@ -20,10 +20,9 @@ import { http } from 'msw';
 
 import * as user from '@/entities/user';
 
-import DeleteAccountButton from './delete-account-button.ui';
-
 import { server, simpleMockHttp } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import DeleteAccountButton from './delete-account-button.ui';
 
 jest.mock('@/entities/user');
 
@@ -36,10 +35,14 @@ const TEST_USER: user.User = {
   signUpMethod: 'EMAIL',
 };
 
-server.use(http.get('/api/logout', () => {}));
+server.use(
+  http.get('/api/logout', () => {
+    return;
+  }),
+);
 
 describe('DeleteAccountButton', () => {
-  test('match snapshot', async () => {
+  test('match snapshot', () => {
     jest.spyOn(user, 'useUserStore').mockImplementation(() => ({
       signInWithEmail: jest.fn(),
       _signIn: jest.fn(),

@@ -42,7 +42,7 @@ const CreateApiKeyButton: React.FC<IProps> = (props) => {
         toast.positive({ title: t('toast.add') });
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });

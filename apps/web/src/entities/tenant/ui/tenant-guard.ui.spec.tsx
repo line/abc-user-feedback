@@ -19,12 +19,11 @@ import mockRouter from 'next-router-mock';
 
 import { Path } from '@/shared';
 
-import { useTenantStore } from '../tenant.model';
-import TenantGuard from './tenant-guard.ui';
-
 import { env } from '@/env.mjs';
 import { server } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
+import { useTenantStore } from '../tenant.model';
+import TenantGuard from './tenant-guard.ui';
 
 const INITIAL_PATH = '/';
 

@@ -41,7 +41,7 @@ const defaultValues: WebhookInfo = {
 interface IProps {
   disabled?: boolean;
   projectId: number;
-  onClickCreate: (input: WebhookInfo) => Promise<any> | any;
+  onClickCreate: (input: WebhookInfo) => unknown;
 }
 
 const CreateWebhookPopover: React.FC<IProps> = (props) => {

@@ -29,11 +29,11 @@ const UserInvitationPage: NextPageWithLayout = () => {
   const router = useRouter();
 
   const code = useMemo(
-    () => (router.query?.code ?? '') as string,
+    () => (router.query.code ?? '') as string,
     [router.query],
   );
   const email = useMemo(
-    () => (router.query?.email ?? '') as string,
+    () => (router.query.email ?? '') as string,
     [router.query],
   );
 

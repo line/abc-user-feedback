@@ -49,11 +49,11 @@ const MemberSetting: React.FC<IProps> = (props) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        await refetch();
         toast.positive({ title: t('toast.save'), iconName: 'MailFill' });
-        refetch();
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -75,11 +75,11 @@ const MemberSetting: React.FC<IProps> = (props) => {
         pathParams: { projectId, memberId: input.memberId },
       }),
     async onSuccess() {
+      await refetch();
       toast.negative({ title: t('toast.delete') });
-      refetch();
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
   const { mutate: updateMember } = useMutation({
@@ -97,7 +97,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
       toast.positive({ title: t('toast.save') });
     },
     onError(error) {
-      toast.negative({ title: error?.message ?? 'Error' });
+      toast.negative({ title: error.message });
     },
   });
 

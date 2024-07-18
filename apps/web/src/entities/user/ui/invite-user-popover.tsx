@@ -57,7 +57,7 @@ const InviteUserPopover: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { register, watch, setValue, reset, handleSubmit, formState } =
     useForm<IForm>({ resolver: zodResolver(scheme), defaultValues });
-
+  const { projectId, type, roleId } = watch();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -65,21 +65,22 @@ const InviteUserPopover: React.FC<IProps> = () => {
   }, [open]);
 
   useEffect(() => {
-    if (watch('type') !== 'SUPER') return;
+    if (type !== 'SUPER') return;
     reset({ projectId: undefined, roleId: undefined }, { keepValues: true });
-  }, [watch('type')]);
+  }, [type]);
 
   useEffect(() => {
     reset({ roleId: undefined }, { keepValues: true });
-  }, [watch('projectId')]);
+  }, [projectId]);
 
   const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
 
   const { data: roleData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',
-    variables: { projectId: watch('projectId')! },
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    variables: { projectId: projectId! },
     queryOptions: {
-      enabled: !!watch('projectId') && watch('type') === 'GENERAL',
+      enabled: !!projectId && type === 'GENERAL',
     },
   });
 
@@ -87,12 +88,12 @@ const InviteUserPopover: React.FC<IProps> = () => {
     method: 'post',
     path: '/api/admin/users/invite',
     queryOptions: {
-      async onSuccess() {
+      onSuccess() {
         toast.positive({ title: t('toast.invite'), iconName: 'MailFill' });
         setOpen(false);
       },
       onError(error) {
-        toast.negative({ title: error?.message ?? 'Error' });
+        toast.negative({ title: error.message });
       },
     },
   });
@@ -141,14 +142,10 @@ const InviteUserPopover: React.FC<IProps> = () => {
               { label: 'SUPER', value: 'SUPER' },
               { label: 'GENERAL', value: 'GENERAL' },
             ]}
-            defaultValue={
-              watch('type') ?
-                { label: watch('type'), value: watch('type') }
-              : undefined
-            }
+            defaultValue={{ label: type, value: type }}
             required
           />
-          {watch('type') === 'GENERAL' && (
+          {type === 'GENERAL' && (
             <>
               <SelectBox
                 label="Project"
@@ -158,16 +155,14 @@ const InviteUserPopover: React.FC<IProps> = () => {
                 getOptionLabel={(option) => option.name}
                 isClearable
               />
-              {watch('projectId') && (
+              {projectId && (
                 <SelectBox
                   label="Role"
                   required
                   options={roleData?.roles ?? []}
                   onChange={(v) => setValue('roleId', v?.id)}
                   value={
-                    roleData?.roles.find(
-                      (role) => role.id === watch('roleId'),
-                    ) ?? null
+                    roleData?.roles.find((role) => role.id === roleId) ?? null
                   }
                   getOptionValue={(option) => String(option.id)}
                   getOptionLabel={(option) => option.name}

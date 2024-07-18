@@ -62,20 +62,20 @@ const DEFAULT_FIELDS: FieldInfo[] = [
   },
 ];
 
-type Input = {
+interface Input {
   channelInfo: ChannelInfo;
   fields: FieldInfo[];
   fieldPreview: null;
   imageConfig: ChannelImageConfig;
-};
+}
 
-type State = {
+interface State {
   editingStep: number;
   currentStep: number;
   input: Input;
-};
+}
 
-type Action = {
+interface Action {
   jumpStepByKey: (key: CreateChannelStepKey) => void;
   jumpStep: (step: number) => void;
   prevStep: () => void;
@@ -83,7 +83,7 @@ type Action = {
   reset: () => void;
   getCurrentStepKey: () => CreateChannelStepKey;
   onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => void;
-};
+}
 
 const DEFAULT_STATE: State = {
   editingStep: 0,

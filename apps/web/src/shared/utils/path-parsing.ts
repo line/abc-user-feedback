@@ -29,11 +29,11 @@ export const getRequestUrl = (
     param.replace(/[{}]/g, ''),
   );
   paramKeys.forEach((param) => {
-    url = url.replace(`{${param}}`, variables?.[param] as string);
+    url = url.replace(`{${param}}`, variables[param] as string);
   });
 
   const qs = new URLSearchParams(
-    Object.entries(variables ?? {}).reduce(
+    Object.entries(variables).reduce(
       (current, [key, value]) =>
         paramKeys.includes(key) ? current : { ...current, [key]: value },
       {},

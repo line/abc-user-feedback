@@ -25,11 +25,11 @@ interface IProps {
 const ShareButton: React.FC<IProps> = ({ pathname }) => {
   const { t } = useTranslation();
 
-  const onClickLinkCopy: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onClickLinkCopy: MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.stopPropagation();
     try {
       const { origin } = window.location;
-      navigator.clipboard.writeText(`${origin}${pathname}`);
+      await navigator.clipboard.writeText(`${origin}${pathname}`);
       toast.positive({ title: t('toast.copy'), iconName: 'CopyFill' });
     } catch (error) {
       toast.negative({ title: 'fail' });
