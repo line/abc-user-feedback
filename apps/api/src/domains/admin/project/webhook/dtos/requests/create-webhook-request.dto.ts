@@ -17,6 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsEnum, IsString } from 'class-validator';
 
 import { WebhookStatusEnum } from '@/common/enums';
+import { TokenValidator } from '@/common/validators/token-validator';
 import { IsNullable } from '@/domains/admin/user/decorators';
 import { EventDto } from '..';
 
@@ -40,5 +41,6 @@ export class CreateWebhookRequestDto {
   @ApiProperty()
   @IsString()
   @IsNullable()
+  @TokenValidator()
   token: string;
 }
