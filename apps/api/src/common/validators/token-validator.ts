@@ -36,7 +36,7 @@ export class TokenValidatorConstraint implements ValidatorConstraintInterface {
 }
 
 export function TokenValidator(validationOptions?: ValidationOptions) {
-  return function (object: Object, propertyName: string) {
+  return function (object: object, propertyName: string) {
     registerDecorator({
       target: object.constructor,
       propertyName: propertyName,
