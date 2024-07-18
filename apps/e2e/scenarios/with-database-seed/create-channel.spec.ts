@@ -3,8 +3,8 @@ import { expect, test } from "@playwright/test";
 export default () => {
   test.describe("create-channel suite", () => {
     test("creating a channel succeeds", async ({ page }) => {
-      await page.goto("http://localhost:3000");
-      await page.waitForTimeout(2000);
+      await page.goto("http://localhost:3000/main");
+      await page.waitForTimeout(1000);
 
       await page.getByText("SeededTestProject").click();
       await page.getByText("FeedbackIssueSetting").hover();

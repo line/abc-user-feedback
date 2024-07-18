@@ -37,7 +37,7 @@ const TenantGuard: React.FC<IProps> = ({ children }) => {
     if (data) setTenant(data);
   }, [data, error]);
 
-  if (status === 'pending') return <div>Loading...</div>;
+  if (status === 'pending') return <>Loading...</>;
   return children;
 };
 

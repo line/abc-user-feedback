@@ -26,7 +26,7 @@ import { ironOption } from '@/server/iron-option';
 import getLogger from '@/server/logger';
 
 const handler = createNextApiHandler({
-  POST: async (req, res) => {
+  GET: async (req, res) => {
     const session = await getIronSession<JwtSession>(req, res, ironOption);
 
     if (!session.jwt) return res.status(400).end();

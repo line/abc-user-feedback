@@ -20,7 +20,7 @@ export default () => {
 
     test("creating a feedback succeeds", async ({ page }) => {
       await page.goto("http://localhost:3000");
-      await page.waitForTimeout(1500);
+      await page.waitForTimeout(1000);
 
       await page.getByText("SeededTestProject").click();
       await page.getByText("FeedbackIssueSetting").hover();
@@ -45,7 +45,7 @@ export default () => {
       await page.goto(
         `http://localhost:3000/main/project/${projectId}/feedback?channelId=${channelId}`
       );
-      await page.waitForTimeout(1500);
+      await page.waitForTimeout(1000);
 
       await expect(page.locator("tbody")).toContainText("test text");
     });
