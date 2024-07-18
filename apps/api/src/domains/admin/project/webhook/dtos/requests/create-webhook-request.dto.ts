@@ -38,9 +38,8 @@ export class CreateWebhookRequestDto {
   @IsArray()
   events: EventDto[];
 
-  @ApiProperty()
-  @IsString()
+  @ApiProperty({ nullable: true })
   @IsNullable()
   @TokenValidator()
-  token: string;
+  token: string | null;
 }
