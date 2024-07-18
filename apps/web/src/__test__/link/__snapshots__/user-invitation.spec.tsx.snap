@@ -181,13 +181,7 @@ exports[`Reset Password Page snapshot test 1`] = `
                 />
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
             <div
@@ -218,13 +212,7 @@ exports[`Reset Password Page snapshot test 1`] = `
                 />
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
           </div>

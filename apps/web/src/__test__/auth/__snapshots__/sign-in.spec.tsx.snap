@@ -142,13 +142,7 @@ exports[`Sign In Page should render all allow 1`] = `
                 </div>
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
             <div
@@ -174,13 +168,7 @@ exports[`Sign In Page should render all allow 1`] = `
                 </div>
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
           </div>
@@ -390,13 +378,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
                 </div>
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
             <div
@@ -422,13 +404,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
                 </div>
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
           </div>
@@ -763,13 +739,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
                 </div>
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
             <div
@@ -795,13 +765,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
                 </div>
                 <div
                   class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-                >
-                  <svg
-                    class="inline-block text-blue-primary"
-                    height="20"
-                    width="20"
-                  />
-                </div>
+                />
               </div>
             </div>
           </div>

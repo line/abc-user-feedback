@@ -60,13 +60,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-          >
-            <svg
-              class="inline-block text-blue-primary"
-              height="20"
-              width="20"
-            />
-          </div>
+          />
         </div>
       </div>
       <div
@@ -97,13 +91,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-          >
-            <svg
-              class="inline-block text-blue-primary"
-              height="20"
-              width="20"
-            />
-          </div>
+          />
         </div>
       </div>
     </div>
