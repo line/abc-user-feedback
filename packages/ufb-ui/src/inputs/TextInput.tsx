@@ -31,8 +31,8 @@ export interface ITextInputProps extends Omit<IInputProps, 'leftChildren'> {
 export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
   (props, ref) => {
     const {
-      isSubmitted,
-      isSubmitting,
+      isSubmitted = false,
+      isSubmitting = false,
       isValid,
       leftIconName,
       className,
@@ -52,7 +52,7 @@ export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
     }, [inputRef]);
 
     useEffect(() => {
-      if (isSubmitting ?? !isSubmitted) return;
+      if (isSubmitting || !isSubmitted) return;
       setIconType(isValid ? 'success' : 'fail');
     }, [isSubmitted, isValid, isSubmitting]);
 

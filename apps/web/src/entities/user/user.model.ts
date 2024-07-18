@@ -70,13 +70,15 @@ export const useUserStore = create<State & Action>((set, get) => ({
     if (!jwt) return;
 
     const { sub, exp } = jwtDecode<JwtPayload>(jwt.accessToken);
-    if (!sub || dayjs().isBefore(dayjs(exp))) void get().signOut();
-    else {
+    if (!sub || dayjs().isBefore(dayjs(exp))) {
+      await get().signOut();
+    } else {
       const { data } = await client.get({
         path: '/api/admin/users/{id}',
         pathParams: { id: parseInt(sub) },
         options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } },
       });
+
       set({ user: data });
     }
   },
