@@ -16,11 +16,10 @@
 import { createContext, useContext, useMemo } from 'react';
 import dayjs from 'dayjs';
 
+import { env } from '@/env';
 import type { DateRangeType } from '@/shared';
 import { DATE_FORMAT, useQueryParamsState } from '@/shared';
 import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
-
-import { env } from '@/env.mjs';
 
 const DEFAULT_DATE_RANGE: DateRangeType = {
   startDate: dayjs().subtract(env.NEXT_PUBLIC_MAX_DAYS, 'day').toDate(),

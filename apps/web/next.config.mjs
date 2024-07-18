@@ -1,10 +1,10 @@
-import './src/env.mjs';
-
 import path from 'path';
 import { fileURLToPath } from 'url';
+import createJiti from 'jiti';
 
 import * as i18nConfig from './next-i18next.config.js';
 
+createJiti(fileURLToPath(import.meta.url))('./src/env');
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type {import('next').NextConfig} */

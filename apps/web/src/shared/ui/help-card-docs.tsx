@@ -17,7 +17,7 @@ import { Trans } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 type I18nKey =
   | 'help-card.image-config'

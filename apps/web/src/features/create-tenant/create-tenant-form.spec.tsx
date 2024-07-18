@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import { server } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
 import CreateTenantForm from './create-tenant-form.ui';

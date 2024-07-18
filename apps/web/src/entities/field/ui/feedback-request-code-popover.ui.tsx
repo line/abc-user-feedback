@@ -25,9 +25,8 @@ import {
   PopoverTrigger,
 } from '@ufb/ui';
 
+import { env } from '@/env';
 import { cn, useOAIQuery } from '@/shared';
-
-import { env } from '@/env.mjs';
 
 interface IProps {
   channelId: number;

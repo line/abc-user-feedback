@@ -15,7 +15,7 @@
  */
 import type { SessionOptions } from 'iron-session';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 export const ironOption: SessionOptions = {
   cookieName: 'user-feedback',

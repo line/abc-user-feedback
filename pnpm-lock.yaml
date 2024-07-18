@@ -487,6 +487,9 @@ importers:
       jest-environment-jsdom:
         specifier: ^29.7.0
         version: 29.7.0
+      jiti:
+        specifier: ^1.21.6
+        version: 1.21.6
       msw:
         specifier: ^2.3.0
         version: 2.3.1(typescript@5.5.3)
