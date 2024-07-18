@@ -498,7 +498,7 @@ importers:
         version: 1.15.0
       openapi-typescript:
         specifier: ^7.0.0
-        version: 7.0.2(typescript@5.5.3)
+        version: 7.0.4(typescript@5.5.3)
       postcss:
         specifier: ^8.4.38
         version: 8.4.39
@@ -6974,8 +6974,8 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
-  openapi-typescript@7.0.2:
-    resolution: {integrity: sha512-BBrYEf0YdW31Ernd07cD/qHoalSuiiUQvy+rHvU/1Iz9WbcFpRsIXrnfEnrEuiGTRuKCG6cDQCrxNK/rbwQRLg==}
+  openapi-typescript@7.0.4:
+    resolution: {integrity: sha512-Cx1xsSDKRssFJTCAHDgCj7X4m2DYfmwZ0FjuV9WYXdlUtdfbp3hYO6lVrl4F4HrdOAoEs+hUo5UwEsnu2/TU7w==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
@@ -8512,6 +8512,10 @@ packages:
 
   type-fest@4.21.0:
     resolution: {integrity: sha512-ADn2w7hVPcK6w1I0uWnM//y1rLXZhzB9mr0a3OirzclKF1Wp6VzevUmzz/NRAWunOT6E8HrnpGY7xOfc6K57fA==}
+    engines: {node: '>=16'}
+
+  type-fest@4.22.0:
+    resolution: {integrity: sha512-hxMO1k4ip1uTVGgPbs1hVpYyhz2P91A6tQyH2H9POx3U6T3MdhIcfY8L2hRu/LRmzPFdfduOS0RIDjFlP2urPw==}
     engines: {node: '>=16'}
 
   type-is@1.6.18:
@@ -16886,7 +16890,7 @@ snapshots:
       is-wsl: 2.2.0
     optional: true
 
-  openapi-typescript@7.0.2(typescript@5.5.3):
+  openapi-typescript@7.0.4(typescript@5.5.3):
     dependencies:
       '@redocly/openapi-core': 1.18.0(supports-color@9.4.0)
       ansi-colors: 4.1.3
@@ -17007,7 +17011,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.24.7
       index-to-position: 0.1.2
-      type-fest: 4.21.0
+      type-fest: 4.22.0
 
   parse5-htmlparser2-tree-adapter@6.0.1:
     dependencies:
@@ -18706,6 +18710,8 @@ snapshots:
   type-fest@0.21.3: {}
 
   type-fest@4.21.0: {}
+
+  type-fest@4.22.0: {}
 
   type-is@1.6.18:
     dependencies:
