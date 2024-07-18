@@ -257,7 +257,7 @@ importers:
         version: 7.0.0
       ts-jest:
         specifier: ^29.1.2
-        version: 29.2.2(@babel/core@7.24.9)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.9))(jest@29.7.0(@types/node@20.14.11)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.6.13(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.3)))(typescript@5.5.3)
+        version: 29.2.3(@babel/core@7.24.9)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.9))(jest@29.7.0(@types/node@20.14.11)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.6.13(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.3)))(typescript@5.5.3)
       ts-loader:
         specifier: ^9.5.1
         version: 9.5.1(typescript@5.5.3)(webpack@5.92.1(@swc/core@1.6.13(@swc/helpers@0.5.12)))
@@ -7898,6 +7898,11 @@ packages:
     engines: {node: '>=10'}
     hasBin: true
 
+  semver@7.6.3:
+    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
+    engines: {node: '>=10'}
+    hasBin: true
+
   send@0.18.0:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==}
     engines: {node: '>= 0.8.0'}
@@ -8383,8 +8388,8 @@ packages:
   ts-interface-checker@0.1.13:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
 
-  ts-jest@29.2.2:
-    resolution: {integrity: sha512-sSW7OooaKT34AAngP6k1VS669a0HdLxkQZnlC7T76sckGCokXFnvJ3yRlQZGRTAoV5K19HfSgCiSwWOSIfcYlg==}
+  ts-jest@29.2.3:
+    resolution: {integrity: sha512-yCcfVdiBFngVz9/keHin9EnsrQtQtEu3nRykNy9RVp+FiPFFbPJ3Sg6Qg4+TkmH0vMP5qsTKgXSsk80HRwvdgQ==}
     engines: {node: ^14.15.0 || ^16.10.0 || ^18.0.0 || >=20.0.0}
     hasBin: true
     peerDependencies:
@@ -11165,7 +11170,7 @@ snapshots:
       nopt: 5.0.0
       npmlog: 5.0.1
       rimraf: 3.0.2
-      semver: 7.6.2
+      semver: 7.6.3
       tar: 6.2.1
     transitivePeerDependencies:
       - encoding
@@ -12715,7 +12720,7 @@ snapshots:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.6.2
+      semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.3)
     optionalDependencies:
       typescript: 5.5.3
@@ -14081,7 +14086,7 @@ snapshots:
       '@one-ini/wasm': 0.1.1
       commander: 10.0.1
       minimatch: 9.0.1
-      semver: 7.6.2
+      semver: 7.6.3
     optional: true
 
   ee-first@1.1.1: {}
@@ -14639,7 +14644,7 @@ snapshots:
       proxy-addr: 2.0.7
       rfdc: 1.4.1
       secure-json-parse: 2.7.0
-      semver: 7.6.2
+      semver: 7.6.3
       toad-cache: 3.7.0
 
   fastify@4.28.1:
@@ -14757,7 +14762,7 @@ snapshots:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
-      semver: 7.6.2
+      semver: 7.6.3
       tapable: 2.2.1
       typescript: 5.3.3
       webpack: 5.92.1(@swc/core@1.6.13(@swc/helpers@0.5.12))
@@ -15405,7 +15410,7 @@ snapshots:
       '@babel/parser': 7.24.8
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
 
@@ -15729,7 +15734,7 @@ snapshots:
       jest-util: 29.7.0
       natural-compare: 1.4.0
       pretty-format: 29.7.0
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
 
@@ -15913,7 +15918,7 @@ snapshots:
       lodash.isstring: 4.0.1
       lodash.once: 4.1.1
       ms: 2.1.3
-      semver: 7.6.2
+      semver: 7.6.3
 
   jstransformer@1.0.0:
     dependencies:
@@ -16164,7 +16169,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
 
   make-error@1.3.6: {}
 
@@ -17969,6 +17974,8 @@ snapshots:
 
   semver@7.6.2: {}
 
+  semver@7.6.3: {}
+
   send@0.18.0:
     dependencies:
       debug: 2.6.9
@@ -18564,7 +18571,7 @@ snapshots:
 
   ts-interface-checker@0.1.13: {}
 
-  ts-jest@29.2.2(@babel/core@7.24.9)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.9))(jest@29.7.0(@types/node@20.14.11)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.6.13(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.3)))(typescript@5.5.3):
+  ts-jest@29.2.3(@babel/core@7.24.9)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.9))(jest@29.7.0(@types/node@20.14.11)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.6.13(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.3)))(typescript@5.5.3):
     dependencies:
       bs-logger: 0.2.6
       ejs: 3.1.10
@@ -18574,7 +18581,7 @@ snapshots:
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
-      semver: 7.6.2
+      semver: 7.6.3
       typescript: 5.5.3
       yargs-parser: 21.1.1
     optionalDependencies:
