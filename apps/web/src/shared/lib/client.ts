@@ -28,7 +28,7 @@ import type {
   OAIResponse,
 } from '@/shared';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 class client {
   private axiosInstance = axios.create({

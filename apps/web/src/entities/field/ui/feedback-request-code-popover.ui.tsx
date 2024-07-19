@@ -27,7 +27,7 @@ import {
 
 import { cn, useOAIQuery } from '@/shared';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 interface IProps {
   channelId: number;

@@ -8,7 +8,7 @@ RUN apk add --no-cache libc6-compat
 
 # Set working directory
 WORKDIR /app
-RUN npm install -g turbo@^1.13.2
+RUN npm install -g turbo
 COPY . .
 RUN turbo prune --scope=web --docker
 
@@ -41,7 +41,7 @@ ARG TURBO_TEAM
 ENV TURBO_TEAM=${TURBO_TEAM}
 
 COPY --from=builder /app/apps/web/.env.build /app/apps/web/.env.production
-RUN SKIP_ENV_VALIDATION=1 pnpm dlx turbo run build --filter=web...
+RUN SKIP_ENV_VALIDATION=true pnpm dlx turbo run build --filter=web...
 
 FROM base AS runner
 WORKDIR /app

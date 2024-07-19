@@ -19,7 +19,7 @@ import mockRouter from 'next-router-mock';
 
 import { Path } from '@/shared';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import { server } from '@/msw';
 import { render, screen, waitFor } from '@/test-utils';
 import { useTenantStore } from '../tenant.model';

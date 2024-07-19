@@ -19,7 +19,7 @@ import { getIronSession } from 'iron-session';
 
 import type { Jwt } from '@/shared';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import { createNextApiHandler } from '@/server/api-handler';
 import type { JwtSession } from '@/server/iron-option';
 import { ironOption } from '@/server/iron-option';

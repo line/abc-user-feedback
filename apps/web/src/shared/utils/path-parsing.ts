@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 export const getRequestUrl = (
   path: string,

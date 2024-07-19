@@ -19,7 +19,7 @@ import { z } from 'zod';
 
 import type { Jwt } from '@/shared';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import { createNextApiHandler, procedure } from '@/server/api-handler';
 import type { JwtSession } from '@/server/iron-option';
 import { ironOption } from '@/server/iron-option';

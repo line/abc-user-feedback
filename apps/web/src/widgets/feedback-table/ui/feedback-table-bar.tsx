@@ -22,7 +22,7 @@ import { DateRangePicker, TablePagination, TableSearchInput } from '@/shared';
 import type { Field } from '@/entities/field';
 import { useIssueSearch } from '@/entities/issue';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 import type { FeedbackColumnType } from '../feedback-table-columns';
 import { useFeedbackTable } from '../model';
 import ChannelSelectBox from './channel-select-box';

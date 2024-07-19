@@ -16,7 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { http, HttpResponse } from 'msw';
 
-import { env } from '@/env.mjs';
+import { env } from '@/env';
 
 export const signInWithOAuthMockHandlers = [
   http.get(
