@@ -32,7 +32,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@floating-ui/react": "^0.26.12",
-    "@headlessui/react": "2.1.1",
+    "@headlessui/react": "2.1.2",
     "@headlessui/tailwindcss": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@mui/base": "5.0.0-beta.40",
