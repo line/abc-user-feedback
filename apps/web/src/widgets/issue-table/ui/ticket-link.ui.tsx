@@ -32,7 +32,7 @@ const TicketLink: React.FC<IProps> = ({ value, projectId }) => {
   const link = useMemo(() => {
     if (!issueTracker?.data.ticketDomain) return '';
     try {
-      new URL(
+      return new URL(
         `/browse/${issueTracker.data.ticketKey}-${value}`,
         issueTracker.data.ticketDomain,
       ).toString();
@@ -49,6 +49,7 @@ const TicketLink: React.FC<IProps> = ({ value, projectId }) => {
           href={link}
           target="_blank"
           rel="noreferrer"
+          onClick={(e) => e.stopPropagation()}
         >
           {`${issueTracker.data.ticketKey}-${value}`}
         </a>

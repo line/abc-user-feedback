@@ -29,13 +29,7 @@ exports[`SignInWithEmailForm match snapshot when tenant is not private 1`] = `
           </div>
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-          >
-            <svg
-              class="inline-block text-blue-primary"
-              height="20"
-              width="20"
-            />
-          </div>
+          />
         </div>
       </div>
       <div
@@ -61,13 +55,7 @@ exports[`SignInWithEmailForm match snapshot when tenant is not private 1`] = `
           </div>
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-          >
-            <svg
-              class="inline-block text-blue-primary"
-              height="20"
-              width="20"
-            />
-          </div>
+          />
         </div>
       </div>
     </div>
@@ -124,13 +112,7 @@ exports[`SignInWithEmailForm match snapshot when tenant is private 1`] = `
           </div>
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-          >
-            <svg
-              class="inline-block text-blue-primary"
-              height="20"
-              width="20"
-            />
-          </div>
+          />
         </div>
       </div>
       <div
@@ -156,13 +138,7 @@ exports[`SignInWithEmailForm match snapshot when tenant is private 1`] = `
           </div>
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
-          >
-            <svg
-              class="inline-block text-blue-primary"
-              height="20"
-              width="20"
-            />
-          </div>
+          />
         </div>
       </div>
     </div>

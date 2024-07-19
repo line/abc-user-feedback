@@ -100,7 +100,6 @@ export const objToStr = (
         case 'select':
         case 'multiSelect':
           if (hasNameOfKey(value)) {
-            console.log('value: ', value.name);
             return `${name}:${value.name}`;
           }
           return `${name}:${String(value)}`;
@@ -161,12 +160,10 @@ export const objToQuery = (
             break;
           }
           case 'select': {
-            console.log('value: ', value);
             const optionKey2 =
               hasKeyOfKey(value) ?
                 value.key
               : column.options?.find((v) => v.name === value)?.key;
-            console.log('optionKey2: ', optionKey2);
 
             if (!optionKey2) break;
             result[key] = optionKey2;
