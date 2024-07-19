@@ -17,12 +17,13 @@ import type { AxiosResponse } from 'axios';
 import axios, { AxiosError } from 'axios';
 import { getIronSession } from 'iron-session';
 
+import type { Jwt } from '@/shared';
+
 import { env } from '@/env';
 import { createNextApiHandler } from '@/server/api-handler';
 import type { JwtSession } from '@/server/iron-option';
 import { ironOption } from '@/server/iron-option';
 import getLogger from '@/server/logger';
-import type { Jwt } from '@/shared';
 
 const handler = createNextApiHandler({
   GET: async (req, res) => {

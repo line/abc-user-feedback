@@ -17,7 +17,6 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-import { env } from '@/env';
 import { getRequestUrl, Path, sessionStorage } from '@/shared';
 import type {
   Jwt,
@@ -28,6 +27,8 @@ import type {
   OAIRequestBody,
   OAIResponse,
 } from '@/shared';
+
+import { env } from '@/env';
 
 class client {
   private axiosInstance = axios.create({

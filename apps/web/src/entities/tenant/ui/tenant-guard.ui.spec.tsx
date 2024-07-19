@@ -17,9 +17,10 @@
 import { http, HttpResponse } from 'msw';
 import mockRouter from 'next-router-mock';
 
+import { Path } from '@/shared';
+
 import { env } from '@/env';
 import { server } from '@/msw';
-import { Path } from '@/shared';
 import { render, screen, waitFor } from '@/test-utils';
 import { useTenantStore } from '../tenant.model';
 import TenantGuard from './tenant-guard.ui';
