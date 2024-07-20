@@ -501,7 +501,7 @@ importers:
         version: 1.15.0
       openapi-typescript:
         specifier: ^7.0.0
-        version: 7.0.4(typescript@5.5.3)
+        version: 7.1.0(typescript@5.5.3)
       postcss:
         specifier: ^8.4.38
         version: 8.4.39
@@ -6996,8 +6996,8 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
-  openapi-typescript@7.0.4:
-    resolution: {integrity: sha512-Cx1xsSDKRssFJTCAHDgCj7X4m2DYfmwZ0FjuV9WYXdlUtdfbp3hYO6lVrl4F4HrdOAoEs+hUo5UwEsnu2/TU7w==}
+  openapi-typescript@7.1.0:
+    resolution: {integrity: sha512-qxjGhIO6ODCGximE2HiozkPUNbO4y7F2OQyGa+gcn6TdZMMtmuiyDPqoKmf+Y4VlvQRfhJUTU635w8KfZVeuVA==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
@@ -16944,7 +16944,7 @@ snapshots:
       is-wsl: 2.2.0
     optional: true
 
-  openapi-typescript@7.0.4(typescript@5.5.3):
+  openapi-typescript@7.1.0(typescript@5.5.3):
     dependencies:
       '@redocly/openapi-core': 1.18.0(supports-color@9.4.0)
       ansi-colors: 4.1.3
