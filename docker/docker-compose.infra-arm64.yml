@@ -1,7 +1,7 @@
 services:
   mysql:
     hostname: mysql
-    image: mysql:8.4.1
+    image: mysql:9.0.0
     platform: linux/arm64/v8
     restart: always
     command: [--mysql-native-password=ON]
@@ -21,7 +21,7 @@ services:
   # optional for e2e test
   mysql-for-e2e:
     hostname: mysql
-    image: mysql:8.4.1
+    image: mysql:9.0.0
     platform: linux/arm64/v8
     restart: always
     command: [--mysql-native-password=ON]
