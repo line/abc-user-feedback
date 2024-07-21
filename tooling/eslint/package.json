@@ -30,7 +30,7 @@
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
     "eslint": "^9.0.0",
-    "rimraf": "^5.0.5",
+    "rimraf": "^6.0.0",
     "typescript": "^5.4.5"
   },
   "prettier": "@ufb/prettier-config"
