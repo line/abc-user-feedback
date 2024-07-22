@@ -41,10 +41,12 @@ const useLineChartData = (
 ) => {
   const dataKeys = useMemo(
     () =>
-      targetData.map(({ name }, i) => ({
-        color: CHART_FIVE_COLORS[i] ?? getDarkColor(),
-        name,
-      })),
+      targetData
+        .sort((a, b) => a.id - b.id)
+        .map(({ name }, i) => ({
+          color: CHART_FIVE_COLORS[i] ?? getDarkColor(),
+          name,
+        })),
     [targetData],
   );
 

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -37,7 +37,8 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
     variables: { projectId },
   });
 
-  return <FeedbackLineChart from={from} to={to} channels={data?.items ?? []} />;
+  if (!data) return <></>;
+  return <FeedbackLineChart from={from} to={to} channels={data.items} />;
 };
 
 interface IFeedbackLineChartProps {
@@ -82,10 +83,6 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
     currentChannels,
     data?.channels ?? [],
   );
-
-  useEffect(() => {
-    setCurrentChannels(channels);
-  }, [channels]);
 
   return (
     <SimpleLineChart
