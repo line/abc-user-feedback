@@ -537,7 +537,7 @@ importers:
         version: 18.3.1
       tsup:
         specifier: ^8.0.2
-        version: 8.2.1(@swc/core@1.7.0)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.3)(yaml@2.4.5)
+        version: 8.2.2(@swc/core@1.7.0)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.3)(yaml@2.4.5)
       typescript:
         specifier: ^5.4.5
         version: 5.5.3
@@ -5284,14 +5284,6 @@ packages:
   fb-watchman@2.0.2:
     resolution: {integrity: sha512-p5161BqbuCaSnB8jIbzQHOlpgsPmK5rJVDfDKO91Axs5NC1uu3HRQm6wt9cd9/+GtQQIO53JdGXXoyDpTAsgYA==}
 
-  fdir@6.1.1:
-    resolution: {integrity: sha512-QfKBVg453Dyn3mr0Q0O+Tkr1r79lOTAKSi9f/Ot4+qVEwxWhav2Z+SudrG9vQjM2aYRMQQZ2/Q1zdA8ACM1pDg==}
-    peerDependencies:
-      picomatch: 3.x
-    peerDependenciesMeta:
-      picomatch:
-        optional: true
-
   figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
     engines: {node: '>=8'}
@@ -7212,10 +7204,6 @@ packages:
     resolution: {integrity: sha512-xUXwsxNjwTQ8K3GnT4pCJm+xq3RUPQbmkYJTP5aFIfNIvbcc/4MUxgBaaRSZJ6yGJZiGSyYlM6MzwTsRk8SYCg==}
     engines: {node: '>=12'}
 
-  picomatch@4.0.2:
-    resolution: {integrity: sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==}
-    engines: {node: '>=12'}
-
   pify@2.3.0:
     resolution: {integrity: sha512-udgsAY+fTnvv7kI7aaxbqwWNb0AHiB0qBO89PZKPkoTmGOgdbrHDKD+0B2X4uTfJ/FT1R09r9gTsjUjNJotuog==}
     engines: {node: '>=0.10.0'}
@@ -8516,8 +8504,8 @@ packages:
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
 
-  tsup@8.2.1:
-    resolution: {integrity: sha512-ArA/s1GvXbovrnNeTtLphz7D2+OiFVCARviT8RmnWxFdH44dFt8v2tqz54MjJyqZC+QgjKjRuTlWKvC3CkAq3Q==}
+  tsup@8.2.2:
+    resolution: {integrity: sha512-MufIuzdSt6HYPOeOtjUXLR4rqRJySi6XsRNZdwvjC2XR+xghsu2L3vSmYmX+k4S1mO6j0OlUEyVQ3Fc0H66XcA==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
@@ -14739,10 +14727,6 @@ snapshots:
     dependencies:
       bser: 2.1.1
 
-  fdir@6.1.1(picomatch@4.0.2):
-    optionalDependencies:
-      picomatch: 4.0.2
-
   figures@3.2.0:
     dependencies:
       escape-string-regexp: 1.0.5
@@ -17206,8 +17190,6 @@ snapshots:
 
   picomatch@4.0.1: {}
 
-  picomatch@4.0.2: {}
-
   pify@2.3.0: {}
 
   pino-abstract-transport@1.2.0:
@@ -18672,7 +18654,7 @@ snapshots:
 
   tslib@2.6.3: {}
 
-  tsup@8.2.1(@swc/core@1.7.0)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.3)(yaml@2.4.5):
+  tsup@8.2.2(@swc/core@1.7.0)(jiti@1.21.6)(postcss@8.4.39)(typescript@5.5.3)(yaml@2.4.5):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.0)
       cac: 6.7.14
@@ -18681,10 +18663,9 @@ snapshots:
       debug: 4.3.5(supports-color@9.4.0)
       esbuild: 0.23.0
       execa: 5.1.1
-      fdir: 6.1.1(picomatch@4.0.2)
+      globby: 11.1.0
       joycon: 3.1.1
       picocolors: 1.0.1
-      picomatch: 4.0.2
       postcss-load-config: 6.0.1(jiti@1.21.6)(postcss@8.4.39)(yaml@2.4.5)
       resolve-from: 5.0.0
       rollup: 4.19.0
