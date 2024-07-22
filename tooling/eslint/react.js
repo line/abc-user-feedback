@@ -13,17 +13,29 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const config = {
-  extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
-  parserOptions: { project: true },
-  rules: {
-    'react/prop-types': 'off',
-    'react-hooks/exhaustive-deps': 'off',
-    'react/display-name': 'off',
-  },
-  globals: { React: 'writable' },
-  settings: { react: { version: 'detect' } },
-  env: { browser: true },
-};
+const reactPlugin = require('eslint-plugin-react');
+const hooksPlugin = require('eslint-plugin-react-hooks');
 
-module.exports = config;
+/** @type {Awaited<import('typescript-eslint').Config>} */
+module.exports = [
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': hooksPlugin,
+    },
+    rules: {
+      ...reactPlugin.configs['jsx-runtime'].rules,
+      ...hooksPlugin.configs.recommended.rules,
+      'react/prop-types': 'off',
+      'react-hooks/exhaustive-deps': 'off',
+      'react/display-name': 'off',
+      'react-hooks/rules-of-hooks': 'off',
+    },
+    languageOptions: {
+      globals: {
+        React: 'writable',
+      },
+    },
+  },
+];

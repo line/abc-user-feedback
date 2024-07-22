@@ -13,21 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { MouseEventHandler } from 'react';
 import { useMemo } from 'react';
 
 import type { IconNameType } from '../Icon';
 import { Icon } from '../Icon';
 import type { ColorType } from '../types/color.type';
 
-interface IProps extends React.PropsWithChildren {
+export interface BadgeProps extends React.PropsWithChildren {
   left?: {
     iconName: IconNameType;
-    onClick?: MouseEventHandler<HTMLOrSVGElement>;
+    onClick?: React.MouseEventHandler<HTMLOrSVGElement>;
   };
   right?: {
     iconName: IconNameType;
-    onClick?: MouseEventHandler<HTMLOrSVGElement>;
+    onClick?: React.MouseEventHandler<HTMLOrSVGElement>;
     disabled?: boolean;
   };
   color?: ColorType | 'black';
@@ -79,7 +78,7 @@ const disabledTextColor = {
   purple: 'text-purple-tertiary',
 };
 
-export const Badge: React.FC<IProps> = (props) => {
+export const Badge: React.FC<BadgeProps> = (props) => {
   const {
     children,
     left,

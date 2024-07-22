@@ -75,9 +75,10 @@ export const Input = forwardRef<HTMLInputElement, IInputProps>((props, ref) => {
       <div className="relative">
         <input
           id={label}
-          className={['input', inputCN, sizeCN, className].join(' ')}
           ref={ref}
           {...rest}
+          className={['input', inputCN, sizeCN, className].join(' ')}
+          placeholder={rest.disabled ? '' : rest.placeholder}
         />
         {leftChildren && (
           <div className="absolute-y-center absolute left-[14px] flex items-center gap-2">

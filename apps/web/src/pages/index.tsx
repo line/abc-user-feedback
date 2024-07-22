@@ -15,13 +15,15 @@
  */
 import type { GetServerSideProps, NextPage } from 'next';
 
-import { Path } from '@/constants/path';
+import { Path } from '@/shared';
 
 const IndexPage: NextPage = () => {
   return <></>;
 };
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  return { redirect: { destination: Path.SIGN_IN, permanent: true } };
+  return Promise.resolve({
+    redirect: { destination: Path.SIGN_IN, permanent: true },
+  });
 };
 export default IndexPage;

@@ -26,8 +26,8 @@ import type { DataSource, Repository } from 'typeorm';
 import { AppModule } from '@/app.module';
 import {
   FieldFormatEnum,
+  FieldPropertyEnum,
   FieldStatusEnum,
-  FieldTypeEnum,
 } from '@/common/enums';
 import { HttpExceptionFilter } from '@/common/filters';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
@@ -133,7 +133,7 @@ describe('AppController (e2e)', () => {
               name: 'createdAt',
               key: 'createdAt',
               format: FieldFormatEnum.date,
-              type: FieldTypeEnum.DEFAULT,
+              property: FieldPropertyEnum.READ_ONLY,
               status: FieldStatusEnum.ACTIVE,
               options: undefined,
               description: '',
@@ -142,7 +142,7 @@ describe('AppController (e2e)', () => {
               name: 'updatedAt',
               key: 'updatedAt',
               format: FieldFormatEnum.date,
-              type: FieldTypeEnum.DEFAULT,
+              property: FieldPropertyEnum.READ_ONLY,
               status: FieldStatusEnum.ACTIVE,
               options: undefined,
               description: '',
@@ -290,7 +290,7 @@ describe('AppController (e2e)', () => {
 const fieldEntityToDto2 = (field: FieldEntity) => ({
   name: field.name,
   format: field.format,
-  type: field.type,
+  property: field.property,
   status: field.status,
   description: field.description,
   options:

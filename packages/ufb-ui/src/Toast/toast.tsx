@@ -21,7 +21,7 @@ import type { IToastInfoBoxProps } from './ToastPromiseBox';
 import { ToastPromiseBox } from './ToastPromiseBox';
 
 interface IToastProps {
-  title?: string;
+  title?: React.ReactNode;
   description?: string;
   iconName?: IconNameType;
 }
@@ -34,7 +34,7 @@ export const toast = {
   accent: (input: IToastProps) =>
     reactToast.custom((t) => <ToastBox type="accent" {...input} t={t} />),
   promise: async (
-    fn: Promise<any>,
+    fn: Promise<void>,
     input: {
       title: { success: string; loading: string; error: string };
       description?: { success?: string; loading?: string; error?: string };

@@ -16,9 +16,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
+
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import { UserService } from '@/domains/admin/user/user.service';
-import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
 import { UserRepositoryStub } from '../stubs';
 import { getMockProvider } from '../util-functions';

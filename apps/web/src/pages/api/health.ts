@@ -13,9 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { NextApiHandler } from 'next';
 
-const handler: NextApiHandler = (req, res) => {
-  res.status(200).json({ status: 'ok' });
-};
+import { createNextApiHandler } from '@/server/api-handler';
+
+const handler = createNextApiHandler({
+  GET: (_, res) => {
+    res.status(200).json({ status: 'ok' });
+  },
+});
 export default handler;

@@ -1,8 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "experimentalUI": true,
-  "globalDependencies": ["**/.env"],
-  "pipeline": {
+  "ui": "tui",
+  "tasks": {
     "topo": {
       "dependsOn": ["^topo"]
     },
@@ -22,7 +21,13 @@
     },
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],
-      "outputMode": "new-only"
+      "outputLogs": "new-only"
+    },
+    "@ufb/tailwind#build": {
+      "outputs": ["dist/**"]
+    },
+    "@ufb/shared#build": {
+      "outputs": ["dist/**"]
     },
     "lint": {
       "dependsOn": ["^topo", "^build"],
@@ -42,6 +47,7 @@
       "cache": false
     }
   },
+  "globalDependencies": ["**/.env"],
   "globalEnv": [
     "NODE_ENV",
     "SESSION_PASSWORD",
@@ -66,6 +72,9 @@
     "AUTO_MIGRATION",
     "MASTER_API_KEY",
     "BASE_URL",
-    "NEXT_PUBLIC_MAX_DAYS"
-  ]
+    "NEXT_PUBLIC_MAX_DAYS",
+    "SKIP_ENV_VALIDATION",
+    "PORT"
+  ],
+  "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }

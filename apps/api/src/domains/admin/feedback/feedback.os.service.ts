@@ -126,7 +126,7 @@ export class FeedbackOSService {
                           FieldFormatEnum.number,
                         ]),
                         this.getMultiFieldQuery(
-                          query[fieldKey].toString(),
+                          (query[fieldKey] as string).toString(),
                           fields,
                           [FieldFormatEnum.text, FieldFormatEnum.keyword],
                         ),
