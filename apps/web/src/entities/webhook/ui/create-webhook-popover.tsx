@@ -68,7 +68,6 @@ const CreateWebhookPopover: React.FC<IProps> = (props) => {
   }, [open]);
 
   const onSubmit = async (data: WebhookInfo) => {
-    console.log('data: ', data);
     await onClickCreate({ ...data, status: 'ACTIVE' });
     setOpen(false);
   };
