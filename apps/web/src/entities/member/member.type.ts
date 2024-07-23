@@ -16,7 +16,7 @@
 import { z } from 'zod';
 
 import { roleSchema } from '../role';
-import { userSchema } from '../user';
+import { userSchema } from '../user/user.schema';
 
 const memberSchema = z.object({
   id: z.number(),

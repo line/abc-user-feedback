@@ -42,3 +42,8 @@ export const userMemberSchema = userSchema.merge(
     createdAt: z.string(),
   }),
 );
+
+export const updateUserSchema = userSchema.omit({
+  id: true,
+  signUpMethod: true,
+});

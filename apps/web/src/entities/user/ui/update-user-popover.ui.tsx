@@ -31,8 +31,8 @@ import {
 
 import { SelectBox, useOAIMutation } from '@/shared';
 
-import { userMemberSchema } from '../user.schema';
-import type { UserMember, UserTypeEnum } from '../user.type';
+import { updateUserSchema } from '../user.schema';
+import type { UpdateUser, UserMember, UserTypeEnum } from '../user.type';
 
 interface IProps {
   user: UserMember;
@@ -44,14 +44,16 @@ const UpdateUserPopover: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
-  const { register, setValue, watch, handleSubmit } = useForm<UserMember>({
-    resolver: zodResolver(userMemberSchema),
-    defaultValues: {
-      type: user.type,
-      name: user.name,
-      department: user.department,
-    },
-  });
+  const { register, setValue, watch, handleSubmit, formState } =
+    useForm<UpdateUser>({
+      resolver: zodResolver(updateUserSchema),
+      defaultValues: {
+        email: user.email,
+        type: user.type,
+        name: user.name,
+        department: user.department,
+      },
+    });
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -71,7 +73,9 @@ const UpdateUserPopover: React.FC<IProps> = (props) => {
     },
   });
 
-  const onSubmit = (input: UserMember) => mutate(input);
+  const onSubmit = (input: UpdateUser) => {
+    mutate(input);
+  };
   return (
     <Popover placement="left-start" open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -103,8 +107,22 @@ const UpdateUserPopover: React.FC<IProps> = (props) => {
                 ]}
               />
             </div>
-            <TextInput label="Name" {...register('name')} />
-            <TextInput label="Department" {...register('department')} />
+            <TextInput
+              label="Name"
+              {...register('name')}
+              isSubmitting={formState.isSubmitting}
+              isSubmitted={formState.isSubmitted}
+              hint={formState.errors.name?.message}
+              isValid={!formState.errors.name}
+            />
+            <TextInput
+              label="Department"
+              {...register('department')}
+              isSubmitting={formState.isSubmitting}
+              isSubmitted={formState.isSubmitted}
+              hint={formState.errors.department?.message}
+              isValid={!formState.errors.department}
+            />
           </div>
           <div className="mt-5 flex justify-end gap-2">
             <button

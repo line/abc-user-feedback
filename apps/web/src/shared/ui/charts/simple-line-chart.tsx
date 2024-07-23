@@ -92,6 +92,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
             className="font-10-regular text-secondary"
             tickSize={15}
             tickLine={false}
+            min={0}
           />
           {dataKeys.map(({ color, name }) => (
             <Line

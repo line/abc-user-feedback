@@ -37,7 +37,8 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
     variables: { projectId },
   });
 
-  return <FeedbackLineChart from={from} to={to} channels={data?.items ?? []} />;
+  if (!data) return <></>;
+  return <FeedbackLineChart from={from} to={to} channels={data.items} />;
 };
 
 interface IFeedbackLineChartProps {

@@ -14,19 +14,15 @@
  * under the License.
  */
 
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import type { userMemberSchema } from './user.schema';
-
-export const userSchema = z.object({
-  id: z.number(),
-  email: z.string().email(),
-  type: z.union([z.literal('SUPER'), z.literal('GENERAL')]),
-  name: z.string().nullable(),
-  department: z.string().nullable(),
-  signUpMethod: z.union([z.literal('OAUTH'), z.literal('EMAIL')]),
-});
+import type {
+  updateUserSchema,
+  userMemberSchema,
+  userSchema,
+} from './user.schema';
 
 export type User = z.infer<typeof userSchema>;
 export type UserMember = z.infer<typeof userMemberSchema>;
 export type UserTypeEnum = User['type'];
+export type UpdateUser = z.infer<typeof updateUserSchema>;
