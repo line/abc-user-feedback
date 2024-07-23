@@ -21,6 +21,7 @@ import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+
 import {
   emailFixture,
   passwordFixture,

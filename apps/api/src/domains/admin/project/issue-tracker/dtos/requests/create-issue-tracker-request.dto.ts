@@ -16,8 +16,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsObject } from 'class-validator';
 
+import { IssueTrackerDataDto } from '../issue-tracker-data.dto';
+
 export class CreateIssueTrackerRequestDto {
-  @ApiProperty()
+  @ApiProperty({ type: IssueTrackerDataDto })
   @IsObject()
-  data: Record<string, any>;
+  data: IssueTrackerDataDto;
 }

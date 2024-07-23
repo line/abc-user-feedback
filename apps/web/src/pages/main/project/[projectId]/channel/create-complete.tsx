@@ -13,46 +13,56 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { useMemo } from 'react';
-import type { GetServerSideProps, NextPage } from 'next';
+import { useEffect } from 'react';
+import type { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
 
-import { DEFAULT_LOCALE } from '@/constants/i18n';
-import { Path } from '@/constants/path';
+import type { NextPageWithLayout } from '@/shared';
 import {
-  ChannelInfoSection,
-  FieldPreviewSection,
-  FieldSection,
-  ImageUploadSection,
-} from '@/containers/create-channel-complete';
-import { useOAIQuery } from '@/hooks';
+  CreateSectionTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  useOAIQuery,
+} from '@/shared';
+import { ChannelInfoForm, ImageConfigForm } from '@/entities/channel';
+import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
+import { FieldTable, PreviewFieldTable } from '@/entities/field';
+import { ProjectGuard } from '@/entities/project';
 
-const CreateCompletePage: NextPage = () => {
+interface IProps {
+  projectId: number;
+}
+
+const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
   const { t } = useTranslation();
   const router = useRouter();
-  const { channelId, projectId } = useMemo(
-    () => ({
-      channelId: Number(router.query.channelId),
-      projectId: Number(router.query.projectId),
-    }),
-    [router.query],
-  );
+  const { channelId, projectId } = {
+    channelId: Number(router.query.channelId),
+    projectId: Number(router.query.projectId),
+  };
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
-  const gotoFeedback = () => {
-    router.push({
-      pathname: Path.FEEDBACK,
-      query: { channelId, projectId },
-    });
-  };
+
+  const channelInfoFormMethods = useForm<ChannelInfo>();
+  const imageConfigFormMethods = useForm<ChannelImageConfig>();
+
+  useEffect(() => {
+    if (!data) return;
+    channelInfoFormMethods.reset(data);
+    imageConfigFormMethods.reset(data.imageConfig);
+  }, [data]);
+
+  const gotoFeedback = () =>
+    router.push({ pathname: Path.FEEDBACK, query: { channelId, projectId } });
 
   return (
     <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
@@ -67,14 +77,26 @@ const CreateCompletePage: NextPage = () => {
           {t('main.create-channel.complete-title')}
         </p>
       </div>
-      {data && (
-        <>
-          <ChannelInfoSection {...data} />
-          <FieldSection fields={data.fields} />
-          <ImageUploadSection {...data.imageConfig} />
-          <FieldPreviewSection fields={data.fields} />
-        </>
-      )}
+      <CreateSectionTemplate
+        title={t('channel-setting-menu.channel-info')}
+        defaultOpen
+      >
+        <FormProvider {...channelInfoFormMethods}>
+          <ChannelInfoForm readOnly />
+        </FormProvider>
+      </CreateSectionTemplate>
+      <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
+        <FieldTable fields={data?.fields ?? []} />
+      </CreateSectionTemplate>
+      <CreateSectionTemplate title={t('channel-setting-menu.image-mgmt')}>
+        <FormProvider {...imageConfigFormMethods}>
+          <ImageConfigForm readOnly />
+        </FormProvider>
+      </CreateSectionTemplate>
+      <CreateSectionTemplate title={t('main.setting.field-mgmt.preview')}>
+        <PreviewFieldTable fields={data?.fields ?? []} />
+      </CreateSectionTemplate>
+
       <div className="border-fill-tertiary flex rounded border p-6">
         <div className="flex flex-1 items-center gap-2.5">
           <Image
@@ -121,12 +143,23 @@ const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
     </div>
   );
 };
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+
+CompleteChannelCreationPage.getLayout = (page: React.ReactElement<IProps>) => {
+  return <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>;
+};
+
+export const getServerSideProps: GetServerSideProps<IProps> = async ({
+  locale,
+  query,
+}) => {
+  const projectId = parseInt(query.projectId as string);
+
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      projectId,
     },
   };
 };
 
-export default CreateCompletePage;
+export default CompleteChannelCreationPage;

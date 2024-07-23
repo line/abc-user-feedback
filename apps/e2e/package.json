@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "clean": "git clean -xdf node_modules playwright-report test-results",
     "test:e2e": "playwright test"
   },
   "devDependencies": {

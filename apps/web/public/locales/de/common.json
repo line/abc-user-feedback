@@ -453,7 +453,7 @@
     "issue-tracker": "Verknüpfen und verwalten Sie User Feedback mit Ihrem Issue-Tracking-System. Bitte geben Sie die Details Ihres Issue-Tracking-Systems ein.",
     "channel-info": "Definieren Sie die Feedbackfelder, die über den Kanal gesammelt werden sollen. Bitte registrieren Sie Kanalinformationen unter Berücksichtigung des Feedbackwegs und der Eigenschaften (z.B. VOC, App-Bewertung).",
     "field": "Definieren Sie die Feedbackfelder, die über User Feedback für jeden registrierten Kanal gesammelt werden sollen. Konfigurieren Sie vorab die Felder, die über die API gesammelt oder direkt im ADMIN registriert werden sollen.",
-    "image-setting": "Für Feedback in Bildformat, integrieren Sie einen Bild-Speicher und richten Sie eine Whitelist für Bild-URL-Domains ein.\nBeziehen Sie sich auf die Bild <icon></icon> <docs>Dokumentation</docs> für Details.",
+    "image-config": "Für Feedback in Bildformat, integrieren Sie einen Bild-Speicher und richten Sie eine Whitelist für Bild-URL-Domains ein.\nBeziehen Sie sich auf die Bild <icon></icon> <docs>Dokumentation</docs> für Details.",
     "field-preview": "Vorschau der konfigurierten Felder in der Feldverwaltung. Die Vorschau zeigt Beispieldaten zur Veranschaulichung.",
     "webhook": "Nutzen Sie Webhooks, um auf eine Vielzahl von Ereignissen innerhalb von User Feedback zu reagieren. Für weitere Details, beziehen Sie sich auf die Webhook <icon></icon> <docs>Dokumentation</docs>."
   },

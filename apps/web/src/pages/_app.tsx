@@ -13,28 +13,37 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ReactElement, ReactNode } from 'react';
-import { useState } from 'react';
-import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { DehydratedState } from '@tanstack/react-query';
+import {
+  HydrationBoundary,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { OverlayProvider } from '@toss/use-overlay';
+import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 
 import { Toaster } from '@ufb/ui';
 
-import { TenantProvider } from '@/contexts/tenant.context';
-import { UserProvider } from '@/contexts/user.context';
+import { sessionStorage } from '@/shared';
+import type { Jwt, NextPageWithLayout } from '@/shared/types';
+import { TenantGuard } from '@/entities/tenant';
+import { useUserStore } from '@/entities/user';
+
 // NOTE: DON'T Change the following import order
 import 'react-datepicker/dist/react-datepicker.css';
-import '@/styles/react-datepicker.css';
-import './_app.css';
+import '@/shared/styles/react-datepicker.css';
+import '@/shared/styles/global.css';
 
-export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
-  getLayout?: (page: ReactElement) => ReactNode;
-};
+interface PageProps {
+  dehydratedState?: DehydratedState;
+}
 
-type AppPropsWithLayout = AppProps & {
+type AppPropsWithLayout = AppProps<PageProps> & {
   Component: NextPageWithLayout;
 };
 
@@ -42,6 +51,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const [queryClient] = useState(() => new QueryClient());
 
   const getLayout = Component.getLayout ?? ((page) => page);
+  const { setUser } = useUserStore();
+
+  const initializeJwt = async () => {
+    const { data } = await axios.get<{ jwt?: Jwt }>('/api/jwt');
+    if (!data.jwt) return;
+    sessionStorage.setItem('jwt', data.jwt);
+    setUser();
+  };
+
+  useEffect(() => {
+    void initializeJwt();
+  }, []);
 
   return (
     <>
@@ -50,12 +71,15 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
       <QueryClientProvider client={queryClient}>
-        <TenantProvider>
-          <UserProvider>
-            {getLayout(<Component {...pageProps} />)}
-            <Toaster />
-          </UserProvider>
-        </TenantProvider>
+        <OverlayProvider>
+          <HydrationBoundary state={pageProps.dehydratedState}>
+            <TenantGuard>
+              {getLayout(<Component {...pageProps} />)}
+              <Toaster />
+            </TenantGuard>
+          </HydrationBoundary>
+          {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
+        </OverlayProvider>
       </QueryClientProvider>
     </>
   );

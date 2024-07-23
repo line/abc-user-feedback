@@ -13,17 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 
 import type { IconNameType } from '../Icon';
 import { Icon } from '../Icon';
+import { composeRefs } from '../utils';
 import type { IInputProps } from './Input';
 import { Input } from './Input';
 
@@ -35,10 +29,10 @@ export interface ITextInputProps extends Omit<IInputProps, 'leftChildren'> {
 }
 
 export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
-  (props, ref: any) => {
+  (props, ref) => {
     const {
-      isSubmitted,
-      isSubmitting,
+      isSubmitted = false,
+      isSubmitting = false,
       isValid,
       leftIconName,
       className,
@@ -50,8 +44,6 @@ export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
     const [iconType, setIconType] = useState<'clear' | 'success' | 'fail'>();
 
     const inputRef = useRef<HTMLInputElement>(null);
-
-    useImperativeHandle(ref, () => inputRef.current);
 
     const onClickClear = useCallback(() => {
       if (!inputRef.current) return;
@@ -113,7 +105,7 @@ export const TextInput = forwardRef<HTMLInputElement, ITextInputProps>(
           else setIconType('clear');
           if (onChange) onChange(e);
         }}
-        ref={inputRef}
+        ref={composeRefs(inputRef, ref)}
         isSubmitted={isSubmitted}
         isSubmitting={isSubmitting}
         isValid={isValid}

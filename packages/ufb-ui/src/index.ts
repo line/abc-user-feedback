@@ -19,3 +19,4 @@ export * from './Toast';
 export * from './Badge';
 export * from './Tooltip';
 export * from './Popover';
+export * from './types';

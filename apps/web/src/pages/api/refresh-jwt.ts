@@ -13,44 +13,52 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { NextApiHandler } from 'next';
+import type { AxiosResponse } from 'axios';
 import axios, { AxiosError } from 'axios';
 import { getIronSession } from 'iron-session';
 
-import type { JwtSession } from '@/constants/iron-option';
-import { ironOption } from '@/constants/iron-option';
-import { env } from '@/env.mjs';
-import getLogger from '@/libs/logger';
+import type { Jwt } from '@/shared';
 
-const handler: NextApiHandler = async (req, res) => {
-  const session = await getIronSession<JwtSession>(req, res, ironOption);
+import { env } from '@/env';
+import { createNextApiHandler } from '@/server/api-handler';
+import type { JwtSession } from '@/server/iron-option';
+import { ironOption } from '@/server/iron-option';
+import getLogger from '@/server/logger';
 
-  const { jwt } = session;
-  if (!jwt) return res.status(400).end();
+const handler = createNextApiHandler({
+  GET: async (req, res) => {
+    const session = await getIronSession<JwtSession>(req, res, ironOption);
 
-  try {
-    const response = await axios.get(
-      `${env.API_BASE_URL}/api/admin/auth/refresh`,
-      { headers: { Authorization: `Bearer ${jwt?.refreshToken}` } },
-    );
+    if (!session.jwt) return res.status(400).end();
 
-    if (response.status !== 200) {
-      return res.status(response.status).send(response.data);
+    try {
+      const { status, data } = await axios.get<Jwt>(
+        `${env.API_BASE_URL}/api/admin/auth/refresh`,
+        { headers: { Authorization: `Bearer ${session.jwt.refreshToken}` } },
+      );
+
+      if (status !== 200) return res.status(status).send(data);
+
+      session.jwt = data;
+      await session.save();
+
+      return res.send(data);
+    } catch (error) {
+      getLogger('/api/refrech-jwt').error(error);
+      if (error instanceof TypeError) {
+        return res
+          .status(500)
+          .send({ message: error.message, code: error.name });
+      } else if (error instanceof AxiosError && error.response) {
+        const { status, data } = error.response as AxiosResponse<
+          unknown,
+          unknown
+        >;
+        return res.status(status).send(data);
+      }
+      return res.status(500).send({ message: 'Unknown Error' });
     }
-
-    session.jwt = response.data;
-    await session.save();
-    return res.send({ jwt: response.data });
-  } catch (error) {
-    getLogger('/api/refrech-jwt').error(error);
-    if (error instanceof TypeError) {
-      return res.status(500).send({ message: error.message, code: error.name });
-    } else if (error instanceof AxiosError && error.response) {
-      const { status, data } = error.response;
-      return res.status(status).send(data);
-    }
-    return res.status(500).send({ message: 'Unknown Error' });
-  }
-};
+  },
+});
 
 export default handler;

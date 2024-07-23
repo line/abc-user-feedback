@@ -149,13 +149,17 @@ export const PopoverTrigger = React.forwardRef<
   React.HTMLProps<HTMLElement> & PopoverTriggerProps
 >(function PopoverTrigger({ children, asChild = false, ...props }, propRef) {
   const context = usePopoverContext();
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
   const childrenRef = (children as any).ref;
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
   // `asChild` allows the user to pass any element as the anchor
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
       children,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       context.getReferenceProps({
         ref,
         ...props,
@@ -198,7 +202,7 @@ export const PopoverContent = React.forwardRef<
       <div
         ref={ref}
         style={{
-          ...(context.modal || disabledFloatingStyle ?
+          ...(!!context.modal || disabledFloatingStyle ?
             { position: 'absolute' }
           : context.floatingStyles),
           zIndex: 50,
@@ -346,7 +350,7 @@ export const PopoverModalContent: React.FC<IPopoverModalContentProps> = (
           <button
             {...submitButton}
             className={['btn btn-primary', submitButton.className].join(' ')}
-            type={submitButton.type || 'button'}
+            type={submitButton.type ?? 'button'}
           />
         </div>
       </div>

@@ -23,6 +23,10 @@ import { getDataSourceToken } from '@nestjs/typeorm';
 import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
+import { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import { CodeEntity } from '@/shared/code/code.entity';
+import { CodeService } from '@/shared/code/code.service';
+
 import { AppModule } from '@/app.module';
 import {
   EmailUserSignInRequestDto,
@@ -39,9 +43,6 @@ import {
 } from '@/domains/admin/user/entities/enums';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import { UserPasswordService } from '@/domains/admin/user/user-password.service';
-import { CodeTypeEnum } from '@/shared/code/code-type.enum';
-import { CodeEntity } from '@/shared/code/code.entity';
-import { CodeService } from '@/shared/code/code.service';
 import { clearEntities } from '@/test-utils/util-functions';
 
 describe('AppController (e2e)', () => {

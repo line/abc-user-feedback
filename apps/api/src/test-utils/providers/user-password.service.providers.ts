@@ -16,9 +16,10 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
+
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import { UserPasswordService } from '@/domains/admin/user/user-password.service';
-import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
 import { UserRepositoryStub } from '../stubs';
 import { getMockProvider } from '../util-functions';

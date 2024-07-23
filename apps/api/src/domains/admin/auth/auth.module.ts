@@ -21,6 +21,7 @@ import { PassportModule } from '@nestjs/passport';
 
 import { CodeModule } from '@/shared/code/code.module';
 import { MailingModule } from '@/shared/mailing/mailing.module';
+
 import type { ConfigServiceType } from '@/types/config-service.type';
 import { ApiKeyModule } from '../project/api-key/api-key.module';
 import { MemberModule } from '../project/member/member.module';

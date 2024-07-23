@@ -21,10 +21,10 @@ import type { mysqlConfig } from '@/configs/mysql.config';
 import type { opensearchConfig } from '@/configs/opensearch.config';
 import type { smtpConfig } from '@/configs/smtp.config';
 
-export type ConfigServiceType = {
+export interface ConfigServiceType {
   app: ConfigType<typeof appConfig>;
   opensearch: ConfigType<typeof opensearchConfig>;
   smtp: ConfigType<typeof smtpConfig>;
   jwt: ConfigType<typeof jwtConfig>;
   mysql: ConfigType<typeof mysqlConfig>;
-};
+}

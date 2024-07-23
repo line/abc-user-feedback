@@ -30,6 +30,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 import { NotVerifiedEmailException } from '@/shared/mailing/exceptions';
+
 import type { ConfigServiceType } from '@/types/config-service.type';
 import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
@@ -170,6 +171,7 @@ export class AuthService {
 
   async signIn(user: UserDto): Promise<JwtDto> {
     const { email, id, department, name, type } = user;
+
     const { state } = await this.userService.findById(id);
 
     if (state === UserStateEnum.Blocked) throw new UserBlockedException();

@@ -16,13 +16,14 @@
 import { Expose, plainToInstance } from 'class-transformer';
 
 import { IssueTrackerEntity } from '../issue-tracker.entity';
+import { IssueTrackerDataDto } from './issue-tracker-data.dto';
 
 export class CreateIssueTrackerDto {
   @Expose()
   projectId: number;
 
   @Expose()
-  data: object;
+  data: IssueTrackerDataDto;
 
   public static from(params: any): CreateIssueTrackerDto {
     return plainToInstance(CreateIssueTrackerDto, params, {
