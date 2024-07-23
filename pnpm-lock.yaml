@@ -91,7 +91,7 @@ importers:
         version: 6.0.1(@nestjs/common@10.3.10(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(prom-client@15.1.3)
       aws-sdk:
         specifier: ^2.1604.0
-        version: 2.1659.0
+        version: 2.1661.0
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -4022,8 +4022,8 @@ packages:
   avvio@8.3.2:
     resolution: {integrity: sha512-st8e519GWHa/azv8S87mcJvZs4WsgTBjOw/Ih1CP6u+8SZvcOeAYNG6JbsIrAUUJJ7JfmrnOkR8ipDS+u9SIRQ==}
 
-  aws-sdk@2.1659.0:
-    resolution: {integrity: sha512-WOoy5DdWW4kpQuxjWiQdoSDR+dT/HeAUwjb6b+8taEMZzvUzp3fmdDwdryUTlLWGxrnb7ru2yu5pryjhPOzANg==}
+  aws-sdk@2.1661.0:
+    resolution: {integrity: sha512-xobeiuBp2TZEOW/RFFEuFFB4kps1jxSzYquu5/FvzUNQcMoyJb+1G/KFYW0sT+zXiBbPF5UNGUJwGyvBt+O2bA==}
     engines: {node: '>= 10.0.0'}
 
   aws-ssl-profiles@1.1.1:
@@ -13201,7 +13201,7 @@ snapshots:
       '@fastify/error': 3.4.1
       fastq: 1.17.1
 
-  aws-sdk@2.1659.0:
+  aws-sdk@2.1661.0:
     dependencies:
       buffer: 4.9.2
       events: 1.1.1
