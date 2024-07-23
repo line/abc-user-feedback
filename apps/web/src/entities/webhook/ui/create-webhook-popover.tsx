@@ -30,6 +30,7 @@ const defaultValues: WebhookInfo = {
   name: '',
   status: 'ACTIVE',
   url: '',
+  token: null,
   events: [
     { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
     { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },
@@ -67,6 +68,7 @@ const CreateWebhookPopover: React.FC<IProps> = (props) => {
   }, [open]);
 
   const onSubmit = async (data: WebhookInfo) => {
+    console.log('data: ', data);
     await onClickCreate({ ...data, status: 'ACTIVE' });
     setOpen(false);
   };
