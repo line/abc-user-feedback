@@ -231,6 +231,9 @@ importers:
       '@typescript-eslint/parser':
         specifier: ^7.7.1
         version: 7.16.1(eslint@9.7.0)(typescript@5.5.4)
+      '@ufb/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
       '@ufb/prettier-config':
         specifier: workspace:*
         version: link:../../tooling/prettier
