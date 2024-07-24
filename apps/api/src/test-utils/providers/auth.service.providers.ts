@@ -15,7 +15,7 @@
  */
 import { HttpService } from '@nestjs/axios';
 import { JwtService } from '@nestjs/jwt';
-import { ClsService } from 'nestjs-cls';
+import { ClsModule } from 'nestjs-cls';
 
 import { EmailVerificationMailingService } from '@/shared/mailing/email-verification-mailing.service';
 
@@ -50,7 +50,7 @@ export const AuthServiceProviders = [
   ...TenantServiceProviders,
   ...RoleServiceProviders,
   ...MemberServiceProviders,
-  ClsService,
+  ClsModule,
   {
     provide: HttpService,
     useValue: {

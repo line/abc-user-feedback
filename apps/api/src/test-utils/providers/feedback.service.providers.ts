@@ -15,7 +15,7 @@
  */
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ClsService } from 'nestjs-cls';
+import { ClsModule } from 'nestjs-cls';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
@@ -41,7 +41,7 @@ export const FeedbackServiceProviders = [
     provide: getRepositoryToken(FeedbackEntity),
     useClass: FeedbackRepositoryStub,
   },
-  ClsService,
+  ClsModule,
   ...FieldServiceProviders,
   ...IssueServiceProviders,
   ...OptionServiceProviders,
