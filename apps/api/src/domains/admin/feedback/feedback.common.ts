@@ -32,12 +32,13 @@ export function validateValue(field: FieldEntity, value: any) {
       return (
         value === null ||
         (typeof value === 'string' &&
-          !!field.options.find((v) => v.key === value))
+          !!(field.options ?? []).find((v) => v.key === value))
       );
     case FieldFormatEnum.multiSelect:
       if (Array.isArray(value)) {
         for (const option of value) {
-          if (!field.options.find((v) => v.key === option)) return false;
+          if (!(field.options ?? []).find((v) => v.key === option))
+            return false;
         }
         return true;
       } else {

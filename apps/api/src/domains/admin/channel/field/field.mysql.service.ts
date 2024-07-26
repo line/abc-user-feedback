@@ -51,7 +51,7 @@ export class FieldMySQLService {
       throw new FieldKeyDuplicatedException();
     }
     fields.forEach(({ format, options }) => {
-      if (!this.isValidField(format, options)) {
+      if (!this.isValidField(format, options ?? [])) {
         throw new BadRequestException('only select format field has options');
       }
     });
@@ -126,9 +126,9 @@ export class FieldMySQLService {
       ...fields,
     ];
 
-    const fieldEntities = [];
+    const fieldEntities: FieldEntity[] = [];
     for (const field of fieldsToCreate) {
-      const { format, options } = field;
+      const { format, options = [] } = field;
       const newField = FieldEntity.from({ channelId, ...field });
       const { id } = await this.repository.save(newField);
       fieldEntities.push(newField);
@@ -169,7 +169,7 @@ export class FieldMySQLService {
       channel: { id: channelId },
     });
 
-    for (const { id, format, key, options, ...rest } of updatingFieldDtos) {
+    for (const { id = 0, format, key, options, ...rest } of updatingFieldDtos) {
       const fieldEntity = fieldEntities.find((v) => v.id === id);
       if (!fieldEntity) {
         throw new BadRequestException('field must be included');
@@ -186,9 +186,9 @@ export class FieldMySQLService {
       }
     }
 
-    const createdFields = [];
+    const createdFields: FieldEntity[] = [];
     for (const field of creatingFieldDtos) {
-      const { format, options } = field;
+      const { format, options = [] } = field;
       const newField = FieldEntity.from({ channelId, ...field });
       const createdField = await this.repository.save(newField);
       createdFields.push(createdField);
@@ -210,6 +210,6 @@ export class FieldMySQLService {
       withDeleted: true,
     });
     const fieldMap = new Map(fields.map((field) => [field.id, field]));
-    return ids.map((id) => fieldMap.get(id));
+    return ids.map((id) => fieldMap.get(id) ?? new FieldEntity());
   }
 }

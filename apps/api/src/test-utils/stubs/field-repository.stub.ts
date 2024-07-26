@@ -15,12 +15,13 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import { fieldsFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class FieldRepositoryStub {
-  field = fieldsFixture[0];
-  fields = fieldsFixture;
+  field: FieldEntity | null = fieldsFixture[0];
+  fields: FieldEntity[] = fieldsFixture;
   findOne() {
     return this.field;
   }

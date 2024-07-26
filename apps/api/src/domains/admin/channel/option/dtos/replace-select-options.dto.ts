@@ -15,5 +15,5 @@
  */
 export class ReplaceManyOptionsDto {
   fieldId: number;
-  options: { id?: number; name: string; key: string }[];
+  options: { id?: number; name: string; key: string }[] | undefined;
 }

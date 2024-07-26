@@ -44,7 +44,7 @@ class Query {
   @IsOptional()
   updatedAt?: TimeRange;
 
-  [key: string]: string | string[] | TimeRange | number | number[];
+  [key: string]: string | string[] | TimeRange | number | number[] | undefined;
 }
 
 export class FindFeedbacksByChannelIdRequestDto extends PaginationRequestDto {

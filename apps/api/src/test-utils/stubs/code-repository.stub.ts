@@ -16,12 +16,13 @@
 import { faker } from '@faker-js/faker';
 
 import type { CodeTypeEnum } from '@/shared/code/code-type.enum';
+import { CodeEntity } from '@/shared/code/code.entity';
 
 import { codeFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class CodeRepositoryStub {
-  code = codeFixture;
+  code: CodeEntity | null = codeFixture;
   findOne() {
     return this.code;
   }
@@ -75,15 +76,15 @@ export class CodeRepositoryStub {
   }
 
   setIsVerified(bool) {
-    this.code.isVerified = bool;
+    if (this.code) this.code.isVerified = bool;
   }
 
   setType(type: CodeTypeEnum) {
-    this.code.type = type;
+    if (this.code) this.code.type = type;
   }
 
   setTryCount(tryCount) {
-    this.code.tryCount = tryCount;
+    if (this.code) this.code.tryCount = tryCount;
   }
 
   createQueryBuilder() {

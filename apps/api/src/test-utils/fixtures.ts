@@ -155,13 +155,15 @@ const getRandomOptionDtos = () => {
   });
 };
 
-export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
+export const getRandomEnumValue = <T extends object>(anEnum: T): T[keyof T] => {
   const enumValues = Object.keys(anEnum) as (keyof T)[];
   const randomIndex = faker.number.int(enumValues.length - 1);
   const randomEnumKey = enumValues[randomIndex];
   return anEnum[randomEnumKey];
 };
-export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
+export const getRandomEnumValues = <T extends object>(
+  anEnum: T,
+): T[keyof T][] => {
   const enumValues = Object.values(anEnum);
   return faker.helpers.arrayElements(enumValues) as T[keyof T][];
 };

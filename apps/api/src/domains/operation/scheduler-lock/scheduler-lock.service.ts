@@ -46,7 +46,7 @@ export class SchedulerLockService {
   async acquireLock(
     lockType: LockTypeEnum,
     lockTTLInMilliseconds: number,
-  ): Promise<boolean> {
+  ): Promise<boolean | null> {
     const expiryTime = DateTime.utc()
       .plus({ milliseconds: lockTTLInMilliseconds })
       .toJSDate();

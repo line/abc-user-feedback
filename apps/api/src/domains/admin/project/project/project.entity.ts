@@ -46,7 +46,7 @@ export class ProjectEntity extends CommonEntity {
   name: string;
 
   @Column('varchar', { nullable: true })
-  description: string;
+  description: string | null;
 
   @Column({
     type: 'varchar',
@@ -111,7 +111,7 @@ export class ProjectEntity extends CommonEntity {
   }: {
     tenantId: number;
     name: string;
-    description: string;
+    description: string | null;
     timezone: Timezone;
   }) {
     const project = new ProjectEntity();

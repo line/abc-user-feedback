@@ -27,7 +27,9 @@ export class EmailVerificationMailingService {
     private readonly mailerService: MailerService,
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {
-    this.baseUrl = this.configService.get('smtp', { infer: true }).baseUrl;
+    this.baseUrl =
+      (this.configService.get('smtp', { infer: true }) ?? { baseUrl: '' })
+        .baseUrl ?? '';
   }
   async send({ code, email }: SendMailDto) {
     await this.mailerService.sendMail({

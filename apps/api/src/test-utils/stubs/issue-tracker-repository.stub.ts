@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/issue-tracker.entity';
 import { issueTrackerFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class IssueTrackerRepositoryStub {
-  issueTracker = issueTrackerFixture;
+  issueTracker: IssueTrackerEntity | null = issueTrackerFixture;
   findOne() {
     return this.issueTracker;
   }

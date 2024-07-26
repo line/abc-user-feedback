@@ -254,7 +254,7 @@ export class IssueStatisticsService {
       DateTime.fromJSDate(dto.date)
         .plus({ hours: offset })
         .toISO()
-        .split('T')[0] + 'T00:00:00',
+        ?.split('T')[0] + 'T00:00:00',
     );
 
     const stats = await this.repository.findOne({
