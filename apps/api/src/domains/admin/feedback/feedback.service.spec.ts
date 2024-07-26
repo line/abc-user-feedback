@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ClsService } from 'nestjs-cls';
+import { ClsModule, ClsService } from 'nestjs-cls';
 import type { Repository } from 'typeorm';
 
 import {
@@ -50,7 +50,7 @@ describe('FeedbackService Test Suite', () => {
   let feedbackIssueStatsRepo: Repository<FeedbackIssueStatisticsEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [TestConfig],
+      imports: [TestConfig, ClsModule.forFeature()],
       providers: FeedbackServiceProviders,
     }).compile();
 
