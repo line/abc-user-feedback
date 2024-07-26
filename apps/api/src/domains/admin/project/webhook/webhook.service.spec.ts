@@ -199,7 +199,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.FEEDBACK_CREATION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });
@@ -215,7 +215,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.ISSUE_ADDITION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });
@@ -300,7 +300,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.FEEDBACK_CREATION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });
@@ -320,7 +320,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.ISSUE_ADDITION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });

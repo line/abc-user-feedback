@@ -73,7 +73,7 @@ export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
     ...input,
   };
 };
-export const createFieldDto = (input: Partial<CreateFieldDto>) => {
+export const createFieldDto = (input: Partial<CreateFieldDto> = {}) => {
   const format = input.format ?? getRandomEnumValue(FieldFormatEnum);
   const property = input.property ?? getRandomEnumValue(FieldPropertyEnum);
   const status = input.status ?? getRandomEnumValue(FieldStatusEnum);

@@ -104,7 +104,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCountByDate(dto);
 
-      expect(issueStatsRepo.find.bind(issueStatsRepo)).toBeCalledTimes(1);
+      expect(issueStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
@@ -144,7 +144,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCountByDate(dto);
 
-      expect(issueStatsRepo.find.bind(issueStatsRepo)).toBeCalledTimes(1);
+      expect(issueStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
@@ -179,7 +179,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCountByDate(dto);
 
-      expect(issueStatsRepo.find.bind(issueStatsRepo)).toBeCalledTimes(1);
+      expect(issueStatsRepo.find).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         statistics: [
           {
@@ -212,7 +212,7 @@ describe('IssueStatisticsService suite', () => {
 
       const countByDateByChannel = await issueStatsService.getCount(dto);
 
-      expect(issueRepo.count.bind(issueStatsRepo)).toBeCalledTimes(1);
+      expect(issueRepo.count).toBeCalledTimes(1);
       expect(countByDateByChannel).toEqual({
         count: issueStatsFixture.length,
       });
@@ -233,12 +233,11 @@ describe('IssueStatisticsService suite', () => {
 
       await issueStatsService.addCronJobByProjectId(projectId);
 
-      expect(
-        schedulerRegistry.addCronJob.bind(schedulerRegistry),
-      ).toBeCalledTimes(1);
-      expect(
-        schedulerRegistry.addCronJob.bind(schedulerRegistry),
-      ).toBeCalledWith(`issue-statistics-${projectId}`, expect.anything());
+      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
+      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+        `issue-statistics-${projectId}`,
+        expect.anything(),
+      );
     });
   });
 
@@ -259,9 +258,7 @@ describe('IssueStatisticsService suite', () => {
 
       await issueStatsService.createIssueStatistics(projectId, dayToCreate);
 
-      expect(
-        issueStatsRepo.manager.transaction.bind(issueStatsRepo),
-      ).toBeCalledTimes(dayToCreate);
+      expect(issueStatsRepo.manager.transaction).toBeCalledTimes(dayToCreate);
     });
   });
 
@@ -286,9 +283,9 @@ describe('IssueStatisticsService suite', () => {
         count,
       });
 
-      expect(issueStatsRepo.findOne.bind(issueStatsRepo)).toBeCalledTimes(1);
-      expect(issueStatsRepo.save.bind(issueStatsRepo)).toBeCalledTimes(1);
-      expect(issueStatsRepo.save.bind(issueStatsRepo)).toBeCalledWith({
+      expect(issueStatsRepo.findOne).toBeCalledTimes(1);
+      expect(issueStatsRepo.save).toBeCalledTimes(1);
+      expect(issueStatsRepo.save).toBeCalledWith({
         count: 1 + count,
       });
     });
@@ -317,10 +314,8 @@ describe('IssueStatisticsService suite', () => {
         count,
       });
 
-      expect(issueStatsRepo.findOne.bind(issueStatsRepo)).toBeCalledTimes(1);
-      expect(
-        issueStatsRepo.createQueryBuilder.bind(issueStatsRepo),
-      ).toBeCalledTimes(1);
+      expect(issueStatsRepo.findOne).toBeCalledTimes(1);
+      expect(issueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
         date: new Date(

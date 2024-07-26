@@ -105,8 +105,8 @@ describe('UserService', () => {
       );
 
       expect(result).toMatchObject({});
-      expect(userRepo.findOne.bind(userRepo)).toBeCalledTimes(1);
-      expect(userRepo.findOne.bind(userRepo)).toBeCalledWith({
+      expect(userRepo.findOne).toBeCalledTimes(1);
+      expect(userRepo.findOne).toBeCalledWith({
         where: { email, signUpMethod },
         withDeleted: true,
       });
@@ -121,8 +121,8 @@ describe('UserService', () => {
 
       const result = await userService.findById(userId);
 
-      expect(userRepo.findOne.bind(userRepo)).toBeCalledTimes(1);
-      expect(userRepo.findOne.bind(userRepo)).toBeCalledWith({
+      expect(userRepo.findOne).toBeCalledTimes(1);
+      expect(userRepo.findOne).toBeCalledWith({
         where: { id: userId },
       });
       expect(result).toMatchObject({ id: userId });
@@ -135,8 +135,8 @@ describe('UserService', () => {
         UserNotFoundException,
       );
 
-      expect(userRepo.findOne.bind(userRepo)).toBeCalledTimes(1);
-      expect(userRepo.findOne.bind(userRepo)).toBeCalledWith({
+      expect(userRepo.findOne).toBeCalledTimes(1);
+      expect(userRepo.findOne).toBeCalledWith({
         where: { id: userId },
       });
     });
@@ -159,8 +159,8 @@ describe('UserService', () => {
         }),
       ).rejects.toThrow(UserAlreadyExistsException);
 
-      expect(userRepo.findOneBy.bind(userRepo)).toBeCalledTimes(1);
-      expect(userRepo.findOneBy.bind(userRepo)).toBeCalledWith({ email });
+      expect(userRepo.findOneBy).toBeCalledTimes(1);
+      expect(userRepo.findOneBy).toBeCalledWith({ email });
       expect(MockCodeService.setCode).not.toBeCalled();
       expect(MockUserInvitationMailingService.send).not.toBeCalled();
     });

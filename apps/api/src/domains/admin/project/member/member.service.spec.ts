@@ -66,10 +66,10 @@ describe('MemberService test suite', () => {
 
       await memberService.create(dto);
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(1);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).toBeCalledWith({
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledWith({
         role: { id: roleId },
         user: { id: userId },
       });
@@ -85,9 +85,9 @@ describe('MemberService test suite', () => {
         MemberAlreadyExistsException,
       );
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(1);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).not.toBeCalled();
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).not.toBeCalled();
     });
   });
 
@@ -112,10 +112,10 @@ describe('MemberService test suite', () => {
 
       await memberService.createMany(dtos);
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(memberCount);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(memberCount);
-      expect(memberRepo.save.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).toBeCalledWith(
+      expect(roleRepo.findOne).toBeCalledTimes(memberCount);
+      expect(memberRepo.findOne).toBeCalledTimes(memberCount);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledWith(
         members.map(({ roleId, userId }) =>
           MemberEntity.from({ roleId, userId }),
         ),
@@ -132,9 +132,9 @@ describe('MemberService test suite', () => {
         MemberAlreadyExistsException,
       );
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(1);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).not.toBeCalled();
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).not.toBeCalled();
     });
   });
 
@@ -163,10 +163,10 @@ describe('MemberService test suite', () => {
 
       await memberService.update(dto);
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(1);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).toBeCalledWith({
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledTimes(1);
+      expect(memberRepo.save).toBeCalledWith({
         id: memberId,
         role: { id: newRoleId, project: { id: projectId } },
       });
@@ -182,9 +182,9 @@ describe('MemberService test suite', () => {
         MemberNotFoundException,
       );
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(1);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).not.toBeCalled();
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).not.toBeCalled();
     });
     it('updating a member fails with not matching inputs', async () => {
       jest
@@ -199,9 +199,9 @@ describe('MemberService test suite', () => {
         MemberUpdateRoleNotMatchedProjectException,
       );
 
-      expect(roleRepo.findOne.bind(roleRepo)).toBeCalledTimes(1);
-      expect(memberRepo.findOne.bind(memberRepo)).toBeCalledTimes(1);
-      expect(memberRepo.save.bind(memberRepo)).not.toBeCalled();
+      expect(roleRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.findOne).toBeCalledTimes(1);
+      expect(memberRepo.save).not.toBeCalled();
     });
   });
 });

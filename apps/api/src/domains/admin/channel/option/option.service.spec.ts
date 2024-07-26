@@ -194,7 +194,7 @@ describe('Option Test suite', () => {
 
       await optionService.replaceMany(dto);
 
-      expect(optionRepo.save.bind(optionRepo)).toBeCalledTimes(length);
+      expect(optionRepo.save).toBeCalledTimes(length);
     });
   });
 });
