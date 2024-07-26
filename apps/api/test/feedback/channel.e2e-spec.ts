@@ -166,7 +166,7 @@ describe('AppController (e2e)', () => {
 
         const result: { body: OpenSearchIndex[] } = await osService.indices.get(
           {
-            index: body.id,
+            index: body.id.toString(),
           },
         );
         expect(Object.keys(result.body)[0]).toEqual(body.id);
@@ -176,7 +176,9 @@ describe('AppController (e2e)', () => {
             Record<string, { type: string }>
           >,
         ).forEach(([fieldId, { type }]) => {
-          const field = fields.find(({ id }) => id === parseInt(fieldId));
+          const field =
+            fields.find(({ id }) => id === parseInt(fieldId)) ??
+            new FieldEntity();
           expect(field).toBeDefined();
           expect(FIELD_TYPES_TO_MAPPING_TYPES[field.format]).toEqual(type);
         });
@@ -268,8 +270,8 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .then(async () => {
         const updatedchannel = await channelRepo.findOneBy({ id: channelId });
-        expect(updatedchannel.name).toEqual(dto.name);
-        expect(updatedchannel.description).toEqual(dto.description);
+        expect(updatedchannel?.name).toEqual(dto.name);
+        expect(updatedchannel?.description).toEqual(dto.description);
 
         const updatedFields = await fieldRepo.find({
           where: { channel: { id: channelId } },
@@ -323,6 +325,6 @@ const fieldEntityToDto2 = (field: FieldEntity) => ({
   description: field.description,
   options:
     field.format === FieldFormatEnum.select ?
-      field.options.map(({ name }) => ({ name })).sort(optionSort)
+      (field.options ?? []).map(({ name }) => ({ name })).sort(optionSort)
     : undefined,
 });

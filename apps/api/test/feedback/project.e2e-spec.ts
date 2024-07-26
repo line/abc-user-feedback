@@ -139,8 +139,8 @@ describe('AppController (e2e)', () => {
       .expect(200)
       .then(async () => {
         const updatedproject = await projectRepo.findOneBy({ id: project.id });
-        expect(updatedproject.name).toEqual(name);
-        expect(updatedproject.description).toEqual(description);
+        expect(updatedproject?.name).toEqual(name);
+        expect(updatedproject?.description).toEqual(description);
       });
   });
   // it('/projects/:id (DELETE)', async () => {

@@ -131,10 +131,10 @@ describe('AppController (e2e)', () => {
           const updatedTenant = await tenantRepo.findOne({
             where: { id: tenant.id },
           });
-          expect(updatedTenant.siteName).toEqual(dto.siteName);
-          expect(updatedTenant.isPrivate).toEqual(dto.isPrivate);
-          expect(updatedTenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
-          expect(updatedTenant.allowDomains).toEqual(dto.allowDomains);
+          expect(updatedTenant?.siteName).toEqual(dto.siteName);
+          expect(updatedTenant?.isPrivate).toEqual(dto.isPrivate);
+          expect(updatedTenant?.isRestrictDomain).toEqual(dto.isRestrictDomain);
+          expect(updatedTenant?.allowDomains).toEqual(dto.allowDomains);
         });
     });
     it('not found tenant', async () => {

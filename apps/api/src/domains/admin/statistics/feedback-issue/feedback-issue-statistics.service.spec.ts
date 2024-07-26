@@ -18,7 +18,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
@@ -329,8 +329,11 @@ describe('FeedbackIssueStatisticsService suite', () => {
       jest.spyOn(feedbackIssueStatsRepo, 'findOne').mockResolvedValue(null);
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'values');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'values' as never);
 
       await feedbackIssueStatsService.updateFeedbackCount({
         issueId,
@@ -347,7 +350,7 @@ describe('FeedbackIssueStatisticsService suite', () => {
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
         date: new Date(
-          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO().split('T')[0] +
+          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO()?.split('T')[0] +
             'T00:00:00',
         ),
         feedbackCount,

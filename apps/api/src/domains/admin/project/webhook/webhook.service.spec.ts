@@ -54,12 +54,12 @@ function createCreateWebhookDto(overrides = {}): CreateWebhookDto {
       {
         status: EventStatusEnum.ACTIVE,
         type: EventTypeEnum.ISSUE_CREATION,
-        channelIds: null,
+        channelIds: [],
       },
       {
         status: EventStatusEnum.ACTIVE,
         type: EventTypeEnum.ISSUE_STATUS_CHANGE,
-        channelIds: null,
+        channelIds: [],
       },
     ],
     ...overrides,
@@ -87,12 +87,12 @@ function createUpdateWebhookDto(overrides = {}): UpdateWebhookDto {
       {
         status: getRandomEnumValue(EventStatusEnum),
         type: EventTypeEnum.ISSUE_CREATION,
-        channelIds: null,
+        channelIds: [],
       },
       {
         status: getRandomEnumValue(EventStatusEnum),
         type: EventTypeEnum.ISSUE_STATUS_CHANGE,
-        channelIds: null,
+        channelIds: [],
       },
     ],
     ...overrides,

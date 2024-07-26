@@ -21,7 +21,7 @@ import { IsPassword } from '@/common/decorators/is-password';
 export class EmailUserSignInRequestDto {
   @ApiProperty()
   @IsEmail()
-  email: string;
+  email: string | null;
 
   @ApiProperty()
   @IsPassword()

@@ -84,7 +84,7 @@ export class ChannelEntity extends CommonEntity {
 
   static from(
     name: string,
-    description: string,
+    description: string | null,
     projectId: number,
     imageConfig: ImageConfig | null,
   ) {

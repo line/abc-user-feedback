@@ -39,6 +39,7 @@ import {
 import type { SignInResponseDto } from '@/domains/admin/auth/dtos/responses/sign-in-response.dto';
 import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import { UserDto } from '@/domains/admin/user/dtos/user.dto';
 import {
   UserStateEnum,
   UserTypeEnum,
@@ -148,7 +149,7 @@ describe('AppController (e2e)', () => {
       dto.code = code;
 
       const originalCode = await codeRepo.findOneBy({ code });
-      expect(originalCode.isVerified).toEqual(false);
+      expect(originalCode?.isVerified).toEqual(false);
 
       await request(app.getHttpServer() as Server)
         .post('/auth/email/code/verify')
@@ -156,7 +157,7 @@ describe('AppController (e2e)', () => {
         .expect(200);
 
       const updatedCode = await codeRepo.findOneBy({ code });
-      expect(updatedCode.isVerified).toEqual(true);
+      expect(updatedCode?.isVerified).toEqual(true);
     });
     it('invalid code', async () => {
       const dto = new EmailVerificationCodeRequestDto();
@@ -164,7 +165,7 @@ describe('AppController (e2e)', () => {
       dto.code = faker.string.sample();
 
       const originalCode = await codeRepo.findOneBy({ code });
-      expect(originalCode.isVerified).toEqual(false);
+      expect(originalCode?.isVerified).toEqual(false);
 
       return request(app.getHttpServer() as Server)
         .post('/auth/email/code/verify')
@@ -172,7 +173,7 @@ describe('AppController (e2e)', () => {
         .expect(400)
         .then(async () => {
           const updatedCode = await codeRepo.findOneBy({ code });
-          expect(updatedCode.isVerified).toEqual(false);
+          expect(updatedCode?.isVerified).toEqual(false);
         });
     });
     it('invalid email', async () => {
@@ -272,7 +273,11 @@ describe('AppController (e2e)', () => {
       await codeService.setCode({
         type: CodeTypeEnum.USER_INVITATION,
         key: email,
-        data: { roleId: 1, userType: UserTypeEnum.GENERAL, invitedBy: null },
+        data: {
+          roleId: 1,
+          userType: UserTypeEnum.GENERAL,
+          invitedBy: new UserDto(),
+        },
       });
 
     beforeEach(() => {
