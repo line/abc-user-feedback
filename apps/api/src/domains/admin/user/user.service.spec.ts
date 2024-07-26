@@ -18,7 +18,6 @@ import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository, SelectQueryBuilder } from 'typeorm';
 import { Like } from 'typeorm';
-import { SelectQuery } from 'typeorm/query-builder/SelectQuery';
 
 import { SortMethodEnum } from '@/common/enums';
 import {
