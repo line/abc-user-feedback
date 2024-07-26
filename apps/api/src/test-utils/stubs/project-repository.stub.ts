@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { projectFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class ProjectRepositoryStub {
-  project = projectFixture;
+  project: ProjectEntity | null = projectFixture;
   findOne() {
     return this.project;
   }

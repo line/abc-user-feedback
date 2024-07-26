@@ -157,9 +157,10 @@ export class WebhookService {
 
   @Transactional()
   async delete(webhookId: number) {
-    const webhook = await this.repository.findOne({
-      where: { id: webhookId },
-    });
+    const webhook =
+      (await this.repository.findOne({
+        where: { id: webhookId },
+      })) ?? new WebhookEntity();
 
     await this.repository.remove(webhook);
   }

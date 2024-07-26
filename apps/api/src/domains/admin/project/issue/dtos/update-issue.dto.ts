@@ -23,7 +23,7 @@ export class UpdateIssueDto extends CreateIssueDto {
   issueId: number;
 
   @Expose()
-  description: string;
+  description: string | null;
 
   @Expose()
   status?: IssueStatusEnum;

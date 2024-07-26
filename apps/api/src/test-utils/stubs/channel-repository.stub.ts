@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { channelFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class ChannelRepositoryStub {
-  channel = channelFixture;
+  channel: ChannelEntity | null = channelFixture;
   findOne() {
     return this.channel;
   }
@@ -59,7 +60,7 @@ export class ChannelRepositoryStub {
   }
 
   setImageConfig(config) {
-    this.channel.imageConfig = config;
+    if (this.channel) this.channel.imageConfig = config;
   }
 
   setNull() {

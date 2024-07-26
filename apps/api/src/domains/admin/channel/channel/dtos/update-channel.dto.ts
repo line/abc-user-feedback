@@ -22,7 +22,7 @@ export class UpdateChannelDto {
   name: string;
 
   @Expose()
-  description: string;
+  description: string | null;
 
   @Expose()
   imageConfig: ImageConfigDto | null;

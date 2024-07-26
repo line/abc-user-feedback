@@ -35,6 +35,12 @@ import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-res
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
 
+interface OpenSearchQuery {
+  bool: {
+    must: any[];
+  };
+}
+
 @Injectable()
 export class FeedbackOSService {
   private logger = new Logger(FeedbackOSService.name);
@@ -62,12 +68,12 @@ export class FeedbackOSService {
   }
 
   private getMultiFieldQuery(
-    query: FindFeedbacksByChannelIdDto['query'],
+    query: string,
     fields: FieldEntity[],
     fieldFormats: FieldFormatEnum[],
   ) {
     type FieldFormatCondition = {
-      match_phrase: Record<string, FindFeedbacksByChannelIdDto['query']>;
+      match_phrase: Record<string, string>;
     }[];
     return {
       bool: {
@@ -105,11 +111,11 @@ export class FeedbackOSService {
       query:
         query ?
           Object.keys(query).reduce(
-            (osQuery, fieldKey) => {
+            (osQuery: OpenSearchQuery, fieldKey) => {
               if (fieldKey === 'ids') {
                 osQuery.bool.must.push({
                   ids: {
-                    values: query[fieldKey].map((id) => id.toString()),
+                    values: (query[fieldKey] ?? []).map((id) => id.toString()),
                   },
                 });
 
@@ -155,16 +161,18 @@ export class FeedbackOSService {
               if (format === FieldFormatEnum.select) {
                 osQuery.bool.must.push({
                   match_phrase: {
-                    [key]: options.find(
+                    [key]: (options ?? []).find(
                       (option) => option.key === query[fieldKey],
-                    ).key,
+                    )?.key,
                   },
                 });
               } else if (format === FieldFormatEnum.multiSelect) {
                 for (const value of query[fieldKey] as string[]) {
                   osQuery.bool.must.push({
                     match_phrase: {
-                      [key]: options.find((option) => option.key === value).key,
+                      [key]: (options ?? []).find(
+                        (option) => option.key === value,
+                      )?.key,
                     },
                   });
                 }
@@ -237,7 +245,7 @@ export class FeedbackOSService {
   ): Promise<Pagination<Feedback, IPaginationMeta>> {
     const { channelId, limit, page, query, sort, fields } = dto;
 
-    if (query.issueIds) {
+    if (query?.issueIds) {
       const feedbackIds = await this.issueIdsToFeedbackIds(
         query.issueIds as number[],
       );
@@ -250,7 +258,7 @@ export class FeedbackOSService {
       }
     }
 
-    const osQuery = this.osQueryBulider(query, sort, fields);
+    const osQuery = this.osQueryBulider(query, sort, fields ?? []);
     this.logger.log(osQuery);
 
     const { items, total }: { items: Record<string, any>[]; total: number } =
@@ -288,7 +296,7 @@ export class FeedbackOSService {
       scrollId: currentScrollId,
     } = dto;
 
-    if (query.issueIds) {
+    if (query?.issueIds) {
       const feedbackIds = await this.issueIdsToFeedbackIds(
         query.issueIds as number[],
       );

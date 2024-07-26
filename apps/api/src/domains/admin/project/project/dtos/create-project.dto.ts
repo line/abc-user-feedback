@@ -20,7 +20,7 @@ import type { Timezone } from '../project.entity';
 
 export class CreateProjectDto {
   name: string;
-  description: string;
+  description: string | null;
   timezone: Timezone;
   roles?: Omit<CreateRoleDto, 'projectId'>[];
   members?: {

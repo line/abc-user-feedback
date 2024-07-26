@@ -45,7 +45,7 @@ export const smtpConfigSchema = Joi.object({
 export const smtpConfig = registerAs('smtp', () => ({
   use: process.env.SMTP_USE === 'true',
   host: process.env.SMTP_HOST,
-  port: +process.env.SMTP_PORT,
+  port: parseInt(process.env.SMTP_PORT || '25'),
   username: process.env.SMTP_USERNAME,
   password: process.env.SMTP_PASSWORD,
   sender: process.env.SMTP_SENDER,

@@ -44,7 +44,7 @@ export class FieldEntity extends CommonEntity {
   key: string;
 
   @Column('varchar', { nullable: true })
-  description: string;
+  description: string | null;
 
   @Column('enum', { enum: FieldFormatEnum })
   format: FieldFormatEnum;
@@ -65,7 +65,7 @@ export class FieldEntity extends CommonEntity {
     nullable: true,
     cascade: true,
   })
-  options: Relation<OptionEntity>[];
+  options: Relation<OptionEntity>[] | undefined;
 
   static from({
     channelId,
@@ -79,7 +79,7 @@ export class FieldEntity extends CommonEntity {
     channelId: number;
     name: string;
     key: string;
-    description: string;
+    description: string | null;
     format: FieldFormatEnum;
     property: FieldPropertyEnum;
     status: FieldStatusEnum;

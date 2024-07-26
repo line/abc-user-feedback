@@ -233,7 +233,7 @@ export class FeedbackService {
           scrollId: currentScrollId,
         });
         feedbacks = data;
-        currentScrollId = scrollId as string;
+        currentScrollId = scrollId as unknown as string;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelId({
           channelId,
@@ -290,7 +290,7 @@ export class FeedbackService {
     csvStream.pipe(stream);
 
     const pageSize = 1000;
-    let feedbacks = [];
+    let feedbacks: Record<string, any>[] = [];
     let currentScrollId: number | null = null;
     let page = 1;
     const feedbackIds: number[] = [];
@@ -303,7 +303,7 @@ export class FeedbackService {
           sort: sort as FindFeedbacksByChannelIdDto['sort'],
           fields: fields as FieldEntity[],
           size: pageSize,
-          scrollId: currentScrollId,
+          scrollId: currentScrollId as unknown as string,
         });
         feedbacks = data;
         currentScrollId = scrollId;
@@ -388,7 +388,7 @@ export class FeedbackService {
 
       if (field.format === FieldFormatEnum.images) {
         const channel = await this.channelService.findById({ channelId });
-        const domainWhiteList = channel.imageConfig.domainWhiteList;
+        const domainWhiteList = channel.imageConfig?.domainWhiteList ?? [];
 
         if (domainWhiteList.length !== 0) {
           const images = value as string[];
@@ -502,27 +502,27 @@ export class FeedbackService {
       if (field.format === FieldFormatEnum.multiSelect) {
         const values = data[fieldKey] as string[];
         const newValues = values.filter(
-          (v) => !field.options.find(({ name }) => name === v),
+          (v) => !(field.options ?? []).find(({ name }) => name === v),
         );
         const newOptions = await this.optionService.createMany({
           fieldId: field.id,
           options: newValues.map((v) => ({ name: v, key: v })),
         });
-        field.options = field.options.concat(newOptions);
+        field.options = (field.options ?? []).concat(newOptions);
       }
 
       const value = data[fieldKey] as string;
       if (
         field.format === FieldFormatEnum.select &&
         value &&
-        !field.options.find((v) => v.name === value)
+        !(field.options ?? []).find((v) => v.name === value)
       ) {
         const newOption = await this.optionService.create({
           fieldId: field.id,
           key: value,
           name: value,
         });
-        field.options = field.options.concat(newOption);
+        field.options = (field.options ?? []).concat(newOption);
       }
 
       if (!validateValue(field, data[fieldKey])) {
@@ -601,7 +601,7 @@ export class FeedbackService {
     });
     if (fields.length === 0) throw new BadRequestException('invalid channel');
 
-    let fieldsToExport = fields;
+    let fieldsToExport: FieldEntity[] = fields;
     if (fieldIds) {
       fieldsToExport = await this.fieldService.findByIds(fieldIds);
       if (fields.length === 0) {
@@ -676,18 +676,18 @@ export class FeedbackService {
 
     const s3 = new S3Client({
       credentials: {
-        accessKeyId: channel.imageConfig.accessKeyId,
-        secretAccessKey: channel.imageConfig.secretAccessKey,
+        accessKeyId: channel.imageConfig?.accessKeyId ?? '',
+        secretAccessKey: channel.imageConfig?.secretAccessKey ?? '',
       },
-      endpoint: channel.imageConfig.endpoint,
-      region: channel.imageConfig.region,
+      endpoint: channel.imageConfig?.endpoint,
+      region: channel.imageConfig?.region,
     });
     try {
       const imageUrls = await Promise.all(
         files.map(async (file) => {
           const key = `${channelId}_${Date.now()}_${file.originalname}`;
           const command = new PutObjectCommand({
-            Bucket: channel.imageConfig.bucket,
+            Bucket: channel.imageConfig?.bucket,
             Key: key,
             Body: file.buffer,
             ContentType: file.mimetype,
@@ -697,7 +697,7 @@ export class FeedbackService {
 
           return {
             ...file,
-            url: `${channel.imageConfig.endpoint}/${channel.imageConfig.bucket}/${key}`,
+            url: `${channel.imageConfig?.endpoint}/${channel.imageConfig?.bucket}/${key}`,
           } as ImageUrl;
         }),
       );

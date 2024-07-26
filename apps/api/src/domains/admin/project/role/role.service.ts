@@ -64,7 +64,7 @@ export class RoleService {
   async update(id: number, projectId: number, dto: UpdateRoleDto) {
     const { name, permissions } = dto;
 
-    const role = await this.roleRepo.findOneBy({ id });
+    const role = (await this.roleRepo.findOneBy({ id })) ?? new RoleEntity();
 
     if (
       await this.roleRepo.findOne({

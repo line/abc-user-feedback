@@ -22,7 +22,7 @@ export class CreateApiKeyDto {
   projectId: number;
 
   @Expose()
-  value?: string;
+  value: string;
 
   public static from(params: any): CreateApiKeyDto {
     return plainToInstance(CreateApiKeyDto, params, {

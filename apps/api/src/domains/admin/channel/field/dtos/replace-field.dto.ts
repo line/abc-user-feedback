@@ -32,7 +32,7 @@ export class ReplaceFieldDto {
   key: string;
 
   @Expose()
-  description: string;
+  description: string | null;
 
   @Expose()
   format: FieldFormatEnum;
