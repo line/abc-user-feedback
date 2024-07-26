@@ -78,9 +78,9 @@ export class FieldMySQLService {
     options: { id?: number; name: string }[],
   ) {
     if (isSelectFieldFormat(type)) {
-      return !options || Array.isArray(options);
+      return options.length === 0 || Array.isArray(options);
     } else {
-      return !options || !Array.isArray(options);
+      return options.length === 0 || !Array.isArray(options);
     }
   }
 
@@ -133,7 +133,7 @@ export class FieldMySQLService {
       const { id } = await this.repository.save(newField);
       fieldEntities.push(newField);
 
-      if (isSelectFieldFormat(format) && options?.length > 0) {
+      if (isSelectFieldFormat(format) && options.length > 0) {
         await this.optionService.createMany({
           fieldId: id,
           options,

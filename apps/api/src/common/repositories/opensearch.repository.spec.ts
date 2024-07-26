@@ -78,8 +78,8 @@ describe('Opensearch Repository Test suite', () => {
 
       await osRepo.createIndex({ index });
 
-      expect(osClient.indices.create).toBeCalledTimes(1);
-      expect(osClient.indices.create).toBeCalledWith({
+      expect(osClient.indices.create.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.create.bind(osClient)).toBeCalledWith({
         index: indexName,
         body: {
           settings: {
@@ -103,8 +103,8 @@ describe('Opensearch Repository Test suite', () => {
           },
         },
       });
-      expect(osClient.indices.putAlias).toBeCalledTimes(1);
-      expect(osClient.indices.putAlias).toBeCalledWith({
+      expect(osClient.indices.putAlias.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.putAlias.bind(osClient)).toBeCalledWith({
         index: indexName,
         name: index,
       });
@@ -123,9 +123,9 @@ describe('Opensearch Repository Test suite', () => {
 
       await osRepo.putMappings(dto);
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.putMapping).toBeCalledTimes(1);
-      expect(osClient.indices.putMapping).toBeCalledWith({
+      expect(osClient.indices.exists.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.putMapping.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.putMapping.bind(osClient)).toBeCalledWith({
         index: dto.index,
         body: { properties: dto.mappings },
       });
@@ -143,8 +143,8 @@ describe('Opensearch Repository Test suite', () => {
         new NotFoundException('index is not found'),
       );
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.putMapping).not.toBeCalled();
+      expect(osClient.indices.exists.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.putMapping.bind(osClient)).not.toBeCalled();
     });
   });
 
@@ -177,9 +177,9 @@ describe('Opensearch Repository Test suite', () => {
       const response = await osRepo.createData(dto);
 
       expect(response.id).toEqual(dto.id);
-      expect(osClient.indices.getMapping).toBeCalledTimes(1);
-      expect(osClient.index).toBeCalledTimes(1);
-      expect(osClient.index).toBeCalledWith({
+      expect(osClient.indices.getMapping.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.index.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.index.bind(osClient)).toBeCalledWith({
         id: dto.id,
         index: 'channel_' + index,
         body: dto.data,
@@ -215,9 +215,9 @@ describe('Opensearch Repository Test suite', () => {
         new NotFoundException('index is not found'),
       );
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.getMapping).not.toBeCalled();
-      expect(osClient.index).not.toBeCalled();
+      expect(osClient.indices.exists.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.getMapping.bind(osClient)).not.toBeCalled();
+      expect(osClient.index.bind(osClient)).not.toBeCalled();
     });
     it('creating data fails with invalid data', async () => {
       const index = faker.number.int().toString();
@@ -252,21 +252,33 @@ describe('Opensearch Repository Test suite', () => {
         new InternalServerErrorException('error!!!'),
       );
 
-      expect(osClient.indices.exists).toBeCalledTimes(1);
-      expect(osClient.indices.getMapping).toBeCalledTimes(1);
-      expect(osClient.index).not.toBeCalled();
+      expect(osClient.indices.exists.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.indices.getMapping.bind(osClient)).toBeCalledTimes(1);
+      expect(osClient.index.bind(osClient)).not.toBeCalled();
     });
   });
 
-  describe('getData', () => {});
+  describe('getData', () => {
+    return null;
+  });
 
-  describe('scroll', () => {});
+  describe('scroll', () => {
+    return null;
+  });
 
-  describe('updateData', () => {});
+  describe('updateData', () => {
+    return null;
+  });
 
-  describe('deleteBulkData', () => {});
+  describe('deleteBulkData', () => {
+    return null;
+  });
 
-  describe('deleteIndex', () => {});
+  describe('deleteIndex', () => {
+    return null;
+  });
 
-  describe('getTotal', () => {});
+  describe('getTotal', () => {
+    return null;
+  });
 });

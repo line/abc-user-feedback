@@ -52,17 +52,21 @@ describe('UserPasswordService', () => {
 
       await userPasswordService.sendResetPasswordMail(email);
 
-      expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(1);
+      expect(
+        resetPasswordMailingService.send.bind(resetPasswordMailingService),
+      ).toHaveBeenCalledTimes(1);
     });
     it('sending a reset password mail fails with invalid email', async () => {
       const email = faker.internet.email();
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(
         userPasswordService.sendResetPasswordMail(email),
       ).rejects.toThrow(UserNotFoundException);
 
-      expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(0);
+      expect(
+        resetPasswordMailingService.send.bind(resetPasswordMailingService),
+      ).toHaveBeenCalledTimes(0);
     });
   });
   describe('resetPassword', () => {
@@ -77,7 +81,7 @@ describe('UserPasswordService', () => {
 
       const user = await userPasswordService.resetPassword(dto);
 
-      expect(codeRepo.findOne).toHaveBeenCalledTimes(1);
+      expect(codeRepo.findOne.bind(codeRepo)).toHaveBeenCalledTimes(1);
       expect(bcrypt.compareSync(dto.password, user.hashPassword)).toBe(true);
     });
     it('resetting a password fails with an invalid email', async () => {
@@ -85,7 +89,7 @@ describe('UserPasswordService', () => {
       dto.email = faker.internet.email();
       dto.code = faker.string.sample();
       dto.password = faker.internet.password();
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(userPasswordService.resetPassword(dto)).rejects.toThrow(
         UserNotFoundException,

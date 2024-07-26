@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -26,6 +27,8 @@ import type { DataSource, Repository } from 'typeorm';
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/admin/auth/auth.service';
 import { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import type { UserDto } from '@/domains/admin/user/dtos';
+import type { GetAllUserResponseDto } from '@/domains/admin/user/dtos/responses/get-all-user-response.dto';
 import { UserStateEnum } from '@/domains/admin/user/entities/enums';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import {
@@ -111,7 +114,7 @@ describe('AppController (e2e)', () => {
         }))
         .slice(0, 10);
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .get('/users')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.OK)
@@ -119,7 +122,7 @@ describe('AppController (e2e)', () => {
           expect(body).toHaveProperty('items');
           expect(body).toHaveProperty('meta');
 
-          const { items, meta } = body;
+          const { items, meta } = body as GetAllUserResponseDto;
           expect(items).toEqual(expectUsers);
           expect(meta.totalItems).toEqual(total);
           expect(meta.itemCount).toEqual(10);
@@ -127,7 +130,7 @@ describe('AppController (e2e)', () => {
     });
 
     it('UnAuthorized', async () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .get('/users')
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -152,7 +155,7 @@ describe('AppController (e2e)', () => {
         }))
         .slice((page - 1) * limit, page * limit);
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .get(`/users?page=${page}&limit=${limit}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.OK)
@@ -160,7 +163,7 @@ describe('AppController (e2e)', () => {
           expect(body).toHaveProperty('items');
           expect(body).toHaveProperty('meta');
 
-          const { items, meta } = body;
+          const { items, meta } = body as GetAllUserResponseDto;
           expect(items).toEqual(expectUsers);
           expect(meta.totalItems).toEqual(total);
           expect(meta.itemCount).toBeLessThanOrEqual(10);
@@ -172,7 +175,7 @@ describe('AppController (e2e)', () => {
     it('positive case', async () => {
       const ids = faker.helpers.arrayElements(userEntities).map((v) => v.id);
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .delete(`/users`)
         .set('Authorization', `Bearer ${accessToken}`)
         .send({ ids })
@@ -186,7 +189,7 @@ describe('AppController (e2e)', () => {
     });
 
     it('Unauthorized', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .delete(`/users`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -194,24 +197,24 @@ describe('AppController (e2e)', () => {
 
   describe('/users/:id (GET)', () => {
     it('', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .get(`/users/${ownerUser.id}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(200)
         .expect(({ body }) => {
-          expect(body.id).toEqual(ownerUser.id);
-          expect(body.email).toEqual(ownerUser.email);
+          expect((body as UserDto).id).toEqual(ownerUser.id);
+          expect((body as UserDto).email).toEqual(ownerUser.email);
         });
     });
     it('', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .get(`/users/${ownerUser.id}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
   });
   describe('/users/:id (DELETE)', () => {
     it('positive', async () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .delete(`/users/${ownerUser.id}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.OK)
@@ -221,13 +224,13 @@ describe('AppController (e2e)', () => {
         });
     });
     it('Unauthorization', async () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .delete(`/users/${faker.number.int()}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
     it('Unauthorization', async () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .delete(`/users/${ownerUser.id}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -240,7 +243,7 @@ describe('AppController (e2e)', () => {
         permissions: [],
       });
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .put(`/users/${ownerUser.id}/role`)
         .set('Authorization', `Bearer ${accessToken}`)
         .send({ roleId: role.id })
@@ -252,7 +255,7 @@ describe('AppController (e2e)', () => {
         permissions: [],
       });
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .put(`/users/${ownerUser.id}/role`)
         .send({ roleId: role.id })
         .expect(HttpStatusCode.UNAUTHORIZED);

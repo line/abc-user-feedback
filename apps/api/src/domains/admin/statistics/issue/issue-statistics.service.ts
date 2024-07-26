@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
@@ -36,6 +36,10 @@ import type {
 import { IssueStatisticsEntity } from './issue-statistics.entity';
 
 dotenv.config();
+
+interface IssueEntityWithCount extends IssueEntity {
+  count: string;
+}
 
 @Injectable()
 export class IssueStatisticsService {
@@ -114,16 +118,24 @@ export class IssueStatisticsService {
         .groupBy('issue.status')
         .getRawMany()
         .then((res) =>
-          res.map((stat) => ({ status: stat.status, count: +stat.count })),
+          res.map((stat: IssueEntityWithCount) => ({
+            status: stat.status,
+            count: +stat.count,
+          })),
         ),
     };
   }
 
   async addCronJobByProjectId(projectId: number) {
-    const { timezone } = await this.projectRepository.findOne({
+    const project: ProjectEntity | null = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-    const timezoneOffset = timezone.offset;
+
+    if (project === null) {
+      throw new NotFoundException(`Project(id: ${projectId}) not found`);
+    }
+
+    const timezoneOffset = project.timezone.offset;
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
@@ -153,11 +165,16 @@ export class IssueStatisticsService {
     this.logger.log(`issue-statistics-${projectId} cron job started`);
   }
 
-  async createIssueStatistics(projectId: number, dayToCreate: number = 1) {
-    const { timezone, id } = await this.projectRepository.findOne({
+  async createIssueStatistics(projectId: number, dayToCreate = 1) {
+    const project: ProjectEntity | null = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-    const timezoneOffset = timezone.offset;
+
+    if (project === null) {
+      throw new NotFoundException(`Project(id: ${projectId}) not found`);
+    }
+
+    const timezoneOffset = project.timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
@@ -166,7 +183,7 @@ export class IssueStatisticsService {
         .transaction(async (transactionalEntityManager) => {
           const issueCount = await this.issueRepository.count({
             where: {
-              project: { id },
+              project: { id: project.id },
               createdAt: Between(
                 DateTime.utc()
                   .minus({ days: day })
@@ -202,13 +219,13 @@ export class IssueStatisticsService {
                     .minus({ hours: offset })
                     .toFormat('yyyy-MM-dd'),
               count: issueCount,
-              project: { id },
+              project: { id: project.id },
             })
             .orUpdate(['count'], ['date', 'project'])
             .updateEntity(false)
             .execute();
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           this.logger.error({
             message: 'Failed to create issue statistics',
             error,
@@ -222,10 +239,14 @@ export class IssueStatisticsService {
     if (dto.count === 0) return;
     if (!dto.count) dto.count = 1;
 
-    const { timezone } = await this.projectRepository.findOne({
+    const project: ProjectEntity | null = await this.projectRepository.findOne({
       where: { id: dto.projectId },
     });
-    const timezoneOffset = timezone.offset;
+
+    if (project === null) {
+      throw new NotFoundException(`Project(id: ${dto.projectId}) not found`);
+    }
+    const timezoneOffset = project.timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 

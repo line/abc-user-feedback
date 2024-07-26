@@ -40,9 +40,7 @@ export class FindIssuesByProjectIdRequestDto extends PaginationRequestDto {
     example: { createdAt: 'ASC' },
   })
   @IsOptional()
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
 
   constructor(limit = 10, page = 1) {
     super(limit, page);

@@ -273,14 +273,12 @@ describe('ProjectService Test suite', () => {
     it('updating a project succeeds with valid inputs', async () => {
       const name = faker.string.sample();
       dto.name = name;
-      jest
-        .spyOn(projectRepo, 'findOne')
-        .mockResolvedValue(null as ProjectEntity);
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(projectRepo, 'save');
 
       await projectService.update(dto);
 
-      expect(projectRepo.save).toBeCalledTimes(1);
+      expect(projectRepo.save.bind(projectRepo)).toBeCalledTimes(1);
     });
     it('updating a project fails with a duplicate name', async () => {
       const name = 'DUPLICATE_NAME';
@@ -291,7 +289,7 @@ describe('ProjectService Test suite', () => {
         new ProjectInvalidNameException('Duplicated name'),
       );
 
-      expect(projectRepo.save).not.toBeCalled();
+      expect(projectRepo.save.bind(projectRepo)).not.toBeCalled();
     });
   });
   describe('deleteById', () => {
@@ -301,7 +299,7 @@ describe('ProjectService Test suite', () => {
 
       await projectService.deleteById(projectId);
 
-      expect(projectRepo.remove).toBeCalledTimes(1);
+      expect(projectRepo.remove.bind(projectRepo)).toBeCalledTimes(1);
     });
   });
 });

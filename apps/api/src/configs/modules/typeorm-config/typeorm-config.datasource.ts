@@ -18,12 +18,15 @@ import type { DataSourceOptions } from 'typeorm';
 import { DataSource } from 'typeorm';
 
 import { mysqlConfig } from '@/configs/mysql.config';
+import type { ConfigServiceType } from '@/types/config-service.type';
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 const env = mysqlConfig();
 console.log('env: ', env);
 const configService = new ConfigService({ mysql: env });
-const typeormConfigService = new TypeOrmConfigService(configService as any);
+const typeormConfigService = new TypeOrmConfigService(
+  configService as unknown as ConfigService<ConfigServiceType, false>,
+);
 const typeormConfig =
   typeormConfigService.createTypeOrmOptions() as DataSourceOptions;
 

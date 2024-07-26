@@ -129,7 +129,7 @@ describe('webhook service', () => {
       for (let i = 0; i < webhook.events.length; i++) {
         expect(webhook.events[i].status).toBe(dto.events[i].status);
         expect(webhook.events[i].type).toBe(dto.events[i].type);
-        if (dto.events[i].channelIds) {
+        if (dto.events[i].channelIds.length !== 0) {
           expect(webhook.events[i].channels[0].id).toBe(
             dto.events[i].channelIds[0],
           );
@@ -278,7 +278,7 @@ describe('webhook service', () => {
       for (let i = 0; i < webhook.events.length; i++) {
         expect(webhook.events[i].status).toBe(dto.events[i].status);
         expect(webhook.events[i].type).toBe(dto.events[i].type);
-        if (dto.events[i].channelIds) {
+        if (dto.events[i].channelIds.length !== 0) {
           expect(webhook.events[i].channels[0].id).toBe(
             dto.events[i].channelIds[0],
           );

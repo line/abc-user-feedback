@@ -35,10 +35,9 @@ class client {
     baseURL: env.NEXT_PUBLIC_API_BASE_URL,
   });
 
-  private static instance: client;
+  private static instance: client | null;
   public static get Instance(): client {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return this.instance || (this.instance = new this());
+    return this.instance ?? (this.instance = new this());
   }
 
   constructor() {

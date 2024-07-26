@@ -122,7 +122,7 @@ describe('IssueService test suite', () => {
               _objectLiteralParameters: {
                 ...(dto.query.createdAt as TimeRange),
               },
-            }),
+            }) as TimeRange | string,
           },
         ],
       });
@@ -189,7 +189,7 @@ describe('IssueService test suite', () => {
             project: {
               id: dto.projectId,
             },
-            column: Like(`%${dto.query.column}%`),
+            column: Like(`%${dto.query.column as string}%`),
           },
         ],
       });

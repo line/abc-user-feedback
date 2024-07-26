@@ -64,7 +64,7 @@ export class TenantRepositoryStub {
     return 1;
   }
 
-  setIsRestrictDomain(bool, domains = []) {
+  setIsRestrictDomain(bool, domains: string[] = []) {
     this.tenant.isRestrictDomain = bool;
     this.tenant.allowDomains = domains;
   }

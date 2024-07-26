@@ -28,6 +28,7 @@ import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
+import { ProjectNotFoundException } from '../../project/project/exceptions';
 import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateCountDto } from './dtos';
 import type {
@@ -155,10 +156,12 @@ export class FeedbackStatisticsService {
   }
 
   async addCronJobByProjectId(projectId: number) {
-    const { timezone } = await this.projectRepository.findOne({
+    const project = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-    const timezoneOffset = timezone.offset;
+    if (project === null) throw new ProjectNotFoundException();
+
+    const timezoneOffset = project.timezone.offset;
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
@@ -189,10 +192,11 @@ export class FeedbackStatisticsService {
   }
 
   async createFeedbackStatistics(projectId: number, dayToCreate = 1) {
-    const { timezone } = await this.projectRepository.findOne({
+    const project = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-    const timezoneOffset = timezone.offset;
+    if (project === null) throw new ProjectNotFoundException();
+    const timezoneOffset = project.timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
@@ -248,7 +252,7 @@ export class FeedbackStatisticsService {
               .updateEntity(false)
               .execute();
           })
-          .catch((error) => {
+          .catch((error: Error) => {
             this.logger.error({
               message: 'Failed to create feedback statistics',
               error,
@@ -263,10 +267,11 @@ export class FeedbackStatisticsService {
     if (dto.count === 0) return;
     if (!dto.count) dto.count = 1;
 
-    const { timezone } = await this.projectRepository.findOne({
+    const project = await this.projectRepository.findOne({
       where: { channels: { id: dto.channelId } },
     });
-    const timezoneOffset = timezone.offset;
+    if (project === null) throw new ProjectNotFoundException();
+    const timezoneOffset = project.timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 

@@ -14,10 +14,9 @@
  * under the License.
  */
 class PathV3 {
-  private static instance: PathV3;
+  private static instance: PathV3 | null;
   public static get Instance(): PathV3 {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return this.instance || (this.instance = new this());
+    return this.instance ?? (this.instance = new this());
   }
 
   readonly CREATE_TENANT = '/tenant/create';

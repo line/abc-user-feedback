@@ -28,8 +28,6 @@ export class FindFeedbacksByChannelIdDto extends PaginationDto {
     ids?: number[];
     [key: string]: string | string[] | TimeRange | number | number[];
   };
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
   fields?: FieldEntity[];
 }

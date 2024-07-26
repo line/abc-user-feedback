@@ -24,15 +24,22 @@ import type { ConfigServiceType } from '@/types/config-service.type';
 import { LockTypeEnum } from './lock-type.enum';
 import { SchedulerLockEntity } from './scheduler-lock.entity';
 
+interface AppConfig {
+  serverId?: string | undefined;
+}
+
 @Injectable()
 export class SchedulerLockService {
-  private readonly serverId: string;
+  private readonly serverId: string | undefined;
   constructor(
     @InjectRepository(SchedulerLockEntity)
     private readonly repository: Repository<SchedulerLockEntity>,
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {
-    this.serverId = this.configService.get('app', { infer: true }).serverId;
+    const appConfig: AppConfig | undefined = this.configService.get('app', {
+      infer: true,
+    });
+    this.serverId = appConfig?.serverId;
   }
 
   @Transactional()

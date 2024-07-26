@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -36,6 +37,9 @@ import {
   CreateChannelRequestDto,
   UpdateChannelRequestDto,
 } from '@/domains/admin/channel/channel/dtos/requests';
+import type { CreateChannelResponseDto } from '@/domains/admin/channel/channel/dtos/responses/create-channel-response.dto';
+import type { FindChannelByIdResponseDto } from '@/domains/admin/channel/channel/dtos/responses/find-channel-by-id-response.dto';
+import type { FindChannelsByProjectIdResponseDto } from '@/domains/admin/channel/channel/dtos/responses/find-channels-by-id-response.dto';
 import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import { FIELD_TYPES_TO_MAPPING_TYPES } from '@/domains/admin/channel/field/field.service';
 import { OptionEntity } from '@/domains/admin/channel/option/option.entity';
@@ -45,6 +49,12 @@ import {
   clearEntities,
   DEFAULT_FIELD_COUNT,
 } from '@/test-utils/util-functions';
+
+interface OpenSearchIndex {
+  mappings: {
+    properties: ArrayLike<Record<string, { type: string }>>;
+  };
+}
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -108,15 +118,20 @@ describe('AppController (e2e)', () => {
       createFieldDto({}),
     );
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .post(`/projects/${project.id}/channels`)
       .send(dto)
       .expect(201)
-      .then(async ({ body }) => {
+      .then(async ({ body }: { body: CreateChannelResponseDto }) => {
         expect(body.id).toBeDefined();
 
-        const channel = await channelRepo.findOneBy({ id: body.id });
+        const channel = await channelRepo.findOneBy({
+          id: body.id,
+        });
         expect(channel).toBeDefined();
+        if (channel === null) {
+          throw new Error('Channel not found');
+        }
         expect(channel.name).toEqual(dto.name);
         expect(channel.description).toEqual(dto.description);
 
@@ -149,11 +164,17 @@ describe('AppController (e2e)', () => {
             }),
         );
 
-        const result = await osService.indices.get({ index: body.id });
+        const result: { body: OpenSearchIndex[] } = await osService.indices.get(
+          {
+            index: body.id,
+          },
+        );
         expect(Object.keys(result.body)[0]).toEqual(body.id);
 
-        Object.entries<{ [x: string]: { type: string } }>(
-          result.body[body.id].mappings.properties,
+        Object.entries<Record<string, { type: string }>>(
+          result.body[body.id].mappings.properties as ArrayLike<
+            Record<string, { type: string }>
+          >,
         ).forEach(([fieldId, { type }]) => {
           const field = fields.find(({ id }) => id === parseInt(fieldId));
           expect(field).toBeDefined();
@@ -173,20 +194,25 @@ describe('AppController (e2e)', () => {
       })),
     );
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .get(`/projects/${project.id}/channels`)
       .expect(200)
       .expect(({ body }) => {
         expect(body).toHaveProperty('items');
         expect(body).toHaveProperty('meta');
 
-        expect(Array.isArray(body.items)).toEqual(true);
-        for (const channel of body.items) {
+        expect(
+          Array.isArray((body as FindChannelsByProjectIdResponseDto).items),
+        ).toEqual(true);
+        for (const channel of (body as FindChannelsByProjectIdResponseDto)
+          .items) {
           expect(channel).toHaveProperty('id');
           expect(channel).toHaveProperty('name');
           expect(channel).toHaveProperty('description');
         }
-        expect(body.meta.totalItems).toEqual(total);
+        expect(
+          (body as FindChannelsByProjectIdResponseDto).meta.totalItems,
+        ).toEqual(total);
       });
   });
 
@@ -196,13 +222,15 @@ describe('AppController (e2e)', () => {
       description: faker.string.sample(),
     });
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .get('/channels/' + channel.id)
       .expect(200)
       .expect(({ body }) => {
-        expect(body.id).toEqual(channel.id);
-        expect(body.name).toEqual(channel.name);
-        expect(body.description).toEqual(channel.description);
+        expect((body as FindChannelByIdResponseDto).id).toEqual(channel.id);
+        expect((body as FindChannelByIdResponseDto).name).toEqual(channel.name);
+        expect((body as FindChannelByIdResponseDto).description).toEqual(
+          channel.description,
+        );
       });
   });
   it('/channels/:id (PUT)', async () => {
@@ -234,7 +262,7 @@ describe('AppController (e2e)', () => {
     dto.description = faker.string.sample();
     // dto.fields = [...existingFields, ...newfields];
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .put(`/channels/${channelId}`)
       .send(dto)
       .expect(200)

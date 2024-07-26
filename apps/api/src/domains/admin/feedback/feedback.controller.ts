@@ -156,19 +156,25 @@ export class FeedbackController {
     const filename = `UFB_${projectName}_${channelName}_Feedback_${DateTime.utc().toFormat(
       'yyyy-MM-dd',
     )}.${type}`;
-    res.header('Content-Disposition', `attachment; filename="${filename}"`);
+    void res.header(
+      'Content-Disposition',
+      `attachment; filename="${filename}"`,
+    );
 
-    if (type === 'xlsx') {
-      res.type(
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      );
-    } else if (type === 'csv') {
-      res.type('text/csv');
+    switch (type) {
+      case 'xlsx':
+        void res.type(
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        );
+        break;
+      case 'csv':
+        void res.type('text/csv');
+        break;
     }
 
-    res.send(stream);
+    void res.send(stream);
 
-    this.historyService.createHistory({
+    void this.historyService.createHistory({
       action: HistoryActionEnum.Download,
       entity: { feedbackIds },
       entityName: EntityNameEnum.Channel,

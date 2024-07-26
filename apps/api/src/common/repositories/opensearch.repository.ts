@@ -32,6 +32,23 @@ import type {
 } from './dtos';
 import { LargeWindowException } from './large-window.exception';
 
+interface OpenSearchResponse {
+  hits: {
+    hits: { _source: Record<string, any> }[];
+    total: { value: number };
+  };
+  _scroll_id: number;
+}
+
+type OpenSearchMappingResponse = Record<
+  string,
+  {
+    mappings: {
+      properties: Record<string, any>;
+    };
+  }
+>;
+
 @Injectable()
 export class OpensearchRepository {
   private opensearchClient: Client;
@@ -88,12 +105,15 @@ export class OpensearchRepository {
     });
     if (!existence.body) throw new NotFoundException('index is not found');
 
-    const response = await this.opensearchClient.indices.getMapping({
-      index: indexName,
-    });
+    const response =
+      await this.opensearchClient.indices.getMapping<OpenSearchMappingResponse>(
+        {
+          index: indexName,
+        },
+      );
 
     const mappingKeys = Object.keys(
-      response.body[indexName].mappings.properties,
+      response.body[indexName].mappings.properties as object,
     );
     const dataKeys = Object.keys(data);
     if (!dataKeys.every((v) => mappingKeys.includes(v))) {
@@ -107,7 +127,7 @@ export class OpensearchRepository {
       refresh: true,
     });
 
-    return { id: body._id };
+    return { id: body._id as number };
   }
 
   async getData(dto: GetDataDto) {
@@ -117,7 +137,7 @@ export class OpensearchRepository {
       sort.push('_id:desc');
     }
     try {
-      const { body } = await this.opensearchClient.search({
+      const { body } = await this.opensearchClient.search<OpenSearchResponse>({
         index,
         from: (page - 1) * limit,
         size: limit,
@@ -147,14 +167,14 @@ export class OpensearchRepository {
     if (sort.length === 0) sort.push('_id:desc');
 
     if (scrollId) {
-      const { body } = await this.opensearchClient.scroll({
+      const { body } = await this.opensearchClient.scroll<OpenSearchResponse>({
         scroll_id: scrollId,
         scroll: '1m',
       });
       return this.convertToScrollData(body);
     }
 
-    const { body } = await this.opensearchClient.search({
+    const { body } = await this.opensearchClient.search<OpenSearchResponse>({
       index,
       size,
       sort,
@@ -164,7 +184,7 @@ export class OpensearchRepository {
     return this.convertToScrollData(body);
   }
 
-  private convertToScrollData(body: Record<string, any>) {
+  private convertToScrollData(body: OpenSearchResponse) {
     return {
       data: body.hits.hits.map((v) => ({
         ...v._source,
@@ -194,12 +214,12 @@ export class OpensearchRepository {
     await this.opensearchClient.indices.delete({ index: 'channel_' + index });
   }
 
-  async getTotal(index: string, query: any) {
+  async getTotal(index: string, query: object): Promise<number> {
     const { body } = await this.opensearchClient.count({
       index,
       body: { query },
     });
 
-    return body.count;
+    return body.count as number;
   }
 }

@@ -26,9 +26,7 @@ export class ScrollFeedbacksDto {
     ids?: number[];
     [key: string]: string | string[] | TimeRange | number | number[];
   };
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
   fields: FieldEntity[];
   size: number;
   scrollId: string | null;

@@ -102,7 +102,7 @@ export class UserController {
     @Param('id', ParseIntPipe) id: number,
     @CurrentUser() user: UserDto,
   ) {
-    if (id !== user?.id) throw new UnauthorizedException('');
+    if (id !== user.id) throw new UnauthorizedException('');
     return UserDto.transform(await this.userService.findById(id));
   }
 
