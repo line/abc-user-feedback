@@ -70,8 +70,8 @@ describe('RoleService', () => {
         RoleAlreadyExistsException,
       );
 
-      expect(roleRepo.findOneBy.bind(roleRepo)).toHaveBeenCalledTimes(1);
-      expect(roleRepo.findOneBy.bind(roleRepo)).toHaveBeenCalledWith({
+      expect(roleRepo.findOneBy).toHaveBeenCalledTimes(1);
+      expect(roleRepo.findOneBy).toHaveBeenCalledWith({
         name: dto.name,
         project: { id: dto.projectId },
       });

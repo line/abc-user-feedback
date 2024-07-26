@@ -295,12 +295,11 @@ describe('FeedbackStatisticsService suite', () => {
 
       await feedbackStatsService.addCronJobByProjectId(projectId);
 
-      expect(
-        schedulerRegistry.addCronJob.bind(schedulerRegistry),
-      ).toBeCalledTimes(1);
-      expect(
-        schedulerRegistry.addCronJob.bind(schedulerRegistry),
-      ).toBeCalledWith(`feedback-statistics-${projectId}`, expect.anything());
+      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
+      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+        `feedback-statistics-${projectId}`,
+        expect.anything(),
+      );
     });
   });
 
@@ -331,9 +330,9 @@ describe('FeedbackStatisticsService suite', () => {
         dayToCreate,
       );
 
-      expect(
-        feedbackStatsRepo.manager.transaction.bind(feedbackStatsRepo),
-      ).toBeCalledTimes(dayToCreate * channelCount);
+      expect(feedbackStatsRepo.manager.transaction).toBeCalledTimes(
+        dayToCreate * channelCount,
+      );
     });
   });
 
@@ -358,11 +357,9 @@ describe('FeedbackStatisticsService suite', () => {
         count,
       });
 
-      expect(feedbackStatsRepo.findOne.bind(feedbackStatsRepo)).toBeCalledTimes(
-        1,
-      );
-      expect(feedbackStatsRepo.save.bind(feedbackStatsRepo)).toBeCalledTimes(1);
-      expect(feedbackStatsRepo.save.bind(feedbackStatsRepo)).toBeCalledWith({
+      expect(feedbackStatsRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.save).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.save).toBeCalledWith({
         count: 1 + count,
       });
     });
@@ -391,12 +388,8 @@ describe('FeedbackStatisticsService suite', () => {
         count,
       });
 
-      expect(feedbackStatsRepo.findOne.bind(feedbackStatsRepo)).toBeCalledTimes(
-        1,
-      );
-      expect(
-        feedbackStatsRepo.createQueryBuilder.bind(feedbackStatsRepo),
-      ).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.findOne).toBeCalledTimes(1);
+      expect(feedbackStatsRepo.createQueryBuilder).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
         date: new Date(

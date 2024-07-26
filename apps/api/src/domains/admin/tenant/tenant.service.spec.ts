@@ -62,7 +62,7 @@ describe('TenantService', () => {
       const tenant = await tenantService.create(dto);
       expect(tenant.id).toBeDefined();
       expect(tenant.siteName).toEqual(dto.siteName);
-      expect(userRepo.save.bind(userRepo)).toHaveBeenCalledTimes(1);
+      expect(userRepo.save).toHaveBeenCalledTimes(1);
     });
     it('creation fails with the duplicate site name', async () => {
       const dto = new SetupTenantDto();

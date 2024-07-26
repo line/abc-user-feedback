@@ -107,7 +107,8 @@ export class OptionService {
     });
 
     const deletingOptionIds = optionEntities
-      .filter((option) => option.deletedAt.getTime() === 0)
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      .filter((option) => option.deletedAt === null)
       .filter((option) => (options ?? []).every((dto) => dto.id !== option.id))
       .map((v) => v.id);
 

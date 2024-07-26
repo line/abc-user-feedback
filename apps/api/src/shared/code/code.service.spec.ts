@@ -57,7 +57,7 @@ describe('CodeService', () => {
       const code = await codeService.setCode(dto);
 
       expect(code).toHaveLength(6);
-      expect(codeRepo.save.bind(codeRepo)).toHaveBeenCalledWith(
+      expect(codeRepo.save).toHaveBeenCalledWith(
         expect.objectContaining({
           code,
           type: dto.type,
@@ -75,7 +75,7 @@ describe('CodeService', () => {
       const code = await codeService.setCode(dto);
 
       expect(code).toHaveLength(6);
-      expect(codeRepo.save.bind(codeRepo)).toHaveBeenCalledWith(
+      expect(codeRepo.save).toHaveBeenCalledWith(
         expect.objectContaining({
           code,
           type: dto.type,
@@ -98,7 +98,7 @@ describe('CodeService', () => {
       const code = await codeService.setCode(dto);
 
       expect(code).toHaveLength(6);
-      expect(codeRepo.save.bind(codeRepo)).toHaveBeenCalledWith(
+      expect(codeRepo.save).toHaveBeenCalledWith(
         expect.objectContaining({
           code,
           type: dto.type,
@@ -122,7 +122,7 @@ describe('CodeService', () => {
       const code = await codeService.setCode(dto);
 
       expect(code).toHaveLength(6);
-      expect(codeRepo.save.bind(codeRepo)).toHaveBeenCalledWith(
+      expect(codeRepo.save).toHaveBeenCalledWith(
         expect.objectContaining({
           code,
           type: dto.type,

@@ -105,7 +105,7 @@ describe('auth service ', () => {
   });
 
   describe('verifyEmailCode', () => {
-    return null;
+    return;
   });
 
   describe('validateEmailUser', () => {
@@ -171,7 +171,7 @@ describe('auth service ', () => {
         NotVerifiedEmailException,
       );
 
-      expect(userRepo.save.bind(userRepo)).not.toBeCalled();
+      expect(userRepo.save).not.toBeCalled();
     });
     it('signing up by an email fails with a not verification requested email', async () => {
       const dto = new SignUpEmailUserDto();
@@ -187,16 +187,16 @@ describe('auth service ', () => {
         new BadRequestException('must request email verification'),
       );
 
-      expect(userRepo.save.bind(userRepo)).not.toBeCalled();
+      expect(userRepo.save).not.toBeCalled();
     });
   });
 
   describe('signUpInvitationUser', () => {
-    return null;
+    return;
   });
 
   describe('signUpOAuthUser', () => {
-    return null;
+    return;
   });
 
   describe('signIn', () => {
@@ -230,7 +230,7 @@ describe('auth service ', () => {
   });
 
   describe('refreshToken', () => {
-    return null;
+    return;
   });
 
   describe('validateApiKey', () => {
@@ -287,6 +287,6 @@ describe('auth service ', () => {
   });
 
   describe('signInByOAuth', () => {
-    return null;
+    return;
   });
 });

@@ -74,9 +74,7 @@ describe('FieldService suite', () => {
 
       expect(fields.length).toBe(fieldCount + 4);
 
-      expect(optionRepo.save.bind(optionRepo)).toBeCalledTimes(
-        selectFieldCount,
-      );
+      expect(optionRepo.save).toBeCalledTimes(selectFieldCount);
     });
     it('creating many fields fails with duplicate names', async () => {
       const channelId = faker.number.int();
@@ -140,7 +138,7 @@ describe('FieldService suite', () => {
 
       await fieldService.replaceMany(dto);
 
-      expect(fieldRepo.save.bind(fieldRepo)).toBeCalledTimes(
+      expect(fieldRepo.save).toBeCalledTimes(
         updatingFieldDtos.length + creatingFieldDtos.length,
       );
     });

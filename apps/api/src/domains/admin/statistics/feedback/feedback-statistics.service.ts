@@ -206,58 +206,60 @@ export class FeedbackStatisticsService {
 
     for (let day = 1; day <= dayToCreate; day++) {
       for (const channel of channels) {
-        await this.repository.manager
-          .transaction(async (transactionalEntityManager) => {
-            const feedbackCount = await this.feedbackRepository.count({
-              where: {
-                channel: { id: channel.id },
-                createdAt: Between(
-                  DateTime.utc()
-                    .minus({ days: day })
-                    .startOf('day')
-                    .minus({ hours: offset })
-                    .toJSDate(),
-                  DateTime.utc()
-                    .minus({ days: day })
-                    .endOf('day')
-                    .minus({ hours: offset })
-                    .toJSDate(),
-                ),
-              },
-            });
-
-            if (feedbackCount === 0) return;
-
-            await transactionalEntityManager
-              .createQueryBuilder()
-              .insert()
-              .into(FeedbackStatisticsEntity)
-              .values({
-                date:
-                  offset >= 0 ?
+        try {
+          await this.repository.manager.transaction(
+            async (transactionalEntityManager) => {
+              const feedbackCount = await this.feedbackRepository.count({
+                where: {
+                  channel: { id: channel.id },
+                  createdAt: Between(
+                    DateTime.utc()
+                      .minus({ days: day })
+                      .startOf('day')
+                      .minus({ hours: offset })
+                      .toJSDate(),
                     DateTime.utc()
                       .minus({ days: day })
                       .endOf('day')
                       .minus({ hours: offset })
-                      .toFormat('yyyy-MM-dd')
-                  : DateTime.utc()
-                      .minus({ days: day })
-                      .startOf('day')
-                      .minus({ hours: offset })
-                      .toFormat('yyyy-MM-dd'),
-                count: feedbackCount,
-                channel: { id: channel.id },
-              })
-              .orUpdate(['count'], ['date', 'channel'])
-              .updateEntity(false)
-              .execute();
-          })
-          .catch((error: Error) => {
-            this.logger.error({
-              message: 'Failed to create feedback statistics',
-              error,
-            });
+                      .toJSDate(),
+                  ),
+                },
+              });
+
+              if (feedbackCount === 0) return;
+
+              await transactionalEntityManager
+                .createQueryBuilder()
+                .insert()
+                .into(FeedbackStatisticsEntity)
+                .values({
+                  date:
+                    offset >= 0 ?
+                      DateTime.utc()
+                        .minus({ days: day })
+                        .endOf('day')
+                        .minus({ hours: offset })
+                        .toFormat('yyyy-MM-dd')
+                    : DateTime.utc()
+                        .minus({ days: day })
+                        .startOf('day')
+                        .minus({ hours: offset })
+                        .toFormat('yyyy-MM-dd'),
+                  count: feedbackCount,
+                  channel: { id: channel.id },
+                })
+                .orUpdate(['count'], ['date', 'channel'])
+                .updateEntity(false)
+                .execute();
+            },
+          );
+        } catch (error) {
+          this.logger.error({
+            message: 'Failed to create feedback statistics',
+            error: error as Error,
           });
+        }
       }
     }
   }

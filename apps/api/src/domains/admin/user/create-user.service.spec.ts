@@ -166,7 +166,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -186,7 +186,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
   });
   describe('with a private and no restrict on domain tenant', () => {
@@ -252,7 +252,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -272,7 +272,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -378,7 +378,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -398,7 +398,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
   });
 });

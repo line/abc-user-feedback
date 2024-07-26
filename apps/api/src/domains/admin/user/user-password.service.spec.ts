@@ -52,9 +52,7 @@ describe('UserPasswordService', () => {
 
       await userPasswordService.sendResetPasswordMail(email);
 
-      expect(
-        resetPasswordMailingService.send.bind(resetPasswordMailingService),
-      ).toHaveBeenCalledTimes(1);
+      expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(1);
     });
     it('sending a reset password mail fails with invalid email', async () => {
       const email = faker.internet.email();
@@ -64,9 +62,7 @@ describe('UserPasswordService', () => {
         userPasswordService.sendResetPasswordMail(email),
       ).rejects.toThrow(UserNotFoundException);
 
-      expect(
-        resetPasswordMailingService.send.bind(resetPasswordMailingService),
-      ).toHaveBeenCalledTimes(0);
+      expect(resetPasswordMailingService.send).toHaveBeenCalledTimes(0);
     });
   });
   describe('resetPassword', () => {
@@ -81,7 +77,7 @@ describe('UserPasswordService', () => {
 
       const user = await userPasswordService.resetPassword(dto);
 
-      expect(codeRepo.findOne.bind(codeRepo)).toHaveBeenCalledTimes(1);
+      expect(codeRepo.findOne).toHaveBeenCalledTimes(1);
       expect(bcrypt.compareSync(dto.password, user.hashPassword)).toBe(true);
     });
     it('resetting a password fails with an invalid email', async () => {
