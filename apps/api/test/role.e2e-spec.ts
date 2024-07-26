@@ -168,8 +168,8 @@ describe('AppController (e2e)', () => {
         .expect(204)
         .then(async () => {
           const updatedRole = await roleRepo.findOneBy({ id: role.id });
-          expect(updatedRole.name).toEqual(dto.name);
-          expect(updatedRole.permissions).toEqual(dto.permissions);
+          expect(updatedRole?.name).toEqual(dto.name);
+          expect(updatedRole?.permissions).toEqual(dto.permissions);
         });
     });
     it('Unauthrized', async () => {

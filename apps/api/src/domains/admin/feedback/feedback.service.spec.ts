@@ -18,7 +18,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
 import {
   FieldFormatEnum,
@@ -195,10 +195,16 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);
@@ -219,10 +225,16 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);
@@ -240,10 +252,16 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);

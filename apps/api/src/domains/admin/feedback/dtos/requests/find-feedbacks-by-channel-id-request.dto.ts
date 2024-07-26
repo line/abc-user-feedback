@@ -65,7 +65,7 @@ export class FindFeedbacksByChannelIdRequestDto extends PaginationRequestDto {
   @IsOptional()
   sort?: Record<string, SortMethodEnum>;
 
-  constructor(limit = 10, page = 1, query: Query) {
+  constructor(limit = 10, page = 1, query?: Query) {
     super(limit, page);
     this.query = query;
   }

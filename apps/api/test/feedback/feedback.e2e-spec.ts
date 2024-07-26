@@ -88,7 +88,11 @@ describe('AppController (e2e)', () => {
     const { id: projectId } = await projectService.create({
       name: faker.random.word(),
       description: faker.lorem.lines(1),
-      timezone: null,
+      timezone: {
+        countryCode: 'KR',
+        name: 'Asia/Seoul',
+        offset: '+09:00',
+      },
     });
 
     const { id: channelId } = await channelService.create({
@@ -143,9 +147,9 @@ describe('AppController (e2e)', () => {
 
   it('/channels/:channelId/feedbacks (GET)', async () => {
     const feedbackCount = faker.number.int({ min: 1, max: 10 });
-    const dataset = [];
+    const dataset: Record<string, any>[] = [];
     for (let i = 0; i < feedbackCount; i++) {
-      const data = {};
+      const data: Record<string, any> = {};
       fields
         .filter(({ name }) => name !== 'createdAt' && name !== 'updatedAt')
         .forEach(({ name, format, options }) => {
@@ -197,7 +201,8 @@ describe('AppController (e2e)', () => {
 
         expect(body._source[targetField.id]).toEqual(
           targetField.format === FieldFormatEnum.select ?
-            targetField.options.find((v) => v.name === newValue).id
+            ((targetField.options ?? []).find((v) => v.name === newValue) ??
+              { id: 0 }.id)
           : newValue,
         );
       });
@@ -273,7 +278,10 @@ const toApi = (
     return Object.assign(prev, {
       [field.id]:
         field.format === FieldFormatEnum.select ?
-          (field.options.find((v) => v.name === value) ?? new FieldEntity()).id
+          (
+            (field.options ?? []).find((v) => v.name === value) ??
+            new FieldEntity()
+          ).id
         : value,
     });
   }, {});

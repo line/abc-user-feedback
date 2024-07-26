@@ -16,8 +16,9 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 import { Like } from 'typeorm';
+import { SelectQuery } from 'typeorm/query-builder/SelectQuery';
 
 import { SortMethodEnum } from '@/common/enums';
 import {
@@ -71,8 +72,10 @@ describe('UserService', () => {
       };
       jest
         .spyOn(userRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () => createQueryBuilder as unknown as SelectQueryBuilder<UserEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const {
         meta: { currentPage, itemCount },
@@ -127,7 +130,7 @@ describe('UserService', () => {
     });
     it('finding by an id fails with a nonexistent id', async () => {
       const userId = faker.number.int();
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null);
 
       await expect(userService.findById(userId)).rejects.toThrow(
         UserNotFoundException,

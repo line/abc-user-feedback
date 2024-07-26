@@ -16,7 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 import { Like } from 'typeorm';
 
 import type { TimeRange } from '@/common/dtos';
@@ -63,10 +63,13 @@ describe('IssueService test suite', () => {
 
     it('creating an issue succeeds with valid inputs', async () => {
       dto.name = faker.string.sample();
-      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null as IssueEntity);
+      jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
 
       const issue = await issueService.create(dto);
 
@@ -105,8 +108,11 @@ describe('IssueService test suite', () => {
       };
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
@@ -137,8 +143,11 @@ describe('IssueService test suite', () => {
       };
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
@@ -151,8 +160,11 @@ describe('IssueService test suite', () => {
       };
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
@@ -176,8 +188,11 @@ describe('IssueService test suite', () => {
       };
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
@@ -201,8 +216,11 @@ describe('IssueService test suite', () => {
       };
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
@@ -238,8 +256,11 @@ describe('IssueService test suite', () => {
       };
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
@@ -269,7 +290,7 @@ describe('IssueService test suite', () => {
             project: {
               id: dto.projectId,
             },
-            id: parseInt(dto.query.searchText),
+            id: parseInt(dto.query.searchText ?? ''),
           },
         ],
       });
@@ -288,7 +309,7 @@ describe('IssueService test suite', () => {
 
     it('updating an issue succeeds with valid inputs', async () => {
       dto.name = faker.string.sample();
-      jest.spyOn(issueRepo, 'findOne').mockResolvedValue(null as IssueEntity);
+      jest.spyOn(issueRepo, 'findOne').mockResolvedValue(null);
 
       const issue = await issueService.update(dto);
 

@@ -61,7 +61,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       await memberService.create(dto);
@@ -107,7 +107,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       await memberService.createMany(dtos);
@@ -175,7 +175,7 @@ describe('MemberService test suite', () => {
       jest
         .spyOn(roleRepo, 'findOne')
         .mockResolvedValue({ project: { id: projectId } } as RoleEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       await expect(memberService.update(dto)).rejects.toThrowError(
