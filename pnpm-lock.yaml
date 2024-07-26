@@ -30,7 +30,7 @@ importers:
         specifier: ^3.556.0
         version: 3.616.0
       '@fastify/multipart':
-        specifier: ^8.2.0
+        specifier: ^8.3.0
         version: 8.3.0
       '@fastify/static':
         specifier: ^7.0.3
@@ -83,6 +83,12 @@ importers:
       '@swc/helpers':
         specifier: ^0.5.10
         version: 0.5.12
+      '@types/passport-jwt':
+        specifier: ^4.0.1
+        version: 4.0.1
+      '@types/passport-local':
+        specifier: ^1.0.38
+        version: 1.0.38
       '@ufb/shared':
         specifier: workspace:*
         version: link:../../packages/ufb-shared
@@ -510,7 +516,7 @@ importers:
         version: 8.4.39
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
+        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
       ts-toolbelt:
         specifier: ^9.6.0
         version: 9.6.0
@@ -582,7 +588,7 @@ importers:
         version: 3.3.3
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
+        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
 
   packages/ufb-ui:
     dependencies:
@@ -628,7 +634,7 @@ importers:
         version: 9.7.0
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
+        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
 
   tooling/eslint:
     dependencies:
@@ -3585,6 +3591,18 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
+  '@types/passport-jwt@4.0.1':
+    resolution: {integrity: sha512-Y0Ykz6nWP4jpxgEUYq8NoVZeCQPo1ZndJLfapI249g1jHChvRfZRO/LS3tqu26YgAS/laI1qx98sYGz0IalRXQ==}
+
+  '@types/passport-local@1.0.38':
+    resolution: {integrity: sha512-nsrW4A963lYE7lNTv9cr5WmiUD1ibYJvWrpE13oxApFsRt77b0RdtZvKbCdNIY4v/QZ6TRQWaDDEwV1kCTmcXg==}
+
+  '@types/passport-strategy@0.2.38':
+    resolution: {integrity: sha512-GC6eMqqojOooq993Tmnmp7AUTbbQSgilyvpCYQjT+H6JfG/g6RGc7nXEniZlp0zyKJ0WUdOiZWLBZft9Yug1uA==}
+
+  '@types/passport@1.0.16':
+    resolution: {integrity: sha512-FD0qD5hbPWQzaM0wHUnJ/T0BBCJBxCeemtnCwc/ThhTg3x9jfrAcRUmj5Dopza+MfFS9acTe3wk7rcVnRIp/0A==}
+
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
 
@@ -5812,10 +5830,6 @@ packages:
 
   is-callable@1.2.7:
     resolution: {integrity: sha512-1BC0BVFhS/p0qtw6enp8e+8OD0UrK0oFLztSjNzhcKA3WDuJxxAPXzPuPtKkjEY9UUoEWlX/8fgKeu2S8i9JTA==}
-    engines: {node: '>= 0.4'}
-
-  is-core-module@2.14.0:
-    resolution: {integrity: sha512-a5dFJih5ZLYlRtDc0dZWP7RiKr6xIKzmn/oAYCDvdLThadVgyJwlaoQPmRtMSpz+rk0OGAgIu+TcM9HUF0fk1A==}
     engines: {node: '>= 0.4'}
 
   is-core-module@2.15.0:
@@ -10890,7 +10904,7 @@ snapshots:
 
   '@headlessui/tailwindcss@0.2.1(tailwindcss@3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4)))':
     dependencies:
-      tailwindcss: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
+      tailwindcss: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
 
   '@hookform/resolvers@3.9.0(react-hook-form@7.52.1(react@18.3.1))':
     dependencies:
@@ -12658,6 +12672,26 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
+  '@types/passport-jwt@4.0.1':
+    dependencies:
+      '@types/jsonwebtoken': 9.0.5
+      '@types/passport-strategy': 0.2.38
+
+  '@types/passport-local@1.0.38':
+    dependencies:
+      '@types/express': 4.17.21
+      '@types/passport': 1.0.16
+      '@types/passport-strategy': 0.2.38
+
+  '@types/passport-strategy@0.2.38':
+    dependencies:
+      '@types/express': 4.17.21
+      '@types/passport': 1.0.16
+
+  '@types/passport@1.0.16':
+    dependencies:
+      '@types/express': 4.17.21
+
   '@types/prop-types@15.7.12': {}
 
   '@types/pug@2.0.10':
@@ -14365,7 +14399,7 @@ snapshots:
   eslint-import-resolver-node@0.3.9:
     dependencies:
       debug: 3.2.7
-      is-core-module: 2.14.0
+      is-core-module: 2.15.0
       resolve: 1.22.8
     transitivePeerDependencies:
       - supports-color
@@ -14392,7 +14426,7 @@ snapshots:
       eslint-import-resolver-node: 0.3.9
       eslint-module-utils: 2.8.1(@typescript-eslint/parser@7.16.1(eslint@9.7.0)(typescript@5.5.4))(eslint-import-resolver-node@0.3.9)(eslint@9.7.0)
       hasown: 2.0.2
-      is-core-module: 2.14.0
+      is-core-module: 2.15.0
       is-glob: 4.0.3
       minimatch: 3.1.2
       object.fromentries: 2.0.8
@@ -15347,10 +15381,6 @@ snapshots:
       has-tostringtag: 1.0.2
 
   is-callable@1.2.7: {}
-
-  is-core-module@2.14.0:
-    dependencies:
-      hasown: 2.0.2
 
   is-core-module@2.15.0:
     dependencies:
@@ -17323,7 +17353,7 @@ snapshots:
       postcss-load-options: 1.2.0
       postcss-load-plugins: 2.3.0
 
-  postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4)):
+  postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4)):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.4.5
@@ -18449,7 +18479,7 @@ snapshots:
 
   tailwind-scrollbar-hide@1.1.7: {}
 
-  tailwindcss@3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4)):
+  tailwindcss@3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -18468,7 +18498,7 @@ snapshots:
       postcss: 8.4.39
       postcss-import: 15.1.0(postcss@8.4.39)
       postcss-js: 4.0.1(postcss@8.4.39)
-      postcss-load-config: 4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
+      postcss-load-config: 4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
       postcss-nested: 6.0.1(postcss@8.4.39)
       postcss-selector-parser: 6.1.1
       resolve: 1.22.8

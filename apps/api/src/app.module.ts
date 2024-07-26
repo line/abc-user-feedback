@@ -18,6 +18,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { Request } from 'express';
 import { ClsModule } from 'nestjs-cls';
 import { LoggerModule } from 'nestjs-pino';
 
@@ -80,7 +81,7 @@ export const domainModules = [
   FeedbackIssueStatisticsModule,
   APIModule,
   SchedulerLockModule,
-] as any[];
+] as (typeof AuthModule)[];
 
 @Module({
   imports: [
@@ -102,7 +103,7 @@ export const domainModules = [
       pinoHttp: {
         transport: { target: 'pino-pretty', options: { singleLine: true } },
         autoLogging: {
-          ignore: (req: any) => req.originalUrl === '/api/health',
+          ignore: (req: Request) => req.originalUrl === '/api/health',
         },
         customLogLevel: (req, res, err) => {
           if (res.statusCode === 401) {
@@ -110,7 +111,9 @@ export const domainModules = [
           }
           if (res.statusCode >= 400 && res.statusCode < 500) {
             return 'warn';
-          } else if (res.statusCode >= 500 || err) {
+          } else if (res.statusCode >= 500) {
+            return 'error';
+          } else if (err != null) {
             return 'error';
           }
           return 'info';

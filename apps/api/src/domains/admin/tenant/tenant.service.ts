@@ -44,8 +44,8 @@ export class TenantService {
 
   @Transactional()
   async create(dto: SetupTenantDto) {
-    const [tenant] = await this.tenantRepo.find({ take: 1 });
-    if (tenant) throw new TenantAlreadyExistsException();
+    const tenants = await this.tenantRepo.find({ take: 1 });
+    if (tenants.length > 0) throw new TenantAlreadyExistsException();
     const newTenant = new TenantEntity();
     const savedTenant = await this.tenantRepo.save(
       Object.assign(newTenant, dto),
@@ -68,12 +68,12 @@ export class TenantService {
   }
 
   async findOne() {
-    const [tenant] = await this.tenantRepo.find();
-    if (!tenant) throw new TenantNotFoundException();
+    const tenants = await this.tenantRepo.find();
+    if (tenants.length === 0) throw new TenantNotFoundException();
 
     return {
-      ...tenant,
-      useEmailVerification: this.configService.get('smtp.use'),
+      ...tenants[0],
+      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
   }
 

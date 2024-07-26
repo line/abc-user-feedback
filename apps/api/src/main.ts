@@ -80,7 +80,11 @@ async function bootstrap() {
   SwaggerModule.setup('docs', app, document);
 
   const configService = app.get(ConfigService<ConfigServiceType>);
-  const { port, address } = configService.get('app', { infer: true });
+  const { port, address }: { port: number; address: string } =
+    configService.get('app', { infer: true }) ?? {
+      port: 4000,
+      address: 'localhost',
+    };
 
   await app.listen(port, address);
   DefaultLogger.log(`🚀 Application is running on: ${await app.getUrl()}`);

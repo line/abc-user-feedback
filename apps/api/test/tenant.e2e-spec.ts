@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -28,6 +29,7 @@ import {
   SetupTenantRequestDto,
   UpdateTenantRequestDto,
 } from '@/domains/admin/tenant/dtos/requests';
+import type { GetTenantResponseDto } from '@/domains/admin/tenant/dtos/responses/get-tenant-response.dto';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
@@ -69,7 +71,7 @@ describe('AppController (e2e)', () => {
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/tenant')
         .send(dto)
         .expect(201)
@@ -78,7 +80,7 @@ describe('AppController (e2e)', () => {
           expect(tenants).toHaveLength(1);
           const [tenant] = tenants;
           for (const key in dto) {
-            const value = dto[key];
+            const value = dto[key] as string;
             expect(tenant[key]).toEqual(value);
           }
         });
@@ -93,7 +95,10 @@ describe('AppController (e2e)', () => {
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
 
-      return request(app.getHttpServer()).post('/tenant').send(dto).expect(400);
+      return request(app.getHttpServer() as Server)
+        .post('/tenant')
+        .send(dto)
+        .expect(400);
     });
   });
   describe('/tenant (PUT)', () => {
@@ -117,7 +122,7 @@ describe('AppController (e2e)', () => {
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .put('/tenant')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(dto)
@@ -142,7 +147,7 @@ describe('AppController (e2e)', () => {
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .put('/tenant')
         .set('Authorization', `Bearer ${accessToken}`)
 
@@ -157,7 +162,7 @@ describe('AppController (e2e)', () => {
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .put('/tenant')
         .set('Authorization', `Bearer ${accessToken}`)
         .send(dto)
@@ -171,7 +176,7 @@ describe('AppController (e2e)', () => {
       dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .put('/tenant')
         .send(dto)
         .expect(HttpStatusCode.UNAUTHORIZED);
@@ -182,15 +187,17 @@ describe('AppController (e2e)', () => {
     beforeEach(async () => {
       dto.siteName = faker.string.sample();
 
-      await request(app.getHttpServer()).post('/tenant').send(dto);
+      await request(app.getHttpServer() as Server)
+        .post('/tenant')
+        .send(dto);
     });
 
     it('find', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .get('/tenant')
         .expect(200)
         .expect(({ body }) => {
-          expect(dto.siteName).toEqual(body.siteName);
+          expect(dto.siteName).toEqual((body as GetTenantResponseDto).siteName);
         });
     });
   });

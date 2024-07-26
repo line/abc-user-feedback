@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -34,6 +35,11 @@ import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { ProjectService } from '@/domains/admin/project/project/project.service';
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
 import { clearEntities } from '@/test-utils/util-functions';
+
+interface OpenSearchResponse {
+  _source: Record<string, any>;
+  total: { value: number };
+}
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -104,29 +110,35 @@ describe('AppController (e2e)', () => {
   });
 
   it('/channels/:channelId/feedbacks (POST)', () => {
-    const dto = {};
+    const dto: Record<string, string | number | string[] | number[]> = {};
     fields
       .filter(({ name }) => name !== 'createdAt' && name !== 'updatedAt')
       .forEach(({ name, format, options }) => {
         dto[name] = getRandomValue(format, options);
       });
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .post(`/channels/${channel.id}/feedbacks`)
       .send(dto)
       .expect(201)
-      .then(async ({ body }) => {
-        expect(body.id).toBeDefined();
-        const esResult = await osService.get({
-          id: body.id,
-          index: channel.id.toString(),
-        });
+      .then(
+        async ({
+          body,
+        }: {
+          body: Record<string, any> & { issueNames?: string[] };
+        }) => {
+          expect(body.id).toBeDefined();
+          const esResult = await osService.get<OpenSearchResponse>({
+            id: body.id as string,
+            index: channel.id.toString(),
+          });
 
-        delete esResult.body._source[
-          fields.find((v) => v.name === 'createdAt').id
-        ];
-        expect(toApi(dto, fields)).toMatchObject(esResult.body._source);
-      });
+          delete esResult.body._source[
+            (fields.find((v) => v.name === 'createdAt') ?? { id: 0 }).id
+          ];
+          expect(toApi(dto, fields)).toMatchObject(esResult.body._source);
+        },
+      );
   });
 
   it('/channels/:channelId/feedbacks (GET)', async () => {
@@ -143,10 +155,10 @@ describe('AppController (e2e)', () => {
       dataset.push(data);
     }
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .get(`/channels/${channel.id}/feedbacks`)
       .expect(200)
-      .then(async ({ body }) => {
+      .then(({ body }) => {
         expect(Array.isArray(body)).toEqual(true);
         expect(body).toHaveLength(feedbackCount);
       });
@@ -171,14 +183,14 @@ describe('AppController (e2e)', () => {
 
     const newValue = getRandomValue(targetField.format, targetField.options);
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .put(
         `/channels/${channel.id}/feedbacks/${feedbackId}/field/${targetField.id}`,
       )
       .send({ value: newValue })
       .expect(200)
       .then(async () => {
-        const { body } = await osService.get({
+        const { body } = await osService.get<OpenSearchResponse>({
           id: feedbackId.toString(),
           index: channel.id.toString(),
         });
@@ -251,13 +263,17 @@ describe('AppController (e2e)', () => {
   // });
 });
 
-const toApi = (data: Record<string, any>, fields: FieldEntity[]) => {
+const toApi = (
+  data: Record<string, string | number | string[] | number[]>,
+  fields: FieldEntity[],
+) => {
   return Object.entries(data).reduce((prev, [key, value]) => {
-    const field = fields.find((v) => v.name === key);
+    const field: FieldEntity =
+      fields.find((v) => v.name === key) ?? new FieldEntity();
     return Object.assign(prev, {
       [field.id]:
         field.format === FieldFormatEnum.select ?
-          field.options?.find((v) => v.name === value).id
+          (field.options.find((v) => v.name === value) ?? new FieldEntity()).id
         : value,
     });
   }, {});

@@ -25,9 +25,7 @@ export class GenerateExcelDto {
     ids?: number[];
     [key: string]: string | string[] | TimeRange | number | number[];
   };
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
   type: 'xlsx' | 'csv';
   fieldIds?: number[];
 }

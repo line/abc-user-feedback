@@ -15,7 +15,7 @@
  */
 import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Client } from '@opensearch-project/opensearch';
+import { Client, NodeOptions } from '@opensearch-project/opensearch';
 
 import type { ConfigServiceType } from '@/types/config-service.type';
 
@@ -24,13 +24,22 @@ import type { ConfigServiceType } from '@/types/config-service.type';
   providers: [
     {
       provide: 'OPENSEARCH_CLIENT',
-      useFactory: (configService: ConfigService<ConfigServiceType>): Client => {
-        const { use, node, password, username } = configService.get(
-          'opensearch',
-          {
-            infer: true,
-          },
-        );
+      useFactory: (
+        configService: ConfigService<ConfigServiceType>,
+      ): Client | undefined => {
+        const {
+          use,
+          node,
+          password,
+          username,
+        }: {
+          use: boolean;
+          node: string | string[] | NodeOptions | NodeOptions[];
+          password: string;
+          username: string;
+        } = configService.get('opensearch', {
+          infer: true,
+        }) ?? { use: false, node: '', password: '', username: '' };
         return use ?
             new Client({ node, auth: { username, password } })
           : undefined;

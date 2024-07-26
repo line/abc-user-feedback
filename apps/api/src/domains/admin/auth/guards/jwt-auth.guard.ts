@@ -21,6 +21,9 @@ import type { Observable } from 'rxjs';
 
 import type { ClsServiceType } from '@/types/cls-service.type';
 
+interface User {
+  id: number;
+}
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
   constructor(private readonly clsService: ClsService<ClsServiceType>) {
@@ -31,13 +34,13 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   ): boolean | Promise<boolean> | Observable<boolean> {
     return super.canActivate(context);
   }
-  handleRequest(err: any, user: any) {
+  handleRequest(err: any, user: any): any {
     // You can throw an exception based on either "info" or "err" arguments
     if (err || !user) {
       throw err || new UnauthorizedException('Invalid jwt');
     }
 
-    this.clsService.set('userId', user.id);
+    this.clsService.set('userId', (user as User).id);
     return user;
   }
 }

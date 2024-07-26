@@ -14,7 +14,7 @@
  * under the License.
  */
 import { HttpService } from '@nestjs/axios';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { AxiosError } from 'axios';
@@ -51,7 +51,7 @@ export class WebhookListener {
   }: {
     webhooks: WebhookEntity[];
     event: EventTypeEnum;
-    data: any;
+    data: object;
   }) {
     await Promise.all(
       webhooks.map((webhook) =>
@@ -71,7 +71,7 @@ export class WebhookListener {
                 this.logger.error({
                   message: 'Failed to send webhook',
                   axiosError:
-                    error?.response?.data ?
+                    error.response?.data ?
                       {
                         data: error.response.data,
                         status: error.response.status,
@@ -102,6 +102,9 @@ export class WebhookListener {
         issues: true,
       },
     });
+
+    if (feedback === null)
+      throw new NotFoundException(`Feedback ${feedbackId} not found`);
     const webhooks = await this.webhookRepo.find({
       where: {
         project: { id: feedback.channel.project.id },
@@ -140,7 +143,7 @@ export class WebhookListener {
       },
     };
 
-    this.sendWebhooks({
+    void this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.FEEDBACK_CREATION,
       data,
@@ -155,15 +158,16 @@ export class WebhookListener {
     feedbackId: number;
     issueId: number;
   }) {
-    const feedback = await this.feedbackRepo.findOne({
-      where: { id: feedbackId },
-      relations: {
-        channel: {
-          project: true,
+    const feedback =
+      (await this.feedbackRepo.findOne({
+        where: { id: feedbackId },
+        relations: {
+          channel: {
+            project: true,
+          },
+          issues: true,
         },
-        issues: true,
-      },
-    });
+      })) ?? new FeedbackEntity();
     const webhooks = await this.webhookRepo.find({
       where: {
         project: { id: feedback.channel.project.id },
@@ -204,7 +208,7 @@ export class WebhookListener {
       addedIssue: issues.find((issue) => issue.id === issueId),
     };
 
-    this.sendWebhooks({
+    void this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.ISSUE_ADDITION,
       data,
@@ -213,12 +217,13 @@ export class WebhookListener {
 
   @OnEvent(EventTypeEnum.ISSUE_CREATION)
   async handleIssueCreation({ issueId }: { issueId: number }) {
-    const issue = await this.issueRepo.findOne({
-      where: { id: issueId },
-      relations: {
-        project: true,
-      },
-    });
+    const issue =
+      (await this.issueRepo.findOne({
+        where: { id: issueId },
+        relations: {
+          project: true,
+        },
+      })) ?? new IssueEntity();
     const webhooks = await this.webhookRepo.find({
       where: {
         project: { id: issue.project.id },
@@ -246,7 +251,7 @@ export class WebhookListener {
       },
     };
 
-    this.sendWebhooks({
+    void this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.ISSUE_CREATION,
       data,
@@ -261,12 +266,13 @@ export class WebhookListener {
     issueId: number;
     previousStatus: IssueStatusEnum;
   }) {
-    const issue = await this.issueRepo.findOne({
-      where: { id: issueId },
-      relations: {
-        project: true,
-      },
-    });
+    const issue =
+      (await this.issueRepo.findOne({
+        where: { id: issueId },
+        relations: {
+          project: true,
+        },
+      })) ?? new IssueEntity();
     const webhooks = await this.webhookRepo.find({
       where: {
         project: { id: issue.project.id },
@@ -295,7 +301,7 @@ export class WebhookListener {
       previousStatus,
     };
 
-    this.sendWebhooks({
+    void this.sendWebhooks({
       webhooks,
       event: EventTypeEnum.ISSUE_STATUS_CHANGE,
       data,

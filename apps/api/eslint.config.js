@@ -1,13 +1,15 @@
 const baseConfig = require('@ufb/eslint-config/base');
+const nestjsConfig = require('@ufb/eslint-config/nestjs');
 
 const tsParser = require('@typescript-eslint/parser');
 const globals = require('globals');
 
 module.exports = [
   {
-    ignores: ['dist/**'],
+    ignores: ['dist/**', '**/*.js'],
   },
   ...baseConfig,
+  ...nestjsConfig,
   {
     languageOptions: {
       globals: { ...globals.node, ...globals.jest },

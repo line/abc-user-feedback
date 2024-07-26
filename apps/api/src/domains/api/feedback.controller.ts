@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Multipart, MultipartFile } from '@fastify/multipart';
 import {
   BadRequestException,
   Body,
@@ -48,6 +49,13 @@ import {
   FindFeedbacksByChannelIdResponseDto,
 } from '../admin/feedback/dtos/responses';
 import { FeedbackService } from '../admin/feedback/feedback.service';
+
+interface File {
+  fieldname: string;
+  buffer: Buffer;
+  mimetype: string;
+  originalname: string;
+}
 
 @ApiTags('feedbacks')
 @Controller('/projects/:projectId/channels/:channelId')
@@ -167,16 +175,21 @@ export class FeedbackController {
       throw new BadRequestException('Invalid channel id');
     }
 
-    const files = [];
+    const files: File[] = [];
     const body = {};
-    const parts = await request.parts();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+    const parts = (await request.parts()) as AsyncIterableIterator<
+      Multipart | MultipartFile
+    >;
     for await (const part of parts) {
       if (part.type === 'file') {
         if (part.mimetype.includes('image') === false) {
           throw new BadRequestException(`Not Image File (${part.mimetype})`);
         }
         const buffer = await part.toBuffer();
+
         const mimes = filetypemime(buffer).map((mime) => mime.mime);
+
         if (mimes.includes(part.mimetype) === false) {
           throw new BadRequestException(
             `Invalid file (sent type: ${

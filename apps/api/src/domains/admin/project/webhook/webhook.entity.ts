@@ -45,7 +45,19 @@ export class WebhookEntity extends CommonEntity {
   })
   events: Relation<EventEntity>[];
 
-  static from({ projectId, name, url, status, events }) {
+  static from({
+    projectId,
+    name,
+    url,
+    status,
+    events,
+  }: {
+    projectId: number;
+    name: string;
+    url: string;
+    status: WebhookStatusEnum;
+    events: EventEntity[];
+  }): WebhookEntity {
     const webhook = new WebhookEntity();
     webhook.project = new ProjectEntity();
     webhook.project.id = projectId;

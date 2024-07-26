@@ -104,7 +104,9 @@ describe('auth service ', () => {
     });
   });
 
-  describe('verifyEmailCode', () => {});
+  describe('verifyEmailCode', () => {
+    return null;
+  });
 
   describe('validateEmailUser', () => {
     it('validating a user succeeds with valid inputs', async () => {
@@ -169,7 +171,7 @@ describe('auth service ', () => {
         NotVerifiedEmailException,
       );
 
-      expect(userRepo.save).not.toBeCalled();
+      expect(userRepo.save.bind(userRepo)).not.toBeCalled();
     });
     it('signing up by an email fails with a not verification requested email', async () => {
       const dto = new SignUpEmailUserDto();
@@ -185,13 +187,17 @@ describe('auth service ', () => {
         new BadRequestException('must request email verification'),
       );
 
-      expect(userRepo.save).not.toBeCalled();
+      expect(userRepo.save.bind(userRepo)).not.toBeCalled();
     });
   });
 
-  describe('signUpInvitationUser', () => {});
+  describe('signUpInvitationUser', () => {
+    return null;
+  });
 
-  describe('signUpOAuthUser', () => {});
+  describe('signUpOAuthUser', () => {
+    return null;
+  });
 
   describe('signIn', () => {
     it('signing in succeeds with a valid user', async () => {
@@ -223,7 +229,9 @@ describe('auth service ', () => {
     });
   });
 
-  describe('refreshToken', () => {});
+  describe('refreshToken', () => {
+    return null;
+  });
 
   describe('validateApiKey', () => {
     it('validating an api key succeeds with a valid api key', async () => {
@@ -278,5 +286,7 @@ describe('auth service ', () => {
     });
   });
 
-  describe('signInByOAuth', () => {});
+  describe('signInByOAuth', () => {
+    return null;
+  });
 });

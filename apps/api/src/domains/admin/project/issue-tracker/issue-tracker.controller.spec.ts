@@ -18,7 +18,7 @@ import { Test } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 
 import { getMockProvider, MockDataSource } from '@/test-utils/util-functions';
-import { IssueTrackerDataDto } from './dtos/issue-tracker-data.dto';
+import type { IssueTrackerDataDto } from './dtos/issue-tracker-data.dto';
 import { IssueTrackerController } from './issue-tracker.controller';
 import { IssueTrackerService } from './issue-tracker.service';
 

@@ -59,7 +59,7 @@ describe('CreateUserService', () => {
       const dto: CreateOAuthUserDto = {
         email: faker.internet.email(),
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       tenantRepo.setIsRestrictDomain(false);
 
       const user = await createUserService.createOAuthUser(dto);
@@ -100,7 +100,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.GENERAL,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -115,7 +115,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.SUPER,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -130,7 +130,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.GENERAL,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
@@ -142,7 +142,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.SUPER,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
@@ -156,10 +156,8 @@ describe('CreateUserService', () => {
         type: UserTypeEnum.GENERAL,
         roleId,
       };
-      jest
-        .spyOn(userRepo, 'findOneBy')
-        .mockResolvedValueOnce(null as UserEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValueOnce(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
@@ -168,7 +166,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -178,8 +176,8 @@ describe('CreateUserService', () => {
         type: UserTypeEnum.SUPER,
         roleId,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
@@ -188,7 +186,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
     });
   });
   describe('with a private and no restrict on domain tenant', () => {
@@ -212,7 +210,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.GENERAL,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -227,7 +225,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.SUPER,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -244,8 +242,8 @@ describe('CreateUserService', () => {
         type: UserTypeEnum.GENERAL,
         roleId,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
@@ -254,7 +252,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -264,8 +262,8 @@ describe('CreateUserService', () => {
         type: UserTypeEnum.SUPER,
         roleId,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
@@ -274,7 +272,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -288,7 +286,7 @@ describe('CreateUserService', () => {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
         password: faker.internet.password(),
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createEmailUser(dto);
 
@@ -302,7 +300,7 @@ describe('CreateUserService', () => {
         email: faker.internet.email().split('@')[0] + '@invalid.com',
         password: faker.internet.password(),
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
@@ -314,7 +312,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.GENERAL,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -329,7 +327,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.SUPER,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await createUserService.createInvitationUser(dto);
 
@@ -344,7 +342,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.GENERAL,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
@@ -356,7 +354,7 @@ describe('CreateUserService', () => {
         password: faker.internet.password(),
         type: UserTypeEnum.SUPER,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
@@ -370,8 +368,8 @@ describe('CreateUserService', () => {
         type: UserTypeEnum.GENERAL,
         roleId,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
@@ -380,7 +378,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
     });
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
@@ -390,8 +388,8 @@ describe('CreateUserService', () => {
         type: UserTypeEnum.SUPER,
         roleId,
       };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null as MemberEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
+      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(memberRepo, 'save');
 
       const user = await createUserService.createInvitationUser(dto);
@@ -400,7 +398,7 @@ describe('CreateUserService', () => {
       expect(user.email).toBe(dto.email);
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
+      expect(memberRepo.save.bind(memberRepo)).toHaveBeenCalledTimes(1);
     });
   });
 });

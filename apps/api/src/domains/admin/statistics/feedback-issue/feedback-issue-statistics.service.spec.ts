@@ -240,8 +240,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
 
       await feedbackIssueStatsService.addCronJobByProjectId(projectId);
 
-      expect(schedulerRegistry.addCronJob).toBeCalledTimes(1);
-      expect(schedulerRegistry.addCronJob).toBeCalledWith(
+      expect(
+        schedulerRegistry.addCronJob.bind(schedulerRegistry),
+      ).toBeCalledTimes(1);
+      expect(
+        schedulerRegistry.addCronJob.bind(schedulerRegistry),
+      ).toBeCalledWith(
         `feedback-issue-statistics-${projectId}`,
         expect.anything(),
       );
@@ -273,9 +277,9 @@ describe('FeedbackIssueStatisticsService suite', () => {
         dayToCreate,
       );
 
-      expect(feedbackIssueStatsRepo.manager.transaction).toBeCalledTimes(
-        dayToCreate * issueCount,
-      );
+      expect(
+        feedbackIssueStatsRepo.manager.transaction.bind(feedbackIssueStatsRepo),
+      ).toBeCalledTimes(dayToCreate * issueCount);
     });
   });
 
@@ -300,9 +304,15 @@ describe('FeedbackIssueStatisticsService suite', () => {
         feedbackCount,
       });
 
-      expect(feedbackIssueStatsRepo.findOne).toBeCalledTimes(1);
-      expect(feedbackIssueStatsRepo.save).toBeCalledTimes(1);
-      expect(feedbackIssueStatsRepo.save).toBeCalledWith({
+      expect(
+        feedbackIssueStatsRepo.findOne.bind(feedbackIssueStatsRepo),
+      ).toBeCalledTimes(1);
+      expect(
+        feedbackIssueStatsRepo.save.bind(feedbackIssueStatsRepo),
+      ).toBeCalledTimes(1);
+      expect(
+        feedbackIssueStatsRepo.save.bind(feedbackIssueStatsRepo),
+      ).toBeCalledWith({
         feedbackCount: 1 + feedbackCount,
       });
     });
@@ -328,8 +338,12 @@ describe('FeedbackIssueStatisticsService suite', () => {
         feedbackCount,
       });
 
-      expect(feedbackIssueStatsRepo.findOne).toBeCalledTimes(1);
-      expect(feedbackIssueStatsRepo.createQueryBuilder).toBeCalledTimes(1);
+      expect(
+        feedbackIssueStatsRepo.findOne.bind(feedbackIssueStatsRepo),
+      ).toBeCalledTimes(1);
+      expect(
+        feedbackIssueStatsRepo.createQueryBuilder.bind(feedbackIssueStatsRepo),
+      ).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
         date: new Date(

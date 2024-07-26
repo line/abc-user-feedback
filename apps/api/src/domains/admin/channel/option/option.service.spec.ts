@@ -187,14 +187,14 @@ describe('Option Test suite', () => {
           key: faker.string.sample(),
           name: faker.string.sample(),
           deletedAt: null,
-        })) as OptionEntity[],
+        })) as unknown as OptionEntity[],
       );
       jest.spyOn(optionRepo, 'query');
       jest.spyOn(optionRepo, 'save');
 
       await optionService.replaceMany(dto);
 
-      expect(optionRepo.save).toBeCalledTimes(length);
+      expect(optionRepo.save.bind(optionRepo)).toBeCalledTimes(length);
     });
   });
 });

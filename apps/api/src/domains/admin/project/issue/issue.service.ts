@@ -122,7 +122,7 @@ export class IssueService {
         continue;
       }
 
-      andWhere[column] = Like(`%${query[column]}%`);
+      andWhere[column] = Like(`%${query[column] as string}%`);
     }
 
     if (query.searchText) {

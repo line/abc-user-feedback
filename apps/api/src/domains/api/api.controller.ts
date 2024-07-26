@@ -61,6 +61,6 @@ export class APIController {
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
       </body>
     </html>`;
-    reply.type('text/html').send(html);
+    void reply.type('text/html').send(html);
   }
 }

@@ -16,12 +16,17 @@
 import type { ExecutionContext } from '@nestjs/common';
 import { createParamDecorator } from '@nestjs/common';
 
+import type { UserDto } from '../dtos/user.dto';
+
 type DataType = 'id';
 
+interface Request {
+  user: UserDto | null;
+}
 export const CurrentUser = createParamDecorator(
   (data: DataType, ctx: ExecutionContext) => {
-    const { user } = ctx.switchToHttp().getRequest();
+    const { user } = ctx.switchToHttp().getRequest<Request>();
     if (!user) return null;
-    return data ? user[data] : user;
+    return data in user ? user[data] : user;
   },
 );

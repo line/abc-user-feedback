@@ -70,7 +70,7 @@ export class EventEntity extends CommonEntity {
       event.webhook.id = webhookId;
     }
 
-    if (channelIds) {
+    if (channelIds.length !== 0) {
       event.channels = channelIds.map((channelId) => {
         const channel = new ChannelEntity();
         channel.id = channelId;

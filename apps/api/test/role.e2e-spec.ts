@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -25,6 +26,10 @@ import type { DataSource, Repository } from 'typeorm';
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/admin/auth/auth.service';
 import { UpdateRoleRequestDto } from '@/domains/admin/project/role/dtos/requests';
+import type {
+  GetAllRolesResponseDto,
+  GetAllRolesResponseRoleDto,
+} from '@/domains/admin/project/role/dtos/responses/get-all-roles-response.dto';
 import { PermissionEnum } from '@/domains/admin/project/role/permission.enum';
 import { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import {
@@ -79,26 +84,28 @@ describe('AppController (e2e)', () => {
           permissions: getRandomEnumValues(PermissionEnum),
         });
       }
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .get('/roles')
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.OK)
         .expect(({ body }) => {
           expect(body).toHaveProperty('roles');
-          expect(Array.isArray(body.roles)).toEqual(true);
+          expect(Array.isArray((body as GetAllRolesResponseDto).roles)).toEqual(
+            true,
+          );
 
-          for (const role of body.roles) {
+          for (const role of (body as GetAllRolesResponseDto).roles) {
             expect(role).toHaveProperty('id');
             expect(role).toHaveProperty('name');
             expect(role).toHaveProperty('permissions');
           }
 
           expect(body).toHaveProperty('total');
-          expect(body.total).toEqual(total + 1);
+          expect((body as GetAllRolesResponseDto).total).toEqual(total + 1);
         });
     });
     it('Unauthroized', async () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .get('/roles')
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -106,7 +113,7 @@ describe('AppController (e2e)', () => {
 
   describe('/roles (POST)', () => {
     it('positive case', () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/roles')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
@@ -116,7 +123,7 @@ describe('AppController (e2e)', () => {
         .expect(201);
     });
     it('Unauthroized', () => {
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/roles')
         .send({
           name: faker.string.sample(),
@@ -132,13 +139,15 @@ describe('AppController (e2e)', () => {
       permissions: getRandomEnumValues(PermissionEnum),
     });
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .get('/roles/' + role.id)
       .expect(HttpStatusCode.OK)
       .expect(({ body }) => {
-        expect(body.id).toEqual(role.id);
-        expect(body.name).toEqual(role.name);
-        expect(body.permissions).toEqual(role.permissions);
+        expect((body as GetAllRolesResponseRoleDto).id).toEqual(role.id);
+        expect((body as GetAllRolesResponseRoleDto).name).toEqual(role.name);
+        expect((body as GetAllRolesResponseRoleDto).permissions).toEqual(
+          role.permissions,
+        );
       });
   });
   describe('/roles/:id (PUT)', () => {
@@ -152,7 +161,7 @@ describe('AppController (e2e)', () => {
       dto.name = 'updatedRole';
       dto.permissions = getRandomEnumValues(PermissionEnum);
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .put(`/roles/${role.id}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .send(dto)
@@ -164,7 +173,7 @@ describe('AppController (e2e)', () => {
         });
     });
     it('Unauthrized', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .put(`/roles/${faker.number.int()}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
@@ -176,7 +185,7 @@ describe('AppController (e2e)', () => {
         permissions: getRandomEnumValues(PermissionEnum),
       });
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .delete(`/roles/${role.id}`)
         .set('Authorization', `Bearer ${accessToken}`)
         .expect(HttpStatusCode.OK)
@@ -185,7 +194,7 @@ describe('AppController (e2e)', () => {
         });
     });
     it('Unauthrized', async () => {
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .delete(`/roles/${faker.number.int()}`)
         .expect(HttpStatusCode.UNAUTHORIZED);
     });
