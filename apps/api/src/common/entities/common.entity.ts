@@ -38,7 +38,8 @@ export abstract class CommonEntity {
 
   @BeforeInsert()
   beforeInsertHook() {
-    if (this.createdAt.getTime() === 0) {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (!this.createdAt) {
       this.createdAt = DateTime.utc().toJSDate();
     }
     this.updatedAt = DateTime.utc().toJSDate();
