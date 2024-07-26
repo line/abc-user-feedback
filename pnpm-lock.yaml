@@ -12,13 +12,13 @@ importers:
         specifier: workspace:*
         version: link:tooling/prettier
       prettier:
-        specifier: ^3.2.5
+        specifier: ^3.3.3
         version: 3.3.3
       turbo:
-        specifier: ^2.0.0
+        specifier: ^2.0.9
         version: 2.0.9
       typescript:
-        specifier: ^5.4.5
+        specifier: ^5.5.4
         version: 5.5.4
 
   apps/api:
@@ -516,7 +516,7 @@ importers:
         version: 8.4.40
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
+        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
       ts-toolbelt:
         specifier: ^9.6.0
         version: 9.6.0
@@ -588,7 +588,7 @@ importers:
         version: 3.3.3
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
+        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
 
   packages/ufb-ui:
     dependencies:
@@ -634,7 +634,7 @@ importers:
         version: 9.7.0
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
+        version: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
 
   tooling/eslint:
     dependencies:
@@ -10903,7 +10903,7 @@ snapshots:
 
   '@headlessui/tailwindcss@0.2.1(tailwindcss@3.4.7(ts-node@10.9.2(@swc/core@1.7.2(@swc/helpers@0.5.12))(@types/node@20.14.12)(typescript@5.5.4)))':
     dependencies:
-      tailwindcss: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
+      tailwindcss: 3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
 
   '@hookform/resolvers@3.9.0(react-hook-form@7.52.1(react@18.3.1))':
     dependencies:
@@ -17360,7 +17360,7 @@ snapshots:
       postcss-load-options: 1.2.0
       postcss-load-plugins: 2.3.0
 
-  postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4)):
+  postcss-load-config@4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4)):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.5.0
@@ -18488,7 +18488,7 @@ snapshots:
 
   tailwind-scrollbar-hide@1.1.7: {}
 
-  tailwindcss@3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4)):
+  tailwindcss@3.4.6(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -18507,7 +18507,7 @@ snapshots:
       postcss: 8.4.39
       postcss-import: 15.1.0(postcss@8.4.39)
       postcss-js: 4.0.1(postcss@8.4.39)
-      postcss-load-config: 4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(@types/node@20.14.11)(typescript@5.5.4))
+      postcss-load-config: 4.0.2(postcss@8.4.39)(ts-node@10.9.2(@swc/core@1.7.0(@swc/helpers@0.5.12))(typescript@5.5.4))
       postcss-nested: 6.0.1(postcss@8.4.39)
       postcss-selector-parser: 6.1.1
       resolve: 1.22.8
