@@ -16,6 +16,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Controller, Get, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
+import { AxiosError, AxiosResponse } from 'axios';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { lastValueFrom } from 'rxjs';
 
@@ -30,8 +31,32 @@ export class APIController {
     @Res() reply: FastifyReply,
   ): Promise<void> {
     const { hostname } = request;
-    const specUrl = `https://${hostname}/docs-json`;
-    await lastValueFrom(this.httpService.head(specUrl));
+    let specUrl = `https://${hostname}/docs-json`;
+    try {
+      await lastValueFrom(this.httpService.head(specUrl));
+    } catch (e: any) {
+      // Log the error for debugging purposes
+      console.error(`HTTPS check failed for ${specUrl}:`, e.message);
+
+      // Check if the error is due to network issues or 404 status
+      if (
+        e.response &&
+        (e.response.status === 404 || e.response.status === 500)
+      ) {
+        specUrl = `http://${hostname}/docs-json`;
+        try {
+          await lastValueFrom(this.httpService.head(specUrl));
+        } catch (httpError) {
+          console.error(`HTTP check failed for ${specUrl}:`, httpError.message);
+          // Handle the case where both HTTPS and HTTP fail
+          throw new Error(`Both HTTPS and HTTP checks failed for ${hostname}`);
+        }
+      } else {
+        // Re-throw other types of errors
+        console.error('Unknown error!');
+        throw e;
+      }
+    }
 
     const html = `<!DOCTYPE html>
     <html>
