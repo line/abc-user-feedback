@@ -31,6 +31,15 @@ export class APIController {
     @Res() reply: FastifyReply,
   ): Promise<void> {
     const { hostname } = request;
+    const swaggerUrl =
+      'https://abc-userfeedback-api-alpha-abc-ufb.app.linecorp-dev.com/docs';
+    try {
+      await lastValueFrom(this.httpService.head(swaggerUrl));
+      console.log(`Swagger URL ${swaggerUrl} is accessible`);
+    } catch (e: any) {
+      console.error(`HTTPS check failed for ${swaggerUrl}:`, e.message);
+    }
+
     let specUrl = `https://${hostname}/docs-json`;
     try {
       await lastValueFrom(this.httpService.head(specUrl));
