@@ -30,12 +30,8 @@ export class APIController {
     @Res() reply: FastifyReply,
   ): Promise<void> {
     const { hostname } = request;
-    let specUrl = `https://${hostname}/docs-json`;
-    try {
-      await lastValueFrom(this.httpService.head(specUrl));
-    } catch (e) {
-      specUrl = `http://${hostname}/docs-json`;
-    }
+    const specUrl = `https://${hostname}/docs-json`;
+    await lastValueFrom(this.httpService.head(specUrl));
 
     const html = `<!DOCTYPE html>
     <html>
