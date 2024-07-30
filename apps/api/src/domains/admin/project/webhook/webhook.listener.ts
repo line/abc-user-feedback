@@ -18,7 +18,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { AxiosError } from 'axios';
-import { catchError, lastValueFrom, of } from 'rxjs';
+import { catchError, lastValueFrom, of, retry, timer } from 'rxjs';
 import { Repository } from 'typeorm';
 
 import type { IssueStatusEnum } from '@/common/enums';
@@ -68,6 +68,15 @@ export class WebhookListener {
               },
             )
             .pipe(
+              retry({
+                count: 3,
+                delay: (error, retryCount) => {
+                  this.logger.warn(
+                    `Retrying webhook... Attempt #${retryCount + 1}`,
+                  );
+                  return timer(3000);
+                },
+              }),
               catchError((error: AxiosError) => {
                 this.logger.error({
                   message: 'Failed to send webhook',
