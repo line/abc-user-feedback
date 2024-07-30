@@ -13,26 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { HttpService } from '@nestjs/axios';
 import { Controller, Get, Req, Res } from '@nestjs/common';
 import { ApiExcludeController } from '@nestjs/swagger';
-import { AxiosError, AxiosResponse } from 'axios';
 import { FastifyReply, FastifyRequest } from 'fastify';
-import { lastValueFrom } from 'rxjs';
 
 @Controller()
 @ApiExcludeController()
 export class APIController {
-  constructor(private readonly httpService: HttpService) {}
-
   @Get('docs/redoc')
   async getAPIDocs(
     @Req() request: FastifyRequest,
     @Res() reply: FastifyReply,
   ): Promise<void> {
     const { hostname } = request;
-    let specUrl = `https://${hostname}/docs-json`;
-    }
 
     const html = `<!DOCTYPE html>
     <html>
@@ -54,7 +47,7 @@ export class APIController {
         </style>
       </head>
       <body>
-        <redoc spec-url='${specUrl}'></redoc>
+        <redoc spec-url='//${hostname}/docs-json'></redoc>
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
       </body>
     </html>`;
