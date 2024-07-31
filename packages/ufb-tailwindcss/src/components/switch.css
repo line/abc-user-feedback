@@ -1,0 +1,32 @@
+.switch {
+  --switch-text-default: var(--text-neutral-primary);
+  --switch-fg-handle: var(--fg-neutral-primary);
+  --switch-fg-disabled: var(--fg-neutral-disabled);
+  --switch-fg-default: var(--fg-neutral-inverse);
+  --switch-fg-blue: var(--fg-tint-blue-bold);
+  --switch-fg-orange: var(--fg-tint-orange-bold);
+  --switch-fg-red: var(--fg-tint-red-bold);
+  --switch-fg-green: var(--fg-tint-green-bold);
+
+  @apply relative inline-flex h-24 cursor-pointer items-center gap-8 text-base text-[var(--switch-text-default)] before:box-content before:flex before:h-20 before:w-40 before:rounded-full before:p-2 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
+}
+
+.switch-default {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-default)];
+}
+.switch-blue {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-blue)];
+}
+.switch-orange {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-orange)];
+}
+.switch-red {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-red)];
+}
+.switch-green {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-green)];
+}
+
+.switch-thumb {
+  @apply absolute left-2 top-2 flex h-20 w-20 translate-x-0 rounded-full bg-[var(--switch-fg-handle)] transition-transform data-[state=checked]:translate-x-full;
+}

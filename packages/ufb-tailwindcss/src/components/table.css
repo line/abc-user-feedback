@@ -1,0 +1,63 @@
+.table-wrap {
+  --table-text-cell: var(--text-neutral-primary);
+  --table-text-header: var(--text-neutral-tertiary);
+  --table-icon-cell: var(--text-neutral-primary);
+  --table-icon-header: var(--text-neutral-tertiary);
+  --table-border-default: var(--border-neutral-tertiary);
+  --table-fg-default: var(--fg-neutral-primary);
+  --table-fg-hover: var(--fg-neutral-tertiary);
+
+  @apply relative w-full overflow-auto;
+}
+
+.table {
+  @apply w-full caption-bottom;
+}
+
+.table-header {
+  @apply [&_tr]:border-b [&_tr]:border-b-[var(--table-border-default)];
+}
+
+.table-body {
+  @apply [&_tr:last-child]:border-0;
+}
+
+.table-footer {
+  @apply border-t border-t-[var(--table-border-default)] bg-[var(--table-fg-hover)] [&>tr]:last:border-b-0;
+}
+
+.table-row {
+  @apply border-b border-b-[var(--table-border-default)] transition-colors hover:bg-[var(--table-fg-hover)] data-[state=selected]:bg-[var(--table-fg-hover)];
+}
+
+.table-head {
+  @apply h-48 px-16 align-middle text-base font-normal text-[var(--table-text-header)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-4 [&>svg]:mr-4 [&>svg]:text-[var(--table-icon-header)];
+
+  &.table-head-left {
+    @apply text-left;
+  }
+  &.table-head-center {
+    @apply text-center;
+  }
+  &.table-head-right {
+    @apply text-right;
+  }
+}
+
+.table-cell {
+  @apply px-16 py-12 align-middle text-base text-[var(--table-text-cell)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-4 [&>svg]:text-[var(--table-icon-cell)];
+
+  &.table-cell-left {
+    @apply text-left;
+  }
+  &.table-cell-center {
+    @apply text-center;
+  }
+  &.table-cell-right {
+    @apply text-right;
+  }
+}
+
+.table-caption {
+  @apply text-small mt-4 text-[--table-text-header];
+}

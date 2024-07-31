@@ -1,0 +1,39 @@
+.command {
+  @apply flex h-full w-full flex-col overflow-hidden p-4 text-[var(--text-neutral-primary)];
+}
+
+.command-empty {
+  @apply flex items-center justify-center p-24 text-center text-base text-[var(--text-neutral-secondary)];
+}
+
+.command-item {
+  @apply rounded-6 relative flex cursor-default select-none items-center p-8 text-base outline-none transition-colors hover:bg-[var(--fg-neutral-tertiary)];
+}
+
+.command-item ~ .command-item {
+  @apply mt-4;
+}
+
+.command-shortcut {
+  @apply text-small ml-auto tracking-widest text-[var(--text-neutral-tertiary)];
+}
+
+.command-separator {
+  @apply -mx-1 my-4 h-1 bg-[var(--border-neutral-tertiary)];
+}
+
+.command-group {
+  @apply overflow-hidden p-1 text-[var(--text-neutral-primary)] [&_[cmdk-group-heading]]:p-8 [&_[cmdk-group-heading]]:text-base [&_[cmdk-group-heading]]:font-bold;
+}
+
+.command-list {
+  @apply pt-4;
+}
+
+.command-input-box {
+  @apply relative flex items-center justify-center border-b border-b-[var(--border-neutral-tertiary)] bg-[var(--fg-neutral-primary)] [&>svg]:ml-8;
+}
+
+.command-input {
+  @apply min-w-0 flex-1 bg-[transparent] p-8 text-base text-[var(--text-neutral-primary)] outline-none placeholder:text-[var(--text-neutral-tertiary)] focus:text-[var(--text-neutral-primary)];
+}

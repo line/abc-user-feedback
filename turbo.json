@@ -14,7 +14,11 @@
       "persistent": true
     },
     "web#dev": {
-      "dependsOn": ["@ufb/tailwind#build", "@ufb/shared#build"]
+      "dependsOn": [
+        "@ufb/tailwind#build",
+        "@ufb/shared#build",
+        "@ufb/tailwindcss#build"
+      ]
     },
     "api#dev": {
       "dependsOn": ["@ufb/shared#build"]
@@ -22,6 +26,9 @@
     "format": {
       "outputs": ["node_modules/.cache/.prettiercache"],
       "outputLogs": "new-only"
+    },
+    "@ufb/tailwindcss#build": {
+      "outputs": ["dist/**"]
     },
     "@ufb/tailwind#build": {
       "outputs": ["dist/**"]

@@ -1,0 +1,73 @@
+.alert {
+  --alert-text-default: var(--text-neutral-primary);
+  --alert-text-description: var(--text-neutral-secondary);
+  --alert-border-default: var(--border-neutral-tertiary);
+  --alert-border-warning: var(--border-tint-orange);
+  --alert-border-success: var(--border-tint-green);
+  --alert-border-error: var(--border-tint-red);
+  --alert-border-informative: var(--border-tint-blue);
+  --alert-icon-default: var(--icon-neutral-primary);
+  --alert-icon-warning: var(--icon-tint-orange);
+  --alert-icon-success: var(--icon-tint-green);
+  --alert-icon-error: var(--icon-tint-red);
+  --alert-icon-informative: var(--icon-tint-blue);
+  --alert-fg-default: var(--fg-neutral-primary);
+
+  @apply relative inline-flex min-w-[320px] items-center space-x-8 border bg-[var(--alert-fg-default)] px-20 py-16;
+
+  &.alert-radius-large {
+    @apply rounded-24;
+  }
+  &.alert-radius-medium {
+    @apply rounded-8;
+  }
+  &.alert-radius-small {
+    @apply rounded-0;
+  }
+
+  &.alert-default {
+    @apply border-[var(--alert-border-default)];
+  }
+  &.alert-warning {
+    @apply border-[var(--alert-border-warning)];
+  }
+  &.alert-success {
+    @apply border-[var(--alert-border-success)];
+  }
+  &.alert-error {
+    @apply border-[var(--alert-border-error)];
+  }
+  &.alert-informative {
+    @apply border-[var(--alert-border-informative)];
+  }
+}
+
+.alert-icon {
+  @apply mb-auto box-content h-20 w-20 flex-shrink-0 p-4;
+
+  &.alert-icon-default {
+    @apply text-[var(--alert-icon-default)];
+  }
+  &.alert-icon-warning {
+    @apply text-[var(--alert-icon-warning)];
+  }
+  &.alert-icon-success {
+    @apply text-[var(--alert-icon-success)];
+  }
+  &.alert-icon-error {
+    @apply text-[var(--alert-icon-error)];
+  }
+  &.alert-icon-informative {
+    @apply text-[var(--alert-icon-informative)];
+  }
+}
+.alert-title {
+  @apply text-title-h5 flex flex-1 flex-col text-[var(--alert-text-default)] [&>span]:mt-4 [&>span]:text-base [&>span]:font-normal [&>span]:text-[var(--alert-text-description)];
+}
+.alert-button {
+  @apply flex-shrink-0;
+}
+
+.alert-close {
+  @apply flex-shrink-0;
+}

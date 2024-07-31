@@ -1,0 +1,27 @@
+.radio-group {
+  --radio-text-default: var(--text-neutral-primary);
+  --radio-border-default: var(--border-neutral-tertiary);
+  --radio-fg-default: var(--fg-neutral-primary);
+  --radio-fg-select: var(--fg-neutral-inverse); /* todo tint */
+
+  @apply flex;
+
+  &.radio-group-horizontal {
+    @apply flex-row space-x-16;
+  }
+  &.radio-group-vertical {
+    @apply flex-col space-y-4;
+  }
+}
+
+.radio-item {
+  @apply flex items-center py-2 text-base text-[var(--radio-text-default)] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.radio {
+  @apply relative mr-8 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--radio-fg-default)] shadow-[0_0_0_0.0625rem_inset_var(--radio-border-default)];
+}
+
+.radio-indicator {
+  @apply absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-[var(--radio-fg-select)] text-[var(--radio-fg-default)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+}

@@ -1,0 +1,90 @@
+.input {
+  --input-text-default: var(--text-neutral-tertiary);
+  --input-text-typing: var(--text-neutral-primary);
+  --input-text-filled: var(--text-neutral-primary);
+  --input-text-error: var(--text-neutral-primary);
+  --input-label-default: var(--text-neutral-primary);
+  --input-caption-default: var(--text-neutral-tertiary);
+  --input-caption-success: var(--text-tint-green);
+  --input-caption-error: var(--text-tint-red);
+
+  --input-icon-default: var(--icon-neutral-tertiary);
+  --input-icon-typing: var(--icon-neutral-primary);
+  --input-icon-filled: var(--icon-neutral-primary);
+  --input-icon-error: var(--icon-neutral-primary);
+  --input-icon-caption-default: var(--icon-neutral-tertiary);
+  --input-icon-caption-success: var(--icon-tint-green);
+  --input-icon-caption-error: var(--icon-tint-red);
+
+  --input-border-default: var(--border-neutral-tertiary);
+  --input-border-typing: var(--border-neutral-primary);
+  --input-border-filled: var(--border-neutral-tertiary);
+  --input-border-error: var(--border-tint-red);
+
+  --input-fg-default: var(--fg-neutral-primary);
+  --input-fg-typing: var(--fg-neutral-tertiary);
+  --input-fg-filled: var(--fg-neutral-primary);
+  --input-fg-error: var(--fg-neutral-primary);
+
+  @apply flex flex-col gap-6;
+}
+
+.input-box {
+  @apply relative flex items-center justify-center gap-4 bg-[var(--input-fg-default)] shadow-[0_0_0_0.0625rem_inset_var(--input-border-default)] focus-within:bg-[var(--input-fg-typing)] focus-within:shadow-[0_0_0_0.125rem_inset_var(--input-border-typing)];
+  &.input-box-disabled {
+    @apply cursor-not-allowed opacity-50;
+  }
+  &.input-box-error {
+    @apply bg-[var(--input-fg-error)] !shadow-[0_0_0_0.125rem_inset_var(--input-border-error)];
+  }
+  > input {
+    @apply min-w-0 flex-1 bg-[transparent] text-[var(--input-text-filled)] outline-none placeholder:text-[var(--input-text-default)] focus:text-[var(--input-text-typing)];
+  }
+}
+
+.input-box-large {
+  @apply text-xlarge px-20 py-8;
+}
+.input-box-medium {
+  @apply text-large px-16 py-8;
+}
+.input-box-small {
+  @apply px-12 py-8 text-base;
+}
+
+.input-label {
+  @apply text-base font-normal text-[var(--input-label-default)];
+}
+
+.input-caption {
+  @apply flex gap-4 text-base;
+  &.input-caption-default {
+    @apply text-[var(--input-caption-default)];
+  }
+  &.input-caption-success {
+    @apply text-[var(--input-caption-success)];
+  }
+  &.input-caption-info {
+    @apply text-[var(--input-caption-default)];
+  }
+  &.input-caption-error {
+    @apply text-[var(--input-caption-error)];
+  }
+}
+.input-caption-icon {
+  @apply mt-2 flex-shrink-0;
+}
+
+.input-button {
+  @apply flex flex-shrink-0 items-center justify-center disabled:cursor-not-allowed;
+}
+
+.input-box-radius-large {
+  @apply rounded-full;
+}
+.input-box-radius-medium {
+  @apply rounded-8;
+}
+.input-box-radius-small {
+  @apply rounded-0;
+}

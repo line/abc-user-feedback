@@ -1,0 +1,15 @@
+.title-h1 {
+  @apply text-title-h1 font-bold;
+}
+.title-h2 {
+  @apply text-title-h2 font-bold;
+}
+.title-h3 {
+  @apply text-title-h3 font-bold;
+}
+.title-h4 {
+  @apply text-title-h4;
+}
+.title-h5 {
+  @apply text-title-h5;
+}

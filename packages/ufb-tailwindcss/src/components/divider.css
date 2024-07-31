@@ -1,0 +1,37 @@
+.divider {
+  @apply shrink-0;
+
+  &.divider-bold {
+    @apply bg-[var(--border-neutral-primary)];
+  }
+  &.divider-subtle {
+    @apply bg-[var(--border-neutral-tertiary)];
+  }
+}
+
+.divider-horizontal {
+  @apply mx-auto h-1 w-full;
+
+  &.divider-indent-8 {
+    @apply w-[calc(100%_-_16px)];
+  }
+  &.divider-indent-16 {
+    @apply w-[calc(100%_-_32px)];
+  }
+  &.divider-indent-24 {
+    @apply w-[calc(100%_-_48px)];
+  }
+}
+.divider-vertical {
+  @apply my-auto h-full w-1;
+
+  &.divider-indent-8 {
+    @apply h-[calc(100%_-_16px)];
+  }
+  &.divider-indent-16 {
+    @apply h-[calc(100%_-_32px)];
+  }
+  &.divider-indent-24 {
+    @apply h-[calc(100%_-_48px)];
+  }
+}

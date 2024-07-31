@@ -1,0 +1,31 @@
+.nav-bar {
+  @apply flex h-56 items-center border-b border-b-[var(--border-neutral-tertiary)] bg-[var(--fg-neutral-primary)] px-24 py-10;
+}
+
+.nav-bar-menu {
+  @apply !p-0;
+}
+
+.nav-bar-logo {
+  @apply flex p-6;
+}
+
+.nav-bar-divider {
+  @apply mx-16;
+}
+
+.nav-bar-select {
+  @apply w-[15rem];
+}
+
+.nav-bar-dropdown {
+  @apply ml-auto;
+}
+
+.nav-bar-dropdown ~ .nav-bar-button {
+  @apply ml-12;
+}
+
+.nav-bar-dropdown-content {
+  @apply min-w-[7.5rem];
+}

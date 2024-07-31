@@ -1,0 +1,24 @@
+.menu {
+  @apply rounded-8 inline-flex bg-[var(--fg-neutral-primary)] px-8 py-12;
+
+  &.menu-horizontal {
+    @apply flex-row  space-x-12;
+  }
+  &.menu-vertical {
+    @apply min-w-[10rem] flex-col space-y-12;
+  }
+}
+
+.menu-item {
+  @apply rounded-8 relative flex cursor-default select-none items-center space-x-8 text-left text-[var(--text-neutral-tertiary)] outline-none hover:bg-[var(--fg-neutral-tertiary)] data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--fg-neutral-tertiary)] data-[state=on]:text-[var(--text-neutral-primary)] data-[disabled]:opacity-50 [&>span]:flex-1 [&>svg]:flex-shrink-0;
+
+  &.menu-item-small {
+    @apply p-8 text-base;
+  }
+  &.menu-item-medium {
+    @apply text-large px-12 py-10;
+  }
+  &.menu-item-large {
+    @apply text-xlarge px-14 py-10;
+  }
+}

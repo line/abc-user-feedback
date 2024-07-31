@@ -1,0 +1,61 @@
+.tag {
+  --tag-primary-text-default: var(--text-neutral-inverse);
+  --tag-primary-icon-default: var(--icon-neutral-inverse);
+  --tag-primary-border-default: var(--border-neutral-transparent);
+  --tag-primary-fg-default: var(--fg-neutral-inverse); /* todo tint */
+
+  --tag-secondary-text-default: var(--text-neutral-primary);
+  --tag-secondary-icon-default: var(--icon-neutral-primary);
+  --tag-secondary-border-default: var(--border-neutral-transparent);
+  --tag-secondary-fg-default: var(--fg-neutral-tertiary);
+
+  --tag-destructive-text-default: var(--text-neutral-inverse);
+  --tag-destructive-icon-default: var(--icon-neutral-inverse);
+  --tag-destructive-border-default: var(--border-neutral-transparent);
+  --tag-destructive-fg-default: var(--fg-tint-red-bold);
+
+  --tag-outline-text-default: var(--text-neutral-primary); /* todo tint */
+  --tag-outline-icon-default: var(--icon-neutral-primary); /* todo tint */
+  --tag-outline-border-default: var(--border-neutral-tertiary);
+  --tag-outline-fg-default: var(--fg-neutral-transparent);
+  --tag-outline-fg-hover: var(--fg-neutral-secondary); /* todo tint */
+
+  @apply inline-flex items-center font-bold hover:opacity-80;
+}
+
+.tag-small {
+  @apply text-small gap-4 px-8 py-2;
+}
+.tag-medium {
+  @apply gap-6 px-10 py-4 text-base;
+}
+.tag-large {
+  @apply text-large gap-8 px-12 py-4;
+}
+
+.tag-primary {
+  @apply bg-[var(--tag-primary-fg-default)] text-[var(--tag-primary-text-default)];
+}
+.tag-secondary {
+  @apply bg-[var(--tag-secondary-fg-default)] text-[var(--tag-secondary-text-default)];
+}
+.tag-destructive {
+  @apply bg-[var(--tag-destructive-fg-default)] text-[var(--tag-destructive-text-default)];
+}
+.tag-outline {
+  @apply bg-[var(--tag-outline-fg-default)] text-[var(--tag-outline-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--tag-outline-border-default)] hover:bg-[var(--tag-outline-fg-hover)];
+}
+
+.tag-button {
+  @apply flex;
+}
+
+.tag-radius-small {
+  @apply rounded-0;
+}
+.tag-radius-medium {
+  @apply rounded-6;
+}
+.tag-radius-large {
+  @apply rounded-full;
+}
