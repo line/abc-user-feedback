@@ -252,7 +252,8 @@
     "next": "Next",
     "complete": "Complete",
     "next-time": "Later",
-    "start": "Start"
+    "start": "Start",
+    "generate": "Generate"
   },
   "input": {
     "label": {

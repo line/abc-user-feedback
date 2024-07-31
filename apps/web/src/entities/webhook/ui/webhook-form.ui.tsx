@@ -127,7 +127,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
             type="button"
             onClick={() => setValue('token', window.crypto.randomUUID())}
           >
-            생성
+            {t('button.generate')}
           </button>
         }
       />
