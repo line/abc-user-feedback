@@ -13,30 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Column, Entity, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, Relation } from "typeorm";
 
-import { CommonEntity } from '@/common/entities';
-import { WebhookStatusEnum } from '../../../../common/enums';
-import { ProjectEntity } from '../project/project.entity';
-import { EventEntity } from './event.entity';
+import { CommonEntity } from "@/common/entities";
+import { WebhookStatusEnum } from "../../../../common/enums";
+import { ProjectEntity } from "../project/project.entity";
+import { EventEntity } from "./event.entity";
 
-@Entity('webhooks')
+@Entity("webhooks")
 export class WebhookEntity extends CommonEntity {
-  @Column('varchar')
+  @Column("varchar")
   name: string;
 
-  @Column('varchar')
+  @Column("varchar")
   url: string;
 
-  @Column('enum', {
+  @Column("varchar")
+  token: string | null;
+
+  @Column("enum", {
     enum: WebhookStatusEnum,
     default: WebhookStatusEnum.ACTIVE,
   })
   status: WebhookStatusEnum;
 
   @ManyToOne(() => ProjectEntity, (project) => project.webhooks, {
-    onDelete: 'CASCADE',
-    orphanedRowAction: 'delete',
+    onDelete: "CASCADE",
+    orphanedRowAction: "delete",
   })
   project: Relation<ProjectEntity>;
 
@@ -45,24 +48,13 @@ export class WebhookEntity extends CommonEntity {
   })
   events: Relation<EventEntity>[];
 
-  static from({
-    projectId,
-    name,
-    url,
-    status,
-    events,
-  }: {
-    projectId: number;
-    name: string;
-    url: string;
-    status: WebhookStatusEnum;
-    events: EventEntity[];
-  }): WebhookEntity {
+  static from({ projectId, name, url, token, status, events }) {
     const webhook = new WebhookEntity();
     webhook.project = new ProjectEntity();
     webhook.project.id = projectId;
     webhook.name = name;
     webhook.url = url;
+    webhook.token = token;
     webhook.status = status;
     webhook.events = events;
 

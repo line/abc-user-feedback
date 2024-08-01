@@ -36,6 +36,17 @@ export const webhookSchema = z.object({
   url: z.string(),
   status: z.enum(['ACTIVE', 'INACTIVE']),
   events: z.array(webhookEventSchema),
+  token: z
+    .string()
+    .min(16)
+    .regex(/^[a-zA-Z0-9._-]+$/)
+    .or(
+      z
+        .string()
+        .length(0)
+        .transform(() => null),
+    )
+    .or(z.null()),
   createdAt: z.string(),
 });
 

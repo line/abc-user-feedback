@@ -12,6 +12,7 @@ module.exports = [
       'jest.setup.ts',
       'next-env.d.ts',
       'jest.polyfills.js',
+      '**/api.type.ts',
     ],
   },
   ...baseConfig,

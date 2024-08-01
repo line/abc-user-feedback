@@ -98,6 +98,7 @@ const convertDefatulValuesToFormValues = (defaultValues: Webhook) => {
     name: defaultValues.name,
     url: defaultValues.url,
     status: defaultValues.status,
+    token: defaultValues.token,
     events: defaultValues.events.map((event) => ({
       status: event.status,
       type: event.type,

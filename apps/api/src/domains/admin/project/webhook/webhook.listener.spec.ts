@@ -59,6 +59,7 @@ describe('webhook listener', () => {
         {
           headers: {
             'Content-Type': 'application/json',
+            'x-webhook-token': 'TEST-TOKEN',
           },
         },
       );
@@ -87,6 +88,7 @@ describe('webhook listener', () => {
         {
           headers: {
             'Content-Type': 'application/json',
+            'x-webhook-token': 'TEST-TOKEN',
           },
         },
       );
@@ -114,6 +116,7 @@ describe('webhook listener', () => {
         {
           headers: {
             'Content-Type': 'application/json',
+            'x-webhook-token': 'TEST-TOKEN',
           },
         },
       );
@@ -142,6 +145,7 @@ describe('webhook listener', () => {
         {
           headers: {
             'Content-Type': 'application/json',
+            'x-webhook-token': 'TEST-TOKEN',
           },
         },
       );

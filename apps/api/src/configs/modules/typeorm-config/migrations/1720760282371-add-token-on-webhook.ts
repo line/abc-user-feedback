@@ -13,33 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, plainToInstance } from 'class-transformer';
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-import { WebhookStatusEnum } from '@/common/enums';
-import type { EventDto } from '.';
+export class AddTokenOnWebhook1720760282371 implements MigrationInterface {
+  name = 'AddTokenOnWebhook1720760282371';
 
-export class CreateWebhookDto {
-  @Expose()
-  projectId: number;
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`webhooks\` ADD \`token\` varchar(255) NULL DEFAULT NULL AFTER \`url\``,
+    );
+  }
 
-  @Expose()
-  name: string;
-
-  @Expose()
-  url: string;
-
-  @Expose()
-  status: WebhookStatusEnum;
-
-  @Expose()
-  events: EventDto[];
-
-  @Expose()
-  token: string | null;
-
-  public static from(params: any): CreateWebhookDto {
-    return plainToInstance(CreateWebhookDto, params, {
-      excludeExtraneousValues: true,
-    });
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE \`webhooks\` DROP COLUMN \`token\``);
   }
 }
