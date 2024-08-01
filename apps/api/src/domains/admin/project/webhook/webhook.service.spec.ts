@@ -39,6 +39,7 @@ function createCreateWebhookDto(overrides = {}): CreateWebhookDto {
     projectId: webhookFixture.project.id,
     name: faker.string.sample(),
     url: faker.internet.url(),
+    token: faker.string.sample(),
     status: WebhookStatusEnum.ACTIVE,
     events: [
       {
@@ -72,6 +73,7 @@ function createUpdateWebhookDto(overrides = {}): UpdateWebhookDto {
     projectId: webhookFixture.project.id,
     name: faker.string.sample(),
     url: faker.internet.url(),
+    token: faker.string.sample(),
     status: getRandomEnumValue(WebhookStatusEnum),
     events: [
       {
@@ -124,6 +126,7 @@ describe('webhook service', () => {
       expect(webhook.project.id).toBe(dto.projectId);
       expect(webhook.name).toBe(dto.name);
       expect(webhook.url).toBe(dto.url);
+      expect(webhook.token).toBe(dto.token);
       expect(webhook.status).toBe(dto.status);
       expect(webhook.events.length).toBe(dto.events.length);
       for (let i = 0; i < webhook.events.length; i++) {
@@ -163,6 +166,7 @@ describe('webhook service', () => {
       expect(webhook.project.id).toBe(dto.projectId);
       expect(webhook.name).toBe(dto.name);
       expect(webhook.url).toBe(dto.url);
+      expect(webhook.token).toBe(dto.token);
       expect(webhook.status).toBe(dto.status);
       expect(webhook.events.length).toBe(dto.events.length);
       expect(webhook.events[0].channels.length).toBe(
@@ -273,6 +277,7 @@ describe('webhook service', () => {
       expect(webhook.project.id).toBe(dto.projectId);
       expect(webhook.name).toBe(dto.name);
       expect(webhook.url).toBe(dto.url);
+      expect(webhook.token).toBe(dto.token);
       expect(webhook.status).toBe(dto.status);
       expect(webhook.events.length).toBe(dto.events.length);
       for (let i = 0; i < webhook.events.length; i++) {
