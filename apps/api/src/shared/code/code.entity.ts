@@ -32,8 +32,8 @@ export class CodeEntity extends CommonEntity {
   @Column('varchar', {
     nullable: true,
     transformer: {
-      from: (v) => (v ? JSON.parse(v) : v),
-      to: (v) => (v ? JSON.stringify(v) : v),
+      from: (v) => (v ? (JSON.parse(v as string) as object) : (v as object)),
+      to: (v) => (v ? JSON.stringify(v as object) : (v as object)),
     },
   })
   data: any;

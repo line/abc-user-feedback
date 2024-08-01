@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { MemberEntity } from '@/domains/admin/project/member/member.entity';
 import { memberFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class MemberRepositoryStub {
-  member = memberFixture;
+  member: MemberEntity | null = memberFixture;
   findOne() {
     return this.member;
   }
@@ -51,11 +52,11 @@ export class MemberRepositoryStub {
         ...this.member,
         ...e,
         role: {
-          ...this.member.role,
+          ...this.member?.role,
           ...e.role,
         },
         user: {
-          ...this.member.user,
+          ...this.member?.user,
           ...e.user,
         },
         id: faker.number.int(),
@@ -64,12 +65,12 @@ export class MemberRepositoryStub {
       return {
         ...this.member,
         role: {
-          ...this.member.role,
-          ...memberToSave.role,
+          ...this.member?.role,
+          ...(memberToSave as MemberEntity).role,
         },
         user: {
-          ...this.member.user,
-          ...memberToSave.user,
+          ...this.member?.user,
+          ...(memberToSave as MemberEntity).user,
         },
         ...memberToSave,
       };

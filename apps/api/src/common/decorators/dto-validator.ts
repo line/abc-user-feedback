@@ -14,15 +14,23 @@
  * under the License.
  */
 import { InternalServerErrorException } from '@nestjs/common';
+import type { ValidationError } from 'class-validator';
 import { validate } from 'class-validator';
 
-const DtoValidator =
-  () => (target: unknown, propName: string, descriptor: any) => {
-    const methodRef = (descriptor as any).value;
+type Method = (...args: object[]) => any;
 
-    (descriptor as any).value = async function (...args) {
+const DtoValidator =
+  () =>
+  (
+    target: unknown,
+    propName: string,
+    descriptor: TypedPropertyDescriptor<any>,
+  ) => {
+    const methodRef = descriptor.value as Method;
+
+    descriptor.value = async function (...args: object[]): Promise<any> {
       for (const arg of args) {
-        let errors = [];
+        let errors: ValidationError[] = [];
 
         if (!Array.isArray(arg) && typeof arg === 'object') {
           errors = await validate(arg);
@@ -32,14 +40,16 @@ const DtoValidator =
           typeof arg[0] === 'object'
         ) {
           errors = (
-            await Promise.all(arg.map(async (item) => await validate(item)))
+            await Promise.all(
+              arg.map(async (item: object) => await validate(item)),
+            )
           ).flat();
         }
         if (errors.length > 0) {
           throw new InternalServerErrorException(errors);
         }
       }
-      return await methodRef.call(this, ...args);
+      return (await methodRef.call(this, ...args)) as object;
     };
     return descriptor;
   };

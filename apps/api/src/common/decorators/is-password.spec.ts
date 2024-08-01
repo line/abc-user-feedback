@@ -14,7 +14,7 @@
  * under the License.
  */
 import { faker } from '@faker-js/faker';
-import { Validator } from 'class-validator';
+import { ValidationError, Validator } from 'class-validator';
 
 import { IsPassword } from './is-password';
 
@@ -30,7 +30,7 @@ describe('IsPassword decorator', () => {
       faker.number.int({ min: 8, max: 15 }),
     );
     const validator = new Validator();
-    validator.validate(instance).then((errors) => {
+    void validator.validate(instance).then((errors) => {
       expect(errors).toHaveLength(0);
     });
   });
@@ -40,9 +40,9 @@ describe('IsPassword decorator', () => {
       faker.number.int({ min: 0, max: 7 }),
     );
     const validator = new Validator();
-    validator.validate(instance).then((errors) => {
+    void validator.validate(instance).then((errors: ValidationError[]) => {
       expect(errors.length).toEqual(1);
-      expect(Object.keys(errors[0].constraints)[0]).toEqual('minLength');
+      expect(Object.keys(errors[0].constraints ?? {})[0]).toEqual('minLength');
     });
   });
 
@@ -51,9 +51,9 @@ describe('IsPassword decorator', () => {
     instance.password = faker.number.int({ min: 10000000, max: 99999999 });
 
     const validator = new Validator();
-    validator.validate(instance).then((errors) => {
+    void validator.validate(instance).then((errors: ValidationError[]) => {
       expect(errors.length).toEqual(1);
-      expect(Object.keys(errors[0].constraints)[0]).toEqual('isString');
+      expect(Object.keys(errors[0].constraints ?? {})[0]).toEqual('isString');
     });
   });
 
@@ -61,10 +61,10 @@ describe('IsPassword decorator', () => {
     const instance = new IsPasswordTest();
     instance.password = faker.number.int({ min: 0, max: 9999999 });
     const validator = new Validator();
-    validator.validate(instance).then((errors) => {
+    void validator.validate(instance).then((errors: ValidationError[]) => {
       expect(errors.length).toEqual(1);
-      expect(Object.keys(errors[0].constraints)[0]).toEqual('isString');
-      expect(Object.keys(errors[0].constraints)[1]).toEqual('minLength');
+      expect(Object.keys(errors[0].constraints ?? {})[0]).toEqual('isString');
+      expect(Object.keys(errors[0].constraints ?? {})[1]).toEqual('minLength');
     });
   });
 });

@@ -44,8 +44,9 @@ export class CodeService {
 
     const code = this.createCode();
 
-    const codeEntity =
-      (await this.codeRepo.findOneBy({ key, type })) || new CodeEntity();
+    let codeEntity = await this.codeRepo.findOneBy({ key, type });
+
+    if (codeEntity === null) codeEntity = new CodeEntity();
 
     await this.codeRepo.save(
       Object.assign(codeEntity, {
@@ -97,12 +98,12 @@ export class CodeService {
     type: CodeTypeEnum.USER_INVITATION,
     code: string,
   ): Promise<SetCodeUserInvitationDataDto> {
-    const codeEntity = await this.codeRepo.findOneBy({
+    const codeEntity: CodeEntity | null = await this.codeRepo.findOneBy({
       type,
       code,
     });
     if (!codeEntity) throw new NotFoundException('code not found');
-    return codeEntity.data;
+    return codeEntity.data as SetCodeUserInvitationDataDto;
   }
 
   async checkVerified(type: CodeTypeEnum, key: string) {

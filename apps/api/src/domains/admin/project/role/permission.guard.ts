@@ -20,6 +20,7 @@ import { InjectDataSource } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
 import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
+import { UserEntity } from '../../user/entities/user.entity';
 import type { PermissionEnum } from './permission.enum';
 import { PERMISSIONS_KEY } from './require-permission.decorator';
 import { RoleEntity } from './role.entity';
@@ -38,9 +39,12 @@ export class PermissionGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
-    if (!requiredPermission) return true;
-
-    const { user, params } = context.switchToHttp().getRequest();
+    const {
+      user,
+      params,
+    }: { user: UserEntity; params: { projectId: number } } = context
+      .switchToHttp()
+      .getRequest();
 
     if (user.type === UserTypeEnum.SUPER) return true;
 

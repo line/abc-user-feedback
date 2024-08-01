@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { OptionEntity } from '@/domains/admin/channel/option/option.entity';
 import { optionFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class OptionRepositoryStub {
-  option = optionFixture;
+  option: OptionEntity | null = optionFixture;
   findOne() {
     return this.option;
   }

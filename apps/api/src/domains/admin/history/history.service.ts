@@ -31,6 +31,8 @@ export class HistoryService {
       const { userId, ...rest } = dto;
       const entityId = dto.entityId;
 
+      if (!userId) throw new Error('userId is required');
+
       await this.dataSource.transaction(async (manager) => {
         const repo = manager.getRepository(HistoryEntity);
         const history = HistoryEntity.from({ userId, entityId, ...rest });

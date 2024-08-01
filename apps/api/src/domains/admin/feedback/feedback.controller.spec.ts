@@ -103,7 +103,6 @@ describe('FeedbackController', () => {
     const dto = new ExportFeedbacksRequestDto(
       faker.number.int(),
       faker.number.int(),
-      'csv',
     );
     const userDto = new UserDto();
     jest.spyOn(MockFeedbackService, 'generateFile').mockResolvedValue({

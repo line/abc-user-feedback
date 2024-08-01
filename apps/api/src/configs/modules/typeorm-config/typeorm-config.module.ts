@@ -15,7 +15,7 @@
  */
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { addTransactionalDataSource } from 'typeorm-transactional';
 
 import { TypeOrmConfigService } from './typeorm-config.service';
@@ -24,7 +24,7 @@ import { TypeOrmConfigService } from './typeorm-config.service';
   imports: [
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
-      dataSourceFactory: async (options) => {
+      dataSourceFactory: async (options: DataSourceOptions) => {
         Logger.log('start data source initalized');
         const datasource = await new DataSource(options).initialize();
         Logger.log('end data source initalized');

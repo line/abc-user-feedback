@@ -48,10 +48,6 @@ export class WebhookService {
     ];
 
     if (eventRequiresChannelIds.includes(event.type)) {
-      if (!event.channelIds) {
-        return false;
-      }
-
       const channels = await this.channelRepo.findBy({
         id: In(event.channelIds),
       });
@@ -59,7 +55,7 @@ export class WebhookService {
     }
 
     if (eventExcludesChannelIds.includes(event.type)) {
-      return !event.channelIds || event.channelIds.length === 0;
+      return event.channelIds.length === 0;
     }
 
     return false;
@@ -119,11 +115,12 @@ export class WebhookService {
   }
 
   @Transactional()
-  async update(dto: UpdateWebhookDto) {
-    const webhook = await this.repository.findOne({
-      where: { id: dto.id },
-      relations: ['events'],
-    });
+  async update(dto: UpdateWebhookDto): Promise<WebhookEntity> {
+    const webhook =
+      (await this.repository.findOne({
+        where: { id: dto.id },
+        relations: ['events'],
+      })) ?? new WebhookEntity();
 
     if (
       await this.repository.findOne({
@@ -161,10 +158,11 @@ export class WebhookService {
   }
 
   @Transactional()
-  async delete(webhookId) {
-    const webhook = await this.repository.findOne({
-      where: { id: webhookId },
-    });
+  async delete(webhookId: number) {
+    const webhook =
+      (await this.repository.findOne({
+        where: { id: webhookId },
+      })) ?? new WebhookEntity();
 
     await this.repository.remove(webhook);
   }

@@ -72,7 +72,7 @@ describe('AuthController', () => {
     const dto = new EmailVerificationCodeRequestDto();
     dto.code = faker.string.sample();
     dto.email = faker.internet.email();
-    authController.verifyEmailCode(dto);
+    void authController.verifyEmailCode(dto);
 
     expect(MockAuthService.verifyEmailCode).toHaveBeenCalledTimes(1);
   });
@@ -80,7 +80,7 @@ describe('AuthController', () => {
     const dto = new EmailUserSignUpRequestDto();
     dto.email = faker.internet.email();
     dto.password = faker.internet.password();
-    authController.signUpEmailUser(dto);
+    void authController.signUpEmailUser(dto);
     expect(MockAuthService.signUpEmailUser).toHaveBeenCalledTimes(1);
   });
   it('signUpInvitationUser', () => {
@@ -88,17 +88,17 @@ describe('AuthController', () => {
     dto.code = faker.string.sample();
     dto.email = faker.internet.email();
     dto.password = faker.internet.password();
-    authController.signUpInvitationUser(dto);
+    void authController.signUpInvitationUser(dto);
     expect(MockAuthService.signUpInvitationUser).toHaveBeenCalledTimes(1);
   });
   it('signInEmail', () => {
     const dto = new UserDto();
-    authController.signInEmail(dto);
+    void authController.signInEmail(dto);
     expect(MockAuthService.signIn).toHaveBeenCalledTimes(1);
   });
   it('refreshToken', () => {
     const dto = new UserDto();
-    authController.refreshToken(dto);
+    void authController.refreshToken(dto);
     expect(MockAuthService.refreshToken).toHaveBeenCalledTimes(1);
   });
 });

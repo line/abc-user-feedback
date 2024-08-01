@@ -15,6 +15,7 @@
  */
 import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
+import { Request } from 'express';
 
 import { AuthService } from '../auth.service';
 
@@ -23,8 +24,8 @@ export class ApiKeyAuthGuard implements CanActivate {
   constructor(private readonly authService: AuthService) {}
 
   canActivate(context: ExecutionContext) {
-    const request = context.switchToHttp().getRequest();
-    const apiKey = request.headers['x-api-key'];
+    const request = context.switchToHttp().getRequest<Request>();
+    const apiKey = request.headers['x-api-key'] as string | undefined;
     if (!apiKey) return false;
     if (apiKey === process.env.MASTER_API_KEY) return true;
     const projectId = parseInt(request.params.projectId);

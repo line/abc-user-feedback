@@ -16,7 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 import { Like } from 'typeorm';
 
 import { SortMethodEnum } from '@/common/enums';
@@ -71,8 +71,10 @@ describe('UserService', () => {
       };
       jest
         .spyOn(userRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'setFindOptions');
+        .mockImplementation(
+          () => createQueryBuilder as unknown as SelectQueryBuilder<UserEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const {
         meta: { currentPage, itemCount },
@@ -120,19 +122,23 @@ describe('UserService', () => {
       const result = await userService.findById(userId);
 
       expect(userRepo.findOne).toBeCalledTimes(1);
-      expect(userRepo.findOne).toBeCalledWith({ where: { id: userId } });
+      expect(userRepo.findOne).toBeCalledWith({
+        where: { id: userId },
+      });
       expect(result).toMatchObject({ id: userId });
     });
     it('finding by an id fails with a nonexistent id', async () => {
       const userId = faker.number.int();
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null);
 
       await expect(userService.findById(userId)).rejects.toThrow(
         UserNotFoundException,
       );
 
       expect(userRepo.findOne).toBeCalledTimes(1);
-      expect(userRepo.findOne).toBeCalledWith({ where: { id: userId } });
+      expect(userRepo.findOne).toBeCalledWith({
+        where: { id: userId },
+      });
     });
   });
   describe('sendInvitationCode', () => {

@@ -27,6 +27,7 @@ import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
+import { ProjectNotFoundException } from '../../project/project/exceptions';
 import { getIntervalDatesInFormat } from '../utils/util-functions';
 import { UpdateFeedbackCountDto } from './dtos';
 import type { GetCountByDateByIssueDto } from './dtos';
@@ -112,10 +113,11 @@ export class FeedbackIssueStatisticsService {
   }
 
   async addCronJobByProjectId(projectId: number) {
-    const { timezone } = await this.projectRepository.findOne({
+    const project = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-    const timezoneOffset = timezone.offset;
+    if (project === null) throw new ProjectNotFoundException();
+    const timezoneOffset = project.timezone.offset;
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
@@ -148,14 +150,12 @@ export class FeedbackIssueStatisticsService {
     this.logger.log(`feedback-issue-statistics-${projectId} cron job started`);
   }
 
-  async createFeedbackIssueStatistics(
-    projectId: number,
-    dayToCreate: number = 1,
-  ) {
-    const { timezone } = await this.projectRepository.findOne({
+  async createFeedbackIssueStatistics(projectId: number, dayToCreate = 1) {
+    const project = await this.projectRepository.findOne({
       where: { id: projectId },
     });
-    const timezoneOffset = timezone.offset;
+    if (project === null) throw new ProjectNotFoundException();
+    const timezoneOffset = project.timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
@@ -165,58 +165,60 @@ export class FeedbackIssueStatisticsService {
 
     for (let day = 1; day <= dayToCreate; day++) {
       for (const issue of issues) {
-        await this.repository.manager
-          .transaction(async (transactionalEntityManager) => {
-            const feedbackCount = await this.feedbackRepository.count({
-              where: {
-                issues: { id: issue.id },
-                createdAt: Between(
-                  DateTime.utc()
-                    .minus({ days: day })
-                    .startOf('day')
-                    .minus({ hours: offset })
-                    .toJSDate(),
-                  DateTime.utc()
-                    .minus({ days: day })
-                    .endOf('day')
-                    .minus({ hours: offset })
-                    .toJSDate(),
-                ),
-              },
-            });
-
-            if (feedbackCount === 0) return;
-
-            await transactionalEntityManager
-              .createQueryBuilder()
-              .insert()
-              .into(FeedbackIssueStatisticsEntity)
-              .values({
-                date:
-                  offset >= 0 ?
+        try {
+          await this.repository.manager.transaction(
+            async (transactionalEntityManager) => {
+              const feedbackCount = await this.feedbackRepository.count({
+                where: {
+                  issues: { id: issue.id },
+                  createdAt: Between(
+                    DateTime.utc()
+                      .minus({ days: day })
+                      .startOf('day')
+                      .minus({ hours: offset })
+                      .toJSDate(),
                     DateTime.utc()
                       .minus({ days: day })
                       .endOf('day')
                       .minus({ hours: offset })
-                      .toFormat('yyyy-MM-dd')
-                  : DateTime.utc()
-                      .minus({ days: day })
-                      .startOf('day')
-                      .minus({ hours: offset })
-                      .toFormat('yyyy-MM-dd'),
-                issue: { id: issue.id },
-                feedbackCount,
-              })
-              .orUpdate(['feedback_count'], ['date', 'issue'])
-              .updateEntity(false)
-              .execute();
-          })
-          .catch((error) => {
-            this.logger.error({
-              message: 'Failed to create feedback issue statistics',
-              error,
-            });
+                      .toJSDate(),
+                  ),
+                },
+              });
+
+              if (feedbackCount === 0) return;
+
+              await transactionalEntityManager
+                .createQueryBuilder()
+                .insert()
+                .into(FeedbackIssueStatisticsEntity)
+                .values({
+                  date:
+                    offset >= 0 ?
+                      DateTime.utc()
+                        .minus({ days: day })
+                        .endOf('day')
+                        .minus({ hours: offset })
+                        .toFormat('yyyy-MM-dd')
+                    : DateTime.utc()
+                        .minus({ days: day })
+                        .startOf('day')
+                        .minus({ hours: offset })
+                        .toFormat('yyyy-MM-dd'),
+                  issue: { id: issue.id },
+                  feedbackCount,
+                })
+                .orUpdate(['feedback_count'], ['date', 'issue'])
+                .updateEntity(false)
+                .execute();
+            },
+          );
+        } catch (error) {
+          this.logger.error({
+            message: 'Failed to create feedback issue statistics',
+            error: error as Error,
           });
+        }
       }
     }
   }
@@ -226,10 +228,11 @@ export class FeedbackIssueStatisticsService {
     if (dto.feedbackCount === 0) return;
     if (!dto.feedbackCount) dto.feedbackCount = 1;
 
-    const { timezone } = await this.projectRepository.findOne({
+    const project = await this.projectRepository.findOne({
       where: { issues: { id: dto.issueId } },
     });
-    const timezoneOffset = timezone.offset;
+    if (project === null) throw new ProjectNotFoundException();
+    const timezoneOffset = project.timezone.offset;
     const [hours, minutes] = timezoneOffset.split(':');
     const offset = Number(hours) + Number(minutes) / 60;
 
@@ -237,7 +240,7 @@ export class FeedbackIssueStatisticsService {
       DateTime.fromJSDate(dto.date)
         .plus({ hours: offset })
         .toISO()
-        .split('T')[0] + 'T00:00:00',
+        ?.split('T')[0] + 'T00:00:00',
     );
 
     const stats = await this.repository.findOne({

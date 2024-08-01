@@ -21,10 +21,7 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 @ApiExcludeController()
 export class APIController {
   @Get('docs/redoc')
-  async getAPIDocs(
-    @Req() request: FastifyRequest,
-    @Res() reply: FastifyReply,
-  ): Promise<void> {
+  getAPIDocs(@Req() request: FastifyRequest, @Res() reply: FastifyReply) {
     const { hostname } = request;
 
     const html = `<!DOCTYPE html>
@@ -51,6 +48,6 @@ export class APIController {
         <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
       </body>
     </html>`;
-    reply.type('text/html').send(html);
+    void reply.type('text/html').send(html);
   }
 }

@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import { roleFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class RoleRepositoryStub {
-  role = roleFixture;
+  role: RoleEntity | null = roleFixture;
   findOne() {
     return this.role;
   }

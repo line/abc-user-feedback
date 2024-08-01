@@ -57,9 +57,9 @@ import {
 import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
 
 export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
-  const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
-  const property = input?.property ?? getRandomEnumValue(FieldPropertyEnum);
-  const status = input?.status ?? getRandomEnumValue(FieldStatusEnum);
+  const format = input.format ?? getRandomEnumValue(FieldFormatEnum);
+  const property = input.property ?? getRandomEnumValue(FieldPropertyEnum);
+  const status = input.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
     name: faker.string.alphanumeric(20),
     description: faker.lorem.lines(2),
@@ -73,10 +73,10 @@ export const createFieldEntity = (input: Partial<CreateFieldDto>) => {
     ...input,
   };
 };
-export const createFieldDto = (input: Partial<CreateFieldDto>) => {
-  const format = input?.format ?? getRandomEnumValue(FieldFormatEnum);
-  const property = input?.property ?? getRandomEnumValue(FieldPropertyEnum);
-  const status = input?.status ?? getRandomEnumValue(FieldStatusEnum);
+export const createFieldDto = (input: Partial<CreateFieldDto> = {}) => {
+  const format = input.format ?? getRandomEnumValue(FieldFormatEnum);
+  const property = input.property ?? getRandomEnumValue(FieldPropertyEnum);
+  const status = input.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
     name: faker.string.alphanumeric(20),
     key: faker.string.alphanumeric(20),
@@ -108,7 +108,7 @@ export const createIssueDto = (input: Partial<CreateIssueDto>) => {
 export const getRandomValue = (
   format: FieldFormatEnum,
   options?: { id: number; name: string; key: string }[],
-) => {
+): string | number | string[] | number[] => {
   switch (format) {
     case FieldFormatEnum.text:
       return faker.string.sample();
@@ -117,11 +117,11 @@ export const getRandomValue = (
     case FieldFormatEnum.number:
       return faker.number.int();
     case FieldFormatEnum.select:
-      return options.length === 0 ?
-          undefined
+      return !options || options.length === 0 ?
+          []
         : options[faker.number.int({ min: 0, max: options.length - 1 })].key;
     case FieldFormatEnum.multiSelect:
-      return options.length === 0 ?
+      return !options || options.length === 0 ?
           []
         : faker.helpers
             .shuffle(options)
@@ -155,18 +155,23 @@ const getRandomOptionDtos = () => {
   });
 };
 
-export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
-  const enumValues = Object.keys(anEnum) as Array<keyof T>;
+export const getRandomEnumValue = <T extends object>(anEnum: T): T[keyof T] => {
+  const enumValues = Object.keys(anEnum) as (keyof T)[];
   const randomIndex = faker.number.int(enumValues.length - 1);
   const randomEnumKey = enumValues[randomIndex];
   return anEnum[randomEnumKey];
 };
-export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
-  const enumValues = Object.values(anEnum) as Array<keyof T>;
+export const getRandomEnumValues = <T extends object>(
+  anEnum: T,
+): T[keyof T][] => {
+  const enumValues = Object.values(anEnum);
   return faker.helpers.arrayElements(enumValues) as T[keyof T][];
 };
 
-export const optionSort = (a, b) =>
+export const optionSort = (
+  a: { id: number; name: string },
+  b: { id: number; name: string },
+) =>
   a.name < b.name ? -1
   : a.name > b.name ? 1
   : 0;
@@ -191,6 +196,10 @@ export const tenantFixture = {
   oauthConfig: null,
   createdAt: faker.date.past(),
   updatedAt: faker.date.past(),
+  projects: [],
+  deletedAt: new Date(0),
+  beforeInsertHook: jest.fn(),
+  beforeUpdateHook: jest.fn(),
 } as TenantEntity;
 
 export const projectFixture = {
@@ -336,6 +345,9 @@ export const feedbackFixture = {
   updatedAt: faker.date.past(),
   channel: channelFixture,
   issues: [],
+  deletedAt: new Date(0),
+  beforeInsertHook: jest.fn(),
+  beforeUpdateHook: jest.fn(),
 } as FeedbackEntity;
 
 export const eventFixture = {

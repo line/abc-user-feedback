@@ -122,7 +122,7 @@ export class IssueService {
         continue;
       }
 
-      andWhere[column] = Like(`%${query[column]}%`);
+      andWhere[column] = Like(`%${query[column] as string}%`);
     }
 
     if (query.searchText) {
@@ -220,10 +220,11 @@ export class IssueService {
 
   @Transactional()
   async deleteById(id: number) {
-    const issue = await this.repository.findOne({
-      where: { id },
-      relations: { project: true },
-    });
+    const issue =
+      (await this.repository.findOne({
+        where: { id },
+        relations: { project: true },
+      })) ?? new IssueEntity();
 
     await this.issueStatisticsService.updateCount({
       projectId: issue.project.id,

@@ -30,12 +30,14 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
     private readonly configService: ConfigService<ConfigServiceType>,
   ) {}
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    const { main_url, sub_urls, auto_migration } = this.configService.get(
-      'mysql',
-      {
+    const {
+      main_url,
+      sub_urls,
+      auto_migration,
+    }: { main_url: string; sub_urls: string[]; auto_migration: boolean } =
+      this.configService.get('mysql', {
         infer: true,
-      },
-    );
+      }) ?? { main_url: '', sub_urls: [], auto_migration: false };
 
     return {
       type: 'mysql',

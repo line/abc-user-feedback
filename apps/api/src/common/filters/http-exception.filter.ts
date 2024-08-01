@@ -30,12 +30,12 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const exceptionResponse = exception.getResponse();
 
     if (typeof exceptionResponse === 'string') {
-      response.status(statusCode).send({
+      void response.status(statusCode).send({
         response: exceptionResponse,
         path: request.url,
       });
     } else {
-      response.status(statusCode).send({
+      void response.status(statusCode).send({
         ...exceptionResponse,
         statusCode,
         path: request.url,

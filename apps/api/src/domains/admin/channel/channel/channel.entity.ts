@@ -48,7 +48,7 @@ export class ChannelEntity extends CommonEntity {
   name: string;
 
   @Column('varchar', { nullable: true })
-  description: string;
+  description: string | null;
 
   @Column({ type: 'json', nullable: true })
   imageConfig: ImageConfig | null;
@@ -84,7 +84,7 @@ export class ChannelEntity extends CommonEntity {
 
   static from(
     name: string,
-    description: string,
+    description: string | null,
     projectId: number,
     imageConfig: ImageConfig | null,
   ) {
