@@ -44,7 +44,7 @@ export class HistoryEntity extends CommonEntity {
     action,
     entity,
   }: {
-    userId: number;
+    userId: number | null | undefined;
     entityName: EntityNameEnum;
     entityId: number;
     action: HistoryActionEnum;

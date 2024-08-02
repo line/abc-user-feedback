@@ -25,7 +25,7 @@ import {
 
 export abstract class CommonEntity {
   @PrimaryGeneratedColumn('increment')
-  id: number;
+  id: number | null | undefined;
 
   @CreateDateColumn()
   createdAt: Date;
