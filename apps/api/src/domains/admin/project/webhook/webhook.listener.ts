@@ -18,7 +18,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { AxiosError } from 'axios';
-import { catchError, lastValueFrom, of, retry, timer } from 'rxjs';
+import { catchError, lastValueFrom, of, retry, tap, timer } from 'rxjs';
 import { Repository } from 'typeorm';
 
 import type { IssueStatusEnum } from '@/common/enums';
@@ -68,6 +68,11 @@ export class WebhookListener {
               },
             )
             .pipe(
+              tap(() => {
+                this.logger.log(
+                  `Successfully sent webhook to ${webhook.url}(event: ${event}, data: ${JSON.stringify(data)}, token: ${webhook.token})`,
+                );
+              }),
               retry({
                 count: 3,
                 delay: (error, retryCount) => {
