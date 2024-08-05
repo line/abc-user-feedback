@@ -24,6 +24,7 @@ const colors = {
   current: "currentColor",
 };
 
+/** @type {import('tailwindcss').Config["theme"]} */
 module.exports = {
   ...theme,
   colors: {

@@ -37,7 +37,7 @@ class PathV3 {
   readonly DASHBOARD = '/main/project/[projectId]/dashboard';
   readonly FEEDBACK = '/main/project/[projectId]/feedback';
   readonly ISSUE = '/main/project/[projectId]/issue';
-  readonly SETTINGS = '/main/project/[projectId]/setting';
+  readonly SETTINGS = '/main/project/[projectId]/settings';
 
   isErrorPage(pathname: string) {
     return pathname.startsWith('/error');

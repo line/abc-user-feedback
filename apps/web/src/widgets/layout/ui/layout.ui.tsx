@@ -14,32 +14,27 @@
  * under the License.
  */
 
-import type { GetServerSideProps } from 'next';
+import Header from './header.ui';
 
-import { Path } from '@/shared';
-
-interface IProps {
+interface IProps extends React.PropsWithChildren {
   projectId: number;
+  title: string;
 }
 
-const SettingPage = () => {
-  return <></>;
-};
+const Layout: React.FC<IProps> = (props) => {
+  const { children, projectId, title } = props;
 
-export const getServerSideProps: GetServerSideProps<IProps> = async ({
-  query,
-}) => {
-  return new Promise((resove) =>
-    resove({
-      redirect: {
-        destination: Path.SETTINGS.replace(
-          '[projectId]',
-          String(query.projectId),
-        ),
-        permanent: true,
-      },
-    }),
+  return (
+    <div>
+      <Header projectId={projectId} />
+      <main className="p-5">
+        <div className="h-20 px-6 py-3">
+          <h1 className="title-h3">{title}</h1>
+        </div>
+        {children}
+      </main>
+    </div>
   );
 };
 
-export default SettingPage;
+export default Layout;

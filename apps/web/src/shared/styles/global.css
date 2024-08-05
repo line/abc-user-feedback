@@ -39,7 +39,7 @@
 
 body {
   @apply font-14-regular text-primary bg-primary;
-  font-family: LINESeedJP, LINESeedKR, LINESeedEN, sans-serif;
+  /* font-family: LINESeedJP, LINESeedKR, LINESeedEN, sans-serif; */
 }
 
 a {

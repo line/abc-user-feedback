@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Button } from '@ufb/react';
+
 import { cn } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
@@ -25,18 +27,15 @@ const SettingMenuTemplate: React.FC<IProps> = (props) => {
   const { title, actionBtn, children, action } = props;
 
   return (
-    <div className="border-fill-tertiary relative flex h-[calc(100vh-152px)] min-w-[300px] flex-col gap-6 overflow-auto rounded border p-6">
+    <div className="relative flex flex-col gap-6">
       <div className="flex h-10 items-center justify-between">
         {typeof title === 'string' ?
           <h1 className="font-20-bold">{title}</h1>
         : title}
         {actionBtn && (
-          <button
+          <Button
             {...actionBtn}
-            className={cn([
-              'btn btn-md btn-primary min-w-[120px]',
-              actionBtn.className,
-            ])}
+            className={cn(['min-w-[120px]', actionBtn.className])}
           />
         )}
         {action}

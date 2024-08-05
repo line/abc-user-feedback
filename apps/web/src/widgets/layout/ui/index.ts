@@ -13,33 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import type { GetServerSideProps } from 'next';
-
-import { Path } from '@/shared';
-
-interface IProps {
-  projectId: number;
-}
-
-const SettingPage = () => {
-  return <></>;
-};
-
-export const getServerSideProps: GetServerSideProps<IProps> = async ({
-  query,
-}) => {
-  return new Promise((resove) =>
-    resove({
-      redirect: {
-        destination: Path.SETTINGS.replace(
-          '[projectId]',
-          String(query.projectId),
-        ),
-        permanent: true,
-      },
-    }),
-  );
-};
-
-export default SettingPage;
+export { default as Layout } from './layout.ui';

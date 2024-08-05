@@ -15,18 +15,15 @@
  */
 import { useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { Listbox } from '@headlessui/react';
 import { setCookie } from 'cookies-next';
 
-import { Icon } from '@ufb/ui';
-
-import { cn } from '../utils';
+import { NavBarDropdownButton } from '@ufb/react';
 
 interface IProps extends React.PropsWithChildren {}
 
 const LocaleSelectBox: React.FC<IProps> = () => {
   const router = useRouter();
-  const onToggleLanguageClick = useCallback(
+  const onChangeLanguage = useCallback(
     async (newLocale: string) => {
       const { pathname, asPath, query } = router;
       setCookie('NEXT_LOCALE', newLocale);
@@ -36,39 +33,12 @@ const LocaleSelectBox: React.FC<IProps> = () => {
   );
 
   return (
-    <Listbox
-      as="div"
-      className="relative"
-      value={router.locale}
-      onChange={(v) => onToggleLanguageClick(v)}
-    >
-      <Listbox.Button className="btn btn-sm btn-secondary min-w-0 px-2">
-        {({ value }) => (
-          <>
-            <Icon name="GlobeStroke" size={16} className="mr-1" />
-            <span className="font-12-bold uppercase">{value}</span>
-          </>
-        )}
-      </Listbox.Button>
-      <Listbox.Options className="bg-primary absolute z-10 mt-1 w-full overflow-hidden rounded border">
-        {router.locales
-          ?.filter((v) => v !== 'default')
-          .map((v) => (
-            <Listbox.Option
-              key={v}
-              value={v}
-              className={({ selected }) =>
-                cn([
-                  'hover:bg-secondary cursor-pointer select-none p-2 text-center font-extrabold uppercase',
-                  selected ? 'font-bold' : 'font-normal',
-                ])
-              }
-            >
-              {v}
-            </Listbox.Option>
-          ))}
-      </Listbox.Options>
-    </Listbox>
+    <NavBarDropdownButton
+      triggerIcon="RiTranslate2"
+      items={router.locales
+        ?.filter((v) => v !== 'default')
+        .map((v) => ({ children: v, onClick: () => onChangeLanguage(v) }))}
+    />
   );
 };
 

@@ -15,7 +15,7 @@
  */
 import { useEffect } from 'react';
 
-import { Icon } from '@ufb/ui';
+import { NavBarButton } from '@ufb/react';
 
 import { useThemeStore } from '../theme.model';
 
@@ -28,15 +28,10 @@ const ThemeToggleButton: React.FC = () => {
   }, [theme]);
 
   return (
-    <button
-      className="icon-btn icon-btn-sm icon-btn-secondary"
+    <NavBarButton
+      icon={theme === 'light' ? 'RiSunLine' : 'RiMoonLine'}
       onClick={toggle}
-    >
-      <Icon
-        name={theme === 'light' ? 'MoonStroke' : 'SunStroke'}
-        className="text-primary"
-      />
-    </button>
+    />
   );
 };
 

@@ -36,7 +36,7 @@ const TestPage: NextPage = () => {
     <div>
       <NavBar>
         <div className="w-[240px]">
-          <Select onValueChange={() => {}}>
+          <Select>
             <SelectTrigger size="small">
               <SelectValue placeholder="Select a fruit" />
             </SelectTrigger>
