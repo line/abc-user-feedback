@@ -74,7 +74,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <SettingMenuTemplate
-      title={t('tenant-setting-menu.tenant-info')}
+      title={t('project-setting-menu.project-info')}
       actionBtn={{
         form: 'form',
         type: 'submit',
