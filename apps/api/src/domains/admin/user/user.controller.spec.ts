@@ -59,56 +59,56 @@ describe('user controller', () => {
   it('to be defined', () => {
     expect(userController).toBeDefined();
   });
-  it('getAllUsers', () => {
+  it('getAllUsers', async () => {
     jest.spyOn(MockUserService, 'findAll').mockResolvedValue([]);
-    userController.getAllUsers({ limit: 10, page: 1 });
+    await userController.getAllUsers({ limit: 10, page: 1 });
     expect(MockUserService.findAll).toHaveBeenCalledTimes(1);
   });
 
-  it('deleteUsers', () => {
-    userController.deleteUsers({ ids: [1] });
+  it('deleteUsers', async () => {
+    await userController.deleteUsers({ ids: [1] });
     expect(MockUserService.deleteUsers).toHaveBeenCalledTimes(1);
   });
-  it('inviteUser', () => {
+  it('inviteUser', async () => {
     const userDto = new UserDto();
     userDto.id = faker.number.int();
-    userController.inviteUser(new UserInvitationRequestDto(), userDto);
+    await userController.inviteUser(new UserInvitationRequestDto(), userDto);
     expect(MockUserService.sendInvitationCode).toHaveBeenCalledTimes(1);
   });
-  it('requestResetPassword', () => {
-    userController.requestResetPassword('email');
+  it('requestResetPassword', async () => {
+    await userController.requestResetPassword('email');
     expect(MockUserPasswordService.sendResetPasswordMail).toHaveBeenCalledTimes(
       1,
     );
   });
-  it('resetPassword', () => {
-    userController.resetPassword(new ResetPasswordRequestDto());
+  it('resetPassword', async () => {
+    await userController.resetPassword(new ResetPasswordRequestDto());
     expect(MockUserPasswordService.resetPassword).toHaveBeenCalledTimes(1);
   });
-  it('changePassword', () => {
-    userController.changePassword(
+  it('changePassword', async () => {
+    await userController.changePassword(
       new UserDto(),
       new ChangePasswordRequestDto(),
     );
     expect(MockUserPasswordService.changePassword).toHaveBeenCalledTimes(1);
   });
 
-  it('getUser', () => {
+  it('getUser', async () => {
     const userDto = new UserDto();
     userDto.id = faker.number.int();
 
-    userController.getUser(userDto.id, userDto);
+    await userController.getUser(userDto.id, userDto);
 
     expect(MockUserService.findById).toHaveBeenCalledTimes(1);
     expect(MockUserService.findById).toHaveBeenCalledWith(userDto.id);
   });
 
   describe('deleteUser', () => {
-    it('positive', () => {
+    it('positive', async () => {
       const userDto = new UserDto();
       userDto.id = faker.number.int();
 
-      userController.deleteUser(userDto.id, userDto);
+      await userController.deleteUser(userDto.id, userDto);
 
       expect(MockUserService.deleteById).toHaveBeenCalledTimes(1);
       expect(MockUserService.deleteById).toHaveBeenCalledWith(userDto.id);
@@ -117,7 +117,7 @@ describe('user controller', () => {
       const userDto = new UserDto();
       userDto.id = faker.number.int();
 
-      expect(
+      void expect(
         userController.deleteUser(faker.number.int(), userDto),
       ).rejects.toThrow(UnauthorizedException);
     });

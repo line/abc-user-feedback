@@ -98,11 +98,12 @@ export class ApiKeyService {
 
   @Transactional()
   async softDeleteById(id: number) {
-    const apiKey = await this.repository.findOne({
-      where: {
-        id,
-      },
-    });
+    const apiKey =
+      (await this.repository.findOne({
+        where: {
+          id,
+        },
+      })) ?? new ApiKeyEntity();
 
     await this.repository.save(
       Object.assign(apiKey, { deletedAt: DateTime.utc().toJSDate() }),
@@ -111,12 +112,13 @@ export class ApiKeyService {
 
   @Transactional()
   async recoverById(id: number) {
-    const apiKey = await this.repository.findOne({
-      where: {
-        id,
-      },
-      withDeleted: true,
-    });
+    const apiKey =
+      (await this.repository.findOne({
+        where: {
+          id,
+        },
+        withDeleted: true,
+      })) ?? new ApiKeyEntity();
 
     await this.repository.save(Object.assign(apiKey, { deletedAt: null }));
   }

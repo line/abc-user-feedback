@@ -30,6 +30,7 @@ const defaultValues: WebhookInfo = {
   name: '',
   status: 'ACTIVE',
   url: '',
+  token: null,
   events: [
     { type: 'FEEDBACK_CREATION', channelIds: [], status: 'INACTIVE' },
     { type: 'ISSUE_ADDITION', channelIds: [], status: 'INACTIVE' },

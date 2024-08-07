@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -25,6 +26,8 @@ import type { DataSource, Repository } from 'typeorm';
 import { AppModule } from '@/app.module';
 import { HttpExceptionFilter } from '@/common/filters';
 import { CreateProjectRequestDto } from '@/domains/admin/project/project/dtos/requests';
+import type { FindProjectByIdResponseDto } from '@/domains/admin/project/project/dtos/responses/find-project-by-id-response.dto';
+import type { FindProjectsResponseDto } from '@/domains/admin/project/project/dtos/responses/find-projects-response.dto';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { clearEntities } from '@/test-utils/util-functions';
 
@@ -72,20 +75,24 @@ describe('AppController (e2e)', () => {
       })),
     );
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .get('/projects')
       .expect(200)
       .expect(({ body }) => {
         expect(body).toHaveProperty('items');
         expect(body).toHaveProperty('meta');
 
-        expect(Array.isArray(body.items)).toEqual(true);
-        for (const project of body.items) {
+        expect(Array.isArray((body as FindProjectsResponseDto).items)).toEqual(
+          true,
+        );
+        for (const project of (body as FindProjectsResponseDto).items) {
           expect(project).toHaveProperty('id');
           expect(project).toHaveProperty('name');
           expect(project).toHaveProperty('description');
         }
-        expect(body.meta.totalItems).toEqual(total);
+        expect((body as FindProjectsResponseDto).meta.totalItems).toEqual(
+          total,
+        );
       });
   });
 
@@ -94,7 +101,10 @@ describe('AppController (e2e)', () => {
     dto.name = faker.string.sample();
     dto.description = faker.string.sample();
 
-    return request(app.getHttpServer()).post('/projects').send(dto).expect(201);
+    return request(app.getHttpServer() as Server)
+      .post('/projects')
+      .send(dto)
+      .expect(201);
   });
 
   it('/projects/:id (GET)', async () => {
@@ -103,13 +113,15 @@ describe('AppController (e2e)', () => {
       description: faker.string.sample(),
     });
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .get('/projects/' + project.id)
       .expect(200)
       .expect(({ body }) => {
-        expect(body.id).toEqual(project.id);
-        expect(body.name).toEqual(project.name);
-        expect(body.description).toEqual(project.description);
+        expect((body as FindProjectByIdResponseDto).id).toEqual(project.id);
+        expect((body as FindProjectByIdResponseDto).name).toEqual(project.name);
+        expect((body as FindProjectByIdResponseDto).description).toEqual(
+          project.description,
+        );
       });
   });
   it('/projects/:id (PUT)', async () => {
@@ -121,14 +133,14 @@ describe('AppController (e2e)', () => {
     const name = faker.string.sample();
     const description = faker.string.sample();
 
-    return request(app.getHttpServer())
+    return request(app.getHttpServer() as Server)
       .put(`/projects/${project.id}`)
       .send({ name, description })
       .expect(200)
       .then(async () => {
         const updatedproject = await projectRepo.findOneBy({ id: project.id });
-        expect(updatedproject.name).toEqual(name);
-        expect(updatedproject.description).toEqual(description);
+        expect(updatedproject?.name).toEqual(name);
+        expect(updatedproject?.description).toEqual(description);
       });
   });
   // it('/projects/:id (DELETE)', async () => {

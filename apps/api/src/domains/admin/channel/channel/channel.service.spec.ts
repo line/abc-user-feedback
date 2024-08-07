@@ -89,9 +89,7 @@ describe('ChannelService', () => {
     it('finding by an id fails with a nonexistent id', async () => {
       const dto = new FindByChannelIdDto();
       dto.channelId = faker.number.int();
-      jest
-        .spyOn(channelRepo, 'findOne')
-        .mockResolvedValue(null as ChannelEntity);
+      jest.spyOn(channelRepo, 'findOne').mockResolvedValue(null);
 
       await expect(channelService.findById(dto)).rejects.toThrow(
         ChannelNotFoundException,

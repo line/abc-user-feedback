@@ -16,7 +16,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+import { ExtractJwt, JwtFromRequestFunction, Strategy } from 'passport-jwt';
 
 import type { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import type { ConfigServiceType } from '@/types/config-service.type';
@@ -29,19 +29,25 @@ interface IPayload {
   exp: number;
 }
 
+interface StrategyOptions {
+  jwtFromRequest: JwtFromRequestFunction;
+  ignoreExpiration: boolean;
+  secretOrKey: string;
+}
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(configService: ConfigService<ConfigServiceType>) {
-    const { secret } = configService.get('jwt', { infer: true });
+    const { secret } = configService.get('jwt', { infer: true }) ?? {};
 
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: secret,
-    });
+    } as StrategyOptions);
   }
 
-  async validate(payload: IPayload) {
+  validate(payload: IPayload) {
     const { email, sub, type } = payload;
     return { id: sub, email, type };
   }

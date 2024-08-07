@@ -35,6 +35,12 @@ import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-res
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
 
+interface OpenSearchQuery {
+  bool: {
+    must: any[];
+  };
+}
+
 @Injectable()
 export class FeedbackOSService {
   private logger = new Logger(FeedbackOSService.name);
@@ -62,22 +68,28 @@ export class FeedbackOSService {
   }
 
   private getMultiFieldQuery(
-    query: any,
+    query: string,
     fields: FieldEntity[],
     fieldFormats: FieldFormatEnum[],
   ) {
+    type FieldFormatCondition = {
+      match_phrase: Record<string, string>;
+    }[];
     return {
       bool: {
-        should: fields.reduce((prev, field) => {
-          if (fieldFormats.includes(field.format)) {
-            prev.push({
-              match_phrase: {
-                [field.id]: query,
-              },
-            });
-          }
-          return prev;
-        }, []),
+        should: fields.reduce(
+          (prev: FieldFormatCondition, field: FieldEntity) => {
+            if (fieldFormats.includes(field.format)) {
+              prev.push({
+                match_phrase: {
+                  [field.id]: query,
+                },
+              });
+            }
+            return prev;
+          },
+          [],
+        ),
       },
     };
   }
@@ -99,11 +111,11 @@ export class FeedbackOSService {
       query:
         query ?
           Object.keys(query).reduce(
-            (osQuery, fieldKey) => {
+            (osQuery: OpenSearchQuery, fieldKey) => {
               if (fieldKey === 'ids') {
                 osQuery.bool.must.push({
                   ids: {
-                    values: query[fieldKey].map((id) => id.toString()),
+                    values: (query[fieldKey] ?? []).map((id) => id.toString()),
                   },
                 });
 
@@ -149,16 +161,18 @@ export class FeedbackOSService {
               if (format === FieldFormatEnum.select) {
                 osQuery.bool.must.push({
                   match_phrase: {
-                    [key]: options.find(
+                    [key]: (options ?? []).find(
                       (option) => option.key === query[fieldKey],
-                    ).key,
+                    )?.key,
                   },
                 });
               } else if (format === FieldFormatEnum.multiSelect) {
                 for (const value of query[fieldKey] as string[]) {
                   osQuery.bool.must.push({
                     match_phrase: {
-                      [key]: options.find((option) => option.key === value).key,
+                      [key]: (options ?? []).find(
+                        (option) => option.key === value,
+                      )?.key,
                     },
                   });
                 }
@@ -231,12 +245,12 @@ export class FeedbackOSService {
   ): Promise<Pagination<Feedback, IPaginationMeta>> {
     const { channelId, limit, page, query, sort, fields } = dto;
 
-    if (query && query.issueIds) {
+    if (query?.issueIds) {
       const feedbackIds = await this.issueIdsToFeedbackIds(
         query.issueIds as number[],
       );
 
-      delete query['issueIds'];
+      delete query.issueIds;
       if (query.ids) {
         query.ids = [...query.ids, ...feedbackIds];
       } else {
@@ -244,15 +258,16 @@ export class FeedbackOSService {
       }
     }
 
-    const osQuery = this.osQueryBulider(query, sort, fields);
+    const osQuery = this.osQueryBulider(query, sort, fields ?? []);
     this.logger.log(osQuery);
 
-    const { items, total } = await this.osRepository.getData({
-      index: channelId.toString(),
-      limit,
-      page,
-      ...osQuery,
-    });
+    const { items, total }: { items: Record<string, any>[]; total: number } =
+      await this.osRepository.getData({
+        index: channelId.toString(),
+        limit,
+        page,
+        ...osQuery,
+      });
 
     const totalItems = await this.osRepository.getTotal(
       channelId.toString(),
@@ -281,12 +296,12 @@ export class FeedbackOSService {
       scrollId: currentScrollId,
     } = dto;
 
-    if (query && query.issueIds) {
+    if (query?.issueIds) {
       const feedbackIds = await this.issueIdsToFeedbackIds(
         query.issueIds as number[],
       );
 
-      delete query['issueIds'];
+      delete query.issueIds;
       if (query.ids) query.ids = [...query.ids, ...feedbackIds];
       else query.ids = feedbackIds;
     }
@@ -326,7 +341,7 @@ export class FeedbackOSService {
           must: [
             {
               ids: {
-                values: [feedbackId.toString()],
+                values: [(feedbackId as number).toString()],
               },
             },
           ],

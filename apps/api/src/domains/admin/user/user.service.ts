@@ -35,6 +35,11 @@ import {
   UserNotFoundException,
 } from './exceptions';
 
+interface ValueRange {
+  lt: string | number;
+  gte: string | number;
+}
+
 @Injectable()
 export class UserService {
   constructor(
@@ -53,7 +58,7 @@ export class UserService {
             return { ...prev, members: { role: { project: { id: value } } } };
           }
           if (key === 'createdAt') {
-            const { lt, gte } = value as any;
+            const { lt, gte } = value as unknown as ValueRange;
             return {
               ...prev,
               createdAt: Raw((alias) => `${alias} >= :gte AND ${alias} < :lt`, {
@@ -121,7 +126,7 @@ export class UserService {
     const code = await this.codeService.setCode({
       type: CodeTypeEnum.USER_INVITATION,
       key: email,
-      data: { roleId, userType, invitedBy },
+      data: { roleId: roleId ?? 0, userType, invitedBy },
       durationSec: 60 * 60 * 24,
     });
     await this.userInvitationMailingService.send({ code, email });
@@ -139,18 +144,22 @@ export class UserService {
   async validateEmail(email: string) {
     const tenant = await this.tenantService.findOne();
     const domain = email.split('@')[1];
-    if (tenant.isRestrictDomain && !tenant.allowDomains.includes(domain)) {
+    if (tenant.isRestrictDomain && !tenant.allowDomains?.includes(domain)) {
       throw new NotAllowedDomainException();
     }
     return true;
   }
 
   async findRolesById(id: number) {
-    const { members } = await this.userRepo.findOne({
+    const user = await this.userRepo.findOne({
       where: { id },
       select: { members: true },
       relations: { members: { role: { project: true } } },
     });
+    if (user === null) {
+      throw new UserNotFoundException();
+    }
+    const { members } = user;
     return members.map((v) => v.role);
   }
 }

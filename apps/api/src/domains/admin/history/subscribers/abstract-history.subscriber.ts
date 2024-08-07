@@ -58,13 +58,16 @@ export abstract class AbstractHistorySubscriber<T extends CommonEntity>
   afterRecover({ entity }: RecoverEvent<T>): void | Promise<any> {
     this.saveHistory(HistoryActionEnum.Recover, entity);
   }
-  private saveHistory(action: HistoryActionEnum, entity: T | ObjectLiteral) {
-    const userId = this.cls.get('userId');
+  private saveHistory(
+    action: HistoryActionEnum,
+    entity: T | ObjectLiteral | null | undefined,
+  ) {
+    const userId: number = this.cls.get('userId');
 
     if (!entity) return;
-    this.historyService.createHistory({
+    void this.historyService.createHistory({
       userId,
-      entityId: entity.id,
+      entityId: (entity as CommonEntity).id,
       entityName: this.entityName,
       action,
       entity,

@@ -18,7 +18,7 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DateTime } from 'luxon';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
@@ -261,10 +261,13 @@ describe('FeedbackStatisticsService suite', () => {
       dto.projectId = projectId;
       jest
         .spyOn(issueRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
+        );
       jest
-        .spyOn(createQueryBuilder, 'getRawMany')
-        .mockResolvedValue(feedbackStatsFixture);
+        .spyOn(createQueryBuilder, 'getRawMany' as never)
+        .mockResolvedValue(feedbackStatsFixture as never);
       jest
         .spyOn(feedbackRepo, 'count')
         .mockResolvedValue(feedbackStatsFixture.length);
@@ -373,8 +376,11 @@ describe('FeedbackStatisticsService suite', () => {
       jest.spyOn(feedbackStatsRepo, 'findOne').mockResolvedValue(null);
       jest
         .spyOn(feedbackStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
-      jest.spyOn(createQueryBuilder, 'values');
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackStatisticsEntity>,
+        );
+      jest.spyOn(createQueryBuilder, 'values' as never);
 
       await feedbackStatsService.updateCount({
         channelId,
@@ -387,7 +393,7 @@ describe('FeedbackStatisticsService suite', () => {
       expect(createQueryBuilder.values).toBeCalledTimes(1);
       expect(createQueryBuilder.values).toBeCalledWith({
         date: new Date(
-          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO().split('T')[0] +
+          DateTime.fromJSDate(date).plus({ hours: 9 }).toISO()?.split('T')[0] +
             'T00:00:00',
         ),
         count,

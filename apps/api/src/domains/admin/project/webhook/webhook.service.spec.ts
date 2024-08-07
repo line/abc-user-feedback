@@ -39,6 +39,7 @@ function createCreateWebhookDto(overrides = {}): CreateWebhookDto {
     projectId: webhookFixture.project.id,
     name: faker.string.sample(),
     url: faker.internet.url(),
+    token: faker.string.sample(),
     status: WebhookStatusEnum.ACTIVE,
     events: [
       {
@@ -54,12 +55,12 @@ function createCreateWebhookDto(overrides = {}): CreateWebhookDto {
       {
         status: EventStatusEnum.ACTIVE,
         type: EventTypeEnum.ISSUE_CREATION,
-        channelIds: null,
+        channelIds: [],
       },
       {
         status: EventStatusEnum.ACTIVE,
         type: EventTypeEnum.ISSUE_STATUS_CHANGE,
-        channelIds: null,
+        channelIds: [],
       },
     ],
     ...overrides,
@@ -72,6 +73,7 @@ function createUpdateWebhookDto(overrides = {}): UpdateWebhookDto {
     projectId: webhookFixture.project.id,
     name: faker.string.sample(),
     url: faker.internet.url(),
+    token: faker.string.sample(),
     status: getRandomEnumValue(WebhookStatusEnum),
     events: [
       {
@@ -87,12 +89,12 @@ function createUpdateWebhookDto(overrides = {}): UpdateWebhookDto {
       {
         status: getRandomEnumValue(EventStatusEnum),
         type: EventTypeEnum.ISSUE_CREATION,
-        channelIds: null,
+        channelIds: [],
       },
       {
         status: getRandomEnumValue(EventStatusEnum),
         type: EventTypeEnum.ISSUE_STATUS_CHANGE,
-        channelIds: null,
+        channelIds: [],
       },
     ],
     ...overrides,
@@ -124,12 +126,13 @@ describe('webhook service', () => {
       expect(webhook.project.id).toBe(dto.projectId);
       expect(webhook.name).toBe(dto.name);
       expect(webhook.url).toBe(dto.url);
+      expect(webhook.token).toBe(dto.token);
       expect(webhook.status).toBe(dto.status);
       expect(webhook.events.length).toBe(dto.events.length);
       for (let i = 0; i < webhook.events.length; i++) {
         expect(webhook.events[i].status).toBe(dto.events[i].status);
         expect(webhook.events[i].type).toBe(dto.events[i].type);
-        if (dto.events[i].channelIds) {
+        if (dto.events[i].channelIds.length !== 0) {
           expect(webhook.events[i].channels[0].id).toBe(
             dto.events[i].channelIds[0],
           );
@@ -163,6 +166,7 @@ describe('webhook service', () => {
       expect(webhook.project.id).toBe(dto.projectId);
       expect(webhook.name).toBe(dto.name);
       expect(webhook.url).toBe(dto.url);
+      expect(webhook.token).toBe(dto.token);
       expect(webhook.status).toBe(dto.status);
       expect(webhook.events.length).toBe(dto.events.length);
       expect(webhook.events[0].channels.length).toBe(
@@ -199,7 +203,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.FEEDBACK_CREATION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });
@@ -215,7 +219,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.ISSUE_ADDITION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });
@@ -273,12 +277,13 @@ describe('webhook service', () => {
       expect(webhook.project.id).toBe(dto.projectId);
       expect(webhook.name).toBe(dto.name);
       expect(webhook.url).toBe(dto.url);
+      expect(webhook.token).toBe(dto.token);
       expect(webhook.status).toBe(dto.status);
       expect(webhook.events.length).toBe(dto.events.length);
       for (let i = 0; i < webhook.events.length; i++) {
         expect(webhook.events[i].status).toBe(dto.events[i].status);
         expect(webhook.events[i].type).toBe(dto.events[i].type);
-        if (dto.events[i].channelIds) {
+        if (dto.events[i].channelIds.length !== 0) {
           expect(webhook.events[i].channels[0].id).toBe(
             dto.events[i].channelIds[0],
           );
@@ -300,7 +305,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.FEEDBACK_CREATION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });
@@ -320,7 +325,7 @@ describe('webhook service', () => {
             {
               status: EventStatusEnum.ACTIVE,
               type: EventTypeEnum.ISSUE_ADDITION,
-              channelIds: null,
+              channelIds: [],
             },
           ],
         });

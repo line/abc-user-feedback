@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { tenantFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class TenantRepositoryStub {
-  tenant = tenantFixture;
+  tenant: TenantEntity | null = tenantFixture;
   findOne() {
     return this.tenant;
   }
@@ -64,18 +65,24 @@ export class TenantRepositoryStub {
     return 1;
   }
 
-  setIsRestrictDomain(bool, domains = []) {
-    this.tenant.isRestrictDomain = bool;
-    this.tenant.allowDomains = domains;
+  setIsRestrictDomain(bool, domains: string[] = []) {
+    if (this.tenant) {
+      this.tenant.isRestrictDomain = bool;
+      this.tenant.allowDomains = domains;
+    }
   }
 
   setIsPrivate(bool) {
-    this.tenant.isPrivate = bool;
+    if (this.tenant) {
+      this.tenant.isPrivate = bool;
+    }
   }
 
   setUseOAuth(bool, config) {
-    this.tenant.useOAuth = bool;
-    this.tenant.oauthConfig = config;
+    if (this.tenant) {
+      this.tenant.useOAuth = bool;
+      this.tenant.oauthConfig = config;
+    }
   }
 
   setNull() {

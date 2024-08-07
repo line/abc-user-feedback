@@ -33,7 +33,9 @@ interface IProps {
 
 const WebhookForm: React.FC<IProps> = (props) => {
   const { channels } = props;
+
   const { t } = useTranslation();
+
   const { register, setValue, getValues, watch, formState } =
     useFormContext<WebhookInfo>();
 
@@ -107,9 +109,27 @@ const WebhookForm: React.FC<IProps> = (props) => {
         {...register('url')}
         isSubmitted={formState.isSubmitted}
         isSubmitting={formState.isSubmitting}
-        isValid={!formState.errors.name}
+        isValid={!formState.errors.url}
         hint={formState.errors.url?.message}
         required
+      />
+      <TextInput
+        label="Token"
+        placeholder={t('placeholder', { name: 'Webhook Token' })}
+        {...register('token')}
+        isSubmitted={formState.isSubmitted}
+        isSubmitting={formState.isSubmitting}
+        isValid={!formState.errors.token}
+        hint={formState.errors.token?.message}
+        rightChildren={
+          <button
+            className="btn btn-primary btn-xs btn-rounded min-w-[64px]"
+            type="button"
+            onClick={() => setValue('token', window.crypto.randomUUID())}
+          >
+            {t('button.generate')}
+          </button>
+        }
       />
       <div className="flex flex-col gap-2">
         <p className="input-label">Event</p>

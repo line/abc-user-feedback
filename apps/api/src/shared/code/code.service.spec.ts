@@ -135,7 +135,7 @@ describe('CodeService', () => {
   });
   describe('verifyCode', () => {
     const key = faker.string.sample();
-    beforeEach(async () => {
+    beforeEach(() => {
       codeRepo.setType(CodeTypeEnum.EMAIL_VEIRIFICATION);
       codeRepo.setIsVerified(false);
     });

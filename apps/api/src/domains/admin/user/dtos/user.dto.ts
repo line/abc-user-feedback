@@ -25,7 +25,7 @@ export class UserDto {
 
   @Expose()
   @ApiProperty()
-  email: string;
+  email: string | null;
 
   @Expose()
   @ApiProperty()

@@ -72,9 +72,10 @@ export class UserPasswordService {
   @Transactional()
   async changePassword(dto: ChangePasswordDto) {
     const { newPassword, password, userId } = dto;
-    const user = await this.userRepo.findOneBy({
-      id: userId,
-    });
+    const user =
+      (await this.userRepo.findOneBy({
+        id: userId,
+      })) ?? new UserEntity();
     const originHashPassword = user.hashPassword;
 
     if (!bcrypt.compareSync(password, originHashPassword)) {

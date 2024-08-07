@@ -240,7 +240,8 @@
     "next": "次へ",
     "complete": "完了",
     "next-time": "次回",
-    "start": "はじまり"
+    "start": "はじまり",
+    "generate": "生成"
   },
   "input": {
     "label": {

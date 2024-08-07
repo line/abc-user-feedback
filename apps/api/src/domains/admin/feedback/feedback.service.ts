@@ -61,6 +61,19 @@ import { validateValue } from './feedback.common';
 import { FeedbackMySQLService } from './feedback.mysql.service';
 import { FeedbackOSService } from './feedback.os.service';
 
+interface File {
+  fieldname: string;
+  buffer: Buffer;
+  mimetype: string;
+  originalname: string;
+}
+
+interface ImageUrl extends File {
+  url: string;
+}
+
+type ImageUrlsByKeys = Record<string, string[]>;
+
 @Injectable()
 export class FeedbackService {
   constructor(
@@ -86,6 +99,10 @@ export class FeedbackService {
       {},
     );
 
+    if (query === undefined) {
+      throw new BadRequestException('query is required');
+    }
+
     for (const fieldKey of Object.keys(query)) {
       if (['ids', 'issueIds'].includes(fieldKey)) {
         if (!Array.isArray(query[fieldKey])) {
@@ -96,7 +113,7 @@ export class FeedbackService {
       if ('searchText' === fieldKey) {
         continue;
       }
-      if (!fieldsByKey[fieldKey]) {
+      if (!(fieldKey in fieldsByKey)) {
         throw new BadRequestException(`invalid key in query: ${fieldKey}`);
       }
 
@@ -144,7 +161,7 @@ export class FeedbackService {
   }
 
   private convertFeedback(
-    feedback: any,
+    feedback: Feedback,
     fieldsByKey: Record<string, FieldEntity>,
     fieldsToExport: FieldEntity[],
   ) {
@@ -155,13 +172,13 @@ export class FeedbackService {
           key === 'issues' ?
             feedback[key].map((issue) => issue.name).join(', ')
           : feedback[key].join(', ')
-        : feedback[key];
+        : (feedback[key] as string);
     }
 
     return Object.keys(convertedFeedback)
       .filter((key) => fieldsToExport.find((field) => field.name === key))
       .reduce((obj, key) => {
-        obj[key] = convertedFeedback[key];
+        obj[key] = convertedFeedback[key] as object;
         return obj;
       }, {});
   }
@@ -173,11 +190,21 @@ export class FeedbackService {
     fields,
     fieldsByKey,
     fieldsToExport,
+  }: {
+    channelId: number;
+    query: FindFeedbacksByChannelIdDto['query'];
+    sort: FindFeedbacksByChannelIdDto['sort'];
+    fields: FieldEntity[];
+    fieldsByKey: Record<string, FieldEntity>;
+    fieldsToExport: FieldEntity[];
   }) {
     if (!existsSync('/tmp')) {
       await fs.mkdir('/tmp');
     }
-    const tempFilePath = path.join('/tmp', `temp_${new Date()}.xlsx`);
+    const tempFilePath = path.join(
+      '/tmp',
+      `temp_${new Date().toString()}.xlsx`,
+    );
     const workbook = new ExcelJS.stream.xlsx.WorkbookWriter({
       filename: tempFilePath,
     });
@@ -186,14 +213,14 @@ export class FeedbackService {
     const headers = fieldsToExport.map((field) => ({
       header: field.name,
       key: field.name,
-    }));
+    })) as Partial<ExcelJS.Column>[];
     worksheet.columns = headers;
 
     const pageSize = 1000;
-    let feedbacks = [];
-    let currentScrollId = null;
+    let feedbacks: Feedback[] = [];
+    let currentScrollId: string | null = null;
     let page = 1;
-    const feedbackIds = [];
+    const feedbackIds: number[] = [];
 
     do {
       if (this.configService.get('opensearch.use')) {
@@ -206,7 +233,7 @@ export class FeedbackService {
           scrollId: currentScrollId,
         });
         feedbacks = data;
-        currentScrollId = scrollId;
+        currentScrollId = scrollId as unknown as string;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelId({
           channelId,
@@ -221,18 +248,18 @@ export class FeedbackService {
       }
       const issuesByFeedbackIds =
         await this.issueService.findIssuesByFeedbackIds(
-          feedbacks.map((feedback) => feedback.id),
+          feedbacks.map((feedback) => feedback.id as number),
         );
 
       for (const feedback of feedbacks) {
-        feedback.issues = issuesByFeedbackIds[feedback.id];
+        feedback.issues = issuesByFeedbackIds[feedback.id as number];
         const convertedFeedback = this.convertFeedback(
           feedback,
           fieldsByKey,
           fieldsToExport,
         );
         worksheet.addRow(convertedFeedback).commit();
-        feedbackIds.push(feedback.id);
+        feedbackIds.push(feedback.id as number);
       }
     } while (feedbacks.length === pageSize);
     worksheet.commit();
@@ -257,35 +284,35 @@ export class FeedbackService {
   }) {
     const stream = new PassThrough();
     const csvStream = fastcsv.format({
-      headers: fieldsToExport.map((field) => field.name),
+      headers: (fieldsToExport as FieldEntity[]).map((field) => field.name),
     });
 
     csvStream.pipe(stream);
 
     const pageSize = 1000;
-    let feedbacks = [];
-    let currentScrollId = null;
+    let feedbacks: Record<string, any>[] = [];
+    let currentScrollId: number | null = null;
     let page = 1;
-    const feedbackIds = [];
+    const feedbackIds: number[] = [];
 
     do {
       if (this.configService.get('opensearch.use')) {
         const { data, scrollId } = await this.feedbackOSService.scroll({
-          channelId,
-          query,
-          sort,
-          fields,
+          channelId: channelId as number,
+          query: query as FindFeedbacksByChannelIdDto['query'],
+          sort: sort as FindFeedbacksByChannelIdDto['sort'],
+          fields: fields as FieldEntity[],
           size: pageSize,
-          scrollId: currentScrollId,
+          scrollId: currentScrollId as unknown as string,
         });
         feedbacks = data;
         currentScrollId = scrollId;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelId({
-          channelId,
-          query,
-          sort,
-          fields,
+          channelId: channelId as number,
+          query: query as FindFeedbacksByChannelIdDto['query'],
+          sort: sort as FindFeedbacksByChannelIdDto['sort'],
+          fields: fields as FieldEntity[],
           limit: pageSize,
           page,
         });
@@ -294,18 +321,18 @@ export class FeedbackService {
       }
       const issuesByFeedbackIds =
         await this.issueService.findIssuesByFeedbackIds(
-          feedbacks.map((feedback) => feedback.id),
+          feedbacks.map((feedback: Feedback) => feedback.id as number),
         );
 
       for (const feedback of feedbacks) {
-        feedback.issues = issuesByFeedbackIds[feedback.id];
+        feedback.issues = issuesByFeedbackIds[feedback.id as number];
         const convertedFeedback = this.convertFeedback(
           feedback,
-          fieldsByKey,
-          fieldsToExport,
+          fieldsByKey as Record<string, FieldEntity>,
+          fieldsToExport as FieldEntity[],
         );
         csvStream.write(convertedFeedback);
-        feedbackIds.push(feedback.id);
+        feedbackIds.push(feedback.id as number);
       }
     } while (feedbacks.length === pageSize);
 
@@ -341,7 +368,10 @@ export class FeedbackService {
         );
       }
 
-      const value = data[fieldKey];
+      const value: number | string | string[] = data[fieldKey] as
+        | number
+        | string
+        | string[];
       const field = fields.find((v) => v.key === fieldKey);
 
       if (!field) {
@@ -358,9 +388,9 @@ export class FeedbackService {
 
       if (field.format === FieldFormatEnum.images) {
         const channel = await this.channelService.findById({ channelId });
-        const domainWhiteList = channel.imageConfig.domainWhiteList;
+        const domainWhiteList = channel.imageConfig?.domainWhiteList ?? [];
 
-        if (domainWhiteList) {
+        if (domainWhiteList.length !== 0) {
           const images = value as string[];
           for (const image of images) {
             const url = new URL(image);
@@ -421,7 +451,7 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    this.validateQuery(dto.query || {}, fields);
+    this.validateQuery(dto.query ?? {}, fields);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -429,11 +459,13 @@ export class FeedbackService {
       : await this.feedbackMySQLService.findByChannelId(dto);
 
     const issuesByFeedbackIds = await this.issueService.findIssuesByFeedbackIds(
-      feedbacksByPagination.items.map((feedback) => feedback.id),
+      feedbacksByPagination.items.map(
+        (feedback: Feedback) => feedback.id as number,
+      ),
     );
 
-    feedbacksByPagination.items.forEach((feedback) => {
-      feedback.issues = issuesByFeedbackIds[feedback.id];
+    feedbacksByPagination.items.forEach((feedback: Feedback) => {
+      feedback.issues = issuesByFeedbackIds[feedback.id as number];
     });
 
     return feedbacksByPagination;
@@ -453,11 +485,11 @@ export class FeedbackService {
     );
 
     for (const fieldKey of Object.keys(data)) {
-      const field = fieldsByKey[fieldKey];
-
-      if (!field) {
+      if (!(fieldKey in fieldsByKey)) {
         throw new BadRequestException('invalid field name');
       }
+
+      const field = fieldsByKey[fieldKey];
 
       if (field.property === FieldPropertyEnum.READ_ONLY) {
         throw new BadRequestException('this field is read-only');
@@ -470,27 +502,27 @@ export class FeedbackService {
       if (field.format === FieldFormatEnum.multiSelect) {
         const values = data[fieldKey] as string[];
         const newValues = values.filter(
-          (v) => !field.options.find(({ name }) => name === v),
+          (v) => !(field.options ?? []).find(({ name }) => name === v),
         );
         const newOptions = await this.optionService.createMany({
           fieldId: field.id,
           options: newValues.map((v) => ({ name: v, key: v })),
         });
-        field.options = field.options.concat(newOptions);
+        field.options = (field.options ?? []).concat(newOptions);
       }
 
       const value = data[fieldKey] as string;
       if (
         field.format === FieldFormatEnum.select &&
         value &&
-        !field.options.find((v) => v.name === value)
+        !(field.options ?? []).find((v) => v.name === value)
       ) {
         const newOption = await this.optionService.create({
           fieldId: field.id,
           key: value,
           name: value,
         });
-        field.options = field.options.concat(newOption);
+        field.options = (field.options ?? []).concat(newOption);
       }
 
       if (!validateValue(field, data[fieldKey])) {
@@ -569,7 +601,7 @@ export class FeedbackService {
     });
     if (fields.length === 0) throw new BadRequestException('invalid channel');
 
-    let fieldsToExport = fields;
+    let fieldsToExport: FieldEntity[] = fields;
     if (fieldIds) {
       fieldsToExport = await this.fieldService.findByIds(fieldIds);
       if (fields.length === 0) {
@@ -578,7 +610,7 @@ export class FeedbackService {
     }
 
     this.validateQuery(query, fields);
-    const fieldsByKey = fields.reduce(
+    const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
         return prev;
@@ -586,24 +618,25 @@ export class FeedbackService {
       {},
     );
 
-    if (type === 'xlsx') {
-      return this.generateXLSXFile({
-        channelId,
-        query,
-        sort,
-        fields,
-        fieldsByKey,
-        fieldsToExport,
-      });
-    } else if (type === 'csv') {
-      return this.generateCSVFile({
-        channelId,
-        query,
-        sort,
-        fields,
-        fieldsByKey,
-        fieldsToExport,
-      });
+    switch (type) {
+      case 'xlsx':
+        return this.generateXLSXFile({
+          channelId,
+          query,
+          sort,
+          fields,
+          fieldsByKey,
+          fieldsToExport,
+        });
+      case 'csv':
+        return this.generateCSVFile({
+          channelId,
+          query,
+          sort,
+          fields,
+          fieldsByKey,
+          fieldsToExport,
+        });
     }
   }
 
@@ -621,8 +654,10 @@ export class FeedbackService {
       });
       const feedback = items[0];
       const issuesByFeedbackIds =
-        await this.issueService.findIssuesByFeedbackIds([feedback.id]);
-      feedback.issues = issuesByFeedbackIds[feedback.id];
+        await this.issueService.findIssuesByFeedbackIds([
+          feedback.id as number,
+        ]);
+      feedback.issues = issuesByFeedbackIds[feedback.id as number];
 
       return feedback;
     } else {
@@ -635,27 +670,24 @@ export class FeedbackService {
     files,
   }: {
     channelId: number;
-    files: Array<any>;
+    files: File[];
   }) {
     const channel = await this.channelService.findById({ channelId });
-    if (!channel) {
-      throw new BadRequestException('invalid channel id');
-    }
 
     const s3 = new S3Client({
       credentials: {
-        accessKeyId: channel.imageConfig.accessKeyId,
-        secretAccessKey: channel.imageConfig.secretAccessKey,
+        accessKeyId: channel.imageConfig?.accessKeyId ?? '',
+        secretAccessKey: channel.imageConfig?.secretAccessKey ?? '',
       },
-      endpoint: channel.imageConfig.endpoint,
-      region: channel.imageConfig.region,
+      endpoint: channel.imageConfig?.endpoint,
+      region: channel.imageConfig?.region,
     });
     try {
       const imageUrls = await Promise.all(
         files.map(async (file) => {
           const key = `${channelId}_${Date.now()}_${file.originalname}`;
           const command = new PutObjectCommand({
-            Bucket: channel.imageConfig.bucket,
+            Bucket: channel.imageConfig?.bucket,
             Key: key,
             Body: file.buffer,
             ContentType: file.mimetype,
@@ -665,23 +697,26 @@ export class FeedbackService {
 
           return {
             ...file,
-            url: `${channel.imageConfig.endpoint}/${channel.imageConfig.bucket}/${key}`,
-          };
+            url: `${channel.imageConfig?.endpoint}/${channel.imageConfig?.bucket}/${key}`,
+          } as ImageUrl;
         }),
       );
-      const imageUrlsByKeys = imageUrls.reduce((prev, curr) => {
-        if (curr.fieldname in prev) {
-          return {
-            ...prev,
-            [curr.fieldname]: prev[curr.fieldname].concat(curr.url),
-          };
-        } else {
-          return {
-            ...prev,
-            [curr.fieldname]: [curr.url],
-          };
-        }
-      }, {});
+      const imageUrlsByKeys: ImageUrlsByKeys = imageUrls.reduce(
+        (prev: ImageUrlsByKeys, curr: ImageUrl) => {
+          if (curr.fieldname in prev) {
+            return {
+              ...prev,
+              [curr.fieldname]: prev[curr.fieldname].concat(curr.url),
+            };
+          } else {
+            return {
+              ...prev,
+              [curr.fieldname]: [curr.url],
+            };
+          }
+        },
+        {} as ImageUrlsByKeys,
+      );
 
       return imageUrlsByKeys;
     } catch (e) {

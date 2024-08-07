@@ -34,6 +34,9 @@ export class CreateWebhookDto {
   @Expose()
   events: EventDto[];
 
+  @Expose()
+  token: string | null;
+
   public static from(params: any): CreateWebhookDto {
     return plainToInstance(CreateWebhookDto, params, {
       excludeExtraneousValues: true,

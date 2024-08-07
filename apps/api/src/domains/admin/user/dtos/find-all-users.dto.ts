@@ -22,8 +22,8 @@ export class FindAllUsersDto {
   options: IPaginationOptions;
   query?: {
     email?: string;
-    name?: string;
-    department?: string;
+    name?: string | null;
+    department?: string | null;
     type?: UserTypeEnum;
     projectId?: number;
   };

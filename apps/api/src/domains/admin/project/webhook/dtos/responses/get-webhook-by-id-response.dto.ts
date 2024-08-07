@@ -59,6 +59,10 @@ export class GetWebhookByIdResponseDto {
   url: string;
 
   @Expose()
+  @ApiProperty()
+  token: string;
+
+  @Expose()
   @ApiProperty({ type: WebhookStatusEnum, enum: WebhookStatusEnum })
   status: WebhookStatusEnum;
 

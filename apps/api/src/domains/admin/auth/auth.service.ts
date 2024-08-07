@@ -22,7 +22,7 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import * as bcrypt from 'bcrypt';
 import { DateTime } from 'luxon';
 import { catchError, lastValueFrom, map } from 'rxjs';
@@ -55,6 +55,16 @@ import type {
 } from './dtos';
 import { SignUpEmailUserDto, SignUpOauthUserDto } from './dtos';
 import { PasswordNotMatchException, UserBlockedException } from './exceptions';
+
+interface AccessTokenResponse {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  refresh_token: string;
+  scope: string;
+}
+
+type UserProfileResponse = Record<string, string>;
 
 @Injectable()
 export class AuthService {
@@ -146,9 +156,6 @@ export class AuthService {
       code,
     );
 
-    if (!data?.userType) {
-      throw new InternalServerErrorException('no user type');
-    }
     return await this.createUserService.createInvitationUser({
       ...rest,
       type: data.userType,
@@ -176,7 +183,7 @@ export class AuthService {
 
     if (state === UserStateEnum.Blocked) throw new UserBlockedException();
     const { accessTokenExpiredTime, refreshTokenExpiredTime } =
-      this.configService.get('jwt', { infer: true });
+      this.configService.get('jwt', { infer: true }) ?? {};
 
     return {
       accessToken: this.jwtService.sign(
@@ -221,10 +228,10 @@ export class AuthService {
       response_type: 'code',
       state: crypto.randomBytes(10).toString('hex'),
       scope: oauthConfig.scopeString,
-      callback_url: encodeURIComponent(callback_url),
+      callback_url: encodeURIComponent(callback_url ?? ''),
     });
 
-    return `${oauthConfig.authCodeRequestURL}?${params}`;
+    return `${oauthConfig.authCodeRequestURL}?${params.toString()}`;
   }
 
   private async getAccessToken(code: string): Promise<string> {
@@ -238,9 +245,9 @@ export class AuthService {
     }
 
     const { accessTokenRequestURL, clientId, clientSecret } = oauthConfig;
-    return await lastValueFrom(
+    return await lastValueFrom<string>(
       this.httpService
-        .post(
+        .post<AccessTokenResponse>(
           accessTokenRequestURL,
           {
             grant_type: 'authorization_code',
@@ -256,15 +263,19 @@ export class AuthService {
             },
           },
         )
-        .pipe(map((res) => res.data?.access_token))
+        .pipe<string>(
+          map<AxiosResponse<AccessTokenResponse, any>, string>(
+            (res) => res.data.access_token,
+          ),
+        )
         .pipe(
-          catchError((error) => {
+          catchError((error: Error) => {
             if (error instanceof AxiosError) {
               throw new InternalServerErrorException({
                 axiosError: {
-                  ...error.response.data,
-                  status: error.response.status,
-                },
+                  ...error.response?.data,
+                  status: error.response?.status,
+                } as object,
               });
             }
             throw error;
@@ -279,20 +290,20 @@ export class AuthService {
     if (!oauthConfig) {
       throw new BadRequestException('OAuth Config is required.');
     }
-    return await lastValueFrom(
+    return await lastValueFrom<string>(
       this.httpService
-        .get(oauthConfig.userProfileRequestURL, {
+        .get<UserProfileResponse>(oauthConfig.userProfileRequestURL, {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
-        .pipe(map((res) => res.data?.[oauthConfig.emailKey]))
+        .pipe(map((res) => res.data[oauthConfig.emailKey]))
         .pipe(
-          catchError((error) => {
+          catchError((error: Error) => {
             if (error instanceof AxiosError) {
               throw new InternalServerErrorException({
                 axiosError: {
-                  ...error.response.data,
-                  status: error.response.status,
-                },
+                  ...error.response?.data,
+                  status: error.response?.status,
+                } as object,
               });
             }
             throw error;

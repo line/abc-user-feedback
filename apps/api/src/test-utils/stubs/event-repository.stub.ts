@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { EventEntity } from '@/domains/admin/project/webhook/event.entity';
 import { eventFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class EventRepositoryStub {
-  event = eventFixture;
+  event: EventEntity | null = eventFixture;
   findOne() {
     return this.event;
   }

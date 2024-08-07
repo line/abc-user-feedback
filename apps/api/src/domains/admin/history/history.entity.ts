@@ -22,8 +22,11 @@ import { EntityNameEnum } from './history-entity.enum';
 
 @Entity('histories')
 export class HistoryEntity extends CommonEntity {
-  @ManyToOne(() => UserEntity, { createForeignKeyConstraints: false })
-  user: Relation<UserEntity>;
+  @ManyToOne(() => UserEntity, {
+    createForeignKeyConstraints: false,
+    nullable: true,
+  })
+  user: Relation<UserEntity> | null;
 
   @Column('enum', { enum: EntityNameEnum })
   entityName: EntityNameEnum;
@@ -44,15 +47,19 @@ export class HistoryEntity extends CommonEntity {
     action,
     entity,
   }: {
-    userId: number;
+    userId: number | null | undefined;
     entityName: EntityNameEnum;
     entityId: number;
     action: HistoryActionEnum;
     entity: object;
   }) {
     const history = new HistoryEntity();
-    history.user = new UserEntity();
-    history.user.id = userId;
+    if (userId) {
+      history.user = new UserEntity();
+      history.user.id = userId;
+    } else {
+      history.user = null;
+    }
     history.entityName = entityName;
     history.entityId = entityId;
     history.action = action;

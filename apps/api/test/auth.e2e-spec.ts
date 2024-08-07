@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import { ValidationPipe } from '@nestjs/common';
@@ -35,8 +36,10 @@ import {
   EmailVerificationMailingRequestDto,
   InvitationUserSignUpRequestDto,
 } from '@/domains/admin/auth/dtos/requests';
+import type { SignInResponseDto } from '@/domains/admin/auth/dtos/responses/sign-in-response.dto';
 import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import { UserDto } from '@/domains/admin/user/dtos/user.dto';
 import {
   UserStateEnum,
   UserTypeEnum,
@@ -44,6 +47,13 @@ import {
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import { UserPasswordService } from '@/domains/admin/user/user-password.service';
 import { clearEntities } from '@/test-utils/util-functions';
+
+interface JwtPayload {
+  sub: number;
+  email: string;
+  permissions: string[];
+  roleName: string;
+}
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -98,7 +108,7 @@ describe('AppController (e2e)', () => {
       const dto = new EmailVerificationMailingRequestDto();
       dto.email = faker.internet.email();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/email/code')
         .send(dto)
         .expect(201)
@@ -116,7 +126,7 @@ describe('AppController (e2e)', () => {
       const dto = new EmailVerificationMailingRequestDto();
       dto.email = user.email;
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/email/code')
         .send(dto)
         .expect(400);
@@ -139,15 +149,15 @@ describe('AppController (e2e)', () => {
       dto.code = code;
 
       const originalCode = await codeRepo.findOneBy({ code });
-      expect(originalCode.isVerified).toEqual(false);
+      expect(originalCode?.isVerified).toEqual(false);
 
-      await request(app.getHttpServer())
+      await request(app.getHttpServer() as Server)
         .post('/auth/email/code/verify')
         .send(dto)
         .expect(200);
 
       const updatedCode = await codeRepo.findOneBy({ code });
-      expect(updatedCode.isVerified).toEqual(true);
+      expect(updatedCode?.isVerified).toEqual(true);
     });
     it('invalid code', async () => {
       const dto = new EmailVerificationCodeRequestDto();
@@ -155,15 +165,15 @@ describe('AppController (e2e)', () => {
       dto.code = faker.string.sample();
 
       const originalCode = await codeRepo.findOneBy({ code });
-      expect(originalCode.isVerified).toEqual(false);
+      expect(originalCode?.isVerified).toEqual(false);
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/email/code/verify')
         .send(dto)
         .expect(400)
         .then(async () => {
           const updatedCode = await codeRepo.findOneBy({ code });
-          expect(updatedCode.isVerified).toEqual(false);
+          expect(updatedCode?.isVerified).toEqual(false);
         });
     });
     it('invalid email', async () => {
@@ -171,7 +181,7 @@ describe('AppController (e2e)', () => {
       dto.email = faker.internet.email();
       dto.code = code;
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/email/code/verify')
         .send(dto)
         .expect(404);
@@ -192,7 +202,7 @@ describe('AppController (e2e)', () => {
         key: email,
       });
 
-    beforeEach(async () => {
+    beforeEach(() => {
       email = faker.internet.email();
     });
 
@@ -204,7 +214,7 @@ describe('AppController (e2e)', () => {
       dto.email = email;
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/email')
         .send(dto)
         .expect(201)
@@ -219,7 +229,7 @@ describe('AppController (e2e)', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/email')
         .send(dto)
         .expect(400);
@@ -232,7 +242,7 @@ describe('AppController (e2e)', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/email')
         .send(dto)
         .expect(400);
@@ -251,7 +261,7 @@ describe('AppController (e2e)', () => {
       dto.email = email;
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/email')
         .send(dto)
         .expect(400);
@@ -263,7 +273,11 @@ describe('AppController (e2e)', () => {
       await codeService.setCode({
         type: CodeTypeEnum.USER_INVITATION,
         key: email,
-        data: { roleId: 1, userType: UserTypeEnum.GENERAL, invitedBy: null },
+        data: {
+          roleId: 1,
+          userType: UserTypeEnum.GENERAL,
+          invitedBy: new UserDto(),
+        },
       });
 
     beforeEach(() => {
@@ -276,7 +290,7 @@ describe('AppController (e2e)', () => {
       dto.code = code;
       dto.email = email;
       dto.password = faker.internet.password();
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/invitation')
         .send(dto)
         .expect(201);
@@ -287,7 +301,7 @@ describe('AppController (e2e)', () => {
       dto.email = email;
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/invitation')
         .send(dto)
         .expect(400);
@@ -300,7 +314,7 @@ describe('AppController (e2e)', () => {
       dto.email = email;
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/invitation')
         .send(dto)
         .expect(400);
@@ -313,7 +327,7 @@ describe('AppController (e2e)', () => {
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signUp/invitation')
         .send(dto)
         .expect(400);
@@ -337,7 +351,7 @@ describe('AppController (e2e)', () => {
       dto.email = userEntity.email;
       dto.password = password;
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signIn/email')
         .send(dto)
         .expect(201)
@@ -345,7 +359,10 @@ describe('AppController (e2e)', () => {
           expect(body).toHaveProperty('accessToken');
           expect(body).toHaveProperty('refreshToken');
 
-          const payload = jwtService.verify(body.accessToken);
+          const payload = jwtService.verify<JwtPayload>(
+            (body as SignInResponseDto).accessToken,
+          );
+
           expect(payload.sub).toEqual(userEntity.id);
           expect(payload).toHaveProperty('email');
           expect(payload).toHaveProperty('permissions');
@@ -358,7 +375,7 @@ describe('AppController (e2e)', () => {
       dto.email = faker.internet.email();
       dto.password = password;
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signIn/email')
         .send(dto)
         .expect(404);
@@ -369,7 +386,7 @@ describe('AppController (e2e)', () => {
       dto.email = userEntity.email;
       dto.password = faker.internet.password();
 
-      return request(app.getHttpServer())
+      return request(app.getHttpServer() as Server)
         .post('/auth/signIn/email')
         .send(dto)
         .expect(401);

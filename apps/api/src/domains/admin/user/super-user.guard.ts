@@ -17,11 +17,15 @@ import type { CanActivate, ExecutionContext } from '@nestjs/common';
 import { Injectable } from '@nestjs/common';
 
 import { UserTypeEnum } from './entities/enums';
+import { UserEntity } from './entities/user.entity';
 
+interface Request {
+  user: UserEntity | null;
+}
 @Injectable()
 export class SuperUserGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean {
-    const { user } = context.switchToHttp().getRequest();
+    const { user } = context.switchToHttp().getRequest<Request>();
 
     if (!user) return false;
 
