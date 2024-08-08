@@ -33,14 +33,11 @@ export const useOAuthCallback = () => {
   const router = useRouter();
 
   const query = useMemo(() => {
-    if (!router.query.callback_url) return null;
     const { code, callback_url } = router.query;
-
-    return code ? ({ code, callback_url } as IQuery) : null;
+    return { code, callback_url } as IQuery;
   }, [router.query]);
 
   useEffect(() => {
-    if (!query) return;
     signInWithOAuth(query).catch(() => {
       toast.negative({ title: 'OAuth2.0 Login Error' });
       void router.replace(Path.SIGN_IN);
