@@ -359,7 +359,7 @@ importers:
         version: 3.6.0
       dayjs:
         specifier: ^1.11.10
-        version: 1.11.11
+        version: 1.11.12
       framer-motion:
         specifier: ^11.1.7
         version: 11.3.24(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -4786,6 +4786,9 @@ packages:
 
   dayjs@1.11.11:
     resolution: {integrity: sha512-okzr3f11N6WuqYtZSvm+F776mB41wRZMhKP+hc34YdW+KmtYYK9iqvHSwo2k9FEH3fhGXvOPV6yz2IcSrfRUDg==}
+
+  dayjs@1.11.12:
+    resolution: {integrity: sha512-Rt2g+nTbLlDWZTwwrIXjy9MeiZmSDI375FvZs72ngxx8PDC6YXOeR3q5LAuPzjZQxhiWdRKac7RKV+YyQYfYIg==}
 
   deasync@0.1.30:
     resolution: {integrity: sha512-OaAjvEQuQ9tJsKG4oHO9nV1UHTwb2Qc2+fadB0VeVtD0Z9wiG1XPGLJ4W3aLhAoQSYTaLROFRbd5X20Dkzf7MQ==}
@@ -14417,6 +14420,8 @@ snapshots:
   dateformat@4.6.3: {}
 
   dayjs@1.11.11: {}
+
+  dayjs@1.11.12: {}
 
   deasync@0.1.30:
     dependencies:
