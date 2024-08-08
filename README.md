@@ -70,7 +70,20 @@ You can configure the frontend for session password, maximum time span to query,
 
 You can configure the backend for MySQL, SMTP for email verification, OpenSearch-powered improved search experience, etc.
 
-## Setup Dev Environment (Local)
+## Setup Dev Environment using Command Line Tool (Local)
+
+ABC User Feedback supports command line tool that easily run frontend and backend.
+
+With this command line tool, you can initialize infrastructure and run app powered by prepared docker image.
+
+```bash
+git clone https://github.com/line/abc-user-feedback
+cd abc-user-feedback/apps/cli
+./ufb-cli init
+./ufb-cli start
+```
+
+## Setup Dev Environment Manually (Local)
 
 ABC User Feedback is using a monorepo (powered by [TurboRepo](https://turbo.build/)) with multiple apps and packages.
 

@@ -4,7 +4,6 @@ services:
     image: mysql:9.0.1
     platform: linux/amd64
     restart: always
-    command: [--mysql-native-password=ON]
     environment:
       MYSQL_ROOT_PASSWORD: userfeedback
       MYSQL_DATABASE: userfeedback
@@ -24,7 +23,6 @@ services:
     image: mysql:9.0.1
     platform: linux/amd64
     restart: always
-    command: [--mysql-native-password=ON]
     environment:
       MYSQL_ROOT_PASSWORD: userfeedback
       MYSQL_DATABASE: e2e
