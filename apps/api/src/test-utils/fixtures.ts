@@ -137,14 +137,14 @@ export const getRandomValue = (
 };
 
 const getRandomOptionEntities = () => {
-  const length = faker.number.int(10);
+  const length = faker.number.int({ min: 1, max: 10 });
   return Array.from({ length }).map(() => ({
     id: faker.number.int(),
     name: faker.string.sample(),
   }));
 };
 const getRandomOptionDtos = () => {
-  const length = faker.number.int(10);
+  const length = faker.number.int({ min: 1, max: 10 });
   return Array.from({ length }).map(() => {
     const randomValue = faker.string.sample();
     return {
