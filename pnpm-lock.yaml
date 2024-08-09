@@ -291,15 +291,25 @@ importers:
       commander:
         specifier: ^12.1.0
         version: 12.1.0
-      dotenv:
-        specifier: ^16.4.5
-        version: 16.4.5
       inquirer:
         specifier: ^10.1.8
         version: 10.1.8
       js-toml:
         specifier: ^1.0.0
         version: 1.0.0
+    devDependencies:
+      '@ufb/eslint-config':
+        specifier: workspace:*
+        version: link:../../tooling/eslint
+      '@ufb/prettier-config':
+        specifier: workspace:*
+        version: link:../../tooling/prettier
+      '@ufb/tsconfig':
+        specifier: workspace:*
+        version: link:../../tooling/typescript
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@swc/core@1.7.6(@swc/helpers@0.5.12))(@types/node@22.1.0)(typescript@5.5.4)
 
   apps/e2e:
     devDependencies:
@@ -19595,7 +19605,6 @@ snapshots:
       yn: 3.1.1
     optionalDependencies:
       '@swc/core': 1.7.6(@swc/helpers@0.5.12)
-    optional: true
 
   ts-toolbelt@9.6.0: {}
 
