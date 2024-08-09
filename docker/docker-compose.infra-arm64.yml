@@ -4,7 +4,6 @@ services:
     image: mysql:9.0.1
     platform: linux/arm64/v8
     restart: always
-    command: [--mysql-native-password=ON]
     environment:
       MYSQL_ROOT_PASSWORD: userfeedback
       MYSQL_DATABASE: userfeedback
@@ -24,7 +23,6 @@ services:
     image: mysql:9.0.1
     platform: linux/arm64/v8
     restart: always
-    command: [--mysql-native-password=ON]
     environment:
       MYSQL_ROOT_PASSWORD: userfeedback
       MYSQL_DATABASE: e2e
@@ -61,9 +59,9 @@ services:
       - node.name=opensearch-node
       - discovery.type=single-node
       - bootstrap.memory_lock=true
-      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - plugins.security.disabled=true
-      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=userfeedback
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=UserFeedback123!@#
     ulimits:
       memlock:
         soft: -1
@@ -88,7 +86,7 @@ services:
       - 5601:5601
     environment:
       - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
-      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=true"
     depends_on:
       - opensearch-node
     networks:
