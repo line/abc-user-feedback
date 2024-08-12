@@ -14,7 +14,12 @@
  * under the License.
  */
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Combobox } from '@headlessui/react';
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+} from '@headlessui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
 import { useClickAway } from 'react-use';
@@ -38,18 +43,8 @@ interface IProps extends React.PropsWithChildren {
 const IssueCell: React.FC<IProps> = (props) => {
   const { issues, feedbackId, isExpanded, cellWidth } = props;
   const queryClient = useQueryClient();
-
-  const refetch = async () => {
-    await queryClient.invalidateQueries({
-      queryKey: [
-        '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
-      ],
-    });
-  };
-
   const { projectId, channelId } = useFeedbackTable();
   const { t } = useTranslation();
-
   const perms = usePermissions(projectId);
 
   const [overflow, setOverflow] = useState<boolean>(false);
@@ -58,7 +53,15 @@ const IssueCell: React.FC<IProps> = (props) => {
   const [openIssueId, setOpenIssueId] = useState<number | null>(null);
 
   const [inputValue, setInputValue] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
+  const [openPopover, setOpenPopover] = useState(false);
+
+  const refetch = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [
+        '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+      ],
+    });
+  };
 
   const { data: allIssues, refetch: allIssuesRefetch } = useIssueSearch(
     projectId,
@@ -136,7 +139,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     },
   });
 
-  useClickAway(comboBoxRef, () => setIsEditing(false), ['click']);
+  useClickAway(comboBoxRef, () => setOpenPopover(false), ['click']);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -145,22 +148,24 @@ const IssueCell: React.FC<IProps> = (props) => {
     setOverflow(newState);
   }, [ref.current, cellWidth, issues]);
 
-  const addIssue = async (issue?: Issue) => {
-    let issueId = issue?.id;
-    if (!issueId) {
+  const addIssue = async (input?: Issue | string) => {
+    if (!input) return;
+
+    if (typeof input === 'string') {
       const data = await createIssue({ name: inputValue });
       if (!data) return;
-      issueId = data.id;
+      await attatchIssue({ issueId: data.id });
+    } else {
+      await attatchIssue({ issueId: input.id });
     }
-    await attatchIssue({ issueId });
     setInputValue('');
   };
 
   return (
     <div className="relative">
       <Popper
-        open={isEditing}
-        setOpen={setIsEditing}
+        open={openPopover}
+        setOpen={setOpenPopover}
         placement="bottom-start"
         offset={0}
         buttonChildren={
@@ -169,7 +174,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               className="btn btn-xs btn-secondary btn-rounded font-12-regular my-2"
               onClick={(e) => {
                 e.stopPropagation();
-                setIsEditing(true);
+                setOpenPopover(true);
               }}
               disabled={!perms.includes('feedback_issue_update')}
             >
@@ -197,7 +202,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 className="icon-btn icon-btn-xs icon-btn-rounded icon-btn-secondary"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsEditing(true);
+                  setOpenPopover(true);
                 }}
                 disabled={!perms.includes('feedback_issue_update')}
               >
@@ -224,18 +229,15 @@ const IssueCell: React.FC<IProps> = (props) => {
                 }}
               />
             ))}
-            <Combobox.Input
+            <ComboboxInput
               className="input-sm bg-transparent"
               placeholder={t('main.feedback.issue-cell.input-issue')}
               onChange={(event) => setInputValue(event.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Escape') setIsEditing(false);
-              }}
               ref={comboBoxRef}
               autoFocus
             />
           </label>
-          <Combobox.Options className="border-t-[1px]" static>
+          <ComboboxOptions className="border-t-[1px]" static>
             <div className="flex h-[42px] items-center p-1">
               <span className="text-secondary px-2 py-1">
                 {t('main.feedback.issue-cell.issue-list')}
@@ -243,7 +245,7 @@ const IssueCell: React.FC<IProps> = (props) => {
             </div>
             <div className="max-h-[300px] overflow-y-auto">
               {filteredIssues.map((item) => (
-                <Combobox.Option
+                <ComboboxOption
                   key={item.id}
                   value={item}
                   className="p-1"
@@ -285,7 +287,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                       </div>
                     </div>
                   )}
-                </Combobox.Option>
+                </ComboboxOption>
               ))}
             </div>
             {!filteredIssues.find(
@@ -293,12 +295,12 @@ const IssueCell: React.FC<IProps> = (props) => {
             ) &&
               perms.includes('issue_create') &&
               inputValue.length > 0 && (
-                <Combobox.Option value={undefined} className="p-1">
-                  {({ active }) => (
+                <ComboboxOption value={inputValue} className="p-1">
+                  {({ focus }) => (
                     <div
                       className={
                         'flex h-[34px] cursor-pointer items-center gap-2 rounded px-2 py-1 ' +
-                        (active ? 'bg-fill-secondary' : 'bg-primary')
+                        (focus ? 'bg-fill-secondary' : 'bg-primary')
                       }
                     >
                       <span className="text-secondary">
@@ -309,9 +311,9 @@ const IssueCell: React.FC<IProps> = (props) => {
                       </Badge>
                     </div>
                   )}
-                </Combobox.Option>
+                </ComboboxOption>
               )}
-          </Combobox.Options>
+          </ComboboxOptions>
         </Combobox>
       </Popper>
     </div>
