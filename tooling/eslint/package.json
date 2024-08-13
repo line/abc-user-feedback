@@ -29,9 +29,10 @@
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
-    "eslint": "^9.0.0",
+    "eslint": "catalog:",
     "rimraf": "^6.0.0",
-    "typescript": "^5.4.5"
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   },
   "prettier": "@ufb/prettier-config"
 }
