@@ -122,7 +122,6 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
     resolver: zodResolver(channelImageConfigSchema),
   });
 
-  console.log('methods: ', methods.formState.isDirty);
   useEffect(() => {
     if (data?.imageConfig) {
       methods.reset({
