@@ -125,7 +125,9 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
             className="toggle toggle-sm"
             checked={!!domainWhiteList}
             onChange={(e) => {
-              setValue('domainWhiteList', e.target.checked ? [] : null);
+              setValue('domainWhiteList', e.target.checked ? [] : null, {
+                shouldDirty: true,
+              });
             }}
             disabled={readOnly}
           />

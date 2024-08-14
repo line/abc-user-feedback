@@ -122,11 +122,14 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
     resolver: zodResolver(channelImageConfigSchema),
   });
 
+  console.log('methods: ', methods.formState.isDirty);
   useEffect(() => {
-    methods.reset({
-      ...data?.imageConfig,
-      domainWhiteList: data?.imageConfig.domainWhiteList ?? null,
-    });
+    if (data?.imageConfig) {
+      methods.reset({
+        ...data.imageConfig,
+        domainWhiteList: data.imageConfig.domainWhiteList,
+      });
+    }
   }, [data]);
 
   const onSubmit = (input: ChannelImageConfig) => {

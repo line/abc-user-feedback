@@ -76,13 +76,6 @@ const IssueCell: React.FC<IProps> = (props) => {
   );
 
   const { mutateAsync: attatchIssue } = useMutation({
-    mutationKey: [
-      'post',
-      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
-      projectId,
-      channelId,
-      feedbackId,
-    ],
     mutationFn: async ({ issueId }: { issueId: number }) => {
       const { data } = await client.post({
         path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
@@ -100,13 +93,6 @@ const IssueCell: React.FC<IProps> = (props) => {
   });
 
   const { mutateAsync: detecthIssue } = useMutation({
-    mutationKey: [
-      'delete',
-      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
-      projectId,
-      channelId,
-      feedbackId,
-    ],
     mutationFn: async ({ issueId }: { issueId: number }) => {
       const { data } = await client.delete({
         path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
