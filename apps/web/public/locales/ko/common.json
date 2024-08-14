@@ -133,7 +133,7 @@
       },
       "role-mgmt": {
         "edit-role": "Role 수정",
-        "update-role-name": "Role 수정",
+        "update-role-name": "Role Name 수정",
         "delete-role": "Role 삭제"
       },
       "api-key-status": {
