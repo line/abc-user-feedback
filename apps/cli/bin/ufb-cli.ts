@@ -15,11 +15,11 @@
  * under the License.
  */
 import { execSync } from 'child_process';
-import fs from 'fs';
-import path from 'path';
+import * as fs from 'fs';
+import * as path from 'path';
 import { Command } from 'commander';
-import inquirer from 'inquirer';
 import { load } from 'js-toml';
+import prompts from 'prompts';
 
 const program = new Command();
 
@@ -32,27 +32,38 @@ program
   .description(
     'Start the appropriate Docker Compose file based on architecture to setup the UserFeedback infrastructure.',
   )
-  .action(() => {
-    inquirer
-      .prompt([
-        {
-          type: 'list',
-          name: 'architecture',
-          message: 'Select your architecture:',
-          choices: ['arm', 'amd'],
-        },
-      ])
-      .then((answers) => {
-        const architecture = answers.architecture;
-        const composeFile =
-          architecture === 'amd' ?
-            'docker-compose.infra-amd64.yml'
-          : 'docker-compose.infra-arm64.yml';
+  .action(async () => {
+    const architecture = await prompts({
+      type: 'select',
+      name: 'value',
+      message: 'Select your architecture:',
+      choices: [
+        { title: 'arm', value: 'arm' },
+        { title: 'amd', value: 'amd' },
+      ],
+      initial: 0,
+    });
 
-        console.log(`Running Docker Compose with ${composeFile}...`);
+    const composeFile =
+      architecture === 'amd' ?
+        'docker-compose.infra-amd64.yml'
+      : 'docker-compose.infra-arm64.yml';
 
-        execSync(`docker-compose -f ../../docker/${composeFile} up -d`);
-      });
+    const sourcePath = path.join(__dirname + '/../', composeFile);
+    const destinationPath = path.join(process.cwd(), composeFile);
+
+    fs.copyFileSync(sourcePath, destinationPath);
+
+    const dockerComposeCommand = `docker-compose -f ${destinationPath.toString()} down`;
+    execSync(dockerComposeCommand);
+
+    console.log('Prune Docker containers before running Docker Compose...');
+    execSync('docker container prune -f', { stdio: 'inherit' });
+
+    console.log(`Running Docker Compose with ${destinationPath.toString()}...`);
+    execSync(`docker-compose -f ${destinationPath.toString()} up  -d`, {
+      stdio: 'inherit',
+    });
   });
 
 program
@@ -61,25 +72,33 @@ program
     'Pull UserFeedback Docker image and run container with environment variables',
   )
   .action(() => {
-    const configPath = path.resolve(process.cwd(), 'config.toml');
+    const sourceConfigPath = path.join(__dirname + '/../config.toml');
+    const destinationConfigPath = path.join(process.cwd(), 'config.toml');
+    fs.copyFileSync(sourceConfigPath, destinationConfigPath);
+    console.log(
+      'config.toml has been created. Please fill in the required environment variables.',
+    );
 
-    const templatePath = path.resolve(
+    const sourceTemplatePath = path.join(
+      __dirname + '/../docker-compose.template.yml',
+    );
+    const destinationTemplatePath = path.join(
       process.cwd(),
       'docker-compose.template.yml',
     );
+    fs.copyFileSync(sourceTemplatePath, destinationTemplatePath);
 
-    if (!fs.existsSync(configPath)) {
-      console.error('api.config.toml file not found');
-      process.exit(1);
-    }
+    type TomlConfig = {
+      web: {
+        [key: string]: string;
+      };
+      api: {
+        [key: string]: string;
+      };
+    };
 
-    if (!fs.existsSync(templatePath)) {
-      console.error('docker-compose.template.yml file not found');
-      process.exit(1);
-    }
-
-    const tomlContent = fs.readFileSync(configPath, 'utf-8');
-    const tomlConfig = load(tomlContent);
+    const tomlContent = fs.readFileSync(destinationConfigPath, 'utf-8');
+    const tomlConfig = load(tomlContent) as TomlConfig;
 
     const webEnvVars = [
       'NEXT_PUBLIC_API_BASE_URL',
@@ -122,7 +141,10 @@ program
       process.exit(1);
     }
 
-    let dockerComposeTemplate = fs.readFileSync(templatePath, 'utf-8');
+    let dockerComposeTemplate = fs.readFileSync(
+      destinationTemplatePath,
+      'utf-8',
+    );
 
     webEnvVars.forEach((varName) => {
       const regex = new RegExp(`\\$\\{${varName}\\}`, 'g');
