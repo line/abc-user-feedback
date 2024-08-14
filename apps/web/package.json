@@ -96,7 +96,8 @@
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
     "autoprefixer": "^10.4.19",
-    "eslint": "^9.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jiti": "^1.21.6",
@@ -107,7 +108,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "^5.4.5",
+    "typescript": "catalog:",
     "undici": "~5.28.4"
   }
 }
