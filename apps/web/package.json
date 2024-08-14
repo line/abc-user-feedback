@@ -87,7 +87,7 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.14.14",
+    "@types/node": "20.14.15",
     "@types/react": "^18.2.79",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-datepicker": "^6.0.0",
@@ -96,7 +96,8 @@
     "@ufb/prettier-config": "workspace:*",
     "@ufb/tsconfig": "workspace:*",
     "autoprefixer": "^10.4.19",
-    "eslint": "^9.0.0",
+    "eslint": "catalog:",
+    "prettier": "catalog:",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "jiti": "^1.21.6",
@@ -107,7 +108,7 @@
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "^5.4.5",
+    "typescript": "catalog:",
     "undici": "~5.28.4"
   }
 }

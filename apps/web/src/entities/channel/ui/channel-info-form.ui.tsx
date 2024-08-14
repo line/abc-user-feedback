@@ -35,7 +35,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   return (
     <div className="flex flex-col gap-6">
       {type === 'update' && (
-        <TextInput {...register('id')} label="Project ID" disabled />
+        <TextInput {...register('id')} label="Channel ID" disabled />
       )}
       <TextInput
         {...register('name')}
