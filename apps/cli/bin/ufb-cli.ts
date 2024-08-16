@@ -19,6 +19,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { Command } from 'commander';
 import { load } from 'js-toml';
+import type { Answers } from 'prompts';
 import prompts from 'prompts';
 
 const program = new Command();
@@ -33,7 +34,7 @@ program
     'Start the appropriate Docker Compose file based on architecture to setup the UserFeedback infrastructure.',
   )
   .action(async () => {
-    const architecture = await prompts({
+    const architecture: Answers<string> = await prompts({
       type: 'select',
       name: 'value',
       message: 'Select your architecture:',
@@ -45,7 +46,7 @@ program
     });
 
     const composeFile =
-      architecture === 'amd' ?
+      architecture.value === 'amd' ?
         'docker-compose.infra-amd64.yml'
       : 'docker-compose.infra-arm64.yml';
 
@@ -88,14 +89,10 @@ program
     );
     fs.copyFileSync(sourceTemplatePath, destinationTemplatePath);
 
-    type TomlConfig = {
-      web: {
-        [key: string]: string;
-      };
-      api: {
-        [key: string]: string;
-      };
-    };
+    interface TomlConfig {
+      web: Record<string, string>;
+      api: Record<string, string>;
+    }
 
     const tomlContent = fs.readFileSync(destinationConfigPath, 'utf-8');
     const tomlConfig = load(tomlContent) as TomlConfig;

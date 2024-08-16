@@ -8,12 +8,13 @@
     "build": "tsc",
     "clean": "git clean -xdf dist .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
-    "format:fix": "prettier --write --list-different \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
+    "format:fix": "prettier --write --list-different .",
     "lint": "eslint",
     "start": "node dist/ufb-cli.js",
     "start:dev": "ts-node bin/ufb-cli.ts"
   },
   "dependencies": {
+    "@types/prompts": "^2.4.9",
     "child_process": "^1.0.2",
     "commander": "^12.1.0",
     "js-toml": "^1.0.0",

@@ -300,6 +300,9 @@ importers:
 
   apps/cli:
     dependencies:
+      '@types/prompts':
+        specifier: ^2.4.9
+        version: 2.4.9
       child_process:
         specifier: ^1.0.2
         version: 1.0.2
@@ -3723,6 +3726,9 @@ packages:
 
   '@types/passport@1.0.16':
     resolution: {integrity: sha512-FD0qD5hbPWQzaM0wHUnJ/T0BBCJBxCeemtnCwc/ThhTg3x9jfrAcRUmj5Dopza+MfFS9acTe3wk7rcVnRIp/0A==}
+
+  '@types/prompts@2.4.9':
+    resolution: {integrity: sha512-qTxFi6Buiu8+50/+3DGIWLHM6QuWsEKugJnnP6iv2Mc4ncxE4A/OJkjuVOA+5X0X1S/nq5VJRa8Lu+nwcvbrKA==}
 
   '@types/prop-types@15.7.12':
     resolution: {integrity: sha512-5zvhXYtRNRluoE/jAp4GVsSduVUzNWKkOZrCDBWYtE7biZywwdC2AcEzg+cSMLFRfVgeAFqpfNabiPjxFddV1Q==}
@@ -13190,6 +13196,11 @@ snapshots:
   '@types/passport@1.0.16':
     dependencies:
       '@types/express': 4.17.21
+
+  '@types/prompts@2.4.9':
+    dependencies:
+      '@types/node': 20.14.15
+      kleur: 3.0.3
 
   '@types/prop-types@15.7.12': {}
 

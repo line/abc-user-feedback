@@ -6,7 +6,7 @@ services:
     ports:
       - 3000:3000
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     environment:
       - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
       - NEXT_PUBLIC_MAX_DAYS=${NEXT_PUBLIC_MAX_DAYS}
@@ -22,7 +22,7 @@ services:
     ports:
       - 4000:4000
     extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - 'host.docker.internal:host-gateway'
     environment:
       - JWT_SECRET=${JWT_SECRET}
       - MYSQL_PRIMARY_URL=${MYSQL_PRIMARY_URL}
