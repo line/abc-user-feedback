@@ -386,7 +386,7 @@ importers:
         version: 10.1.1
       iron-session:
         specifier: ^8.0.0
-        version: 8.0.2
+        version: 8.0.3
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -5982,8 +5982,8 @@ packages:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
 
-  iron-session@8.0.2:
-    resolution: {integrity: sha512-p4Yf1moQr6gnCcXu5vCaxVKRKDmR9PZcQDfp7ZOgbsSHUsgaNti6OgDB2BdgxC2aS6V/6Hu4O0wYlj92sbdIJg==}
+  iron-session@8.0.3:
+    resolution: {integrity: sha512-WtDX0griBliMoR6hGoU3SlefW+VSbfHrIVqURQ0Nbg/Pd+nj7VDsKV+sx0FHjyUCaO02YoYV5v+kW0PqvFJISQ==}
 
   iron-webcrypto@1.2.1:
     resolution: {integrity: sha512-feOM6FaSr6rEABp/eDfVseKyTMDt+KGpeB35SkVn9Tyn0CqvVsY3EwI0v5i8nMHyJnzCIQf7nsy3p41TPkJZhg==}
@@ -15888,7 +15888,7 @@ snapshots:
 
   ipaddr.js@1.9.1: {}
 
-  iron-session@8.0.2:
+  iron-session@8.0.3:
     dependencies:
       cookie: 0.6.0
       iron-webcrypto: 1.2.1
