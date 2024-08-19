@@ -51,7 +51,7 @@ import { LocalStrategy } from './strategies/local.strategy';
       global: true,
       inject: [ConfigService],
       useFactory: (configService: ConfigService<ConfigServiceType>) => {
-        const { secret } = configService.get('jwt', { infer: true });
+        const { secret } = configService.get('jwt', { infer: true }) ?? {};
         return { secret };
       },
     }),

@@ -133,7 +133,7 @@
       },
       "role-mgmt": {
         "edit-role": "Role 수정",
-        "update-role-name": "Role 수정",
+        "update-role-name": "Role Name 수정",
         "delete-role": "Role 삭제"
       },
       "api-key-status": {
@@ -240,7 +240,8 @@
     "next": "다음",
     "complete": "완료",
     "next-time": "다음에",
-    "start": "시작하기"
+    "start": "시작하기",
+    "generate": "생성"
   },
   "input": {
     "label": {

@@ -24,11 +24,15 @@ export class ScrollFeedbacksDto {
     createdAt?: TimeRange;
     updatedAt?: TimeRange;
     ids?: number[];
-    [key: string]: string | string[] | TimeRange | number | number[];
+    [key: string]:
+      | string
+      | string[]
+      | TimeRange
+      | number
+      | number[]
+      | undefined;
   };
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
   fields: FieldEntity[];
   size: number;
   scrollId: string | null;

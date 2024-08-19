@@ -89,7 +89,11 @@ export class ProjectService {
         }
         const members = dto.members.map((member) => ({
           userId: member.userId,
-          roleId: savedRoles.find((role) => role.name === member.roleName).id,
+          roleId: (
+            savedRoles.find((role) => role.name === member.roleName) ?? {
+              id: 0,
+            }
+          ).id,
         }));
         const savedMembers = await this.memberService.createMany(members);
 

@@ -258,15 +258,27 @@ describe('Opensearch Repository Test suite', () => {
     });
   });
 
-  describe('getData', () => {});
+  describe('getData', () => {
+    return;
+  });
 
-  describe('scroll', () => {});
+  describe('scroll', () => {
+    return;
+  });
 
-  describe('updateData', () => {});
+  describe('updateData', () => {
+    return;
+  });
 
-  describe('deleteBulkData', () => {});
+  describe('deleteBulkData', () => {
+    return;
+  });
 
-  describe('deleteIndex', () => {});
+  describe('deleteIndex', () => {
+    return;
+  });
 
-  describe('getTotal', () => {});
+  describe('getTotal', () => {
+    return;
+  });
 });

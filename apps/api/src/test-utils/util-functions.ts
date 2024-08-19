@@ -50,14 +50,16 @@ export const MockDataSource = {
   initialize: jest.fn(),
 };
 
-export const getRandomEnumValue = <T>(anEnum: T): T[keyof T] => {
-  const enumValues = Object.keys(anEnum) as Array<keyof T>;
+export const getRandomEnumValue = <T extends object>(anEnum: T): T[keyof T] => {
+  const enumValues = Object.keys(anEnum) as (keyof T)[];
   const randomIndex = faker.number.int(enumValues.length - 1);
   const randomEnumKey = enumValues[randomIndex];
   return anEnum[randomEnumKey];
 };
-export const getRandomEnumValues = <T>(anEnum: T): T[keyof T][] => {
-  const enumValues = Object.values(anEnum) as Array<keyof T>;
+export const getRandomEnumValues = <T extends object>(
+  anEnum: T,
+): T[keyof T][] => {
+  const enumValues = Object.values(anEnum);
   return faker.helpers.arrayElements(enumValues) as T[keyof T][];
 };
 
@@ -84,7 +86,7 @@ export const signInTestUser = async (
 
 export const DEFAULT_FIELD_COUNT = 2;
 
-export const createQueryBuilder: any = {
+export const createQueryBuilder: Record<string, object> = {
   setFindOptions: () => jest.fn().mockImplementation(() => createQueryBuilder),
   select: () => createQueryBuilder,
   innerJoin: () => createQueryBuilder,
@@ -121,7 +123,7 @@ export const mockRepository = () => ({
   createQueryBuilder: jest.fn(() => createQueryBuilder),
   query: jest.fn(),
   manager: {
-    transaction: async () => jest.fn().mockImplementation(mockRepository),
+    transaction: () => jest.fn().mockImplementation(mockRepository),
   },
 });
 
@@ -135,10 +137,10 @@ export const MockOpensearchRepository = {
   getTotal: jest.fn(),
 };
 
-export function removeUndefinedValues(obj) {
+export function removeUndefinedValues(obj: object): object {
   Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === 'object') {
-      removeUndefinedValues(obj[key]);
+      removeUndefinedValues(obj[key] as object);
     } else if (obj[key] === undefined) {
       delete obj[key];
     }

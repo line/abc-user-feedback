@@ -25,7 +25,7 @@ import type { TimeRange } from '@/common/dtos';
 import { FieldFormatEnum, SortMethodEnum } from '@/common/enums';
 import type { ClsServiceType } from '@/types/cls-service.type';
 import { ChannelEntity } from '../channel/channel/channel.entity';
-import type { FieldEntity } from '../channel/field/field.entity';
+import { FieldEntity } from '../channel/field/field.entity';
 import { OptionEntity } from '../channel/option/option.entity';
 import { IssueEntity } from '../project/issue/issue.entity';
 import { FeedbackIssueStatisticsService } from '../statistics/feedback-issue/feedback-issue-statistics.service';
@@ -38,9 +38,13 @@ import {
   RemoveIssueDto,
   UpdateFeedbackMySQLDto,
 } from './dtos';
-import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
+
+interface QueryFailedDriverError {
+  code: string;
+}
 
 @Injectable()
 export class FeedbackMySQLService {
@@ -63,7 +67,7 @@ export class FeedbackMySQLService {
     feedback.channel = new ChannelEntity();
     feedback.channel.id = channelId;
     if (data.createdAt) {
-      feedback.createdAt = data.createdAt;
+      feedback.createdAt = data.createdAt as Date;
       delete data.createdAt;
     }
     feedback.data = data;
@@ -80,7 +84,14 @@ export class FeedbackMySQLService {
   async findByChannelId(
     dto: FindFeedbacksByChannelIdDto,
   ): Promise<Pagination<Feedback, IPaginationMeta>> {
-    const { page, limit, channelId, query = {}, sort = {}, fields } = dto;
+    const {
+      page,
+      limit,
+      channelId,
+      query = {},
+      sort = {},
+      fields = [new FieldEntity()],
+    } = dto;
 
     const queryBuilder = this.feedbackRepository
       .createQueryBuilder('feedbacks')
@@ -127,12 +138,12 @@ export class FeedbackMySQLService {
                   if (i === 0) {
                     qb.where(
                       `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
-                      { likeValue: `%${value}%` },
+                      { likeValue: `%${value as string | number}%` },
                     );
                   } else {
                     qb.orWhere(
                       `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
-                      { likeValue: `%${value}%` },
+                      { likeValue: `%${value as string | number}%` },
                     );
                   }
                 }
@@ -156,13 +167,19 @@ export class FeedbackMySQLService {
         queryBuilder.andWhere('feedbacks.updated_at >= :gte', { gte });
         queryBuilder.andWhere('feedbacks.updated_at < :lt', { lt });
       } else {
-        const { id, format } = fields.find((v) => v.key === fieldKey);
+        const { id, format }: { id: number; format: FieldFormatEnum } =
+          fields.find((v) => v.key === fieldKey) ?? {
+            id: 0,
+            format: FieldFormatEnum.date,
+          };
 
         if (format === FieldFormatEnum.select) {
           const options = await this.optionRepository.find({
             where: { field: { id } },
           });
-          const option = options.find((option) => option.key === value);
+          const option =
+            options.find((option) => option.key === value) ??
+            new OptionEntity();
 
           queryBuilder.andWhere(
             `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
@@ -174,7 +191,9 @@ export class FeedbackMySQLService {
           });
 
           for (const optionKey of value as string[]) {
-            const option = options.find((option) => option.key === optionKey);
+            const option =
+              options.find((option) => option.key === optionKey) ??
+              new OptionEntity();
             queryBuilder.andWhere(
               `JSON_CONTAINS(
                 JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
@@ -187,7 +206,7 @@ export class FeedbackMySQLService {
         ) {
           queryBuilder.andWhere(
             `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :value`,
-            { value: `%${value}%` },
+            { value: `%${value as string | number}%` },
           );
         } else if (format === FieldFormatEnum.date) {
           const { gte, lt } = value as TimeRange;
@@ -300,10 +319,11 @@ export class FeedbackMySQLService {
     try {
       const { issueId, feedbackId, channelId } = dto;
 
-      const feedback = await this.feedbackRepository.findOne({
-        relations: { issues: true },
-        where: { id: feedbackId, channel: { id: channelId } },
-      });
+      const feedback =
+        (await this.feedbackRepository.findOne({
+          relations: { issues: true },
+          where: { id: feedbackId, channel: { id: channelId } },
+        })) ?? new FeedbackEntity();
 
       const issue = new IssueEntity();
       issue.id = issueId;
@@ -329,9 +349,14 @@ export class FeedbackMySQLService {
       });
     } catch (e) {
       if (e instanceof QueryFailedError) {
-        if (e.driverError.code === 'ER_NO_REFERENCED_ROW_2') {
+        if (
+          (e.driverError as QueryFailedDriverError).code ===
+          'ER_NO_REFERENCED_ROW_2'
+        ) {
           throw new BadRequestException('unknown id');
-        } else if (e.driverError.code === 'ER_DUP_ENTRY') {
+        } else if (
+          (e.driverError as QueryFailedDriverError).code === 'ER_DUP_ENTRY'
+        ) {
           throw new BadRequestException('already issueed');
         } else {
           this.logger.error(e);
@@ -348,10 +373,11 @@ export class FeedbackMySQLService {
     try {
       const { channelId, issueId, feedbackId } = dto;
 
-      const feedback = await this.feedbackRepository.findOne({
-        relations: { issues: true },
-        where: { id: feedbackId, channel: { id: channelId } },
-      });
+      const feedback =
+        (await this.feedbackRepository.findOne({
+          relations: { issues: true },
+          where: { id: feedbackId, channel: { id: channelId } },
+        })) ?? new FeedbackEntity();
       feedback.issues = feedback.issues.filter((issue) => issue.id !== issueId);
       this.cls.set('removeIssueInFeedback', { feedbackId, issueId });
 

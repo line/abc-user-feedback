@@ -273,9 +273,7 @@ describe('ProjectService Test suite', () => {
     it('updating a project succeeds with valid inputs', async () => {
       const name = faker.string.sample();
       dto.name = name;
-      jest
-        .spyOn(projectRepo, 'findOne')
-        .mockResolvedValue(null as ProjectEntity);
+      jest.spyOn(projectRepo, 'findOne').mockResolvedValue(null);
       jest.spyOn(projectRepo, 'save');
 
       await projectService.update(dto);

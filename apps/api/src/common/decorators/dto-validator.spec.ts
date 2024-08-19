@@ -25,16 +25,24 @@ class Dto {
 
 class TestClass {
   @DtoValidator()
-  noParam() {}
+  noParam() {
+    return;
+  }
 
   @DtoValidator()
-  dtoParam(_dto: Dto) {}
+  dtoParam(_dto: Dto) {
+    return;
+  }
 
   @DtoValidator()
-  dtosParam(_dtos: Dto[]) {}
+  dtosParam(_dtos: Dto[]) {
+    return;
+  }
 
   @DtoValidator()
-  compositionParam(_a: any, _dtos: Dto) {}
+  compositionParam(_a: any, _dtos: Dto) {
+    return;
+  }
 }
 describe('dto validator', () => {
   let instance: TestClass;
@@ -49,14 +57,14 @@ describe('dto validator', () => {
     dto.str = 'test';
     instance.dtoParam(dto);
     const dto2 = new Dto();
-    expect(instance.dtoParam(dto2)).rejects.toThrow();
+    void expect(instance.dtoParam(dto2)).rejects.toThrow();
   });
   it('method call with no params', () => {
     const dto = new Dto();
     dto.str = 'test';
     instance.dtosParam([dto]);
     const dto2 = new Dto();
-    expect(instance.dtosParam([dto2])).rejects.toThrow();
+    void expect(instance.dtosParam([dto2])).rejects.toThrow();
   });
   it('method call with no params', () => {
     const dto = new Dto();

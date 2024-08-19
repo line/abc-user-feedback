@@ -56,7 +56,7 @@ describe('UserPasswordService', () => {
     });
     it('sending a reset password mail fails with invalid email', async () => {
       const email = faker.internet.email();
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(
         userPasswordService.sendResetPasswordMail(email),
@@ -85,7 +85,7 @@ describe('UserPasswordService', () => {
       dto.email = faker.internet.email();
       dto.code = faker.string.sample();
       dto.password = faker.internet.password();
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       await expect(userPasswordService.resetPassword(dto)).rejects.toThrow(
         UserNotFoundException,

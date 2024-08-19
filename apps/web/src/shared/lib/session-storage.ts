@@ -31,10 +31,9 @@ export type SessionStorageValueType<TPath extends SessionStorageKeyType> =
 class sessionStorage {
   private storage: Storage;
 
-  private static instance: sessionStorage;
+  private static instance: sessionStorage | null;
   public static get Instance(): sessionStorage {
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    return this.instance || (this.instance = new this());
+    return this.instance ?? (this.instance = new this());
   }
 
   constructor() {

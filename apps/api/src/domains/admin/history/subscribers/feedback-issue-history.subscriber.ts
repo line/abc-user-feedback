@@ -46,13 +46,13 @@ export class FeedbackIssueHistorySubscriber
   private saveHistory(action: HistoryActionEnum) {
     const userId = this.cls.get('userId');
     if (!userId) return;
-    const data =
+    const data: { feedbackId: number } | undefined =
       action === HistoryActionEnum.Create ?
         this.cls.get('addIssueInFeedback')
       : this.cls.get('removeIssueInFeedback');
     if (!data) return;
 
-    this.historyService.createHistory({
+    void this.historyService.createHistory({
       userId,
       entityId: data.feedbackId,
       entityName: EntityNameEnum.FeedbackIssue,

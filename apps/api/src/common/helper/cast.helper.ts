@@ -41,7 +41,7 @@ export function toNumber(value: string, opts: ToNumberOptions = {}): number {
   let newValue: number = Number.parseInt(value || String(opts.default), 10);
 
   if (Number.isNaN(newValue)) {
-    newValue = opts.default;
+    newValue = opts.default ?? 0;
   }
 
   if (opts.min) {
@@ -49,7 +49,7 @@ export function toNumber(value: string, opts: ToNumberOptions = {}): number {
       newValue = opts.min;
     }
 
-    if (newValue > opts.max) {
+    if (opts.max && newValue > opts.max) {
       newValue = opts.max;
     }
   }

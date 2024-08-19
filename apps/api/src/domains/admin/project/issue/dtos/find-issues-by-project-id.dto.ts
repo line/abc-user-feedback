@@ -21,9 +21,13 @@ export class FindIssuesByProjectIdDto extends PaginationDto {
   projectId: number;
   query?: {
     searchText?: string;
-    [key: string]: string | string[] | TimeRange | number | number[];
+    [key: string]:
+      | string
+      | string[]
+      | TimeRange
+      | number
+      | number[]
+      | undefined;
   };
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
 }

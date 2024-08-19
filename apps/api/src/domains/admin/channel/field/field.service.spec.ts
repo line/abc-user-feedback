@@ -24,6 +24,7 @@ import { createFieldDto, updateFieldDto } from '@/test-utils/fixtures';
 import { TestConfig } from '@/test-utils/util-functions';
 import { FieldServiceProviders } from '../../../../test-utils/providers/field.service.providers';
 import { OptionEntity } from '../option/option.entity';
+import type { CreateFieldDto, ReplaceFieldDto } from './dtos';
 import { CreateManyFieldsDto, ReplaceManyFieldsDto } from './dtos';
 import {
   FieldKeyDuplicatedException,
@@ -32,8 +33,12 @@ import {
 import { FieldEntity } from './field.entity';
 import { FieldService } from './field.service';
 
-const countSelect = (prev, curr) => {
-  return isSelectFieldFormat(curr.format) && curr.options.length > 0 ?
+const countSelect = (prev: number, curr: CreateFieldDto): number => {
+  return (
+      isSelectFieldFormat(curr.format) &&
+        curr.options &&
+        curr.options.length > 0
+    ) ?
       prev + 1
     : prev;
 };
@@ -68,6 +73,7 @@ describe('FieldService suite', () => {
       const fields = await fieldService.createMany(dto);
 
       expect(fields.length).toBe(fieldCount + 4);
+
       expect(optionRepo.save).toBeCalledTimes(selectFieldCount);
     });
     it('creating many fields fails with duplicate names', async () => {
@@ -221,7 +227,9 @@ describe('FieldService suite', () => {
       }).map(() => updateFieldDto({ format: FieldFormatEnum.keyword }));
       const dto = new ReplaceManyFieldsDto();
       dto.channelId = channelId;
-      dto.fields = JSON.parse(JSON.stringify(updatingFieldDtos));
+      dto.fields = JSON.parse(
+        JSON.stringify(updatingFieldDtos),
+      ) as ReplaceFieldDto[];
       jest.spyOn(fieldRepo, 'findBy').mockResolvedValue(
         updatingFieldDtos.map((field) => {
           field.format = FieldFormatEnum.text;
@@ -241,7 +249,9 @@ describe('FieldService suite', () => {
       }).map(updateFieldDto);
       const dto = new ReplaceManyFieldsDto();
       dto.channelId = channelId;
-      dto.fields = JSON.parse(JSON.stringify(updatingFieldDtos));
+      dto.fields = JSON.parse(
+        JSON.stringify(updatingFieldDtos),
+      ) as ReplaceFieldDto[];
       jest.spyOn(fieldRepo, 'findBy').mockResolvedValue(
         updatingFieldDtos.map((field) => {
           field.key = faker.string.sample();

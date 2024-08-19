@@ -18,7 +18,7 @@ import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { PermissionEnum } from '../../permission.enum';
 
-class GetAllRolesResponseRoleDto {
+export class GetAllRolesResponseRoleDto {
   @Expose()
   @ApiProperty()
   id: number;

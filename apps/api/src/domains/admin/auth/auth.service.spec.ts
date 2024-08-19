@@ -81,7 +81,7 @@ describe('auth service ', () => {
     it('sending a code by email succeeds with a valid email', async () => {
       const validEmail = faker.internet.email();
       dto.email = validEmail;
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null);
       tenantRepo.setIsRestrictDomain(false);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
 
@@ -104,7 +104,9 @@ describe('auth service ', () => {
     });
   });
 
-  describe('verifyEmailCode', () => {});
+  describe('verifyEmailCode', () => {
+    return;
+  });
 
   describe('validateEmailUser', () => {
     it('validating a user succeeds with valid inputs', async () => {
@@ -120,7 +122,7 @@ describe('auth service ', () => {
       });
     });
     it('validating a user fails with a nonexistent user', async () => {
-      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOne').mockResolvedValue(null);
       const dto = new ValidateEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = passwordFixture;
@@ -149,7 +151,7 @@ describe('auth service ', () => {
       tenantRepo.setIsRestrictDomain(false);
       tenantRepo.setIsPrivate(false);
       codeRepo.setIsVerified(true);
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
       const user = await authService.signUpEmailUser(dto);
 
@@ -162,7 +164,7 @@ describe('auth service ', () => {
       tenantRepo.setIsRestrictDomain(false);
       tenantRepo.setIsPrivate(false);
       codeRepo.setIsVerified(false);
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save');
 
       await expect(authService.signUpEmailUser(dto)).rejects.toThrowError(
@@ -178,7 +180,7 @@ describe('auth service ', () => {
       tenantRepo.setIsRestrictDomain(false);
       tenantRepo.setIsPrivate(false);
       codeRepo.setNull();
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null as UserEntity);
+      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save');
 
       await expect(authService.signUpEmailUser(dto)).rejects.toThrowError(
@@ -189,9 +191,13 @@ describe('auth service ', () => {
     });
   });
 
-  describe('signUpInvitationUser', () => {});
+  describe('signUpInvitationUser', () => {
+    return;
+  });
 
-  describe('signUpOAuthUser', () => {});
+  describe('signUpOAuthUser', () => {
+    return;
+  });
 
   describe('signIn', () => {
     it('signing in succeeds with a valid user', async () => {
@@ -223,7 +229,9 @@ describe('auth service ', () => {
     });
   });
 
-  describe('refreshToken', () => {});
+  describe('refreshToken', () => {
+    return;
+  });
 
   describe('validateApiKey', () => {
     it('validating an api key succeeds with a valid api key', async () => {
@@ -278,5 +286,7 @@ describe('auth service ', () => {
     });
   });
 
-  describe('signInByOAuth', () => {});
+  describe('signInByOAuth', () => {
+    return;
+  });
 });

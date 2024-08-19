@@ -107,8 +107,9 @@ export class OptionService {
     });
 
     const deletingOptionIds = optionEntities
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       .filter((option) => option.deletedAt === null)
-      .filter((option) => options.every((dto) => dto.id !== option.id))
+      .filter((option) => (options ?? []).every((dto) => dto.id !== option.id))
       .map((v) => v.id);
 
     if (deletingOptionIds.length > 0) {
@@ -129,7 +130,7 @@ export class OptionService {
       );
     }
 
-    for (const option of options) {
+    for (const option of options ?? []) {
       const inactiveOption = this.getInactiveOption(
         optionEntities,
         option.key,

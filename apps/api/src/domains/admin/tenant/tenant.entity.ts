@@ -48,7 +48,7 @@ export class TenantEntity extends CommonEntity {
   isRestrictDomain: boolean;
 
   @Column('simple-array', { nullable: true })
-  allowDomains: Array<string> | null;
+  allowDomains: string[] | null;
 
   @Column('boolean', { default: false })
   useOAuth: boolean;

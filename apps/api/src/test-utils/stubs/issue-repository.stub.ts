@@ -16,11 +16,12 @@
 import { faker } from '@faker-js/faker';
 
 import { IssueStatusEnum } from '@/common/enums';
+import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { issueFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class IssueRepositoryStub {
-  issue = issueFixture;
+  issue: IssueEntity | null = issueFixture;
   findOne() {
     return this.issue;
   }
@@ -59,8 +60,8 @@ export class IssueRepositoryStub {
       return {
         ...this.issue,
         ...issueToSave,
-        status: issueToSave.status || IssueStatusEnum.INIT,
-        feedbackCount: issueToSave.feedbackCount || 0,
+        status: (issueToSave as IssueEntity).status || IssueStatusEnum.INIT,
+        feedbackCount: (issueToSave as IssueEntity).feedbackCount || 0,
       };
     }
   }

@@ -30,7 +30,13 @@ export class FindIssuesByProjectIdRequestDto extends PaginationRequestDto {
   @IsOptional()
   query?: {
     searchText?: string;
-    [key: string]: string | string[] | TimeRange | number | number[];
+    [key: string]:
+      | string
+      | string[]
+      | TimeRange
+      | number
+      | number[]
+      | undefined;
   };
 
   @ApiProperty({
@@ -40,9 +46,7 @@ export class FindIssuesByProjectIdRequestDto extends PaginationRequestDto {
     example: { createdAt: 'ASC' },
   })
   @IsOptional()
-  sort?: {
-    [key: string]: SortMethodEnum;
-  };
+  sort?: Record<string, SortMethodEnum>;
 
   constructor(limit = 10, page = 1) {
     super(limit, page);

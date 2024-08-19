@@ -15,11 +15,12 @@
  */
 import { faker } from '@faker-js/faker';
 
+import { ApiKeyEntity } from '@/domains/admin/project/api-key/api-key.entity';
 import { apiKeyFixture } from '../fixtures';
 import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class ApiKeyRepositoryStub {
-  apiKey = apiKeyFixture;
+  apiKey: ApiKeyEntity | null = apiKeyFixture;
   findOne() {
     return this.apiKey;
   }

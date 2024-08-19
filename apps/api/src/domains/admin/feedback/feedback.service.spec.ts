@@ -18,7 +18,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ClsModule, ClsService } from 'nestjs-cls';
-import type { Repository } from 'typeorm';
+import type { Repository, SelectQueryBuilder } from 'typeorm';
 
 import {
   FieldFormatEnum,
@@ -77,7 +77,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       jest
         .spyOn(feedbackStatsRepo, 'findOne')
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
@@ -89,7 +89,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with an invalid channel', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       jest.spyOn(fieldRepo, 'find').mockResolvedValue([]);
 
       await expect(feedbackService.create(dto)).rejects.toThrow(
@@ -99,7 +99,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with a reserved field key', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       const reservedFieldKey = faker.helpers.arrayElement(
         RESERVED_FIELD_KEYS.filter((key) => key !== 'createdAt'),
       );
@@ -114,7 +114,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback fails with an invalid field key', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       const invalidFieldKey = 'invalidFieldKey';
       dto.data[invalidFieldKey] = faker.string.sample();
 
@@ -184,7 +184,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs and issue names', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       const issueNames = Array.from({
         length: faker.number.int({ min: 1, max: 1 }),
       }).map(() => faker.string.sample());
@@ -195,10 +195,16 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);
@@ -208,7 +214,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs and an existent issue name', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       const issueNames = Array.from({
         length: faker.number.int({ min: 1, max: 1 }),
       }).map(() => faker.string.sample());
@@ -219,10 +225,16 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);
@@ -232,7 +244,7 @@ describe('FeedbackService Test Suite', () => {
     it('creating a feedback succeeds with valid inputs and a nonexistent issue name', async () => {
       const dto = new CreateFeedbackDto();
       dto.channelId = faker.number.int();
-      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture));
+      dto.data = JSON.parse(JSON.stringify(feedbackDataFixture)) as object;
       dto.data.issueNames = [faker.string.sample()];
       jest.spyOn(issueRepo, 'findOneBy').mockResolvedValue(null);
       jest
@@ -240,10 +252,16 @@ describe('FeedbackService Test Suite', () => {
         .mockResolvedValue({ count: 1 } as FeedbackStatisticsEntity);
       jest
         .spyOn(issueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<IssueStatisticsEntity>,
+        );
       jest
         .spyOn(feedbackIssueStatsRepo, 'createQueryBuilder')
-        .mockImplementation(() => createQueryBuilder);
+        .mockImplementation(
+          () =>
+            createQueryBuilder as unknown as SelectQueryBuilder<FeedbackIssueStatisticsEntity>,
+        );
       clsService.set = jest.fn();
 
       const feedback = await feedbackService.create(dto);

@@ -107,7 +107,7 @@ const UserManagementTable: React.FC<IProps> = () => {
             disabledNextPage={
               pagination.pageIndex + 1 >= (data?.meta.totalPages ?? 1)
             }
-            disabledPrevPage={pagination.pageIndex <= 1}
+            disabledPrevPage={pagination.pageIndex < 1}
             setLimit={table.setPageSize}
           />
           <TableSearchInput

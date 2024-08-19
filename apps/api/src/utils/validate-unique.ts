@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export const validateUnique = <T>(objList: T[], name: keyof T) => {
-  return new Set(objList.map((v) => v[name])).size === objList.length;
+export const validateUnique = <T>(objList: T[] | undefined, name: keyof T) => {
+  return (
+    new Set((objList ?? []).map((v) => v[name])).size === (objList ?? []).length
+  );
 };

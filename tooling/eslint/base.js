@@ -21,7 +21,7 @@ const headerPlugin = require('@ufb/eslint-plugin-header');
 
 module.exports = tseslint.config(
   {
-    ignores: ['**/*.config.*', 'dist/**'],
+    ignores: ['**/*.config.*', 'dist/**', '**/*.stub.ts'],
   },
   {
     files: ['**/*.js', '**/*.ts', '**/*.tsx'],

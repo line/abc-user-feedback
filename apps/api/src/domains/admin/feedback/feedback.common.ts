@@ -32,22 +32,25 @@ export function validateValue(field: FieldEntity, value: any) {
       return (
         value === null ||
         (typeof value === 'string' &&
-          !!field.options.find((v) => v.key === value))
+          !!(field.options ?? []).find((v) => v.key === value))
       );
     case FieldFormatEnum.multiSelect:
       if (Array.isArray(value)) {
         for (const option of value) {
-          if (!field.options.find((v) => v.key === option)) return false;
+          if (!(field.options ?? []).find((v) => v.key === option))
+            return false;
         }
         return true;
       } else {
         return false;
       }
     case FieldFormatEnum.date:
-      return !isNaN(Date.parse(value)) && typeof value !== 'number';
+      return !isNaN(Date.parse(value as string)) && typeof value !== 'number';
     case FieldFormatEnum.images:
       return Array.isArray(value);
     default:
-      throw new Error(`${field.key}: ${field.format} is error ${value}`);
+      throw new Error(
+        `${field.key}: ${field.format as string} is error ${value}`,
+      );
   }
 }

@@ -29,7 +29,7 @@ export class CreateFieldDto {
   key: string;
 
   @Expose()
-  description: string;
+  description: string | null;
 
   @Expose()
   format: FieldFormatEnum;

@@ -126,7 +126,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             disabledNextPage={
               pagination.pageIndex + 1 >= (meta?.totalPages ?? 1)
             }
-            disabledPrevPage={pagination.pageIndex <= 1}
+            disabledPrevPage={pagination.pageIndex < 1}
             short
           />
           <div className="bg-fill-tertiary h-4 w-[1px]" />
@@ -180,7 +180,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
             disabledNextPage={
               pagination.pageIndex + 1 >= (meta?.totalPages ?? 1)
             }
-            disabledPrevPage={pagination.pageIndex <= 1}
+            disabledPrevPage={pagination.pageIndex < 1}
           />
           <div className="w-[272px]">
             <DateRangePicker
