@@ -50,19 +50,16 @@ program
         'docker-compose.infra-amd64.yml'
       : 'docker-compose.infra-arm64.yml';
 
-    const sourcePath = path.join(__dirname + '/../', composeFile);
-    const destinationPath = path.join(process.cwd(), composeFile);
+    const composeFilePath = path.join(__dirname + '/../', composeFile);
 
-    fs.copyFileSync(sourcePath, destinationPath);
-
-    const dockerComposeCommand = `docker-compose -f ${destinationPath.toString()} down`;
+    const dockerComposeCommand = `docker-compose -f ${composeFilePath.toString()} down`;
     execSync(dockerComposeCommand);
 
     console.log('Prune Docker containers before running Docker Compose...');
     execSync('docker container prune -f', { stdio: 'inherit' });
 
-    console.log(`Running Docker Compose with ${destinationPath.toString()}...`);
-    execSync(`docker-compose -f ${destinationPath.toString()} up  -d`, {
+    console.log(`Running Docker Compose with ${composeFilePath.toString()}...`);
+    execSync(`docker-compose -f ${composeFilePath.toString()} up  -d`, {
       stdio: 'inherit',
     });
   });
