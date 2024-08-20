@@ -55,6 +55,20 @@ program
     const dockerComposeCommand = `docker-compose -f ${composeFilePath.toString()} down`;
     execSync(dockerComposeCommand);
 
+    const shouldRunPrune: Answers<string> = await prompts({
+      type: 'select',
+      name: 'value',
+      message:
+        'It is recommended to prune Docker containers before running Docker Compose. Do you want to prune Docker containers?',
+      choices: [
+        { title: 'yes', value: true },
+        { title: 'no', value: false },
+      ],
+      initial: 0,
+    });
+
+    if (shouldRunPrune.value === false) return;
+
     console.log('Prune Docker containers before running Docker Compose...');
     execSync('docker container prune -f', { stdio: 'inherit' });
 
@@ -62,6 +76,13 @@ program
     execSync(`docker-compose -f ${composeFilePath.toString()} up  -d`, {
       stdio: 'inherit',
     });
+
+    const sourceConfigPath = path.join(__dirname + '/../config.toml');
+    const destinationConfigPath = path.join(process.cwd(), 'config.toml');
+    fs.copyFileSync(sourceConfigPath, destinationConfigPath);
+    console.log(
+      'config.toml has been created. Please fill in the required environment variables.',
+    );
   });
 
 program
@@ -70,12 +91,7 @@ program
     'Pull UserFeedback Docker image and run container with environment variables',
   )
   .action(() => {
-    const sourceConfigPath = path.join(__dirname + '/../config.toml');
     const destinationConfigPath = path.join(process.cwd(), 'config.toml');
-    fs.copyFileSync(sourceConfigPath, destinationConfigPath);
-    console.log(
-      'config.toml has been created. Please fill in the required environment variables.',
-    );
 
     const sourceTemplatePath = path.join(
       __dirname + '/../docker-compose.template.yml',
