@@ -10,7 +10,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:8.0.39
+        image: mysql:9.0.1
         env:
           MYSQL_ROOT_PASSWORD: userfeedback
           MYSQL_DATABASE: e2e
