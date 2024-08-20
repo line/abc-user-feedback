@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
   "ignorePaths": ["**/.github/workflows/e2e-test.yml"],
-  "baseBranches": ["feat/fix-renovate-setting"],
+  "baseBranches": ["dev"],
   "packageRules": [
     {
       "matchPackagePatterns": ["^@ufb/"],
