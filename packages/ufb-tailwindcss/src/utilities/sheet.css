@@ -1,0 +1,25 @@
+.sheet-side-top {
+  @apply data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top !rounded-t-0 inset-x-0 top-0 max-h-[75%] border-b;
+}
+
+.sheet-side-bottom {
+  @apply data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom !rounded-b-0 inset-x-0 bottom-0 max-h-[75%] border-t;
+}
+
+.sheet-side-left {
+  @apply data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left !rounded-l-0 inset-y-0 left-0 h-full w-3/4 max-w-[504px] border-r;
+}
+
+.sheet-side-right {
+  @apply data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right !rounded-r-0 inset-y-0 right-0 h-full w-3/4 max-w-[504px] border-l;
+}
+
+.sheet-radius-small {
+  @apply rounded-0;
+}
+.sheet-radius-medium {
+  @apply rounded-8;
+}
+.sheet-radius-large {
+  @apply rounded-24;
+}

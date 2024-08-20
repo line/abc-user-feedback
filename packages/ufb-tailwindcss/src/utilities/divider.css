@@ -1,0 +1,33 @@
+.divider-bold {
+  @apply bg-[var(--border-neutral-primary)];
+}
+.divider-subtle {
+  @apply bg-[var(--border-neutral-tertiary)];
+}
+
+.divider-horizontal {
+  @apply mx-auto h-1 w-full;
+}
+.divider-vertical {
+  @apply my-auto h-full w-1;
+}
+
+.divider-horizontal-indent-8 {
+  @apply w-[calc(100%_-_16px)];
+}
+.divider-horizontal-indent-16 {
+  @apply w-[calc(100%_-_32px)];
+}
+.divider-horizontal-indent-24 {
+  @apply w-[calc(100%_-_48px)];
+}
+
+.divider-vertical-indent-8 {
+  @apply h-[calc(100%_-_16px)];
+}
+.divider-vertical-indent-16 {
+  @apply h-[calc(100%_-_32px)];
+}
+.divider-vertical-indent-24 {
+  @apply h-[calc(100%_-_48px)];
+}

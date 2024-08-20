@@ -16,7 +16,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/ui';
+import { InputCaption, InputField, InputLabel, TextInput } from '@ufb/react';
 
 import type { ProjectInfo } from '../project.type';
 import TimezoneSelectBox from './timezone-select-box';
@@ -36,34 +36,41 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
   return (
     <div className="flex flex-col gap-6">
       {type === 'update' && (
-        <TextInput {...register('id')} label="Project ID" disabled />
+        <InputField>
+          <InputLabel>Project ID</InputLabel>
+          <TextInput {...register('id')} disabled />
+        </InputField>
       )}
-      <TextInput
-        {...register('name')}
-        label="Project Name"
-        placeholder={t('placeholder', { name: 'Project Name' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.name?.message}
-        isValid={!formState.errors.name}
-        required
-        disabled={readOnly}
-      />
-      <TextInput
-        {...register('description')}
-        label="Project Description"
-        placeholder={t('placeholder', { name: 'Project Description' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.description?.message}
-        isValid={!formState.errors.description}
-        disabled={readOnly}
-      />
-      <TimezoneSelectBox
-        value={watch('timezone')}
-        onChange={(value) => setValue('timezone', value, { shouldDirty: true })}
-        disabled={readOnly}
-      />
+      <InputField>
+        <InputLabel>Project Name</InputLabel>
+        <TextInput
+          {...register('name')}
+          placeholder={t('placeholder', { name: 'Project Name' })}
+          required
+          disabled={readOnly}
+        />
+        {formState.errors.name && (
+          <InputCaption>{formState.errors.name.message}</InputCaption>
+        )}
+      </InputField>
+      <InputField>
+        <InputLabel>Project Description</InputLabel>
+        <TextInput
+          {...register('description')}
+          placeholder={t('placeholder', { name: 'Project Description' })}
+          disabled={readOnly}
+        />
+      </InputField>
+      <InputField>
+        <InputLabel>Time Zone</InputLabel>
+        <TimezoneSelectBox
+          value={watch('timezone')}
+          onChange={(value) =>
+            value && setValue('timezone', value, { shouldDirty: true })
+          }
+          disabled={readOnly}
+        />
+      </InputField>
     </div>
   );
 };

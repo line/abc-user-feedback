@@ -1,13 +1,21 @@
 .command {
-  @apply flex h-full w-full flex-col overflow-hidden p-4 text-[var(--text-neutral-primary)];
+  --command-text-default: var(--text-neutral-primary);
+  --command-text-empty: var(--text-neutral-secondary);
+  --command-text-shortcut: var(--text-neutral-tertiary);
+  --command-text-placeholder: var(--text-neutral-tertiary);
+  --command-fg-default: var(--fg-neutral-primary);
+  --command-fg-hover: var(--fg-neutral-tertiary);
+  --command-border-default: var(--border-neutral-tertiary);
+
+  @apply flex h-full w-full flex-col overflow-hidden p-4 text-[var(--command-text-default)];
 }
 
 .command-empty {
-  @apply flex items-center justify-center p-24 text-center text-base text-[var(--text-neutral-secondary)];
+  @apply flex items-center justify-center p-24 text-center text-base text-[var(--command-text-empty)];
 }
 
 .command-item {
-  @apply rounded-6 relative flex cursor-default select-none items-center p-8 text-base outline-none transition-colors hover:bg-[var(--fg-neutral-tertiary)];
+  @apply rounded-6 relative flex cursor-pointer select-none items-center p-8 text-base outline-none transition-colors hover:bg-[var(--command-fg-hover)];
 }
 
 .command-item ~ .command-item {
@@ -15,15 +23,15 @@
 }
 
 .command-shortcut {
-  @apply text-small ml-auto tracking-widest text-[var(--text-neutral-tertiary)];
+  @apply text-small ml-auto tracking-widest text-[var(--command-text-shortcut)];
 }
 
 .command-separator {
-  @apply -mx-1 my-4 h-1 bg-[var(--border-neutral-tertiary)];
+  @apply -mx-1 my-4 h-1 bg-[var(--command-border-default)];
 }
 
 .command-group {
-  @apply overflow-hidden p-1 text-[var(--text-neutral-primary)] [&_[cmdk-group-heading]]:p-8 [&_[cmdk-group-heading]]:text-base [&_[cmdk-group-heading]]:font-bold;
+  @apply overflow-hidden p-1 text-[var(--command-text-default)] [&_[cmdk-group-heading]]:p-8 [&_[cmdk-group-heading]]:text-base [&_[cmdk-group-heading]]:font-medium;
 }
 
 .command-list {
@@ -31,9 +39,9 @@
 }
 
 .command-input-box {
-  @apply relative flex items-center justify-center border-b border-b-[var(--border-neutral-tertiary)] bg-[var(--fg-neutral-primary)] [&>svg]:ml-8;
+  @apply relative flex items-center justify-center border-b border-b-[var(--command-border-default)] bg-[var(--command-fg-default)] [&>svg]:ml-8;
 }
 
 .command-input {
-  @apply min-w-0 flex-1 bg-[transparent] p-8 text-base text-[var(--text-neutral-primary)] outline-none placeholder:text-[var(--text-neutral-tertiary)] focus:text-[var(--text-neutral-primary)];
+  @apply min-w-0 flex-1 bg-[transparent] p-8 text-base text-[var(--command-text-default)] outline-none placeholder:text-[var(--command-text-placeholder)];
 }

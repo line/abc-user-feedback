@@ -1,0 +1,16 @@
+.menu-horizontal {
+  @apply flex-row space-x-12;
+}
+.menu-vertical {
+  @apply min-w-[10rem] flex-col space-y-12;
+}
+
+.menu-item-small {
+  @apply p-8 text-base;
+}
+.menu-item-medium {
+  @apply text-large px-12 py-10;
+}
+.menu-item-large {
+  @apply text-xlarge px-14 py-10;
+}

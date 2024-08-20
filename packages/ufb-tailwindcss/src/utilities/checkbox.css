@@ -1,0 +1,26 @@
+.checkbox-small {
+  @apply text-small;
+}
+.checkbox-medium {
+  @apply text-base;
+}
+.checkbox-large {
+  @apply text-large;
+}
+
+.check-small {
+  @apply h-14 w-14;
+}
+.check-medium {
+  @apply h-16 w-16;
+}
+.check-large {
+  @apply h-20 w-20;
+}
+
+.checkbox-icon-check {
+  @apply rounded-4 bg-[var(--checkbox-fg-checked)] text-[var(--checkbox-icon-checked)];
+}
+.checkbox-icon-indeterminate {
+  @apply rounded-4 bg-[var(--checkbox-fg-indeterminate)] text-[var(--checkbox-icon-indeterminate)];
+}

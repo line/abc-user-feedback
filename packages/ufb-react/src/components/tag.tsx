@@ -49,6 +49,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
     radius = "medium",
     icon,
     onClick,
+    className,
     children,
     ...rest
   } = props;
@@ -57,22 +58,24 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
     <span
       {...rest}
       ref={ref}
-      className={cn(tagVariants({ type, size, radius }))}
+      className={cn(tagVariants({ type, size, radius, className }))}
     >
       {icon && <Icon name={icon} size={SMALL_ICON_SIZE[size]} aria-hidden />}
       {children}
-      <button
-        type="button"
-        aria-label="Remove this tag"
-        className="tag-button"
-        onClick={onClick}
-      >
-        <Icon
-          name="RiCloseLargeLine"
-          size={SMALL_ICON_SIZE[size]}
-          aria-hidden
-        />
-      </button>
+      {onClick && (
+        <button
+          type="button"
+          aria-label="Remove this tag"
+          className="tag-button"
+          onClick={onClick}
+        >
+          <Icon
+            name="RiCloseLargeLine"
+            size={SMALL_ICON_SIZE[size]}
+            aria-hidden
+          />
+        </button>
+      )}
     </span>
   );
 });

@@ -1,31 +1,32 @@
-.nav-bar {
-  @apply flex h-56 items-center border-b border-b-[var(--border-neutral-tertiary)] bg-[var(--fg-neutral-primary)] px-24 py-10;
+/* todo remove */
+.navbar {
+  @apply border-b-neutral-tertiary bg-neutral-primary flex h-56 items-center border-b px-24 py-10;
 }
 
-.nav-bar-menu {
+.navbar-menu {
   @apply !p-0;
 }
 
-.nav-bar-logo {
+.navbar-logo {
   @apply flex p-6;
 }
 
-.nav-bar-divider {
+.navbar-divider {
   @apply mx-16;
 }
 
-.nav-bar-select {
+.navbar-select {
   @apply w-[15rem];
 }
 
-.nav-bar-dropdown {
+.navbar-dropdown {
   @apply ml-auto;
 }
 
-.nav-bar-dropdown ~ .nav-bar-button {
+.navbar-dropdown ~ .navbar-button {
   @apply ml-12;
 }
 
-.nav-bar-dropdown-content {
+.navbar-dropdown-content {
   @apply min-w-[7.5rem];
 }

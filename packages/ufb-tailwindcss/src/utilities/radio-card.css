@@ -1,0 +1,23 @@
+.radio-card-group-horizontal {
+  @apply flex-row space-x-8;
+}
+.radio-card-group-vertical {
+  @apply flex-col space-y-8;
+}
+
+.radio-card-horizontal {
+  @apply min-w-[10rem] flex-row items-center space-x-8 px-16 py-12 text-left;
+}
+.radio-card-vertical {
+  @apply min-h-[7rem] min-w-[10rem] flex-col items-center justify-center space-y-8 px-24 py-12 text-center;
+}
+
+.radio-card-radius-small {
+  @apply rounded-0;
+}
+.radio-card-radius-medium {
+  @apply rounded-8;
+}
+.radio-card-radius-large {
+  @apply rounded-24;
+}

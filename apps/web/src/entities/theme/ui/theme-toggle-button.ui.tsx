@@ -15,7 +15,7 @@
  */
 import { useEffect } from 'react';
 
-import { NavBarButton } from '@ufb/react';
+import { IconButton } from '@ufb/react';
 
 import { useThemeStore } from '../theme.model';
 
@@ -28,9 +28,10 @@ const ThemeToggleButton: React.FC = () => {
   }, [theme]);
 
   return (
-    <NavBarButton
+    <IconButton
       icon={theme === 'light' ? 'RiSunLine' : 'RiMoonLine'}
       onClick={toggle}
+      variant="ghost"
     />
   );
 };

@@ -15,16 +15,19 @@
  */
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import { Path, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
+import { DeleteProjectPopover } from '@/features/create-project';
 
 import SettingMenuTemplate from '../setting-menu-template';
 
@@ -34,8 +37,9 @@ interface IProps {
 
 const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const perms = usePermissions(projectId);
-  const client = useQueryClient();
+  const queryClient = useQueryClient();
 
   const methods = useForm<ProjectInfo>({
     resolver: zodResolver(projectInfoSchema),
@@ -58,8 +62,27 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        await client.invalidateQueries({ queryKey: ['/api/admin/projects'] });
+        await queryClient.invalidateQueries({
+          queryKey: ['/api/admin/projects'],
+        });
         toast.positive({ title: t('toast.save') });
+      },
+      onError(error) {
+        toast.negative({ title: error.message });
+      },
+    },
+  });
+  const { mutate: deleteProject } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/projects/{projectId}',
+    pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        await router.push(Path.MAIN);
+        await queryClient.invalidateQueries({
+          queryKey: ['/api/admin/projects'],
+        });
+        toast.negative({ title: t('toast.delete') });
       },
       onError(error) {
         toast.negative({ title: error.message });
@@ -75,21 +98,33 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   return (
     <SettingMenuTemplate
       title={t('project-setting-menu.project-info')}
-      actionBtn={{
-        form: 'form',
-        type: 'submit',
-        children: t('button.save'),
-        disabled:
-          !perms.includes('project_update') ||
-          !methods.formState.isDirty ||
-          isPending,
-      }}
+      action={
+        <Button
+          form="form"
+          type="submit"
+          disabled={
+            !perms.includes('project_update') ||
+            !methods.formState.isDirty ||
+            isPending
+          }
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
       <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
         <FormProvider {...methods}>
           <ProjectInfoForm type="update" />
         </FormProvider>
       </form>
+      <div className="flex justify-end">
+        {data && (
+          <DeleteProjectPopover
+            project={data}
+            onClickDelete={() => deleteProject(undefined)}
+          />
+        )}
+      </div>
     </SettingMenuTemplate>
   );
 };

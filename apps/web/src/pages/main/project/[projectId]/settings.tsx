@@ -24,7 +24,13 @@ import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
-import { ProjectInfoSetting } from '@/widgets/setting-menu';
+import {
+  ApiKeySetting,
+  IssueTrackerSetting,
+  MemberSetting,
+  ProjectInfoSetting,
+  WebhookSetting,
+} from '@/widgets/setting-menu';
 
 type MenuType = 'project' | 'member' | 'api-key' | 'issue-tracker' | 'webhook';
 
@@ -66,6 +72,14 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
       <div className="border-neutral-tertiary h-[calc(100vh-300px)] w-full rounded border p-6">
         {menuItemValue === 'project' && (
           <ProjectInfoSetting projectId={projectId} />
+        )}
+        {menuItemValue === 'member' && <MemberSetting projectId={projectId} />}
+        {menuItemValue === 'api-key' && <ApiKeySetting projectId={projectId} />}
+        {menuItemValue === 'issue-tracker' && (
+          <IssueTrackerSetting projectId={projectId} />
+        )}
+        {menuItemValue === 'webhook' && (
+          <WebhookSetting projectId={projectId} />
         )}
       </div>
     </div>

@@ -1,75 +1,55 @@
-import React, { useRef, useState } from "react";
+import type { ButtonHTMLAttributes, HTMLInputTypeAttribute } from "react";
+import React, { useRef } from "react";
 import { cva } from "class-variance-authority";
 
 import type { Radius, Size } from "../lib/types";
+import type { IconProps } from "./icon";
 import { ICON_SIZE } from "../constants";
 import { cn, composeRefs } from "../lib/utils";
 import { Icon } from "./icon";
 
-type InputType = "text" | "search" | "id" | "password";
+type TextInputType = ("text" | "email" | "password" | "search" | "tel") &
+  HTMLInputTypeAttribute;
 type CaptionType = "default" | "success" | "info" | "error";
-
-const defaultContext: InputProps = {
-  size: "small",
-  radius: "medium",
-  type: "text",
-};
-
-const InputFieldContext = React.createContext<InputProps>(defaultContext);
-
-function useInputFieldContext() {
-  const context = React.useContext(InputFieldContext);
-  return context;
-}
-
-function InputFieldProvider(props: InputProps) {
-  const { children, ...rest } = props;
-
-  return (
-    <InputFieldContext.Provider value={rest}>
-      {children}
-    </InputFieldContext.Provider>
-  );
-}
 
 const InputField = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
   (props, ref) => {
     const { children } = props;
 
     return (
-      <div ref={ref} className={cn("input")}>
-        <InputFieldProvider>{children}</InputFieldProvider>
+      <div ref={ref} className="input-field">
+        {children}
       </div>
     );
   },
 );
-
 InputField.displayName = "InputField";
 
-const inputVariants = cva("input-box", {
+const defaultContext: TextInputProps = {
+  size: "small",
+};
+
+const InputContext = React.createContext<TextInputProps>(defaultContext);
+
+const inputVariants = cva("input", {
   variants: {
     size: {
-      large: "input-box-large",
-      medium: "input-box-medium",
-      small: "input-box-small",
+      large: "input-large",
+      medium: "input-medium",
+      small: "input-small",
     },
     radius: {
-      large: "input-box-radius-large",
-      medium: "input-box-radius-medium",
-      small: "input-box-radius-small",
-    },
-    disabled: {
-      true: "input-box-disabled",
-      false: "",
+      large: "input-radius-large",
+      medium: "input-radius-medium",
+      small: "input-radius-small",
     },
     hasError: {
-      true: "input-box-error",
+      true: "input-error",
       false: "",
     },
     defaultVariants: {
       size: "small",
       radius: "medium",
-      disabled: false,
       hasError: false,
     },
   },
@@ -89,91 +69,97 @@ const inputCaptionVariants = cva("input-caption", {
   },
 });
 
-interface InputProps
+interface InputBoxProps extends React.HTMLAttributes<HTMLDivElement> {
+  size?: Size;
+}
+
+const InputBox = React.forwardRef<HTMLInputElement, InputBoxProps>(
+  ({ size = "small", className, children, onBlur, ...props }, ref) => {
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      e.stopPropagation();
+      if (!e.currentTarget.contains(e.relatedTarget)) {
+        onBlur?.(e);
+      }
+    };
+
+    return (
+      <InputContext.Provider value={{ size }}>
+        <div
+          ref={ref}
+          className={cn("input-box", className)}
+          onBlur={handleBlur}
+          {...props}
+        >
+          {children}
+        </div>
+      </InputContext.Provider>
+    );
+  },
+);
+InputBox.displayName = "InputBox";
+
+interface TextInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   size?: Size;
-  type?: InputType;
+  type?: TextInputType;
   radius?: Radius;
   hasError?: boolean;
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const {
-    size = "small",
-    type = "text",
-    radius = "medium",
-    hasError,
-    disabled,
-    onChange,
-    className,
-    ...rest
-  } = props;
+const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
+  (props, ref) => {
+    const {
+      size,
+      type = "text",
+      radius = "medium",
+      hasError,
+      disabled,
+      onFocus,
+      onBlur,
+      className,
+      ...rest
+    } = props;
 
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showButton, setShowButton] = useState(false);
+    const { size: boxSize = "small" } = React.useContext(InputContext);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClick = () => {
-    if (type === "password") {
-      setShowPassword((showPassword) => !showPassword);
-    } else {
-      setShowButton(false);
-      inputRef.current?.value && (inputRef.current.value = "");
-      inputRef.current?.focus();
-    }
-  };
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      e.stopPropagation();
+      if (!e.currentTarget.contains(e.relatedTarget)) {
+        onFocus?.(e);
+      }
+    };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setShowButton(!!e.target.value);
-    onChange?.(e);
-  };
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      e.stopPropagation();
+      if (!e.currentTarget.contains(e.relatedTarget)) {
+        onBlur?.(e);
+      }
+    };
 
-  const handleFocus = (e: React.FocusEvent<HTMLElement>) => {
-    e.stopPropagation();
-    if (!e.currentTarget.contains(e.relatedTarget) && inputRef.current?.value) {
-      setShowButton(true);
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLElement>) => {
-    e.stopPropagation();
-    if (!e.currentTarget.contains(e.relatedTarget)) {
-      setShowButton(false);
-    }
-  };
-
-  return (
-    <div
-      className={cn(
-        inputVariants({ size, radius, disabled, hasError, className }),
-      )}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-    >
-      {TypeIcon(size)[type]}
+    return (
       <input
         {...rest}
         spellCheck="false"
-        type={type === "password" && !showPassword ? "password" : "text"}
+        type={type}
         ref={composeRefs(inputRef, ref)}
-        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         disabled={disabled}
+        className={cn(
+          inputVariants({
+            size: size ?? boxSize,
+            radius,
+            hasError,
+            className,
+          }),
+        )}
       />
-      {(showButton || type === "password") && (
-        <button
-          type="button"
-          onClick={handleClick}
-          className={cn("input-button")}
-          disabled={disabled}
-        >
-          {ButtonIcon(size, showPassword)[type]}
-        </button>
-      )}
-    </div>
-  );
-});
+    );
+  },
+);
 
-Input.displayName = "Input";
+TextInput.displayName = "TextInput";
 
 const InputLabel = React.forwardRef<HTMLElement, React.PropsWithChildren>(
   (props, ref) => {
@@ -185,17 +171,16 @@ const InputLabel = React.forwardRef<HTMLElement, React.PropsWithChildren>(
     );
   },
 );
-
 InputLabel.displayName = "InputLabel";
 
 interface InputCaptionProps extends React.PropsWithChildren {
   type?: CaptionType;
+  size?: Size;
 }
 
 const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
   (props, ref) => {
-    const { type = "default", children } = props;
-    const { size = "small" } = useInputFieldContext();
+    const { type = "default", size = "small", children } = props;
 
     return (
       <span ref={ref} className={cn(inputCaptionVariants({ type }))}>
@@ -205,35 +190,110 @@ const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
     );
   },
 );
-
 InputCaption.displayName = "InputCaption";
 
-export { InputField, Input, InputLabel, InputCaption, type InputProps };
-
-const ButtonIcon = (
-  size: Size,
-  showPassword: boolean,
-): Record<InputType, React.ReactNode> => {
-  return {
-    text: <Icon name="RiCloseCircleFill" size={ICON_SIZE[size]} />,
-    search: <Icon name="RiCloseCircleFill" size={ICON_SIZE[size]} />,
-    id: <Icon name="RiCloseCircleFill" size={ICON_SIZE[size]} />,
-    password: (
-      <Icon
-        name={showPassword ? "RiEyeCloseFill" : "RiEyeFill"}
-        size={ICON_SIZE[size]}
-      />
-    ),
-  };
+const inputIconVariants = cva("input-icon", {
+  variants: {
+    size: {
+      large: "input-icon-large",
+      medium: "input-icon-medium",
+      small: "input-icon-small",
+    },
+    defaultVariants: {
+      size: "small",
+    },
+  },
+});
+const InputIcon = ({ className, ...props }: IconProps) => {
+  const { size = "small" } = React.useContext(InputContext);
+  return (
+    <Icon
+      {...props}
+      size={ICON_SIZE[size]}
+      className={cn(inputIconVariants({ size, className }))}
+    />
+  );
 };
+InputIcon.displayName = "InputIcon";
 
-const TypeIcon = (size: Size): Record<InputType, React.ReactNode> => {
-  return {
-    text: null,
-    search: <Icon name="RiSearchLine" size={ICON_SIZE[size]} />,
-    id: <Icon name="RiUser3Fill" size={ICON_SIZE[size]} />,
-    password: <Icon name="RiLockPasswordFill" size={ICON_SIZE[size]} />,
+const inputButtonVariants = cva("input-button", {
+  variants: {
+    size: {
+      large: "input-button-large",
+      medium: "input-button-medium",
+      small: "input-button-small",
+    },
+    defaultVariants: {
+      size: "small",
+    },
+  },
+});
+const InputClearButton = React.forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement>
+>(({ className, ...props }, ref) => {
+  const { size = "small" } = React.useContext(InputContext);
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={cn(inputButtonVariants({ size, className }))}
+      aria-label="Reset input text"
+      {...props}
+    >
+      <Icon name="RiCloseCircleFill" size={ICON_SIZE[size]} />
+    </button>
+  );
+});
+InputClearButton.displayName = "InputClearButton";
+
+const InputEyeButton = React.forwardRef<
+  HTMLButtonElement,
+  ButtonHTMLAttributes<HTMLButtonElement> & {
+    onChangeVisibility?: (visible: boolean) => void;
+  }
+>(({ className, onClick, onChangeVisibility, ...props }, ref) => {
+  const [visible, setVisible] = React.useState(false);
+  const { size = "small" } = React.useContext(InputContext);
+
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    setVisible((visible) => !visible);
+    onClick?.(e);
   };
+
+  React.useEffect(() => {
+    onChangeVisibility?.(visible);
+  }, [visible]);
+
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={cn(inputButtonVariants({ size, className }))}
+      onClick={handleClick}
+      aria-label={visible ? "hide password" : "show password"}
+      {...props}
+    >
+      {visible ? (
+        <Icon name="RiEyeCloseFill" size={ICON_SIZE[size]} />
+      ) : (
+        <Icon name="RiEyeFill" size={ICON_SIZE[size]} />
+      )}
+    </button>
+  );
+});
+InputEyeButton.displayName = "InputEyeButton";
+
+export {
+  InputField,
+  InputBox,
+  TextInput,
+  InputLabel,
+  InputCaption,
+  InputClearButton,
+  InputEyeButton,
+  InputIcon,
+  type TextInputProps,
 };
 
 const CaptionIcon = (size: Size): Record<CaptionType, React.ReactNode> => {

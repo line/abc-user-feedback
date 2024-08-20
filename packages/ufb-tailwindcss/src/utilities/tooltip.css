@@ -1,0 +1,9 @@
+.tooltip-text-left {
+  @apply text-left;
+}
+.tooltip-text-center {
+  @apply text-center;
+}
+.tooltip-text-right {
+  @apply text-right;
+}

@@ -1,21 +1,39 @@
+.dropdown-content {
+  --dropdown-text-default: var(--text-neutral-primary);
+  --dropdown-text-pressed: var(--text-neutral-primary); /* todo tint */
+  --dropdown-text-empty: var(--text-neutral-secondary);
+  --dropdown-text-shortcut: var(--text-neutral-tertiary);
+  --dropdown-fg-default: var(--fg-neutral-primary);
+  --dropdown-fg-hover: var(--fg-neutral-tertiary);
+  --dropdown-fg-pressed: var(--fg-neutral-tertiary);
+  --dropdown-border-default: var(--border-neutral-tertiary);
+
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 z-50 min-w-[8rem] overflow-hidden border border-[var(--dropdown-border-default)] bg-[var(--dropdown-fg-default)] p-4 text-[var(--dropdown-text-default)] shadow-md;
+}
+
 .dropdown-sub-trigger {
-  @apply rounded-6 flex cursor-default select-none items-center p-8 text-base outline-none focus:bg-[var(--fg-neutral-tertiary)] data-[state=open]:bg-[var(--fg-neutral-tertiary)];
+  @apply rounded-6 flex cursor-pointer select-none items-center p-8 text-base outline-none focus:bg-[var(--dropdown-fg-hover)] data-[state=open]:bg-[var(--dropdown-fg-pressed)] data-[state=open]:text-[var(--dropdown-text-pressed)];
 }
 
 .dropdown-sub-content {
-  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 z-50 min-w-[8rem] overflow-hidden border border-[var(--border-neutral-tertiary)] bg-[var(--fg-neutral-primary)] p-4 text-[var(--text-neutral-primary)] shadow-lg;
-}
+  --dropdown-text-default: var(--text-neutral-primary);
+  --dropdown-text-pressed: var(--text-neutral-primary); /* todo tint */
+  --dropdown-text-empty: var(--text-neutral-secondary);
+  --dropdown-text-shortcut: var(--text-neutral-tertiary);
+  --dropdown-fg-default: var(--fg-neutral-primary);
+  --dropdown-fg-hover: var(--fg-neutral-tertiary);
+  --dropdown-fg-pressed: var(--fg-neutral-tertiary);
+  --dropdown-border-default: var(--border-neutral-tertiary);
 
-.dropdown-content {
-  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 z-50 min-w-[8rem] overflow-hidden border border-[var(--border-neutral-tertiary)] bg-[var(--fg-neutral-primary)] p-4 text-[var(--text-neutral-primary)] shadow-md;
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 z-50 min-w-[8rem] overflow-hidden border border-[var(--dropdown-border-default)] bg-[var(--dropdown-fg-default)] p-4 text-[var(--dropdown-text-default)] shadow-lg;
 }
 
 .dropdown-item {
-  @apply rounded-6 relative flex cursor-default select-none items-center p-8 text-base outline-none transition-colors focus:bg-[var(--fg-neutral-tertiary)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-6 relative flex cursor-pointer select-none items-center p-8 text-base outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
 .dropdown-checkbox {
-  @apply rounded-8 relative flex cursor-default select-none items-center py-8 pl-32 pr-8 text-base outline-none transition-colors focus:bg-[var(--fg-neutral-tertiary)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-8 relative flex cursor-pointer select-none items-center py-8 pl-32 pr-8 text-base outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
 .dropdown-checkbox-icon {
@@ -23,7 +41,7 @@
 }
 
 .dropdown-radio {
-  @apply rounded-8 relative flex cursor-default select-none items-center py-8 pl-32 pr-8 text-base outline-none transition-colors focus:bg-[var(--fg-neutral-tertiary)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-8 relative flex cursor-pointer select-none items-center py-8 pl-32 pr-8 text-base outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 }
 
 .dropdown-radio-icon {
@@ -35,17 +53,17 @@
 }
 
 .dropdown-label {
-  @apply p-8 text-base font-bold;
+  @apply p-8 text-base font-medium;
 }
 
 .dropdown-shortcut {
-  @apply text-small ml-auto tracking-widest text-[var(--text-neutral-tertiary)];
+  @apply text-small ml-auto tracking-widest text-[var(--dropdown-text-shortcut)];
 }
 
 .dropdown-separator {
-  @apply -mx-1 my-4 h-1 bg-[var(--border-neutral-tertiary)];
+  @apply -mx-1 my-4 h-1 bg-[var(--dropdown-border-default)];
 }
 
 .dropdown-empty {
-  @apply flex items-center justify-center p-24 text-base text-[var(--text-neutral-secondary)];
+  @apply flex items-center justify-center p-24 text-base text-[var(--dropdown-text-empty)];
 }

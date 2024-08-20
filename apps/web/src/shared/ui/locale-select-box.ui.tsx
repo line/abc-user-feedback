@@ -17,7 +17,13 @@ import { useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 
-import { NavBarDropdownButton } from '@ufb/react';
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  IconButton,
+} from '@ufb/react';
 
 interface IProps extends React.PropsWithChildren {}
 
@@ -33,12 +39,20 @@ const LocaleSelectBox: React.FC<IProps> = () => {
   );
 
   return (
-    <NavBarDropdownButton
-      triggerIcon="RiTranslate2"
-      items={router.locales
-        ?.filter((v) => v !== 'default')
-        .map((v) => ({ children: v, onClick: () => onChangeLanguage(v) }))}
-    />
+    <Dropdown>
+      <DropdownTrigger asChild>
+        <IconButton icon="RiTranslate2" variant="ghost" />
+      </DropdownTrigger>
+      <DropdownContent>
+        {router.locales
+          ?.filter((v) => v !== 'default')
+          .map((v) => (
+            <DropdownItem key={v} onClick={() => onChangeLanguage(v)}>
+              {v}
+            </DropdownItem>
+          ))}
+      </DropdownContent>
+    </Dropdown>
   );
 };
 

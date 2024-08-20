@@ -1,0 +1,38 @@
+.sheet-overlay {
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 bg-dim fixed inset-0 z-50;
+}
+
+.sheet {
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out bg-neutral-primary fixed z-50 flex flex-col space-y-20 p-20 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500;
+
+  /* default */
+  @apply sheet-radius-small [&:not([class*=sheet-side])]:sheet-side-right;
+}
+
+.sheet-close {
+  @apply rounded-8 absolute right-16 top-16 !m-0 transition-opacity hover:opacity-80 disabled:pointer-events-none disabled:opacity-50;
+}
+
+.sheet-header {
+  @apply flex flex-shrink-0 flex-col space-y-4 text-left;
+}
+
+.sheet-body {
+  @apply space-y-12;
+}
+
+.sheet-footer {
+  @apply flex flex-shrink-0 justify-end space-x-8;
+}
+
+.sheet-icon {
+  @apply flex p-4;
+}
+
+.sheet-title {
+  @apply text-xlarge text-neutral-primary font-medium;
+}
+
+.sheet-description {
+  @apply text-neutral-secondary text-base;
+}

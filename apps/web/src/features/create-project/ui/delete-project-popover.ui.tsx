@@ -13,15 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Popover,
-  PopoverModalContent,
-  PopoverTrigger,
-  TextInput,
-} from '@ufb/ui';
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@ufb/react';
 
 import { usePermissions } from '@/shared';
 import type { Project } from '@/entities/project';
@@ -35,41 +39,35 @@ const DeleteProjectPopover: React.FC<IProps> = (props) => {
   const { project, onClickDelete } = props;
   const { t } = useTranslation();
   const perms = usePermissions(project.id);
-  const [open, setOpen] = useState(false);
-  const [inputChannelName, setInputChannelName] = useState('');
 
   return (
-    <Popover modal open={open} onOpenChange={setOpen}>
-      <PopoverTrigger
-        className="btn btn-md btn-primary min-w-[120px]"
-        onClick={() => setOpen(true)}
-        disabled={!perms.includes('project_delete')}
-      >
-        {t('button.delete')}
-      </PopoverTrigger>
-      <PopoverModalContent
-        title={t('main.setting.dialog.delete-project.title')}
-        cancelButton={{ children: t('button.cancel') }}
-        description={t('main.setting.dialog.delete-project.description')}
-        icon={{
-          name: 'WarningTriangleFill',
-          className: 'text-red-primary',
-          size: 56,
-        }}
-        submitButton={{
-          children: t('button.delete'),
-          disabled: inputChannelName !== project.name,
-          className: 'btn-red',
-          onClick: () => onClickDelete(project.id),
-        }}
-      >
-        <p className="font-16-bold mb-3 text-center">{project.name}</p>
-        <TextInput
-          placeholder={t('input.placeholder.input')}
-          onChange={(e) => setInputChannelName(e.target.value)}
-        />
-      </PopoverModalContent>
-    </Popover>
+    <Dialog>
+      <DialogTrigger disabled={!perms.includes('project_delete')}>
+        <Button>{t('button.delete')}</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader icon="RiCloseCircleFill">
+          <DialogTitle>
+            {t('main.setting.dialog.delete-project.title')}
+          </DialogTitle>
+          <DialogDescription>
+            {t('main.setting.dialog.delete-project.description')}
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose>
+            <Button variant="outline">{t('button.cancel')}</Button>
+          </DialogClose>
+          <Button
+            variant="destructive"
+            size="small"
+            onClick={() => onClickDelete(project.id)}
+          >
+            {t('button.delete')}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

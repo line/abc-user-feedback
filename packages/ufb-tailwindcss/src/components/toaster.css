@@ -1,0 +1,10 @@
+.toaster {
+}
+
+.toast {
+  @apply !absolute;
+}
+
+.toast-close {
+  @apply order-1;
+}

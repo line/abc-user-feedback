@@ -12,7 +12,7 @@
 }
 
 .calendar-months {
-  @apply flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0;
+  @apply flex flex-col space-y-4;
 }
 .calendar-month {
   @apply space-y-4;
@@ -22,7 +22,7 @@
   @apply relative flex items-center justify-center pt-1;
 }
 .calendar-caption-label {
-  @apply text-base font-bold text-[var(--calendar-text-default)];
+  @apply text-base font-medium text-[var(--calendar-text-default)];
 }
 
 .calendar-nav {
@@ -55,7 +55,7 @@
 }
 
 .calendar-day {
-  @apply rounded-8 relative h-full w-full overflow-hidden p-0 text-base aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
+  @apply rounded-8 relative flex h-full w-full items-center justify-center overflow-hidden p-0 text-base aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
 }
 
 .calendar-day-selected {

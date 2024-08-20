@@ -16,18 +16,95 @@ const badgeVariants = cva("badge", {
       small: "badge-radius-small",
     },
     type: {
-      bold: "badge-bold",
-      subtle: "badge-subtle",
-      outline: "badge-outline",
+      bold: "",
+      subtle: "",
+      outline: "",
     },
     color: {
-      default: "badge-default",
-      blue: "badge-blue",
-      orange: "badge-orange",
-      red: "badge-red",
-      green: "badge-green",
+      default: "",
+      blue: "",
+      orange: "",
+      red: "",
+      green: "",
     },
   },
+  compoundVariants: [
+    {
+      type: "bold",
+      color: "default",
+      className: "badge-bold-default",
+    },
+    {
+      type: "bold",
+      color: "blue",
+      className: "badge-bold-blue",
+    },
+    {
+      type: "bold",
+      color: "orange",
+      className: "badge-bold-orange",
+    },
+    {
+      type: "bold",
+      color: "red",
+      className: "badge-bold-red",
+    },
+    {
+      type: "bold",
+      color: "green",
+      className: "badge-bold-green",
+    },
+    {
+      type: "subtle",
+      color: "default",
+      className: "badge-subtle-default",
+    },
+    {
+      type: "subtle",
+      color: "blue",
+      className: "badge-subtle-blue",
+    },
+    {
+      type: "subtle",
+      color: "orange",
+      className: "badge-subtle-orange",
+    },
+    {
+      type: "subtle",
+      color: "red",
+      className: "badge-subtle-red",
+    },
+    {
+      type: "subtle",
+      color: "green",
+      className: "badge-subtle-green",
+    },
+    {
+      type: "outline",
+      color: "default",
+      className: "badge-outline-default",
+    },
+    {
+      type: "outline",
+      color: "blue",
+      className: "badge-outline-blue",
+    },
+    {
+      type: "outline",
+      color: "orange",
+      className: "badge-outline-orange",
+    },
+    {
+      type: "outline",
+      color: "red",
+      className: "badge-outline-red",
+    },
+    {
+      type: "outline",
+      color: "green",
+      className: "badge-outline-green",
+    },
+  ],
   defaultVariants: {
     radius: "medium",
     type: "bold",
@@ -35,7 +112,7 @@ const badgeVariants = cva("badge", {
   },
 });
 
-export interface BadgeProps
+interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
   radius?: Radius;
@@ -70,4 +147,4 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
 
 Badge.displayName = "Badge";
 
-export { Badge, badgeVariants };
+export { Badge, type BadgeProps };

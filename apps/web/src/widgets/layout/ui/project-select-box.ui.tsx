@@ -17,7 +17,6 @@
 import { useRouter } from 'next/router';
 
 import {
-  NavBarSelect,
   Select,
   SelectContent,
   SelectItem,
@@ -44,14 +43,21 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <NavBarSelect
+    <Select
       value={String(projectId)}
       onValueChange={(value) => onChangeProject(value)}
-      items={data?.items.map(({ id, name }) => ({
-        value: String(id),
-        children: name,
-      }))}
-    />
+    >
+      <SelectTrigger className="max-w-60">
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent>
+        {data?.items.map(({ id, name }) => (
+          <SelectItem key={id} value={String(id)}>
+            {name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
 

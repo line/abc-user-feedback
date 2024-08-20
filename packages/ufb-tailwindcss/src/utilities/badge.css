@@ -1,0 +1,57 @@
+.badge-bold-default {
+  @apply bg-[var(--badge-bold-fg-default)] text-[var(--badge-bold-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--badge-bold-border-default)];
+}
+.badge-bold-blue {
+  @apply bg-[var(--badge-bold-fg-blue)] text-[var(--badge-bold-text-blue)] shadow-[0_0_0_0.0625rem_inset_var(--badge-bold-border-blue)];
+}
+.badge-bold-orange {
+  @apply bg-[var(--badge-bold-fg-orange)] text-[var(--badge-bold-text-orange)] shadow-[0_0_0_0.0625rem_inset_var(--badge-bold-border-orange)];
+}
+.badge-bold-red {
+  @apply bg-[var(--badge-bold-fg-red)] text-[var(--badge-bold-text-red)] shadow-[0_0_0_0.0625rem_inset_var(--badge-bold-border-red)];
+}
+.badge-bold-green {
+  @apply bg-[var(--badge-bold-fg-green)] text-[var(--badge-bold-text-green)] shadow-[0_0_0_0.0625rem_inset_var(--badge-bold-border-green)];
+}
+
+.badge-subtle-default {
+  @apply bg-[var(--badge-subtle-fg-default)] text-[var(--badge-subtle-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--badge-subtle-border-default)];
+}
+.badge-subtle-blue {
+  @apply bg-[var(--badge-subtle-fg-blue)] text-[var(--badge-subtle-text-blue)] shadow-[0_0_0_0.0625rem_inset_var(--badge-subtle-border-blue)];
+}
+.badge-subtle-orange {
+  @apply bg-[var(--badge-subtle-fg-orange)] text-[var(--badge-subtle-text-orange)] shadow-[0_0_0_0.0625rem_inset_var(--badge-subtle-border-orange)];
+}
+.badge-subtle-red {
+  @apply bg-[var(--badge-subtle-fg-red)] text-[var(--badge-subtle-text-red)] shadow-[0_0_0_0.0625rem_inset_var(--badge-subtle-border-red)];
+}
+.badge-subtle-green {
+  @apply bg-[var(--badge-subtle-fg-green)] text-[var(--badge-subtle-text-green)] shadow-[0_0_0_0.0625rem_inset_var(--badge-subtle-border-green)];
+}
+
+.badge-outline-default {
+  @apply bg-[var(--badge-outline-fg-default)] text-[var(--badge-outline-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--badge-outline-border-default)];
+}
+.badge-outline-blue {
+  @apply bg-[var(--badge-outline-fg-blue)] text-[var(--badge-outline-text-blue)] shadow-[0_0_0_0.0625rem_inset_var(--badge-outline-border-blue)];
+}
+.badge-outline-orange {
+  @apply bg-[var(--badge-outline-fg-orange)] text-[var(--badge-outline-text-orange)] shadow-[0_0_0_0.0625rem_inset_var(--badge-outline-border-orange)];
+}
+.badge-outline-red {
+  @apply bg-[var(--badge-outline-fg-red)] text-[var(--badge-outline-text-red)] shadow-[0_0_0_0.0625rem_inset_var(--badge-outline-border-red)];
+}
+.badge-outline-green {
+  @apply bg-[var(--badge-outline-fg-green)] text-[var(--badge-outline-text-green)] shadow-[0_0_0_0.0625rem_inset_var(--badge-outline-border-green)];
+}
+
+.badge-radius-small {
+  @apply rounded-0;
+}
+.badge-radius-medium {
+  @apply rounded-6;
+}
+.badge-radius-large {
+  @apply rounded-full;
+}

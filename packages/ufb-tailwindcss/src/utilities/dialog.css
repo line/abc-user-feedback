@@ -1,0 +1,44 @@
+.dialog-content-radius-large {
+  @apply rounded-24;
+}
+.dialog-content-radius-medium {
+  @apply rounded-8;
+}
+.dialog-content-radius-small {
+  @apply rounded-0;
+}
+
+.dialog-icon-default {
+  @apply text-[var(--text-neutral-primary)];
+}
+.dialog-icon-orange {
+  @apply text-[var(--icon-tint-orange)];
+}
+.dialog-icon-blue {
+  @apply text-[var(--icon-tint-blue)];
+}
+.dialog-icon-green {
+  @apply text-[var(--icon-tint-green)];
+}
+.dialog-icon-red {
+  @apply text-[var(--icon-tint-red)];
+}
+
+.dialog-footer-left {
+  @apply justify-start;
+}
+.dialog-footer-center {
+  @apply justify-center;
+}
+.dialog-footer-right {
+  @apply justify-end;
+}
+.dialog-footer-between {
+  @apply justify-between;
+}
+.dialog-footer-full {
+  @apply justify-start;
+  > * {
+    @apply flex-1;
+  }
+}

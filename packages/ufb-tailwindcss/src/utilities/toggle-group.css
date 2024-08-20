@@ -1,0 +1,19 @@
+.toggle-group-item-large {
+  @apply text-xlarge px-24 py-8 font-medium;
+}
+.toggle-group-item-medium {
+  @apply text-large px-16 py-8 font-medium;
+}
+.toggle-group-item-small {
+  @apply px-12 py-8 text-base font-medium;
+}
+
+.toggle-group-item-radius-large {
+  @apply first:rounded-l-full last:rounded-r-full;
+}
+.toggle-group-item-radius-medium {
+  @apply first:rounded-l-8 last:rounded-r-8;
+}
+.toggle-group-item-radius-small {
+  @apply first:rounded-l-0 last:rounded-r-0;
+}

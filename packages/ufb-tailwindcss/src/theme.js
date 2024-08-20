@@ -1,18 +1,3 @@
-/**
- * Copyright 2023 LINE Corporation
- *
- * LINE Corporation licenses this file to you under the Apache License,
- * version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at:
- *
- *   https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
 const theme = require("tailwindcss/defaultTheme");
 const borderRadius = require("./borderRadius");
 const boxShadow = require("./boxShadow");
@@ -24,20 +9,95 @@ const colors = {
   current: "currentColor",
 };
 
-/** @type {import('tailwindcss').Config["theme"]} */
 module.exports = {
   ...theme,
-  colors: {
-    ...colors,
-  },
+  colors,
   fill: {
     ...colors,
+    neutral: {
+      primary: "var(--text-neutral-primary)",
+      secondary: "var(--text-neutral-secondary)",
+      tertiary: "var(--text-neutral-tertiary)",
+      inverse: "var(--text-neutral-inverse)",
+      disabled: "var(--text-neutral-disabled)",
+      static: "var(--text-neutral-static)",
+    },
+    tint: {
+      red: "var(--text-tint-red)",
+      orange: "var(--text-tint-orange)",
+      green: "var(--text-tint-green)",
+      blue: "var(--text-tint-blue)",
+    },
   },
   textColor: {
     ...colors,
+    neutral: {
+      primary: "var(--text-neutral-primary)",
+      secondary: "var(--text-neutral-secondary)",
+      tertiary: "var(--text-neutral-tertiary)",
+      inverse: "var(--text-neutral-inverse)",
+      disabled: "var(--text-neutral-disabled)",
+      static: "var(--text-neutral-static)",
+    },
+    tint: {
+      red: "var(--text-tint-red)",
+      orange: "var(--text-tint-orange)",
+      green: "var(--text-tint-green)",
+      blue: "var(--text-tint-blue)",
+    },
   },
   backgroundColor: {
     ...colors,
+    neutral: {
+      primary: "var(--fg-neutral-primary)",
+      secondary: "var(--fg-neutral-secondary)",
+      tertiary: "var(--fg-neutral-tertiary)",
+      inverse: "var(--fg-neutral-inverse)",
+      disabled: "var(--fg-neutral-disabled)",
+      hover: "var(--fg-neutral-hover)",
+      transparent: "var(--base-transparent)",
+    },
+    primary: "var(--bg-primary)",
+    secondary: "var(--bg-secondary)",
+    tertiary: "var(--bg-tertiary)",
+    dim: "var(--bg-dim)",
+    tint: {
+      red: {
+        bold: "var(--fg-tint-red-bold)",
+        subtle: "var(--fg-tint-red-subtle)",
+        hover: "var(--fg-tint-red-hover)",
+      },
+      orange: {
+        bold: "var(--fg-tint-orange-bold)",
+        subtle: "var(--fg-tint-orange-subtle)",
+        hover: "var(--fg-tint-orange-hover)",
+      },
+      green: {
+        bold: "var(--fg-tint-green-bold)",
+        subtle: "var(--fg-tint-green-subtle)",
+        hover: "var(--fg-tint-green-hover)",
+      },
+      blue: {
+        bold: "var(--fg-tint-blue-bold)",
+        subtle: "var(--fg-tint-blue-subtle)",
+        hover: "var(--fg-tint-blue-hover)",
+      },
+    },
+  },
+  borderColor: {
+    neutral: {
+      primary: "var(--border-neutral-primary)",
+      secondary: "var(--border-neutral-secondary)",
+      tertiary: "var(--border-neutral-tertiary)",
+      disabled: "var(--border-neutral-disabled)",
+      transparent: "var(--border-neutral-transparent)",
+    },
+    tint: {
+      red: "var(--border-tint-red)",
+      orange: "var(--border-tint-orange)",
+      green: "var(--border-tint-green)",
+      blue: "var(--border-tint-blue)",
+    },
   },
   borderRadius,
   boxShadow,

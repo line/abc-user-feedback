@@ -63,11 +63,7 @@ type AlertContentProps = React.HTMLAttributes<HTMLHeadingElement>;
 
 const AlertContent = React.forwardRef<HTMLParagraphElement, AlertContentProps>(
   ({ children, className, ...props }, ref) => (
-    <div
-      ref={ref}
-      className={cn("flex flex-1 items-center gap-2.5", className)}
-      {...props}
-    >
+    <div ref={ref} className={cn("alert-content", className)} {...props}>
       {children}
     </div>
   ),
@@ -80,11 +76,7 @@ const AlertTextContainer = React.forwardRef<
   HTMLParagraphElement,
   AlertTextContainerProps
 >(({ children, className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-1 flex-col items-start justify-center", className)}
-    {...props}
-  >
+  <div ref={ref} className={cn("alert-text-container", className)} {...props}>
     {children}
   </div>
 ));
@@ -107,7 +99,7 @@ const AlertDescription = React.forwardRef<
   HTMLParagraphElement,
   AlertDescriptionProps
 >(({ children, className, ...props }, ref) => (
-  <p className={cn("text-sm", className)} {...props} ref={ref}>
+  <p className={cn("alert-description", className)} {...props} ref={ref}>
     {children}
   </p>
 ));

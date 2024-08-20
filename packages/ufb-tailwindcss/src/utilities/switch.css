@@ -1,0 +1,15 @@
+.switch-default {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-default)];
+}
+.switch-blue {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-blue)];
+}
+.switch-orange {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-orange)];
+}
+.switch-red {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-red)];
+}
+.switch-green {
+  @apply data-[state=checked]:before:bg-[var(--switch-fg-green)];
+}

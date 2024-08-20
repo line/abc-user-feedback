@@ -29,7 +29,7 @@ const Layout: React.FC<IProps> = (props) => {
       <Header projectId={projectId} />
       <main className="p-5">
         <div className="h-20 px-6 py-3">
-          <h1 className="title-h3">{title}</h1>
+          <h1 className="text-title-h3">{title}</h1>
         </div>
         {children}
       </main>

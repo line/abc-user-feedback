@@ -16,15 +16,47 @@ const dividerVariants = cva("divider", {
     },
     indent: {
       0: "",
-      8: "divider-indent-8",
-      16: "divider-indent-16",
-      24: "divider-indent-24",
+      8: "",
+      16: "",
+      24: "",
     },
-    defaultVariants: {
-      type: "bold",
+  },
+  compoundVariants: [
+    {
       orientation: "horizontal",
-      indent: 0,
+      indent: 8,
+      className: "divider-horizontal-indent-8",
     },
+    {
+      orientation: "horizontal",
+      indent: 16,
+      className: "divider-horizontal-indent-16",
+    },
+    {
+      orientation: "horizontal",
+      indent: 24,
+      className: "divider-horizontal-indent-24",
+    },
+    {
+      orientation: "vertical",
+      indent: 8,
+      className: "divider-vertical-indent-8",
+    },
+    {
+      orientation: "vertical",
+      indent: 16,
+      className: "divider-vertical-indent-16",
+    },
+    {
+      orientation: "vertical",
+      indent: 24,
+      className: "divider-vertical-indent-24",
+    },
+  ],
+  defaultVariants: {
+    type: "bold",
+    orientation: "horizontal",
+    indent: 0,
   },
 });
 

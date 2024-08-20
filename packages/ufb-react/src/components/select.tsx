@@ -8,12 +8,132 @@ import { ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import { ScrollArea, ScrollBar } from "./scroll-area";
+import { Tag } from "./tag";
 
-const Select = SelectPrimitive.Root;
+const SelectContext = React.createContext<
+  {
+    type?: "single" | "multiple";
+    size?: Size;
+  } & SingleSelectProps &
+    MultipleSelectProps
+>({
+  type: "single",
+  size: "medium",
+});
+
+type SelectProps = {
+  type?: "single" | "multiple";
+  size?: Size;
+} & SingleSelectProps &
+  MultipleSelectProps;
+const Select = ({
+  type = "single",
+  size = "medium",
+  values = [],
+  onValuesChange,
+  ...props
+}: SelectProps) => {
+  const [multipleValues, setMultipleValues] = React.useState<string[]>(values);
+
+  const handleMultipleValuesChange = (values: string[]) => {
+    setMultipleValues(values);
+    onValuesChange?.(values);
+  };
+
+  return (
+    <SelectContext.Provider value={{ type, size, values: multipleValues }}>
+      {type === "single" ? (
+        <SingleSelect {...props} />
+      ) : (
+        <MultipleSelect
+          {...props}
+          values={multipleValues}
+          onValuesChange={handleMultipleValuesChange}
+        />
+      )}
+    </SelectContext.Provider>
+  );
+};
+Select.displayName = "Select";
+
+type SingleSelectProps = React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Root
+>;
+const SingleSelect = ({ ...props }) => {
+  return <SelectPrimitive.Root {...props} />;
+};
+SingleSelect.displayName = "SingleSelect";
+
+type MultipleSelectProps = React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Root
+> & {
+  values?: string[];
+  onValuesChange?: (values: string[]) => void;
+};
+const MultipleSelect = ({
+  values = [],
+  onValuesChange,
+  children,
+  ...props
+}: MultipleSelectProps) => {
+  const [value, setValue] = React.useState<string | undefined>(undefined);
+
+  return (
+    <SelectPrimitive.Root
+      value={value}
+      onOpenChange={() => {
+        // NOTE : onValueChange 호출을 위한 setValue 변경
+        setValue(undefined);
+      }}
+      onValueChange={(value) => {
+        onValuesChange?.(
+          values.includes(value)
+            ? values.filter((curr) => curr !== value)
+            : [...values, value],
+        );
+      }}
+      {...props}
+    >
+      {children}
+    </SelectPrimitive.Root>
+  );
+};
+MultipleSelect.displayName = "MultipleSelect";
 
 const SelectGroup = SelectPrimitive.Group;
 
-const SelectValue = SelectPrimitive.Value;
+const SelectValue = ({
+  ...props
+}: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>) => {
+  const { type = "single" } = React.useContext(SelectContext);
+  return type === "single" ? (
+    <SingleSelectValue {...props} />
+  ) : (
+    <MultipleSelectValue {...props} />
+  );
+};
+
+const SingleSelectValue = SelectPrimitive.Value;
+SingleSelectValue.displayName = "SingleSelectValue";
+
+const MultipleSelectValue = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Value>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+>(({ placeholder }, ref) => {
+  const { size = "medium", values = [] } = React.useContext(SelectContext);
+  return (
+    <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
+      {values && values.length > 0
+        ? values.map((value, index) => (
+            <Tag key={index} type="outline" size={size} className="select-tag">
+              {value}
+            </Tag>
+          ))
+        : placeholder}
+    </SelectPrimitive.Value>
+  );
+});
+MultipleSelectValue.displayName = "MultipleSelectValue";
 
 const selectTriggerVariants = cva("select-trigger", {
   variants: {
@@ -31,25 +151,27 @@ const selectTriggerVariants = cva("select-trigger", {
 interface SelectTriggerProps
   extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
   icon?: IconNameType;
-  size?: Size;
 }
 
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
->(({ icon, size = "medium", className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(selectTriggerVariants({ size, className }))}
-    {...props}
-  >
-    {icon && <Icon name={icon} size={ICON_SIZE[size]} />}
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <Icon name="RiArrowDownSLine" size={ICON_SIZE[size]} />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-));
+>(({ icon, className, children, ...props }, ref) => {
+  const { size = "medium" } = React.useContext(SelectContext);
+  return (
+    <SelectPrimitive.Trigger
+      ref={ref}
+      className={cn(selectTriggerVariants({ size, className }))}
+      {...props}
+    >
+      {icon && <Icon name={icon} size={ICON_SIZE[size]} />}
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size]} />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  );
+});
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName;
 
 const SelectContent = React.forwardRef<
@@ -99,11 +221,26 @@ const SelectLabel = React.forwardRef<
 ));
 SelectLabel.displayName = SelectPrimitive.Label.displayName;
 
-const SelectItem = React.forwardRef<
+type SelectItemProps = SingleSelectItemProps & MultipleSelectItemProps;
+const SelectItem = ({ ...props }: SelectItemProps) => {
+  const { type = "single" } = React.useContext(SelectContext);
+
+  return type === "single" ? (
+    <SingleSelectItem {...props} />
+  ) : (
+    <MultipleSelectItem {...props} />
+  );
+};
+SelectItem.displayName = "SelectItem";
+
+type SingleSelectItemProps = React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Item
+> & {
+  icon?: IconNameType;
+};
+const SingleSelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> & {
-    icon?: IconNameType;
-  }
+  SingleSelectItemProps
 >(({ className, icon, children, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
@@ -122,7 +259,39 @@ const SelectItem = React.forwardRef<
     </SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ));
-SelectItem.displayName = SelectPrimitive.Item.displayName;
+SingleSelectItem.displayName = SelectPrimitive.Item.displayName;
+
+type MultipleSelectItemProps = React.ComponentPropsWithoutRef<
+  typeof SelectPrimitive.Item
+> & {
+  icon?: IconNameType;
+  values?: string[];
+};
+const MultipleSelectItem = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Item>,
+  MultipleSelectItemProps
+>(({ icon, value, className, children, ...props }, ref) => {
+  const { values = [] } = React.useContext(SelectContext);
+  return (
+    <SelectPrimitive.Item
+      ref={ref}
+      className={cn("select-item", className)}
+      value={value}
+      {...props}
+    >
+      {values.includes(value) && (
+        <span className="select-item-check">
+          <Icon name="RiCheckLine" size={20} />
+        </span>
+      )}
+      <SelectPrimitive.ItemText>
+        {icon && <Icon name={icon} size={16} className="select-item-icon" />}
+        {children}
+      </SelectPrimitive.ItemText>
+    </SelectPrimitive.Item>
+  );
+});
+MultipleSelectItem.displayName = "MultipleSelectItem";
 
 const SelectSeparator = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Separator>,

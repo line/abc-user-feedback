@@ -30,7 +30,7 @@ const SettingMenuTemplate: React.FC<IProps> = (props) => {
     <div className="relative flex flex-col gap-6">
       <div className="flex h-10 items-center justify-between">
         {typeof title === 'string' ?
-          <h1 className="font-20-bold">{title}</h1>
+          <h4 className="text-title-h4">{title}</h4>
         : title}
         {actionBtn && (
           <Button

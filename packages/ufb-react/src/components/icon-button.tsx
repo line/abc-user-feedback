@@ -14,10 +14,12 @@ const defaultVariants: {
   variant: ButtonVariant;
   size: Size;
   radius: Radius;
+  isLoading?: boolean;
 } = {
   variant: "primary",
   size: "small",
   radius: "medium",
+  isLoading: false,
 };
 
 const iconButtonVariants = cva("icon-button", {
@@ -38,6 +40,10 @@ const iconButtonVariants = cva("icon-button", {
       small: "icon-button-radius-small",
       medium: "icon-button-radius-medium",
       large: "icon-button-radius-large",
+    },
+    isLoading: {
+      true: "!text-transparent",
+      false: "",
     },
   },
   defaultVariants,
@@ -86,8 +92,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     return (
       <Comp
         className={cn(
-          iconButtonVariants({ variant, size, radius, className }),
-          isLoading && "text-transparent",
+          iconButtonVariants({ variant, size, radius, isLoading, className }),
         )}
         disabled={disabled || isLoading}
         ref={ref}
@@ -96,9 +101,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
         <Icon name={icon} size={ICON_SIZE[size]} aria-hidden />
         {isLoading && (
           <span className={cn(iconButtonLoadingVariants({ variant }))}>
-            <Spinner
-              size={size === "large" || size === "medium" ? "large" : "small"}
-            />
+            <Spinner size={size} />
           </span>
         )}
       </Comp>

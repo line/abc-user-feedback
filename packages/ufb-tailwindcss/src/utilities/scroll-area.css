@@ -1,0 +1,6 @@
+.scroll-bar-vertical {
+  @apply h-full w-8 border-l-2 border-l-[transparent] py-4 pr-2;
+}
+.scroll-bar-horizontal {
+  @apply h-8 w-full flex-col border-t-2 border-t-[transparent] px-4 pb-2;
+}

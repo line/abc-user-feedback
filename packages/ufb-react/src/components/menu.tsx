@@ -1,38 +1,23 @@
-/**
- * Copyright 2023 LINE Corporation
- *
- * LINE Corporation licenses this file to you under the Apache License,
- * version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at:
- *
- *   https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
-import * as React from 'react';
-import * as ToggleGroupPrimitive from '@radix-ui/react-toggle-group';
-import { cva } from 'class-variance-authority';
+import * as React from "react";
+import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
+import { cva } from "class-variance-authority";
 
-import { ICON_SIZE } from '../constants';
-import { cn } from '../lib/utils';
-import { Badge } from './badge';
-import type { IconNameType } from './icon';
-import { Icon } from './icon';
+import type { IconNameType } from "./icon";
+import { ICON_SIZE } from "../constants";
+import { cn } from "../lib/utils";
+import { Badge } from "./badge";
+import { Icon } from "./icon";
 
 const DefaultValue = {
-  align: 'horizontal',
-  size: 'small',
+  align: "horizontal",
+  size: "small",
 } as const;
 
-const menuVariants = cva('menu', {
+const menuVariants = cva("menu", {
   variants: {
     align: {
-      horizontal: 'menu-horizontal',
-      vertical: 'menu-vertical',
+      horizontal: "menu-horizontal",
+      vertical: "menu-vertical",
     },
     defaultVariants: {
       align: DefaultValue.align,
@@ -41,8 +26,8 @@ const menuVariants = cva('menu', {
 });
 
 const MenuContext = React.createContext<{
-  align?: 'vertical' | 'horizontal';
-  size?: 'small' | 'medium' | 'large';
+  align?: "vertical" | "horizontal";
+  size?: "small" | "medium" | "large";
 }>({
   align: DefaultValue.align,
   size: DefaultValue.size,
@@ -51,8 +36,8 @@ const MenuContext = React.createContext<{
 const Menu = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> & {
-    align?: 'vertical' | 'horizontal';
-    size?: 'small' | 'medium' | 'large';
+    align?: "vertical" | "horizontal";
+    size?: "small" | "medium" | "large";
   }
 >(
   (
@@ -85,12 +70,12 @@ interface MenuItemProps
   badge?: React.ReactNode;
 }
 
-const menuItemVariants = cva('menu-item', {
+const menuItemVariants = cva("menu-item", {
   variants: {
     size: {
-      small: 'menu-item-small',
-      medium: 'menu-item-medium',
-      large: 'menu-item-large',
+      small: "menu-item-small",
+      medium: "menu-item-medium",
+      large: "menu-item-large",
     },
     defaultVariants: {
       size: DefaultValue.size,

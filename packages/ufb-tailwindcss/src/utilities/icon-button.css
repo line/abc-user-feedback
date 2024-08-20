@@ -1,0 +1,51 @@
+.icon-button-large {
+  @apply p-14;
+}
+.icon-button-medium {
+  @apply p-12;
+}
+.icon-button-small {
+  @apply p-10;
+}
+
+.icon-button-radius-small {
+  @apply rounded-0;
+}
+.icon-button-radius-medium {
+  @apply rounded-8;
+}
+.icon-button-radius-large {
+  @apply rounded-full;
+}
+
+.icon-button-primary {
+  @apply bg-[var(--icon-button-primary-fg-default)] text-[var(--icon-button-primary-icon-default)];
+}
+.icon-button-secondary {
+  @apply bg-[var(--icon-button-secondary-fg-default)] text-[var(--icon-button-secondary-icon-default)];
+}
+.icon-button-destructive {
+  @apply bg-[var(--icon-button-destructive-fg-default)] text-[var(--icon-button-destructive-icon-default)];
+}
+.icon-button-ghost {
+  @apply bg-[var(--icon-button-ghost-fg-default)] text-[var(--icon-button-ghost-icon-default)] data-[state=open]:bg-[var(--icon-button-ghost-fg-hover)] [&:not(:disabled)]:hover:bg-[var(--icon-button-ghost-fg-hover)];
+}
+.icon-button-outline {
+  @apply bg-[var(--icon-button-outline-fg-default)] text-[var(--icon-button-outline-icon-default)] shadow-[0_0_0_0.0625rem_inset_var(--icon-button-outline-border-default)] data-[state=open]:hover:bg-[var(--icon-button-outline-fg-hover)] [&:not(:disabled)]:hover:bg-[var(--icon-button-outline-fg-hover)];
+}
+
+.icon-button-loading-primary {
+  @apply text-[var(--icon-button-primary-icon-default)];
+}
+.icon-button-loading-secondary {
+  @apply text-[var(--icon-button-secondary-icon-default)];
+}
+.icon-button-loading-destructive {
+  @apply text-[var(--icon-button-destructive-icon-default)];
+}
+.icon-button-loading-ghost {
+  @apply text-[var(--icon-button-ghost-icon-default)];
+}
+.icon-button-loading-outline {
+  @apply text-[var(--icon-button-outline-icon-default)];
+}

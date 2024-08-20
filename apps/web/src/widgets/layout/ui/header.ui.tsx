@@ -18,11 +18,14 @@ import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 
 import {
-  NavBar,
-  NavBarButton,
-  NavBarDivider,
-  NavBarDropdownButton,
-  NavBarMenu,
+  Divider,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  IconButton,
+  Menu,
+  MenuItem,
 } from '@ufb/react';
 
 import { ThemeToggleButton } from '@/entities/theme';
@@ -47,27 +50,34 @@ const Header: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <NavBar>
+    <div className="navbar gap-2">
       <ProjectSelectBox projectId={projectId} />
-      <NavBarDivider />
-      <NavBarMenu
-        className="flex-1"
-        type="single"
-        value={currentMenu}
-        items={MENU_ITEMS.map((v) => ({ children: v, value: v }))}
-      />
+      <Divider type="subtle" indent={8} orientation="vertical" />
+      <Menu value={currentMenu} type="single" className="navbar-menu flex-1">
+        {MENU_ITEMS.map((v) => (
+          <MenuItem value={v}>{v}</MenuItem>
+        ))}
+      </Menu>
       <div className="flex gap-3">
-        <NavBarButton icon="RiBuildingLine" />
+        <IconButton icon="RiBuildingLine" variant="ghost" />
         <ThemeToggleButton />
-        <NavBarDropdownButton
-          triggerIcon="RiTranslate2"
-          items={router.locales
-            ?.filter((v) => v !== 'default')
-            .map((v) => ({ children: v, onClick: () => onChangeLanguage(v) }))}
-        />
-        <NavBarButton icon="RiUser6Line" />
+        <Dropdown>
+          <DropdownTrigger asChild>
+            <IconButton icon="RiTranslate2" variant="ghost" />
+          </DropdownTrigger>
+          <DropdownContent>
+            {router.locales
+              ?.filter((v) => v !== 'default')
+              .map((v) => (
+                <DropdownItem key={v} onClick={() => onChangeLanguage(v)}>
+                  {v}
+                </DropdownItem>
+              ))}
+          </DropdownContent>
+        </Dropdown>
+        <IconButton icon="RiUser6Line" variant="ghost" />
       </div>
-    </NavBar>
+    </div>
   );
 };
 

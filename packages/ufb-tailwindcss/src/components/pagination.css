@@ -1,0 +1,11 @@
+.pagination {
+  @apply mx-auto flex w-full justify-center;
+}
+
+.pagination-content {
+  @apply flex flex-row items-center space-x-4;
+}
+
+.pagination-item {
+  @apply flex-shrink-0;
+}

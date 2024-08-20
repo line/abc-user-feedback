@@ -86,7 +86,7 @@ const DialogHeader = ({
     {icon && (
       <Icon
         name={icon}
-        size={40}
+        size={32}
         className={cn("dialog-icon", Dialog_Icon_Color_Map[icon])}
       />
     )}

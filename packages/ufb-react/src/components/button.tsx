@@ -1,6 +1,6 @@
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { ButtonVariant, Radius, Size } from "../lib/types";
@@ -14,10 +14,12 @@ const defaultVariants: {
   variant: ButtonVariant;
   size: Size;
   radius: Radius;
+  isLoading?: boolean;
 } = {
   variant: "primary",
   size: "small",
   radius: "medium",
+  isLoading: false,
 };
 
 const buttonVariants = cva("button", {
@@ -39,6 +41,10 @@ const buttonVariants = cva("button", {
       medium: "button-radius-medium",
       large: "button-radius-large",
     },
+    isLoading: {
+      true: "!text-transparent",
+      false: "",
+    },
   },
   defaultVariants,
 });
@@ -56,7 +62,7 @@ const buttonLoadingVariants = cva("button-loading", {
   defaultVariants,
 });
 
-export interface ButtonProps
+interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   variant?: ButtonVariant;
@@ -89,8 +95,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          buttonVariants({ variant, size, radius, className }),
-          isLoading && "text-transparent",
+          buttonVariants({ variant, size, radius, isLoading, className }),
         )}
         disabled={disabled || isLoading}
         ref={ref}
@@ -104,7 +109,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className="button-leading-icon"
           />
         )}
-        {children}
+        <Slottable>{children}</Slottable>
         {iconR && (
           <Icon
             name={iconR}
@@ -115,9 +120,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         {isLoading && (
           <span className={cn(buttonLoadingVariants({ variant }))}>
-            <Spinner
-              size={size === "large" || size === "medium" ? "large" : "small"}
-            />
+            <Spinner size={size} />
           </span>
         )}
       </Comp>
@@ -127,4 +130,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+export { Button, type ButtonProps, buttonVariants };

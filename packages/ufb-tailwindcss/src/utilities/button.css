@@ -1,0 +1,51 @@
+.button-large {
+  @apply text-xlarge min-w-52 gap-8 px-20 py-10;
+}
+.button-medium {
+  @apply text-large min-w-44 gap-8 px-16 py-10;
+}
+.button-small {
+  @apply min-w-36 gap-4 px-12 py-8 text-base;
+}
+
+.button-radius-small {
+  @apply rounded-0;
+}
+.button-radius-medium {
+  @apply rounded-8;
+}
+.button-radius-large {
+  @apply rounded-full;
+}
+
+.button-primary {
+  @apply bg-[var(--button-primary-fg-default)] text-[var(--button-primary-text-default)];
+}
+.button-secondary {
+  @apply bg-[var(--button-secondary-fg-default)] text-[var(--button-secondary-text-default)];
+}
+.button-destructive {
+  @apply bg-[var(--button-destructive-fg-default)] text-[var(--button-destructive-text-default)];
+}
+.button-ghost {
+  @apply bg-[var(--button-ghost-fg-default)] text-[var(--button-ghost-text-default)] [&:not(:disabled)]:hover:bg-[var(--button-ghost-fg-hover)];
+}
+.button-outline {
+  @apply bg-[var(--button-outline-fg-default)] text-[var(--button-outline-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--button-outline-border-default)] [&:not(:disabled)]:hover:bg-[var(--button-outline-fg-hover)];
+}
+
+.button-loading-primary {
+  @apply text-[var(--button-primary-text-default)];
+}
+.button-loading-secondary {
+  @apply text-[var(--button-secondary-text-default)];
+}
+.button-loading-destructive {
+  @apply text-[var(--button-destructive-text-default)];
+}
+.button-loading-ghost {
+  @apply text-[var(--button-ghost-text-default)];
+}
+.button-loading-outline {
+  @apply text-[var(--button-outline-text-default)];
+}

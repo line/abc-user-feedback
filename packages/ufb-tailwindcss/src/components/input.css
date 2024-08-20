@@ -1,4 +1,4 @@
-.input {
+.input-field {
   --input-text-default: var(--text-neutral-tertiary);
   --input-text-typing: var(--text-neutral-primary);
   --input-text-filled: var(--text-neutral-primary);
@@ -17,7 +17,7 @@
   --input-icon-caption-error: var(--icon-tint-red);
 
   --input-border-default: var(--border-neutral-tertiary);
-  --input-border-typing: var(--border-neutral-primary);
+  --input-border-typing: var(--border-neutral-primary); /* todo tint */
   --input-border-filled: var(--border-neutral-tertiary);
   --input-border-error: var(--border-tint-red);
 
@@ -26,30 +26,31 @@
   --input-fg-filled: var(--fg-neutral-primary);
   --input-fg-error: var(--fg-neutral-primary);
 
-  @apply flex flex-col gap-6;
+  @apply flex flex-col space-y-6;
 }
 
 .input-box {
-  @apply relative flex items-center justify-center gap-4 bg-[var(--input-fg-default)] shadow-[0_0_0_0.0625rem_inset_var(--input-border-default)] focus-within:bg-[var(--input-fg-typing)] focus-within:shadow-[0_0_0_0.125rem_inset_var(--input-border-typing)];
-  &.input-box-disabled {
-    @apply cursor-not-allowed opacity-50;
-  }
-  &.input-box-error {
-    @apply bg-[var(--input-fg-error)] !shadow-[0_0_0_0.125rem_inset_var(--input-border-error)];
-  }
-  > input {
-    @apply min-w-0 flex-1 bg-[transparent] text-[var(--input-text-filled)] outline-none placeholder:text-[var(--input-text-default)] focus:text-[var(--input-text-typing)];
-  }
+  @apply [&:has(.input-icon)>.input-medium]:!pl-46 [&:has(.input-icon)>.input-large]:!pl-54 [&:has(.input-button)>.input-medium]:!pr-46 [&:has(.input-button)>.input-large]:!pr-54 relative [&:has(.input-button)>.input-small]:!pr-36 [&:has(.input-icon)>.input-small]:!pl-36;
 }
 
-.input-box-large {
-  @apply text-xlarge px-20 py-8;
+.input {
+  @apply w-full bg-[var(--input-fg-default)] text-[var(--input-text-filled)] shadow-[0_0_0_0.0625rem_inset_var(--input-border-default)] outline-none placeholder:text-[var(--input-text-default)] focus:bg-[var(--input-fg-typing)] focus:text-[var(--input-text-typing)] focus:shadow-[0_0_0_0.125rem_inset_var(--input-border-typing)] disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-search-cancel-button]:hidden;
+  /* default */
+  @apply input-small input-radius-medium;
 }
-.input-box-medium {
-  @apply text-large px-16 py-8;
+
+.input-button {
+  @apply absolute-y-center flex flex-shrink-0 items-center justify-center disabled:cursor-not-allowed disabled:opacity-50;
+
+  /* default */
+  @apply input-button-small;
 }
-.input-box-small {
-  @apply px-12 py-8 text-base;
+
+.input-icon {
+  @apply absolute-y-center flex;
+
+  /* default */
+  @apply input-icon-small;
 }
 
 .input-label {
@@ -58,33 +59,10 @@
 
 .input-caption {
   @apply flex gap-4 text-base;
-  &.input-caption-default {
-    @apply text-[var(--input-caption-default)];
-  }
-  &.input-caption-success {
-    @apply text-[var(--input-caption-success)];
-  }
-  &.input-caption-info {
-    @apply text-[var(--input-caption-default)];
-  }
-  &.input-caption-error {
-    @apply text-[var(--input-caption-error)];
-  }
+
+  /* default */
+  @apply input-caption-default;
 }
 .input-caption-icon {
   @apply mt-2 flex-shrink-0;
-}
-
-.input-button {
-  @apply flex flex-shrink-0 items-center justify-center disabled:cursor-not-allowed;
-}
-
-.input-box-radius-large {
-  @apply rounded-full;
-}
-.input-box-radius-medium {
-  @apply rounded-8;
-}
-.input-box-radius-small {
-  @apply rounded-0;
 }

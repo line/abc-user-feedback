@@ -1,0 +1,41 @@
+.alert-radius-large {
+  @apply rounded-24;
+}
+.alert-radius-medium {
+  @apply rounded-8;
+}
+.alert-radius-small {
+  @apply rounded-0;
+}
+
+.alert-default {
+  @apply border-[var(--alert-border-default)];
+}
+.alert-warning {
+  @apply border-[var(--alert-border-warning)];
+}
+.alert-success {
+  @apply border-[var(--alert-border-success)];
+}
+.alert-error {
+  @apply border-[var(--alert-border-error)];
+}
+.alert-informative {
+  @apply border-[var(--alert-border-informative)];
+}
+
+.alert-icon-default {
+  @apply text-[var(--alert-icon-default)];
+}
+.alert-icon-warning {
+  @apply text-[var(--alert-icon-warning)];
+}
+.alert-icon-success {
+  @apply text-[var(--alert-icon-success)];
+}
+.alert-icon-error {
+  @apply text-[var(--alert-icon-error)];
+}
+.alert-icon-informative {
+  @apply text-[var(--alert-icon-informative)];
+}

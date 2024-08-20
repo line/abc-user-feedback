@@ -1,52 +1,68 @@
-import * as React from "react";
-import * as ToastPrimitives from "@radix-ui/react-toast";
+import { CSSProperties } from "react";
+import { Toaster as Sonner, toast } from "sonner";
 
-import { cn } from "../lib/utils";
-import { AlertIconButton } from "./alert";
+import { Icon } from "./icon";
 
-const ToastProvider = ToastPrimitives.Provider;
+type ToasterProps = React.ComponentProps<typeof Sonner>;
 
-const ToastViewport = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Viewport>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Viewport>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Viewport
-    ref={ref}
-    className={cn("toast-viewport", className)}
-    {...props}
-  />
-));
-ToastViewport.displayName = ToastPrimitives.Viewport.displayName;
-
-const Toast = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Root>
->(({ className, ...props }, ref) => {
+const Toaster = ({ ...props }: ToasterProps) => {
   return (
-    <ToastPrimitives.Root
-      ref={ref}
-      className={cn("toast", className)}
+    <Sonner
+      className="toaster"
+      toastOptions={{
+        unstyled: true,
+        classNames: {
+          toast: "toast alert",
+          title: "alert-title",
+          description: "alert-description",
+          loader: "",
+          cancelButton:
+            "icon-button icon-button-ghost icon-button-medium icon-button-radius-medium alert-close toast-close",
+          actionButton:
+            "button button-outline button-medium button-radius-medium alert-button",
+          success: "alert-success",
+          error: "alert-error",
+          info: "alert-informative",
+          warning: "alert-warning",
+          loading: "",
+          default: "alert-default",
+          content: "alert-text-container",
+          icon: "alert-icon",
+        },
+      }}
+      icons={{
+        warning: (
+          <Icon
+            name="RiErrorWarningFill"
+            size={20}
+            className="alert-icon-warning"
+          />
+        ),
+        success: (
+          <Icon
+            name="RiCheckboxCircleFill"
+            size={20}
+            className="alert-icon-success"
+          />
+        ),
+        error: (
+          <Icon
+            name="RiCloseCircleFill"
+            size={20}
+            className="alert-icon-error"
+          />
+        ),
+        info: (
+          <Icon
+            name="RiInformation2Fill"
+            size={20}
+            className="alert-icon-informative"
+          />
+        ),
+      }}
       {...props}
     />
   );
-});
-Toast.displayName = ToastPrimitives.Root.displayName;
+};
 
-const ToastClose = React.forwardRef<
-  React.ElementRef<typeof ToastPrimitives.Close>,
-  React.ComponentPropsWithoutRef<typeof ToastPrimitives.Close>
->(({ className, ...props }, ref) => (
-  <ToastPrimitives.Close
-    ref={ref}
-    className={cn(className)}
-    toast-close=""
-    {...props}
-  >
-    <AlertIconButton />
-  </ToastPrimitives.Close>
-));
-ToastClose.displayName = ToastPrimitives.Close.displayName;
-
-type ToastProps = React.ComponentPropsWithoutRef<typeof Toast>;
-
-export { type ToastProps, ToastProvider, ToastViewport, Toast, ToastClose };
+export { Toaster, toast };
