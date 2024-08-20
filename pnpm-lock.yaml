@@ -327,7 +327,7 @@ importers:
         version: link:../../tooling/typescript
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.7.11(@swc/helpers@0.5.12))(@types/node@22.1.0)(typescript@5.5.4)
+        version: 10.9.2(@swc/core@1.7.14(@swc/helpers@0.5.12))(@types/node@22.1.0)(typescript@5.5.4)
 
   apps/e2e:
     devDependencies:
@@ -13194,7 +13194,7 @@ snapshots:
 
   '@types/prompts@2.4.9':
     dependencies:
-      '@types/node': 20.14.15
+      '@types/node': 20.16.1
       kleur: 3.0.3
 
   '@types/prop-types@15.7.12': {}
@@ -19502,7 +19502,6 @@ snapshots:
       yn: 3.1.1
     optionalDependencies:
       '@swc/core': 1.7.14(@swc/helpers@0.5.12)
-    optional: true
 
   ts-toolbelt@9.6.0: {}
 
