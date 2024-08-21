@@ -12,7 +12,8 @@ There are `npx` commands that setting infrastructure, running servers, and stop 
 
 ## Initialization
 
-Following command sets up infrastructures(MySQL, SMTP, OpenSearch)
+The following command sets up the infrastructures(MySQL, SMTP, OpenSearch) depends on its architecture(arm/amd).
+Also, this command creates `config.toml` file which the user can configure environment variables to start servers.
 
 ```sh
 npx ufb-cli init
@@ -20,7 +21,7 @@ npx ufb-cli init
 
 ## Start Servers
 
-Following command starts api/web servers
+Based on `config.toml` file you've created in initialization phase, it generates docker compose file. Using this docker compose file, the following command starts api/web servers.
 
 ```sh
 npx ufb-cli start
@@ -28,7 +29,7 @@ npx ufb-cli start
 
 ## Stop Servers
 
-Following command stops api/web servers
+The following command stops api/web servers.
 
 ```sh
 npx ufb-cli stop

@@ -51,31 +51,18 @@ program
       : 'docker-compose.infra-arm64.yml';
 
     const composeFilePath = path.join(__dirname + '/../', composeFile);
-
-    const dockerComposeCommand = `docker-compose -f ${composeFilePath.toString()} down`;
-    execSync(dockerComposeCommand);
-
-    const shouldRunPrune: Answers<string> = await prompts({
-      type: 'select',
-      name: 'value',
-      message:
-        'It is recommended to prune Docker containers before running Docker Compose. Do you want to prune Docker containers?',
-      choices: [
-        { title: 'yes', value: true },
-        { title: 'no', value: false },
-      ],
-      initial: 0,
-    });
-
-    if (shouldRunPrune.value === false) return;
-
-    console.log('Prune Docker containers before running Docker Compose...');
-    execSync('docker container prune -f', { stdio: 'inherit' });
+    console.log(
+      `Terminates existing Docker Compose with ufb-cli project name...`,
+    );
+    execSync(`docker compose -p ufb-cli down`);
 
     console.log(`Running Docker Compose with ${composeFilePath.toString()}...`);
-    execSync(`docker-compose -f ${composeFilePath.toString()} up  -d`, {
-      stdio: 'inherit',
-    });
+    execSync(
+      `docker compose -p ufb-cli -f ${composeFilePath.toString()} up  -d`,
+      {
+        stdio: 'inherit',
+      },
+    );
 
     const sourceConfigPath = path.join(__dirname + '/../config.toml');
     const destinationConfigPath = path.join(process.cwd(), 'config.toml');
@@ -93,14 +80,9 @@ program
   .action(() => {
     const destinationConfigPath = path.join(process.cwd(), 'config.toml');
 
-    const sourceTemplatePath = path.join(
+    const templatePath = path.join(
       __dirname + '/../docker-compose.template.yml',
     );
-    const destinationTemplatePath = path.join(
-      process.cwd(),
-      'docker-compose.template.yml',
-    );
-    fs.copyFileSync(sourceTemplatePath, destinationTemplatePath);
 
     interface TomlConfig {
       web: Record<string, string>;
@@ -151,10 +133,7 @@ program
       process.exit(1);
     }
 
-    let dockerComposeTemplate = fs.readFileSync(
-      destinationTemplatePath,
-      'utf-8',
-    );
+    let dockerComposeTemplate = fs.readFileSync(templatePath, 'utf-8');
 
     webEnvVars.forEach((varName) => {
       const regex = new RegExp(`\\$\\{${varName}\\}`, 'g');
@@ -186,7 +165,7 @@ program
     execSync(`docker pull ${apiDockerImage}`);
     execSync(`docker pull ${webDockerImage}`);
 
-    const dockerComposeCommand = `docker-compose -f ${dockerComposePath} up -d`;
+    const dockerComposeCommand = `docker compose -p ufb-cli -f ${dockerComposePath} up -d`;
     console.log(`Running Docker Compose with command: ${dockerComposeCommand}`);
     execSync(dockerComposeCommand);
   });
@@ -207,7 +186,7 @@ program
       process.exit(1);
     }
 
-    const dockerComposeCommand = `docker-compose -f ${dockerComposePath} down`;
+    const dockerComposeCommand = `docker compose -p ufb-cli -f ${dockerComposePath} down`;
     console.log(
       `Stopping Docker Compose with command: ${dockerComposeCommand}`,
     );
