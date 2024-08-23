@@ -174,19 +174,7 @@ program
   .command('stop')
   .description('Stop the running Docker containers for app and web services')
   .action(() => {
-    const dockerComposePath = path.resolve(
-      process.cwd(),
-      'docker-compose.generated.yml',
-    );
-
-    if (!fs.existsSync(dockerComposePath)) {
-      console.error(
-        'docker-compose.generated.yml file not found. Please run "ufb-cli start" first.',
-      );
-      process.exit(1);
-    }
-
-    const dockerComposeCommand = `docker compose -p ufb-cli -f ${dockerComposePath} down`;
+    const dockerComposeCommand = `docker compose -p ufb-cli down`;
     console.log(
       `Stopping Docker Compose with command: ${dockerComposeCommand}`,
     );
