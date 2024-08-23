@@ -2,7 +2,7 @@
   --radio-text-default: var(--text-neutral-primary);
   --radio-border-default: var(--border-neutral-tertiary);
   --radio-fg-default: var(--fg-neutral-primary);
-  --radio-fg-select: var(--fg-neutral-inverse); /* todo tint */
+  --radio-fg-select: var(--tint, var(--fg-neutral-inverse));
 
   @apply flex;
 

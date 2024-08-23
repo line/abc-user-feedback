@@ -21,15 +21,19 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
+import { Button, Divider } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { Path, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import {
+  Path,
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
-import { DeleteProjectPopover } from '@/features/create-project';
-
-import SettingMenuTemplate from '../setting-menu-template';
+import { DeleteProjectButton } from '@/features/delete-project';
 
 interface IProps {
   projectId: number;
@@ -51,7 +55,6 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   });
 
   useEffect(() => {
-    if (!data) return;
     methods.reset(data);
   }, [data]);
 
@@ -72,6 +75,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
       },
     },
   });
+
   const { mutate: deleteProject } = useOAIMutation({
     method: 'delete',
     path: '/api/admin/projects/{projectId}',
@@ -96,8 +100,8 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <SettingMenuTemplate
-      title={t('project-setting-menu.project-info')}
+    <SettingTemplate
+      title={t('v2.project-setting-menu.project-info')}
       action={
         <Button
           form="form"
@@ -108,7 +112,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
             isPending
           }
         >
-          {t('button.save')}
+          {t('v2.button.save')}
         </Button>
       }
     >
@@ -117,15 +121,16 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
           <ProjectInfoForm type="update" />
         </FormProvider>
       </form>
-      <div className="flex justify-end">
+      <Divider type="subtle" />
+      <div className="flex">
         {data && (
-          <DeleteProjectPopover
+          <DeleteProjectButton
             project={data}
             onClickDelete={() => deleteProject(undefined)}
           />
         )}
       </div>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

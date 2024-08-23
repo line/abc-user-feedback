@@ -19,11 +19,15 @@ import { useTranslation } from 'react-i18next';
 
 import { toast } from '@ufb/ui';
 
-import { client, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import {
+  client,
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { PermissionType } from '@/entities/role';
 import { CreateRolePopover, RoleTable } from '@/entities/role';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {
   projectId: number;
@@ -96,7 +100,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('project-setting-menu.role-mgmt')}
       action={
         <CreateRolePopover
@@ -118,7 +122,7 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
           onDeleteRole={(role) => deleteRole({ roleId: role.id })}
         />
       </div>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

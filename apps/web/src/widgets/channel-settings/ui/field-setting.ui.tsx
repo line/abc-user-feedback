@@ -25,7 +25,13 @@ import {
   toast,
 } from '@ufb/ui';
 
-import { cn, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import {
+  cn,
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { FieldInfo, FieldStatus } from '@/entities/field';
 import {
   FeedbackRequestCodePopover,
@@ -34,8 +40,6 @@ import {
   PreviewFieldTable,
   sortField,
 } from '@/entities/field';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 const objectsEqual = (
   o1: Record<string, unknown>[],
@@ -132,7 +136,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   }, [isDirty]);
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('channel-setting-menu.field-mgmt')}
       action={
         <div className="flex gap-2">
@@ -197,7 +201,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           }
         </div>
       </div>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

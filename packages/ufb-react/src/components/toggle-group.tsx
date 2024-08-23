@@ -8,6 +8,7 @@ import type { Radius, Size } from "../lib/types";
 import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import useTheme from "./use-theme";
 
 const toggleVariants = cva("toggle-group-item", {
   variants: {
@@ -23,33 +24,39 @@ const toggleVariants = cva("toggle-group-item", {
     },
   },
   defaultVariants: {
-    size: "small",
-    radius: "medium",
+    size: undefined,
+    radius: undefined,
   },
 });
 
 const ToggleGroupContext = React.createContext<
   VariantProps<typeof toggleVariants>
 >({
-  size: "small",
-  radius: "medium",
+  size: undefined,
+  radius: undefined,
 });
 
 const ToggleGroup = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> &
     VariantProps<typeof toggleVariants>
->(({ className, size, radius, children, ...props }, ref) => (
-  <ToggleGroupPrimitive.Root
-    ref={ref}
-    className={cn("toggle-group", className)}
-    {...props}
-  >
-    <ToggleGroupContext.Provider value={{ size, radius }}>
-      {children}
-    </ToggleGroupContext.Provider>
-  </ToggleGroupPrimitive.Root>
-));
+>(({ className, size, radius, children, ...props }, ref) => {
+  const { themeSize, themeRadius } = useTheme();
+
+  return (
+    <ToggleGroupPrimitive.Root
+      ref={ref}
+      className={cn("toggle-group", className)}
+      {...props}
+    >
+      <ToggleGroupContext.Provider
+        value={{ size: size ?? themeSize, radius: radius ?? themeRadius }}
+      >
+        {children}
+      </ToggleGroupContext.Provider>
+    </ToggleGroupPrimitive.Root>
+  );
+});
 
 ToggleGroup.displayName = ToggleGroupPrimitive.Root.displayName;
 
@@ -77,8 +84,8 @@ const ToggleGroupItem = React.forwardRef<
         ref={ref}
         className={cn(
           toggleVariants({
-            size: context.size ?? size,
-            radius: context.radius ?? radius,
+            size: size ?? context.size,
+            radius: radius ?? context.radius,
           }),
           className,
         )}

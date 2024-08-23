@@ -1,0 +1,31 @@
+.accordion {
+  @apply bg-neutral-primary text-neutral-primary overflow-hidden;
+}
+
+.accordion-border {
+  @apply border-neutral-tertiary border [&>div:last-of-type]:border-b-0;
+}
+
+.accordion-item {
+  @apply border-neutral-transparent;
+}
+
+.accordion-item-border {
+  @apply border-neutral-tertiary border-b;
+}
+
+.accordion-trigger {
+  @apply flex w-full items-center space-x-8 p-16 text-left text-base font-medium transition-all [&>strong]:flex-1 [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
+}
+
+.accordion-trigger-bg {
+  @apply bg-neutral-tertiary;
+}
+
+.accordion-content-box {
+  @apply data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-base transition-all;
+}
+
+.accordion-content {
+  @apply p-16;
+}

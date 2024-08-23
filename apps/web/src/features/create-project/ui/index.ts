@@ -15,4 +15,3 @@
  */
 export { default as RouteCreateProjectButton } from './route-create-project-button.ui';
 export { default as CreateProject } from './create-project.ui';
-export { default as DeleteProjectPopover } from './delete-project-popover.ui';

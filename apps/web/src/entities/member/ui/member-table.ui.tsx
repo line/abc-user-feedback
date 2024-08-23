@@ -16,8 +16,6 @@
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
-
 import { BasicTable } from '@/shared';
 import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
@@ -31,10 +29,18 @@ interface IProps {
   roles: Role[];
   onDeleteMember?: (id: number) => void;
   onUpdateMember?: (newMember: Member) => void;
+  createButton: React.ReactNode;
 }
 
 const MemberTable: React.FC<IProps> = (props) => {
-  const { isLoading, members, roles, onDeleteMember, onUpdateMember } = props;
+  const {
+    isLoading,
+    members,
+    roles,
+    createButton,
+    onDeleteMember,
+    onUpdateMember,
+  } = props;
   const { t } = useTranslation();
 
   const { data: userData } = useUserSearch({
@@ -57,12 +63,8 @@ const MemberTable: React.FC<IProps> = (props) => {
     <BasicTable
       table={table}
       isLoading={isLoading}
-      emptyComponent={
-        <div className="my-32 flex flex-col items-center justify-center gap-3">
-          <Icon name="DriverRegisterFill" className="text-tertiary" size={56} />
-          <p>{t('main.setting.register-member')}</p>
-        </div>
-      }
+      emptyCaption={t('v2.text.no-data.member')}
+      createButton={createButton}
     />
   );
 };

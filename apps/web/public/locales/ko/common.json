@@ -241,7 +241,12 @@
     "complete": "완료",
     "next-time": "다음에",
     "start": "시작하기",
-    "generate": "생성"
+    "generate": "생성",
+    "name": {
+      "create": "{{name}} 생성",
+      "delete": "{{name}} 삭제",
+      "register": "{{name}} 등록"
+    }
   },
   "input": {
     "label": {
@@ -460,5 +465,56 @@
   "system-popup": {
     "create-project/channel-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.",
     "field-setting-get-out": "아직 저장되지 않은 필드 정보가 있어요. 그래도 나가시겠어요."
+  },
+  "v2": {
+    "button": {
+      "name": {
+        "create": "{{name}} 생성",
+        "delete": "{{name}} 삭제",
+        "register": "{{name}} 등록"
+      },
+      "create": "생성하기",
+      "delete": "삭제",
+      "register": "등록하기",
+      "save": "저장"
+    },
+    "project-setting-menu": {
+      "project-info": "Project 정보",
+      "member-mgmt": "Member 관리",
+      "role-mgmt": "Role 관리",
+      "api-key-mgmt": "API Key 관리",
+      "issue-tracker-mgmt": "Issue Tracker 관리",
+      "webhook-integration": "Webhook 연동",
+      "delete-project": "Project 삭제"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel 정보",
+      "field-mgmt": "Field 관리",
+      "image-mgmt": "Image 관리",
+      "delete-channel": "Channel 삭제"
+    },
+    "dialog": {
+      "delete-project": {
+        "title": "Project 삭제",
+        "description": "Project를 삭제하면 Issue/Feedback 데이터가 모두 삭제됩니다.\n삭제를 계속 진행하려면 아래 텍스트를 입력해주세요."
+      }
+    },
+    "toast": {
+      "sign-in": "로그인 성공",
+      "register": "등록 완료",
+      "delete": "삭제 완료",
+      "save": "저장 완료",
+      "invite": "초대 완료",
+      "active": "활성화",
+      "inactive": "비활성화",
+      "add": "추가 완료",
+      "copy": "복사 완료"
+    },
+    "text": {
+      "no-data": {
+        "api-key": "생성된 API Key가 없습니다.",
+        "member": "등록된 Member가 없습니다."
+      }
+    }
   }
 }

@@ -4,7 +4,7 @@
   --calendar-text-week: var(--text-neutral-tertiary);
   --calendar-border-default: var(--border-neutral-tertiary);
   --calendar-fg-default: var(--fg-neutral-primary);
-  --calendar-fg-pressed: var(--fg-neutral-inverse); /* todo tint */
+  --calendar-fg-pressed: var(--tint, var(--fg-neutral-inverse));
   --calendar-fg-hover: var(--fg-neutral-tertiary);
   --calendar-fg-range: var(--fg-neutral-tertiary);
 

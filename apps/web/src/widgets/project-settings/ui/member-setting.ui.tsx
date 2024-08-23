@@ -14,14 +14,20 @@
  * under the License.
  */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { client, useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
-import { CreateMemberPopover, MemberTable } from '@/entities/member';
-
-import SettingMenuTemplate from '../setting-menu-template';
+import {
+  client,
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
+import { CreateMemberDialog, MemberTable } from '@/entities/member';
 
 interface IProps {
   projectId: number;
@@ -33,6 +39,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
   const queryClient = useQueryClient();
+  const overlay = useOverlay();
 
   const {
     data: memberData,
@@ -101,25 +108,32 @@ const MemberSetting: React.FC<IProps> = (props) => {
     },
   });
 
+  const openCreateMemberDialog = () => {
+    if (!rolesData || !projectData) return;
+    overlay.open(({ isOpen, close }) => (
+      <CreateMemberDialog
+        members={memberData?.members ?? []}
+        onCreate={(user, role) =>
+          createMember({ userId: user.id, roleId: role.id })
+        }
+        project={projectData}
+        roles={rolesData.roles}
+        close={close}
+        isOpen={isOpen}
+      />
+    ));
+  };
+
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('project-setting-menu.member-mgmt')}
       action={
-        rolesData &&
-        projectData && (
-          <CreateMemberPopover
-            members={memberData?.members ?? []}
-            onCreate={(user, role) =>
-              createMember({
-                userId: user.id,
-                roleId: role.id,
-              })
-            }
-            project={projectData}
-            roles={rolesData.roles}
-            disabled={!perms.includes('project_member_create')}
-          />
-        )
+        <Button
+          disabled={!perms.includes('project_member_create')}
+          onClick={openCreateMemberDialog}
+        >
+          {t('v2.button.name.register', { name: 'Member' })}
+        </Button>
       }
     >
       <MemberTable
@@ -130,8 +144,17 @@ const MemberSetting: React.FC<IProps> = (props) => {
         onUpdateMember={({ id, role }) =>
           updateMember({ memberId: id, roleId: role.id })
         }
+        createButton={
+          <Button
+            className="min-w-[120px]"
+            disabled={!perms.includes('project_member_create')}
+            onClick={openCreateMemberDialog}
+          >
+            {t('v2.button.register')}
+          </Button>
+        }
       />
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

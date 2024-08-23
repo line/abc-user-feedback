@@ -6,6 +6,7 @@ import type { IconNameType } from "./icon";
 import { SMALL_ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import useTheme from "./use-theme";
 
 type TagType = "primary" | "secondary" | "outline" | "destructive";
 
@@ -29,8 +30,8 @@ const tagVariants = cva("tag", {
     },
     defaultVariants: {
       type: "primary",
-      size: "small",
-      radius: "medium",
+      size: undefined,
+      radius: undefined,
     },
   },
 });
@@ -45,8 +46,8 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
 const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
   const {
     type = "primary",
-    size = "small",
-    radius = "medium",
+    size,
+    radius,
     icon,
     onClick,
     className,
@@ -54,13 +55,28 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
     ...rest
   } = props;
 
+  const { themeSize, themeRadius } = useTheme();
+
   return (
     <span
       {...rest}
       ref={ref}
-      className={cn(tagVariants({ type, size, radius, className }))}
+      className={cn(
+        tagVariants({
+          type,
+          size: size ?? themeSize,
+          radius: radius ?? themeRadius,
+          className,
+        }),
+      )}
     >
-      {icon && <Icon name={icon} size={SMALL_ICON_SIZE[size]} aria-hidden />}
+      {icon && (
+        <Icon
+          name={icon}
+          size={SMALL_ICON_SIZE[size ?? themeSize]}
+          aria-hidden
+        />
+      )}
       {children}
       {onClick && (
         <button
@@ -71,7 +87,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
         >
           <Icon
             name="RiCloseLargeLine"
-            size={SMALL_ICON_SIZE[size]}
+            size={SMALL_ICON_SIZE[size ?? themeSize]}
             aria-hidden
           />
         </button>

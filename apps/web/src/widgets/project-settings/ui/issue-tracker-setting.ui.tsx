@@ -20,13 +20,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import {
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { IssueTracker } from '@/entities/issue-tracker';
 import { IssueTrackerForm, issueTrackerSchema } from '@/entities/issue-tracker';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {
   projectId: number;
@@ -52,10 +55,10 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('toast.save'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
@@ -67,10 +70,10 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('toast.save'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
@@ -83,17 +86,21 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     data ? modify({ data: input }) : create({ data: input });
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('project-setting-menu.issue-tracker-mgmt')}
-      actionBtn={{
-        children: t('button.save'),
-        disabled:
-          !perms.includes('project_tracker_update') ||
-          !methods.formState.isDirty ||
-          modifyPending ||
-          createPending,
-        onClick: methods.handleSubmit(onSubmit),
-      }}
+      action={
+        <Button
+          disabled={
+            !perms.includes('project_tracker_update') ||
+            !methods.formState.isDirty ||
+            modifyPending ||
+            createPending
+          }
+          onClick={methods.handleSubmit(onSubmit)}
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
@@ -111,7 +118,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
       <FormProvider {...methods}>
         <IssueTrackerForm />
       </FormProvider>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

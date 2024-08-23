@@ -274,7 +274,6 @@
     --text-neutral-secondary: var(--neutral600);
     --text-neutral-tertiary: var(--neutral500);
     --text-neutral-inverse: var(--base-white);
-    --text-neutral-disabled: var(--neutral400);
     --text-neutral-static: var(--base-white);
     --text-tint-red: var(--red600);
     --text-tint-orange: var(--amber600);
@@ -284,7 +283,6 @@
     --icon-neutral-secondary: var(--neutral600);
     --icon-neutral-tertiary: var(--neutral500);
     --icon-neutral-inverse: var(--base-white);
-    --icon-neutral-disabled: var(--neutral400);
     --icon-neutral-static: var(--base-white);
     --icon-tint-red: var(--red600);
     --icon-tint-orange: var(--amber600);
@@ -293,7 +291,6 @@
     --border-neutral-primary: var(--neutral950);
     --border-neutral-secondary: var(--neutral500);
     --border-neutral-tertiary: var(--neutral300);
-    --border-neutral-disabled: var(--neutral300);
     --border-neutral-transparent: var(--base-transparent);
     --border-tint-red: var(--red600);
     --border-tint-orange: var(--amber600);
@@ -304,20 +301,15 @@
     --fg-neutral-tertiary: var(--neutral200);
     --fg-neutral-inverse: var(--neutral950);
     --fg-neutral-disabled: var(--neutral300);
-    --fg-neutral-hover: var(--neutral600);
     --fg-neutral-transparent: var(--base-transparent);
     --fg-tint-red-bold: var(--red600);
     --fg-tint-red-subtle: var(--red100);
-    --fg-tint-red-hover: var(--red400);
     --fg-tint-orange-bold: var(--amber600);
     --fg-tint-orange-subtle: var(--amber100);
-    --fg-tint-orange-hover: var(--amber400);
     --fg-tint-green-bold: var(--green600);
     --fg-tint-green-subtle: var(--green100);
-    --fg-tint-green-hover: var(--green400);
     --fg-tint-blue-bold: var(--blue600);
     --fg-tint-blue-subtle: var(--blue100);
-    --fg-tint-blue-hover: var(--blue400);
     --bg-primary: var(--base-white);
     --bg-secondary: var(--neutral100);
     --bg-tertiary: var(--neutral200);
@@ -329,7 +321,6 @@
     --text-neutral-secondary: var(--neutral300);
     --text-neutral-tertiary: var(--neutral400);
     --text-neutral-inverse: var(--base-black);
-    --text-neutral-disabled: var(--neutral500);
     --text-tint-red: var(--red500);
     --text-tint-orange: var(--amber500);
     --text-tint-green: var(--green500);
@@ -338,7 +329,6 @@
     --icon-neutral-secondary: var(--neutral300);
     --icon-neutral-tertiary: var(--neutral400);
     --icon-neutral-inverse: var(--base-black);
-    --icon-neutral-disabled: var(--neutral500);
     --icon-tint-red: var(--red500);
     --icon-tint-orange: var(--amber500);
     --icon-tint-green: var(--green500);
@@ -346,7 +336,6 @@
     --border-neutral-primary: var(--neutral50);
     --border-neutral-secondary: var(--neutral500);
     --border-neutral-tertiary: var(--neutral600);
-    --border-neutral-disabled: var(--neutral700);
     --border-tint-red: var(--red500);
     --border-tint-orange: var(--amber500);
     --border-tint-green: var(--green500);
@@ -356,7 +345,6 @@
     --fg-neutral-tertiary: var(--neutral600);
     --fg-neutral-inverse: var(--neutral50);
     --fg-neutral-disabled: var(--neutral700);
-    --fg-neutral-hover: var(--neutral500);
     --bg-primary: var(--neutral950);
     --bg-secondary: var(--neutral900);
     --bg-tertiary: var(--neutral800);

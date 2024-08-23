@@ -13,14 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
+import {
+  Button,
+  Sheet,
+  SheetBody,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '@ufb/react';
 
-import { useOAIQuery, usePermissions } from '@/shared';
+import { useOAIQuery } from '@/shared';
 
 import { webhookInfoSchema } from '../webhook.schema';
 import type { WebhookInfo } from '../webhook.type';
@@ -43,20 +52,19 @@ interface IProps {
   disabled?: boolean;
   projectId: number;
   onClickCreate: (input: WebhookInfo) => unknown;
+  isOpen: boolean;
+  close: () => void;
 }
 
-const CreateWebhookPopover: React.FC<IProps> = (props) => {
-  const { disabled, projectId, onClickCreate } = props;
+const CreateWebhookSheet: React.FC<IProps> = (props) => {
+  const { projectId, onClickCreate, isOpen, close } = props;
 
   const { t } = useTranslation();
-  const perms = usePermissions(projectId);
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
-
-  const [open, setOpen] = useState(false);
 
   const methods = useForm<WebhookInfo>({
     resolver: zodResolver(webhookInfoSchema),
@@ -65,45 +73,35 @@ const CreateWebhookPopover: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     methods.reset(defaultValues);
-  }, [open]);
+  }, [isOpen]);
 
   const onSubmit = async (data: WebhookInfo) => {
     await onClickCreate({ ...data, status: 'ACTIVE' });
-    setOpen(false);
+    close();
   };
 
   return (
-    <Popover onOpenChange={setOpen} open={open} modal>
-      <PopoverTrigger
-        onClick={() => setOpen((prev) => !prev)}
-        className="icon-btn icon-btn-sm icon-btn-tertiary"
-        asChild
-      >
-        <button
-          className="btn btn-primary"
-          disabled={!perms.includes('project_webhook_create') || disabled}
-        >
-          {t('button.create', { name: 'Webhook' })}
-        </button>
-      </PopoverTrigger>
-      <PopoverModalContent
-        title={t('dialog.create-webhook.title')}
-        cancelButton={{ children: t('button.cancel') }}
-        submitButton={{
-          children: t('button.confirm'),
-          type: 'submit',
-          form: 'webhook',
-        }}
-        width={560}
-      >
-        <form id="webhook" onSubmit={methods.handleSubmit(onSubmit)}>
-          <FormProvider {...methods}>
-            <WebhookForm channels={data?.items ?? []} />
-          </FormProvider>
-        </form>
-      </PopoverModalContent>
-    </Popover>
+    <Sheet onOpenChange={close} open={isOpen} modal>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>{t('dialog.create-webhook.title')}</SheetTitle>
+        </SheetHeader>
+        <SheetBody>
+          <form id="webhook" onSubmit={methods.handleSubmit(onSubmit)}>
+            <FormProvider {...methods}>
+              <WebhookForm channels={data?.items ?? []} />
+            </FormProvider>
+          </form>
+        </SheetBody>
+        <SheetFooter>
+          <SheetClose />
+          <Button type={'submit'} form={'webhook'}>
+            {t('button.confirm')}
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
 
-export default CreateWebhookPopover;
+export default CreateWebhookSheet;

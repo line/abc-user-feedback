@@ -5,6 +5,7 @@ import { cva } from "class-variance-authority";
 
 import type { Color, Radius } from "../lib/types";
 import { cn } from "../lib/utils";
+import useTheme from "./use-theme";
 
 type BadgeType = "bold" | "subtle" | "outline";
 
@@ -106,7 +107,7 @@ const badgeVariants = cva("badge", {
     },
   ],
   defaultVariants: {
-    radius: "medium",
+    radius: undefined,
     type: "bold",
     color: "default",
   },
@@ -123,22 +124,19 @@ interface BadgeProps
 
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   (
-    {
-      radius = "medium",
-      type = "bold",
-      color = "default",
-      className,
-      asChild,
-      ...props
-    },
+    { radius, type = "bold", color = "default", className, asChild, ...props },
     ref,
   ) => {
+    const { themeRadius } = useTheme();
     const Comp = asChild ? Slot : "div";
 
     return (
       <Comp
         ref={ref}
-        className={cn(badgeVariants({ radius, type, color }), className)}
+        className={cn(
+          badgeVariants({ radius: radius ?? themeRadius, type, color }),
+          className,
+        )}
         {...props}
       />
     );

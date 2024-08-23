@@ -7,6 +7,7 @@ import type { Radius } from "../types";
 import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import useTheme from "./use-theme";
 
 const radioCardGroupVariants = cva("radio-card-group", {
   variants: {
@@ -39,7 +40,7 @@ const RadioCardGroup = React.forwardRef<
   (
     {
       orientation = "horizontal",
-      radius = "medium",
+      radius,
       cardType = "vertical",
       children,
       className,
@@ -47,13 +48,16 @@ const RadioCardGroup = React.forwardRef<
     },
     ref,
   ) => {
+    const { themeRadius } = useTheme();
     return (
       <RadioGroupPrimitive.Root
         className={cn(radioCardGroupVariants({ orientation, className }))}
         {...props}
         ref={ref}
       >
-        <RadioGroupContext.Provider value={{ cardType, radius }}>
+        <RadioGroupContext.Provider
+          value={{ cardType, radius: radius ?? themeRadius }}
+        >
           {children}
         </RadioGroupContext.Provider>
       </RadioGroupPrimitive.Root>
@@ -76,7 +80,7 @@ const radioCardVariants = cva("radio-card", {
   },
   defaultVariants: {
     type: "vertical",
-    radius: "medium",
+    radius: undefined,
   },
 });
 

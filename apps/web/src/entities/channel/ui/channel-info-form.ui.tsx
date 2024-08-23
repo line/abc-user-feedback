@@ -16,7 +16,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/ui';
+import { InputCaption, InputField, InputLabel, TextInput } from '@ufb/react';
 
 import type { ChannelInfo } from '../channel.type';
 
@@ -33,31 +33,40 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   const { register, formState } = useFormContext<ChannelInfo>();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       {type === 'update' && (
-        <TextInput {...register('id')} label="Channel ID" disabled />
+        <InputField>
+          <InputLabel>ID</InputLabel>
+          <TextInput {...register('id')} disabled />
+        </InputField>
       )}
-      <TextInput
-        {...register('name')}
-        label="Channel Name"
-        placeholder={t('placeholder', { name: 'Channel Name' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.name?.message}
-        isValid={!formState.errors.name}
-        required
-        disabled={readOnly}
-      />
-      <TextInput
-        {...register('description')}
-        label="Channel Description"
-        placeholder={t('placeholder', { name: 'Channel Description' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.description?.message}
-        isValid={!formState.errors.description}
-        disabled={readOnly}
-      />
+      <InputField>
+        <InputLabel>
+          Name <span className="text-tint-red">*</span>
+        </InputLabel>
+        <TextInput
+          {...register('name')}
+          placeholder={t('placeholder', { name: 'Name' })}
+          required
+          disabled={readOnly}
+          hasError={!!formState.errors.name}
+        />
+        {formState.errors.name && (
+          <InputCaption>{formState.errors.name.message}</InputCaption>
+        )}
+      </InputField>
+      <InputField>
+        <InputLabel>Description</InputLabel>
+        <TextInput
+          {...register('description')}
+          placeholder={t('placeholder', { name: 'Description' })}
+          disabled={readOnly}
+          hasError={!!formState.errors.description}
+        />
+        {formState.errors.description && (
+          <InputCaption>{formState.errors.description.message}</InputCaption>
+        )}
+      </InputField>
     </div>
   );
 };

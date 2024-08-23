@@ -16,7 +16,9 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputCaption, InputField, InputLabel, TextInput } from '@ufb/react';
+import { InputField, InputLabel } from '@ufb/react';
+
+import { TextInput } from '@/shared';
 
 import type { ProjectInfo } from '../project.type';
 import TimezoneSelectBox from './timezone-select-box';
@@ -34,33 +36,26 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
     useFormContext<ProjectInfo>();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       {type === 'update' && (
-        <InputField>
-          <InputLabel>Project ID</InputLabel>
-          <TextInput {...register('id')} disabled />
-        </InputField>
+        <TextInput label="ID" {...register('id')} disabled />
       )}
-      <InputField>
-        <InputLabel>Project Name</InputLabel>
-        <TextInput
-          {...register('name')}
-          placeholder={t('placeholder', { name: 'Project Name' })}
-          required
-          disabled={readOnly}
-        />
-        {formState.errors.name && (
-          <InputCaption>{formState.errors.name.message}</InputCaption>
-        )}
-      </InputField>
-      <InputField>
-        <InputLabel>Project Description</InputLabel>
-        <TextInput
-          {...register('description')}
-          placeholder={t('placeholder', { name: 'Project Description' })}
-          disabled={readOnly}
-        />
-      </InputField>
+      <TextInput
+        label="Name"
+        {...register('name')}
+        placeholder={t('placeholder', { name: 'Name' })}
+        required
+        disabled={readOnly}
+        error={formState.errors.name?.message}
+      />
+      <TextInput
+        label="Description"
+        {...register('description')}
+        placeholder={t('placeholder', { name: 'Description' })}
+        required
+        disabled={readOnly}
+        error={formState.errors.description?.message}
+      />
       <InputField>
         <InputLabel>Time Zone</InputLabel>
         <TimezoneSelectBox
@@ -68,7 +63,7 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
           onChange={(value) =>
             value && setValue('timezone', value, { shouldDirty: true })
           }
-          disabled={readOnly}
+          disabled={readOnly || type === 'update'}
         />
       </InputField>
     </div>

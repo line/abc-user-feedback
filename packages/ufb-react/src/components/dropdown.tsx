@@ -1,10 +1,26 @@
-import type { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
-import * as React from "react";
-import * as DropdownPrimitive from "@radix-ui/react-dropdown-menu";
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import * as React from 'react';
+import type { DropdownMenuCheckboxItemProps } from '@radix-ui/react-dropdown-menu';
+import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
 
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
-import { ScrollArea, ScrollBar } from "./scroll-area";
+import { cn } from '../lib/utils';
+import type { IconNameType } from './icon';
+import { Icon } from './icon';
+import { ScrollArea, ScrollBar } from './scroll-area';
 
 const Dropdown = DropdownPrimitive.Root;
 
@@ -22,15 +38,24 @@ const DropdownSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.SubTrigger> & {
     inset?: boolean;
+    iconL?: IconNameType;
+    iconR?: IconNameType;
+    caption?: React.ReactNode;
   }
->(({ className, inset, children, ...props }, ref) => (
+>(({ iconL, iconR, caption, className, inset, children, ...props }, ref) => (
   <DropdownPrimitive.SubTrigger
     ref={ref}
-    className={cn("dropdown-sub-trigger", inset && "pl-8", className)}
+    className={cn(
+      'dropdown-sub-trigger',
+      inset && 'dropdown-sub-trigger-inset',
+      className,
+    )}
     {...props}
   >
-    {children}
-    <Icon name="RiArrowRightSLine" size={16} className="ml-auto" />
+    {iconL && <Icon name={iconL} size={16} />}
+    <div className="dropdown-item-text">{children}</div>
+    {caption && <span className="dropdown-caption">{caption}</span>}
+    {iconR && <Icon name={iconR} size={16} />}
   </DropdownPrimitive.SubTrigger>
 ));
 DropdownSubTrigger.displayName = DropdownPrimitive.SubTrigger.displayName;
@@ -41,7 +66,7 @@ const DropdownSubContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.SubContent
     ref={ref}
-    className={cn("dropdown-sub-content", className)}
+    className={cn('dropdown-sub-content', className)}
     {...props}
   />
 ));
@@ -57,7 +82,7 @@ const DropdownContent = React.forwardRef<
     <DropdownPrimitive.Content
       ref={ref}
       sideOffset={sideOffset}
-      className={cn("dropdown-content", className)}
+      className={cn('dropdown-content', className)}
       {...props}
     >
       <ScrollArea maxHeight={maxHeight}>
@@ -73,13 +98,21 @@ const DropdownItem = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item> & {
     inset?: boolean;
+    iconL?: IconNameType;
+    iconR?: IconNameType;
+    caption?: React.ReactNode;
   }
->(({ className, inset, ...props }, ref) => (
+>(({ iconL, iconR, caption, children, className, inset, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
-    className={cn("dropdown-item", inset && "pl-8", className)}
+    className={cn('dropdown-item', inset && 'dropdown-item-inset', className)}
     {...props}
-  />
+  >
+    {iconL && <Icon name={iconL} size={16} />}
+    <div className="dropdown-item-text">{children}</div>
+    {caption && <span className="dropdown-caption">{caption}</span>}
+    {iconR && <Icon name={iconR} size={16} />}
+  </DropdownPrimitive.Item>
 ));
 DropdownItem.displayName = DropdownPrimitive.Item.displayName;
 
@@ -89,7 +122,7 @@ const DropdownCheckboxItem = React.forwardRef<
 >(({ className, children, checked, ...props }, ref) => (
   <DropdownPrimitive.CheckboxItem
     ref={ref}
-    className={cn("dropdown-checkbox", className)}
+    className={cn('dropdown-checkbox', className)}
     checked={checked}
     {...props}
   >
@@ -109,7 +142,7 @@ const DropdownRadioItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
   <DropdownPrimitive.RadioItem
     ref={ref}
-    className={cn("dropdown-radio", className)}
+    className={cn('dropdown-radio', className)}
     {...props}
   >
     <DropdownPrimitive.ItemIndicator className="dropdown-radio-icon">
@@ -128,7 +161,7 @@ const DropdownLabel = React.forwardRef<
 >(({ className, inset, ...props }, ref) => (
   <DropdownPrimitive.Label
     ref={ref}
-    className={cn("dropdown-label", inset && "pl-8", className)}
+    className={cn('dropdown-label', inset && 'dropdown-label-inset', className)}
     {...props}
   />
 ));
@@ -140,19 +173,11 @@ const DropdownSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DropdownPrimitive.Separator
     ref={ref}
-    className={cn("dropdown-separator", className)}
+    className={cn('dropdown-separator', className)}
     {...props}
   />
 ));
 DropdownSeparator.displayName = DropdownPrimitive.Separator.displayName;
-
-const DropdownShortcut = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
-  return <span className={cn("dropdown-shortcut", className)} {...props} />;
-};
-DropdownShortcut.displayName = "DropdownShortcut";
 
 export {
   Dropdown,
@@ -163,7 +188,6 @@ export {
   DropdownRadioItem,
   DropdownLabel,
   DropdownSeparator,
-  DropdownShortcut,
   DropdownGroup,
   DropdownPortal,
   DropdownSub,

@@ -13,7 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ChannelInfoSetting } from './channel-info-setting.ui';
-export { default as ChannelDeletionSetting } from './channel-deletion-setting.ui';
-export { default as FieldSetting } from './field-setting.ui';
-export { default as ImageConfigSetting } from './image-config-setting.ui';
+export * from './setting-menu.type';
+export * from './ui';

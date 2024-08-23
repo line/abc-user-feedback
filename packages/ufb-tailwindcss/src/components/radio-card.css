@@ -2,7 +2,7 @@
   --radio-card-text-title: var(--text-neutral-primary);
   --radio-card-text-description: var(--text-neutral-tertiary);
   --radio-card-border-default: var(--border-neutral-tertiary);
-  --radio-card-border-selected: var(--border-neutral-primary); /* todo tint */
+  --radio-card-border-selected: var(--tint, var(--border-neutral-primary));
   --radio-card-fg-default: var(--fg-neutral-primary);
   --radio-card-fg-hover: var(--fg-neutral-tertiary);
 

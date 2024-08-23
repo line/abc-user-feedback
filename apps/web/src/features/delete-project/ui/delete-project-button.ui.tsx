@@ -35,15 +35,17 @@ interface IProps {
   onClickDelete: (projectId: number) => void;
 }
 
-const DeleteProjectPopover: React.FC<IProps> = (props) => {
+const DeleteProjectButton: React.FC<IProps> = (props) => {
   const { project, onClickDelete } = props;
   const { t } = useTranslation();
   const perms = usePermissions(project.id);
 
   return (
     <Dialog>
-      <DialogTrigger disabled={!perms.includes('project_delete')}>
-        <Button>{t('button.delete')}</Button>
+      <DialogTrigger disabled={!perms.includes('project_delete')} asChild>
+        <Button variant="destructive" className="min-w-[120px]">
+          {t('v2.button.name.delete', { name: 'Project' })}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader icon="RiCloseCircleFill">
@@ -63,7 +65,7 @@ const DeleteProjectPopover: React.FC<IProps> = (props) => {
             size="small"
             onClick={() => onClickDelete(project.id)}
           >
-            {t('button.delete')}
+            {t('v2.button.delete')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -71,4 +73,4 @@ const DeleteProjectPopover: React.FC<IProps> = (props) => {
   );
 };
 
-export default DeleteProjectPopover;
+export default DeleteProjectButton;

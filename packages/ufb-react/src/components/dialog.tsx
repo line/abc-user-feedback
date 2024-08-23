@@ -1,11 +1,12 @@
+import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { cva } from "class-variance-authority";
 
 import type { Radius } from "../types";
-import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import useTheme from "./use-theme";
 
 const Dialog = DialogPrimitive.Root;
 
@@ -35,7 +36,7 @@ const dialogContentVariants = cva("dialog-content", {
       small: "dialog-content-radius-small",
     },
     defaultVariants: {
-      radius: "medium",
+      radius: undefined,
     },
   },
 });
@@ -48,48 +49,65 @@ interface DialogContentProps
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   DialogContentProps
->(({ radius = "medium", className, children, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(dialogContentVariants({ radius, className }))}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close className="dialog-close">
-        <Icon name="RiCloseLine" size={20} />
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-));
+>(({ radius, className, children, ...props }, ref) => {
+  const { themeRadius } = useTheme();
+  return (
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        className={cn(
+          dialogContentVariants({ radius: radius ?? themeRadius, className }),
+        )}
+        {...props}
+      >
+        {children}
+        <DialogPrimitive.Close className="dialog-close">
+          <Icon name="RiCloseLine" size={20} />
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  );
+});
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
-const Dialog_Icon_Color_Map: Record<string, string> = {
-  RiErrorWarningFill: "dialog-icon-orange",
-  RiInformation2Fill: "dialog-icon-blue",
-  RiCheckboxCircleFill: "dialog-icon-green",
-  RiCloseCircleFill: "dialog-icon-red",
-};
+const dialogIconVariants = cva("dialog-icon", {
+  variants: {
+    variant: {
+      default: "dialog-icon-default",
+      warning: "dialog-icon-warning",
+      success: "dialog-icon-success",
+      error: "dialog-icon-error",
+      informative: "dialog-icon-informative",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+  },
+});
 
-interface DialogHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  icon?: IconNameType;
-}
+const DialogIcon = (
+  props: React.ComponentPropsWithoutRef<typeof Icon> &
+    VariantProps<typeof dialogIconVariants>,
+) => {
+  const { className, name, size = 32, variant = "default", ...rest } = props;
+  return (
+    <Icon
+      {...rest}
+      name={name}
+      size={size}
+      className={cn(dialogIconVariants({ variant, className }))}
+    />
+  );
+};
+DialogIcon.displayName = "DialogIcon";
 
 const DialogHeader = ({
-  icon,
   className,
   children,
   ...props
-}: DialogHeaderProps) => (
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn("dialog-header", className)} {...props}>
-    {icon && (
-      <Icon
-        name={icon}
-        size={32}
-        className={cn("dialog-icon", Dialog_Icon_Color_Map[icon])}
-      />
-    )}
     {children}
   </div>
 );
@@ -158,4 +176,5 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
+  DialogIcon,
 };

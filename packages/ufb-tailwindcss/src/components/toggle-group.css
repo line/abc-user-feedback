@@ -1,10 +1,10 @@
 .toggle-group {
   --toggle-group-text-default: var(--text-neutral-primary);
   --toggle-group-text-hover: var(--text-neutral-primary);
-  --toggle-group-text-pressed: var(--text-neutral-primary); /* todo tint */
+  --toggle-group-text-pressed: var(--tint, var(--text-neutral-primary));
   --toggle-group-icon-default: var(--icon-neutral-primary);
   --toggle-group-icon-hover: var(--icon-neutral-primary);
-  --toggle-group-icon-pressed: var(--icon-neutral-primary); /* todo tint */
+  --toggle-group-icon-pressed: var(--tint, var(--icon-neutral-primary));
   --toggle-group-border-default: var(--border-neutral-tertiary);
   --toggle-group-border-hover: var(--border-neutral-tertiary);
   --toggle-group-border-pressed: var(--border-neutral-tertiary);

@@ -17,7 +17,7 @@
   --input-icon-caption-error: var(--icon-tint-red);
 
   --input-border-default: var(--border-neutral-tertiary);
-  --input-border-typing: var(--border-neutral-primary); /* todo tint */
+  --input-border-typing: var(--tint, var(--border-neutral-primary));
   --input-border-filled: var(--border-neutral-tertiary);
   --input-border-error: var(--border-tint-red);
 

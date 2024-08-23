@@ -2,13 +2,12 @@ import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cva } from "class-variance-authority";
 
-import type { ButtonProps } from "./button";
 import type { IconNameType } from "./icon";
-import type { IconButtonProps } from "./icon-button";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
 import { IconButton } from "./icon-button";
+import useTheme from "./use-theme";
 
 const alertVariants = cva("alert", {
   variants: {
@@ -27,13 +26,13 @@ const alertVariants = cva("alert", {
   },
   defaultVariants: {
     variant: "default",
-    radius: "medium",
+    radius: undefined,
   },
 });
 
 const AlertContext = React.createContext<VariantProps<typeof alertVariants>>({
   variant: "default",
-  radius: "medium",
+  radius: undefined,
 });
 
 interface AlertProps
@@ -41,21 +40,26 @@ interface AlertProps
     VariantProps<typeof alertVariants> {}
 
 const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  (
-    { children, className, variant = "default", radius = "medium", ...props },
-    ref,
-  ) => (
-    <div
-      ref={ref}
-      role="alert"
-      className={cn(alertVariants({ variant, radius }), className)}
-      {...props}
-    >
-      <AlertContext.Provider value={{ variant, radius }}>
-        {children}
-      </AlertContext.Provider>
-    </div>
-  ),
+  ({ children, className, variant = "default", radius, ...props }, ref) => {
+    const { themeRadius } = useTheme();
+    return (
+      <div
+        ref={ref}
+        role="alert"
+        className={cn(
+          alertVariants({ variant, radius: radius ?? themeRadius }),
+          className,
+        )}
+        {...props}
+      >
+        <AlertContext.Provider
+          value={{ variant, radius: radius ?? themeRadius }}
+        >
+          {children}
+        </AlertContext.Provider>
+      </div>
+    );
+  },
 );
 Alert.displayName = "Alert";
 
@@ -105,22 +109,23 @@ const AlertDescription = React.forwardRef<
 ));
 AlertDescription.displayName = "AlertDescription";
 
-interface AlertIconButtonProps extends Omit<IconButtonProps, "icon"> {
+interface AlertIconButtonProps
+  extends Omit<React.ComponentPropsWithoutRef<typeof IconButton>, "icon"> {
   icon?: IconNameType;
 }
 
 const AlertIconButton = React.forwardRef<
   HTMLButtonElement,
   AlertIconButtonProps
->(({ icon, className, ...props }, ref) => {
+>(({ icon, variant, size, className, ...props }, ref) => {
   const { radius } = React.useContext(AlertContext);
   return (
     <IconButton
       ref={ref}
       icon={icon ?? "RiCloseFill"}
       radius={radius ?? "medium"}
-      size="medium"
-      variant="ghost"
+      size={size ?? "medium"}
+      variant={variant ?? "ghost"}
       className={cn("alert-close", className)}
       {...props}
     />
@@ -129,21 +134,22 @@ const AlertIconButton = React.forwardRef<
 
 AlertIconButton.displayName = "AlertIconButton";
 
-const AlertButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, ...props }, ref) => {
-    const { radius } = React.useContext(AlertContext);
-    return (
-      <Button
-        ref={ref}
-        variant="outline"
-        size="medium"
-        radius={radius ?? "medium"}
-        className={cn("alert-button", className)}
-        {...props}
-      />
-    );
-  },
-);
+const AlertButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentPropsWithoutRef<typeof Button>
+>(({ variant, size, className, ...props }, ref) => {
+  const { radius } = React.useContext(AlertContext);
+  return (
+    <Button
+      ref={ref}
+      variant={variant ?? "outline"}
+      size={size ?? "medium"}
+      radius={radius ?? "medium"}
+      className={cn("alert-button", className)}
+      {...props}
+    />
+  );
+});
 AlertButton.displayName = "AlertButton";
 
 const Alert_Icon: Record<string, IconNameType | undefined> = {
@@ -169,16 +175,22 @@ const alertIconVariants = cva("alert-icon", {
   },
 });
 
-interface AlertIconProps extends React.SVGAttributes<HTMLOrSVGElement> {
+interface AlertIconProps
+  extends Omit<React.ComponentPropsWithoutRef<typeof Icon>, "name"> {
   name?: IconNameType;
 }
-const AlertIcon = ({ className, name = "temp", ...props }: AlertIconProps) => {
+const AlertIcon = ({
+  className,
+  name = "temp",
+  size = 20,
+  ...props
+}: AlertIconProps) => {
   const { variant } = React.useContext(AlertContext);
   return (
     <Icon
       className={cn(alertIconVariants({ variant, className }))}
       name={Alert_Icon[variant ?? "default"] ?? name}
-      size={20}
+      size={size}
       {...props}
     />
   );

@@ -11,16 +11,16 @@
 .dialog-icon-default {
   @apply text-[var(--text-neutral-primary)];
 }
-.dialog-icon-orange {
+.dialog-icon-warning {
   @apply text-[var(--icon-tint-orange)];
 }
-.dialog-icon-blue {
+.dialog-icon-informative {
   @apply text-[var(--icon-tint-blue)];
 }
-.dialog-icon-green {
+.dialog-icon-success {
   @apply text-[var(--icon-tint-green)];
 }
-.dialog-icon-red {
+.dialog-icon-error {
   @apply text-[var(--icon-tint-red)];
 }
 

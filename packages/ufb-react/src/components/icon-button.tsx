@@ -9,16 +9,17 @@ import { ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import { Spinner } from "./spinner";
+import useTheme from "./use-theme";
 
 const defaultVariants: {
   variant: ButtonVariant;
-  size: Size;
-  radius: Radius;
+  size?: Size;
+  radius?: Radius;
   isLoading?: boolean;
 } = {
   variant: "primary",
-  size: "small",
-  radius: "medium",
+  size: undefined,
+  radius: undefined,
   isLoading: false,
 };
 
@@ -78,8 +79,8 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     {
       className,
       variant = "primary",
-      size = "small",
-      radius = "medium",
+      size,
+      radius,
       disabled = false,
       icon,
       isLoading,
@@ -89,19 +90,27 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
+    const { themeSize, themeRadius } = useTheme();
+
     return (
       <Comp
         className={cn(
-          iconButtonVariants({ variant, size, radius, isLoading, className }),
+          iconButtonVariants({
+            variant,
+            size: size ?? themeSize,
+            radius: radius ?? themeRadius,
+            isLoading,
+            className,
+          }),
         )}
         disabled={disabled || isLoading}
         ref={ref}
         {...props}
       >
-        <Icon name={icon} size={ICON_SIZE[size]} aria-hidden />
+        <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} aria-hidden />
         {isLoading && (
           <span className={cn(iconButtonLoadingVariants({ variant }))}>
-            <Spinner size={size} />
+            <Spinner size={size ?? themeSize} />
           </span>
         )}
       </Comp>

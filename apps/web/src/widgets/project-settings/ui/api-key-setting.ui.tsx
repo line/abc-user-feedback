@@ -14,18 +14,28 @@
  * under the License.
  */
 
-import Image from 'next/image';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import {
+  Alert,
+  AlertContent,
+  AlertIcon,
+  AlertTextContainer,
+  Button,
+} from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { client, HelpCardDocs, useOAIQuery } from '@/shared';
+import {
+  client,
+  HelpCardDocs,
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { ApiKeyUpdateType } from '@/entities/api-key';
 import { ApiKeyTable } from '@/entities/api-key';
-import { CreateApiKeyButton } from '@/features/create-api-key';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {
   projectId: number;
@@ -33,6 +43,8 @@ interface IProps {
 
 const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const perms = usePermissions(projectId);
 
   const { data, refetch, status } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/api-keys',
@@ -47,7 +59,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       }),
     async onSuccess() {
       await refetch();
-      toast.positive({ title: t('toast.inactive') });
+      toast.positive({ title: t('v2.toast.inactive') });
     },
     onError(error) {
       toast.negative({ title: error.message });
@@ -62,7 +74,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       }),
     async onSuccess() {
       await refetch();
-      toast.positive({ title: t('toast.active') });
+      toast.positive({ title: t('v2.toast.active') });
     },
     onError(error) {
       toast.negative({ title: error.message });
@@ -77,10 +89,27 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       }),
     async onSuccess() {
       await refetch();
-      toast.negative({ title: t('toast.delete') });
+      await queryClient.invalidateQueries({
+        queryKey: ['/api/admin/projects/{projectId}/api-keys'],
+      });
+      toast.negative({ title: t('v2.toast.delete') });
     },
     onError(error) {
       toast.negative({ title: error.message });
+    },
+  });
+  const { mutate: createApiKey, isPending } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/api-keys',
+    pathParams: { projectId },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        toast.positive({ title: t('v2.toast.add') });
+      },
+      onError(error) {
+        toast.negative({ title: error.message });
+      },
     },
   });
 
@@ -90,30 +119,44 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <SettingMenuTemplate
-      title={t('project-setting-menu.api-key-mgmt')}
-      action={<CreateApiKeyButton projectId={projectId} />}
+    <SettingTemplate
+      title={t('v2.project-setting-menu.api-key-mgmt')}
+      action={
+        <Button
+          className="min-w-[120px]"
+          disabled={!perms.includes('project_apikey_create')}
+          isLoading={isPending}
+          onClick={() => createApiKey({ value: undefined })}
+        >
+          {t('v2.button.name.create', { name: 'API Key' })}
+        </Button>
+      }
     >
-      <div className="flex items-center rounded border px-6 py-2">
-        <p className="flex-1 whitespace-pre-line py-5">
-          <HelpCardDocs i18nKey="help-card.api-key" />
-        </p>
-        <div className="relative h-full w-[90px]">
-          <Image
-            src="/assets/images/api-key-help.svg"
-            style={{ objectFit: 'contain' }}
-            alt="temp"
-            fill
-          />
-        </div>
-      </div>
+      <Alert variant="informative">
+        <AlertContent>
+          <AlertIcon name="RiInformation2Fill" />
+          <AlertTextContainer>
+            <HelpCardDocs i18nKey="help-card.api-key" />
+          </AlertTextContainer>
+        </AlertContent>
+      </Alert>
       <ApiKeyTable
         isLoading={status === 'pending'}
         apiKeys={data?.items ?? []}
         onClickDelete={(id) => deleteApiKey({ apiKeyId: id })}
         onClickUpdate={(type, id) => UpdateMutation[type](id)}
+        createButton={
+          <Button
+            className="min-w-[120px]"
+            disabled={!perms.includes('project_apikey_create')}
+            isLoading={isPending}
+            onClick={() => createApiKey({ value: undefined })}
+          >
+            {t('v2.button.create')}
+          </Button>
+        }
       />
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

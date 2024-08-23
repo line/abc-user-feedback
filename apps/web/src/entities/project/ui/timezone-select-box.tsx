@@ -33,6 +33,19 @@ const getLabel = (timezone?: Timezone) => {
   return `(${timezone.offset}) ${timezone.name}, ${country?.name}`;
 };
 
+const getSelectValue = (timezone?: Timezone) => {
+  if (!timezone) return '';
+  const country = getCountry(timezone.countryCode);
+  return `${timezone.offset}_${timezone.name}_${country?.name}`;
+};
+
+const getTimezonValue = (value: string): Timezone => {
+  const [offset, name, countryCode] = value.split('_');
+  if (!offset || !name || !countryCode)
+    throw new Error('Invalid timezone value');
+  return { offset, name, countryCode };
+};
+
 interface IProps {
   value?: Timezone;
   onChange?: (timezone?: Timezone) => void;
@@ -44,8 +57,8 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
 
   return (
     <Select
-      value={value?.name}
-      onValueChange={(v) => onChange?.(options.find((o) => o.name === v))}
+      value={getSelectValue(value)}
+      onValueChange={(v) => onChange?.(getTimezonValue(v))}
       disabled={disabled}
     >
       <SelectTrigger>
@@ -53,7 +66,10 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
       </SelectTrigger>
       <SelectContent maxHeight="360px">
         {options.map((option) => (
-          <SelectItem key={option.name} value={option.name}>
+          <SelectItem
+            key={getSelectValue(option)}
+            value={getSelectValue(option)}
+          >
             {getLabel(option)}
           </SelectItem>
         ))}

@@ -1,4 +1,5 @@
 export * from "./alert";
+export * from "./accordion";
 export * from "./badge";
 export * from "./button";
 export * from "./checkbox";
@@ -25,3 +26,4 @@ export * from "./tag";
 export * from "./table";
 export * from "./toggle-group";
 export * from "./tooltip";
+export * from "./use-theme";

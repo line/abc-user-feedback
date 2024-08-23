@@ -27,6 +27,7 @@ import { OverlayProvider } from '@toss/use-overlay';
 import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 
+import { Toaster as Toaster2 } from '@ufb/react';
 import { Toaster } from '@ufb/ui';
 
 import { sessionStorage } from '@/shared';
@@ -76,6 +77,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
             <TenantGuard>
               {getLayout(<Component {...pageProps} />)}
               <Toaster />
+              <Toaster2 />
             </TenantGuard>
           </HydrationBoundary>
           {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}

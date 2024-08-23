@@ -15,15 +15,23 @@
 }
 
 .command-item {
-  @apply rounded-6 relative flex cursor-pointer select-none items-center p-8 text-base outline-none transition-colors hover:bg-[var(--command-fg-hover)];
+  @apply rounded-6 relative flex cursor-pointer select-none items-center space-x-8 p-8 text-base outline-none transition-colors hover:bg-[var(--command-fg-hover)];
+}
+
+.command-item-inset {
+  @apply pl-32;
+}
+
+.command-item-text {
+  @apply flex-1;
 }
 
 .command-item ~ .command-item {
   @apply mt-4;
 }
 
-.command-shortcut {
-  @apply text-small ml-auto tracking-widest text-[var(--command-text-shortcut)];
+.command-caption {
+  @apply text-small tracking-widest text-[var(--command-text-shortcut)];
 }
 
 .command-separator {

@@ -41,3 +41,9 @@ export { default as SmallCard } from './small-card.ui';
 export * from './tables';
 export * from './charts';
 export * from './select-box';
+
+export { default as SettingTemplate } from './setting-template.ui';
+
+//
+export { default as TextInput } from './text-input.ui';
+export { default as DialogContentTemplate } from './dialog-content-template.ui';

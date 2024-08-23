@@ -20,5 +20,3 @@ export { default as ChannelSettingMenu } from './channel-setting-menu';
 export { default as SettingMenuBox } from './setting-menu-box';
 
 export * from './tenant';
-export * from './project';
-export * from './channel';

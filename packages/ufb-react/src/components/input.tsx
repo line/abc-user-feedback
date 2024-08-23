@@ -7,6 +7,7 @@ import type { IconProps } from "./icon";
 import { ICON_SIZE } from "../constants";
 import { cn, composeRefs } from "../lib/utils";
 import { Icon } from "./icon";
+import useTheme from "./use-theme";
 
 type TextInputType = ("text" | "email" | "password" | "search" | "tel") &
   HTMLInputTypeAttribute;
@@ -26,7 +27,7 @@ const InputField = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
 InputField.displayName = "InputField";
 
 const defaultContext: TextInputProps = {
-  size: "small",
+  size: undefined,
 };
 
 const InputContext = React.createContext<TextInputProps>(defaultContext);
@@ -48,8 +49,8 @@ const inputVariants = cva("input", {
       false: "",
     },
     defaultVariants: {
-      size: "small",
-      radius: "medium",
+      size: undefined,
+      radius: undefined,
       hasError: false,
     },
   },
@@ -74,7 +75,8 @@ interface InputBoxProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const InputBox = React.forwardRef<HTMLInputElement, InputBoxProps>(
-  ({ size = "small", className, children, onBlur, ...props }, ref) => {
+  ({ size, className, children, onBlur, ...props }, ref) => {
+    const { themeSize } = useTheme();
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
       e.stopPropagation();
       if (!e.currentTarget.contains(e.relatedTarget)) {
@@ -83,7 +85,7 @@ const InputBox = React.forwardRef<HTMLInputElement, InputBoxProps>(
     };
 
     return (
-      <InputContext.Provider value={{ size }}>
+      <InputContext.Provider value={{ size: size ?? themeSize }}>
         <div
           ref={ref}
           className={cn("input-box", className)}
@@ -111,7 +113,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
     const {
       size,
       type = "text",
-      radius = "medium",
+      radius,
       hasError,
       disabled,
       onFocus,
@@ -120,7 +122,8 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       ...rest
     } = props;
 
-    const { size: boxSize = "small" } = React.useContext(InputContext);
+    const { themeRadius } = useTheme();
+    const { size: boxSize } = React.useContext(InputContext);
     const inputRef = useRef<HTMLInputElement>(null);
 
     const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -149,7 +152,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
         className={cn(
           inputVariants({
             size: size ?? boxSize,
-            radius,
+            radius: radius ?? themeRadius,
             hasError,
             className,
           }),
@@ -180,11 +183,12 @@ interface InputCaptionProps extends React.PropsWithChildren {
 
 const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
   (props, ref) => {
-    const { type = "default", size = "small", children } = props;
+    const { type = "default", size, children } = props;
+    const { themeSize } = useTheme();
 
     return (
       <span ref={ref} className={cn(inputCaptionVariants({ type }))}>
-        {CaptionIcon(size)[type]}
+        {CaptionIcon(size ?? themeSize)[type]}
         {children}
       </span>
     );
@@ -200,17 +204,18 @@ const inputIconVariants = cva("input-icon", {
       small: "input-icon-small",
     },
     defaultVariants: {
-      size: "small",
+      size: undefined,
     },
   },
 });
 const InputIcon = ({ className, ...props }: IconProps) => {
-  const { size = "small" } = React.useContext(InputContext);
+  const { size } = React.useContext(InputContext);
+  const { themeSize } = useTheme();
   return (
     <Icon
       {...props}
-      size={ICON_SIZE[size]}
-      className={cn(inputIconVariants({ size, className }))}
+      size={ICON_SIZE[size ?? themeSize]}
+      className={cn(inputIconVariants({ size: size ?? themeSize, className }))}
     />
   );
 };
@@ -224,7 +229,7 @@ const inputButtonVariants = cva("input-button", {
       small: "input-button-small",
     },
     defaultVariants: {
-      size: "small",
+      size: undefined,
     },
   },
 });
@@ -232,16 +237,19 @@ const InputClearButton = React.forwardRef<
   HTMLButtonElement,
   ButtonHTMLAttributes<HTMLButtonElement>
 >(({ className, ...props }, ref) => {
-  const { size = "small" } = React.useContext(InputContext);
+  const { size } = React.useContext(InputContext);
+  const { themeSize } = useTheme();
   return (
     <button
       ref={ref}
       type="button"
-      className={cn(inputButtonVariants({ size, className }))}
+      className={cn(
+        inputButtonVariants({ size: size ?? themeSize, className }),
+      )}
       aria-label="Reset input text"
       {...props}
     >
-      <Icon name="RiCloseCircleFill" size={ICON_SIZE[size]} />
+      <Icon name="RiCloseCircleFill" size={ICON_SIZE[size ?? themeSize]} />
     </button>
   );
 });
@@ -254,7 +262,8 @@ const InputEyeButton = React.forwardRef<
   }
 >(({ className, onClick, onChangeVisibility, ...props }, ref) => {
   const [visible, setVisible] = React.useState(false);
-  const { size = "small" } = React.useContext(InputContext);
+  const { size } = React.useContext(InputContext);
+  const { themeSize } = useTheme();
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     setVisible((visible) => !visible);
@@ -269,15 +278,17 @@ const InputEyeButton = React.forwardRef<
     <button
       ref={ref}
       type="button"
-      className={cn(inputButtonVariants({ size, className }))}
+      className={cn(
+        inputButtonVariants({ size: size ?? themeSize, className }),
+      )}
       onClick={handleClick}
       aria-label={visible ? "hide password" : "show password"}
       {...props}
     >
       {visible ? (
-        <Icon name="RiEyeCloseFill" size={ICON_SIZE[size]} />
+        <Icon name="RiEyeCloseFill" size={ICON_SIZE[size ?? themeSize]} />
       ) : (
-        <Icon name="RiEyeFill" size={ICON_SIZE[size]} />
+        <Icon name="RiEyeFill" size={ICON_SIZE[size ?? themeSize]} />
       )}
     </button>
   );

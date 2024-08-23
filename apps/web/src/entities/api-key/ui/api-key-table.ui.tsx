@@ -16,8 +16,6 @@
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
-
 import { BasicTable } from '@/shared';
 
 import { getApiKeyColumns } from '../api-key-columns';
@@ -28,10 +26,12 @@ interface IProps {
   apiKeys: ApiKey[];
   onClickDelete?: (id: number) => void;
   onClickUpdate?: (type: ApiKeyUpdateType, id: number) => void;
+  createButton: React.ReactNode;
 }
 
 const ApiKeyTable: React.FC<IProps> = (props) => {
-  const { isLoading, apiKeys, onClickDelete, onClickUpdate } = props;
+  const { isLoading, apiKeys, onClickDelete, onClickUpdate, createButton } =
+    props;
 
   const { t } = useTranslation();
 
@@ -46,16 +46,8 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
     <BasicTable
       isLoading={isLoading}
       table={table}
-      emptyComponent={
-        <div className="my-32 flex flex-col items-center justify-center gap-3">
-          <Icon
-            name="WarningTriangleFill"
-            className="text-quaternary"
-            size={32}
-          />
-          <p className="text-secondary">{t('text.no-data')}</p>
-        </div>
-      }
+      emptyCaption={t('v2.text.no-data.api-key')}
+      createButton={createButton}
     />
   );
 };

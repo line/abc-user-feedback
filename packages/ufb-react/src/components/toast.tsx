@@ -2,6 +2,7 @@ import { CSSProperties } from "react";
 import { Toaster as Sonner, toast } from "sonner";
 
 import { Icon } from "./icon";
+import { Spinner } from "./spinner";
 
 type ToasterProps = React.ComponentProps<typeof Sonner>;
 
@@ -31,6 +32,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         },
       }}
       icons={{
+        loading: <Spinner size="small" />,
         warning: (
           <Icon
             name="RiErrorWarningFill"

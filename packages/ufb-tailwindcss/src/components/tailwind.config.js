@@ -175,6 +175,8 @@ module.exports = {
             animation: {
               in: "enter 0.15s ease-in-out",
               out: "exit 0.15s ease-in-out",
+              "accordion-down": "accordion-down 0.2s ease-out",
+              "accordion-up": "accordion-up 0.2s ease-out",
             },
             keyframes: {
               enter: {
@@ -190,6 +192,14 @@ module.exports = {
                   transform:
                     "translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0))",
                 },
+              },
+              "accordion-down": {
+                from: { height: "0" },
+                to: { height: "var(--radix-accordion-content-height)" },
+              },
+              "accordion-up": {
+                from: { height: "var(--radix-accordion-content-height)" },
+                to: { height: "0" },
               },
             },
           },

@@ -15,15 +15,21 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { client, useOAIMutation, useOAIQuery } from '@/shared';
+import {
+  client,
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { WebhookInfo } from '@/entities/webhook';
-import { CreateWebhookPopover, WebhookTable } from '@/entities/webhook';
-
-import SettingMenuTemplate from '../setting-menu-template';
+import { CreateWebhookSheet, WebhookTable } from '@/entities/webhook';
 
 interface IProps {
   projectId: number;
@@ -31,6 +37,9 @@ interface IProps {
 
 const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const overlay = useOverlay();
+  const perms = usePermissions(projectId);
+
   const { data, refetch, isPending } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/webhooks',
     variables: { projectId },
@@ -80,16 +89,28 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       },
     },
   });
+  const openCreateWebhookSheet = () => {
+    overlay.open(({ close, isOpen }) => (
+      <CreateWebhookSheet
+        isOpen={isOpen}
+        close={close}
+        onClickCreate={create}
+        disabled={createStatus === 'pending'}
+        projectId={projectId}
+      />
+    ));
+  };
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('project-setting-menu.webhook-integration')}
       action={
-        <CreateWebhookPopover
-          projectId={projectId}
-          onClickCreate={create}
-          disabled={createStatus === 'pending'}
-        />
+        <Button
+          disabled={!perms.includes('project_webhook_create')}
+          onClick={openCreateWebhookSheet}
+        >
+          {t('button.create', { name: 'Webhook' })}
+        </Button>
       }
     >
       <WebhookTable
@@ -99,7 +120,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
         onDelete={(webhookId) => deleteWebhook({ webhookId })}
         onUpdate={(webhookId, body) => updateWebhook({ webhookId, body })}
       />
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

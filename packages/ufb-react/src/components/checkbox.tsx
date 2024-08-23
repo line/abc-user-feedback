@@ -6,15 +6,16 @@ import type { Size } from "../lib/types";
 import { CHECK_ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import useTheme from "./use-theme";
 
 type CheckboxVariant = "check" | "indeterminate";
 
 const defaultVariants: {
   variant: CheckboxVariant;
-  size: Size;
+  size?: Size;
 } = {
   variant: "check",
-  size: "small",
+  size: undefined,
 };
 
 const checkboxVariants = cva("checkbox", {
@@ -67,33 +68,32 @@ const Checkbox = React.forwardRef<
   CheckboxProps
 >(
   (
-    {
-      variant = defaultVariants.variant,
-      size = defaultVariants.size,
-      children,
-      className,
-      ...props
-    },
+    { variant = defaultVariants.variant, size, children, className, ...props },
     ref,
-  ) => (
-    <CheckboxPrimitive.Root
-      ref={ref}
-      className={cn(checkboxVariants({ variant, size, className }))}
-      {...props}
-    >
-      <span className={cn(checkVariants({ size }))}>
-        <CheckboxPrimitive.Indicator
-          className={cn(checkboxIconVariants({ variant }))}
-        >
-          <Icon
-            name={variant === "check" ? "RiCheckLine" : "RiSubtractLine"}
-            size={CHECK_ICON_SIZE[size]}
-          />
-        </CheckboxPrimitive.Indicator>
-      </span>
-      {children}
-    </CheckboxPrimitive.Root>
-  ),
+  ) => {
+    const { themeSize } = useTheme();
+    return (
+      <CheckboxPrimitive.Root
+        ref={ref}
+        className={cn(
+          checkboxVariants({ variant, size: size ?? themeSize, className }),
+        )}
+        {...props}
+      >
+        <span className={cn(checkVariants({ size }))}>
+          <CheckboxPrimitive.Indicator
+            className={cn(checkboxIconVariants({ variant }))}
+          >
+            <Icon
+              name={variant === "check" ? "RiCheckLine" : "RiSubtractLine"}
+              size={CHECK_ICON_SIZE[size ?? themeSize]}
+            />
+          </CheckboxPrimitive.Indicator>
+        </span>
+        {children}
+      </CheckboxPrimitive.Root>
+    );
+  },
 );
 Checkbox.displayName = CheckboxPrimitive.Root.displayName;
 

@@ -17,7 +17,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
+import { Input, Popover, PopoverModalContent } from '@ufb/ui';
 
 import { SelectBox } from '@/shared';
 import type { ProjectInfo } from '@/entities/project';
@@ -32,13 +32,13 @@ interface IProps {
   onCreate: (user: User, role: Role) => void;
   project: ProjectInfo;
   roles: Role[];
-  disabled?: boolean;
+  isOpen: boolean;
+  close: () => void;
 }
 
-const CreateMemberPopover: React.FC<IProps> = (props) => {
-  const { members, onCreate, project, roles, disabled = false } = props;
+const CreateMemberDialog: React.FC<IProps> = (props) => {
+  const { members, onCreate, project, roles, close, isOpen } = props;
 
-  const [open, setOpen] = useState(false);
   const { t } = useTranslation();
 
   const { data: userData } = useUserSearch({
@@ -50,16 +50,7 @@ const CreateMemberPopover: React.FC<IProps> = (props) => {
   const [role, setRole] = useState<Role>();
 
   return (
-    <Popover onOpenChange={setOpen} open={open} modal>
-      <PopoverTrigger asChild>
-        <button
-          className="btn btn-primary btn-md min-w-[120px]"
-          onClick={() => setOpen(true)}
-          disabled={disabled}
-        >
-          {t('main.setting.button.register-member')}
-        </button>
-      </PopoverTrigger>
+    <Popover onOpenChange={close} open={isOpen} modal>
       <PopoverModalContent
         title={t('main.setting.dialog.register-member.title')}
         cancelButton={{ children: t('button.cancel') }}
@@ -69,7 +60,7 @@ const CreateMemberPopover: React.FC<IProps> = (props) => {
           onClick: () => {
             if (!user || !role) return;
             onCreate(user, role);
-            setOpen(false);
+            close();
           },
         }}
       >
@@ -115,4 +106,4 @@ const CreateMemberPopover: React.FC<IProps> = (props) => {
   );
 };
 
-export default CreateMemberPopover;
+export default CreateMemberDialog;

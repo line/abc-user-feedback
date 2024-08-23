@@ -7,8 +7,8 @@
   --checkbox-icon-indeterminate: var(--text-neutral-inverse);
   --checkbox-border-default: var(--border-neutral-tertiary);
   --checkbox-fg-default: var(--fg-neutral-primary);
-  --checkbox-fg-checked: var(--fg-neutral-inverse); /* todo tint */
-  --checkbox-fg-indeterminate: var(--fg-neutral-inverse); /* todo tint */
+  --checkbox-fg-checked: var(--tint, var(--fg-neutral-inverse));
+  --checkbox-fg-indeterminate: var(--tint, var(--fg-neutral-inverse));
 
   @apply inline-flex cursor-pointer items-center text-[var(--checkbox-text-default)] disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
 

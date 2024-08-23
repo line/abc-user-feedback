@@ -14,4 +14,4 @@
  * under the License.
  */
 export { default as MemberTable } from './member-table.ui';
-export { default as CreateMemberPopover } from './create-member-popover.ui';
+export { default as CreateMemberDialog } from './create-member-dialog.ui';

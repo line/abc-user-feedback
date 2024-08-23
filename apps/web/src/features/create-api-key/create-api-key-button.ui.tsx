@@ -16,6 +16,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
 import { useOAIMutation, usePermissions } from '@/shared';
@@ -48,13 +49,12 @@ const CreateApiKeyButton: React.FC<IProps> = (props) => {
   });
 
   return (
-    <button
-      className="btn btn-md btn-primary min-w-[120px]"
+    <Button
       disabled={!perms.includes('project_apikey_create') || isPending}
       onClick={() => createApiKey({ value: undefined })}
     >
       {t('main.setting.button.create-api-key')}
-    </button>
+    </Button>
   );
 };
 

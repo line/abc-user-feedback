@@ -9,6 +9,7 @@ import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import { Tag } from "./tag";
+import useTheme from "./use-theme";
 
 const SelectContext = React.createContext<
   {
@@ -18,7 +19,7 @@ const SelectContext = React.createContext<
     MultipleSelectProps
 >({
   type: "single",
-  size: "medium",
+  size: undefined,
 });
 
 type SelectProps = {
@@ -28,11 +29,12 @@ type SelectProps = {
   MultipleSelectProps;
 const Select = ({
   type = "single",
-  size = "medium",
+  size,
   values = [],
   onValuesChange,
   ...props
 }: SelectProps) => {
+  const { themeSize } = useTheme();
   const [multipleValues, setMultipleValues] = React.useState<string[]>(values);
 
   const handleMultipleValuesChange = (values: string[]) => {
@@ -41,7 +43,9 @@ const Select = ({
   };
 
   return (
-    <SelectContext.Provider value={{ type, size, values: multipleValues }}>
+    <SelectContext.Provider
+      value={{ type, size: size ?? themeSize, values: multipleValues }}
+    >
       {type === "single" ? (
         <SingleSelect {...props} />
       ) : (
@@ -120,12 +124,18 @@ const MultipleSelectValue = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Value>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
 >(({ placeholder }, ref) => {
-  const { size = "medium", values = [] } = React.useContext(SelectContext);
+  const { size, values = [] } = React.useContext(SelectContext);
+  const { themeSize } = useTheme();
   return (
     <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
       {values && values.length > 0
         ? values.map((value, index) => (
-            <Tag key={index} type="outline" size={size} className="select-tag">
+            <Tag
+              key={index}
+              type="outline"
+              size={size ?? themeSize}
+              className="select-tag"
+            >
               {value}
             </Tag>
           ))
@@ -144,7 +154,7 @@ const selectTriggerVariants = cva("select-trigger", {
     },
   },
   defaultVariants: {
-    size: "medium",
+    size: undefined,
   },
 });
 
@@ -157,17 +167,20 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
 >(({ icon, className, children, ...props }, ref) => {
-  const { size = "medium" } = React.useContext(SelectContext);
+  const { size } = React.useContext(SelectContext);
+  const { themeSize } = useTheme();
   return (
     <SelectPrimitive.Trigger
       ref={ref}
-      className={cn(selectTriggerVariants({ size, className }))}
+      className={cn(
+        selectTriggerVariants({ size: size ?? themeSize, className }),
+      )}
       {...props}
     >
-      {icon && <Icon name={icon} size={ICON_SIZE[size]} />}
+      {icon && <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} />}
       {children}
       <SelectPrimitive.Icon asChild>
-        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size]} />
+        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size ?? themeSize]} />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );

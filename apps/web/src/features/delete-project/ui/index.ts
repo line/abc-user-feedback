@@ -13,10 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ProjectInfoSetting } from './project-info-setting.ui';
-export { default as MemberSetting } from './member-setting.ui';
-export { default as RoleSetting } from './role-setting.ui';
-export { default as ApiKeySetting } from './api-key-setting.ui';
-export { default as IssueTrackerSetting } from './issue-tracker-setting.ui';
-export { default as ProjectDeletionSetting } from './project-deletion-setting.ui';
-export { default as WebhookSetting } from './webhook-setting.ui';
+export { default as DeleteProjectButton } from './delete-project-button.ui';

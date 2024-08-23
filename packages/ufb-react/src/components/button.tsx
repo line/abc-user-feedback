@@ -9,16 +9,17 @@ import { ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import { Spinner } from "./spinner";
+import useTheme from "./use-theme";
 
 const defaultVariants: {
   variant: ButtonVariant;
-  size: Size;
-  radius: Radius;
+  size?: Size;
+  radius?: Radius;
   isLoading?: boolean;
 } = {
   variant: "primary",
-  size: "small",
-  radius: "medium",
+  size: undefined,
+  radius: undefined,
   isLoading: false,
 };
 
@@ -79,8 +80,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     {
       className,
       variant = "primary",
-      size = "small",
-      radius = "medium",
+      size,
+      radius,
       disabled = false,
       iconL,
       iconR,
@@ -92,10 +93,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref,
   ) => {
     const Comp = asChild ? Slot : "button";
+    const { themeSize, themeRadius } = useTheme();
     return (
       <Comp
         className={cn(
-          buttonVariants({ variant, size, radius, isLoading, className }),
+          buttonVariants({
+            variant,
+            size: size ?? themeSize,
+            radius: radius ?? themeRadius,
+            isLoading,
+            className,
+          }),
         )}
         disabled={disabled || isLoading}
         ref={ref}
@@ -104,7 +112,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {iconL && (
           <Icon
             name={iconL}
-            size={ICON_SIZE[size]}
+            size={ICON_SIZE[size ?? themeSize]}
             aria-hidden
             className="button-leading-icon"
           />
@@ -113,14 +121,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {iconR && (
           <Icon
             name={iconR}
-            size={ICON_SIZE[size]}
+            size={ICON_SIZE[size ?? themeSize]}
             aria-hidden
             className="button-trailing-icon"
           />
         )}
         {isLoading && (
           <span className={cn(buttonLoadingVariants({ variant }))}>
-            <Spinner size={size} />
+            <Spinner size={size ?? themeSize} />
           </span>
         )}
       </Comp>

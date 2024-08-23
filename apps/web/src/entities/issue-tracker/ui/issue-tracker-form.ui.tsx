@@ -15,9 +15,9 @@
  */
 import { useFormContext } from 'react-hook-form';
 
-import { TextInput } from '@ufb/ui';
+import { Icon, InputField, InputLabel } from '@ufb/react';
 
-import { SelectBox } from '@/shared';
+import { SelectBox, TextInput } from '@/shared';
 
 import type { IssueTracker } from '../issue-tracker.type';
 
@@ -39,28 +39,23 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
       <TextInput
         label="Base URL"
         placeholder="example.com"
+        error={formState.errors.ticketDomain?.message}
         {...register('ticketDomain')}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.ticketDomain?.message}
-        isValid={!formState.errors.ticketDomain}
-        disabled={readOnly}
       />
       <TextInput
         label="Project Key"
         placeholder="PROJECT"
-        {...register('ticketKey')}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.ticketKey?.message}
-        isValid={!formState.errors.ticketKey}
+        error={formState.errors.ticketKey?.message}
         disabled={readOnly}
+        {...register('ticketKey')}
       />
-      <TextInput
-        label="Ticket URL"
-        value={`${watch('ticketDomain')}/browse/${watch('ticketKey')}-{Number}`}
-        disabled
-      />
+      <InputField>
+        <InputLabel>Issue URL</InputLabel>
+        <div className="bg-neutral-tertiary input-disabled rounded-8 flex items-center gap-2 p-4">
+          <Icon name="RiPriceTag3Fill" size={16} />
+          {`${watch('ticketDomain')}/browse/${watch('ticketKey')}-{Number}`}
+        </div>
+      </InputField>
     </div>
   );
 };

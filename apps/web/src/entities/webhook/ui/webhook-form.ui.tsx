@@ -16,9 +16,18 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/ui';
+import {
+  Button,
+  TextInput as Input,
+  InputCaption,
+  InputField,
+  InputLabel,
+  RadioCard,
+  RadioCardGroup,
+  RadioGroup,
+} from '@ufb/react';
 
-import { DescriptionTooltip, SelectBox } from '@/shared';
+import { DescriptionTooltip, SelectBox, TextInput } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import type {
@@ -97,42 +106,64 @@ const WebhookForm: React.FC<IProps> = (props) => {
         label="Name"
         placeholder={t('placeholder', { name: 'Name' })}
         {...register('name')}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        isValid={!formState.errors.name}
-        hint={formState.errors.name?.message}
+        error={formState.errors.name?.message}
         required
       />
       <TextInput
         label="URL"
         placeholder={t('placeholder', { name: 'URL' })}
         {...register('url')}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        isValid={!formState.errors.url}
-        hint={formState.errors.url?.message}
+        error={formState.errors.url?.message}
         required
       />
-      <TextInput
-        label="Token"
-        placeholder={t('placeholder', { name: 'Webhook Token' })}
-        {...register('token')}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        isValid={!formState.errors.token}
-        hint={formState.errors.token?.message}
-        rightChildren={
-          <button
-            className="btn btn-primary btn-xs btn-rounded min-w-[64px]"
+      <InputField>
+        <InputLabel>Token</InputLabel>
+        <div className="flex gap-2">
+          <Input
+            placeholder={t('placeholder', { name: 'Webhook Token' })}
+            {...register('token')}
+            hasError={!!formState.errors.token?.message}
+          />
+          <Button
             type="button"
             onClick={() => setValue('token', window.crypto.randomUUID())}
+            className="flex-shrink-0"
           >
             {t('button.generate')}
-          </button>
-        }
-      />
+          </Button>
+        </div>
+        {formState.errors.token?.message && (
+          <InputCaption type="error">
+            {formState.errors.token.message}
+          </InputCaption>
+        )}
+      </InputField>
       <div className="flex flex-col gap-2">
         <p className="input-label">Event</p>
+        <RadioCardGroup orientation="vertical">
+          <RadioCard
+            value="item-1"
+            id="r1"
+            icon="RiFlashlightFill"
+            title="Title"
+            description="Description"
+          />
+          <RadioCard
+            value="item-2"
+            id="r2"
+            icon="RiFlashlightFill"
+            title="Title"
+            description="Description"
+          />
+          <RadioCard
+            value="item-3"
+            id="r3"
+            icon="RiFlashlightFill"
+            title="Title"
+            description="Description"
+          />
+        </RadioCardGroup>
+        {/* 
         <div className="flex h-12 items-center">
           <label className="flex flex-1 items-center">
             <input
@@ -221,7 +252,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
               description={t('tooltip.webhook-issue-creation')}
             />
           </label>
-        </div>
+        </div> */}
       </div>
     </div>
   );

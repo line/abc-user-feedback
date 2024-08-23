@@ -28,6 +28,10 @@
   .card {
     @apply border-fill-tertiary bg-tertiary rounded border p-6;
   }
+
+  .setting-action-buttons > button {
+    @apply min-w-[120px];
+  }
 }
 
 @keyframes table-loading {

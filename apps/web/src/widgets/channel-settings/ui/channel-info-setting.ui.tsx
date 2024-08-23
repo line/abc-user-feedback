@@ -19,13 +19,17 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { useOAIMutation, useOAIQuery, usePermissions } from '@/shared';
+import {
+  SettingTemplate,
+  useOAIMutation,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {
   projectId: number;
@@ -76,21 +80,25 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const onSubmit = (values: ChannelInfo) => updateChannel(values);
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('channel-setting-menu.channel-info')}
-      actionBtn={{
-        children: t('button.save'),
-        onClick: methods.handleSubmit(onSubmit),
-        disabled:
-          !perms.includes('channel_update') ||
-          !methods.formState.isDirty ||
-          isPending,
-      }}
+      action={
+        <Button
+          onClick={methods.handleSubmit(onSubmit)}
+          disabled={
+            !perms.includes('channel_update') ||
+            !methods.formState.isDirty ||
+            isPending
+          }
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
       <FormProvider {...methods}>
         <ChannelInfoForm type="update" />
       </FormProvider>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

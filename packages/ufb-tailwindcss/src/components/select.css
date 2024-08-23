@@ -3,7 +3,7 @@
   --select-text-pressed: var(--text-neutral-primary);
   --select-text-filled: var(--text-neutral-primary);
   --select-border-default: var(--border-neutral-tertiary);
-  --select-border-pressed: var(--border-neutral-primary); /* todo tint */
+  --select-border-pressed: var(--tint, var(--border-neutral-primary));
   --select-fg-default: var(--fg-neutral-primary);
   --select-fg-pressed: var(--fg-neutral-tertiary);
 
@@ -18,7 +18,7 @@
   --select-text-pressed: var(--text-neutral-primary);
   --select-text-filled: var(--text-neutral-primary);
   --select-border-default: var(--border-neutral-tertiary);
-  --select-border-pressed: var(--border-neutral-primary); /* todo tint */
+  --select-border-pressed: var(--tint, var(--border-neutral-primary));
   --select-fg-default: var(--fg-neutral-primary);
   --select-fg-pressed: var(--fg-neutral-tertiary);
 

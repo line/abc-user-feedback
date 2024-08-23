@@ -2,6 +2,7 @@ import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 
+import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Dialog, DialogContent } from "./dialog";
 import { Icon } from "./icon";
@@ -99,24 +100,26 @@ CommandSeparator.displayName = CommandPrimitive.Separator.displayName;
 
 const CommandItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
+    inset?: boolean;
+    iconL?: IconNameType;
+    iconR?: IconNameType;
+    caption?: React.ReactNode;
+  }
+>(({ inset, iconL, iconR, caption, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
-    className={cn("command-item", className)}
+    className={cn("command-item", inset && "command-item-inset", className)}
     {...props}
-  />
+  >
+    {iconL && <Icon name={iconL} size={16} />}
+    <div className="command-item-text">{children}</div>
+    {caption && <span className="command-caption">{caption}</span>}
+    {iconR && <Icon name={iconR} size={16} />}
+  </CommandPrimitive.Item>
 ));
 
 CommandItem.displayName = CommandPrimitive.Item.displayName;
-
-const CommandShortcut = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLSpanElement>) => {
-  return <span className={cn("command-shortcut", className)} {...props} />;
-};
-CommandShortcut.displayName = "CommandShortcut";
 
 export {
   Command,
@@ -126,6 +129,5 @@ export {
   CommandEmpty,
   CommandGroup,
   CommandItem,
-  CommandShortcut,
   CommandSeparator,
 };

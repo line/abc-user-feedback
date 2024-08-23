@@ -20,10 +20,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
 import {
   HelpCardDocs,
+  SettingTemplate,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -31,8 +33,6 @@ import {
 import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelImageConfig } from '@/entities/channel';
 import { channelImageConfigSchema, ImageConfigForm } from '@/entities/channel';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {
   channelId: number;
@@ -138,17 +138,21 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
   };
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('channel-setting-menu.image-mgmt')}
-      actionBtn={{
-        children: t('button.save'),
-        disabled:
-          !perms.includes('channel_image_update') ||
-          !methods.formState.isDirty ||
-          isPending,
-        onClick: methods.handleSubmit(onSubmit),
-        form: 'form',
-      }}
+      action={
+        <Button
+          disabled={
+            !perms.includes('channel_image_update') ||
+            !methods.formState.isDirty ||
+            isPending
+          }
+          onClick={methods.handleSubmit(onSubmit)}
+          form={'form'}
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
       <div className="flex items-center rounded border px-6 py-2">
         <p className="flex-1 whitespace-pre-line py-5">
@@ -178,7 +182,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
       <FormProvider {...methods}>
         <ImageConfigForm />
       </FormProvider>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

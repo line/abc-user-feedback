@@ -15,14 +15,16 @@
  */
 import { useState } from 'react';
 import type { GetServerSideProps } from 'next';
-import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-
-import { Menu, MenuItem } from '@ufb/react';
 
 import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectGuard } from '@/entities/project';
+import {
+  ChannelInfoSetting,
+  FieldSetting,
+  ImageConfigSetting,
+} from '@/widgets/channel-settings';
 import { Layout } from '@/widgets/layout';
 import {
   ApiKeySetting,
@@ -30,56 +32,62 @@ import {
   MemberSetting,
   ProjectInfoSetting,
   WebhookSetting,
-} from '@/widgets/setting-menu';
-
-type MenuType = 'project' | 'member' | 'api-key' | 'issue-tracker' | 'webhook';
+} from '@/widgets/project-settings';
+import { SettingsMenu } from '@/widgets/settings-menu';
+import type { SettingMenu } from '@/widgets/settings-menu';
 
 interface IProps {
   projectId: number;
 }
 
 const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
-  const { t } = useTranslation();
-  const [menuItemValue, setMenuItemValue] = useState<MenuType>('project');
+  const [currentSettingMenu, setCurrentSettingMenu] =
+    useState<SettingMenu>('project');
+  const [currentChannelId, setCurrentChannelId] = useState<number>();
 
   return (
     <div className="flex h-full gap-8">
       <div className="w-[280px] flex-shrink-0 px-3 py-6">
-        <Menu
-          type="single"
-          align="vertical"
-          className="w-full"
-          value={menuItemValue}
-          onValueChange={(value: MenuType) => setMenuItemValue(value)}
-        >
-          <MenuItem value="project" iconL="RiInformation2Fill">
-            {t('project-setting-menu.project-info')}
-          </MenuItem>
-          <MenuItem value="member" iconL="RiUser2Fill">
-            {t('project-setting-menu.member-mgmt')}
-          </MenuItem>
-          <MenuItem value="api-key" iconL="RiShieldKeyholeFill">
-            {t('project-setting-menu.api-key-mgmt')}
-          </MenuItem>
-          <MenuItem value="issue-tracker" iconL="RiSeoFill">
-            {t('project-setting-menu.issue-tracker-mgmt')}
-          </MenuItem>
-          <MenuItem value="webhook" iconL="RiWebhookFill">
-            {t('project-setting-menu.webhook-integration')}
-          </MenuItem>
-        </Menu>
+        <SettingsMenu
+          onChangeSettingMenuValue={(settingMenu, channelId) => {
+            setCurrentSettingMenu(settingMenu);
+            setCurrentChannelId(channelId);
+          }}
+          projectId={projectId}
+          settingMenuValue={currentSettingMenu}
+          channelId={currentChannelId}
+        />
       </div>
-      <div className="border-neutral-tertiary h-[calc(100vh-300px)] w-full rounded border p-6">
-        {menuItemValue === 'project' && (
+      <div className="border-neutral-tertiary h-[calc(100vh-300px)] w-full overflow-auto rounded border p-6">
+        {currentSettingMenu === 'project' && (
           <ProjectInfoSetting projectId={projectId} />
         )}
-        {menuItemValue === 'member' && <MemberSetting projectId={projectId} />}
-        {menuItemValue === 'api-key' && <ApiKeySetting projectId={projectId} />}
-        {menuItemValue === 'issue-tracker' && (
+        {currentSettingMenu === 'member' && (
+          <MemberSetting projectId={projectId} />
+        )}
+        {currentSettingMenu === 'api-key' && (
+          <ApiKeySetting projectId={projectId} />
+        )}
+        {currentSettingMenu === 'issue-tracker' && (
           <IssueTrackerSetting projectId={projectId} />
         )}
-        {menuItemValue === 'webhook' && (
+        {currentSettingMenu === 'webhook' && (
           <WebhookSetting projectId={projectId} />
+        )}
+        {currentChannelId && currentSettingMenu === 'channel-info' && (
+          <ChannelInfoSetting
+            projectId={projectId}
+            channelId={currentChannelId}
+          />
+        )}
+        {currentChannelId && currentSettingMenu === 'field-mgmt' && (
+          <FieldSetting projectId={projectId} channelId={currentChannelId} />
+        )}
+        {currentChannelId && currentSettingMenu === 'image-mgmt' && (
+          <ImageConfigSetting
+            projectId={projectId}
+            channelId={currentChannelId}
+          />
         )}
       </div>
     </div>

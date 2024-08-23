@@ -18,29 +18,26 @@ import { Button } from '@ufb/react';
 import { cn } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
-  title: string | React.ReactNode;
-  actionBtn?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  title: React.ReactNode;
   action?: React.ReactNode;
+  actionBtn?: React.ButtonHTMLAttributes<HTMLButtonElement>;
 }
 
 const SettingMenuTemplate: React.FC<IProps> = (props) => {
   const { title, actionBtn, children, action } = props;
 
   return (
-    <div className="relative flex flex-col gap-6">
-      <div className="flex h-10 items-center justify-between">
-        {typeof title === 'string' ?
-          <h4 className="text-title-h4">{title}</h4>
-        : title}
+    <div className="relative flex flex-col gap-4">
+      <div className="flex min-h-10 items-center justify-between">
+        <h4 className="text-title-h4 flex-1">{title}</h4>
         {actionBtn && (
           <Button
             {...actionBtn}
             className={cn(['min-w-[120px]', actionBtn.className])}
           />
         )}
-        {action}
+        <div className="setting-action-buttons flex">{action}</div>
       </div>
-      <hr className="border-fill-tertiary" />
       {children}
     </div>
   );

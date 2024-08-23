@@ -15,18 +15,17 @@ module.exports = {
   fill: {
     ...colors,
     neutral: {
-      primary: "var(--text-neutral-primary)",
-      secondary: "var(--text-neutral-secondary)",
-      tertiary: "var(--text-neutral-tertiary)",
-      inverse: "var(--text-neutral-inverse)",
-      disabled: "var(--text-neutral-disabled)",
-      static: "var(--text-neutral-static)",
+      primary: "var(--icon-neutral-primary)",
+      secondary: "var(--icon-neutral-secondary)",
+      tertiary: "var(--icon-neutral-tertiary)",
+      inverse: "var(--icon-neutral-inverse)",
+      static: "var(--icon-neutral-static)",
     },
     tint: {
-      red: "var(--text-tint-red)",
-      orange: "var(--text-tint-orange)",
-      green: "var(--text-tint-green)",
-      blue: "var(--text-tint-blue)",
+      red: "var(--icon-tint-red)",
+      orange: "var(--icon-tint-orange)",
+      green: "var(--icon-tint-green)",
+      blue: "var(--icon-tint-blue)",
     },
   },
   textColor: {
@@ -36,7 +35,6 @@ module.exports = {
       secondary: "var(--text-neutral-secondary)",
       tertiary: "var(--text-neutral-tertiary)",
       inverse: "var(--text-neutral-inverse)",
-      disabled: "var(--text-neutral-disabled)",
       static: "var(--text-neutral-static)",
     },
     tint: {
@@ -54,7 +52,6 @@ module.exports = {
       tertiary: "var(--fg-neutral-tertiary)",
       inverse: "var(--fg-neutral-inverse)",
       disabled: "var(--fg-neutral-disabled)",
-      hover: "var(--fg-neutral-hover)",
       transparent: "var(--base-transparent)",
     },
     primary: "var(--bg-primary)",
@@ -65,22 +62,18 @@ module.exports = {
       red: {
         bold: "var(--fg-tint-red-bold)",
         subtle: "var(--fg-tint-red-subtle)",
-        hover: "var(--fg-tint-red-hover)",
       },
       orange: {
         bold: "var(--fg-tint-orange-bold)",
         subtle: "var(--fg-tint-orange-subtle)",
-        hover: "var(--fg-tint-orange-hover)",
       },
       green: {
         bold: "var(--fg-tint-green-bold)",
         subtle: "var(--fg-tint-green-subtle)",
-        hover: "var(--fg-tint-green-hover)",
       },
       blue: {
         bold: "var(--fg-tint-blue-bold)",
         subtle: "var(--fg-tint-blue-subtle)",
-        hover: "var(--fg-tint-blue-hover)",
       },
     },
   },
@@ -89,7 +82,6 @@ module.exports = {
       primary: "var(--border-neutral-primary)",
       secondary: "var(--border-neutral-secondary)",
       tertiary: "var(--border-neutral-tertiary)",
-      disabled: "var(--border-neutral-disabled)",
       transparent: "var(--border-neutral-transparent)",
     },
     tint: {
