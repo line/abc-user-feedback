@@ -19,6 +19,14 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 import { createConnection as connect } from './database-utils';
 
+process.env.NODE_ENV = 'test';
+process.env.MYSQL_PRIMARY_URL =
+  'mysql://root:userfeedback@localhost:13307/integration';
+process.env.OPENSEARCH_USE = 'true';
+process.env.OPENSEARCH_NODE = 'http://127.0.0.1:9200';
+process.env.OPENSEARCH_USERNAME = '';
+process.env.OPENSEARCH_PASSWORD = '';
+
 async function createTestDatabase() {
   const connection = await connect();
 

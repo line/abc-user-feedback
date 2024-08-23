@@ -10,6 +10,9 @@
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
   },
+  "setupFilesAfterEnv": [
+    "<rootDir>/../integration-test/jest-integration.setup.ts"
+  ],
   "globalSetup": "<rootDir>/../integration-test/global.setup.ts",
   "globalTeardown": "<rootDir>/../integration-test/global.teardown.ts"
 }
