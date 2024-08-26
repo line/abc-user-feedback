@@ -4,6 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+catalogs:
+  default:
+    eslint:
+      specifier: ^9.7.0
+      version: 9.8.0
+    prettier:
+      specifier: ^3.3.3
+      version: 3.3.3
+    typescript:
+      specifier: ^5.5.3
+      version: 5.5.4
+
 importers:
 
   .:
@@ -312,7 +324,7 @@ importers:
         version: link:../../tooling/typescript
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.7.14(@swc/helpers@0.5.12))(@types/node@22.1.0)(typescript@5.5.4)
+        version: 10.9.2(@swc/core@1.7.18(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4)
 
   apps/e2e:
     devDependencies:
@@ -19480,7 +19492,6 @@ snapshots:
       yn: 3.1.1
     optionalDependencies:
       '@swc/core': 1.7.18(@swc/helpers@0.5.12)
-    optional: true
 
   ts-toolbelt@9.6.0: {}
 
