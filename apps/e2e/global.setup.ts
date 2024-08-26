@@ -15,6 +15,7 @@ setup("tenant create and authenticate", async ({ page }) => {
 
   await expect(page.getByRole("banner")).toHaveText(/TestTenant/, {
     timeout: 500000,
+    useInnerText: true,
   });
   await page.getByPlaceholder("ID").click();
   await page.getByPlaceholder("ID").fill("user@feedback.com");
