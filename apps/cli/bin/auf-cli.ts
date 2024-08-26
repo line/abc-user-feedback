@@ -48,7 +48,7 @@ program
   .description(
     'Start the appropriate Docker Compose file based on architecture to setup the ABC UserFeedback infrastructure.',
   )
-  .action(async () => {
+  .action(() => {
     const architecture = getArchitectureType();
     console.log(`Your system architecture is detected as: ${architecture}`);
 
