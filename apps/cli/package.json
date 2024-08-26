@@ -1,8 +1,8 @@
 {
-  "name": "ufb-cli",
-  "version": "1.0.22",
+  "name": "auf-cli",
+  "version": "1.0.0",
   "bin": {
-    "ufb-cli": "./dist/ufb-cli.js"
+    "auf-cli": "./dist/auf-cli.js"
   },
   "scripts": {
     "build": "tsc",
@@ -10,8 +10,8 @@
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --write --list-different .",
     "lint": "eslint",
-    "start": "node dist/ufb-cli.js",
-    "start:dev": "ts-node bin/ufb-cli.ts"
+    "start": "node dist/auf-cli.js",
+    "start:dev": "ts-node bin/auf-cli.ts"
   },
   "dependencies": {
     "@types/prompts": "^2.4.9",

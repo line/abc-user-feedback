@@ -21,7 +21,7 @@ The following command sets up the infrastructure(MySQL, SMTP, OpenSearch) based 
 It also creates a `config.toml` file where you can configure environment variables to start the servers.
 
 ```sh
-npx ufb-cli init
+npx auf-cli init
 ```
 
 ## Start Servers
@@ -29,7 +29,7 @@ npx ufb-cli init
 Based on `config.toml` file created during the initialization phase, this command generates a Docker Compose file. Using this Docker Compose file, the following command starts the API and web servers.
 
 ```sh
-npx ufb-cli start
+npx auf-cli start
 ```
 
 ## Stop Servers
@@ -37,5 +37,5 @@ npx ufb-cli start
 The following command stops the API and web servers.
 
 ```sh
-npx ufb-cli stop
+npx auf-cli stop
 ```

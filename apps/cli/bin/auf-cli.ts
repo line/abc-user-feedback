@@ -24,7 +24,7 @@ import { load } from 'js-toml';
 const program = new Command();
 
 program.description(
-  'UserFeedback CLI that helps to run web frontend and server easily.',
+  'ABC UserFeedback CLI that helps to run web frontend and server easily.',
 );
 
 function getArchitectureType() {
@@ -46,7 +46,7 @@ function getArchitectureType() {
 program
   .command('init')
   .description(
-    'Start the appropriate Docker Compose file based on architecture to setup the UserFeedback infrastructure.',
+    'Start the appropriate Docker Compose file based on architecture to setup the ABC UserFeedback infrastructure.',
   )
   .action(async () => {
     const architecture = getArchitectureType();
@@ -59,13 +59,13 @@ program
 
     const composeFilePath = path.join(__dirname + '/../', composeFile);
     console.log(
-      `Terminates existing Docker Compose with ufb-cli project name...`,
+      `Terminates existing Docker Compose with auf-cli project name...`,
     );
-    execSync(`docker compose -p ufb-cli down`);
+    execSync(`docker compose -p auf-cli down`);
 
     console.log(`Running Docker Compose with ${composeFilePath.toString()}...`);
     execSync(
-      `docker compose -p ufb-cli -f ${composeFilePath.toString()} up  -d`,
+      `docker compose -p auf-cli -f ${composeFilePath.toString()} up  -d`,
       {
         stdio: 'inherit',
       },
@@ -82,12 +82,12 @@ program
 program
   .command('start')
   .description(
-    'Pull UserFeedback Docker image and run container with environment variables',
+    'Pull ABC UserFeedback Docker image and run container with environment variables',
   )
   .action(() => {
     if (fs.existsSync(path.join(process.cwd(), 'config.toml')) === false) {
       console.error(
-        'config.toml file is missing. Please run "npx ufb-cli init" first.',
+        'config.toml file is missing. Please run "npx auf-cli init" first.',
       );
       return;
     }
@@ -179,11 +179,15 @@ program
     execSync(`docker pull ${apiDockerImage}`);
     execSync(`docker pull ${webDockerImage}`);
 
-    const dockerComposeCommand = `docker compose -p ufb-cli -f ${dockerComposePath} up -d`;
+    const dockerComposeCommand = `docker compose -p auf-cli -f ${dockerComposePath} up -d`;
     console.log(`Running Docker Compose with command: ${dockerComposeCommand}`);
     execSync(dockerComposeCommand);
 
-    console.log('\x1b[32m', '\nStarted UserFeedback services.\n', '\x1b[0m');
+    console.log(
+      '\x1b[32m',
+      '\nStarted ABC UserFeedback services.\n',
+      '\x1b[0m',
+    );
     const serviceInfos = {
       'API URL': 'http://localhost:4000',
       'WEB URL': 'http://localhost:3000',
@@ -202,7 +206,7 @@ program
   .command('stop')
   .description('Stop the running Docker containers for app and web services')
   .action(() => {
-    const dockerComposeCommand = `docker compose -p ufb-cli down`;
+    const dockerComposeCommand = `docker compose -p auf-cli down`;
     console.log(
       `Stopping Docker Compose with command: ${dockerComposeCommand}`,
     );
