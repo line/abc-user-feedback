@@ -4,18 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-catalogs:
-  default:
-    eslint:
-      specifier: ^9.7.0
-      version: 9.8.0
-    prettier:
-      specifier: ^3.3.3
-      version: 3.3.3
-    typescript:
-      specifier: ^5.5.3
-      version: 5.5.4
-
 importers:
 
   .:
@@ -312,9 +300,6 @@ importers:
       js-toml:
         specifier: ^1.0.0
         version: 1.0.0
-      prompts:
-        specifier: ^2.4.2
-        version: 2.4.2
     devDependencies:
       '@ufb/eslint-config':
         specifier: workspace:*

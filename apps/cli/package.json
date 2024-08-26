@@ -1,6 +1,6 @@
 {
   "name": "ufb-cli",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "bin": {
     "ufb-cli": "./dist/ufb-cli.js"
   },
@@ -17,8 +17,7 @@
     "@types/prompts": "^2.4.9",
     "child_process": "^1.0.2",
     "commander": "^12.1.0",
-    "js-toml": "^1.0.0",
-    "prompts": "^2.4.2"
+    "js-toml": "^1.0.0"
   },
   "devDependencies": {
     "@ufb/eslint-config": "workspace:*",

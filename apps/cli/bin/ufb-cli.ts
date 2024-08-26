@@ -16,11 +16,10 @@
  */
 import { execSync } from 'child_process';
 import * as fs from 'fs';
+import os from 'os';
 import * as path from 'path';
 import { Command } from 'commander';
 import { load } from 'js-toml';
-import type { Answers } from 'prompts';
-import prompts from 'prompts';
 
 const program = new Command();
 
@@ -28,25 +27,33 @@ program.description(
   'UserFeedback CLI that helps to run web frontend and server easily.',
 );
 
+function getArchitectureType() {
+  const arch = os.arch();
+
+  switch (arch) {
+    case 'arm':
+    case 'arm64':
+      return 'arm';
+    case 'ia32':
+    case 'x32':
+    case 'x64':
+      return 'amd';
+    default:
+      return 'arm';
+  }
+}
+
 program
   .command('init')
   .description(
     'Start the appropriate Docker Compose file based on architecture to setup the UserFeedback infrastructure.',
   )
   .action(async () => {
-    const architecture: Answers<string> = await prompts({
-      type: 'select',
-      name: 'value',
-      message: 'Select your architecture:',
-      choices: [
-        { title: 'arm', value: 'arm' },
-        { title: 'amd', value: 'amd' },
-      ],
-      initial: 0,
-    });
+    const architecture = getArchitectureType();
+    console.log(`Your system architecture is detected as: ${architecture}`);
 
     const composeFile =
-      architecture.value === 'amd' ?
+      architecture === 'amd' ?
         'docker-compose.infra-amd64.yml'
       : 'docker-compose.infra-arm64.yml';
 
@@ -78,6 +85,13 @@ program
     'Pull UserFeedback Docker image and run container with environment variables',
   )
   .action(() => {
+    if (fs.existsSync(path.join(process.cwd(), 'config.toml')) === false) {
+      console.error(
+        'config.toml file is missing. Please run "npx ufb-cli init" first.',
+      );
+      return;
+    }
+
     const destinationConfigPath = path.join(process.cwd(), 'config.toml');
 
     const templatePath = path.join(
@@ -168,6 +182,20 @@ program
     const dockerComposeCommand = `docker compose -p ufb-cli -f ${dockerComposePath} up -d`;
     console.log(`Running Docker Compose with command: ${dockerComposeCommand}`);
     execSync(dockerComposeCommand);
+
+    console.log('\x1b[32m', '\nStarted UserFeedback services.\n', '\x1b[0m');
+    const serviceInfos = {
+      'API URL': 'http://localhost:4000',
+      'WEB URL': 'http://localhost:3000',
+      'DB URL': 'http://localhost:13306',
+      'OPENSEARCH URL': 'http://localhost:9200',
+      'OPENSEARCH ADMIN URL': 'http://localhost:5601',
+      JWT_SECRET: tomlConfig.api.JWT_SECRET,
+    };
+
+    for (const [key, value] of Object.entries(serviceInfos)) {
+      console.log(`${key.padStart(20)}: ${value}`);
+    }
   });
 
 program

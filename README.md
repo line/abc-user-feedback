@@ -70,11 +70,11 @@ You can configure the frontend for session password, maximum time span to query,
 
 You can configure the backend for MySQL, SMTP for email verification, OpenSearch-powered improved search experience, etc.
 
-## Setup Dev Environment using Command Line Tool without any dependency
+## Setup Dev Environment using Command Line Tool without Dependencies
 
-ABC User Feedback supports command line tool that easily run frontend and backend.
+ABC User Feedback supports a command line tool that easily runs both the frontend and backend.
 
-With this command line tool, you can initialize infrastructure and run app powered by prepared docker image. As the cli is executable with `npx`, only `npm` environment is necessary and any other dependency is not necessary.
+With this command line tool, you can initialize the infrastructure and run the app powered by a pre-configured Docker image. Since the CLI is executable with `npx`, only an `npm` environment is required, and no other dependencies are necessary.
 
 ```bash
 npx ufb-cli init # initialize infrastructure
