@@ -79,20 +79,16 @@ type AlertTextContainerProps = React.HTMLAttributes<HTMLHeadingElement>;
 const AlertTextContainer = React.forwardRef<
   HTMLParagraphElement,
   AlertTextContainerProps
->(({ children, className, ...props }, ref) => (
-  <div ref={ref} className={cn("alert-text-container", className)} {...props}>
-    {children}
-  </div>
+>(({ className, ...props }, ref) => (
+  <div ref={ref} className={cn("alert-text-container", className)} {...props} />
 ));
 AlertTextContainer.displayName = "AlertTextContainer";
 
 type AlertTitleProps = React.HTMLAttributes<HTMLHeadingElement>;
 
 const AlertTitle = React.forwardRef<HTMLParagraphElement, AlertTitleProps>(
-  ({ children, className, ...props }, ref) => (
-    <h5 ref={ref} className={cn("alert-title", className)} {...props}>
-      {children}
-    </h5>
+  ({ className, ...props }, ref) => (
+    <h5 ref={ref} className={cn("alert-title", className)} {...props} />
   ),
 );
 AlertTitle.displayName = "AlertTitle";
@@ -102,10 +98,8 @@ type AlertDescriptionProps = React.HTMLAttributes<HTMLHeadingElement>;
 const AlertDescription = React.forwardRef<
   HTMLParagraphElement,
   AlertDescriptionProps
->(({ children, className, ...props }, ref) => (
-  <p className={cn("alert-description", className)} {...props} ref={ref}>
-    {children}
-  </p>
+>(({ className, ...props }, ref) => (
+  <p className={cn("alert-description", className)} {...props} ref={ref} />
 ));
 AlertDescription.displayName = "AlertDescription";
 

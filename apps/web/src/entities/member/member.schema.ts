@@ -13,15 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { z } from 'zod';
 
-export type SettingMenu =
-  | 'project'
-  | 'member'
-  | 'api-key'
-  | 'issue-tracker'
-  | 'webhook'
-  | 'channel-info'
-  | 'field-mgmt'
-  | 'image-mgmt';
+import { roleSchema } from '../role';
+import { userSchema } from '../user/user.schema';
 
-export type SubSettingMenu = 'role';
+export const memberSchema = z.object({
+  id: z.number(),
+  user: userSchema.pick({
+    id: true,
+    email: true,
+    name: true,
+    department: true,
+  }),
+  role: roleSchema,
+  createdAt: z.string(),
+});
+export const memberInfoSchema = memberSchema.partial({
+  id: true,
+  createdAt: true,
+});

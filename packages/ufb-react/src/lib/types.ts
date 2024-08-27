@@ -8,3 +8,4 @@ export type ButtonVariant =
   | "ghost"
   | "outline";
 export type ButtonState = "default" | "loading" | "disabled";
+export type CaptionType = "default" | "success" | "info" | "error";

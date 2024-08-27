@@ -13,15 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-export type SettingMenu =
-  | 'project'
-  | 'member'
-  | 'api-key'
-  | 'issue-tracker'
-  | 'webhook'
-  | 'channel-info'
-  | 'field-mgmt'
-  | 'image-mgmt';
-
-export type SubSettingMenu = 'role';
+export { default as TextInput } from './text-input.ui';
+export { default as SelectInput } from './select-input.ui';

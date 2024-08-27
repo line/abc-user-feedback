@@ -471,12 +471,14 @@
       "name": {
         "create": "{{name}} 생성",
         "delete": "{{name}} 삭제",
-        "register": "{{name}} 등록"
+        "register": "{{name}} 등록",
+        "add": "{{name}} 추가"
       },
       "create": "생성하기",
       "delete": "삭제",
       "register": "등록하기",
-      "save": "저장"
+      "save": "저장",
+      "cancel": "취소"
     },
     "project-setting-menu": {
       "project-info": "Project 정보",
@@ -495,26 +497,29 @@
     },
     "dialog": {
       "delete-project": {
-        "title": "Project 삭제",
-        "description": "Project를 삭제하면 Issue/Feedback 데이터가 모두 삭제됩니다.\n삭제를 계속 진행하려면 아래 텍스트를 입력해주세요."
+        "title": "삭제 하시겠습니까?",
+        "description": "삭제를 하면 관련된 정보가 모두 사라집니다."
       }
-    },
-    "toast": {
-      "sign-in": "로그인 성공",
-      "register": "등록 완료",
-      "delete": "삭제 완료",
-      "save": "저장 완료",
-      "invite": "초대 완료",
-      "active": "활성화",
-      "inactive": "비활성화",
-      "add": "추가 완료",
-      "copy": "복사 완료"
     },
     "text": {
       "no-data": {
         "api-key": "생성된 API Key가 없습니다.",
-        "member": "등록된 Member가 없습니다."
+        "member": "등록된 Member가 없습니다.",
+        "channel": "생성된 Channel이 없습니다."
+      },
+      "create-project": "Project 생성",
+      "create-channel": "Channel 생성",
+      "name": {
+        "detail": "{{name}} 상세",
+        "add": "{{name}} 추가",
+        "register": "{{name}} 등록"
       }
+    },
+    "placeholder": {
+      "select": "선택해주세요."
+    },
+    "toast": {
+      "success": "성공적으로 처리되었습니다."
     }
   }
 }

@@ -17,8 +17,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   client,
@@ -28,13 +27,15 @@ import {
   usePermissions,
 } from '@/shared';
 import { CreateMemberDialog, MemberTable } from '@/entities/member';
+import type { SubSettingMenu } from '@/widgets/settings-menu';
 
 interface IProps {
   projectId: number;
+  onClickChangeSubMenu: (menu: SubSettingMenu) => void;
 }
 
 const MemberSetting: React.FC<IProps> = (props) => {
-  const { projectId } = props;
+  const { projectId, onClickChangeSubMenu } = props;
 
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
@@ -57,10 +58,10 @@ const MemberSetting: React.FC<IProps> = (props) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.save'), iconName: 'MailFill' });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
@@ -75,7 +76,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     variables: { projectId },
   });
 
-  const { mutate: deleteMember } = useMutation({
+  const { mutateAsync: deleteMember } = useMutation({
     mutationFn: (input: { memberId: number }) =>
       client.delete({
         path: '/api/admin/projects/{projectId}/members/{memberId}',
@@ -83,13 +84,13 @@ const MemberSetting: React.FC<IProps> = (props) => {
       }),
     async onSuccess() {
       await refetch();
-      toast.negative({ title: t('toast.delete') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
-  const { mutate: updateMember } = useMutation({
+  const { mutateAsync: updateMember } = useMutation({
     mutationFn: (input: { memberId: number; roleId: number }) =>
       client.put({
         path: '/api/admin/projects/{projectId}/members/{memberId}',
@@ -101,10 +102,10 @@ const MemberSetting: React.FC<IProps> = (props) => {
       await queryClient.invalidateQueries({
         queryKey: ['/api/admin/users/{userId}/roles'],
       });
-      toast.positive({ title: t('toast.save') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
 
@@ -128,22 +129,34 @@ const MemberSetting: React.FC<IProps> = (props) => {
     <SettingTemplate
       title={t('project-setting-menu.member-mgmt')}
       action={
-        <Button
-          disabled={!perms.includes('project_member_create')}
-          onClick={openCreateMemberDialog}
-        >
-          {t('v2.button.name.register', { name: 'Member' })}
-        </Button>
+        <>
+          <Button
+            iconL="RiExchange2Fill"
+            variant="outline"
+            onClick={() => onClickChangeSubMenu('role')}
+          >
+            {t('project-setting-menu.role-mgmt')}
+          </Button>
+          <Button
+            disabled={!perms.includes('project_member_create')}
+            onClick={openCreateMemberDialog}
+          >
+            {t('v2.button.name.register', { name: 'Member' })}
+          </Button>
+        </>
       }
     >
       <MemberTable
         isLoading={isPending}
         members={memberData?.members ?? []}
         roles={rolesData?.roles ?? []}
-        onDeleteMember={(memberId) => deleteMember({ memberId })}
-        onUpdateMember={({ id, role }) =>
-          updateMember({ memberId: id, roleId: role.id })
-        }
+        onDeleteMember={async (memberId) => {
+          await deleteMember({ memberId });
+        }}
+        onUpdateMember={async ({ id, role }) => {
+          await updateMember({ memberId: id, roleId: role.id });
+        }}
+        project={projectData}
         createButton={
           <Button
             className="min-w-[120px]"

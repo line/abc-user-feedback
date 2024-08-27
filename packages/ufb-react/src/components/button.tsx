@@ -15,12 +15,12 @@ const defaultVariants: {
   variant: ButtonVariant;
   size?: Size;
   radius?: Radius;
-  isLoading?: boolean;
+  loading?: boolean;
 } = {
   variant: "primary",
   size: undefined,
   radius: undefined,
-  isLoading: false,
+  loading: false,
 };
 
 const buttonVariants = cva("button", {
@@ -42,7 +42,7 @@ const buttonVariants = cva("button", {
       medium: "button-radius-medium",
       large: "button-radius-large",
     },
-    isLoading: {
+    loading: {
       true: "!text-transparent",
       false: "",
     },
@@ -71,7 +71,7 @@ interface ButtonProps
   radius?: Radius;
   iconL?: IconNameType;
   iconR?: IconNameType;
-  isLoading?: boolean;
+  loading?: boolean;
   asChild?: boolean;
 }
 
@@ -85,7 +85,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       disabled = false,
       iconL,
       iconR,
-      isLoading,
+      loading = false,
       asChild = false,
       children,
       ...props
@@ -101,36 +101,38 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             variant,
             size: size ?? themeSize,
             radius: radius ?? themeRadius,
-            isLoading,
+            loading,
             className,
           }),
         )}
-        disabled={disabled || isLoading}
+        disabled={disabled || loading}
         ref={ref}
         {...props}
       >
-        {iconL && (
-          <Icon
-            name={iconL}
-            size={ICON_SIZE[size ?? themeSize]}
-            aria-hidden
-            className="button-leading-icon"
-          />
-        )}
-        <Slottable>{children}</Slottable>
-        {iconR && (
-          <Icon
-            name={iconR}
-            size={ICON_SIZE[size ?? themeSize]}
-            aria-hidden
-            className="button-trailing-icon"
-          />
-        )}
-        {isLoading && (
-          <span className={cn(buttonLoadingVariants({ variant }))}>
-            <Spinner size={size ?? themeSize} />
-          </span>
-        )}
+        <React.Fragment>
+          {iconL && (
+            <Icon
+              name={iconL}
+              size={ICON_SIZE[size ?? themeSize]}
+              aria-hidden
+              className="button-leading-icon"
+            />
+          )}
+          <Slottable>{children}</Slottable>
+          {iconR && (
+            <Icon
+              name={iconR}
+              size={ICON_SIZE[size ?? themeSize]}
+              aria-hidden
+              className="button-trailing-icon"
+            />
+          )}
+          {loading && (
+            <span className={cn(buttonLoadingVariants({ variant }))}>
+              <Spinner size={size ?? themeSize} />
+            </span>
+          )}
+        </React.Fragment>
       </Comp>
     );
   },

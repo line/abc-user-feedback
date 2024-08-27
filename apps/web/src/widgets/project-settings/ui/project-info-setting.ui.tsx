@@ -21,7 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Divider } from '@ufb/react';
+import { Button,  } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
 import {
@@ -103,17 +103,25 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     <SettingTemplate
       title={t('v2.project-setting-menu.project-info')}
       action={
-        <Button
-          form="form"
-          type="submit"
-          disabled={
-            !perms.includes('project_update') ||
-            !methods.formState.isDirty ||
-            isPending
-          }
-        >
-          {t('v2.button.save')}
-        </Button>
+        <>
+          {data && (
+            <DeleteProjectButton
+              project={data}
+              onClickDelete={() => deleteProject(undefined)}
+            />
+          )}
+          <Button
+            form="form"
+            type="submit"
+            disabled={
+              !perms.includes('project_update') ||
+              !methods.formState.isDirty ||
+              isPending
+            }
+          >
+            {t('v2.button.save')}
+          </Button>
+        </>
       }
     >
       <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
@@ -121,15 +129,6 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
           <ProjectInfoForm type="update" />
         </FormProvider>
       </form>
-      <Divider type="subtle" />
-      <div className="flex">
-        {data && (
-          <DeleteProjectButton
-            project={data}
-            onClickDelete={() => deleteProject(undefined)}
-          />
-        )}
-      </div>
     </SettingTemplate>
   );
 };

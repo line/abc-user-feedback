@@ -6,6 +6,7 @@ import { cva } from "class-variance-authority";
 import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import { IconButton } from "./icon-button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 
 const Sheet = SheetPrimitive.Root;
@@ -68,9 +69,14 @@ const SheetContent = React.forwardRef<
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="sheet-close">
-          <Icon name="RiCloseLine" size={20} />
-          <span className="sr-only">Close</span>
+        <SheetPrimitive.Close asChild>
+          <IconButton
+            icon="RiCloseLine"
+            size="medium"
+            variant="ghost"
+            className="sheet-close"
+            aria-label="Close"
+          />
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>

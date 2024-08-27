@@ -31,7 +31,6 @@ import { cn } from '@/shared/utils';
 import CheckedTableHead from './checked-table-head';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
-import TableSortIcon from './table-sort-icon';
 
 interface IProps<T> {
   table: ReactTable<T>;
@@ -41,6 +40,8 @@ interface IProps<T> {
   isLoading?: boolean;
   onClickDelete?: () => void;
   createButton: React.ReactNode;
+  classname?: string;
+  onClickRow?: (row: T) => void;
 }
 
 function BasicTable<T>(props: IProps<T>) {
@@ -51,76 +52,77 @@ function BasicTable<T>(props: IProps<T>) {
     isLoading = false,
     onClickDelete,
     createButton,
+    classname,
+    onClickRow,
   } = props;
 
   return (
-    <div className="overflow-auto">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            {table.getIsSomeRowsSelected() ?
-              <CheckedTableHead table={table} onClickDelete={onClickDelete} />
-            : table.getFlatHeaders().map((header, i) => (
-                <TableHead key={i} style={{ width: header.getSize() }}>
-                  <div
-                    className={cn('flex flex-nowrap items-center', {
-                      'overflow-hidden text-ellipsis':
-                        resiable && header.column.getCanResize(),
-                    })}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
-                  </div>
-                  {resiable && header.column.getCanResize() && (
-                    <TableResizer header={header} table={table} />
+    <Table className={classname}>
+      <TableHeader>
+        <TableRow>
+          {table.getIsSomeRowsSelected() ?
+            <CheckedTableHead table={table} onClickDelete={onClickDelete} />
+          : table.getFlatHeaders().map((header, i) => (
+              <TableHead key={i} style={{ width: header.getSize() }}>
+                <div
+                  className={cn('flex flex-nowrap items-center', {
+                    'overflow-hidden text-ellipsis':
+                      resiable && header.column.getCanResize(),
+                  })}
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
                   )}
-                </TableHead>
-              ))
-            }
-          </TableRow>
-          {isLoading && (
-            <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
-          )}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.length === 0 ?
-            <TableRow className="hover:bg-inherit">
-              <TableCell colSpan={table.getFlatHeaders().length}>
-                <div className="my-10 flex flex-col items-center justify-center gap-4">
-                  <Image
-                    width={200}
-                    height={200}
-                    src="/assets/images/empty-image.png"
-                    alt="empty image"
-                  />
-                  <p className="text-small text-neutral-tertiary">
-                    {emptyCaption}
-                  </p>
-                  {createButton}
                 </div>
-              </TableCell>
-            </TableRow>
-          : table.getRowModel().rows.map((row) => (
-              <TableRow key={row.index}>
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell
-                    key={`${cell.id} ${cell.row.index}`}
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
+                {resiable && header.column.getCanResize() && (
+                  <TableResizer header={header} table={table} />
+                )}
+              </TableHead>
             ))
           }
-        </TableBody>
-      </Table>
-    </div>
+        </TableRow>
+        {isLoading && (
+          <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
+        )}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows.length === 0 ?
+          <TableRow className="hover:bg-inherit">
+            <TableCell colSpan={table.getFlatHeaders().length}>
+              <div className="my-10 flex flex-col items-center justify-center gap-4">
+                <Image
+                  width={200}
+                  height={200}
+                  src="/assets/images/empty-image.png"
+                  alt="empty image"
+                />
+                <p className="text-small text-neutral-tertiary">
+                  {emptyCaption}
+                </p>
+                {createButton}
+              </div>
+            </TableCell>
+          </TableRow>
+        : table.getRowModel().rows.map((row) => (
+            <TableRow
+              key={row.index}
+              onClick={() => onClickRow && onClickRow(row.original)}
+              className={cn({ 'cursor-pointer': !!onClickRow })}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <TableCell
+                  key={`${cell.id} ${cell.row.index}`}
+                  style={{ width: cell.column.getSize() }}
+                >
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))
+        }
+      </TableBody>
+    </Table>
   );
 }
 

@@ -1,3 +1,4 @@
+import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cva } from "class-variance-authority";
@@ -6,6 +7,13 @@ import type { IconNameType } from "./icon";
 import { ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Badge } from "./badge";
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownGroup,
+  DropdownItem,
+  DropdownTrigger,
+} from "./dropdown";
 import { Icon } from "./icon";
 
 const DefaultValue = {
@@ -107,4 +115,55 @@ const MenuItem = React.forwardRef<
 });
 MenuItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
-export { Menu, MenuItem };
+const MenuDropdown = Dropdown;
+
+interface MenuDropdownTriggerProps
+  extends React.ComponentPropsWithoutRef<"button"> {
+  iconL?: IconNameType;
+  iconR?: IconNameType;
+  badge?: React.ReactNode;
+}
+const MenuDropdownTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownTrigger>,
+  MenuDropdownTriggerProps
+>(({ iconL, iconR, badge, children, className, ...props }, ref) => {
+  const { size = DefaultValue.size } = React.useContext(MenuContext);
+  return (
+    <DropdownTrigger
+      ref={ref}
+      className={cn(menuItemVariants({ size, className }))}
+      {...props}
+    >
+      {iconL && <Icon name={iconL} size={ICON_SIZE[size]} />}
+      <span>{children}</span>
+      {badge && (
+        <Badge type="bold" color="default" radius="large">
+          {badge}
+        </Badge>
+      )}
+      {iconR && <Icon name={iconR} size={ICON_SIZE[size]} />}
+    </DropdownTrigger>
+  );
+});
+MenuDropdownTrigger.displayName = "MenuDropdownTrigger";
+const MenuDropdownContent = DropdownContent;
+const MenuDropdownGroup = DropdownGroup;
+const MenuDropdownItem = React.forwardRef<
+  React.ElementRef<typeof DropdownItem>,
+  React.ComponentPropsWithoutRef<typeof MenuItem>
+>(({ className, ...props }, ref) => (
+  <DropdownItem ref={ref} className={cn("menu-dropdown-item", className)}>
+    <MenuItem {...props} />
+  </DropdownItem>
+));
+MenuDropdownItem.displayName = "MenuDropdownItem";
+
+export {
+  Menu,
+  MenuItem,
+  MenuDropdown,
+  MenuDropdownTrigger,
+  MenuDropdownContent,
+  MenuDropdownGroup,
+  MenuDropdownItem,
+};

@@ -15,12 +15,12 @@ const defaultVariants: {
   variant: ButtonVariant;
   size?: Size;
   radius?: Radius;
-  isLoading?: boolean;
+  loading?: boolean;
 } = {
   variant: "primary",
   size: undefined,
   radius: undefined,
-  isLoading: false,
+  loading: false,
 };
 
 const iconButtonVariants = cva("icon-button", {
@@ -42,7 +42,7 @@ const iconButtonVariants = cva("icon-button", {
       medium: "icon-button-radius-medium",
       large: "icon-button-radius-large",
     },
-    isLoading: {
+    loading: {
       true: "!text-transparent",
       false: "",
     },
@@ -70,7 +70,7 @@ export interface IconButtonProps
   size?: Size;
   radius?: Radius;
   icon: IconNameType;
-  isLoading?: boolean;
+  loading?: boolean;
   asChild?: boolean;
 }
 
@@ -83,7 +83,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
       radius,
       disabled = false,
       icon,
-      isLoading,
+      loading = false,
       asChild = false,
       ...props
     },
@@ -99,20 +99,22 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
             variant,
             size: size ?? themeSize,
             radius: radius ?? themeRadius,
-            isLoading,
+            loading,
             className,
           }),
         )}
-        disabled={disabled || isLoading}
+        disabled={disabled || loading}
         ref={ref}
         {...props}
       >
-        <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} aria-hidden />
-        {isLoading && (
-          <span className={cn(iconButtonLoadingVariants({ variant }))}>
-            <Spinner size={size ?? themeSize} />
-          </span>
-        )}
+        <React.Fragment>
+          <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} aria-hidden />
+          {loading && (
+            <span className={cn(iconButtonLoadingVariants({ variant }))}>
+              <Spinner size={size ?? themeSize} />
+            </span>
+          )}
+        </React.Fragment>
       </Comp>
     );
   },

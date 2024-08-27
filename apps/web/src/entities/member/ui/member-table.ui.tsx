@@ -14,34 +14,41 @@
  * under the License.
  */
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import { BasicTable } from '@/shared';
+import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
 
 import { getMemberColumns } from '../member-columns';
 import type { Member } from '../member.type';
+import MemberFormDialog from './member-form-dialog.ui';
 
 interface IProps {
   isLoading?: boolean;
   members: Member[];
   roles: Role[];
-  onDeleteMember?: (id: number) => void;
-  onUpdateMember?: (newMember: Member) => void;
+  onDeleteMember?: (id: number) => Promise<void>;
+  onUpdateMember: (newMember: Member) => Promise<void>;
   createButton: React.ReactNode;
+  project?: ProjectInfo;
 }
 
 const MemberTable: React.FC<IProps> = (props) => {
   const {
     isLoading,
     members,
-    roles,
     createButton,
     onDeleteMember,
     onUpdateMember,
+    project,
+    roles,
   } = props;
+
   const { t } = useTranslation();
+  const overlay = useOverlay();
 
   const { data: userData } = useUserSearch({
     limit: 1000,
@@ -49,15 +56,32 @@ const MemberTable: React.FC<IProps> = (props) => {
   });
 
   const table = useReactTable({
-    columns: getMemberColumns(
-      userData?.items ?? [],
-      roles,
-      onDeleteMember,
-      onUpdateMember,
-    ),
+    columns: getMemberColumns(userData?.items ?? []),
     data: members,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  const openMemberDialog = (member: Member) => {
+    if (!project) return;
+    overlay.open(({ close, isOpen }) => (
+      <MemberFormDialog
+        close={close}
+        isOpen={isOpen}
+        member={member}
+        onSubmit={async (newMember) => {
+          await onUpdateMember({
+            role: newMember.role,
+            user: newMember.user,
+            id: member.id,
+            createdAt: member.createdAt,
+          });
+        }}
+        onDelete={onDeleteMember}
+        project={project}
+        roles={roles}
+      />
+    ));
+  };
 
   return (
     <BasicTable
@@ -65,6 +89,8 @@ const MemberTable: React.FC<IProps> = (props) => {
       isLoading={isLoading}
       emptyCaption={t('v2.text.no-data.member')}
       createButton={createButton}
+      classname={members.length === 0 ? 'h-full' : ''}
+      onClickRow={openMemberDialog}
     />
   );
 };

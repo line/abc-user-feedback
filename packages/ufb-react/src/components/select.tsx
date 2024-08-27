@@ -2,9 +2,10 @@ import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { cva } from "class-variance-authority";
 
+import type { CaptionType } from "../lib/types";
 import type { Size } from "../types";
 import type { IconNameType } from "./icon";
-import { ICON_SIZE } from "../constants";
+import { CAPTION_DEFAULT_ICON, ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import { ScrollArea, ScrollBar } from "./scroll-area";
@@ -13,23 +14,40 @@ import useTheme from "./use-theme";
 
 const SelectContext = React.createContext<
   {
-    type?: "single" | "multiple";
+    type: "single" | "multiple";
     size?: Size;
+    error: boolean;
   } & SingleSelectProps &
     MultipleSelectProps
 >({
   type: "single",
   size: undefined,
+  error: false,
+});
+
+const selectVariants = cva("select", {
+  variants: {
+    size: {
+      small: "select-small",
+      medium: "select-medium",
+      large: "select-large",
+    },
+    defaultVariants: {
+      size: undefined,
+    },
+  },
 });
 
 type SelectProps = {
   type?: "single" | "multiple";
   size?: Size;
+  error?: boolean;
 } & SingleSelectProps &
   MultipleSelectProps;
 const Select = ({
   type = "single",
   size,
+  error = false,
   values = [],
   onValuesChange,
   ...props
@@ -44,17 +62,19 @@ const Select = ({
 
   return (
     <SelectContext.Provider
-      value={{ type, size: size ?? themeSize, values: multipleValues }}
+      value={{ type, size: size ?? themeSize, values: multipleValues, error }}
     >
-      {type === "single" ? (
-        <SingleSelect {...props} />
-      ) : (
-        <MultipleSelect
-          {...props}
-          values={multipleValues}
-          onValuesChange={handleMultipleValuesChange}
-        />
-      )}
+      <div className={cn(selectVariants({ size: size ?? themeSize }))}>
+        {type === "single" ? (
+          <SingleSelect {...props} />
+        ) : (
+          <MultipleSelect
+            {...props}
+            values={multipleValues}
+            onValuesChange={handleMultipleValuesChange}
+          />
+        )}
+      </div>
     </SelectContext.Provider>
   );
 };
@@ -77,7 +97,6 @@ type MultipleSelectProps = React.ComponentPropsWithoutRef<
 const MultipleSelect = ({
   values = [],
   onValuesChange,
-  children,
   ...props
 }: MultipleSelectProps) => {
   const [value, setValue] = React.useState<string | undefined>(undefined);
@@ -97,9 +116,7 @@ const MultipleSelect = ({
         );
       }}
       {...props}
-    >
-      {children}
-    </SelectPrimitive.Root>
+    />
   );
 };
 MultipleSelect.displayName = "MultipleSelect";
@@ -128,18 +145,20 @@ const MultipleSelectValue = React.forwardRef<
   const { themeSize } = useTheme();
   return (
     <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
-      {values && values.length > 0
-        ? values.map((value, index) => (
-            <Tag
-              key={index}
-              type="outline"
-              size={size ?? themeSize}
-              className="select-tag"
-            >
-              {value}
-            </Tag>
-          ))
-        : placeholder}
+      <React.Fragment>
+        {values.length > 0
+          ? values.map((value, index) => (
+              <Tag
+                key={index}
+                type="outline"
+                size={size ?? themeSize}
+                className="select-tag"
+              >
+                {value}
+              </Tag>
+            ))
+          : placeholder}
+      </React.Fragment>
     </SelectPrimitive.Value>
   );
 });
@@ -152,9 +171,14 @@ const selectTriggerVariants = cva("select-trigger", {
       medium: "select-trigger-medium",
       large: "select-trigger-large",
     },
+    error: {
+      true: "select-trigger-error",
+      false: "",
+    },
   },
   defaultVariants: {
     size: undefined,
+    error: false,
   },
 });
 
@@ -167,21 +191,23 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   SelectTriggerProps
 >(({ icon, className, children, ...props }, ref) => {
-  const { size } = React.useContext(SelectContext);
+  const { size, error } = React.useContext(SelectContext);
   const { themeSize } = useTheme();
   return (
     <SelectPrimitive.Trigger
       ref={ref}
       className={cn(
-        selectTriggerVariants({ size: size ?? themeSize, className }),
+        selectTriggerVariants({ size: size ?? themeSize, error, className }),
       )}
       {...props}
     >
-      {icon && <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} />}
-      {children}
-      <SelectPrimitive.Icon asChild>
-        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size ?? themeSize]} />
-      </SelectPrimitive.Icon>
+      <React.Fragment>
+        {icon && <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} />}
+        {children}
+        <SelectPrimitive.Icon asChild>
+          <Icon name="RiArrowDownSLine" size={ICON_SIZE[size ?? themeSize]} />
+        </SelectPrimitive.Icon>
+      </React.Fragment>
     </SelectPrimitive.Trigger>
   );
 });
@@ -196,22 +222,11 @@ const SelectContent = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
-      className={cn(
-        "select-content",
-        position === "popper" &&
-          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-        className,
-      )}
+      className={cn("select-content", className)}
       position={position}
       {...props}
     >
-      <SelectPrimitive.Viewport
-        className={cn(
-          "select-viewport",
-          position === "popper" &&
-            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]",
-        )}
-      >
+      <SelectPrimitive.Viewport className={cn("select-viewport")}>
         <ScrollArea maxHeight={maxHeight}>
           {children}
           <ScrollBar />
@@ -222,17 +237,17 @@ const SelectContent = React.forwardRef<
 ));
 SelectContent.displayName = SelectPrimitive.Content.displayName;
 
-const SelectLabel = React.forwardRef<
+const SelectGroupLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Label>
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("select-label", className)}
+    className={cn("select-group-label", className)}
     {...props}
   />
 ));
-SelectLabel.displayName = SelectPrimitive.Label.displayName;
+SelectGroupLabel.displayName = SelectPrimitive.Label.displayName;
 
 type SelectItemProps = SingleSelectItemProps & MultipleSelectItemProps;
 const SelectItem = ({ ...props }: SelectItemProps) => {
@@ -260,16 +275,19 @@ const SingleSelectItem = React.forwardRef<
     className={cn("select-item", className)}
     {...props}
   >
-    <span className="select-item-check">
-      <SelectPrimitive.ItemIndicator>
-        <Icon name="RiCheckLine" size={20} />
-      </SelectPrimitive.ItemIndicator>
-    </span>
-
-    <SelectPrimitive.ItemText>
-      {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-      {children}
-    </SelectPrimitive.ItemText>
+    <React.Fragment>
+      <span className="select-item-check">
+        <SelectPrimitive.ItemIndicator>
+          <Icon name="RiCheckLine" size={20} />
+        </SelectPrimitive.ItemIndicator>
+      </span>
+      <SelectPrimitive.ItemText>
+        <React.Fragment>
+          {icon && <Icon name={icon} size={16} className="select-item-icon" />}
+          {children}
+        </React.Fragment>
+      </SelectPrimitive.ItemText>
+    </React.Fragment>
   </SelectPrimitive.Item>
 ));
 SingleSelectItem.displayName = SelectPrimitive.Item.displayName;
@@ -292,15 +310,21 @@ const MultipleSelectItem = React.forwardRef<
       value={value}
       {...props}
     >
-      {values.includes(value) && (
-        <span className="select-item-check">
-          <Icon name="RiCheckLine" size={20} />
-        </span>
-      )}
-      <SelectPrimitive.ItemText>
-        {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-        {children}
-      </SelectPrimitive.ItemText>
+      <React.Fragment>
+        {values.includes(value) && (
+          <span className="select-item-check">
+            <Icon name="RiCheckLine" size={20} />
+          </span>
+        )}
+        <SelectPrimitive.ItemText>
+          <React.Fragment>
+            {icon && (
+              <Icon name={icon} size={16} className="select-item-icon" />
+            )}
+            {children}
+          </React.Fragment>
+        </SelectPrimitive.ItemText>
+      </React.Fragment>
     </SelectPrimitive.Item>
   );
 });
@@ -318,13 +342,78 @@ const SelectSeparator = React.forwardRef<
 ));
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName;
 
+const SelectLabel = React.forwardRef<
+  HTMLElement,
+  React.ComponentPropsWithoutRef<"strong">
+>((props, ref) => {
+  const { className, ...rest } = props;
+  return (
+    <strong ref={ref} className={cn("select-label", className)} {...rest} />
+  );
+});
+SelectLabel.displayName = "SelectLabel";
+
+const selectCaptionVariants = cva("select-caption", {
+  variants: {
+    type: {
+      default: "select-caption-default",
+      success: "select-caption-success",
+      info: "select-caption-info",
+      error: "select-caption-error",
+    },
+    defaultVariants: {
+      type: "default",
+    },
+  },
+});
+
+interface SelectCaptionProps extends React.ComponentPropsWithoutRef<"span"> {
+  type?: CaptionType;
+  icon?: IconNameType;
+  size?: Size;
+}
+
+const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
+  (props, ref) => {
+    const {
+      icon = undefined,
+      type = "default",
+      size,
+      className,
+      children,
+      ...rest
+    } = props;
+    const { themeSize } = useTheme();
+
+    return (
+      <span
+        ref={ref}
+        className={cn(selectCaptionVariants({ type, className }))}
+        {...rest}
+      >
+        <React.Fragment>
+          <Icon
+            name={icon ?? CAPTION_DEFAULT_ICON[type]}
+            size={ICON_SIZE[size ?? themeSize]}
+            className="select-caption-icon"
+          />
+          {children}
+        </React.Fragment>
+      </span>
+    );
+  },
+);
+SelectCaption.displayName = "SelectCaption";
+
 export {
   Select,
   SelectGroup,
   SelectValue,
   SelectTrigger,
   SelectContent,
+  SelectGroupLabel,
   SelectLabel,
   SelectItem,
   SelectSeparator,
+  SelectCaption,
 };

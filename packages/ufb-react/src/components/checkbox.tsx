@@ -80,17 +80,19 @@ const Checkbox = React.forwardRef<
         )}
         {...props}
       >
-        <span className={cn(checkVariants({ size }))}>
-          <CheckboxPrimitive.Indicator
-            className={cn(checkboxIconVariants({ variant }))}
-          >
-            <Icon
-              name={variant === "check" ? "RiCheckLine" : "RiSubtractLine"}
-              size={CHECK_ICON_SIZE[size ?? themeSize]}
-            />
-          </CheckboxPrimitive.Indicator>
-        </span>
-        {children}
+        <React.Fragment>
+          <span className={cn(checkVariants({ size }))}>
+            <CheckboxPrimitive.Indicator
+              className={cn(checkboxIconVariants({ variant }))}
+            >
+              <Icon
+                name={variant === "check" ? "RiCheckLine" : "RiSubtractLine"}
+                size={CHECK_ICON_SIZE[size ?? themeSize]}
+              />
+            </CheckboxPrimitive.Indicator>
+          </span>
+          {children}
+        </React.Fragment>
       </CheckboxPrimitive.Root>
     );
   },

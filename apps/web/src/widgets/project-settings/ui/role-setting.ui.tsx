@@ -15,9 +15,10 @@
  */
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   client,
@@ -27,16 +28,20 @@ import {
   usePermissions,
 } from '@/shared';
 import type { PermissionType } from '@/entities/role';
-import { CreateRolePopover, RoleTable } from '@/entities/role';
+import { RoleFormSheet, RoleTable } from '@/entities/role';
 
 interface IProps {
   projectId: number;
+  onClickClearMenu: () => void;
 }
 
-const RoleSetting: React.FC<IProps> = ({ projectId }) => {
+const RoleSetting: React.FC<IProps> = (props) => {
+  const { projectId, onClickClearMenu } = props;
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
+
   const queryClient = useQueryClient();
+  const overlay = useOverlay();
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',
@@ -50,15 +55,15 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.add') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
 
-  const { mutate: deleteRole } = useMutation({
+  const { mutateAsync: deleteRole } = useMutation({
     mutationFn: async (input: { roleId: number }) => {
       return client.delete({
         path: '/api/admin/projects/{projectId}/roles/{roleId}',
@@ -67,14 +72,14 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
     },
     async onSuccess() {
       await refetch();
-      toast.negative({ title: t('toast.delete') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
 
-  const { mutate: updateRole } = useMutation({
+  const { mutateAsync: updateRole } = useMutation({
     mutationFn: async (input: {
       roleId: number;
       name: string;
@@ -92,34 +97,49 @@ const RoleSetting: React.FC<IProps> = ({ projectId }) => {
         queryKey: ['/api/admin/users/{userId}/roles'],
       });
       await refetch();
-      toast.positive({ title: t('toast.save') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
+  const openRoleSheet = () => {
+    overlay.open(({ isOpen, close }) => (
+      <RoleFormSheet
+        isOpen={isOpen}
+        close={close}
+        handleSubmit={async ({ name, permissions }) => {
+          await createRole({ name, permissions });
+        }}
+      />
+    ));
+  };
 
   return (
     <SettingTemplate
       title={t('project-setting-menu.role-mgmt')}
+      onClickBack={onClickClearMenu}
       action={
-        <CreateRolePopover
-          onCreate={(name) => createRole({ name, permissions: [] })}
-          roles={data?.roles ?? []}
+        <Button
+          onClick={openRoleSheet}
           disabled={!perms.includes('project_role_create')}
-        />
+        >
+          {t('v2.button.name.create', { name: 'Role' })}
+        </Button>
       }
     >
       <div className="overflow-auto">
         <RoleTable
           roles={data?.roles ?? []}
-          onUpdateRole={(input) => {
+          onUpdateRole={async (input) => {
             const { name, permissions, id: roleId } = input;
             const targetRole = data?.roles.find((v) => v.id === roleId);
             if (!targetRole) return;
-            updateRole({ name, permissions, roleId });
+            await updateRole({ name, permissions, roleId });
           }}
-          onDeleteRole={(role) => deleteRole({ roleId: role.id })}
+          onDeleteRole={async (role) => {
+            await deleteRole({ roleId: role.id });
+          }}
         />
       </div>
     </SettingTemplate>

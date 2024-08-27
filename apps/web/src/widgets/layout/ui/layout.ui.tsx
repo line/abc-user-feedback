@@ -14,6 +14,9 @@
  * under the License.
  */
 
+import { IconButton } from '@ufb/react';
+import { Icon } from '@ufb/ui';
+
 import Header from './header.ui';
 
 interface IProps extends React.PropsWithChildren {
@@ -33,6 +36,20 @@ const Layout: React.FC<IProps> = (props) => {
         </div>
         {children}
       </main>
+      <footer className="bg-neutral-tertiary flex flex-col items-center p-4">
+        <div className="flex items-center gap-2">
+          <Icon name="LogoBlack" />
+          <p className="text-title-h5">ABC User Feedback</p>
+        </div>
+        <div className="flex items-center gap-1">
+          <IconButton variant="ghost" icon="RiEarthFill" />
+          <IconButton variant="ghost" icon="RiGithubFill" />
+          <IconButton variant="ghost" icon="RiMailLine" />
+        </div>
+        <div className="text-neutral-tertiary font-normal">
+          © 2024 ABC Studio. All rights reserved
+        </div>
+      </footer>
     </div>
   );
 };

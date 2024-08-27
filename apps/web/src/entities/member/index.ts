@@ -15,3 +15,4 @@
  */
 export * from './ui';
 export * from './member.type';
+export * from './member.schema';

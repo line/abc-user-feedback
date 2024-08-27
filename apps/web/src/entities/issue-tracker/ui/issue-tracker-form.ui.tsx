@@ -51,9 +51,9 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
       />
       <InputField>
         <InputLabel>Issue URL</InputLabel>
-        <div className="bg-neutral-tertiary input-disabled rounded-8 flex items-center gap-2 p-4">
+        <div className="bg-neutral-tertiary flex items-center gap-2 rounded p-4 opacity-50">
           <Icon name="RiPriceTag3Fill" size={16} />
-          {`${watch('ticketDomain')}/browse/${watch('ticketKey')}-{Number}`}
+          {`${watch('ticketDomain') ?? ''}/browse/${watch('ticketKey') ?? ''}-{Number}`}
         </div>
       </InputField>
     </div>

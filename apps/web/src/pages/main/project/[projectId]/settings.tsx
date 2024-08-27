@@ -31,18 +31,20 @@ import {
   IssueTrackerSetting,
   MemberSetting,
   ProjectInfoSetting,
+  RoleSetting,
   WebhookSetting,
 } from '@/widgets/project-settings';
 import { SettingsMenu } from '@/widgets/settings-menu';
-import type { SettingMenu } from '@/widgets/settings-menu';
+import type { SettingMenu, SubSettingMenu } from '@/widgets/settings-menu';
 
 interface IProps {
   projectId: number;
 }
 
 const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
-  const [currentSettingMenu, setCurrentSettingMenu] =
-    useState<SettingMenu>('project');
+  const [currentMenu, setCurrentMenu] = useState<SettingMenu>('project');
+  const [currentSubMenu, setCurrentSubMenu] = useState<SubSettingMenu>();
+
   const [currentChannelId, setCurrentChannelId] = useState<number>();
 
   return (
@@ -50,40 +52,44 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
       <div className="w-[280px] flex-shrink-0 px-3 py-6">
         <SettingsMenu
           onChangeSettingMenuValue={(settingMenu, channelId) => {
-            setCurrentSettingMenu(settingMenu);
+            setCurrentMenu(settingMenu);
             setCurrentChannelId(channelId);
+            setCurrentSubMenu(undefined);
           }}
           projectId={projectId}
-          settingMenuValue={currentSettingMenu}
+          settingMenuValue={currentMenu}
           channelId={currentChannelId}
         />
       </div>
-      <div className="border-neutral-tertiary h-[calc(100vh-300px)] w-full overflow-auto rounded border p-6">
-        {currentSettingMenu === 'project' && (
+      <div className="border-neutral-tertiary h-[calc(100vh-200px)] w-full overflow-auto rounded border p-6">
+        {currentMenu === 'project' && (
           <ProjectInfoSetting projectId={projectId} />
         )}
-        {currentSettingMenu === 'member' && (
-          <MemberSetting projectId={projectId} />
-        )}
-        {currentSettingMenu === 'api-key' && (
-          <ApiKeySetting projectId={projectId} />
-        )}
-        {currentSettingMenu === 'issue-tracker' && (
+        {currentMenu === 'member' &&
+          (currentSubMenu === 'role' ?
+            <RoleSetting
+              projectId={projectId}
+              onClickClearMenu={() => setCurrentSubMenu(undefined)}
+            />
+          : <MemberSetting
+              projectId={projectId}
+              onClickChangeSubMenu={(menu) => setCurrentSubMenu(menu)}
+            />)}
+        {currentMenu === 'api-key' && <ApiKeySetting projectId={projectId} />}
+        {currentMenu === 'issue-tracker' && (
           <IssueTrackerSetting projectId={projectId} />
         )}
-        {currentSettingMenu === 'webhook' && (
-          <WebhookSetting projectId={projectId} />
-        )}
-        {currentChannelId && currentSettingMenu === 'channel-info' && (
+        {currentMenu === 'webhook' && <WebhookSetting projectId={projectId} />}
+        {currentChannelId && currentMenu === 'channel-info' && (
           <ChannelInfoSetting
             projectId={projectId}
             channelId={currentChannelId}
           />
         )}
-        {currentChannelId && currentSettingMenu === 'field-mgmt' && (
+        {currentChannelId && currentMenu === 'field-mgmt' && (
           <FieldSetting projectId={projectId} channelId={currentChannelId} />
         )}
-        {currentChannelId && currentSettingMenu === 'image-mgmt' && (
+        {currentChannelId && currentMenu === 'image-mgmt' && (
           <ImageConfigSetting
             projectId={projectId}
             channelId={currentChannelId}

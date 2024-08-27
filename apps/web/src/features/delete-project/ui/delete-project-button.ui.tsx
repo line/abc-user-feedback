@@ -23,6 +23,7 @@ import {
   DialogDescription,
   DialogFooter,
   DialogHeader,
+  DialogIcon,
   DialogTitle,
   DialogTrigger,
 } from '@ufb/react';
@@ -43,21 +44,24 @@ const DeleteProjectButton: React.FC<IProps> = (props) => {
   return (
     <Dialog>
       <DialogTrigger disabled={!perms.includes('project_delete')} asChild>
-        <Button variant="destructive" className="min-w-[120px]">
+        <Button
+          className="min-w-[120px]"
+          variant="outline"
+          iconL="RiDeleteBinFill"
+        >
           {t('v2.button.name.delete', { name: 'Project' })}
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader icon="RiCloseCircleFill">
-          <DialogTitle>
-            {t('main.setting.dialog.delete-project.title')}
-          </DialogTitle>
+        <DialogHeader>
+          <DialogIcon name="RiErrorWarningFill" variant="error" />
+          <DialogTitle>{t('v2.dialog.delete-project.title')}</DialogTitle>
           <DialogDescription>
-            {t('main.setting.dialog.delete-project.description')}
+            {t('v2.dialog.delete-project.description')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button variant="outline">{t('button.cancel')}</Button>
           </DialogClose>
           <Button

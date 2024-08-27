@@ -13,8 +13,8 @@
   "prettier": "@ufb/prettier-config",
   "dependencies": {
     "@floating-ui/react": "^0.26.12",
-    "react": "18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
     "react-hot-toast": "^2.4.1"
   },
   "devDependencies": {

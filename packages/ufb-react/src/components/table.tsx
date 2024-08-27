@@ -10,9 +10,7 @@ const Table = React.forwardRef<
   HTMLTableElement,
   React.HTMLAttributes<HTMLTableElement>
 >(({ className, ...props }, ref) => (
-  <div className="table-wrap">
-    <table ref={ref} className={cn("table", className)} {...props} />
-  </div>
+  <table ref={ref} className={cn("table", className)} {...props} />
 ));
 Table.displayName = "Table";
 

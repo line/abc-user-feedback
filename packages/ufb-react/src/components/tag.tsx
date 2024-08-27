@@ -70,28 +70,30 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
         }),
       )}
     >
-      {icon && (
-        <Icon
-          name={icon}
-          size={SMALL_ICON_SIZE[size ?? themeSize]}
-          aria-hidden
-        />
-      )}
-      {children}
-      {onClick && (
-        <button
-          type="button"
-          aria-label="Remove this tag"
-          className="tag-button"
-          onClick={onClick}
-        >
+      <React.Fragment>
+        {icon && (
           <Icon
-            name="RiCloseLargeLine"
+            name={icon}
             size={SMALL_ICON_SIZE[size ?? themeSize]}
             aria-hidden
           />
-        </button>
-      )}
+        )}
+        {children}
+        {onClick && (
+          <button
+            type="button"
+            aria-label="Remove this tag"
+            className="tag-button"
+            onClick={onClick}
+          >
+            <Icon
+              name="RiCloseLargeLine"
+              size={SMALL_ICON_SIZE[size ?? themeSize]}
+              aria-hidden
+            />
+          </button>
+        )}
+      </React.Fragment>
     </span>
   );
 });

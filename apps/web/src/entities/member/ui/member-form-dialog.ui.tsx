@@ -30,22 +30,25 @@ import { TextInput } from '@/shared';
 import { SelectInput } from '@/shared/ui/inputs';
 import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
-import type { User } from '@/entities/user';
 import { useUserSearch } from '@/entities/user';
 
-import type { Member } from '../member.type';
+import type { Member, MemberInfo } from '../member.type';
 
 interface IProps {
-  members: Member[];
-  onCreate: (user: User, role: Role) => void;
   project: ProjectInfo;
+
+  onSubmit: (member: MemberInfo) => Promise<void>;
+
+  member?: Member;
+  onDelete?: (memberId: number) => Promise<void>;
+
   roles: Role[];
   isOpen: boolean;
   close: () => void;
 }
 
-const CreateMemberDialog: React.FC<IProps> = (props) => {
-  const { members, onCreate, project, roles, close, isOpen } = props;
+const MemberFormDialog: React.FC<IProps> = (props) => {
+  const { project, roles, close, isOpen, member, onDelete, onSubmit } = props;
 
   const { t } = useTranslation();
 
@@ -54,19 +57,22 @@ const CreateMemberDialog: React.FC<IProps> = (props) => {
     query: { type: 'GENERAL' },
   });
 
-  const [user, setUser] = useState<User>();
-  const [role, setRole] = useState<Role>();
+  const [user, setUser] = useState<Member['user'] | undefined>(member?.user);
+  const [role, setRole] = useState<Member['role'] | undefined>(member?.role);
 
   return (
     <Dialog onOpenChange={close} open={isOpen} modal>
       <DialogContent>
         <DialogTitle>
-          {t('main.setting.dialog.register-member.title')}
+          {member ?
+            t('v2.text.name.detail', { name: 'Member' })
+          : t('v2.text.name.register', { name: 'Member' })}
         </DialogTitle>
         <div className="my-8 flex flex-col gap-5">
           <SelectInput
             label="Email"
             placeholder={t('v2.placeholder.select')}
+            value={String(user?.id)}
             onChange={(v) => {
               const newUser = userData?.items.find(
                 (user) => String(user.id) === v,
@@ -74,11 +80,10 @@ const CreateMemberDialog: React.FC<IProps> = (props) => {
               setUser(newUser);
             }}
             options={
-              userData?.items
-                .filter(
-                  (v) => !members.find((member) => member.user.id === v.id),
-                )
-                .map((v) => ({ label: v.email, value: `${v.id}` })) ?? []
+              userData?.items.map((v) => ({
+                label: v.email,
+                value: `${v.id}`,
+              })) ?? []
             }
             required
           />
@@ -86,6 +91,7 @@ const CreateMemberDialog: React.FC<IProps> = (props) => {
           <SelectInput
             label="Role"
             placeholder={t('v2.placeholder.select')}
+            value={String(role?.id)}
             options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
             onChange={(v) => {
               const newRole = roles.find((role) => String(role.id) === v);
@@ -95,14 +101,27 @@ const CreateMemberDialog: React.FC<IProps> = (props) => {
           />
         </div>
         <DialogFooter>
+          {member && onDelete && (
+            <div className="flex-1">
+              <Button
+                variant="destructive"
+                onClick={async () => {
+                  await onDelete(member.id);
+                  close();
+                }}
+              >
+                {t('v2.button.delete')}
+              </Button>
+            </div>
+          )}
           <DialogClose asChild>
             <Button variant="outline">{t('v2.button.cancel')}</Button>
           </DialogClose>
           <Button
             type="submit"
-            onClick={() => {
+            onClick={async () => {
               if (!user || !role) return;
-              onCreate(user, role);
+              await onSubmit({ user, role });
               close();
             }}
           >
@@ -114,4 +133,4 @@ const CreateMemberDialog: React.FC<IProps> = (props) => {
   );
 };
 
-export default CreateMemberDialog;
+export default MemberFormDialog;

@@ -13,15 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { Badge } from '@ufb/react';
 
-export type SettingMenu =
-  | 'project'
-  | 'member'
-  | 'api-key'
-  | 'issue-tracker'
-  | 'webhook'
-  | 'channel-info'
-  | 'field-mgmt'
-  | 'image-mgmt';
+interface Props {
+  name: string;
+}
 
-export type SubSettingMenu = 'role';
+const Avatar: React.FC<Props> = ({ name }) => {
+  return <Badge radius="large">{name.slice(0, 1)}</Badge>;
+};
+
+export default Avatar;

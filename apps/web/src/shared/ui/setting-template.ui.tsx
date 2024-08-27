@@ -13,18 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { IconButton } from '@ufb/react';
+
 interface Props extends React.PropsWithChildren {
   title: React.ReactNode;
   action?: React.ReactNode;
+  onClickBack?: () => void;
 }
 
 const SettingTemplate: React.FC<Props> = (props) => {
-  const { title, action, children } = props;
+  const { title, action, children, onClickBack } = props;
   return (
-    <div className="relative flex flex-col gap-4">
+    <div className="relative flex h-full flex-col gap-4">
       <div className="flex min-h-10 items-center justify-between">
-        <h4 className="text-title-h4 flex-1">{title}</h4>
-        <div className="setting-action-buttons flex">{action}</div>
+        <h4 className="text-title-h4 flex-1">
+          {onClickBack && (
+            <IconButton
+              icon="RiArrowLeftLine"
+              variant="ghost"
+              onClick={onClickBack}
+            />
+          )}
+          {title}
+        </h4>
+        <div className="setting-action-buttons flex gap-3">{action}</div>
       </div>
       {children}
     </div>

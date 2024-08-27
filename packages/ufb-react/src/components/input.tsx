@@ -2,16 +2,15 @@ import type { ButtonHTMLAttributes, HTMLInputTypeAttribute } from "react";
 import React, { useRef } from "react";
 import { cva } from "class-variance-authority";
 
-import type { Radius, Size } from "../lib/types";
-import type { IconProps } from "./icon";
-import { ICON_SIZE } from "../constants";
+import type { CaptionType, Radius, Size } from "../lib/types";
+import type { IconNameType, IconProps } from "./icon";
+import { CAPTION_DEFAULT_ICON, ICON_SIZE } from "../constants";
 import { cn, composeRefs } from "../lib/utils";
 import { Icon } from "./icon";
 import useTheme from "./use-theme";
 
 type TextInputType = ("text" | "email" | "password" | "search" | "tel") &
   HTMLInputTypeAttribute;
-type CaptionType = "default" | "success" | "info" | "error";
 
 const InputField = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
   (props, ref) => {
@@ -44,14 +43,14 @@ const inputVariants = cva("input", {
       medium: "input-radius-medium",
       small: "input-radius-small",
     },
-    hasError: {
+    error: {
       true: "input-error",
       false: "",
     },
     defaultVariants: {
       size: undefined,
       radius: undefined,
-      hasError: false,
+      error: false,
     },
   },
 });
@@ -105,7 +104,7 @@ interface TextInputProps
   size?: Size;
   type?: TextInputType;
   radius?: Radius;
-  hasError?: boolean;
+  error?: boolean;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
@@ -114,8 +113,8 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
       size,
       type = "text",
       radius,
-      hasError,
-      disabled,
+      error = false,
+      disabled = false,
       onFocus,
       onBlur,
       className,
@@ -153,7 +152,7 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
           inputVariants({
             size: size ?? boxSize,
             radius: radius ?? themeRadius,
-            hasError,
+            error,
             className,
           }),
         )}
@@ -164,32 +163,49 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
 
 TextInput.displayName = "TextInput";
 
-const InputLabel = React.forwardRef<HTMLElement, React.PropsWithChildren>(
-  (props, ref) => {
-    const { children } = props;
-    return (
-      <strong ref={ref} className={cn("input-label")}>
-        {children}
-      </strong>
-    );
-  },
-);
+const InputLabel = React.forwardRef<
+  HTMLElement,
+  React.ComponentPropsWithoutRef<"strong">
+>((props, ref) => {
+  const { className, ...rest } = props;
+  return (
+    <strong ref={ref} className={cn("input-label", className)} {...rest} />
+  );
+});
 InputLabel.displayName = "InputLabel";
 
-interface InputCaptionProps extends React.PropsWithChildren {
+interface InputCaptionProps extends React.ComponentPropsWithoutRef<"span"> {
+  icon?: IconNameType;
   type?: CaptionType;
   size?: Size;
 }
 
 const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
   (props, ref) => {
-    const { type = "default", size, children } = props;
+    const {
+      icon = undefined,
+      type = "default",
+      size,
+      className,
+      children,
+      ...rest
+    } = props;
     const { themeSize } = useTheme();
 
     return (
-      <span ref={ref} className={cn(inputCaptionVariants({ type }))}>
-        {CaptionIcon(size ?? themeSize)[type]}
-        {children}
+      <span
+        ref={ref}
+        className={cn(inputCaptionVariants({ type, className }))}
+        {...rest}
+      >
+        <React.Fragment>
+          <Icon
+            name={icon ?? CAPTION_DEFAULT_ICON[type]}
+            size={ICON_SIZE[size ?? themeSize]}
+            className="input-caption-icon"
+          />
+          {children}
+        </React.Fragment>
       </span>
     );
   },
@@ -305,31 +321,4 @@ export {
   InputEyeButton,
   InputIcon,
   type TextInputProps,
-};
-
-const CaptionIcon = (size: Size): Record<CaptionType, React.ReactNode> => {
-  return {
-    default: null,
-    error: (
-      <Icon
-        name="RiErrorWarningFill"
-        size={ICON_SIZE[size]}
-        className="input-caption-icon"
-      />
-    ),
-    info: (
-      <Icon
-        name="RiInformationFill"
-        size={ICON_SIZE[size]}
-        className="input-caption-icon"
-      />
-    ),
-    success: (
-      <Icon
-        name="RiCheckboxCircleFill"
-        size={ICON_SIZE[size]}
-        className="input-caption-icon"
-      />
-    ),
-  };
 };

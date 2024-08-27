@@ -64,5 +64,5 @@
   @apply input-caption-default;
 }
 .input-caption-icon {
-  @apply mt-2 flex-shrink-0;
+  @apply flex-shrink-0;
 }

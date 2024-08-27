@@ -1,9 +1,9 @@
 .accordion-content-inset-small {
-  @apply !pl-40;
+  @apply pl-40;
 }
 .accordion-content-inset-medium {
-  @apply !pl-44;
+  @apply pl-44;
 }
 .accordion-content-inset-large {
-  @apply !pl-48;
+  @apply pl-48;
 }

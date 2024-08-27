@@ -1,7 +1,7 @@
-.checkbox {
+.checkboxv1 {
   --chkbg: var(--text-color-primary);
   --chkfg: var(--text-color-inverse);
-  @apply h-5 w-5 cursor-pointer appearance-none border border-fill-primary;
+  @apply border-fill-primary h-5 w-5 cursor-pointer appearance-none border;
   border-radius: 4px;
 
   &:focus-visible {
@@ -14,21 +14,35 @@
   &[aria-checked='true'] {
     @apply bg-no-repeat;
     animation: checkmark 0.2s ease-in-out;
-    background-image:
-      linear-gradient(-45deg, transparent 65%, var(--chkbg) 65.99%),
+    background-image: linear-gradient(
+        -45deg,
+        transparent 65%,
+        var(--chkbg) 65.99%
+      ),
       linear-gradient(45deg, transparent 75%, var(--chkbg) 75.99%),
       linear-gradient(-45deg, var(--chkbg) 40%, transparent 40.99%),
-      linear-gradient(45deg, var(--chkbg) 30%, var(--chkfg) 30.99%, var(--chkfg) 40%, transparent 40.99%),
+      linear-gradient(
+        45deg,
+        var(--chkbg) 30%,
+        var(--chkfg) 30.99%,
+        var(--chkfg) 40%,
+        transparent 40.99%
+      ),
       linear-gradient(-45deg, var(--chkfg) 50%, var(--chkbg) 50.99%);
   }
 
   &:indeterminate {
     @apply bg-no-repeat;
     animation: checkmark 0.2s ease-in-out;
-    background-image:
-      linear-gradient(90deg, transparent 80%, var(--chkbg) 80%),
+    background-image: linear-gradient(90deg, transparent 80%, var(--chkbg) 80%),
       linear-gradient(-90deg, transparent 80%, var(--chkbg) 80%),
-      linear-gradient(0deg, var(--chkbg) 43%, var(--chkfg) 43%, var(--chkfg) 57%, var(--chkbg) 57%);
+      linear-gradient(
+        0deg,
+        var(--chkbg) 43%,
+        var(--chkfg) 43%,
+        var(--chkfg) 57%,
+        var(--chkbg) 57%
+      );
   }
 
   &-xs {
@@ -48,13 +62,12 @@
   }
 
   &-label {
-    @apply flex items-center gap-2 cursor-pointer select-none;
+    @apply flex cursor-pointer select-none items-center gap-2;
   }
 
   &:disabled {
     @apply cursor-not-allowed opacity-30;
   }
-
 }
 
 @keyframes checkmark {

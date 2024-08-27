@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
+import { Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { Size } from "../types";
@@ -94,17 +95,20 @@ const AccordionTrigger = React.forwardRef<
         className={cn(
           "accordion-trigger",
           useBgColor && "accordion-trigger-bg",
+          iconAlign === "left" && "accordion-trigger-align-left",
           className,
         )}
         {...props}
       >
-        {iconAlign === "left" && (
-          <Icon name="RiArrowDownSLine" size={ICON_SIZE[iconSize]} />
-        )}
-        <strong>{children}</strong>
-        {iconAlign === "right" && (
-          <Icon name="RiArrowDownSLine" size={ICON_SIZE[iconSize]} />
-        )}
+        <React.Fragment>
+          {iconAlign === "left" && (
+            <Icon name="RiArrowDownSLine" size={ICON_SIZE[iconSize]} />
+          )}
+          <Slottable>{children}</Slottable>
+          {iconAlign === "right" && (
+            <Icon name="RiArrowDownSLine" size={ICON_SIZE[iconSize]} />
+          )}
+        </React.Fragment>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );

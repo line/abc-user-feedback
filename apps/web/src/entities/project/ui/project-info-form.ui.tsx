@@ -52,12 +52,13 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
         label="Description"
         {...register('description')}
         placeholder={t('placeholder', { name: 'Description' })}
-        required
         disabled={readOnly}
         error={formState.errors.description?.message}
       />
       <InputField>
-        <InputLabel>Time Zone</InputLabel>
+        <InputLabel>
+          Time Zone <span className="text-tint-red">*</span>
+        </InputLabel>
         <TimezoneSelectBox
           value={watch('timezone')}
           onChange={(value) =>

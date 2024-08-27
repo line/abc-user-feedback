@@ -96,6 +96,8 @@ export class AuthService {
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
       key: email,
     });
+    console.log('code: ', code);
+
     await this.emailVerificationMailingService.send({ code, email });
 
     return DateTime.utc()

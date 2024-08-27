@@ -1,16 +1,28 @@
-.select-trigger {
+.select {
   --select-text-default: var(--text-neutral-tertiary);
   --select-text-pressed: var(--text-neutral-primary);
   --select-text-filled: var(--text-neutral-primary);
+  --select-caption-default: var(--text-neutral-tertiary);
+  --select-caption-success: var(--text-tint-green);
+  --select-caption-error: var(--text-tint-red);
   --select-border-default: var(--border-neutral-tertiary);
   --select-border-pressed: var(--tint, var(--border-neutral-primary));
+  --select-border-error: var(--border-tint-red);
   --select-fg-default: var(--fg-neutral-primary);
   --select-fg-pressed: var(--fg-neutral-tertiary);
 
+  /* default */
+  @apply select-small;
+}
+.select-trigger {
   @apply rounded-8 flex w-full items-center justify-start space-x-12 bg-[var(--select-fg-default)] text-left text-[var(--select-text-filled)] shadow-[0_0_0_0.0625rem_inset_var(--select-border-default)] transition-transform placeholder:text-[var(--select-text-default)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:text-[var(--select-text-pressed)] data-[state=open]:shadow-[0_0_0_0.125rem_inset_var(--select-border-pressed)] [&>span]:line-clamp-1 [&>span]:flex-1 [&>svg:last-of-type]:data-[state=open]:rotate-180;
 
   /* default */
   @apply select-trigger-medium;
+}
+
+.select-trigger-error {
+  @apply !shadow-[0_0_0_0.125rem_inset_var(--select-border-error)];
 }
 
 .select-content {
@@ -22,14 +34,14 @@
   --select-fg-default: var(--fg-neutral-primary);
   --select-fg-pressed: var(--fg-neutral-tertiary);
 
-  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 relative z-50 min-w-[8rem] overflow-hidden border border-[var(--select-border-default)] bg-[var(--select-fg-default)] p-4 text-[var(--select-text-filled)] shadow-md;
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 relative z-50 w-[--radix-select-trigger-width] overflow-hidden border border-[var(--select-border-default)] bg-[var(--select-fg-default)] p-4 text-[var(--select-text-filled)] shadow-md data-[side=bottom]:mt-4 data-[side=top]:mb-4;
 }
 
 .select-viewport {
   @apply p-1;
 }
 
-.select-label {
+.select-group-label {
   @apply p-8 text-base font-medium;
 }
 
@@ -51,4 +63,18 @@
 
 .select-tag {
   @apply mr-6 capitalize;
+}
+
+.select-label {
+  @apply text-base font-normal text-[var(--select-text-filled)];
+}
+
+.select-caption {
+  @apply flex gap-4 text-base;
+
+  /* default */
+  @apply select-caption-default;
+}
+.select-caption-icon {
+  @apply flex-shrink-0;
 }

@@ -10,7 +10,7 @@
 }
 
 .sheet-close {
-  @apply rounded-8 absolute right-16 top-16 !m-0 transition-opacity hover:opacity-80 disabled:pointer-events-none disabled:opacity-50;
+  @apply !absolute right-8 top-8 !m-0;
 }
 
 .sheet-header {

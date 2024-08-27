@@ -41,12 +41,14 @@ const RadioItem = React.forwardRef<
       className={cn("radio-item", className)}
       {...props}
     >
-      <span className="radio">
-        <RadioGroupPrimitive.Indicator className="radio-indicator">
-          <Icon name="RiCircleFill" size={6} />
-        </RadioGroupPrimitive.Indicator>
-      </span>
-      {children}
+      <React.Fragment>
+        <span className="radio">
+          <RadioGroupPrimitive.Indicator className="radio-indicator">
+            <Icon name="RiCircleFill" size={6} />
+          </RadioGroupPrimitive.Indicator>
+        </span>
+        {children}
+      </React.Fragment>
     </RadioGroupPrimitive.Item>
   );
 });

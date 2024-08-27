@@ -12,7 +12,7 @@ const IconNames = Object.keys(Icons) as (keyof typeof Icons)[];
 type IconNameType = keyof typeof Icons;
 
 interface IconProps {
-  name: IconNameType;
+  name: IconNameType | null;
   color?: string;
   size?: number | string;
   className?: string;
@@ -25,6 +25,10 @@ const Icon: React.FC<IconProps> = ({
   className,
   ...props
 }) => {
+  if (!name) {
+    return <></>;
+  }
+
   if (Object.keys(customIcons).includes(name)) {
     return React.createElement("span", {
       style: { width: size, height: size, backgroundColor: color },

@@ -6,6 +6,7 @@ import { cva } from "class-variance-authority";
 import type { Radius } from "../types";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
+import { IconButton } from "./icon-button";
 import useTheme from "./use-theme";
 
 const Dialog = DialogPrimitive.Root;
@@ -62,8 +63,14 @@ const DialogContent = React.forwardRef<
         {...props}
       >
         {children}
-        <DialogPrimitive.Close className="dialog-close">
-          <Icon name="RiCloseLine" size={20} />
+        <DialogPrimitive.Close asChild>
+          <IconButton
+            icon="RiCloseLine"
+            size="medium"
+            variant="ghost"
+            className="dialog-close"
+            aria-label="Close"
+          />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>
@@ -104,12 +111,9 @@ DialogIcon.displayName = "DialogIcon";
 
 const DialogHeader = ({
   className,
-  children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("dialog-header", className)} {...props}>
-    {children}
-  </div>
+  <div className={cn("dialog-header", className)} {...props} />
 );
 DialogHeader.displayName = "DialogHeader";
 

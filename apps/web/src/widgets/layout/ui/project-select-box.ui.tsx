@@ -15,11 +15,14 @@
  */
 
 import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
 
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from '@ufb/react';
@@ -32,10 +35,15 @@ interface IProps {
 
 const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const router = useRouter();
+  const { t } = useTranslation();
 
   const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
   const onChangeProject = async (projectId: string) => {
+    if (projectId === '0') {
+      await router.push('/main/project/create');
+      return;
+    }
     await router.push({
       pathname: `/main/project/[projectId]/settings`,
       query: { projectId },
@@ -47,15 +55,25 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
       value={String(projectId)}
       onValueChange={(value) => onChangeProject(value)}
     >
-      <SelectTrigger className="max-w-60">
+      <SelectTrigger className="min-w-60">
         <SelectValue placeholder="Select a fruit" />
       </SelectTrigger>
       <SelectContent>
-        {data?.items.map(({ id, name }) => (
-          <SelectItem key={id} value={String(id)}>
-            {name}
-          </SelectItem>
-        ))}
+        <SelectGroup>
+          {data?.items.map(({ id, name }) => (
+            <SelectItem key={id} value={String(id)}>
+              {name}
+            </SelectItem>
+          ))}
+        </SelectGroup>
+        <SelectSeparator />
+        <SelectItem
+          value="0"
+          icon="RiAddCircleFill"
+          className="text-tint-blue p-2"
+        >
+          {t('v2.text.create-project')}
+        </SelectItem>
       </SelectContent>
     </Select>
   );

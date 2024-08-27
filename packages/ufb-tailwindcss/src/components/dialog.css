@@ -36,5 +36,5 @@
 }
 
 .dialog-close {
-  @apply absolute right-8 top-8 !m-0 flex p-12 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:text-[var(--icon-neutral-primary)];
+  @apply !absolute right-8 top-8 !m-0;
 }

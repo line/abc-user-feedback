@@ -47,3 +47,6 @@ export { default as SettingTemplate } from './setting-template.ui';
 //
 export { default as TextInput } from './text-input.ui';
 export { default as DialogContentTemplate } from './dialog-content-template.ui';
+export * from './inputs';
+
+export { default as Avatar } from './avatar.ui';

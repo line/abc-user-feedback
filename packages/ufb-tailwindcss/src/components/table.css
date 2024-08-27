@@ -1,4 +1,4 @@
-.table-wrap {
+.table {
   --table-text-cell: var(--text-neutral-primary);
   --table-text-header: var(--text-neutral-tertiary);
   --table-icon-cell: var(--text-neutral-primary);
@@ -7,10 +7,6 @@
   --table-fg-default: var(--fg-neutral-primary);
   --table-fg-hover: var(--fg-neutral-tertiary);
 
-  @apply relative w-full overflow-auto;
-}
-
-.table {
   @apply w-full caption-bottom;
 }
 

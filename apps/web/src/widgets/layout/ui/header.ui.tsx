@@ -32,7 +32,11 @@ import { ThemeToggleButton } from '@/entities/theme';
 
 import ProjectSelectBox from './project-select-box.ui';
 
-const MENU_ITEMS = ['dashboard', 'feedback', 'issue', 'settings'];
+const MENU_ITEMS = ['dashboard', 'feedback', 'issue', 'settings'] as const;
+
+type MenuType = (typeof MENU_ITEMS)[number];
+const firstLeterPascal = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1);
 
 interface IProps {
   projectId: number;
@@ -53,11 +57,25 @@ const Header: React.FC<IProps> = ({ projectId }) => {
     <div className="navbar gap-2">
       <ProjectSelectBox projectId={projectId} />
       <Divider type="subtle" indent={8} orientation="vertical" />
-      <Menu value={currentMenu} type="single" className="navbar-menu flex-1">
-        {MENU_ITEMS.map((v) => (
-          <MenuItem value={v}>{v}</MenuItem>
-        ))}
-      </Menu>
+      <div className="flex-1">
+        <Menu
+          value={currentMenu}
+          type="single"
+          className="navbar-menu"
+          onValueChange={async (value: MenuType | '') => {
+            if (!value) return;
+
+            await router.push({
+              pathname: `/main/project/[projectId]/${value}`,
+              query: { projectId },
+            });
+          }}
+        >
+          {MENU_ITEMS.map((v) => (
+            <MenuItem value={v}>{firstLeterPascal(v)}</MenuItem>
+          ))}
+        </Menu>
+      </div>
       <div className="flex gap-3">
         <IconButton icon="RiBuildingLine" variant="ghost" />
         <ThemeToggleButton />

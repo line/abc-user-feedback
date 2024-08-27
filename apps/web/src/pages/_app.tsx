@@ -80,7 +80,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
               <Toaster2 />
             </TenantGuard>
           </HydrationBoundary>
-          {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
+          {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />} */}
         </OverlayProvider>
       </QueryClientProvider>
     </>

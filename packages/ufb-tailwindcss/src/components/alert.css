@@ -13,7 +13,7 @@
   --alert-icon-informative: var(--icon-tint-blue);
   --alert-fg-default: var(--fg-neutral-primary);
 
-  @apply relative inline-flex min-w-[320px] items-center space-x-8 border bg-[var(--alert-fg-default)] px-20 py-16;
+  @apply relative inline-flex min-w-[356px] items-center space-x-8 border bg-[var(--alert-fg-default)] px-20 py-16;
 
   /* default */
   @apply alert-radius-medium alert-default;

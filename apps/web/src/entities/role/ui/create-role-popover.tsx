@@ -19,6 +19,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
+import { Button } from '@ufb/react';
 import { Input, Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
 import type { Role } from '../role.type';
@@ -60,12 +61,8 @@ const CreateRolePopover: React.FC<IProps> = ({ disabled, onCreate, roles }) => {
 
   return (
     <Popover open={open} onOpenChange={setOpen} modal>
-      <PopoverTrigger
-        onClick={() => setOpen(true)}
-        disabled={disabled}
-        className="btn-primary btn min-w-[120px]"
-      >
-        {t('main.setting.dialog.create-role.title')}
+      <PopoverTrigger onClick={() => setOpen(true)} disabled={disabled} asChild>
+        <Button>{t('v2.button.name.create', { name: 'Role' })}</Button>
       </PopoverTrigger>
       <PopoverModalContent
         title={t('main.setting.dialog.create-role.title')}

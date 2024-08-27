@@ -19,10 +19,8 @@ import { useTranslation } from 'react-i18next';
 import { Popover, PopoverModalContent } from '@ufb/ui';
 
 import type { Member } from '@/entities/member';
-import { CreateMemberPopover, MemberTable } from '@/entities/member';
-import type { Role } from '@/entities/role';
+import { MemberTable } from '@/entities/member';
 import { useUserSearch } from '@/entities/user';
-import type { User } from '@/entities/user';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
@@ -38,18 +36,6 @@ const InputMembersStep: React.FC<IProps> = () => {
     limit: 1000,
     query: { type: 'GENERAL' },
   });
-
-  const createMember = (user: User, role: Role) => {
-    onChangeInput(
-      'members',
-      input.members.concat({
-        id: (input.members[input.members.length - 1]?.id ?? 0) + 1,
-        user,
-        role,
-        createdAt: new Date().toISOString(),
-      }),
-    );
-  };
 
   const updateMember = (member: Member) => {
     onChangeInput(
@@ -94,22 +80,13 @@ const InputMembersStep: React.FC<IProps> = () => {
   };
 
   return (
-    <CreateProjectInputTemplate
-      actionButton={
-        <CreateMemberPopover
-          members={input.members}
-          onCreate={createMember}
-          project={input.projectInfo}
-          roles={input.roles}
-        />
-      }
-      validate={() => validate()}
-    >
+    <CreateProjectInputTemplate validate={() => validate()}>
       <MemberTable
         members={input.members}
         roles={input.roles}
         onDeleteMember={deleteMember}
         onUpdateMember={updateMember}
+        createButton={<></>}
       />
     </CreateProjectInputTemplate>
   );

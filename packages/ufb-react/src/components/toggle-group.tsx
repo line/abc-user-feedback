@@ -93,8 +93,10 @@ const ToggleGroupItem = React.forwardRef<
         disabled={disabled}
         {...props}
       >
-        {icon && <Icon name={icon} aria-hidden size={20} />}
-        {children}
+        <React.Fragment>
+          {icon && <Icon name={icon} aria-hidden size={20} />}
+          {children}
+        </React.Fragment>
       </ToggleGroupPrimitive.Item>
     );
   },

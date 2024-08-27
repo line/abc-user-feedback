@@ -7,3 +7,26 @@
 .select-trigger-large {
   @apply text-xlarge min-h-52 px-16;
 }
+
+.select-small {
+  @apply space-y-4;
+}
+.select-medium {
+  @apply space-y-6;
+}
+.select-large {
+  @apply space-y-8;
+}
+
+.select-caption-default {
+  @apply text-[var(--select-caption-default)];
+}
+.select-caption-success {
+  @apply text-[var(--select-caption-success)];
+}
+.select-caption-info {
+  @apply text-[var(--select-caption-default)];
+}
+.select-caption-error {
+  @apply text-[var(--select-caption-error)];
+}

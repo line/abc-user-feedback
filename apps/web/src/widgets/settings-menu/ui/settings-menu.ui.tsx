@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useMemo } from 'react';
+import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -21,12 +22,12 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger,
-  Icon,
+  Button,
   Menu,
+  MenuDropdown,
+  MenuDropdownContent,
+  MenuDropdownItem,
+  MenuDropdownTrigger,
   MenuItem,
 } from '@ufb/react';
 
@@ -58,6 +59,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
   });
 
   const onMenuValueChange = (value: string) => {
+    if (!value) return;
     const [menuValue, channelId] = value.split('_');
 
     if (!channelId) {
@@ -93,48 +95,50 @@ const SettingsMenu: React.FC<Props> = (props) => {
       <Accordion type="single" iconAlign="left" collapsible useDivider={false}>
         <AccordionItem value="item-1">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
-          <AccordionContent className="p-0">
-            <div>
-              {data?.items.map(({ name, id }) => (
-                <Dropdown key={id}>
-                  <DropdownTrigger asChild>
-                    <button className="menu-item menu-item-small w-full">
-                      <span>{name}</span>
-                      <Icon name="RiArrowRightSLine" size={20} />
-                    </button>
-                  </DropdownTrigger>
-                  <DropdownContent side="right" align="start">
-                    <DropdownItem asChild>
-                      <MenuItem
-                        value={`channel-info_${id}`}
-                        className="w-full"
-                        iconL="RiInformation2Line"
-                      >
-                        {t('v2.channel-setting-menu.channel-info')}
-                      </MenuItem>
-                    </DropdownItem>
-                    <DropdownItem asChild>
-                      <MenuItem
-                        value={`field-mgmt_${id}`}
-                        className="w-full"
-                        iconL="RiListCheck"
-                      >
-                        {t('v2.channel-setting-menu.field-mgmt')}
-                      </MenuItem>
-                    </DropdownItem>
-                    <DropdownItem asChild>
-                      <MenuItem
-                        value={`image-mgmt_${id}`}
-                        className="w-full"
-                        iconL="RiImageFill"
-                      >
-                        {t('v2.channel-setting-menu.image-mgmt')}
-                      </MenuItem>
-                    </DropdownItem>
-                  </DropdownContent>
-                </Dropdown>
-              ))}
-            </div>
+          <AccordionContent className="!p-0">
+            {data?.meta.totalItems === 0 ?
+              <div className="border-neutral-tertiary flex w-full flex-col items-center justify-center gap-4 rounded border p-4">
+                <Image
+                  width={96}
+                  height={96}
+                  src="/assets/images/empty-image.png"
+                  alt="empty image"
+                />
+                <p className="text-small text-neutral-tertiary">
+                  {t('v2.text.no-data.channel')}
+                </p>
+                <Button className="w-full">
+                  {t('v2.text.create-channel')}
+                </Button>
+              </div>
+            : data?.items.map(({ name, id }) => (
+                <MenuDropdown key={id}>
+                  <MenuDropdownTrigger value="" iconR="RiArrowRightSLine">
+                    {name}
+                  </MenuDropdownTrigger>
+                  <MenuDropdownContent side="right" align="start">
+                    <MenuDropdownItem
+                      value={`channel-info_${id}`}
+                      iconL="RiInformation2Line"
+                    >
+                      {t('v2.channel-setting-menu.channel-info')}
+                    </MenuDropdownItem>
+                    <MenuDropdownItem
+                      value={`field-mgmt_${id}`}
+                      iconL="RiListCheck"
+                    >
+                      {t('v2.channel-setting-menu.field-mgmt')}
+                    </MenuDropdownItem>
+                    <MenuDropdownItem
+                      value={`image-mgmt_${id}`}
+                      iconL="RiImageFill"
+                    >
+                      {t('v2.channel-setting-menu.image-mgmt')}
+                    </MenuDropdownItem>
+                  </MenuDropdownContent>
+                </MenuDropdown>
+              ))
+            }
           </AccordionContent>
         </AccordionItem>
       </Accordion>

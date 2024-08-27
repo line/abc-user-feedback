@@ -4,7 +4,7 @@ export * from "./badge";
 export * from "./button";
 export * from "./checkbox";
 export * from "./calendar";
-export * from "./command";
+export * from "./combobox";
 export * from "./divider";
 export * from "./dialog";
 export * from "./dropdown";

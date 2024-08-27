@@ -14,24 +14,26 @@
  * under the License.
  */
 import { createColumnHelper } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { DescriptionTooltip } from '@/shared';
-import type { Role } from '@/entities/role';
+import {
+  Badge,
+  Button,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+} from '@ufb/react';
+
+import { Avatar, DATE_TIME_FORMAT, DescriptionTooltip } from '@/shared';
 
 import type { User } from '../user';
 import type { Member } from './member.type';
-import DeleteMemberPopover from './ui/delete-member-popover.ui';
-import UpdateMemberPopover from './ui/update-member-popover.ui';
 
 const columnHelper = createColumnHelper<Member>();
 
-export const getMemberColumns = (
-  users: User[],
-  roles: Role[],
-  onClickDelete?: (index: number) => void,
-  onClickUpdate?: (member: Member) => void,
-) => [
+export const getMemberColumns = (users: User[]) => [
   columnHelper.accessor('user.email', {
     header: 'Email',
     enableSorting: false,
@@ -56,46 +58,52 @@ export const getMemberColumns = (
   columnHelper.accessor('user.name', {
     header: 'Name',
     enableSorting: false,
-    cell: ({ getValue }) => ((getValue() ?? '').length > 0 ? getValue() : '-'),
+    cell: ({ getValue }) => {
+      const name = getValue();
+      return name ?
+          <>
+            <Avatar name={name} />
+            {name}
+          </>
+        : '-';
+    },
   }),
   columnHelper.accessor('user.department', {
     header: 'Department',
     enableSorting: false,
-    cell: ({ getValue }) => ((getValue() ?? '').length > 0 ? getValue() : '-'),
+    cell: ({ getValue }) =>
+      getValue() ? <Badge type="subtle">{getValue()}</Badge> : '-',
   }),
   columnHelper.accessor('role.name', {
     header: 'Role',
-    cell: ({ getValue }) => getValue(),
+    cell: ({ getValue }) =>
+      getValue() ? <Badge type="subtle">{getValue()}</Badge> : '-',
     enableSorting: false,
   }),
-  ...(onClickUpdate ?
-    [
-      columnHelper.display({
-        id: 'edit',
-        header: 'Edit',
-        cell: ({ row }) => (
-          <UpdateMemberPopover
-            roles={roles}
-            member={row.original}
-            onClickUpdate={onClickUpdate}
-          />
-        ),
-        size: 75,
-      }),
-    ]
-  : []),
-  ...(onClickDelete ?
-    [
-      columnHelper.display({
-        id: 'delete',
-        header: 'Delete',
-        cell: ({ row }) => (
-          <DeleteMemberPopover
-            onClickDelete={() => onClickDelete(row.original.id)}
-          />
-        ),
-        size: 75,
-      }),
-    ]
-  : []),
+  columnHelper.accessor('createdAt', {
+    header: ({ column }) => (
+      <Dropdown>
+        <DropdownTrigger>
+          <Button variant="ghost" size="small" iconR="RiArrowUpDownFill">
+            Joined
+          </Button>
+        </DropdownTrigger>
+        <DropdownContent>
+          <DropdownItem
+            onClick={() => column.toggleSorting(false)}
+            iconL="RiArrowUpLine"
+          >
+            Ascending
+          </DropdownItem>
+          <DropdownItem
+            onClick={() => column.toggleSorting(true)}
+            iconL="RiArrowDownLine"
+          >
+            Descending
+          </DropdownItem>
+        </DropdownContent>
+      </Dropdown>
+    ),
+    cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
+  }),
 ];

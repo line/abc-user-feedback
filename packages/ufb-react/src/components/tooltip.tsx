@@ -51,22 +51,24 @@ const TooltipContent = React.forwardRef<
       className={cn(tooltipVariants({ textAlign, className }))}
       {...props}
     >
-      {title && <strong className={cn("tooltip-title")}>{title}</strong>}
-      {children}
-      {side !== undefined && (
-        <React.Fragment>
-          <TooltipPrimitive.TooltipArrow
-            width={10}
-            height={6}
-            className={cn("tooltip-arrow-border")}
-          />
-          <TooltipPrimitive.TooltipArrow
-            width={8}
-            height={5}
-            className={cn("tooltip-arrow")}
-          />
-        </React.Fragment>
-      )}
+      <React.Fragment>
+        {title && <strong className={cn("tooltip-title")}>{title}</strong>}
+        {children}
+        {side !== undefined && (
+          <React.Fragment>
+            <TooltipPrimitive.TooltipArrow
+              width={10}
+              height={6}
+              className={cn("tooltip-arrow-border")}
+            />
+            <TooltipPrimitive.TooltipArrow
+              width={8}
+              height={5}
+              className={cn("tooltip-arrow")}
+            />
+          </React.Fragment>
+        )}
+      </React.Fragment>
     </TooltipPrimitive.Content>
   ),
 );

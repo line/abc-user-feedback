@@ -15,11 +15,15 @@
 }
 
 .accordion-trigger {
-  @apply flex w-full items-center space-x-8 p-16 text-left text-base font-medium transition-all [&>strong]:flex-1 [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
+  @apply flex w-full items-center justify-between p-16 text-left text-base font-medium transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
 }
 
 .accordion-trigger-bg {
   @apply bg-neutral-tertiary;
+}
+
+.accordion-trigger-align-left {
+  @apply justify-start [&>svg:first-of-type]:mr-8;
 }
 
 .accordion-content-box {
