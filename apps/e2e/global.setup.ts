@@ -13,10 +13,7 @@ setup("tenant create and authenticate", async ({ page }) => {
   await page.goto("http://localhost:3000/auth/sign-in");
   await page.waitForTimeout(1000);
 
-  await expect(page.getByRole("banner")).toHaveText(/TestTenant/, {
-    timeout: 500000,
-    useInnerText: true,
-  });
+  await expect(page.getByRole("banner", { name: "TestTenant" })).toBeVisible();
   await page.getByPlaceholder("ID").click();
   await page.getByPlaceholder("ID").fill("user@feedback.com");
   await page.getByPlaceholder("Password").click();
