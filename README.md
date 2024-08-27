@@ -82,6 +82,8 @@ npx auf-cli start # start app
 npx auf-cli stop # stop app
 ```
 
+Please refer to the following npm package site: https://www.npmjs.com/package/auf-cli
+
 ## Setup Dev Environment Manually (Local)
 
 ABC User Feedback is using a monorepo (powered by [TurboRepo](https://turbo.build/)) with multiple apps and packages.

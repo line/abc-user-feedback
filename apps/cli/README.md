@@ -1,6 +1,6 @@
-# ABC UserFeedback CLI
+# ABC User Feedback CLI
 
-The ABC UserFeedback CLI helps you easily run web frontends and servers.
+The ABC User Feedback CLI helps you easily run web frontends and servers.
 
 [ABC User Feedback](https://github.com/line/abc-user-feedback) is a standalone web application that manages Voice of Customer (VoC) data, allowing you to gather and organize feedback from your customers.
 

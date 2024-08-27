@@ -24,7 +24,7 @@ import { load } from 'js-toml';
 const program = new Command();
 
 program.description(
-  'ABC UserFeedback CLI that helps to run web frontend and server easily.',
+  'ABC User Feedback CLI that helps to run web frontend and server easily.',
 );
 
 function getArchitectureType() {
@@ -46,7 +46,7 @@ function getArchitectureType() {
 program
   .command('init')
   .description(
-    'Start the appropriate Docker Compose file based on architecture to setup the ABC UserFeedback infrastructure.',
+    'Start the appropriate Docker Compose file based on architecture to setup the ABC User Feedback infrastructure.',
   )
   .action(() => {
     const architecture = getArchitectureType();
@@ -62,6 +62,9 @@ program
       `Terminates existing Docker Compose with auf-cli project name...`,
     );
     execSync(`docker compose -p auf-cli down`);
+
+    console.log('Deletes existing mounted docker volumes...');
+    execSync(`rm -rf ${path.join(__dirname, '../volumes')}`);
 
     console.log(`Running Docker Compose with ${composeFilePath.toString()}...`);
     execSync(
@@ -82,7 +85,7 @@ program
 program
   .command('start')
   .description(
-    'Pull ABC UserFeedback Docker image and run container with environment variables',
+    'Pull ABC User Feedback Docker image and run container with environment variables',
   )
   .action(() => {
     if (fs.existsSync(path.join(process.cwd(), 'config.toml')) === false) {
@@ -185,7 +188,7 @@ program
 
     console.log(
       '\x1b[32m',
-      '\nStarted ABC UserFeedback services.\n',
+      '\nStarted ABC User Feedback services.\n',
       '\x1b[0m',
     );
     const serviceInfos = {
