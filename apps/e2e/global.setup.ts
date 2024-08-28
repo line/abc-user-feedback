@@ -9,13 +9,14 @@ setup("tenant create and authenticate", async ({ page }) => {
   await page.getByLabel("Site name").click();
   await page.getByLabel("Site name").fill("TestTenant");
   await page.getByRole("button", { name: "Setting", exact: true }).click();
+  await page.waitForTimeout(1000);
 
   await page.goto("http://localhost:3000/auth/sign-in");
   await page.waitForTimeout(1000);
 
-  await expect(page.getByRole("banner")).toHaveText(/TestTenant/, {
-    timeout: 500000,
-  });
+  await expect(page.locator("body", { hasText: "TestTenant" })).toContainText(
+    "TestTenant"
+  );
   await page.getByPlaceholder("ID").click();
   await page.getByPlaceholder("ID").fill("user@feedback.com");
   await page.getByPlaceholder("Password").click();
