@@ -47,7 +47,7 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
     clearErrors,
   } = useForm<FormType>({
     resolver: zodResolver(signUpWithEmailSchema),
-    defaultValues: { emailState: 'NOT_VERIFIED' },
+    defaultValues: { emailState: 'NOT_VERIFIED', code: '' },
   });
 
   const [expiredTime, setExpiredTime] = useState<string>();
