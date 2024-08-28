@@ -1,6 +1,6 @@
 {
   "name": "auf-cli",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "bin": {
     "auf-cli": "./dist/auf-cli.js"
   },
