@@ -21,8 +21,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button,  } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   Path,
@@ -68,10 +67,10 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects'],
         });
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
@@ -86,10 +85,10 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects'],
         });
-        toast.negative({ title: t('toast.delete') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
