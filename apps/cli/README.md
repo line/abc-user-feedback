@@ -39,3 +39,11 @@ The following command stops the API and web servers.
 ```sh
 npx auf-cli stop
 ```
+
+## Clean Mounted Volumes
+
+The following command clean the mounted docker volumes created during initialization.
+
+```sh
+npx auf-cli clean
+```

@@ -80,14 +80,6 @@ program
   });
 
 program
-  .command('clean')
-  .description('Delete existing mounted docker volumes')
-  .action(() => {
-    console.log('Deletes existing mounted docker volumes...');
-    execSync(`rm -rf ${path.join(__dirname, '../volumes')}`);
-  });
-
-program
   .command('start')
   .description(
     'Pull ABC User Feedback Docker image and run container with environment variables',
@@ -221,6 +213,14 @@ program
       `Stopping Docker Compose with command: ${dockerComposeCommand}`,
     );
     execSync(dockerComposeCommand);
+  });
+
+program
+  .command('clean')
+  .description('Delete existing mounted docker volumes')
+  .action(() => {
+    console.log('Deletes existing mounted docker volumes...');
+    execSync(`rm -rf ${path.join(__dirname, '../volumes')}`);
   });
 
 program.parse(process.argv);
