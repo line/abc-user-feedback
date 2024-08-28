@@ -63,9 +63,6 @@ program
     );
     execSync(`docker compose -p auf-cli down`);
 
-    console.log('Deletes existing mounted docker volumes...');
-    execSync(`rm -rf ${path.join(__dirname, '../volumes')}`);
-
     console.log(`Running Docker Compose with ${composeFilePath.toString()}...`);
     execSync(
       `docker compose -p auf-cli -f ${composeFilePath.toString()} up  -d`,
@@ -80,6 +77,14 @@ program
     console.log(
       'config.toml has been created. Please fill in the required environment variables.',
     );
+  });
+
+program
+  .command('clean')
+  .description('Delete existing mounted docker volumes')
+  .action(() => {
+    console.log('Deletes existing mounted docker volumes...');
+    execSync(`rm -rf ${path.join(__dirname, '../volumes')}`);
   });
 
 program
