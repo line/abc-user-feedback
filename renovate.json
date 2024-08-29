@@ -1,16 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
-  "baseBranches": [
-    "dev"
-  ],
+  "extends": ["config:recommended"],
+  "ignorePaths": ["**/.github/workflows/e2e-test.yml"],
+  "baseBranches": ["dev"],
   "packageRules": [
     {
-      "matchPackagePatterns": [
-        "^@ufb/"
-      ],
+      "matchPackagePatterns": ["^@ufb/"],
+      "enabled": false
+    },
+    {
+      "matchManagers": ["docker-compose"],
       "enabled": false
     }
   ],
