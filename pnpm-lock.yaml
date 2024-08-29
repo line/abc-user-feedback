@@ -324,7 +324,7 @@ importers:
         version: link:../../tooling/typescript
       ts-node:
         specifier: ^10.9.2
-        version: 10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4)
+        version: 10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4)
 
   apps/e2e:
     devDependencies:
@@ -547,7 +547,7 @@ importers:
         version: 1.21.6
       msw:
         specifier: ^2.3.0
-        version: 2.3.5(typescript@5.5.4)
+        version: 2.4.1(graphql@16.9.0)(typescript@5.5.4)
       next-router-mock:
         specifier: ^0.9.13
         version: 0.9.13(next@14.2.7(@babel/core@7.25.2)(@opentelemetry/api@1.9.0)(@playwright/test@1.46.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
@@ -640,7 +640,7 @@ importers:
         version: 3.3.3
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.10(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4))
+        version: 3.4.10(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4))
 
   packages/ufb-ui:
     dependencies:
@@ -689,7 +689,7 @@ importers:
         version: 3.3.3
       tailwindcss:
         specifier: ^3.4.3
-        version: 3.4.10(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4))
+        version: 3.4.10(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4))
       typescript:
         specifier: 'catalog:'
         version: 5.5.4
@@ -2214,20 +2214,20 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@inquirer/confirm@3.1.20':
-    resolution: {integrity: sha512-UvG5Plh0MfCqUvZB8RKzBBEWB/EeMzO59Awy/Jg4NgeSjIPqhPaQFnnmxiyWUTwZh4uENB7wCklEFUwckioXWg==}
+  '@inquirer/confirm@3.1.22':
+    resolution: {integrity: sha512-gsAKIOWBm2Q87CDfs9fEo7wJT3fwWIJfnDGMn9Qy74gBnNFOACDNfhUzovubbJjWnKLGBln7/NcSmZwj5DuEXg==}
     engines: {node: '>=18'}
 
-  '@inquirer/core@9.0.8':
-    resolution: {integrity: sha512-ttnI/BGlP9SxjbQnv1nssv7dPAwiR82KmjJZx2SxSZyi2mGbaEvh4jg0I4yU/4mVQf7QvCVGGr/hGuJFEYhwnw==}
+  '@inquirer/core@9.0.10':
+    resolution: {integrity: sha512-TdESOKSVwf6+YWDz8GhS6nKscwzkIyakEzCLJ5Vh6O3Co2ClhCJ0A4MG909MUWfaWdpJm7DE45ii51/2Kat9tA==}
     engines: {node: '>=18'}
 
   '@inquirer/figures@1.0.5':
     resolution: {integrity: sha512-79hP/VWdZ2UVc9bFGJnoQ/lQMpL74mGgzSYX1xUqCVk7/v73vJCMw1VuyWN1jGkZ9B3z7THAbySqGbCNefcjfA==}
     engines: {node: '>=18'}
 
-  '@inquirer/type@1.5.1':
-    resolution: {integrity: sha512-m3YgGQlKNS0BM+8AFiJkCsTqHEFCWn6s/Rqye3mYwvqY6LdfUv12eSwbsgNzrYyrLXiy7IrrjDLPysaSBwEfhw==}
+  '@inquirer/type@1.5.2':
+    resolution: {integrity: sha512-w9qFkumYDCNyDZmNQjf/n6qQuvQ4dMC3BJesY4oF+yr0CxR5vxujflAVeIcS6U336uzi9GM0kAfZlLrZ9UTkpA==}
     engines: {node: '>=18'}
 
   '@isaacs/cliui@8.0.2':
@@ -3699,8 +3699,8 @@ packages:
   '@types/node@20.16.2':
     resolution: {integrity: sha512-91s/n4qUPV/wg8eE9KHYW1kouTfDk2FPGjXbBMfRWP/2vg1rCXNQL1OCabwGs0XSdukuK+MwCDXE30QpSeMUhQ==}
 
-  '@types/node@22.5.0':
-    resolution: {integrity: sha512-DkFrJOe+rfdHTqqMg0bSNlGlQ85hSoh2TPzZyhHsXnMtligRWpxUySiyw8FY14ITt24HVCiQPWxS3KO/QlGmWg==}
+  '@types/node@22.5.1':
+    resolution: {integrity: sha512-KkHsxej0j9IW1KKOOAA/XBA0z08UFSrRQHErzEfA3Vgq57eXIMYboIlHJuYIfd+lwCQjtKqUu3UnmKbtUc9yRw==}
 
   '@types/nodemailer@6.4.15':
     resolution: {integrity: sha512-0EBJxawVNjPkng1zm2vopRctuWVCxk34JcIlRuXSf54habUWdz1FB7wHDqOqvDa8Mtpt0Q3LTXQkAs2LNyK5jQ==}
@@ -7067,13 +7067,16 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
-  msw@2.3.5:
-    resolution: {integrity: sha512-+GUI4gX5YC5Bv33epBrD+BGdmDvBg2XGruiWnI3GbIbRmMMBeZ5gs3mJ51OWSGHgJKztZ8AtZeYMMNMVrje2/Q==}
+  msw@2.4.1:
+    resolution: {integrity: sha512-HXcoQPzYTwEmVk+BGIcRa0vLabBT+J20SSSeYh/QfajaK5ceA6dlD4ZZjfz2dqGEq4vRNCPLP6eXsB94KllPFg==}
     engines: {node: '>=18'}
     hasBin: true
     peerDependencies:
+      graphql: '>= 16.8.x'
       typescript: '>= 4.7.x'
     peerDependenciesMeta:
+      graphql:
+        optional: true
       typescript:
         optional: true
 
@@ -8979,10 +8982,6 @@ packages:
   type-fest@0.21.3:
     resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
     engines: {node: '>=10'}
-
-  type-fest@4.23.0:
-    resolution: {integrity: sha512-ZiBujro2ohr5+Z/hZWHESLz3g08BBdrdLMieYFULJO+tWc437sn8kQsWLJoZErY8alNhxre9K4p3GURAG11n+w==}
-    engines: {node: '>=16'}
 
   type-fest@4.26.0:
     resolution: {integrity: sha512-OduNjVJsFbifKb57UqZ2EMP1i4u64Xwow3NYXUtBbD4vIwJdQd4+xl8YDou1dlm4DVrtwT/7Ky8z8WyCULVfxw==}
@@ -11461,17 +11460,17 @@ snapshots:
   '@img/sharp-win32-x64@0.33.5':
     optional: true
 
-  '@inquirer/confirm@3.1.20':
+  '@inquirer/confirm@3.1.22':
     dependencies:
-      '@inquirer/core': 9.0.8
-      '@inquirer/type': 1.5.1
+      '@inquirer/core': 9.0.10
+      '@inquirer/type': 1.5.2
 
-  '@inquirer/core@9.0.8':
+  '@inquirer/core@9.0.10':
     dependencies:
       '@inquirer/figures': 1.0.5
-      '@inquirer/type': 1.5.1
+      '@inquirer/type': 1.5.2
       '@types/mute-stream': 0.0.4
-      '@types/node': 22.5.0
+      '@types/node': 22.5.1
       '@types/wrap-ansi': 3.0.0
       ansi-escapes: 4.3.2
       cli-spinners: 2.9.2
@@ -11484,7 +11483,7 @@ snapshots:
 
   '@inquirer/figures@1.0.5': {}
 
-  '@inquirer/type@1.5.1':
+  '@inquirer/type@1.5.2':
     dependencies:
       mute-stream: 1.0.0
 
@@ -13162,7 +13161,7 @@ snapshots:
 
   '@types/mute-stream@0.0.4':
     dependencies:
-      '@types/node': 20.16.2
+      '@types/node': 22.5.1
 
   '@types/node@14.18.63': {}
 
@@ -13170,7 +13169,7 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
-  '@types/node@22.5.0':
+  '@types/node@22.5.1':
     dependencies:
       undici-types: 6.19.8
 
@@ -15740,7 +15739,8 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql@16.9.0: {}
+  graphql@16.9.0:
+    optional: true
 
   handlebars@4.7.8:
     dependencies:
@@ -17410,26 +17410,26 @@ snapshots:
 
   ms@2.1.3: {}
 
-  msw@2.3.5(typescript@5.5.4):
+  msw@2.4.1(graphql@16.9.0)(typescript@5.5.4):
     dependencies:
       '@bundled-es-modules/cookie': 2.0.0
       '@bundled-es-modules/statuses': 1.0.1
       '@bundled-es-modules/tough-cookie': 0.1.6
-      '@inquirer/confirm': 3.1.20
+      '@inquirer/confirm': 3.1.22
       '@mswjs/interceptors': 0.29.1
       '@open-draft/until': 2.1.0
       '@types/cookie': 0.6.0
       '@types/statuses': 2.0.5
       chalk: 4.1.2
-      graphql: 16.9.0
       headers-polyfill: 4.0.3
       is-node-process: 1.2.0
       outvariant: 1.4.3
       path-to-regexp: 6.2.2
       strict-event-emitter: 0.5.1
-      type-fest: 4.23.0
+      type-fest: 4.26.0
       yargs: 17.7.2
     optionalDependencies:
+      graphql: 16.9.0
       typescript: 5.5.4
 
   multer@1.4.4-lts.1:
@@ -18078,13 +18078,13 @@ snapshots:
       postcss: 8.4.41
       ts-node: 10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@20.16.2)(typescript@5.5.4)
 
-  postcss-load-config@4.0.2(postcss@8.4.41)(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4)):
+  postcss-load-config@4.0.2(postcss@8.4.41)(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4)):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.5.0
     optionalDependencies:
       postcss: 8.4.41
-      ts-node: 10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4)
+      ts-node: 10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4)
 
   postcss-load-config@5.1.0(jiti@1.21.6)(postcss@8.4.41):
     dependencies:
@@ -19265,7 +19265,7 @@ snapshots:
     transitivePeerDependencies:
       - ts-node
 
-  tailwindcss@3.4.10(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4)):
+  tailwindcss@3.4.10(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
@@ -19284,7 +19284,7 @@ snapshots:
       postcss: 8.4.41
       postcss-import: 15.1.0(postcss@8.4.41)
       postcss-js: 4.0.1(postcss@8.4.41)
-      postcss-load-config: 4.0.2(postcss@8.4.41)(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4))
+      postcss-load-config: 4.0.2(postcss@8.4.41)(ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4))
       postcss-nested: 6.2.0(postcss@8.4.41)
       postcss-selector-parser: 6.1.2
       resolve: 1.22.8
@@ -19474,14 +19474,14 @@ snapshots:
     optionalDependencies:
       '@swc/core': 1.7.21(@swc/helpers@0.5.12)
 
-  ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.0)(typescript@5.5.4):
+  ts-node@10.9.2(@swc/core@1.7.21(@swc/helpers@0.5.12))(@types/node@22.5.1)(typescript@5.5.4):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 22.5.0
+      '@types/node': 22.5.1
       acorn: 8.12.1
       acorn-walk: 8.3.3
       arg: 4.1.3
@@ -19583,8 +19583,6 @@ snapshots:
   type-fest@0.20.2: {}
 
   type-fest@0.21.3: {}
-
-  type-fest@4.23.0: {}
 
   type-fest@4.26.0: {}
 
