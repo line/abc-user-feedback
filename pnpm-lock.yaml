@@ -556,7 +556,7 @@ importers:
         version: 1.15.1
       openapi-typescript:
         specifier: ^7.0.0
-        version: 7.3.2(typescript@5.5.4)
+        version: 7.3.3(typescript@5.5.4)
       postcss:
         specifier: ^8.4.38
         version: 8.4.41
@@ -2897,8 +2897,8 @@ packages:
   '@redocly/config@0.10.1':
     resolution: {integrity: sha512-H3LnKVGzOaxskwJu8pmJYwBOWjP61qOK7TuTrbafqArDVckE06fhA6l0nO4KvBbjLPjy1Al7UnlxOu23V4Nl0w==}
 
-  '@redocly/openapi-core@1.22.0':
-    resolution: {integrity: sha512-IXazrCCUwRkwgVGlaWghFEyyLrz5EM1VM+Kn3/By4QGaNVd04oxC1c92h3kbt1StAxtrTfxBAGwS7bqqCF7nsw==}
+  '@redocly/openapi-core@1.22.1':
+    resolution: {integrity: sha512-pjr456gJzrbwPvBjFKlWOd9nZEcr/dp6XSH0c8ijWGWv5K+V0vpUUy2zaTAVsFAoCydx1miEoOcbLhWQ9WC2nw==}
     engines: {node: '>=14.19.0', npm: '>=7.0.0'}
 
   '@rollup/plugin-commonjs@26.0.1':
@@ -7340,8 +7340,8 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
-  openapi-typescript@7.3.2:
-    resolution: {integrity: sha512-bNHPVlTrzRRD+7RBARjcbRrLDvNOLMNV6uHXDCneH9iQsm7WUoccvBtMaG8Y8eZ1GeFsQvnXZteNXt46snBJZQ==}
+  openapi-typescript@7.3.3:
+    resolution: {integrity: sha512-NkUBI8fr5mg/3s001UPfUiBpKmHtSjkvFQO/IipCrQal5d5nGFoev1OXdxr7J9PHTswrAqU2hKdpoCL6OnammA==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
@@ -12226,7 +12226,7 @@ snapshots:
 
   '@redocly/config@0.10.1': {}
 
-  '@redocly/openapi-core@1.22.0(supports-color@9.4.0)':
+  '@redocly/openapi-core@1.22.1(supports-color@9.4.0)':
     dependencies:
       '@redocly/ajv': 8.11.0
       '@redocly/config': 0.10.1
@@ -17711,9 +17711,9 @@ snapshots:
       is-wsl: 2.2.0
     optional: true
 
-  openapi-typescript@7.3.2(typescript@5.5.4):
+  openapi-typescript@7.3.3(typescript@5.5.4):
     dependencies:
-      '@redocly/openapi-core': 1.22.0(supports-color@9.4.0)
+      '@redocly/openapi-core': 1.22.1(supports-color@9.4.0)
       ansi-colors: 4.1.3
       parse-json: 8.1.0
       supports-color: 9.4.0
