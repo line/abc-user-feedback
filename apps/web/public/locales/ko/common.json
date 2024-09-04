@@ -478,7 +478,8 @@
       "delete": "삭제",
       "register": "등록하기",
       "save": "저장",
-      "cancel": "취소"
+      "cancel": "취소",
+      "out": "나가기"
     },
     "project-setting-menu": {
       "project-info": "Project 정보",
@@ -499,13 +500,18 @@
       "delete-project": {
         "title": "삭제 하시겠습니까?",
         "description": "삭제를 하면 관련된 정보가 모두 사라집니다."
+      },
+      "warn-if-unsaved-changes": {
+        "title": "페이지를 나가시겠습니까?",
+        "description": "중간에 나가면 입력한 내용이 저장되지 않습니다."
       }
     },
     "text": {
       "no-data": {
         "api-key": "생성된 API Key가 없습니다.",
         "member": "등록된 Member가 없습니다.",
-        "channel": "생성된 Channel이 없습니다."
+        "channel": "생성된 Channel이 없습니다.",
+        "webhook": "등록된 Webhook이 없습니다."
       },
       "create-project": "Project 생성",
       "create-channel": "Channel 생성",
@@ -516,10 +522,30 @@
       }
     },
     "placeholder": {
-      "select": "선택해주세요."
+      "select": "선택해주세요.",
+      "text": "입력해주세요.",
+      "text-or-generate": "입력 또는 생성해주세요."
     },
     "toast": {
       "success": "성공적으로 처리되었습니다."
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "피드백 생성",
+        "description": "피드백이 생성되면."
+      },
+      "issue-addition": {
+        "title": "이슈 등록",
+        "description": "문제가 피드백에 등록된 경우."
+      },
+      "issue-status-change": {
+        "title": "이슈 상태 변경",
+        "description": "문제의 상태가 변경되는 경우."
+      },
+      "issue-creation": {
+        "title": "이슈 생성",
+        "description": "이슈가 생성될 때."
+      }
     }
   }
 }

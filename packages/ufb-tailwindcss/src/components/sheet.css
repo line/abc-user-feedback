@@ -30,9 +30,9 @@
 }
 
 .sheet-title {
-  @apply text-xlarge text-neutral-primary font-medium;
+  @apply text-xlarge-strong text-neutral-primary;
 }
 
 .sheet-description {
-  @apply text-neutral-secondary text-base;
+  @apply text-neutral-secondary text-base-normal;
 }

@@ -1,11 +1,11 @@
 .checkbox-small {
-  @apply text-small;
+  @apply text-small-normal;
 }
 .checkbox-medium {
-  @apply text-base;
+  @apply text-base-normal;
 }
 .checkbox-large {
-  @apply text-large;
+  @apply text-large-normal;
 }
 
 .check-small {

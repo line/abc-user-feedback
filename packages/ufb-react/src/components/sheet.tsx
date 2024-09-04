@@ -1,10 +1,12 @@
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
+import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 import { Icon } from "./icon";
 import { IconButton } from "./icon-button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
@@ -13,7 +15,15 @@ const Sheet = SheetPrimitive.Root;
 
 const SheetTrigger = SheetPrimitive.Trigger;
 
-const SheetClose = SheetPrimitive.Close;
+const SheetClose = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  React.ComponentPropsWithoutRef<typeof Button>
+>(({ variant, ...props }, ref) => (
+  <SheetPrimitive.Close asChild>
+    <Button ref={ref} variant={variant ?? "outline"} {...props} />
+  </SheetPrimitive.Close>
+));
+SheetClose.displayName = "SheetClose";
 
 const SheetPortal = SheetPrimitive.Portal;
 
@@ -100,15 +110,18 @@ const SheetHeader = ({
 );
 SheetHeader.displayName = "SheetHeader";
 
-const SheetBody = ({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-  <ScrollArea>
-    <div className={cn("sheet-body", className)} {...props} />
-    <ScrollBar />
-  </ScrollArea>
-);
+interface SheetBodyProps extends React.HTMLAttributes<HTMLDivElement> {
+  asChild?: boolean;
+}
+const SheetBody = ({ asChild, className, ...props }: SheetBodyProps) => {
+  const Comp = asChild ? Slot : "div";
+  return (
+    <ScrollArea>
+      <Comp className={cn("sheet-body", className)} {...props} />
+      <ScrollBar />
+    </ScrollArea>
+  );
+};
 SheetBody.displayName = "SheetBody";
 
 const SheetFooter = ({

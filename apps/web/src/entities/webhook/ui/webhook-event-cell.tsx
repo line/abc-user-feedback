@@ -16,17 +16,17 @@
 import { useTranslation } from 'react-i18next';
 
 import {
-  Badge,
-  Popover,
-  PopoverContent,
-  PopoverHeading,
-  PopoverTrigger,
-} from '@ufb/ui';
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  Tag,
+} from '@ufb/react';
 
-import { cn } from '@/shared';
+import { useOAIQuery } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
-import type { WebhookEventType, WebhookStatus } from '../webhook.type';
+import type { WebhookEventType } from '../webhook.type';
 
 const toCamelCase = (str: string) => {
   return str
@@ -35,44 +35,34 @@ const toCamelCase = (str: string) => {
 };
 
 interface IProps {
-  webhookStatus: WebhookStatus;
   type: WebhookEventType;
   channels: Channel[];
+  projectId: number;
 }
 
 const WebhookEventCell: React.FC<IProps> = (props) => {
-  const { channels, type, webhookStatus } = props;
+  const { channels, type, projectId } = props;
   const { t } = useTranslation();
 
-  if (type === 'ISSUE_CREATION' || type === 'ISSUE_STATUS_CHANGE') {
-    return <p>{toCamelCase(t(`text.webhook-type.${type}`))}</p>;
-  }
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
 
   return (
-    <Popover>
-      <PopoverTrigger disabled={webhookStatus === 'INACTIVE'}>
-        <span
-          className={cn(
-            'text-blue-primary font-12-regular cursor-pointer underline',
-            { 'text-tertiary': webhookStatus === 'INACTIVE' },
-          )}
-        >
+    <Dropdown>
+      <DropdownTrigger onClick={(e) => e.stopPropagation()} asChild>
+        <Tag iconR="RiInformation2Line">
           {toCamelCase(t(`text.webhook-type.${type}`))}
-        </span>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverHeading>
-          {t('channel-setting-menu.channel-info')}
-        </PopoverHeading>
-        <div className="m-4 flex min-w-[200px] max-w-[340px] flex-wrap gap-2">
-          {channels.map(({ id, name }) => (
-            <Badge key={id} type="secondary">
-              {name}
-            </Badge>
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
+        </Tag>
+      </DropdownTrigger>
+      <DropdownContent onClick={(e) => e.stopPropagation()}>
+        {(type === 'ISSUE_CREATION' || type === 'ISSUE_STATUS_CHANGE' ?
+          data?.items
+        : channels
+        )?.map(({ id, name }) => <DropdownItem key={id}>{name}</DropdownItem>)}
+      </DropdownContent>
+    </Dropdown>
   );
 };
 

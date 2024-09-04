@@ -17,7 +17,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { Icon, InputField, InputLabel } from '@ufb/react';
 
-import { SelectBox, TextInput } from '@/shared';
+import { SelectInput, TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { IssueTracker } from '../issue-tracker.type';
 
@@ -28,13 +28,15 @@ interface IProps {
 const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
   const { register, watch, formState } = useFormContext<IssueTracker>();
 
+  useWarnIfUnsavedChanges(formState.isDirty);
+
   return (
     <div className="flex flex-col gap-6">
-      <SelectBox
+      <SelectInput
         options={[{ value: 'jira', label: 'JIRA' }]}
-        value={{ value: 'jira', label: 'JIRA' }}
+        value="jira"
         label="Issue Tracking System"
-        isDisabled={readOnly}
+        disabled={readOnly}
       />
       <TextInput
         label="Base URL"

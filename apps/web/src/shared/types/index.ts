@@ -19,3 +19,4 @@ export * from './date-range.type';
 export * from './api.type';
 export * from './fetch-error.type';
 export * from './openapi.type';
+export * from './form-overlay-props.type';

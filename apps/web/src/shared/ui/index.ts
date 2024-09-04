@@ -23,7 +23,7 @@ export { default as MainCard } from './main-card.ui';
 export { default as SubMenu } from './sub-menu.ui';
 export { default as CreateTemplate } from './create-template.ui';
 export { default as CreateInputTemplate } from './create-input-template.ui';
-export { default as CreateSectionTemplate } from './create-section-template.ui.tsx';
+export { default as CreateSectionTemplate } from './create-section-template.ui';
 export { default as DashboardCard } from './dashboard-card';
 
 export { default as ExpandableText } from './expandable-text.ui';
@@ -45,8 +45,11 @@ export * from './select-box';
 export { default as SettingTemplate } from './setting-template.ui';
 
 //
-export { default as TextInput } from './text-input.ui';
 export { default as DialogContentTemplate } from './dialog-content-template.ui';
 export * from './inputs';
 
 export { default as Avatar } from './avatar.ui';
+export { default as WarnIfUnsavedChangesDialog } from './warn-if-unsaved-changes-dialog.ui';
+export { default as SortingTableHead } from './sorting-table-head.ui';
+export { default as CopyIconButton } from './copy-icon-button.ui';
+export { default as SettingAlert } from './setting-alert.ui';

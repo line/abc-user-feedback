@@ -122,7 +122,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
           <Input
             placeholder={t('placeholder', { name: 'Webhook Token' })}
             {...register('token')}
-            hasError={!!formState.errors.token?.message}
+            error={!!formState.errors.token?.message}
           />
           <Button
             type="button"
@@ -133,7 +133,7 @@ const WebhookForm: React.FC<IProps> = (props) => {
           </Button>
         </div>
         {formState.errors.token?.message && (
-          <InputCaption type="error">
+          <InputCaption variant="error">
             {formState.errors.token.message}
           </InputCaption>
         )}

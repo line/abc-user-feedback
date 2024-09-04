@@ -105,7 +105,6 @@ function SelectBox<Option = unknown, IsMulti extends boolean = false>(
           );
         },
       }}
-      menuPortalTarget={document.body}
       unstyled
       {...reactSelectProps}
     />

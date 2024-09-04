@@ -20,9 +20,20 @@ export const CHECK_ICON_SIZE: Record<Size, number> = {
   small: 14,
 };
 
-export const CAPTION_DEFAULT_ICON: Record<CaptionType, IconNameType | null> = {
-  default: null,
+export const CAPTION_DEFAULT_ICON: Record<
+  CaptionType,
+  IconNameType | undefined
+> = {
+  default: undefined,
   error: "RiErrorWarningFill",
   info: "RiInformationFill",
   success: "RiCheckboxCircleFill",
 } as const;
+
+export const ALERT_DEFAULT_ICON: Record<string, IconNameType | undefined> = {
+  default: undefined,
+  warning: "RiErrorWarningFill",
+  informative: "RiInformation2Fill",
+  success: "RiCheckboxCircleFill",
+  error: "RiCloseCircleFill",
+};

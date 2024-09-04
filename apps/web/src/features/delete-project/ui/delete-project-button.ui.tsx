@@ -28,27 +28,20 @@ import {
   DialogTrigger,
 } from '@ufb/react';
 
-import { usePermissions } from '@/shared';
-import type { Project } from '@/entities/project';
-
 interface IProps {
-  project: Project;
-  onClickDelete: (projectId: number) => void;
+  disabled?: boolean;
+  onClickDelete: () => void;
+  loading?: boolean;
 }
 
 const DeleteProjectButton: React.FC<IProps> = (props) => {
-  const { project, onClickDelete } = props;
+  const { onClickDelete, disabled = false, loading } = props;
   const { t } = useTranslation();
-  const perms = usePermissions(project.id);
 
   return (
     <Dialog>
-      <DialogTrigger disabled={!perms.includes('project_delete')} asChild>
-        <Button
-          className="min-w-[120px]"
-          variant="outline"
-          iconL="RiDeleteBinFill"
-        >
+      <DialogTrigger asChild>
+        <Button variant="outline" iconL="RiDeleteBinFill" disabled={disabled}>
           {t('v2.button.name.delete', { name: 'Project' })}
         </Button>
       </DialogTrigger>
@@ -67,7 +60,8 @@ const DeleteProjectButton: React.FC<IProps> = (props) => {
           <Button
             variant="destructive"
             size="small"
-            onClick={() => onClickDelete(project.id)}
+            onClick={() => onClickDelete()}
+            loading={loading}
           >
             {t('v2.button.delete')}
           </Button>

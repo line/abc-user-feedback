@@ -8,11 +8,11 @@ import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import useTheme from "./use-theme";
 
-type TagType = "primary" | "secondary" | "outline" | "destructive";
+type TagVariant = "primary" | "secondary" | "outline" | "destructive";
 
 const tagVariants = cva("tag", {
   variants: {
-    type: {
+    variant: {
       primary: "tag-primary",
       secondary: "tag-secondary",
       outline: "tag-outline",
@@ -29,7 +29,7 @@ const tagVariants = cva("tag", {
       small: "tag-radius-small",
     },
     defaultVariants: {
-      type: "primary",
+      variant: "primary",
       size: undefined,
       radius: undefined,
     },
@@ -37,19 +37,24 @@ const tagVariants = cva("tag", {
 });
 
 interface TagProps extends React.HTMLAttributes<HTMLElement> {
-  type?: TagType;
+  variant?: TagVariant;
   size?: Size;
   radius?: Radius;
-  icon?: IconNameType;
+  iconL?: IconNameType;
+  iconR?: IconNameType;
+  onClickIconL?: React.MouseEventHandler<SVGSVGElement>;
+  onClickIconR?: React.MouseEventHandler<SVGSVGElement>;
 }
 
 const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
   const {
-    type = "primary",
+    variant = "primary",
     size,
     radius,
-    icon,
-    onClick,
+    iconL,
+    iconR,
+    onClickIconL,
+    onClickIconR,
     className,
     children,
     ...rest
@@ -63,7 +68,7 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
       ref={ref}
       className={cn(
         tagVariants({
-          type,
+          variant,
           size: size ?? themeSize,
           radius: radius ?? themeRadius,
           className,
@@ -71,27 +76,22 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
       )}
     >
       <React.Fragment>
-        {icon && (
+        {iconL && (
           <Icon
-            name={icon}
+            name={iconL}
             size={SMALL_ICON_SIZE[size ?? themeSize]}
             aria-hidden
+            onClick={onClickIconL}
           />
         )}
         {children}
-        {onClick && (
-          <button
-            type="button"
-            aria-label="Remove this tag"
-            className="tag-button"
-            onClick={onClick}
-          >
-            <Icon
-              name="RiCloseLargeLine"
-              size={SMALL_ICON_SIZE[size ?? themeSize]}
-              aria-hidden
-            />
-          </button>
+        {iconR && (
+          <Icon
+            name={iconR}
+            size={SMALL_ICON_SIZE[size ?? themeSize]}
+            aria-hidden
+            onClick={onClickIconR}
+          />
         )}
       </React.Fragment>
     </span>

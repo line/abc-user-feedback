@@ -16,6 +16,7 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
+import { useTranslation } from 'react-i18next';
 
 import {
   Divider,
@@ -29,6 +30,7 @@ import {
 } from '@ufb/react';
 
 import { ThemeToggleButton } from '@/entities/theme';
+import { useUserStore } from '@/entities/user';
 
 import ProjectSelectBox from './project-select-box.ui';
 
@@ -44,6 +46,8 @@ interface IProps {
 
 const Header: React.FC<IProps> = ({ projectId }) => {
   const router = useRouter();
+  const { t } = useTranslation();
+  const { signOut } = useUserStore();
 
   const currentMenu = useMemo(() => router.pathname.split('/').pop(), [router]);
 
@@ -53,10 +57,18 @@ const Header: React.FC<IProps> = ({ projectId }) => {
     await router.push({ pathname, query }, asPath, { locale: newLocale });
   };
 
+  const handleClickProfile = async () => {
+    await router.push('/main/profile');
+  };
+
+  const handleClickSignout = () => {
+    void signOut();
+  };
+
   return (
     <div className="navbar gap-2">
       <ProjectSelectBox projectId={projectId} />
-      <Divider type="subtle" indent={8} orientation="vertical" />
+      <Divider variant="subtle" indent={8} orientation="vertical" />
       <div className="flex-1">
         <Menu
           value={currentMenu}
@@ -64,15 +76,16 @@ const Header: React.FC<IProps> = ({ projectId }) => {
           className="navbar-menu"
           onValueChange={async (value: MenuType | '') => {
             if (!value) return;
-
             await router.push({
               pathname: `/main/project/[projectId]/${value}`,
               query: { projectId },
             });
           }}
         >
-          {MENU_ITEMS.map((v) => (
-            <MenuItem value={v}>{firstLeterPascal(v)}</MenuItem>
+          {MENU_ITEMS.map((v, i) => (
+            <MenuItem key={i} value={v}>
+              {firstLeterPascal(v)}
+            </MenuItem>
           ))}
         </Menu>
       </div>
@@ -93,7 +106,25 @@ const Header: React.FC<IProps> = ({ projectId }) => {
               ))}
           </DropdownContent>
         </Dropdown>
-        <IconButton icon="RiUser6Line" variant="ghost" />
+        <Dropdown>
+          <DropdownTrigger asChild>
+            <IconButton icon="RiUser6Line" variant="ghost" />
+          </DropdownTrigger>
+          <DropdownContent>
+            <DropdownItem
+              className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
+              onClick={handleClickProfile}
+            >
+              {t('header.profile')}
+            </DropdownItem>
+            <DropdownItem
+              className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
+              onClick={handleClickSignout}
+            >
+              {t('header.sign-out')}
+            </DropdownItem>
+          </DropdownContent>
+        </Dropdown>
       </div>
     </div>
   );

@@ -9,3 +9,9 @@ export type ButtonVariant =
   | "outline";
 export type ButtonState = "default" | "loading" | "disabled";
 export type CaptionType = "default" | "success" | "info" | "error";
+export type AlertVariantType =
+  | "default"
+  | "warning"
+  | "success"
+  | "error"
+  | "informative";

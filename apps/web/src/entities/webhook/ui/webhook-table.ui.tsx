@@ -13,10 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
-
-import { Icon } from '@ufb/ui';
 
 import { BasicTable } from '@/shared';
 
@@ -24,19 +23,26 @@ import { getWebhookColumns } from '../webhook-column';
 import type { Webhook, WebhookInfo } from '../webhook.type';
 
 interface IProps {
+  projectId: number;
   isLoading?: boolean;
   webhooks: Webhook[];
-  projectId: number;
   onUpdate: (webhookId: number, webhook: WebhookInfo) => void;
-  onDelete: (webhookId: number) => void;
+  createButton: React.ReactNode;
+  onClickRow: (row: Webhook) => void;
 }
 
 const WebhookTable: React.FC<IProps> = (props) => {
-  const { isLoading, webhooks, projectId, onDelete, onUpdate } = props;
+  const { isLoading, webhooks, onUpdate, createButton, onClickRow, projectId } =
+    props;
   const { t } = useTranslation();
 
+  const columns = useMemo(
+    () => getWebhookColumns(projectId, onUpdate),
+    [projectId, onUpdate],
+  );
+
   const table = useReactTable({
-    columns: getWebhookColumns(projectId, onDelete, onUpdate),
+    columns,
     data: webhooks,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
@@ -46,12 +52,9 @@ const WebhookTable: React.FC<IProps> = (props) => {
     <BasicTable
       isLoading={isLoading}
       table={table}
-      emptyComponent={
-        <div className="my-32 flex flex-col items-center justify-center gap-3">
-          <Icon name="DriverRegisterFill" className="text-tertiary" size={56} />
-          <p>{t('main.setting.register-member')}</p>
-        </div>
-      }
+      emptyCaption={t('v2.text.no-data.webhook')}
+      createButton={createButton}
+      onClickRow={onClickRow}
     />
   );
 };

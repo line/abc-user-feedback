@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 
 import { InputField, InputLabel } from '@ufb/react';
 
-import { TextInput } from '@/shared';
+import { TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { ProjectInfo } from '../project.type';
 import TimezoneSelectBox from './timezone-select-box';
@@ -34,6 +34,8 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
 
   const { register, setValue, watch, formState } =
     useFormContext<ProjectInfo>();
+
+  useWarnIfUnsavedChanges(formState.isDirty);
 
   return (
     <div className="flex flex-col gap-4">

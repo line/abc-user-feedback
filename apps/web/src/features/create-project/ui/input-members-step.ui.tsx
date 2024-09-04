@@ -37,7 +37,7 @@ const InputMembersStep: React.FC<IProps> = () => {
     query: { type: 'GENERAL' },
   });
 
-  const updateMember = (member: Member) => {
+  const updateMember = async (member: Member) => {
     onChangeInput(
       'members',
       input.members.map((m) => (m.id === member.id ? member : m)),
@@ -84,9 +84,8 @@ const InputMembersStep: React.FC<IProps> = () => {
       <MemberTable
         members={input.members}
         roles={input.roles}
-        onDeleteMember={deleteMember}
-        onUpdateMember={updateMember}
         createButton={<></>}
+        onUpdateMember={updateMember}
       />
     </CreateProjectInputTemplate>
   );

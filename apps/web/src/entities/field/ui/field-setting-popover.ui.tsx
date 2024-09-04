@@ -18,16 +18,21 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import type { IconNameType } from '@ufb/react';
 import {
-  Icon,
-  Input,
-  Popover,
-  PopoverContent,
-  PopoverHeading,
-  PopoverTrigger,
-} from '@ufb/ui';
+  Button,
+  Checkbox,
+  Sheet,
+  SheetBody,
+  SheetClose,
+  SheetContent,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from '@ufb/react';
 
-import { cn, DescriptionTooltip, SelectBox } from '@/shared';
+import type { FormOverlayProps } from '@/shared';
+import { SelectInput, TextInput } from '@/shared';
 
 import { FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
@@ -43,22 +48,31 @@ const defaultValues: FieldInfo = {
   property: 'READ_ONLY',
 };
 
-interface IProps extends React.PropsWithChildren {
-  onSave: (input: FieldInfo) => void;
-  data?: FieldInfo;
+interface IProps extends FormOverlayProps<FieldInfo> {
   disabled?: boolean;
   fieldRows: FieldInfo[];
 }
 
+const options: {
+  label: FieldInfo['format'];
+  value: FieldInfo['format'];
+  icon: IconNameType;
+}[] = [
+  { label: 'text', value: 'text', icon: 'RiText' },
+  { label: 'keyword', value: 'keyword', icon: 'RiFontSize' },
+  { label: 'number', value: 'number', icon: 'RiHashtag' },
+  { label: 'date', value: 'date', icon: 'RiCalendarEventLine' },
+  { label: 'select', value: 'select', icon: 'RiCheckboxCircleLine' },
+  { label: 'multiSelect', value: 'multiSelect', icon: 'RiListCheck' },
+  { label: 'images', value: 'images', icon: 'RiImageLine' },
+];
 const FieldSettingPopover: React.FC<IProps> = (props) => {
-  const { onSave, data, disabled, fieldRows } = props;
+  const { data, disabled, fieldRows, close, isOpen, onSubmit: onSave } = props;
 
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
 
   const [isSameKey, setIsSameKey] = useState(true);
   const [optionInput, setOptionInput] = useState<string>('');
-  const [optionSubmitted, setOptionSubmitted] = useState(false);
 
   const isOriginalData = useMemo(() => (data ? !!data.id : false), [data]);
   const isEditing = useMemo(() => !!data, [data]);
@@ -93,7 +107,6 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     reset(data ?? defaultValues);
-    setOptionSubmitted(false);
   }, [data, open]);
 
   useEffect(() => {
@@ -109,7 +122,6 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
         (v) => v.name.toLowerCase() === optionInput.toLowerCase(),
       )
     ) {
-      setOptionSubmitted(true);
       setError('options', { message: 'Option Name is duplicated' });
     } else {
       setValue(
@@ -121,7 +133,6 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
       );
       setOptionInput('');
       clearErrors('options');
-      setOptionSubmitted(false);
     }
   };
 
@@ -132,10 +143,8 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
     );
   };
 
-  const onSubmit = (input: FieldInfo) => {
-    const checkDuplicatedKey = otherFields.find(
-      (v) => v.key.toLowerCase() === input.key.toLowerCase(),
-    );
+  const onSubmit = async (input: FieldInfo) => {
+    const checkDuplicatedKey = otherFields.find((v) => v.key === input.key);
     if (checkDuplicatedKey) {
       setError('key', { message: 'Key is duplicated' });
       return;
@@ -147,98 +156,57 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
       setError('name', { message: 'Name is duplicated' });
       return;
     }
-    onSave({ ...data, ...input });
+    await onSave({ ...data, ...input });
     reset(defaultValues);
-    setOpen(false);
+    close();
   };
 
   return (
-    <>
-      <Popover
-        open={open}
-        onOpenChange={setOpen}
-        modal={isEditing}
-        placement={!isEditing ? 'bottom-end' : undefined}
-        initialOpen={data?.id === 176}
-      >
-        <PopoverTrigger asChild>
-          {isEditing ?
-            <button
-              className={cn([
-                'icon-btn icon-btn-sm icon-btn-tertiary',
-                { 'bg-fill-tertiary': open },
-              ])}
-              disabled={disabled}
-              onClick={() => setOpen(true)}
-            >
-              <Icon name="EditFill" />
-            </button>
-          : <button
-              className={cn([
-                'btn btn-sm btn-secondary',
-                { 'bg-fill-tertiary': open },
-              ])}
-              disabled={disabled}
-              onClick={() => setOpen(true)}
-            >
-              {t('main.setting.dialog.add-field.title')}
-            </button>
-          }
-        </PopoverTrigger>
-        <PopoverContent isPortal>
-          <PopoverHeading>
+    <Sheet open={isOpen} onOpenChange={close}>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>
             {isEditing ?
               t('main.setting.dialog.edit-field.title')
             : t('main.setting.dialog.add-field.title')}
-          </PopoverHeading>
-          <form
-            className="m-5 w-[520px] space-y-5"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <Input
+          </SheetTitle>
+        </SheetHeader>
+        <SheetBody asChild>
+          <form onSubmit={handleSubmit(onSubmit)} id="field-setting">
+            <TextInput
               label="Key"
               {...register('key')}
               disabled={isOriginalData}
-              isSubmitted={formState.isSubmitted}
-              isSubmitting={formState.isSubmitting}
-              isValid={!formState.errors.key}
-              hint={formState.errors.key?.message}
+              error={formState.errors.key?.message}
               required={!data}
               maxLength={20}
             />
-            <div>
-              <Input
+            <div className="flex flex-col gap-1.5">
+              <TextInput
                 label="Display Name"
                 {...register('name')}
-                isSubmitted={formState.isSubmitted}
-                isSubmitting={formState.isSubmitting}
-                isValid={!formState.errors.name}
-                hint={formState.errors.name?.message}
+                error={formState.errors.name?.message}
                 disabled={isSameKey}
                 required
                 maxLength={20}
               />
-              <label className="flex items-center gap-1">
-                <input
-                  type="checkbox"
-                  className="checkbox my-2 mr-2"
-                  checked={isSameKey}
-                  onChange={(e) => setIsSameKey(e.target.checked)}
-                />
+              <Checkbox
+                checked={isSameKey}
+                onCheckedChange={(checked) => setIsSameKey(!!checked)}
+              >
                 {t('main.setting.same-key')}
-              </label>
+              </Checkbox>
             </div>
             <div>
-              <SelectBox
+              <SelectInput
                 label="Field Format"
                 onChange={(value) =>
-                  value?.key && setValue('format', value.key)
+                  setValue('format', value as FieldInfo['format'])
                 }
-                options={FIELD_FORMAT_LIST.map((v) => ({ key: v, name: v }))}
-                value={{ key: watch('format'), name: watch('format') }}
-                isDisabled={isOriginalData}
-                getOptionValue={(option) => option.key}
-                getOptionLabel={(option) => option.name}
+                options={options}
+                value={watch('format')}
+                disabled={isOriginalData}
+                required
               />
               {watch('format') === 'images' && (
                 <p className="text-primary font-12-regular mt-2">
@@ -249,7 +217,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             {(watch('format') === 'select' ||
               watch('format') === 'multiSelect') && (
               <div>
-                <Input
+                <TextInput
                   label="Select Option"
                   value={optionInput}
                   onChange={(e) => setOptionInput(e.target.value)}
@@ -259,18 +227,11 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                       addOption();
                     }
                   }}
-                  rightChildren={
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-xs btn-rounded"
-                      onClick={addOption}
-                    >
-                      {t('button.register')}
-                    </button>
+                  error={formState.errors.options?.message}
+                  right={
+                    <Button onClick={addOption}>{t('button.register')}</Button>
                   }
-                  isValid={!formState.errors.options}
-                  isSubmitted={optionSubmitted}
-                  hint={formState.errors.options?.message}
+                  required
                 />
 
                 {(watch('options') ?? []).length > 0 && (
@@ -287,89 +248,46 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 )}
               </div>
             )}
-            <div>
-              <div className="flex items-center">
-                <span className="font-10-regular w-[120px]">
-                  Field Property
-                  <DescriptionTooltip
-                    description={t('tooltip.field-property')}
-                  />
-                </span>
-                <label className="radio-label h-[36px] w-[120px]">
-                  <input
-                    type="radio"
-                    name="radio-type"
-                    className="radio radio-sm"
-                    onChange={() => setValue('property', 'READ_ONLY')}
-                    checked={watch('property') === 'READ_ONLY'}
-                  />
-                  Read Only
-                </label>
-                <label className="radio-label h-[36px] w-[120px]">
-                  <input
-                    type="radio"
-                    name="radio-type"
-                    className="radio radio-sm"
-                    onChange={() => setValue('property', 'EDITABLE')}
-                    checked={watch('property') === 'EDITABLE'}
-                    disabled={watch('format') === 'images'}
-                  />
-                  Editable
-                </label>
-              </div>
-              <div className="flex items-center">
-                <span className="font-10-regular w-[120px]">
-                  Field Status
-                  <DescriptionTooltip description={t('tooltip.field-status')} />
-                </span>
-                <label className="radio-label h-[36px] w-[120px]">
-                  <input
-                    type="radio"
-                    name="radio-status"
-                    className="radio radio-sm"
-                    onChange={(e) =>
-                      e.target.checked ? setValue('status', 'ACTIVE') : {}
-                    }
-                    checked={watch('status') === 'ACTIVE'}
-                  />
-                  {t('main.setting.field-status.active')}
-                </label>
-                <label className="radio-label h-[36px] w-[120px]">
-                  <input
-                    type="radio"
-                    name="radio-status"
-                    className="radio radio-sm"
-                    onChange={(e) =>
-                      e.target.checked ? setValue('status', 'INACTIVE') : {}
-                    }
-                    checked={watch('status') === 'INACTIVE'}
-                  />
-                  {t('main.setting.field-status.inactive')}
-                </label>
-              </div>
-            </div>
-            <Input
+            <SelectInput
+              label="Field Property"
+              options={[
+                { label: 'Read Only', value: 'READ_ONLY' },
+                { label: 'Editable', value: 'EDITABLE' },
+              ]}
+              value={watch('property')}
+              onChange={(value) =>
+                setValue('property', value as FieldInfo['property'])
+              }
+              required
+            />
+            <SelectInput
+              label="Field Status"
+              options={[
+                { label: 'Active', value: 'ACTIVE' },
+                { label: 'Inactive', value: 'INACTIVE' },
+              ]}
+              value={watch('status')}
+              onChange={(value) =>
+                setValue('status', value as FieldInfo['status'])
+              }
+              required
+            />
+            <TextInput
               label="Description"
               {...register('description')}
               required={false}
               maxLength={50}
             />
-            <div className="flex justify-end gap-2">
-              <button
-                type="button"
-                className="btn btn-secondary min-w-[80px]"
-                onClick={() => setOpen(false)}
-              >
-                {t('button.cancel')}
-              </button>
-              <button className="btn btn-primary min-w-[80px]">
-                {t('button.confirm')}
-              </button>
-            </div>
           </form>
-        </PopoverContent>
-      </Popover>
-    </>
+        </SheetBody>
+        <SheetFooter>
+          <SheetClose>{t('button.cancel')}</SheetClose>
+          <Button type="submit" form="field-setting">
+            {t('button.confirm')}
+          </Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 };
 

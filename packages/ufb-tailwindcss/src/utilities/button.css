@@ -1,11 +1,11 @@
 .button-large {
-  @apply text-xlarge min-w-52 gap-8 px-20 py-10;
+  @apply text-xlarge-strong min-w-52 gap-8 px-20 py-10;
 }
 .button-medium {
-  @apply text-large min-w-44 gap-8 px-16 py-10;
+  @apply text-large-strong min-w-44 gap-8 px-16 py-10;
 }
 .button-small {
-  @apply min-w-36 gap-4 px-12 py-8 text-base;
+  @apply text-base-strong min-w-36 gap-4 px-12 py-8;
 }
 
 .button-radius-small {

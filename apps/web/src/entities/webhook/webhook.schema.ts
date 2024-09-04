@@ -33,7 +33,7 @@ export const webhookEventSchema = z.object({
 export const webhookSchema = z.object({
   id: z.number(),
   name: z.string(),
-  url: z.string(),
+  url: z.string().url(),
   status: z.enum(['ACTIVE', 'INACTIVE']),
   events: z.array(webhookEventSchema),
   token: z

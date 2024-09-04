@@ -13,7 +13,24 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
 import Image from 'next/image';
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
@@ -29,6 +46,7 @@ import {
 import { cn } from '@/shared/utils';
 
 import CheckedTableHead from './checked-table-head';
+import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
 
@@ -42,9 +60,10 @@ interface IProps<T> {
   createButton: React.ReactNode;
   classname?: string;
   onClickRow?: (row: T) => void;
+  reoder?: (data: T[]) => void;
 }
 
-function BasicTable<T>(props: IProps<T>) {
+const BasicTable = <T,>(props: IProps<T>) => {
   const {
     table,
     emptyCaption,
@@ -54,76 +73,108 @@ function BasicTable<T>(props: IProps<T>) {
     createButton,
     classname,
     onClickRow,
+    reoder,
   } = props;
 
-  return (
-    <Table className={classname}>
-      <TableHeader>
-        <TableRow>
-          {table.getIsSomeRowsSelected() ?
-            <CheckedTableHead table={table} onClickDelete={onClickDelete} />
-          : table.getFlatHeaders().map((header, i) => (
-              <TableHead key={i} style={{ width: header.getSize() }}>
-                <div
-                  className={cn('flex flex-nowrap items-center', {
-                    'overflow-hidden text-ellipsis':
-                      resiable && header.column.getCanResize(),
-                  })}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
-                  )}
-                </div>
-                {resiable && header.column.getCanResize() && (
-                  <TableResizer header={header} table={table} />
-                )}
-              </TableHead>
-            ))
-          }
-        </TableRow>
-        {isLoading && (
-          <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
-        )}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows.length === 0 ?
-          <TableRow className="hover:bg-inherit">
-            <TableCell colSpan={table.getFlatHeaders().length}>
-              <div className="my-10 flex flex-col items-center justify-center gap-4">
-                <Image
-                  width={200}
-                  height={200}
-                  src="/assets/images/empty-image.png"
-                  alt="empty image"
-                />
-                <p className="text-small text-neutral-tertiary">
-                  {emptyCaption}
-                </p>
-                {createButton}
-              </div>
-            </TableCell>
-          </TableRow>
-        : table.getRowModel().rows.map((row) => (
-            <TableRow
-              key={row.index}
-              onClick={() => onClickRow && onClickRow(row.original)}
-              className={cn({ 'cursor-pointer': !!onClickRow })}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={`${cell.id} ${cell.row.index}`}
-                  style={{ width: cell.column.getSize() }}
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))
-        }
-      </TableBody>
-    </Table>
+  // reorder rows after drag & drop
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = dataIds.indexOf(active.id as string);
+      const newIndex = dataIds.indexOf(over.id as string);
+      reoder?.(
+        arrayMove(
+          table.getRowModel().rows.map((v) => v.original),
+          oldIndex,
+          newIndex,
+        ),
+      );
+    }
+  }
+  const dataIds = useMemo(
+    () => table.getRowModel().rows.map((row) => row.id),
+    [table.getRowModel().rows],
   );
-}
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {}),
+  );
+
+  return (
+    <DndContext
+      collisionDetection={closestCenter}
+      modifiers={[restrictToVerticalAxis]}
+      sensors={sensors}
+      onDragEnd={handleDragEnd}
+    >
+      <Table className={classname}>
+        <TableHeader>
+          <TableRow>
+            {table.getIsSomeRowsSelected() ?
+              <CheckedTableHead table={table} onClickDelete={onClickDelete} />
+            : table.getFlatHeaders().map((header, i) => (
+                <TableHead key={i} style={{ width: header.getSize() }}>
+                  <div
+                    className={cn('flex flex-nowrap items-center', {
+                      'overflow-hidden text-ellipsis':
+                        resiable && header.column.getCanResize(),
+                    })}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </div>
+                  {resiable && header.column.getCanResize() && (
+                    <TableResizer header={header} table={table} />
+                  )}
+                </TableHead>
+              ))
+            }
+          </TableRow>
+          {isLoading && (
+            <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
+          )}
+        </TableHeader>
+        <TableBody>
+          <SortableContext
+            items={dataIds}
+            strategy={verticalListSortingStrategy}
+          >
+            {table.getRowModel().rows.length === 0 ?
+              <TableRow className="hover:bg-inherit">
+                <TableCell colSpan={table.getFlatHeaders().length}>
+                  <div className="my-10 flex flex-col items-center justify-center gap-4">
+                    <Image
+                      width={200}
+                      height={200}
+                      src="/assets/images/empty-image.png"
+                      alt="empty image"
+                    />
+                    <p className="text-small text-neutral-tertiary">
+                      {emptyCaption}
+                    </p>
+                    {createButton}
+                  </div>
+                </TableCell>
+              </TableRow>
+            : table
+                .getRowModel()
+                .rows.map((row) => (
+                  <DraggableRow
+                    key={row.id}
+                    row={row}
+                    onClickRow={onClickRow}
+                  />
+                ))
+            }
+          </SortableContext>
+        </TableBody>
+      </Table>
+    </DndContext>
+  );
+};
 
 export default BasicTable;

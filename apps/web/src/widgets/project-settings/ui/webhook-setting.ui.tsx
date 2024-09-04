@@ -18,18 +18,19 @@ import { useMutation } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   client,
+  HelpCardDocs,
+  SettingAlert,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import type { WebhookInfo } from '@/entities/webhook';
-import { CreateWebhookSheet, WebhookTable } from '@/entities/webhook';
+import type { Webhook, WebhookInfo } from '@/entities/webhook';
+import { WebhookFormSheet, WebhookTable } from '@/entities/webhook';
 
 interface IProps {
   projectId: number;
@@ -45,7 +46,12 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId },
   });
 
-  const { mutate: deleteWebhook } = useMutation({
+  const { data: channels } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId },
+  });
+
+  const { mutateAsync: deleteWebhook } = useMutation({
     mutationFn: (input: { webhookId: number }) =>
       client.delete({
         path: '/api/admin/projects/{projectId}/webhooks/{webhookId}',
@@ -53,10 +59,10 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       }),
     async onSuccess() {
       await refetch();
-      toast.positive({ title: t('toast.save') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
   const { mutateAsync: updateWebhook } = useMutation({
@@ -68,35 +74,62 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       }),
     async onSuccess() {
       await refetch();
-      toast.positive({ title: t('toast.save') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
 
-  const { mutateAsync: create, status: createStatus } = useOAIMutation({
+  const { mutateAsync: create } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/webhooks',
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
+
   const openCreateWebhookSheet = () => {
     overlay.open(({ close, isOpen }) => (
-      <CreateWebhookSheet
+      <WebhookFormSheet
         isOpen={isOpen}
         close={close}
-        onClickCreate={create}
-        disabled={createStatus === 'pending'}
-        projectId={projectId}
+        channels={channels?.items ?? []}
+        onSubmit={async (data: WebhookInfo) => {
+          await create({ ...data, status: 'ACTIVE' });
+          close();
+        }}
+      />
+    ));
+  };
+  const openUpdateWebhookSheet = (webhook: Webhook) => {
+    overlay.open(({ close, isOpen }) => (
+      <WebhookFormSheet
+        isOpen={isOpen}
+        close={close}
+        data={{
+          ...webhook,
+          events: webhook.events.map((event) => ({
+            ...event,
+            channelIds: event.channels.map((channel) => channel.id),
+          })),
+        }}
+        channels={channels?.items ?? []}
+        onSubmit={async (data: WebhookInfo) => {
+          await updateWebhook({ webhookId: webhook.id, body: data });
+          close();
+        }}
+        onClickDelete={async () => {
+          await deleteWebhook({ webhookId: webhook.id });
+          close();
+        }}
       />
     ));
   };
@@ -109,16 +142,27 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
           disabled={!perms.includes('project_webhook_create')}
           onClick={openCreateWebhookSheet}
         >
-          {t('button.create', { name: 'Webhook' })}
+          {t('v2.button.name.register', { name: 'Webhook' })}
         </Button>
       }
     >
+      <SettingAlert
+        description={<HelpCardDocs i18nKey="help-card.webhook" />}
+      />
       <WebhookTable
-        isLoading={isPending}
         projectId={projectId}
+        isLoading={isPending}
         webhooks={data?.items ?? []}
-        onDelete={(webhookId) => deleteWebhook({ webhookId })}
         onUpdate={(webhookId, body) => updateWebhook({ webhookId, body })}
+        createButton={
+          <Button
+            disabled={!perms.includes('project_webhook_create')}
+            onClick={openCreateWebhookSheet}
+          >
+            {t('v2.button.register')}
+          </Button>
+        }
+        onClickRow={openUpdateWebhookSheet}
       />
     </SettingTemplate>
   );

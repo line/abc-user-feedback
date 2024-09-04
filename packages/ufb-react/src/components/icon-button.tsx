@@ -78,6 +78,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
   (
     {
       className,
+      type = "button",
       variant = "primary",
       size,
       radius,
@@ -103,6 +104,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
             className,
           }),
         )}
+        type={type}
         disabled={disabled || loading}
         ref={ref}
         {...props}

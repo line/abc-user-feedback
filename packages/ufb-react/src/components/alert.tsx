@@ -3,6 +3,7 @@ import * as React from "react";
 import { cva } from "class-variance-authority";
 
 import type { IconNameType } from "./icon";
+import { ALERT_DEFAULT_ICON } from "../constants";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
@@ -146,14 +147,6 @@ const AlertButton = React.forwardRef<
 });
 AlertButton.displayName = "AlertButton";
 
-const Alert_Icon: Record<string, IconNameType | undefined> = {
-  default: undefined,
-  warning: "RiErrorWarningFill",
-  informative: "RiInformation2Fill",
-  success: "RiCheckboxCircleFill",
-  error: "RiCloseCircleFill",
-};
-
 const alertIconVariants = cva("alert-icon", {
   variants: {
     variant: {
@@ -175,7 +168,7 @@ interface AlertIconProps
 }
 const AlertIcon = ({
   className,
-  name = "temp",
+  name = undefined,
   size = 20,
   ...props
 }: AlertIconProps) => {
@@ -183,7 +176,7 @@ const AlertIcon = ({
   return (
     <Icon
       className={cn(alertIconVariants({ variant, className }))}
-      name={Alert_Icon[variant ?? "default"] ?? name}
+      name={name ?? ALERT_DEFAULT_ICON[variant ?? "default"]}
       size={size}
       {...props}
     />

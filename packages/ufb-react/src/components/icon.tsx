@@ -12,10 +12,11 @@ const IconNames = Object.keys(Icons) as (keyof typeof Icons)[];
 type IconNameType = keyof typeof Icons;
 
 interface IconProps {
-  name: IconNameType | null;
+  name?: IconNameType;
   color?: string;
   size?: number | string;
   className?: string;
+  onClick?: React.MouseEventHandler<SVGSVGElement>;
 }
 
 const Icon: React.FC<IconProps> = ({
@@ -23,6 +24,7 @@ const Icon: React.FC<IconProps> = ({
   color = "currentColor",
   size = 24,
   className,
+  onClick,
   ...props
 }) => {
   if (!name) {
@@ -39,7 +41,8 @@ const Icon: React.FC<IconProps> = ({
   return React.createElement(Icons[name], {
     color,
     size,
-    className: cn("icon", className),
+    className: cn("icon", onClick && "icon-clickable", className),
+    onClick,
     ...props,
   });
 };

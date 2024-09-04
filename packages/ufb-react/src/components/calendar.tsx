@@ -5,11 +5,14 @@ import { DayPicker } from "react-day-picker";
 import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 
-type CalendarProps = React.ComponentProps<typeof DayPicker>;
+type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  showToday?: boolean;
+};
 
 function Calendar({
   className,
   classNames,
+  showToday = true,
   showOutsideDays = true,
   mode = "default",
   ...props
@@ -37,7 +40,7 @@ function Calendar({
         day_range_start: "calendar-day-range-start",
         day_range_end: "calendar-day-range-end",
         day_selected: "calendar-day-selected",
-        day_today: "calendar-day-today",
+        day_today: showToday ? "calendar-day-today" : "",
         day_outside: "calendar-day-outside",
         day_disabled: "calendar-day-disabled",
         day_range_middle: "calendar-day-range-middle",

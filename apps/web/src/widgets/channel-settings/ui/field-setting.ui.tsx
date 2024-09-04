@@ -14,16 +14,11 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Icon,
-  Popover,
-  PopoverModalContent,
-  PopoverTrigger,
-  toast,
-} from '@ufb/ui';
+import { Button, Divider } from '@ufb/react';
+import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import {
   cn,
@@ -37,7 +32,6 @@ import {
   FeedbackRequestCodePopover,
   FieldSettingPopover,
   FieldTable,
-  PreviewFieldTable,
   sortField,
 } from '@/entities/field';
 
@@ -54,14 +48,13 @@ interface IProps {
 const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
+  const overlay = useOverlay();
 
   const [fieldStatus, setFieldStatus] = useState<FieldStatus>('ACTIVE');
-  const [showPreview, setShowPreview] = useState(false);
-  const router = useRouter();
 
   const [currentFields, setCurrentFields] = useState<FieldInfo[]>([]);
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isLoading } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
@@ -106,72 +99,59 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const deleteField = ({ index }: { index: number }) => {
     setCurrentFields((prev) => prev.filter((_, i) => i !== index));
   };
-
-  useEffect(() => {
-    if (!isDirty) return;
-
-    const confirmMsg: string = t('system-popup.field-setting-get-out');
-
-    // 닫기, 새로고침
-    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-      e.returnValue = confirmMsg;
-      return confirmMsg;
-    };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    // Browser 뒤로가기, 나가기 버튼
-    const handleBeforeChangeRoute = (url: string) => {
-      if (router.pathname !== url && !confirm(confirmMsg)) {
-        router.events.emit('routeChangeError');
-
-        throw `사이트 변경 취소`;
-      }
-    };
-    router.events.on('routeChangeStart', handleBeforeChangeRoute);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      router.events.off('routeChangeStart', handleBeforeChangeRoute);
-    };
-  }, [isDirty]);
+  const openFieldFormSheet = () => {
+    overlay.open(({ close, isOpen }) => (
+      <FieldSettingPopover
+        isOpen={isOpen}
+        close={close}
+        onSubmit={addField}
+        fieldRows={currentFields}
+        disabled={!perms.includes('channel_field_update')}
+      />
+    ));
+  };
 
   return (
     <SettingTemplate
       title={t('channel-setting-menu.field-mgmt')}
       action={
-        <div className="flex gap-2">
+        <>
           <FeedbackRequestCodePopover
             projectId={projectId}
             channelId={channelId}
+          />
+          <Divider
+            variant="subtle"
+            orientation="vertical"
+            className="my-2 h-auto"
+          />
+          <Button
+            variant="outline"
+            iconL="RiAddLine"
+            onClick={openFieldFormSheet}
+          >
+            Field 추가
+          </Button>
+          <Button variant="outline" iconL="RiEyeLine">
+            미리보기
+          </Button>
+          <Divider
+            variant="subtle"
+            orientation="vertical"
+            className="my-2 h-auto"
           />
           <SaveFieldPopover
             onClickSave={saveFields}
             disabled={!isDirty || !perms.includes('channel_field_update')}
           />
-        </div>
+        </>
       }
     >
-      <div className="h-[calc(100%-120px)]">
-        <div className="mb-4 flex h-1/2 flex-col gap-3">
-          <div className="flex justify-between">
-            <StatusButtonGroup
-              setStatus={setFieldStatus}
-              status={fieldStatus}
-            />
-            <FieldSettingPopover
-              onSave={addField}
-              fieldRows={currentFields}
-              disabled={!perms.includes('channel_field_update')}
-            />
-          </div>
-          <FieldTable
-            fields={currentFields}
-            onDeleteField={deleteField}
-            onModifyField={updateField}
-            fieldStatus={fieldStatus}
-          />
-        </div>
-        <div className="flex h-1/2 flex-col gap-3">
+      <div className="flex justify-between">
+        <StatusButtonGroup setStatus={setFieldStatus} status={fieldStatus} />
+      </div>
+      <FieldTable fields={currentFields} />
+      {/* <div className="flex h-1/2 flex-col gap-3">
           <div>
             <h1 className="font-20-bold">
               {t('main.setting.field-mgmt.preview')}
@@ -199,8 +179,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
               </button>
             </div>
           }
-        </div>
-      </div>
+        </div> */}
     </SettingTemplate>
   );
 };

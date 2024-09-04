@@ -12,13 +12,13 @@
   @apply my-auto h-full w-1;
 }
 
-.divider-horizontal-indent-8 {
+.divider.divider-horizontal-indent-8 {
   @apply w-[calc(100%_-_16px)];
 }
-.divider-horizontal-indent-16 {
+.divider.divider-horizontal-indent-16 {
   @apply w-[calc(100%_-_32px)];
 }
-.divider-horizontal-indent-24 {
+.divider.divider-horizontal-indent-24 {
   @apply w-[calc(100%_-_48px)];
 }
 

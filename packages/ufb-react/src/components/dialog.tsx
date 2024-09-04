@@ -1,12 +1,16 @@
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { Radius } from "../types";
+import { ALERT_DEFAULT_ICON } from "../constants";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 import { Icon } from "./icon";
 import { IconButton } from "./icon-button";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 import useTheme from "./use-theme";
 
 const Dialog = DialogPrimitive.Root;
@@ -15,7 +19,15 @@ const DialogTrigger = DialogPrimitive.Trigger;
 
 const DialogPortal = DialogPrimitive.Portal;
 
-const DialogClose = DialogPrimitive.Close;
+const DialogClose = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  React.ComponentPropsWithoutRef<typeof Button>
+>(({ variant, ...props }, ref) => (
+  <DialogPrimitive.Close asChild>
+    <Button ref={ref} variant={variant ?? "outline"} {...props} />
+  </DialogPrimitive.Close>
+));
+DialogClose.displayName = "DialogClose";
 
 const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
@@ -97,11 +109,11 @@ const DialogIcon = (
   props: React.ComponentPropsWithoutRef<typeof Icon> &
     VariantProps<typeof dialogIconVariants>,
 ) => {
-  const { className, name, size = 32, variant = "default", ...rest } = props;
+  const { className, name, size = 32, variant, ...rest } = props;
   return (
     <Icon
       {...rest}
-      name={name}
+      name={name ?? ALERT_DEFAULT_ICON[variant ?? "default"]}
       size={size}
       className={cn(dialogIconVariants({ variant, className }))}
     />
@@ -131,6 +143,20 @@ const dialogFooterVariants = cva("dialog-footer", {
     },
   },
 });
+
+interface DialogBodyProps extends React.HTMLAttributes<HTMLDivElement> {
+  asChild?: boolean;
+}
+const DialogBody = ({ asChild, className, ...props }: DialogBodyProps) => {
+  const Comp = asChild ? Slot : "div";
+  return (
+    <ScrollArea>
+      <Comp className={cn("dialog-body", className)} {...props} />
+      <ScrollBar />
+    </ScrollArea>
+  );
+};
+DialogBody.displayName = "DialogBody";
 
 interface DialogFooterProps extends React.HTMLAttributes<HTMLDivElement> {
   align?: "left" | "right" | "center" | "between" | "full";
@@ -177,6 +203,7 @@ export {
   DialogTrigger,
   DialogContent,
   DialogHeader,
+  DialogBody,
   DialogFooter,
   DialogTitle,
   DialogDescription,

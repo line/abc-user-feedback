@@ -20,7 +20,8 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
-import { TextInput, toast } from '@ufb/ui';
+import { InputBox, InputField, InputIcon, TextInput } from '@ufb/react';
+import { toast } from '@ufb/ui';
 
 import type { IFetchError } from '@/shared';
 import { Path } from '@/shared';
@@ -58,26 +59,22 @@ const SignInWithEmailForm: React.FC<IProps> = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="mb-6 flex flex-col gap-3">
-        <TextInput
-          placeholder="ID"
-          leftIconName="ProfileCircleFill"
-          type="email"
-          {...register('email')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.email}
-          size="lg"
-        />
-        <TextInput
-          placeholder="Password"
-          leftIconName="LockFill"
-          type="password"
-          {...register('password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.password}
-          size="lg"
-        />
+        <InputField>
+          <InputBox>
+            <InputIcon name="RiUser2Fill" />
+            <TextInput placeholder="ID" type="email" {...register('email')} />
+          </InputBox>
+        </InputField>
+        <InputField>
+          <InputBox>
+            <InputIcon name="RiLock2Fill" />
+            <TextInput
+              placeholder="Password"
+              type="password"
+              {...register('password')}
+            />
+          </InputBox>
+        </InputField>
       </div>
       <div className="flex flex-col gap-1">
         <button

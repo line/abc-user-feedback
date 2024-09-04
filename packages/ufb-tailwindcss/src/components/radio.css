@@ -11,7 +11,7 @@
 }
 
 .radio-item {
-  @apply flex items-center py-2 text-base text-[var(--radio-text-default)] disabled:cursor-not-allowed disabled:opacity-50;
+  @apply text-base-normal flex items-center py-2 text-[var(--radio-text-default)] disabled:cursor-not-allowed disabled:opacity-50;
 }
 
 .radio {

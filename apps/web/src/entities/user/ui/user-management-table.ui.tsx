@@ -40,8 +40,9 @@ const UserManagementTable: React.FC<IProps> = () => {
   const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
 
+  const columns = useMemo(() => getUserColumns(), []);
   const table = useReactTable({
-    columns: getUserColumns(),
+    columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
@@ -128,6 +129,7 @@ const UserManagementTable: React.FC<IProps> = () => {
             <p className="text-secondary">{t('text.no-data')}</p>
           </div>
         }
+        createButton
       />
     </div>
   );

@@ -13,4 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as DeleteChannelPopover } from './delete-channel-popover.ui';
+export { default as DeleteChannelButton } from './delete-channel-button.ui';

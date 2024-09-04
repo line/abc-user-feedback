@@ -1,11 +1,11 @@
 .select-trigger-small {
-  @apply min-h-36 px-12 text-base;
+  @apply text-base-normal min-h-36 px-12;
 }
 .select-trigger-medium {
-  @apply text-large min-h-44 px-14;
+  @apply text-large-normal min-h-44 px-14;
 }
 .select-trigger-large {
-  @apply text-xlarge min-h-52 px-16;
+  @apply text-xlarge-normal min-h-52 px-16;
 }
 
 .select-small {

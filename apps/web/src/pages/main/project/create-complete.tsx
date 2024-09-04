@@ -101,10 +101,16 @@ const CompleteProjectCreationPage: NextPage = () => {
         <MemberTable
           members={members?.members ?? []}
           roles={roles?.roles ?? []}
+          createButton={<></>}
+          onUpdateMember={() => {}}
         />
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
-        <ApiKeyTable apiKeys={apiKeys?.items ?? []} />
+        <ApiKeyTable
+          apiKeys={apiKeys?.items ?? []}
+          createButton
+          onClickUpdate={() => {}}
+        />
       </CreateSectionTemplate>
       <CreateSectionTemplate
         title={t('project-setting-menu.issue-tracker-mgmt')}

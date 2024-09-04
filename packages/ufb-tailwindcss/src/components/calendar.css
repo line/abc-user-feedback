@@ -8,7 +8,7 @@
   --calendar-fg-hover: var(--fg-neutral-tertiary);
   --calendar-fg-range: var(--fg-neutral-tertiary);
 
-  @apply rounded-8 box-content w-[15.75rem] border border-[var(--calendar-border-default)] bg-[var(--calendar-fg-default)] p-8 shadow-sm;
+  @apply rounded-8 relative box-content w-[15.75rem] border border-[var(--calendar-border-default)] bg-[var(--calendar-fg-default)] p-8 shadow-sm;
 }
 
 .calendar-months {
@@ -22,7 +22,7 @@
   @apply relative flex items-center justify-center pt-1;
 }
 .calendar-caption-label {
-  @apply text-base font-medium text-[var(--calendar-text-default)];
+  @apply text-base-strong text-[var(--calendar-text-default)];
 }
 
 .calendar-nav {
@@ -45,17 +45,17 @@
   @apply flex;
 }
 .calendar-head-cell {
-  @apply text-small flex-1 px-8 py-2 font-normal text-[var(--calendar-text-week)];
+  @apply text-small-normal flex-1 px-8 py-2 font-normal text-[var(--calendar-text-week)];
 }
 .calendar-row {
   @apply mt-2 flex w-full;
 }
 .calendar-cell {
-  @apply [&:has([aria-selected].day-range-end)]:rounded-r-8 first:[&:has([aria-selected])]:rounded-l-8 last:[&:has([aria-selected])]:rounded-r-8 [&:has(.calendar-day-range-start)]:rounded-l-8 [&:has(.calendar-day-range-end)]:rounded-r-8 relative h-[2.25rem] w-[2.25rem] p-0 text-center text-base focus-within:relative focus-within:z-20 [&:has(.calendar-day-range-end)]:bg-[var(--calendar-fg-hover)] [&:has(.calendar-day-range-start)]:bg-[var(--calendar-fg-hover)];
+  @apply [&:has([aria-selected].day-range-end)]:rounded-r-8 first:[&:has([aria-selected])]:rounded-l-8 last:[&:has([aria-selected])]:rounded-r-8 [&:has(.calendar-day-range-start)]:rounded-l-8 [&:has(.calendar-day-range-end)]:rounded-r-8 text-base-normal relative h-[2.25rem] flex-1 p-0 text-center focus-within:relative focus-within:z-20 [&:has(.calendar-day-range-end)]:bg-[var(--calendar-fg-hover)] [&:has(.calendar-day-range-start)]:bg-[var(--calendar-fg-hover)];
 }
 
 .calendar-day {
-  @apply rounded-8 relative flex h-full w-full items-center justify-center overflow-hidden p-0 text-base aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
+  @apply rounded-8 text-base-normal relative flex h-full w-full items-center justify-center overflow-hidden p-0 aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
 }
 
 .calendar-day-selected {

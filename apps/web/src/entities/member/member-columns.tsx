@@ -17,16 +17,14 @@ import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Badge,
-  Button,
-  Dropdown,
-  DropdownContent,
-  DropdownItem,
-  DropdownTrigger,
-} from '@ufb/react';
+import { Badge } from '@ufb/react';
 
-import { Avatar, DATE_TIME_FORMAT, DescriptionTooltip } from '@/shared';
+import {
+  Avatar,
+  DATE_TIME_FORMAT,
+  DescriptionTooltip,
+  SortingTableHead,
+} from '@/shared';
 
 import type { User } from '../user';
 import type { Member } from './member.type';
@@ -72,37 +70,17 @@ export const getMemberColumns = (users: User[]) => [
     header: 'Department',
     enableSorting: false,
     cell: ({ getValue }) =>
-      getValue() ? <Badge type="subtle">{getValue()}</Badge> : '-',
+      getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
   }),
   columnHelper.accessor('role.name', {
     header: 'Role',
     cell: ({ getValue }) =>
-      getValue() ? <Badge type="subtle">{getValue()}</Badge> : '-',
+      getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
     enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {
     header: ({ column }) => (
-      <Dropdown>
-        <DropdownTrigger>
-          <Button variant="ghost" size="small" iconR="RiArrowUpDownFill">
-            Joined
-          </Button>
-        </DropdownTrigger>
-        <DropdownContent>
-          <DropdownItem
-            onClick={() => column.toggleSorting(false)}
-            iconL="RiArrowUpLine"
-          >
-            Ascending
-          </DropdownItem>
-          <DropdownItem
-            onClick={() => column.toggleSorting(true)}
-            iconL="RiArrowDownLine"
-          >
-            Descending
-          </DropdownItem>
-        </DropdownContent>
-      </Dropdown>
+      <SortingTableHead column={column}>Joined</SortingTableHead>
     ),
     cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
   }),

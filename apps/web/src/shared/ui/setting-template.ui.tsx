@@ -36,7 +36,9 @@ const SettingTemplate: React.FC<Props> = (props) => {
           )}
           {title}
         </h4>
-        <div className="setting-action-buttons flex gap-3">{action}</div>
+        <div className="setting-action-buttons flex items-stretch gap-3">
+          {action}
+        </div>
       </div>
       {children}
     </div>

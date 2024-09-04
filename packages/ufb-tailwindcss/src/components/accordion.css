@@ -1,5 +1,5 @@
 .accordion {
-  @apply bg-neutral-primary text-neutral-primary overflow-hidden;
+  @apply bg-neutral-primary text-neutral-primary h-fit overflow-hidden;
 }
 
 .accordion-border {
@@ -15,7 +15,7 @@
 }
 
 .accordion-trigger {
-  @apply flex w-full items-center justify-between p-16 text-left text-base font-medium transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
+  @apply text-base-strong flex w-full items-center justify-between p-16 text-left transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
 }
 
 .accordion-trigger-bg {
@@ -27,7 +27,7 @@
 }
 
 .accordion-content-box {
-  @apply data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-base transition-all;
+  @apply data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down text-base-normal overflow-hidden transition-all;
 }
 
 .accordion-content {

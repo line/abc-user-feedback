@@ -6,7 +6,7 @@ import { cn } from "../lib/utils";
 
 const dividerVariants = cva("divider", {
   variants: {
-    type: {
+    variant: {
       bold: "divider-bold",
       subtle: "divider-subtle",
     },
@@ -54,7 +54,7 @@ const dividerVariants = cva("divider", {
     },
   ],
   defaultVariants: {
-    type: "bold",
+    variant: "bold",
     orientation: "horizontal",
     indent: 0,
   },
@@ -62,7 +62,7 @@ const dividerVariants = cva("divider", {
 
 interface DividerProps
   extends React.ComponentPropsWithoutRef<typeof SeparatorPrimitive.Root> {
-  type?: "bold" | "subtle";
+  variant?: "bold" | "subtle";
   indent?: 0 | 8 | 16 | 24;
 }
 
@@ -72,7 +72,7 @@ const Divider = React.forwardRef<
 >(
   (
     {
-      type = "bold",
+      variant = "bold",
       indent = 0,
       orientation = "horizontal",
       className,
@@ -85,7 +85,9 @@ const Divider = React.forwardRef<
       ref={ref}
       decorative={decorative}
       orientation={orientation}
-      className={cn(dividerVariants({ type, orientation, indent, className }))}
+      className={cn(
+        dividerVariants({ variant, orientation, indent, className }),
+      )}
       {...props}
     />
   ),

@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
@@ -32,12 +34,13 @@ import { RoleFormSheet, RoleTable } from '@/entities/role';
 
 interface IProps {
   projectId: number;
-  onClickClearMenu: () => void;
 }
 
 const RoleSetting: React.FC<IProps> = (props) => {
-  const { projectId, onClickClearMenu } = props;
+  const { projectId } = props;
   const { t } = useTranslation();
+  const router = useRouter();
+
   const perms = usePermissions(projectId);
 
   const queryClient = useQueryClient();
@@ -118,14 +121,26 @@ const RoleSetting: React.FC<IProps> = (props) => {
   return (
     <SettingTemplate
       title={t('project-setting-menu.role-mgmt')}
-      onClickBack={onClickClearMenu}
+      onClickBack={() =>
+        router.push({
+          pathname: '/main/project/[projectId]/settings',
+          query: { projectId, menu: 'member' },
+        })
+      }
       action={
-        <Button
-          onClick={openRoleSheet}
-          disabled={!perms.includes('project_role_create')}
+        <Link
+          href={{
+            pathname: '/main/project/[projectId]/settings',
+            query: { projectId, menu: 'member', submenu: 'role' },
+          }}
         >
-          {t('v2.button.name.create', { name: 'Role' })}
-        </Button>
+          <Button
+            onClick={openRoleSheet}
+            disabled={!perms.includes('project_role_create')}
+          >
+            {t('v2.button.name.create', { name: 'Role' })}
+          </Button>
+        </Link>
       }
     >
       <div className="overflow-auto">

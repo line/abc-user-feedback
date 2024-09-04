@@ -1,11 +1,11 @@
 .toggle-group-item-large {
-  @apply text-xlarge px-24 py-8 font-medium;
+  @apply text-xlarge-strong px-24 py-8;
 }
 .toggle-group-item-medium {
-  @apply text-large px-16 py-8 font-medium;
+  @apply text-large-strong px-16 py-8;
 }
 .toggle-group-item-small {
-  @apply px-12 py-8 text-base font-medium;
+  @apply text-base-strong px-12 py-8;
 }
 
 .toggle-group-item-radius-large {

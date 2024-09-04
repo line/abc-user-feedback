@@ -1,4 +1,3 @@
-import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cva } from "class-variance-authority";
@@ -17,40 +16,40 @@ import {
 import { Icon } from "./icon";
 
 const DefaultValue = {
-  align: "horizontal",
+  orientation: "horizontal",
   size: "small",
 } as const;
 
 const menuVariants = cva("menu", {
   variants: {
-    align: {
+    orientation: {
       horizontal: "menu-horizontal",
       vertical: "menu-vertical",
     },
     defaultVariants: {
-      align: DefaultValue.align,
+      orientation: DefaultValue.orientation,
     },
   },
 });
 
 const MenuContext = React.createContext<{
-  align?: "vertical" | "horizontal";
+  orientation?: "vertical" | "horizontal";
   size?: "small" | "medium" | "large";
 }>({
-  align: DefaultValue.align,
+  orientation: DefaultValue.orientation,
   size: DefaultValue.size,
 });
 
 const Menu = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Root> & {
-    align?: "vertical" | "horizontal";
+    orientation?: "vertical" | "horizontal";
     size?: "small" | "medium" | "large";
   }
 >(
   (
     {
-      align = DefaultValue.align,
+      orientation = DefaultValue.orientation,
       size = DefaultValue.size,
       children,
       className,
@@ -60,10 +59,10 @@ const Menu = React.forwardRef<
   ) => (
     <ToggleGroupPrimitive.Root
       ref={ref}
-      className={cn(menuVariants({ align, className }))}
+      className={cn(menuVariants({ orientation, className }))}
       {...props}
     >
-      <MenuContext.Provider value={{ align, size }}>
+      <MenuContext.Provider value={{ orientation, size }}>
         {children}
       </MenuContext.Provider>
     </ToggleGroupPrimitive.Root>
@@ -105,7 +104,7 @@ const MenuItem = React.forwardRef<
       {iconL && <Icon name={iconL} size={ICON_SIZE[size]} />}
       <span>{children}</span>
       {badge && (
-        <Badge type="bold" color="default" radius="large">
+        <Badge variant="bold" color="default" radius="large">
           {badge}
         </Badge>
       )}
@@ -137,7 +136,7 @@ const MenuDropdownTrigger = React.forwardRef<
       {iconL && <Icon name={iconL} size={ICON_SIZE[size]} />}
       <span>{children}</span>
       {badge && (
-        <Badge type="bold" color="default" radius="large">
+        <Badge variant="bold" color="default" radius="large">
           {badge}
         </Badge>
       )}

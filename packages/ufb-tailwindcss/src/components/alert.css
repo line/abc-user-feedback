@@ -20,7 +20,7 @@
 }
 
 .alert-icon {
-  @apply mb-auto box-content h-20 w-20 flex-shrink-0 p-4;
+  @apply mb-auto box-content flex-shrink-0 p-4;
 
   /* default */
   @apply alert-icon-default;
@@ -39,7 +39,7 @@
 }
 
 .alert-description {
-  @apply text-base font-normal text-[var(--alert-text-description)];
+  @apply text-base-normal text-[var(--alert-text-description)];
 }
 .alert-button {
   @apply flex-shrink-0;

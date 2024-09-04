@@ -79,6 +79,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
+      type = "button",
       variant = "primary",
       size,
       radius,
@@ -105,34 +106,33 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             className,
           }),
         )}
+        type={type}
         disabled={disabled || loading}
         ref={ref}
         {...props}
       >
-        <React.Fragment>
-          {iconL && (
-            <Icon
-              name={iconL}
-              size={ICON_SIZE[size ?? themeSize]}
-              aria-hidden
-              className="button-leading-icon"
-            />
-          )}
-          <Slottable>{children}</Slottable>
-          {iconR && (
-            <Icon
-              name={iconR}
-              size={ICON_SIZE[size ?? themeSize]}
-              aria-hidden
-              className="button-trailing-icon"
-            />
-          )}
-          {loading && (
-            <span className={cn(buttonLoadingVariants({ variant }))}>
-              <Spinner size={size ?? themeSize} />
-            </span>
-          )}
-        </React.Fragment>
+        {iconL && (
+          <Icon
+            name={iconL}
+            size={ICON_SIZE[size ?? themeSize]}
+            aria-hidden
+            className="button-leading-icon"
+          />
+        )}
+        <Slottable>{children}</Slottable>
+        {iconR && (
+          <Icon
+            name={iconR}
+            size={ICON_SIZE[size ?? themeSize]}
+            aria-hidden
+            className="button-trailing-icon"
+          />
+        )}
+        {loading && (
+          <span className={cn(buttonLoadingVariants({ variant }))}>
+            <Spinner size={size ?? themeSize} />
+          </span>
+        )}
       </Comp>
     );
   },

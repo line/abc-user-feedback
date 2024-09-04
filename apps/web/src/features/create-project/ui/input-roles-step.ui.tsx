@@ -56,11 +56,7 @@ const InputRolesStep: React.FC<IProps> = () => {
       }
       disableNextBtn={input.roles.length === 0}
     >
-      <RoleTable
-        roles={input.roles}
-        onUpdateRole={onUpdateRole}
-        onDeleteRole={onDeleteRole}
-      />
+      <RoleTable roles={input.roles} />
     </CreateProjectInputTemplate>
   );
 };

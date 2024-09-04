@@ -17,7 +17,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { Badge, Icon } from '@ufb/ui';
 
-import { cn, displayString, usePermissions } from '@/shared';
+import { cn, displayString, RowDragHandleCell, usePermissions } from '@/shared';
 
 import { FIELD_PROPERTY_TEXT, isDefaultField } from './field-utils';
 import type { FieldInfo } from './field.type';
@@ -26,12 +26,13 @@ import OptionListPopover from './ui/option-list-popover.ui';
 
 const columnHelper = createColumnHelper<FieldInfo>();
 
-export const getFieldColumns = (
-  fieldRows: FieldInfo[],
-  onClickDelete?: (input: { index: number }) => void,
-  onClickModify?: (input: { index: number; field: FieldInfo }) => void,
-  isInputStep?: boolean,
-) => [
+export const getFieldColumns = () => [
+  columnHelper.display({
+    id: 'drag-handle',
+    header: 'Move',
+    cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
+    size: 60,
+  }),
   columnHelper.accessor('key', {
     header: 'Key',
     cell: ({ getValue, row }) => (
@@ -82,59 +83,4 @@ export const getFieldColumns = (
     },
     size: 120,
   }),
-  ...(onClickDelete ?
-    [
-      columnHelper.display({
-        id: 'delete',
-        header: () => <p className="w-full text-center">Delete</p>,
-        cell: ({ row }) => {
-          const perms = usePermissions();
-          return (
-            <div className="text-center">
-              <button
-                className="icon-btn icon-btn-sm icon-btn-tertiary"
-                disabled={
-                  isDefaultField(row.original) ||
-                  (!isInputStep && !!row.original.createdAt) ||
-                  (!isInputStep && !perms.includes('channel_field_update'))
-                }
-                onClick={() => onClickDelete({ index: row.index })}
-              >
-                <Icon name="TrashFill" />
-              </button>
-            </div>
-          );
-        },
-        size: 125,
-      }),
-    ]
-  : []),
-  ...(onClickModify ?
-    [
-      columnHelper.display({
-        id: 'edit',
-        header: () => <p className="text-center">Edit</p>,
-        cell: ({ row }) => {
-          const perms = usePermissions();
-
-          return (
-            <div className="text-center">
-              <FieldSettingPopover
-                onSave={(input) =>
-                  onClickModify({ field: input, index: row.index })
-                }
-                data={row.original}
-                disabled={
-                  isDefaultField(row.original) ||
-                  (!isInputStep && !perms.includes('channel_field_update'))
-                }
-                fieldRows={fieldRows}
-              />
-            </div>
-          );
-        },
-        size: 125,
-      }),
-    ]
-  : []),
 ];

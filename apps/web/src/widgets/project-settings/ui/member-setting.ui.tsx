@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import Link from 'next/link';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
@@ -26,16 +27,15 @@ import {
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import { CreateMemberDialog, MemberTable } from '@/entities/member';
-import type { SubSettingMenu } from '@/widgets/settings-menu';
+import { MemberTable } from '@/entities/member';
+import MemberFormDialog from '@/entities/member/ui/member-form-dialog.ui';
 
 interface IProps {
   projectId: number;
-  onClickChangeSubMenu: (menu: SubSettingMenu) => void;
 }
 
 const MemberSetting: React.FC<IProps> = (props) => {
-  const { projectId, onClickChangeSubMenu } = props;
+  const { projectId } = props;
 
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
@@ -112,9 +112,9 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const openCreateMemberDialog = () => {
     if (!rolesData || !projectData) return;
     overlay.open(({ isOpen, close }) => (
-      <CreateMemberDialog
+      <MemberFormDialog
         members={memberData?.members ?? []}
-        onCreate={(user, role) =>
+        onSubmit={({ role, user }) =>
           createMember({ userId: user.id, roleId: role.id })
         }
         project={projectData}
@@ -130,13 +130,16 @@ const MemberSetting: React.FC<IProps> = (props) => {
       title={t('project-setting-menu.member-mgmt')}
       action={
         <>
-          <Button
-            iconL="RiExchange2Fill"
-            variant="outline"
-            onClick={() => onClickChangeSubMenu('role')}
+          <Link
+            href={{
+              pathname: '/main/project/[projectId]/settings',
+              query: { projectId, menu: 'member', submenu: 'role' },
+            }}
           >
-            {t('project-setting-menu.role-mgmt')}
-          </Button>
+            <Button iconL="RiExchange2Fill" variant="outline">
+              {t('project-setting-menu.role-mgmt')}
+            </Button>
+          </Link>
           <Button
             disabled={!perms.includes('project_member_create')}
             onClick={openCreateMemberDialog}
@@ -159,7 +162,6 @@ const MemberSetting: React.FC<IProps> = (props) => {
         project={projectData}
         createButton={
           <Button
-            className="min-w-[120px]"
             disabled={!perms.includes('project_member_create')}
             onClick={openCreateMemberDialog}
           >

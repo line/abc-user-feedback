@@ -17,13 +17,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Badge,
-  Popover,
-  PopoverContent,
-  PopoverHeading,
-  PopoverTrigger,
-} from '@ufb/ui';
+import { Popover, PopoverContent, PopoverTrigger, Tag } from '@ufb/react';
 
 import type { FieldOptionInfo } from '../field.type';
 
@@ -48,23 +42,19 @@ const DeleteFieldOptionPopover: React.FC<IProps> = (props) => {
     >
       <PopoverTrigger asChild>
         <div className="relative">
-          <Badge
-            color="black"
-            type="secondary"
-            right={{
-              iconName: 'Close',
-              onClick: () =>
-                option.id ? setTargetOptionIndex(index) : removeOption(index),
-            }}
+          <Tag
+            variant="secondary"
+            iconR="RiCloseLargeLine"
+            onClickIconR={() =>
+              option.id ? setTargetOptionIndex(index) : removeOption(index)
+            }
           >
             {option.name}
-          </Badge>
+          </Tag>
         </div>
       </PopoverTrigger>
       <PopoverContent className="z-100">
-        <PopoverHeading>
-          {t('main.setting.dialog.delete-option.title')}
-        </PopoverHeading>
+        <h1>{t('main.setting.dialog.delete-option.title')}</h1>
         <div className="m-5">
           <p className="font-14-regular mb-10 whitespace-pre-line">
             {t('main.setting.dialog.delete-option.description')}

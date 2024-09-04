@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 import type { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { DEFAULT_LOCALE } from '@/shared';
@@ -42,20 +42,17 @@ interface IProps {
 }
 
 const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
-  const [currentMenu, setCurrentMenu] = useState<SettingMenu>('project');
-  const [currentSubMenu, setCurrentSubMenu] = useState<SubSettingMenu>();
+  const router = useRouter();
 
-  const [currentChannelId, setCurrentChannelId] = useState<number>();
+  const currentMenu = (router.query.menu ?? 'project') as SettingMenu;
+  const currentSubMenu = router.query.submenu as SubSettingMenu | undefined;
+  const currentChannelId =
+    router.query.channelId ? Number(router.query.channelId) : null;
 
   return (
     <div className="flex h-full gap-8">
       <div className="w-[280px] flex-shrink-0 px-3 py-6">
         <SettingsMenu
-          onChangeSettingMenuValue={(settingMenu, channelId) => {
-            setCurrentMenu(settingMenu);
-            setCurrentChannelId(channelId);
-            setCurrentSubMenu(undefined);
-          }}
           projectId={projectId}
           settingMenuValue={currentMenu}
           channelId={currentChannelId}
@@ -67,14 +64,8 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         )}
         {currentMenu === 'member' &&
           (currentSubMenu === 'role' ?
-            <RoleSetting
-              projectId={projectId}
-              onClickClearMenu={() => setCurrentSubMenu(undefined)}
-            />
-          : <MemberSetting
-              projectId={projectId}
-              onClickChangeSubMenu={(menu) => setCurrentSubMenu(menu)}
-            />)}
+            <RoleSetting projectId={projectId} />
+          : <MemberSetting projectId={projectId} />)}
         {currentMenu === 'api-key' && <ApiKeySetting projectId={projectId} />}
         {currentMenu === 'issue-tracker' && (
           <IssueTrackerSetting projectId={projectId} />

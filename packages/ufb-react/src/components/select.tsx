@@ -12,17 +12,23 @@ import { ScrollArea, ScrollBar } from "./scroll-area";
 import { Tag } from "./tag";
 import useTheme from "./use-theme";
 
-const SelectContext = React.createContext<
-  {
-    type: "single" | "multiple";
-    size?: Size;
-    error: boolean;
-  } & SingleSelectProps &
-    MultipleSelectProps
->({
+interface SelectContextProps {
+  type: SelectProps["type"];
+  size?: SelectProps["size"];
+  error?: SelectProps["error"];
+  values?: MultipleSelectProps["values"];
+  itemTextByValue: Record<string, string>;
+  setItemTextByValue: React.Dispatch<
+    React.SetStateAction<Record<string, string>>
+  >;
+}
+const SelectContext = React.createContext<SelectContextProps>({
   type: "single",
   size: undefined,
   error: false,
+  values: [],
+  setItemTextByValue: () => {},
+  itemTextByValue: {},
 });
 
 const selectVariants = cva("select", {
@@ -44,6 +50,7 @@ type SelectProps = {
   error?: boolean;
 } & SingleSelectProps &
   MultipleSelectProps;
+
 const Select = ({
   type = "single",
   size,
@@ -54,6 +61,9 @@ const Select = ({
 }: SelectProps) => {
   const { themeSize } = useTheme();
   const [multipleValues, setMultipleValues] = React.useState<string[]>(values);
+  const [itemTextByValue, setItemTextByValue] = React.useState<
+    Record<string, string>
+  >({});
 
   const handleMultipleValuesChange = (values: string[]) => {
     setMultipleValues(values);
@@ -62,7 +72,14 @@ const Select = ({
 
   return (
     <SelectContext.Provider
-      value={{ type, size: size ?? themeSize, values: multipleValues, error }}
+      value={{
+        type,
+        size: size ?? themeSize,
+        values: multipleValues,
+        error,
+        itemTextByValue,
+        setItemTextByValue,
+      }}
     >
       <div className={cn(selectVariants({ size: size ?? themeSize }))}>
         {type === "single" ? (
@@ -83,10 +100,7 @@ Select.displayName = "Select";
 type SingleSelectProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Root
 >;
-const SingleSelect = ({ ...props }) => {
-  return <SelectPrimitive.Root {...props} />;
-};
-SingleSelect.displayName = "SingleSelect";
+const SingleSelect = SelectPrimitive.Root;
 
 type MultipleSelectProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Root
@@ -99,20 +113,14 @@ const MultipleSelect = ({
   onValuesChange,
   ...props
 }: MultipleSelectProps) => {
-  const [value, setValue] = React.useState<string | undefined>(undefined);
-
   return (
     <SelectPrimitive.Root
-      value={value}
-      onOpenChange={() => {
-        // NOTE : onValueChange 호출을 위한 setValue 변경
-        setValue(undefined);
-      }}
+      value="null"
       onValueChange={(value) => {
         onValuesChange?.(
           values.includes(value)
             ? values.filter((curr) => curr !== value)
-            : [...values, value],
+            : values.concat(value),
         );
       }}
       {...props}
@@ -141,8 +149,14 @@ const MultipleSelectValue = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Value>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
 >(({ placeholder }, ref) => {
-  const { size, values = [] } = React.useContext(SelectContext);
+  const {
+    size,
+    values = [],
+    itemTextByValue,
+  } = React.useContext(SelectContext);
+
   const { themeSize } = useTheme();
+
   return (
     <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
       <React.Fragment>
@@ -150,11 +164,11 @@ const MultipleSelectValue = React.forwardRef<
           ? values.map((value, index) => (
               <Tag
                 key={index}
-                type="outline"
+                variant="outline"
                 size={size ?? themeSize}
                 className="select-tag"
               >
-                {value}
+                {itemTextByValue[value]}
               </Tag>
             ))
           : placeholder}
@@ -250,6 +264,7 @@ const SelectGroupLabel = React.forwardRef<
 SelectGroupLabel.displayName = SelectPrimitive.Label.displayName;
 
 type SelectItemProps = SingleSelectItemProps & MultipleSelectItemProps;
+
 const SelectItem = ({ ...props }: SelectItemProps) => {
   const { type = "single" } = React.useContext(SelectContext);
 
@@ -265,6 +280,7 @@ type SingleSelectItemProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Item
 > & {
   icon?: IconNameType;
+  children: string;
 };
 const SingleSelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
@@ -281,12 +297,8 @@ const SingleSelectItem = React.forwardRef<
           <Icon name="RiCheckLine" size={20} />
         </SelectPrimitive.ItemIndicator>
       </span>
-      <SelectPrimitive.ItemText>
-        <React.Fragment>
-          {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-          {children}
-        </React.Fragment>
-      </SelectPrimitive.ItemText>
+      {icon && <Icon name={icon} size={16} className="select-item-icon" />}
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </React.Fragment>
   </SelectPrimitive.Item>
 ));
@@ -297,12 +309,19 @@ type MultipleSelectItemProps = React.ComponentPropsWithoutRef<
 > & {
   icon?: IconNameType;
   values?: string[];
+  children: string;
 };
 const MultipleSelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
   MultipleSelectItemProps
 >(({ icon, value, className, children, ...props }, ref) => {
-  const { values = [] } = React.useContext(SelectContext);
+  const { values = [], setItemTextByValue } = React.useContext(SelectContext);
+  const isSelected = values.includes(value);
+
+  React.useEffect(() => {
+    setItemTextByValue((prev) => ({ ...prev, [value]: children }));
+  }, [children]);
+
   return (
     <SelectPrimitive.Item
       ref={ref}
@@ -311,19 +330,13 @@ const MultipleSelectItem = React.forwardRef<
       {...props}
     >
       <React.Fragment>
-        {values.includes(value) && (
+        {isSelected && (
           <span className="select-item-check">
             <Icon name="RiCheckLine" size={20} />
           </span>
         )}
-        <SelectPrimitive.ItemText>
-          <React.Fragment>
-            {icon && (
-              <Icon name={icon} size={16} className="select-item-icon" />
-            )}
-            {children}
-          </React.Fragment>
-        </SelectPrimitive.ItemText>
+        {icon && <Icon name={icon} size={16} className="select-item-icon" />}
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
       </React.Fragment>
     </SelectPrimitive.Item>
   );
@@ -355,20 +368,20 @@ SelectLabel.displayName = "SelectLabel";
 
 const selectCaptionVariants = cva("select-caption", {
   variants: {
-    type: {
+    variant: {
       default: "select-caption-default",
       success: "select-caption-success",
       info: "select-caption-info",
       error: "select-caption-error",
     },
     defaultVariants: {
-      type: "default",
+      variant: "default",
     },
   },
 });
 
 interface SelectCaptionProps extends React.ComponentPropsWithoutRef<"span"> {
-  type?: CaptionType;
+  variant?: CaptionType;
   icon?: IconNameType;
   size?: Size;
 }
@@ -377,7 +390,7 @@ const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
   (props, ref) => {
     const {
       icon = undefined,
-      type = "default",
+      variant = "default",
       size,
       className,
       children,
@@ -388,12 +401,12 @@ const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
     return (
       <span
         ref={ref}
-        className={cn(selectCaptionVariants({ type, className }))}
+        className={cn(selectCaptionVariants({ variant, className }))}
         {...rest}
       >
         <React.Fragment>
           <Icon
-            name={icon ?? CAPTION_DEFAULT_ICON[type]}
+            name={icon ?? CAPTION_DEFAULT_ICON[variant]}
             size={ICON_SIZE[size ?? themeSize]}
             className="select-caption-icon"
           />

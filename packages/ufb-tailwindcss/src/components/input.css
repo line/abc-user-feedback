@@ -54,15 +54,15 @@
 }
 
 .input-label {
-  @apply text-base font-normal text-[var(--input-label-default)];
+  @apply text-base-normal font-normal text-[var(--input-label-default)];
 }
 
 .input-caption {
-  @apply flex gap-4 text-base;
+  @apply text-base-normal flex gap-4;
 
   /* default */
   @apply input-caption-default;
 }
 .input-caption-icon {
-  @apply flex-shrink-0;
+  @apply mt-2 flex-shrink-0;
 }

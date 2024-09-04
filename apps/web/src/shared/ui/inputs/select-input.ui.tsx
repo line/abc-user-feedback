@@ -13,19 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { IconNameType } from '@ufb/react';
 import {
-  InputField,
-  InputLabel,
   Select,
   SelectContent,
   SelectItem,
+  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@ufb/react';
 
 interface Props {
   placeholder?: string;
-  options: { label: string; value: string }[];
+  options: { label: string; value: string; icon?: IconNameType }[];
   label: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -38,23 +38,21 @@ const SelectInput: React.FC<Props> = (props) => {
     props;
 
   return (
-    <InputField>
-      <InputLabel>
+    <Select value={value} onValueChange={onChange} disabled={disabled}>
+      <SelectLabel>
         {label} {required && <span className="text-tint-red">*</span>}
-      </InputLabel>
-      <Select value={value} onValueChange={onChange} disabled={disabled}>
-        <SelectTrigger>
-          <SelectValue placeholder={placeholder} />
-        </SelectTrigger>
-        <SelectContent>
-          {options.map(({ label, value }) => (
-            <SelectItem key={value} value={value}>
-              {label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-    </InputField>
+      </SelectLabel>
+      <SelectTrigger>
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent>
+        {options.map(({ label, value, icon }) => (
+          <SelectItem key={value} value={value} icon={icon}>
+            {label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
 

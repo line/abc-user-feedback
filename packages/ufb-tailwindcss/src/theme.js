@@ -1,7 +1,6 @@
 const theme = require("tailwindcss/defaultTheme");
 const borderRadius = require("./borderRadius");
 const boxShadow = require("./boxShadow");
-const fontSize = require("./fontSize");
 const spacing = require("./spacing");
 
 const colors = {
@@ -9,6 +8,7 @@ const colors = {
   current: "currentColor",
 };
 
+/** @type {import("tailwindcss").Config["theme"]} */
 module.exports = {
   ...theme,
   colors,
@@ -93,6 +93,5 @@ module.exports = {
   },
   borderRadius,
   boxShadow,
-  fontSize,
   spacing,
 };

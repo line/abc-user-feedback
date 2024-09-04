@@ -7,7 +7,7 @@ import type { Color, Radius } from "../lib/types";
 import { cn } from "../lib/utils";
 import useTheme from "./use-theme";
 
-type BadgeType = "bold" | "subtle" | "outline";
+type BadgeVariant = "bold" | "subtle" | "outline";
 
 const badgeVariants = cva("badge", {
   variants: {
@@ -16,7 +16,7 @@ const badgeVariants = cva("badge", {
       medium: "badge-radius-medium",
       small: "badge-radius-small",
     },
-    type: {
+    variant: {
       bold: "",
       subtle: "",
       outline: "",
@@ -31,84 +31,84 @@ const badgeVariants = cva("badge", {
   },
   compoundVariants: [
     {
-      type: "bold",
+      variant: "bold",
       color: "default",
       className: "badge-bold-default",
     },
     {
-      type: "bold",
+      variant: "bold",
       color: "blue",
       className: "badge-bold-blue",
     },
     {
-      type: "bold",
+      variant: "bold",
       color: "orange",
       className: "badge-bold-orange",
     },
     {
-      type: "bold",
+      variant: "bold",
       color: "red",
       className: "badge-bold-red",
     },
     {
-      type: "bold",
+      variant: "bold",
       color: "green",
       className: "badge-bold-green",
     },
     {
-      type: "subtle",
+      variant: "subtle",
       color: "default",
       className: "badge-subtle-default",
     },
     {
-      type: "subtle",
+      variant: "subtle",
       color: "blue",
       className: "badge-subtle-blue",
     },
     {
-      type: "subtle",
+      variant: "subtle",
       color: "orange",
       className: "badge-subtle-orange",
     },
     {
-      type: "subtle",
+      variant: "subtle",
       color: "red",
       className: "badge-subtle-red",
     },
     {
-      type: "subtle",
+      variant: "subtle",
       color: "green",
       className: "badge-subtle-green",
     },
     {
-      type: "outline",
+      variant: "outline",
       color: "default",
       className: "badge-outline-default",
     },
     {
-      type: "outline",
+      variant: "outline",
       color: "blue",
       className: "badge-outline-blue",
     },
     {
-      type: "outline",
+      variant: "outline",
       color: "orange",
       className: "badge-outline-orange",
     },
     {
-      type: "outline",
+      variant: "outline",
       color: "red",
       className: "badge-outline-red",
     },
     {
-      type: "outline",
+      variant: "outline",
       color: "green",
       className: "badge-outline-green",
     },
   ],
   defaultVariants: {
     radius: undefined,
-    type: "bold",
+    variant: "bold",
     color: "default",
   },
 });
@@ -117,14 +117,21 @@ interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof badgeVariants> {
   radius?: Radius;
-  type?: BadgeType;
+  variant?: BadgeVariant;
   color?: Color;
   asChild?: boolean;
 }
 
 const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
   (
-    { radius, type = "bold", color = "default", className, asChild, ...props },
+    {
+      radius,
+      variant = "bold",
+      color = "default",
+      className,
+      asChild,
+      ...props
+    },
     ref,
   ) => {
     const { themeRadius } = useTheme();
@@ -134,7 +141,7 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
       <Comp
         ref={ref}
         className={cn(
-          badgeVariants({ radius: radius ?? themeRadius, type, color }),
+          badgeVariants({ radius: radius ?? themeRadius, variant, color }),
           className,
         )}
         {...props}

@@ -11,11 +11,11 @@
 }
 
 .table-header {
-  @apply [&_tr]:border-b [&_tr]:border-b-[var(--table-border-default)];
+  @apply [&_th]:border-b [&_th]:border-b-[var(--table-border-default)];
 }
 
 .table-body {
-  @apply [&_tr:last-child]:border-0;
+  @apply [&_td]:border-b [&_td]:border-b-[var(--table-border-default)] [&_tr:last-child_td]:border-0;
 }
 
 .table-footer {
@@ -27,19 +27,19 @@
 }
 
 .table-head {
-  @apply h-48 px-16 align-middle text-base font-normal text-[var(--table-text-header)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-4 [&>svg]:mr-4 [&>svg]:text-[var(--table-icon-header)];
+  @apply text-base-normal h-48 px-16 align-middle font-normal text-[var(--table-text-header)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-4 [&>svg]:mr-4 [&>svg]:text-[var(--table-icon-header)];
 
   /* default */
   @apply table-head-left;
 }
 
 .table-cell {
-  @apply px-16 py-12 align-middle text-base text-[var(--table-text-cell)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-4 [&>svg]:text-[var(--table-icon-cell)];
+  @apply text-base-normal px-16 py-12 align-middle text-[var(--table-text-cell)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-4 [&>svg]:text-[var(--table-icon-cell)];
 
   /* default */
   @apply table-cell-left;
 }
 
 .table-caption {
-  @apply text-small mt-4 text-[--table-text-header];
+  @apply text-small-normal mt-4 text-[--table-text-header];
 }

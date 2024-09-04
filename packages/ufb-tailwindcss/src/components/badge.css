@@ -47,7 +47,7 @@
   --badge-outline-fg-red: var(--fg-neutral-primary);
   --badge-outline-fg-green: var(--fg-neutral-primary);
 
-  @apply text-small inline-flex px-8 py-2 font-medium;
+  @apply text-small-strong inline-flex px-8 py-2;
 
   /* default */
   @apply badge-bold-default badge-radius-medium;

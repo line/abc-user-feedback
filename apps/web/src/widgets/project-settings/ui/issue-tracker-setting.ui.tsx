@@ -15,7 +15,6 @@
  */
 
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -23,6 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, toast } from '@ufb/react';
 
 import {
+  SettingAlert,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
@@ -102,19 +102,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
         </Button>
       }
     >
-      <div className="flex items-center rounded border px-6 py-2">
-        <p className="flex-1 whitespace-pre-line py-5">
-          {t('help-card.issue-tracker')}
-        </p>
-        <div className="relative h-full w-[160px]">
-          <Image
-            src="/assets/images/temp.png"
-            style={{ objectFit: 'contain' }}
-            alt="temp"
-            fill
-          />
-        </div>
-      </div>
+      <SettingAlert description={t('help-card.issue-tracker')} />
       <FormProvider {...methods}>
         <IssueTrackerForm />
       </FormProvider>

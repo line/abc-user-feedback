@@ -57,14 +57,14 @@ const inputVariants = cva("input", {
 
 const inputCaptionVariants = cva("input-caption", {
   variants: {
-    type: {
+    variant: {
       default: "input-caption-default",
       success: "input-caption-success",
       info: "input-caption-info",
       error: "input-caption-error",
     },
     defaultVariants: {
-      type: "default",
+      variant: "default",
     },
   },
 });
@@ -176,7 +176,7 @@ InputLabel.displayName = "InputLabel";
 
 interface InputCaptionProps extends React.ComponentPropsWithoutRef<"span"> {
   icon?: IconNameType;
-  type?: CaptionType;
+  variant?: CaptionType;
   size?: Size;
 }
 
@@ -184,7 +184,7 @@ const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
   (props, ref) => {
     const {
       icon = undefined,
-      type = "default",
+      variant = "default",
       size,
       className,
       children,
@@ -195,12 +195,12 @@ const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
     return (
       <span
         ref={ref}
-        className={cn(inputCaptionVariants({ type, className }))}
+        className={cn(inputCaptionVariants({ variant, className }))}
         {...rest}
       >
         <React.Fragment>
           <Icon
-            name={icon ?? CAPTION_DEFAULT_ICON[type]}
+            name={icon ?? CAPTION_DEFAULT_ICON[variant]}
             size={ICON_SIZE[size ?? themeSize]}
             className="input-caption-icon"
           />

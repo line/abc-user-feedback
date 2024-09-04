@@ -29,7 +29,8 @@ module.exports = {
       pattern: /text-title-(h1|h2|h3|h4|h5)/,
     },
     {
-      pattern: /text-(small|base|large|xlarge)/,
+      pattern:
+        /text-(small|base|large|xlarge)-(normal|strong|underline|delete)/,
     },
   ],
   theme,

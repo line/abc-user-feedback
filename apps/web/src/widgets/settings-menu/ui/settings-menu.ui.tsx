@@ -15,6 +15,7 @@
  */
 import { useMemo } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -31,20 +32,18 @@ import {
   MenuItem,
 } from '@ufb/react';
 
-import { useOAIQuery } from '@/shared';
+import { cn, useOAIQuery } from '@/shared';
 
 import type { SettingMenu } from '../setting-menu.type';
 
 interface Props {
   settingMenuValue: SettingMenu;
-  channelId?: number;
-  onChangeSettingMenuValue: (value: SettingMenu, channelId?: number) => void;
+  channelId?: number | null;
   projectId: number;
 }
 
 const SettingsMenu: React.FC<Props> = (props) => {
-  const { settingMenuValue, onChangeSettingMenuValue, projectId, channelId } =
-    props;
+  const { settingMenuValue, projectId, channelId } = props;
 
   const menuValue = useMemo(() => {
     if (channelId) return `${settingMenuValue}_${channelId}`;
@@ -58,44 +57,69 @@ const SettingsMenu: React.FC<Props> = (props) => {
     variables: { projectId },
   });
 
-  const onMenuValueChange = (value: string) => {
-    if (!value) return;
-    const [menuValue, channelId] = value.split('_');
-
-    if (!channelId) {
-      onChangeSettingMenuValue(menuValue as SettingMenu, undefined);
-    } else {
-      onChangeSettingMenuValue(menuValue as SettingMenu, parseInt(channelId));
-    }
-  };
-
   return (
     <Menu
       type="single"
-      align="vertical"
+      orientation="vertical"
       className="w-full"
       value={menuValue}
-      onValueChange={onMenuValueChange}
     >
-      <MenuItem value="project" iconL="RiInformation2Line">
-        {t('v2.project-setting-menu.project-info')}
-      </MenuItem>
-      <MenuItem value="member" iconL="RiUser2Line">
-        {t('v2.project-setting-menu.member-mgmt')}
-      </MenuItem>
-      <MenuItem value="api-key" iconL="RiShieldKeyholeLine">
-        {t('v2.project-setting-menu.api-key-mgmt')}
-      </MenuItem>
-      <MenuItem value="issue-tracker" iconL="RiSeoLine">
-        {t('v2.project-setting-menu.issue-tracker-mgmt')}
-      </MenuItem>
-      <MenuItem value="webhook" iconL="RiWebhookLine">
-        {t('v2.project-setting-menu.webhook-integration')}
-      </MenuItem>
-      <Accordion type="single" iconAlign="left" collapsible useDivider={false}>
+      <Link
+        href={{
+          pathname: '/main/project/[projectId]/settings',
+          query: { projectId, menu: 'project' },
+        }}
+      >
+        <MenuItem value="project" iconL="RiInformation2Line">
+          {t('v2.project-setting-menu.project-info')}
+        </MenuItem>
+      </Link>
+      <Link
+        href={{
+          pathname: '/main/project/[projectId]/settings',
+          query: { projectId, menu: 'member' },
+        }}
+      >
+        <MenuItem value="member" iconL="RiUser2Line">
+          {t('v2.project-setting-menu.member-mgmt')}
+        </MenuItem>
+      </Link>
+      <Link
+        href={{
+          pathname: '/main/project/[projectId]/settings',
+          query: { projectId, menu: 'api-key' },
+        }}
+      >
+        <MenuItem value="api-key" iconL="RiShieldKeyholeLine">
+          {t('v2.project-setting-menu.api-key-mgmt')}
+        </MenuItem>
+      </Link>
+      <Link
+        href={{
+          pathname: '/main/project/[projectId]/settings',
+          query: { projectId, menu: 'issue-tracker' },
+        }}
+      >
+        <MenuItem value="issue-tracker" iconL="RiSeoLine">
+          {t('v2.project-setting-menu.issue-tracker-mgmt')}
+        </MenuItem>
+      </Link>
+      <Link
+        href={{
+          pathname: '/main/project/[projectId]/settings',
+          query: { projectId, menu: 'webhook' },
+        }}
+      >
+        <MenuItem value="webhook" iconL="RiWebhookLine">
+          {t('v2.project-setting-menu.webhook-integration')}
+        </MenuItem>
+      </Link>
+      <Accordion type="single" iconAlign="left" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
-          <AccordionContent className="!p-0">
+          <AccordionContent
+            className={cn({ 'p-0': data?.meta.totalItems === 0 })}
+          >
             {data?.meta.totalItems === 0 ?
               <div className="border-neutral-tertiary flex w-full flex-col items-center justify-center gap-4 rounded border p-4">
                 <Image
@@ -113,28 +137,61 @@ const SettingsMenu: React.FC<Props> = (props) => {
               </div>
             : data?.items.map(({ name, id }) => (
                 <MenuDropdown key={id}>
-                  <MenuDropdownTrigger value="" iconR="RiArrowRightSLine">
+                  <MenuDropdownTrigger iconR="RiArrowRightSLine">
                     {name}
                   </MenuDropdownTrigger>
                   <MenuDropdownContent side="right" align="start">
-                    <MenuDropdownItem
-                      value={`channel-info_${id}`}
-                      iconL="RiInformation2Line"
+                    <Link
+                      href={{
+                        pathname: '/main/project/[projectId]/settings',
+                        query: {
+                          projectId,
+                          menu: 'channel-info',
+                          channelId: id,
+                        },
+                      }}
                     >
-                      {t('v2.channel-setting-menu.channel-info')}
-                    </MenuDropdownItem>
-                    <MenuDropdownItem
-                      value={`field-mgmt_${id}`}
-                      iconL="RiListCheck"
+                      <MenuDropdownItem
+                        value={`channel-info_${id}`}
+                        iconL="RiInformation2Line"
+                      >
+                        {t('v2.channel-setting-menu.channel-info')}
+                      </MenuDropdownItem>
+                    </Link>
+                    <Link
+                      href={{
+                        pathname: '/main/project/[projectId]/settings',
+                        query: {
+                          projectId,
+                          menu: 'field-mgmt',
+                          channelId: id,
+                        },
+                      }}
                     >
-                      {t('v2.channel-setting-menu.field-mgmt')}
-                    </MenuDropdownItem>
-                    <MenuDropdownItem
-                      value={`image-mgmt_${id}`}
-                      iconL="RiImageFill"
+                      <MenuDropdownItem
+                        value={`field-mgmt_${id}`}
+                        iconL="RiListCheck"
+                      >
+                        {t('v2.channel-setting-menu.field-mgmt')}
+                      </MenuDropdownItem>
+                    </Link>
+                    <Link
+                      href={{
+                        pathname: '/main/project/[projectId]/settings',
+                        query: {
+                          projectId,
+                          menu: 'image-mgmt',
+                          channelId: id,
+                        },
+                      }}
                     >
-                      {t('v2.channel-setting-menu.image-mgmt')}
-                    </MenuDropdownItem>
+                      <MenuDropdownItem
+                        value={`image-mgmt_${id}`}
+                        iconL="RiImageFill"
+                      >
+                        {t('v2.channel-setting-menu.image-mgmt')}
+                      </MenuDropdownItem>
+                    </Link>
                   </MenuDropdownContent>
                 </MenuDropdown>
               ))

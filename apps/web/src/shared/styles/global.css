@@ -30,7 +30,7 @@
   }
 }
 
-.setting-action-buttons > button {
+.button {
   @apply min-w-[120px];
 }
 
@@ -39,6 +39,9 @@
 }
 
 .sheet-footer button {
+  @apply min-w-[84px];
+}
+.input-container button {
   @apply min-w-[84px];
 }
 

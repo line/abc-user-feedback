@@ -8,7 +8,7 @@
   --switch-fg-red: var(--fg-tint-red-bold);
   --switch-fg-green: var(--fg-tint-green-bold);
 
-  @apply relative inline-flex h-24 cursor-pointer items-center gap-8 text-base text-[var(--switch-text-default)] before:box-content before:flex before:h-20 before:w-40 before:rounded-full before:p-2 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
+  @apply text-base-normal relative inline-flex h-24 cursor-pointer items-center gap-8 text-[var(--switch-text-default)] before:box-content before:flex before:h-20 before:w-40 before:rounded-full before:p-2 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
 
   /* default */
   @apply switch-default;

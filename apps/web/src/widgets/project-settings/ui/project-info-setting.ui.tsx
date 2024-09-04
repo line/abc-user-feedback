@@ -53,10 +53,6 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId },
   });
 
-  useEffect(() => {
-    methods.reset(data);
-  }, [data]);
-
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/admin/projects/{projectId}',
@@ -75,7 +71,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
-  const { mutate: deleteProject } = useOAIMutation({
+  const { mutate: deleteProject, isPending: deletePending } = useOAIMutation({
     method: 'delete',
     path: '/api/admin/projects/{projectId}',
     pathParams: { projectId },
@@ -93,8 +89,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
+  useEffect(() => {
+    methods.reset(data);
+  }, [data]);
+
   const onSubmit = (input: ProjectInfo) => {
-    if (!data) return;
     mutate({ ...data, ...input });
   };
 
@@ -103,12 +102,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
       title={t('v2.project-setting-menu.project-info')}
       action={
         <>
-          {data && (
-            <DeleteProjectButton
-              project={data}
-              onClickDelete={() => deleteProject(undefined)}
-            />
-          )}
+          <DeleteProjectButton
+            onClickDelete={() => deleteProject(undefined)}
+            disabled={!perms.includes('project_delete')}
+            loading={deletePending}
+          />
           <Button
             form="form"
             type="submit"

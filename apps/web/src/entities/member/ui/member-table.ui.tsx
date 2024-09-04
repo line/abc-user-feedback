@@ -13,7 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { useMemo } from 'react';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
@@ -30,8 +35,8 @@ interface IProps {
   isLoading?: boolean;
   members: Member[];
   roles: Role[];
-  onDeleteMember?: (id: number) => Promise<void>;
-  onUpdateMember: (newMember: Member) => Promise<void>;
+  onDeleteMember?: (id: number) => Promise<void> | void;
+  onUpdateMember: (newMember: Member) => Promise<void> | void;
   createButton: React.ReactNode;
   project?: ProjectInfo;
 }
@@ -55,10 +60,16 @@ const MemberTable: React.FC<IProps> = (props) => {
     query: { type: 'GENERAL' },
   });
 
+  const columns = useMemo(
+    () => getMemberColumns(userData?.items ?? []),
+    [userData],
+  );
+
   const table = useReactTable({
-    columns: getMemberColumns(userData?.items ?? []),
+    columns,
     data: members,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const openMemberDialog = (member: Member) => {
@@ -67,7 +78,7 @@ const MemberTable: React.FC<IProps> = (props) => {
       <MemberFormDialog
         close={close}
         isOpen={isOpen}
-        member={member}
+        data={member}
         onSubmit={async (newMember) => {
           await onUpdateMember({
             role: newMember.role,
@@ -76,9 +87,12 @@ const MemberTable: React.FC<IProps> = (props) => {
             createdAt: member.createdAt,
           });
         }}
-        onDelete={onDeleteMember}
+        onClickDelete={
+          onDeleteMember ? () => onDeleteMember(member.id) : undefined
+        }
         project={project}
         roles={roles}
+        members={members}
       />
     ));
   };

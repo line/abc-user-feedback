@@ -18,6 +18,8 @@ import { useTranslation } from 'react-i18next';
 
 import { InputCaption, InputField, InputLabel, TextInput } from '@ufb/react';
 
+import { useWarnIfUnsavedChanges } from '@/shared';
+
 import type { ChannelInfo } from '../channel.type';
 
 interface IProps {
@@ -31,6 +33,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
 
   const { register, formState } = useFormContext<ChannelInfo>();
+  useWarnIfUnsavedChanges(formState.isDirty);
 
   return (
     <div className="flex flex-col gap-4">
@@ -49,7 +52,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
           placeholder={t('placeholder', { name: 'Name' })}
           required
           disabled={readOnly}
-          hasError={!!formState.errors.name}
+          error={!!formState.errors.name}
         />
         {formState.errors.name && (
           <InputCaption>{formState.errors.name.message}</InputCaption>
@@ -61,7 +64,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
           {...register('description')}
           placeholder={t('placeholder', { name: 'Description' })}
           disabled={readOnly}
-          hasError={!!formState.errors.description}
+          error={!!formState.errors.description}
         />
         {formState.errors.description && (
           <InputCaption>{formState.errors.description.message}</InputCaption>

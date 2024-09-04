@@ -17,18 +17,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Alert,
-  AlertContent,
-  AlertIcon,
-  AlertTextContainer,
-  Button,
-} from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   client,
   HelpCardDocs,
+  SettingAlert,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
@@ -51,69 +45,75 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId },
   });
 
-  const { mutate: softDelete } = useMutation({
-    mutationFn: (input: { apiKeyId: number }) =>
-      client.delete({
+  const { mutateAsync: softDelete } = useMutation({
+    mutationFn: async (input: { apiKeyId: number }) => {
+      await client.delete({
         path: '/api/admin/projects/{projectId}/api-keys/{apiKeyId}/soft',
         pathParams: { projectId, apiKeyId: input.apiKeyId },
-      }),
+      });
+    },
     async onSuccess() {
       await refetch();
-      toast.positive({ title: t('v2.toast.inactive') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
 
-  const { mutate: recover } = useMutation({
-    mutationFn: (input: { apiKeyId: number }) =>
-      client.delete({
+  const { mutateAsync: recover } = useMutation({
+    mutationFn: async (input: { apiKeyId: number }) => {
+      await client.delete({
         path: '/api/admin/projects/{projectId}/api-keys/{apiKeyId}/recover',
         pathParams: { projectId, apiKeyId: input.apiKeyId },
-      }),
+      });
+    },
     async onSuccess() {
       await refetch();
-      toast.positive({ title: t('v2.toast.active') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
 
-  const { mutate: deleteApiKey } = useMutation({
-    mutationFn: (input: { apiKeyId: number }) =>
-      client.delete({
+  const { mutateAsync: deleteApiKey } = useMutation({
+    mutationFn: async (input: { apiKeyId: number }) => {
+      await client.delete({
         path: '/api/admin/projects/{projectId}/api-keys/{apiKeyId}',
         pathParams: { projectId, apiKeyId: input.apiKeyId },
-      }),
+      });
+    },
     async onSuccess() {
       await refetch();
       await queryClient.invalidateQueries({
         queryKey: ['/api/admin/projects/{projectId}/api-keys'],
       });
-      toast.negative({ title: t('v2.toast.delete') });
+      toast.success(t('v2.toast.success'));
     },
     onError(error) {
-      toast.negative({ title: error.message });
+      toast.error(error.message);
     },
   });
-  const { mutate: createApiKey, isPending } = useOAIMutation({
+  const { mutateAsync: createApiKey, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/api-keys',
     pathParams: { projectId },
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        toast.positive({ title: t('v2.toast.add') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
 
-  const UpdateMutation: Record<ApiKeyUpdateType, (apiKeyId: number) => void> = {
+  const UpdateMutation: Record<
+    ApiKeyUpdateType,
+    (apiKeyId: number) => Promise<void>
+  > = {
     recover: (apiKeyId) => recover({ apiKeyId }),
     softDelete: (apiKeyId) => softDelete({ apiKeyId }),
   };
@@ -125,21 +125,16 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
         <Button
           className="min-w-[120px]"
           disabled={!perms.includes('project_apikey_create')}
-          isLoading={isPending}
+          loading={isPending}
           onClick={() => createApiKey({ value: undefined })}
         >
           {t('v2.button.name.create', { name: 'API Key' })}
         </Button>
       }
     >
-      <Alert variant="informative">
-        <AlertContent>
-          <AlertIcon name="RiInformation2Fill" />
-          <AlertTextContainer>
-            <HelpCardDocs i18nKey="help-card.api-key" />
-          </AlertTextContainer>
-        </AlertContent>
-      </Alert>
+      <SettingAlert
+        description={<HelpCardDocs i18nKey="help-card.api-key" />}
+      />
       <ApiKeyTable
         isLoading={status === 'pending'}
         apiKeys={data?.items ?? []}
@@ -147,9 +142,8 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
         onClickUpdate={(type, id) => UpdateMutation[type](id)}
         createButton={
           <Button
-            className="min-w-[120px]"
             disabled={!perms.includes('project_apikey_create')}
-            isLoading={isPending}
+            loading={isPending}
             onClick={() => createApiKey({ value: undefined })}
           >
             {t('v2.button.create')}

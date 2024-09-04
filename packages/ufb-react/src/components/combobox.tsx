@@ -1,36 +1,29 @@
-import type { DialogProps } from "@radix-ui/react-dialog";
 import * as React from "react";
 import { Command as CommandPrimitive } from "cmdk";
 
 import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
-import { Dialog, DialogContent } from "./dialog";
+import { Button } from "./button";
 import { Icon } from "./icon";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 
-const Combobox = React.forwardRef<
-  React.ElementRef<typeof CommandPrimitive>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive>
->(({ className, ...props }, ref) => (
-  <CommandPrimitive
+const Combobox = Popover;
+Combobox.displayName = "Combobox";
+
+const ComboboxContent = React.forwardRef<
+  React.ElementRef<typeof PopoverContent>,
+  React.ComponentPropsWithoutRef<typeof PopoverContent>
+>(({ className, children, ...props }, ref) => (
+  <PopoverContent
     ref={ref}
-    className={cn("combobox", className)}
     {...props}
-  />
+    className={cn("combobox-content", className)}
+  >
+    <CommandPrimitive>{children}</CommandPrimitive>
+  </PopoverContent>
 ));
-Combobox.displayName = CommandPrimitive.displayName;
-
-type ComboboxDialogProps = DialogProps;
-
-const ComboboxDialog = ({ children, ...props }: ComboboxDialogProps) => {
-  return (
-    <Dialog {...props}>
-      <DialogContent className="overflow-hidden p-0 shadow-lg">
-        <Combobox>{children}</Combobox>
-      </DialogContent>
-    </Dialog>
-  );
-};
+ComboboxContent.displayName = CommandPrimitive.displayName;
 
 const ComboboxInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
@@ -125,13 +118,80 @@ const ComboboxItem = React.forwardRef<
 
 ComboboxItem.displayName = CommandPrimitive.Item.displayName;
 
+const ComboboxSelectItem = React.forwardRef<
+  React.ElementRef<typeof CommandPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
+    iconL?: IconNameType;
+    iconR?: IconNameType;
+    caption?: React.ReactNode;
+    checked?: boolean;
+  }
+>(({ iconL, iconR, caption, checked, children, className, ...props }, ref) => (
+  <CommandPrimitive.Item
+    ref={ref}
+    className={cn("combobox-item", className)}
+    {...props}
+  >
+    <React.Fragment>
+      <Icon
+        name="RiCheckLine"
+        size={20}
+        color={checked ? "currentColor" : "transparent"}
+      />
+      {iconL && <Icon name={iconL} size={16} />}
+      <div className="combobox-item-text">{children}</div>
+      {caption && <span className="combobox-caption">{caption}</span>}
+      {iconR && <Icon name={iconR} size={16} />}
+    </React.Fragment>
+  </CommandPrimitive.Item>
+));
+
+ComboboxSelectItem.displayName = "ComboboxSelectItem";
+
+const ComboboxTrigger = React.forwardRef<
+  React.ElementRef<typeof Button>,
+  React.ComponentPropsWithoutRef<typeof Button>
+>(
+  (
+    {
+      variant = "outline",
+      iconR = "RiArrowDownSLine",
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    return (
+      <PopoverTrigger asChild>
+        <Button
+          ref={ref}
+          variant={variant}
+          iconR={iconR}
+          className={cn(
+            "combobox-trigger",
+            iconR === "RiArrowDownSLine" && "combobox-trigger-icon-rotate",
+            className,
+          )}
+          {...props}
+        >
+          {children}
+        </Button>
+      </PopoverTrigger>
+    );
+  },
+);
+ComboboxTrigger.displayName = "ComboboxTrigger";
+
 export {
   Combobox,
-  ComboboxDialog,
+  ComboboxContent,
   ComboboxInput,
   ComboboxList,
   ComboboxEmpty,
   ComboboxGroup,
   ComboboxItem,
+  ComboboxSelectItem,
   ComboboxSeparator,
+  ComboboxTrigger,
 };

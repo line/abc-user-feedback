@@ -58,7 +58,11 @@ const InputApiKeyStep: React.FC<IProps> = () => {
         </button>
       }
     >
-      <ApiKeyTable apiKeys={input.apiKeys} onClickDelete={deleteApiKey} />
+      <ApiKeyTable
+        apiKeys={input.apiKeys}
+        onClickUpdate={async () => {}}
+        createButton
+      />
     </CreateProjectInputTemplate>
   );
 };

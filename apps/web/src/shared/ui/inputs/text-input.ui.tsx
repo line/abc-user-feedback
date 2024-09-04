@@ -25,7 +25,7 @@ import {
   InputLabel,
 } from '@ufb/react';
 
-interface Props extends Omit<TextInputProps, 'hasError' | 'required'> {
+interface Props extends Omit<TextInputProps, 'error' | 'required'> {
   required?: boolean;
   label: string;
   error?: string;
@@ -41,17 +41,20 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
       <InputLabel>
         {label} {required && <span className="text-tint-red">*</span>}
       </InputLabel>
-      <InputBox>
-        {leftIcon && <InputIcon name={leftIcon} />}
-        <Input
-          {...textInputProps}
-          error={!!error}
-          required={required}
-          ref={ref}
-        />
+      <div className="input-container flex gap-2">
+        <InputBox className="flex-1">
+          {leftIcon && <InputIcon name={leftIcon} />}
+          <Input
+            {...textInputProps}
+            className="flex-1"
+            error={!!error}
+            required={required}
+            ref={ref}
+          />
+        </InputBox>
         {right}
-      </InputBox>
-      {error && <InputCaption type="error">{error}</InputCaption>}
+      </div>
+      {error && <InputCaption variant="error">{error}</InputCaption>}
     </InputField>
   );
 });

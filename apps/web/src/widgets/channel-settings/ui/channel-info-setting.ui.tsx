@@ -19,8 +19,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   SettingTemplate,
@@ -30,6 +29,7 @@ import {
 } from '@/shared';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
+import { DeleteChannelButton } from '@/features/delete-channel';
 
 interface IProps {
   projectId: number;
@@ -42,6 +42,9 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const perms = usePermissions(projectId);
   const queryClient = useQueryClient();
 
+  const methods = useForm<ChannelInfo>({
+    resolver: zodResolver(channelInfoSchema),
+  });
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
@@ -57,21 +60,30 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects/{projectId}/channels'],
         });
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });
-
-  const methods = useForm<ChannelInfo>({
-    resolver: zodResolver(channelInfoSchema),
+  const { mutate: deleteChannel, isPending: deletePending } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
+    pathParams: { channelId, projectId },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        await queryClient.invalidateQueries({
+          queryKey: ['/api/admin/projects/{projectId}/channels'],
+        });
+        toast.success(t('v2.toast.success'));
+      },
+      onError(error) {
+        toast.error(error.message);
+      },
+    },
   });
-
-  useEffect(() => {
-    void refetch();
-  }, []);
 
   useEffect(() => {
     methods.reset(data);
@@ -83,16 +95,23 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     <SettingTemplate
       title={t('channel-setting-menu.channel-info')}
       action={
-        <Button
-          onClick={methods.handleSubmit(onSubmit)}
-          disabled={
-            !perms.includes('channel_update') ||
-            !methods.formState.isDirty ||
-            isPending
-          }
-        >
-          {t('button.save')}
-        </Button>
+        <>
+          <DeleteChannelButton
+            projectId={projectId}
+            onClickDelete={() => deleteChannel(undefined)}
+            loading={deletePending}
+          />
+          <Button
+            onClick={methods.handleSubmit(onSubmit)}
+            disabled={
+              !perms.includes('channel_update') ||
+              !methods.formState.isDirty ||
+              isPending
+            }
+          >
+            {t('button.save')}
+          </Button>
+        </>
       }
     >
       <FormProvider {...methods}>

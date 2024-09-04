@@ -3,7 +3,7 @@
   --tooltip-border: var(--border-neutral-tertiary);
   --tooltip-fg: var(--fg-neutral-primary);
 
-  @apply rounded-8 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-fg)] px-12 py-4 text-base text-[var(--tooltip-text)] shadow-md;
+  @apply rounded-8 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 text-base-normal z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-fg)] px-12 py-4 text-[var(--tooltip-text)] shadow-md;
 
   /* default */
   @apply tooltip-text-center;
@@ -30,5 +30,5 @@
 }
 
 .tooltip-title {
-  @apply mb-4 text-base font-medium;
+  @apply text-base-strong mb-4;
 }

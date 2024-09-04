@@ -22,10 +22,14 @@
   @apply dialog-icon-default;
 }
 .dialog-title {
-  @apply text-title-h4 font-medium text-[var(--text-neutral-primary)];
+  @apply text-title-h4 text-[var(--text-neutral-primary)];
 }
 .dialog-description {
-  @apply text-base text-[var(--text-neutral-secondary)];
+  @apply text-base-normal text-[var(--text-neutral-secondary)];
+}
+
+.dialog-body {
+  @apply space-y-12;
 }
 
 .dialog-footer {

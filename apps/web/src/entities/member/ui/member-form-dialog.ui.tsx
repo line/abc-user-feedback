@@ -26,7 +26,8 @@ import {
   DialogTitle,
 } from '@ufb/react';
 
-import { TextInput } from '@/shared';
+import type { FormOverlayProps } from '@/shared';
+import { SelectSearchInput, TextInput } from '@/shared';
 import { SelectInput } from '@/shared/ui/inputs';
 import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
@@ -34,21 +35,23 @@ import { useUserSearch } from '@/entities/user';
 
 import type { Member, MemberInfo } from '../member.type';
 
-interface IProps {
+interface Props extends FormOverlayProps<MemberInfo> {
+  members: Member[];
   project: ProjectInfo;
-
-  onSubmit: (member: MemberInfo) => Promise<void>;
-
-  member?: Member;
-  onDelete?: (memberId: number) => Promise<void>;
-
   roles: Role[];
-  isOpen: boolean;
-  close: () => void;
 }
 
-const MemberFormDialog: React.FC<IProps> = (props) => {
-  const { project, roles, close, isOpen, member, onDelete, onSubmit } = props;
+const MemberFormDialog: React.FC<Props> = (props) => {
+  const {
+    project,
+    roles,
+    close,
+    isOpen,
+    data,
+    onSubmit,
+    onClickDelete,
+    members,
+  } = props;
 
   const { t } = useTranslation();
 
@@ -57,56 +60,52 @@ const MemberFormDialog: React.FC<IProps> = (props) => {
     query: { type: 'GENERAL' },
   });
 
-  const [user, setUser] = useState<Member['user'] | undefined>(member?.user);
-  const [role, setRole] = useState<Member['role'] | undefined>(member?.role);
+  const [user, setUser] = useState<Member['user'] | undefined>(data?.user);
+  const [role, setRole] = useState<Member['role'] | undefined>(data?.role);
 
   return (
     <Dialog onOpenChange={close} open={isOpen} modal>
       <DialogContent>
         <DialogTitle>
-          {member ?
+          {data ?
             t('v2.text.name.detail', { name: 'Member' })
           : t('v2.text.name.register', { name: 'Member' })}
         </DialogTitle>
-        <div className="my-8 flex flex-col gap-5">
-          <SelectInput
+        <div className="flex flex-col gap-3">
+          <TextInput label="Project" value={project.name} disabled />
+          <SelectSearchInput
             label="Email"
-            placeholder={t('v2.placeholder.select')}
-            value={String(user?.id)}
+            value={user?.email}
             onChange={(v) => {
-              const newUser = userData?.items.find(
-                (user) => String(user.id) === v,
-              );
-              setUser(newUser);
+              setUser(userData?.items.find((user) => user.email === v));
             }}
             options={
-              userData?.items.map((v) => ({
-                label: v.email,
-                value: `${v.id}`,
-              })) ?? []
+              userData?.items
+                .filter(
+                  (v) => !members.some((member) => member.user.id === v.id),
+                )
+                .map((v) => ({ label: v.email, value: v.email })) ?? []
             }
             required
           />
-          <TextInput label="Project" value={project.name} disabled />
           <SelectInput
             label="Role"
             placeholder={t('v2.placeholder.select')}
-            value={String(role?.id)}
+            value={role ? String(role.id) : undefined}
             options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
             onChange={(v) => {
-              const newRole = roles.find((role) => String(role.id) === v);
-              setRole(newRole);
+              setRole(roles.find((role) => String(role.id) === v));
             }}
             required
           />
         </div>
         <DialogFooter>
-          {member && onDelete && (
+          {data?.id && onClickDelete && (
             <div className="flex-1">
               <Button
                 variant="destructive"
                 onClick={async () => {
-                  await onDelete(member.id);
+                  await onClickDelete();
                   close();
                 }}
               >

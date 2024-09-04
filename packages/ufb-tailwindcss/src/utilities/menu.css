@@ -6,11 +6,11 @@
 }
 
 .menu-item-small {
-  @apply p-8 text-base;
+  @apply text-base-normal p-8;
 }
 .menu-item-medium {
-  @apply text-large px-12 py-10;
+  @apply text-large-normal px-12 py-10;
 }
 .menu-item-large {
-  @apply text-xlarge px-14 py-10;
+  @apply text-xlarge-normal px-14 py-10;
 }
