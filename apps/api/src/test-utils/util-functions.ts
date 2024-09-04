@@ -28,7 +28,10 @@ import {
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import type { AuthService } from '@/domains/admin/auth/auth.service';
 import { UserDto } from '@/domains/admin/user/dtos';
-import { UserStateEnum } from '@/domains/admin/user/entities/enums';
+import {
+  UserStateEnum,
+  UserTypeEnum,
+} from '@/domains/admin/user/entities/enums';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 
 initializeTransactionalContext();
@@ -80,6 +83,7 @@ export const signInTestUser = async (
     email: faker.internet.email(),
     state: UserStateEnum.Active,
     hashPassword: faker.internet.password(),
+    type: UserTypeEnum.SUPER,
   });
   return { jwt: await authService.signIn(UserDto.transform(user)), user };
 };

@@ -32,7 +32,7 @@ import {
 import type { GetTenantResponseDto } from '@/domains/admin/tenant/dtos/responses';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
-import { signInTestUser } from '@/test-utils/util-functions';
+import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
 
 describe('TenantController (integration)', () => {
@@ -58,6 +58,10 @@ describe('TenantController (integration)', () => {
 
     app = module.createNestApplication();
     await app.init();
+  });
+
+  beforeEach(async () => {
+    await clearEntities([tenantRepo, userRepo]);
   });
 
   describe('/admin/tenants (POST)', () => {

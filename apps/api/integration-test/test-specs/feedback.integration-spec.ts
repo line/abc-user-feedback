@@ -18,18 +18,26 @@ import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 import type { Client } from '@opensearch-project/opensearch';
 import request from 'supertest';
-import type { Repository } from 'typeorm';
+import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from '@/app.module';
-import { FieldFormatEnum } from '@/common/enums';
+import {
+  FieldFormatEnum,
+  FieldPropertyEnum,
+  FieldStatusEnum,
+} from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
+import { AuthService } from '@/domains/admin/auth/auth.service';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { ChannelService } from '@/domains/admin/channel/channel/channel.service';
 import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import type { CreateFeedbackDto } from '@/domains/admin/feedback/dtos';
+import type { FindFeedbacksByChannelIdRequestDto } from '@/domains/admin/feedback/dtos/requests';
+import type { FindFeedbacksByChannelIdResponseDto } from '@/domains/admin/feedback/dtos/responses';
 import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { ProjectService } from '@/domains/admin/project/project/project.service';
@@ -37,7 +45,7 @@ import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
-import { clearEntities } from '@/test-utils/util-functions';
+import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
 
 interface OpenSearchResponse {
   _source: Record<string, any>;
@@ -46,6 +54,9 @@ interface OpenSearchResponse {
 
 describe('FeedbackController (integration)', () => {
   let app: INestApplication;
+
+  let dataSource: DataSource;
+  let authService: AuthService;
 
   let tenantService: TenantService;
   let projectService: ProjectService;
@@ -59,6 +70,12 @@ describe('FeedbackController (integration)', () => {
   let osService: Client;
   let opensearchRepository: OpensearchRepository;
 
+  let project: ProjectEntity;
+  let channel: ChannelEntity;
+  let fields: FieldEntity[];
+
+  let accessToken: string;
+
   beforeAll(async () => {
     initializeTransactionalContext();
     const module: TestingModule = await Test.createTestingModule({
@@ -67,6 +84,10 @@ describe('FeedbackController (integration)', () => {
 
     app = module.createNestApplication();
     await app.init();
+
+    dataSource = module.get(getDataSourceToken());
+
+    authService = module.get(AuthService);
 
     tenantService = module.get(TenantService);
     projectService = module.get(ProjectService);
@@ -79,20 +100,13 @@ describe('FeedbackController (integration)', () => {
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
     osService = module.get<Client>('OPENSEARCH_CLIENT');
     opensearchRepository = module.get(OpensearchRepository);
-  });
 
-  let channel: ChannelEntity;
-  let fields: FieldEntity[];
-
-  beforeEach(async () => {
-    // console.log(opensearchRepository);
-    await opensearchRepository.deleteIndex('1');
-    // await osService.delete({ index: '*' });
+    await opensearchRepository.deleteIndexAll();
     await clearEntities([tenantRepo, projectRepo, channelRepo, fieldRepo]);
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();
     await tenantService.create(dto);
-    const { id: projectId } = await projectService.create({
+    project = await projectService.create({
       name: faker.lorem.words(),
       description: faker.lorem.lines(1),
       timezone: {
@@ -103,36 +117,49 @@ describe('FeedbackController (integration)', () => {
     });
 
     const { id: channelId } = await channelService.create({
-      projectId,
+      projectId: project.id,
       name: faker.string.alphanumeric(20),
       description: faker.lorem.lines(1),
       fields: Array.from({
         length: faker.number.int({ min: 1, max: 10 }),
-      }).map(createFieldDto),
+      }).map(() =>
+        createFieldDto({
+          format: FieldFormatEnum.keyword,
+          property: FieldPropertyEnum.EDITABLE,
+          status: FieldStatusEnum.ACTIVE,
+        }),
+      ),
       imageConfig: null,
     });
 
-    console.log(channelId);
     channel = await channelService.findById({ channelId });
 
     fields = await fieldRepo.find({
       where: { channel: { id: channel.id } },
       relations: { options: true },
     });
-    console.log(channel);
+
+    const { jwt } = await signInTestUser(dataSource, authService);
+    accessToken = jwt.accessToken;
   });
 
-  it('/admin/channels/:channelId/feedbacks (POST)', () => {
-    console.log(channel);
+  it('/admin/projects/:projectId/channels/:channelId/feedbacks (POST)', () => {
     const dto: Record<string, string | number | string[] | number[]> = {};
     fields
-      .filter(({ name }) => name !== 'createdAt' && name !== 'updatedAt')
-      .forEach(({ name, format, options }) => {
-        dto[name] = getRandomValue(format, options);
+      .filter(
+        ({ key }) =>
+          key !== 'id' &&
+          key !== 'issues' &&
+          key !== 'createdAt' &&
+          key !== 'updatedAt',
+      )
+      .forEach(({ key, format, options }) => {
+        dto[key] = getRandomValue(format, options);
       });
 
     return request(app.getHttpServer() as Server)
-      .post(`/admin/channels/${channel.id}/feedbacks`)
+      .post(`/admin/projects/${project.id}/channels/${channel.id}/feedbacks`)
+      .set('x-api-key', `${process.env.MASTER_API_KEY}`)
       .send(dto)
       .expect(201)
       .then(
@@ -147,34 +174,109 @@ describe('FeedbackController (integration)', () => {
             index: channel.id.toString(),
           });
 
-          delete esResult.body._source[
-            (fields.find((v) => v.name === 'createdAt') ?? { id: 0 }).id
-          ];
-          expect(toApi(dto, fields)).toMatchObject(esResult.body._source);
+          ['id', 'createdAt', 'updatedAt'].forEach(
+            (field) => delete esResult.body._source[field],
+          );
+          expect(dto).toMatchObject(esResult.body._source);
         },
       );
   });
 
+  it('/admin/projects/:projectId/channels/:channelId/feedbacks/search (POST)', async () => {
+    const dto: CreateFeedbackDto = {
+      channelId: channel.id,
+      data: {},
+    };
+    fields
+      .filter(
+        ({ key }) =>
+          key !== 'id' &&
+          key !== 'issues' &&
+          key !== 'createdAt' &&
+          key !== 'updatedAt',
+      )
+      .forEach(({ key, format, options }) => {
+        dto.data[key] = getRandomValue(format, options);
+      });
+
+    await feedbackService.create(dto);
+
+    const keywordField = fields.find(
+      ({ format }) => format === FieldFormatEnum.keyword,
+    );
+    if (!keywordField) return;
+
+    const findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
+      query: {
+        searchText: dto.data[keywordField.key] as string,
+      },
+      limit: 10,
+      page: 1,
+    };
+
+    return request(app.getHttpServer() as Server)
+      .post(
+        `/admin/projects/${project.id}/channels/${channel.id}/feedbacks/search`,
+      )
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(findFeedbackDto)
+      .expect(201)
+      .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
+        expect(body.meta.itemCount).toBeGreaterThan(0);
+      });
+  });
+
+  it('/admin/projects/:projectId/channels/:channelId/feedbacks/:feedbackId (PUT)', async () => {
+    const dto: CreateFeedbackDto = {
+      channelId: channel.id,
+      data: {},
+    };
+    let availableFieldKey = '';
+    fields
+      .filter(
+        ({ key }) =>
+          key !== 'id' &&
+          key !== 'issues' &&
+          key !== 'createdAt' &&
+          key !== 'updatedAt',
+      )
+      .forEach(({ key, format, options }) => {
+        dto.data[key] = getRandomValue(format, options);
+        availableFieldKey = key;
+      });
+
+    const feedback = await feedbackService.create(dto);
+
+    return request(app.getHttpServer() as Server)
+      .put(
+        `/admin/projects/${project.id}/channels/${channel.id}/feedbacks/${feedback.id}`,
+      )
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send({
+        [availableFieldKey]: 'test',
+      })
+      .expect(200)
+      .then(async () => {
+        const esResult = await osService.get<OpenSearchResponse>({
+          id: feedback.id.toString(),
+          index: channel.id.toString(),
+        });
+
+        ['id', 'createdAt', 'updatedAt'].forEach(
+          (field) => delete esResult.body._source[field],
+        );
+
+        dto.data[availableFieldKey] = 'test';
+        expect(dto.data).toMatchObject(esResult.body._source);
+      });
+  });
+
   afterAll(async () => {
+    await clearEntities([tenantRepo, projectRepo, channelRepo, fieldRepo]);
+    const delay = (ms: number) =>
+      new Promise((resolve) => setTimeout(resolve, ms));
+
+    await delay(500);
     await app.close();
   });
 });
-
-const toApi = (
-  data: Record<string, string | number | string[] | number[]>,
-  fields: FieldEntity[],
-) => {
-  return Object.entries(data).reduce((prev, [key, value]) => {
-    const field: FieldEntity =
-      fields.find((v) => v.name === key) ?? new FieldEntity();
-    return Object.assign(prev, {
-      [field.id]:
-        field.format === FieldFormatEnum.select ?
-          (
-            (field.options ?? []).find((v) => v.name === value) ??
-            new FieldEntity()
-          ).id
-        : value,
-    });
-  }, {});
-};
