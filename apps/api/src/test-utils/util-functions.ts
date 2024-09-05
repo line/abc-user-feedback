@@ -21,6 +21,11 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
+import {
+  FieldFormatEnum,
+  FieldPropertyEnum,
+  FieldStatusEnum,
+} from '@/common/enums';
 import { appConfig } from '@/configs/app.config';
 import { jwtConfig, jwtConfigSchema } from '@/configs/jwt.config';
 import {
@@ -30,17 +35,24 @@ import {
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import type { AuthService } from '@/domains/admin/auth/auth.service';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import type { ChannelService } from '@/domains/admin/channel/channel/channel.service';
 import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import type { CreateFeedbackDto } from '@/domains/admin/feedback/dtos';
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import type { FeedbackService } from '@/domains/admin/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import type { ProjectService } from '@/domains/admin/project/project/project.service';
 import { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import type { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { UserDto } from '@/domains/admin/user/dtos';
 import {
   UserStateEnum,
   UserTypeEnum,
 } from '@/domains/admin/user/entities/enums';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
 
 initializeTransactionalContext();
 
@@ -72,6 +84,69 @@ export const getRandomEnumValues = <T extends object>(
 ): T[keyof T][] => {
   const enumValues = Object.values(anEnum);
   return faker.helpers.arrayElements(enumValues) as T[keyof T][];
+};
+
+export const createTenant = async (tenantService: TenantService) => {
+  const dto = new SetupTenantRequestDto();
+  dto.siteName = faker.string.sample();
+  await tenantService.create(dto);
+};
+
+export const createProject = async (projectService: ProjectService) => {
+  return await projectService.create({
+    name: faker.lorem.words(),
+    description: faker.lorem.lines(1),
+    timezone: {
+      countryCode: 'KR',
+      name: 'Asia/Seoul',
+      offset: '+09:00',
+    },
+  });
+};
+
+export const createChannel = async (
+  channelService: ChannelService,
+  project: ProjectEntity,
+) => {
+  return await channelService.create({
+    projectId: project.id,
+    name: faker.string.alphanumeric(20),
+    description: faker.lorem.lines(1),
+    fields: Array.from({
+      length: faker.number.int({ min: 1, max: 10 }),
+    }).map(() =>
+      createFieldDto({
+        format: FieldFormatEnum.keyword,
+        property: FieldPropertyEnum.EDITABLE,
+        status: FieldStatusEnum.ACTIVE,
+      }),
+    ),
+    imageConfig: null,
+  });
+};
+
+export const createFeedback = async (
+  fields: FieldEntity[],
+  channelId: number,
+  feedbackService: FeedbackService,
+) => {
+  const dto: CreateFeedbackDto = {
+    channelId: channelId,
+    data: {},
+  };
+  fields
+    .filter(
+      ({ key }) =>
+        key !== 'id' &&
+        key !== 'issues' &&
+        key !== 'createdAt' &&
+        key !== 'updatedAt',
+    )
+    .forEach(({ key, format, options }) => {
+      dto.data[key] = getRandomValue(format, options);
+    });
+
+  await feedbackService.create(dto);
 };
 
 export const clearAllEntities = async (module: TestingModule) => {

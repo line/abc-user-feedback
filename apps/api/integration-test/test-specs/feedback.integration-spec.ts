@@ -14,7 +14,6 @@
  * under the License.
  */
 import type { Server } from 'net';
-import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
@@ -25,11 +24,7 @@ import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from '@/app.module';
-import {
-  FieldFormatEnum,
-  FieldPropertyEnum,
-  FieldStatusEnum,
-} from '@/common/enums';
+import { FieldFormatEnum } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import { AuthService } from '@/domains/admin/auth/auth.service';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
@@ -41,13 +36,15 @@ import type { FindFeedbacksByChannelIdResponseDto } from '@/domains/admin/feedba
 import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { ProjectService } from '@/domains/admin/project/project/project.service';
-import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
-import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
+import { getRandomValue } from '@/test-utils/fixtures';
 import {
   clearAllEntities,
   clearEntities,
+  createChannel,
+  createProject,
+  createTenant,
   signInTestUser,
 } from '@/test-utils/util-functions';
 
@@ -108,34 +105,9 @@ describe('FeedbackController (integration)', () => {
     await opensearchRepository.deleteIndexAll();
     await clearAllEntities(module);
 
-    const dto = new SetupTenantRequestDto();
-    dto.siteName = faker.string.sample();
-    await tenantService.create(dto);
-    project = await projectService.create({
-      name: faker.lorem.words(),
-      description: faker.lorem.lines(1),
-      timezone: {
-        countryCode: 'KR',
-        name: 'Asia/Seoul',
-        offset: '+09:00',
-      },
-    });
-
-    const { id: channelId } = await channelService.create({
-      projectId: project.id,
-      name: faker.string.alphanumeric(20),
-      description: faker.lorem.lines(1),
-      fields: Array.from({
-        length: faker.number.int({ min: 1, max: 10 }),
-      }).map(() =>
-        createFieldDto({
-          format: FieldFormatEnum.keyword,
-          property: FieldPropertyEnum.EDITABLE,
-          status: FieldStatusEnum.ACTIVE,
-        }),
-      ),
-      imageConfig: null,
-    });
+    await createTenant(tenantService);
+    project = await createProject(projectService);
+    const { id: channelId } = await createChannel(channelService, project);
 
     channel = await channelService.findById({ channelId });
 
