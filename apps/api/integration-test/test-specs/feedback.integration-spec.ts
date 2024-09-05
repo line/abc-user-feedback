@@ -45,7 +45,11 @@ import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
-import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
+import {
+  clearAllEntities,
+  clearEntities,
+  signInTestUser,
+} from '@/test-utils/util-functions';
 
 interface OpenSearchResponse {
   _source: Record<string, any>;
@@ -102,7 +106,8 @@ describe('FeedbackController (integration)', () => {
     opensearchRepository = module.get(OpensearchRepository);
 
     await opensearchRepository.deleteIndexAll();
-    await clearEntities([tenantRepo, projectRepo, channelRepo, fieldRepo]);
+    await clearAllEntities(module);
+
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();
     await tenantService.create(dto);

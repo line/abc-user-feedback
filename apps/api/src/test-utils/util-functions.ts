@@ -16,6 +16,8 @@
 import { faker } from '@faker-js/faker';
 import type { InjectionToken, Provider } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import type { TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
 import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
@@ -27,6 +29,12 @@ import {
 } from '@/configs/opensearch.config';
 import { smtpConfig, smtpConfigSchema } from '@/configs/smtp.config';
 import type { AuthService } from '@/domains/admin/auth/auth.service';
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
+import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
+import { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { UserDto } from '@/domains/admin/user/dtos';
 import {
   UserStateEnum,
@@ -64,6 +72,40 @@ export const getRandomEnumValues = <T extends object>(
 ): T[keyof T][] => {
   const enumValues = Object.values(anEnum);
   return faker.helpers.arrayElements(enumValues) as T[keyof T][];
+};
+
+export const clearAllEntities = async (module: TestingModule) => {
+  const userRepo: Repository<UserEntity> = module.get(
+    getRepositoryToken(UserEntity),
+  );
+  const roleRepo: Repository<RoleEntity> = module.get(
+    getRepositoryToken(RoleEntity),
+  );
+  const tenantRepo: Repository<TenantEntity> = module.get(
+    getRepositoryToken(TenantEntity),
+  );
+  const projectRepo: Repository<ProjectEntity> = module.get(
+    getRepositoryToken(ProjectEntity),
+  );
+  const channelRepo: Repository<ChannelEntity> = module.get(
+    getRepositoryToken(ChannelEntity),
+  );
+  const fieldRepo: Repository<FieldEntity> = module.get(
+    getRepositoryToken(FieldEntity),
+  );
+  const feedbackRepo: Repository<FeedbackEntity> = module.get(
+    getRepositoryToken(FeedbackEntity),
+  );
+
+  await clearEntities([
+    userRepo,
+    roleRepo,
+    tenantRepo,
+    projectRepo,
+    channelRepo,
+    fieldRepo,
+    feedbackRepo,
+  ]);
 };
 
 export const clearEntities = async (repos: Repository<any>[]) => {

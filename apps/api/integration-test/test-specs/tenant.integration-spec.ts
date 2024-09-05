@@ -32,10 +32,11 @@ import {
 import type { GetTenantResponseDto } from '@/domains/admin/tenant/dtos/responses';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
-import { clearEntities, signInTestUser } from '@/test-utils/util-functions';
+import { clearAllEntities, signInTestUser } from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
 
 describe('TenantController (integration)', () => {
+  let module: TestingModule;
   let app: INestApplication;
 
   let dataSource: DataSource;
@@ -46,7 +47,7 @@ describe('TenantController (integration)', () => {
 
   beforeAll(async () => {
     initializeTransactionalContext();
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
@@ -61,7 +62,7 @@ describe('TenantController (integration)', () => {
   });
 
   beforeEach(async () => {
-    await clearEntities([tenantRepo, userRepo]);
+    await clearAllEntities(module);
   });
 
   describe('/admin/tenants (POST)', () => {

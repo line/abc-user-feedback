@@ -19,7 +19,7 @@ import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
 
 import { CreateChannelRequestFieldDto } from './create-channel-request.dto';
 
-class UpdateChannelRequestFieldDto extends CreateChannelRequestFieldDto {
+export class UpdateChannelRequestFieldDto extends CreateChannelRequestFieldDto {
   @ApiProperty({ required: false })
   @IsNumber()
   @IsOptional()

@@ -301,7 +301,17 @@ export class IssueService {
           });
         }
       });
-      this.schedulerRegistry.addCronJob(`feedback-count-by-issue-${id}`, job);
+
+      const name = `feedback-count-by-issue-${id}`;
+      const cronJobs = this.schedulerRegistry.getCronJobs();
+      if (cronJobs.has(name)) {
+        this.logger.warn(
+          `Cron job with name ${name} already exists. Skipping addition.`,
+        );
+        return;
+      }
+
+      this.schedulerRegistry.addCronJob(name, job);
       job.start();
     }
   }
