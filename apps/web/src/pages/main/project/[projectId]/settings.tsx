@@ -22,6 +22,7 @@ import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectGuard } from '@/entities/project';
 import {
   ChannelInfoSetting,
+  FieldPreview,
   FieldSetting,
   ImageConfigSetting,
 } from '@/widgets/channel-settings';
@@ -62,10 +63,12 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         {currentMenu === 'project' && (
           <ProjectInfoSetting projectId={projectId} />
         )}
-        {currentMenu === 'member' &&
-          (currentSubMenu === 'role' ?
-            <RoleSetting projectId={projectId} />
-          : <MemberSetting projectId={projectId} />)}
+        {currentMenu === 'member' && !currentSubMenu && (
+          <MemberSetting projectId={projectId} />
+        )}
+        {currentMenu === 'member' && currentSubMenu === 'role' && (
+          <RoleSetting projectId={projectId} />
+        )}
         {currentMenu === 'api-key' && <ApiKeySetting projectId={projectId} />}
         {currentMenu === 'issue-tracker' && (
           <IssueTrackerSetting projectId={projectId} />
@@ -77,9 +80,11 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             channelId={currentChannelId}
           />
         )}
-        {currentChannelId && currentMenu === 'field-mgmt' && (
-          <FieldSetting projectId={projectId} channelId={currentChannelId} />
-        )}
+        {currentChannelId &&
+          currentMenu === 'field-mgmt' &&
+          !currentSubMenu && (
+            <FieldSetting projectId={projectId} channelId={currentChannelId} />
+          )}
         {currentChannelId && currentMenu === 'image-mgmt' && (
           <ImageConfigSetting
             projectId={projectId}

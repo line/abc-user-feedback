@@ -15,7 +15,6 @@
  */
 
 import { useEffect } from 'react';
-import Image from 'next/image';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -25,12 +24,12 @@ import { toast } from '@ufb/ui';
 
 import {
   HelpCardDocs,
+  SettingAlert,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelImageConfig } from '@/entities/channel';
 import { channelImageConfigSchema, ImageConfigForm } from '@/entities/channel';
 
@@ -64,59 +63,6 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
       },
     },
   });
-
-  const { mutate: testConection } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/projects/{projectId}/channels/image-upload-url-test',
-    pathParams: { projectId },
-    queryOptions: {
-      onSuccess(data) {
-        if (data?.success) {
-          toast.accent({ title: 'Test Connection Success' });
-        } else {
-          methods.setError('accessKeyId', { message: '' });
-          methods.setError('bucket', { message: '' });
-          methods.setError('endpoint', { message: '' });
-          methods.setError('region', { message: '' });
-          methods.setError('root', { message: '' });
-          methods.setError('secretAccessKey', { message: '' });
-          toast.negative({ title: 'Test Connection failed' });
-        }
-      },
-      onError() {
-        toast.negative({ title: 'Test Connection failed' });
-      },
-    },
-  });
-
-  const handleTestConnection = async () => {
-    let isError = false;
-    await methods.handleSubmit(EMPTY_FUNCTION)();
-    const { accessKeyId, bucket, endpoint, region, secretAccessKey } =
-      methods.getValues();
-    if (accessKeyId.length === 0) {
-      methods.setError('accessKeyId', { message: t('hint.required') });
-      isError = true;
-    }
-    if (bucket.length === 0) {
-      methods.setError('bucket', { message: t('hint.required') });
-      isError = true;
-    }
-    if (endpoint.length === 0) {
-      methods.setError('endpoint', { message: t('hint.required') });
-      isError = true;
-    }
-    if (region.length === 0) {
-      methods.setError('region', { message: t('hint.required') });
-      isError = true;
-    }
-    if (secretAccessKey.length === 0) {
-      methods.setError('secretAccessKey', { message: t('hint.required') });
-      isError = true;
-    }
-    if (isError) return;
-    testConection(methods.getValues());
-  };
 
   const methods = useForm<ChannelImageConfig>({
     resolver: zodResolver(channelImageConfigSchema),
@@ -154,31 +100,9 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         </Button>
       }
     >
-      <div className="flex items-center rounded border px-6 py-2">
-        <p className="flex-1 whitespace-pre-line py-5">
-          <HelpCardDocs i18nKey="help-card.image-config" />
-        </p>
-        <div className="relative h-full w-[80px]">
-          <Image
-            src="/assets/images/image-setting-help.png"
-            style={{ objectFit: 'contain' }}
-            alt="image-setting-help"
-            fill
-          />
-        </div>
-      </div>
-      <div className="flex items-center justify-between">
-        <h2 className="font-20-bold">
-          {t('title-box.image-storage-integration')}
-        </h2>
-        <button
-          type="button"
-          className="btn btn-secondary"
-          onClick={handleTestConnection}
-        >
-          Test Connection
-        </button>
-      </div>
+      <SettingAlert
+        description={<HelpCardDocs i18nKey="help-card.image-config" />}
+      />
       <FormProvider {...methods}>
         <ImageConfigForm />
       </FormProvider>

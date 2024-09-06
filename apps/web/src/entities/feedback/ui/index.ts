@@ -13,26 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import { Icon } from '@ufb/ui';
-
-import { usePermissions } from '@/shared';
-
-interface IProps {
-  onClickDelete: () => void;
-}
-
-const DeleteApiKeyButton: React.FC<IProps> = ({ onClickDelete }) => {
-  const perms = usePermissions();
-  return (
-    <button
-      className="icon-btn icon-btn-tertiary icon-btn-sm"
-      onClick={onClickDelete}
-      disabled={!perms.includes('project_apikey_delete')}
-    >
-      <Icon name="TrashFill" />
-    </button>
-  );
-};
-
-export default DeleteApiKeyButton;
+export { default as FeedbackTable } from './feedback-table.ui';

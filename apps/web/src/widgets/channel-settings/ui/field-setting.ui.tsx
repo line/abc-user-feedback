@@ -17,17 +17,18 @@ import { useEffect, useMemo, useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Divider } from '@ufb/react';
+import { Divider, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import {
-  cn,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
-import type { FieldInfo, FieldStatus } from '@/entities/field';
+import { FeedbackTable, usePreviewFeedback } from '@/entities/feedback';
+import type { FieldInfo } from '@/entities/field';
 import {
   FeedbackRequestCodePopover,
   FieldSettingPopover,
@@ -45,19 +46,20 @@ interface IProps {
   channelId: number;
 }
 
-const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
+const FieldSetting: React.FC<IProps> = (props) => {
+  const { projectId, channelId } = props;
   const { t } = useTranslation();
   const perms = usePermissions(projectId);
   const overlay = useOverlay();
+  const [isPreview, setIsPreview] = useState(false);
 
-  const [fieldStatus, setFieldStatus] = useState<FieldStatus>('ACTIVE');
+  const [fields, setFields] = useState<FieldInfo[]>([]);
 
-  const [currentFields, setCurrentFields] = useState<FieldInfo[]>([]);
-
-  const { data, refetch, isLoading } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
+
   const { mutateAsync } = useOAIMutation({
     method: 'put',
     path: '/api/admin/projects/{projectId}/channels/{channelId}/fields',
@@ -74,152 +76,117 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   });
 
   const isDirty = useMemo(
-    () =>
-      !(data ? objectsEqual(data.fields.sort(sortField), currentFields) : true),
-    [data, currentFields],
+    () => !(data ? objectsEqual(data.fields.sort(sortField), fields) : true),
+    [data, fields],
   );
+  const feedbacks = usePreviewFeedback(fields);
+
+  useWarnIfUnsavedChanges(isDirty);
 
   useEffect(() => {
-    setCurrentFields(data?.fields.sort(sortField) ?? []);
+    setFields(data?.fields.sort(sortField) ?? []);
   }, [data]);
 
   const saveFields = async () => {
-    await mutateAsync({ fields: currentFields });
+    await mutateAsync({ fields });
   };
 
   const addField = (input: FieldInfo) => {
-    setCurrentFields((v) => v.concat(input).sort(sortField));
+    setFields((v) => v.concat(input).sort(sortField));
   };
 
   const updateField = (input: { index: number; field: FieldInfo }) => {
-    setCurrentFields((prev) =>
+    setFields((prev) =>
       prev.map((v, i) => (i === input.index ? input.field : v)),
     );
   };
+
   const deleteField = ({ index }: { index: number }) => {
-    setCurrentFields((prev) => prev.filter((_, i) => i !== index));
+    setFields((prev) => prev.filter((_, i) => i !== index));
   };
-  const openFieldFormSheet = () => {
+
+  const openFieldFormSheet = (input?: { index: number; field: FieldInfo }) => {
     overlay.open(({ close, isOpen }) => (
       <FieldSettingPopover
         isOpen={isOpen}
         close={close}
-        onSubmit={addField}
-        fieldRows={currentFields}
+        onSubmit={(newField) =>
+          input ?
+            updateField({ index: input.index, field: newField })
+          : addField(newField)
+        }
+        fieldRows={fields}
         disabled={!perms.includes('channel_field_update')}
+        data={input?.field}
+        onClickDelete={
+          input ?
+            () => {
+              deleteField({ index: input.index });
+              close();
+            }
+          : undefined
+        }
       />
     ));
   };
 
   return (
     <SettingTemplate
-      title={t('channel-setting-menu.field-mgmt')}
+      title={
+        isPreview ?
+          t('main.setting.field-mgmt.preview')
+        : t('channel-setting-menu.field-mgmt')
+      }
+      onClickBack={isPreview ? () => setIsPreview(false) : undefined}
       action={
-        <>
-          <FeedbackRequestCodePopover
-            projectId={projectId}
-            channelId={channelId}
-          />
-          <Divider
-            variant="subtle"
-            orientation="vertical"
-            className="my-2 h-auto"
-          />
-          <Button
-            variant="outline"
-            iconL="RiAddLine"
-            onClick={openFieldFormSheet}
-          >
-            Field 추가
-          </Button>
-          <Button variant="outline" iconL="RiEyeLine">
-            미리보기
-          </Button>
-          <Divider
-            variant="subtle"
-            orientation="vertical"
-            className="my-2 h-auto"
-          />
-          <SaveFieldPopover
-            onClickSave={saveFields}
-            disabled={!isDirty || !perms.includes('channel_field_update')}
-          />
-        </>
+        !isPreview && (
+          <>
+            <FeedbackRequestCodePopover
+              projectId={projectId}
+              channelId={channelId}
+            />
+            <Divider
+              variant="subtle"
+              orientation="vertical"
+              className="my-2 h-auto"
+            />
+            <ToggleGroup type="single" value="">
+              <ToggleGroupItem
+                value="item-1"
+                onClick={() => openFieldFormSheet()}
+                icon="RiAddLine"
+              >
+                Field 추가
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="item-2"
+                icon="RiEyeLine"
+                onClick={() => setIsPreview(true)}
+              >
+                미리보기
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <Divider
+              variant="subtle"
+              orientation="vertical"
+              className="my-2 h-auto"
+            />
+            <SaveFieldPopover
+              onClickSave={saveFields}
+              disabled={!isDirty || !perms.includes('channel_field_update')}
+            />
+          </>
+        )
       }
     >
-      <div className="flex justify-between">
-        <StatusButtonGroup setStatus={setFieldStatus} status={fieldStatus} />
-      </div>
-      <FieldTable fields={currentFields} />
-      {/* <div className="flex h-1/2 flex-col gap-3">
-          <div>
-            <h1 className="font-20-bold">
-              {t('main.setting.field-mgmt.preview')}
-            </h1>
-          </div>
-          {showPreview ?
-            <div className="overflow-auto">
-              <PreviewFieldTable
-                fields={currentFields.filter((v) => v.status === 'ACTIVE')}
-              />
-            </div>
-          : <div className="flex h-full flex-col items-center justify-center rounded border">
-              <Icon name="Search" className="text-quaternary mb-2" size={32} />
-              <p className="text-primary font-14-bold">
-                {t('main.setting.field-mgmt.preview-description')}
-              </p>
-              <p className="text-secondary">
-                {t('main.setting.field-mgmt.preview-caption')}
-              </p>
-              <button
-                className="btn btn-blue mt-2 min-w-[120px]"
-                onClick={() => setShowPreview(true)}
-              >
-                {t('main.setting.field-mgmt.preview')}
-              </button>
-            </div>
-          }
-        </div> */}
+      {isPreview ?
+        <FeedbackTable feedbacks={feedbacks} fields={fields} />
+      : <FieldTable
+          fields={fields}
+          onClickRow={(index, field) => openFieldFormSheet({ index, field })}
+        />
+      }
     </SettingTemplate>
-  );
-};
-
-interface IStatusButtonGroupProps {
-  status: FieldStatus;
-  setStatus: (status: FieldStatus) => void;
-}
-
-const StatusButtonGroup: React.FC<IStatusButtonGroupProps> = (props) => {
-  const { setStatus, status } = props;
-
-  const { t } = useTranslation();
-  return (
-    <div className="flex gap-2">
-      <button
-        className={cn([
-          'btn btn-sm btn-rounded min-w-[64px] border',
-          {
-            'text-tertiary bg-fill-inverse': status === 'INACTIVE',
-            'text-primary bg-fill-quaternary': status === 'ACTIVE',
-          },
-        ])}
-        onClick={() => setStatus('ACTIVE')}
-      >
-        {t('main.setting.field-status.active')}
-      </button>
-      <button
-        className={cn([
-          'btn btn-sm btn-rounded min-w-[64px] border',
-          {
-            'text-tertiary bg-fill-inverse': status === 'ACTIVE',
-            'text-primary bg-fill-quaternary': status === 'INACTIVE',
-          },
-        ])}
-        onClick={() => setStatus('INACTIVE')}
-      >
-        {t('main.setting.field-status.inactive')}
-      </button>
-    </div>
   );
 };
 

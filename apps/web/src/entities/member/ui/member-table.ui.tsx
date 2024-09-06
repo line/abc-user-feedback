@@ -72,7 +72,7 @@ const MemberTable: React.FC<IProps> = (props) => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  const openMemberDialog = (member: Member) => {
+  const openMemberFormDialog = (member: Member) => {
     if (!project) return;
     overlay.open(({ close, isOpen }) => (
       <MemberFormDialog
@@ -104,7 +104,7 @@ const MemberTable: React.FC<IProps> = (props) => {
       emptyCaption={t('v2.text.no-data.member')}
       createButton={createButton}
       classname={members.length === 0 ? 'h-full' : ''}
-      onClickRow={openMemberDialog}
+      onClickRow={(_, row) => openMemberFormDialog(row)}
     />
   );
 };

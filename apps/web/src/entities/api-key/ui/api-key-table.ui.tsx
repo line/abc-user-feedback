@@ -81,7 +81,7 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
       emptyCaption={t('v2.text.no-data.api-key')}
       createButton={createButton}
       classname={apiKeys.length === 0 ? 'h-full' : ''}
-      onClickRow={openApiKeyDialog}
+      onClickRow={(_, row) => openApiKeyDialog(row)}
     />
   );
 };

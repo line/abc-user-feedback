@@ -13,19 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { BadgeProps } from '@ufb/ui';
-import { Badge } from '@ufb/ui';
+import type { BadgeProps } from '@ufb/react';
+import { Badge } from '@ufb/react';
 
 import { ISSUE_COLOR_MAP } from '../issue-color.constant';
 import type { Issue } from '../issue.type';
 
-interface IProps extends Omit<BadgeProps, 'color' | 'type'> {
+interface IProps extends Omit<BadgeProps, 'color'> {
   issue: Issue;
 }
 
 const IssueBadge: React.FC<IProps> = ({ issue, ...props }) => {
   return (
-    <Badge color={ISSUE_COLOR_MAP[issue.status]} type="secondary" {...props}>
+    <Badge color={ISSUE_COLOR_MAP[issue.status]} {...props}>
       {issue.name}
     </Badge>
   );

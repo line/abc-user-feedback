@@ -59,7 +59,7 @@ interface IProps<T> {
   onClickDelete?: () => void;
   createButton: React.ReactNode;
   classname?: string;
-  onClickRow?: (row: T) => void;
+  onClickRow?: (rowId: string, row: T) => void;
   reoder?: (data: T[]) => void;
 }
 
@@ -109,30 +109,27 @@ const BasicTable = <T,>(props: IProps<T>) => {
       sensors={sensors}
       onDragEnd={handleDragEnd}
     >
-      <Table className={classname}>
+      <Table className={cn(classname, 'rounded border')}>
         <TableHeader>
           <TableRow>
-            {table.getIsSomeRowsSelected() ?
-              <CheckedTableHead table={table} onClickDelete={onClickDelete} />
-            : table.getFlatHeaders().map((header, i) => (
-                <TableHead key={i} style={{ width: header.getSize() }}>
-                  <div
-                    className={cn('flex flex-nowrap items-center', {
-                      'overflow-hidden text-ellipsis':
-                        resiable && header.column.getCanResize(),
-                    })}
-                  >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </div>
-                  {resiable && header.column.getCanResize() && (
-                    <TableResizer header={header} table={table} />
+            {table.getFlatHeaders().map((header, i) => (
+              <TableHead key={i} style={{ width: header.getSize() }}>
+                <div
+                  className={cn('flex flex-nowrap items-center', {
+                    'overflow-hidden text-ellipsis':
+                      resiable && header.column.getCanResize(),
+                  })}
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
                   )}
-                </TableHead>
-              ))
-            }
+                </div>
+                {resiable && header.column.getCanResize() && (
+                  <TableResizer header={header} table={table} />
+                )}
+              </TableHead>
+            ))}
           </TableRow>
           {isLoading && (
             <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
@@ -143,7 +140,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
             items={dataIds}
             strategy={verticalListSortingStrategy}
           >
-            {table.getRowModel().rows.length === 0 ?
+            {table.getRowCount() === 0 ?
               <TableRow className="hover:bg-inherit">
                 <TableCell colSpan={table.getFlatHeaders().length}>
                   <div className="my-10 flex flex-col items-center justify-center gap-4">
@@ -166,7 +163,11 @@ const BasicTable = <T,>(props: IProps<T>) => {
                   <DraggableRow
                     key={row.id}
                     row={row}
-                    onClickRow={onClickRow}
+                    onClickRow={
+                      onClickRow ?
+                        () => onClickRow(row.id, row.original)
+                      : undefined
+                    }
                   />
                 ))
             }

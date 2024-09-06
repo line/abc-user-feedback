@@ -35,6 +35,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
             await router.push(url);
           } finally {
             setIsLoading(false);
+            close();
           }
         }}
       />
@@ -59,7 +60,13 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
 
   // Browser 뒤로가기, 나가기 버튼
   useEffect(() => {
-    const handleBeforeChangeRoute = (url: string) => {
+    const handleBeforeChangeRoute = (
+      url: string,
+      option: { shallow: boolean },
+    ) => {
+      if (option.shallow) {
+        return;
+      }
       if (!hasUnsavedChanges || isLoading) return;
       openWarnIfUnsavedChangesDialog(url);
 

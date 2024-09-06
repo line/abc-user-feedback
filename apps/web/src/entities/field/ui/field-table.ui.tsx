@@ -15,19 +15,26 @@
  */
 
 import { useMemo } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 
-import { BasicTable } from '@/shared';
+import { Button } from '@ufb/react';
+
+import { BasicTable, TableFacetedFilter } from '@/shared';
 
 import { getFieldColumns } from '../field-columns';
 import type { FieldInfo } from '../field.type';
 
 interface IProps {
   fields: FieldInfo[];
+  onClickRow: (rowId: number, field: FieldInfo) => void;
 }
 
 const FieldTable: React.FC<IProps> = (props) => {
-  const { fields } = props;
+  const { fields, onClickRow } = props;
 
   const columns = useMemo(() => getFieldColumns(), []);
 
@@ -35,10 +42,53 @@ const FieldTable: React.FC<IProps> = (props) => {
     getCoreRowModel: getCoreRowModel(),
     columns,
     data: fields,
-    debugTable: true,
+    enableColumnFilters: true,
+    getFilteredRowModel: getFilteredRowModel(),
+    getRowId(_, index) {
+      return String(index);
+    },
   });
 
-  return <BasicTable table={table} createButton />;
+  return (
+    <div>
+      <div className="mb-4 flex gap-3">
+        {table.getColumn('status') && (
+          <TableFacetedFilter
+            column={table.getColumn('status')}
+            options={[
+              { label: 'Inactive', value: 'INACTIVE' },
+              { label: 'Active', value: 'ACTIVE' },
+            ]}
+            title="Status"
+          />
+        )}
+        {table.getColumn('property') && (
+          <TableFacetedFilter
+            column={table.getColumn('property')}
+            options={[
+              { label: 'Editable', value: 'EDITABLE' },
+              { label: 'Read Only', value: 'READ_ONLY' },
+            ]}
+            title="Property"
+          />
+        )}
+        {table.getState().columnFilters.length > 0 && (
+          <Button
+            variant="ghost"
+            iconL="RiCloseLine"
+            onClick={() => table.resetColumnFilters()}
+          >
+            Reset
+          </Button>
+        )}
+      </div>
+      <BasicTable
+        table={table}
+        onClickRow={(rowId, row) => onClickRow(Number(rowId), row)}
+        createButton
+      />
+    </div>
+  );
 };
 
 export default FieldTable;

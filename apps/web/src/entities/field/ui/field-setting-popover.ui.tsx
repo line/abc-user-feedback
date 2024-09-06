@@ -18,7 +18,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import type { IconNameType } from '@ufb/react';
 import {
   Button,
   Checkbox,
@@ -34,7 +33,7 @@ import {
 import type { FormOverlayProps } from '@/shared';
 import { SelectInput, TextInput } from '@/shared';
 
-import { FIELD_FORMAT_LIST } from '../field.constant';
+import { FIELD_FORMAT_ICON_MAP, FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
 import type { FieldInfo } from '../field.type';
 import DeleteFieldOptionPopover from './delete-field-option-popover.ui';
@@ -53,25 +52,22 @@ interface IProps extends FormOverlayProps<FieldInfo> {
   fieldRows: FieldInfo[];
 }
 
-const options: {
-  label: FieldInfo['format'];
-  value: FieldInfo['format'];
-  icon: IconNameType;
-}[] = [
-  { label: 'text', value: 'text', icon: 'RiText' },
-  { label: 'keyword', value: 'keyword', icon: 'RiFontSize' },
-  { label: 'number', value: 'number', icon: 'RiHashtag' },
-  { label: 'date', value: 'date', icon: 'RiCalendarEventLine' },
-  { label: 'select', value: 'select', icon: 'RiCheckboxCircleLine' },
-  { label: 'multiSelect', value: 'multiSelect', icon: 'RiListCheck' },
-  { label: 'images', value: 'images', icon: 'RiImageLine' },
-];
 const FieldSettingPopover: React.FC<IProps> = (props) => {
-  const { data, disabled, fieldRows, close, isOpen, onSubmit: onSave } = props;
+  const {
+    data,
+    disabled,
+    fieldRows,
+    close,
+    isOpen,
+    onSubmit: onSave,
+    onClickDelete,
+  } = props;
 
   const { t } = useTranslation();
 
-  const [isSameKey, setIsSameKey] = useState(true);
+  const [isSameKey, setIsSameKey] = useState(
+    data ? data.name === data.key : true,
+  );
   const [optionInput, setOptionInput] = useState<string>('');
 
   const isOriginalData = useMemo(() => (data ? !!data.id : false), [data]);
@@ -93,27 +89,13 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
     clearErrors,
   } = useForm<FieldInfo>({
     resolver: zodResolver(fieldInfoSchema),
-    defaultValues,
+    defaultValues: data ?? defaultValues,
     mode: 'onSubmit',
   });
 
   useEffect(() => {
-    if (data && data.name !== data.key) setIsSameKey(false);
-  }, [data]);
-
-  useEffect(() => {
     if (isSameKey) setValue('name', watch('key'));
-  }, [data, isSameKey, watch('key')]);
-
-  useEffect(() => {
-    reset(data ?? defaultValues);
-  }, [data, open]);
-
-  useEffect(() => {
-    setOptionInput('');
-    setValue('property', 'READ_ONLY');
-    setValue('options', undefined);
-  }, [watch('format')]);
+  }, [isSameKey, watch('key')]);
 
   const addOption = () => {
     if (optionInput === '') return;
@@ -203,7 +185,11 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 onChange={(value) =>
                   setValue('format', value as FieldInfo['format'])
                 }
-                options={options}
+                options={FIELD_FORMAT_LIST.map((v) => ({
+                  label: v,
+                  value: v,
+                  icon: FIELD_FORMAT_ICON_MAP[v],
+                }))}
                 value={watch('format')}
                 disabled={isOriginalData}
                 required
@@ -231,7 +217,6 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   right={
                     <Button onClick={addOption}>{t('button.register')}</Button>
                   }
-                  required
                 />
 
                 {(watch('options') ?? []).length > 0 && (
@@ -281,9 +266,20 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
           </form>
         </SheetBody>
         <SheetFooter>
-          <SheetClose>{t('button.cancel')}</SheetClose>
-          <Button type="submit" form="field-setting">
-            {t('button.confirm')}
+          {data && (
+            <div className="flex-1">
+              <Button
+                disabled={isOriginalData}
+                variant="destructive"
+                onClick={() => onClickDelete?.()}
+              >
+                {t('v2.button.delete')}
+              </Button>
+            </div>
+          )}
+          <SheetClose>{t('v2.button.cancel')}</SheetClose>
+          <Button type="submit" form="field-setting" disabled={disabled}>
+            {t('v2.button.confirm')}
           </Button>
         </SheetFooter>
       </SheetContent>

@@ -13,14 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ColorType } from '@ufb/ui';
+import type { Color } from '@ufb/react';
 
 import type { IssueStatus } from './issue.type';
 
-export const ISSUE_COLOR_MAP: Record<IssueStatus, ColorType> = {
+export const ISSUE_COLOR_MAP: Record<IssueStatus, Color> = {
   INIT: 'red',
   ON_REVIEW: 'blue',
-  IN_PROGRESS: 'yellow',
+  IN_PROGRESS: 'default',
   RESOLVED: 'green',
-  PENDING: 'purple',
+  PENDING: 'orange',
 };

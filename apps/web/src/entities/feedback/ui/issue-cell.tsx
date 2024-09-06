@@ -13,30 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
-import { Checkbox } from '@ufb/react';
+import { IssueBadge } from '@/entities/issue';
+import type { Issue } from '@/entities/issue';
 
 interface IProps {
-  checked: boolean;
-  disabled?: boolean;
-  indeterminate: boolean;
-  onCheckedChange: (checked: boolean) => void;
+  issues?: Issue[];
 }
 
-const TableCheckbox: React.FC<IProps> = (props) => {
-  const { checked, disabled = false, indeterminate, onCheckedChange } = props;
+const IssueCell: React.FC<IProps> = (props) => {
+  const { issues } = props;
 
   return (
-    <div className="flex items-center">
-      <Checkbox
-        onClick={(e) => e.stopPropagation()}
-        checked={indeterminate ? 'indeterminate' : checked}
-        disabled={disabled}
-        variant={indeterminate ? 'indeterminate' : 'check'}
-        onCheckedChange={(checked) => onCheckedChange(!!checked)}
-      />
+    <div className="flex flex-wrap items-center gap-1 rounded">
+      {issues?.map((issue) => <IssueBadge key={issue.id} issue={issue} />)}
     </div>
   );
 };
 
-export default TableCheckbox;
+export default IssueCell;

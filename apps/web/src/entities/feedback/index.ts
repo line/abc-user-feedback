@@ -14,3 +14,5 @@
  * under the License.
  */
 export * from './lib';
+export * from './ui';
+export * from './feedback.type';

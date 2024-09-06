@@ -14,14 +14,23 @@
  * under the License.
  */
 import { createColumnHelper } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
-import { Badge, Icon } from '@ufb/ui';
+import { Badge, Icon, Tag } from '@ufb/react';
 
-import { cn, displayString, RowDragHandleCell, usePermissions } from '@/shared';
+import {
+  DATE_TIME_FORMAT,
+  displayString,
+  RowDragHandleCell,
+  SortingTableHead,
+} from '@/shared';
 
-import { FIELD_PROPERTY_TEXT, isDefaultField } from './field-utils';
+import { FIELD_PROPERTY_TEXT } from './field-utils';
+import {
+  FIELD_FORMAT_ICON_MAP,
+  FIELD_STATUS_COLOR_MAP,
+} from './field.constant';
 import type { FieldInfo } from './field.type';
-import FieldSettingPopover from './ui/field-setting-popover.ui';
 import OptionListPopover from './ui/option-list-popover.ui';
 
 const columnHelper = createColumnHelper<FieldInfo>();
@@ -29,58 +38,68 @@ const columnHelper = createColumnHelper<FieldInfo>();
 export const getFieldColumns = () => [
   columnHelper.display({
     id: 'drag-handle',
-    header: 'Move',
+    header: () => (
+      <Icon name="RiDraggable" className="text-neutral-tertiary" size={16} />
+    ),
     cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
-    size: 60,
+    size: 10,
   }),
   columnHelper.accessor('key', {
     header: 'Key',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-    size: 120,
+    cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
   }),
   columnHelper.accessor('name', {
     header: 'Display Name',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-    size: 150,
+    cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
   }),
   columnHelper.accessor('format', {
     header: 'Format',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-    size: 100,
-  }),
-  columnHelper.accessor('description', {
-    header: 'Description',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
+    cell: ({ getValue }) => (
+      <div className="flex items-center gap-1">
+        <Icon name={FIELD_FORMAT_ICON_MAP[getValue()]} size={16} />
+        {getValue()}
+      </div>
     ),
   }),
   columnHelper.accessor('options', {
-    header: 'Options',
+    header: 'Select Option',
     cell: ({ getValue }) => {
       const options = getValue() ?? [];
       return options.length > 0 ? <OptionListPopover options={options} /> : '-';
     },
-    size: 100,
   }),
   columnHelper.accessor('property', {
     header: 'Property',
-    cell: ({ getValue }) => {
-      return <Badge type="secondary">{FIELD_PROPERTY_TEXT[getValue()]}</Badge>;
+    cell: ({ getValue }) => (
+      <Tag variant="secondary">{FIELD_PROPERTY_TEXT[getValue()]}</Tag>
+    ),
+    filterFn: (row, id, value: FieldInfo['property'][]) => {
+      return value.includes(row.getValue(id));
     },
-    size: 120,
+  }),
+  columnHelper.accessor('status', {
+    header: 'Status',
+    cell: ({ getValue }) => (
+      <Badge color={FIELD_STATUS_COLOR_MAP[getValue()]} radius="large">
+        {getValue()}
+      </Badge>
+    ),
+    filterFn: (row, id, value: FieldInfo['status'][]) => {
+      return value.includes(row.getValue(id));
+    },
+  }),
+  columnHelper.accessor('description', {
+    header: 'Description',
+    cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+  }),
+  columnHelper.accessor('createdAt', {
+    header: ({ column }) => (
+      <SortingTableHead column={column}>Created</SortingTableHead>
+    ),
+    cell: ({ getValue }) => (
+      <span>
+        {getValue() ? dayjs(getValue()).format(DATE_TIME_FORMAT) : '-'}
+      </span>
+    ),
   }),
 ];

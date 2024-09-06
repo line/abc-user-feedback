@@ -26,22 +26,38 @@ import {
 interface Props {
   placeholder?: string;
   options: { label: string; value: string; icon?: IconNameType }[];
-  label: string;
+  label?: string;
   value?: string;
   onChange?: (value: string) => void;
   disabled?: boolean;
   required?: boolean;
+  type?: 'single' | 'multiple';
 }
 
 const SelectInput: React.FC<Props> = (props) => {
-  const { placeholder, options, label, value, onChange, disabled, required } =
-    props;
+  const {
+    placeholder,
+    options,
+    label,
+    value,
+    onChange,
+    disabled,
+    required,
+    type = 'single',
+  } = props;
 
   return (
-    <Select value={value} onValueChange={onChange} disabled={disabled}>
-      <SelectLabel>
-        {label} {required && <span className="text-tint-red">*</span>}
-      </SelectLabel>
+    <Select
+      value={value}
+      onValueChange={onChange}
+      disabled={disabled}
+      type={type}
+    >
+      {label && (
+        <SelectLabel>
+          {label} {required && <span className="text-tint-red">*</span>}
+        </SelectLabel>
+      )}
       <SelectTrigger>
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>

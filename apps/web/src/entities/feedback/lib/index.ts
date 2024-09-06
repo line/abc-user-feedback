@@ -14,3 +14,4 @@
  * under the License.
  */
 export { default as useFeedbackSearch } from './use-feedback-search';
+export { default as usePreviewFeedback } from './use-preview-feedback';

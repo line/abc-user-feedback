@@ -16,6 +16,8 @@
 
 import { useSortable } from '@dnd-kit/sortable';
 
+import { Icon } from '@ufb/react';
+
 interface Props {
   rowId: string;
 }
@@ -26,7 +28,7 @@ const RowDragHandleCell: React.FC<Props> = (props) => {
 
   return (
     <button {...attributes} {...listeners}>
-      🟰
+      <Icon name="RiDraggable" className="text-neutral-tertiary" size={16} />
     </button>
   );
 };

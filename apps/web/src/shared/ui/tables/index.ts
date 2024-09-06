@@ -26,3 +26,4 @@ export { default as TablePagination } from './table-pagination';
 export { default as TableResizer } from './table-resizer';
 export { default as TableSortIcon } from './table-sort-icon';
 export { default as RowDragHandleCell } from './row-drag-handle-cell.ui';
+export { default as TableFacetedFilter } from './table-faceted-filter.ui';

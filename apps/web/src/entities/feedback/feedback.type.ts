@@ -13,15 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Issue } from '../issue';
 
-export type SettingMenu =
-  | 'project'
-  | 'member'
-  | 'api-key'
-  | 'issue-tracker'
-  | 'webhook'
-  | 'channel-info'
-  | 'field-mgmt'
-  | 'image-mgmt';
-
-export type SubSettingMenu = 'role' | 'preview';
+export interface Feedback {
+  id: number;
+  createdAt: string;
+  updatedAt: string;
+  issues?: Issue[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [key: string]: any;
+}

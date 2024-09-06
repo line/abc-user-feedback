@@ -479,7 +479,8 @@
       "register": "등록하기",
       "save": "저장",
       "cancel": "취소",
-      "out": "나가기"
+      "out": "나가기",
+      "confirm": "확인"
     },
     "project-setting-menu": {
       "project-info": "Project 정보",

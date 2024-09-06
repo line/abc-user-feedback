@@ -136,7 +136,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
               query: { projectId, menu: 'member', submenu: 'role' },
             }}
           >
-            <Button iconL="RiExchange2Fill" variant="outline">
+            <Button iconL="RiExchange2Fill" variant="outline" asChild>
               {t('project-setting-menu.role-mgmt')}
             </Button>
           </Link>
