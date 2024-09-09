@@ -258,7 +258,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
                           checked={row.getIsSelected()}
                           disabled={!row.getCanSelect()}
                           indeterminate={row.getIsSomeSelected()}
-                          onChange={row.getToggleSelectedHandler()}
+                          onCheckedChange={(checked) =>
+                            row.toggleSelected(checked)
+                          }
                         />
                         <ShareButton
                           pathname={`/main/project/${projectId}/issue?id=${row.original.id}`}

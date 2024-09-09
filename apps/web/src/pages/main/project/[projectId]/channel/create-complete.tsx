@@ -86,7 +86,7 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
         </FormProvider>
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
-        <FieldTable fields={data?.fields ?? []} />
+        <FieldTable fields={data?.fields ?? []} onClickRow={() => {}} />
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('channel-setting-menu.image-mgmt')}>
         <FormProvider {...imageConfigFormMethods}>

@@ -87,6 +87,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
                 .map((v) => ({ label: v.email, value: v.email })) ?? []
             }
             required
+            disabled={!!data}
           />
           <SelectInput
             label="Role"

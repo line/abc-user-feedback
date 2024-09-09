@@ -33,7 +33,7 @@ export const getUserColumns = () => [
       <TableCheckbox
         checked={table.getIsAllRowsSelected()}
         indeterminate={table.getIsSomeRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
+        onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
       />
     ),
     cell: ({ row }) => (
@@ -41,7 +41,7 @@ export const getUserColumns = () => [
         checked={row.getIsSelected()}
         disabled={!row.getCanSelect()}
         indeterminate={row.getIsSomeSelected()}
-        onChange={row.getToggleSelectedHandler()}
+        onCheckedChange={(checked) => row.toggleSelected(checked)}
       />
     ),
     size: 50,

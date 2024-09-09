@@ -43,7 +43,7 @@ export const getColumns = (fieldData: Field[]) =>
           {...{
             checked: table.getIsAllRowsSelected(),
             indeterminate: table.getIsSomeRowsSelected(),
-            onChange: table.getToggleAllRowsSelectedHandler(),
+            onCheckedChange: (checked) => table.toggleAllRowsSelected(checked),
           }}
         />
       ),
@@ -53,7 +53,7 @@ export const getColumns = (fieldData: Field[]) =>
             checked: row.getIsSelected(),
             disabled: !row.getCanSelect(),
             indeterminate: row.getIsSomeSelected(),
-            onChange: row.getToggleSelectedHandler(),
+            onCheckedChange: (checked) => row.toggleSelected(checked),
           }}
         />
       ),

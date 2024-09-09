@@ -22,6 +22,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Button, toast } from '@ufb/react';
+import { ErrorCode } from '@ufb/shared';
 
 import {
   Path,
@@ -66,6 +67,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         toast.success(t('v2.toast.success'));
       },
       onError(error) {
+        console.log('error.code: ', error.code);
+        if (error.code === ErrorCode.Project.ProjectInvalidName) {
+          methods.setError('name', { message: t('v2.error.duplicated') });
+          return;
+        }
         toast.error(error.message);
       },
     },
@@ -77,11 +83,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
-        await router.push(Path.MAIN);
         await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects'],
         });
         toast.success(t('v2.toast.success'));
+        await router.push(Path.MAIN);
       },
       onError(error) {
         toast.error(error.message);

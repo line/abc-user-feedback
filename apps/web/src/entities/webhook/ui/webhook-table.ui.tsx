@@ -28,7 +28,7 @@ interface IProps {
   webhooks: Webhook[];
   onUpdate: (webhookId: number, webhook: WebhookInfo) => void;
   createButton: React.ReactNode;
-  onClickRow: (row: Webhook) => void;
+  onClickRow: (rowId: number, row: Webhook) => void;
 }
 
 const WebhookTable: React.FC<IProps> = (props) => {
@@ -46,6 +46,9 @@ const WebhookTable: React.FC<IProps> = (props) => {
     data: webhooks,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
+    getRowId(originalRow) {
+      return String(originalRow.id);
+    },
   });
 
   return (
@@ -54,7 +57,7 @@ const WebhookTable: React.FC<IProps> = (props) => {
       table={table}
       emptyCaption={t('v2.text.no-data.webhook')}
       createButton={createButton}
-      onClickRow={onClickRow}
+      onClickRow={(rowId, row) => onClickRow(Number(rowId), row)}
     />
   );
 };

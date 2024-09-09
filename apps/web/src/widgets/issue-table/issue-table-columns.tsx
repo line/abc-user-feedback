@@ -36,17 +36,21 @@ export const getColumns = (t: TFunction, projectId: number) => [
     id: 'select',
     header: ({ table }) => (
       <TableCheckbox
-        checked={table.getIsAllRowsSelected()}
-        indeterminate={table.getIsSomeRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
+        {...{
+          checked: table.getIsAllRowsSelected(),
+          indeterminate: table.getIsSomeRowsSelected(),
+          onCheckedChange: (checked) => table.toggleAllRowsSelected(checked),
+        }}
       />
     ),
     cell: ({ row }) => (
       <TableCheckbox
-        checked={row.getIsSelected()}
-        disabled={!row.getCanSelect()}
-        indeterminate={row.getIsSomeSelected()}
-        onChange={row.getToggleSelectedHandler()}
+        {...{
+          checked: row.getIsSelected(),
+          disabled: !row.getCanSelect(),
+          indeterminate: row.getIsSomeSelected(),
+          onCheckedChange: (checked) => row.toggleSelected(checked),
+        }}
       />
     ),
     size: 40,

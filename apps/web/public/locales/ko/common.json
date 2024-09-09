@@ -547,6 +547,11 @@
         "title": "이슈 생성",
         "description": "이슈가 생성될 때."
       }
+    },
+    "error": {
+      "duplicated": "중복된 정보가 존재합니다.",
+      "lessThenNcharacters": "{{n}}자 이하로 입력해 주세요.",
+      "required": "입력해 주세요."
     }
   }
 }

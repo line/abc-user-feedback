@@ -196,23 +196,30 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
             <ComboboxContent>
               <ComboboxInput
                 value={inputDomain}
-                onValueChange={setInputDomain}
+                onValueChange={(value) => {
+                  if (formState.errors.domainWhiteList) {
+                    clearErrors('domainWhiteList');
+                  }
+                  setInputDomain(value);
+                }}
               />
               <ComboboxEmpty>{t('v2.placeholder.text')}</ComboboxEmpty>
               <ComboboxList>
                 <ComboboxGroup>
-                  {formState.errors.domainWhiteList && (
-                    <ComboboxItem>
-                      {formState.errors.domainWhiteList.message}
+                  {formState.errors.domainWhiteList ?
+                    <ComboboxItem value={inputDomain}>
+                      <div className="text-tint-red flex items-center gap-1">
+                        <Icon name="RiErrorWarningLine" size={16} />
+                        {formState.errors.domainWhiteList.message}
+                      </div>
                     </ComboboxItem>
-                  )}
-                  {inputDomain && (
+                  : inputDomain ?
                     <ComboboxItem
                       onSelect={(value) => addDomainWhiteList(value)}
                     >
                       {inputDomain}
                     </ComboboxItem>
-                  )}
+                  : <></>}
                 </ComboboxGroup>
               </ComboboxList>
             </ComboboxContent>

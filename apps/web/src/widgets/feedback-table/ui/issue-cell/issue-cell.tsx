@@ -208,11 +208,13 @@ const IssueCell: React.FC<IProps> = (props) => {
               <IssueBadge
                 key={issue.id}
                 issue={issue}
-                right={{
-                  iconName: 'Close',
-                  onClick: () => detecthIssue({ issueId: issue.id }),
-                  disabled: !perms.includes('feedback_issue_update'),
-                }}
+                right={
+                  <Icon
+                    name="Close"
+                    onClick={() => detecthIssue({ issueId: issue.id })}
+                    aria-disabled={!perms.includes('feedback_issue_update')}
+                  />
+                }
               />
             ))}
             <ComboboxInput

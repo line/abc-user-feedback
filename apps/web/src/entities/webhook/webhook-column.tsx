@@ -26,7 +26,7 @@ const columnHelper = createColumnHelper<Webhook>();
 
 export const getWebhookColumns = (
   projectId: number,
-  onUpdate: (webhookId: number, input: WebhookInfo) => void,
+  onUpdate: (id: number, data: WebhookInfo) => void,
 ) => [
   columnHelper.accessor('status', {
     header: () => <p className="w-full text-center">On/Off</p>,

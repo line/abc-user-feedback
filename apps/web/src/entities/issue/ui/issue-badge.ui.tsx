@@ -21,12 +21,13 @@ import type { Issue } from '../issue.type';
 
 interface IProps extends Omit<BadgeProps, 'color'> {
   issue: Issue;
+  right?: React.ReactNode;
 }
 
-const IssueBadge: React.FC<IProps> = ({ issue, ...props }) => {
+const IssueBadge: React.FC<IProps> = ({ issue, right, ...props }) => {
   return (
     <Badge color={ISSUE_COLOR_MAP[issue.status]} {...props}>
-      {issue.name}
+      {issue.name} {right}
     </Badge>
   );
 };

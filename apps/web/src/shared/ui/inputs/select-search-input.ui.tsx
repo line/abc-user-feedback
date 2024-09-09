@@ -35,10 +35,11 @@ interface Props {
   onChange: (value: string) => void;
   options: { label: string; value: string }[];
   required?: boolean;
+  disabled?: boolean;
 }
 
 const SelectSearchInput: React.FC<Props> = (props) => {
-  const { onChange, value, options, label, required } = props;
+  const { onChange, value, options, label, required, disabled = false } = props;
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -49,7 +50,9 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         {label} {required && <span className="text-tint-red">*</span>}
       </InputLabel>
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger>{value ?? t('v2.placeholder.select')}</ComboboxTrigger>
+        <ComboboxTrigger disabled={disabled}>
+          {value ?? t('v2.placeholder.select')}
+        </ComboboxTrigger>
         <ComboboxContent align="start">
           <ComboboxInput placeholder={t('v2.placeholder.select')} />
           <ComboboxList>

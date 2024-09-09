@@ -101,7 +101,7 @@ const FeedbackTableRow: React.FC<IProps> = ({ row, refetch }) => {
               checked={row.getIsSelected()}
               disabled={!row.getCanSelect()}
               indeterminate={row.getIsSomeSelected()}
-              onChange={row.getToggleSelectedHandler()}
+              onCheckedChange={(checked) => row.toggleSelected(checked)}
             />
             {editableState !== row.original.id ?
               <>

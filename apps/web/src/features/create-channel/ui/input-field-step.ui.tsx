@@ -14,6 +14,11 @@
  * under the License.
  */
 
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'react-i18next';
+
+import { Button } from '@ufb/react';
+
 import { FieldSettingPopover } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 import FieldTable from '@/entities/field/ui/field-table.ui';
@@ -25,6 +30,11 @@ interface IProps {}
 
 const InputFieldStep: React.FC<IProps> = () => {
   const { input, onChangeInput } = useCreateChannelStore();
+  const fields = input.fields;
+
+  const { t } = useTranslation();
+
+  const overlay = useOverlay();
 
   const createField = (field: FieldInfo) => {
     onChangeInput('fields', input.fields.concat(field));
@@ -50,17 +60,41 @@ const InputFieldStep: React.FC<IProps> = () => {
     );
   };
 
+  const openFieldFormSheet = (input?: { index: number; field: FieldInfo }) => {
+    overlay.open(({ close, isOpen }) => (
+      <FieldSettingPopover
+        isOpen={isOpen}
+        close={close}
+        onSubmit={(newField) =>
+          input ?
+            updateField({ index: input.index, field: newField })
+          : createField(newField)
+        }
+        fieldRows={fields}
+        data={input?.field}
+        onClickDelete={
+          input ?
+            () => {
+              deleteField({ index: input.index });
+              close();
+            }
+          : undefined
+        }
+      />
+    ));
+  };
+
   return (
     <CreateChannelInputTemplate
       actionButton={
-        <FieldSettingPopover onSave={createField} fieldRows={input.fields} />
+        <Button onClick={() => openFieldFormSheet()}>
+          {t('v2.button.register')}
+        </Button>
       }
     >
       <FieldTable
-        isInputStep
         fields={input.fields}
-        onDeleteField={deleteField}
-        onModifyField={updateField}
+        onClickRow={(index, field) => openFieldFormSheet({ index, field })}
       />
     </CreateChannelInputTemplate>
   );

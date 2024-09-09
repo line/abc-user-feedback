@@ -13,14 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { ColorType } from '@ufb/ui';
+import type { Color } from '@ufb/react';
 
-export const BACKGROUND_COLOR_MAP: Record<ColorType, string> = {
+export const BACKGROUND_COLOR_MAP: Record<Color, string> = {
   red: 'bg-red-primary',
   blue: 'bg-blue-primary',
-  yellow: 'bg-yellow-primary',
   green: 'bg-green-primary',
-  purple: 'bg-purple-primary',
-  navy: 'bg-navy-primary',
   orange: 'bg-orange-primary',
+  default: 'black',
 };

@@ -16,6 +16,7 @@
 import type { IconNameType } from '@ufb/react';
 import {
   Select,
+  SelectCaption,
   SelectContent,
   SelectItem,
   SelectLabel,
@@ -32,6 +33,7 @@ interface Props {
   disabled?: boolean;
   required?: boolean;
   type?: 'single' | 'multiple';
+  error?: string;
 }
 
 const SelectInput: React.FC<Props> = (props) => {
@@ -44,6 +46,7 @@ const SelectInput: React.FC<Props> = (props) => {
     disabled,
     required,
     type = 'single',
+    error,
   } = props;
 
   return (
@@ -68,6 +71,7 @@ const SelectInput: React.FC<Props> = (props) => {
           </SelectItem>
         ))}
       </SelectContent>
+      {error && <SelectCaption variant="default">{error}</SelectCaption>}
     </Select>
   );
 };
