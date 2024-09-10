@@ -77,6 +77,10 @@ export class CreateChannelRequestFieldDto {
   @IsEnum(FieldStatusEnum)
   status: FieldStatusEnum;
 
+  @ApiProperty()
+  @IsNumber()
+  order: number;
+
   @ApiProperty({
     type: [CreateChannelRequestFieldSelectOptionDto],
     required: false,

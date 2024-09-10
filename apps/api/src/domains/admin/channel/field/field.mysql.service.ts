@@ -160,10 +160,7 @@ export class FieldMySQLService {
     this.checkReservedFieldName(creatingFieldDtos);
     this.checkReservedFieldKey(creatingFieldDtos);
 
-    const updatingFieldDtos = fields.filter(
-      (v) =>
-        v.id && !['id', 'createdAt', 'updatedAt', 'issues'].includes(v.key),
-    );
+    const updatingFieldDtos = fields.filter((v) => v.id);
 
     const fieldEntities = await this.repository.findBy({
       channel: { id: channelId },
