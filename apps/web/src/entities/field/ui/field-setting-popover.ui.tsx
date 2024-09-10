@@ -139,9 +139,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
       return;
     }
 
-    const checkDuplicatedName = otherFields.find(
-      (v) => v.name.toLowerCase() === input.name.toLowerCase(),
-    );
+    const checkDuplicatedName = otherFields.find((v) => v.name === input.name);
     if (checkDuplicatedName) {
       setError('name', { message: 'Name is duplicated' });
       return;
