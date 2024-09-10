@@ -133,13 +133,12 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
   };
 
   const onSubmit = (input: FieldInfo) => {
-    const checkDuplicatedKey = otherFields.find(
-      (v) => v.key.toLowerCase() === input.key.toLowerCase(),
-    );
+    const checkDuplicatedKey = otherFields.find((v) => v.key === input.key);
     if (checkDuplicatedKey) {
       setError('key', { message: 'Key is duplicated' });
       return;
     }
+
     const checkDuplicatedName = otherFields.find(
       (v) => v.name.toLowerCase() === input.name.toLowerCase(),
     );
@@ -147,6 +146,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
       setError('name', { message: 'Name is duplicated' });
       return;
     }
+
     onSave({ ...data, ...input });
     reset(defaultValues);
     setOpen(false);
