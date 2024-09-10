@@ -44,7 +44,7 @@ export class ReplaceFieldDto {
   status: FieldStatusEnum;
 
   @Expose()
-  order: number;
+  order?: number | null;
 
   @Expose()
   @Type(() => Option)
