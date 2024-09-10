@@ -43,6 +43,9 @@ export class CreateFieldDto {
   @Expose()
   @Type(() => Option)
   options?: Option[];
+
+  @Expose()
+  order?: number | null;
 }
 
 class Option {

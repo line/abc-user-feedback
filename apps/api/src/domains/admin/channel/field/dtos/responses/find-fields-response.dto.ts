@@ -55,6 +55,10 @@ export class FindFieldsResponseDto {
 
   @Expose()
   @ApiProperty()
+  order: number;
+
+  @Expose()
+  @ApiProperty()
   name: string;
 
   @Expose()

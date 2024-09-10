@@ -13,51 +13,18 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, Type } from 'class-transformer';
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-import {
-  FieldFormatEnum,
-  FieldPropertyEnum,
-  FieldStatusEnum,
-} from '../../../../../common/enums';
+export class AddOrderOnField1725935382221 implements MigrationInterface {
+  name = 'AddOrderOnField1725935382221';
 
-export class ReplaceFieldDto {
-  @Expose()
-  id?: number;
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`fields\` ADD \`order\` int NOT NULL DEFAULT '0'`,
+    );
+  }
 
-  @Expose()
-  name: string;
-
-  @Expose()
-  key: string;
-
-  @Expose()
-  description: string | null;
-
-  @Expose()
-  format: FieldFormatEnum;
-
-  @Expose()
-  property: FieldPropertyEnum;
-
-  @Expose()
-  status: FieldStatusEnum;
-
-  @Expose()
-  order?: number | null;
-
-  @Expose()
-  @Type(() => Option)
-  options?: Option[];
-}
-
-class Option {
-  @Expose()
-  id?: number;
-
-  @Expose()
-  name: string;
-
-  @Expose()
-  key: string;
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`ALTER TABLE \`fields\` DROP COLUMN \`order\``);
+  }
 }
