@@ -47,6 +47,7 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env
+          echo "JWT_SECRET=DEV" >> ./apps/api/.env
 
       - name: Run integration tests
         run: |
