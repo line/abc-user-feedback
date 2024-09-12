@@ -19,7 +19,12 @@ jobs:
           TZ: UTC
         ports:
           - 13307:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: >-
+          --add-host=host.docker.internal:host-gateway
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
       smtp:
         image: rnwood/smtp4dev:v3
@@ -38,6 +43,11 @@ jobs:
           --add-host=host.docker.internal:host-gateway
         ports:
           - 9200:9200
+
+    container:
+      image: ubuntu:latest
+      options: >-
+        --add-host=host.docker.internal:host-gateway
 
     steps:
       - name: Check out repository code
