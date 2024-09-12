@@ -28,10 +28,10 @@ jobs:
           - 25:25
           - 143:143
 
-      # opensearch:
-      #   image: opensearchproject/opensearch:2.4.1
-      #   ports:
-      #     - 9200:9200
+      opensearch:
+        image: opensearchproject/opensearch:2.16.0
+        ports:
+          - 9200:9200
 
     steps:
       - name: Check out repository code
