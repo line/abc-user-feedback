@@ -48,8 +48,9 @@ jobs:
           pnpm build
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env
           echo "JWT_SECRET=DEV" >> ./apps/api/.env
+          echo "MYSQL_PRIMARY_URL=mysql://root:userfeedback@host.docker.internal:13307/integration" >> ./apps/api/.env
           echo "OPENSEARCH_USE=true" >> ./apps/api/.env
-          echo "OPENSEARCH_NODE=http://opensearch:9200" >> ./apps/api/.env
+          echo "OPENSEARCH_NODE=http://host.docker.internal:9200" >> ./apps/api/.env
           echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env
           echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env
 
