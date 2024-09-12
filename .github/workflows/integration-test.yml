@@ -38,6 +38,7 @@ jobs:
           discovery.type: single-node
           bootstrap.memory_lock: "true"
           plugins.security.disabled: "true"
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: "UserFeedback123!@#"
         options: >-
           --health-cmd="curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"
           --health-interval=10s
