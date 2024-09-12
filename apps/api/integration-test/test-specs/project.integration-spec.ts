@@ -98,111 +98,123 @@ describe('ProjectController (integration)', () => {
     accessToken = jwt.accessToken;
   });
 
-  it('/admin/projects (POST)', async () => {
-    const dto = new CreateProjectRequestDto();
-    dto.name = 'TestProject';
+  describe('/admin/projects (POST)', () => {
+    it('should create a project', async () => {
+      const dto = new CreateProjectRequestDto();
+      dto.name = 'TestProject';
 
-    return request(app.getHttpServer() as Server)
-      .post(`/admin/projects`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send(dto)
-      .expect(201);
-  });
-
-  it('/admin/projects (GET)', async () => {
-    const dto = new FindProjectsRequestDto();
-    dto.limit = 10;
-    dto.page = 1;
-
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .query(dto)
-      .expect(200)
-      .then(({ body }: { body: FindProjectsResponseDto }) => {
-        expect(body.items.length).toEqual(1);
-        expect(body.items[0].name).toEqual('TestProject');
-      });
-  });
-
-  it('/admin/projects/:projectId (GET)', async () => {
-    const dto = new FindProjectsRequestDto();
-    dto.limit = 10;
-    dto.page = 1;
-
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .query(dto)
-      .expect(200)
-      .then(({ body }: { body: FindProjectByIdResponseDto }) => {
-        expect(body.name).toEqual('TestProject');
-      });
-  });
-
-  it('/admin/projects/:projectId/feedback-count (GET)', async () => {
-    const project = await projectService.findById({ projectId: 1 });
-    const channel = await createChannel(channelService, project);
-
-    const fields = await fieldRepo.find({
-      where: { channel: { id: channel.id } },
-      relations: { options: true },
+      return request(app.getHttpServer() as Server)
+        .post(`/admin/projects`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(201);
     });
-
-    await createFeedback(fields, channel.id, feedbackService);
-
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects/1/feedback-count`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200)
-      .then(({ body }: { body: CountFeedbacksByIdResponseDto }) => {
-        expect(body.total).toEqual(1);
-      });
   });
 
-  it('/admin/projects/:projectId (PUT)', async () => {
-    const dto = new UpdateProjectRequestDto();
-    dto.name = 'UpdatedTestProject';
+  describe('/admin/projects (GET)', () => {
+    it('should find projects', async () => {
+      const dto = new FindProjectsRequestDto();
+      dto.limit = 10;
+      dto.page = 1;
 
-    await request(app.getHttpServer() as Server)
-      .put(`/admin/projects/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send(dto)
-      .expect(200);
-
-    const findDto = new FindProjectsRequestDto();
-    findDto.limit = 10;
-    findDto.page = 1;
-
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .query(findDto)
-      .expect(200)
-      .then(({ body }: { body: FindProjectsResponseDto }) => {
-        expect(body.items.length).toEqual(1);
-        expect(body.items[0].name).toEqual('UpdatedTestProject');
-      });
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .query(dto)
+        .expect(200)
+        .then(({ body }: { body: FindProjectsResponseDto }) => {
+          expect(body.items.length).toEqual(1);
+          expect(body.items[0].name).toEqual('TestProject');
+        });
+    });
   });
 
-  it('/admin/projects/:projectId (DELETE)', async () => {
-    await request(app.getHttpServer() as Server)
-      .delete(`/admin/projects/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200);
+  describe('/admin/projects/:projectId (GET)', () => {
+    it('should find a project by id', async () => {
+      const dto = new FindProjectsRequestDto();
+      dto.limit = 10;
+      dto.page = 1;
 
-    const findDto = new FindProjectsRequestDto();
-    findDto.limit = 10;
-    findDto.page = 1;
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .query(dto)
+        .expect(200)
+        .then(({ body }: { body: FindProjectByIdResponseDto }) => {
+          expect(body.name).toEqual('TestProject');
+        });
+    });
+  });
 
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .query(findDto)
-      .expect(200)
-      .then(({ body }: { body: FindProjectsResponseDto }) => {
-        expect(body.items.length).toEqual(0);
+  describe('/admin/projects/:projectId/feedback-count (GET)', () => {
+    it('should count feedbacks by project id', async () => {
+      const project = await projectService.findById({ projectId: 1 });
+      const channel = await createChannel(channelService, project);
+
+      const fields = await fieldRepo.find({
+        where: { channel: { id: channel.id } },
+        relations: { options: true },
       });
+
+      await createFeedback(fields, channel.id, feedbackService);
+
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/1/feedback-count`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200)
+        .then(({ body }: { body: CountFeedbacksByIdResponseDto }) => {
+          expect(body.total).toEqual(1);
+        });
+    });
+  });
+
+  describe('/admin/projects/:projectId (PUT)', () => {
+    it('should update a project', async () => {
+      const dto = new UpdateProjectRequestDto();
+      dto.name = 'UpdatedTestProject';
+
+      await request(app.getHttpServer() as Server)
+        .put(`/admin/projects/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(200);
+
+      const findDto = new FindProjectsRequestDto();
+      findDto.limit = 10;
+      findDto.page = 1;
+
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .query(findDto)
+        .expect(200)
+        .then(({ body }: { body: FindProjectsResponseDto }) => {
+          expect(body.items.length).toEqual(1);
+          expect(body.items[0].name).toEqual('UpdatedTestProject');
+        });
+    });
+  });
+
+  describe('/admin/projects/:projectId (DELETE)', () => {
+    it('should delete a project', async () => {
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
+
+      const findDto = new FindProjectsRequestDto();
+      findDto.limit = 10;
+      findDto.page = 1;
+
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .query(findDto)
+        .expect(200)
+        .then(({ body }: { body: FindProjectsResponseDto }) => {
+          expect(body.items.length).toEqual(0);
+        });
+    });
   });
 
   afterAll(async () => {

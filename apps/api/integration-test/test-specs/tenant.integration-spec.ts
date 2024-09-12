@@ -66,7 +66,7 @@ describe('TenantController (integration)', () => {
   });
 
   describe('/admin/tenants (POST)', () => {
-    it('setup', async () => {
+    it('should create a tenant', async () => {
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
 
@@ -84,7 +84,7 @@ describe('TenantController (integration)', () => {
           }
         });
     });
-    it('already exists', async () => {
+    it('should return bad request since tenant is already exists', async () => {
       await tenantRepo.save({
         siteName: faker.string.sample(),
         isPrivate: faker.datatype.boolean(),
@@ -118,7 +118,7 @@ describe('TenantController (integration)', () => {
       const { jwt } = await signInTestUser(dataSource, authService);
       accessToken = jwt.accessToken;
     });
-    it('update', async () => {
+    it('should update a tenant', async () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
@@ -141,7 +141,7 @@ describe('TenantController (integration)', () => {
           expect(updatedTenant?.allowDomains).toEqual(dto.allowDomains);
         });
     });
-    it('not found tenant', async () => {
+    it('should fail to find a tenant', async () => {
       await tenantRepo.delete({});
 
       const dto = new UpdateTenantRequestDto();
@@ -157,7 +157,7 @@ describe('TenantController (integration)', () => {
         .send(dto)
         .expect(404);
     });
-    it('unauthorized', async () => {
+    it('should reject the request when unauthorized', async () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
@@ -184,7 +184,7 @@ describe('TenantController (integration)', () => {
         .send(dto);
     });
 
-    it('find', async () => {
+    it('should find a tenant', async () => {
       await request(app.getHttpServer() as Server)
         .get('/admin/tenants')
         .expect(200)

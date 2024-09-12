@@ -102,113 +102,125 @@ describe('ChannelController (integration)', () => {
     accessToken = jwt.accessToken;
   });
 
-  it('/admin/projects/:projectId/channels (POST)', () => {
-    const dto = new CreateChannelRequestDto();
-    dto.name = 'TestChannel';
+  describe('/admin/projects/:projectId/channels (POST)', () => {
+    it('should create a channel', async () => {
+      const dto = new CreateChannelRequestDto();
+      dto.name = 'TestChannel';
 
-    const fieldDto = new CreateChannelRequestFieldDto();
-    fieldDto.name = 'TestField';
-    fieldDto.key = 'testField';
-    fieldDto.format = FieldFormatEnum.text;
-    fieldDto.property = FieldPropertyEnum.EDITABLE;
-    fieldDto.status = FieldStatusEnum.ACTIVE;
+      const fieldDto = new CreateChannelRequestFieldDto();
+      fieldDto.name = 'TestField';
+      fieldDto.key = 'testField';
+      fieldDto.format = FieldFormatEnum.text;
+      fieldDto.property = FieldPropertyEnum.EDITABLE;
+      fieldDto.status = FieldStatusEnum.ACTIVE;
 
-    dto.fields = [fieldDto];
+      dto.fields = [fieldDto];
 
-    return request(app.getHttpServer() as Server)
-      .post(`/admin/projects/${project.id}/channels`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send(dto)
-      .expect(201);
+      return request(app.getHttpServer() as Server)
+        .post(`/admin/projects/${project.id}/channels`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(201);
+    });
   });
 
-  it('/admin/projects/:projectId/channels (GET)', async () => {
-    const dto = new FindChannelsByProjectIdRequestDto();
-    dto.searchText = 'TestChannel';
-    dto.page = 1;
-    dto.limit = 10;
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects/${project.id}/channels`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .query(dto)
-      .expect(200)
-      .then(({ body }: { body: FindChannelsByProjectIdResponseDto }) => {
-        expect(body.items.length).toBe(1);
-        expect(body.items[0].name).toBe('TestChannel');
-      });
+  describe('/admin/projects/:projectId/channels (GET)', async () => {
+    it('should find channels by project id', async () => {
+      const dto = new FindChannelsByProjectIdRequestDto();
+      dto.searchText = 'TestChannel';
+      dto.page = 1;
+      dto.limit = 10;
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/channels`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .query(dto)
+        .expect(200)
+        .then(({ body }: { body: FindChannelsByProjectIdResponseDto }) => {
+          expect(body.items.length).toBe(1);
+          expect(body.items[0].name).toBe('TestChannel');
+        });
+    });
   });
 
-  it('/admin/projects/:projectId/channels/:channelId (GET)', async () => {
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects/${project.id}/channels/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200)
-      .then(({ body }: { body: FindChannelByIdResponseDto }) => {
-        expect(body.name).toBe('TestChannel');
-      });
+  describe('/admin/projects/:projectId/channels/:channelId (GET)', async () => {
+    it('should find channel by id', async () => {
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/channels/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200)
+        .then(({ body }: { body: FindChannelByIdResponseDto }) => {
+          expect(body.name).toBe('TestChannel');
+        });
+    });
   });
 
-  it('/admin/projects/:projectId/channels/:channelId (PUT)', async () => {
-    const dto = new UpdateChannelRequestDto();
-    dto.name = 'TestChannelUpdated';
+  describe('/admin/projects/:projectId/channels/:channelId (PUT)', async () => {
+    it('should update channel', async () => {
+      const dto = new UpdateChannelRequestDto();
+      dto.name = 'TestChannelUpdated';
 
-    await request(app.getHttpServer() as Server)
-      .put(`/admin/projects/${project.id}/channels/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send(dto)
-      .expect(200);
+      await request(app.getHttpServer() as Server)
+        .put(`/admin/projects/${project.id}/channels/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(200);
 
-    await request(app.getHttpServer() as Server)
-      .get(`/admin/projects/${project.id}/channels/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200)
-      .then(({ body }: { body: FindChannelByIdResponseDto }) => {
-        expect(body.name).toBe('TestChannelUpdated');
-      });
+      await request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/channels/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200)
+        .then(({ body }: { body: FindChannelByIdResponseDto }) => {
+          expect(body.name).toBe('TestChannelUpdated');
+        });
+    });
   });
 
-  it('/admin/projects/:projectId/channels/:channelId/fields (PUT)', async () => {
-    const dto = new UpdateChannelFieldsRequestDto();
-    const fieldDto = new UpdateChannelRequestFieldDto();
-    fieldDto.id = 5;
-    fieldDto.format = FieldFormatEnum.text;
-    fieldDto.key = 'testField';
-    fieldDto.name = 'TestFieldUpdated';
-    dto.fields = [fieldDto];
+  describe('/admin/projects/:projectId/channels/:channelId/fields (PUT)', () => {
+    it('should update channel fields', async () => {
+      const dto = new UpdateChannelFieldsRequestDto();
+      const fieldDto = new UpdateChannelRequestFieldDto();
+      fieldDto.id = 5;
+      fieldDto.format = FieldFormatEnum.text;
+      fieldDto.key = 'testField';
+      fieldDto.name = 'TestFieldUpdated';
+      dto.fields = [fieldDto];
 
-    await request(app.getHttpServer() as Server)
-      .put(`/admin/projects/${project.id}/channels/1/fields`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .send(dto)
-      .expect(200);
+      await request(app.getHttpServer() as Server)
+        .put(`/admin/projects/${project.id}/channels/1/fields`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(200);
 
-    await request(app.getHttpServer() as Server)
-      .get(`/admin/projects/${project.id}/channels/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200)
-      .then(({ body }: { body: FindChannelByIdResponseDto }) => {
-        expect(body.fields.length).toBe(5);
-        expect(body.fields[4].name).toBe('TestFieldUpdated');
-      });
+      await request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/channels/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200)
+        .then(({ body }: { body: FindChannelByIdResponseDto }) => {
+          expect(body.fields.length).toBe(5);
+          expect(body.fields[4].name).toBe('TestFieldUpdated');
+        });
+    });
   });
 
-  it('/admin/projects/:projectId/channels/:channelId (DELETE)', async () => {
-    await request(app.getHttpServer() as Server)
-      .delete(`/admin/projects/${project.id}/channels/1`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .expect(200);
+  describe('/admin/projects/:projectId/channels/:channelId (DELETE)', async () => {
+    it('should delete channel', async () => {
+      await request(app.getHttpServer() as Server)
+        .delete(`/admin/projects/${project.id}/channels/1`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200);
 
-    const dto = new FindChannelsByProjectIdRequestDto();
-    dto.page = 1;
-    dto.limit = 10;
-    return request(app.getHttpServer() as Server)
-      .get(`/admin/projects/${project.id}/channels`)
-      .set('Authorization', `Bearer ${accessToken}`)
-      .query(dto)
-      .expect(200)
-      .then(({ body }: { body: FindChannelsByProjectIdResponseDto }) => {
-        expect(body.items.length).toBe(0);
-      });
+      const dto = new FindChannelsByProjectIdRequestDto();
+      dto.page = 1;
+      dto.limit = 10;
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/channels`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .query(dto)
+        .expect(200)
+        .then(({ body }: { body: FindChannelsByProjectIdResponseDto }) => {
+          expect(body.items.length).toBe(0);
+        });
+    });
   });
 
   afterAll(async () => {
