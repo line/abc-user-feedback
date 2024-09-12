@@ -45,6 +45,7 @@ jobs:
         run: |
           npx corepack enable
           pnpm install --frozen-lockfile
+          pnpm build
 
       - name: Run integration tests
         run: |
