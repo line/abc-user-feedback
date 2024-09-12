@@ -43,7 +43,6 @@ jobs:
 
       - name: Setup integration test
         run: |
-          cd apps/api
           npx corepack enable
           pnpm install --frozen-lockfile
 
