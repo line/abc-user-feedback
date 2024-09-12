@@ -20,7 +20,6 @@ jobs:
         ports:
           - 13307:3306
         options: >-
-          --add-host=host.docker.internal:host-gateway
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=5s
@@ -40,14 +39,12 @@ jobs:
           bootstrap.memory_lock: "true"
           plugins.security.disabled: "true"
         options: >-
-          --add-host=host.docker.internal:host-gateway
+          --health-cmd="curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
         ports:
           - 9200:9200
-
-    container:
-      image: ubuntu:latest
-      options: >-
-        --add-host=host.docker.internal:host-gateway
 
     steps:
       - name: Check out repository code
@@ -60,9 +57,9 @@ jobs:
           pnpm build
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env
           echo "JWT_SECRET=DEV" >> ./apps/api/.env
-          echo "MYSQL_PRIMARY_URL=mysql://root:userfeedback@host.docker.internal:13307/integration" >> ./apps/api/.env
+          echo "MYSQL_PRIMARY_URL=mysql://root:userfeedback@localhost:13307/integration" >> ./apps/api/.env
           echo "OPENSEARCH_USE=true" >> ./apps/api/.env
-          echo "OPENSEARCH_NODE=http://host.docker.internal:9200" >> ./apps/api/.env
+          echo "OPENSEARCH_NODE=http://localhost:9200" >> ./apps/api/.env
           echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env
           echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env
 
