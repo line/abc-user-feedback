@@ -49,7 +49,7 @@ jobs:
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env
           echo "JWT_SECRET=DEV" >> ./apps/api/.env
           echo "OPENSEARCH_USE=true" >> ./apps/api/.env
-          echo "OPENSEARCH_NODE=http://localhost:9200" >> ./apps/api/.env
+          echo "OPENSEARCH_NODE=http://opensearch:9200" >> ./apps/api/.env
           echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env
           echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env
 
