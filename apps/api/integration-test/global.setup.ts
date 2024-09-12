@@ -21,9 +21,7 @@ import { createConnection as connect } from './database-utils';
 
 process.env.NODE_ENV = 'test';
 process.env.MYSQL_PRIMARY_URL =
-  process.env.MYSQL_PRIMARY_URL ?
-    process.env.MYSQL_PRIMARY_URL
-  : 'mysql://root:userfeedback@localhost:13307/integration';
+  'mysql://root:userfeedback@localhost:13307/integration';
 process.env.MASTER_API_KEY = 'master-api-key';
 
 async function createTestDatabase() {
