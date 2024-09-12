@@ -124,7 +124,7 @@ describe('ChannelController (integration)', () => {
     });
   });
 
-  describe('/admin/projects/:projectId/channels (GET)', async () => {
+  describe('/admin/projects/:projectId/channels (GET)', () => {
     it('should find channels by project id', async () => {
       const dto = new FindChannelsByProjectIdRequestDto();
       dto.searchText = 'TestChannel';
@@ -142,7 +142,7 @@ describe('ChannelController (integration)', () => {
     });
   });
 
-  describe('/admin/projects/:projectId/channels/:channelId (GET)', async () => {
+  describe('/admin/projects/:projectId/channels/:channelId (GET)', () => {
     it('should find channel by id', async () => {
       return request(app.getHttpServer() as Server)
         .get(`/admin/projects/${project.id}/channels/1`)
@@ -154,7 +154,7 @@ describe('ChannelController (integration)', () => {
     });
   });
 
-  describe('/admin/projects/:projectId/channels/:channelId (PUT)', async () => {
+  describe('/admin/projects/:projectId/channels/:channelId (PUT)', () => {
     it('should update channel', async () => {
       const dto = new UpdateChannelRequestDto();
       dto.name = 'TestChannelUpdated';
@@ -202,7 +202,7 @@ describe('ChannelController (integration)', () => {
     });
   });
 
-  describe('/admin/projects/:projectId/channels/:channelId (DELETE)', async () => {
+  describe('/admin/projects/:projectId/channels/:channelId (DELETE)', () => {
     it('should delete channel', async () => {
       await request(app.getHttpServer() as Server)
         .delete(`/admin/projects/${project.id}/channels/1`)

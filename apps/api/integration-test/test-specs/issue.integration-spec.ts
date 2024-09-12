@@ -32,6 +32,7 @@ import type {
   FindIssueByIdResponseDto,
   FindIssuesByProjectIdResponseDto,
 } from '@/domains/admin/project/issue/dtos/responses';
+import type { CountIssuesByIdResponseDto } from '@/domains/admin/project/project/dtos/responses';
 import type { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { ProjectService } from '@/domains/admin/project/project/project.service';
 import { SetupTenantRequestDto } from '@/domains/admin/tenant/dtos/requests';
@@ -109,6 +110,18 @@ describe('IssueController (integration)', () => {
         .expect(200)
         .then(({ body }: { body: FindIssueByIdResponseDto }) => {
           expect(body.name).toBe('TestIssue');
+        });
+    });
+  });
+
+  describe('/admin/projects/:projectId/issue-count (GET)', () => {
+    it('should return correct issue count', async () => {
+      return request(app.getHttpServer() as Server)
+        .get(`/admin/projects/${project.id}/issue-count`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .expect(200)
+        .then(({ body }: { body: CountIssuesByIdResponseDto }) => {
+          expect(body.total).toBe(1);
         });
     });
   });
