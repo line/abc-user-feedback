@@ -46,6 +46,13 @@ jobs:
           npx corepack enable
           pnpm install --frozen-lockfile
           pnpm build
+          echo "NODE_ENV=test" >> ./apps/api/.env
+          echo "MYSQL_PRIMARY_URL=mysql://root:userfeedback@localhost:13307/integration" >> ./apps/api/.env
+          echo "MASTER_API_KEY=master-api-key" >> ./apps/api/.env
+          echo "OPENSEARCH_USE=true" >> ./apps/api/.env
+          echo "OPENSEARCH_NODE=http://127.0.0.1:9200" >> ./apps/api/.env
+          echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env
+          echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env
           echo "JWT_SECRET=DEV" >> ./apps/api/.env
 
