@@ -1,0 +1,52 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.39
+        env:
+          MYSQL_ROOT_PASSWORD: userfeedback
+          MYSQL_DATABASE: e2e
+          MYSQL_USER: userfeedback
+          MYSQL_PASSWORD: userfeedback
+          TZ: UTC
+        ports:
+          - 13307:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+      smtp:
+        image: rnwood/smtp4dev:v3
+        ports:
+          - 5080:80
+          - 25:25
+          - 143:143
+
+      # opensearch:
+      #   image: opensearchproject/opensearch:2.4.1
+      #   ports:
+      #     - 9200:9200
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build and run
+        run: |
+          docker compose -f "./docker/docker-compose.e2e.yml" up -d
+
+      - name: Setup integration test
+        run: |
+          cd apps/api
+          npx corepack enable
+          pnpm install --frozen-lockfile
+
+      - name: Run integration tests
+        run: |
+          npm run test:integration
