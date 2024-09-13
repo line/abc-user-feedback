@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
@@ -27,8 +27,8 @@ import {
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import { MemberTable } from '@/entities/member';
-import MemberFormDialog from '@/entities/member/ui/member-form-dialog.ui';
+import type { Member } from '@/entities/member';
+import { MemberFormDialog, MemberTable } from '@/entities/member';
 
 interface IProps {
   projectId: number;
@@ -41,6 +41,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const perms = usePermissions(projectId);
   const queryClient = useQueryClient();
   const overlay = useOverlay();
+  const router = useRouter();
 
   const {
     data: memberData,
@@ -124,22 +125,45 @@ const MemberSetting: React.FC<IProps> = (props) => {
       />
     ));
   };
+  const openUpdateMemberFormDialog = (id: number, member: Member) => {
+    if (!projectData || !rolesData) return;
+    overlay.open(({ close, isOpen }) => (
+      <MemberFormDialog
+        close={close}
+        isOpen={isOpen}
+        data={member}
+        onSubmit={async (newMember) => {
+          await updateMember({ memberId: id, roleId: newMember.role.id });
+        }}
+        onClickDelete={async () => {
+          await deleteMember({ memberId: id });
+        }}
+        project={projectData}
+        roles={rolesData.roles}
+        members={memberData?.members ?? []}
+        deleteDisabled={!perms.includes('project_member_delete')}
+        updateDisabled={!perms.includes('project_member_update')}
+      />
+    ));
+  };
 
   return (
     <SettingTemplate
       title={t('project-setting-menu.member-mgmt')}
       action={
         <>
-          <Link
-            href={{
-              pathname: '/main/project/[projectId]/settings',
-              query: { projectId, menu: 'member', submenu: 'role' },
-            }}
+          <Button
+            iconL="RiExchange2Fill"
+            variant="outline"
+            onClick={() =>
+              router.push({
+                pathname: '/main/project/[projectId]/settings',
+                query: { projectId, menu: 'member', submenu: 'role' },
+              })
+            }
           >
-            <Button iconL="RiExchange2Fill" variant="outline" asChild>
-              {t('project-setting-menu.role-mgmt')}
-            </Button>
-          </Link>
+            {t('project-setting-menu.role-mgmt')}
+          </Button>
           <Button
             disabled={!perms.includes('project_member_create')}
             onClick={openCreateMemberDialog}
@@ -151,15 +175,8 @@ const MemberSetting: React.FC<IProps> = (props) => {
     >
       <MemberTable
         isLoading={isPending}
-        members={memberData?.members ?? []}
-        roles={rolesData?.roles ?? []}
-        onDeleteMember={async (memberId) => {
-          await deleteMember({ memberId });
-        }}
-        onUpdateMember={async ({ id, role }) => {
-          await updateMember({ memberId: id, roleId: role.id });
-        }}
-        project={projectData}
+        data={memberData?.members ?? []}
+        onClickRow={openUpdateMemberFormDialog}
         createButton={
           <Button
             disabled={!perms.includes('project_member_create')}

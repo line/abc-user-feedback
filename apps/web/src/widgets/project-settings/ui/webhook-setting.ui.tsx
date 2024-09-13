@@ -130,6 +130,8 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
           await deleteWebhook({ webhookId: webhook.id });
           close();
         }}
+        updateDisabled={!perms.includes('project_webhook_update')}
+        deleteDisabled={!perms.includes('project_webhook_delete')}
       />
     ));
   };
@@ -152,7 +154,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       <WebhookTable
         projectId={projectId}
         isLoading={isPending}
-        webhooks={data?.items ?? []}
+        data={data?.items ?? []}
         onUpdate={(webhookId, body) => updateWebhook({ webhookId, body })}
         createButton={
           <Button

@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -25,6 +26,7 @@ import { Button, toast } from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
 
 import {
+  DeleteDialog,
   Path,
   SettingTemplate,
   useOAIMutation,
@@ -33,7 +35,6 @@ import {
 } from '@/shared';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
-import { DeleteProjectButton } from '@/features/delete-project';
 
 interface IProps {
   projectId: number;
@@ -41,9 +42,11 @@ interface IProps {
 
 const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+
   const router = useRouter();
   const perms = usePermissions(projectId);
   const queryClient = useQueryClient();
+  const overlay = useOverlay();
 
   const methods = useForm<ProjectInfo>({
     resolver: zodResolver(projectInfoSchema),
@@ -77,7 +80,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
-  const { mutate: deleteProject, isPending: deletePending } = useOAIMutation({
+  const { mutateAsync: deleteProject } = useOAIMutation({
     method: 'delete',
     path: '/api/admin/projects/{projectId}',
     pathParams: { projectId },
@@ -103,16 +106,32 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     mutate({ ...data, ...input });
   };
 
+  const openDeleteDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          await deleteProject(undefined);
+          close();
+        }}
+      />
+    ));
+  };
+
   return (
     <SettingTemplate
       title={t('v2.project-setting-menu.project-info')}
       action={
         <>
-          <DeleteProjectButton
-            onClickDelete={() => deleteProject(undefined)}
+          <Button
+            variant="outline"
+            iconL="RiDeleteBinFill"
+            onClick={openDeleteDialog}
             disabled={!perms.includes('project_delete')}
-            loading={deletePending}
-          />
+          >
+            {t('v2.button.name.delete', { name: 'Project' })}
+          </Button>
           <Button
             form="form"
             type="submit"

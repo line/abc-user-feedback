@@ -16,8 +16,7 @@
 
 import type { z } from 'zod';
 
-import { roleSchema } from './role.schema';
-
-export const updateRoleNameSchema = roleSchema.pick({ name: true });
+import type { roleInfoSchema, roleSchema } from './role.schema';
 
 export type Role = z.infer<typeof roleSchema>;
+export type RoleInfo = z.infer<typeof roleInfoSchema>;

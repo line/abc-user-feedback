@@ -13,4 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as DeleteProjectButton } from './delete-project-button.ui';
+export interface EntityTable<T> {
+  isLoading?: boolean;
+  data: T[];
+  onClickRow: (rowId: number, row: T) => void;
+  createButton: React.ReactNode;
+}

@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -25,32 +26,27 @@ import {
   DialogHeader,
   DialogIcon,
   DialogTitle,
-  DialogTrigger,
 } from '@ufb/react';
 
 interface IProps {
-  projectId: number;
-  onClickDelete: () => void;
-  loading?: boolean;
+  onClickDelete: () => Promise<void>;
+  isOpen: boolean;
+  close: () => void;
 }
 
-const DeleteChannelButton: React.FC<IProps> = (props) => {
-  const { onClickDelete, loading = false } = props;
+const DeleteDialog: React.FC<IProps> = (props) => {
+  const { onClickDelete, close, isOpen } = props;
   const { t } = useTranslation();
+  const [loading, setLoading] = useState(false);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" iconL="RiDeleteBinFill">
-          {t('v2.button.name.delete', { name: 'Channel' })}
-        </Button>
-      </DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent>
         <DialogHeader>
           <DialogIcon name="RiErrorWarningFill" variant="error" />
-          <DialogTitle>{t('v2.dialog.delete-project.title')}</DialogTitle>
+          <DialogTitle>{t('v2.dialog.delete.title')}</DialogTitle>
           <DialogDescription>
-            {t('v2.dialog.delete-project.description')}
+            {t('v2.dialog.delete.description')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -58,7 +54,11 @@ const DeleteChannelButton: React.FC<IProps> = (props) => {
           <Button
             variant="destructive"
             size="small"
-            onClick={onClickDelete}
+            onClick={async () => {
+              setLoading(true);
+              await onClickDelete();
+              setLoading(false);
+            }}
             loading={loading}
           >
             {t('v2.button.delete')}
@@ -69,4 +69,4 @@ const DeleteChannelButton: React.FC<IProps> = (props) => {
   );
 };
 
-export default DeleteChannelButton;
+export default DeleteDialog;

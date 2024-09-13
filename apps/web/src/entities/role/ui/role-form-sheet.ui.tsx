@@ -32,6 +32,7 @@ import {
   SheetTitle,
 } from '@ufb/react';
 
+import type { FormOverlayProps } from '@/shared';
 import { TextInput } from '@/shared';
 
 import type { PermissionType } from '../permission.type';
@@ -53,34 +54,25 @@ import {
   ProjectTrackerPermissionList,
   ProjectWebhookPermissionList,
 } from '../permission.type';
-import type { Role } from '../role.type';
+import type { RoleInfo } from '../role.type';
 
-interface Props {
-  role?: Role;
-  isOpen: boolean;
-  close: () => void;
-  handleSubmit: (input: {
-    name: string;
-    permissions: PermissionType[];
-  }) => Promise<void>;
-  handleDelete?: (role: Role) => Promise<void>;
-}
+interface Props extends FormOverlayProps<RoleInfo> {}
 
 const RoleFormSheet: React.FC<Props> = (props) => {
-  const { close, isOpen, role, handleSubmit, handleDelete } = props;
+  const { close, isOpen, data, onSubmit, onClickDelete } = props;
 
   const { t } = useTranslation();
 
-  const [name, setName] = useState(role?.name ?? '');
+  const [name, setName] = useState(data?.name ?? '');
   const [permissions, setPermissions] = useState<PermissionType[]>(
-    role?.permissions ?? [],
+    data?.permissions ?? [],
   );
   const [isLoading, setIsLoading] = useState(false);
 
   const onClickSave = async () => {
     setIsLoading(true);
     try {
-      await handleSubmit({ name, permissions });
+      await onSubmit({ name, permissions });
       close();
     } finally {
       setIsLoading(false);
@@ -137,7 +129,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
       <SheetContent>
         <SheetHeader>
           <SheetTitle>
-            {role ?
+            {data ?
               t('v2.text.name.detail', { name: 'Role' })
             : t('v2.text.name.add', { name: 'Role' })}
           </SheetTitle>
@@ -230,12 +222,12 @@ const RoleFormSheet: React.FC<Props> = (props) => {
           </Accordion>
         </SheetBody>
         <SheetFooter>
-          {role && handleDelete && (
+          {data && onClickDelete && (
             <div className="flex-1">
               <Button
                 variant="destructive"
                 onClick={async () => {
-                  await handleDelete(role);
+                  await onClickDelete();
                   close();
                 }}
               >

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useOverlay } from '@toss/use-overlay';
 
 import {
   Button,
@@ -48,26 +47,20 @@ import {
 } from '../permission.type';
 import type { PermissionType } from '../permission.type';
 import type { Role } from '../role.type';
-import RoleFormSheet from './role-form-sheet.ui';
 
 interface IProps {
   roles: Role[];
-  onUpdateRole?: (role: Role) => Promise<void>;
-  onDeleteRole?: (role: Role) => Promise<void>;
+  onClickRole: (role: Role) => void;
 }
 
 const RoleTable: React.FC<IProps> = (props) => {
-  const { onUpdateRole, onDeleteRole, roles } = props;
+  const { onClickRole, roles } = props;
 
   const colSpan = roles.length + 2;
 
   return (
-    <Table className="table">
-      <RoleTableHead
-        roles={roles}
-        onUpdateRole={onUpdateRole}
-        onDeleteRole={onDeleteRole}
-      />
+    <Table className="border">
+      <RoleTableHead roles={roles} onClickRole={onClickRole} />
       <TableBody>
         <RoleTitleRow colspan={colSpan} title="Feedback" />
         <PermissionRows
@@ -168,29 +161,11 @@ const RoleTable: React.FC<IProps> = (props) => {
 
 interface IRoleTableHeadProps {
   roles: Role[];
-  onUpdateRole?: (role: Role) => Promise<void>;
-  onDeleteRole?: (role: Role) => Promise<void>;
+  onClickRole: (role: Role) => void;
 }
 
 const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
-  const { roles, onUpdateRole, onDeleteRole } = props;
-
-  const overlay = useOverlay();
-
-  const openUpdateRoleSheet = (role: Role) => {
-    if (!onUpdateRole || !onDeleteRole) return;
-    overlay.open(({ isOpen, close }) => (
-      <RoleFormSheet
-        isOpen={isOpen}
-        close={close}
-        role={role}
-        handleSubmit={async ({ name, permissions }) => {
-          await onUpdateRole({ id: role.id, name, permissions });
-        }}
-        handleDelete={onDeleteRole}
-      />
-    ));
-  };
+  const { roles, onClickRole } = props;
 
   return (
     <TableHeader>
@@ -199,7 +174,7 @@ const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
         {roles.map((role) => (
           <TableHead key={role.id} className="text-center">
             <Button
-              onClick={() => openUpdateRoleSheet(role)}
+              onClick={() => onClickRole(role)}
               variant="ghost"
               size="small"
               iconR="RiEditFill"

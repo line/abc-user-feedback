@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
@@ -29,7 +28,7 @@ import {
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import type { PermissionType } from '@/entities/role';
+import type { PermissionType, Role } from '@/entities/role';
 import { RoleFormSheet, RoleTable } from '@/entities/role';
 
 interface IProps {
@@ -106,14 +105,32 @@ const RoleSetting: React.FC<IProps> = (props) => {
       toast.error(error.message);
     },
   });
-  const openRoleSheet = () => {
+  const openCreateRoleSheet = () => {
     overlay.open(({ isOpen, close }) => (
       <RoleFormSheet
         isOpen={isOpen}
         close={close}
-        handleSubmit={async ({ name, permissions }) => {
+        onSubmit={async ({ name, permissions }) => {
           await createRole({ name, permissions });
         }}
+      />
+    ));
+  };
+
+  const openUpdateRoleSheet = (role: Role) => {
+    overlay.open(({ isOpen, close }) => (
+      <RoleFormSheet
+        isOpen={isOpen}
+        close={close}
+        data={role}
+        onSubmit={async ({ name, permissions }) => {
+          await updateRole({ name, permissions, roleId: role.id });
+        }}
+        onClickDelete={async () => {
+          await deleteRole({ roleId: role.id });
+        }}
+        deleteDisabled={!perms.includes('project_role_delete')}
+        updateDisabled={!perms.includes('project_role_update')}
       />
     ));
   };
@@ -128,33 +145,18 @@ const RoleSetting: React.FC<IProps> = (props) => {
         })
       }
       action={
-        <Link
-          href={{
-            pathname: '/main/project/[projectId]/settings',
-            query: { projectId, menu: 'member', submenu: 'role' },
-          }}
+        <Button
+          onClick={openCreateRoleSheet}
+          disabled={!perms.includes('project_role_create')}
         >
-          <Button
-            onClick={openRoleSheet}
-            disabled={!perms.includes('project_role_create')}
-          >
-            {t('v2.button.name.create', { name: 'Role' })}
-          </Button>
-        </Link>
+          {t('v2.button.name.create', { name: 'Role' })}
+        </Button>
       }
     >
       <div className="overflow-auto">
         <RoleTable
           roles={data?.roles ?? []}
-          onUpdateRole={async (input) => {
-            const { name, permissions, id: roleId } = input;
-            const targetRole = data?.roles.find((v) => v.id === roleId);
-            if (!targetRole) return;
-            await updateRole({ name, permissions, roleId });
-          }}
-          onDeleteRole={async (role) => {
-            await deleteRole({ roleId: role.id });
-          }}
+          onClickRole={openUpdateRoleSheet}
         />
       </div>
     </SettingTemplate>

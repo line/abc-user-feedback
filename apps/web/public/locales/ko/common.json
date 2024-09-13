@@ -498,7 +498,7 @@
       "delete-channel": "Channel 삭제"
     },
     "dialog": {
-      "delete-project": {
+      "delete": {
         "title": "삭제 하시겠습니까?",
         "description": "삭제를 하면 관련된 정보가 모두 사라집니다."
       },

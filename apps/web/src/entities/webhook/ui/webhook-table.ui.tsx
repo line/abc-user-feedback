@@ -17,22 +17,19 @@ import { useMemo } from 'react';
 import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
+import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
 
 import { getWebhookColumns } from '../webhook-column';
 import type { Webhook, WebhookInfo } from '../webhook.type';
 
-interface IProps {
+interface IProps extends EntityTable<Webhook> {
   projectId: number;
-  isLoading?: boolean;
-  webhooks: Webhook[];
   onUpdate: (webhookId: number, webhook: WebhookInfo) => void;
-  createButton: React.ReactNode;
-  onClickRow: (rowId: number, row: Webhook) => void;
 }
 
 const WebhookTable: React.FC<IProps> = (props) => {
-  const { isLoading, webhooks, onUpdate, createButton, onClickRow, projectId } =
+  const { isLoading, data, onUpdate, createButton, onClickRow, projectId } =
     props;
   const { t } = useTranslation();
 
@@ -43,12 +40,10 @@ const WebhookTable: React.FC<IProps> = (props) => {
 
   const table = useReactTable({
     columns,
-    data: webhooks,
+    data,
     getCoreRowModel: getCoreRowModel(),
     enableSorting: false,
-    getRowId(originalRow) {
-      return String(originalRow.id);
-    },
+    getRowId: (originalRow) => String(originalRow.id),
   });
 
   return (
@@ -57,7 +52,7 @@ const WebhookTable: React.FC<IProps> = (props) => {
       table={table}
       emptyCaption={t('v2.text.no-data.webhook')}
       createButton={createButton}
-      onClickRow={(rowId, row) => onClickRow(Number(rowId), row)}
+      onClickRow={onClickRow}
     />
   );
 };

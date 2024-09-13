@@ -105,27 +105,36 @@ const FieldSetting: React.FC<IProps> = (props) => {
     setFields((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const openFieldFormSheet = (input?: { index: number; field: FieldInfo }) => {
+  const openCreateFieldFormSheet = () => {
+    overlay.open(({ close, isOpen }) => (
+      <FieldSettingPopover
+        isOpen={isOpen}
+        close={close}
+        onSubmit={addField}
+        fieldRows={fields}
+        updateDisabled={!perms.includes('channel_field_update')}
+      />
+    ));
+  };
+  const openUpdateFieldFormSheet = (input: {
+    index: number;
+    field: FieldInfo;
+  }) => {
     overlay.open(({ close, isOpen }) => (
       <FieldSettingPopover
         isOpen={isOpen}
         close={close}
         onSubmit={(newField) =>
-          input ?
-            updateField({ index: input.index, field: newField })
-          : addField(newField)
+          updateField({ index: input.index, field: newField })
         }
         fieldRows={fields}
-        disabled={!perms.includes('channel_field_update')}
-        data={input?.field}
-        onClickDelete={
-          input ?
-            () => {
-              deleteField({ index: input.index });
-              close();
-            }
-          : undefined
-        }
+        deleteDisabled={!perms.includes('channel_field_update')}
+        updateDisabled={!perms.includes('channel_field_update')}
+        data={input.field}
+        onClickDelete={() => {
+          deleteField({ index: input.index });
+          close();
+        }}
       />
     ));
   };
@@ -153,8 +162,9 @@ const FieldSetting: React.FC<IProps> = (props) => {
             <ToggleGroup type="single" value="">
               <ToggleGroupItem
                 value="item-1"
-                onClick={() => openFieldFormSheet()}
+                onClick={openCreateFieldFormSheet}
                 icon="RiAddLine"
+                disabled={!perms.includes('channel_field_update')}
               >
                 Field 추가
               </ToggleGroupItem>
@@ -183,7 +193,9 @@ const FieldSetting: React.FC<IProps> = (props) => {
         <FeedbackTable feedbacks={feedbacks} fields={fields} />
       : <FieldTable
           fields={fields}
-          onClickRow={(index, field) => openFieldFormSheet({ index, field })}
+          onClickRow={(index, field) =>
+            openUpdateFieldFormSheet({ index, field })
+          }
         />
       }
     </SettingTemplate>

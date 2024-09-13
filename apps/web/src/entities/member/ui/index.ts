@@ -14,4 +14,4 @@
  * under the License.
  */
 export { default as MemberTable } from './member-table.ui';
-export { default as CreateMemberDialog } from './create-member-dialog.ui';
+export { default as MemberFormDialog } from './member-form-dialog.ui';

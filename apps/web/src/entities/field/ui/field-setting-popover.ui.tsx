@@ -48,14 +48,12 @@ const defaultValues: FieldInfo = {
 };
 
 interface IProps extends FormOverlayProps<FieldInfo> {
-  disabled?: boolean;
   fieldRows: FieldInfo[];
 }
 
 const FieldSettingPopover: React.FC<IProps> = (props) => {
   const {
     data,
-    disabled,
     fieldRows,
     close,
     isOpen,
@@ -72,6 +70,14 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
 
   const isOriginalData = useMemo(() => (data ? !!data.id : false), [data]);
   const isEditing = useMemo(() => !!data, [data]);
+  const isDefaultField = useMemo(
+    () =>
+      data?.key === 'id' ||
+      data?.key === 'issues' ||
+      data?.key === 'createdAt' ||
+      data?.key === 'updatedAt',
+    [data],
+  );
 
   const otherFields = useMemo(
     () => (data ? fieldRows.filter((v) => v.key !== data.key) : fieldRows),
@@ -158,7 +164,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             <TextInput
               label="Key"
               {...register('key')}
-              disabled={isOriginalData}
+              disabled={isOriginalData || isDefaultField}
               error={formState.errors.key?.message}
               required={!data}
               maxLength={20}
@@ -168,13 +174,14 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 label="Display Name"
                 {...register('name')}
                 error={formState.errors.name?.message}
-                disabled={isSameKey}
+                disabled={isSameKey || isDefaultField}
                 required
                 maxLength={20}
               />
               <Checkbox
                 checked={isSameKey}
                 onCheckedChange={(checked) => setIsSameKey(!!checked)}
+                disabled={isDefaultField}
               >
                 {t('main.setting.same-key')}
               </Checkbox>
@@ -191,7 +198,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                   icon: FIELD_FORMAT_ICON_MAP[v],
                 }))}
                 value={watch('format')}
-                disabled={isOriginalData}
+                disabled={isOriginalData || isDefaultField}
                 required
               />
               {watch('format') === 'images' && (
@@ -201,38 +208,41 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               )}
             </div>
             {(watch('format') === 'select' ||
-              watch('format') === 'multiSelect') && (
-              <div>
-                <TextInput
-                  label="Select Option"
-                  value={optionInput}
-                  onChange={(e) => setOptionInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addOption();
+              watch('format') === 'multiSelect') &&
+              !isDefaultField && (
+                <div>
+                  <TextInput
+                    label="Select Option"
+                    value={optionInput}
+                    onChange={(e) => setOptionInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        addOption();
+                      }
+                    }}
+                    error={formState.errors.options?.message}
+                    right={
+                      <Button onClick={addOption}>
+                        {t('button.register')}
+                      </Button>
                     }
-                  }}
-                  error={formState.errors.options?.message}
-                  right={
-                    <Button onClick={addOption}>{t('button.register')}</Button>
-                  }
-                />
+                  />
 
-                {(watch('options') ?? []).length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {watch('options')?.map((v, i) => (
-                      <DeleteFieldOptionPopover
-                        key={i}
-                        option={v}
-                        index={i}
-                        removeOption={removeOption}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            )}
+                  {(watch('options') ?? []).length > 0 && (
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {watch('options')?.map((v, i) => (
+                        <DeleteFieldOptionPopover
+                          key={i}
+                          option={v}
+                          index={i}
+                          removeOption={removeOption}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
             <SelectInput
               label="Field Property"
               options={[
@@ -243,6 +253,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               onChange={(value) =>
                 setValue('property', value as FieldInfo['property'])
               }
+              disabled={isDefaultField}
               required
             />
             <SelectInput
@@ -255,6 +266,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               onChange={(value) =>
                 setValue('status', value as FieldInfo['status'])
               }
+              disabled={isDefaultField}
               required
             />
             <TextInput
@@ -262,6 +274,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               {...register('description')}
               required={false}
               maxLength={50}
+              disabled={isDefaultField}
             />
           </form>
         </SheetBody>
@@ -269,7 +282,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
           {data && (
             <div className="flex-1">
               <Button
-                disabled={isOriginalData}
+                disabled={isOriginalData || isDefaultField}
                 variant="destructive"
                 onClick={() => onClickDelete?.()}
               >
@@ -278,7 +291,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             </div>
           )}
           <SheetClose>{t('v2.button.cancel')}</SheetClose>
-          <Button type="submit" form="field-setting" disabled={disabled}>
+          <Button type="submit" form="field-setting" disabled={isDefaultField}>
             {t('v2.button.confirm')}
           </Button>
         </SheetFooter>

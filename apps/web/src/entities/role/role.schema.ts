@@ -24,3 +24,5 @@ export const roleSchema = z.object({
   name: z.string().min(1, i18n?.t('hint.required')).max(20),
   permissions: z.array(z.enum(PermissionList)),
 });
+
+export const roleInfoSchema = roleSchema.omit({ id: true });

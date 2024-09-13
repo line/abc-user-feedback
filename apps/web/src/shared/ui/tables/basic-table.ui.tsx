@@ -45,7 +45,6 @@ import {
 
 import { cn } from '@/shared/utils';
 
-import CheckedTableHead from './checked-table-head';
 import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
@@ -56,10 +55,9 @@ interface IProps<T> {
   emptyCaption?: string;
   resiable?: boolean;
   isLoading?: boolean;
-  onClickDelete?: () => void;
   createButton: React.ReactNode;
-  classname?: string;
-  onClickRow?: (rowId: string, row: T) => void;
+  className?: string;
+  onClickRow?: (rowId: number, row: T) => void;
   reoder?: (data: T[]) => void;
 }
 
@@ -69,9 +67,8 @@ const BasicTable = <T,>(props: IProps<T>) => {
     emptyCaption,
     resiable = false,
     isLoading = false,
-    onClickDelete,
     createButton,
-    classname,
+    className,
     onClickRow,
     reoder,
   } = props;
@@ -109,7 +106,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
       sensors={sensors}
       onDragEnd={handleDragEnd}
     >
-      <Table className={cn(classname, 'rounded border')}>
+      <Table className={cn(className, 'rounded border')}>
         <TableHeader>
           <TableRow>
             {table.getFlatHeaders().map((header, i) => (
@@ -165,7 +162,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
                     row={row}
                     onClickRow={
                       onClickRow ?
-                        () => onClickRow(row.id, row.original)
+                        () => onClickRow(Number(row.id), row.original)
                       : undefined
                     }
                   />

@@ -14,14 +14,18 @@
  * under the License.
  */
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
+import { useOverlay } from '@toss/use-overlay';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { Button, toast } from '@ufb/react';
 
 import {
+  DeleteDialog,
+  Path,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
@@ -29,7 +33,6 @@ import {
 } from '@/shared';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
-import { DeleteChannelButton } from '@/features/delete-channel';
 
 interface IProps {
   projectId: number;
@@ -41,6 +44,8 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
 
   const perms = usePermissions(projectId);
   const queryClient = useQueryClient();
+  const overlay = useOverlay();
+  const router = useRouter();
 
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
@@ -67,7 +72,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
       },
     },
   });
-  const { mutate: deleteChannel, isPending: deletePending } = useOAIMutation({
+  const { mutateAsync: deleteChannel } = useOAIMutation({
     method: 'delete',
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     pathParams: { channelId, projectId },
@@ -78,6 +83,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
           queryKey: ['/api/admin/projects/{projectId}/channels'],
         });
         toast.success(t('v2.toast.success'));
+        await router.push({ pathname: Path.SETTINGS, query: { projectId } });
       },
       onError(error) {
         toast.error(error.message);
@@ -89,6 +95,19 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     methods.reset(data);
   }, [data]);
 
+  const openDeleteDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          await deleteChannel(undefined);
+          close();
+        }}
+      />
+    ));
+  };
+
   const onSubmit = (values: ChannelInfo) => updateChannel(values);
 
   return (
@@ -96,11 +115,14 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
       title={t('channel-setting-menu.channel-info')}
       action={
         <>
-          <DeleteChannelButton
-            projectId={projectId}
-            onClickDelete={() => deleteChannel(undefined)}
-            loading={deletePending}
-          />
+          <Button
+            variant="outline"
+            iconL="RiDeleteBinFill"
+            onClick={openDeleteDialog}
+            disabled={!perms.includes('channel_delete')}
+          >
+            {t('v2.button.name.delete', { name: 'Channel' })}
+          </Button>
           <Button
             onClick={methods.handleSubmit(onSubmit)}
             disabled={

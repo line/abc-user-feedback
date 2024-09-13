@@ -20,4 +20,6 @@ export interface FormOverlayProps<T> {
   data?: T;
   onSubmit: (data: T) => Promise<void> | void;
   onClickDelete?: () => Promise<void> | void;
+  updateDisabled?: boolean;
+  deleteDisabled?: boolean;
 }

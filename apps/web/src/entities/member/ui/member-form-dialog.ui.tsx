@@ -51,6 +51,8 @@ const MemberFormDialog: React.FC<Props> = (props) => {
     onSubmit,
     onClickDelete,
     members,
+    deleteDisabled = false,
+    updateDisabled = false,
   } = props;
 
   const { t } = useTranslation();
@@ -72,7 +74,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           : t('v2.text.name.register', { name: 'Member' })}
         </DialogTitle>
         <div className="flex flex-col gap-3">
-          <TextInput label="Project" value={project.name} disabled />
+          {!data && <TextInput label="Project" value={project.name} disabled />}
           <SelectSearchInput
             label="Email"
             value={user?.email}
@@ -89,6 +91,15 @@ const MemberFormDialog: React.FC<Props> = (props) => {
             required
             disabled={!!data}
           />
+          {data && <TextInput label="Name" value={user?.name ?? ''} disabled />}
+          {data && (
+            <TextInput
+              label="Department"
+              value={user?.department ?? ''}
+              disabled
+            />
+          )}
+
           <SelectInput
             label="Role"
             placeholder={t('v2.placeholder.select')}
@@ -109,6 +120,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
                   await onClickDelete();
                   close();
                 }}
+                disabled={deleteDisabled}
               >
                 {t('v2.button.delete')}
               </Button>
@@ -119,6 +131,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           </DialogClose>
           <Button
             type="submit"
+            disabled={updateDisabled}
             onClick={async () => {
               if (!user || !role) return;
               await onSubmit({ user, role });
