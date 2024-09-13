@@ -55,7 +55,7 @@ interface IProps<T> {
   emptyCaption?: string;
   resiable?: boolean;
   isLoading?: boolean;
-  createButton: React.ReactNode;
+  createButton?: React.ReactNode;
   className?: string;
   onClickRow?: (rowId: number, row: T) => void;
   reoder?: (data: T[]) => void;

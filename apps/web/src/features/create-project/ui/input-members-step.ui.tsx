@@ -81,12 +81,7 @@ const InputMembersStep: React.FC<IProps> = () => {
 
   return (
     <CreateProjectInputTemplate validate={() => validate()}>
-      <MemberTable
-        members={input.members}
-        roles={input.roles}
-        createButton={<></>}
-        onUpdateMember={updateMember}
-      />
+      <MemberTable data={input.members} onClickRow={() => {}} createButton />
     </CreateProjectInputTemplate>
   );
 };

@@ -85,7 +85,6 @@ const FieldTable: React.FC<IProps> = (props) => {
       <BasicTable
         table={table}
         onClickRow={(rowId, row) => onClickRow(Number(rowId), row)}
-        createButton
       />
     </div>
   );

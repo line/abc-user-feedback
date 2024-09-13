@@ -95,14 +95,13 @@ const CompleteProjectCreationPage: NextPage = () => {
         </FormProvider>
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
-        <RoleTable roles={roles?.roles ?? []} />
+        <RoleTable roles={roles?.roles ?? []} onClickRole={() => {}} />
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
         <MemberTable
-          members={members?.members ?? []}
-          roles={roles?.roles ?? []}
-          createButton={<></>}
-          onUpdateMember={() => {}}
+          data={members?.members ?? []}
+          createButton
+          onClickRow={() => {}}
         />
       </CreateSectionTemplate>
       <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>

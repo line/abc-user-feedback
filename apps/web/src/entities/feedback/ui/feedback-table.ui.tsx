@@ -37,7 +37,7 @@ const FeedbackTable: React.FC<Props> = (props) => {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  return <BasicTable table={table} createButton classname="table-fixed" />;
+  return <BasicTable table={table} createButton className="table-fixed" />;
 };
 
 export default FeedbackTable;
