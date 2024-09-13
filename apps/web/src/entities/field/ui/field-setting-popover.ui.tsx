@@ -45,6 +45,7 @@ const defaultValues: FieldInfo = {
   key: '',
   status: 'ACTIVE',
   property: 'READ_ONLY',
+  order: 0,
 };
 
 interface IProps extends FormOverlayProps<FieldInfo> {

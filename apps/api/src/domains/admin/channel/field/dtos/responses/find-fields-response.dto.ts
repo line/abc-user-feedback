@@ -66,7 +66,7 @@ export class FindFieldsResponseDto {
   key: string;
 
   @Expose()
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: 'string' })
   description: string | null;
 
   @Expose()

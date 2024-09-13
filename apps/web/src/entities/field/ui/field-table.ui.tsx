@@ -31,10 +31,11 @@ import type { FieldInfo } from '../field.type';
 interface IProps {
   fields: FieldInfo[];
   onClickRow: (rowId: number, field: FieldInfo) => void;
+  reorder?: (data: FieldInfo[]) => void;
 }
 
 const FieldTable: React.FC<IProps> = (props) => {
-  const { fields, onClickRow } = props;
+  const { fields, onClickRow, reorder } = props;
 
   const columns = useMemo(() => getFieldColumns(), []);
 
@@ -44,9 +45,7 @@ const FieldTable: React.FC<IProps> = (props) => {
     data: fields,
     enableColumnFilters: true,
     getFilteredRowModel: getFilteredRowModel(),
-    getRowId(_, index) {
-      return String(index);
-    },
+    getRowId: (_, index) => String(index),
   });
 
   return (
@@ -85,6 +84,9 @@ const FieldTable: React.FC<IProps> = (props) => {
       <BasicTable
         table={table}
         onClickRow={(rowId, row) => onClickRow(Number(rowId), row)}
+        reoder={(data) => {
+          reorder?.(data.map((field, index) => ({ ...field, order: index })));
+        }}
       />
     </div>
   );

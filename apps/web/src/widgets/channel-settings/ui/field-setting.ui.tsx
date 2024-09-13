@@ -33,7 +33,6 @@ import {
   FeedbackRequestCodePopover,
   FieldSettingPopover,
   FieldTable,
-  sortField,
 } from '@/entities/field';
 
 const objectsEqual = (
@@ -54,6 +53,10 @@ const FieldSetting: React.FC<IProps> = (props) => {
   const [isPreview, setIsPreview] = useState(false);
 
   const [fields, setFields] = useState<FieldInfo[]>([]);
+  console.log(
+    'fields: ',
+    fields.map((field) => field.name),
+  );
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
@@ -76,7 +79,13 @@ const FieldSetting: React.FC<IProps> = (props) => {
   });
 
   const isDirty = useMemo(
-    () => !(data ? objectsEqual(data.fields.sort(sortField), fields) : true),
+    () =>
+      !(data ?
+        objectsEqual(
+          data.fields.sort((a, b) => a.order - b.order),
+          fields,
+        )
+      : true),
     [data, fields],
   );
   const feedbacks = usePreviewFeedback(fields);
@@ -84,7 +93,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
   useWarnIfUnsavedChanges(isDirty);
 
   useEffect(() => {
-    setFields(data?.fields.sort(sortField) ?? []);
+    setFields(data?.fields ?? []);
   }, [data]);
 
   const saveFields = async () => {
@@ -92,7 +101,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
   };
 
   const addField = (input: FieldInfo) => {
-    setFields((v) => v.concat(input).sort(sortField));
+    setFields((v) => v.concat({ ...input, order: v.length }));
   };
 
   const updateField = (input: { index: number; field: FieldInfo }) => {
@@ -196,6 +205,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
           onClickRow={(index, field) =>
             openUpdateFieldFormSheet({ index, field })
           }
+          reorder={(data) => setFields(data)}
         />
       }
     </SettingTemplate>

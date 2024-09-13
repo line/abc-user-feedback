@@ -90,7 +90,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
   }
   const dataIds = useMemo(
     () => table.getRowModel().rows.map((row) => row.id),
-    [table.getRowModel().rows],
+    [table],
   );
 
   const sensors = useSensors(
