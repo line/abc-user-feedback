@@ -49,7 +49,7 @@
     "clsx": "^2.1.0",
     "cookies-next": "^4.1.1",
     "countries-and-timezones": "^3.6.0",
-    "date-fns": "^3.6.0",
+    "date-fns": "^4.0.0",
     "dayjs": "^1.11.10",
     "framer-motion": "^11.1.7",
     "i18next": "^23.11.5",

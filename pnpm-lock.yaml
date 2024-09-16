@@ -398,8 +398,8 @@ importers:
         specifier: ^3.6.0
         version: 3.6.0
       date-fns:
-        specifier: ^3.6.0
-        version: 3.6.0
+        specifier: ^4.0.0
+        version: 4.0.0
       dayjs:
         specifier: ^1.11.10
         version: 1.11.11
@@ -4875,6 +4875,9 @@ packages:
 
   date-fns@3.6.0:
     resolution: {integrity: sha512-fRHTG8g/Gif+kSh50gaGEdToemgfj74aRX3swtiouboip5JDLAyDE9F11nHMIcvOaXeOC6D7SpNhi7uFyB7Uww==}
+
+  date-fns@4.0.0:
+    resolution: {integrity: sha512-6K33+I8fQ5otvHgLIvKK1xmMbLAh0pduyrx7dwMXKiGYeoWhmk6M3Zoak9n7bXHMJQlHq1yqmdGy1QxKddJjUA==}
 
   dateformat@4.6.3:
     resolution: {integrity: sha512-2P0p0pFGzHS5EMnhdxQi7aJN+iMheud0UhG4dlE1DLAlvL8JHjJJTX/CSm4JXwV0Ka5nGk3zC5mcb5bUQUxxMA==}
@@ -14618,6 +14621,8 @@ snapshots:
       is-data-view: 1.0.1
 
   date-fns@3.6.0: {}
+
+  date-fns@4.0.0: {}
 
   dateformat@4.6.3: {}
 
