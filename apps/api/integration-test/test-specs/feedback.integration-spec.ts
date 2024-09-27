@@ -165,7 +165,7 @@ describe('FeedbackController (integration)', () => {
             } else {
               const feedback = await feedbackService.findById({
                 channelId: channel.id,
-                feedbackId: body.id,
+                feedbackId: body.id as number,
               });
 
               ['id', 'createdAt', 'updatedAt', 'issues'].forEach(
