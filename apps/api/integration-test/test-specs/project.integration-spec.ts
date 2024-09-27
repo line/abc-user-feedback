@@ -88,7 +88,7 @@ describe('ProjectController (integration)', () => {
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
 
     await clearAllEntities(module);
-    await opensearchRepository.deleteIndexAll();
+    await opensearchRepository.deleteAllIndexes();
 
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();

@@ -82,7 +82,7 @@ describe('ChannelController (integration)', () => {
     opensearchRepository = module.get(OpensearchRepository);
 
     await clearAllEntities(module);
-    await opensearchRepository.deleteIndexAll();
+    await opensearchRepository.deleteAllIndexes();
 
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();

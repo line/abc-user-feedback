@@ -214,7 +214,7 @@ export class OpensearchRepository {
     await this.opensearchClient.indices.delete({ index: 'channel_' + index });
   }
 
-  async deleteIndexAll() {
+  async deleteAllIndexes() {
     await this.opensearchClient.indices.delete({ index: '_all' });
   }
 

@@ -102,7 +102,7 @@ describe('FeedbackController (integration)', () => {
     osService = module.get<Client>('OPENSEARCH_CLIENT');
     opensearchRepository = module.get(OpensearchRepository);
 
-    await opensearchRepository.deleteIndexAll();
+    await opensearchRepository.deleteAllIndexes();
     await clearAllEntities(module);
 
     await createTenant(tenantService);
