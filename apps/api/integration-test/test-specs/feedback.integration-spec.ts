@@ -15,6 +15,7 @@
  */
 import type { Server } from 'net';
 import type { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
@@ -63,6 +64,7 @@ describe('FeedbackController (integration)', () => {
   let projectService: ProjectService;
   let channelService: ChannelService;
   let feedbackService: FeedbackService;
+  let configService: ConfigService;
 
   let tenantRepo: Repository<TenantEntity>;
   let projectRepo: Repository<ProjectEntity>;
@@ -94,6 +96,7 @@ describe('FeedbackController (integration)', () => {
     projectService = module.get(ProjectService);
     channelService = module.get(ChannelService);
     feedbackService = module.get(FeedbackService);
+    configService = module.get(ConfigService);
 
     tenantRepo = module.get(getRepositoryToken(TenantEntity));
     projectRepo = module.get(getRepositoryToken(ProjectEntity));
@@ -102,8 +105,10 @@ describe('FeedbackController (integration)', () => {
     osService = module.get<Client>('OPENSEARCH_CLIENT');
     opensearchRepository = module.get(OpensearchRepository);
 
-    await opensearchRepository.deleteAllIndexes();
     await clearAllEntities(module);
+    if (configService.get('opensearch.use')) {
+      await opensearchRepository.deleteAllIndexes();
+    }
 
     await createTenant(tenantService);
     project = await createProject(projectService);
@@ -147,15 +152,27 @@ describe('FeedbackController (integration)', () => {
             body: Record<string, any> & { issueNames?: string[] };
           }) => {
             expect(body.id).toBeDefined();
-            const esResult = await osService.get<OpenSearchResponse>({
-              id: body.id as string,
-              index: channel.id.toString(),
-            });
+            if (configService.get('opensearch.use')) {
+              const esResult = await osService.get<OpenSearchResponse>({
+                id: body.id as string,
+                index: channel.id.toString(),
+              });
 
-            ['id', 'createdAt', 'updatedAt'].forEach(
-              (field) => delete esResult.body._source[field],
-            );
-            expect(dto).toMatchObject(esResult.body._source);
+              ['id', 'createdAt', 'updatedAt'].forEach(
+                (field) => delete esResult.body._source[field],
+              );
+              expect(dto).toMatchObject(esResult.body._source);
+            } else {
+              const feedback = await feedbackService.findById({
+                channelId: channel.id,
+                feedbackId: body.id,
+              });
+
+              ['id', 'createdAt', 'updatedAt', 'issues'].forEach(
+                (field) => delete feedback[field],
+              );
+              expect(dto).toMatchObject(feedback);
+            }
           },
         );
     });
@@ -239,17 +256,31 @@ describe('FeedbackController (integration)', () => {
         })
         .expect(200)
         .then(async () => {
-          const esResult = await osService.get<OpenSearchResponse>({
-            id: feedback.id.toString(),
-            index: channel.id.toString(),
-          });
+          if (configService.get('opensearch.use')) {
+            const esResult = await osService.get<OpenSearchResponse>({
+              id: feedback.id.toString(),
+              index: channel.id.toString(),
+            });
 
-          ['id', 'createdAt', 'updatedAt'].forEach(
-            (field) => delete esResult.body._source[field],
-          );
+            ['id', 'createdAt', 'updatedAt'].forEach(
+              (field) => delete esResult.body._source[field],
+            );
 
-          dto.data[availableFieldKey] = 'test';
-          expect(dto.data).toMatchObject(esResult.body._source);
+            dto.data[availableFieldKey] = 'test';
+            expect(dto.data).toMatchObject(esResult.body._source);
+          } else {
+            const updatedFeedback = await feedbackService.findById({
+              channelId: channel.id,
+              feedbackId: feedback.id,
+            });
+
+            ['id', 'createdAt', 'updatedAt', 'issues'].forEach(
+              (field) => delete updatedFeedback[field],
+            );
+
+            dto.data[availableFieldKey] = 'test';
+            expect(dto.data).toMatchObject(updatedFeedback);
+          }
         });
     });
   });

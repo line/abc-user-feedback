@@ -16,6 +16,7 @@
 import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
@@ -43,10 +44,11 @@ describe('IssueController (integration)', () => {
   let app: INestApplication;
 
   let dataSource: DataSource;
-  let authService: AuthService;
 
+  let authService: AuthService;
   let tenantService: TenantService;
   let projectService: ProjectService;
+  let configService: ConfigService;
 
   let opensearchRepository: OpensearchRepository;
 
@@ -66,13 +68,16 @@ describe('IssueController (integration)', () => {
     dataSource = module.get(getDataSourceToken());
 
     authService = module.get(AuthService);
-
     tenantService = module.get(TenantService);
     projectService = module.get(ProjectService);
+    configService = module.get(ConfigService);
+
     opensearchRepository = module.get(OpensearchRepository);
 
     await clearAllEntities(module);
-    await opensearchRepository.deleteAllIndexes();
+    if (configService.get('opensearch.use')) {
+      await opensearchRepository.deleteAllIndexes();
+    }
 
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();

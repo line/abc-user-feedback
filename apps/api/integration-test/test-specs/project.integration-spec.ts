@@ -16,6 +16,7 @@
 import type { Server } from 'net';
 import { faker } from '@faker-js/faker';
 import type { INestApplication } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
@@ -59,6 +60,7 @@ describe('ProjectController (integration)', () => {
   let projectService: ProjectService;
   let channelService: ChannelService;
   let feedbackService: FeedbackService;
+  let configService: ConfigService;
 
   let fieldRepo: Repository<FieldEntity>;
 
@@ -82,13 +84,16 @@ describe('ProjectController (integration)', () => {
     projectService = module.get(ProjectService);
     channelService = module.get(ChannelService);
     feedbackService = module.get(FeedbackService);
+    configService = module.get(ConfigService);
 
     opensearchRepository = module.get(OpensearchRepository);
 
     fieldRepo = module.get(getRepositoryToken(FieldEntity));
 
     await clearAllEntities(module);
-    await opensearchRepository.deleteAllIndexes();
+    if (configService.get('opensearch.use')) {
+      await opensearchRepository.deleteAllIndexes();
+    }
 
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();

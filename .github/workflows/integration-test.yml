@@ -51,7 +51,7 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
-      - name: Setup integration test
+      - name: Setup integration test (with opensearch)
         run: |
           npx corepack enable
           pnpm install --frozen-lockfile
@@ -63,6 +63,14 @@ jobs:
           echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env
           echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env
 
-      - name: Run integration tests
+      - name: Run integration tests (with opensearch)
+        run: |
+          npm run test:integration
+
+      - name: Setup integration test (without opensearch)
+        run: |
+          echo "OPENSEARCH_USE=false" >> ./apps/api/.env
+
+      - name: Run integration tests (without opensearch)
         run: |
           npm run test:integration
