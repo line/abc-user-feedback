@@ -115,7 +115,7 @@ export const getRandomValue = (
     case FieldFormatEnum.keyword:
       return faker.string.sample();
     case FieldFormatEnum.number:
-      return faker.number.int();
+      return faker.number.int({ min: 1, max: 100 });
     case FieldFormatEnum.select:
       return !options || options.length === 0 ?
           []

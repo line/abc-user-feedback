@@ -1,0 +1,76 @@
+name: Integration Tests
+
+on:
+  pull_request:
+    branches: [dev, main]
+
+jobs:
+  integration-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.39
+        env:
+          MYSQL_ROOT_PASSWORD: userfeedback
+          MYSQL_DATABASE: e2e
+          MYSQL_USER: userfeedback
+          MYSQL_PASSWORD: userfeedback
+          TZ: UTC
+        ports:
+          - 13307:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+      smtp:
+        image: rnwood/smtp4dev:v3
+        ports:
+          - 5080:80
+          - 25:25
+          - 143:143
+
+      opensearch:
+        image: opensearchproject/opensearch:2.16.0
+        env:
+          discovery.type: single-node
+          bootstrap.memory_lock: "true"
+          plugins.security.disabled: "true"
+          OPENSEARCH_INITIAL_ADMIN_PASSWORD: "UserFeedback123!@#"
+        options: >-
+          --health-cmd="curl -s http://localhost:9200/_cluster/health | grep -q '\"status\":\"green\"'"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+        ports:
+          - 9200:9200
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Setup integration test (with opensearch)
+        run: |
+          npx corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+          echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env
+          echo "JWT_SECRET=DEV" >> ./apps/api/.env
+          echo "OPENSEARCH_USE=true" >> ./apps/api/.env
+          echo "OPENSEARCH_NODE=http://localhost:9200" >> ./apps/api/.env
+          echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env
+          echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env
+
+      - name: Run integration tests (with opensearch)
+        run: |
+          npm run test:integration
+
+      - name: Setup integration test (without opensearch)
+        run: |
+          echo "OPENSEARCH_USE=false" >> ./apps/api/.env
+
+      - name: Run integration tests (without opensearch)
+        run: |
+          npm run test:integration
