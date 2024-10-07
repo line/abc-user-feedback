@@ -1,6 +1,6 @@
-// https://mswjs.io/docs/faq/#requestresponsetextencoder-is-not-defined-jest
-// https://github.com/mswjs/msw/discussions/1934
-const { TextDecoder, TextEncoder, ReadableStream } = require('node:util');
+// https://github.com/mswjs/msw/issues/1916
+const { TextDecoder, TextEncoder } = require('node:util');
+const { ReadableStream } = require('node:stream/web'); // <--- this did the magic
 
 Object.defineProperties(globalThis, {
   TextDecoder: { value: TextDecoder },
@@ -8,11 +8,15 @@ Object.defineProperties(globalThis, {
   ReadableStream: { value: ReadableStream },
 });
 
-const { fetch, Headers, Request, Response } = require('undici');
+const { Blob, File } = require('node:buffer');
+const { fetch, Response, Request, FormData, Headers } = require('undici');
 
 Object.defineProperties(globalThis, {
   fetch: { value: fetch, writable: true },
+  Blob: { value: Blob },
+  File: { value: File },
   Headers: { value: Headers },
+  FormData: { value: FormData },
   Request: { value: Request },
   Response: { value: Response },
 });
