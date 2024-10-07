@@ -45,7 +45,7 @@ const FieldTable: React.FC<IProps> = (props) => {
     data: fields,
     enableColumnFilters: true,
     getFilteredRowModel: getFilteredRowModel(),
-    getRowId: (_, index) => String(index),
+    getRowId: (row, index) => String(row.id ?? index),
   });
 
   return (

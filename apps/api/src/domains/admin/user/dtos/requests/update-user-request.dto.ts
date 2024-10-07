@@ -20,11 +20,11 @@ import { IsNullable } from '../../decorators';
 import { UserTypeEnum } from '../../entities/enums';
 
 export class UpdateUserRequestDto {
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @IsString()
   name: string | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @IsString()
   @IsNullable()
   department: string | null;

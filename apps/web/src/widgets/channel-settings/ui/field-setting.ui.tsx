@@ -53,10 +53,6 @@ const FieldSetting: React.FC<IProps> = (props) => {
   const [isPreview, setIsPreview] = useState(false);
 
   const [fields, setFields] = useState<FieldInfo[]>([]);
-  console.log(
-    'fields: ',
-    fields.map((field) => field.name),
-  );
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',

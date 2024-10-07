@@ -70,7 +70,6 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        console.log('error.code: ', error.code);
         if (error.code === ErrorCode.Project.ProjectInvalidName) {
           methods.setError('name', { message: t('v2.error.duplicated') });
           return;

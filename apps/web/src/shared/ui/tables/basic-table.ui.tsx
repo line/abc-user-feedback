@@ -88,10 +88,9 @@ const BasicTable = <T,>(props: IProps<T>) => {
       );
     }
   }
-  const dataIds = useMemo(
-    () => table.getRowModel().rows.map((row) => row.id),
-    [table.getRowModel().rows],
-  );
+  const dataIds = useMemo(() => {
+    return table.getRowModel().rows.map((row) => row.id);
+  }, [table.getRowModel().rows]);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),
@@ -133,42 +132,40 @@ const BasicTable = <T,>(props: IProps<T>) => {
           )}
         </TableHeader>
         <TableBody>
-          <SortableContext
-            items={dataIds}
-            strategy={verticalListSortingStrategy}
-          >
-            {table.getRowCount() === 0 ?
-              <TableRow className="hover:bg-inherit">
-                <TableCell colSpan={table.getFlatHeaders().length}>
-                  <div className="my-10 flex flex-col items-center justify-center gap-4">
-                    <Image
-                      width={200}
-                      height={200}
-                      src="/assets/images/empty-image.png"
-                      alt="empty image"
-                    />
-                    <p className="text-small text-neutral-tertiary">
-                      {emptyCaption}
-                    </p>
-                    {createButton}
-                  </div>
-                </TableCell>
-              </TableRow>
-            : table
-                .getRowModel()
-                .rows.map((row) => (
-                  <DraggableRow
-                    key={row.id}
-                    row={row}
-                    onClickRow={
-                      onClickRow ?
-                        () => onClickRow(Number(row.id), row.original)
-                      : undefined
-                    }
+          {table.getRowCount() === 0 ?
+            <TableRow className="hover:bg-inherit">
+              <TableCell colSpan={table.getFlatHeaders().length}>
+                <div className="my-10 flex flex-col items-center justify-center gap-4">
+                  <Image
+                    width={200}
+                    height={200}
+                    src="/assets/images/empty-image.png"
+                    alt="empty image"
                   />
-                ))
-            }
-          </SortableContext>
+                  <p className="text-small text-neutral-tertiary">
+                    {emptyCaption}
+                  </p>
+                  {createButton}
+                </div>
+              </TableCell>
+            </TableRow>
+          : <SortableContext
+              items={dataIds}
+              strategy={verticalListSortingStrategy}
+            >
+              {table.getRowModel().rows.map((row) => (
+                <DraggableRow
+                  key={row.id}
+                  row={row}
+                  onClickRow={
+                    onClickRow ?
+                      () => onClickRow(Number(row.id), row.original)
+                    : undefined
+                  }
+                />
+              ))}
+            </SortableContext>
+          }
         </TableBody>
       </Table>
     </DndContext>

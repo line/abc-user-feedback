@@ -967,7 +967,7 @@ export interface components {
             id: number;
             email: string;
             name: string;
-            department: Record<string, unknown>;
+            department: string | null;
             /** @enum {string} */
             type: "SUPER" | "GENERAL";
             members: components["schemas"]["MemberDto"][];
@@ -1018,7 +1018,7 @@ export interface components {
             id: number;
             email: Record<string, unknown>;
             name: string;
-            department: Record<string, unknown>;
+            department: string | null;
             /** @enum {string} */
             type: "SUPER" | "GENERAL";
             /** @enum {string} */
@@ -1045,8 +1045,8 @@ export interface components {
             roles: components["schemas"]["RoleItemDto"][];
         };
         UpdateUserRequestDto: {
-            name: Record<string, unknown>;
-            department: Record<string, unknown>;
+            name: string | null;
+            department: string | null;
             /** @enum {string} */
             type?: "SUPER" | "GENERAL";
         };
@@ -1082,11 +1082,11 @@ export interface components {
         };
         UpdateTenantRequestDto: {
             siteName: string;
-            description: Record<string, unknown>;
+            description: string | null;
             useEmail: boolean;
             isPrivate: boolean;
             isRestrictDomain: boolean;
-            allowDomains: Record<string, unknown>;
+            allowDomains: string[] | null;
             useOAuth: boolean;
             oauthConfig: components["schemas"]["OAuthConfigRequestDto"] | null;
         };
@@ -1103,7 +1103,7 @@ export interface components {
         GetTenantResponseDto: {
             id: number;
             siteName: string;
-            description: Record<string, unknown>;
+            description: string | null;
             useEmail: boolean;
             useOAuth: boolean;
             isPrivate: boolean;
@@ -1277,7 +1277,7 @@ export interface components {
         };
         UpdateChannelRequestDto: {
             name: string;
-            description: Record<string, unknown>;
+            description: string | null;
             imageConfig?: components["schemas"]["ImageConfigRequestDto"] | null;
         };
         UpdateChannelRequestFieldDto: {
@@ -1319,7 +1319,7 @@ export interface components {
         TimezoneDto: {
             countryCode: string;
             name: string;
-            offset: Record<string, unknown>;
+            offset: string;
         };
         CreateMemberByNameDto: {
             roleName: string;
@@ -1329,15 +1329,15 @@ export interface components {
             value: string;
         };
         IssueTrackerDataDto: {
-            ticketDomain: Record<string, unknown>;
-            ticketKey: Record<string, unknown>;
+            ticketDomain: string | null;
+            ticketKey: string | null;
         };
         CreateIssueTrackerRequestDto: {
             data: components["schemas"]["IssueTrackerDataDto"];
         };
         CreateProjectRequestDto: {
             name: string;
-            description: Record<string, unknown>;
+            description: string | null;
             timezone: components["schemas"]["TimezoneDto"];
             roles?: components["schemas"]["CreateRoleRequestDto"][];
             members?: components["schemas"]["CreateMemberByNameDto"][];
@@ -1369,7 +1369,7 @@ export interface components {
         };
         UpdateProjectRequestDto: {
             name: string;
-            description: Record<string, unknown>;
+            description: string | null;
             timezone: components["schemas"]["TimezoneDto"];
             roles?: components["schemas"]["CreateRoleRequestDto"][];
             members?: components["schemas"]["CreateMemberByNameDto"][];
@@ -1681,7 +1681,7 @@ export interface components {
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE";
             events: components["schemas"]["EventDto"][];
-            token: Record<string, unknown>;
+            token: string | null;
         };
         CreateWebhookResponseDto: {
             id: number;
@@ -1716,7 +1716,7 @@ export interface components {
             /** @enum {string} */
             status: "ACTIVE" | "INACTIVE";
             events: components["schemas"]["EventDto"][];
-            token: Record<string, unknown>;
+            token: string | null;
         };
         UpdateWebhookResponseDto: {
             id: number;

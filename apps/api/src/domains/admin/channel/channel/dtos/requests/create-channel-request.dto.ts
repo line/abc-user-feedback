@@ -60,7 +60,7 @@ export class CreateChannelRequestFieldDto {
   @MinLength(1)
   key: string;
 
-  @ApiProperty({ nullable: true, type: 'string' })
+  @ApiProperty({ nullable: true, type: String })
   @IsNullable()
   @IsString()
   description: string | null;
@@ -77,7 +77,7 @@ export class CreateChannelRequestFieldDto {
   @IsEnum(FieldStatusEnum)
   status: FieldStatusEnum;
 
-  @ApiProperty({ nullable: true, type: 'number' })
+  @ApiProperty({ nullable: true, type: Number })
   @IsOptional()
   @IsNumber()
   order?: number | null;

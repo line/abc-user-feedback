@@ -62,7 +62,7 @@ class GetAllUserResponse {
   name: string;
 
   @Expose()
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   department: string | null;
 
   @Expose()

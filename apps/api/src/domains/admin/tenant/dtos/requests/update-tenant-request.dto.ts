@@ -53,7 +53,7 @@ export class UpdateTenantRequestDto {
   @IsString()
   siteName: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @IsString()
   @IsNullable()
   description: string | null;
@@ -70,7 +70,7 @@ export class UpdateTenantRequestDto {
   @IsBoolean()
   isRestrictDomain: boolean;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: [String] })
   @IsString({ each: true })
   @IsNullable()
   allowDomains: string[] | null;

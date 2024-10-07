@@ -60,7 +60,7 @@ export class GetTenantResponseDto {
   siteName: string;
 
   @Expose()
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   description: string | null;
 
   @Expose()

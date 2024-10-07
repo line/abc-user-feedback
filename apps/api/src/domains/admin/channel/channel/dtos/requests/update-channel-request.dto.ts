@@ -32,7 +32,7 @@ export class UpdateChannelRequestDto {
   @MaxLength(20)
   name: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @IsNullable()
   @IsString()
   @MaxLength(50)
