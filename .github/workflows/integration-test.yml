@@ -33,7 +33,7 @@ jobs:
           - 143:143
 
       opensearch:
-        image: opensearchproject/opensearch:2.17.0
+        image: opensearchproject/opensearch:2.17.1
         env:
           discovery.type: single-node
           bootstrap.memory_lock: "true"
