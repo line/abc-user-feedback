@@ -472,5 +472,93 @@
   "system-popup": {
     "create-project/channel-get-out": "Are you sure you want to exit the creation process for a {{type}}?\nYou can resume this process later.",
     "field-setting-get-out": "You have some field information that has not been saved. You can still leave if you want."
+  },
+  "v2": {
+    "button": {
+      "name": {
+        "create": "Create {{name}}",
+        "delete": "Delete {{name}}",
+        "register": "Register {{name}}",
+        "add": "Add {{name}}"
+      },
+      "create": "Create",
+      "delete": "Delete",
+      "register": "Register",
+      "save": "Save",
+      "cancel": "Cancel",
+      "out": "Exit",
+      "confirm": "Confirm"
+    },
+    "project-setting-menu": {
+      "project-info": "Project Info",
+      "member-mgmt": "Member Management",
+      "role-mgmt": "Role Management",
+      "api-key-mgmt": "API Key Management",
+      "issue-tracker-mgmt": "Issue Tracker Management",
+      "webhook-integration": "Webhook Integration",
+      "delete-project": "Delete Project"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel Info",
+      "field-mgmt": "Field Management",
+      "image-mgmt": "Image Management",
+      "delete-channel": "Delete Channel"
+    },
+    "dialog": {
+      "delete": {
+        "title": "Do you want to delete?",
+        "description": "Deleting will remove all related information."
+      },
+      "warn-if-unsaved-changes": {
+        "title": "Do you want to leave the page?",
+        "description": "Leaving midway will not save your input."
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "No API Key has been created.",
+        "member": "No Member has been registered.",
+        "channel": "No Channel has been created.",
+        "webhook": "No Webhook has been registered."
+      },
+      "create-project": "Create Project",
+      "create-channel": "Create Channel",
+      "name": {
+        "detail": "{{name}} Details",
+        "add": "Add {{name}}",
+        "register": "Register {{name}}"
+      }
+    },
+    "placeholder": {
+      "select": "Please select.",
+      "text": "Please enter.",
+      "text-or-generate": "Please enter or generate."
+    },
+    "toast": {
+      "success": "Processed successfully."
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback Creation",
+        "description": "When feedback is created."
+      },
+      "issue-addition": {
+        "title": "Issue Registration",
+        "description": "When a problem is registered to feedback."
+      },
+      "issue-status-change": {
+        "title": "Issue Status Change",
+        "description": "When the status of a problem changes."
+      },
+      "issue-creation": {
+        "title": "Issue Creation",
+        "description": "When an issue is created."
+      }
+    },
+    "error": {
+      "duplicated": "Duplicate information exists.",
+      "lessThenNcharacters": "Please enter less than {{n}} characters.",
+      "required": "Please enter."
+    }
   }
 }

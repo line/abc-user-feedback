@@ -460,5 +460,93 @@
   "system-popup": {
     "create-project/channel-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
     "field-setting-get-out": "まだ保存されていないフィールド情報があります。 それでも出られますか。"
+  },
+  "v2": {
+    "button": {
+      "name": {
+        "create": "{{name}} 作成",
+        "delete": "{{name}} 削除",
+        "register": "{{name}} 登録",
+        "add": "{{name}} 追加"
+      },
+      "create": "作成する",
+      "delete": "削除",
+      "register": "登録する",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "out": "退出",
+      "confirm": "確認"
+    },
+    "project-setting-menu": {
+      "project-info": "Project 情報",
+      "member-mgmt": "Member 管理",
+      "role-mgmt": "Role 管理",
+      "api-key-mgmt": "API Key 管理",
+      "issue-tracker-mgmt": "Issue Tracker 管理",
+      "webhook-integration": "Webhook 連携",
+      "delete-project": "Project 削除"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel 情報",
+      "field-mgmt": "Field 管理",
+      "image-mgmt": "Image 管理",
+      "delete-channel": "Channel 削除"
+    },
+    "dialog": {
+      "delete": {
+        "title": "削除しますか？",
+        "description": "削除すると関連情報がすべて消去されます。"
+      },
+      "warn-if-unsaved-changes": {
+        "title": "ページを離れますか？",
+        "description": "途中で離れると入力内容は保存されません。"
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "作成された API Key がありません。",
+        "member": "登録された Member がありません。",
+        "channel": "作成された Channel がありません。",
+        "webhook": "登録された Webhook がありません。"
+      },
+      "create-project": "Project 作成",
+      "create-channel": "Channel 作成",
+      "name": {
+        "detail": "{{name}} 詳細",
+        "add": "{{name}} 追加",
+        "register": "{{name}} 登録"
+      }
+    },
+    "placeholder": {
+      "select": "選択してください。",
+      "text": "入力してください。",
+      "text-or-generate": "入力または生成してください。"
+    },
+    "toast": {
+      "success": "正常に処理されました。"
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback 作成",
+        "description": "Feedback が作成されたとき。"
+      },
+      "issue-addition": {
+        "title": "Issue 登録",
+        "description": "問題が Feedback に登録された場合。"
+      },
+      "issue-status-change": {
+        "title": "Issue 状態変更",
+        "description": "Issue の状態が変更された場合。"
+      },
+      "issue-creation": {
+        "title": "Issue 作成",
+        "description": "Issue が作成されたとき。"
+      }
+    },
+    "error": {
+      "duplicated": "重複する情報が存在します。",
+      "lessThenNcharacters": "{{n}}文字以下で入力してください。",
+      "required": "入力してください。"
+    }
   }
 }

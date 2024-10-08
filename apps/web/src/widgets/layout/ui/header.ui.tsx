@@ -101,7 +101,7 @@ const Header: React.FC<IProps> = ({ projectId }) => {
               ?.filter((v) => v !== 'default')
               .map((v) => (
                 <DropdownItem key={v} onClick={() => onChangeLanguage(v)}>
-                  {v}
+                  {v.toLocaleUpperCase()}
                 </DropdownItem>
               ))}
           </DropdownContent>

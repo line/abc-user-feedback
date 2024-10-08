@@ -472,5 +472,93 @@
   "system-popup": {
     "create-project/channel-get-out": "您确定要退出{{type}}的创建过程吗？\n您可以稍后继续此过程。",
     "field-setting-get-out": "还有未保存的字段信息。 你还是要出去吗。"
+  },
+  "v2": {
+    "button": {
+      "name": {
+        "create": "{{name}} 创建",
+        "delete": "{{name}} 删除",
+        "register": "{{name}} 注册",
+        "add": "{{name}} 添加"
+      },
+      "create": "创建",
+      "delete": "删除",
+      "register": "注册",
+      "save": "保存",
+      "cancel": "取消",
+      "out": "退出",
+      "confirm": "确认"
+    },
+    "project-setting-menu": {
+      "project-info": "Project 信息",
+      "member-mgmt": "Member 管理",
+      "role-mgmt": "Role 管理",
+      "api-key-mgmt": "API Key 管理",
+      "issue-tracker-mgmt": "Issue Tracker 管理",
+      "webhook-integration": "Webhook 集成",
+      "delete-project": "Project 删除"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel 信息",
+      "field-mgmt": "Field 管理",
+      "image-mgmt": "Image 管理",
+      "delete-channel": "Channel 删除"
+    },
+    "dialog": {
+      "delete": {
+        "title": "确定要删除吗？",
+        "description": "删除后，相关信息将全部消失。"
+      },
+      "warn-if-unsaved-changes": {
+        "title": "确定要离开页面吗？",
+        "description": "中途离开将不会保存输入的内容。"
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "没有创建的 API Key。",
+        "member": "没有注册的 Member。",
+        "channel": "没有创建的 Channel。",
+        "webhook": "没有注册的 Webhook。"
+      },
+      "create-project": "创建 Project",
+      "create-channel": "创建 Channel",
+      "name": {
+        "detail": "{{name}} 详情",
+        "add": "{{name}} 添加",
+        "register": "{{name}} 注册"
+      }
+    },
+    "placeholder": {
+      "select": "请选择。",
+      "text": "请输入。",
+      "text-or-generate": "请输入或生成。"
+    },
+    "toast": {
+      "success": "处理成功。"
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback 创建",
+        "description": "当 Feedback 被创建时。"
+      },
+      "issue-addition": {
+        "title": "Issue 注册",
+        "description": "当问题被注册到 Feedback 时。"
+      },
+      "issue-status-change": {
+        "title": "Issue 状态更改",
+        "description": "当 Issue 的状态更改时。"
+      },
+      "issue-creation": {
+        "title": "Issue 创建",
+        "description": "当 Issue 被创建时。"
+      }
+    },
+    "error": {
+      "duplicated": "存在重复的信息。",
+      "lessThenNcharacters": "请输入少于 {{n}} 个字符。",
+      "required": "请输入。"
+    }
   }
 }

@@ -532,20 +532,20 @@
     },
     "webhook-card": {
       "feedback-creation": {
-        "title": "피드백 생성",
-        "description": "피드백이 생성되면."
+        "title": "Feedback 생성",
+        "description": "Feedback이 생성되면."
       },
       "issue-addition": {
-        "title": "이슈 등록",
-        "description": "문제가 피드백에 등록된 경우."
+        "title": "Issue 등록",
+        "description": "문제가 Feedback에 등록된 경우."
       },
       "issue-status-change": {
-        "title": "이슈 상태 변경",
-        "description": "문제의 상태가 변경되는 경우."
+        "title": "Issue 상태 변경",
+        "description": "Issue의 상태가 변경되는 경우."
       },
       "issue-creation": {
-        "title": "이슈 생성",
-        "description": "이슈가 생성될 때."
+        "title": "Issue 생성",
+        "description": "Issue가 생성될 때."
       }
     },
     "error": {

@@ -472,5 +472,93 @@
   "system-popup": {
     "create-project/channel-get-out": "Sind Sie sicher, dass Sie den Erstellungsprozess für einen {{type}} verlassen möchten?\nSie können diesen Prozess später fortsetzen.",
     "field-setting-get-out": "Bitte beachten Sie, dass die Feldinformationen noch nicht gespeichert sind. Trotzdem würden Sie rausgehen."
+  },
+  "v2": {
+    "button": {
+      "name": {
+        "create": "{{name}} erstellen",
+        "delete": "{{name}} löschen",
+        "register": "{{name}} registrieren",
+        "add": "{{name}} hinzufügen"
+      },
+      "create": "Erstellen",
+      "delete": "Löschen",
+      "register": "Registrieren",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "out": "Verlassen",
+      "confirm": "Bestätigen"
+    },
+    "project-setting-menu": {
+      "project-info": "Project Informationen",
+      "member-mgmt": "Member Verwaltung",
+      "role-mgmt": "Role Verwaltung",
+      "api-key-mgmt": "API Key Verwaltung",
+      "issue-tracker-mgmt": "Issue Tracker Verwaltung",
+      "webhook-integration": "Webhook Integration",
+      "delete-project": "Project löschen"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel Informationen",
+      "field-mgmt": "Field Verwaltung",
+      "image-mgmt": "Image Verwaltung",
+      "delete-channel": "Channel löschen"
+    },
+    "dialog": {
+      "delete": {
+        "title": "Möchten Sie löschen?",
+        "description": "Beim Löschen gehen alle zugehörigen Informationen verloren."
+      },
+      "warn-if-unsaved-changes": {
+        "title": "Möchten Sie die Seite verlassen?",
+        "description": "Wenn Sie die Seite verlassen, werden die eingegebenen Daten nicht gespeichert."
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "Kein API Key wurde erstellt.",
+        "member": "Kein Member wurde registriert.",
+        "channel": "Kein Channel wurde erstellt.",
+        "webhook": "Kein Webhook wurde registriert."
+      },
+      "create-project": "Project erstellen",
+      "create-channel": "Channel erstellen",
+      "name": {
+        "detail": "{{name}} Details",
+        "add": "{{name}} hinzufügen",
+        "register": "{{name}} registrieren"
+      }
+    },
+    "placeholder": {
+      "select": "Bitte auswählen.",
+      "text": "Bitte eingeben.",
+      "text-or-generate": "Bitte eingeben oder generieren."
+    },
+    "toast": {
+      "success": "Erfolgreich verarbeitet."
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback Erstellung",
+        "description": "Wenn Feedback erstellt wird."
+      },
+      "issue-addition": {
+        "title": "Issue Registrierung",
+        "description": "Wenn ein Problem zum Feedback hinzugefügt wird."
+      },
+      "issue-status-change": {
+        "title": "Issue Statusänderung",
+        "description": "Wenn sich der Status eines Issues ändert."
+      },
+      "issue-creation": {
+        "title": "Issue Erstellung",
+        "description": "Wenn ein Issue erstellt wird."
+      }
+    },
+    "error": {
+      "duplicated": "Doppelte Informationen vorhanden.",
+      "lessThenNcharacters": "Bitte weniger als {{n}} Zeichen eingeben.",
+      "required": "Bitte eingeben."
+    }
   }
 }
