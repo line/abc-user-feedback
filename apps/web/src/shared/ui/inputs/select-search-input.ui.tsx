@@ -31,7 +31,7 @@ import {
 
 interface Props {
   label?: string;
-  value?: string;
+  value?: string | null;
   onChange: (value: string) => void;
   options: { label: string; value: string }[];
   required?: boolean;

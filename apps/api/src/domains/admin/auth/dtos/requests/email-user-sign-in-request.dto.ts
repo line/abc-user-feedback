@@ -19,7 +19,7 @@ import { IsEmail } from 'class-validator';
 import { IsPassword } from '@/common/decorators/is-password';
 
 export class EmailUserSignInRequestDto {
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   @IsEmail()
   email: string | null;
 

@@ -929,7 +929,7 @@ export interface components {
             roleName: string;
         };
         EmailUserSignInRequestDto: {
-            email: Record<string, unknown>;
+            email: string | null;
             password: string;
         };
         SignInResponseDto: {
@@ -1016,7 +1016,7 @@ export interface components {
         };
         UserDto: {
             id: number;
-            email: Record<string, unknown>;
+            email: string | null;
             name: string;
             department: string | null;
             /** @enum {string} */
@@ -1028,7 +1028,7 @@ export interface components {
             id: number;
             createdAt: string;
             updatedAt: string;
-            deletedAt: Record<string, unknown>;
+            deletedAt: string | null;
             name: string;
             description: string;
         };
@@ -1108,7 +1108,7 @@ export interface components {
             useOAuth: boolean;
             isPrivate: boolean;
             isRestrictDomain: boolean;
-            allowDomains: Record<string, unknown>;
+            allowDomains: string[] | null;
             useEmailVerification: boolean;
             oauthConfig: components["schemas"]["OAuthConfigResponseDto"] | null;
         };
@@ -1212,7 +1212,7 @@ export interface components {
         };
         CreateChannelRequestDto: {
             name: string;
-            description: Record<string, unknown>;
+            description: string | null;
             imageConfig?: components["schemas"]["ImageConfigRequestDto"] | null;
             fields: components["schemas"]["CreateChannelRequestFieldDto"][];
         };
@@ -1578,7 +1578,7 @@ export interface components {
              * @description Issue description
              * @example This is a payment issue
              */
-            description: Record<string, unknown>;
+            description: string | null;
             /**
              * @description Issue status
              * @example IN_PROGRESS

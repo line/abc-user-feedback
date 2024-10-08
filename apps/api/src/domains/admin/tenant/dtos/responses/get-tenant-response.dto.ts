@@ -80,7 +80,7 @@ export class GetTenantResponseDto {
   isRestrictDomain: boolean;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: [String] })
   allowDomains: string[] | null;
 
   @Expose()

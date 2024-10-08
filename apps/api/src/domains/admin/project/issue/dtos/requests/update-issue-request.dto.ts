@@ -22,6 +22,7 @@ import { CreateIssueRequestDto } from './create-issue-request.dto';
 
 export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   @ApiProperty({
+    type: String,
     nullable: true,
     description: 'Issue description',
     example: 'This is a payment issue',

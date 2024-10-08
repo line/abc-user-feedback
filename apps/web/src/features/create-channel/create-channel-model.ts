@@ -34,6 +34,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     name: 'ID',
     key: 'id',
     description: '',
+    order: 0,
   },
   {
     format: 'date',
@@ -42,6 +43,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     name: 'Created',
     key: 'createdAt',
     description: '',
+    order: 1,
   },
   {
     format: 'date',
@@ -50,6 +52,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     name: 'Updated',
     key: 'updatedAt',
     description: '',
+    order: 2,
   },
   {
     format: 'multiSelect',
@@ -59,6 +62,7 @@ const DEFAULT_FIELDS: FieldInfo[] = [
     key: 'issues',
     description: '',
     options: [],
+    order: 3,
   },
 ];
 

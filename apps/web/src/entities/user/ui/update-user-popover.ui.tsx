@@ -93,7 +93,7 @@ const UpdateUserPopover: React.FC<IProps> = (props) => {
         </PopoverHeading>
         <form className="m-5 w-[400px]" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-3">
-            <TextInput label="Email" value={user.email} disabled />
+            <TextInput label="Email" value={user.email ?? ''} disabled />
             <div>
               <label className="input-label mb-2">Type</label>
               <SelectBox

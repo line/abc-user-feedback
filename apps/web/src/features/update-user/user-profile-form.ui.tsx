@@ -75,7 +75,7 @@ const UserProfileForm: React.FC<IProps> = (props) => {
         className="flex flex-col gap-6"
         onSubmit={handleSubmit((data) => mutate(data))}
       >
-        <TextInput label="Email" value={user.email} disabled />
+        <TextInput label="Email" value={user.email ?? ''} disabled />
         <TextInput
           label={t('main.profile.label.user-type')}
           value={user.type}
