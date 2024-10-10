@@ -283,6 +283,65 @@ describe('FeedbackController (integration)', () => {
           }
         });
     });
+
+    it('should update a feedback with special character', async () => {
+      const dto: CreateFeedbackDto = {
+        channelId: channel.id,
+        data: {},
+      };
+      let availableFieldKey = '';
+      fields
+        .filter(
+          ({ key }) =>
+            key !== 'id' &&
+            key !== 'issues' &&
+            key !== 'createdAt' &&
+            key !== 'updatedAt',
+        )
+        .forEach(({ key, format, options }) => {
+          dto.data[key] = getRandomValue(format, options);
+          availableFieldKey = key;
+        });
+
+      const feedback = await feedbackService.create(dto);
+
+      return request(app.getHttpServer() as Server)
+        .put(
+          `/admin/projects/${project.id}/channels/${channel.id}/feedbacks/${feedback.id}`,
+        )
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send({
+          [availableFieldKey]: '?',
+        })
+        .expect(200)
+        .then(async () => {
+          if (configService.get('opensearch.use')) {
+            const esResult = await osService.get<OpenSearchResponse>({
+              id: feedback.id.toString(),
+              index: channel.id.toString(),
+            });
+
+            ['id', 'createdAt', 'updatedAt'].forEach(
+              (field) => delete esResult.body._source[field],
+            );
+
+            dto.data[availableFieldKey] = '?';
+            expect(dto.data).toMatchObject(esResult.body._source);
+          } else {
+            const updatedFeedback = await feedbackService.findById({
+              channelId: channel.id,
+              feedbackId: feedback.id,
+            });
+
+            ['id', 'createdAt', 'updatedAt', 'issues'].forEach(
+              (field) => delete updatedFeedback[field],
+            );
+
+            dto.data[availableFieldKey] = '?';
+            expect(dto.data).toMatchObject(updatedFeedback);
+          }
+        });
+    });
   });
 
   afterAll(async () => {
