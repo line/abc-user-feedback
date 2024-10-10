@@ -185,7 +185,17 @@ export class FeedbackStatisticsService {
         });
       }
     });
-    this.schedulerRegistry.addCronJob(`feedback-statistics-${projectId}`, job);
+
+    const name = `feedback-statistics-${projectId}`;
+    const cronJobs = this.schedulerRegistry.getCronJobs();
+    if (cronJobs.has(name)) {
+      this.logger.warn(
+        `Cron job with name ${name} already exists. Skipping addition.`,
+      );
+      return;
+    }
+
+    this.schedulerRegistry.addCronJob(name, job);
     job.start();
 
     this.logger.log(`feedback-statistics-${projectId} cron job started`);

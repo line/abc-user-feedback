@@ -1,0 +1,18 @@
+{
+  "displayName": "api-integration",
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "^@/(.*)$": ["<rootDir>/../src/$1"]
+  },
+  "testRegex": ".integration-spec.ts$",
+  "transform": {
+    "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "setupFilesAfterEnv": [
+    "<rootDir>/../integration-test/jest-integration.setup.ts"
+  ],
+  "globalSetup": "<rootDir>/../integration-test/global.setup.ts",
+  "globalTeardown": "<rootDir>/../integration-test/global.teardown.ts"
+}

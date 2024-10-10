@@ -50,6 +50,11 @@ export class FieldMySQLService {
     if (!validateUnique(fields, 'key')) {
       throw new FieldKeyDuplicatedException();
     }
+    fields.forEach(({ name }) => {
+      if (/^[a-z0-9_-]+$/i.test(name) === false) {
+        throw new BadRequestException('field name should be alphanumeric');
+      }
+    });
     fields.forEach(({ format, options }) => {
       if (!this.isValidField(format, options ?? [])) {
         throw new BadRequestException('only select format field has options');

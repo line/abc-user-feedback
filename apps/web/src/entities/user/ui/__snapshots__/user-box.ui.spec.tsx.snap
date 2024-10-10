@@ -73,6 +73,7 @@ exports[`UserBox snapshot when open 1`] = `
     </button>
     <div
       class="bg-primary border-fill-secondary rounded border shadow-sm w-full"
+      data-floating-ui-focusable=""
       id=":r4:"
       role="dialog"
       style="position: absolute; left: 0px; top: 0px; z-index: 50; transform: translate(6px, 6px);"
