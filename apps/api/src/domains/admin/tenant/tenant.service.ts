@@ -122,7 +122,7 @@ export class TenantService {
           },
         },
         page: 1,
-        limit: 1000,
+        limit: 100000,
       });
       console.log(feedbacks);
 
@@ -152,7 +152,7 @@ export class TenantService {
     const job = new CronJob(`0 * * * * *`, async () => {
       if (
         await this.schedulerLockService.acquireLock(
-          LockTypeEnum.FEEDBACK_COUNT,
+          LockTypeEnum.FEEDBACK_DELETE,
           1000 * 60 * 5,
         )
       ) {
@@ -160,7 +160,7 @@ export class TenantService {
           await this.deleteOldFeedback();
         } finally {
           await this.schedulerLockService.releaseLock(
-            LockTypeEnum.FEEDBACK_COUNT,
+            LockTypeEnum.FEEDBACK_DELETE,
           );
         }
       } else {
