@@ -19,13 +19,10 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
-import type { ProjectInfo } from '@/entities/project';
-import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
 
 import { getMemberColumns } from '../member-columns';
@@ -62,7 +59,6 @@ const MemberTable: React.FC<IProps> = (props) => {
       isLoading={isLoading}
       emptyCaption={t('v2.text.no-data.member')}
       createButton={createButton}
-      className={data.length === 0 ? 'h-full' : ''}
       onClickRow={onClickRow}
     />
   );

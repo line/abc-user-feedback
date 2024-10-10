@@ -17,6 +17,8 @@ import { useMemo } from 'react';
 import { getCountry } from 'countries-and-timezones';
 
 import {
+  InputField,
+  InputLabel,
   Select,
   SelectContent,
   SelectItem,
@@ -56,25 +58,30 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
   const options = useMemo(() => getTimezoneOptions(), []);
 
   return (
-    <Select
-      value={getSelectValue(value)}
-      onValueChange={(v) => onChange?.(getTimezonValue(v))}
-      disabled={disabled}
-    >
-      <SelectTrigger>
-        <SelectValue />
-      </SelectTrigger>
-      <SelectContent maxHeight="360px">
-        {options.map((option) => (
-          <SelectItem
-            key={getSelectValue(option)}
-            value={getSelectValue(option)}
-          >
-            {getLabel(option)}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <InputField>
+      <InputLabel>
+        Time Zone <span className="text-tint-red">*</span>
+      </InputLabel>
+      <Select
+        value={getSelectValue(value)}
+        onValueChange={(v) => onChange?.(getTimezonValue(v))}
+        disabled={disabled}
+      >
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent maxHeight="360px">
+          {options.map((option) => (
+            <SelectItem
+              key={getSelectValue(option)}
+              value={getSelectValue(option)}
+            >
+              {getLabel(option)}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </InputField>
   );
 };
 

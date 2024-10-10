@@ -58,24 +58,25 @@ export const getMemberColumns = (users: User[]) => [
     enableSorting: false,
     cell: ({ getValue }) => {
       const name = getValue();
-      return name ?
+      return (
+        name && (
           <>
             <Avatar name={name} />
             {name}
           </>
-        : '-';
+        )
+      );
     },
   }),
   columnHelper.accessor('user.department', {
     header: 'Department',
     enableSorting: false,
     cell: ({ getValue }) =>
-      getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
+      getValue() && <Badge variant="subtle">{getValue()}</Badge>,
   }),
   columnHelper.accessor('role.name', {
     header: 'Role',
-    cell: ({ getValue }) =>
-      getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
+    cell: ({ getValue }) => <Badge variant="subtle">{getValue()}</Badge>,
     enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {

@@ -64,33 +64,41 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         {currentMenu === 'project' && (
           <ProjectInfoSetting projectId={projectId} />
         )}
-        {currentMenu === 'member' && !currentSubMenu && (
-          <MemberSetting projectId={projectId} />
-        )}
-        {currentMenu === 'member' && currentSubMenu === 'role' && (
-          <RoleSetting projectId={projectId} />
+        {currentMenu === 'member' && (
+          <>
+            {currentSubMenu !== 'role' && (
+              <MemberSetting projectId={projectId} />
+            )}
+            {currentSubMenu === 'role' && <RoleSetting projectId={projectId} />}
+          </>
         )}
         {currentMenu === 'api-key' && <ApiKeySetting projectId={projectId} />}
         {currentMenu === 'issue-tracker' && (
           <IssueTrackerSetting projectId={projectId} />
         )}
         {currentMenu === 'webhook' && <WebhookSetting projectId={projectId} />}
-        {currentChannelId && currentMenu === 'channel-info' && (
-          <ChannelInfoSetting
-            projectId={projectId}
-            channelId={currentChannelId}
-          />
-        )}
-        {currentChannelId &&
-          currentMenu === 'field-mgmt' &&
-          !currentSubMenu && (
-            <FieldSetting projectId={projectId} channelId={currentChannelId} />
-          )}
-        {currentChannelId && currentMenu === 'image-mgmt' && (
-          <ImageConfigSetting
-            projectId={projectId}
-            channelId={currentChannelId}
-          />
+
+        {currentChannelId && (
+          <>
+            {currentMenu === 'channel-info' && (
+              <ChannelInfoSetting
+                projectId={projectId}
+                channelId={currentChannelId}
+              />
+            )}
+            {currentMenu === 'field-mgmt' && !currentSubMenu && (
+              <FieldSetting
+                projectId={projectId}
+                channelId={currentChannelId}
+              />
+            )}
+            {currentMenu === 'image-mgmt' && (
+              <ImageConfigSetting
+                projectId={projectId}
+                channelId={currentChannelId}
+              />
+            )}
+          </>
         )}
       </ScrollArea>
     </div>

@@ -59,25 +59,6 @@ const RoleSetting: React.FC<IProps> = (props) => {
         await refetch();
         toast.success(t('v2.toast.success'));
       },
-      onError(error) {
-        toast.error(error.message);
-      },
-    },
-  });
-
-  const { mutateAsync: deleteRole } = useMutation({
-    mutationFn: async (input: { roleId: number }) => {
-      return client.delete({
-        path: '/api/admin/projects/{projectId}/roles/{roleId}',
-        pathParams: { projectId, roleId: input.roleId },
-      });
-    },
-    async onSuccess() {
-      await refetch();
-      toast.success(t('v2.toast.success'));
-    },
-    onError(error) {
-      toast.error(error.message);
     },
   });
 
@@ -101,10 +82,21 @@ const RoleSetting: React.FC<IProps> = (props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
-    onError(error) {
-      toast.error(error.message);
+  });
+
+  const { mutateAsync: deleteRole } = useMutation({
+    mutationFn: async (input: { roleId: number }) => {
+      return client.delete({
+        path: '/api/admin/projects/{projectId}/roles/{roleId}',
+        pathParams: { projectId, roleId: input.roleId },
+      });
+    },
+    async onSuccess() {
+      await refetch();
+      toast.success(t('v2.toast.success'));
     },
   });
+
   const openCreateRoleSheet = () => {
     overlay.open(({ isOpen, close }) => (
       <RoleFormSheet

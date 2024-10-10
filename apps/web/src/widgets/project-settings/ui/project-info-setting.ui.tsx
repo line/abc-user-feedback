@@ -91,9 +91,6 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         toast.success(t('v2.toast.success'));
         await router.push(Path.MAIN);
       },
-      onError(error) {
-        toast.error(error.message);
-      },
     },
   });
 
@@ -110,10 +107,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
       <DeleteDialog
         close={close}
         isOpen={isOpen}
-        onClickDelete={async () => {
-          await deleteProject(undefined);
-          close();
-        }}
+        onClickDelete={() => deleteProject(undefined)}
       />
     ));
   };
@@ -135,10 +129,9 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
             form="form"
             type="submit"
             disabled={
-              !perms.includes('project_update') ||
-              !methods.formState.isDirty ||
-              isPending
+              !perms.includes('project_update') || !methods.formState.isDirty
             }
+            loading={isPending}
           >
             {t('v2.button.save')}
           </Button>

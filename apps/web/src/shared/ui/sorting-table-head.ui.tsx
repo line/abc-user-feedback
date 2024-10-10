@@ -36,7 +36,8 @@ const SortingTableHead = <T,>({ column, children }: Props<T>) => {
           variant="ghost"
           size="small"
           iconR="RiArrowUpDownFill"
-          className="font-normal text-[var(--table-text-header)]"
+          className="!min-w-0 font-normal text-[var(--table-text-header)]"
+          data-state="open"
         >
           {children}
         </Button>

@@ -21,7 +21,7 @@ export class RoleNotFoundException extends NotFoundException {
   constructor() {
     super({
       code: ErrorCode.Role.RoleNotFound,
-      message: 'role is not found',
+      message: 'Role is not found',
     });
   }
 }

@@ -67,9 +67,6 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         });
         toast.success(t('v2.toast.success'));
       },
-      onError(error) {
-        toast.error(error.message);
-      },
     },
   });
   const { mutateAsync: deleteChannel } = useOAIMutation({
@@ -84,9 +81,6 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         });
         toast.success(t('v2.toast.success'));
         await router.push({ pathname: Path.SETTINGS, query: { projectId } });
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });

@@ -80,7 +80,6 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
       table={table}
       emptyCaption={t('v2.text.no-data.api-key')}
       createButton={createButton}
-      className={apiKeys.length === 0 ? 'h-full' : ''}
       onClickRow={(_, row) => openApiKeyDialog(row)}
     />
   );

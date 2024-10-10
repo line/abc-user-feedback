@@ -67,7 +67,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog onOpenChange={close} open={isOpen} modal>
-      <DialogContent>
+      <DialogContent radius="large">
         <DialogTitle>
           {data ?
             t('v2.text.name.detail', { name: 'Member' })
@@ -131,7 +131,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           </DialogClose>
           <Button
             type="submit"
-            disabled={updateDisabled}
+            disabled={updateDisabled || !user || !role}
             onClick={async () => {
               if (!user || !role) return;
               await onSubmit({ user, role });

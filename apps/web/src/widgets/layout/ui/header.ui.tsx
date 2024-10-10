@@ -16,6 +16,7 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
+import { i18n } from 'next-i18next';
 import { useTranslation } from 'react-i18next';
 
 import {

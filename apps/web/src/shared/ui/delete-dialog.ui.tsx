@@ -41,7 +41,7 @@ const DeleteDialog: React.FC<IProps> = (props) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
-      <DialogContent>
+      <DialogContent radius="large">
         <DialogHeader>
           <DialogIcon name="RiErrorWarningFill" variant="error" />
           <DialogTitle>{t('v2.dialog.delete.title')}</DialogTitle>
@@ -57,6 +57,7 @@ const DeleteDialog: React.FC<IProps> = (props) => {
             onClick={async () => {
               setLoading(true);
               await onClickDelete();
+              close();
               setLoading(false);
             }}
             loading={loading}

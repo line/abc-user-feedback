@@ -41,7 +41,7 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={close}>
-      <DialogContent>
+      <DialogContent radius="large">
         <DialogTitle>
           {t('v2.text.name.detail', { name: 'API Key' })}
         </DialogTitle>

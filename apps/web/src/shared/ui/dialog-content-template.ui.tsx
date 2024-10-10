@@ -31,7 +31,7 @@ interface Props extends React.PropsWithChildren {
 const DialogContentTemplate: React.FC<Props> = (props) => {
   const { description, title, children } = props;
   return (
-    <DialogContent>
+    <DialogContent radius="large">
       <DialogHeader>
         <DialogTitle>{title}</DialogTitle>
         <DialogDescription>{description}</DialogDescription>

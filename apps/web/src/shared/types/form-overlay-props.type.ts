@@ -14,12 +14,12 @@
  * under the License.
  */
 
-export interface FormOverlayProps<T> {
+export interface FormOverlayProps<T = unknown> {
   isOpen: boolean;
   close: () => void;
   data?: T;
-  onSubmit: (data: T) => Promise<void> | void;
-  onClickDelete?: () => Promise<void> | void;
+  onSubmit: (data: T) => Promise<unknown>;
+  onClickDelete?: () => Promise<unknown>;
   updateDisabled?: boolean;
   deleteDisabled?: boolean;
 }

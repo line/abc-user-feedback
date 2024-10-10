@@ -24,7 +24,7 @@ interface Props extends React.PropsWithChildren {
 const SettingTemplate: React.FC<Props> = (props) => {
   const { title, action, children, onClickBack } = props;
   return (
-    <div className="relative flex h-full flex-col gap-4">
+    <div className="flex flex-col gap-4">
       <div className="flex min-h-10 items-center justify-between">
         <h4 className="text-title-h4 flex-1">
           {onClickBack && (

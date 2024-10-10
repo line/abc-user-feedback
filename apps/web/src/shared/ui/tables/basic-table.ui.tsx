@@ -105,7 +105,12 @@ const BasicTable = <T,>(props: IProps<T>) => {
       sensors={sensors}
       onDragEnd={handleDragEnd}
     >
-      <Table className={cn(className, 'rounded border')}>
+      <Table
+        className={cn(
+          className,
+          'border-separate border-spacing-0 rounded border',
+        )}
+      >
         <TableHeader>
           <TableRow>
             {table.getFlatHeaders().map((header, i) => (

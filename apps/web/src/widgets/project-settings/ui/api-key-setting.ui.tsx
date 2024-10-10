@@ -56,9 +56,6 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
-    onError(error) {
-      toast.error(error.message);
-    },
   });
 
   const { mutateAsync: recover } = useMutation({
@@ -71,9 +68,6 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
-    },
-    onError(error) {
-      toast.error(error.message);
     },
   });
 
@@ -91,9 +85,6 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       });
       toast.success(t('v2.toast.success'));
     },
-    onError(error) {
-      toast.error(error.message);
-    },
   });
   const { mutateAsync: createApiKey, isPending } = useOAIMutation({
     method: 'post',
@@ -103,9 +94,6 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       onSuccess: async () => {
         await refetch();
         toast.success(t('v2.toast.success'));
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });

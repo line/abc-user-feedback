@@ -43,16 +43,12 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const overlay = useOverlay();
   const router = useRouter();
 
-  const {
-    data: memberData,
-    refetch,
-    isPending,
-  } = useOAIQuery({
+  const { data, refetch, isPending } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/members',
     variables: { projectId, createdAt: 'ASC' },
   });
 
-  const { mutate: createMember } = useOAIMutation({
+  const { mutateAsync: createMember } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/members',
     pathParams: { projectId },
@@ -60,9 +56,6 @@ const MemberSetting: React.FC<IProps> = (props) => {
       async onSuccess() {
         await refetch();
         toast.success(t('v2.toast.success'));
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });
@@ -87,10 +80,8 @@ const MemberSetting: React.FC<IProps> = (props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
-    onError(error) {
-      toast.error(error.message);
-    },
   });
+
   const { mutateAsync: updateMember } = useMutation({
     mutationFn: (input: { memberId: number; roleId: number }) =>
       client.put({
@@ -105,18 +96,15 @@ const MemberSetting: React.FC<IProps> = (props) => {
       });
       toast.success(t('v2.toast.success'));
     },
-    onError(error) {
-      toast.error(error.message);
-    },
   });
 
-  const openCreateMemberDialog = () => {
+  const openCreateMemberFormDialog = () => {
     if (!rolesData || !projectData) return;
     overlay.open(({ isOpen, close }) => (
       <MemberFormDialog
-        members={memberData?.members ?? []}
+        members={data?.members ?? []}
         onSubmit={({ role, user }) =>
-          createMember({ userId: user.id, roleId: role.id })
+          createMember({ roleId: role.id, userId: user.id })
         }
         project={projectData}
         roles={rolesData.roles}
@@ -132,15 +120,13 @@ const MemberSetting: React.FC<IProps> = (props) => {
         close={close}
         isOpen={isOpen}
         data={member}
-        onSubmit={async (newMember) => {
-          await updateMember({ memberId: id, roleId: newMember.role.id });
-        }}
-        onClickDelete={async () => {
-          await deleteMember({ memberId: id });
-        }}
+        onSubmit={(newMember) =>
+          updateMember({ memberId: id, roleId: newMember.role.id })
+        }
+        onClickDelete={() => deleteMember({ memberId: id })}
         project={projectData}
         roles={rolesData.roles}
-        members={memberData?.members ?? []}
+        members={data?.members ?? []}
         deleteDisabled={!perms.includes('project_member_delete')}
         updateDisabled={!perms.includes('project_member_update')}
       />
@@ -166,7 +152,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
           </Button>
           <Button
             disabled={!perms.includes('project_member_create')}
-            onClick={openCreateMemberDialog}
+            onClick={openCreateMemberFormDialog}
           >
             {t('v2.button.name.register', { name: 'Member' })}
           </Button>
@@ -175,12 +161,12 @@ const MemberSetting: React.FC<IProps> = (props) => {
     >
       <MemberTable
         isLoading={isPending}
-        data={memberData?.members ?? []}
+        data={data?.members ?? []}
         onClickRow={openUpdateMemberFormDialog}
         createButton={
           <Button
             disabled={!perms.includes('project_member_create')}
-            onClick={openCreateMemberDialog}
+            onClick={openCreateMemberFormDialog}
           >
             {t('v2.button.register')}
           </Button>

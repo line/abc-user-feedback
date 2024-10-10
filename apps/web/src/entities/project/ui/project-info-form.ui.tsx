@@ -16,8 +16,6 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputField, InputLabel } from '@ufb/react';
-
 import { TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { ProjectInfo } from '../project.type';
@@ -57,18 +55,13 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
         disabled={readOnly}
         error={formState.errors.description?.message}
       />
-      <InputField>
-        <InputLabel>
-          Time Zone <span className="text-tint-red">*</span>
-        </InputLabel>
-        <TimezoneSelectBox
-          value={watch('timezone')}
-          onChange={(value) =>
-            value && setValue('timezone', value, { shouldDirty: true })
-          }
-          disabled={readOnly || type === 'update'}
-        />
-      </InputField>
+      <TimezoneSelectBox
+        value={watch('timezone')}
+        onChange={(value) =>
+          value && setValue('timezone', value, { shouldDirty: true })
+        }
+        disabled={readOnly || type === 'update'}
+      />
     </div>
   );
 };

@@ -57,9 +57,6 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
         await refetch();
         toast.success(t('toast.save'));
       },
-      onError(error) {
-        toast.error(error.message);
-      },
     },
   });
 
@@ -71,9 +68,6 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
       async onSuccess() {
         await refetch();
         toast.success(t('toast.save'));
-      },
-      onError(error) {
-        toast.error(error.message);
       },
     },
   });
