@@ -22,7 +22,7 @@
     "test:integration": "jest --config ./integration-test/jest-integration.json --runInBand --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "typecheck": "tsc --noEmit",
-    "typeorm": "ts-node --project ./tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli -d src/configs/modules/typeorm-config/typeorm-config.datasource.ts"
+    "typeorm": "ts-node --project ./tsconfig.json -r tsconfig-paths/register ../../node_modules/typeorm/cli -d src/configs/modules/typeorm-config/typeorm-config.datasource.ts"
   },
   "prettier": "@ufb/prettier-config",
   "dependencies": {

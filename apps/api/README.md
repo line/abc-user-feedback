@@ -82,24 +82,26 @@ The following is a list of environment variables used by the application, along 
 
 ### Optional Environment Variables
 
-| Environment            | Description                                                    | Default Value                       |
-| ---------------------- | -------------------------------------------------------------- | ----------------------------------- |
-| `APP_PORT`             | The port that the server runs on                               | `4000`                              |
-| `APP_ADDRESS`          | The address that the server binds to                           | `0.0.0.0`                           |
-| `MYSQL_SECONDARY_URLS` | Secondary MySQL connection URLs (must be in JSON array format) | _optional_                          |
-| `SMTP_USE`             | Flag to enable SMTP server usage (for email verification)      | `false`                             |
-| `SMTP_HOST`            | SMTP server host                                               | _required if `SMTP_USE=true`_       |
-| `SMTP_PORT`            | SMTP server port                                               | _required if `SMTP_USE=true`_       |
-| `SMTP_USERNAME`        | SMTP server authentication username                            | _optional_                          |
-| `SMTP_PASSWORD`        | SMTP server authentication password                            | _optional_                          |
-| `SMTP_SENDER`          | Email address used as sender in emails                         | _required if `SMTP_USE=true`_       |
-| `SMTP_BASE_URL`        | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_       |
-| `OPENSEARCH_USE`       | Flag to enable OpenSearch integration                          | `false`                             |
-| `OPENSEARCH_NODE`      | OpenSearch node URL                                            | _required if `OPENSEARCH_USE=true`_ |
-| `OPENSEARCH_USERNAME`  | OpenSearch username (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_ |
-| `OPENSEARCH_PASSWORD`  | OpenSearch password (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_ |
-| `AUTO_MIGRATION`       | Automatically perform database migration on application start  | `true`                              |
-| `MASTER_API_KEY`       | Master API key for privileged operations                       | _none_                              |
+| Environment                          | Description                                                    | Default Value                                 |
+| ------------------------------------ | -------------------------------------------------------------- | --------------------------------------------- |
+| `APP_PORT`                           | The port that the server runs on                               | `4000`                                        |
+| `APP_ADDRESS`                        | The address that the server binds to                           | `0.0.0.0`                                     |
+| `MYSQL_SECONDARY_URLS`               | Secondary MySQL connection URLs (must be in JSON array format) | _optional_                                    |
+| `SMTP_USE`                           | Flag to enable SMTP server usage (for email verification)      | `false`                                       |
+| `SMTP_HOST`                          | SMTP server host                                               | _required if `SMTP_USE=true`_                 |
+| `SMTP_PORT`                          | SMTP server port                                               | _required if `SMTP_USE=true`_                 |
+| `SMTP_USERNAME`                      | SMTP server authentication username                            | _optional_                                    |
+| `SMTP_PASSWORD`                      | SMTP server authentication password                            | _optional_                                    |
+| `SMTP_SENDER`                        | Email address used as sender in emails                         | _required if `SMTP_USE=true`_                 |
+| `SMTP_BASE_URL`                      | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_                 |
+| `OPENSEARCH_USE`                     | Flag to enable OpenSearch integration                          | `false`                                       |
+| `OPENSEARCH_NODE`                    | OpenSearch node URL                                            | _required if `OPENSEARCH_USE=true`_           |
+| `OPENSEARCH_USERNAME`                | OpenSearch username (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_           |
+| `OPENSEARCH_PASSWORD`                | OpenSearch password (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_           |
+| `AUTO_MIGRATION`                     | Automatically perform database migration on application start  | `true`                                        |
+| `MASTER_API_KEY`                     | Master API key for privileged operations                       | _none_                                        |
+| `ENABLE_AUTO_FEEDBACK_DELETION`      | Enable auto feedback deletion cron on application start        | `false`                                       |
+| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Auto feedback deletion period (in days)                        | _required if `ENABLE_AUTO_FEEDBACK_DELETION`_ |
 
 Please ensure that you set the required environment variables before starting the application. Optional variables can be set as needed based on your specific configuration and requirements.
 

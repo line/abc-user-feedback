@@ -74,7 +74,9 @@
     "BASE_URL",
     "NEXT_PUBLIC_MAX_DAYS",
     "SKIP_ENV_VALIDATION",
-    "PORT"
+    "PORT",
+    "ENABLE_AUTO_FEEDBACK_DELETION",
+    "AUTO_FEEDBACK_DELETION_CYCLE_DAYS"
   ],
   "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }

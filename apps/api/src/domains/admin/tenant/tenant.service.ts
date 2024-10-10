@@ -112,19 +112,24 @@ export class TenantService {
       issues?: IssueEntity[];
     }
 
+    const autoFeedbackDeletionPeriodDays = this.configService.get<number>(
+      'app.autoFeedbackDeletionPeriodDays',
+    );
+
     for (const { id } of channels) {
       const feedbacks = await this.feedbackService.findByChannelId({
         channelId: id,
         query: {
           createdAt: {
             gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
-            lt: DateTime.now().minus({ month: 6 }).toFormat('yyyy-MM-dd'),
+            lt: DateTime.now()
+              .minus({ days: autoFeedbackDeletionPeriodDays })
+              .toFormat('yyyy-MM-dd'),
           },
         },
         page: 1,
         limit: 100000,
       });
-      console.log(feedbacks);
 
       for (const feedback of feedbacks.items) {
         feedbackIdsToDelete.push((feedback as Feedback).id);
@@ -134,22 +139,31 @@ export class TenantService {
         feedbackIds: feedbackIdsToDelete,
       });
     }
-    console.log(channels);
-    // this.feedbackService.findByChannelId(channels[0].id);
   }
 
   async addCronJob() {
     const projects = await this.projectRepo.find();
 
+    const enableAutoFeedbackDeletion = this.configService.get<boolean>(
+      'app.enableAutoFeedbackDeletion',
+    );
+
+    if (process.env.NODE_ENV === 'test' || !enableAutoFeedbackDeletion) {
+      return;
+    }
+
     if (projects.length === 0) {
-      throw new NotFoundException(`Project not found`);
+      this.logger.log(
+        `Project not found (old feedback deletion will not be scheduled)`,
+      );
+      return;
     }
 
     const timezoneOffset = projects[0].timezone.offset;
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
-    const job = new CronJob(`0 * * * * *`, async () => {
+    const job = new CronJob(`6 ${cronHour} * * * *`, async () => {
       if (
         await this.schedulerLockService.acquireLock(
           LockTypeEnum.FEEDBACK_DELETE,
