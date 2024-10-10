@@ -19,6 +19,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json --runInBand --detectOpenHandles",
+    "test:integration": "jest --config ./integration-test/jest-integration.json --runInBand --detectOpenHandles",
     "test:watch": "jest --watch --detectOpenHandles",
     "typecheck": "tsc --noEmit",
     "typeorm": "ts-node --project ./tsconfig.json -r tsconfig-paths/register ./node_modules/typeorm/cli -d src/configs/modules/typeorm-config/typeorm-config.datasource.ts"
@@ -94,7 +95,7 @@
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
     "@types/luxon": "^3.4.2",
-    "@types/node": "20.16.5",
+    "@types/node": "20.16.11",
     "@types/nodemailer": "^6.4.15",
     "@types/passport-jwt": "*",
     "@types/supertest": "^6.0.2",

@@ -125,24 +125,24 @@ export class FeedbackMySQLService {
                 if (stringFields[i].format === FieldFormatEnum.keyword) {
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') = :value`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
                       { value },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') = :value`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
                       { value },
                     );
                   }
                 } else {
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
                       { likeValue: `%${value as string | number}%` },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
                       { likeValue: `%${value as string | number}%` },
                     );
                   }

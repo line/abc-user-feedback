@@ -179,8 +179,8 @@ const DateRangePicker: React.FC<IProps> = (props) => {
               setCurrentValue({ startDate: v[0], endDate: v[1] });
               setActiveIdx(-1);
             }}
-            startDate={currentValue?.startDate}
-            endDate={currentValue?.endDate}
+            startDate={currentValue?.startDate ?? undefined}
+            endDate={currentValue?.endDate ?? undefined}
             monthsShown={2}
             minDate={minDate}
             maxDate={maxDate}

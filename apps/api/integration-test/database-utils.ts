@@ -13,22 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import mysql from 'mysql2/promise';
 
-import { CreateChannelRequestFieldDto } from './create-channel-request.dto';
-
-export class UpdateChannelRequestFieldDto extends CreateChannelRequestFieldDto {
-  @ApiProperty({ required: false })
-  @IsNumber()
-  @IsOptional()
-  id?: number;
-}
-
-export class UpdateChannelFieldsRequestDto {
-  @ApiProperty({ type: [UpdateChannelRequestFieldDto] })
-  @Type(() => UpdateChannelRequestFieldDto)
-  @ValidateNested({ each: true })
-  fields: UpdateChannelRequestFieldDto[];
+export async function createConnection() {
+  return await mysql.createConnection({
+    host: '127.0.0.1',
+    port: 13307,
+    user: 'root',
+    password: 'userfeedback',
+  });
 }

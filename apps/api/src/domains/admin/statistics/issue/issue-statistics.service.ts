@@ -159,7 +159,17 @@ export class IssueStatisticsService {
         });
       }
     });
-    this.schedulerRegistry.addCronJob(`issue-statistics-${projectId}`, job);
+
+    const name = `issue-statistics-${projectId}`;
+    const cronJobs = this.schedulerRegistry.getCronJobs();
+    if (cronJobs.has(name)) {
+      this.logger.warn(
+        `Cron job with name ${name} already exists. Skipping addition.`,
+      );
+      return;
+    }
+
+    this.schedulerRegistry.addCronJob(name, job);
     job.start();
 
     this.logger.log(`issue-statistics-${projectId} cron job started`);

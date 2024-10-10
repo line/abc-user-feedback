@@ -156,7 +156,7 @@ const ColumnSettingPopover: React.FC<IProps> = ({ fieldData, table }) => {
   );
 };
 
-const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
+const StrictModeDroppable = (props: DroppableProps) => {
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -170,7 +170,7 @@ const StrictModeDroppable = ({ children, ...props }: DroppableProps) => {
 
   if (!enabled) return null;
 
-  return <Droppable {...props}>{children}</Droppable>;
+  return <Droppable {...props} />;
 };
 
 export default ColumnSettingPopover;

@@ -32,10 +32,10 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@floating-ui/react": "^0.26.12",
-    "@headlessui/react": "2.1.8",
+    "@headlessui/react": "2.1.9",
     "@headlessui/tailwindcss": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
-    "@mui/base": "5.0.0-beta.40",
+    "@mui/base": "5.0.0-beta.58",
     "@t3-oss/env-nextjs": "^0.11.0",
     "@tanstack/react-query": "^5.31.0",
     "@tanstack/react-table": "^8.16.0",
@@ -62,7 +62,7 @@
     "pino": "^9.0.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
-    "react-datepicker": "^6.9.0",
+    "react-datepicker": "^7.0.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.51.3",
     "react-hot-toast": "^2.4.1",
@@ -87,10 +87,10 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
-    "@types/node": "20.16.5",
+    "@types/node": "20.16.11",
     "@types/react": "^18.2.79",
     "@types/react-beautiful-dnd": "^13.1.8",
-    "@types/react-datepicker": "^6.0.0",
+    "@types/react-datepicker": "^7.0.0",
     "@types/react-dom": "^18.2.25",
     "@ufb/eslint-config": "workspace:*",
     "@ufb/prettier-config": "workspace:*",
@@ -109,6 +109,6 @@
     "tailwindcss": "^3.4.3",
     "ts-toolbelt": "^9.6.0",
     "typescript": "catalog:",
-    "undici": "~5.28.4"
+    "undici": "~6.20.0"
   }
 }

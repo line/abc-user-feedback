@@ -65,7 +65,6 @@ const useLineChartData = (
         currentDate.subtract(dayCount > 50 ? 6 : 0, 'day'),
         dayjs(from),
       );
-      if (!prevDate) throw new Error("Can't get prevDate");
 
       const channelData = targetData.reduce(
         (acc, cur) => {

@@ -13,22 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
-import { IsNumber, IsOptional, ValidateNested } from 'class-validator';
+import { createConnection as connect } from './database-utils';
 
-import { CreateChannelRequestFieldDto } from './create-channel-request.dto';
+async function dropTestDatabase() {
+  const connection = await connect();
 
-export class UpdateChannelRequestFieldDto extends CreateChannelRequestFieldDto {
-  @ApiProperty({ required: false })
-  @IsNumber()
-  @IsOptional()
-  id?: number;
+  await connection.query(`DROP DATABASE IF EXISTS integration;`);
+  await connection.end();
 }
 
-export class UpdateChannelFieldsRequestDto {
-  @ApiProperty({ type: [UpdateChannelRequestFieldDto] })
-  @Type(() => UpdateChannelRequestFieldDto)
-  @ValidateNested({ each: true })
-  fields: UpdateChannelRequestFieldDto[];
-}
+module.exports = async () => {
+  await dropTestDatabase();
+};
