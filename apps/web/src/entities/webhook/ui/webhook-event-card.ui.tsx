@@ -89,14 +89,17 @@ const WebhookEventCard: React.FC<Props> = (props) => {
             : selectedValues
           }
           onValuesChange={setSelectedValues}
-          disabled={!checked || eventChannelDisabled}
         >
           <SelectTrigger>
             <SelectValue placeholder={t('v2.placeholder.select')} />
           </SelectTrigger>
           <SelectContent>
             {channels.map((channel) => (
-              <SelectItem key={channel.id} value={String(channel.id)}>
+              <SelectItem
+                key={channel.id}
+                value={String(channel.id)}
+                disabled={!checked || eventChannelDisabled}
+              >
                 {channel.name}
               </SelectItem>
             ))}

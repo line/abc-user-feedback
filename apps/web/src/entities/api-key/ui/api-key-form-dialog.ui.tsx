@@ -16,17 +16,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Button,
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-} from '@ufb/react';
-
 import type { FormOverlayProps } from '@/shared';
-import { SelectInput, TextInput } from '@/shared';
+import { FormDialog, SelectInput, TextInput } from '@/shared';
 
 import type { ApiKeyFormSchema } from '../api-key.type';
 
@@ -40,42 +31,30 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
   );
 
   return (
-    <Dialog open={isOpen} onOpenChange={close}>
-      <DialogContent radius="large">
-        <DialogTitle>
-          {t('v2.text.name.detail', { name: 'API Key' })}
-        </DialogTitle>
-        <div className="my-8 flex flex-col gap-5">
-          <TextInput label="API Key" value={data?.value} disabled />
-          <SelectInput
-            label="Status"
-            options={[
-              { label: 'Active', value: 'active' },
-              { label: 'Inactive', value: 'inactive' },
-            ]}
-            value={status}
-            onChange={(value) => setStatus(value as 'active' | 'inactive')}
-          />
-        </div>
-        <DialogFooter>
-          {onClickDelete && (
-            <div className="flex-1">
-              <Button variant="destructive" onClick={onClickDelete}>
-                {t('v2.button.delete')}
-              </Button>
-            </div>
-          )}
-          <DialogClose asChild>
-            <Button variant="outline">{t('v2.button.cancel')}</Button>
-          </DialogClose>
-          <Button
-            onClick={() => onSubmit({ value: data?.value ?? '', status })}
-          >
-            {t('v2.button.save')}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <FormDialog
+      isOpen={isOpen}
+      close={close}
+      title={t('v2.text.name.detail', { name: 'API Key' })}
+      submitBtn={{
+        disabled: false,
+        onClick: () => onSubmit({ value: data?.value ?? '', status }),
+      }}
+      deleteBtn={{
+        disabled: false,
+        onClick: onClickDelete,
+      }}
+    >
+      <TextInput label="API Key" value={data?.value} disabled />
+      <SelectInput
+        label="Status"
+        options={[
+          { label: 'Active', value: 'active' },
+          { label: 'Inactive', value: 'inactive' },
+        ]}
+        value={status}
+        onChange={(value) => setStatus(value as 'active' | 'inactive')}
+      />
+    </FormDialog>
   );
 };
 

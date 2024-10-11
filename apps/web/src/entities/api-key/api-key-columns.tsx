@@ -29,7 +29,7 @@ export const getApiKeyColumns = () => [
   columnHelper.accessor('value', {
     header: 'API KEY',
     cell: ({ getValue }) => (
-      <div className="flex items-center gap-1">
+      <div className="text-base-strong flex items-center">
         {getValue()}
         <CopyIconButton data={getValue()} />
       </div>

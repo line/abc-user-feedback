@@ -54,3 +54,5 @@ export { default as SortingTableHead } from './sorting-table-head.ui';
 export { default as CopyIconButton } from './copy-icon-button.ui';
 export { default as SettingAlert } from './setting-alert.ui';
 export { default as DeleteDialog } from './delete-dialog.ui';
+
+export { default as FormDialog } from './form-dialog.ui';

@@ -17,17 +17,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Button,
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogTitle,
-} from '@ufb/react';
-
 import type { FormOverlayProps } from '@/shared';
-import { SelectSearchInput, TextInput } from '@/shared';
+import { FormDialog, SelectSearchInput, TextInput } from '@/shared';
 import { SelectInput } from '@/shared/ui/inputs';
 import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
@@ -66,83 +57,57 @@ const MemberFormDialog: React.FC<Props> = (props) => {
   const [role, setRole] = useState<Member['role'] | undefined>(data?.role);
 
   return (
-    <Dialog onOpenChange={close} open={isOpen} modal>
-      <DialogContent radius="large">
-        <DialogTitle>
-          {data ?
-            t('v2.text.name.detail', { name: 'Member' })
-          : t('v2.text.name.register', { name: 'Member' })}
-        </DialogTitle>
-        <div className="flex flex-col gap-3">
-          {!data && <TextInput label="Project" value={project.name} disabled />}
-          <SelectSearchInput
-            label="Email"
-            value={user?.email}
-            onChange={(v) => {
-              setUser(userData?.items.find((user) => user.email === v));
-            }}
-            options={
-              userData?.items
-                .filter(
-                  (v) => !members.some((member) => member.user.id === v.id),
-                )
-                .map((v) => ({ label: v.email, value: v.email })) ?? []
-            }
-            required
-            disabled={!!data}
-          />
-          {data && <TextInput label="Name" value={user?.name ?? ''} disabled />}
-          {data && (
-            <TextInput
-              label="Department"
-              value={user?.department ?? ''}
-              disabled
-            />
-          )}
+    <FormDialog
+      title={
+        data ?
+          t('v2.text.name.detail', { name: 'Member' })
+        : t('v2.text.name.register', { name: 'Member' })
+      }
+      close={close}
+      isOpen={isOpen}
+      deleteBtn={{
+        disabled: deleteDisabled,
+        onClick: onClickDelete,
+      }}
+      submitBtn={{
+        disabled: updateDisabled || !user || !role,
+        onClick: async () => {
+          if (!user || !role) return;
+          await onSubmit({ user, role });
+        },
+      }}
+    >
+      {!data && <TextInput label="Project" value={project.name} disabled />}
+      <SelectSearchInput
+        label="Email"
+        value={user?.email}
+        onChange={(v) => {
+          setUser(userData?.items.find((user) => user.email === v));
+        }}
+        options={
+          userData?.items
+            .filter((v) => !members.some((member) => member.user.id === v.id))
+            .map((v) => ({ label: v.email, value: v.email })) ?? []
+        }
+        required
+        disabled={!!data}
+      />
+      {data && <TextInput label="Name" value={user?.name ?? ''} disabled />}
+      {data && (
+        <TextInput label="Department" value={user?.department ?? ''} disabled />
+      )}
 
-          <SelectInput
-            label="Role"
-            placeholder={t('v2.placeholder.select')}
-            value={role ? String(role.id) : undefined}
-            options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
-            onChange={(v) => {
-              setRole(roles.find((role) => String(role.id) === v));
-            }}
-            required
-          />
-        </div>
-        <DialogFooter>
-          {data?.id && onClickDelete && (
-            <div className="flex-1">
-              <Button
-                variant="destructive"
-                onClick={async () => {
-                  await onClickDelete();
-                  close();
-                }}
-                disabled={deleteDisabled}
-              >
-                {t('v2.button.delete')}
-              </Button>
-            </div>
-          )}
-          <DialogClose asChild>
-            <Button variant="outline">{t('v2.button.cancel')}</Button>
-          </DialogClose>
-          <Button
-            type="submit"
-            disabled={updateDisabled || !user || !role}
-            onClick={async () => {
-              if (!user || !role) return;
-              await onSubmit({ user, role });
-              close();
-            }}
-          >
-            {t('v2.button.save')}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <SelectInput
+        label="Role"
+        placeholder={t('v2.placeholder.select')}
+        value={role ? String(role.id) : undefined}
+        options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
+        onChange={(v) => {
+          setRole(roles.find((role) => String(role.id) === v));
+        }}
+        required
+      />
+    </FormDialog>
   );
 };
 

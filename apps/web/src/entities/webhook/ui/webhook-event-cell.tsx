@@ -28,12 +28,6 @@ import type { Channel } from '@/entities/channel';
 
 import type { WebhookEventType } from '../webhook.type';
 
-const toCamelCase = (str: string) => {
-  return str
-    .replace(/\b(\w)/g, (_, capture: string) => capture.toUpperCase())
-    .replace(/\s+/g, '');
-};
-
 interface IProps {
   type: WebhookEventType;
   channels: Channel[];
@@ -52,9 +46,7 @@ const WebhookEventCell: React.FC<IProps> = (props) => {
   return (
     <Dropdown>
       <DropdownTrigger onClick={(e) => e.stopPropagation()} asChild>
-        <Tag iconR="RiInformation2Line">
-          {toCamelCase(t(`text.webhook-type.${type}`))}
-        </Tag>
+        <Tag iconR="RiInformation2Line">{t(`text.webhook-type.${type}`)}</Tag>
       </DropdownTrigger>
       <DropdownContent onClick={(e) => e.stopPropagation()}>
         {(type === 'ISSUE_CREATION' || type === 'ISSUE_STATUS_CHANGE' ?

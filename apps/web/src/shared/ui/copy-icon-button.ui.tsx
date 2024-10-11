@@ -32,7 +32,7 @@ const CopyIconButton: React.FC<Props> = (props) => {
         e.stopPropagation();
         try {
           await navigator.clipboard.writeText(data);
-          toast(t('toast.copy'), {
+          toast(t('v2.toast.copy'), {
             icon: <Icon name="RiCheckboxMultipleFill" />,
           });
         } catch (error) {

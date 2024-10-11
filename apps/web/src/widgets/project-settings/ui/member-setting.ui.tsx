@@ -113,6 +113,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
       />
     ));
   };
+
   const openUpdateMemberFormDialog = (id: number, member: Member) => {
     if (!projectData || !rolesData) return;
     overlay.open(({ close, isOpen }) => (

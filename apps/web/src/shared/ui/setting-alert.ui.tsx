@@ -14,7 +14,13 @@
  * under the License.
  */
 
-import { Alert, AlertContent, AlertIcon, AlertTextContainer } from '@ufb/react';
+import {
+  Alert,
+  AlertContent,
+  AlertDescription,
+  AlertIcon,
+  AlertTextContainer,
+} from '@ufb/react';
 
 interface Props {
   description: React.ReactNode;
@@ -26,7 +32,9 @@ const SettingAlert: React.FC<Props> = (props) => {
     <Alert variant="informative" className="mb-4">
       <AlertContent>
         <AlertIcon name="RiInformation2Fill" />
-        <AlertTextContainer>{description}</AlertTextContainer>
+        <AlertTextContainer>
+          <AlertDescription>{description}</AlertDescription>
+        </AlertTextContainer>
       </AlertContent>
     </Alert>
   );

@@ -15,8 +15,6 @@
  */
 import { Trans } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
-
 import { env } from '@/env';
 
 type I18nKey =
@@ -42,17 +40,9 @@ const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
       <Trans
         i18nKey={i18nKey}
         components={{
-          icon: (
-            <Icon
-              name="ExpandPopup"
-              className="text-blue-primary cursor-pointer"
-              size={12}
-              onClick={() => window.open(urlMap[i18nKey], '_blank')}
-            />
-          ),
           docs: (
             <span
-              className="text-blue-primary cursor-pointer"
+              className="text-blue-primary mr-1 cursor-pointer"
               onClick={() => window.open(urlMap[i18nKey], '_blank')}
             />
           ),

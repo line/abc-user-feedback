@@ -17,7 +17,7 @@ import { useFormContext } from 'react-hook-form';
 
 import { Icon, InputField, InputLabel } from '@ufb/react';
 
-import { SelectInput, TextInput, useWarnIfUnsavedChanges } from '@/shared';
+import { cn, SelectInput, TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { IssueTracker } from '../issue-tracker.type';
 
@@ -33,7 +33,7 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
   return (
     <div className="flex flex-col gap-6">
       <SelectInput
-        options={[{ value: 'jira', label: 'JIRA' }]}
+        options={[{ value: 'jira', label: 'Jira' }]}
         value="jira"
         label="Issue Tracking System"
         disabled={readOnly}
@@ -52,8 +52,13 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
         {...register('ticketKey')}
       />
       <InputField>
-        <InputLabel>Issue URL</InputLabel>
-        <div className="bg-neutral-tertiary flex items-center gap-2 rounded p-4 opacity-50">
+        <InputLabel>Preview</InputLabel>
+        <div
+          className={cn(
+            'bg-neutral-tertiary flex items-center gap-2 rounded p-4',
+            { 'opacity-50': !watch('ticketDomain') || !watch('ticketKey') },
+          )}
+        >
           <Icon name="RiPriceTag3Fill" size={16} />
           {`${watch('ticketDomain') ?? ''}/browse/${watch('ticketKey') ?? ''}-{Number}`}
         </div>

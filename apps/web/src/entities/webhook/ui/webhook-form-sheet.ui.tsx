@@ -15,6 +15,7 @@
  */
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useOverlay } from '@toss/use-overlay';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -34,7 +35,7 @@ import {
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
-import { TextInput } from '@/shared';
+import { DeleteDialog, TextInput } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import { webhookInfoSchema } from '../webhook.schema';
@@ -66,6 +67,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
   const { channels, close, isOpen, onSubmit, data, onClickDelete } = props;
 
   const { t } = useTranslation();
+  const overlay = useOverlay();
 
   const {
     register,
@@ -148,15 +150,33 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
     );
   };
 
+  const openDeleteDialog = () => {
+    overlay.open(({ close: dialogClose, isOpen }) => (
+      <DeleteDialog
+        close={dialogClose}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          await onClickDelete?.();
+          dialogClose();
+          close();
+        }}
+      />
+    ));
+  };
+
   return (
     <Sheet onOpenChange={close} open={isOpen} modal>
-      <SheetContent>
+      <SheetContent className="w-[720px]">
         <SheetHeader>
-          <SheetTitle>{t('dialog.create-webhook.title')}</SheetTitle>
+          <SheetTitle>
+            {data ?
+              t('v2.text.name.detail', { name: 'Webhook' })
+            : t('v2.text.name.register', { name: 'Webhook' })}
+          </SheetTitle>
         </SheetHeader>
-        <SheetBody asChild className="">
+        <SheetBody asChild>
           <form
-            className="flex flex-col gap-4"
+            className="flex flex-col"
             onSubmit={handleSubmit((webhook) =>
               onSubmit({
                 ...webhook,
@@ -199,7 +219,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
                 <Button
                   type="button"
                   onClick={() => setValue('token', window.crypto.randomUUID())}
-                  className="flex-shrink-0"
+                  className="!min-w-[84px] flex-shrink-0"
                 >
                   {t('button.generate')}
                 </Button>
@@ -262,13 +282,13 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
         <SheetFooter>
           {onClickDelete && (
             <div className="flex-1">
-              <Button onClick={onClickDelete} variant="destructive">
+              <Button onClick={openDeleteDialog} variant="destructive">
                 {t('v2.button.delete')}
               </Button>
             </div>
           )}
           <SheetClose>{t('v2.button.cancel')}</SheetClose>
-          <Button type={'submit'} form={'webhook'}>
+          <Button type="submit" form="webhook" disabled={!formState.isValid}>
             {t('button.confirm')}
           </Button>
         </SheetFooter>
