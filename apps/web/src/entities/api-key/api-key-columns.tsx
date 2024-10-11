@@ -46,7 +46,7 @@ export const getApiKeyColumns = (
                 title: <Trans i18nKey="toast.copy" />,
                 iconName: 'CopyFill',
               });
-            } catch (error) {
+            } catch {
               toast.negative({ title: 'fail' });
             }
           }}
