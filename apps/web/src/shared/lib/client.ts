@@ -58,7 +58,7 @@ class client {
           failedRequest.response.config.headers.setAuthorization(
             `Bearer ${data.accessToken}`,
           );
-        } catch (error) {
+        } catch {
           await axios.get('/api/logout');
           sessionStorage.removeItem('jwt');
           window.location.assign(Path.SIGN_IN);
@@ -68,6 +68,7 @@ class client {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error: { response?: AxiosResponse }) =>
+        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
         Promise.reject(error.response?.data ?? error),
     );
   }

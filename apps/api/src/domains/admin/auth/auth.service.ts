@@ -133,7 +133,7 @@ export class AuthService {
         CodeTypeEnum.EMAIL_VEIRIFICATION,
         dto.email,
       );
-    } catch (error) {
+    } catch {
       throw new BadRequestException('must request email verification');
     }
     if (!isVerified) throw new NotVerifiedEmailException();
