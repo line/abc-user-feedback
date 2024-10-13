@@ -99,7 +99,7 @@
     "eslint": "catalog:",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jiti": "^1.21.6",
+    "jiti": "^2.0.0",
     "msw": "^2.3.0",
     "next-router-mock": "^0.9.13",
     "node-mocks-http": "^1.14.1",
