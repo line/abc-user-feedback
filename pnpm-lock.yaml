@@ -543,8 +543,8 @@ importers:
         specifier: ^29.7.0
         version: 29.7.0
       jiti:
-        specifier: ^1.21.6
-        version: 1.21.6
+        specifier: ^2.0.0
+        version: 2.3.3
       msw:
         specifier: ^2.3.0
         version: 2.4.1(graphql@16.9.0)(typescript@5.6.3)
@@ -598,7 +598,7 @@ importers:
         version: 18.3.1
       tsup:
         specifier: ^8.0.2
-        version: 8.3.0(@swc/core@1.7.35(@swc/helpers@0.5.13))(jiti@1.21.6)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.5.1)
+        version: 8.3.0(@swc/core@1.7.35(@swc/helpers@0.5.13))(jiti@2.3.3)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.5.1)
       typescript:
         specifier: 'catalog:'
         version: 5.6.3
@@ -625,7 +625,7 @@ importers:
         version: 8.4.47
       postcss-cli:
         specifier: ^11.0.0
-        version: 11.0.0(jiti@1.21.6)(postcss@8.4.47)
+        version: 11.0.0(jiti@2.3.3)(postcss@8.4.47)
       postcss-import:
         specifier: ^16.1.0
         version: 16.1.0(postcss@8.4.47)
@@ -6488,6 +6488,10 @@ packages:
 
   jiti@1.21.6:
     resolution: {integrity: sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==}
+    hasBin: true
+
+  jiti@2.3.3:
+    resolution: {integrity: sha512-EX4oNDwcXSivPrw2qKH2LB5PoFxEvgtv2JgwW0bU858HoLQ+kutSvjLMUqBd0PeJYEinLWhoI9Ol0eYMqj/wNQ==}
     hasBin: true
 
   jmespath@0.16.0:
@@ -16714,6 +16718,8 @@ snapshots:
 
   jiti@1.21.6: {}
 
+  jiti@2.3.3: {}
+
   jmespath@0.16.0: {}
 
   joi@17.13.3:
@@ -18185,7 +18191,7 @@ snapshots:
 
   possible-typed-array-names@1.0.0: {}
 
-  postcss-cli@11.0.0(jiti@1.21.6)(postcss@8.4.47):
+  postcss-cli@11.0.0(jiti@2.3.3)(postcss@8.4.47):
     dependencies:
       chokidar: 3.6.0
       dependency-graph: 0.11.0
@@ -18194,7 +18200,7 @@ snapshots:
       globby: 14.0.2
       picocolors: 1.0.1
       postcss: 8.4.47
-      postcss-load-config: 5.1.0(jiti@1.21.6)(postcss@8.4.47)
+      postcss-load-config: 5.1.0(jiti@2.3.3)(postcss@8.4.47)
       postcss-reporter: 7.1.0(postcss@8.4.47)
       pretty-hrtime: 1.0.3
       read-cache: 1.0.0
@@ -18251,19 +18257,19 @@ snapshots:
       postcss: 8.4.47
       ts-node: 10.9.2(@swc/core@1.7.35(@swc/helpers@0.5.13))(@types/node@22.5.5)(typescript@5.6.3)
 
-  postcss-load-config@5.1.0(jiti@1.21.6)(postcss@8.4.47):
+  postcss-load-config@5.1.0(jiti@2.3.3)(postcss@8.4.47):
     dependencies:
       lilconfig: 3.1.2
       yaml: 2.4.5
     optionalDependencies:
-      jiti: 1.21.6
+      jiti: 2.3.3
       postcss: 8.4.47
 
-  postcss-load-config@6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1):
+  postcss-load-config@6.0.1(jiti@2.3.3)(postcss@8.4.47)(yaml@2.5.1):
     dependencies:
       lilconfig: 3.1.2
     optionalDependencies:
-      jiti: 1.21.6
+      jiti: 2.3.3
       postcss: 8.4.47
       yaml: 2.5.1
 
@@ -19696,7 +19702,7 @@ snapshots:
 
   tslib@2.7.0: {}
 
-  tsup@8.3.0(@swc/core@1.7.35(@swc/helpers@0.5.13))(jiti@1.21.6)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.5.1):
+  tsup@8.3.0(@swc/core@1.7.35(@swc/helpers@0.5.13))(jiti@2.3.3)(postcss@8.4.47)(typescript@5.6.3)(yaml@2.5.1):
     dependencies:
       bundle-require: 5.0.0(esbuild@0.23.1)
       cac: 6.7.14
@@ -19707,7 +19713,7 @@ snapshots:
       execa: 5.1.1
       joycon: 3.1.1
       picocolors: 1.1.0
-      postcss-load-config: 6.0.1(jiti@1.21.6)(postcss@8.4.47)(yaml@2.5.1)
+      postcss-load-config: 6.0.1(jiti@2.3.3)(postcss@8.4.47)(yaml@2.5.1)
       resolve-from: 5.0.0
       rollup: 4.21.3
       source-map: 0.8.0-beta.0
