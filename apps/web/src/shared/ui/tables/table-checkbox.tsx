@@ -32,7 +32,6 @@ const TableCheckbox: React.FC<IProps> = (props) => {
         onClick={(e) => e.stopPropagation()}
         checked={indeterminate ? 'indeterminate' : checked}
         disabled={disabled}
-        variant={indeterminate ? 'indeterminate' : 'check'}
         onCheckedChange={(checked) => onCheckedChange(!!checked)}
       />
     </div>

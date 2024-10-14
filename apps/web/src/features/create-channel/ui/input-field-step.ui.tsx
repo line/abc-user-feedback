@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Button } from '@ufb/react';
 
-import { FieldSettingPopover } from '@/entities/field';
+import { FieldSettingSheet } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 import FieldTable from '@/entities/field/ui/field-table.ui';
 
@@ -62,7 +62,7 @@ const InputFieldStep: React.FC<IProps> = () => {
 
   const openFieldFormSheet = (input?: { index: number; field: FieldInfo }) => {
     overlay.open(({ close, isOpen }) => (
-      <FieldSettingPopover
+      <FieldSettingSheet
         isOpen={isOpen}
         close={close}
         onSubmit={(newField) =>

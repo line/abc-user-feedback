@@ -34,11 +34,11 @@ interface Props extends React.PropsWithChildren {
   title: React.ReactNode;
   deleteBtn: {
     disabled: boolean;
-    onClick?: () => Promise<unknown>;
+    onClick?: () => unknown;
   };
   submitBtn: {
     disabled: boolean;
-    onClick: () => Promise<unknown>;
+    onClick: () => unknown;
   };
 }
 
