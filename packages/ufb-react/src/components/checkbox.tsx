@@ -8,22 +8,14 @@ import { cn } from "../lib/utils";
 import { Icon } from "./icon";
 import useTheme from "./use-theme";
 
-type CheckboxVariant = "check" | "indeterminate";
-
 const defaultVariants: {
-  variant: CheckboxVariant;
   size?: Size;
 } = {
-  variant: "check",
   size: undefined,
 };
 
 const checkboxVariants = cva("checkbox", {
   variants: {
-    variant: {
-      check: "checkbox-check",
-      indeterminate: "checkbox-indeterminate",
-    },
     size: {
       small: "checkbox-small",
       medium: "checkbox-medium",
@@ -44,22 +36,8 @@ const checkVariants = cva("check", {
   defaultVariants,
 });
 
-const checkboxIconVariants = cva("checkbox-icon", {
-  variants: {
-    variant: {
-      check: "checkbox-icon-check",
-      indeterminate: "checkbox-icon-indeterminate",
-    },
-  },
-  defaultVariants,
-});
-
 interface CheckboxProps
-  extends Omit<
-    React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root>,
-    "type"
-  > {
-  variant?: CheckboxVariant;
+  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {
   size?: Size;
 }
 
@@ -68,25 +46,44 @@ const Checkbox = React.forwardRef<
   CheckboxProps
 >(
   (
-    { variant = defaultVariants.variant, size, children, className, ...props },
+    {
+      checked: defaultChecked = false,
+      size,
+      children,
+      className,
+      onCheckedChange,
+      ...props
+    },
     ref,
   ) => {
     const { themeSize } = useTheme();
+    const [checked, setChecked] =
+      React.useState<CheckboxPrimitive.CheckedState>(false);
+
+    const handleCheckedChange = (checked: CheckboxPrimitive.CheckedState) => {
+      setChecked(checked);
+      onCheckedChange?.(checked);
+    };
+
+    React.useEffect(() => {
+      setChecked(defaultChecked);
+    }, [defaultChecked]);
+
     return (
       <CheckboxPrimitive.Root
         ref={ref}
-        className={cn(
-          checkboxVariants({ variant, size: size ?? themeSize, className }),
-        )}
+        className={cn(checkboxVariants({ size: size ?? themeSize, className }))}
+        checked={checked}
+        onCheckedChange={handleCheckedChange}
         {...props}
       >
         <React.Fragment>
           <span className={cn(checkVariants({ size }))}>
-            <CheckboxPrimitive.Indicator
-              className={cn(checkboxIconVariants({ variant }))}
-            >
+            <CheckboxPrimitive.Indicator className={cn("checkbox-icon")}>
               <Icon
-                name={variant === "check" ? "RiCheckLine" : "RiSubtractLine"}
+                name={
+                  checked === "indeterminate" ? "RiSubtractLine" : "RiCheckLine"
+                }
                 size={CHECK_ICON_SIZE[size ?? themeSize]}
               />
             </CheckboxPrimitive.Indicator>

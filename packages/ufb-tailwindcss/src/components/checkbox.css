@@ -4,11 +4,9 @@
   --checkbox-text-indeterminate: var(--text-neutral-primary);
   --checkbox-icon-default: var(--text-neutral-inverse);
   --checkbox-icon-checked: var(--text-neutral-inverse);
-  --checkbox-icon-indeterminate: var(--text-neutral-inverse);
   --checkbox-border-default: var(--border-neutral-tertiary);
   --checkbox-fg-default: var(--fg-neutral-primary);
   --checkbox-fg-checked: var(--tint, var(--fg-neutral-inverse));
-  --checkbox-fg-indeterminate: var(--tint, var(--fg-neutral-inverse));
 
   @apply inline-flex cursor-pointer items-center text-[var(--checkbox-text-default)] disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
 
@@ -24,8 +22,5 @@
 }
 
 .checkbox-icon {
-  @apply rounded-4 absolute left-0 top-0 flex h-full w-full items-center justify-center;
-
-  /* default */
-  @apply checkbox-icon-check;
+  @apply rounded-4 absolute left-0 top-0 flex h-full w-full items-center justify-center bg-[var(--checkbox-fg-checked)] text-[var(--checkbox-icon-checked)];
 }

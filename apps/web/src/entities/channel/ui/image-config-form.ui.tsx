@@ -73,7 +73,9 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
       return;
     }
 
-    setValue('domainWhiteList', (domainWhiteList ?? []).concat(value));
+    setValue('domainWhiteList', (domainWhiteList ?? []).concat(value), {
+      shouldDirty: true,
+    });
     clearErrors('domainWhiteList');
     setInputDomain('');
   };
@@ -226,16 +228,25 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
           </Combobox>
           <Divider orientation="vertical" className="h-5" variant="subtle" />
           <div className="flex items-center gap-2">
-            {domainWhiteList?.map((domain, index) => (
-              <Badge key={index} className="flex items-center" variant="subtle">
-                {domain}
-                <Icon
-                  name="RiCloseLine"
-                  onClick={() => removeDomainWhiteList(index)}
-                  size={16}
-                />
-              </Badge>
-            ))}
+            {!domainWhiteList || domainWhiteList.length === 0 ?
+              <p className="text-neutral-tertiary">
+                모든 Image URL의 도메인을 허용합니다.
+              </p>
+            : domainWhiteList.map((domain, index) => (
+                <Badge
+                  key={index}
+                  className="flex items-center"
+                  variant="subtle"
+                >
+                  {domain}
+                  <Icon
+                    name="RiCloseLine"
+                    onClick={() => removeDomainWhiteList(index)}
+                    size={16}
+                  />
+                </Badge>
+              ))
+            }
           </div>
         </div>
       </div>

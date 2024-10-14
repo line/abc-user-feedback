@@ -21,6 +21,7 @@ import { Divider, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import {
+  SettingAlert,
   SettingTemplate,
   useOAIMutation,
   useOAIQuery,
@@ -31,7 +32,7 @@ import { FeedbackTable, usePreviewFeedback } from '@/entities/feedback';
 import type { FieldInfo } from '@/entities/field';
 import {
   FeedbackRequestCodePopover,
-  FieldSettingPopover,
+  FieldSettingSheet,
   FieldTable,
 } from '@/entities/field';
 
@@ -112,7 +113,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
 
   const openCreateFieldFormSheet = () => {
     overlay.open(({ close, isOpen }) => (
-      <FieldSettingPopover
+      <FieldSettingSheet
         isOpen={isOpen}
         close={close}
         onSubmit={addField}
@@ -126,7 +127,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
     field: FieldInfo;
   }) => {
     overlay.open(({ close, isOpen }) => (
-      <FieldSettingPopover
+      <FieldSettingSheet
         isOpen={isOpen}
         close={close}
         onSubmit={(newField) =>
@@ -194,6 +195,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
         )
       }
     >
+      {isPreview && <SettingAlert description={t('help-card.field-preview')} />}
       {isPreview ?
         <FeedbackTable feedbacks={feedbacks} fields={fields} />
       : <FieldTable

@@ -57,7 +57,7 @@ interface IProps<T> {
   isLoading?: boolean;
   createButton?: React.ReactNode;
   className?: string;
-  onClickRow?: (rowId: number, row: T) => void;
+  onClickRow?: (index: number, row: T) => void;
   reoder?: (data: T[]) => void;
 }
 
@@ -164,7 +164,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
                   row={row}
                   onClickRow={
                     onClickRow ?
-                      () => onClickRow(Number(row.id), row.original)
+                      () => onClickRow(Number(row.index), row.original)
                     : undefined
                   }
                 />

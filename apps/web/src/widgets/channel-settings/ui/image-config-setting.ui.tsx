@@ -66,6 +66,14 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
 
   const methods = useForm<ChannelImageConfig>({
     resolver: zodResolver(channelImageConfigSchema),
+    defaultValues: {
+      accessKeyId: '',
+      secretAccessKey: '',
+      bucket: '',
+      domainWhiteList: [],
+      endpoint: '',
+      region: '',
+    },
   });
 
   useEffect(() => {
@@ -73,6 +81,15 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
       methods.reset({
         ...data.imageConfig,
         domainWhiteList: data.imageConfig.domainWhiteList,
+      });
+    } else {
+      methods.reset({
+        accessKeyId: '',
+        secretAccessKey: '',
+        bucket: '',
+        domainWhiteList: [],
+        endpoint: '',
+        region: '',
       });
     }
   }, [data]);

@@ -71,7 +71,9 @@ export const getFieldColumns = () => [
   columnHelper.accessor('property', {
     header: 'Property',
     cell: ({ getValue }) => (
-      <Tag variant="secondary">{FIELD_PROPERTY_TEXT[getValue()]}</Tag>
+      <Tag variant="secondary" radius="large">
+        {FIELD_PROPERTY_TEXT[getValue()]}
+      </Tag>
     ),
     filterFn: (row, id, value: FieldInfo['property'][]) => {
       return value.includes(row.getValue(id));

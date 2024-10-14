@@ -34,7 +34,8 @@ interface Props extends Omit<TextInputProps, 'error' | 'required'> {
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { required, label, error, leftIcon, right, ...textInputProps } = props;
+  const { required, label, error, leftIcon, right, size, ...textInputProps } =
+    props;
 
   return (
     <InputField>
@@ -50,11 +51,16 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
             error={!!error}
             required={required}
             ref={ref}
+            size={size}
           />
         </InputBox>
         {right}
       </div>
-      {error && <InputCaption variant="error">{error}</InputCaption>}
+      {error && (
+        <InputCaption variant="error" size={size}>
+          {error}
+        </InputCaption>
+      )}
     </InputField>
   );
 });

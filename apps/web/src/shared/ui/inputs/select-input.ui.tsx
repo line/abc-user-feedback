@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { IconNameType } from '@ufb/react';
+import type { IconNameType, Size } from '@ufb/react';
 import {
   Select,
   SelectCaption,
@@ -34,6 +34,7 @@ interface Props {
   required?: boolean;
   type?: 'single' | 'multiple';
   error?: string;
+  size?: Size;
 }
 
 const SelectInput: React.FC<Props> = (props) => {
@@ -47,6 +48,7 @@ const SelectInput: React.FC<Props> = (props) => {
     required,
     type = 'single',
     error,
+    size,
   } = props;
 
   return (
@@ -55,6 +57,7 @@ const SelectInput: React.FC<Props> = (props) => {
       onValueChange={onChange}
       disabled={disabled}
       type={type}
+      size={size}
     >
       {label && (
         <SelectLabel>

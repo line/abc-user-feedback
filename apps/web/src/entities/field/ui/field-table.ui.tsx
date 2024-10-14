@@ -30,7 +30,7 @@ import type { FieldInfo } from '../field.type';
 
 interface IProps {
   fields: FieldInfo[];
-  onClickRow: (rowId: number, field: FieldInfo) => void;
+  onClickRow: (index: number, field: FieldInfo) => void;
   reorder?: (data: FieldInfo[]) => void;
 }
 
@@ -45,7 +45,7 @@ const FieldTable: React.FC<IProps> = (props) => {
     data: fields,
     enableColumnFilters: true,
     getFilteredRowModel: getFilteredRowModel(),
-    getRowId: (row, index) => String(row.id ?? index),
+    getRowId: (row) => String(row.key),
   });
 
   return (
@@ -83,7 +83,7 @@ const FieldTable: React.FC<IProps> = (props) => {
       </div>
       <BasicTable
         table={table}
-        onClickRow={(rowId, row) => onClickRow(Number(rowId), row)}
+        onClickRow={(index, row) => onClickRow(index, row)}
         reoder={(data) => {
           reorder?.(data.map((field, index) => ({ ...field, order: index })));
         }}

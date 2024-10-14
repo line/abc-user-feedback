@@ -6,6 +6,15 @@ import { cn } from "../lib/utils";
 const customIcons = {
   spinner: "icon-spinner",
   temp: "icon-temp",
+  "radio-circle": "icon-radio-circle",
+  webhook: "icon-webhook",
+  android: "icon-android",
+  apple: "icon-apple",
+  github: "icon-github",
+  linkedin: "icon-linkedin",
+  instagram: "icon-instagram",
+  "text-format": "icon-text-format",
+  "warning-triangle": "icon-warning-triangle",
 } as const;
 const Icons = { ...remixIcons, ...customIcons };
 const IconNames = Object.keys(Icons) as (keyof typeof Icons)[];

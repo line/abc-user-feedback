@@ -1,11 +1,11 @@
 .select-trigger-small {
-  @apply text-base-normal min-h-36 px-12;
+  @apply text-base-normal min-h-36 space-x-8 px-12 [&>span>svg]:mr-8;
 }
 .select-trigger-medium {
-  @apply text-large-normal min-h-44 px-14;
+  @apply text-large-normal min-h-44 space-x-10 px-14 [&>span>svg]:mr-10;
 }
 .select-trigger-large {
-  @apply text-xlarge-normal min-h-52 px-16;
+  @apply text-xlarge-normal min-h-52 space-x-12 px-16 [&>span>svg]:mr-12;
 }
 
 .select-small {
@@ -29,4 +29,18 @@
 }
 .select-caption-error {
   @apply text-[var(--select-caption-error)];
+}
+
+.select-item-left {
+  @apply pl-32 pr-8;
+}
+.select-item-right {
+  @apply pl-8 pr-32;
+}
+
+.select-item-check-left {
+  @apply left-8;
+}
+.select-item-check-right {
+  @apply right-8;
 }

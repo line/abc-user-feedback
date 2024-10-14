@@ -52,7 +52,7 @@ interface IProps extends FormOverlayProps<FieldInfo> {
   fieldRows: FieldInfo[];
 }
 
-const FieldSettingPopover: React.FC<IProps> = (props) => {
+const FieldSettingSheet: React.FC<IProps> = (props) => {
   const {
     data,
     fieldRows,
@@ -189,7 +189,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
             </div>
             <div>
               <SelectInput
-                label="Field Format"
+                label="Format"
                 onChange={(value) =>
                   setValue('format', value as FieldInfo['format'])
                 }
@@ -245,7 +245,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
                 </div>
               )}
             <SelectInput
-              label="Field Property"
+              label="Property"
               options={[
                 { label: 'Read Only', value: 'READ_ONLY' },
                 { label: 'Editable', value: 'EDITABLE' },
@@ -258,7 +258,7 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
               required
             />
             <SelectInput
-              label="Field Status"
+              label="Status"
               options={[
                 { label: 'Active', value: 'ACTIVE' },
                 { label: 'Inactive', value: 'INACTIVE' },
@@ -301,4 +301,4 @@ const FieldSettingPopover: React.FC<IProps> = (props) => {
   );
 };
 
-export default FieldSettingPopover;
+export default FieldSettingSheet;

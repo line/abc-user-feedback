@@ -17,8 +17,6 @@ import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { ScrollArea } from '@ufb/react';
-
 import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectGuard } from '@/entities/project';
@@ -60,7 +58,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
           channelId={currentChannelId}
         />
       </div>
-      <ScrollArea className="border-neutral-tertiary h-[calc(100vh-200px)] w-full overflow-auto rounded border p-6">
+      <div className="border-neutral-tertiary h-[calc(100vh-200px)] w-full overflow-auto rounded border p-6">
         {currentMenu === 'project' && (
           <ProjectInfoSetting projectId={projectId} />
         )}
@@ -100,7 +98,7 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             )}
           </>
         )}
-      </ScrollArea>
+      </div>
     </div>
   );
 };

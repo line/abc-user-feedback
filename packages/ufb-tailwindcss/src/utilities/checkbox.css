@@ -17,10 +17,3 @@
 .check-large {
   @apply h-20 w-20;
 }
-
-.checkbox-icon-check {
-  @apply rounded-4 bg-[var(--checkbox-fg-checked)] text-[var(--checkbox-icon-checked)];
-}
-.checkbox-icon-indeterminate {
-  @apply rounded-4 bg-[var(--checkbox-fg-indeterminate)] text-[var(--checkbox-icon-indeterminate)];
-}

@@ -29,7 +29,7 @@ interface Props {
 const SettingAlert: React.FC<Props> = (props) => {
   const { description } = props;
   return (
-    <Alert variant="informative" className="mb-4">
+    <Alert variant="informative">
       <AlertContent>
         <AlertIcon name="RiInformation2Fill" />
         <AlertTextContainer>

@@ -18,8 +18,8 @@ export interface FormOverlayProps<T = unknown> {
   isOpen: boolean;
   close: () => void;
   data?: T;
-  onSubmit: (data: T) => Promise<unknown>;
-  onClickDelete?: () => Promise<unknown>;
+  onSubmit: (data: T) => unknown;
+  onClickDelete?: () => unknown;
   updateDisabled?: boolean;
   deleteDisabled?: boolean;
 }
