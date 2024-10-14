@@ -396,7 +396,7 @@ importers:
         version: 4.3.0
       countries-and-timezones:
         specifier: ^3.6.0
-        version: 3.7.0
+        version: 3.7.1
       date-fns:
         specifier: ^4.0.0
         version: 4.1.0
@@ -4768,8 +4768,8 @@ packages:
       typescript:
         optional: true
 
-  countries-and-timezones@3.7.0:
-    resolution: {integrity: sha512-Ws+r+vlCVzpxIgLpsSP6m7Q12UvOwRZ5+QKcHcuAEBBd1fJH0Wc4pOYIRQSmK4bDzOHE6xmx/PtFQ8A5DMZqpg==}
+  countries-and-timezones@3.7.1:
+    resolution: {integrity: sha512-miFjH1fKf8y6IDRYSZE/rcSE39GXhF9eJWJtLASPo+c+7QKvg59D/WjsGRH9ebdtqIZ2J70MqL7sYytZubQdUQ==}
     engines: {node: '>=8.x', npm: '>=5.x'}
 
   crc-32@1.2.2:
@@ -14604,7 +14604,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  countries-and-timezones@3.7.0: {}
+  countries-and-timezones@3.7.1: {}
 
   crc-32@1.2.2: {}
 
