@@ -128,7 +128,7 @@ export class TenantService {
           },
         },
         page: 1,
-        limit: 100000,
+        limit: 10000,
       });
 
       for (const feedback of feedbacks.items) {
