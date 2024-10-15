@@ -102,7 +102,7 @@ export class TenantService {
     };
   }
 
-  async deleteOldFeedback() {
+  async deleteOldFeedbacks() {
     const channels = await this.channelRepo.find();
     const feedbackIdsToDelete: number[] = [];
 
@@ -171,7 +171,7 @@ export class TenantService {
         )
       ) {
         try {
-          await this.deleteOldFeedback();
+          await this.deleteOldFeedbacks();
         } finally {
           await this.schedulerLockService.releaseLock(
             LockTypeEnum.FEEDBACK_DELETE,
@@ -179,11 +179,11 @@ export class TenantService {
         }
       } else {
         this.logger.log({
-          message: 'Failed to acquire lock for deleting old feedback',
+          message: 'Failed to acquire lock for deleting old feedbacks',
         });
       }
     });
-    this.schedulerRegistry.addCronJob(`delete-old-feedback`, job);
+    this.schedulerRegistry.addCronJob(`delete-old-feedbacks`, job);
     job.start();
     console.log('Cron job started');
   }
