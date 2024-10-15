@@ -375,6 +375,7 @@ describe('FeedbackController (integration)', () => {
         .expect(201);
 
       await tenantService.deleteOldFeedbacks();
+      console.log(process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS);
 
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
         query: {
@@ -395,6 +396,7 @@ describe('FeedbackController (integration)', () => {
         .send(findFeedbackDto)
         .expect(201)
         .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
+          console.log(body.items);
           expect(body.meta.itemCount).toBe(1);
         });
     });
