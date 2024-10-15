@@ -374,10 +374,34 @@ describe('FeedbackController (integration)', () => {
         .send(dto)
         .expect(201);
 
-      await tenantService.deleteOldFeedbacks();
-      console.log(process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS);
+      let findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
+        query: {
+          createdAt: {
+            gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
+            lt: DateTime.now().toFormat('yyyy-MM-dd'),
+          },
+        },
+        limit: 10,
+        page: 1,
+      };
 
-      const findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
+      await request(app.getHttpServer() as Server)
+        .post(
+          `/admin/projects/${project.id}/channels/${channel.id}/feedbacks/search`,
+        )
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(findFeedbackDto)
+        .expect(201)
+        .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
+          console.log(body.items);
+          // expect(body.meta.itemCount).toBe(1);
+        });
+      // const { body }: { body: FindFeedbacksByChannelIdResponseDto } = resp;
+      // console.log(body.items);
+
+      await tenantService.deleteOldFeedbacks();
+
+      findFeedbackDto = {
         query: {
           createdAt: {
             gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),

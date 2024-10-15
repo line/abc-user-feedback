@@ -115,7 +115,6 @@ export class TenantService {
     const autoFeedbackDeletionPeriodDays = this.configService.get<number>(
       'app.autoFeedbackDeletionPeriodDays',
     );
-    console.log(autoFeedbackDeletionPeriodDays);
 
     for (const { id } of channels) {
       const feedbacks = await this.feedbackService.findByChannelId({
