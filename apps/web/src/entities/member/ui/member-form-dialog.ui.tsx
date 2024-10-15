@@ -70,7 +70,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
         onClick: onClickDelete,
       }}
       submitBtn={{
-        disabled: updateDisabled || !user || !role,
+        disabled: updateDisabled || !user || !role || role.id === data?.role.id,
         onClick: async () => {
           if (!user || !role) return;
           await onSubmit({ user, role });

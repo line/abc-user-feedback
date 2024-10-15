@@ -162,10 +162,8 @@ const BasicTable = <T,>(props: IProps<T>) => {
                 <DraggableRow
                   key={row.id}
                   row={row}
-                  onClickRow={
-                    onClickRow ?
-                      () => onClickRow(Number(row.index), row.original)
-                    : undefined
+                  onClickRow={() =>
+                    onClickRow?.(Number(row.index), row.original)
                   }
                 />
               ))}

@@ -100,7 +100,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       />
     ));
   };
-  const openUpdateWebhookSheet = (id: number, webhook: Webhook) => {
+  const openUpdateWebhookSheet = (_: number, webhook: Webhook) => {
     overlay.open(({ close, isOpen }) => (
       <WebhookFormSheet
         isOpen={isOpen}
@@ -114,7 +114,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
         }}
         channels={channels?.items ?? []}
         onSubmit={async (data: WebhookInfo) => {
-          await updateWebhook({ webhookId: id, body: data });
+          await updateWebhook({ webhookId: webhook.id, body: data });
           close();
         }}
         onClickDelete={async () => {

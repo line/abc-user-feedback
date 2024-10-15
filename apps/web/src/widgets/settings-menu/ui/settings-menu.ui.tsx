@@ -113,7 +113,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
     <Menu
       type="single"
       orientation="vertical"
-      className="w-full"
+      className="w-full p-0"
       value={menuValue}
     >
       {projectMenuItems.map((item) => (

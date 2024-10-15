@@ -435,16 +435,16 @@
     }
   },
   "help-card": {
-    "project-info": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
-    "role": "Projectにfアクセスして使用する権限を設定できます。",
-    "member": "Projectに参加する Memberを登録または管理することができます。",
-    "api-key": "ユーザーフィードバックAPIキー情報を管理します。 API を使用する場合は、キーを作成して使用します。 詳細については、API <docs>Docs</docs>をご参考ください。",
-    "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
-    "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
-    "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
-    "image-config": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <docs>Docs</docs>を参照してください。",
-    "field-preview": "登録されたField情報に基づいて、フィードバックがどのように見えるかのプレビューを提供します。なお、プレビューではサンプルデータを使用して表示します。",
-    "webhook": "Webhook は、User Feedback 内で発生するさまざまなイベントに使用されます。 詳細はWebhook <docs>Docs</docs> をご覧ください。"
+    "project-info": "Project単位でフィードバックを収集できます。フィードバックを管理するプロダクトの基準でProject情報を登録してください。（例：Product Name）",
+    "role": "Projectにアクセスして使用できる権限を設定できます。",
+    "member": "Projectに参加するMemberを登録または管理できます。",
+    "api-key": "User Feedback API Keyを管理する画面です。APIを利用するには、Keyを生成して使用してください。詳細はAPI <docs>Docs</docs>を参照してください。",
+    "issue-tracker": "User FeedbackとIssue Tracking Systemの連携を設定する画面です。使用中のIssue Tracking Systemの情報を入力してください。",
+    "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。フィードバックの経路と性質を考慮してChannel情報を登録してください。（例：VOC、APP Review）",
+    "field": "登録したChannelに合わせてUserFeedbackとして収集したいフィードバックフィールドを定義します。APIを通じて収集したいフィールドやADMINで直接登録したいフィールドを事前に設定してください。",
+    "image-config": "Image形式のフィードバックを収集する場合、Image Storageとの連携を設定し、Image URLドメインのホワイトリストを設定できる画面です。詳細はImage <docs>Docs</docs>を参照してください。",
+    "field-preview": "登録したField情報に基づいて、フィードバックがどのように見えるかのプレビューを提供します。プレビューはサンプルデータを使用して表示されます。",
+    "webhook": "User Feedbackで発生するイベントトリガーに合わせてWebhook連携を設定できる画面です。詳細はWebhook <docs>Docs</docs>を参照してください。"
   },
   "hint": {
     "required": "必須入力対象です。",

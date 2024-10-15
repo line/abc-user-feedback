@@ -40,13 +40,13 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
       />
       <TextInput
         label="Base URL"
-        placeholder="example.com"
+        placeholder="https://example.com"
         error={formState.errors.ticketDomain?.message}
         {...register('ticketDomain')}
       />
       <TextInput
         label="Project Key"
-        placeholder="PROJECT"
+        placeholder="PROJ"
         error={formState.errors.ticketKey?.message}
         disabled={readOnly}
         {...register('ticketKey')}
@@ -60,7 +60,7 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
           )}
         >
           <Icon name="RiPriceTag3Fill" size={16} />
-          {`${watch('ticketDomain') ?? ''}/browse/${watch('ticketKey') ?? ''}-{Number}`}
+          {`${watch('ticketDomain') ?? 'https://example.com'}/browse/${watch('ticketKey') ?? 'PROJ'}-{Number}`}
         </div>
       </InputField>
     </div>

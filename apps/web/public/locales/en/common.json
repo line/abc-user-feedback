@@ -447,16 +447,16 @@
     }
   },
   "help-card": {
-    "project-info": "It collects feedback on a project-by-project basis. Please register project information based on the product for which you want to manage feedback (e.g., Product Name).",
-    "role": "Set permissions for accessing and using the project.",
-    "member": "Register or manage members participating in the project.",
-    "api-key": "It manages the User Feedback API Key information. If you want to use the API, create and use the Key. See API <docs>Docs</docs> for more information.",
-    "issue-tracker": "Link and manage User Feedback with your Issue Tracking System. Please enter your Issue Tracking System details.",
-    "channel-info": "Define the feedback fields to collect through the channel. Please register channel information considering the feedback path and characteristics (e.g., VOC, App Review).",
-    "field": "Define the feedback fields to be collected via User Feedback for each registered channel. Pre-configure fields to be collected through the API or those to be directly registered in the ADMIN.",
-    "image-config": "For feedback in images format, integrate with Image Storage and establish a whitelist for image URL domains.\nRefer to the Image <docs>Docs</docs> for details.",
-    "field-preview": "Based on the registered Field information, we provide a preview of what the feedback will look like. Please note that the preview uses sample data for demonstration.",
-    "webhook": "Webhook is used for various events that occur within User Feedback. For more details, refer to the Webhook <docs>Docs</docs>."
+    "project-info": "You can collect feedback by Project unit. Please register Project information based on the product for which you want to manage feedback. (ex. Product Name)",
+    "role": "You can set permissions to access and use the Project.",
+    "member": "You can register or manage Members who will participate in the Project.",
+    "api-key": "This is the screen for managing User Feedback API Key. To use the API, please generate a Key and use it. For more details, please refer to the API <docs>Docs</docs>.",
+    "issue-tracker": "This is the screen for setting up the connection between User Feedback and Issue Tracking System. Please enter the information of the Issue Tracking System you are using.",
+    "channel-info": "You can define the feedback fields you want to collect through Channels. Please register Channel information considering the feedback path and characteristics. (ex. VOC, APP Review)",
+    "field": "Define the feedback fields you want to collect as UserFeedback according to the registered Channel. Set up the fields you want to collect through API or register directly in ADMIN in advance.",
+    "image-config": "If you collect feedback in Image format, this is the screen where you can set up integration with Image Storage and set up a whitelist for Image URL domains. For more details, please refer to the Image <docs>Docs</docs>.",
+    "field-preview": "Based on the registered Field information, we provide a preview of what the feedback will look like. Note that the preview uses example data.",
+    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For more details, please refer to the Webhook <docs>Docs</docs>."
   },
   "hint": {
     "required": "Required",

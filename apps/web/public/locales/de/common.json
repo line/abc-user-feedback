@@ -447,16 +447,16 @@
     }
   },
   "help-card": {
-    "project-info": "Sammeln Sie Feedback für jedes Projekt einzeln. Bitte registrieren Sie die Projektinformationen basierend auf dem Produkt, für das Sie Feedback verwalten möchten (z.B. Produktname).",
-    "role": "Legen Sie Berechtigungen für den Zugriff und die Nutzung des Projekts fest.",
-    "member": "Registrieren oder verwalten Sie Mitglieder, die am Projekt teilnehmen.",
-    "api-key": "Es verwaltet die User Feedback API Key Informationen. Wenn Sie die API verwenden wollen, erstellen und verwenden Sie den Schlüssel. Weitere Informationen finden Sie unter API <docs>Docs</docs>.",
-    "issue-tracker": "Verknüpfen und verwalten Sie User Feedback mit Ihrem Issue-Tracking-System. Bitte geben Sie die Details Ihres Issue-Tracking-Systems ein.",
-    "channel-info": "Definieren Sie die Feedbackfelder, die über den Kanal gesammelt werden sollen. Bitte registrieren Sie Kanalinformationen unter Berücksichtigung des Feedbackwegs und der Eigenschaften (z.B. VOC, App-Bewertung).",
-    "field": "Definieren Sie die Feedbackfelder, die über User Feedback für jeden registrierten Kanal gesammelt werden sollen. Konfigurieren Sie vorab die Felder, die über die API gesammelt oder direkt im ADMIN registriert werden sollen.",
-    "image-config": "Für Feedback in Bildformat, integrieren Sie einen Bild-Speicher und richten Sie eine Whitelist für Bild-URL-Domains ein.\nBeziehen Sie sich auf die Bild <docs>Dokumentation</docs> für Details.",
-    "field-preview": "Basierend auf den registrierten Field-Informationen bieten wir eine Vorschau darauf, wie das Feedback aussehen wird. Bitte beachten Sie, dass die Vorschau Beispieldaten zur Veranschaulichung verwendet.",
-    "webhook": "Nutzen Sie Webhooks, um auf eine Vielzahl von Ereignissen innerhalb von User Feedback zu reagieren. Für weitere Details, beziehen Sie sich auf die Webhook <docs>Dokumentation</docs>."
+    "project-info": "Sie können Feedback nach Project-Einheit sammeln. Bitte registrieren Sie Project-Informationen basierend auf dem Produkt, für das Sie Feedback verwalten möchten. (z.B. Product Name)",
+    "role": "Sie können Berechtigungen für den Zugriff und die Nutzung des Projects festlegen.",
+    "member": "Sie können Member, die am Project teilnehmen werden, registrieren oder verwalten.",
+    "api-key": "Dies ist der Bildschirm zur Verwaltung des User Feedback API Key. Um die API zu nutzen, generieren Sie bitte einen Key und verwenden Sie diesen. Weitere Details finden Sie in den API <docs>Docs</docs>.",
+    "issue-tracker": "Dies ist der Bildschirm zum Einrichten der Verbindung zwischen User Feedback und Issue Tracking System. Bitte geben Sie die Informationen des von Ihnen verwendeten Issue Tracking Systems ein.",
+    "channel-info": "Sie können die Feedback-Felder definieren, die Sie über Channels sammeln möchten. Bitte registrieren Sie Channel-Informationen unter Berücksichtigung des Feedback-Pfads und der Eigenschaften. (z.B. VOC, APP Review)",
+    "field": "Definieren Sie die Feedback-Felder, die Sie als UserFeedback gemäß dem registrierten Channel sammeln möchten. Legen Sie im Voraus die Felder fest, die Sie über die API sammeln oder direkt im ADMIN registrieren möchten.",
+    "image-config": "Wenn Sie Feedback im Image-Format sammeln, ist dies der Bildschirm, auf dem Sie die Integration mit dem Image Storage einrichten und eine Whitelist für Image-URL-Domains festlegen können. Weitere Details finden Sie in den Image <docs>Docs</docs>.",
+    "field-preview": "Basierend auf den registrierten Field-Informationen bieten wir eine Vorschau, wie das Feedback aussehen wird. Beachten Sie, dass die Vorschau Beispieldaten verwendet.",
+    "webhook": "Dies ist der Bildschirm, auf dem Sie die Webhook-Integration entsprechend den in User Feedback auftretenden Ereignis-Triggern einrichten können. Weitere Details finden Sie in den Webhook <docs>Docs</docs>."
   },
   "hint": {
     "required": "Erforderlich",

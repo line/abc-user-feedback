@@ -447,16 +447,16 @@
     }
   },
   "help-card": {
-    "project-info": "基于您希望管理反馈的产品，请注册项目信息（例如，产品名称）。",
-    "role": "设置访问和使用项目的权限。",
-    "member": "注册或管理参与项目的成员。",
-    "api-key": "它管理用户反馈 API Key 信息。 如果您想使用 API，请创建并使用 Key。 详细内容请参考API  <docs>Docs</docs>。",
-    "issue-tracker": "将用户反馈与您的问题跟踪系统链接和管理。请输入您的问题跟踪系统详细信息。",
-    "channel-info": "定义通过频道收集的反馈字段。请注册考虑到反馈路径和特点的频道信息（例如，VOC，应用评价）。",
-    "field": "定义每个注册频道通过用户反馈收集的反馈字段。预先配置通过API收集或直接在ADMIN中注册的字段。",
-    "image-config": "对于图片格式的反馈，与图片存储集成并建立图片URL域的白名单。\n有关详细信息，请参阅图片 <docs>文档</docs>。",
-    "field-preview": "根据注册的Field信息，我们提供反馈可能呈现的预览。请注意，预览使用示例数据进行展示。",
-    "webhook": "Webhook 用于在 User Feedback 中发生的各种事件。 有关更多详细信息，请参阅Webhook <docs>文档</docs>。"
+    "project-info": "您可以按Project单位收集反馈。请根据您要管理反馈的产品标准注册Project信息。（例如：Product Name）",
+    "role": "您可以设置访问和使用Project的权限。",
+    "member": "您可以注册或管理参与Project的Member。",
+    "api-key": "这是管理User Feedback API Key的界面。要使用API，请生成Key并使用。详细信息请参考API <docs>Docs</docs>。",
+    "issue-tracker": "这是设置User Feedback与Issue Tracking System连接的界面。请输入您正在使用的Issue Tracking System的信息。",
+    "channel-info": "您可以通过Channel定义想要收集的反馈字段。请考虑反馈路径和特性注册Channel信息。（例如：VOC，APP Review）",
+    "field": "根据注册的Channel定义您想作为UserFeedback收集的反馈字段。预先设置您想通过API收集的字段或在ADMIN中直接注册的字段。",
+    "image-config": "如果收集Image格式的反馈，这是设置与Image Storage集成并设置Image URL域名白名单的界面。详细信息请参考Image <docs>Docs</docs>。",
+    "field-preview": "基于注册的Field信息，我们提供反馈将如何显示的预览。请注意，预览使用示例数据。",
+    "webhook": "这是根据User Feedback中发生的事件触发器设置Webhook集成的界面。详细信息请参考Webhook <docs>Docs</docs>。"
   },
   "hint": {
     "required": "必填",

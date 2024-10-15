@@ -104,6 +104,7 @@ const RoleSetting: React.FC<IProps> = (props) => {
         close={close}
         onSubmit={async ({ name, permissions }) => {
           await createRole({ name, permissions });
+          close();
         }}
       />
     ));
@@ -117,9 +118,11 @@ const RoleSetting: React.FC<IProps> = (props) => {
         data={role}
         onSubmit={async ({ name, permissions }) => {
           await updateRole({ name, permissions, roleId: role.id });
+          close();
         }}
         onClickDelete={async () => {
           await deleteRole({ roleId: role.id });
+          close();
         }}
         deleteDisabled={!perms.includes('project_role_delete')}
         updateDisabled={!perms.includes('project_role_update')}

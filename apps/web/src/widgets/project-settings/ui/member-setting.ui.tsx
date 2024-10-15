@@ -114,7 +114,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     ));
   };
 
-  const openUpdateMemberFormDialog = (id: number, member: Member) => {
+  const openUpdateMemberFormDialog = (_: number, member: Member) => {
     if (!projectData || !rolesData) return;
     overlay.open(({ close, isOpen }) => (
       <MemberFormDialog
@@ -122,9 +122,9 @@ const MemberSetting: React.FC<IProps> = (props) => {
         isOpen={isOpen}
         data={member}
         onSubmit={(newMember) =>
-          updateMember({ memberId: id, roleId: newMember.role.id })
+          updateMember({ memberId: member.id, roleId: newMember.role.id })
         }
-        onClickDelete={() => deleteMember({ memberId: id })}
+        onClickDelete={() => deleteMember({ memberId: member.id })}
         project={projectData}
         roles={rolesData.roles}
         members={data?.members ?? []}

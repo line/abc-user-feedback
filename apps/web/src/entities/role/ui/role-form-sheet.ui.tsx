@@ -13,8 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
+import { useForm } from 'react-hook-form';
 
 import {
   Accordion,
@@ -33,7 +36,7 @@ import {
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
-import { TextInput } from '@/shared';
+import { DeleteDialog, TextInput } from '@/shared';
 
 import type { PermissionType } from '../permission.type';
 import {
@@ -54,6 +57,7 @@ import {
   ProjectTrackerPermissionList,
   ProjectWebhookPermissionList,
 } from '../permission.type';
+import { roleInfoSchema } from '../role.schema';
 import type { RoleInfo } from '../role.type';
 
 interface Props extends FormOverlayProps<RoleInfo> {}
@@ -61,26 +65,33 @@ interface Props extends FormOverlayProps<RoleInfo> {}
 const RoleFormSheet: React.FC<Props> = (props) => {
   const { close, isOpen, data, onSubmit, onClickDelete } = props;
 
+  const overlay = useOverlay();
+
   const { t } = useTranslation();
+  const {
+    register,
+    reset,
+    handleSubmit,
+    setValue,
+    getValues,
+    watch,
+    formState,
+  } = useForm<RoleInfo>({
+    resolver: zodResolver(roleInfoSchema),
+    defaultValues: { name: '', permissions: [] },
+  });
+  console.log('formState: ', formState.errors);
+  const permissions = watch('permissions');
 
-  const [name, setName] = useState(data?.name ?? '');
-  const [permissions, setPermissions] = useState<PermissionType[]>(
-    data?.permissions ?? [],
-  );
-  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    reset(data);
+  }, [data]);
 
-  const onClickSave = async () => {
-    setIsLoading(true);
-    try {
-      await onSubmit({ name, permissions });
-      close();
-    } finally {
-      setIsLoading(false);
-    }
-  };
   const checkPermission = (checked: boolean, perm: PermissionType) => {
-    setPermissions((prev) =>
-      checked ? [...prev, perm] : prev.filter((v) => v !== perm),
+    const permssions = getValues('permissions');
+    setValue(
+      'permissions',
+      checked ? [...permssions, perm] : permssions.filter((v) => v !== perm),
     );
     if (
       checked &&
@@ -99,8 +110,9 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         );
       });
       relatedPerms.forEach((perm) => {
-        setPermissions((prev) =>
-          prev.includes(perm) ? prev : [...prev, perm],
+        setValue(
+          'permissions',
+          permssions.includes(perm) ? permssions : [...permssions, perm],
         );
       });
     }
@@ -117,11 +129,27 @@ const RoleFormSheet: React.FC<Props> = (props) => {
       });
 
       relatedPerms.forEach((perm) => {
-        setPermissions((prev) =>
-          prev.includes(perm) ? prev.filter((v) => v !== perm) : prev,
+        setValue(
+          'permissions',
+          permssions.includes(perm) ?
+            permssions.filter((v) => v !== perm)
+          : permssions,
         );
       });
     }
+  };
+  const openDeleteDialog = () => {
+    overlay.open(({ close: dialogClose, isOpen }) => (
+      <DeleteDialog
+        close={dialogClose}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          await onClickDelete?.();
+          dialogClose();
+          close();
+        }}
+      />
+    ));
   };
 
   return (
@@ -135,102 +163,102 @@ const RoleFormSheet: React.FC<Props> = (props) => {
           </SheetTitle>
         </SheetHeader>
         <SheetBody>
-          <TextInput
-            label="Name"
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Accordion type="multiple" iconAlign="left">
-            <PermissionRows
-              title="Feedback"
-              permmissionsText={FeedbackPermissionText}
-              permissions={FeedbackPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
+          <form
+            className="flex flex-col"
+            onSubmit={handleSubmit((role) => onSubmit(role))}
+            id="role"
+          >
+            <TextInput
+              label="Name"
+              required
+              {...register('name')}
+              error={formState.errors.name?.message}
             />
-            <PermissionRows
-              title="Issue"
-              permmissionsText={IssuePermissionText}
-              permissions={IssuePermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Project Info"
-              permmissionsText={ProjectPermissionText}
-              permissions={ProjectInfoPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Member"
-              permmissionsText={ProjectPermissionText}
-              permissions={ProjectMemberPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Role"
-              permmissionsText={ProjectPermissionText}
-              permissions={ProjectRolePermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Api Key"
-              permmissionsText={ProjectPermissionText}
-              permissions={ProjectApiKeyPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Issue Tracker"
-              permmissionsText={ProjectPermissionText}
-              permissions={ProjectTrackerPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Webhook"
-              permmissionsText={ProjectPermissionText}
-              permissions={ProjectWebhookPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Channel Info"
-              permmissionsText={ChannelPermissionText}
-              permissions={ChannelInfoPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Channel Field"
-              permmissionsText={ChannelPermissionText}
-              permissions={ChannelFieldPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-            <PermissionRows
-              title="Channel Image Setting"
-              permmissionsText={ChannelPermissionText}
-              permissions={ChannelImageSettingPermissionList}
-              currentPermissions={permissions}
-              onChckedChange={checkPermission}
-            />
-          </Accordion>
+            <Accordion type="multiple" iconAlign="left">
+              <PermissionRows
+                title="Feedback"
+                permmissionsText={FeedbackPermissionText}
+                permissions={FeedbackPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Issue"
+                permmissionsText={IssuePermissionText}
+                permissions={IssuePermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Project Info"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectInfoPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Member"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectMemberPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Role"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectRolePermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Api Key"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectApiKeyPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Issue Tracker"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectTrackerPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Webhook"
+                permmissionsText={ProjectPermissionText}
+                permissions={ProjectWebhookPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Channel Info"
+                permmissionsText={ChannelPermissionText}
+                permissions={ChannelInfoPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Channel Field"
+                permmissionsText={ChannelPermissionText}
+                permissions={ChannelFieldPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+              <PermissionRows
+                title="Channel Image Setting"
+                permmissionsText={ChannelPermissionText}
+                permissions={ChannelImageSettingPermissionList}
+                currentPermissions={permissions}
+                onChckedChange={checkPermission}
+              />
+            </Accordion>
+          </form>
         </SheetBody>
         <SheetFooter>
           {data && onClickDelete && (
             <div className="flex-1">
-              <Button
-                variant="destructive"
-                onClick={async () => {
-                  await onClickDelete();
-                  close();
-                }}
-              >
+              <Button variant="destructive" onClick={openDeleteDialog}>
                 {t('v2.button.delete')}
               </Button>
             </div>
@@ -239,9 +267,10 @@ const RoleFormSheet: React.FC<Props> = (props) => {
             <Button variant="outline">{t('v2.button.cancel')}</Button>
           </SheetClose>
           <Button
+            type="submit"
             className="min-w-[84px]"
-            onClick={onClickSave}
-            loading={isLoading}
+            form="role"
+            disabled={!formState.isValid}
           >
             {t('v2.button.save')}
           </Button>
