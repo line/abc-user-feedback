@@ -396,7 +396,7 @@ importers:
         version: 4.3.0
       countries-and-timezones:
         specifier: ^3.6.0
-        version: 3.7.1
+        version: 3.7.2
       date-fns:
         specifier: ^4.0.0
         version: 4.1.0
@@ -4768,8 +4768,8 @@ packages:
       typescript:
         optional: true
 
-  countries-and-timezones@3.7.1:
-    resolution: {integrity: sha512-miFjH1fKf8y6IDRYSZE/rcSE39GXhF9eJWJtLASPo+c+7QKvg59D/WjsGRH9ebdtqIZ2J70MqL7sYytZubQdUQ==}
+  countries-and-timezones@3.7.2:
+    resolution: {integrity: sha512-BHAMt4pKb3U3r/mRfiIlVnDhRd8m6VC20gwCWtpZGZkSsjZmnMDKFnnjWYGWhBmypQAqcQILFJwmEhIgWGVTmw==}
     engines: {node: '>=8.x', npm: '>=5.x'}
 
   crc-32@1.2.2:
@@ -8076,6 +8076,7 @@ packages:
 
   react-beautiful-dnd@13.1.1:
     resolution: {integrity: sha512-0Lvs4tq2VcrEjEgDXHjT98r+63drkKEgqyxdA7qD3mvKwga6a5SscbdLPO2IExotU1jW8L0Ksdl0Cj2AF67nPQ==}
+    deprecated: 'react-beautiful-dnd is now deprecated. Context and options: https://github.com/atlassian/react-beautiful-dnd/issues/2672'
     peerDependencies:
       react: ^16.8.5 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
@@ -14604,7 +14605,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  countries-and-timezones@3.7.1: {}
+  countries-and-timezones@3.7.2: {}
 
   crc-32@1.2.2: {}
 
