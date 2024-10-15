@@ -374,7 +374,7 @@ describe('FeedbackController (integration)', () => {
         .send(dto)
         .expect(201);
 
-      await tenantService.deleteOldFeedback();
+      await tenantService.deleteOldFeedbacks();
 
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
         query: {
