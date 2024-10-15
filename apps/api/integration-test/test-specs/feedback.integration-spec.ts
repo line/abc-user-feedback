@@ -360,19 +360,14 @@ describe('FeedbackController (integration)', () => {
           dto[key] = getRandomValue(format, options);
         });
 
-      dto.createdAt = DateTime.now()
-        .setZone('Asia/Tokyo')
-        .minus({ month: 7 })
-        .toFormat('yyyy-MM-dd');
+      dto.createdAt = DateTime.now().minus({ month: 7 }).toFormat('yyyy-MM-dd');
       await request(app.getHttpServer() as Server)
         .post(`/admin/projects/${project.id}/channels/${channel.id}/feedbacks`)
         .set('x-api-key', `${process.env.MASTER_API_KEY}`)
         .send(dto)
         .expect(201);
 
-      dto.createdAt = DateTime.now()
-        .setZone('Asia/Tokyo')
-        .toFormat('yyyy-MM-dd');
+      dto.createdAt = DateTime.now().minus({ days: 1 }).toFormat('yyyy-MM-dd');
       console.log(dto);
       await request(app.getHttpServer() as Server)
         .post(`/admin/projects/${project.id}/channels/${channel.id}/feedbacks`)
