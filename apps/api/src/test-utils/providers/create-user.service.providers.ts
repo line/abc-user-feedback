@@ -15,9 +15,16 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { CreateUserService } from '@/domains/admin/user/create-user.service';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
-import { UserRepositoryStub } from '../stubs';
+import {
+  ChannelRepositoryStub,
+  ProjectRepositoryStub,
+  UserRepositoryStub,
+} from '../stubs';
+import { FeedbackServiceProviders } from './feedback.service.providers';
 import { MemberServiceProviders } from './member.service.providers';
 import { TenantServiceProviders } from './tenant.service.providers';
 import { UserPasswordServiceProviders } from './user-password.service.providers';
@@ -27,5 +34,14 @@ export const CreateUserServiceProviders = [
   ...UserPasswordServiceProviders,
   ...TenantServiceProviders,
   ...MemberServiceProviders,
+  ...FeedbackServiceProviders,
   { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
+  {
+    provide: getRepositoryToken(ChannelEntity),
+    useClass: ChannelRepositoryStub,
+  },
+  {
+    provide: getRepositoryToken(ProjectEntity),
+    useClass: ProjectRepositoryStub,
+  },
 ];

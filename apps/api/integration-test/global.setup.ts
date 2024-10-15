@@ -23,6 +23,8 @@ process.env.NODE_ENV = 'test';
 process.env.MYSQL_PRIMARY_URL =
   'mysql://root:userfeedback@localhost:13307/integration';
 process.env.MASTER_API_KEY = 'master-api-key';
+process.env.ENABLE_AUTO_FEEDBACK_DELETION = 'true';
+process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS = '30';
 
 async function createTestDatabase() {
   const connection = await connect();

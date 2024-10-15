@@ -76,7 +76,7 @@
     "SKIP_ENV_VALIDATION",
     "PORT",
     "ENABLE_AUTO_FEEDBACK_DELETION",
-    "AUTO_FEEDBACK_DELETION_CYCLE_DAYS"
+    "AUTO_FEEDBACK_DELETION_PERIOD_DAYS"
   ],
   "globalPassThroughEnv": ["NODE_ENV", "CI", "npm_lifecycle_event"]
 }
