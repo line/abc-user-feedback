@@ -31,7 +31,7 @@ const ShareButton: React.FC<IProps> = ({ pathname }) => {
       const { origin } = window.location;
       await navigator.clipboard.writeText(`${origin}${pathname}`);
       toast.positive({ title: t('toast.copy'), iconName: 'CopyFill' });
-    } catch (error) {
+    } catch {
       toast.negative({ title: 'fail' });
     }
   };

@@ -205,6 +205,22 @@ describe('ChannelController (integration)', () => {
           expect(body.fields[4].name).toBe('TestFieldUpdated');
         });
     });
+
+    it('should return 400 error when update channel fields with special character', async () => {
+      const dto = new UpdateChannelFieldsRequestDto();
+      const fieldDto = new UpdateChannelRequestFieldDto();
+      fieldDto.id = 5;
+      fieldDto.format = FieldFormatEnum.text;
+      fieldDto.key = 'testField';
+      fieldDto.name = '!';
+      dto.fields = [fieldDto];
+
+      await request(app.getHttpServer() as Server)
+        .put(`/admin/projects/${project.id}/channels/1/fields`)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(dto)
+        .expect(400);
+    });
   });
 
   describe('/admin/projects/:projectId/channels/:channelId (DELETE)', () => {

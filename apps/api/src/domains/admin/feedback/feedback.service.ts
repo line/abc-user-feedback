@@ -719,7 +719,7 @@ export class FeedbackService {
       );
 
       return imageUrlsByKeys;
-    } catch (e) {
+    } catch {
       throw new InternalServerErrorException('failed to upload images');
     }
   }

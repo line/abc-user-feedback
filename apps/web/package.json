@@ -32,7 +32,7 @@
   "dependencies": {
     "@faker-js/faker": "^8.4.1",
     "@floating-ui/react": "^0.26.12",
-    "@headlessui/react": "2.1.9",
+    "@headlessui/react": "2.1.10",
     "@headlessui/tailwindcss": "^0.2.0",
     "@hookform/resolvers": "^3.3.4",
     "@mui/base": "5.0.0-beta.58",
@@ -78,7 +78,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.24.4",
-    "@rollup/plugin-commonjs": "^26.0.0",
+    "@rollup/plugin-commonjs": "^28.0.0",
     "@svgr/webpack": "^8.1.0",
     "@swc/core": "^1.4.16",
     "@swc/jest": "^0.2.36",
@@ -99,7 +99,7 @@
     "eslint": "catalog:",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "jiti": "^1.21.6",
+    "jiti": "^2.0.0",
     "msw": "^2.3.0",
     "next-router-mock": "^0.9.13",
     "node-mocks-http": "^1.14.1",

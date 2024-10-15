@@ -120,7 +120,7 @@ const FieldSetting: React.FC<IProps> = ({ channelId, projectId }) => {
       if (router.pathname !== url && !confirm(confirmMsg)) {
         router.events.emit('routeChangeError');
 
-        throw `사이트 변경 취소`;
+        throw new Error(`사이트 변경 취소`);
       }
     };
     router.events.on('routeChangeStart', handleBeforeChangeRoute);

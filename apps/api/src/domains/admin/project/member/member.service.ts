@@ -51,7 +51,7 @@ export class MemberService {
 
     try {
       await this.userService.findById(userId);
-    } catch (error) {
+    } catch {
       throw new MemberInvalidUserException();
     }
 
