@@ -330,7 +330,7 @@ importers:
     devDependencies:
       '@playwright/test':
         specifier: ^1.43.1
-        version: 1.48.0
+        version: 1.48.1
       axios:
         specifier: ^1.7.2
         version: 1.7.7
@@ -420,13 +420,13 @@ importers:
         version: 4.0.0
       next:
         specifier: ^14.2.2
-        version: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-i18next:
         specifier: ^15.3.0
-        version: 15.3.1(i18next@23.16.0)(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-i18next@15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 15.3.1(i18next@23.16.0)(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-i18next@15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       nuqs:
         specifier: ^1.17.4
-        version: 1.20.0(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        version: 1.20.0(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       pino:
         specifier: ^9.0.0
         version: 9.4.0
@@ -553,7 +553,7 @@ importers:
         version: 2.4.11(typescript@5.6.3)
       next-router-mock:
         specifier: ^0.9.13
-        version: 0.9.13(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 0.9.13(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       node-mocks-http:
         specifier: ^1.14.1
         version: 1.16.1(@types/express@5.0.0)(@types/node@20.16.11)
@@ -2890,8 +2890,8 @@ packages:
     resolution: {integrity: sha512-cq8o4cWH0ibXh9VGi5P20Tu9XF/0fFXl9EUinr9QfTM7a7p0oTA4iJRCQWppXR1Pg8dSM0UCItCkPwsk9qWWYA==}
     engines: {node: ^12.20.0 || ^14.18.0 || >=16.0.0}
 
-  '@playwright/test@1.48.0':
-    resolution: {integrity: sha512-W5lhqPUVPqhtc/ySvZI5Q8X2ztBOUgZ8LbAFy0JQgrXZs2xaILrUcNO3rQjwbLPfGK13+rZsDa1FpG+tqYkT5w==}
+  '@playwright/test@1.48.1':
+    resolution: {integrity: sha512-s9RtWoxkOLmRJdw3oFvhFbs9OJS0BzrLUc8Hf6l2UdCNd1rqeEyD4BhCJkvzeEoD1FsK4mirsWwGerhVmYKtZg==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -7701,13 +7701,13 @@ packages:
     resolution: {integrity: sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==}
     engines: {node: '>=8'}
 
-  playwright-core@1.48.0:
-    resolution: {integrity: sha512-RBvzjM9rdpP7UUFrQzRwR8L/xR4HyC1QXMzGYTbf1vjw25/ya9NRAVnXi/0fvFopjebvyPzsmoK58xxeEOaVvA==}
+  playwright-core@1.48.1:
+    resolution: {integrity: sha512-Yw/t4VAFX/bBr1OzwCuOMZkY1Cnb4z/doAFSwf4huqAGWmf9eMNjmK7NiOljCdLmxeRYcGPPmcDgU0zOlzP0YA==}
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright@1.48.0:
-    resolution: {integrity: sha512-qPqFaMEHuY/ug8o0uteYJSRfMGFikhUysk8ZvAtfKmUK3kc/6oNl/y3EczF8OFGYIi/Ex2HspMfzYArk6+XQSA==}
+  playwright@1.48.1:
+    resolution: {integrity: sha512-j8CiHW/V6HxmbntOfyB4+T/uk08tBy6ph0MpBXwuoofkSnLmlfdYNNkFTYD6ofzzlSqLA1fwH4vwvVFvJgLN0w==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -12366,9 +12366,9 @@ snapshots:
 
   '@pkgr/core@0.1.1': {}
 
-  '@playwright/test@1.48.0':
+  '@playwright/test@1.48.1':
     dependencies:
-      playwright: 1.48.0
+      playwright: 1.48.1
 
   '@popperjs/core@2.11.8': {}
 
@@ -17763,7 +17763,7 @@ snapshots:
       '@nestjs/common': 10.4.4(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1)
       typeorm: 0.3.20(mysql2@3.11.3)(ts-node@10.9.2(@swc/core@1.7.36(@swc/helpers@0.5.13))(@types/node@20.16.11)(typescript@5.6.3))
 
-  next-i18next@15.3.1(i18next@23.16.0)(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-i18next@15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-i18next@15.3.1(i18next@23.16.0)(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-i18next@15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.25.0
       '@types/hoist-non-react-statics': 3.3.5
@@ -17771,16 +17771,16 @@ snapshots:
       hoist-non-react-statics: 3.3.2
       i18next: 23.16.0
       i18next-fs-backend: 2.3.2
-      next: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
       react-i18next: 15.0.3(i18next@23.16.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
-  next-router-mock@0.9.13(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
+  next-router-mock@0.9.13(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1):
     dependencies:
-      next: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1
 
-  next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.2.15
       '@swc/helpers': 0.5.5
@@ -17802,7 +17802,7 @@ snapshots:
       '@next/swc-win32-ia32-msvc': 14.2.15
       '@next/swc-win32-x64-msvc': 14.2.15
       '@opentelemetry/api': 1.9.0
-      '@playwright/test': 1.48.0
+      '@playwright/test': 1.48.1
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -17905,10 +17905,10 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  nuqs@1.20.0(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  nuqs@1.20.0(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
       mitt: 3.0.1
-      next: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   nwsapi@2.2.12: {}
 
@@ -18269,11 +18269,11 @@ snapshots:
     dependencies:
       find-up: 4.1.0
 
-  playwright-core@1.48.0: {}
+  playwright-core@1.48.1: {}
 
-  playwright@1.48.0:
+  playwright@1.48.1:
     dependencies:
-      playwright-core: 1.48.0
+      playwright-core: 1.48.1
     optionalDependencies:
       fsevents: 2.3.2
 
