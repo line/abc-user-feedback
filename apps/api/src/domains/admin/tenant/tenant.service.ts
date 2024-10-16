@@ -130,7 +130,6 @@ export class TenantService {
         page: 1,
         limit: 10000,
       });
-      console.log(feedbacks);
 
       for (const feedback of feedbacks.items) {
         feedbackIdsToDelete.push((feedback as Feedback).id);

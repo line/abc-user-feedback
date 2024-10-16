@@ -100,8 +100,8 @@ The following is a list of environment variables used by the application, along 
 | `OPENSEARCH_PASSWORD`                | OpenSearch password (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_           |
 | `AUTO_MIGRATION`                     | Automatically perform database migration on application start  | `true`                                        |
 | `MASTER_API_KEY`                     | Master API key for privileged operations                       | _none_                                        |
-| `ENABLE_AUTO_FEEDBACK_DELETION`      | Enable auto feedback deletion cron on application start        | `false`                                       |
-| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Auto feedback deletion period (in days)                        | _required if `ENABLE_AUTO_FEEDBACK_DELETION`_ |
+| `ENABLE_AUTO_FEEDBACK_DELETION`      | Enable auto old feedback deletion cron on application start    | `false`                                       |
+| `AUTO_FEEDBACK_DELETION_PERIOD_DAYS` | Auto old feedback deletion period (in days)                    | _required if `ENABLE_AUTO_FEEDBACK_DELETION`_ |
 
 Please ensure that you set the required environment variables before starting the application. Optional variables can be set as needed based on your specific configuration and requirements.
 
