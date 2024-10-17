@@ -28,6 +28,7 @@ import { FeedbackIssueStatisticsModule } from '@/domains/admin/statistics/feedba
 import { FeedbackStatisticsModule } from '@/domains/admin/statistics/feedback/feedback-statistics.module';
 import { IssueStatisticsModule } from '@/domains/admin/statistics/issue/issue-statistics.module';
 import { TenantModule } from '@/domains/admin/tenant/tenant.module';
+import { TenantEntity } from '../../tenant/tenant.entity';
 import { ApiKeyModule } from '../api-key/api-key.module';
 import { IssueTrackerModule } from '../issue-tracker/issue-tracker.module';
 import { IssueEntity } from '../issue/issue.entity';
@@ -46,6 +47,7 @@ import { ProjectService } from './project.service';
       FeedbackEntity,
       OptionEntity,
       ChannelEntity,
+      TenantEntity,
     ]),
     forwardRef(() => ChannelModule),
     FieldModule,
@@ -53,9 +55,9 @@ import { ProjectService } from './project.service';
     forwardRef(() => FeedbackModule),
     IssueModule,
     RoleModule,
-    TenantModule,
+    forwardRef(() => TenantModule),
     ApiKeyModule,
-    MemberModule,
+    forwardRef(() => MemberModule),
     IssueTrackerModule,
     FeedbackStatisticsModule,
     IssueStatisticsModule,

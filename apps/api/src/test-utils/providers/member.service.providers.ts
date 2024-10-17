@@ -15,8 +15,10 @@
  */
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { MemberEntity } from '../../domains/admin/project/member/member.entity';
 import { MemberService } from '../../domains/admin/project/member/member.service';
+import { TenantRepositoryStub } from '../stubs';
 import { MemberRepositoryStub } from '../stubs/member-repository.stub';
 import { RoleServiceProviders } from './role.service.providers';
 import { UserServiceProviders } from './user.service.providers';
@@ -27,6 +29,7 @@ export const MemberServiceProviders = [
     provide: getRepositoryToken(MemberEntity),
     useClass: MemberRepositoryStub,
   },
+  { provide: getRepositoryToken(TenantEntity), useClass: TenantRepositoryStub },
   ...RoleServiceProviders,
   ...UserServiceProviders,
 ];
