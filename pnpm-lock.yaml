@@ -181,7 +181,7 @@ importers:
         version: 10.3.0
       pino-pretty:
         specifier: ^11.0.0
-        version: 11.2.2
+        version: 11.3.0
       prom-client:
         specifier: ^15.1.2
         version: 15.1.3
@@ -7702,8 +7702,8 @@ packages:
   pino-http@10.3.0:
     resolution: {integrity: sha512-kaHQqt1i5S9LXWmyuw6aPPqYW/TjoDPizPs4PnDW4hSpajz2Uo/oisNliLf7We1xzpiLacdntmw8yaZiEkppQQ==}
 
-  pino-pretty@11.2.2:
-    resolution: {integrity: sha512-2FnyGir8nAJAqD3srROdrF1J5BIcMT4nwj7hHSc60El6Uxlym00UbCCd8pYIterstVBFlMyF1yFV8XdGIPbj4A==}
+  pino-pretty@11.3.0:
+    resolution: {integrity: sha512-oXwn7ICywaZPHmu3epHGU2oJX4nPmKvHvB/bwrJHlGcbEWaVcotkpyVHMKLKmiVryWYByNp0jpgAcXpFJDXJzA==}
     hasBin: true
 
   pino-std-serializers@7.0.0:
@@ -8047,8 +8047,8 @@ packages:
   pug@3.0.3:
     resolution: {integrity: sha512-uBi6kmc9f3SZ3PXxqcHiUZLmIXgfgWooKWXcwSGwQd2Zi5Rb0bT14+8CJjJgI8AB+nndLaNgHGrcc6bPIB665g==}
 
-  pump@3.0.0:
-    resolution: {integrity: sha512-LwZy+p3SFs1Pytd/jYct4wpv49HiYCqd9Rlc5ZVdk0V+8Yzv6jR5Blk3TRmPL1ft69TxP0IMZGJ+WPFU2BFhww==}
+  pump@3.0.2:
+    resolution: {integrity: sha512-tUPXtzlGM8FE3P0ZL6DVs/3P58k9nk8/jZeQCurTJylQA8qFYzHFfhBJkuqyE0FifOsQ0uKWekiZ5g8wtr28cw==}
 
   punycode.js@2.3.1:
     resolution: {integrity: sha512-uxFIHU0YlHYhDQtV4R9J6a52SLx28BCjT+4ieh7IGbgwVJWO+km431c4yRlREUAsAmt/uMjQUyQHNEPf0M39CA==}
@@ -8584,9 +8584,6 @@ packages:
 
   snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
-
-  sonic-boom@4.0.1:
-    resolution: {integrity: sha512-hTSD/6JMLyT4r9zeof6UtuBDpjJ9sO08/nmS5djaA9eozT9oOlNdpXSnzcgj4FTqpk3nkLrs61l4gip9r1HCrQ==}
 
   sonic-boom@4.1.0:
     resolution: {integrity: sha512-NGipjjRicyJJ03rPiZCJYjwlsuP2d1/5QUviozRXC7S3WdVWNK5e3Ojieb9CCyfhq2UC+3+SRd9nG3I2lPRvUw==}
@@ -15913,7 +15910,7 @@ snapshots:
 
   get-stream@5.2.0:
     dependencies:
-      pump: 3.0.0
+      pump: 3.0.2
 
   get-stream@6.0.1: {}
 
@@ -18273,7 +18270,7 @@ snapshots:
       pino-std-serializers: 7.0.0
       process-warning: 4.0.0
 
-  pino-pretty@11.2.2:
+  pino-pretty@11.3.0:
     dependencies:
       colorette: 2.0.20
       dateformat: 4.6.3
@@ -18283,11 +18280,11 @@ snapshots:
       joycon: 3.1.1
       minimist: 1.2.8
       on-exit-leak-free: 2.1.2
-      pino-abstract-transport: 1.2.0
-      pump: 3.0.0
+      pino-abstract-transport: 2.0.0
+      pump: 3.0.2
       readable-stream: 4.5.2
       secure-json-parse: 2.7.0
-      sonic-boom: 4.0.1
+      sonic-boom: 4.2.0
       strip-json-comments: 3.1.1
 
   pino-std-serializers@7.0.0: {}
@@ -18675,7 +18672,7 @@ snapshots:
       pug-strip-comments: 2.0.0
     optional: true
 
-  pump@3.0.0:
+  pump@3.0.2:
     dependencies:
       end-of-stream: 1.4.4
       once: 1.4.0
@@ -19297,10 +19294,6 @@ snapshots:
     dependencies:
       dot-case: 3.0.4
       tslib: 2.8.0
-
-  sonic-boom@4.0.1:
-    dependencies:
-      atomic-sleep: 1.0.0
 
   sonic-boom@4.1.0:
     dependencies:
