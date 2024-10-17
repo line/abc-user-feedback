@@ -368,7 +368,6 @@ describe('FeedbackController (integration)', () => {
         .expect(201);
 
       dto.createdAt = DateTime.now().minus({ days: 1 }).toFormat('yyyy-MM-dd');
-      console.log(dto);
       await request(app.getHttpServer() as Server)
         .post(`/admin/projects/${project.id}/channels/${channel.id}/feedbacks`)
         .set('x-api-key', `${process.env.MASTER_API_KEY}`)
@@ -396,7 +395,6 @@ describe('FeedbackController (integration)', () => {
         .send(findFeedbackDto)
         .expect(201)
         .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
-          console.log(body.items);
           expect(body.meta.itemCount).toBe(1);
         });
     });

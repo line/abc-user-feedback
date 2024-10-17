@@ -177,7 +177,6 @@ export class FeedbackOSService {
                   });
                 }
               } else if (format === FieldFormatEnum.date) {
-                console.log(query);
                 osQuery.bool.must.push({
                   range: {
                     [key]: query[fieldKey] as TimeRange,

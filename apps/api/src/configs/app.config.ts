@@ -23,7 +23,14 @@ export const appConfigSchema = Joi.object({
   APP_ADDRESS: Joi.string().default('0.0.0.0'),
   BASE_URL: Joi.string().required(),
   ENABLE_AUTO_FEEDBACK_DELETION: Joi.boolean().default(false),
-  AUTO_FEEDBACK_DELETION_PERIOD_DAYS: Joi.number().default(365 * 5),
+  AUTO_FEEDBACK_DELETION_PERIOD_DAYS: Joi.number().when(
+    'ENABLE_AUTO_FEEDBACK_DELETION',
+    {
+      is: true,
+      then: Joi.required(),
+      otherwise: Joi.optional(),
+    },
+  ),
 });
 
 export const appConfig = registerAs('app', () => ({

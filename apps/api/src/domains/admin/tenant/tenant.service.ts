@@ -185,6 +185,6 @@ export class TenantService {
     });
     this.schedulerRegistry.addCronJob(`delete-old-feedbacks`, job);
     job.start();
-    console.log('Cron job started');
+    this.logger.log(`delete-old-feedbacks cron job started`);
   }
 }
