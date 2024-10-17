@@ -429,7 +429,7 @@ importers:
         version: 1.20.0(next@14.2.15(@babel/core@7.25.8)(@opentelemetry/api@1.9.0)(@playwright/test@1.48.1)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       pino:
         specifier: ^9.0.0
-        version: 9.4.0
+        version: 9.5.0
       react:
         specifier: ^18.2.0
         version: 18.3.1
