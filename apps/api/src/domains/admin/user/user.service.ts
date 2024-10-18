@@ -23,14 +23,12 @@ import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-m
 
 import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
-import { TenantService } from '../tenant/tenant.service';
 import type { FindAllUsersDto } from './dtos';
 import { InviteUserDto } from './dtos';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import type { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
-  NotAllowedDomainException,
   UserAlreadyExistsException,
   UserNotFoundException,
 } from './exceptions';
@@ -47,7 +45,6 @@ export class UserService {
     private readonly userRepo: Repository<UserEntity>,
     private readonly userInvitationMailingService: UserInvitationMailingService,
     private readonly codeService: CodeService,
-    private readonly tenantService: TenantService,
   ) {}
 
   async findAll({ options, query, order }: FindAllUsersDto) {
@@ -139,15 +136,6 @@ export class UserService {
       relations: { members: true },
     });
     await this.userRepo.remove(users);
-  }
-
-  async validateEmail(email: string) {
-    const tenant = await this.tenantService.findOne();
-    const domain = email.split('@')[1];
-    if (tenant.isRestrictDomain && !tenant.allowDomains?.includes(domain)) {
-      throw new NotAllowedDomainException();
-    }
-    return true;
   }
 
   async findRolesById(id: number) {
