@@ -173,6 +173,12 @@ export class FeedbackService {
             feedback[key].map((issue) => issue.name).join(', ')
           : feedback[key].join(', ')
         : (feedback[key] as string);
+
+      if (fieldsByKey[key].format === FieldFormatEnum.date) {
+        convertedFeedback[fieldsByKey[key].name] = DateTime.fromJSDate(
+          new Date(feedback[key] as string),
+        ).toFormat('yyyy-MM-dd HH:mm:ss');
+      }
     }
 
     return Object.keys(convertedFeedback)
