@@ -17,6 +17,7 @@ import { faker } from '@faker-js/faker';
 import { BadRequestException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ClsModule } from 'nestjs-cls';
 import type { Repository } from 'typeorm';
 
 import { CodeEntity } from '@/shared/code/code.entity';
@@ -62,7 +63,7 @@ describe('auth service ', () => {
   let apiKeyRepo: Repository<ApiKeyEntity>;
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [TestConfig],
+      imports: [TestConfig, ClsModule.forRoot()],
       providers: AuthServiceProviders,
     }).compile();
     authService = module.get(AuthService);

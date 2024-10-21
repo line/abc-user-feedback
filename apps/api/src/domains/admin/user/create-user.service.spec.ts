@@ -16,6 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ClsModule } from 'nestjs-cls';
 import type { Repository } from 'typeorm';
 
 import type { TenantRepositoryStub } from '@/test-utils/stubs';
@@ -43,7 +44,7 @@ describe('CreateUserService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [TestConfig],
+      imports: [TestConfig, ClsModule.forRoot()],
       providers: CreateUserServiceProviders,
     }).compile();
 

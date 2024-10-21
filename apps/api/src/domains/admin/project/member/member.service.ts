@@ -14,11 +14,15 @@
  * under the License.
  */
 import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { TenantNotFoundException } from '@/domains/admin/tenant/exceptions';
+import { NotAllowedDomainException } from '@/domains/admin/user/exceptions';
 import { UserService } from '@/domains/admin/user/user.service';
+import { TenantEntity } from '../../tenant/tenant.entity';
 import { RoleService } from '../role/role.service';
 import type { FindByProjectIdDto } from './dtos';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
@@ -35,8 +39,11 @@ export class MemberService {
   constructor(
     @InjectRepository(MemberEntity)
     private readonly repository: Repository<MemberEntity>,
+    @InjectRepository(TenantEntity)
+    private readonly tenantRepo: Repository<TenantEntity>,
     private readonly userService: UserService,
     private readonly roleService: RoleService,
+    private readonly configService: ConfigService,
   ) {}
 
   private async validateMember(userId: number, roleId: number) {
@@ -56,6 +63,21 @@ export class MemberService {
       select: { id: true },
     });
     if (member) throw new MemberAlreadyExistsException();
+  }
+
+  async validateEmail(email: string) {
+    const tenants = await this.tenantRepo.find();
+    if (tenants.length === 0) throw new TenantNotFoundException();
+
+    const tenant = {
+      ...tenants[0],
+      useEmailVerification: this.configService.get<boolean>('smtp.use'),
+    };
+    const domain = email.split('@')[1];
+    if (tenant.isRestrictDomain && !tenant.allowDomains?.includes(domain)) {
+      throw new NotAllowedDomainException();
+    }
+    return true;
   }
 
   async findByProjectId({ projectId, sort }: FindByProjectIdDto) {
