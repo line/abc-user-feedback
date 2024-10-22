@@ -356,8 +356,8 @@ importers:
         specifier: ^3.3.4
         version: 3.9.0(react-hook-form@7.53.1(react@18.3.1))
       '@mui/base':
-        specifier: 5.0.0-beta.59
-        version: 5.0.0-beta.59(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        specifier: 5.0.0-beta.60
+        version: 5.0.0-beta.60(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@t3-oss/env-nextjs':
         specifier: ^0.11.0
         version: 0.11.1(typescript@5.6.3)(zod@3.23.8)
@@ -2410,8 +2410,8 @@ packages:
     resolution: {integrity: sha512-aQ8WF5zQwOdcxLsxSEk9Jd01GgGb80xxqCaiDDlewhtwqpSm8MOvUHslwPydVirasdW09++NxDNNftm1vLY8yA==}
     engines: {node: '>=18'}
 
-  '@mui/base@5.0.0-beta.59':
-    resolution: {integrity: sha512-LQZ2907rPMut/2Lq6qSnyP+nqOHLO3buMv91m7SdLpqp/lXU5+8vUXcf5oOwTNis6hfSvYGSQJ493Q00OzxDmQ==}
+  '@mui/base@5.0.0-beta.60':
+    resolution: {integrity: sha512-w8twR3qCUI+uJHO5xDOuc1yB5l46KFbvNsTwIvEW9tQkKxVaiEFf2GAXHuvFJiHfZLqjzett6drZjghy8D1Z1A==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0
@@ -2429,8 +2429,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@mui/utils@6.1.4':
-    resolution: {integrity: sha512-v0wXkyh3/Hpw48ivlNvgs4ZT6M8BIEAMdLgvct59rQBggYFhoAVKyliKDzdj37CnIlYau3DYIn7x5bHlRYFBow==}
+  '@mui/utils@6.1.5':
+    resolution: {integrity: sha512-vp2WfNDY+IbKUIGg+eqX1Ry4t/BilMjzp6p9xO1rfqpYjH1mj8coQxxDfKxcQLzBQkmBJjymjoGOak5VUYwXug==}
     engines: {node: '>=14.0.0'}
     peerDependencies:
       '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -11973,12 +11973,12 @@ snapshots:
       outvariant: 1.4.3
       strict-event-emitter: 0.5.1
 
-  '@mui/base@5.0.0-beta.59(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@mui/base@5.0.0-beta.60(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.25.7
       '@floating-ui/react-dom': 2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/types': 7.2.18(@types/react@18.3.11)
-      '@mui/utils': 6.1.4(@types/react@18.3.11)(react@18.3.1)
+      '@mui/utils': 6.1.5(@types/react@18.3.11)(react@18.3.1)
       '@popperjs/core': 2.11.8
       clsx: 2.1.1
       prop-types: 15.8.1
@@ -11991,7 +11991,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.11
 
-  '@mui/utils@6.1.4(@types/react@18.3.11)(react@18.3.1)':
+  '@mui/utils@6.1.5(@types/react@18.3.11)(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.25.7
       '@mui/types': 7.2.18(@types/react@18.3.11)
@@ -18788,7 +18788,7 @@ snapshots:
 
   react-redux@7.2.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@babel/runtime': 7.24.8
+      '@babel/runtime': 7.25.7
       '@types/react-redux': 7.1.33
       hoist-non-react-statics: 3.3.2
       loose-envify: 1.4.0
@@ -18926,7 +18926,7 @@ snapshots:
 
   redux@4.2.1:
     dependencies:
-      '@babel/runtime': 7.24.8
+      '@babel/runtime': 7.25.7
 
   reflect-metadata@0.2.2: {}
 
