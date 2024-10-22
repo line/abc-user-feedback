@@ -185,6 +185,12 @@ export class TenantService {
     });
     this.schedulerRegistry.addCronJob(`delete-old-feedbacks`, job);
     job.start();
-    this.logger.log(`delete-old-feedbacks cron job started`);
+
+    const autoFeedbackDeletionPeriodDays = this.configService.get<number>(
+      'app.autoFeedbackDeletionPeriodDays',
+    );
+    this.logger.log(
+      `delete-old-feedbacks(with period of ${autoFeedbackDeletionPeriodDays} days) cron job started`,
+    );
   }
 }

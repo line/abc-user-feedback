@@ -37,7 +37,8 @@ export const appConfig = registerAs('app', () => ({
   port: process.env.APP_PORT,
   address: process.env.APP_ADDRESS,
   baseUrl: process.env.APP_BASE_URL,
-  enableAutoFeedbackDeletion: process.env.ENABLE_AUTO_FEEDBACK_DELETION,
+  enableAutoFeedbackDeletion:
+    process.env.ENABLE_AUTO_FEEDBACK_DELETION === 'true',
   autoFeedbackDeletionPeriodDays:
     process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS,
   serverId: uuidv4(),
