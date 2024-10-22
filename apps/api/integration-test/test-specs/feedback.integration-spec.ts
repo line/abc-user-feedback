@@ -20,6 +20,7 @@ import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken, getRepositoryToken } from '@nestjs/typeorm';
 import type { Client } from '@opensearch-project/opensearch';
+import { DateTime } from 'luxon';
 import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
@@ -340,6 +341,61 @@ describe('FeedbackController (integration)', () => {
             dto.data[availableFieldKey] = '?';
             expect(dto.data).toMatchObject(updatedFeedback);
           }
+        });
+    });
+  });
+
+  describe('old feedback deletion test', () => {
+    it('should create feedbacks and delete feedbacks within specific date range', async () => {
+      const dto: Record<string, string | number | string[] | number[]> = {};
+      fields
+        .filter(
+          ({ key }) =>
+            key !== 'id' &&
+            key !== 'issues' &&
+            key !== 'createdAt' &&
+            key !== 'updatedAt',
+        )
+        .forEach(({ key, format, options }) => {
+          dto[key] = getRandomValue(format, options);
+        });
+
+      dto.createdAt = DateTime.now().minus({ month: 7 }).toFormat('yyyy-MM-dd');
+      await request(app.getHttpServer() as Server)
+        .post(`/admin/projects/${project.id}/channels/${channel.id}/feedbacks`)
+        .set('x-api-key', `${process.env.MASTER_API_KEY}`)
+        .send(dto)
+        .expect(201);
+
+      dto.createdAt = DateTime.now().minus({ days: 1 }).toFormat('yyyy-MM-dd');
+      await request(app.getHttpServer() as Server)
+        .post(`/admin/projects/${project.id}/channels/${channel.id}/feedbacks`)
+        .set('x-api-key', `${process.env.MASTER_API_KEY}`)
+        .send(dto)
+        .expect(201);
+
+      await tenantService.deleteOldFeedbacks();
+
+      const findFeedbackDto = {
+        query: {
+          createdAt: {
+            gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
+            lt: DateTime.now().toFormat('yyyy-MM-dd'),
+          },
+        },
+        limit: 10,
+        page: 1,
+      };
+
+      return request(app.getHttpServer() as Server)
+        .post(
+          `/admin/projects/${project.id}/channels/${channel.id}/feedbacks/search`,
+        )
+        .set('Authorization', `Bearer ${accessToken}`)
+        .send(findFeedbackDto)
+        .expect(201)
+        .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
+          expect(body.meta.itemCount).toBe(1);
         });
     });
   });

@@ -24,9 +24,10 @@ import { OpensearchRepository } from '@/common/repositories';
 import { FeedbackIssueStatisticsService } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.service';
 import { FeedbackStatisticsService } from '@/domains/admin/statistics/feedback/feedback-statistics.service';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
-import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
+import { TenantNotFoundException } from '../../tenant/exceptions';
+import { TenantEntity } from '../../tenant/tenant.entity';
 import { ApiKeyService } from '../api-key/api-key.service';
 import { IssueTrackerService } from '../issue-tracker/issue-tracker.service';
 import { MemberService } from '../member/member.service';
@@ -45,12 +46,13 @@ import { ProjectEntity } from './project.entity';
 @Injectable()
 export class ProjectService {
   constructor(
+    @InjectRepository(TenantEntity)
+    private readonly tenantRepo: Repository<TenantEntity>,
     @InjectRepository(ProjectEntity)
     private readonly projectRepo: Repository<ProjectEntity>,
     @InjectRepository(ChannelEntity)
     private readonly channelRepo: Repository<ChannelEntity>,
     private readonly osRepository: OpensearchRepository,
-    private readonly tenantService: TenantService,
     private readonly roleService: RoleService,
     private readonly memberService: MemberService,
     private readonly apiKeyService: ApiKeyService,
@@ -66,12 +68,22 @@ export class ProjectService {
     return !!res;
   }
 
+  async findTenant() {
+    const tenants = await this.tenantRepo.find();
+    if (tenants.length === 0) throw new TenantNotFoundException();
+
+    return {
+      ...tenants[0],
+      useEmailVerification: this.configService.get<boolean>('smtp.use'),
+    };
+  }
+
   @Transactional()
   async create(dto: CreateProjectDto) {
     const project = await this.projectRepo.findOneBy({ name: dto.name });
     if (project) throw new ProjectAlreadyExistsException();
 
-    const tenant = await this.tenantService.findOne();
+    const tenant = await this.findTenant();
     const newProject = ProjectEntity.from({ ...dto, tenantId: tenant.id });
     const savedProject = await this.projectRepo.save(newProject);
 
