@@ -115,6 +115,12 @@ export class TenantService {
     const autoFeedbackDeletionPeriodDays = this.configService.get<number>(
       'app.autoFeedbackDeletionPeriodDays',
     );
+    if (!autoFeedbackDeletionPeriodDays) {
+      this.logger.log(
+        `delete-old-feedbacks cron job is canceled due to invalid autoFeedbackDeletionPeriodDays`,
+      );
+      return;
+    }
 
     for (const { id } of channels) {
       const feedbacks = await this.feedbackService.findByChannelId({
@@ -138,6 +144,9 @@ export class TenantService {
         channelId: id,
         feedbackIds: feedbackIdsToDelete,
       });
+      this.logger.log(
+        `channel(${id}) ${feedbackIdsToDelete.length} feedbacks were deleted`,
+      );
     }
   }
 
@@ -163,7 +172,7 @@ export class TenantService {
 
     const cronHour = (24 - Number(timezoneOffset.split(':')[0])) % 24;
 
-    const job = new CronJob(`6 ${cronHour} * * * *`, async () => {
+    const job = new CronJob(`6 ${cronHour} * * *`, async () => {
       if (
         await this.schedulerLockService.acquireLock(
           LockTypeEnum.FEEDBACK_DELETE,
@@ -171,6 +180,7 @@ export class TenantService {
         )
       ) {
         try {
+          this.logger.log(`delete-old-feedbacks cron job will be executed`);
           await this.deleteOldFeedbacks();
         } finally {
           await this.schedulerLockService.releaseLock(
