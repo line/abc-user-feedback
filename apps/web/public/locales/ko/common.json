@@ -440,13 +440,12 @@
     }
   },
   "help-card": {
-    "project-info": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
-    "role": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
-    "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
-    "api-key": "User Feedback API Key를 관리하는 화면입니다. API를 활용하려면 Key를 생성하여 이용해 주세요. 자세한 내용은 API <docs>Docs</docs> 참고해 주세요.",
+    "project-info": "Project는 피드백 수집 대상의 프로덕트를 의미합니다. 피드백을 관리할 프로덕트를 고려하여 정보를 입력해 주세요.",
+    "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다.",
+    "api-key": "User Feedback API Key를 관리하는 화면입니다. API를 활용하려면 Key를 생성하여 이용해 주세요. 자세한 내용은 API <docs>Docs</docs>를 참고해 주세요.",
     "issue-tracker": "User Feedback과 Issue Tracking System 연결을 설정하는 화면입니다. 사용 중인 Issue Tracking System 정보를 입력해 주세요.",
-    "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
-    "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
+    "channel-info": "Channel은 피드백 수집 경로 또는 수집 방식을 구분하는 단위입니다. Channel의 특성을 고려하여 정보를 입력해 주세요.",
+    "field": "Channel에 수집할 피드백 데이터를 Field 단위로 정의할 수 있습니다. 데이터 유형 및 속성을 고려해 Field를 추가해 주세요. ",
     "image-config": "Image 포맷의 피드백을 수집하는 경우, Image Storage와 연동을 설정하고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있는 화면입니다. 자세한 내용은 Image <docs>Docs</docs>를 참고해 주세요.",
     "field-preview": "등록한 Field 정보를 토대로 피드백이 어떤 모습일지 미리보기를 제공합니다. 참고로 미리보기는 예시 데이터를 활용해 나타냅니다.",
     "webhook": "User Feedback에서 발생하는 이벤트 트리거에 맞춰 Webhook 연동을 설정할 수 있는 화면입니다. 자세한 내용은 Webhook <docs>Docs</docs>를 참고해 주세요. "
@@ -480,7 +479,9 @@
       "save": "저장",
       "cancel": "취소",
       "out": "나가기",
-      "confirm": "확인"
+      "confirm": "확인",
+      "next": "다음",
+      "previous": "이전"
     },
     "project-setting-menu": {
       "project-info": "Project 정보",
@@ -505,6 +506,10 @@
       "warn-if-unsaved-changes": {
         "title": "페이지를 나가시겠습니까?",
         "description": "중간에 나가면 입력한 내용이 저장되지 않습니다."
+      },
+      "warn-if-saved-changes": {
+        "title": "페이지를 나가시겠습니까?",
+        "description": "중간에 나가도 나중에 이어서 진행할 수 있습니다. "
       }
     },
     "text": {
@@ -520,7 +525,11 @@
         "detail": "{{name}} 상세",
         "add": "{{name}} 추가",
         "register": "{{name}} 등록"
-      }
+      },
+      "summary": "요약",
+      "preview": "미리보기",
+      "in-progress": "진행중",
+      "continue": "이어서 하기"
     },
     "placeholder": {
       "select": "선택해주세요.",
@@ -553,6 +562,10 @@
       "duplicated": "중복된 정보가 존재합니다.",
       "lessThenNcharacters": "{{n}}자 이하로 입력해 주세요.",
       "required": "입력해 주세요."
+    },
+    "description": {
+      "create-project": "성공적으로 Project를 생성했습니다.\n다음은 피드백을 수집하기 위해 Channel을 생성해 줘야 합니다.\n‘Channel 생성'을 통해 다음 단계로 진행해 보세요.",
+      "create-channel": "성공적으로 Channel을 생성했습니다.\n이제 유저 피드백을 수집하고 관리할 준비가 되었습니다.\n‘시작하기'를 통해 본격적으로 경험해 보세요."
     }
   }
 }

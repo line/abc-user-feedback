@@ -447,16 +447,15 @@
     }
   },
   "help-card": {
-    "project-info": "Sie können Feedback nach Project-Einheit sammeln. Bitte registrieren Sie Project-Informationen basierend auf dem Produkt, für das Sie Feedback verwalten möchten. (z.B. Product Name)",
-    "role": "Sie können Berechtigungen für den Zugriff und die Nutzung des Projects festlegen.",
-    "member": "Sie können Member, die am Project teilnehmen werden, registrieren oder verwalten.",
-    "api-key": "Dies ist der Bildschirm zur Verwaltung des User Feedback API Key. Um die API zu nutzen, generieren Sie bitte einen Key und verwenden Sie diesen. Weitere Details finden Sie in den API <docs>Docs</docs>.",
-    "issue-tracker": "Dies ist der Bildschirm zum Einrichten der Verbindung zwischen User Feedback und Issue Tracking System. Bitte geben Sie die Informationen des von Ihnen verwendeten Issue Tracking Systems ein.",
-    "channel-info": "Sie können die Feedback-Felder definieren, die Sie über Channels sammeln möchten. Bitte registrieren Sie Channel-Informationen unter Berücksichtigung des Feedback-Pfads und der Eigenschaften. (z.B. VOC, APP Review)",
-    "field": "Definieren Sie die Feedback-Felder, die Sie als UserFeedback gemäß dem registrierten Channel sammeln möchten. Legen Sie im Voraus die Felder fest, die Sie über die API sammeln oder direkt im ADMIN registrieren möchten.",
-    "image-config": "Wenn Sie Feedback im Image-Format sammeln, ist dies der Bildschirm, auf dem Sie die Integration mit dem Image Storage einrichten und eine Whitelist für Image-URL-Domains festlegen können. Weitere Details finden Sie in den Image <docs>Docs</docs>.",
-    "field-preview": "Basierend auf den registrierten Field-Informationen bieten wir eine Vorschau, wie das Feedback aussehen wird. Beachten Sie, dass die Vorschau Beispieldaten verwendet.",
-    "webhook": "Dies ist der Bildschirm, auf dem Sie die Webhook-Integration entsprechend den in User Feedback auftretenden Ereignis-Triggern einrichten können. Weitere Details finden Sie in den Webhook <docs>Docs</docs>."
+    "project-info": "Project bezeichnet das Produkt, für das Feedback gesammelt werden soll. Bitte geben Sie Informationen unter Berücksichtigung des Produkts ein, für das Sie Feedback verwalten möchten.",
+    "member": "Sie können Member registrieren und verwalten, die am Project teilnehmen werden.",
+    "api-key": "Dies ist der Bildschirm zur Verwaltung des User Feedback API Keys. Bitte generieren und verwenden Sie einen Key zur Nutzung der API. Weitere Details finden Sie in der API Docs.",
+    "issue-tracker": "Dies ist der Bildschirm zum Einrichten der Verbindung zwischen User Feedback und Issue Tracking System. Bitte geben Sie die Informationen für das von Ihnen verwendete Issue Tracking System ein.",
+    "channel-info": "Channel ist eine Einheit, die Feedback-Sammelpfade oder Sammelmethoden unterscheidet. Bitte geben Sie Informationen unter Berücksichtigung der Channel-Eigenschaften ein.",
+    "field": "Sie können Feedback-Daten, die im Channel gesammelt werden sollen, in Field-Einheiten definieren. Bitte fügen Sie Fields unter Berücksichtigung des Datentyps und der Eigenschaften hinzu.",
+    "image-config": "Beim Sammeln von Feedback im Image-Format können Sie hier die Image Storage-Integration einrichten und die Whitelist für Image URL-Domains konfigurieren. Weitere Details finden Sie in der Image Docs.",
+    "field-preview": "Bietet eine Vorschau darauf, wie Ihr Feedback basierend auf den registrierten Field-Informationen aussehen wird. Die Vorschau verwendet Beispieldaten zur Veranschaulichung.",
+    "webhook": "Dies ist der Bildschirm, auf dem Sie Webhook-Integration entsprechend den in User Feedback auftretenden Event-Triggern einrichten können. Weitere Details finden Sie in der Webhook Docs."
   },
   "hint": {
     "required": "Erforderlich",
@@ -486,40 +485,46 @@
       "register": "Registrieren",
       "save": "Speichern",
       "cancel": "Abbrechen",
-      "out": "Verlassen",
-      "confirm": "Bestätigen"
+      "out": "Beenden",
+      "confirm": "Bestätigen",
+      "next": "Weiter",
+      "previous": "Zurück"
     },
     "project-setting-menu": {
-      "project-info": "Project Informationen",
-      "member-mgmt": "Member Verwaltung",
-      "role-mgmt": "Role Verwaltung",
-      "api-key-mgmt": "API Key Verwaltung",
-      "issue-tracker-mgmt": "Issue Tracker Verwaltung",
-      "webhook-integration": "Webhook Integration",
+      "project-info": "Project-Informationen",
+      "member-mgmt": "Member-Verwaltung",
+      "role-mgmt": "Role-Verwaltung",
+      "api-key-mgmt": "API Key-Verwaltung",
+      "issue-tracker-mgmt": "Issue Tracker-Verwaltung",
+      "webhook-integration": "Webhook-Integration",
       "delete-project": "Project löschen"
     },
     "channel-setting-menu": {
-      "channel-info": "Channel Informationen",
-      "field-mgmt": "Field Verwaltung",
-      "image-mgmt": "Image Verwaltung",
+      "channel-info": "Channel-Informationen",
+      "field-mgmt": "Field-Verwaltung",
+      "image-mgmt": "Image-Verwaltung",
       "delete-channel": "Channel löschen"
     },
     "dialog": {
       "delete": {
-        "title": "Möchten Sie löschen?",
-        "description": "Beim Löschen gehen alle zugehörigen Informationen verloren."
+        "title": "Möchten Sie wirklich löschen?",
+        "description": "Beim Löschen werden alle zugehörigen Informationen unwiderruflich entfernt."
       },
       "warn-if-unsaved-changes": {
         "title": "Möchten Sie die Seite verlassen?",
-        "description": "Wenn Sie die Seite verlassen, werden die eingegebenen Daten nicht gespeichert."
+        "description": "Wenn Sie die Seite jetzt verlassen, gehen nicht gespeicherte Eingaben verloren."
+      },
+      "warn-if-saved-changes": {
+        "title": "Möchten Sie die Seite verlassen?",
+        "description": "Sie können später jederzeit fortfahren."
       }
     },
     "text": {
       "no-data": {
-        "api-key": "Kein API Key wurde erstellt.",
-        "member": "Kein Member wurde registriert.",
-        "channel": "Kein Channel wurde erstellt.",
-        "webhook": "Kein Webhook wurde registriert."
+        "api-key": "Es wurde noch kein API Key generiert.",
+        "member": "Es wurden noch keine Member registriert.",
+        "channel": "Es wurde noch kein Channel erstellt.",
+        "webhook": "Es wurde noch kein Webhook registriert."
       },
       "create-project": "Project erstellen",
       "create-channel": "Channel erstellen",
@@ -527,7 +532,11 @@
         "detail": "{{name}} Details",
         "add": "{{name}} hinzufügen",
         "register": "{{name}} registrieren"
-      }
+      },
+      "summary": "Zusammenfassung",
+      "preview": "Vorschau",
+      "in-progress": "In Bearbeitung",
+      "continue": "Fortfahren"
     },
     "placeholder": {
       "select": "Bitte auswählen.",
@@ -535,30 +544,35 @@
       "text-or-generate": "Bitte eingeben oder generieren."
     },
     "toast": {
-      "success": "Erfolgreich verarbeitet."
+      "success": "Erfolgreich verarbeitet.",
+      "copy": "In die Zwischenablage kopiert."
     },
     "webhook-card": {
       "feedback-creation": {
-        "title": "Feedback Erstellung",
+        "title": "Feedback-Erstellung",
         "description": "Wenn Feedback erstellt wird."
       },
       "issue-addition": {
-        "title": "Issue Registrierung",
-        "description": "Wenn ein Problem zum Feedback hinzugefügt wird."
+        "title": "Issue-Registrierung",
+        "description": "Wenn ein Issue zum Feedback hinzugefügt wird."
       },
       "issue-status-change": {
-        "title": "Issue Statusänderung",
+        "title": "Issue-Statusänderung",
         "description": "Wenn sich der Status eines Issues ändert."
       },
       "issue-creation": {
-        "title": "Issue Erstellung",
+        "title": "Issue-Erstellung",
         "description": "Wenn ein Issue erstellt wird."
       }
     },
     "error": {
-      "duplicated": "Doppelte Informationen vorhanden.",
-      "lessThenNcharacters": "Bitte weniger als {{n}} Zeichen eingeben.",
-      "required": "Bitte eingeben."
+      "duplicated": "Es existieren bereits doppelte Informationen.",
+      "lessThenNcharacters": "Bitte geben Sie maximal {{n}} Zeichen ein.",
+      "required": "Eingabe erforderlich."
+    },
+    "description": {
+      "create-project": "Project wurde erfolgreich erstellt.\nAls Nächstes müssen Sie einen Channel erstellen, um Feedback zu sammeln.\nFahren Sie mit 'Channel erstellen' zum nächsten Schritt fort.",
+      "create-channel": "Channel wurde erfolgreich erstellt.\nSie können jetzt Benutzerfeedback sammeln und verwalten.\nKlicken Sie auf 'Starten', um die vollständige Funktionalität zu nutzen."
     }
   }
 }

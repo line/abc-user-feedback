@@ -447,16 +447,15 @@
     }
   },
   "help-card": {
-    "project-info": "You can collect feedback by Project unit. Please register Project information based on the product for which you want to manage feedback. (ex. Product Name)",
-    "role": "You can set permissions to access and use the Project.",
-    "member": "You can register or manage Members who will participate in the Project.",
-    "api-key": "This is the screen for managing User Feedback API Key. To use the API, please generate a Key and use it. For more details, please refer to the API <docs>Docs</docs>.",
-    "issue-tracker": "This is the screen for setting up the connection between User Feedback and Issue Tracking System. Please enter the information of the Issue Tracking System you are using.",
-    "channel-info": "You can define the feedback fields you want to collect through Channels. Please register Channel information considering the feedback path and characteristics. (ex. VOC, APP Review)",
-    "field": "Define the feedback fields you want to collect as UserFeedback according to the registered Channel. Set up the fields you want to collect through API or register directly in ADMIN in advance.",
-    "image-config": "If you collect feedback in Image format, this is the screen where you can set up integration with Image Storage and set up a whitelist for Image URL domains. For more details, please refer to the Image <docs>Docs</docs>.",
-    "field-preview": "Based on the registered Field information, we provide a preview of what the feedback will look like. Note that the preview uses example data.",
-    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For more details, please refer to the Webhook <docs>Docs</docs>."
+    "project-info": "Project refers to the product targeted for feedback collection. Please enter information considering the product you want to manage feedback for.",
+    "member": "You can register and manage Members who will participate in the Project.",
+    "api-key": "This is the screen for managing User Feedback API Key. Please generate and use a Key to utilize the API. For details, please refer to the API Docs.",
+    "issue-tracker": "This is the screen for setting up the connection between User Feedback and Issue Tracking System. Please enter the information for the Issue Tracking System you are using.",
+    "channel-info": "Channel is a unit that distinguishes feedback collection paths or collection methods. Please enter information considering the characteristics of the Channel.",
+    "field": "You can define feedback data to be collected in the Channel by Field units. Please add Fields considering the data type and properties.",
+    "image-config": "When collecting feedback in Image format, this screen allows you to set up Image Storage integration and configure whitelist for Image URL domains. For details, please refer to the Image Docs.",
+    "field-preview": "Provides a preview of what your feedback will look like based on registered Field information. The preview uses example data for reference.",
+    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook Docs."
   },
   "hint": {
     "required": "Required",
@@ -487,10 +486,12 @@
       "save": "Save",
       "cancel": "Cancel",
       "out": "Exit",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "next": "Next",
+      "previous": "Previous"
     },
     "project-setting-menu": {
-      "project-info": "Project Info",
+      "project-info": "Project Information",
       "member-mgmt": "Member Management",
       "role-mgmt": "Role Management",
       "api-key-mgmt": "API Key Management",
@@ -499,7 +500,7 @@
       "delete-project": "Delete Project"
     },
     "channel-setting-menu": {
-      "channel-info": "Channel Info",
+      "channel-info": "Channel Information",
       "field-mgmt": "Field Management",
       "image-mgmt": "Image Management",
       "delete-channel": "Delete Channel"
@@ -507,16 +508,20 @@
     "dialog": {
       "delete": {
         "title": "Do you want to delete?",
-        "description": "Deleting will remove all related information."
+        "description": "When deleted, all related information will disappear."
       },
       "warn-if-unsaved-changes": {
         "title": "Do you want to leave the page?",
-        "description": "Leaving midway will not save your input."
+        "description": "If you leave in the middle, the entered content will not be saved."
+      },
+      "warn-if-saved-changes": {
+        "title": "Do you want to leave the page?",
+        "description": "Even if you leave in the middle, you can continue later."
       }
     },
     "text": {
       "no-data": {
-        "api-key": "No API Key has been created.",
+        "api-key": "No API Key has been generated.",
         "member": "No Member has been registered.",
         "channel": "No Channel has been created.",
         "webhook": "No Webhook has been registered."
@@ -527,7 +532,11 @@
         "detail": "{{name}} Details",
         "add": "Add {{name}}",
         "register": "Register {{name}}"
-      }
+      },
+      "summary": "Summary",
+      "preview": "Preview",
+      "in-progress": "In Progress",
+      "continue": "Continue"
     },
     "placeholder": {
       "select": "Please select.",
@@ -535,30 +544,35 @@
       "text-or-generate": "Please enter or generate."
     },
     "toast": {
-      "success": "Processed successfully."
+      "success": "Successfully processed.",
+      "copy": "Copied to clipboard."
     },
     "webhook-card": {
       "feedback-creation": {
         "title": "Feedback Creation",
-        "description": "When feedback is created."
+        "description": "When Feedback is created."
       },
       "issue-addition": {
         "title": "Issue Registration",
-        "description": "When a problem is registered to feedback."
+        "description": "When an issue is registered to Feedback."
       },
       "issue-status-change": {
         "title": "Issue Status Change",
-        "description": "When the status of a problem changes."
+        "description": "When the status of an Issue changes."
       },
       "issue-creation": {
         "title": "Issue Creation",
-        "description": "When an issue is created."
+        "description": "When an Issue is created."
       }
     },
     "error": {
       "duplicated": "Duplicate information exists.",
-      "lessThenNcharacters": "Please enter less than {{n}} characters.",
+      "lessThenNcharacters": "Please enter {{n}} characters or less.",
       "required": "Please enter."
+    },
+    "description": {
+      "create-project": "Project has been created successfully.\nNext, you need to create a Channel to collect feedback.\nProceed to the next step through 'Create Channel'.",
+      "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'."
     }
   }
 }

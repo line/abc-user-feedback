@@ -26,9 +26,9 @@ import { BasicTable } from '@/shared';
 import { useUserSearch } from '@/entities/user';
 
 import { getMemberColumns } from '../member-columns';
-import type { Member } from '../member.type';
+import type { MemberInfo } from '../member.type';
 
-interface IProps extends EntityTable<Member> {}
+interface IProps extends EntityTable<MemberInfo> {}
 
 const MemberTable: React.FC<IProps> = (props) => {
   const { isLoading, createButton, data, onClickRow } = props;
@@ -50,7 +50,6 @@ const MemberTable: React.FC<IProps> = (props) => {
     data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getRowId: (originalRow) => String(originalRow.id),
   });
 
   return (

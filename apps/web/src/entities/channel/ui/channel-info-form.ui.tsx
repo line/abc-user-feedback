@@ -16,9 +16,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { InputCaption, InputField, InputLabel, TextInput } from '@ufb/react';
-
-import { useWarnIfUnsavedChanges } from '@/shared';
+import { TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { ChannelInfo } from '../channel.type';
 
@@ -38,38 +36,23 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   return (
     <div className="flex flex-col gap-4">
       {type === 'update' && (
-        <InputField>
-          <InputLabel>ID</InputLabel>
-          <TextInput {...register('id')} disabled />
-        </InputField>
+        <TextInput label="ID" {...register('id')} disabled />
       )}
-      <InputField>
-        <InputLabel>
-          Name <span className="text-tint-red">*</span>
-        </InputLabel>
-        <TextInput
-          {...register('name')}
-          placeholder={t('placeholder', { name: 'Name' })}
-          required
-          disabled={readOnly}
-          error={!!formState.errors.name}
-        />
-        {formState.errors.name && (
-          <InputCaption>{formState.errors.name.message}</InputCaption>
-        )}
-      </InputField>
-      <InputField>
-        <InputLabel>Description</InputLabel>
-        <TextInput
-          {...register('description')}
-          placeholder={t('placeholder', { name: 'Description' })}
-          disabled={readOnly}
-          error={!!formState.errors.description}
-        />
-        {formState.errors.description && (
-          <InputCaption>{formState.errors.description.message}</InputCaption>
-        )}
-      </InputField>
+      <TextInput
+        label="Name"
+        {...register('name')}
+        placeholder={t('placeholder', { name: 'Name' })}
+        required
+        disabled={readOnly}
+        error={formState.errors.name?.message}
+      />{' '}
+      <TextInput
+        label="Description"
+        {...register('description')}
+        placeholder={t('placeholder', { name: 'Description' })}
+        disabled={readOnly}
+        error={formState.errors.description?.message}
+      />
     </div>
   );
 };

@@ -21,3 +21,4 @@ export * from './path-parsing';
 export * from './remove-empty-value-in-object';
 export * from './reorder';
 export * from './type-guard';
+export * from './is-object-equal';

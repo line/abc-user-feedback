@@ -16,15 +16,9 @@
 import { useMemo } from 'react';
 import { getCountry } from 'countries-and-timezones';
 
-import {
-  InputField,
-  InputLabel,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@ufb/react';
+import { InputField, InputLabel } from '@ufb/react';
+
+import { SelectSearchInput } from '@/shared';
 
 import type { Timezone } from '../project.type';
 import { getTimezoneOptions } from '../timezone.util';
@@ -38,7 +32,7 @@ const getLabel = (timezone?: Timezone) => {
 const getSelectValue = (timezone?: Timezone) => {
   if (!timezone) return '';
   const country = getCountry(timezone.countryCode);
-  return `${timezone.offset}_${timezone.name}_${country?.name}`;
+  return `${timezone.offset}_${timezone.name}_${timezone.countryCode}_${country?.name}`;
 };
 
 const getTimezonValue = (value: string): Timezone => {
@@ -62,25 +56,18 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
       <InputLabel>
         Time Zone <span className="text-tint-red">*</span>
       </InputLabel>
-      <Select
+      <SelectSearchInput
+        displayValue={getLabel(value)}
+        options={options.map((option) => ({
+          label: getLabel(option),
+          value: getSelectValue(option),
+        }))}
         value={getSelectValue(value)}
-        onValueChange={(v) => onChange?.(getTimezonValue(v))}
+        onChange={(v) => {
+          onChange?.(getTimezonValue(v));
+        }}
         disabled={disabled}
-      >
-        <SelectTrigger>
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent maxHeight="360px">
-          {options.map((option) => (
-            <SelectItem
-              key={getSelectValue(option)}
-              value={getSelectValue(option)}
-            >
-              {getLabel(option)}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      />
     </InputField>
   );
 };

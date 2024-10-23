@@ -33,7 +33,7 @@ interface Props {
   onSubmit: () => void;
 }
 
-const WarnIfUnsavedChangesDialog: React.FC<Props> = (props) => {
+const WarnIfSavedChangesDialog: React.FC<Props> = (props) => {
   const { close, isOpen, onSubmit } = props;
   const { t } = useTranslation();
 
@@ -41,12 +41,12 @@ const WarnIfUnsavedChangesDialog: React.FC<Props> = (props) => {
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent radius="large">
         <DialogHeader>
-          <DialogIcon name="RiAlertFill" variant="warning" />
+          <DialogIcon name="RiInformation2Fill" variant="informative" />
           <DialogTitle>
-            {t('v2.dialog.warn-if-unsaved-changes.title')}
+            {t('v2.dialog.warn-if-saved-changes.title')}
           </DialogTitle>
           <DialogDescription>
-            {t('v2.dialog.warn-if-unsaved-changes.description')}
+            {t('v2.dialog.warn-if-saved-changes.description')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -62,4 +62,4 @@ const WarnIfUnsavedChangesDialog: React.FC<Props> = (props) => {
   );
 };
 
-export default WarnIfUnsavedChangesDialog;
+export default WarnIfSavedChangesDialog;

@@ -50,7 +50,7 @@ import type { Role } from '../role.type';
 
 interface IProps {
   roles: Role[];
-  onClickRole: (role: Role) => void;
+  onClickRole?: (role: Role) => void;
 }
 
 const RoleTable: React.FC<IProps> = (props) => {
@@ -161,7 +161,7 @@ const RoleTable: React.FC<IProps> = (props) => {
 
 interface IRoleTableHeadProps {
   roles: Role[];
-  onClickRole: (role: Role) => void;
+  onClickRole?: (role: Role) => void;
 }
 
 const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
@@ -174,7 +174,7 @@ const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
         {roles.map((role) => (
           <TableHead key={role.id} className="text-center">
             <Button
-              onClick={() => onClickRole(role)}
+              onClick={() => onClickRole?.(role)}
               variant="ghost"
               size="small"
               iconR="RiEditFill"

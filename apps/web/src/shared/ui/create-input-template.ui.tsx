@@ -15,15 +15,20 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { cn } from '../utils';
+import { Button, IconButton, ScrollArea } from '@ufb/react';
+
+import SettingAlert from './setting-alert.ui';
 
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   title: React.ReactNode;
-  currentStep: number;
+  currentStepIndex: number;
   lastStep: number;
   validate?: () => Promise<boolean> | boolean;
   disableNextBtn?: boolean;
+  helpText?: React.ReactNode;
+  onClickBack?: () => void;
+  scrollable?: boolean;
 
   onNext: () => void;
   onPrev: () => void;
@@ -38,50 +43,59 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
     actionButton,
     title,
     children,
-    currentStep,
+    currentStepIndex,
     lastStep,
     validate,
     disableNextBtn,
+    helpText,
+    onClickBack,
+    scrollable = false,
   } = props;
 
   const { t } = useTranslation();
 
-  const isLastStep = currentStep === lastStep;
+  const isLastStep = currentStepIndex === lastStep;
 
   return (
-    <div className="border-fill-secondary flex flex-1 flex-col gap-6 overflow-auto rounded border p-6">
-      <div className="flex flex-1 flex-col gap-5">
-        <div className="flex items-center justify-between">
-          <h1 className="font-20-bold">{title}</h1>
+    <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+      <div className="flex items-center justify-between">
+        <h3 className="text-title-h3">
+          {onClickBack && (
+            <IconButton
+              icon="RiArrowLeftLine"
+              variant="ghost"
+              onClick={onClickBack}
+            />
+          )}
+          {title}
+        </h3>
+        <div className="setting-action-buttons flex items-stretch gap-3">
           {actionButton}
         </div>
-        <hr className="border-fill-secondary" />
-        <div className="flex flex-1 flex-col gap-5">{children}</div>
       </div>
-      <div className="flex justify-end gap-2">
-        {currentStep !== 0 && (
-          <button
-            className="btn btn-lg btn-secondary w-[120px]"
-            onClick={onPrev}
+      {helpText && <SettingAlert description={helpText} />}
+      {scrollable ?
+        <ScrollArea className="h-full">{children}</ScrollArea>
+      : <div className="h-full">{children}</div>}
+      {!onClickBack && (
+        <div className="flex justify-end gap-2">
+          {currentStepIndex !== 0 && (
+            <Button variant="outline" onClick={onPrev}>
+              {t('button.previous')}
+            </Button>
+          )}
+          <Button
+            onClick={async () => {
+              if (validate && !(await validate())) return;
+              if (isLastStep) return onComplete();
+              onNext();
+            }}
+            disabled={disableNextBtn}
           >
-            {t('button.previous')}
-          </button>
-        )}
-        <button
-          className={cn([
-            'btn btn-lg w-[120px]',
-            isLastStep ? 'btn-blue' : 'btn-primary',
-          ])}
-          onClick={async () => {
-            if (validate && !(await validate())) return;
-            if (isLastStep) return onComplete();
-            onNext();
-          }}
-          disabled={disableNextBtn}
-        >
-          {isLastStep ? t('button.complete') : t('button.next')}
-        </button>
-      </div>
+            {isLastStep ? t('button.complete') : t('button.next')}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

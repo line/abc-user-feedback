@@ -17,7 +17,7 @@
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
+import { ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
 import { FieldSettingSheet } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
@@ -29,7 +29,7 @@ import CreateChannelInputTemplate from './create-channel-input-template.ui';
 interface IProps {}
 
 const InputFieldStep: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateChannelStore();
+  const { input, onChangeInput, jumpStepByKey } = useCreateChannelStore();
   const fields = input.fields;
 
   const { t } = useTranslation();
@@ -87,9 +87,22 @@ const InputFieldStep: React.FC<IProps> = () => {
   return (
     <CreateChannelInputTemplate
       actionButton={
-        <Button onClick={() => openFieldFormSheet()}>
-          {t('v2.button.register')}
-        </Button>
+        <ToggleGroup type="single" value="">
+          <ToggleGroupItem
+            value="item-1"
+            onClick={() => openFieldFormSheet()}
+            icon="RiAddLine"
+          >
+            {t('v2.button.name.add', { name: 'Field' })}
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="item-2"
+            icon="RiEyeLine"
+            onClick={() => jumpStepByKey('field-preview')}
+          >
+            {t('v2.text.preview')}
+          </ToggleGroupItem>
+        </ToggleGroup>
       }
     >
       <FieldTable

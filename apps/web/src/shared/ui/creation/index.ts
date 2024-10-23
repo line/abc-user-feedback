@@ -13,5 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ui';
-export * from './create-channel-model';
+export { default as CreationLayout } from './creation-layout.ui';
+export { default as CreationStepper } from './creation-stepper.ui';

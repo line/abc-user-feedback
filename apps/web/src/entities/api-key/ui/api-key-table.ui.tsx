@@ -22,23 +22,20 @@ import {
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
 
 import { getApiKeyColumns } from '../api-key-columns';
 import type { ApiKey, ApiKeyUpdateType } from '../api-key.type';
 import ApiKeyFormDialog from './api-key-form-dialog.ui';
 
-interface IProps {
-  isLoading?: boolean;
-  apiKeys: ApiKey[];
+interface IProps extends Omit<EntityTable<ApiKey>, 'onClickRow'> {
   onClickDelete?: (id: number) => Promise<void> | void;
-  onClickUpdate: (type: ApiKeyUpdateType, id: number) => Promise<void> | void;
-  createButton: React.ReactNode;
+  onClickUpdate?: (type: ApiKeyUpdateType, id: number) => Promise<void> | void;
 }
 
 const ApiKeyTable: React.FC<IProps> = (props) => {
-  const { isLoading, apiKeys, onClickDelete, onClickUpdate, createButton } =
-    props;
+  const { isLoading, onClickDelete, onClickUpdate, createButton, data } = props;
 
   const { t } = useTranslation();
   const overlay = useOverlay();
@@ -46,7 +43,7 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
 
   const table = useReactTable({
     columns,
-    data: apiKeys,
+    data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
@@ -60,7 +57,7 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
           value: apiKey.value,
         }}
         onSubmit={async (input) => {
-          await onClickUpdate(
+          await onClickUpdate?.(
             input.status === 'active' ? 'recover' : 'softDelete',
             apiKey.id,
           );

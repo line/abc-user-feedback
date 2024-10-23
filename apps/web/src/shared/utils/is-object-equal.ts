@@ -13,5 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ui';
-export * from './create-channel-model';
+export const isObjectEqual = <T>(o1: T, o2: T): boolean => {
+  return JSON.stringify(o1) === JSON.stringify(o2);
+};

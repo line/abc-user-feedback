@@ -32,6 +32,7 @@ import {
   useOAIMutation,
   useOAIQuery,
   usePermissions,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm, projectInfoSchema } from '@/entities/project';
@@ -85,11 +86,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        await router.push(Path.MAIN);
         await queryClient.invalidateQueries({
           queryKey: ['/api/admin/projects'],
         });
         toast.success(t('v2.toast.success'));
-        await router.push(Path.MAIN);
       },
     },
   });
@@ -97,6 +98,8 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   useEffect(() => {
     methods.reset(data);
   }, [data]);
+
+  useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (input: ProjectInfo) => {
     mutate({ ...data, ...input });

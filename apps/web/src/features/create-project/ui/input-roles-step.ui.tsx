@@ -13,8 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useOverlay } from '@toss/use-overlay';
+
 import type { Role } from '@/entities/role';
-import { CreateRolePopover, RoleTable } from '@/entities/role';
+import { CreateRolePopover, RoleFormSheet, RoleTable } from '@/entities/role';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
@@ -22,7 +24,8 @@ import CreateProjectInputTemplate from './create-project-input-template.ui';
 interface IProps {}
 
 const InputRolesStep: React.FC<IProps> = () => {
-  const { onChangeInput, input } = useCreateProjectStore();
+  const { onChangeInput, input, jumpStepByKey } = useCreateProjectStore();
+  const overlay = useOverlay();
 
   const onCreateRole = (name: string) => {
     onChangeInput(
@@ -49,14 +52,34 @@ const InputRolesStep: React.FC<IProps> = () => {
     );
   };
 
+  const openUpdateRoleSheet = (role: Role) => {
+    overlay.open(({ isOpen, close }) => (
+      <RoleFormSheet
+        isOpen={isOpen}
+        close={close}
+        data={role}
+        onSubmit={({ name, permissions }) => {
+          onUpdateRole({ name, permissions, id: role.id });
+          close();
+        }}
+        onClickDelete={() => {
+          onDeleteRole(role);
+          close();
+        }}
+      />
+    ));
+  };
+
   return (
     <CreateProjectInputTemplate
+      onClickBack={() => jumpStepByKey('members')}
       actionButton={
         <CreateRolePopover onCreate={onCreateRole} roles={input.roles} />
       }
       disableNextBtn={input.roles.length === 0}
+      scrollable
     >
-      <RoleTable roles={input.roles} onClickRole={() => {}} />
+      <RoleTable roles={input.roles} onClickRole={openUpdateRoleSheet} />
     </CreateProjectInputTemplate>
   );
 };

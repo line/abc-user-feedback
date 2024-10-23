@@ -109,6 +109,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
         className={cn(
           className,
           'border-separate border-spacing-0 rounded border',
+          { 'h-full': dataIds.length === 0 },
         )}
       >
         <TableHeader>

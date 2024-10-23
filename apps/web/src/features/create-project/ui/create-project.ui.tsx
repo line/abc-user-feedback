@@ -14,35 +14,40 @@
  * under the License.
  */
 
-import { CreateTemplate } from '@/shared';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'react-i18next';
+
+import { CreationLayout, CreationStepper, Path } from '@/shared';
 
 import { useCreateProjectStore } from '../create-project-model';
-import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
+import { CREATE_PROJECT_MAIN_STEP_LIST } from '../create-project-type';
 import {
   CREATE_PROJECT_COMPONENTS,
-  CREATE_PROJECT_HELP_TEXT,
   CREATE_PROJECT_STEPPER_TEXT,
 } from '../create-project.constant';
 
 interface IProps {}
 
 const CreateProject: React.FC<IProps> = () => {
-  const { currentStep, editingStep, getCurrentStepKey } =
-    useCreateProjectStore();
+  const { t } = useTranslation();
+  const { currentStep } = useCreateProjectStore();
 
-  const currentStepKey = getCurrentStepKey();
+  const router = useRouter();
 
   return (
-    <CreateTemplate
-      type="project"
-      currentStep={currentStep}
-      steps={CREATE_PROJECT_STEP_KEY_LIST}
-      editingStep={editingStep}
-      stepTitle={CREATE_PROJECT_STEPPER_TEXT}
-      helpText={CREATE_PROJECT_HELP_TEXT[currentStepKey]}
+    <CreationLayout
+      title={t('main.create-project.title')}
+      leftPanel={
+        <CreationStepper
+          steps={CREATE_PROJECT_MAIN_STEP_LIST}
+          currentStepIndex={currentStep.index}
+          stepTitle={CREATE_PROJECT_STEPPER_TEXT}
+        />
+      }
+      onClickGoBack={() => router.push({ pathname: Path.MAIN })}
     >
-      {CREATE_PROJECT_COMPONENTS[currentStepKey]}
-    </CreateTemplate>
+      {CREATE_PROJECT_COMPONENTS[currentStep.key]}
+    </CreationLayout>
   );
 };
 

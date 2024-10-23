@@ -17,16 +17,19 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
 
-import { WarnIfUnsavedChangesDialog } from '../ui';
+import { WarnIfSavedChangesDialog } from '../ui';
 
-const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
+const useWarnIfSavedChanges = (
+  hasSavedChanges: boolean,
+  excludePath: string,
+) => {
   const router = useRouter();
   const overlay = useOverlay();
   const [isLoading, setIsLoading] = useState(false);
 
-  const openWarnIfUnsavedChangesDialog = (url: string) => {
+  const openWarnIfSavedChangesDialog = (url: string) => {
     overlay.open(({ isOpen, close }) => (
-      <WarnIfUnsavedChangesDialog
+      <WarnIfSavedChangesDialog
         isOpen={isOpen}
         close={close}
         onSubmit={async () => {
@@ -45,7 +48,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
   // 닫기, 새로고침
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (hasUnsavedChanges) {
+      if (hasSavedChanges) {
         event.preventDefault();
         event.returnValue = ''; // Chrome requires returnValue to be set
       }
@@ -56,13 +59,14 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [hasUnsavedChanges]);
+  }, [hasSavedChanges]);
 
   // Browser 뒤로가기, 나가기 버튼
   useEffect(() => {
     const handleBeforeChangeRoute = (url: string) => {
-      if (!hasUnsavedChanges || isLoading) return;
-      openWarnIfUnsavedChangesDialog(url);
+      if (url.includes(excludePath)) return;
+      if (!hasSavedChanges || isLoading) return;
+      openWarnIfSavedChangesDialog(url);
 
       router.events.emit('routeChangeError');
       throw 'routeChange aborted.';
@@ -72,7 +76,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
     return () => {
       router.events.off('routeChangeStart', handleBeforeChangeRoute);
     };
-  }, [hasUnsavedChanges, isLoading]);
+  }, [hasSavedChanges, isLoading]);
 };
 
-export default useWarnIfUnsavedChanges;
+export default useWarnIfSavedChanges;

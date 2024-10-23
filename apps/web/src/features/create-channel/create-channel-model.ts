@@ -16,12 +16,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
+import type { ChannelInfo } from '@/entities/channel';
 import type { FieldInfo } from '@/entities/field';
 
 import type { CreateChannelStepKey } from './create-channel-type';
 import {
-  CREATE_CHANNEL_STEP_KEY_LIST,
+  CREATE_CHANNEL_MAIN_STEP_LIST,
+  CREATE_CHANNEL_STEP_MAP,
   FIRST_CREATE_CHANNEL_STEP,
   LAST_CREATE_CHANNEL_STEP,
 } from './create-channel-type';
@@ -70,72 +71,90 @@ interface Input {
   channelInfo: ChannelInfo;
   fields: FieldInfo[];
   fieldPreview: null;
-  imageConfig: ChannelImageConfig;
+}
+
+interface Step {
+  key: CreateChannelStepKey;
+  index: number;
 }
 
 interface State {
-  editingStep: number;
-  currentStep: number;
+  editingStepIndex: number | null;
+  currentStep: Step;
   input: Input;
 }
 
 interface Action {
+  jumpStepByIndex: (index: number) => void;
   jumpStepByKey: (key: CreateChannelStepKey) => void;
-  jumpStep: (step: number) => void;
   prevStep: () => void;
   nextStep: () => void;
   reset: () => void;
-  getCurrentStepKey: () => CreateChannelStepKey;
   onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => void;
+  setEditingStepIndex: (index: number) => void;
 }
+export const CREATE_CHANNEL_DEFAULT_INPUT: Input = {
+  channelInfo: { name: '', description: '' },
+  fields: DEFAULT_FIELDS,
+  fieldPreview: null,
+};
 
 const DEFAULT_STATE: State = {
-  editingStep: 0,
-  currentStep: 0,
+  editingStepIndex: null,
+  currentStep: {
+    key: 'channel-info',
+    index: 0,
+  },
   input: {
     channelInfo: { name: '', description: '' },
     fields: DEFAULT_FIELDS,
     fieldPreview: null,
-    imageConfig: {
-      accessKeyId: '',
-      bucket: '',
-      endpoint: '',
-      region: '',
-      secretAccessKey: '',
-      domainWhiteList: null,
-    },
   },
 };
 
 export const useCreateChannelStore = create<State & Action>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...DEFAULT_STATE,
+      setEditingStepIndex(index) {
+        set({ editingStepIndex: index });
+      },
       onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => {
         set(({ input }) => ({ input: { ...input, [key]: value } }));
       },
-      getCurrentStepKey() {
-        const { currentStep } = get();
-        return (
-          CREATE_CHANNEL_STEP_KEY_LIST[currentStep] ??
-          CREATE_CHANNEL_STEP_KEY_LIST[0]
-        );
+      jumpStepByIndex(index) {
+        set({
+          currentStep: {
+            index,
+            key: CREATE_CHANNEL_MAIN_STEP_LIST[index] ?? 'channel-info',
+          },
+        });
       },
       jumpStepByKey(key) {
-        set({ currentStep: CREATE_CHANNEL_STEP_KEY_LIST.indexOf(key) });
-      },
-      jumpStep(step: number) {
-        set({ currentStep: step });
+        set({ currentStep: { index: CREATE_CHANNEL_STEP_MAP[key], key } });
       },
       nextStep() {
-        set(({ currentStep, editingStep }) => ({
-          currentStep: Math.min(currentStep + 1, LAST_CREATE_CHANNEL_STEP),
-          editingStep: Math.max(editingStep, currentStep + 1),
+        set(({ currentStep }) => ({
+          currentStep: {
+            index: Math.min(currentStep.index + 1, LAST_CREATE_CHANNEL_STEP),
+            key:
+              CREATE_CHANNEL_MAIN_STEP_LIST[currentStep.index + 1] ??
+              'channel-info',
+          },
+          editingStepIndex: Math.min(
+            currentStep.index + 1,
+            LAST_CREATE_CHANNEL_STEP,
+          ),
         }));
       },
       prevStep() {
         set(({ currentStep }) => ({
-          currentStep: Math.max(currentStep - 1, FIRST_CREATE_CHANNEL_STEP),
+          currentStep: {
+            index: Math.max(currentStep.index - 1, FIRST_CREATE_CHANNEL_STEP),
+            key:
+              CREATE_CHANNEL_MAIN_STEP_LIST[currentStep.index - 1] ??
+              'channel-info',
+          },
         }));
       },
       reset() {

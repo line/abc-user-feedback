@@ -17,7 +17,6 @@ import { memo, useEffect, useMemo, useState } from 'react';
 import { faker } from '@faker-js/faker';
 import {
   createColumnHelper,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -25,11 +24,11 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import {
+  BasicTable,
   DATE_TIME_FORMAT,
   ExpandableText,
   ImagePreviewButton,
   ISSUES,
-  TableResizer,
 } from '@/shared';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
@@ -52,8 +51,8 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
     const fakeRows: FeedbackColumnType[] = [];
     const issues: Issue[] = faker.helpers
       .uniqueArray(() => faker.word.sample(), 10)
-      .map((v) => ({
-        id: faker.number.int(),
+      .map((v, i) => ({
+        id: i + 1,
         createdAt: faker.date.recent().toString(),
         description: faker.lorem.sentence(),
         feedbackCount: faker.number.int(),
@@ -62,7 +61,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
-    for (let i = 1; i <= 10; i++) {
+    for (let i = 1; i <= 20; i++) {
       const fakeData: FeedbackColumnType = {
         id: i,
         createdAt: dayjs().add(i, 'hour').toString(),
@@ -73,6 +72,10 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         }),
       };
       for (const field of fields) {
+        if (field.key === 'id') continue;
+        if (field.key === 'issues') continue;
+        if (field.key === 'createdAt') continue;
+        if (field.key === 'updatedAt') continue;
         fakeData[field.name] =
           field.format === 'date' ? faker.date.anytime()
           : field.format === 'keyword' ? faker.word.noun()
@@ -91,7 +94,6 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
               ),
             );
       }
-
       fakeRows.push(fakeData);
     }
     setRows(fakeRows);
@@ -100,14 +102,15 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
   const columns = useMemo(
     () =>
       fields.map((field) =>
-        columnHelper.accessor(field.name, {
+        columnHelper.accessor(field.key, {
           size:
             field.key === 'id' ? 50
             : field.format === 'text' ? 200
             : 150,
+          header: () => field.name,
           cell: (info) =>
             field.key === 'issues' ?
-              <div className="scrollbar-hide flex items-center gap-1">
+              <div className="scrollbar-hide flex items-center gap-1 overflow-hidden">
                 {(info.getValue() as Issue[] | undefined)?.map((v, i) => (
                   <IssueBadge key={i} issue={v} />
                 ))}
@@ -145,50 +148,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
 
   return (
     <div className="overflow-x-auto">
-      <table
-        className="mb-2 table table-fixed"
-        style={{ width: table.getCenterTotalSize(), minWidth: '100%' }}
-      >
-        <colgroup>
-          {table.getFlatHeaders().map((header) => (
-            <col key={header.index} width={header.getSize()} />
-          ))}
-        </colgroup>
-        <thead>
-          <tr>
-            {table.getFlatHeaders().map((header) => (
-              <th key={header.index} style={{ width: header.getSize() }}>
-                <div className="flex flex-nowrap items-center">
-                  <span className="overflow-hidden text-ellipsis">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                  </span>
-                </div>
-                {header.column.getCanResize() && (
-                  <TableResizer header={header} table={table} />
-                )}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <td
-                  key={cell.id}
-                  style={{ width: cell.column.getSize(), border: 'none' }}
-                  className="overflow-hidden"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <BasicTable table={table} className="table-fixed" />
     </div>
   );
 };

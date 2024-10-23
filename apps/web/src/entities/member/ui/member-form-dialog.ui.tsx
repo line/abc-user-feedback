@@ -27,7 +27,7 @@ import { useUserSearch } from '@/entities/user';
 import type { Member, MemberInfo } from '../member.type';
 
 interface Props extends FormOverlayProps<MemberInfo> {
-  members: Member[];
+  members: MemberInfo[];
   project: ProjectInfo;
   roles: Role[];
 }

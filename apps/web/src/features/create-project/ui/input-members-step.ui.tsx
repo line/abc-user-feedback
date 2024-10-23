@@ -16,10 +16,11 @@
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { Popover, PopoverModalContent } from '@ufb/ui';
 
-import type { Member } from '@/entities/member';
-import { MemberTable } from '@/entities/member';
+import type { MemberInfo } from '@/entities/member';
+import { MemberFormDialog, MemberTable } from '@/entities/member';
 import { useUserSearch } from '@/entities/user';
 
 import { useCreateProjectStore } from '../create-project-model';
@@ -28,7 +29,7 @@ import CreateProjectInputTemplate from './create-project-input-template.ui';
 interface IProps {}
 
 const InputMembersStep: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateProjectStore();
+  const { input, onChangeInput, jumpStepByKey } = useCreateProjectStore();
   const overlay = useOverlay();
 
   const { t } = useTranslation();
@@ -37,17 +38,21 @@ const InputMembersStep: React.FC<IProps> = () => {
     query: { type: 'GENERAL' },
   });
 
-  const updateMember = async (member: Member) => {
+  const createMember = (member: MemberInfo) => {
+    onChangeInput('members', input.members.concat(member));
+  };
+
+  const updateMember = (index: number, newMember: MemberInfo) => {
     onChangeInput(
       'members',
-      input.members.map((m) => (m.id === member.id ? member : m)),
+      input.members.map((m, i) => (i === index ? newMember : m)),
     );
   };
 
-  const deleteMember = (memberId: number) => {
+  const deleteMember = (index: number) => {
     onChangeInput(
       'members',
-      input.members.filter((m) => m.id !== memberId),
+      input.members.filter((_, i) => index !== i),
     );
   };
 
@@ -78,10 +83,58 @@ const InputMembersStep: React.FC<IProps> = () => {
     }
     return true;
   };
+  const openCreateMemberFormDialog = () => {
+    overlay.open(({ isOpen, close }) => (
+      <MemberFormDialog
+        members={input.members}
+        onSubmit={({ role, user }) => createMember({ role, user })}
+        project={input.projectInfo}
+        roles={input.roles}
+        close={close}
+        isOpen={isOpen}
+      />
+    ));
+  };
+
+  const openUpdateMemberFormDialog = (index: number, member: MemberInfo) => {
+    overlay.open(({ close, isOpen }) => (
+      <MemberFormDialog
+        close={close}
+        isOpen={isOpen}
+        data={member}
+        onSubmit={(newMember) => updateMember(index, newMember)}
+        onClickDelete={() => deleteMember(index)}
+        project={input.projectInfo}
+        roles={input.roles}
+        members={input.members}
+      />
+    ));
+  };
 
   return (
-    <CreateProjectInputTemplate validate={() => validate()}>
-      <MemberTable data={input.members} onClickRow={() => {}} createButton />
+    <CreateProjectInputTemplate
+      validate={validate}
+      actionButton={
+        <>
+          <Button
+            iconL="RiExchange2Fill"
+            variant="outline"
+            onClick={() => {
+              jumpStepByKey('roles');
+            }}
+          >
+            {t('project-setting-menu.role-mgmt')}
+          </Button>
+          <Button onClick={openCreateMemberFormDialog}>
+            {t('v2.button.name.register', { name: 'Member' })}
+          </Button>
+        </>
+      }
+    >
+      <MemberTable
+        data={input.members}
+        onClickRow={openUpdateMemberFormDialog}
+      />
     </CreateProjectInputTemplate>
   );
 };

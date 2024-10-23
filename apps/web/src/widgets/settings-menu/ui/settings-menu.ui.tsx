@@ -16,6 +16,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import type { IconNameType } from '@ufb/react';
@@ -24,6 +25,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  Badge,
   Button,
   Menu,
   MenuDropdown,
@@ -33,7 +35,14 @@ import {
   MenuItem,
 } from '@ufb/react';
 
-import { cn, Path, useOAIQuery, usePermissions } from '@/shared';
+import {
+  cn,
+  CreatingDialog,
+  Path,
+  useOAIQuery,
+  usePermissions,
+} from '@/shared';
+import { useCreateChannelStore } from '@/features/create-channel/create-channel-model';
 
 import type { SettingMenu } from '../setting-menu.type';
 
@@ -46,8 +55,10 @@ interface Props {
 const SettingsMenu: React.FC<Props> = (props) => {
   const { settingMenuValue, projectId, channelId } = props;
   const { t } = useTranslation();
+  const { editingStepIndex, reset, jumpStepByIndex } = useCreateChannelStore();
 
   const router = useRouter();
+  const overlay = useOverlay();
 
   const menuValue =
     channelId ? `${settingMenuValue}_${channelId}` : settingMenuValue;
@@ -108,6 +119,29 @@ const SettingsMenu: React.FC<Props> = (props) => {
       disabled: !perms.includes('channel_image_read'),
     },
   ];
+  const openChannelInProgress = async () => {
+    if (editingStepIndex !== null) {
+      await new Promise<boolean>((resolve) =>
+        overlay.open(({ close, isOpen }) => (
+          <CreatingDialog
+            isOpen={isOpen}
+            close={close}
+            type="Channel"
+            onRestart={() => {
+              reset();
+              resolve(true);
+            }}
+            onContinue={() => {
+              jumpStepByIndex(editingStepIndex);
+              resolve(true);
+            }}
+          />
+        )),
+      );
+    }
+    await router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
+  };
+  const isCreatingChannel = editingStepIndex !== null;
 
   return (
     <Menu
@@ -136,8 +170,18 @@ const SettingsMenu: React.FC<Props> = (props) => {
                 <p className="text-small text-neutral-tertiary">
                   {t('v2.text.no-data.channel')}
                 </p>
-                <Button className="w-full">
-                  {t('v2.text.create-channel')}
+                <Button
+                  className="w-full"
+                  onClick={() =>
+                    router.push({
+                      pathname: Path.CREATE_CHANNEL,
+                      query: { projectId },
+                    })
+                  }
+                >
+                  {isCreatingChannel ?
+                    t('v2.text.continue')
+                  : t('v2.text.create-channel')}
                 </Button>
               </div>
             : data?.items.map(({ name, id }) => (
@@ -166,11 +210,16 @@ const SettingsMenu: React.FC<Props> = (props) => {
           value=""
           iconL="RiAddCircleFill"
           className="text-tint-blue hover:text-tint-blue"
-          onClick={() =>
-            router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } })
-          }
+          onClick={openChannelInProgress}
         >
-          {t('v2.text.create-channel')}
+          <div className="flex">
+            <span className="flex-1">{t('v2.text.create-channel')}</span>
+            {isCreatingChannel && (
+              <Badge color="red" variant="bold">
+                {t('v2.text.in-progress')}
+              </Badge>
+            )}
+          </div>
         </MenuItem>
       )}
     </Menu>

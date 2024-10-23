@@ -18,7 +18,7 @@ import { persist } from 'zustand/middleware';
 
 import type { ApiKey } from '@/entities/api-key';
 import type { IssueTracker } from '@/entities/issue-tracker';
-import type { Member } from '@/entities/member';
+import type { MemberInfo } from '@/entities/member';
 import { getDefaultTimezone } from '@/entities/project';
 import type { ProjectInfo } from '@/entities/project';
 import { PermissionList } from '@/entities/role';
@@ -26,7 +26,8 @@ import type { PermissionType, Role } from '@/entities/role';
 
 import type { CreateProjectStepKey } from './create-project-type';
 import {
-  CREATE_PROJECT_STEP_KEY_LIST,
+  CREATE_PROJECT_MAIN_STEP_LIST,
+  CREATE_PROJECT_STEP_MAP,
   FIRST_CREATE_PROJECT_STEP,
   LAST_CREATE_PROJECT_STEP,
 } from './create-project-type';
@@ -56,75 +57,98 @@ interface Input {
     name: string;
     permissions: PermissionType[];
   }[];
-  members: Member[];
+  members: MemberInfo[];
   issueTracker: IssueTracker;
   apiKeys: ApiKey[];
 }
 
+interface Step {
+  key: CreateProjectStepKey;
+  index: number;
+}
+
 interface State {
-  editingStep: number;
-  currentStep: number;
+  editingStepIndex: number | null;
+  currentStep: Step;
   input: Input;
 }
 
 interface Action {
+  setEditingStepIndex: (index: number) => void;
+  jumpStepByIndex: (index: number) => void;
   jumpStepByKey: (key: CreateProjectStepKey) => void;
-  jumpStep: (step: number) => void;
   prevStep: () => void;
   nextStep: () => void;
   reset: () => void;
-  getCurrentStepKey: () => CreateProjectStepKey;
   onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => void;
 }
+export const CREATE_PROJECT_DEFAULT_INPUT: Input = {
+  projectInfo: {
+    name: '',
+    description: null,
+    timezone: getDefaultTimezone(),
+  },
+  roles: DEFAULT_ROLES,
+  members: [],
+  issueTracker: {
+    ticketDomain: '',
+    ticketKey: '',
+  },
+  apiKeys: [],
+};
 
 const DEFAULT_STATE: State = {
-  editingStep: 0,
-  currentStep: 0,
-  input: {
-    projectInfo: {
-      name: '',
-      description: null,
-      timezone: getDefaultTimezone(),
-    },
-    roles: DEFAULT_ROLES,
-    members: [],
-    issueTracker: {
-      ticketDomain: '',
-      ticketKey: '',
-    },
-    apiKeys: [],
+  editingStepIndex: null,
+  currentStep: {
+    index: 0,
+    key: 'project-info',
   },
+  input: CREATE_PROJECT_DEFAULT_INPUT,
 };
 
 export const useCreateProjectStore = create<State & Action>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...DEFAULT_STATE,
+      setEditingStepIndex(index) {
+        set({ editingStepIndex: index });
+      },
       onChangeInput: <T extends keyof Input>(key: T, value: Input[T]) => {
         set(({ input }) => ({ input: { ...input, [key]: value } }));
       },
-      getCurrentStepKey() {
-        const { currentStep } = get();
-        return (
-          CREATE_PROJECT_STEP_KEY_LIST[currentStep] ??
-          CREATE_PROJECT_STEP_KEY_LIST[0]
-        );
+      jumpStepByIndex(index) {
+        set({
+          currentStep: {
+            index,
+            key: CREATE_PROJECT_MAIN_STEP_LIST[index] ?? 'project-info',
+          },
+        });
       },
       jumpStepByKey(key) {
-        set({ currentStep: CREATE_PROJECT_STEP_KEY_LIST.indexOf(key) });
-      },
-      jumpStep(step: number) {
-        set({ currentStep: step });
+        set({ currentStep: { index: CREATE_PROJECT_STEP_MAP[key], key } });
       },
       nextStep() {
-        set(({ currentStep, editingStep }) => ({
-          currentStep: Math.min(currentStep + 1, LAST_CREATE_PROJECT_STEP),
-          editingStep: Math.max(editingStep, currentStep + 1),
+        set(({ currentStep }) => ({
+          currentStep: {
+            index: Math.min(currentStep.index + 1, LAST_CREATE_PROJECT_STEP),
+            key:
+              CREATE_PROJECT_MAIN_STEP_LIST[currentStep.index + 1] ??
+              'project-info',
+          },
+          editingStepIndex: Math.min(
+            currentStep.index + 1,
+            LAST_CREATE_PROJECT_STEP,
+          ),
         }));
       },
       prevStep() {
         set(({ currentStep }) => ({
-          currentStep: Math.max(currentStep - 1, FIRST_CREATE_PROJECT_STEP),
+          currentStep: {
+            index: Math.max(currentStep.index - 1, FIRST_CREATE_PROJECT_STEP),
+            key:
+              CREATE_PROJECT_MAIN_STEP_LIST[currentStep.index - 1] ??
+              'project-info',
+          },
         }));
       },
       reset() {

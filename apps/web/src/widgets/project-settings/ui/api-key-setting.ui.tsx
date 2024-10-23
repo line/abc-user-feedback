@@ -125,7 +125,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
       />
       <ApiKeyTable
         isLoading={status === 'pending'}
-        apiKeys={data?.items ?? []}
+        data={data?.items ?? []}
         onClickDelete={(id) => deleteApiKey({ apiKeyId: id })}
         onClickUpdate={(type, id) => UpdateMutation[type](id)}
         createButton={

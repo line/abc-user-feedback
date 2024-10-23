@@ -13,5 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './ui';
-export * from './create-channel-model';
+import CreationHeader from './creation-header.ui';
+
+interface Props {
+  children: React.ReactNode;
+  onClickGoBack?: () => void;
+  title: string;
+  leftPanel: React.ReactNode;
+}
+
+const CreationLayout: React.FC<Props> = ({
+  children,
+  onClickGoBack,
+  title,
+  leftPanel,
+}) => {
+  return (
+    <>
+      <CreationHeader onClickGoBack={onClickGoBack} />
+      <div className="m-6 flex h-full gap-8">
+        <div className="w-[520px] flex-shrink-0 p-6">
+          <h2 className="text-title-h2 mb-6">{title}</h2>
+          {leftPanel}
+        </div>
+        {children}
+      </div>
+    </>
+  );
+};
+
+export default CreationLayout;

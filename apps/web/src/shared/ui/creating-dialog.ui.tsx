@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -28,33 +29,39 @@ import {
 } from '@ufb/react';
 
 interface Props {
+  onRestart: () => void;
+  onContinue: () => void;
   isOpen: boolean;
   close: () => void;
-  onSubmit: () => void;
+  type: 'Project' | 'Channel';
 }
 
-const WarnIfUnsavedChangesDialog: React.FC<Props> = (props) => {
-  const { close, isOpen, onSubmit } = props;
+const CreatingDialog: React.FC<Props> = ({
+  onRestart,
+  onContinue,
+  isOpen,
+  close,
+  type,
+}) => {
   const { t } = useTranslation();
-
   return (
     <Dialog open={isOpen} onOpenChange={close}>
       <DialogContent radius="large">
         <DialogHeader>
-          <DialogIcon name="RiAlertFill" variant="warning" />
-          <DialogTitle>
-            {t('v2.dialog.warn-if-unsaved-changes.title')}
-          </DialogTitle>
+          <DialogIcon name="RiInformation2Fill" variant="informative" />
+          <DialogTitle>{t('dialog.continue.title')}</DialogTitle>
           <DialogDescription>
-            {t('v2.dialog.warn-if-unsaved-changes.description')}
+            {t('dialog.continue.description', { type })}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">{t('v2.button.cancel')}</Button>
+            <Button variant="outline" onClick={onRestart}>
+              {t('dialog.continue.button.restart')}
+            </Button>
           </DialogClose>
-          <Button variant="primary" onClick={onSubmit}>
-            {t('v2.button.out')}
+          <Button variant="primary" onClick={onContinue}>
+            {t('dialog.continue.button.continue')}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -62,4 +69,4 @@ const WarnIfUnsavedChangesDialog: React.FC<Props> = (props) => {
   );
 };
 
-export default WarnIfUnsavedChangesDialog;
+export default CreatingDialog;

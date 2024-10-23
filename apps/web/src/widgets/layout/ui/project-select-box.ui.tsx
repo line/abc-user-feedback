@@ -15,6 +15,7 @@
  */
 
 import { useRouter } from 'next/router';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -27,7 +28,8 @@ import {
   SelectValue,
 } from '@ufb/react';
 
-import { useOAIQuery } from '@/shared';
+import { CreatingDialog, Path, useOAIQuery } from '@/shared';
+import { useCreateProjectStore } from '@/features/create-project/create-project-model';
 
 interface IProps {
   projectId: number;
@@ -37,26 +39,54 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const router = useRouter();
   const { t } = useTranslation();
 
+  const { editingStepIndex, reset, jumpStepByIndex } = useCreateProjectStore();
+  const overlay = useOverlay();
+
   const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
-  const onChangeProject = async (projectId: string) => {
-    if (projectId === '0') {
-      await router.push('/main/project/create');
+  const onChangeProject = async (currentProjectId: string) => {
+    if (currentProjectId === 'abcdsa') {
+      await router.push({
+        pathname: `/main/project/[projectId]/settings`,
+        query: { projectId },
+      });
+      if (editingStepIndex !== null) {
+        await new Promise<boolean>((resolve) =>
+          overlay.open(({ close, isOpen }) => (
+            <CreatingDialog
+              isOpen={isOpen}
+              close={close}
+              type="Project"
+              onRestart={() => {
+                reset();
+                resolve(true);
+              }}
+              onContinue={() => {
+                jumpStepByIndex(editingStepIndex);
+                resolve(true);
+              }}
+            />
+          )),
+        );
+      }
+      await router.push(Path.CREATE_PROJECT);
+
       return;
     }
     await router.push({
       pathname: `/main/project/[projectId]/settings`,
-      query: { projectId },
+      query: { projectId: currentProjectId },
     });
   };
 
   return (
     <Select
+      type="single"
       value={String(projectId)}
       onValueChange={(value) => onChangeProject(value)}
     >
       <SelectTrigger className="min-w-60">
-        <SelectValue placeholder="Select a fruit" />
+        <SelectValue placeholder="" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
@@ -68,11 +98,13 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
         </SelectGroup>
         <SelectSeparator />
         <SelectItem
-          value="0"
+          value="abcdsa"
           icon="RiAddCircleFill"
           className="text-tint-blue p-2"
         >
-          {t('v2.text.create-project')}
+          {`${t('v2.text.create-project')}${
+            editingStepIndex !== null ? '...' : ''
+          }`}
         </SelectItem>
       </SelectContent>
     </Select>

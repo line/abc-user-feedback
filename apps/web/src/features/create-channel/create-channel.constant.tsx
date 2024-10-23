@@ -20,7 +20,6 @@ import type { CreateChannelStepKey } from './create-channel-type';
 import InputChannelInfoStep from './ui/input-channel-info-step.ui';
 import InputFieldPreviewStep from './ui/input-field-preview-step.ui';
 import InputFieldStep from './ui/input-field-step.ui';
-import InputImageConfigStep from './ui/input-image-config-step.ui';
 
 export const CREATE_CHANNEL_COMPONENTS: Record<
   CreateChannelStepKey,
@@ -29,7 +28,6 @@ export const CREATE_CHANNEL_COMPONENTS: Record<
   'channel-info': <InputChannelInfoStep />,
   field: <InputFieldStep />,
   'field-preview': <InputFieldPreviewStep />,
-  'image-config': <InputImageConfigStep />,
 };
 
 export const CREATE_CHANNEL_STEPPER_TEXT: Record<
@@ -39,15 +37,13 @@ export const CREATE_CHANNEL_STEPPER_TEXT: Record<
   'channel-info': <Trans i18nKey="channel-setting-menu.channel-info" />,
   field: <Trans i18nKey="channel-setting-menu.field-mgmt" />,
   'field-preview': <Trans i18nKey="main.setting.field-mgmt.preview" />,
-  'image-config': <Trans i18nKey="channel-setting-menu.image-mgmt" />,
 };
 
-export const CREATE_PROJECT_HELP_TEXT: Record<
+export const CREATE_CHANNEL_HELP_TEXT: Record<
   CreateChannelStepKey,
   React.ReactNode
 > = {
   'channel-info': <Trans i18nKey="help-card.channel-info" />,
   field: <Trans i18nKey="help-card.field" />,
   'field-preview': <Trans i18nKey="help-card.field-preview" />,
-  'image-config': <Trans i18nKey="help-card.image-config" />,
 };

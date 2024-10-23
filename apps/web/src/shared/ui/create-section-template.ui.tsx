@@ -13,50 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 
-import { Icon } from '@ufb/ui';
-
-import { cn } from '../utils';
+import { AccordionContent, AccordionItem, AccordionTrigger } from '@ufb/react';
 
 interface IProps extends React.PropsWithChildren {
   title: string;
   defaultOpen?: boolean;
 }
 
-const CreateSectionTemplate: React.FC<IProps> = ({
-  title,
-  children,
-  defaultOpen,
-}) => {
-  const [open, setOpen] = useState(defaultOpen);
-
+const CreateSectionTemplate: React.FC<IProps> = ({ title, children }) => {
   return (
-    <div className="border-fill-tertiary overflow-hidden rounded-sm border">
-      <div
-        className="bg-fill-quaternary flex cursor-pointer items-center justify-between px-6 py-3"
-        onClick={() => setOpen((prev) => !prev)}
-      >
-        <p className="font-14-bold">{title}</p>
-        <button className="icon-btn icon-btn-sm icon-btn-tertiary icon-btn-rounded">
-          <Icon
-            name="ChevronDown"
-            className={cn([
-              'transform transition-transform',
-              open ? 'rotate-180' : 'rotate-0',
-            ])}
-          />
-        </button>
-      </div>
-      <div
-        className={cn([
-          'flex flex-col gap-5',
-          open ? 'visible h-fit p-6' : 'hidden min-h-0',
-        ])}
-      >
-        {children}
-      </div>
-    </div>
+    <AccordionItem
+      value={title}
+      className="border-neutral-tertiary mb-4 rounded border"
+    >
+      <AccordionTrigger className="bg-neutral-tertiary">
+        {title}
+      </AccordionTrigger>
+      <AccordionContent>{children}</AccordionContent>
+    </AccordionItem>
   );
 };
 

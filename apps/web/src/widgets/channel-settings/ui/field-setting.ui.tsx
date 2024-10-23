@@ -172,14 +172,14 @@ const FieldSetting: React.FC<IProps> = (props) => {
                 icon="RiAddLine"
                 disabled={!perms.includes('channel_field_update')}
               >
-                Field 추가
+                {t('v2.button.name.add', { name: 'Field' })}
               </ToggleGroupItem>
               <ToggleGroupItem
                 value="item-2"
                 icon="RiEyeLine"
                 onClick={() => setIsPreview(true)}
               >
-                미리보기
+                {t('v2.text.preview')}
               </ToggleGroupItem>
             </ToggleGroup>
             <Divider

@@ -13,16 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React, { Fragment } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import { IconButton } from '@ufb/react';
 import { Icon } from '@ufb/ui';
 
-import { Path } from '@/shared';
-
-import { cn } from '../utils';
+import { cn, Path } from '@/shared';
 
 type Target = 'project' | 'channel';
 
@@ -31,21 +30,11 @@ interface IProps<T extends string | number | symbol>
   type: Target;
   steps: readonly T[];
   stepTitle: Record<T, React.ReactNode>;
-  helpText: React.ReactNode;
-  currentStep: number;
-  editingStep: number;
+  currentStepIndex: number;
 }
 
 const CreateTemplate = <T extends string>(props: IProps<T>) => {
-  const {
-    children,
-    type,
-    currentStep,
-    steps,
-    editingStep,
-    stepTitle,
-    helpText,
-  } = props;
+  const { children, type, currentStepIndex, steps, stepTitle } = props;
 
   const { t } = useTranslation();
   const router = useRouter();
@@ -59,9 +48,8 @@ const CreateTemplate = <T extends string>(props: IProps<T>) => {
   };
 
   return (
-    <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
-      {/* header */}
-      <div className="flex h-12 items-center justify-between">
+    <>
+      <div className="flex h-12 items-center justify-between p-6">
         <div className="flex items-center gap-1">
           <Image
             src="/assets/images/logo.svg"
@@ -71,65 +59,50 @@ const CreateTemplate = <T extends string>(props: IProps<T>) => {
           />
           <Icon name="Title" className="h-[24px] w-[123px]" />
         </div>
-        <button
-          className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
-          onClick={() => ROUTE[type]()}
-        >
-          <Icon name="Out" size={16} />
-          <span className="font-12-bold uppercase">{t('button.get-out')}</span>
-        </button>
+        <IconButton
+          icon="RiLogoutBoxRLine"
+          variant="ghost"
+          onClick={ROUTE[type]}
+        />
       </div>
-      {/* title */}
-      <h1 className="font-24-bold text-center">
-        {type === 'project' && t('main.create-project.title')}
-        {type === 'channel' && t('main.create-channel.title')}
-      </h1>
-      {/* stepper */}
-      <div className="border-fill-secondary relative flex rounded border px-10 py-4">
-        {steps.map((step, i) => (
-          <Fragment key={i}>
-            <div
-              className={cn([
-                'group flex flex-col items-center gap-3',
-                i !== currentStep && 'gap-4 pt-1',
-              ])}
-            >
-              <div
-                className={cn([
-                  'font-16-bold bg-fill-secondary text-secondary flex h-8 w-8 items-center justify-center rounded-full',
-                  i <= editingStep && 'bg-blue-primary text-above-primary',
-                  i === currentStep &&
-                    'border-text-secondary h-10 w-10 border-2',
-                ])}
-              >
-                {i + 1 > editingStep ?
-                  i + 1
-                : <Icon name="Check" className="text-above-primary" size={16} />
-                }
+      <div className="m-6 flex h-full gap-8">
+        <div className="w-[520px] flex-shrink-0">
+          <h2 className="text-title-h2 mb-6">
+            {type === 'project' && t('main.create-project.title')}
+            {type === 'channel' && t('main.create-channel.title')}
+          </h2>
+          <div>
+            {steps.map((step, i) => (
+              <div key={i} className="relative">
+                <div className="relative z-10 flex gap-4 pb-8">
+                  <div
+                    className={cn(
+                      'bg-neutral-secondary flex h-8 w-8 items-center justify-center rounded-full',
+                      { 'bg-black': i <= currentStepIndex },
+                    )}
+                  >
+                    <span className="text-white">{i + 1}</span>
+                  </div>
+                  <div>
+                    <p className="text-large-strong">Step {i + 1}</p>
+                    <p className="text-neutral-tertiary">{stepTitle[step]}</p>
+                  </div>
+                </div>
+                {i !== steps.length - 1 && (
+                  <div
+                    className={cn(
+                      'border-neutral-tertiary absolute left-[15px] top-0 z-0 mt-5 h-16 border-l-2',
+                      { 'border-black': i <= currentStepIndex },
+                    )}
+                  />
+                )}
               </div>
-              <div className="font-14-bold">{stepTitle[step]}</div>
-            </div>
-            {steps.length - 1 !== i && (
-              <div
-                className={cn([
-                  'border-fill-secondary mt-5 flex-1 border-t-2',
-                  i < editingStep && 'border-blue-primary',
-                ])}
-              />
-            )}
-          </Fragment>
-        ))}
-      </div>
-      {/* helper box */}
-      <div className="border-fill-secondary rounded border px-6 py-4">
-        <div className="mb-1 flex items-center gap-2">
-          <Icon name="IdeaColor" size={16} />
-          <h2 className="font-14-bold">{t('text.helper')}</h2>
+            ))}
+          </div>
         </div>
-        <p className="font-12-regular">{helpText}</p>
+        {children}
       </div>
-      {children}
-    </div>
+    </>
   );
 };
 

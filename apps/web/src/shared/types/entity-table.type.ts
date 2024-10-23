@@ -16,6 +16,6 @@
 export interface EntityTable<T> {
   isLoading?: boolean;
   data: T[];
-  onClickRow: (index: number, row: T) => void;
-  createButton: React.ReactNode;
+  onClickRow?: (index: number, row: T) => void;
+  createButton?: React.ReactNode;
 }

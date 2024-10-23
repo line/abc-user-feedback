@@ -27,7 +27,7 @@ import {
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import type { Member } from '@/entities/member';
+import type { MemberInfo } from '@/entities/member';
 import { MemberFormDialog, MemberTable } from '@/entities/member';
 
 interface IProps {
@@ -114,17 +114,18 @@ const MemberSetting: React.FC<IProps> = (props) => {
     ));
   };
 
-  const openUpdateMemberFormDialog = (_: number, member: Member) => {
-    if (!projectData || !rolesData) return;
+  const openUpdateMemberFormDialog = (_: number, member: MemberInfo) => {
+    if (!projectData || !rolesData || !member.id) return;
+    const memberId = member.id;
     overlay.open(({ close, isOpen }) => (
       <MemberFormDialog
         close={close}
         isOpen={isOpen}
         data={member}
         onSubmit={(newMember) =>
-          updateMember({ memberId: member.id, roleId: newMember.role.id })
+          updateMember({ memberId, roleId: newMember.role.id })
         }
-        onClickDelete={() => deleteMember({ memberId: member.id })}
+        onClickDelete={() => deleteMember({ memberId })}
         project={projectData}
         roles={rolesData.roles}
         members={data?.members ?? []}

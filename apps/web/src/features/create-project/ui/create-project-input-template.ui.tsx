@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
@@ -23,36 +24,47 @@ import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CreateInputTemplate,
+  isObjectEqual,
   Path,
   useOAIMutation,
   useOAIQuery,
+  useWarnIfSavedChanges,
 } from '@/shared';
 
-import { useCreateProjectStore } from '../create-project-model';
-import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
-import { CREATE_PROJECT_STEPPER_TEXT } from '../create-project.constant';
+import {
+  CREATE_PROJECT_DEFAULT_INPUT,
+  useCreateProjectStore,
+} from '../create-project-model';
+import { CREATE_PROJECT_MAIN_STEP_LIST } from '../create-project-type';
+import {
+  CREATE_PROJECT_HELP_TEXT,
+  CREATE_PROJECT_STEPPER_TEXT,
+} from '../create-project.constant';
 
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   validate?: () => Promise<boolean> | boolean;
   disableNextBtn?: boolean;
   isLoading?: boolean;
+  onClickBack?: () => void;
+  scrollable?: boolean;
 }
 
 const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
-  const { children, actionButton, validate, disableNextBtn, isLoading } = props;
+  const {
+    children,
+    actionButton,
+    validate,
+    disableNextBtn,
+    isLoading,
+    onClickBack,
+    scrollable = false,
+  } = props;
 
   const { t } = useTranslation();
 
-  const {
-    currentStep,
-    nextStep,
-    prevStep,
-    getCurrentStepKey,
-    input,
-    jumpStepByKey,
-    reset,
-  } = useCreateProjectStore();
+  const { currentStep, nextStep, prevStep, input, jumpStepByKey, reset } =
+    useCreateProjectStore();
 
   const router = useRouter();
   const overlay = useOverlay();
@@ -114,6 +126,13 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
     },
   });
 
+  const isDefaultInput = useMemo(
+    () => isObjectEqual(CREATE_PROJECT_DEFAULT_INPUT, input),
+    [input],
+  );
+
+  useWarnIfSavedChanges(!isDefaultInput, Path.CREATE_PROJECT_COMPLETE);
+
   const onComplete = () => {
     mutate({
       ...input.projectInfo,
@@ -129,15 +148,18 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
 
   return (
     <CreateInputTemplate
-      currentStep={currentStep}
-      lastStep={CREATE_PROJECT_STEP_KEY_LIST.length - 1}
+      currentStepIndex={currentStep.index}
+      lastStep={CREATE_PROJECT_MAIN_STEP_LIST.length - 1}
       onNext={nextStep}
       onPrev={prevStep}
-      title={CREATE_PROJECT_STEPPER_TEXT[getCurrentStepKey()]}
+      title={CREATE_PROJECT_STEPPER_TEXT[currentStep.key]}
       actionButton={actionButton}
       onComplete={onComplete}
       validate={validate}
       disableNextBtn={disableNextBtn ?? isLoading}
+      helpText={CREATE_PROJECT_HELP_TEXT[currentStep.key]}
+      onClickBack={onClickBack}
+      scrollable={scrollable}
     >
       {children}
     </CreateInputTemplate>

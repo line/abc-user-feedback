@@ -27,9 +27,9 @@ import {
 } from '@/shared';
 
 import type { User } from '../user';
-import type { Member } from './member.type';
+import type { MemberInfo } from './member.type';
 
-const columnHelper = createColumnHelper<Member>();
+const columnHelper = createColumnHelper<MemberInfo>();
 
 export const getMemberColumns = (users: User[]) => [
   columnHelper.accessor('user.email', {
