@@ -133,6 +133,7 @@ export class FeedbackController {
   @ApiBearerAuth()
   @Post('export')
   async exportFeedbacks(
+    @Param('projectId', ParseIntPipe) projectId: number,
     @Param('channelId', ParseIntPipe) channelId: number,
     @Body() body: ExportFeedbacksRequestDto,
     @Res() res: FastifyReply,
@@ -145,6 +146,7 @@ export class FeedbackController {
 
     const { streamableFile, feedbackIds } =
       await this.feedbackService.generateFile({
+        projectId,
         channelId,
         query,
         sort,
