@@ -44,6 +44,7 @@ import type { FieldEntity } from '../channel/field/field.entity';
 import { FieldService } from '../channel/field/field.service';
 import { OptionService } from '../channel/option/option.service';
 import { IssueService } from '../project/issue/issue.service';
+import { ProjectService } from '../project/project/project.service';
 import type {
   CountByProjectIdDto,
   FindFeedbacksByChannelIdDto,
@@ -83,6 +84,7 @@ export class FeedbackService {
     private readonly issueService: IssueService,
     private readonly optionService: OptionService,
     private readonly channelService: ChannelService,
+    private readonly projectService: ProjectService,
     private readonly configService: ConfigService,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -161,6 +163,7 @@ export class FeedbackService {
   }
 
   private convertFeedback(
+    timezone: string,
     feedback: Feedback,
     fieldsByKey: Record<string, FieldEntity>,
     fieldsToExport: FieldEntity[],
@@ -177,7 +180,9 @@ export class FeedbackService {
       if (fieldsByKey[key].format === FieldFormatEnum.date) {
         convertedFeedback[fieldsByKey[key].name] = DateTime.fromJSDate(
           new Date(feedback[key] as string),
-        ).toFormat('yyyy-MM-dd HH:mm:ss');
+        )
+          .setZone(timezone)
+          .toFormat('yyyy-MM-dd HH:mm:ss');
       }
     }
 
@@ -190,6 +195,7 @@ export class FeedbackService {
   }
 
   private async generateXLSXFile({
+    projectId,
     channelId,
     query,
     sort,
@@ -197,6 +203,7 @@ export class FeedbackService {
     fieldsByKey,
     fieldsToExport,
   }: {
+    projectId: number;
     channelId: number;
     query: FindFeedbacksByChannelIdDto['query'];
     sort: FindFeedbacksByChannelIdDto['sort'];
@@ -207,6 +214,9 @@ export class FeedbackService {
     if (!existsSync('/tmp')) {
       await fs.mkdir('/tmp');
     }
+    const project = await this.projectService.findById({ projectId });
+    const timezone = project.timezone.name;
+
     const tempFilePath = path.join(
       '/tmp',
       `temp_${new Date().toString()}.xlsx`,
@@ -260,6 +270,7 @@ export class FeedbackService {
       for (const feedback of feedbacks) {
         feedback.issues = issuesByFeedbackIds[feedback.id as number];
         const convertedFeedback = this.convertFeedback(
+          timezone,
           feedback,
           fieldsByKey,
           fieldsToExport,
@@ -281,19 +292,31 @@ export class FeedbackService {
   }
 
   private async generateCSVFile({
+    projectId,
     channelId,
     query,
     sort,
     fields,
     fieldsByKey,
     fieldsToExport,
+  }: {
+    projectId: number;
+    channelId: number;
+    query: FindFeedbacksByChannelIdDto['query'];
+    sort: FindFeedbacksByChannelIdDto['sort'];
+    fields: FieldEntity[];
+    fieldsByKey: Record<string, FieldEntity>;
+    fieldsToExport: FieldEntity[];
   }) {
     const stream = new PassThrough();
     const csvStream = fastcsv.format({
-      headers: (fieldsToExport as FieldEntity[]).map((field) => field.name),
+      headers: fieldsToExport.map((field) => field.name),
     });
 
     csvStream.pipe(stream);
+
+    const project = await this.projectService.findById({ projectId });
+    const timezone = project.timezone.name;
 
     const pageSize = 1000;
     let feedbacks: Record<string, any>[] = [];
@@ -304,10 +327,10 @@ export class FeedbackService {
     do {
       if (this.configService.get('opensearch.use')) {
         const { data, scrollId } = await this.feedbackOSService.scroll({
-          channelId: channelId as number,
-          query: query as FindFeedbacksByChannelIdDto['query'],
-          sort: sort as FindFeedbacksByChannelIdDto['sort'],
-          fields: fields as FieldEntity[],
+          channelId: channelId,
+          query: query,
+          sort: sort,
+          fields: fields,
           size: pageSize,
           scrollId: currentScrollId as unknown as string,
         });
@@ -315,10 +338,10 @@ export class FeedbackService {
         currentScrollId = scrollId;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelId({
-          channelId: channelId as number,
-          query: query as FindFeedbacksByChannelIdDto['query'],
-          sort: sort as FindFeedbacksByChannelIdDto['sort'],
-          fields: fields as FieldEntity[],
+          channelId: channelId,
+          query: query,
+          sort: sort,
+          fields: fields,
           limit: pageSize,
           page,
         });
@@ -333,9 +356,10 @@ export class FeedbackService {
       for (const feedback of feedbacks) {
         feedback.issues = issuesByFeedbackIds[feedback.id as number];
         const convertedFeedback = this.convertFeedback(
+          timezone,
           feedback,
-          fieldsByKey as Record<string, FieldEntity>,
-          fieldsToExport as FieldEntity[],
+          fieldsByKey,
+          fieldsToExport,
         );
         csvStream.write(convertedFeedback);
         feedbackIds.push(feedback.id as number);
@@ -600,7 +624,7 @@ export class FeedbackService {
     streamableFile: StreamableFile;
     feedbackIds: number[];
   }> {
-    const { channelId, query, sort, type, fieldIds } = dto;
+    const { projectId, channelId, query, sort, type, fieldIds } = dto;
 
     const fields = await this.fieldService.findByChannelId({
       channelId: channelId,
@@ -627,6 +651,7 @@ export class FeedbackService {
     switch (type) {
       case 'xlsx':
         return this.generateXLSXFile({
+          projectId,
           channelId,
           query,
           sort,
@@ -636,6 +661,7 @@ export class FeedbackService {
         });
       case 'csv':
         return this.generateCSVFile({
+          projectId,
           channelId,
           query,
           sort,

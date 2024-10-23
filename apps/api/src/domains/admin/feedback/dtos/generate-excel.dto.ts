@@ -17,6 +17,7 @@ import type { TimeRange } from '@/common/dtos';
 import type { SortMethodEnum } from '@/common/enums';
 
 export class GenerateExcelDto {
+  projectId: number;
   channelId: number;
   query?: {
     searchText?: string;
