@@ -173,7 +173,7 @@ export const objToQuery = (
             result[key] = value;
             break;
         }
-      } catch (error) {
+      } catch {
         result[key] = undefined;
       }
     }

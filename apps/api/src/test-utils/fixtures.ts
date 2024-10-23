@@ -312,11 +312,11 @@ export const optionFixture = {
   id: faker.number.int(),
   key: faker.string.sample(),
   name: faker.string.sample(),
-  field: fieldsFixture.filter((field) => {
-    return [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(
+  field: fieldsFixture.find((field) =>
+    [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(
       field.format,
-    );
-  })[0],
+    ),
+  ),
 } as OptionEntity;
 
 export const issueFixture = {

@@ -79,7 +79,7 @@ export class SchedulerLockService {
       const hasLock =
         lock && lock.serverId === this.serverId && lock.timestamp > new Date();
       return hasLock;
-    } catch (error) {
+    } catch {
       return false;
     }
   }

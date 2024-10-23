@@ -206,13 +206,13 @@ describe('ChannelController (integration)', () => {
         });
     });
 
-    it('should return 400 error when update channel fields with special character', async () => {
+    it('should return 400 error when update channel field key with special character', async () => {
       const dto = new UpdateChannelFieldsRequestDto();
       const fieldDto = new UpdateChannelRequestFieldDto();
       fieldDto.id = 5;
       fieldDto.format = FieldFormatEnum.text;
-      fieldDto.key = 'testField';
-      fieldDto.name = '!';
+      fieldDto.key = 'testField!';
+      fieldDto.name = 'testField!';
       dto.fields = [fieldDto];
 
       await request(app.getHttpServer() as Server)

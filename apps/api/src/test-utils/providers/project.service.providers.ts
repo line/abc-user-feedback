@@ -17,7 +17,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { OpensearchRepository } from '@/common/repositories';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
-import { TenantServiceProviders } from '@/test-utils/providers/tenant.service.providers';
 import {
   getMockProvider,
   MockOpensearchRepository,
@@ -44,7 +43,6 @@ export const ProjectServiceProviders = [
     useClass: ChannelRepositoryStub,
   },
   getMockProvider(OpensearchRepository, MockOpensearchRepository),
-  ...TenantServiceProviders,
   ...RoleServiceProviders,
   ...MemberServiceProviders,
   ...ApiKeyServiceProviders,
