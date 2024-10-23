@@ -94,6 +94,7 @@ describe('FeedbackController', () => {
     expect(MockFeedbackService.findByChannelId).toBeCalledTimes(1);
   });
   it('exportFeedbacks', async () => {
+    const projectId = faker.number.int();
     const channelId = faker.number.int();
     const response = {
       type: jest.fn(),
@@ -113,7 +114,13 @@ describe('FeedbackController', () => {
       project: { name: faker.string.sample() },
     } as ChannelEntity);
 
-    await feedbackController.exportFeedbacks(channelId, dto, response, userDto);
+    await feedbackController.exportFeedbacks(
+      projectId,
+      channelId,
+      dto,
+      response,
+      userDto,
+    );
 
     expect(MockFeedbackService.generateFile).toBeCalledTimes(1);
   });
