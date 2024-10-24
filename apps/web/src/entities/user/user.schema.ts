@@ -18,7 +18,7 @@ import { z } from 'zod';
 
 export const userSchema = z.object({
   id: z.number(),
-  email: z.string().email().nullable(),
+  email: z.string().email(),
   type: z.union([z.literal('SUPER'), z.literal('GENERAL')]),
   name: z.string().nullable(),
   department: z.string().nullable(),

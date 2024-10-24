@@ -24,7 +24,7 @@ export class UserDto {
   id: number;
 
   @Expose()
-  @ApiProperty({ nullable: true, type: String })
+  @ApiProperty({ type: String })
   email: string | null;
 
   @Expose()

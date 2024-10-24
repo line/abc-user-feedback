@@ -46,7 +46,7 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
   const perms = usePermissions(projectId);
 
   const [open, setOpen] = useState(false);
-  const { editingStep, reset, jumpStep } = useCreateChannelStore();
+  const { currentStep, reset, jumpStepByIndex } = useCreateChannelStore();
 
   const goToCreateChannel = () =>
     router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
@@ -59,7 +59,7 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
           <p>{t('text.no-channel')}</p>
         </div>
       )}
-      <Tooltip open={editingStep > 0} placement={placement ?? 'bottom'}>
+      <Tooltip open={currentStep.index > 0} placement={placement ?? 'bottom'}>
         <TooltipTrigger asChild>
           <button
             className={cn([
@@ -67,7 +67,7 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
               type === 'primary' ? 'btn-primary' : 'btn-blue',
             ])}
             onClick={async () => {
-              if (editingStep > 0) setOpen(true);
+              if (currentStep.index > 0) setOpen(true);
               else await goToCreateChannel();
             }}
             disabled={!perms.includes('channel_create')}
@@ -79,7 +79,7 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
         <TooltipContent color="red">
           {t('text.create-channel-in-progress')}{' '}
           <b>
-            ({editingStep + 1}/{CREATE_CHANNEL_STEP_KEY_LIST.length})
+            ({currentStep.index + 1}/{CREATE_CHANNEL_STEP_KEY_LIST.length})
           </b>
         </TooltipContent>
       </Tooltip>
@@ -91,7 +91,7 @@ const RouteCreateChannelButton: React.FC<IProps> = (props) => {
             children: t('dialog.continue.button.continue'),
             className: 'btn-red',
             onClick: async () => {
-              jumpStep(editingStep);
+              jumpStepByIndex(currentStep.index);
               await goToCreateChannel();
             },
           }}

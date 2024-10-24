@@ -78,7 +78,6 @@ export const useUserStore = create<State & Action>((set, get) => ({
         pathParams: { id: parseInt(sub) },
         options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } },
       });
-
       set({ user: data });
     }
   },

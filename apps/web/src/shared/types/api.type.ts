@@ -1016,7 +1016,7 @@ export interface components {
         };
         UserDto: {
             id: number;
-            email: string | null;
+            email: string;
             name: string;
             department: string | null;
             /** @enum {string} */

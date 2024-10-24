@@ -44,16 +44,16 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
 
   const { user } = useUserStore();
 
-  const { editingStep, reset, jumpStep } = useCreateProjectStore();
+  const { currentStep, reset, jumpStepByIndex } = useCreateProjectStore();
 
   return (
     <>
-      <Tooltip open={!hasProject || editingStep > 0} placement="bottom">
+      <Tooltip open={!hasProject || currentStep.index > 0} placement="bottom">
         <TooltipTrigger asChild>
           <button
             className="btn btn-lg btn-primary w-[200px] gap-2"
             onClick={async () => {
-              if (editingStep > 0) setOpen(true);
+              if (currentStep.index > 0) setOpen(true);
               else await router.push(Path.CREATE_PROJECT);
             }}
             disabled={user?.type !== 'SUPER'}
@@ -62,12 +62,12 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             {t('main.index.create-project')}
           </button>
         </TooltipTrigger>
-        <TooltipContent color={editingStep > 0 ? 'red' : 'blue'}>
-          {editingStep > 0 ?
+        <TooltipContent color={currentStep.index > 0 ? 'red' : 'blue'}>
+          {currentStep.index > 0 ?
             <>
               {t('text.create-project-in-progress')}{' '}
               <b>
-                ({editingStep + 1}/{CREATE_PROJECT_STEP_KEY_LIST.length})
+                ({currentStep.index + 1}/{CREATE_PROJECT_STEP_KEY_LIST.length})
               </b>
             </>
           : t('main.index.no-project')}
@@ -81,7 +81,7 @@ const RouteCreateProjectButton: React.FC<IProps> = ({ hasProject }) => {
             children: t('dialog.continue.button.continue'),
             className: 'btn-red',
             onClick: async () => {
-              jumpStep(editingStep);
+              jumpStepByIndex(currentStep.index);
               await router.push(Path.CREATE_PROJECT);
             },
           }}
