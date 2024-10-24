@@ -46,6 +46,16 @@
   @apply input-button-small;
 }
 
+.input-button.show-only-on-focus-and-has-value {
+  @apply hidden;
+}
+
+.input-box:focus-within
+  .input:not(:placeholder-shown)
+  ~ .input-button.show-only-on-focus-and-has-value {
+  @apply flex;
+}
+
 .input-icon {
   @apply absolute-y-center flex;
 

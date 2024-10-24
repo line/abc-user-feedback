@@ -97,23 +97,12 @@ interface InputBoxProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const InputBox = React.forwardRef<HTMLInputElement, InputBoxProps>(
-  ({ size, className, children, onBlur, ...props }, ref) => {
+  ({ size, className, children, ...props }, ref) => {
     const { themeSize } = useTheme();
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      e.stopPropagation();
-      if (!e.currentTarget.contains(e.relatedTarget)) {
-        onBlur?.(e);
-      }
-    };
 
     return (
       <InputContext.Provider value={{ size: size ?? themeSize }}>
-        <div
-          ref={ref}
-          className={cn("input-box", className)}
-          onBlur={handleBlur}
-          {...props}
-        >
+        <div ref={ref} className={cn("input-box", className)} {...props}>
           {children}
         </div>
       </InputContext.Provider>
@@ -290,6 +279,7 @@ const InputClearButton = React.forwardRef<
       type="button"
       className={cn(
         inputButtonVariants({ size: size ?? themeSize, className }),
+        "show-only-on-focus-and-has-value",
       )}
       aria-label="Reset input text"
       {...props}

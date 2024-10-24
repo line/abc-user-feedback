@@ -55,7 +55,7 @@
 }
 
 .calendar-day {
-  @apply rounded-8 text-base-normal relative flex h-full w-full items-center justify-center overflow-hidden p-0 aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
+  @apply rounded-8 text-base-normal relative flex h-full w-full items-center justify-center overflow-hidden p-0 transition-colors aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
 }
 
 .calendar-day-selected {

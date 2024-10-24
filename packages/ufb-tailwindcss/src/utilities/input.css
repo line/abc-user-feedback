@@ -3,13 +3,13 @@
 }
 
 .input-large {
-  @apply text-xlarge-normal px-20 py-10;
+  @apply text-xlarge-normal h-52 px-20 py-10;
 }
 .input-medium {
-  @apply text-large-normal px-16 py-10;
+  @apply text-large-normal h-44 px-16 py-10;
 }
 .input-small {
-  @apply text-base-normal px-12 py-8;
+  @apply text-base-normal h-36 px-12 py-8;
 }
 
 .input-radius-large {

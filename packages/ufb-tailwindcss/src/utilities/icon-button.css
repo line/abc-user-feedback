@@ -28,10 +28,10 @@
   @apply bg-[var(--icon-button-destructive-fg-default)] text-[var(--icon-button-destructive-icon-default)];
 }
 .icon-button-ghost {
-  @apply bg-[var(--icon-button-ghost-fg-default)] text-[var(--icon-button-ghost-icon-default)] data-[state=open]:bg-[var(--icon-button-ghost-fg-hover)] [&:not(:disabled)]:hover:bg-[var(--icon-button-ghost-fg-hover)];
+  @apply bg-[var(--icon-button-ghost-fg-default)] text-[var(--icon-button-ghost-icon-default)] transition-colors data-[state=open]:bg-[var(--icon-button-ghost-fg-hover)] [&:not(:disabled)]:hover:bg-[var(--icon-button-ghost-fg-hover)];
 }
 .icon-button-outline {
-  @apply bg-[var(--icon-button-outline-fg-default)] text-[var(--icon-button-outline-icon-default)] shadow-[0_0_0_0.0625rem_inset_var(--icon-button-outline-border-default)] data-[state=open]:hover:bg-[var(--icon-button-outline-fg-hover)] [&:not(:disabled)]:hover:bg-[var(--icon-button-outline-fg-hover)];
+  @apply bg-[var(--icon-button-outline-fg-default)] text-[var(--icon-button-outline-icon-default)] shadow-[0_0_0_0.0625rem_inset_var(--icon-button-outline-border-default)] transition-colors data-[state=open]:hover:bg-[var(--icon-button-outline-fg-hover)] [&:not(:disabled)]:hover:bg-[var(--icon-button-outline-fg-hover)];
 }
 
 .icon-button-loading-primary {

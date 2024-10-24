@@ -1,11 +1,11 @@
 .button-large {
-  @apply text-xlarge-strong min-w-52 gap-8 px-20 py-10;
+  @apply text-xlarge-strong min-h-52 min-w-52 gap-8 px-20 py-8;
 }
 .button-medium {
-  @apply text-large-strong min-w-44 gap-8 px-16 py-10;
+  @apply text-large-strong min-h-44 min-w-44 gap-8 px-16 py-8;
 }
 .button-small {
-  @apply text-base-strong min-w-36 gap-4 px-12 py-8;
+  @apply text-base-strong min-h-36 min-w-36 gap-4 px-12 py-6;
 }
 
 .button-radius-small {
@@ -28,10 +28,10 @@
   @apply bg-[var(--button-destructive-fg-default)] text-[var(--button-destructive-text-default)];
 }
 .button-ghost {
-  @apply bg-[var(--button-ghost-fg-default)] text-[var(--button-ghost-text-default)] [&:not(:disabled)]:hover:bg-[var(--button-ghost-fg-hover)];
+  @apply bg-[var(--button-ghost-fg-default)] text-[var(--button-ghost-text-default)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-ghost-fg-hover)];
 }
 .button-outline {
-  @apply bg-[var(--button-outline-fg-default)] text-[var(--button-outline-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--button-outline-border-default)] [&:not(:disabled)]:hover:bg-[var(--button-outline-fg-hover)];
+  @apply bg-[var(--button-outline-fg-default)] text-[var(--button-outline-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--button-outline-border-default)] transition-colors [&:not(:disabled)]:hover:bg-[var(--button-outline-fg-hover)];
 }
 
 .button-loading-primary {

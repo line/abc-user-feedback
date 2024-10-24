@@ -22,7 +22,7 @@
     var(--fg-neutral-secondary)
   );
 
-  @apply relative inline-flex cursor-pointer items-center justify-center disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
+  @apply relative inline-flex cursor-pointer items-center justify-center transition-opacity disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
 
   /* default */
   @apply icon-button-small icon-button-radius-medium icon-button-primary;

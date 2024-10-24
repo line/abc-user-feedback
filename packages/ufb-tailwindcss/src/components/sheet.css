@@ -3,7 +3,9 @@
 }
 
 .sheet {
-  @apply data-[state=open]:animate-in data-[state=closed]:animate-out bg-neutral-primary fixed z-50 flex flex-col space-y-20 p-20 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500;
+  --sheet-border: var(--border-neutral-tertiary);
+
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out bg-neutral-primary text-neutral-primary fixed z-50 flex flex-col space-y-20 border-[var(--sheet-border)] p-20 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500;
 
   /* default */
   @apply sheet-radius-small [&:not([class*=sheet-side])]:sheet-side-right;
@@ -32,7 +34,7 @@
 }
 
 .sheet-title {
-  @apply text-xlarge-strong text-neutral-primary;
+  @apply text-xlarge-strong;
 }
 
 .sheet-description {

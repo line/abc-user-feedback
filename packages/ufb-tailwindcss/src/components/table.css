@@ -7,7 +7,7 @@
   --table-fg-default: var(--fg-neutral-primary);
   --table-fg-hover: var(--fg-neutral-tertiary);
 
-  @apply w-full caption-bottom;
+  @apply w-full caption-bottom border-[var(--table-border-default)];
 }
 
 .table-header {

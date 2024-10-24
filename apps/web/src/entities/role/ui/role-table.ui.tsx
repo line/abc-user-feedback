@@ -59,7 +59,7 @@ const RoleTable: React.FC<IProps> = (props) => {
   const colSpan = roles.length + 2;
 
   return (
-    <Table className="border">
+    <Table className="border-separate border-spacing-0 rounded border">
       <RoleTableHead roles={roles} onClickRole={onClickRole} />
       <TableBody>
         <RoleTitleRow colspan={colSpan} title="Feedback" />

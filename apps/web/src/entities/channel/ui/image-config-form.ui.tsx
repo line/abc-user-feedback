@@ -48,7 +48,6 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
 
   const [inputDomain, setInputDomain] = useState('');
   const [connectionError, setConnectionError] = useState(false);
-  console.log('connectionError: ', connectionError);
 
   const {
     register,

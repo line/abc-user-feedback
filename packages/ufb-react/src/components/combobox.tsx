@@ -1,28 +1,13 @@
-/**
- * Copyright 2023 LINE Corporation
- *
- * LINE Corporation licenses this file to you under the Apache License,
- * version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at:
- *
- *   https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
-import * as React from 'react';
-import { Command as CommandPrimitive } from 'cmdk';
+import * as React from "react";
+import { Command as CommandPrimitive } from "cmdk";
 
-import type { TriggerType } from '../lib/types';
-import { cn } from '../lib/utils';
-import { Button } from './button';
-import type { IconNameType } from './icon';
-import { Icon } from './icon';
-import { Popover, PopoverContent, PopoverTrigger } from './popover';
-import { ScrollArea, ScrollBar } from './scroll-area';
+import type { TriggerType } from "../lib/types";
+import type { IconNameType } from "./icon";
+import { cn } from "../lib/utils";
+import { Button } from "./button";
+import { Icon } from "./icon";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import { ScrollArea, ScrollBar } from "./scroll-area";
 
 const ComboboxContext = React.createContext<{
   trigger: TriggerType;
@@ -30,8 +15,8 @@ const ComboboxContext = React.createContext<{
   setTrigger: React.Dispatch<React.SetStateAction<TriggerType>>;
   setIsHover: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
-  trigger: 'click',
-  setTrigger: () => 'click',
+  trigger: "click",
+  setTrigger: () => "click",
   isHover: false,
   setIsHover: () => false,
 });
@@ -41,7 +26,7 @@ const Combobox = ({
   onOpenChange,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Popover>) => {
-  const [trigger, setTrigger] = React.useState<TriggerType>('click');
+  const [trigger, setTrigger] = React.useState<TriggerType>("click");
   const [isHover, setIsHover] = React.useState(false);
   return (
     <ComboboxContext.Provider
@@ -66,14 +51,14 @@ const ComboboxContent = React.forwardRef<
   const { trigger, setIsHover } = React.useContext(ComboboxContext);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (trigger === 'hover') {
+    if (trigger === "hover") {
       setIsHover(true);
     }
     onMouseEnter?.(e);
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (trigger === 'hover') {
+    if (trigger === "hover") {
       setIsHover(false);
     }
     onMouseLeave?.(e);
@@ -85,7 +70,7 @@ const ComboboxContent = React.forwardRef<
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}
-      className={cn('combobox-content', className)}
+      className={cn("combobox-content", className)}
     >
       <CommandPrimitive>{children}</CommandPrimitive>
     </PopoverContent>
@@ -101,7 +86,7 @@ const ComboboxInput = React.forwardRef<
     <Icon name="RiSearchLine" size={16} className="combobox-icon" />
     <CommandPrimitive.Input
       ref={ref}
-      className={cn('combobox-input', className)}
+      className={cn("combobox-input", className)}
       {...props}
     />
   </div>
@@ -118,7 +103,7 @@ const ComboboxList = React.forwardRef<
   <ScrollArea maxHeight={maxHeight}>
     <CommandPrimitive.List
       ref={ref}
-      className={cn('combobox-list', className)}
+      className={cn("combobox-list", className)}
       {...props}
     />
     <ScrollBar />
@@ -142,7 +127,7 @@ const ComboboxGroup = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Group
     ref={ref}
-    className={cn('combobox-group', className)}
+    className={cn("combobox-group", className)}
     {...props}
   />
 ));
@@ -155,7 +140,7 @@ const ComboboxSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn('combobox-separator', className)}
+    className={cn("combobox-separator", className)}
     {...props}
   />
 ));
@@ -172,7 +157,7 @@ const ComboboxItem = React.forwardRef<
 >(({ inset, iconL, iconR, caption, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
-    className={cn('combobox-item', inset && 'combobox-item-inset', className)}
+    className={cn("combobox-item", inset && "combobox-item-inset", className)}
     {...props}
   >
     <React.Fragment>
@@ -197,14 +182,14 @@ const ComboboxSelectItem = React.forwardRef<
 >(({ iconL, iconR, caption, checked, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
-    className={cn('combobox-item', className)}
+    className={cn("combobox-item", className)}
     {...props}
   >
     <React.Fragment>
       <Icon
         name="RiCheckLine"
         size={20}
-        color={checked ? 'currentColor' : 'transparent'}
+        color={checked ? "currentColor" : "transparent"}
       />
       {iconL && <Icon name={iconL} size={16} />}
       <div className="combobox-item-text">{children}</div>
@@ -214,7 +199,7 @@ const ComboboxSelectItem = React.forwardRef<
   </CommandPrimitive.Item>
 ));
 
-ComboboxSelectItem.displayName = 'ComboboxSelectItem';
+ComboboxSelectItem.displayName = "ComboboxSelectItem";
 
 const ComboboxTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
@@ -225,7 +210,7 @@ const ComboboxTrigger = React.forwardRef<
   (
     {
       asChild = false,
-      variant = 'outline',
+      variant = "outline",
       trigger,
       iconR,
       className,
@@ -239,14 +224,14 @@ const ComboboxTrigger = React.forwardRef<
     const { setTrigger, setIsHover } = React.useContext(ComboboxContext);
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (trigger === 'hover') {
+      if (trigger === "hover") {
         setIsHover(true);
       }
       onMouseEnter?.(e);
     };
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (trigger === 'hover') {
+      if (trigger === "hover") {
         setIsHover(false);
       }
       onMouseLeave?.(e);
@@ -279,8 +264,8 @@ const ComboboxTrigger = React.forwardRef<
           variant={variant}
           iconR={iconR}
           className={cn(
-            'combobox-trigger',
-            iconR === 'RiArrowDownSLine' && 'combobox-trigger-icon-rotate',
+            "combobox-trigger",
+            iconR === "RiArrowDownSLine" && "combobox-trigger-icon-rotate",
             className,
           )}
           onMouseEnter={handleMouseEnter}
@@ -293,7 +278,7 @@ const ComboboxTrigger = React.forwardRef<
     );
   },
 );
-ComboboxTrigger.displayName = 'ComboboxTrigger';
+ComboboxTrigger.displayName = "ComboboxTrigger";
 
 export {
   Combobox,

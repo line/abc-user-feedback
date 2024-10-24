@@ -8,7 +8,7 @@
   --checkbox-fg-default: var(--fg-neutral-primary);
   --checkbox-fg-checked: var(--tint, var(--fg-neutral-inverse));
 
-  @apply inline-flex cursor-pointer items-center text-[var(--checkbox-text-default)] disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
+  @apply inline-flex cursor-pointer items-center text-[var(--checkbox-text-default)] transition-opacity disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
 
   /* default */
   @apply checkbox-small;

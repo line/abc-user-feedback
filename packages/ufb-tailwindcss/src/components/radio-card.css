@@ -13,7 +13,7 @@
 }
 
 .radio-card {
-  @apply relative inline-flex border border-[0_0_0_0.0625rem_inset_var(--radio-card-border-default)] bg-[var(--radio-card-fg-default)] disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:shadow-[0_0_0_0.125rem_inset_var(--radio-card-border-selected)] [&:not(:disabled)]:hover:bg-[var(--radio-card-fg-hover)];
+  @apply relative inline-flex border-[var(--radio-card-border-default)] bg-[var(--radio-card-fg-default)] shadow-[0_0_0_0.0625rem_inset_var(--radio-card-border-default)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:shadow-[0_0_0_0.125rem_inset_var(--radio-card-border-selected)] [&:not(:disabled)]:hover:bg-[var(--radio-card-fg-hover)];
 
   /* default */
   @apply [&:not(.radio-card-horizontal)]:radio-card-vertical radio-card-radius-medium;
