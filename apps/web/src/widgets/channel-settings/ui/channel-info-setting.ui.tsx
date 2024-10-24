@@ -30,6 +30,7 @@ import {
   useOAIMutation,
   useOAIQuery,
   usePermissions,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
@@ -50,6 +51,8 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
   });
+  useWarnIfUnsavedChanges(methods.formState.isDirty);
+
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },

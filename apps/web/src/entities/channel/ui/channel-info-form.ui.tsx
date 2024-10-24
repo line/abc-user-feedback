@@ -16,7 +16,7 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { TextInput, useWarnIfUnsavedChanges } from '@/shared';
+import { TextInput } from '@/shared';
 
 import type { ChannelInfo } from '../channel.type';
 
@@ -31,7 +31,6 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
 
   const { register, formState } = useFormContext<ChannelInfo>();
-  useWarnIfUnsavedChanges(formState.isDirty);
 
   return (
     <div className="flex flex-col gap-4">

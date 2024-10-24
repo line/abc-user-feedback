@@ -98,13 +98,16 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
         </SelectGroup>
         <SelectSeparator />
         <SelectItem
-          value="abcdsa"
+          value="0"
           icon="RiAddCircleFill"
           className="text-tint-blue p-2"
         >
-          {`${t('v2.text.create-project')}${
-            editingStepIndex !== null ? '...' : ''
-          }`}
+          <div className="flex w-[215px] items-center justify-between gap-2">
+            <span>{t('v2.text.create-project')}</span>
+            {editingStepIndex !== null && (
+              <span className="text-tint-red">{t('v2.text.in-progress')}</span>
+            )}
+          </div>
         </SelectItem>
       </SelectContent>
     </Select>
