@@ -15,7 +15,42 @@ import useTheme from "./use-theme";
 
 const Dialog = DialogPrimitive.Root;
 
-const DialogTrigger = DialogPrimitive.Trigger;
+const DialogTrigger = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Trigger>,
+  DialogPrimitive.DialogTriggerProps &
+    React.ComponentPropsWithoutRef<typeof Button>
+>(
+  (
+    { asChild = false, variant = "outline", className, children, ...props },
+    ref,
+  ) => {
+    if (asChild) {
+      return (
+        <DialogPrimitive.Trigger
+          asChild
+          ref={ref}
+          className={className}
+          {...props}
+        >
+          {children}
+        </DialogPrimitive.Trigger>
+      );
+    }
+
+    return (
+      <DialogPrimitive.Trigger asChild>
+        <Button
+          variant={variant}
+          className={cn("dialog-trigger", className)}
+          {...props}
+        >
+          {children}
+        </Button>
+      </DialogPrimitive.Trigger>
+    );
+  },
+);
+DialogTrigger.displayName = DialogPrimitive.DialogTrigger.displayName;
 
 const DialogPortal = DialogPrimitive.Portal;
 

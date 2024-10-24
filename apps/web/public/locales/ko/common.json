@@ -529,7 +529,8 @@
       "summary": "요약",
       "preview": "미리보기",
       "in-progress": "진행중",
-      "continue": "이어서 하기"
+      "continue": "이어서 하기",
+      "test-connection-failed": "연동 테스트에 실패했습니다."
     },
     "placeholder": {
       "select": "선택해주세요.",

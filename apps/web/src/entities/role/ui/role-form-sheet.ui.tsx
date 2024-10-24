@@ -300,16 +300,17 @@ const PermissionRows = <T extends PermissionType>(
   } = props;
 
   return (
-    <AccordionItem value={title}>
-      <AccordionTrigger>{title}</AccordionTrigger>
+    <AccordionItem value={title} className="border-none">
+      <AccordionTrigger className="h-9 py-0">{title}</AccordionTrigger>
       <AccordionContent className="py-0">
         <div className="flex flex-col">
           {permissions.map((perm) => (
             <Checkbox
               key={perm}
-              className="h-9 w-full text-base"
+              className="h-9 w-full"
               checked={currentPermissions.includes(perm)}
               onCheckedChange={(checked) => onChckedChange(!!checked, perm)}
+              size="small"
             >
               {permmissionsText[perm]}
             </Checkbox>

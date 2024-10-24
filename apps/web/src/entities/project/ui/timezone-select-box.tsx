@@ -16,8 +16,6 @@
 import { useMemo } from 'react';
 import { getCountry } from 'countries-and-timezones';
 
-import { InputField, InputLabel } from '@ufb/react';
-
 import { SelectSearchInput } from '@/shared';
 
 import type { Timezone } from '../project.type';
@@ -52,23 +50,20 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
   const options = useMemo(() => getTimezoneOptions(), []);
 
   return (
-    <InputField>
-      <InputLabel>
-        Time Zone <span className="text-tint-red">*</span>
-      </InputLabel>
-      <SelectSearchInput
-        displayValue={getLabel(value)}
-        options={options.map((option) => ({
-          label: getLabel(option),
-          value: getSelectValue(option),
-        }))}
-        value={getSelectValue(value)}
-        onChange={(v) => {
-          onChange?.(getTimezonValue(v));
-        }}
-        disabled={disabled}
-      />
-    </InputField>
+    <SelectSearchInput
+      label="Time Zone"
+      displayValue={getLabel(value)}
+      options={options.map((option) => ({
+        label: getLabel(option),
+        value: getSelectValue(option),
+      }))}
+      value={getSelectValue(value)}
+      onChange={(v) => {
+        onChange?.(getTimezonValue(v));
+      }}
+      disabled={disabled}
+      required
+    />
   );
 };
 

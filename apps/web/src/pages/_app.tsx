@@ -15,6 +15,7 @@
  */
 import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
+import { Inter } from 'next/font/google';
 import Head from 'next/head';
 import type { DehydratedState } from '@tanstack/react-query';
 import {
@@ -22,7 +23,6 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { OverlayProvider } from '@toss/use-overlay';
 import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
@@ -39,6 +39,8 @@ import { useUserStore } from '@/entities/user';
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
+
+const inter = Inter({ subsets: ['latin'] });
 
 interface PageProps {
   dehydratedState?: DehydratedState;
@@ -71,6 +73,11 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <title>User Feedback</title>
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
+      <style jsx global>{`
+        html {
+          font-family: ${inter.style.fontFamily};
+        }
+      `}</style>
       <QueryClientProvider client={queryClient}>
         <OverlayProvider>
           <HydrationBoundary state={pageProps.dehydratedState}>

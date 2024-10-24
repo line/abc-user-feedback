@@ -30,7 +30,7 @@
 }
 
 .input-box {
-  @apply [&:has(.input-icon)>.input-medium]:!pl-46 [&:has(.input-icon)>.input-large]:!pl-54 [&:has(.input-button)>.input-medium]:!pr-46 [&:has(.input-button)>.input-large]:!pr-54 relative [&:has(.input-button)>.input-small]:!pr-36 [&:has(.input-icon)>.input-small]:!pl-36;
+  @apply relative [&:has(.input-button)>.input-large]:!pr-48 [&:has(.input-button)>.input-medium]:!pr-40 [&:has(.input-button)>.input-small]:!pr-32 [&:has(.input-icon)>.input-large]:!pl-48 [&:has(.input-icon)>.input-medium]:!pl-40 [&:has(.input-icon)>.input-small]:!pl-32;
 }
 
 .input {
@@ -58,11 +58,14 @@
 }
 
 .input-caption {
-  @apply text-base-normal flex gap-4;
+  @apply flex gap-4;
 
   /* default */
-  @apply input-caption-default;
+  @apply input-caption-default input-caption-small;
 }
 .input-caption-icon {
-  @apply mt-2 flex-shrink-0;
+  @apply flex-shrink-0;
+
+  /* default */
+  @apply input-caption-icon-small;
 }

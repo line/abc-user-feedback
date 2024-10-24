@@ -161,7 +161,11 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           </SheetTitle>
         </SheetHeader>
         <SheetBody asChild>
-          <form onSubmit={handleSubmit(onSubmit)} id="field-setting">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            id="field-setting"
+            className="flex flex-col gap-3"
+          >
             <TextInput
               label="Key"
               {...register('key')}

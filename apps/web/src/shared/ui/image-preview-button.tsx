@@ -18,7 +18,14 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverContent, PopoverTrigger } from '@ufb/ui';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@ufb/react';
+import { Icon } from '@ufb/ui';
 
 import { useHorizontalScroll } from '@/shared';
 
@@ -45,8 +52,8 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
 
   if (urls.length === 0) return null;
   return (
-    <Popover modal open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <Dialog modal open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
         <button
           className="btn btn-secondary btn-xs btn-rounded gap-1"
           onClick={(e) => {
@@ -57,20 +64,11 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
           <Icon name="MediaImageFill" size={12} />
           Image
         </button>
-      </PopoverTrigger>
-      <PopoverContent
-        className="border-fill-secondary flex flex-col gap-5 border p-5"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between">
-          <h1 className="font-14-bold">{t('modal.image-preview.title')}</h1>
-          <button
-            className="icon-btn icon-btn-xs icon-btn-tertiary"
-            onClick={() => setOpen(false)}
-          >
-            <Icon name="Close" />
-          </button>
-        </div>
+      </DialogTrigger>
+      <DialogContent onClick={(e) => e.stopPropagation()}>
+        <DialogHeader>
+          <DialogTitle>{t('modal.image-preview.title')}</DialogTitle>
+        </DialogHeader>
 
         <Image
           src={urls[currentImageIndex] ?? ''}
@@ -138,8 +136,8 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             </div>
           </div>
         </div>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 };
 

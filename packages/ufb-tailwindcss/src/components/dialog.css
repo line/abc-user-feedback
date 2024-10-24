@@ -2,6 +2,12 @@
   @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-[var(--alpha-black800)];
 }
 
+.dialog-trigger {
+  --dialog-fg-open: var(--fg-neutral-tertiary);
+
+  @apply data-[state=open]:bg-[var(--dialog-fg-open)];
+}
+
 .dialog-content {
   --dialog-border: var(--border-neutral-tertiary);
   --dialog-fg-default: var(--fg-neutral-primary);

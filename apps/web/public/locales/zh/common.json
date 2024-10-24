@@ -449,13 +449,13 @@
   "help-card": {
     "project-info": "Project指的是需要收集反馈的产品。请考虑要管理反馈的产品并输入相关信息。",
     "member": "您可以注册和管理将参与Project的成员。",
-    "api-key": "这是管理User Feedback API Key的界面。要使用API，请生成Key并使用。详细内容请参考API Docs。",
+    "api-key": "这是管理User Feedback API Key的界面。要使用API，请生成Key并使用。详细内容请参考API <docs>Docs</docs>。",
     "issue-tracker": "这是设置User Feedback和Issue Tracking System连接的界面。请输入您正在使用的Issue Tracking System信息。",
     "channel-info": "Channel是区分反馈收集渠道或收集方式的单位。请考虑Channel的特性来输入信息。",
     "field": "您可以按Field单位定义在Channel中收集的反馈数据。请考虑数据类型和属性来添加Field。",
-    "image-config": "收集Image格式的反馈时，可以设置Image Storage连接并设置Image URL域名的白名单。详细内容请参考Image Docs。",
+    "image-config": "收集Image格式的反馈时，可以设置Image Storage连接并设置Image URL域名的白名单。详细内容请参考Image <docs>Docs</docs>。",
     "field-preview": "根据注册的Field信息预览反馈将呈现的样子。预览使用示例数据来显示。",
-    "webhook": "这是根据User Feedback中发生的事件触发器设置Webhook连接的界面。详细内容请参考Webhook Docs。"
+    "webhook": "这是根据User Feedback中发生的事件触发器设置Webhook连接的界面。详细内容请参考Webhook <docs>Docs</docs>。"
   },
   "hint": {
     "required": "必填",
@@ -536,7 +536,8 @@
       "summary": "摘要",
       "preview": "预览",
       "in-progress": "进行中",
-      "continue": "继续"
+      "continue": "继续",
+      "test-connection-failed": "连接测试失败"
     },
     "placeholder": {
       "select": "请选择。",

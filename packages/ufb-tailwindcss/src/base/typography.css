@@ -86,26 +86,26 @@
   &-xlarge {
     &-normal {
       font-size: 1.25rem;
-      line-height: 1.75rem;
+      line-height: 2rem;
 
       font-weight: 400;
     }
     &-strong {
       font-size: 1.25rem;
-      line-height: 1.75rem;
+      line-height: 2rem;
 
       font-weight: 600;
     }
     &-underline {
       font-size: 1.25rem;
-      line-height: 1.75rem;
+      line-height: 2rem;
 
       font-weight: 400;
       text-decoration: underline;
     }
     &-delete {
       font-size: 1.25rem;
-      line-height: 1.75rem;
+      line-height: 2rem;
 
       font-weight: 400;
       text-decoration: line-through;

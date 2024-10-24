@@ -48,7 +48,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
           <Input
             {...textInputProps}
             className="flex-1"
-            error={!!error}
+            error={typeof error !== 'undefined'}
             required={required}
             ref={ref}
             size={size}
@@ -56,7 +56,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
         </InputBox>
         {right}
       </div>
-      {error && (
+      {typeof error !== 'undefined' && (
         <InputCaption variant="error" size={size}>
           {error}
         </InputCaption>

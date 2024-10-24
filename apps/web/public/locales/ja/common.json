@@ -437,13 +437,13 @@
   "help-card": {
     "project-info": "Projectはフィードバック収集対象の製品を指します。フィードバックを管理する製品を考慮して情報を入力してください。",
     "member": "Projectに参加するMemberを登録・管理することができます。",
-    "api-key": "User Feedback API Keyを管理する画面です。APIをご利用いただくにはKeyを生成してご使用ください。詳しくはAPI Docsをご参照ください。",
+    "api-key": "User Feedback API Keyを管理する画面です。APIをご利用いただくにはKeyを生成してご使用ください。詳しくはAPI <docs>Docs</docs>をご参照ください。",
     "issue-tracker": "User FeedbackとIssue Tracking Systemの連携を設定する画面です。ご利用中のIssue Tracking Systemの情報を入力してください。",
     "channel-info": "Channelはフィードバック収集経路または収集方法を区分する単位です。Channelの特性を考慮して情報を入力してください。",
     "field": "Channelで収集するフィードバックデータをField単位で定義できます。データタイプと属性を考慮してFieldを追加してください。",
-    "image-config": "Image形式のフィードバックを収集する場合、Image Storageとの連携を設定し、Image URLドメインのホワイトリストを設定できる画面です。詳しくはImage Docsをご参照ください。",
+    "image-config": "Image形式のフィードバックを収集する場合、Image Storageとの連携を設定し、Image URLドメインのホワイトリストを設定できる画面です。詳しくはImage <docs>Docs</docs>をご参照ください。",
     "field-preview": "登録したField情報に基づいてフィードバックがどのように表示されるかをプレビュー表示します。プレビューではサンプルデータを使用して表示しています。",
-    "webhook": "User Feedbackで発生するイベントトリガーに応じてWebhook連携を設定できる画面です。詳しくはWebhook Docsをご参照ください。"
+    "webhook": "User Feedbackで発生するイベントトリガーに応じてWebhook連携を設定できる画面です。詳しくはWebhook <docs>Docs</docs>をご参照ください。"
   },
   "hint": {
     "required": "必須入力対象です。",
@@ -524,7 +524,8 @@
       "summary": "概要",
       "preview": "プレビュー",
       "in-progress": "進行中",
-      "continue": "続きから再開"
+      "continue": "続きから再開",
+      "test-connection-failed": "接続テストに失敗しました"
     },
     "placeholder": {
       "select": "選択してください",

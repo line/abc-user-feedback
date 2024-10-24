@@ -67,7 +67,7 @@
   --combobox-fg-hover: var(--fg-neutral-tertiary);
   --combobox-border-default: var(--border-neutral-tertiary);
 
-  @apply !font-normal [&>svg:last-of-type]:!ml-auto;
+  @apply data-[state=open]:bg-[var(--combobox-fg-hover)] [&>svg:last-of-type]:!ml-auto;
 }
 
 .combobox-trigger-icon-rotate {

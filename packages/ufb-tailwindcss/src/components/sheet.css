@@ -9,16 +9,18 @@
   @apply sheet-radius-small [&:not([class*=sheet-side])]:sheet-side-right;
 }
 
+.sheet-trigger {
+  --sheet-fg-open: var(--fg-neutral-tertiary);
+
+  @apply data-[state=open]:bg-[var(--sheet-fg-open)];
+}
+
 .sheet-close {
   @apply !absolute right-8 top-8 !m-0;
 }
 
 .sheet-header {
   @apply flex flex-shrink-0 flex-col space-y-4 text-left;
-}
-
-.sheet-body {
-  @apply space-y-12;
 }
 
 .sheet-footer {

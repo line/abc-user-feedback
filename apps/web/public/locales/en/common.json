@@ -449,13 +449,13 @@
   "help-card": {
     "project-info": "Project refers to the product targeted for feedback collection. Please enter information considering the product you want to manage feedback for.",
     "member": "You can register and manage Members who will participate in the Project.",
-    "api-key": "This is the screen for managing User Feedback API Key. Please generate and use a Key to utilize the API. For details, please refer to the API Docs.",
+    "api-key": "This is the screen for managing User Feedback API Key. Please generate and use a Key to utilize the API. For details, please refer to the API <docs>Docs</docs>.",
     "issue-tracker": "This is the screen for setting up the connection between User Feedback and Issue Tracking System. Please enter the information for the Issue Tracking System you are using.",
     "channel-info": "Channel is a unit that distinguishes feedback collection paths or collection methods. Please enter information considering the characteristics of the Channel.",
     "field": "You can define feedback data to be collected in the Channel by Field units. Please add Fields considering the data type and properties.",
-    "image-config": "When collecting feedback in Image format, this screen allows you to set up Image Storage integration and configure whitelist for Image URL domains. For details, please refer to the Image Docs.",
+    "image-config": "When collecting feedback in Image format, this screen allows you to set up Image Storage integration and configure whitelist for Image URL domains. For details, please refer to the Image <docs>Docs</docs>.",
     "field-preview": "Provides a preview of what your feedback will look like based on registered Field information. The preview uses example data for reference.",
-    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook Docs."
+    "webhook": "This is the screen where you can set up Webhook integration according to event triggers occurring in User Feedback. For details, please refer to the Webhook <docs>Docs</docs>."
   },
   "hint": {
     "required": "Required",
@@ -536,7 +536,8 @@
       "summary": "Summary",
       "preview": "Preview",
       "in-progress": "In Progress",
-      "continue": "Continue"
+      "continue": "Continue",
+      "test-connection-failed": "Test Connection failed"
     },
     "placeholder": {
       "select": "Please select.",

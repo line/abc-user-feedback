@@ -15,3 +15,4 @@ export type AlertVariantType =
   | "success"
   | "error"
   | "informative";
+export type TriggerType = "click" | "hover";

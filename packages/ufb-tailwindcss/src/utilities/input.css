@@ -3,10 +3,10 @@
 }
 
 .input-large {
-  @apply text-xlarge-normal px-20 py-8;
+  @apply text-xlarge-normal px-20 py-10;
 }
 .input-medium {
-  @apply text-large-normal px-16 py-8;
+  @apply text-large-normal px-16 py-10;
 }
 .input-small {
   @apply text-base-normal px-12 py-8;
@@ -23,20 +23,20 @@
 }
 
 .input-icon-large {
-  @apply left-20;
+  @apply left-16;
 }
 .input-icon-medium {
-  @apply left-16;
+  @apply left-14;
 }
 .input-icon-small {
   @apply left-12;
 }
 
 .input-button-large {
-  @apply right-20;
+  @apply right-16;
 }
 .input-button-medium {
-  @apply right-16;
+  @apply right-14;
 }
 .input-button-small {
   @apply right-12;
@@ -53,4 +53,24 @@
 }
 .input-caption-error {
   @apply text-[var(--input-caption-error)];
+}
+
+.input-caption-small {
+  @apply text-base-normal;
+}
+.input-caption-medium {
+  @apply text-base-normal;
+}
+.input-caption-large {
+  @apply text-large-normal;
+}
+
+.input-caption-icon-small {
+  @apply mt-[0.188rem];
+}
+.input-caption-icon-medium {
+  @apply mt-[0.188rem];
+}
+.input-caption-icon-large {
+  @apply mt-2;
 }

@@ -2,14 +2,121 @@ import type { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-men
 import * as React from "react";
 import * as DropdownPrimitive from "@radix-ui/react-dropdown-menu";
 
+import type { TriggerType } from "../lib/types";
 import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
+import { Button } from "./button";
 import { Icon } from "./icon";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 
-const Dropdown = DropdownPrimitive.Root;
+const DropdownContext = React.createContext<{
+  trigger: TriggerType;
+  isHover: boolean;
+  setTrigger: React.Dispatch<React.SetStateAction<TriggerType>>;
+  setIsHover: React.Dispatch<React.SetStateAction<boolean>>;
+}>({
+  trigger: "click",
+  setTrigger: () => "click",
+  isHover: false,
+  setIsHover: () => false,
+});
 
-const DropdownTrigger = DropdownPrimitive.Trigger;
+const Dropdown = ({
+  open = false,
+  onOpenChange,
+  ...props
+}: React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Root>) => {
+  const [trigger, setTrigger] = React.useState<TriggerType>("click");
+  const [isHover, setIsHover] = React.useState(false);
+  return (
+    <DropdownContext.Provider
+      value={{ trigger, setTrigger, isHover, setIsHover }}
+    >
+      <DropdownPrimitive.Root
+        {...props}
+        open={open || isHover}
+        onOpenChange={(open: boolean) => {
+          setIsHover(open);
+          onOpenChange?.(open);
+        }}
+      />
+    </DropdownContext.Provider>
+  );
+};
+
+const DropdownTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownPrimitive.Trigger>,
+  DropdownPrimitive.DropdownMenuTriggerProps &
+    React.ComponentPropsWithoutRef<typeof Button> & {
+      trigger?: TriggerType;
+    }
+>(
+  (
+    {
+      asChild = false,
+      variant = "outline",
+      trigger,
+      onMouseEnter,
+      onMouseLeave,
+      className,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    const { setTrigger, setIsHover } = React.useContext(DropdownContext);
+
+    const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (trigger === "hover") {
+        setIsHover(true);
+      }
+      onMouseEnter?.(e);
+    };
+
+    const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (trigger === "hover") {
+        setIsHover(false);
+      }
+      onMouseLeave?.(e);
+    };
+
+    React.useEffect(() => {
+      if (trigger) {
+        setTrigger(trigger);
+      }
+    }, []);
+
+    if (asChild) {
+      return (
+        <DropdownPrimitive.Trigger
+          asChild
+          ref={ref}
+          className={className}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          {...props}
+        >
+          {children}
+        </DropdownPrimitive.Trigger>
+      );
+    }
+
+    return (
+      <DropdownPrimitive.Trigger asChild>
+        <Button
+          variant={variant}
+          className={cn("dropdown-trigger", className)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          {...props}
+        >
+          {children}
+        </Button>
+      </DropdownPrimitive.Trigger>
+    );
+  },
+);
+DropdownTrigger.displayName = DropdownPrimitive.DropdownMenuTrigger.displayName;
 
 const DropdownGroup = DropdownPrimitive.Group;
 
@@ -27,24 +134,57 @@ const DropdownSubTrigger = React.forwardRef<
     iconR?: IconNameType;
     caption?: React.ReactNode;
   }
->(({ iconL, iconR, caption, className, inset, children, ...props }, ref) => (
-  <DropdownPrimitive.SubTrigger
-    ref={ref}
-    className={cn(
-      "dropdown-sub-trigger",
-      inset && "dropdown-sub-trigger-inset",
+>(
+  (
+    {
+      asChild = false,
+      iconL,
+      iconR,
+      caption,
       className,
-    )}
-    {...props}
-  >
-    <React.Fragment>
-      {iconL && <Icon name={iconL} size={16} className="dropdown-icon-left" />}
-      <React.Fragment>{children}</React.Fragment>
-      {caption && <span className="dropdown-caption">{caption}</span>}
-      {iconR && <Icon name={iconR} size={16} className="dropdown-icon-right" />}
-    </React.Fragment>
-  </DropdownPrimitive.SubTrigger>
-));
+      inset,
+      children,
+      ...props
+    },
+    ref,
+  ) => {
+    if (asChild) {
+      return (
+        <DropdownPrimitive.SubTrigger
+          asChild
+          ref={ref}
+          className={className}
+          {...props}
+        >
+          {children}
+        </DropdownPrimitive.SubTrigger>
+      );
+    }
+
+    return (
+      <DropdownPrimitive.SubTrigger
+        ref={ref}
+        className={cn(
+          "dropdown-sub-trigger",
+          inset && "dropdown-sub-trigger-inset",
+          className,
+        )}
+        {...props}
+      >
+        <React.Fragment>
+          {iconL && (
+            <Icon name={iconL} size={16} className="dropdown-icon-left" />
+          )}
+          <React.Fragment>{children}</React.Fragment>
+          {caption && <span className="dropdown-caption">{caption}</span>}
+          {iconR && (
+            <Icon name={iconR} size={16} className="dropdown-icon-right" />
+          )}
+        </React.Fragment>
+      </DropdownPrimitive.SubTrigger>
+    );
+  },
+);
 DropdownSubTrigger.displayName = DropdownPrimitive.SubTrigger.displayName;
 
 const DropdownSubContent = React.forwardRef<
@@ -64,21 +204,54 @@ const DropdownContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Content> & {
     maxHeight?: string;
   }
->(({ children, className, sideOffset = 4, maxHeight, ...props }, ref) => (
-  <DropdownPrimitive.Portal>
-    <DropdownPrimitive.Content
-      ref={ref}
-      sideOffset={sideOffset}
-      className={cn("dropdown-content", className)}
-      {...props}
-    >
-      <ScrollArea maxHeight={maxHeight}>
-        {children}
-        <ScrollBar />
-      </ScrollArea>
-    </DropdownPrimitive.Content>
-  </DropdownPrimitive.Portal>
-));
+>(
+  (
+    {
+      children,
+      className,
+      sideOffset = 4,
+      maxHeight,
+      onMouseEnter,
+      onMouseLeave,
+      ...props
+    },
+    ref,
+  ) => {
+    const { trigger, setIsHover } = React.useContext(DropdownContext);
+
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (trigger === "hover") {
+        setIsHover(true);
+      }
+      onMouseEnter?.(e);
+    };
+
+    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (trigger === "hover") {
+        setIsHover(false);
+      }
+      onMouseLeave?.(e);
+    };
+
+    return (
+      <DropdownPrimitive.Portal>
+        <DropdownPrimitive.Content
+          ref={ref}
+          sideOffset={sideOffset}
+          className={cn("dropdown-content", className)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          {...props}
+        >
+          <ScrollArea maxHeight={maxHeight}>
+            {children}
+            <ScrollBar />
+          </ScrollArea>
+        </DropdownPrimitive.Content>
+      </DropdownPrimitive.Portal>
+    );
+  },
+);
 DropdownContent.displayName = DropdownPrimitive.Content.displayName;
 
 const DropdownItem = React.forwardRef<

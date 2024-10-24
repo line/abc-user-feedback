@@ -449,13 +449,13 @@
   "help-card": {
     "project-info": "Project bezeichnet das Produkt, für das Feedback gesammelt werden soll. Bitte geben Sie Informationen unter Berücksichtigung des Produkts ein, für das Sie Feedback verwalten möchten.",
     "member": "Sie können Member registrieren und verwalten, die am Project teilnehmen werden.",
-    "api-key": "Dies ist der Bildschirm zur Verwaltung des User Feedback API Keys. Bitte generieren und verwenden Sie einen Key zur Nutzung der API. Weitere Details finden Sie in der API Docs.",
+    "api-key": "Dies ist der Bildschirm zur Verwaltung des User Feedback API Keys. Bitte generieren und verwenden Sie einen Key zur Nutzung der API. Weitere Details finden Sie in der API <docs>Docs</docs>.",
     "issue-tracker": "Dies ist der Bildschirm zum Einrichten der Verbindung zwischen User Feedback und Issue Tracking System. Bitte geben Sie die Informationen für das von Ihnen verwendete Issue Tracking System ein.",
     "channel-info": "Channel ist eine Einheit, die Feedback-Sammelpfade oder Sammelmethoden unterscheidet. Bitte geben Sie Informationen unter Berücksichtigung der Channel-Eigenschaften ein.",
     "field": "Sie können Feedback-Daten, die im Channel gesammelt werden sollen, in Field-Einheiten definieren. Bitte fügen Sie Fields unter Berücksichtigung des Datentyps und der Eigenschaften hinzu.",
-    "image-config": "Beim Sammeln von Feedback im Image-Format können Sie hier die Image Storage-Integration einrichten und die Whitelist für Image URL-Domains konfigurieren. Weitere Details finden Sie in der Image Docs.",
+    "image-config": "Beim Sammeln von Feedback im Image-Format können Sie hier die Image Storage-Integration einrichten und die Whitelist für Image URL-Domains konfigurieren. Weitere Details finden Sie in der Image <docs>Docs</docs>.",
     "field-preview": "Bietet eine Vorschau darauf, wie Ihr Feedback basierend auf den registrierten Field-Informationen aussehen wird. Die Vorschau verwendet Beispieldaten zur Veranschaulichung.",
-    "webhook": "Dies ist der Bildschirm, auf dem Sie Webhook-Integration entsprechend den in User Feedback auftretenden Event-Triggern einrichten können. Weitere Details finden Sie in der Webhook Docs."
+    "webhook": "Dies ist der Bildschirm, auf dem Sie Webhook-Integration entsprechend den in User Feedback auftretenden Event-Triggern einrichten können. Weitere Details finden Sie in der Webhook <docs>Docs</docs>."
   },
   "hint": {
     "required": "Erforderlich",
@@ -536,7 +536,8 @@
       "summary": "Zusammenfassung",
       "preview": "Vorschau",
       "in-progress": "In Bearbeitung",
-      "continue": "Fortfahren"
+      "continue": "Fortfahren",
+      "test-connection-failed": "Verbindungstest fehlgeschlagen"
     },
     "placeholder": {
       "select": "Bitte auswählen.",

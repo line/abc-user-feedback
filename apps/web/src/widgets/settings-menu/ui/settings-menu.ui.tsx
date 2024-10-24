@@ -156,9 +156,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
       <Accordion type="single" iconAlign="left" collapsible divider={false}>
         <AccordionItem value="item-1">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
-          <AccordionContent
-            className={cn({ 'p-0': data?.meta.totalItems === 0 })}
-          >
+          <AccordionContent className={cn('p-0', {})}>
             {data?.meta.totalItems === 0 ?
               <div className="border-neutral-tertiary flex w-full flex-col items-center justify-center gap-4 rounded border p-4">
                 <Image
@@ -186,7 +184,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
               </div>
             : data?.items.map(({ name, id }) => (
                 <MenuDropdown key={id}>
-                  <MenuDropdownTrigger iconR="RiArrowRightSLine">
+                  <MenuDropdownTrigger
+                    iconR="RiArrowRightSLine"
+                    className="!pl-8"
+                  >
                     {name}
                   </MenuDropdownTrigger>
                   <MenuDropdownContent side="right" align="start">
@@ -209,7 +210,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
         <MenuItem
           value=""
           iconL="RiAddCircleFill"
-          className="text-tint-blue hover:text-tint-blue"
+          className="!text-tint-blue hover:!text-tint-blue"
           onClick={openChannelInProgress}
         >
           <div className="flex">

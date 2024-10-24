@@ -49,7 +49,7 @@ const FieldTable: React.FC<IProps> = (props) => {
   });
 
   return (
-    <div>
+    <div className="overflow-auto">
       <div className="mb-4 flex gap-3">
         {table.getColumn('status') && (
           <TableFacetedFilter

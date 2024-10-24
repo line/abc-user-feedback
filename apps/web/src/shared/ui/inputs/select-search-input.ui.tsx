@@ -59,7 +59,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         {label} {required && <span className="text-tint-red">*</span>}
       </InputLabel>
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled}>
+        <ComboboxTrigger disabled={disabled} iconR="RiArrowDownSLine">
           {displayValue ?? value ?? t('v2.placeholder.select')}
         </ComboboxTrigger>
         <ComboboxContent align="start">

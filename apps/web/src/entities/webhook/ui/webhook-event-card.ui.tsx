@@ -68,7 +68,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
         'flex cursor-pointer items-center gap-3 rounded border px-3 py-4 text-left',
         {
           'opacity-50': !checked,
-          'border-black': checked,
+          'border-[var(--button-primary-text-default)]': checked,
         },
       )}
       onClick={() => onChangeChecked(!checked)}

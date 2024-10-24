@@ -20,6 +20,12 @@ export const CHECK_ICON_SIZE: Record<Size, number> = {
   small: 14,
 };
 
+export const INPUT_CAPTION_ICON_SIZE: Record<Size, number> = {
+  large: 20,
+  medium: 16,
+  small: 16,
+};
+
 export const CAPTION_DEFAULT_ICON: Record<
   CaptionType,
   IconNameType | undefined

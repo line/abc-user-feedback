@@ -47,6 +47,8 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
 
   const [inputDomain, setInputDomain] = useState('');
+  const [connectionError, setConnectionError] = useState(false);
+  console.log('connectionError: ', connectionError);
 
   const {
     register,
@@ -103,10 +105,13 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
           setError('root', { message: '' });
           setError('secretAccessKey', { message: '' });
           toast.error('Test Connection failed');
+          setConnectionError(false);
+          setConnectionError(true);
         }
       },
       onError() {
         toast.error('Test Connection failed');
+        setConnectionError(true);
       },
     },
   });
@@ -135,13 +140,16 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
       setError('secretAccessKey', { message: t('hint.required') });
       isError = true;
     }
-    if (isError) return;
+    if (isError) {
+      setConnectionError(true);
+      return;
+    }
     testConection(getValues());
   };
 
   return (
     <div>
-      <div className="mb-4 flex flex-col gap-6 border p-4">
+      <div className="border-neutral-tertiary mb-4 flex flex-col gap-6 rounded border p-4">
         <h2 className="text-title-h5">
           {t('title-box.image-storage-integration')}
         </h2>
@@ -180,7 +188,7 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
           error={formState.errors.bucket?.message}
           disabled={readOnly}
         />
-        <div>
+        <div className="flex items-center gap-2">
           <Button
             type="button"
             className="btn btn-secondary"
@@ -188,9 +196,15 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
           >
             Test Connection
           </Button>
+          {connectionError && (
+            <div className="text-tint-red flex items-center gap-1">
+              <Icon name="RiErrorWarningFill" size={20} />
+              <span>{t('v2.text.test-connection-failed')}</span>
+            </div>
+          )}
         </div>
       </div>
-      <div className="flex flex-col gap-2 border p-4">
+      <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-4">
         <h2 className="text-title-h5">Image URL Domain Whitelist</h2>
         <div className="flex gap-4">
           <Combobox>

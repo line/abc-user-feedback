@@ -13,7 +13,42 @@ import { ScrollArea, ScrollBar } from "./scroll-area";
 
 const Sheet = SheetPrimitive.Root;
 
-const SheetTrigger = SheetPrimitive.Trigger;
+const SheetTrigger = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Trigger>,
+  SheetPrimitive.DialogTriggerProps &
+    React.ComponentPropsWithoutRef<typeof Button>
+>(
+  (
+    { asChild = false, variant = "outline", className, children, ...props },
+    ref,
+  ) => {
+    if (asChild) {
+      return (
+        <SheetPrimitive.Trigger
+          asChild
+          ref={ref}
+          className={className}
+          {...props}
+        >
+          {children}
+        </SheetPrimitive.Trigger>
+      );
+    }
+
+    return (
+      <SheetPrimitive.Trigger asChild>
+        <Button
+          variant={variant}
+          className={cn("sheet-trigger", className)}
+          {...props}
+        >
+          {children}
+        </Button>
+      </SheetPrimitive.Trigger>
+    );
+  },
+);
+SheetTrigger.displayName = SheetPrimitive.Trigger.displayName;
 
 const SheetClose = React.forwardRef<
   React.ElementRef<typeof Button>,
@@ -117,7 +152,7 @@ const SheetBody = ({ asChild, className, ...props }: SheetBodyProps) => {
   const Comp = asChild ? Slot : "div";
   return (
     <ScrollArea>
-      <Comp className={cn("sheet-body", className)} {...props} />
+      <Comp className={cn(className)} {...props} />
       <ScrollBar />
     </ScrollArea>
   );

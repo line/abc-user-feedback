@@ -77,12 +77,12 @@ interface MenuItemProps
   badge?: React.ReactNode;
 }
 
-const menuItemVariants = cva("menu-item", {
+const menuItemVariants = cva("!menu-item", {
   variants: {
     size: {
-      small: "menu-item-small",
-      medium: "menu-item-medium",
-      large: "menu-item-large",
+      small: "!menu-item-small",
+      medium: "!menu-item-medium",
+      large: "!menu-item-large",
     },
     defaultVariants: {
       size: DefaultValue.size,
@@ -116,35 +116,44 @@ MenuItem.displayName = ToggleGroupPrimitive.Item.displayName;
 
 const MenuDropdown = Dropdown;
 
-interface MenuDropdownTriggerProps
-  extends React.ComponentPropsWithoutRef<"button"> {
-  iconL?: IconNameType;
-  iconR?: IconNameType;
-  badge?: React.ReactNode;
-}
 const MenuDropdownTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownTrigger>,
-  MenuDropdownTriggerProps
->(({ iconL, iconR, badge, children, className, ...props }, ref) => {
-  const { size = DefaultValue.size } = React.useContext(MenuContext);
-  return (
-    <DropdownTrigger
-      ref={ref}
-      className={cn(menuItemVariants({ size, className }))}
-      {...props}
-    >
-      {iconL && <Icon name={iconL} size={ICON_SIZE[size]} />}
-      <span>{children}</span>
-      {badge && (
-        <Badge variant="bold" color="default" radius="large">
-          {badge}
-        </Badge>
-      )}
-      {iconR && <Icon name={iconR} size={ICON_SIZE[size]} />}
-    </DropdownTrigger>
-  );
-});
+  React.ComponentPropsWithoutRef<typeof DropdownTrigger> & {
+    badge?: React.ReactNode;
+  }
+>(
+  (
+    { asChild, variant = "ghost", className, children, badge, ...props },
+    ref,
+  ) => {
+    const { size = DefaultValue.size } = React.useContext(MenuContext);
+    if (asChild) {
+      return (
+        <DropdownTrigger asChild ref={ref} className={className} {...props}>
+          {children}
+        </DropdownTrigger>
+      );
+    }
+
+    return (
+      <DropdownTrigger
+        ref={ref}
+        variant={variant}
+        className={cn(menuItemVariants({ size, className }))}
+        {...props}
+      >
+        <span>{children}</span>
+        {badge && (
+          <Badge variant="bold" color="default" radius="large">
+            {badge}
+          </Badge>
+        )}
+      </DropdownTrigger>
+    );
+  },
+);
 MenuDropdownTrigger.displayName = "MenuDropdownTrigger";
+
 const MenuDropdownContent = DropdownContent;
 const MenuDropdownGroup = DropdownGroup;
 const MenuDropdownItem = React.forwardRef<

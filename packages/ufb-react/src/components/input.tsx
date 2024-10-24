@@ -4,7 +4,11 @@ import { cva } from "class-variance-authority";
 
 import type { CaptionType, Radius, Size } from "../lib/types";
 import type { IconNameType, IconProps } from "./icon";
-import { CAPTION_DEFAULT_ICON, ICON_SIZE } from "../constants";
+import {
+  CAPTION_DEFAULT_ICON,
+  ICON_SIZE,
+  INPUT_CAPTION_ICON_SIZE,
+} from "../constants";
 import { cn, composeRefs } from "../lib/utils";
 import { Icon } from "./icon";
 import useTheme from "./use-theme";
@@ -63,8 +67,27 @@ const inputCaptionVariants = cva("input-caption", {
       info: "input-caption-info",
       error: "input-caption-error",
     },
+    size: {
+      large: "input-caption-large",
+      medium: "input-caption-medium",
+      small: "input-caption-small",
+    },
     defaultVariants: {
+      size: undefined,
       variant: "default",
+    },
+  },
+});
+
+const inputCaptionIconVariants = cva("input-caption-icon", {
+  variants: {
+    size: {
+      large: "input-caption-icon-large",
+      medium: "input-caption-icon-medium",
+      small: "input-caption-icon-small",
+    },
+    defaultVariants: {
+      size: undefined,
     },
   },
 });
@@ -195,14 +218,20 @@ const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
     return (
       <span
         ref={ref}
-        className={cn(inputCaptionVariants({ variant, className }))}
+        className={cn(
+          inputCaptionVariants({ size: size ?? themeSize, variant, className }),
+        )}
         {...rest}
       >
         <React.Fragment>
           <Icon
             name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-            size={ICON_SIZE[size ?? themeSize]}
-            className="input-caption-icon"
+            size={INPUT_CAPTION_ICON_SIZE[size ?? themeSize]}
+            className={cn(
+              inputCaptionIconVariants({
+                size: size ?? themeSize,
+              }),
+            )}
           />
           {children}
         </React.Fragment>
