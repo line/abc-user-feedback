@@ -369,7 +369,7 @@ importers:
         version: 8.20.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@toss/use-overlay':
         specifier: ^1.4.0
-        version: 1.4.0(react@18.3.1)
+        version: 1.4.2(react@18.3.1)
       '@ufb/shared':
         specifier: workspace:*
         version: link:../../packages/ufb-shared
@@ -3587,8 +3587,8 @@ packages:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
 
-  '@toss/use-overlay@1.4.0':
-    resolution: {integrity: sha512-1fkKRwUWaPn1fPTHeYiOdnQu4j6sHLDfJZS1smsarPxWxUlr1+FikNIjzYQGAVXgNjxw0cqNfKR4HvVSsM5w3A==}
+  '@toss/use-overlay@1.4.2':
+    resolution: {integrity: sha512-OYJKSKkldho8qrJR0xMJLpz85H68+E+y6H3y/N0XUed/b0ytbfU+fuxcPd14uiC8H0xzliTGBlY8GQP9Z/lteQ==}
     peerDependencies:
       react: ^16.8 || ^17 || ^18
 
@@ -13227,7 +13227,7 @@ snapshots:
 
   '@tootallnate/once@2.0.0': {}
 
-  '@toss/use-overlay@1.4.0(react@18.3.1)':
+  '@toss/use-overlay@1.4.2(react@18.3.1)':
     dependencies:
       react: 18.3.1
 
