@@ -208,8 +208,8 @@ importers:
         version: 10.0.0
     devDependencies:
       '@faker-js/faker':
-        specifier: ^8.4.1
-        version: 8.4.1
+        specifier: ^9.0.0
+        version: 9.0.3
       '@nestjs/cli':
         specifier: ^10.3.2
         version: 10.4.5(@swc/cli@0.4.0(@swc/core@1.7.39(@swc/helpers@0.5.13))(chokidar@3.6.0))(@swc/core@1.7.39(@swc/helpers@0.5.13))
@@ -341,8 +341,8 @@ importers:
   apps/web:
     dependencies:
       '@faker-js/faker':
-        specifier: ^8.4.1
-        version: 8.4.1
+        specifier: ^9.0.0
+        version: 9.0.3
       '@floating-ui/react':
         specifier: ^0.26.12
         version: 0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -2032,9 +2032,9 @@ packages:
     resolution: {integrity: sha512-BsWiH1yFGjXXS2yvrf5LyuoSIIbPrGUWob917o+BTKuZ7qJdxX8aJLRxs1fS9n6r7vESrq1OUqb68dANcFXuQQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@faker-js/faker@8.4.1':
-    resolution: {integrity: sha512-XQ3cU+Q8Uqmrbf2e0cIC/QN43sTBSC8KF12u29Mb47tWrt2hAgBXSgpZMj4Ao8Uk0iJcU99QsOCaIL8934obCg==}
-    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
+  '@faker-js/faker@9.0.3':
+    resolution: {integrity: sha512-lWrrK4QNlFSU+13PL9jMbMKLJYXDFu3tQfayBsMXX7KL/GiQeqfB1CzHkqD5UHBUtPAuPo6XwGbMFNdVMZObRA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@fast-csv/format@4.3.5':
     resolution: {integrity: sha512-8iRn6QF3I8Ak78lNAa+Gdl5MJJBM5vRHivFtMRUWINdevNo00K7OXxS2PshawLKTejVwieIlPmK5YlLu6w4u8A==}
@@ -11446,7 +11446,7 @@ snapshots:
 
   '@eslint/object-schema@2.1.4': {}
 
-  '@faker-js/faker@8.4.1': {}
+  '@faker-js/faker@9.0.3': {}
 
   '@fast-csv/format@4.3.5':
     dependencies:
