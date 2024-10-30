@@ -45,7 +45,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
   const onChangeProject = async (currentProjectId: string) => {
-    if (currentProjectId === 'abcdsa') {
+    if (currentProjectId === '0') {
       await router.push({
         pathname: `/main/project/[projectId]/settings`,
         query: { projectId },
