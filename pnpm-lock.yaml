@@ -345,7 +345,7 @@ importers:
         version: 8.4.1
       '@floating-ui/react':
         specifier: ^0.26.12
-        version: 0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 0.26.26(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@headlessui/react':
         specifier: 2.2.0
         version: 2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -649,7 +649,7 @@ importers:
     dependencies:
       '@floating-ui/react':
         specifier: ^0.26.12
-        version: 0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 0.26.26(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -1001,6 +1001,10 @@ packages:
 
   '@babel/code-frame@7.26.0':
     resolution: {integrity: sha512-INCKxTtbXtcNbUZ3YXutwMpEleqttcswhAdee7dhuoVrD2cnuc3PqtERBtxkX5nziX9vnBL8WXmSGwv8CuPV6g==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/code-frame@7.26.2':
+    resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
     engines: {node: '>=6.9.0'}
 
   '@babel/compat-data@7.24.9':
@@ -2104,14 +2108,17 @@ packages:
   '@floating-ui/dom@1.6.11':
     resolution: {integrity: sha512-qkMCxSR24v2vGkhYDo/UzxfJN3D4syqSjyuTFz6C7XcpU1pASPRieNI0Kj5VP3/503mOfYiGY891ugBX1GlABQ==}
 
+  '@floating-ui/dom@1.6.12':
+    resolution: {integrity: sha512-NP83c0HjokcGVEMeoStg317VD9W7eDlGK7457dMBANbKA6GJZdc7rjujdgqzTaz93jkGgc5P/jeWbaCHnMNc+w==}
+
   '@floating-ui/react-dom@2.1.2':
     resolution: {integrity: sha512-06okr5cgPzMNBy+Ycse2A6udMi4bqwW/zgBF/rwjcNqWkyr82Mcg8b0vjX8OJpZFy/FKjJmw6wV7t44kK6kW7A==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
 
-  '@floating-ui/react@0.26.25':
-    resolution: {integrity: sha512-hZOmgN0NTOzOuZxI1oIrDu3Gcl8WViIkvPMpB4xdd4QD6xAMtwgwr3VPoiyH/bLtRcS1cDnhxLSD1NsMJmwh/A==}
+  '@floating-ui/react@0.26.26':
+    resolution: {integrity: sha512-iv2BjdcyoF1j1708Z9CrGtMc9ZZvMPZnDqyB1FrSWYCi+/nlPArUO/u9QhwC4E1Pi4T0g18GZ4W702m0NDh9bw==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -10275,6 +10282,12 @@ snapshots:
       js-tokens: 4.0.0
       picocolors: 1.1.1
 
+  '@babel/code-frame@7.26.2':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.25.9
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
   '@babel/compat-data@7.24.9': {}
 
   '@babel/compat-data@7.26.0': {}
@@ -11581,13 +11594,18 @@ snapshots:
       '@floating-ui/core': 1.6.8
       '@floating-ui/utils': 0.2.8
 
+  '@floating-ui/dom@1.6.12':
+    dependencies:
+      '@floating-ui/core': 1.6.8
+      '@floating-ui/utils': 0.2.8
+
   '@floating-ui/react-dom@2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/dom': 1.6.11
+      '@floating-ui/dom': 1.6.12
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
-  '@floating-ui/react@0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@floating-ui/react@0.26.26(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@floating-ui/react-dom': 2.1.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@floating-ui/utils': 0.2.8
@@ -11605,7 +11623,7 @@ snapshots:
 
   '@headlessui/react@2.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
-      '@floating-ui/react': 0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@floating-ui/react': 0.26.26(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@react-aria/focus': 3.17.1(react@18.3.1)
       '@react-aria/interactions': 3.21.3(react@18.3.1)
       '@tanstack/react-virtual': 3.8.3(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -13193,7 +13211,7 @@ snapshots:
 
   '@testing-library/dom@10.3.2':
     dependencies:
-      '@babel/code-frame': 7.26.0
+      '@babel/code-frame': 7.26.2
       '@babel/runtime': 7.26.0
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
@@ -18759,7 +18777,7 @@ snapshots:
 
   react-datepicker@7.5.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
-      '@floating-ui/react': 0.26.25(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@floating-ui/react': 0.26.26(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       clsx: 2.1.1
       date-fns: 3.6.0
       prop-types: 15.8.1
