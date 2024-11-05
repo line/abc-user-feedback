@@ -19,6 +19,7 @@ import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import {
+  Icon,
   Select,
   SelectContent,
   SelectGroup,
@@ -45,38 +46,33 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
   const onChangeProject = async (currentProjectId: string) => {
-    if (currentProjectId === '0') {
-      await router.push({
-        pathname: `/main/project/[projectId]/settings`,
-        query: { projectId },
-      });
-      if (editingStepIndex !== null) {
-        await new Promise<boolean>((resolve) =>
-          overlay.open(({ close, isOpen }) => (
-            <CreatingDialog
-              isOpen={isOpen}
-              close={close}
-              type="Project"
-              onRestart={() => {
-                reset();
-                resolve(true);
-              }}
-              onContinue={() => {
-                jumpStepByIndex(editingStepIndex);
-                resolve(true);
-              }}
-            />
-          )),
-        );
-      }
-      await router.push(Path.CREATE_PROJECT);
-
-      return;
-    }
     await router.push({
       pathname: `/main/project/[projectId]/settings`,
       query: { projectId: currentProjectId },
     });
+  };
+
+  const openCreateProjectDialog = async () => {
+    if (editingStepIndex !== null) {
+      await new Promise<boolean>((resolve) =>
+        overlay.open(({ close, isOpen }) => (
+          <CreatingDialog
+            isOpen={isOpen}
+            close={close}
+            type="Project"
+            onRestart={() => {
+              reset();
+              resolve(true);
+            }}
+            onContinue={() => {
+              jumpStepByIndex(editingStepIndex);
+              resolve(true);
+            }}
+          />
+        )),
+      );
+    }
+    await router.push(Path.CREATE_PROJECT);
   };
 
   return (
@@ -97,7 +93,21 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
           ))}
         </SelectGroup>
         <SelectSeparator />
-        <SelectItem
+        <div
+          className="select-item text-tint-blue select-item-left p-2"
+          onClick={openCreateProjectDialog}
+        >
+          <span className="select-item-check select-item-check-left">
+            <Icon name="RiAddCircleFill" size={16} />
+          </span>
+          <div className="flex w-[215px] items-center justify-between gap-2">
+            <span>{t('v2.text.create-project')}</span>
+            {editingStepIndex !== null && (
+              <span className="text-tint-red">{t('v2.text.in-progress')}</span>
+            )}
+          </div>
+        </div>
+        {/* <SelectItem
           value="0"
           icon="RiAddCircleFill"
           className="text-tint-blue p-2"
@@ -108,7 +118,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
               <span className="text-tint-red">{t('v2.text.in-progress')}</span>
             )}
           </div>
-        </SelectItem>
+        </SelectItem> */}
       </SelectContent>
     </Select>
   );
