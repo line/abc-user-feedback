@@ -16,3 +16,4 @@
 export { default as TextInput } from './text-input.ui';
 export { default as SelectInput } from './select-input.ui';
 export { default as SelectSearchInput } from './select-search-input.ui';
+export { default as ComboboxInputbox } from './combobox-input-box.ui';

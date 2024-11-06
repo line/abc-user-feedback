@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import Link from 'next/link';
+
 import { Divider, IconButton } from '@ufb/react';
 
 import { ThemeToggleButton } from '@/entities/theme';
@@ -24,7 +26,7 @@ import ProjectSelectBox from './project-select-box.ui';
 import UserProfileBox from './user-profile-box.ui';
 
 interface IProps {
-  projectId: number;
+  projectId?: number;
 }
 
 const Header: React.FC<IProps> = ({ projectId }) => {
@@ -36,7 +38,9 @@ const Header: React.FC<IProps> = ({ projectId }) => {
         <MenuList projectId={projectId} />
       </div>
       <div className="flex gap-3">
-        <IconButton icon="RiBuildingLine" variant="ghost" />
+        <Link href={{ pathname: '/main/tenant' }}>
+          <IconButton icon="RiBuildingLine" variant="ghost" />
+        </Link>
         <ThemeToggleButton />
         <LanguageSelectBox />
         <UserProfileBox />

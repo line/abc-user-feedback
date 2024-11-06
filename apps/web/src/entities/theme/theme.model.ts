@@ -16,20 +16,45 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+type Theme = 'light' | 'dark' | 'system';
+
 interface State {
-  theme: 'light' | 'dark';
+  theme: Theme;
+  systemTheme: Theme;
 }
 
 interface Action {
-  toggle: () => void;
+  setTheme: (theme: Theme) => void;
+  setSystemTheme: (theme: Theme) => void;
 }
 
 export const useThemeStore = create<State & Action>()(
   persist(
-    (set) => ({
-      theme: 'light',
-      toggle: () =>
-        set(({ theme }) => ({ theme: theme === 'light' ? 'dark' : 'light' })),
+    (set, get) => ({
+      theme: 'system',
+      systemTheme: 'light', // 초기값을 시스템 테마로 설정
+
+      setTheme: (theme) => {
+        set({ theme });
+
+        if (typeof window === 'undefined') return;
+
+        const root = window.document.documentElement;
+        root.classList.remove('light', 'dark');
+
+        if (theme === 'system') {
+          const systemTheme = get().systemTheme;
+          root.classList.add(systemTheme);
+        } else {
+          root.classList.add(theme);
+        }
+      },
+      setSystemTheme: (theme) => {
+        set({ systemTheme: theme });
+        if (get().theme === 'system') {
+          get().setTheme('system');
+        }
+      },
     }),
     { name: 'theme' },
   ),

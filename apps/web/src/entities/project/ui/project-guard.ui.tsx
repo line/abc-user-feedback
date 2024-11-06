@@ -38,7 +38,7 @@ const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
     }
   }, [data]);
 
-  if (status === 'pending') return <>Loading...</>;
+  if (status === 'pending') return <>Loading...2</>;
   return children;
 };
 

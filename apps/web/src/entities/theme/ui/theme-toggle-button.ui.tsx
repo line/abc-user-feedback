@@ -13,26 +13,31 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect } from 'react';
 
-import { IconButton } from '@ufb/react';
+import {
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  IconButton,
+} from '@ufb/react';
 
 import { useThemeStore } from '../theme.model';
 
 const ThemeToggleButton: React.FC = () => {
-  const { theme, toggle } = useThemeStore();
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    document.documentElement.className = theme;
-  }, [theme]);
+  const { setTheme } = useThemeStore();
 
   return (
-    <IconButton
-      icon={theme === 'light' ? 'RiSunLine' : 'RiMoonLine'}
-      onClick={toggle}
-      variant="ghost"
-    />
+    <Dropdown>
+      <DropdownTrigger asChild>
+        <IconButton icon="RiSunLine" variant="ghost" />
+      </DropdownTrigger>
+      <DropdownContent>
+        <DropdownItem onClick={() => setTheme('light')}>Light</DropdownItem>
+        <DropdownItem onClick={() => setTheme('dark')}>Dark</DropdownItem>
+        <DropdownItem onClick={() => setTheme('system')}>System</DropdownItem>
+      </DropdownContent>
+    </Dropdown>
   );
 };
 

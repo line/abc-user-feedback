@@ -33,7 +33,7 @@ import { CreatingDialog, Path, useOAIQuery } from '@/shared';
 import { useCreateProjectStore } from '@/features/create-project/create-project-model';
 
 interface IProps {
-  projectId: number;
+  projectId?: number;
 }
 
 const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
@@ -78,7 +78,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   return (
     <Select
       type="single"
-      value={String(projectId)}
+      value={projectId ? String(projectId) : undefined}
       onValueChange={(value) => onChangeProject(value)}
     >
       <SelectTrigger className="min-w-60">

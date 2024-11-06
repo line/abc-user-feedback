@@ -40,6 +40,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
 
+import { useThemeStore } from '@/entities/theme';
+
 const inter = Inter({ subsets: ['latin'] });
 
 interface PageProps {
@@ -65,6 +67,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     void initializeJwt();
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    useThemeStore
+      .getState()
+      .setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
+
+    const handleChange = (e: MediaQueryListEvent) => {
+      useThemeStore.getState().setSystemTheme(e.matches ? 'dark' : 'light');
+    };
+
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return (

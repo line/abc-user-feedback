@@ -100,6 +100,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
       value: 'webhook',
     },
   ];
+
   const channelMenuItems: Omit<ProjectMenuItemProps, 'projectId'>[] = [
     {
       label: t('v2.channel-setting-menu.channel-info'),
@@ -119,6 +120,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
       disabled: !perms.includes('channel_image_read'),
     },
   ];
+
   const openChannelInProgress = async () => {
     if (editingStepIndex !== null) {
       await new Promise<boolean>((resolve) =>
@@ -141,6 +143,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
     }
     await router.push({ pathname: Path.CREATE_CHANNEL, query: { projectId } });
   };
+
   const isCreatingChannel = editingStepIndex !== null;
 
   return (
@@ -239,9 +242,7 @@ const ProjectMenuItem = (props: ProjectMenuItemProps) => {
   const { disabled = false, label, icon, value, projectId } = props;
   return (
     <Link
-      className={cn({
-        'pointer-events-none': disabled,
-      })}
+      className={cn({ 'pointer-events-none': disabled })}
       href={{
         pathname: '/main/project/[projectId]/settings',
         query: { projectId, menu: value },

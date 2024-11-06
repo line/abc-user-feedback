@@ -22,7 +22,6 @@ import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
 
 import { cn, usePermissions } from '@/shared';
 import type { Field } from '@/entities/field';
-import { useThemeStore } from '@/entities/theme';
 
 import type { FeedbackColumnType } from '../feedback-table-columns';
 import { useFeedbackDownload } from '../lib';
@@ -52,7 +51,6 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
   }, [columnOrder, columnVisibility, fieldData]);
 
   const [open, setOpen] = useState(false);
-  const { theme } = useThemeStore();
   const perms = usePermissions(projectId);
 
   const { t } = useTranslation();
@@ -101,7 +99,6 @@ const FeedbackTableDownloadButton: React.FC<IProps> = (props) => {
           error: t('main.feedback.download.error-description', { count }),
         },
       },
-      theme,
     );
   };
 

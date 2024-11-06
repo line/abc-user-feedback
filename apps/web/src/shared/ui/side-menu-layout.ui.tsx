@@ -13,8 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as TenantGuard } from './tenant-guard.ui';
-export { default as TenantCard } from './tenant-card.ui';
-export { default as TenantInfoForm } from './tenant-info-form.ui';
-export { default as OAuthConfigForm } from './oauth-config-form.ui';
-export { default as EmailConfigForm } from './email-config-form.ui';
+
+interface Props extends React.PropsWithChildren {
+  sideMenu: React.ReactNode;
+}
+
+const SideMenuLayout: React.FC<Props> = (props) => {
+  const { children, sideMenu } = props;
+  return (
+    <div className="flex h-full gap-8">
+      <div className="w-[280px] flex-shrink-0 px-3 py-6">{sideMenu}</div>
+      <div className="border-neutral-tertiary h-[calc(100vh-200px)] w-full overflow-auto rounded border p-6">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export default SideMenuLayout;

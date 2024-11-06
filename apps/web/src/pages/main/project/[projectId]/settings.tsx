@@ -19,6 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import { ProjectGuard } from '@/entities/project';
 import {
   ChannelInfoSetting,
@@ -41,7 +42,7 @@ interface IProps {
   projectId: number;
 }
 
-const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
+const SettingsPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const router = useRouter();
 
   const currentMenu = (router.query.menu ?? 'project') as SettingMenu;
@@ -50,60 +51,54 @@ const SettingPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     router.query.channelId ? Number(router.query.channelId) : null;
 
   return (
-    <div className="flex h-full gap-8">
-      <div className="w-[280px] flex-shrink-0 px-3 py-6">
+    <SideMenuLayout
+      sideMenu={
         <SettingsMenu
           projectId={projectId}
           settingMenuValue={currentMenu}
           channelId={currentChannelId}
         />
-      </div>
-      <div className="border-neutral-tertiary h-[calc(100vh-200px)] w-full overflow-auto rounded border p-6">
-        {currentMenu === 'project' && (
-          <ProjectInfoSetting projectId={projectId} />
-        )}
-        {currentMenu === 'member' && (
-          <>
-            {currentSubMenu !== 'role' && (
-              <MemberSetting projectId={projectId} />
-            )}
-            {currentSubMenu === 'role' && <RoleSetting projectId={projectId} />}
-          </>
-        )}
-        {currentMenu === 'api-key' && <ApiKeySetting projectId={projectId} />}
-        {currentMenu === 'issue-tracker' && (
-          <IssueTrackerSetting projectId={projectId} />
-        )}
-        {currentMenu === 'webhook' && <WebhookSetting projectId={projectId} />}
+      }
+    >
+      {currentMenu === 'project' && (
+        <ProjectInfoSetting projectId={projectId} />
+      )}
+      {currentMenu === 'member' && (
+        <>
+          {currentSubMenu !== 'role' && <MemberSetting projectId={projectId} />}
+          {currentSubMenu === 'role' && <RoleSetting projectId={projectId} />}
+        </>
+      )}
+      {currentMenu === 'api-key' && <ApiKeySetting projectId={projectId} />}
+      {currentMenu === 'issue-tracker' && (
+        <IssueTrackerSetting projectId={projectId} />
+      )}
+      {currentMenu === 'webhook' && <WebhookSetting projectId={projectId} />}
 
-        {currentChannelId && (
-          <>
-            {currentMenu === 'channel-info' && (
-              <ChannelInfoSetting
-                projectId={projectId}
-                channelId={currentChannelId}
-              />
-            )}
-            {currentMenu === 'field-mgmt' && !currentSubMenu && (
-              <FieldSetting
-                projectId={projectId}
-                channelId={currentChannelId}
-              />
-            )}
-            {currentMenu === 'image-mgmt' && (
-              <ImageConfigSetting
-                projectId={projectId}
-                channelId={currentChannelId}
-              />
-            )}
-          </>
-        )}
-      </div>
-    </div>
+      {currentChannelId && (
+        <>
+          {currentMenu === 'channel-info' && (
+            <ChannelInfoSetting
+              projectId={projectId}
+              channelId={currentChannelId}
+            />
+          )}
+          {currentMenu === 'field-mgmt' && !currentSubMenu && (
+            <FieldSetting projectId={projectId} channelId={currentChannelId} />
+          )}
+          {currentMenu === 'image-mgmt' && (
+            <ImageConfigSetting
+              projectId={projectId}
+              channelId={currentChannelId}
+            />
+          )}
+        </>
+      )}
+    </SideMenuLayout>
   );
 };
 
-SettingPage.getLayout = (page: React.ReactElement<IProps>) => {
+SettingsPage.getLayout = (page: React.ReactElement<IProps>) => {
   return (
     <Layout projectId={page.props.projectId} title="Settings">
       <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
@@ -125,4 +120,4 @@ export const getServerSideProps: GetServerSideProps<IProps> = async ({
   };
 };
 
-export default SettingPage;
+export default SettingsPage;

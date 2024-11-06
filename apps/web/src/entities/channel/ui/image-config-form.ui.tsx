@@ -17,23 +17,9 @@ import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Badge,
-  Button,
-  Combobox,
-  ComboboxContent,
-  ComboboxEmpty,
-  ComboboxGroup,
-  ComboboxInput,
-  ComboboxItem,
-  ComboboxList,
-  ComboboxTrigger,
-  Divider,
-  Icon,
-  toast,
-} from '@ufb/react';
+import { Badge, Button, Divider, Icon, toast } from '@ufb/react';
 
-import { TextInput, useOAIMutation } from '@/shared';
+import { ComboboxInputbox, TextInput, useOAIMutation } from '@/shared';
 
 import type { ChannelImageConfig } from '../channel.type';
 
@@ -149,9 +135,9 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
   return (
     <div>
       <div className="border-neutral-tertiary mb-4 flex flex-col gap-6 rounded border p-4">
-        <h2 className="text-title-h5">
+        <h5 className="text-title-h5">
           {t('title-box.image-storage-integration')}
-        </h2>
+        </h5>
         <TextInput
           label="Access Key ID"
           placeholder={t('placeholder', { name: 'Access Key ID' })}
@@ -204,41 +190,17 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
         </div>
       </div>
       <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-4">
-        <h2 className="text-title-h5">Image URL Domain Whitelist</h2>
+        <h5 className="text-title-h5">Image URL Domain Whitelist</h5>
         <div className="flex gap-4">
-          <Combobox>
-            <ComboboxTrigger>Add Domain URL</ComboboxTrigger>
-            <ComboboxContent>
-              <ComboboxInput
-                value={inputDomain}
-                onValueChange={(value) => {
-                  if (formState.errors.domainWhiteList) {
-                    clearErrors('domainWhiteList');
-                  }
-                  setInputDomain(value);
-                }}
-              />
-              <ComboboxEmpty>{t('v2.placeholder.text')}</ComboboxEmpty>
-              <ComboboxList>
-                <ComboboxGroup>
-                  {formState.errors.domainWhiteList ?
-                    <ComboboxItem value={inputDomain}>
-                      <div className="text-tint-red flex items-center gap-1">
-                        <Icon name="RiErrorWarningLine" size={16} />
-                        {formState.errors.domainWhiteList.message}
-                      </div>
-                    </ComboboxItem>
-                  : inputDomain ?
-                    <ComboboxItem
-                      onSelect={(value) => addDomainWhiteList(value)}
-                    >
-                      {inputDomain}
-                    </ComboboxItem>
-                  : <></>}
-                </ComboboxGroup>
-              </ComboboxList>
-            </ComboboxContent>
-          </Combobox>
+          <ComboboxInputbox
+            clearError={() => clearErrors('domainWhiteList')}
+            inputValue={inputDomain}
+            setInputValue={setInputDomain}
+            onSelectValue={addDomainWhiteList}
+            error={formState.errors.domainWhiteList?.message}
+          >
+            Add Domain URL
+          </ComboboxInputbox>
           <Divider orientation="vertical" className="h-5" variant="subtle" />
           <div className="flex items-center gap-2">
             {!domainWhiteList || domainWhiteList.length === 0 ?

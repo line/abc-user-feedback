@@ -20,7 +20,7 @@ import { Icon } from '@ufb/ui';
 import Header from './header.ui';
 
 interface IProps extends React.PropsWithChildren {
-  projectId: number;
+  projectId?: number;
   title: string;
 }
 

@@ -14,85 +14,75 @@
  * under the License.
  */
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/ui';
+import { TextInput } from '@/shared';
 
 import type { AuthInfo } from '../tenant.type';
 
-interface IProps {}
+interface IProps {
+  disabled?: boolean;
+}
 
-const OAuthConfigForm: React.FC<IProps> = () => {
+const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
   const { register, formState } = useFormContext<AuthInfo>();
+  const { t } = useTranslation();
   return (
-    <div className="flex flex-col gap-3 rounded border p-3">
+    <div className="flex flex-col gap-3">
       <TextInput
         {...register('oauthConfig.clientId')}
         label="Client ID"
-        hint={formState.errors.oauthConfig?.clientSecret?.message}
-        isValid={!formState.errors.oauthConfig?.clientSecret}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.clientSecret?.message}
+        disabled={disabled}
         required
       />
       <TextInput
         {...register('oauthConfig.clientSecret')}
         label="Client Secret"
-        hint={formState.errors.oauthConfig?.clientSecret?.message}
-        isValid={!formState.errors.oauthConfig?.clientSecret}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.clientSecret?.message}
+        disabled={disabled}
         required
       />
       <TextInput
         {...register('oauthConfig.authCodeRequestURL')}
         label="Authorization Code Request URL"
-        hint={formState.errors.oauthConfig?.authCodeRequestURL?.message}
-        isValid={!formState.errors.oauthConfig?.authCodeRequestURL}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.authCodeRequestURL?.message}
+        disabled={disabled}
         required
       />
       <TextInput
         {...register('oauthConfig.scopeString')}
         label="Scope"
-        hint={formState.errors.oauthConfig?.scopeString?.message}
-        isValid={!formState.errors.oauthConfig?.scopeString}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.scopeString?.message}
+        disabled={disabled}
         required
       />
       <TextInput
         {...register('oauthConfig.accessTokenRequestURL')}
         label="Access Token Request URL"
-        hint={formState.errors.oauthConfig?.accessTokenRequestURL?.message}
-        isValid={!formState.errors.oauthConfig?.accessTokenRequestURL}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.accessTokenRequestURL?.message}
+        disabled={disabled}
         required
       />
       <TextInput
         {...register('oauthConfig.userProfileRequestURL')}
         label="User Profile Request URL"
-        hint={formState.errors.oauthConfig?.userProfileRequestURL?.message}
-        isValid={!formState.errors.oauthConfig?.userProfileRequestURL}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.userProfileRequestURL?.message}
+        disabled={disabled}
         required
       />
       <TextInput
         {...register('oauthConfig.emailKey')}
         label="Email Key in Response of User Profile"
-        hint={formState.errors.oauthConfig?.emailKey?.message}
-        isValid={!formState.errors.oauthConfig?.emailKey}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.oauthConfig?.emailKey?.message}
+        disabled={disabled}
         required
       />
     </div>

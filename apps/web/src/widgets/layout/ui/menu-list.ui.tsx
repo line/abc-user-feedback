@@ -25,7 +25,7 @@ const firstLeterPascal = (str: string) =>
   str.charAt(0).toUpperCase() + str.slice(1);
 
 interface Props {
-  projectId: number;
+  projectId?: number;
 }
 
 const MenuList: React.FC<Props> = ({ projectId }) => {

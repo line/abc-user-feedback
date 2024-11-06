@@ -15,8 +15,9 @@
  */
 
 import { useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/ui';
+import { TextInput } from '@/shared';
 
 import type { TenantInfo } from '../tenant.type';
 
@@ -24,26 +25,23 @@ interface IProps {}
 
 const TenantInfoForm: React.FC<IProps> = () => {
   const { register, formState } = useFormContext<TenantInfo>();
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-6">
       <TextInput {...register('id')} label="Project ID" disabled />
       <TextInput
         {...register('siteName')}
-        label="Tenant Name"
-        hint={formState.errors.siteName?.message}
-        isValid={!formState.errors.siteName}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
+        label="Name"
+        placeholder={t('placeholder', { name: 'Tenant Name' })}
+        error={formState.errors.siteName?.message}
         required
       />
       <TextInput
         {...register('description')}
         label="Description"
-        hint={formState.errors.siteName?.message}
-        isValid={!formState.errors.siteName}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
+        placeholder={t('placeholder', { name: 'Description' })}
+        error={formState.errors.siteName?.message}
       />
     </div>
   );

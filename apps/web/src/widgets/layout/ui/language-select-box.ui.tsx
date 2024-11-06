@@ -24,6 +24,14 @@ import {
   IconButton,
 } from '@ufb/react';
 
+const LanguageMap: Record<string, string> = {
+  en: 'English',
+  de: 'German',
+  ja: 'Japanese',
+  ko: 'Korean',
+  zh: 'Chinese',
+};
+
 interface Props {}
 
 const LanguageSelectBox: React.FC<Props> = () => {
@@ -45,7 +53,7 @@ const LanguageSelectBox: React.FC<Props> = () => {
           ?.filter((v) => v !== 'default')
           .map((v) => (
             <DropdownItem key={v} onClick={() => onChangeLanguage(v)}>
-              {v.toLocaleUpperCase()}
+              {LanguageMap[v] ?? v.toLocaleUpperCase()}
             </DropdownItem>
           ))}
       </DropdownContent>
