@@ -173,7 +173,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           <TablePagination
             limit={pagination.pageSize}
             nextPage={() => table.setPageIndex((page) => page + 1)}
-            prevPage={() => table.setPageIndex((page) => page - 1)}
+            previousPage={() => table.setPageIndex((page) => page - 1)}
             disabledNextPage={
               pagination.pageIndex + 1 >= (data?.meta.totalPages ?? 1)
             }

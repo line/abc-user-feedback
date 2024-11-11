@@ -18,11 +18,11 @@ import { useRouter } from 'next/router';
 
 import { Menu, MenuItem } from '@ufb/react';
 
+import { firstLeterPascal } from '@/shared';
+
 const MENU_ITEMS = ['dashboard', 'feedback', 'issue', 'settings'] as const;
 
 type MenuType = (typeof MENU_ITEMS)[number];
-const firstLeterPascal = (str: string) =>
-  str.charAt(0).toUpperCase() + str.slice(1);
 
 interface Props {
   projectId?: number;
@@ -38,6 +38,7 @@ const MenuList: React.FC<Props> = ({ projectId }) => {
         value={currentMenu}
         type="single"
         className="navbar-menu"
+        disabled={!projectId}
         onValueChange={async (value: MenuType | '') => {
           if (!value) return;
           await router.push({

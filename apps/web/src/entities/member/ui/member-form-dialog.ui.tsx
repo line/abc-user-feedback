@@ -65,10 +65,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       }
       close={close}
       isOpen={isOpen}
-      deleteBtn={{
-        disabled: deleteDisabled,
-        onClick: onClickDelete,
-      }}
+      deleteBtn={{ disabled: deleteDisabled, onClick: onClickDelete }}
       submitBtn={{
         disabled: updateDisabled || !user || !role || role.id === data?.role.id,
         onClick: async () => {

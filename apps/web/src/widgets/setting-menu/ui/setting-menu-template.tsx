@@ -27,7 +27,7 @@ const SettingMenuTemplate: React.FC<IProps> = (props) => {
   const { title, actionBtn, children, action } = props;
 
   return (
-    <div className="relative flex flex-col gap-4">
+    <div className="flex h-full flex-col gap-4">
       <div className="flex min-h-10 items-center justify-between">
         <h4 className="text-title-h4 flex-1">{title}</h4>
         {actionBtn && (

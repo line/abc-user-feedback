@@ -13,13 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './cn';
-export * from './parse-as-date-range';
-export * from './get-day-count';
-export * from './display-string';
-export * from './path-parsing';
-export * from './remove-empty-value-in-object';
-export * from './reorder';
-export * from './type-guard';
-export * from './is-object-equal';
-export * from './first-letter-pascal';
+export const firstLeterPascal = (str: string) =>
+  str.charAt(0).toUpperCase() + str.slice(1);

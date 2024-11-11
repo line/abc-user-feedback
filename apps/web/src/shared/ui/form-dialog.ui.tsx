@@ -32,13 +32,14 @@ interface Props extends React.PropsWithChildren {
   isOpen: boolean;
   close: () => void;
   title: React.ReactNode;
-  deleteBtn: {
+  deleteBtn?: {
     disabled: boolean;
     onClick?: () => unknown;
   };
   submitBtn: {
     disabled: boolean;
-    onClick: () => unknown;
+    onClick?: () => unknown;
+    form?: string;
   };
 }
 
@@ -53,7 +54,7 @@ const FormDialog: React.FC<Props> = (props) => {
         close={dialogClose}
         isOpen={isOpen}
         onClickDelete={async () => {
-          await deleteBtn.onClick?.();
+          await deleteBtn?.onClick?.();
           dialogClose();
           close();
         }}
@@ -67,7 +68,7 @@ const FormDialog: React.FC<Props> = (props) => {
         <DialogTitle>{title}</DialogTitle>
         <div className="flex flex-col gap-3">{children}</div>
         <DialogFooter>
-          {deleteBtn.onClick && (
+          {deleteBtn && (
             <div className="flex-1">
               <Button
                 variant="destructive"
@@ -84,8 +85,9 @@ const FormDialog: React.FC<Props> = (props) => {
           <Button
             type="submit"
             disabled={submitBtn.disabled}
+            form={submitBtn.form}
             onClick={async () => {
-              await submitBtn.onClick();
+              await submitBtn.onClick?.();
               close();
             }}
           >

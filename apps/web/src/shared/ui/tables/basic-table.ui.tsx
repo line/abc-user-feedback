@@ -99,82 +99,77 @@ const BasicTable = <T,>(props: IProps<T>) => {
   );
 
   return (
-    <DndContext
-      collisionDetection={closestCenter}
-      modifiers={[restrictToVerticalAxis]}
-      sensors={sensors}
-      onDragEnd={handleDragEnd}
-    >
-      <Table
-        className={cn(
-          className,
-          'border-separate border-spacing-0 rounded border',
-          {
-            'h-full': dataIds.length === 0,
-          },
-        )}
+    <div className="h-full rounded border">
+      <DndContext
+        collisionDetection={closestCenter}
+        modifiers={[restrictToVerticalAxis]}
+        sensors={sensors}
+        onDragEnd={handleDragEnd}
       >
-        <TableHeader>
-          <TableRow>
-            {table.getFlatHeaders().map((header, i) => (
-              <TableHead key={i} style={{ width: header.getSize() }}>
-                <div
-                  className={cn('flex flex-nowrap items-center', {
-                    'overflow-hidden text-ellipsis':
-                      resiable && header.column.getCanResize(),
-                  })}
-                >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
+        <Table className={cn(className, { 'h-full': dataIds.length === 0 })}>
+          <TableHeader>
+            <TableRow>
+              {table.getFlatHeaders().map((header, i) => (
+                <TableHead key={i} style={{ width: header.getSize() }}>
+                  <div
+                    className={cn('flex flex-nowrap items-center', {
+                      'overflow-hidden text-ellipsis':
+                        resiable && header.column.getCanResize(),
+                    })}
+                  >
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
+                    )}
+                  </div>
+                  {resiable && header.column.getCanResize() && (
+                    <TableResizer header={header} table={table} />
                   )}
-                </div>
-                {resiable && header.column.getCanResize() && (
-                  <TableResizer header={header} table={table} />
-                )}
-              </TableHead>
-            ))}
-          </TableRow>
-          {isLoading && (
-            <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
-          )}
-        </TableHeader>
-        <TableBody>
-          {table.getRowCount() === 0 ?
-            <TableRow className="hover:bg-inherit">
-              <TableCell colSpan={table.getFlatHeaders().length}>
-                <div className="my-10 flex flex-col items-center justify-center gap-4">
-                  <Image
-                    width={200}
-                    height={200}
-                    src="/assets/images/empty-image.png"
-                    alt="empty image"
-                  />
-                  <p className="text-small text-neutral-tertiary">
-                    {emptyCaption}
-                  </p>
-                  {createButton}
-                </div>
-              </TableCell>
-            </TableRow>
-          : <SortableContext
-              items={dataIds}
-              strategy={verticalListSortingStrategy}
-            >
-              {table.getRowModel().rows.map((row) => (
-                <DraggableRow
-                  key={row.id}
-                  row={row}
-                  onClickRow={() =>
-                    onClickRow?.(Number(row.index), row.original)
-                  }
-                />
+                </TableHead>
               ))}
-            </SortableContext>
-          }
-        </TableBody>
-      </Table>
-    </DndContext>
+            </TableRow>
+            {isLoading && (
+              <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
+            )}
+          </TableHeader>
+
+          <TableBody>
+            {table.getRowCount() === 0 ?
+              <TableRow className="hover:bg-inherit">
+                <TableCell colSpan={table.getFlatHeaders().length}>
+                  <div className="my-10 flex flex-col items-center justify-center gap-4">
+                    <Image
+                      width={200}
+                      height={200}
+                      src="/assets/images/empty-image.png"
+                      alt="empty image"
+                    />
+                    <p className="text-small text-neutral-tertiary">
+                      {emptyCaption}
+                    </p>
+                    {createButton}
+                  </div>
+                </TableCell>
+              </TableRow>
+            : <SortableContext
+                items={dataIds}
+                strategy={verticalListSortingStrategy}
+              >
+                {table.getRowModel().rows.map((row) => (
+                  <DraggableRow
+                    key={row.id}
+                    row={row}
+                    onClickRow={() =>
+                      onClickRow?.(Number(row.index), row.original)
+                    }
+                  />
+                ))}
+              </SortableContext>
+            }
+          </TableBody>
+        </Table>
+      </DndContext>
+    </div>
   );
 };
 

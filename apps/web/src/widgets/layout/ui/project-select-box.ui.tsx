@@ -37,6 +37,7 @@ interface IProps {
 }
 
 const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
+  console.log('projectId: ', projectId);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -82,7 +83,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
       onValueChange={(value) => onChangeProject(value)}
     >
       <SelectTrigger className="min-w-60">
-        <SelectValue placeholder="" />
+        <SelectValue placeholder="123" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>

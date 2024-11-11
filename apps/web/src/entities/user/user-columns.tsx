@@ -19,9 +19,13 @@ import dayjs from 'dayjs';
 
 import { Badge } from '@ufb/ui';
 
-import { DATE_TIME_FORMAT, displayString, TableCheckbox } from '@/shared';
+import {
+  Avatar,
+  DATE_TIME_FORMAT,
+  displayString,
+  TableCheckbox,
+} from '@/shared';
 
-import UpdateUserPopover from './ui/update-user-popover.ui';
 import type { UserMember } from './user.type';
 
 const columnHelper = createColumnHelper<UserMember>();
@@ -52,15 +56,19 @@ export const getUserColumns = () => [
     enableSorting: false,
     size: 220,
   }),
-  columnHelper.accessor('type', {
-    header: 'Type',
-    enableSorting: false,
-    size: 80,
-  }),
+
   columnHelper.accessor('name', {
     header: 'Name',
     enableSorting: false,
-    cell: ({ getValue }) => displayString(getValue()),
+    cell: ({ getValue }) => {
+      const name = getValue();
+      return name ?
+          <>
+            <Avatar name={name} />
+            {name}
+          </>
+        : '-';
+    },
     size: 120,
   }),
   columnHelper.accessor('department', {
@@ -69,29 +77,40 @@ export const getUserColumns = () => [
     enableSorting: false,
     size: 120,
   }),
+  columnHelper.accessor('type', {
+    header: 'Type',
+    enableSorting: false,
+    size: 80,
+    filterFn: (row, id, value: UserMember['type'][]) => {
+      return value.includes(row.getValue(id));
+    },
+    cell: ({ getValue }) => {
+      return <Badge type="secondary">{getValue()}</Badge>;
+    },
+  }),
   columnHelper.accessor('members', {
     header: 'Project',
-    cell: ({ getValue }) =>
-      getValue().length > 0 ?
+    cell: ({ getValue, row }) =>
+      row.original.type === 'SUPER' ? <Badge type="secondary">All</Badge>
+      : getValue().length > 0 ?
         <div className="flex flex-wrap gap-2">
           {getValue().map((member) => (
             <Badge key={member.id} type="secondary">
-              {member.role.project.name}
+              {member.role.project.name} ({member.role.name})
             </Badge>
           ))}
         </div>
       : '-',
     enableSorting: false,
+    filterFn: (row, _, value: string[]) => {
+      return row.original.members.some((member) =>
+        value.includes(String(member.role.project.id)),
+      );
+    },
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
     enableSorting: true,
-  }),
-  columnHelper.display({
-    id: 'edit',
-    header: 'Edit',
-    cell: ({ row }) => <UpdateUserPopover user={row.original} />,
-    size: 60,
   }),
 ];

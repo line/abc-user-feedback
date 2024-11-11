@@ -14,7 +14,12 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/ui';
@@ -22,6 +27,7 @@ import { Icon } from '@ufb/ui';
 import type { SearchItemType } from '@/shared';
 import {
   BasicTable,
+  TableFacetedFilter,
   TablePagination,
   TableSearchInput,
   useOAIQuery,
@@ -45,17 +51,21 @@ const UserManagementTable: React.FC<IProps> = () => {
     columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     manualSorting: true,
     getRowId: (row) => String(row.id),
+    getFilteredRowModel: getFilteredRowModel(),
+    enableColumnFilters: true,
     initialState: { sorting: [{ id: 'createdAt', desc: false }] },
   });
+  const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
 
   const { sorting, pagination } = table.getState();
 
   const sort = useSort(sorting);
 
   const { data } = useUserSearch({
-    page: pagination.pageIndex + 1,
+    page: pagination.pageIndex,
     limit: pagination.pageSize,
     query,
     order: sort as { createdAt: 'ASC' | 'DESC' },
@@ -92,30 +102,27 @@ const UserManagementTable: React.FC<IProps> = () => {
   }, [projectData]);
 
   return (
-    <div>
-      <div className="mb-3 flex items-center justify-between">
-        <p className="font-16-regular text-secondary">
-          {t('text.search-result')}
-          <span className="text-primary ml-2">
-            {t('text.number-count', { count: data?.meta.totalItems ?? 0 })}
-          </span>
-        </p>
-        <div className="flex gap-2">
-          <TablePagination
-            limit={pagination.pageSize}
-            nextPage={() => table.setPageIndex((page) => page + 1)}
-            prevPage={() => table.setPageIndex((page) => page - 1)}
-            disabledNextPage={
-              pagination.pageIndex + 1 >= (data?.meta.totalPages ?? 1)
-            }
-            disabledPrevPage={pagination.pageIndex < 1}
-            setLimit={table.setPageSize}
-          />
-          <TableSearchInput
-            searchItems={searchItems}
-            onChangeQuery={setQuery}
-          />
-        </div>
+    <>
+      <div className="mb-3 flex items-center gap-2">
+        <TableSearchInput searchItems={searchItems} onChangeQuery={setQuery} />
+        <TableFacetedFilter
+          column={table.getColumn('type')}
+          options={[
+            { label: 'Super', value: 'SUPER' },
+            { label: 'General', value: 'GENERAL' },
+          ]}
+          title="Type"
+        />
+        <TableFacetedFilter
+          column={table.getColumn('members')}
+          options={
+            projects?.items.map((v) => ({
+              label: v.name,
+              value: String(v.id),
+            })) ?? []
+          }
+          title="Project"
+        />
       </div>
       <BasicTable
         table={table}
@@ -131,7 +138,14 @@ const UserManagementTable: React.FC<IProps> = () => {
         }
         createButton
       />
-    </div>
+      <div className="flex items-center justify-between">
+        <p>
+          {table.getSelectedRowModel().rows.length} of {data?.meta.totalItems}{' '}
+          row(s) selected.
+        </p>
+        <TablePagination table={table} />
+      </div>
+    </>
   );
 };
 

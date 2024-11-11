@@ -23,7 +23,11 @@ import type { NextPageWithLayout } from '@/shared';
 import { DEFAULT_LOCALE } from '@/shared';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import { Layout } from '@/widgets/layout';
-import { AuthSetting, TenantInfoSetting } from '@/widgets/setting-menu';
+import {
+  AuthSetting,
+  TenantInfoSetting,
+  UserManagementSetting,
+} from '@/widgets/setting-menu';
 
 const TenantPage: NextPageWithLayout = () => {
   const [currentMenu, setCurrentMenu] = useState('tenant');
@@ -51,6 +55,7 @@ const TenantPage: NextPageWithLayout = () => {
     >
       {currentMenu === 'tenant' && <TenantInfoSetting />}
       {currentMenu === 'login' && <AuthSetting />}
+      {currentMenu === 'user' && <UserManagementSetting />}
     </SideMenuLayout>
   );
 };

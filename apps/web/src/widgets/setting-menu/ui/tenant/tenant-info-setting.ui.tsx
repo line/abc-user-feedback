@@ -18,17 +18,16 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
 import { toast } from '@ufb/ui';
 
-import { useOAIMutation } from '@/shared';
+import { SettingTemplate, useOAIMutation } from '@/shared';
 import type { TenantInfo } from '@/entities/tenant';
 import {
   TenantInfoForm,
   tenantInfoSchema,
   useTenantStore,
 } from '@/entities/tenant';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {}
 
@@ -65,21 +64,24 @@ const TenantInfoSetting: React.FC<IProps> = () => {
   };
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('tenant-setting-menu.tenant-info')}
-      actionBtn={{
-        form: 'form',
-        type: 'submit',
-        children: t('button.save'),
-        disabled: !methods.formState.isDirty || isPending,
-      }}
+      action={
+        <Button
+          form="form"
+          type="submit"
+          disabled={!methods.formState.isDirty || isPending}
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
       <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
         <FormProvider {...methods}>
           <TenantInfoForm />
         </FormProvider>
       </form>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 
