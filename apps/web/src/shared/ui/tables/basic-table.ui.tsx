@@ -99,7 +99,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
   );
 
   return (
-    <div className="h-full rounded border">
+    <div className="border-neutral-tertiary h-full rounded border">
       <DndContext
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis]}

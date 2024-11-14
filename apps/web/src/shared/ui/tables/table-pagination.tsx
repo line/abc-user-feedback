@@ -14,7 +14,6 @@
  * under the License.
  */
 import type { Table } from '@tanstack/react-table';
-import { useTranslation } from 'next-i18next';
 
 import {
   Button,
@@ -34,7 +33,7 @@ const TablePagination = <T,>(props: IProps<T>) => {
   const { pagination } = table.getState();
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="text-neutral-tertiary flex items-center gap-2">
       <p>Rows per page</p>
       <Dropdown>
         <DropdownTrigger asChild>

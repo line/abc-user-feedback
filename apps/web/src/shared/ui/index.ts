@@ -45,7 +45,6 @@ export * from './select-box';
 export { default as SettingTemplate } from './setting-template.ui';
 
 //
-export { default as DialogContentTemplate } from './dialog-content-template.ui';
 export * from './inputs';
 export * from './creation';
 

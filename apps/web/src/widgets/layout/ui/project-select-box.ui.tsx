@@ -37,7 +37,6 @@ interface IProps {
 }
 
 const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
-  console.log('projectId: ', projectId);
   const router = useRouter();
   const { t } = useTranslation();
 
@@ -46,7 +45,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
 
   const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
-  const onChangeProject = async (currentProjectId: string) => {
+  const onChangeProject = async (currentProjectId?: string) => {
     await router.push({
       pathname: `/main/project/[projectId]/settings`,
       query: { projectId: currentProjectId },
@@ -79,11 +78,11 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   return (
     <Select
       type="single"
-      value={projectId ? String(projectId) : undefined}
+      value={projectId ? String(projectId) : ''}
       onValueChange={(value) => onChangeProject(value)}
     >
       <SelectTrigger className="min-w-60">
-        <SelectValue placeholder="123" />
+        <SelectValue placeholder="Select project" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
@@ -108,18 +107,6 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
             )}
           </div>
         </div>
-        {/* <SelectItem
-          value="0"
-          icon="RiAddCircleFill"
-          className="text-tint-blue p-2"
-        >
-          <div className="flex w-[215px] items-center justify-between gap-2">
-            <span>{t('v2.text.create-project')}</span>
-            {editingStepIndex !== null && (
-              <span className="text-tint-red">{t('v2.text.in-progress')}</span>
-            )}
-          </div>
-        </SelectItem> */}
       </SelectContent>
     </Select>
   );

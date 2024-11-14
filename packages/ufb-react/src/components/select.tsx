@@ -84,6 +84,16 @@ const Select = ({
     onValuesChange?.(values);
   };
 
+  React.useEffect(() => {
+    if (singleValue === value) return;
+    setSingleValue(value);
+  }, [value]);
+
+  React.useEffect(() => {
+    if (multipleValues.every((v) => values.includes(v))) return;
+    setMultipleValues(values);
+  }, [values]);
+
   return (
     <SelectContext.Provider
       value={{
@@ -118,9 +128,7 @@ Select.displayName = "Select";
 
 type SingleSelectProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Root
-> & {
-  value?: string;
-};
+>;
 const SingleSelect = SelectPrimitive.Root;
 
 type MultipleSelectProps = React.ComponentPropsWithoutRef<

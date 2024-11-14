@@ -14,34 +14,42 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import {
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import { Button, toast } from '@ufb/react';
 import { Icon } from '@ufb/ui';
 
 import type { SearchItemType } from '@/shared';
 import {
   BasicTable,
+  client,
+  DeleteDialog,
   TableFacetedFilter,
   TablePagination,
   TableSearchInput,
+  useOAIMutation,
   useOAIQuery,
   useSort,
 } from '@/shared';
 
 import { useUserSearch } from '../lib';
 import { getUserColumns } from '../user-columns';
-import type { UserMember } from '../user.type';
+import type { UpdateUser, UserMember } from '../user.type';
+import UpdateUserDialog from './update-user-dialog.ui';
 
 interface IProps {}
 
 const UserManagementTable: React.FC<IProps> = () => {
   const { t } = useTranslation();
+  const overlay = useOverlay();
 
   const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
@@ -58,24 +66,52 @@ const UserManagementTable: React.FC<IProps> = () => {
     enableColumnFilters: true,
     initialState: { sorting: [{ id: 'createdAt', desc: false }] },
   });
-  const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
-
   const { sorting, pagination } = table.getState();
-
   const sort = useSort(sorting);
 
-  const { data } = useUserSearch({
+  const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
+  const { data, refetch } = useUserSearch({
     page: pagination.pageIndex,
     limit: pagination.pageSize,
     query,
     order: sort as { createdAt: 'ASC' | 'DESC' },
   });
+  const { mutateAsync: deleteUsers } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/users',
+    queryOptions: {
+      async onSuccess() {
+        await refetch();
+        toast.success(t('v2.toast.success'));
+        table.resetRowSelection();
+      },
+      onError({ message }) {
+        toast.error(message);
+      },
+    },
+  });
+
+  const { mutateAsync: updateUser } = useMutation({
+    mutationFn: async ({ id, body }: { id: number; body: UpdateUser }) => {
+      const { data } = await client.put({
+        path: '/api/admin/users/{id}',
+        pathParams: { id },
+        body,
+      });
+      return data;
+    },
+    onSuccess: async () => {
+      await refetch();
+      toast.success(t('v2.toast.success'));
+    },
+    onError({ message }) {
+      toast.error(message);
+    },
+  });
 
   useEffect(() => {
     setRows(data?.items ?? []);
   }, [data]);
-
-  const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
 
   const searchItems = useMemo(() => {
     return [
@@ -96,33 +132,76 @@ const UserManagementTable: React.FC<IProps> = () => {
         format: 'select',
         key: 'projectId',
         name: 'Project',
-        options: projectData?.items.map((v) => ({ key: v.id, name: v.name })),
+        options: projects?.items.map((v) => ({ key: v.id, name: v.name })),
       },
     ] as SearchItemType[];
-  }, [projectData]);
+  }, [projects]);
+
+  const selectedRowIds = useMemo(() => {
+    return Object.entries(table.getState().rowSelection).reduce(
+      (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
+      [] as number[],
+    );
+  }, [table.getState().rowSelection]);
+
+  const openDeleteUsersDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={() => deleteUsers({ ids: selectedRowIds })}
+      />
+    ));
+  };
+  const openUpdateUserDialog = (data: UserMember) => {
+    overlay.open(({ close, isOpen }) => (
+      <UpdateUserDialog
+        close={close}
+        isOpen={isOpen}
+        data={data}
+        onSubmit={(input) => updateUser({ id: data.id, body: input })}
+        onClickDelete={() => deleteUsers({ ids: [data.id] })}
+      />
+    ));
+  };
 
   return (
     <>
-      <div className="mb-3 flex items-center gap-2">
-        <TableSearchInput searchItems={searchItems} onChangeQuery={setQuery} />
-        <TableFacetedFilter
-          column={table.getColumn('type')}
-          options={[
-            { label: 'Super', value: 'SUPER' },
-            { label: 'General', value: 'GENERAL' },
-          ]}
-          title="Type"
-        />
-        <TableFacetedFilter
-          column={table.getColumn('members')}
-          options={
-            projects?.items.map((v) => ({
-              label: v.name,
-              value: String(v.id),
-            })) ?? []
-          }
-          title="Project"
-        />
+      <div className="mb-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <TableSearchInput
+            searchItems={searchItems}
+            onChangeQuery={setQuery}
+          />
+          <TableFacetedFilter
+            column={table.getColumn('type')}
+            options={[
+              { label: 'Super', value: 'SUPER' },
+              { label: 'General', value: 'GENERAL' },
+            ]}
+            title="Type"
+          />
+          <TableFacetedFilter
+            column={table.getColumn('members')}
+            options={
+              projects?.items.map((v) => ({
+                label: v.name,
+                value: String(v.id),
+              })) ?? []
+            }
+            title="Project"
+          />
+        </div>
+        {selectedRowIds.length > 0 && (
+          <Button
+            variant="outline"
+            className="!text-tint-red"
+            onClick={openDeleteUsersDialog}
+            iconL="RiDeleteBin6Line"
+          >
+            User 삭제 ({selectedRowIds.length})
+          </Button>
+        )}
       </div>
       <BasicTable
         table={table}
@@ -136,10 +215,11 @@ const UserManagementTable: React.FC<IProps> = () => {
             <p className="text-secondary">{t('text.no-data')}</p>
           </div>
         }
+        onClickRow={(_, row) => openUpdateUserDialog(row)}
         createButton
       />
       <div className="flex items-center justify-between">
-        <p>
+        <p className="text-neutral-tertiary">
           {table.getSelectedRowModel().rows.length} of {data?.meta.totalItems}{' '}
           row(s) selected.
         </p>

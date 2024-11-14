@@ -18,10 +18,10 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
+import { Button, toast } from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
-import { TextInput, toast } from '@ufb/ui';
 
-import { useOAIMutation } from '@/shared';
+import { SettingTemplate, TextInput, useOAIMutation } from '@/shared';
 
 import { changePasswordFormSchema } from './change-password-form.schema';
 
@@ -48,51 +48,42 @@ const ChangePasswordForm: React.FC<IProps> = () => {
     path: '/api/admin/users/password/change',
     queryOptions: {
       onSuccess() {
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('toast.save'));
         reset();
       },
       onError(error) {
         if (error.code === ErrorCode.User.InvalidPassword) {
           setError('password', { message: 'Invalid Password' });
-          toast.negative({
-            title: 'Error',
-            description: error.message,
-          });
-        } else {
-          toast.negative({ title: 'Error', description: error.message });
         }
+        toast.error(error.message);
       },
     },
   });
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-20-bold">{t('main.profile.change-password')}</h1>
-        <button
+    <SettingTemplate
+      title={t('main.profile.change-password')}
+      action={
+        <Button
           form="reset_password"
-          className="btn btn-md btn-primary min-w-[120px]"
-          disabled={!formState.isValid || isPending}
+          type="submit"
+          disabled={!formState.isValid}
+          loading={isPending}
         >
           {t('button.save')}
-        </button>
-      </div>
-      <hr />
+        </Button>
+      }
+    >
       <form
         id="reset_password"
         className="flex flex-col gap-6"
-        onSubmit={handleSubmit((data) => {
-          mutate(data);
-        })}
+        onSubmit={handleSubmit((data) => mutate(data))}
       >
         <TextInput
           type="password"
           label={t('input.label.password')}
           placeholder={t('input.placeholder.password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.password}
-          hint={formState.errors.password?.message}
+          error={formState.errors.password?.message}
           {...register('password')}
           required
         />
@@ -100,10 +91,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
           type="password"
           label={t('main.profile.label.new-password')}
           placeholder={t('main.profile.placeholder.new-password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.newPassword}
-          hint={formState.errors.newPassword?.message}
+          error={formState.errors.newPassword?.message}
           {...register('newPassword')}
           required
         />
@@ -111,15 +99,12 @@ const ChangePasswordForm: React.FC<IProps> = () => {
           type="password"
           label={t('main.profile.label.confirm-new-password')}
           placeholder={t('main.profile.placeholder.confirm-new-password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.confirmNewPassword}
-          hint={formState.errors.confirmNewPassword?.message}
+          error={formState.errors.confirmNewPassword?.message}
           {...register('confirmNewPassword')}
           required
         />
       </form>
-    </div>
+    </SettingTemplate>
   );
 };
 

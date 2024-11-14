@@ -81,7 +81,6 @@ export const useUserStore = create<State & Action>((set, get) => ({
       set({ user: data });
     }
   },
-
   async _signIn(jwt) {
     sessionStorage.setItem('jwt', jwt);
     get().setUser();

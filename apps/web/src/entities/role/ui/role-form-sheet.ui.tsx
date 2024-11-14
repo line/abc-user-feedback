@@ -80,7 +80,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
     resolver: zodResolver(roleInfoSchema),
     defaultValues: { name: '', permissions: [] },
   });
-  console.log('formState: ', formState.errors);
+
   const permissions = watch('permissions');
 
   useEffect(() => {

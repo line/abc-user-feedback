@@ -13,9 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
 import type { GetStaticProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { parseAsString, useQueryState } from 'nuqs';
+import { useTranslation } from 'react-i18next';
 
 import { Menu, MenuItem } from '@ufb/react';
 
@@ -30,7 +31,12 @@ import {
 } from '@/widgets/setting-menu';
 
 const TenantPage: NextPageWithLayout = () => {
-  const [currentMenu, setCurrentMenu] = useState('tenant');
+  const { t } = useTranslation();
+  const [currentMenu, setCurrentMenu] = useQueryState<string>(
+    'menu',
+    parseAsString.withDefault('tenant'),
+  );
+
   return (
     <SideMenuLayout
       sideMenu={
@@ -42,13 +48,13 @@ const TenantPage: NextPageWithLayout = () => {
           onValueChange={(value) => setCurrentMenu(value)}
         >
           <MenuItem value="tenant" iconL="RiInformation2Line">
-            Tenant 정보
+            {t('tenant-setting-menu.tenant-info')}
           </MenuItem>
           <MenuItem value="login" iconL="RiUser2Line">
-            Login 관리
+            {t('tenant-setting-menu.sign-up-mgmt')}
           </MenuItem>
           <MenuItem value="user" iconL="RiShieldKeyholeLine">
-            User 관리
+            {t('tenant-setting-menu.user-mgmt')}
           </MenuItem>
         </Menu>
       }
