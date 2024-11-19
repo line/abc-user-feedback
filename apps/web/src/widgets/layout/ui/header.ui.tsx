@@ -18,9 +18,9 @@ import Link from 'next/link';
 
 import { Divider, IconButton } from '@ufb/react';
 
-import { ThemeToggleButton } from '@/entities/theme';
+import { LanguageSelectBox } from '@/shared';
+import { ThemeSelectBox } from '@/entities/theme';
 
-import LanguageSelectBox from './language-select-box.ui';
 import MenuList from './menu-list.ui';
 import ProjectSelectBox from './project-select-box.ui';
 import UserProfileBox from './user-profile-box.ui';
@@ -31,21 +31,21 @@ interface IProps {
 
 const Header: React.FC<IProps> = ({ projectId }) => {
   return (
-    <div className="navbar gap-2">
+    <header className="navbar items-center gap-2">
       <ProjectSelectBox projectId={projectId} />
       <Divider variant="subtle" indent={8} orientation="vertical" />
       <div className="flex-1">
         <MenuList projectId={projectId} />
       </div>
-      <div className="flex gap-3">
+      <div className="flex items-center gap-3">
         <Link href={{ pathname: '/main/tenant' }}>
           <IconButton icon="RiBuildingLine" variant="ghost" />
         </Link>
-        <ThemeToggleButton />
+        <ThemeSelectBox />
         <LanguageSelectBox />
         <UserProfileBox />
       </div>
-    </div>
+    </header>
   );
 };
 

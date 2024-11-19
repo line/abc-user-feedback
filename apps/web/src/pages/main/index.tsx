@@ -13,50 +13,43 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, SectionTemplate, useOAIQuery } from '@/shared';
+import { DEFAULT_LOCALE, Path, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { ProjectCard } from '@/entities/project';
-import { TenantCard, useTenantStore } from '@/entities/tenant';
-import { RouteCreateProjectButton } from '@/features/create-project';
-import { MainLayout } from '@/widgets';
+import { useUserStore } from '@/entities/user';
 
 const MainIndexPage: NextPageWithLayout = () => {
+  const router = useRouter();
+  const { user } = useUserStore();
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 1000, page: 1 },
+    variables: { limit: 1 },
+    queryOptions: { retry: false },
   });
-  const { tenant } = useTenantStore();
 
-  return (
-    <div className="mx-4 my-2 flex flex-col gap-8">
-      <SectionTemplate title="Tenant">
-        {tenant && <TenantCard tenant={tenant} />}
-      </SectionTemplate>
-      <SectionTemplate title="Project">
-        <div className="flex flex-wrap gap-4">
-          {data?.items.map((project) => (
-            <ProjectCard key={project.id} project={project} />
-          ))}
-          <div
-            className={
-              'border-fill-tertiary flex h-[204px] w-[452px] flex-col items-center justify-center rounded border'
-            }
-          >
-            <RouteCreateProjectButton
-              hasProject={data?.meta.totalItems !== 0}
-            />
-          </div>
-        </div>
-      </SectionTemplate>
-    </div>
-  );
-};
+  useEffect(() => {
+    if (!data || !user) return;
+    const [project] = data.items;
+    if (project) {
+      void router.push({
+        pathname: Path.PROJECT_MAIN,
+        query: { projectId: project.id },
+      });
+      return;
+    }
 
-MainIndexPage.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>;
+    if (user.type === 'SUPER') {
+      void router.push({ pathname: Path.CREATE_PROJECT });
+      return;
+    }
+    void router.push({ pathname: '/main/profile' });
+  }, [data]);
+
+  return <></>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

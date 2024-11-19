@@ -13,32 +13,106 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect } from 'react';
+import { useState } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { parseAsStringLiteral, useQueryState } from 'nuqs';
+import { useTranslation } from 'react-i18next';
 
-import { DEFAULT_LOCALE, Path } from '@/shared';
+import { toast } from '@ufb/react';
+
+import {
+  AnonymousTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  useOAIMutation,
+} from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
+import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
 import { CreateTenantForm } from '@/features/create-tenant';
-import { MainLayout } from '@/widgets';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+const STEPS = ['tenant', 'user', 'final'] as const;
 
 const CreateTenantPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const { t } = useTranslation();
 
-  const { tenant } = useTenantStore();
+  const [step, setStep] = useQueryState(
+    'step',
+    parseAsStringLiteral(STEPS)
+      .withDefault('tenant')
+      .withOptions({ history: 'push' }),
+  );
 
-  useEffect(() => {
-    if (!tenant) return;
-    void router.replace(Path.SIGN_IN);
-  }, [tenant]);
+  const [data, setData] = useState<{
+    tenant: { siteName: string } | null;
+    user: { email: string; password: string } | null;
+  }>({
+    tenant: null,
+    user: null,
+  });
 
-  return <CreateTenantForm />;
+  const { tenant, refetchTenant } = useTenantStore();
+
+  const queryClient = useQueryClient();
+
+  const { mutate: createTenant, isPending } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/tenants',
+    queryOptions: {
+      async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: ['/api/admin/tenants'],
+        });
+        await router.replace(Path.SIGN_IN);
+        await refetchTenant();
+        toast.success('Success');
+      },
+    },
+  });
+
+  return (
+    <AnonymousTemplate
+      title={
+        step === 'final' ?
+          t('tenant.create.complete-title')
+        : t('tenant.create.title')
+      }
+      image={
+        step === 'final' ?
+          '/assets/images/complete-tenant-setting.png'
+        : '/assets/images/tenant-info.png'
+      }
+    >
+      {step === 'tenant' && (
+        <CreateTenantForm
+          onSubmit={({ siteName }) => {
+            setData((prev) => ({ ...prev, tenant: { siteName } }));
+            void setStep('user');
+          }}
+          submitText={t('button.next')}
+        />
+      )}
+      {step === 'user' && (
+        <SignUpWithEmailForm
+          onSubmit={({ email, password }) => {
+            setData((prev) => ({ ...prev, user: { email, password } }));
+            void setStep('final');
+          }}
+          submitText={t('button.next')}
+        />
+      )}
+      <div></div>
+    </AnonymousTemplate>
+  );
 };
 
 CreateTenantPage.getLayout = (page) => {
-  return <MainLayout center> {page}</MainLayout>;
+  return <AnonymousLayout> {page}</AnonymousLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

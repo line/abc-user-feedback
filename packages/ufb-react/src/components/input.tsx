@@ -13,20 +13,22 @@ import { cn, composeRefs } from "../lib/utils";
 import { Icon } from "./icon";
 import useTheme from "./use-theme";
 
-type TextInputType = ("text" | "email" | "password" | "search" | "tel") &
+type TextInputType = (
+  | "text"
+  | "email"
+  | "password"
+  | "search"
+  | "tel"
+  | "code"
+) &
   HTMLInputTypeAttribute;
 
-const InputField = React.forwardRef<HTMLDivElement, React.PropsWithChildren>(
-  (props, ref) => {
-    const { children } = props;
-
-    return (
-      <div ref={ref} className="input-field">
-        {children}
-      </div>
-    );
-  },
-);
+const InputField = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => {
+  return <div ref={ref} className={cn("input-field", className)} {...props} />;
+});
 InputField.displayName = "InputField";
 
 const defaultContext: TextInputProps = {

@@ -27,6 +27,7 @@ interface IProps {
 const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
   const { register, formState } = useFormContext<AuthInfo>();
   const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-3">
       <TextInput

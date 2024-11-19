@@ -39,7 +39,8 @@ class PathV3 {
   readonly SETTINGS = '/main/project/[projectId]/settings';
 
   isErrorPage(pathname: string) {
-    return pathname.startsWith('/error');
+    console.log('pathname: ', pathname);
+    return pathname === '/404';
   }
 
   isProtectPage(pathname: string) {

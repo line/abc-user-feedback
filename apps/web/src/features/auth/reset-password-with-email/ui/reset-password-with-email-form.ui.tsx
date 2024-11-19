@@ -19,9 +19,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
-import { TextInput, toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
-import { Path, useOAIMutation } from '@/shared';
+import { Path, TextInput, useOAIMutation } from '@/shared';
 
 import { resetPasswordWithEmailSchema } from '../reset-password-with-email.schema';
 
@@ -46,11 +46,8 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
     path: '/api/admin/users/password/reset',
     queryOptions: {
       async onSuccess() {
-        toast.positive({ title: 'Success' });
+        toast.success('Success');
         await router.push(Path.SIGN_IN);
-      },
-      onError(error) {
-        toast.negative({ title: 'Error', description: error.message });
       },
     },
   });
@@ -72,10 +69,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
           type="password"
           label={t('input.label.password')}
           placeholder={t('input.placeholder.password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.password}
-          hint={formState.errors.password?.message}
+          error={formState.errors.password?.message}
           {...register('password')}
           required
         />
@@ -83,29 +77,22 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
           type="password"
           label={t('input.label.confirm-password')}
           placeholder={t('input.placeholder.confirm-password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.confirmPassword}
-          hint={formState.errors.confirmPassword?.message}
+          error={formState.errors.confirmPassword?.message}
           {...register('confirmPassword')}
           required
         />
       </div>
       <div className="flex flex-col gap-2">
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={!formState.isValid || isPending}
-        >
+        <Button type="submit" disabled={!formState.isValid} loading={isPending}>
           {t('button.setting')}
-        </button>
-        <button
+        </Button>
+        <Button
+          variant="outline"
           type="button"
-          className="btn btn-secondary"
           onClick={() => router.push(Path.SIGN_IN)}
         >
           {t('button.back')}
-        </button>
+        </Button>
       </div>
     </form>
   );

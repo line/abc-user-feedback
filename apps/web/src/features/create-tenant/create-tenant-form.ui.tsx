@@ -13,79 +13,44 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import type { z } from 'zod';
 
-import { toast } from '@ufb/ui';
+import { Button } from '@ufb/react';
 
-import { Path, useOAIMutation } from '@/shared';
-import { useTenantStore } from '@/entities/tenant';
+import { TextInput } from '@/shared';
 
 import { createTenantFormSchema } from './create-tenant-form.schema';
-import { DEFAULT_SUPER_ACCOUNT } from './default-super-account.constant';
+import type { CreateTenant } from './create-tenant-form.type';
 
-type FormType = z.infer<typeof createTenantFormSchema>;
+interface IProps {
+  onSubmit: (data: CreateTenant) => void;
+  submitText: string;
+}
 
-interface IProps {}
-
-const CreateTenantForm: React.FC<IProps> = () => {
+const CreateTenantForm: React.FC<IProps> = (props) => {
+  const { onSubmit, submitText } = props;
   const { t } = useTranslation();
-  const router = useRouter();
-  const queryClient = useQueryClient();
 
-  const { refetchTenant } = useTenantStore();
-  const { register, handleSubmit, formState } = useForm<FormType>({
+  const { register, handleSubmit, formState } = useForm<CreateTenant>({
     resolver: zodResolver(createTenantFormSchema),
-  });
-
-  const { mutate: createTenant, isPending } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/tenants',
-    queryOptions: {
-      async onSuccess() {
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/tenants'],
-        });
-        await router.replace(Path.SIGN_IN);
-        await refetchTenant();
-        toast.positive({
-          title: 'Default Super User',
-          description: `email: ${DEFAULT_SUPER_ACCOUNT.email} \n password: ${DEFAULT_SUPER_ACCOUNT.password}`,
-        });
-      },
-      onError(error) {
-        toast.negative({ title: 'Error', description: error.message });
-      },
-    },
   });
 
   return (
     <form
       className="flex flex-col gap-4"
-      onSubmit={handleSubmit((data) => createTenant(data))}
+      onSubmit={handleSubmit((data) => onSubmit(data))}
     >
-      <h1 className="font-20-bold">{t('tenant.create.title')}</h1>
-      <label>
-        <span>{t('tenant.create.site-name')}</span>
-        <input
-          className="input"
-          type="text"
-          placeholder="Please enter the site name"
-          {...register('siteName')}
-        />
-      </label>
+      <TextInput
+        label={t('tenant.create.site-name')}
+        placeholder="Please enter the site name"
+        {...register('siteName')}
+      />
 
-      <button
-        className="btn btn-primary"
-        type="submit"
-        disabled={isPending || !formState.isValid}
-      >
-        {t('button.setting')}
-      </button>
+      <Button type="submit" disabled={!formState.isValid}>
+        {submitText}
+      </Button>
     </form>
   );
 };

@@ -16,7 +16,7 @@
 import { useRouter } from 'next/router';
 
 import { LocaleSelectBox, Logo, Path } from '@/shared';
-import { ThemeToggleButton } from '@/entities/theme';
+import { ThemeSelectBox } from '@/entities/theme';
 import { UserBox } from '@/entities/user';
 
 import Breadcrumb from './breadcrumb';
@@ -41,7 +41,7 @@ const MainLayout: React.FC<IProps> = (props) => {
         <div className="flex items-center gap-2 self-stretch">
           <UserBox />
           <LocaleSelectBox />
-          <ThemeToggleButton />
+          <ThemeSelectBox />
         </div>
       </header>
       {center ?

@@ -2,7 +2,8 @@
   "tenant": {
     "create": {
       "title": "Tenant Settings",
-      "site-name": "Site Name"
+      "site-name": "Site Name",
+      "complete-title": "Tenant Creation Complete"
     }
   },
   "auth": {
@@ -517,6 +518,14 @@
       "warn-if-saved-changes": {
         "title": "Do you want to leave the page?",
         "description": "Even if you leave in the middle, you can continue later."
+      },
+      "no-project-in-profile-page": {
+        "title": "Oh no...",
+        "description": "{{name}}, there is currently no registered project information. \n Please request member registration from the project manager or make an inquiry."
+      },
+      "no-project-in-project-creation-page": {
+        "title": "Welcome!",
+        "description": "User Feedback has a Tenant-Project-Channel hierarchy. To collect or manage feedback, you need to create a project for the collection target and a channel for the collection method."
       }
     },
     "text": {
@@ -537,7 +546,9 @@
       "preview": "Preview",
       "in-progress": "In Progress",
       "continue": "Continue",
-      "test-connection-failed": "Test Connection failed"
+      "test-connection-failed": "Test Connection failed",
+      "oh-my": "Oh my!",
+      "no-project-in-profile-page": "{{name}}, currently no registered project information. \n Ask or contact the registered Project Administrator to register as a Member."
     },
     "placeholder": {
       "select": "Please select.",

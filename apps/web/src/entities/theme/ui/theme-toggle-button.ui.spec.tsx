@@ -16,11 +16,11 @@
 import userEvent from '@testing-library/user-event';
 
 import { render, screen } from '@/test-utils';
-import ThemeToggleButton from './theme-toggle-button.ui';
+import ThemeSelectBox from './theme-toggle-button.ui';
 
 describe('ThemeToggleButton', () => {
   it('toggle theme using document className', async () => {
-    render(<ThemeToggleButton />);
+    render(<ThemeSelectBox />);
     const button = screen.getByRole('button');
 
     expect(document.documentElement.className).toBe('light');

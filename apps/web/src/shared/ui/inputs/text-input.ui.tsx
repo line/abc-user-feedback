@@ -13,15 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React from 'react';
+import React, { useState } from 'react';
 
-import type { IconNameType, TextInputProps } from '@ufb/react';
+import type { TextInputProps } from '@ufb/react';
 import {
   TextInput as Input,
   InputBox,
   InputCaption,
+  InputEyeButton,
   InputField,
-  InputIcon,
   InputLabel,
 } from '@ufb/react';
 
@@ -29,22 +29,39 @@ interface Props extends Omit<TextInputProps, 'error' | 'required'> {
   required?: boolean;
   label: string;
   error?: string;
-  leftIcon?: IconNameType;
+  left?: React.ReactNode;
   right?: React.ReactNode;
+  rightButton?: React.ReactNode;
+  infoCaption?: string;
+  successCaption?: string;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
-  const { required, label, error, leftIcon, right, size, ...textInputProps } =
-    props;
+  const {
+    required,
+    label,
+    error,
+    left,
+    right,
+    rightButton,
+    size,
+    type,
+    infoCaption,
+    successCaption,
+    ...textInputProps
+  } = props;
+  const [inputType, setInputType] = useState(type);
 
   return (
-    <InputField>
+    <InputField className="w-full">
       <InputLabel>
         {label} {required && <span className="text-tint-red">*</span>}
       </InputLabel>
       <div className="input-container flex gap-2">
-        <InputBox className="flex-1">
-          {leftIcon && <InputIcon name={leftIcon} />}
+        <InputBox className="w-full flex-1">
+          {left && (
+            <div className="absolute-y-center absolute left-2">{left}</div>
+          )}
           <Input
             {...textInputProps}
             className="flex-1"
@@ -52,13 +69,35 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
             required={required}
             ref={ref}
             size={size}
+            type={inputType}
           />
+          {type === 'password' && (
+            <InputEyeButton
+              onChangeVisibility={(visible) =>
+                setInputType(visible ? 'text' : 'password')
+              }
+              className="!min-w-0"
+            />
+          )}
+          {right && (
+            <span className="absolute-y-center absolute right-2">{right}</span>
+          )}
         </InputBox>
-        {right}
+        {rightButton}
       </div>
-      {typeof error !== 'undefined' && (
+      {!!error && (
         <InputCaption variant="error" size={size}>
           {error}
+        </InputCaption>
+      )}
+      {!!infoCaption && (
+        <InputCaption variant="info" size={size}>
+          {infoCaption}
+        </InputCaption>
+      )}
+      {!!successCaption && (
+        <InputCaption variant="success" size={size}>
+          {successCaption}
         </InputCaption>
       )}
     </InputField>

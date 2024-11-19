@@ -227,7 +227,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                       }
                     }}
                     error={formState.errors.options?.message}
-                    right={
+                    rightButton={
                       <Button onClick={addOption}>
                         {t('button.register')}
                       </Button>

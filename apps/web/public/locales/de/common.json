@@ -2,7 +2,8 @@
   "tenant": {
     "create": {
       "title": "Mandanten-Einstellungen",
-      "site-name": "Seitenname"
+      "site-name": "Seitenname",
+      "complete-title": "Mandant erstellt"
     }
   },
   "auth": {
@@ -517,6 +518,14 @@
       "warn-if-saved-changes": {
         "title": "Möchten Sie die Seite verlassen?",
         "description": "Sie können später jederzeit fortfahren."
+      },
+      "no-project-in-profile-page": {
+        "title": "Oh nein...",
+        "description": "{{name}}님. Derzeit sind keine registrierten Projektinformationen verfügbar. \n Bitte wenden Sie sich an den zuständigen Projektmanager, um sich als Mitglied registrieren zu lassen, oder stellen Sie eine Anfrage."
+      },
+      "no-project-in-project-creation-page": {
+        "title": "Willkommen!",
+        "description": "User Feedback hat eine Tenant-Project-Channel-Hierarchie. Um Feedback zu sammeln oder zu verwalten, müssen Sie ein Projekt für das Sammelziel und einen Kanal für die Sammelmethode erstellen."
       }
     },
     "text": {
@@ -537,7 +546,9 @@
       "preview": "Vorschau",
       "in-progress": "In Bearbeitung",
       "continue": "Fortfahren",
-      "test-connection-failed": "Verbindungstest fehlgeschlagen"
+      "test-connection-failed": "Verbindungstest fehlgeschlagen",
+      "oh-my": "Oh mein!",
+      "no-project-in-profile-page": "{{name}}님. Derzeit sind keine registrierten Projektinformationen verfügbar. \n Bitte wenden Sie sich an den zuständigen Projektmanager, um sich als Mitglied registrieren zu lassen, oder stellen Sie eine Anfrage."
     },
     "placeholder": {
       "select": "Bitte auswählen.",

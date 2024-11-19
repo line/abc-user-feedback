@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import { useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
@@ -47,6 +48,7 @@ const FormDialog: React.FC<Props> = (props) => {
   const { close, isOpen, title, children, deleteBtn, submitBtn } = props;
   const { t } = useTranslation();
   const overlay = useOverlay();
+  const [loading, setLoading] = useState(false);
 
   const openDeleteDialog = () => {
     overlay.open(({ close: dialogClose, isOpen }) => (
@@ -86,8 +88,11 @@ const FormDialog: React.FC<Props> = (props) => {
             type="submit"
             disabled={submitBtn.disabled}
             form={submitBtn.form}
+            loading={loading}
             onClick={async () => {
+              setLoading(true);
               await submitBtn.onClick?.();
+              setLoading(false);
               close();
             }}
           >

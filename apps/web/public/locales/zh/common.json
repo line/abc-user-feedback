@@ -2,7 +2,8 @@
   "tenant": {
     "create": {
       "title": "租户设置",
-      "site-name": "站点名称"
+      "site-name": "站点名称",
+      "complete-title": "租户创建完成"
     }
   },
   "auth": {
@@ -517,6 +518,14 @@
       "warn-if-saved-changes": {
         "title": "确定要离开页面吗？",
         "description": "即使中途离开，之后也可以继续。"
+      },
+      "no-project-in-profile-page": {
+        "title": "哦不...",
+        "description": "{{name}}，当前没有注册的项目信息。 \n 请向项目管理员请求成员注册或进行咨询。"
+      },
+      "no-project-in-project-creation-page": {
+        "title": "欢迎！",
+        "description": "用户反馈具有租户-项目-频道层次结构。要收集或管理反馈，您需要为收集目标创建一个项目，并为收集方法创建一个频道。"
       }
     },
     "text": {
@@ -537,7 +546,9 @@
       "preview": "预览",
       "in-progress": "进行中",
       "continue": "继续",
-      "test-connection-failed": "连接测试失败"
+      "test-connection-failed": "连接测试失败",
+      "oh-my": "哦，我的！",
+      "no-project-in-profile-page": "{{name}}님. 当前没有注册的Project信息。 \n 请向注册目标Project管理员请求Member注册或进行咨询。"
     },
     "placeholder": {
       "select": "请选择。",

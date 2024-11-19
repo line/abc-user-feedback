@@ -19,9 +19,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
-import { TextInput, toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
-import { Path, useOAIMutation } from '@/shared';
+import { Path, TextInput, useOAIMutation } from '@/shared';
 
 import { requestResetPasswordWithEmailSchema } from '../request-reset-password-with-email.schema';
 
@@ -44,10 +44,7 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await router.push(Path.SIGN_IN);
-        toast.positive({ title: 'Success' });
-      },
-      onError(error) {
-        toast.negative({ title: 'Error', description: error.message });
+        toast.success('Success');
       },
     },
   });
@@ -59,29 +56,28 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
           type="email"
           label="Email"
           placeholder={t('input.placeholder.email')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.email}
-          hint={formState.errors.email?.message}
+          error={formState.errors.email?.message}
           {...register('email')}
           required
         />
       </div>
       <div className="flex flex-col gap-2">
-        <button
+        <Button
+          size="medium"
           type="submit"
-          className="btn btn-primary"
-          disabled={!formState.isValid || isPending}
+          loading={isPending}
+          disabled={!formState.isValid}
         >
           {t('auth.reset-password.button.send-email')}
-        </button>
-        <button
+        </Button>
+        <Button
+          size="medium"
+          variant="outline"
           type="button"
-          className="btn btn-secondary"
           onClick={router.back}
         >
           {t('button.back')}
-        </button>
+        </Button>
       </div>
     </form>
   );

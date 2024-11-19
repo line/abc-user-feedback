@@ -68,9 +68,8 @@ export default function useOAIMutation<
 
       return data as TResponse;
     },
-    onError(error, variables, context) {
+    onError(error) {
       toast.error(error.message);
-      queryOptions?.onError?.(error, variables, context);
     },
     ...queryOptions,
   });

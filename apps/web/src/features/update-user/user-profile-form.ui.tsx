@@ -75,9 +75,6 @@ const UserProfileForm: React.FC<IProps> = () => {
       async onSuccess() {
         await signOut();
       },
-      onError(error) {
-        toast.error(error.message);
-      },
     },
   });
 

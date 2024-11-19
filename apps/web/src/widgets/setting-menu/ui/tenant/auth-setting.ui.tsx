@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -38,14 +38,13 @@ const AuthSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
 
   const { tenant, refetchTenant } = useTenantStore();
-  const [enableEmail, setEnableEmail] = useState(false);
-  const [enableOAuth, setEnableOAuth] = useState(false);
 
   const methods = useForm<AuthInfo>({
     resolver: zodResolver(authInfoScema),
   });
 
-  const { reset, handleSubmit, formState } = methods;
+  const { reset, handleSubmit, formState, watch, setValue } = methods;
+  const { isRestrictDomain, useOAuth } = watch();
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -100,9 +99,14 @@ const AuthSetting: React.FC<IProps> = () => {
                   제공합니다.
                 </p>
               </div>
-              <Switch checked={enableEmail} onCheckedChange={setEnableEmail} />
+              <Switch
+                checked={isRestrictDomain}
+                onCheckedChange={(checked) =>
+                  setValue('isRestrictDomain', checked, { shouldDirty: true })
+                }
+              />
             </div>
-            <EmailConfigForm disabled={!enableEmail} />
+            <EmailConfigForm disabled={!isRestrictDomain} />
           </div>
           <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-6">
             <div className="flex">
@@ -112,9 +116,14 @@ const AuthSetting: React.FC<IProps> = () => {
                   OAuth2.0을 활용해 로그인할 수 있는 방식을 제공합니다.
                 </p>
               </div>
-              <Switch checked={enableOAuth} onCheckedChange={setEnableOAuth} />
+              <Switch
+                checked={useOAuth}
+                onCheckedChange={(checked) =>
+                  setValue('useOAuth', checked, { shouldDirty: true })
+                }
+              />
             </div>
-            <OAuthConfigForm disabled={!enableOAuth} />
+            <OAuthConfigForm disabled={!useOAuth} />
           </div>
         </form>
       </FormProvider>

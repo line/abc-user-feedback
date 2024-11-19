@@ -2,7 +2,8 @@
   "tenant": {
     "create": {
       "title": "Tenant 설정",
-      "site-name": "사이트 이름"
+      "site-name": "사이트 이름",
+      "complete-title": "Tenant 설정 완료"
     }
   },
   "auth": {
@@ -510,6 +511,14 @@
       "warn-if-saved-changes": {
         "title": "페이지를 나가시겠습니까?",
         "description": "중간에 나가도 나중에 이어서 진행할 수 있습니다. "
+      },
+      "no-project-in-profile-page": {
+        "title": "이런...",
+        "description": "{{name}}님. 현재 등록된 Project 정보가 없습니다. \n 등록 대상 Project 관리자에게 Member 등록을 요청하거나 또는 문의해 보세요."
+      },
+      "no-project-in-project-creation-page": {
+        "title": "환영합니다!",
+        "description": "User Feedback은 Tenant-Project-Channel 계층 구조를 가지고 있습니다. 피드백을 수집 또는 관리하기 위해서는 수집 대상의 Project와 수집 방식의 Channel을 이어서 생성해 주셔야 합니다. "
       }
     },
     "text": {

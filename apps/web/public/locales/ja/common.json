@@ -2,7 +2,8 @@
   "tenant": {
     "create": {
       "title": "基本設定",
-      "site-name": "サイト名"
+      "site-name": "サイト名",
+      "complete-title": "基本設定が完了しました。"
     }
   },
   "auth": {
@@ -505,6 +506,14 @@
       "warn-if-saved-changes": {
         "title": "ページを離れてよろしいですか？",
         "description": "途中で離れても後で続きから再開できます。"
+      },
+      "no-project-in-profile-page": {
+        "title": "あらら...",
+        "description": "{{name}}さん、現在登録されたプロジェクト情報がありません。 \n プロジェクト管理者にメンバー登録を依頼するか、問い合わせてみてください。"
+      },
+      "no-project-in-project-creation-page": {
+        "title": "ようこそ！",
+        "description": "ユーザーフィードバックは、テナント-プロジェクト-チャネルの階層構造を持っています。フィードバックを収集または管理するには、収集対象のプロジェクトと収集方法のチャネルを作成する必要があります。"
       }
     },
     "text": {
@@ -525,7 +534,9 @@
       "preview": "プレビュー",
       "in-progress": "進行中",
       "continue": "続きから再開",
-      "test-connection-failed": "接続テストに失敗しました"
+      "test-connection-failed": "接続テストに失敗しました",
+      "oh-my": "しまった。",
+      "no-project-in-profile-page": "{{name}}님. 現在登録されたProject情報がありません。 \n 登録対象Project管理者にMember登録を依頼するか、または問い合わせてみてください。"
     },
     "placeholder": {
       "select": "選択してください",

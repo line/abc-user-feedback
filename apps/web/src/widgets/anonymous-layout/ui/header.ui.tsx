@@ -13,4 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ThemeSelectBox } from './theme-select-box.ui';
+import { LanguageSelectBox, Logo } from '@/shared';
+import { ThemeSelectBox } from '@/entities/theme';
+
+const Header = () => {
+  return (
+    <header className="navbar items-center justify-between gap-2 border-none">
+      <Logo />
+      <div className="flex items-center gap-2">
+        <ThemeSelectBox />
+        <LanguageSelectBox />
+      </div>
+    </header>
+  );
+};
+
+export default Header;

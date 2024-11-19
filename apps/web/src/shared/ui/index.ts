@@ -58,3 +58,5 @@ export { default as DeleteDialog } from './delete-dialog.ui';
 
 export { default as FormDialog } from './form-dialog.ui';
 export { default as CreatingDialog } from './creating-dialog.ui';
+export { default as LanguageSelectBox } from './language-select-box.ui';
+export { default as AnonymousTemplate } from './anonymous-template.ui';

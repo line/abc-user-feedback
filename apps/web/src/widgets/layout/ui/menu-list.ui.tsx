@@ -33,7 +33,7 @@ const MenuList: React.FC<Props> = ({ projectId }) => {
   const currentMenu = useMemo(() => router.pathname.split('/').pop(), [router]);
 
   return (
-    <div className="flex-1">
+    <nav className="flex-1">
       <Menu
         value={currentMenu}
         type="single"
@@ -53,7 +53,7 @@ const MenuList: React.FC<Props> = ({ projectId }) => {
           </MenuItem>
         ))}
       </Menu>
-    </div>
+    </nav>
   );
 };
 

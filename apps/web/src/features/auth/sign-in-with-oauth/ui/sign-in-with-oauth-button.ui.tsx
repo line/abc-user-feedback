@@ -17,6 +17,8 @@
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
+import { Button } from '@ufb/react';
+
 import { useOAIQuery } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
 
@@ -36,14 +38,14 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
   });
 
   return (
-    <button
-      type="button"
-      className="btn btn-lg btn-blue"
+    <Button
+      variant="outline"
+      size="medium"
       disabled={!data?.url}
       onClick={() => router.push(data?.url ?? '')}
     >
-      OAuth2.0 {t('button.sign-in')}
-    </button>
+      OAuth 2.0 {t('button.sign-in')}
+    </Button>
   );
 };
 

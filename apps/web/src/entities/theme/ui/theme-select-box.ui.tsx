@@ -24,7 +24,7 @@ import {
 
 import { useThemeStore } from '../theme.model';
 
-const ThemeToggleButton: React.FC = () => {
+const ThemeSelectBox: React.FC = () => {
   const { setTheme } = useThemeStore();
 
   return (
@@ -41,4 +41,4 @@ const ThemeToggleButton: React.FC = () => {
   );
 };
 
-export default ThemeToggleButton;
+export default ThemeSelectBox;

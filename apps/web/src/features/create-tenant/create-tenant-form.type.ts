@@ -13,4 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as ThemeSelectBox } from './theme-select-box.ui';
+import type { z } from 'zod';
+
+import type { createTenantFormSchema } from './create-tenant-form.schema';
+
+export type CreateTenant = z.infer<typeof createTenantFormSchema>;
