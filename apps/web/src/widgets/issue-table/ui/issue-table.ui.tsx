@@ -170,16 +170,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           </span>
         </h2>
         <div className="flex items-center gap-4">
-          <TablePagination
-            limit={pagination.pageSize}
-            nextPage={() => table.setPageIndex((page) => page + 1)}
-            previousPage={() => table.setPageIndex((page) => page - 1)}
-            disabledNextPage={
-              pagination.pageIndex + 1 >= (data?.meta.totalPages ?? 1)
-            }
-            disabledPrevPage={pagination.pageIndex < 1}
-            setLimit={table.setPageSize}
-          />
+          <TablePagination table={table} />
           <div className="w-[300px]">
             <DateRangePicker
               value={dateRange}

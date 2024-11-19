@@ -77,7 +77,7 @@ const EmailConfigForm: React.FC<Props> = ({ disabled }) => {
       <div className="flex items-center gap-2">
         {!allowDomains || allowDomains.length === 0 ?
           <p className="text-neutral-tertiary">
-            {t('v2.text.all-domains-allows')}
+            {t('v2.text.all-domains-allow')}
           </p>
         : allowDomains.map((domain, index) => (
             <Badge key={index} className="flex items-center" variant="subtle">

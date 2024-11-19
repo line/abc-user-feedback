@@ -68,8 +68,6 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
   const { query, setQuery, projectId, createdAtRange, setCreatedAtRange } =
     useFeedbackTable();
 
-  const { pagination } = table.getState();
-
   useEffect(() => {
     if (Object.keys(columnVisibility).length === 0) return;
     const initialVisibility = fieldData.reduce((acc, v) => {
@@ -119,16 +117,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
           }}
         />
         <div className="flex h-10 items-center justify-end gap-3">
-          <TablePagination
-            limit={pagination.pageSize}
-            nextPage={() => table.setPageIndex((page) => page + 1)}
-            previousPage={() => table.setPageIndex((page) => page - 1)}
-            disabledNextPage={
-              pagination.pageIndex + 1 >= (meta?.totalPages ?? 1)
-            }
-            disabledPrevPage={pagination.pageIndex < 1}
-            short
-          />
+          <TablePagination table={table} />
           <div className="bg-fill-tertiary h-4 w-[1px]" />
           <FeedbackTableExpandButtonGroup table={table} />
 
@@ -172,16 +161,7 @@ const FeedbackTableBar: React.FC<IProps> = (props) => {
           </span>
         </h2>
         <div className="flex h-10 items-center justify-end gap-4">
-          <TablePagination
-            limit={pagination.pageSize}
-            nextPage={() => table.setPageIndex((page) => page + 1)}
-            previousPage={() => table.setPageIndex((page) => page - 1)}
-            setLimit={table.setPageSize}
-            disabledNextPage={
-              pagination.pageIndex + 1 >= (meta?.totalPages ?? 1)
-            }
-            disabledPrevPage={pagination.pageIndex < 1}
-          />
+          <TablePagination table={table} />
           <div className="w-[272px]">
             <DateRangePicker
               onChange={setCreatedAtRange}
