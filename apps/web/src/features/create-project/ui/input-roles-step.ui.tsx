@@ -58,6 +58,7 @@ const InputRolesStep: React.FC<IProps> = () => {
         isOpen={isOpen}
         close={close}
         data={role}
+        rows={input.roles}
         onSubmit={({ name, permissions }) => {
           onUpdateRole({ name, permissions, id: role.id });
           close();

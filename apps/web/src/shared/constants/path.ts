@@ -40,7 +40,7 @@ class PathV3 {
 
   isErrorPage(pathname: string) {
     console.log('pathname: ', pathname);
-    return pathname === '/404';
+    return pathname === '/404' || pathname === '/403';
   }
 
   isProtectPage(pathname: string) {

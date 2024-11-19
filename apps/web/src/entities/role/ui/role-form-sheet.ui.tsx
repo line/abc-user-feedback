@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
@@ -60,10 +60,12 @@ import {
 import { roleInfoSchema } from '../role.schema';
 import type { RoleInfo } from '../role.type';
 
-interface Props extends FormOverlayProps<RoleInfo> {}
+interface Props extends FormOverlayProps<RoleInfo> {
+  rows: RoleInfo[];
+}
 
 const RoleFormSheet: React.FC<Props> = (props) => {
-  const { close, isOpen, data, onSubmit, onClickDelete } = props;
+  const { close, isOpen, data, onSubmit: onSave, onClickDelete, rows } = props;
 
   const overlay = useOverlay();
 
@@ -76,12 +78,18 @@ const RoleFormSheet: React.FC<Props> = (props) => {
     getValues,
     watch,
     formState,
+    setError,
   } = useForm<RoleInfo>({
     resolver: zodResolver(roleInfoSchema),
     defaultValues: { name: '', permissions: [] },
   });
 
   const permissions = watch('permissions');
+
+  const otherRoles = useMemo(
+    () => rows.filter((v) => v.name !== data?.name),
+    [data, rows],
+  );
 
   useEffect(() => {
     reset(data);
@@ -150,6 +158,17 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         }}
       />
     ));
+  };
+
+  const onSubmit = async (input: RoleInfo) => {
+    const checkDuplicatedKey = otherRoles.find((v) => v.name === input.name);
+    if (checkDuplicatedKey) {
+      setError('name', { message: 'Name is duplicated' });
+      return;
+    }
+    await onSave({ ...data, ...input });
+    reset({ name: '', permissions: [] });
+    close();
   };
 
   return (

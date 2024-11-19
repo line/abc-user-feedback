@@ -81,7 +81,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
   );
 
   const otherFields = useMemo(
-    () => (data ? fieldRows.filter((v) => v.key !== data.key) : fieldRows),
+    () => fieldRows.filter((v) => v.key !== data?.key),
     [data, fieldRows],
   );
 

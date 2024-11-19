@@ -50,7 +50,7 @@ const ProfilePage: NextPageWithLayout = () => {
   );
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 1 },
+    variables: { limit: 0 },
     queryOptions: { retry: false },
   });
   const openWarningNoProjects = () => {
@@ -79,7 +79,7 @@ const ProfilePage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || data.meta.totalItems > 1) return;
     openWarningNoProjects();
   }, [data]);
 

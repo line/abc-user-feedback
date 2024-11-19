@@ -33,8 +33,7 @@ const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
     if (!data) return;
     const project = data.items.find((v) => v.id === projectId);
     if (!project) {
-      alert('You do not have permission for this project');
-      void router.replace(Path.MAIN);
+      void router.replace('/403');
     }
   }, [data]);
 

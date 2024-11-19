@@ -37,7 +37,7 @@ const CreateProjectPage: NextPage = () => {
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 1 },
+    variables: { limit: 0 },
     queryOptions: { retry: false },
   });
   const openWarningNoProjects = () => {
@@ -64,7 +64,7 @@ const CreateProjectPage: NextPage = () => {
   };
 
   useEffect(() => {
-    if (!data) return;
+    if (!data || data.meta.totalItems > 1) return;
     openWarningNoProjects();
   }, [data]);
 

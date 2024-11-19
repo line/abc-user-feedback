@@ -102,6 +102,7 @@ const RoleSetting: React.FC<IProps> = (props) => {
       <RoleFormSheet
         isOpen={isOpen}
         close={close}
+        rows={data?.roles ?? []}
         onSubmit={async ({ name, permissions }) => {
           await createRole({ name, permissions });
           close();
@@ -116,6 +117,7 @@ const RoleSetting: React.FC<IProps> = (props) => {
         isOpen={isOpen}
         close={close}
         data={role}
+        rows={data?.roles ?? []}
         onSubmit={async ({ name, permissions }) => {
           await updateRole({ name, permissions, roleId: role.id });
           close();
