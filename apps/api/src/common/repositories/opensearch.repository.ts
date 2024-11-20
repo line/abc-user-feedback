@@ -214,6 +214,10 @@ export class OpensearchRepository {
     await this.opensearchClient.indices.delete({ index: 'channel_' + index });
   }
 
+  async deleteAllIndexes() {
+    await this.opensearchClient.indices.delete({ index: '_all' });
+  }
+
   async getTotal(index: string, query: object): Promise<number> {
     const { body } = await this.opensearchClient.count({
       index,

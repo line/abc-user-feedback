@@ -22,7 +22,7 @@ const createJestConfig = nextJest({ dir: './' });
 // /** @type {import('jest').Config} */
 const jestConfig = {
   coverageProvider: 'v8',
-  testEnvironment: './JSDOMEnvironment.ts',
+  testEnvironment: 'jest-fixed-jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   setupFiles: ['<rootDir>/jest.polyfills.js'],
   moduleNameMapper: {

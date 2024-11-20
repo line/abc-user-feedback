@@ -15,17 +15,7 @@
  */
 import type { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 
-const METHOD_LIST = [
-  'GET',
-  'POST',
-  'PUT',
-  'DELETE',
-  'PATCH',
-  'HEAD',
-  'OPTIONS',
-] as const;
-
-type Method = (typeof METHOD_LIST)[number];
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'HEAD' | 'OPTIONS';
 
 type CustomNextApiRequest<T = Record<string, unknown>> = Omit<
   NextApiRequest,

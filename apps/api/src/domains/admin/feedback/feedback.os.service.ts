@@ -82,7 +82,7 @@ export class FeedbackOSService {
             if (fieldFormats.includes(field.format)) {
               prev.push({
                 match_phrase: {
-                  [field.id]: query,
+                  [field.key]: query,
                 },
               });
             }

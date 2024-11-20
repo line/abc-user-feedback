@@ -36,7 +36,7 @@ const TicketLink: React.FC<IProps> = ({ value, projectId }) => {
         `/browse/${issueTracker.data.ticketKey}-${value}`,
         issueTracker.data.ticketDomain,
       ).toString();
-    } catch (error) {
+    } catch {
       return '';
     }
   }, [issueTracker]);

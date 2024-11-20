@@ -16,6 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { ClsModule } from 'nestjs-cls';
 import type { Repository } from 'typeorm';
 
 import { tenantFixture } from '@/test-utils/fixtures';
@@ -43,7 +44,7 @@ describe('TenantService', () => {
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
-      imports: [TestConfig],
+      imports: [TestConfig, ClsModule.forRoot()],
       providers: TenantServiceProviders,
     }).compile();
     tenantService = module.get(TenantService);

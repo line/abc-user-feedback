@@ -78,8 +78,8 @@ export const createFieldDto = (input: Partial<CreateFieldDto> = {}) => {
   const property = input.property ?? getRandomEnumValue(FieldPropertyEnum);
   const status = input.status ?? getRandomEnumValue(FieldStatusEnum);
   return {
-    name: faker.string.alphanumeric(20),
-    key: faker.string.alphanumeric(20),
+    name: `_${faker.string.alphanumeric(20)}`,
+    key: `_${faker.string.alphanumeric(20)}`,
     description: faker.lorem.lines(2),
     format,
     property,
@@ -115,7 +115,7 @@ export const getRandomValue = (
     case FieldFormatEnum.keyword:
       return faker.string.sample();
     case FieldFormatEnum.number:
-      return faker.number.int();
+      return faker.number.int({ min: 1, max: 100 });
     case FieldFormatEnum.select:
       return !options || options.length === 0 ?
           []
@@ -312,11 +312,11 @@ export const optionFixture = {
   id: faker.number.int(),
   key: faker.string.sample(),
   name: faker.string.sample(),
-  field: fieldsFixture.filter((field) => {
-    return [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(
+  field: fieldsFixture.find((field) =>
+    [FieldFormatEnum.select, FieldFormatEnum.multiSelect].includes(
       field.format,
-    );
-  })[0],
+    ),
+  ),
 } as OptionEntity;
 
 export const issueFixture = {

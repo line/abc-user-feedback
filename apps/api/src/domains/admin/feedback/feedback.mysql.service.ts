@@ -125,24 +125,24 @@ export class FeedbackMySQLService {
                 if (stringFields[i].format === FieldFormatEnum.keyword) {
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') = :value`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
                       { value },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') = :value`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
                       { value },
                     );
                   }
                 } else {
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
                       { likeValue: `%${value as string | number}%` },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].id}"') like :likeValue`,
+                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
                       { likeValue: `%${value as string | number}%` },
                     );
                   }
@@ -292,12 +292,13 @@ export class FeedbackMySQLService {
           }
           let query = `JSON_SET(IFNULL(feedbacks.data,'{}'), `;
           for (const [index, fieldKey] of Object.entries(Object.keys(data))) {
-            query += `'$."${fieldKey}"', ${
+            query += `'$.${fieldKey}',
+            ${
               Array.isArray(data[fieldKey]) ?
                 data[fieldKey].length === 0 ?
                   'JSON_ARRAY()'
                 : 'JSON_ARRAY("' + data[fieldKey].join('","') + '")'
-              : '"' + data[fieldKey] + '"'
+              : `:${fieldKey}`
             }`;
 
             if (parseInt(index) + 1 !== Object.entries(data).length) {
@@ -311,6 +312,7 @@ export class FeedbackMySQLService {
         updatedAt: () => `'${DateTime.utc().toFormat('yyyy-MM-dd HH:mm:ss')}'`,
       })
       .where('id = :feedbackId', { feedbackId })
+      .setParameters(data)
       .execute();
   }
 

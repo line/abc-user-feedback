@@ -90,7 +90,7 @@ export class AuthService {
       SignUpMethodEnum.EMAIL,
     );
     if (user) throw new UserAlreadyExistsException();
-    await this.userService.validateEmail(email);
+    await this.memberService.validateEmail(email);
 
     const code = await this.codeService.setCode({
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
@@ -134,7 +134,7 @@ export class AuthService {
         CodeTypeEnum.EMAIL_VEIRIFICATION,
         dto.email,
       );
-    } catch (error) {
+    } catch {
       throw new BadRequestException('must request email verification');
     }
     if (!isVerified) throw new NotVerifiedEmailException();

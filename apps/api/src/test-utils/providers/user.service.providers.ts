@@ -23,7 +23,6 @@ import { UserService } from '@/domains/admin/user/user.service';
 import { CodeServiceProviders } from '@/test-utils/providers/code.service.providers';
 import { UserRepositoryStub } from '../stubs';
 import { getMockProvider } from '../util-functions';
-import { TenantServiceProviders } from './tenant.service.providers';
 
 export const MockUserInvitationMailingService = {
   send: jest.fn(),
@@ -41,5 +40,4 @@ export const UserServiceProviders = [
   ),
   getMockProvider(MailerService, MockMailerService),
   ...CodeServiceProviders,
-  ...TenantServiceProviders,
 ];

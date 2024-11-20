@@ -15,7 +15,9 @@
  */
 export { CreateChannelRequestDto } from './create-channel-request.dto';
 export { FindChannelsByProjectIdRequestDto } from './find-channels-by-project-id-request.dto';
+export { CreateChannelRequestFieldDto } from './create-channel-request.dto';
 export { ImageConfigRequestDto } from './image-config-request.dto';
 export { UpdateChannelRequestDto } from './update-channel-request.dto';
 export { UpdateChannelFieldsRequestDto } from './update-channel-fields-request.dto';
+export { UpdateChannelRequestFieldDto } from './update-channel-fields-request.dto';
 export { ImageUploadUrlTestRequestDto } from './image-upload-url-test-request.dto';

@@ -13,24 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { SchedulerRegistry } from '@nestjs/schedule';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
+import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import {
   FeedbackRepositoryStub,
+  ProjectRepositoryStub,
   TenantRepositoryStub,
   UserRepositoryStub,
 } from '../stubs';
+import { FeedbackServiceProviders } from './feedback.service.providers';
 
 export const TenantServiceProviders = [
   TenantService,
+  SchedulerRegistry,
+  SchedulerLockService,
   { provide: getRepositoryToken(TenantEntity), useClass: TenantRepositoryStub },
   { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
   {
     provide: getRepositoryToken(FeedbackEntity),
     useClass: FeedbackRepositoryStub,
   },
+  {
+    provide: getRepositoryToken(ProjectEntity),
+    useClass: ProjectRepositoryStub,
+  },
+  ...FeedbackServiceProviders,
 ];

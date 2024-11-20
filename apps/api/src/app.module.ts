@@ -106,6 +106,10 @@ export const domainModules = [
           ignore: (req: Request) => req.originalUrl === '/api/health',
         },
         customLogLevel: (req, res, err) => {
+          if (process.env.NODE_ENV === 'test') {
+            return 'silent';
+          }
+
           if (res.statusCode === 401) {
             return 'silent';
           }

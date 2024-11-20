@@ -30,6 +30,7 @@ import { FeedbackOSService } from '../admin/feedback/feedback.os.service';
 import { FeedbackService } from '../admin/feedback/feedback.service';
 import { IssueEntity } from '../admin/project/issue/issue.entity';
 import { IssueModule } from '../admin/project/issue/issue.module';
+import { ProjectModule } from '../admin/project/project/project.module';
 import { FeedbackIssueStatisticsModule } from '../admin/statistics/feedback-issue/feedback-issue-statistics.module';
 import { FeedbackStatisticsModule } from '../admin/statistics/feedback/feedback-statistics.module';
 import { APIController } from './api.controller';
@@ -45,6 +46,7 @@ import { IssueController } from './issue.controller';
     FieldModule,
     OptionModule,
     ChannelModule,
+    ProjectModule,
     FeedbackStatisticsModule,
     FeedbackIssueStatisticsModule,
     AuthModule,

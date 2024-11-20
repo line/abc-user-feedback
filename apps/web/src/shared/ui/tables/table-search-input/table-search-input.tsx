@@ -66,7 +66,7 @@ const TableSearchInput: React.FC<IProps> = (props) => {
       startIndex + 1,
       startIndex === endIndex ? inputValue.length : endIndex,
     );
-    return value.indexOf(':') === -1 ?
+    return !value.includes(':') ?
         ''
       : value.slice(0, value.indexOf(':')).trim();
   }, [inputValue, inputRef]);

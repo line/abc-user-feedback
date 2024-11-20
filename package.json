@@ -17,7 +17,8 @@
     "postinstall": "pnpm lint:ws",
     "typecheck": "turbo typecheck",
     "test": "turbo test",
-    "test:e2e": "cd apps/e2e && pnpm test:e2e"
+    "test:e2e": "cd apps/e2e && pnpm test:e2e",
+    "test:integration": "cd apps/api && pnpm test:integration"
   },
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
@@ -25,7 +26,7 @@
     "turbo": "^2.0.9",
     "typescript": "^5.5.4"
   },
-  "packageManager": "pnpm@9.8.0",
+  "packageManager": "pnpm@9.13.2",
   "engines": {
     "node": ">=20.11.1"
   }

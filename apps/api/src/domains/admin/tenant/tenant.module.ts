@@ -13,10 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { SchedulerLockModule } from '@/domains/operation/scheduler-lock/scheduler-lock.module';
+import { ChannelEntity } from '../channel/channel/channel.entity';
 import { FeedbackEntity } from '../feedback/feedback.entity';
+import { FeedbackModule } from '../feedback/feedback.module';
+import { MemberModule } from '../project/member/member.module';
+import { ProjectEntity } from '../project/project/project.entity';
 import { RoleEntity } from '../project/role/role.entity';
 import { RoleModule } from '../project/role/role.module';
 import { UserEntity } from '../user/entities/user.entity';
@@ -31,11 +36,21 @@ import { TenantService } from './tenant.service';
       RoleEntity,
       UserEntity,
       FeedbackEntity,
+      ChannelEntity,
+      ProjectEntity,
     ]),
     RoleModule,
+    SchedulerLockModule,
+    forwardRef(() => FeedbackModule),
+    forwardRef(() => MemberModule),
   ],
   providers: [TenantService],
   controllers: [TenantController],
   exports: [TenantService],
 })
-export class TenantModule {}
+export class TenantModule {
+  constructor(private readonly service: TenantService) {}
+  async onModuleInit() {
+    await this.service.addCronJob();
+  }
+}

@@ -70,7 +70,21 @@ You can configure the frontend for session password, maximum time span to query,
 
 You can configure the backend for MySQL, SMTP for email verification, OpenSearch-powered improved search experience, etc.
 
-## Setup Dev Environment (Local)
+## Setup Dev Environment using Command Line Tool without Dependencies
+
+ABC User Feedback supports a command line tool(`auf-cli`) that easily runs both the frontend and backend.
+
+With this command line tool, you can initialize the infrastructure and run the app powered by a pre-configured Docker image. Since the CLI is executable with `npx`, only an `npm` environment is required, and no other dependencies are necessary.
+
+```bash
+npx auf-cli init # initialize infrastructure
+npx auf-cli start # start app
+npx auf-cli stop # stop app
+```
+
+Please refer to the following npm package site: https://www.npmjs.com/package/auf-cli
+
+## Setup Dev Environment Manually (Local)
 
 ABC User Feedback is using a monorepo (powered by [TurboRepo](https://turbo.build/)) with multiple apps and packages.
 
@@ -140,9 +154,9 @@ Please follow the [contributing guidelines](./CONTRIBUTING.md) to contribute to 
 ## License
 
 ```
-Copyright 2023 LINE Corporation
+Copyright 2024 LY Corporation
 
-LINE Corporation licenses this file to you under the Apache License,
+LY Corporation licenses this file to you under the Apache License,
 version 2.0 (the "License"); you may not use this file except in compliance
 with the License. You may obtain a copy of the License at:
 

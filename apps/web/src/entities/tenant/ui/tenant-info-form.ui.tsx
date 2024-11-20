@@ -29,7 +29,7 @@ const TenantInfoForm: React.FC<IProps> = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <TextInput {...register('id')} label="Project ID" disabled />
+      <TextInput {...register('id')} label="Tenant ID" disabled />
       <TextInput
         {...register('siteName')}
         label="Name"
