@@ -56,7 +56,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.save') });
+        toast.positive({ title: t('v2.toast.success') });
       },
       onError(error) {
         toast.negative({ title: error.message });

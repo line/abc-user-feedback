@@ -3,7 +3,7 @@ const theme = require("../theme");
 
 function filterDefault(values) {
   return Object.fromEntries(
-    Object.entries(values).filter(([key]) => key !== "DEFAULT"),
+    Object.entries(values).filter(([key]) => key !== "DEFAULT")
   );
 }
 
@@ -31,6 +31,9 @@ module.exports = {
     {
       pattern:
         /text-(small|base|large|xlarge)-(normal|strong|underline|delete)/,
+    },
+    {
+      pattern: /rounded(-|)(0|4|6|8|12|16|24|full|)/,
     },
   ],
   theme,
@@ -65,7 +68,7 @@ module.exports = {
             "fade-in": (value) => ({ "--tw-enter-opacity": value }),
             "fade-out": (value) => ({ "--tw-exit-opacity": value }),
           },
-          { values: theme("animationOpacity") },
+          { values: theme("animationOpacity") }
         );
 
         matchUtilities(
@@ -73,7 +76,7 @@ module.exports = {
             "zoom-in": (value) => ({ "--tw-enter-scale": value }),
             "zoom-out": (value) => ({ "--tw-exit-scale": value }),
           },
-          { values: theme("animationScale") },
+          { values: theme("animationScale") }
         );
 
         matchUtilities(
@@ -81,7 +84,7 @@ module.exports = {
             "spin-in": (value) => ({ "--tw-enter-rotate": value }),
             "spin-out": (value) => ({ "--tw-exit-rotate": value }),
           },
-          { values: theme("animationRotate") },
+          { values: theme("animationRotate") }
         );
 
         matchUtilities(
@@ -111,22 +114,22 @@ module.exports = {
               "--tw-exit-translate-x": value,
             }),
           },
-          { values: theme("animationTranslate") },
+          { values: theme("animationTranslate") }
         );
 
         matchUtilities(
           { duration: (value) => ({ animationDuration: value }) },
-          { values: filterDefault(theme("animationDuration")) },
+          { values: filterDefault(theme("animationDuration")) }
         );
 
         matchUtilities(
           { delay: (value) => ({ animationDelay: value }) },
-          { values: theme("animationDelay") },
+          { values: theme("animationDelay") }
         );
 
         matchUtilities(
           { ease: (value) => ({ animationTimingFunction: value }) },
-          { values: filterDefault(theme("animationTimingFunction")) },
+          { values: filterDefault(theme("animationTimingFunction")) }
         );
 
         addUtilities({
@@ -136,17 +139,17 @@ module.exports = {
 
         matchUtilities(
           { "fill-mode": (value) => ({ animationFillMode: value }) },
-          { values: theme("animationFillMode") },
+          { values: theme("animationFillMode") }
         );
 
         matchUtilities(
           { direction: (value) => ({ animationDirection: value }) },
-          { values: theme("animationDirection") },
+          { values: theme("animationDirection") }
         );
 
         matchUtilities(
           { repeat: (value) => ({ animationIterationCount: value }) },
-          { values: theme("animationRepeat") },
+          { values: theme("animationRepeat") }
         );
       },
       {
@@ -227,7 +230,7 @@ module.exports = {
             },
           },
         },
-      },
+      }
     ),
     plugin(({ addBase }) => {
       addBase(require("../../dist/base"));

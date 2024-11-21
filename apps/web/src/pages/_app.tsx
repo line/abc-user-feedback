@@ -26,6 +26,7 @@ import {
 import { OverlayProvider } from '@toss/use-overlay';
 import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
+import { ThemeProvider } from 'next-themes';
 
 import { Toaster as Toaster2 } from '@ufb/react';
 import { Toaster } from '@ufb/ui';
@@ -39,8 +40,6 @@ import { useUserStore } from '@/entities/user';
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
-
-import { useThemeStore } from '@/entities/theme';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -67,24 +66,12 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     void initializeJwt();
-
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    useThemeStore
-      .getState()
-      .setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      useThemeStore.getState().setSystemTheme(e.matches ? 'dark' : 'light');
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
   }, []);
 
   return (
     <>
       <Head>
-        <title>User Feedback</title>
+        <title>ABC User Feedback</title>
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
       <style jsx global>{`
@@ -93,16 +80,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         }
       `}</style>
       <QueryClientProvider client={queryClient}>
-        <OverlayProvider>
-          <HydrationBoundary state={pageProps.dehydratedState}>
-            <TenantGuard>
-              {getLayout(<Component {...pageProps} />)}
-              <Toaster />
-              <Toaster2 />
-            </TenantGuard>
-          </HydrationBoundary>
-          {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />} */}
-        </OverlayProvider>
+        <ThemeProvider attribute="class" defaultTheme="system">
+          <OverlayProvider>
+            <HydrationBoundary state={pageProps.dehydratedState}>
+              <TenantGuard>
+                {getLayout(<Component {...pageProps} />)}
+                <Toaster />
+                <Toaster2 />
+              </TenantGuard>
+            </HydrationBoundary>
+            {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />} */}
+          </OverlayProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   );

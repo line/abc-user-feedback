@@ -59,10 +59,7 @@ const UserProfileForm: React.FC<IProps> = () => {
       queryOptions: {
         async onSuccess() {
           await refetch();
-          toast.success(t('toast.save'));
-        },
-        onError(error) {
-          toast.error(error.message);
+          toast.success(t('v2.toast.success'));
         },
       },
     });
@@ -74,6 +71,7 @@ const UserProfileForm: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await signOut();
+        toast.success(t('v2.toast.success'));
       },
     },
   });
@@ -122,11 +120,7 @@ const UserProfileForm: React.FC<IProps> = () => {
         className="flex flex-col gap-6"
       >
         <TextInput label="Email" value={user?.email} disabled />
-        <TextInput
-          label={t('main.profile.label.user-type')}
-          value={user?.type}
-          disabled
-        />
+        <TextInput label="Type" value={user?.type} disabled />
         <TextInput
           label="Name"
           placeholder={t('main.profile.placeholder.name')}

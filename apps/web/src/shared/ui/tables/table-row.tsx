@@ -14,9 +14,9 @@
  * under the License.
  */
 import { useEffect, useRef, useState } from 'react';
+import { useTheme } from 'next-themes';
 
 import { cn } from '@/shared';
-import { useThemeStore } from '@/entities/theme';
 
 interface IProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
   isSelected: boolean;
@@ -26,7 +26,7 @@ interface IProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
 const TableRow: React.FC<IProps> = (props) => {
   const { isSelected, children, hoverElement, ...otherProps } = props;
   const ref = useRef<HTMLTableRowElement>(null);
-  const { theme } = useThemeStore();
+  const { theme } = useTheme();
 
   const [isHover, setIsHover] = useState(false);
   const [rowHeight, setRowHeight] = useState(50);

@@ -45,7 +45,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await refetchTenant();
-        toast.positive({ title: t('toast.save') });
+        toast.positive({ title: t('v2.toast.success') });
       },
       onError(error) {
         toast.negative({ title: error.message ?? 'Error' });

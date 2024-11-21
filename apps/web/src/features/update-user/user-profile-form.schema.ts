@@ -16,6 +16,6 @@
 import { z } from 'zod';
 
 export const userProfileFormSchema = z.object({
-  name: z.string().nullable(),
-  department: z.string().nullable(),
+  name: z.string().max(20).nullable(),
+  department: z.string().max(20).nullable(),
 });

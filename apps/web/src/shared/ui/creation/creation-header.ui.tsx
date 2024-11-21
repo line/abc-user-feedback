@@ -14,10 +14,9 @@
  * under the License.
  */
 
-import Image from 'next/image';
-
 import { IconButton } from '@ufb/react';
-import { Icon } from '@ufb/ui';
+
+import Logo from '../logo.ui';
 
 interface Props {
   onClickGoBack?: () => void;
@@ -26,15 +25,7 @@ interface Props {
 const CreationHeader: React.FC<Props> = ({ onClickGoBack }) => {
   return (
     <div className="flex h-12 items-center justify-between p-6">
-      <div className="flex items-center gap-1">
-        <Image
-          src="/assets/images/logo.svg"
-          alt="logo"
-          width={24}
-          height={24}
-        />
-        <Icon name="Title" className="h-[24px] w-[123px]" />
-      </div>
+      <Logo />
       {onClickGoBack && (
         <IconButton
           icon="RiLogoutBoxRLine"

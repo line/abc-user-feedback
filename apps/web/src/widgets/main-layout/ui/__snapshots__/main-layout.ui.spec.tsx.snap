@@ -21,7 +21,7 @@ exports[`MainLayout snapshot center 1`] = `
             decoding="async"
             height="24"
             loading="lazy"
-            src="/assets/images/logo.svg"
+            src="/assets/images/logo.png"
             style="color: transparent;"
             width="24"
           />
@@ -124,7 +124,7 @@ exports[`MainLayout snapshot default 1`] = `
             decoding="async"
             height="24"
             loading="lazy"
-            src="/assets/images/logo.svg"
+            src="/assets/images/logo.png"
             style="color: transparent;"
             width="24"
           />
@@ -226,7 +226,7 @@ exports[`MainLayout snapshot with sidenav 1`] = `
             decoding="async"
             height="24"
             loading="lazy"
-            src="/assets/images/logo.svg"
+            src="/assets/images/logo.png"
             style="color: transparent;"
             width="24"
           />

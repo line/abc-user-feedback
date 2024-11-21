@@ -48,7 +48,7 @@ const UserProfileBox: React.FC<Props> = () => {
       <DropdownTrigger asChild>
         <IconButton icon="RiUser6Line" variant="ghost" />
       </DropdownTrigger>
-      <DropdownContent>
+      <DropdownContent align="end">
         <DropdownItem
           className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
           onClick={handleClickProfile}

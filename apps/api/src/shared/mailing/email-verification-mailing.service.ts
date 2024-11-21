@@ -32,7 +32,6 @@ export class EmailVerificationMailingService {
         .baseUrl ?? '';
   }
   async send({ code, email }: SendMailDto) {
-    console.log('code, email: ', code, email);
     await this.mailerService.sendMail({
       to: email,
       subject: `User feedback Email Verification`,

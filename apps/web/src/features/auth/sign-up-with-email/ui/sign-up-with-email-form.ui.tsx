@@ -20,24 +20,23 @@ import dayjs from 'dayjs';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useInterval } from 'react-use';
-import type { z } from 'zod';
 
 import { Button } from '@ufb/react';
 
 import { TextInput, useOAIMutation } from '@/shared';
 
 import { signUpWithEmailSchema } from '../sign-up-with-email.schema';
-
-type FormType = z.infer<typeof signUpWithEmailSchema>;
+import type { SignUpWithEmailType } from '../sign-up-with-email.type';
 
 interface IProps {
-  onSubmit: (data: FormType) => void;
+  onSubmit: (data: SignUpWithEmailType) => void;
   loading?: boolean;
   submitText: string;
+  initialValues?: SignUpWithEmailType | null;
 }
 
 const SignUpWithEmailForm: React.FC<IProps> = (props) => {
-  const { onSubmit, loading, submitText } = props;
+  const { onSubmit, loading, submitText, initialValues } = props;
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -50,9 +49,12 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
     watch,
     setError,
     clearErrors,
-  } = useForm<FormType>({
+  } = useForm<SignUpWithEmailType>({
     resolver: zodResolver(signUpWithEmailSchema),
-    defaultValues: { emailState: 'NOT_VERIFIED', code: '' },
+    defaultValues:
+      initialValues ?
+        { ...initialValues }
+      : { emailState: 'NOT_VERIFIED', code: '' },
   });
 
   const [expiredTime, setExpiredTime] = useState<string>();
@@ -135,7 +137,6 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
                 {t('auth.sign-up.button.request-auth-code')}
               </Button>
             }
-            required
           />
         </div>
         {watch('emailState') !== 'NOT_VERIFIED' && (
@@ -174,7 +175,6 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
                   undefined
                 )
               }
-              required
             />
           </div>
         )}
@@ -184,7 +184,6 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
           placeholder={t('input.placeholder.password')}
           error={formState.errors.password?.message}
           {...register('password')}
-          required
         />
         <TextInput
           type="password"
@@ -192,7 +191,6 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
           placeholder={t('input.placeholder.confirm-password')}
           error={formState.errors.confirmPassword?.message}
           {...register('confirmPassword')}
-          required
         />
       </div>
       <div className="flex flex-col gap-4">

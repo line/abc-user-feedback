@@ -18,8 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Switch } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Switch, toast } from '@ufb/react';
 
 import { useOAIMutation } from '@/shared';
 import type { AuthInfo } from '@/entities/tenant';
@@ -34,7 +33,7 @@ import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {}
 
-const AuthSetting: React.FC<IProps> = () => {
+const LoginSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
 
   const { tenant, refetchTenant } = useTenantStore();
@@ -44,7 +43,7 @@ const AuthSetting: React.FC<IProps> = () => {
   });
 
   const { reset, handleSubmit, formState, watch, setValue } = methods;
-  const { isRestrictDomain, useOAuth } = watch();
+  const { useEmail, useOAuth } = watch();
 
   const { mutate, isPending } = useOAIMutation({
     method: 'put',
@@ -52,10 +51,10 @@ const AuthSetting: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await refetchTenant();
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message ?? 'Error' });
+        toast.error(error.message);
       },
     },
   });
@@ -67,13 +66,6 @@ const AuthSetting: React.FC<IProps> = () => {
 
   const onSubmit = (input: AuthInfo) => {
     if (!tenant) return;
-    if (input.isRestrictDomain) {
-      input.allowDomains = (input.allowDomains ?? []).filter(
-        (v) => v && v.length > 0,
-      );
-    } else {
-      input.allowDomains = [];
-    }
     mutate({ ...tenant, ...input });
   };
 
@@ -95,25 +87,24 @@ const AuthSetting: React.FC<IProps> = () => {
               <div className="flex-1">
                 <h5 className="text-title-h5 mb-1">Email Login</h5>
                 <p className="text-neutral-tertiary text-small-normal">
-                  Email 인증을 통해 회원가입 및 로그인할 수 있는 방식을
-                  제공합니다.
+                  {t('v2.login-setting.email-description')}
                 </p>
               </div>
               <Switch
-                checked={isRestrictDomain}
+                checked={useEmail}
                 onCheckedChange={(checked) =>
-                  setValue('isRestrictDomain', checked, { shouldDirty: true })
+                  setValue('useEmail', checked, { shouldDirty: true })
                 }
               />
             </div>
-            <EmailConfigForm disabled={!isRestrictDomain} />
+            {useEmail && <EmailConfigForm disabled={!useEmail} />}
           </div>
           <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-6">
             <div className="flex">
               <div className="flex-1">
                 <h5 className="text-title-h5 mb-1">OAuth2.0 Login</h5>
                 <p className="text-neutral-tertiary text-small-normal">
-                  OAuth2.0을 활용해 로그인할 수 있는 방식을 제공합니다.
+                  {t('v2.login-setting.oauth-description')}
                 </p>
               </div>
               <Switch
@@ -123,7 +114,7 @@ const AuthSetting: React.FC<IProps> = () => {
                 }
               />
             </div>
-            <OAuthConfigForm disabled={!useOAuth} />
+            {useOAuth && <OAuthConfigForm disabled={!useOAuth} />}
           </div>
         </form>
       </FormProvider>
@@ -131,4 +122,4 @@ const AuthSetting: React.FC<IProps> = () => {
   );
 };
 
-export default AuthSetting;
+export default LoginSetting;

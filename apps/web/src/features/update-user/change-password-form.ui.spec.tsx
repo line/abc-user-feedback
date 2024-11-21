@@ -89,7 +89,7 @@ describe('ResetPasswordWithEmailForm', () => {
 
       await waitFor(() =>
         expect(
-          screen.getByText(new RegExp('toast.save', 'i')),
+          screen.getByText(new RegExp('v2.toast.success', 'i')),
         ).toBeInTheDocument(),
       );
     });

@@ -18,8 +18,8 @@ import Link from 'next/link';
 
 import { Divider, IconButton } from '@ufb/react';
 
-import { LanguageSelectBox } from '@/shared';
-import { ThemeSelectBox } from '@/entities/theme';
+import { LanguageSelectBox, ThemeSelectBox } from '@/shared';
+import { useUserStore } from '@/entities/user';
 
 import MenuList from './menu-list.ui';
 import ProjectSelectBox from './project-select-box.ui';
@@ -30,6 +30,7 @@ interface IProps {
 }
 
 const Header: React.FC<IProps> = ({ projectId }) => {
+  const { user } = useUserStore();
   return (
     <header className="navbar items-center gap-2">
       <ProjectSelectBox projectId={projectId} />
@@ -38,9 +39,11 @@ const Header: React.FC<IProps> = ({ projectId }) => {
         <MenuList projectId={projectId} />
       </div>
       <div className="flex items-center gap-3">
-        <Link href={{ pathname: '/main/tenant' }}>
-          <IconButton icon="RiBuildingLine" variant="ghost" />
-        </Link>
+        {user?.type === 'SUPER' && (
+          <Link href={{ pathname: '/main/tenant' }}>
+            <IconButton icon="RiBuildingLine" variant="ghost" />
+          </Link>
+        )}
         <ThemeSelectBox />
         <LanguageSelectBox />
         <UserProfileBox />

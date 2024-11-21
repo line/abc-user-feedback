@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -42,23 +41,16 @@ const defaultValues: IForm = {
   email: '',
   type: 'GENERAL',
 };
+
 interface IProps extends FormOverlayProps<IForm> {}
 
 const InviteUserPopover: React.FC<IProps> = (props) => {
   const { close, isOpen, onSubmit } = props;
   const { t } = useTranslation();
-  const { register, watch, setValue, reset, handleSubmit, formState } =
-    useForm<IForm>({ resolver: zodResolver(scheme), defaultValues });
+  const { register, watch, setValue, handleSubmit, formState } = useForm<IForm>(
+    { resolver: zodResolver(scheme), defaultValues },
+  );
   const { projectId, type, roleId } = watch();
-
-  useEffect(() => {
-    if (type !== 'SUPER') return;
-    reset({ projectId: undefined, roleId: undefined }, { keepValues: true });
-  }, [type]);
-
-  useEffect(() => {
-    reset({ roleId: undefined }, { keepValues: true });
-  }, [projectId]);
 
   const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
 

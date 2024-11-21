@@ -24,8 +24,7 @@ import {
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button, toast } from '@ufb/react';
-import { Icon } from '@ufb/ui';
+import { Badge, Button, toast } from '@ufb/react';
 
 import type { SearchItemType } from '@/shared';
 import {
@@ -45,37 +44,48 @@ import { getUserColumns } from '../user-columns';
 import type { UpdateUser, UserMember } from '../user.type';
 import UpdateUserDialog from './update-user-dialog.ui';
 
-interface IProps {}
+interface IProps {
+  createButton?: React.ReactNode;
+}
 
-const UserManagementTable: React.FC<IProps> = () => {
+const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
 
   const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
+  const [pageCount, setPageCount] = useState(0);
 
   const columns = useMemo(() => getUserColumns(), []);
   const table = useReactTable({
     columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    manualSorting: true,
     getRowId: (row) => String(row.id),
-    getFilteredRowModel: getFilteredRowModel(),
     enableColumnFilters: true,
-    initialState: { sorting: [{ id: 'createdAt', desc: false }] },
+    initialState: { sorting: [{ id: 'createdAt', desc: true }] },
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount,
+    getFilteredRowModel: getFilteredRowModel(),
   });
+
   const { sorting, pagination } = table.getState();
   const sort = useSort(sorting);
 
   const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
-  const { data, refetch } = useUserSearch({
-    page: pagination.pageIndex,
+
+  const {
+    data: userData,
+    refetch,
+    isLoading,
+  } = useUserSearch({
+    page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
-    query,
     order: sort as { createdAt: 'ASC' | 'DESC' },
+    query,
   });
+
   const { mutateAsync: deleteUsers } = useOAIMutation({
     method: 'delete',
     path: '/api/admin/users',
@@ -110,8 +120,9 @@ const UserManagementTable: React.FC<IProps> = () => {
   });
 
   useEffect(() => {
-    setRows(data?.items ?? []);
-  }, [data]);
+    setRows(userData?.items ?? []);
+    setPageCount(userData?.meta.totalPages ?? 0);
+  }, [userData]);
 
   const searchItems = useMemo(() => {
     return [
@@ -191,6 +202,15 @@ const UserManagementTable: React.FC<IProps> = () => {
             }
             title="Project"
           />
+          {table.getState().columnFilters.length > 0 && (
+            <Button
+              variant="ghost"
+              iconL="RiCloseLine"
+              onClick={() => table.resetColumnFilters()}
+            >
+              Reset
+            </Button>
+          )}
         </div>
         {selectedRowIds.length > 0 && (
           <Button
@@ -199,29 +219,23 @@ const UserManagementTable: React.FC<IProps> = () => {
             onClick={openDeleteUsersDialog}
             iconL="RiDeleteBin6Line"
           >
-            User 삭제 ({selectedRowIds.length})
+            {t('v2.button.name.delete', { name: 'User' })}
+            <Badge variant="subtle" className="!text-tint-red">
+              {selectedRowIds.length}
+            </Badge>
           </Button>
         )}
       </div>
       <BasicTable
         table={table}
-        emptyComponent={
-          <div className="my-32 flex flex-col items-center justify-center gap-3">
-            <Icon
-              name="WarningTriangleFill"
-              className="text-quaternary"
-              size={32}
-            />
-            <p className="text-secondary">{t('text.no-data')}</p>
-          </div>
-        }
         onClickRow={(_, row) => openUpdateUserDialog(row)}
-        createButton
+        isLoading={isLoading}
+        createButton={createButton}
       />
       <div className="flex items-center justify-between">
         <p className="text-neutral-tertiary">
-          {table.getSelectedRowModel().rows.length} of {data?.meta.totalItems}{' '}
-          row(s) selected.
+          {table.getSelectedRowModel().rows.length} of{' '}
+          {userData?.meta.totalItems} row(s) selected.
         </p>
         <TablePagination table={table} />
       </div>

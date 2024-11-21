@@ -48,7 +48,7 @@ const LanguageSelectBox: React.FC<Props> = () => {
       <DropdownTrigger asChild>
         <IconButton icon="RiTranslate2" variant="ghost" />
       </DropdownTrigger>
-      <DropdownContent>
+      <DropdownContent align="end">
         {router.locales
           ?.filter((v) => v !== 'default')
           .map((v) => (

@@ -13,27 +13,43 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import Image from 'next/image';
 
 import { Icon } from '@ufb/react';
 
 import { useTenantStore } from '@/entities/tenant';
 
+import { cn } from '../utils';
+
 interface Props extends React.PropsWithChildren {
   title: string;
   image: string;
+  imageSub?: React.ReactNode;
+  description?: string;
 }
 
 const AnonymousTemplate = (props: Props) => {
-  const { title, children, image } = props;
+  const { title, children, image, imageSub, description } = props;
   const { tenant } = useTenantStore();
 
   return (
     <div className="flex h-full items-center justify-center">
       <div className="flex items-stretch justify-center gap-4">
-        <div className="border-neutral-tertiary flex w-[520px] flex-col gap-10 rounded border p-8">
+        <div
+          className="border-neutral-tertiary rounded-24 flex w-[520px] flex-col gap-10 border p-8"
+          style={{
+            boxShadow:
+              '0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)',
+          }}
+        >
           <div className="flex h-[54px] justify-between">
-            <p className="text-xlarge-strong">{title}</p>
+            <div>
+              <h3 className="text-xlarge-strong">{title}</h3>
+              {description && (
+                <p className="text-small-normal text-neutral-tertiary">
+                  {description}
+                </p>
+              )}
+            </div>
             {tenant && (
               <span>
                 <Icon name="RiBuildingLine" size={16} />
@@ -43,8 +59,13 @@ const AnonymousTemplate = (props: Props) => {
           </div>
           {children}
         </div>
-        <div className="flex w-[520px] flex-col items-center justify-end">
+        <div
+          className={cn('flex w-[520px] flex-col items-center justify-end', {
+            'justify-center': !!imageSub,
+          })}
+        >
           <img src={image} alt="sign-in-image" />
+          {imageSub}
         </div>
       </div>
     </div>

@@ -14,5 +14,5 @@
  * under the License.
  */
 export { default as TenantInfoSetting } from './tenant-info-setting.ui';
-export { default as AuthSetting } from './auth-setting.ui';
+export { default as LoginSetting } from './login-setting.ui';
 export { default as UserManagementSetting } from './user-management-setting.ui';

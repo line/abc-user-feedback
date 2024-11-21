@@ -2,8 +2,7 @@
   "tenant": {
     "create": {
       "title": "Mandanten-Einstellungen",
-      "site-name": "Seitenname",
-      "complete-title": "Mandant erstellt"
+      "site-name": "Seitenname"
     }
   },
   "auth": {
@@ -547,8 +546,13 @@
       "in-progress": "In Bearbeitung",
       "continue": "Fortfahren",
       "test-connection-failed": "Verbindungstest fehlgeschlagen",
-      "oh-my": "Oh mein!",
-      "no-project-in-profile-page": "{{name}}님. Derzeit sind keine registrierten Projektinformationen verfügbar. \n Bitte wenden Sie sich an den zuständigen Projektmanager, um sich als Mitglied registrieren zu lassen, oder stellen Sie eine Anfrage."
+      "all-domains-allow": "Alle Domains sind erlaubt."
+    },
+    "create-tenant": {
+      "title": "Tenant-Erstellung",
+      "complete-title": "Tenant-Erstellung abgeschlossen",
+      "description": "Bitte geben Sie den Namen des Unternehmens oder der Organisation ein, die ABC User Feedback verwenden wird.",
+      "complete-description": "Tenant-Einrichtung ist abgeschlossen. Versuchen Sie, sich mit dem erstellten Master-Konto zum ersten Mal anzumelden."
     },
     "placeholder": {
       "select": "Bitte auswählen.",
@@ -585,6 +589,10 @@
     "description": {
       "create-project": "Project wurde erfolgreich erstellt.\nAls Nächstes müssen Sie einen Channel erstellen, um Feedback zu sammeln.\nFahren Sie mit 'Channel erstellen' zum nächsten Schritt fort.",
       "create-channel": "Channel wurde erfolgreich erstellt.\nSie können jetzt Benutzerfeedback sammeln und verwalten.\nKlicken Sie auf 'Starten', um die vollständige Funktionalität zu nutzen."
+    },
+    "login-setting": {
+      "oauth-description": "Bietet eine Möglichkeit, sich mit OAuth2.0 anzumelden.",
+      "email-description": "Bietet eine Möglichkeit, sich über E-Mail-Verifizierung zu registrieren und anzumelden."
     }
   }
 }

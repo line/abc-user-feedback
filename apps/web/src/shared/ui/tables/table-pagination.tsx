@@ -24,6 +24,8 @@ import {
   IconButton,
 } from '@ufb/react';
 
+const PAGE_SIZES = [10, 20, 30, 40, 50];
+
 interface IProps<T> {
   table: Table<T>;
 }
@@ -47,8 +49,14 @@ const TablePagination = <T,>(props: IProps<T>) => {
           </Button>
         </DropdownTrigger>
         <DropdownContent>
-          <DropdownItem onClick={() => table.setPageSize(10)}>10</DropdownItem>
-          <DropdownItem onClick={() => table.setPageSize(20)}>20</DropdownItem>
+          {PAGE_SIZES.map((pageSize) => (
+            <DropdownItem
+              key={pageSize}
+              onClick={() => table.setPageSize(pageSize)}
+            >
+              {pageSize}
+            </DropdownItem>
+          ))}
         </DropdownContent>
       </Dropdown>
       <p>

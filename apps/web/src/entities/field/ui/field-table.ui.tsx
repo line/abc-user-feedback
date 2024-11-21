@@ -49,28 +49,24 @@ const FieldTable: React.FC<IProps> = (props) => {
   });
 
   return (
-    <div className="overflow-auto">
+    <>
       <div className="mb-4 flex gap-3">
-        {table.getColumn('status') && (
-          <TableFacetedFilter
-            column={table.getColumn('status')}
-            options={[
-              { label: 'Inactive', value: 'INACTIVE' },
-              { label: 'Active', value: 'ACTIVE' },
-            ]}
-            title="Status"
-          />
-        )}
-        {table.getColumn('property') && (
-          <TableFacetedFilter
-            column={table.getColumn('property')}
-            options={[
-              { label: 'Editable', value: 'EDITABLE' },
-              { label: 'Read Only', value: 'READ_ONLY' },
-            ]}
-            title="Property"
-          />
-        )}
+        <TableFacetedFilter
+          column={table.getColumn('status')}
+          options={[
+            { label: 'Inactive', value: 'INACTIVE' },
+            { label: 'Active', value: 'ACTIVE' },
+          ]}
+          title="Status"
+        />
+        <TableFacetedFilter
+          column={table.getColumn('property')}
+          options={[
+            { label: 'Editable', value: 'EDITABLE' },
+            { label: 'Read Only', value: 'READ_ONLY' },
+          ]}
+          title="Property"
+        />
         {table.getState().columnFilters.length > 0 && (
           <Button
             variant="ghost"
@@ -88,7 +84,7 @@ const FieldTable: React.FC<IProps> = (props) => {
           reorder?.(data.map((field, index) => ({ ...field, order: index })));
         }}
       />
-    </div>
+    </>
   );
 };
 

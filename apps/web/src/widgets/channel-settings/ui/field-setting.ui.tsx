@@ -17,8 +17,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Divider, ToggleGroup, ToggleGroupItem } from '@ufb/react';
-import { Popover, PopoverModalContent, PopoverTrigger, toast } from '@ufb/ui';
+import { Divider, toast, ToggleGroup, ToggleGroupItem } from '@ufb/react';
+import { Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
 import {
   SettingAlert,
@@ -67,10 +67,10 @@ const FieldSetting: React.FC<IProps> = (props) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        toast.positive({ title: t('toast.save') });
+        toast.success(t('v2.toast.success'));
       },
       onError(error) {
-        toast.negative({ title: error.message });
+        toast.error(error.message);
       },
     },
   });

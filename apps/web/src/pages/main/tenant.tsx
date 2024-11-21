@@ -14,6 +14,7 @@
  * under the License.
  */
 import type { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
 import { useTranslation } from 'react-i18next';
@@ -25,14 +26,15 @@ import { DEFAULT_LOCALE } from '@/shared';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import { Layout } from '@/widgets/layout';
 import {
-  AuthSetting,
+  LoginSetting,
   TenantInfoSetting,
   UserManagementSetting,
 } from '@/widgets/setting-menu';
 
 const TenantPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
-  const [currentMenu, setCurrentMenu] = useQueryState<string>(
+  const router = useRouter();
+  const [currentMenu] = useQueryState<string>(
     'menu',
     parseAsString.withDefault('tenant'),
   );
@@ -45,7 +47,9 @@ const TenantPage: NextPageWithLayout = () => {
           orientation="vertical"
           className="w-full p-0"
           value={currentMenu}
-          onValueChange={(value) => setCurrentMenu(value)}
+          onValueChange={(value) =>
+            router.push({ pathname: router.pathname, query: { menu: value } })
+          }
         >
           <MenuItem value="tenant" iconL="RiInformation2Line">
             {t('tenant-setting-menu.tenant-info')}
@@ -60,7 +64,7 @@ const TenantPage: NextPageWithLayout = () => {
       }
     >
       {currentMenu === 'tenant' && <TenantInfoSetting />}
-      {currentMenu === 'login' && <AuthSetting />}
+      {currentMenu === 'login' && <LoginSetting />}
       {currentMenu === 'user' && <UserManagementSetting />}
     </SideMenuLayout>
   );

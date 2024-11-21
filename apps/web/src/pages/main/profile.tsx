@@ -15,6 +15,7 @@
  */
 import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
@@ -43,8 +44,9 @@ const ProfilePage: NextPageWithLayout = () => {
 
   const overlay = useOverlay();
   const { user } = useUserStore();
+  const router = useRouter();
 
-  const [currentMenu, setCurrentMenu] = useQueryState<string>(
+  const [currentMenu] = useQueryState<string>(
     'menu',
     parseAsString.withDefault('profile'),
   );
@@ -53,6 +55,7 @@ const ProfilePage: NextPageWithLayout = () => {
     variables: { limit: 0 },
     queryOptions: { retry: false },
   });
+
   const openWarningNoProjects = () => {
     overlay.open(({ close, isOpen }) => (
       <Dialog open={isOpen} onOpenChange={close}>
@@ -79,7 +82,7 @@ const ProfilePage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (!data || data.meta.totalItems > 1) return;
+    if (!data || data.meta.totalItems > 0) return;
     openWarningNoProjects();
   }, [data]);
 
@@ -91,7 +94,9 @@ const ProfilePage: NextPageWithLayout = () => {
           orientation="vertical"
           className="w-full p-0"
           value={currentMenu}
-          onValueChange={(value) => setCurrentMenu(value)}
+          onValueChange={(value) =>
+            router.push({ pathname: router.pathname, query: { menu: value } })
+          }
         >
           <MenuItem value="profile" iconL="RiInformation2Line">
             {t('main.profile.profile-info')}

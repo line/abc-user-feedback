@@ -2,8 +2,7 @@
   "tenant": {
     "create": {
       "title": "租户设置",
-      "site-name": "站点名称",
-      "complete-title": "租户创建完成"
+      "site-name": "站点名称"
     }
   },
   "auth": {
@@ -547,8 +546,13 @@
       "in-progress": "进行中",
       "continue": "继续",
       "test-connection-failed": "连接测试失败",
-      "oh-my": "哦，我的！",
-      "no-project-in-profile-page": "{{name}}님. 当前没有注册的Project信息。 \n 请向注册目标Project管理员请求Member注册或进行咨询。"
+      "all-domains-allow": "允许所有域。"
+    },
+    "create-tenant": {
+      "title": "租户设置",
+      "site-name": "站点名称",
+      "complete-title": "租户创建完成",
+      "description": "ABC User Feedback을 사용할 회사 또는 조직의 이름을 입력해 주세요. "
     },
     "placeholder": {
       "select": "请选择。",
@@ -585,6 +589,10 @@
     "description": {
       "create-project": "Project创建成功。\n接下来，需要创建Channel来收集反馈。\n请通过'创建Channel'继续下一步。",
       "create-channel": "Channel创建成功。\n现在您可以开始收集和管理用户反馈了。\n请通过'开始使用'来全面体验。"
+    },
+    "login-setting": {
+      "oauth-description": "提供使用OAuth2.0登录的方式。",
+      "email-description": "提供通过Email认证注册和登录的方式。"
     }
   }
 }

@@ -32,4 +32,18 @@ export const changePasswordFormSchema = z
       message: 'must equal New Password',
       path: ['confirmNewPassword'],
     },
-  );
+  )
+  .refine(
+    ({ newPassword }) => /[a-zA-Z!@#$%^&*(),.?":{}|<>]/.test(newPassword),
+    {
+      message: 'must contain at least one letter or special character',
+      path: ['newPassword'],
+    },
+  )
+  .refine(({ newPassword }) => !/(.)\1/.test(newPassword), {
+    message: 'must not contain consecutive identical characters',
+    path: ['newPassword'],
+  });
+// 비밀번호는 최소 8자리 이상이어야 합니다.
+// 영문 또는 특수문자가 포함되어야 합니다.
+// 동일 숫자/문자를 연속해서 사용이 불가합니다.

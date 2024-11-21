@@ -62,37 +62,45 @@ const SignInPage: NextPageWithLayout = () => {
     <AnonymousTemplate
       title={t('button.sign-in')}
       image="/assets/images/sign-in.png"
+      imageSub={
+        <p className="text-title-h3 text-center">
+          Listen to <br />
+          users' voice & improve.
+        </p>
+      }
     >
-      <form
-        id="sign-in"
-        className="flex flex-col gap-4"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {tenant?.useOAuth && (
-          <>
-            <SignInWithOAuthButton />
-            <div className="flex items-center gap-2">
-              <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
-              <span className="text-neutral-tertiary">or With Email</span>
-              <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
-            </div>
-          </>
-        )}
-        <TextInput
-          label="Email"
-          placeholder={t('v2.placeholder.text')}
-          type="email"
-          {...register('email')}
-          error={formState.errors.email?.message}
-        />
-        <TextInput
-          label="Password"
-          placeholder={t('v2.placeholder.text')}
-          type="password"
-          {...register('password')}
-          error={formState.errors.password?.message}
-        />
-      </form>
+      {tenant?.useOAuth && (
+        <>
+          <SignInWithOAuthButton />
+          <div className="flex items-center gap-2">
+            <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
+            <span className="text-neutral-tertiary">or With Email</span>
+            <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
+          </div>
+        </>
+      )}
+      {tenant?.useEmail && (
+        <form
+          id="sign-in"
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <TextInput
+            label="Email"
+            placeholder={t('v2.placeholder.text')}
+            type="email"
+            {...register('email')}
+            error={formState.errors.email?.message}
+          />
+          <TextInput
+            label="Password"
+            placeholder={t('v2.placeholder.text')}
+            type="password"
+            {...register('password')}
+            error={formState.errors.password?.message}
+          />
+        </form>
+      )}
       <div className="flex flex-col gap-4">
         <Button
           size="medium"
@@ -103,12 +111,16 @@ const SignInPage: NextPageWithLayout = () => {
           {t('button.sign-in')}
         </Button>
         <div className="flex flex-col gap-3">
-          <Link href="/auth/reset-password" className="text-center">
-            {t('link.reset-password.title')}
-          </Link>
-          <Link href="/auth/sign-up" className="text-center">
-            {t('button.sign-up')}
-          </Link>
+          {tenant?.useEmail && (
+            <Link href="/auth/reset-password" className="text-center underline">
+              {t('link.reset-password.title')}
+            </Link>
+          )}
+          {tenant?.useEmail && (
+            <Link href="/auth/sign-up" className="text-center underline">
+              {t('button.sign-up')}
+            </Link>
+          )}
         </div>
       </div>
     </AnonymousTemplate>

@@ -52,7 +52,7 @@ const CreateTemplate = <T extends string>(props: IProps<T>) => {
       <div className="flex h-12 items-center justify-between p-6">
         <div className="flex items-center gap-1">
           <Image
-            src="/assets/images/logo.svg"
+            src="/assets/images/logo.png"
             alt="logo"
             width={24}
             height={24}

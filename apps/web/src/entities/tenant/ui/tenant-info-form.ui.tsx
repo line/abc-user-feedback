@@ -17,15 +17,18 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@/shared';
+import { TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { TenantInfo } from '../tenant.type';
 
 interface IProps {}
 
 const TenantInfoForm: React.FC<IProps> = () => {
-  const { register, formState } = useFormContext<TenantInfo>();
   const { t } = useTranslation();
+
+  const { register, formState } = useFormContext<TenantInfo>();
+
+  useWarnIfUnsavedChanges(formState.isDirty);
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,7 +44,7 @@ const TenantInfoForm: React.FC<IProps> = () => {
         {...register('description')}
         label="Description"
         placeholder={t('placeholder', { name: 'Description' })}
-        error={formState.errors.siteName?.message}
+        error={formState.errors.description?.message}
       />
     </div>
   );

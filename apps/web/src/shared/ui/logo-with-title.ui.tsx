@@ -26,7 +26,7 @@ const LogoWithTitle: React.FC<IProps> = ({ title }) => {
     <div className="mb-12">
       <div className="mb-2 flex gap-0.5">
         <Image
-          src="/assets/images/logo.svg"
+          src="/assets/images/logo.png"
           alt="logo"
           width={12}
           height={12}

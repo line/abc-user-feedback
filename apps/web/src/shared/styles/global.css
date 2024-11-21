@@ -53,7 +53,7 @@
 }
 
 body {
-  @apply font-14-regular text-primary bg-primary;
+  @apply font-14-regular text-primary bg-primary min-w-[1280px];
   /* font-family: LINESeedJP, LINESeedKR, LINESeedEN, sans-serif; */
 }
 

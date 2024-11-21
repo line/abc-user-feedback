@@ -2,8 +2,7 @@
   "tenant": {
     "create": {
       "title": "Tenant Settings",
-      "site-name": "Site Name",
-      "complete-title": "Tenant Creation Complete"
+      "site-name": "Site Name"
     }
   },
   "auth": {
@@ -420,7 +419,7 @@
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant Information",
-    "sign-up-mgmt": "Login & Signup Management",
+    "sign-up-mgmt": "Login Management",
     "user-mgmt": "User Management"
   },
   "project-setting-menu": {
@@ -475,12 +474,6 @@
   },
   "v2": {
     "button": {
-      "name": {
-        "create": "Create {{name}}",
-        "delete": "Delete {{name}}",
-        "register": "Register {{name}}",
-        "add": "Add {{name}}"
-      },
       "create": "Create",
       "delete": "Delete",
       "register": "Register",
@@ -489,7 +482,14 @@
       "out": "Exit",
       "confirm": "Confirm",
       "next": "Next",
-      "previous": "Previous"
+      "previous": "Previous",
+      "name": {
+        "create": "Create {{name}}",
+        "delete": "Delete {{name}}",
+        "register": "Register {{name}}",
+        "add": "Add {{name}}",
+        "invite": "Invite {{name}}"
+      }
     },
     "project-setting-menu": {
       "project-info": "Project Information",
@@ -547,8 +547,13 @@
       "in-progress": "In Progress",
       "continue": "Continue",
       "test-connection-failed": "Test Connection failed",
-      "oh-my": "Oh my!",
-      "no-project-in-profile-page": "{{name}}, currently no registered project information. \n Ask or contact the registered Project Administrator to register as a Member."
+      "all-domains-allow": "All domains are allowed."
+    },
+    "create-tenant": {
+      "title": "Tenant Creation",
+      "complete-title": "Tenant Creation Complete",
+      "description": "Please enter the name of the company or organization that will use ABC User Feedback.",
+      "complete-description": "Tenant setup is complete. Try logging in for the first time with the master account you created."
     },
     "placeholder": {
       "select": "Please select.",
@@ -585,6 +590,10 @@
     "description": {
       "create-project": "Project has been created successfully.\nNext, you need to create a Channel to collect feedback.\nProceed to the next step through 'Create Channel'.",
       "create-channel": "Channel has been created successfully.\nNow you're ready to collect and manage user feedback.\nStart experiencing it in full through 'Get Started'."
+    },
+    "login-setting": {
+      "oauth-description": "Provides a way to log in using OAuth2.0.",
+      "email-description": "Provides a way to sign up and log in using email verification."
     }
   }
 }

@@ -85,7 +85,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     },
     onSuccess: async () => {
       await refetch();
-      toast.positive({ title: t('toast.save') });
+      toast.positive({ title: t('v2.toast.success') });
     },
     onError: (error) => {
       toast.negative({ title: error.message });
@@ -103,7 +103,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     onSuccess: async () => {
       await refetch();
       setInputValue('');
-      toast.positive({ title: t('toast.save') });
+      toast.positive({ title: t('v2.toast.success') });
     },
     onError: (error) => {
       toast.negative({ title: error.message });

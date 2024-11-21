@@ -2,8 +2,7 @@
   "tenant": {
     "create": {
       "title": "Tenant 설정",
-      "site-name": "사이트 이름",
-      "complete-title": "Tenant 설정 완료"
+      "site-name": "사이트 이름"
     }
   },
   "auth": {
@@ -413,7 +412,7 @@
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant 정보",
-    "sign-up-mgmt": "Login & Signup 관리",
+    "sign-up-mgmt": "Login 관리",
     "user-mgmt": "User 관리"
   },
   "project-setting-menu": {
@@ -472,7 +471,8 @@
         "create": "{{name}} 생성",
         "delete": "{{name}} 삭제",
         "register": "{{name}} 등록",
-        "add": "{{name}} 추가"
+        "add": "{{name}} 추가",
+        "invite": "{{name}} 초대"
       },
       "create": "생성하기",
       "delete": "삭제",
@@ -542,6 +542,12 @@
       "test-connection-failed": "연동 테스트에 실패했습니다.",
       "all-domains-allow": "모든 도메인을 허용합니다."
     },
+    "create-tenant": {
+      "title": "Tenant 생성",
+      "complete-title": "Tenant 생성 완료",
+      "description": "ABC User Feedback을 사용할 회사 또는 조직의 이름을 입력해 주세요.",
+      "complete-description": "Tenant 설정을 완료했습니다. 생성한 마스터 계정으로 첫 로그인을 시도해 보세요."
+    },
     "placeholder": {
       "select": "선택해주세요.",
       "text": "입력해주세요.",
@@ -577,6 +583,10 @@
     "description": {
       "create-project": "성공적으로 Project를 생성했습니다.\n다음은 피드백을 수집하기 위해 Channel을 생성해 줘야 합니다.\n‘Channel 생성'을 통해 다음 단계로 진행해 보세요.",
       "create-channel": "성공적으로 Channel을 생성했습니다.\n이제 유저 피드백을 수집하고 관리할 준비가 되었습니다.\n‘시작하기'를 통해 본격적으로 경험해 보세요."
+    },
+    "login-setting": {
+      "oauth-description": "OAuth2.0을 활용해 로그인할 수 있는 방식을 제공합니다.",
+      "email-description": "Email 인증을 통해 회원가입 및 로그인할 수 있는 방식을 제공합니다."
     }
   }
 }

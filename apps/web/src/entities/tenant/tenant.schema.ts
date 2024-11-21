@@ -15,29 +15,31 @@
  */
 import { z } from 'zod';
 
+const oauthConfigSchema = z.object({
+  clientId: z.string().min(1),
+  emailKey: z.string().min(1),
+  scopeString: z.string().min(1),
+  clientSecret: z.string().min(1),
+  authCodeRequestURL: z.string().min(1),
+  accessTokenRequestURL: z.string().min(1),
+  userProfileRequestURL: z.string().min(1),
+});
 export const tenantSchema = z.object({
   id: z.number(),
-  siteName: z.string(),
-  description: z.string().nullable(),
+  siteName: z.string().min(1).max(20),
+  description: z.string().max(50).nullable(),
   useEmail: z.boolean(),
   useOAuth: z.boolean(),
-  isPrivate: z.boolean(),
-  isRestrictDomain: z.boolean(),
   allowDomains: z
     .array(z.string().refine((v) => /[a-z]+\.[a-z]{2,3}/.test(v)))
     .nullable(),
+  oauthConfig: oauthConfigSchema.nullable(),
+  /* deprecated */
+  isPrivate: z.boolean(),
+  /* deprecated */
+  isRestrictDomain: z.boolean(),
+  /* deprecated */
   useEmailVerification: z.boolean(),
-  oauthConfig: z
-    .object({
-      clientId: z.string(),
-      emailKey: z.string(),
-      scopeString: z.string(),
-      clientSecret: z.string(),
-      authCodeRequestURL: z.string(),
-      accessTokenRequestURL: z.string(),
-      userProfileRequestURL: z.string(),
-    })
-    .nullable(),
 });
 
 export const tenantInfoSchema = tenantSchema.pick({
@@ -45,11 +47,15 @@ export const tenantInfoSchema = tenantSchema.pick({
   siteName: true,
   description: true,
 });
-export const authInfoScema = tenantSchema.pick({
-  isPrivate: true,
-  isRestrictDomain: true,
-  allowDomains: true,
-  useOAuth: true,
-  useEmail: true,
-  oauthConfig: true,
-});
+export const authInfoScema = tenantSchema
+  .pick({
+    useEmail: true,
+    allowDomains: true,
+    useOAuth: true,
+    oauthConfig: true,
+  })
+  .refine((schema) =>
+    schema.useOAuth ?
+      oauthConfigSchema.safeParse(schema.oauthConfig).success
+    : true,
+  );

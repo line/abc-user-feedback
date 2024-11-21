@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import { useTheme } from 'next-themes';
+
 import {
   Dropdown,
   DropdownContent,
@@ -22,20 +24,22 @@ import {
   IconButton,
 } from '@ufb/react';
 
-import { useThemeStore } from '../theme.model';
+import { firstLeterPascal } from '../utils';
 
 const ThemeSelectBox: React.FC = () => {
-  const { setTheme } = useThemeStore();
+  const { themes, setTheme } = useTheme();
 
   return (
     <Dropdown>
       <DropdownTrigger asChild>
         <IconButton icon="RiSunLine" variant="ghost" />
       </DropdownTrigger>
-      <DropdownContent>
-        <DropdownItem onClick={() => setTheme('light')}>Light</DropdownItem>
-        <DropdownItem onClick={() => setTheme('dark')}>Dark</DropdownItem>
-        <DropdownItem onClick={() => setTheme('system')}>System</DropdownItem>
+      <DropdownContent align="end">
+        {themes.map((theme) => (
+          <DropdownItem key={theme} onClick={() => setTheme(theme)}>
+            {firstLeterPascal(theme)}
+          </DropdownItem>
+        ))}
       </DropdownContent>
     </Dropdown>
   );

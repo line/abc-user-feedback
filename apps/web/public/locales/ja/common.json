@@ -2,8 +2,7 @@
   "tenant": {
     "create": {
       "title": "基本設定",
-      "site-name": "サイト名",
-      "complete-title": "基本設定が完了しました。"
+      "site-name": "サイト名"
     }
   },
   "auth": {
@@ -408,7 +407,7 @@
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant情報",
-    "sign-up-mgmt": "Login & Signup管理",
+    "sign-up-mgmt": "Login管理",
     "user-mgmt": "User管理"
   },
   "project-setting-menu": {
@@ -535,8 +534,13 @@
       "in-progress": "進行中",
       "continue": "続きから再開",
       "test-connection-failed": "接続テストに失敗しました",
-      "oh-my": "しまった。",
-      "no-project-in-profile-page": "{{name}}님. 現在登録されたProject情報がありません。 \n 登録対象Project管理者にMember登録を依頼するか、または問い合わせてみてください。"
+      "all-domains-allow": "すべてのドメインを許可します。"
+    },
+    "create-tenant": {
+      "title": "Tenant 作成",
+      "complete-title": "Tenant 作成完了",
+      "description": "ABC User Feedbackを使用する会社または組織の名前を入力してください。",
+      "complete-description": "Tenant 設定を完了しました。作成したマスターアカウントで初めてログインを試みてください。"
     },
     "placeholder": {
       "select": "選択してください",
@@ -573,6 +577,10 @@
     "description": {
       "create-project": "Projectの作成が完了しました。\n次は、フィードバックを収集するためにChannelを作成する必要があります。\n「Channel作成」から次のステップへ進んでください。",
       "create-channel": "Channelの作成が完了しました。\nこれでユーザーフィードバックの収集・管理の準備が整いました。\n「はじめる」から本格的にご利用ください。"
+    },
+    "login-setting": {
+      "oauth-description": "OAuth2.0を活用してログインできる方法を提供します。",
+      "email-description": "Email認証を通じて会員登録およびログインできる方法を提供します。"
     }
   }
 }

@@ -13,8 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { LanguageSelectBox, Logo } from '@/shared';
-import { ThemeSelectBox } from '@/entities/theme';
+import { LanguageSelectBox, Logo, ThemeSelectBox } from '@/shared';
 
 const Header = () => {
   return (

@@ -55,7 +55,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.success(t('toast.save'));
+        toast.success(t('v2.toast.success'));
       },
     },
   });
@@ -67,7 +67,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.success(t('toast.save'));
+        toast.success(t('v2.toast.success'));
       },
     },
   });

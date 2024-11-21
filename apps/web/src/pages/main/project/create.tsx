@@ -64,7 +64,7 @@ const CreateProjectPage: NextPage = () => {
   };
 
   useEffect(() => {
-    if (!data || data.meta.totalItems > 1) return;
+    if (!data || data.meta.totalItems > 0) return;
     openWarningNoProjects();
   }, [data]);
 

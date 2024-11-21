@@ -21,7 +21,7 @@ exports[`MainIndexPage should render without crashing 1`] = `
             decoding="async"
             height="24"
             loading="lazy"
-            src="/assets/images/logo.svg"
+            src="/assets/images/logo.png"
             style="color: transparent;"
             width="24"
           />

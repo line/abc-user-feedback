@@ -87,7 +87,7 @@ const IssueSettingPopover: React.FC<IProps> = ({
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('toast.save') });
+        toast.positive({ title: t('v2.toast.success') });
         close();
       },
       onError({ message }) {

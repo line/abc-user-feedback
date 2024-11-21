@@ -14,3 +14,4 @@
  * under the License.
  */
 export * from './ui';
+export type { SignUpWithEmailType } from './sign-up-with-email.type';

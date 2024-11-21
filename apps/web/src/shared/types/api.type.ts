@@ -340,23 +340,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/admin/projects/{projectId}/members": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["MemberController_getAllRolesByProjectId"];
-        put?: never;
-        post: operations["MemberController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/members/{memberId}": {
+    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks": {
         parameters: {
             query?: never;
             header?: never;
@@ -364,9 +348,73 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        put: operations["MemberController_update"];
+        put?: never;
+        post: operations["FeedbackController_create"];
+        delete: operations["FeedbackController_deleteMany"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["FeedbackController_findByChannelId"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["FeedbackController_addIssue"];
+        delete: operations["FeedbackController_removeIssue"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["FeedbackController_exportFeedbacks"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["FeedbackController_updateFeedback"];
         post?: never;
-        delete: operations["MemberController_delete"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -431,6 +479,118 @@ export interface paths {
         put?: never;
         post?: never;
         delete: operations["ApiKeyController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/members": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MemberController_getAllRolesByProjectId"];
+        put?: never;
+        post: operations["MemberController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/members/{memberId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["MemberController_update"];
+        post?: never;
+        delete: operations["MemberController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProjectController_findAll"];
+        put?: never;
+        post: operations["ProjectController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/name-check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProjectController_checkName"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProjectController_findOne"];
+        put: operations["ProjectController_updateOne"];
+        post?: never;
+        delete: operations["ProjectController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/feedback-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProjectController_countFeedbacks"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/issue-count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ProjectController_countIssues"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -526,166 +686,6 @@ export interface paths {
         get: operations["OptionController_getOptions"];
         put?: never;
         post: operations["OptionController_createOption"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProjectController_findAll"];
-        put?: never;
-        post: operations["ProjectController_create"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/name-check": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProjectController_checkName"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProjectController_findOne"];
-        put: operations["ProjectController_updateOne"];
-        post?: never;
-        delete: operations["ProjectController_delete"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/feedback-count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProjectController_countFeedbacks"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/issue-count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["ProjectController_countIssues"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["FeedbackController_create"];
-        delete: operations["FeedbackController_deleteMany"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["FeedbackController_findByChannelId"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["FeedbackController_addIssue"];
-        delete: operations["FeedbackController_removeIssue"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/export": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        post: operations["FeedbackController_exportFeedbacks"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put: operations["FeedbackController_updateFeedback"];
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1070,6 +1070,8 @@ export interface components {
         };
         SetupTenantRequestDto: {
             siteName: string;
+            email: string;
+            password: string;
         };
         OAuthConfigRequestDto: {
             clientId: string;
@@ -1132,6 +1134,126 @@ export interface components {
             name: string;
             permissions: ("feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_create" | "issue_update" | "issue_delete" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
         };
+        Query: {
+            /**
+             * @description Search text for feedback data
+             * @example payment
+             */
+            searchText?: string;
+            /** @example {
+             *       "gte": "2023-01-01",
+             *       "lt": "2023-12-31"
+             *     } */
+            createdAt?: components["schemas"]["TimeRange"];
+            /** @example {
+             *       "gte": "2023-01-01",
+             *       "lt": "2023-12-31"
+             *     } */
+            updatedAt?: components["schemas"]["TimeRange"];
+        };
+        FindFeedbacksByChannelIdRequestDto: {
+            /**
+             * @default 10
+             * @example 10
+             */
+            limit?: number;
+            /**
+             * @default 1
+             * @example 1
+             */
+            page?: number;
+            /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+            query?: components["schemas"]["Query"];
+            /**
+             * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
+             * @example {
+             *       "createdAt": "ASC"
+             *     }
+             */
+            sort?: Record<string, unknown>;
+        };
+        Feedback: Record<string, unknown>;
+        FindFeedbacksByChannelIdResponseDto: {
+            meta: components["schemas"]["PaginationMetaDto"];
+            /** @example [
+             *       {
+             *         "id": 1,
+             *         "name": "feedback",
+             *         "issues": [
+             *           {
+             *             "id": 1,
+             *             "name": "issue"
+             *           }
+             *         ]
+             *       }
+             *     ] */
+            items: components["schemas"]["Feedback"][];
+        };
+        AddIssueResponseDto: {
+            /**
+             * @description Issue id
+             * @example 1
+             */
+            issueId: number;
+            /**
+             * @description Issue id
+             * @example 1
+             */
+            feedbackId: number;
+        };
+        ExportFeedbacksRequestDto: {
+            /**
+             * @default 10
+             * @example 10
+             */
+            limit?: number;
+            /**
+             * @default 1
+             * @example 1
+             */
+            page?: number;
+            /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+            query?: components["schemas"]["Query"];
+            /**
+             * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
+             * @example {
+             *       "createdAt": "ASC"
+             *     }
+             */
+            sort?: Record<string, unknown>;
+            type: string;
+            fieldIds?: number[];
+        };
+        DeleteFeedbacksRequestDto: {
+            /**
+             * @description Feedback ids in an array
+             * @example [
+             *       1,
+             *       2
+             *     ]
+             */
+            feedbackIds: number[];
+        };
+        CreateApiKeyRequestDto: {
+            value?: string;
+        };
+        CreateApiKeyResponseDto: {
+            id: number;
+            value: string;
+            /** Format: date-time */
+            createdAt: string;
+        };
+        ApiKeyResponseDto: {
+            id: number;
+            value: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            deletedAt: string;
+        };
+        FindApiKeysResponseDto: {
+            items: components["schemas"]["ApiKeyResponseDto"][];
+        };
         MemberUserDto: {
             id: number;
             email: string;
@@ -1161,25 +1283,68 @@ export interface components {
         UpdateMemberRequestDto: {
             roleId: number;
         };
-        CreateApiKeyRequestDto: {
-            value?: string;
+        TimezoneDto: {
+            countryCode: string;
+            name: string;
+            offset: string;
         };
-        CreateApiKeyResponseDto: {
-            id: number;
+        CreateMemberByNameDto: {
+            roleName: string;
+            userId: number;
+        };
+        CreateApiKeyByValueDto: {
             value: string;
+        };
+        IssueTrackerDataDto: {
+            ticketDomain: string | null;
+            ticketKey: string | null;
+        };
+        CreateIssueTrackerRequestDto: {
+            data: components["schemas"]["IssueTrackerDataDto"];
+        };
+        CreateProjectRequestDto: {
+            name: string;
+            description: string | null;
+            timezone: components["schemas"]["TimezoneDto"];
+            roles?: components["schemas"]["CreateRoleRequestDto"][];
+            members?: components["schemas"]["CreateMemberByNameDto"][];
+            apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
+            issueTracker?: components["schemas"]["CreateIssueTrackerRequestDto"];
+        };
+        CreateProjectResponseDto: {
+            id: number;
+        };
+        FindProjectByIdResponseDto: {
+            id: number;
+            name: string;
+            description: string;
+            timezone: components["schemas"]["TimezoneDto"];
             /** Format: date-time */
             createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
         };
-        ApiKeyResponseDto: {
+        FindProjectsResponseDto: {
+            meta: components["schemas"]["PaginationMetaDto"];
+            items: components["schemas"]["FindProjectByIdResponseDto"][];
+        };
+        CountFeedbacksByIdResponseDto: {
+            total: number;
+        };
+        CountIssuesByIdResponseDto: {
+            total: number;
+        };
+        UpdateProjectRequestDto: {
+            name: string;
+            description: string | null;
+            timezone: components["schemas"]["TimezoneDto"];
+            roles?: components["schemas"]["CreateRoleRequestDto"][];
+            members?: components["schemas"]["CreateMemberByNameDto"][];
+            apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
+            issueTracker?: components["schemas"]["CreateIssueTrackerRequestDto"];
+        };
+        UpdateProjectResponseDto: {
             id: number;
-            value: string;
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            deletedAt: string;
-        };
-        FindApiKeysResponseDto: {
-            items: components["schemas"]["ApiKeyResponseDto"][];
         };
         ImageConfigRequestDto: {
             accessKeyId: string;
@@ -1315,169 +1480,6 @@ export interface components {
         };
         CreateOptionResponseDto: {
             id: number;
-        };
-        TimezoneDto: {
-            countryCode: string;
-            name: string;
-            offset: string;
-        };
-        CreateMemberByNameDto: {
-            roleName: string;
-            userId: number;
-        };
-        CreateApiKeyByValueDto: {
-            value: string;
-        };
-        IssueTrackerDataDto: {
-            ticketDomain: string | null;
-            ticketKey: string | null;
-        };
-        CreateIssueTrackerRequestDto: {
-            data: components["schemas"]["IssueTrackerDataDto"];
-        };
-        CreateProjectRequestDto: {
-            name: string;
-            description: string | null;
-            timezone: components["schemas"]["TimezoneDto"];
-            roles?: components["schemas"]["CreateRoleRequestDto"][];
-            members?: components["schemas"]["CreateMemberByNameDto"][];
-            apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
-            issueTracker?: components["schemas"]["CreateIssueTrackerRequestDto"];
-        };
-        CreateProjectResponseDto: {
-            id: number;
-        };
-        FindProjectByIdResponseDto: {
-            id: number;
-            name: string;
-            description: string;
-            timezone: components["schemas"]["TimezoneDto"];
-            /** Format: date-time */
-            createdAt: string;
-            /** Format: date-time */
-            updatedAt: string;
-        };
-        FindProjectsResponseDto: {
-            meta: components["schemas"]["PaginationMetaDto"];
-            items: components["schemas"]["FindProjectByIdResponseDto"][];
-        };
-        CountFeedbacksByIdResponseDto: {
-            total: number;
-        };
-        CountIssuesByIdResponseDto: {
-            total: number;
-        };
-        UpdateProjectRequestDto: {
-            name: string;
-            description: string | null;
-            timezone: components["schemas"]["TimezoneDto"];
-            roles?: components["schemas"]["CreateRoleRequestDto"][];
-            members?: components["schemas"]["CreateMemberByNameDto"][];
-            apiKeys?: components["schemas"]["CreateApiKeyByValueDto"][];
-            issueTracker?: components["schemas"]["CreateIssueTrackerRequestDto"];
-        };
-        UpdateProjectResponseDto: {
-            id: number;
-        };
-        Query: {
-            /**
-             * @description Search text for feedback data
-             * @example payment
-             */
-            searchText?: string;
-            /** @example {
-             *       "gte": "2023-01-01",
-             *       "lt": "2023-12-31"
-             *     } */
-            createdAt?: components["schemas"]["TimeRange"];
-            /** @example {
-             *       "gte": "2023-01-01",
-             *       "lt": "2023-12-31"
-             *     } */
-            updatedAt?: components["schemas"]["TimeRange"];
-        };
-        FindFeedbacksByChannelIdRequestDto: {
-            /**
-             * @default 10
-             * @example 10
-             */
-            limit?: number;
-            /**
-             * @default 1
-             * @example 1
-             */
-            page?: number;
-            /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
-            query?: components["schemas"]["Query"];
-            /**
-             * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
-             * @example {
-             *       "createdAt": "ASC"
-             *     }
-             */
-            sort?: Record<string, unknown>;
-        };
-        Feedback: Record<string, unknown>;
-        FindFeedbacksByChannelIdResponseDto: {
-            meta: components["schemas"]["PaginationMetaDto"];
-            /** @example [
-             *       {
-             *         "id": 1,
-             *         "name": "feedback",
-             *         "issues": [
-             *           {
-             *             "id": 1,
-             *             "name": "issue"
-             *           }
-             *         ]
-             *       }
-             *     ] */
-            items: components["schemas"]["Feedback"][];
-        };
-        AddIssueResponseDto: {
-            /**
-             * @description Issue id
-             * @example 1
-             */
-            issueId: number;
-            /**
-             * @description Issue id
-             * @example 1
-             */
-            feedbackId: number;
-        };
-        ExportFeedbacksRequestDto: {
-            /**
-             * @default 10
-             * @example 10
-             */
-            limit?: number;
-            /**
-             * @default 1
-             * @example 1
-             */
-            page?: number;
-            /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
-            query?: components["schemas"]["Query"];
-            /**
-             * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
-             * @example {
-             *       "createdAt": "ASC"
-             *     }
-             */
-            sort?: Record<string, unknown>;
-            type: string;
-            fieldIds?: number[];
-        };
-        DeleteFeedbacksRequestDto: {
-            /**
-             * @description Feedback ids in an array
-             * @example [
-             *       1,
-             *       2
-             *     ]
-             */
-            feedbackIds: number[];
         };
         CreateIssueRequestDto: {
             /**
@@ -1920,9 +1922,7 @@ export interface operations {
     UserController_getAllUsers: {
         parameters: {
             query?: {
-                /** @example 10 */
                 limit?: number;
-                /** @example 1 */
                 page?: number;
             };
             header?: never;
@@ -2323,13 +2323,84 @@ export interface operations {
             };
         };
     };
-    MemberController_getAllRolesByProjectId: {
+    FeedbackController_create: {
         parameters: {
-            query: {
-                createdAt: unknown;
-            };
+            query?: never;
             header?: never;
             path: {
+                projectId: number;
+                channelId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    FeedbackController_deleteMany: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteFeedbacksRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    FeedbackController_findByChannelId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FindFeedbacksByChannelIdRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindFeedbacksByChannelIdResponseDto"];
+                };
+            };
+        };
+    };
+    FeedbackController_addIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: number;
+                feedbackId: number;
+                issueId: number;
                 projectId: number;
             };
             cookie?: never;
@@ -2341,23 +2412,48 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["GetAllMemberResponseDto"];
+                    "application/json": components["schemas"]["AddIssueResponseDto"];
                 };
             };
         };
     };
-    MemberController_create: {
+    FeedbackController_removeIssue: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                channelId: number;
+                feedbackId: number;
+                issueId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AddIssueResponseDto"];
+                };
+            };
+        };
+    };
+    FeedbackController_exportFeedbacks: {
         parameters: {
             query?: never;
             header?: never;
             path: {
                 projectId: number;
+                channelId: number;
             };
             cookie?: never;
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["CreateMemberRequestDto"];
+                "application/json": components["schemas"]["ExportFeedbacksRequestDto"];
             };
         };
         responses: {
@@ -2369,36 +2465,13 @@ export interface operations {
             };
         };
     };
-    MemberController_update: {
+    FeedbackController_updateFeedback: {
         parameters: {
             query?: never;
             header?: never;
             path: {
-                memberId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateMemberRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    MemberController_delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                memberId: number;
+                channelId: number;
+                feedbackId: number;
                 projectId: number;
             };
             cookie?: never;
@@ -2516,12 +2589,272 @@ export interface operations {
             };
         };
     };
+    MemberController_getAllRolesByProjectId: {
+        parameters: {
+            query: {
+                createdAt: unknown;
+            };
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAllMemberResponseDto"];
+                };
+            };
+        };
+    };
+    MemberController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateMemberRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MemberController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMemberRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MemberController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                memberId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProjectController_findAll: {
+        parameters: {
+            query?: {
+                limit?: number;
+                page?: number;
+                searchText?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindProjectsResponseDto"];
+                };
+            };
+        };
+    };
+    ProjectController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateProjectRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateProjectResponseDto"];
+                };
+            };
+        };
+    };
+    ProjectController_checkName: {
+        parameters: {
+            query: {
+                name: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProjectController_findOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FindProjectByIdResponseDto"];
+                };
+            };
+        };
+    };
+    ProjectController_updateOne: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateProjectRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UpdateProjectResponseDto"];
+                };
+            };
+        };
+    };
+    ProjectController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProjectController_countFeedbacks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CountFeedbacksByIdResponseDto"];
+                };
+            };
+        };
+    };
+    ProjectController_countIssues: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CountIssuesByIdResponseDto"];
+                };
+            };
+        };
+    };
     ChannelController_findAllByProjectId: {
         parameters: {
             query?: {
-                /** @example 10 */
                 limit?: number;
-                /** @example 1 */
                 page?: number;
                 searchText?: string;
             };
@@ -2749,343 +3082,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CreateOptionResponseDto"];
                 };
-            };
-        };
-    };
-    ProjectController_findAll: {
-        parameters: {
-            query?: {
-                /** @example 10 */
-                limit?: number;
-                /** @example 1 */
-                page?: number;
-                searchText?: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FindProjectsResponseDto"];
-                };
-            };
-        };
-    };
-    ProjectController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["CreateProjectRequestDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CreateProjectResponseDto"];
-                };
-            };
-        };
-    };
-    ProjectController_checkName: {
-        parameters: {
-            query: {
-                name: string;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ProjectController_findOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FindProjectByIdResponseDto"];
-                };
-            };
-        };
-    };
-    ProjectController_updateOne: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["UpdateProjectRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["UpdateProjectResponseDto"];
-                };
-            };
-        };
-    };
-    ProjectController_delete: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    ProjectController_countFeedbacks: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CountFeedbacksByIdResponseDto"];
-                };
-            };
-        };
-    };
-    ProjectController_countIssues: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["CountIssuesByIdResponseDto"];
-                };
-            };
-        };
-    };
-    FeedbackController_create: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                projectId: number;
-                channelId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    FeedbackController_deleteMany: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DeleteFeedbacksRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    FeedbackController_findByChannelId: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["FindFeedbacksByChannelIdRequestDto"];
-            };
-        };
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["FindFeedbacksByChannelIdResponseDto"];
-                };
-            };
-        };
-    };
-    FeedbackController_addIssue: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: number;
-                feedbackId: number;
-                issueId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddIssueResponseDto"];
-                };
-            };
-        };
-    };
-    FeedbackController_removeIssue: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: number;
-                feedbackId: number;
-                issueId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["AddIssueResponseDto"];
-                };
-            };
-        };
-    };
-    FeedbackController_exportFeedbacks: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ExportFeedbacksRequestDto"];
-            };
-        };
-        responses: {
-            201: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
-    FeedbackController_updateFeedback: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                channelId: number;
-                feedbackId: number;
-                projectId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };

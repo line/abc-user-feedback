@@ -21,7 +21,12 @@ import type { z } from 'zod';
 import { Button, toast } from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
 
-import { SettingTemplate, TextInput, useOAIMutation } from '@/shared';
+import {
+  SettingTemplate,
+  TextInput,
+  useOAIMutation,
+  useWarnIfUnsavedChanges,
+} from '@/shared';
 
 import { changePasswordFormSchema } from './change-password-form.schema';
 
@@ -42,13 +47,14 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       resolver: zodResolver(changePasswordFormSchema),
       defaultValues: DEFAULT_VALUES,
     });
+  useWarnIfUnsavedChanges(formState.isDirty);
 
   const { mutate, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/users/password/change',
     queryOptions: {
       onSuccess() {
-        toast.success(t('toast.save'));
+        toast.success(t('v2.toast.success'));
         reset();
       },
       onError(error) {
@@ -64,12 +70,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
     <SettingTemplate
       title={t('main.profile.change-password')}
       action={
-        <Button
-          form="reset_password"
-          type="submit"
-          disabled={!formState.isValid}
-          loading={isPending}
-        >
+        <Button form="reset_password" type="submit" loading={isPending}>
           {t('button.save')}
         </Button>
       }

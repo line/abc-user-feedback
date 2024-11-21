@@ -16,10 +16,10 @@
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import { SettingTemplate, useOAIMutation } from '@/shared';
+import { useTenantStore } from '@/entities/tenant';
 import { InviteUserPopover, UserManagementTable } from '@/entities/user';
 
 interface IProps {}
@@ -27,16 +27,14 @@ interface IProps {}
 const UserManagementSetting: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const overlay = useOverlay();
+  const { tenant } = useTenantStore();
 
   const { mutateAsync } = useOAIMutation({
     method: 'post',
     path: '/api/admin/users/invite',
     queryOptions: {
       onSuccess() {
-        toast.positive({ title: t('toast.invite'), iconName: 'MailFill' });
-      },
-      onError(error) {
-        toast.negative({ title: error.message });
+        toast.success(t('v2.toast.success'));
       },
     },
   });
@@ -60,12 +58,18 @@ const UserManagementSetting: React.FC<IProps> = () => {
     <SettingTemplate
       title={t('tenant-setting-menu.user-mgmt')}
       action={
-        <Button onClick={openApiKeyDialog}>
-          {t('v2.button.name.register', { name: 'Member' })}
+        <Button onClick={openApiKeyDialog} disabled={!tenant?.useEmail}>
+          {t('v2.button.name.invite', { name: 'User' })}
         </Button>
       }
     >
-      <UserManagementTable />
+      <UserManagementTable
+        createButton={
+          <Button onClick={openApiKeyDialog} disabled={!tenant?.useEmail}>
+            {t('v2.button.name.invite', { name: 'User' })}
+          </Button>
+        }
+      />
     </SettingTemplate>
   );
 };
