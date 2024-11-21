@@ -44,7 +44,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
             disabled=""
             id="Email"
             placeholder=""
-            value="Dudley_Kassulke@hotmail.com"
+            value="Herman67@gmail.com"
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"
@@ -69,7 +69,7 @@ exports[`ResetPasswordWithEmailForm match snapshot 1`] = `
             disabled=""
             id="main.profile.label.user-type"
             placeholder=""
-            value="GENERAL"
+            value="SUPER"
           />
           <div
             class="absolute-y-center absolute right-[14px] flex items-center gap-2"

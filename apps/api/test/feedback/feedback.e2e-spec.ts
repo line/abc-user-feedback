@@ -86,7 +86,7 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     await clearEntities([projectRepo, channelRepo, fieldRepo]);
     const { id: projectId } = await projectService.create({
-      name: faker.random.word(),
+      name: faker.word.noun(),
       description: faker.lorem.lines(1),
       timezone: {
         countryCode: 'KR',
@@ -97,7 +97,7 @@ describe('AppController (e2e)', () => {
 
     const { id: channelId } = await channelService.create({
       projectId,
-      name: faker.string.alphanumeric(20),
+      name: faker.word.noun(),
       description: faker.lorem.lines(1),
       fields: Array.from({
         length: faker.number.int({ min: 1, max: 10 }),
