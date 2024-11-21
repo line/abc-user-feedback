@@ -25,6 +25,7 @@ import { ProjectEntity } from '../project/project/project.entity';
 import { RoleEntity } from '../project/role/role.entity';
 import { RoleModule } from '../project/role/role.module';
 import { UserEntity } from '../user/entities/user.entity';
+import { UserModule } from '../user/user.module';
 import { TenantController } from './tenant.controller';
 import { TenantEntity } from './tenant.entity';
 import { TenantService } from './tenant.service';
@@ -43,6 +44,7 @@ import { TenantService } from './tenant.service';
     SchedulerLockModule,
     forwardRef(() => FeedbackModule),
     forwardRef(() => MemberModule),
+    forwardRef(() => UserModule),
   ],
   providers: [TenantService],
   controllers: [TenantController],

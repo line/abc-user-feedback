@@ -15,11 +15,23 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
-import { IsString } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
+
+import { IsPassword } from '@/common/decorators/is-password';
 
 export class SetupTenantDto {
   @Expose()
   @ApiProperty()
   @IsString()
   siteName: string;
+
+  @Expose()
+  @ApiProperty()
+  @IsEmail()
+  email: string;
+
+  @Expose()
+  @ApiProperty()
+  @IsPassword()
+  password: string;
 }
