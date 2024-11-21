@@ -30,7 +30,7 @@
     "root": true
   },
   "dependencies": {
-    "@faker-js/faker": "^8.4.1",
+    "@faker-js/faker": "^9.0.0",
     "@floating-ui/react": "^0.26.12",
     "@headlessui/react": "2.2.0",
     "@headlessui/tailwindcss": "^0.2.0",

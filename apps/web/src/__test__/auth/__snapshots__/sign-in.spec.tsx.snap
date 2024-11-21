@@ -49,7 +49,7 @@ exports[`Sign In Page should render all allow 1`] = `
             <span
               class="font-12-regular"
             >
-              S_:GHQo.!/
+              S:Ho!,_m-V
             </span>
           </div>
         </div>
@@ -112,7 +112,7 @@ exports[`Sign In Page should render all allow 1`] = `
           <div
             class="font-14-regular w-full text-center"
           >
-            S_:GHQo.!/
+            S:Ho!,_m-V
           </div>
         </div>
         <form>
@@ -285,7 +285,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
             <span
               class="font-12-regular"
             >
-              S_:GHQo.!/
+              S:Ho!,_m-V
             </span>
           </div>
         </div>
@@ -348,7 +348,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
           <div
             class="font-14-regular w-full text-center"
           >
-            S_:GHQo.!/
+            S:Ho!,_m-V
           </div>
         </div>
         <form>
@@ -505,7 +505,7 @@ exports[`Sign In Page should render when useEmail is false 1`] = `
             <span
               class="font-12-regular"
             >
-              S_:GHQo.!/
+              S:Ho!,_m-V
             </span>
           </div>
         </div>
@@ -568,7 +568,7 @@ exports[`Sign In Page should render when useEmail is false 1`] = `
           <div
             class="font-14-regular w-full text-center"
           >
-            S_:GHQo.!/
+            S:Ho!,_m-V
           </div>
         </div>
         <div
@@ -646,7 +646,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
             <span
               class="font-12-regular"
             >
-              S_:GHQo.!/
+              S:Ho!,_m-V
             </span>
           </div>
         </div>
@@ -709,7 +709,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
           <div
             class="font-14-regular w-full text-center"
           >
-            S_:GHQo.!/
+            S:Ho!,_m-V
           </div>
         </div>
         <form>

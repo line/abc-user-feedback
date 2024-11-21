@@ -190,7 +190,7 @@ describe('AppController (e2e)', () => {
 
     await channelRepo.save(
       Array.from({ length: total }).map(() => ({
-        name: faker.random.word(),
+        name: faker.word.noun(),
         description: faker.lorem.lines(1),
         project: { id: project.id },
       })),
