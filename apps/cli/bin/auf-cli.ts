@@ -194,8 +194,6 @@ program
       'DB URL': 'http://localhost:13306',
       'OPENSEARCH URL': 'http://localhost:9200',
       'OPENSEARCH ADMIN URL': 'http://localhost:5601',
-      'WEB ACCOUNT ID': 'user@feedback.com',
-      'WEB ACCOUNT PASSWORD': '12345678',
       JWT_SECRET: tomlConfig.api.JWT_SECRET,
     };
 
