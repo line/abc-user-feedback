@@ -26,7 +26,7 @@ import { CodeService } from '../../../shared/code/code.service';
 import type { FindAllUsersDto } from './dtos';
 import { InviteUserDto } from './dtos';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import type { SignUpMethodEnum } from './entities/enums';
+import type { SignUpMethodEnum, UserTypeEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
   UserAlreadyExistsException,
@@ -52,7 +52,10 @@ export class UserService {
       query ?
         Object.entries(query).reduce((prev, [key, value]) => {
           if (key === 'projectId') {
-            return { ...prev, members: { role: { project: { id: value } } } };
+            return {
+              ...prev,
+              members: { role: { project: { id: In(value as number[]) } } },
+            };
           }
           if (key === 'createdAt') {
             const { lt, gte } = value as unknown as ValueRange;
@@ -64,7 +67,10 @@ export class UserService {
               }),
             };
           }
-          return { ...prev, [key]: Like(`%${value}%`) };
+          if (key === 'type') {
+            return { ...prev, type: In(value as UserTypeEnum[]) };
+          }
+          return { ...prev, [key]: Like(`%${value as string}%`) };
         }, {})
       : {};
 

@@ -14,10 +14,11 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { SortMethodEnum } from '@/common/enums';
+import { ArrayDistinct } from '@/common/validators';
 import { UserTypeEnum } from '../../entities/enums';
 
 class UserOrder {
@@ -43,19 +44,20 @@ class UserSearchQuery {
   @IsString()
   department?: string | null;
 
-  @ApiProperty({ required: false, enum: UserTypeEnum })
+  @ApiProperty({ required: false, type: [UserTypeEnum], enum: UserTypeEnum })
   @IsOptional()
-  @IsEnum(UserTypeEnum)
-  type?: UserTypeEnum;
+  @IsEnum(UserTypeEnum, { each: true })
+  @ArrayDistinct()
+  type?: UserTypeEnum[];
 
   @ApiProperty({ required: false, type: TimeRange })
   @IsOptional()
   createdAt?: TimeRange;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: [Number] })
   @IsOptional()
-  @IsNumber()
-  projectId?: number;
+  @ArrayDistinct()
+  projectId?: number[];
 }
 
 export class GetAllUsersRequestDto extends PaginationRequestDto {
