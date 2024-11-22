@@ -67,7 +67,7 @@ export class MemberService {
 
   async validateEmail(email: string) {
     const tenants = await this.tenantRepo.find();
-    if (tenants.length === 0) throw new TenantNotFoundException();
+    if (tenants.length === 0) return true;
 
     const tenant = {
       ...tenants[0],
