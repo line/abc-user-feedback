@@ -24,8 +24,8 @@ export class FindAllUsersDto {
     email?: string;
     name?: string | null;
     department?: string | null;
-    type?: UserTypeEnum;
-    projectId?: number;
+    type?: UserTypeEnum[];
+    projectId?: number[];
   };
   order?: { createdAt?: SortMethodEnum };
 }
