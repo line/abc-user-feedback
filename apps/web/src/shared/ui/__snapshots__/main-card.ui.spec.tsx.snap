@@ -24,12 +24,12 @@ exports[`MainCard snapshot 1`] = `
         <p
           class="font-16-bold mb-1"
         >
-          est
+          animus
         </p>
         <p
           class="font-12-regular text-secondary line-clamp-1 break-all"
         >
-          tutamen arcesso abeo
+          speciosus trepide approbo
         </p>
       </div>
     </div>
@@ -40,24 +40,24 @@ exports[`MainCard snapshot 1`] = `
         <p
           class="font-12-regular mb-1"
         >
-          speciosus
+          cibo
         </p>
         <p
           class="font-24-bold"
         >
-          2,507,328,496,599,040
+          3,823,714,527,020,033
         </p>
       </div>
       <div>
         <p
           class="font-12-regular mb-1"
         >
-          cupiditas
+          tutamen
         </p>
         <p
           class="font-24-bold"
         >
-          3,823,714,539,929,600
+          42,503,677,966,558
         </p>
       </div>
     </div>
