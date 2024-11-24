@@ -311,7 +311,7 @@ importers:
         version: 12.1.0
       js-toml:
         specifier: ^1.0.0
-        version: 1.0.0
+        version: 1.0.1
     devDependencies:
       '@ufb/eslint-config':
         specifier: workspace:*
@@ -1624,8 +1624,8 @@ packages:
   '@babel/regjsgen@0.8.0':
     resolution: {integrity: sha512-x/rqGMdzj+fWZvCOYForTghzbtqPDZ5gPwaoNGHdgDfF2QA/XZbCBp4Moo5scrkAMPhB7z26XM/AaHuIJdgauA==}
 
-  '@babel/runtime-corejs3@7.25.0':
-    resolution: {integrity: sha512-BOehWE7MgQ8W8Qn0CQnMtg2tHPHPulcS/5AVpFvs2KCK1ET+0WqZqPvnpRpFN81gYoFopdIEJX9Sgjw3ZBccPg==}
+  '@babel/runtime-corejs3@7.26.0':
+    resolution: {integrity: sha512-YXHu5lN8kJCb1LOb9PgV6pvak43X2h4HvRApcN5SdWeaItQOzfn1hgP6jasD6KWQyJDBxrVmA9o9OivlnNJK/w==}
     engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.24.8':
@@ -4822,8 +4822,8 @@ packages:
   core-js-compat@3.37.1:
     resolution: {integrity: sha512-9TNiImhKvQqSUkOvk/mMRZzOANTiEVC7WaBNhHcKM7x+/5E1l5NvsysR19zuDQScE8k+kfQXWRN3AtS/eOSHpg==}
 
-  core-js-pure@3.38.0:
-    resolution: {integrity: sha512-8balb/HAXo06aHP58mZMtXgD8vcnXz9tUDePgqBgJgKdmTlMt+jw3ujqniuBDQXMvTzxnMpxHFeuSM3g1jWQuQ==}
+  core-js-pure@3.39.0:
+    resolution: {integrity: sha512-7fEcWwKI4rJinnK+wLTezeg2smbFFdSBP6E2kQZNbnzM2s1rpKQ6aaRteZSSg7FLU3P0HGGVo/gbpfanU36urg==}
 
   core-js@2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
@@ -6656,8 +6656,8 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
-  js-toml@1.0.0:
-    resolution: {integrity: sha512-G757004huuG5Cjg8KUoVTS4zNRR4449KG8kjtFQS0yyQnceq3KfxcArThcqUV2cwdpd0C9I+e1WciK3Xm4cWJw==}
+  js-toml@1.0.1:
+    resolution: {integrity: sha512-rHd/IolpFm2V5BmHCEY8CckHs8NDsYZZ64H5RNgA6Opsr9vX4QyTiQPplgtqg7b3ztqYShZC38nl6CUg7QuhXg==}
 
   js-yaml@3.14.1:
     resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
@@ -11132,9 +11132,9 @@ snapshots:
 
   '@babel/regjsgen@0.8.0': {}
 
-  '@babel/runtime-corejs3@7.25.0':
+  '@babel/runtime-corejs3@7.26.0':
     dependencies:
-      core-js-pure: 3.38.0
+      core-js-pure: 3.39.0
       regenerator-runtime: 0.14.1
 
   '@babel/runtime@7.24.8':
@@ -14691,7 +14691,7 @@ snapshots:
     dependencies:
       browserslist: 4.24.2
 
-  core-js-pure@3.38.0: {}
+  core-js-pure@3.39.0: {}
 
   core-js@2.6.12: {}
 
@@ -16954,7 +16954,7 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  js-toml@1.0.0:
+  js-toml@1.0.1:
     dependencies:
       chevrotain: 11.0.3
       xregexp: 5.1.1
@@ -20380,7 +20380,7 @@ snapshots:
 
   xregexp@5.1.1:
     dependencies:
-      '@babel/runtime-corejs3': 7.25.0
+      '@babel/runtime-corejs3': 7.26.0
 
   xtend@4.0.2: {}
 
