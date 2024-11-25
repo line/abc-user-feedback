@@ -20,5 +20,4 @@ import type { apiKeyFormSchema, apiKeySchema } from './api-key.schema';
 
 export type ApiKey = z.infer<typeof apiKeySchema>;
 export type ApiKeyUpdateType = 'recover' | 'softDelete';
-
 export type ApiKeyFormSchema = z.infer<typeof apiKeyFormSchema>;

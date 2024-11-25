@@ -81,9 +81,7 @@ const FormDialog: React.FC<Props> = (props) => {
               </Button>
             </div>
           )}
-          <DialogClose asChild>
-            <Button variant="outline">{t('v2.button.cancel')}</Button>
-          </DialogClose>
+          <DialogClose>{t('v2.button.cancel')}</DialogClose>
           <Button
             type="submit"
             disabled={submitBtn.disabled}

@@ -29,7 +29,7 @@ const TenantGuard: React.FC<IProps> = ({ children }) => {
 
   const { data, status, error } = useOAIQuery({
     path: '/api/admin/tenants',
-    queryOptions: { retry: 0 },
+    queryOptions: { retry: 0, refetchOnWindowFocus: false },
   });
 
   useEffect(() => {

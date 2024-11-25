@@ -33,6 +33,7 @@ const DeleteFieldOptionPopover: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
   const [targetOptionIndex, setTargetOptionIndex] = useState<number>();
   const close = () => setTargetOptionIndex(undefined);
+
   return (
     <Popover
       open={targetOptionIndex === index}

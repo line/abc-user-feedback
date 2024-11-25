@@ -50,8 +50,9 @@ const MemberFormDialog: React.FC<Props> = (props) => {
 
   const { data: userData } = useUserSearch({
     limit: 1000,
-    query: { type: 'GENERAL' },
+    query: { type: ['GENERAL'] },
   });
+  console.log('userData: ', userData);
 
   const [user, setUser] = useState<Member['user'] | undefined>(data?.user);
   const [role, setRole] = useState<Member['role'] | undefined>(data?.role);

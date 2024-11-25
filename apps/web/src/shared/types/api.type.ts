@@ -988,10 +988,9 @@ export interface components {
             email?: string;
             name?: Record<string, unknown>;
             department?: Record<string, unknown>;
-            /** @enum {string} */
-            type?: "SUPER" | "GENERAL";
+            type?: ("SUPER" | "GENERAL")[];
             createdAt?: components["schemas"]["TimeRange"];
-            projectId?: number;
+            projectId?: number[];
         };
         UserOrder: {
             /** @enum {string} */

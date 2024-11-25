@@ -29,13 +29,14 @@ import {
 } from '@ufb/react';
 
 interface IProps {
-  onClickDelete: () => Promise<void>;
+  onClickDelete: () => Promise<void> | void;
   isOpen: boolean;
   close: () => void;
+  description?: string;
 }
 
 const DeleteDialog: React.FC<IProps> = (props) => {
-  const { onClickDelete, close, isOpen } = props;
+  const { onClickDelete, close, isOpen, description } = props;
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
@@ -46,7 +47,7 @@ const DeleteDialog: React.FC<IProps> = (props) => {
           <DialogIcon name="RiErrorWarningFill" variant="error" />
           <DialogTitle>{t('v2.dialog.delete.title')}</DialogTitle>
           <DialogDescription>
-            {t('v2.dialog.delete.description')}
+            {description ?? t('v2.dialog.delete.description')}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

@@ -47,6 +47,7 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   });
+
   const openApiKeyDialog = (apiKey: ApiKey) => {
     overlay.open(({ close, isOpen }) => (
       <ApiKeyFormDialog

@@ -26,14 +26,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Button, toast } from '@ufb/react';
 
-import type { SearchItemType } from '@/shared';
 import {
   BasicTable,
   client,
   DeleteDialog,
   TableFacetedFilter,
   TablePagination,
-  TableSearchInput,
   useOAIMutation,
   useOAIQuery,
   useSort,
@@ -52,7 +50,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
 
-  const [query, setQuery] = useState({});
+  // const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
   const [pageCount, setPageCount] = useState(0);
 
@@ -70,10 +68,25 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     getFilteredRowModel: getFilteredRowModel(),
   });
 
-  const { sorting, pagination } = table.getState();
+  const { sorting, pagination, columnFilters } = table.getState();
   const sort = useSort(sorting);
 
   const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
+
+  const query = useMemo(() => {
+    return columnFilters.reduce(
+      (acc, { id, value }) => {
+        if (id === 'members') {
+          return {
+            ...acc,
+            projectId: (value as string[]).map((v) => parseInt(v)),
+          };
+        }
+        return { ...acc, [id]: value };
+      },
+      {} as Record<string, unknown>,
+    );
+  }, [columnFilters]);
 
   const {
     data: userData,
@@ -124,30 +137,6 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     setPageCount(userData?.meta.totalPages ?? 0);
   }, [userData]);
 
-  const searchItems = useMemo(() => {
-    return [
-      { format: 'text', key: 'email', name: 'Email' },
-      { format: 'text', key: 'name', name: 'Name' },
-      { format: 'text', key: 'department', name: 'Department' },
-      { format: 'date', key: 'createdAt', name: 'Created' },
-      {
-        format: 'select',
-        key: 'type',
-        name: 'Type',
-        options: [
-          { key: 'GENERAL', name: 'GENERAL' },
-          { key: 'SUPER', name: 'SUPER' },
-        ],
-      },
-      {
-        format: 'select',
-        key: 'projectId',
-        name: 'Project',
-        options: projects?.items.map((v) => ({ key: v.id, name: v.name })),
-      },
-    ] as SearchItemType[];
-  }, [projects]);
-
   const selectedRowIds = useMemo(() => {
     return Object.entries(table.getState().rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
@@ -180,10 +169,6 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     <>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TableSearchInput
-            searchItems={searchItems}
-            onChangeQuery={setQuery}
-          />
           <TableFacetedFilter
             column={table.getColumn('type')}
             options={[

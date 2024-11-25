@@ -35,7 +35,7 @@ const InputMembersStep: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { data: userData } = useUserSearch({
     limit: 1000,
-    query: { type: 'GENERAL' },
+    query: { type: ['GENERAL'] },
   });
 
   const createMember = (member: MemberInfo) => {

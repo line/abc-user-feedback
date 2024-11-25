@@ -15,6 +15,7 @@
  */
 import { useEffect, useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useOverlay } from '@toss/use-overlay';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -28,15 +29,15 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  Tag,
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
-import { SelectInput, TextInput } from '@/shared';
+import { DeleteDialog, SelectInput, TextInput } from '@/shared';
 
 import { FIELD_FORMAT_ICON_MAP, FIELD_FORMAT_LIST } from '../field.constant';
 import { fieldInfoSchema } from '../field.schema';
 import type { FieldInfo } from '../field.type';
-import DeleteFieldOptionPopover from './delete-field-option-popover.ui';
 
 const defaultValues: FieldInfo = {
   description: '',
@@ -68,6 +69,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     data ? data.name === data.key : true,
   );
   const [optionInput, setOptionInput] = useState<string>('');
+  const overlay = useOverlay();
 
   const isOriginalData = useMemo(() => (data ? !!data.id : false), [data]);
   const isEditing = useMemo(() => !!data, [data]);
@@ -126,10 +128,19 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
   };
 
   const removeOption = (targetIndex: number) => {
-    setValue(
-      'options',
-      (watch('options') ?? []).filter((_, i) => i !== targetIndex),
-    );
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={() => {
+          setValue(
+            'options',
+            (watch('options') ?? []).filter((_, i) => i !== targetIndex),
+          );
+        }}
+        description={t('main.setting.dialog.delete-option.description')}
+      />
+    ));
   };
 
   const onSubmit = async (input: FieldInfo) => {
@@ -237,12 +248,14 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   {(watch('options') ?? []).length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {watch('options')?.map((v, i) => (
-                        <DeleteFieldOptionPopover
+                        <Tag
                           key={i}
-                          option={v}
-                          index={i}
-                          removeOption={removeOption}
-                        />
+                          radius="large"
+                          iconR="RiCloseLargeLine"
+                          onClickIconR={() => removeOption(i)}
+                        >
+                          {v.name}
+                        </Tag>
                       ))}
                     </div>
                   )}
