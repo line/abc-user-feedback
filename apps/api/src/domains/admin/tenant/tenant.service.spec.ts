@@ -29,6 +29,7 @@ import {
   SetupTenantDto,
   UpdateTenantDto,
 } from './dtos';
+import { LoginButtonTypeEnum } from './entities/enums/login-button-type.enum';
 import {
   TenantAlreadyExistsException,
   TenantNotFoundException,
@@ -91,6 +92,8 @@ describe('TenantService', () => {
       userProfileRequestURL: faker.string.sample(),
       emailKey: faker.string.sample(),
       defatulLoginEnable: faker.datatype.boolean(),
+      loginButtonType: LoginButtonTypeEnum.CUSTOM,
+      loginButtonName: faker.string.sample(),
     };
 
     it('update succeeds with valid data', async () => {
