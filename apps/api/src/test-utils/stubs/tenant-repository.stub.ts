@@ -65,19 +65,6 @@ export class TenantRepositoryStub {
     return 1;
   }
 
-  setIsRestrictDomain(bool, domains: string[] = []) {
-    if (this.tenant) {
-      this.tenant.isRestrictDomain = bool;
-      this.tenant.allowDomains = domains;
-    }
-  }
-
-  setIsPrivate(bool) {
-    if (this.tenant) {
-      this.tenant.isPrivate = bool;
-    }
-  }
-
   setUseOAuth(bool, config) {
     if (this.tenant) {
       this.tenant.useOAuth = bool;

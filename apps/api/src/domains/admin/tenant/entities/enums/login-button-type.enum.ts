@@ -13,12 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { OAuthConfig } from '../tenant.entity';
-
-export class UpdateTenantDto {
-  siteName: string;
-  useEmail: boolean;
-  allowDomains: string[] | null;
-  useOAuth: boolean;
-  oauthConfig: OAuthConfig | null;
+export enum LoginButtonTypeEnum {
+  CUSTOM = 'CUSTOM',
+  GOOGLE = 'GOOGLE',
 }

@@ -61,7 +61,6 @@ describe('CreateUserService', () => {
         email: faker.internet.email(),
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-      tenantRepo.setIsRestrictDomain(false);
 
       const user = await createUserService.createOAuthUser(dto);
 
@@ -80,11 +79,6 @@ describe('CreateUserService', () => {
     });
   });
   describe('with a private and having restrictions on domain tenant', () => {
-    beforeEach(() => {
-      tenantRepo.setIsPrivate(true);
-      tenantRepo.setIsRestrictDomain(true, ['linecorp.com']);
-    });
-
     it('creating a user with an email fails', async () => {
       const dto: CreateEmailUserDto = {
         email: faker.internet.email(),
@@ -191,10 +185,6 @@ describe('CreateUserService', () => {
     });
   });
   describe('with a private and no restrict on domain tenant', () => {
-    beforeEach(() => {
-      tenantRepo.setIsPrivate(true);
-      tenantRepo.setIsRestrictDomain(false);
-    });
     it('creating a user with an email fails', async () => {
       const dto: CreateEmailUserDto = {
         email: faker.internet.email(),
@@ -278,10 +268,6 @@ describe('CreateUserService', () => {
   });
 
   describe('with a non-private and having restrictions on domain tenant', () => {
-    beforeEach(() => {
-      tenantRepo.setIsPrivate(false);
-      tenantRepo.setIsRestrictDomain(true, ['linecorp.com']);
-    });
     it('creating a user with an email succeeds with valid inputs', async () => {
       const dto: CreateEmailUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',

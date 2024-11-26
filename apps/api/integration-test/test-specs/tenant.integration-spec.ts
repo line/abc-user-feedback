@@ -87,8 +87,6 @@ describe('TenantController (integration)', () => {
     it('should return bad request since tenant is already exists', async () => {
       await tenantRepo.save({
         siteName: faker.string.sample(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const dto = new SetupTenantRequestDto();
@@ -111,8 +109,6 @@ describe('TenantController (integration)', () => {
     beforeEach(async () => {
       tenant = await tenantRepo.save({
         siteName: faker.string.sample(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const { jwt } = await signInTestUser(dataSource, authService);
@@ -122,8 +118,6 @@ describe('TenantController (integration)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return await request(app.getHttpServer() as Server)
@@ -136,8 +130,6 @@ describe('TenantController (integration)', () => {
             where: { id: tenant.id },
           });
           expect(updatedTenant?.siteName).toEqual(dto.siteName);
-          expect(updatedTenant?.isPrivate).toEqual(dto.isPrivate);
-          expect(updatedTenant?.isRestrictDomain).toEqual(dto.isRestrictDomain);
           expect(updatedTenant?.allowDomains).toEqual(dto.allowDomains);
         });
     });
@@ -147,8 +139,6 @@ describe('TenantController (integration)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return request(app.getHttpServer() as Server)
@@ -161,8 +151,6 @@ describe('TenantController (integration)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return await request(app.getHttpServer() as Server)

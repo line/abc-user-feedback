@@ -14,9 +14,17 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsObject, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsEnum,
+  IsObject,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 import { IsNullable } from '@/domains/admin/user/decorators';
+import { LoginButtonTypeEnum } from '../../entities/enums/login-button-type.enum';
 
 export class OAuthConfigRequestDto {
   @ApiProperty()
@@ -46,6 +54,17 @@ export class OAuthConfigRequestDto {
   @ApiProperty()
   @IsString()
   emailKey: string;
+
+  @ApiProperty({
+    type: LoginButtonTypeEnum,
+    enum: LoginButtonTypeEnum,
+  })
+  @IsEnum(LoginButtonTypeEnum)
+  loginButtonType: LoginButtonTypeEnum;
+
+  @ApiProperty()
+  @IsString()
+  loginButtonName: string;
 }
 
 export class UpdateTenantRequestDto {
@@ -62,14 +81,6 @@ export class UpdateTenantRequestDto {
   @IsBoolean()
   useEmail: boolean;
 
-  @ApiProperty()
-  @IsBoolean()
-  isPrivate: boolean;
-
-  @ApiProperty()
-  @IsBoolean()
-  isRestrictDomain: boolean;
-
   @ApiProperty({ nullable: true, type: [String] })
   @IsString({ each: true })
   @IsNullable()
@@ -82,5 +93,7 @@ export class UpdateTenantRequestDto {
   @ApiProperty({ nullable: true, type: OAuthConfigRequestDto })
   @IsObject()
   @IsNullable()
+  @ValidateNested()
+  @Type(() => OAuthConfigRequestDto)
   oauthConfig: OAuthConfigRequestDto | null;
 }

@@ -83,7 +83,6 @@ describe('auth service ', () => {
       const validEmail = faker.internet.email();
       dto.email = validEmail;
       jest.spyOn(userRepo, 'findOne').mockResolvedValue(null);
-      tenantRepo.setIsRestrictDomain(false);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
 
       const timeoutTime = await authService.sendEmailCode(dto);
@@ -94,7 +93,6 @@ describe('auth service ', () => {
     it('sending a code by email succeeds with a duplicate email', async () => {
       const duplicateEmail = emailFixture;
       dto.email = duplicateEmail;
-      tenantRepo.setIsRestrictDomain(false);
       jest.spyOn(MockEmailVerificationMailingService, 'send');
 
       await expect(authService.sendEmailCode(dto)).rejects.toThrowError(
@@ -149,8 +147,6 @@ describe('auth service ', () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
-      tenantRepo.setIsRestrictDomain(false);
-      tenantRepo.setIsPrivate(false);
       codeRepo.setIsVerified(true);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
 
@@ -162,8 +158,6 @@ describe('auth service ', () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
-      tenantRepo.setIsRestrictDomain(false);
-      tenantRepo.setIsPrivate(false);
       codeRepo.setIsVerified(false);
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save');
@@ -178,8 +172,6 @@ describe('auth service ', () => {
       const dto = new SignUpEmailUserDto();
       dto.email = faker.internet.email();
       dto.password = faker.internet.password();
-      tenantRepo.setIsRestrictDomain(false);
-      tenantRepo.setIsPrivate(false);
       codeRepo.setNull();
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
       jest.spyOn(userRepo, 'save');

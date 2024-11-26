@@ -189,8 +189,6 @@ export const tenantFixture = {
   siteName: faker.string.sample(),
   description: faker.lorem.lines(2),
   useEmail: faker.datatype.boolean(),
-  isPrivate: faker.datatype.boolean(),
-  isRestrictDomain: faker.datatype.boolean(),
   allowDomains: [],
   useOAuth: faker.datatype.boolean(),
   oauthConfig: null,

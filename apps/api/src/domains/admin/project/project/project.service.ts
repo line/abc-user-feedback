@@ -74,7 +74,6 @@ export class ProjectService {
 
     return {
       ...tenants[0],
-      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
   }
 

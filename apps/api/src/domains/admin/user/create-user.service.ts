@@ -54,9 +54,6 @@ export class CreateUserService {
   async createEmailUser(dto: CreateEmailUserDto) {
     const { password, ...rest } = dto;
 
-    const tenant = await this.tenantService.findOne();
-    if (tenant.isPrivate) throw new NotAllowedUserCreateException();
-
     return await this.createUser({
       ...rest,
       method: 'email',
@@ -85,10 +82,7 @@ export class CreateUserService {
     const tenant = await this.tenantService.findOne();
     // check restrict domain
     const domain = email.split('@')[1];
-    if (
-      tenant.isRestrictDomain &&
-      !(tenant.allowDomains ?? []).includes(domain)
-    ) {
+    if (!(tenant.allowDomains ?? []).includes(domain)) {
       throw new NotAllowedDomainException();
     }
 
