@@ -93,7 +93,6 @@ export class TenantService {
 
     return {
       ...tenants[0],
-      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
   }
 

@@ -71,10 +71,9 @@ export class MemberService {
 
     const tenant = {
       ...tenants[0],
-      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
     const domain = email.split('@')[1];
-    if (tenant.isRestrictDomain && !tenant.allowDomains?.includes(domain)) {
+    if (!tenant.allowDomains?.includes(domain)) {
       throw new NotAllowedDomainException();
     }
     return true;

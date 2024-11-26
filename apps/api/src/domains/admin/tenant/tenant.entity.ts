@@ -44,12 +44,6 @@ export class TenantEntity extends CommonEntity {
   @Column('boolean', { default: true })
   useEmail: boolean;
 
-  @Column('boolean', { default: false })
-  isPrivate: boolean;
-
-  @Column('boolean', { default: false })
-  isRestrictDomain: boolean;
-
   @Column('simple-array', { nullable: true })
   allowDomains: string[] | null;
 

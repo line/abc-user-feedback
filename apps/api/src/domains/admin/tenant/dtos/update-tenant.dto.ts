@@ -18,8 +18,6 @@ import type { OAuthConfig } from '../tenant.entity';
 export class UpdateTenantDto {
   siteName: string;
   useEmail: boolean;
-  isPrivate: boolean;
-  isRestrictDomain: boolean;
   allowDomains: string[] | null;
   useOAuth: boolean;
   oauthConfig: OAuthConfig | null;

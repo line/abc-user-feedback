@@ -88,20 +88,8 @@ export class GetTenantResponseDto {
   useOAuth: boolean;
 
   @Expose()
-  @ApiProperty()
-  isPrivate: boolean;
-
-  @Expose()
-  @ApiProperty()
-  isRestrictDomain: boolean;
-
-  @Expose()
   @ApiProperty({ nullable: true, type: [String] })
   allowDomains: string[] | null;
-
-  @Expose()
-  @ApiProperty()
-  useEmailVerification: boolean;
 
   @Expose()
   @ApiProperty({ type: OAuthConfigResponseDto, nullable: true })

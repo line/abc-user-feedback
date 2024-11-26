@@ -79,8 +79,6 @@ describe('TenantService', () => {
     const dto = new UpdateTenantDto();
     dto.siteName = faker.string.sample();
     dto.useEmail = faker.datatype.boolean();
-    dto.isPrivate = faker.datatype.boolean();
-    dto.isRestrictDomain = faker.datatype.boolean();
     dto.allowDomains = [faker.string.sample()];
     dto.useOAuth = faker.datatype.boolean();
     dto.oauthConfig = {
@@ -102,8 +100,6 @@ describe('TenantService', () => {
       expect(tenant.id).toBeDefined();
       expect(tenant.siteName).toEqual(dto.siteName);
       expect(tenant.useEmail).toEqual(dto.useEmail);
-      expect(tenant.isPrivate).toEqual(dto.isPrivate);
-      expect(tenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
       expect(tenant.allowDomains).toEqual(dto.allowDomains);
       expect(tenant.useOAuth).toEqual(dto.useOAuth);
       expect(tenant.oauthConfig).toEqual(dto.oauthConfig);
@@ -120,7 +116,7 @@ describe('TenantService', () => {
     it('finding a tenant succeeds when there is a tenant', async () => {
       const tenant = await tenantService.findOne();
 
-      expect(tenant).toEqual({ ...tenantFixture, useEmailVerification: false });
+      expect(tenant).toEqual({ ...tenantFixture });
     });
     it('finding a tenant fails when there is no tenant', async () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);

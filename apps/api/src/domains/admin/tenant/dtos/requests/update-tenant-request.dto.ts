@@ -81,14 +81,6 @@ export class UpdateTenantRequestDto {
   @IsBoolean()
   useEmail: boolean;
 
-  @ApiProperty()
-  @IsBoolean()
-  isPrivate: boolean;
-
-  @ApiProperty()
-  @IsBoolean()
-  isRestrictDomain: boolean;
-
   @ApiProperty({ nullable: true, type: [String] })
   @IsString({ each: true })
   @IsNullable()
