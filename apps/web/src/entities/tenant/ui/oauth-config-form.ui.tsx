@@ -16,6 +16,8 @@
 import { useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { RadioCard, RadioCardGroup } from '@ufb/react';
+
 import { TextInput } from '@/shared';
 
 import type { AuthInfo } from '../tenant.type';
@@ -25,11 +27,21 @@ interface IProps {
 }
 
 const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
-  const { register, formState } = useFormContext<AuthInfo>();
+  const { register, formState, setValue, getValues, watch } =
+    useFormContext<AuthInfo>();
   const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-3">
+      <RadioCardGroup
+        value={getValues('oauthConfig.loginButtonType')}
+        onValueChange={(v: 'GOOGLE' | 'CUSTOM') =>
+          setValue('oauthConfig.loginButtonType', v, { shouldDirty: true })
+        }
+      >
+        <RadioCard value="GOOGLE" icon="RiGoogleFill" title="Google Login" />
+        <RadioCard value="CUSTOM" icon="RiMailLine" title="Custom Login" />
+      </RadioCardGroup>
       <TextInput
         {...register('oauthConfig.clientId')}
         label="Client ID"
@@ -86,6 +98,16 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
         disabled={disabled}
         required
       />
+      {watch('oauthConfig.loginButtonType') === 'CUSTOM' && (
+        <TextInput
+          {...register('oauthConfig.loginButtonName')}
+          label="Login Button Name"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.loginButtonName?.message}
+          disabled={disabled}
+          required
+        />
+      )}
     </div>
   );
 };

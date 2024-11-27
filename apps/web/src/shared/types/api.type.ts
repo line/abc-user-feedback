@@ -1080,13 +1080,14 @@ export interface components {
             accessTokenRequestURL: string;
             userProfileRequestURL: string;
             emailKey: string;
+            /** @enum {string} */
+            loginButtonType: "CUSTOM" | "GOOGLE";
+            loginButtonName: string;
         };
         UpdateTenantRequestDto: {
             siteName: string;
             description: string | null;
             useEmail: boolean;
-            isPrivate: boolean;
-            isRestrictDomain: boolean;
             allowDomains: string[] | null;
             useOAuth: boolean;
             oauthConfig: components["schemas"]["OAuthConfigRequestDto"] | null;
@@ -1100,6 +1101,9 @@ export interface components {
             accessTokenRequestURL: string;
             userProfileRequestURL: string;
             emailKey: string;
+            /** @enum {string|null} */
+            loginButtonType: "CUSTOM" | "GOOGLE" | null;
+            loginButtonName: string | null;
         };
         GetTenantResponseDto: {
             id: number;
@@ -1107,10 +1111,7 @@ export interface components {
             description: string | null;
             useEmail: boolean;
             useOAuth: boolean;
-            isPrivate: boolean;
-            isRestrictDomain: boolean;
             allowDomains: string[] | null;
-            useEmailVerification: boolean;
             oauthConfig: components["schemas"]["OAuthConfigResponseDto"] | null;
         };
         CountFeedbacksByTenantIdResponseDto: {

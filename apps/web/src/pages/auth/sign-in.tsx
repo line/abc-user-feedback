@@ -69,15 +69,13 @@ const SignInPage: NextPageWithLayout = () => {
         </p>
       }
     >
-      {tenant?.useOAuth && (
-        <>
-          <SignInWithOAuthButton />
-          <div className="flex items-center gap-2">
-            <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
-            <span className="text-neutral-tertiary">or With Email</span>
-            <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
-          </div>
-        </>
+      {tenant?.useOAuth && <SignInWithOAuthButton />}
+      {tenant?.useOAuth && tenant.useEmail && (
+        <div className="flex items-center gap-2">
+          <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
+          <span className="text-neutral-tertiary">or With Email</span>
+          <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
+        </div>
       )}
       {tenant?.useEmail && (
         <form

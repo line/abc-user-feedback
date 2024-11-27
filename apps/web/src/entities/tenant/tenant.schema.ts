@@ -17,12 +17,14 @@ import { z } from 'zod';
 
 const oauthConfigSchema = z.object({
   clientId: z.string().min(1),
-  emailKey: z.string().min(1),
-  scopeString: z.string().min(1),
   clientSecret: z.string().min(1),
   authCodeRequestURL: z.string().min(1),
+  scopeString: z.string().min(1),
   accessTokenRequestURL: z.string().min(1),
   userProfileRequestURL: z.string().min(1),
+  emailKey: z.string().min(1),
+  loginButtonType: z.enum(['CUSTOM', 'GOOGLE']),
+  loginButtonName: z.string(),
 });
 export const tenantSchema = z.object({
   id: z.number(),
@@ -34,12 +36,6 @@ export const tenantSchema = z.object({
     .array(z.string().refine((v) => /[a-z]+\.[a-z]{2,3}/.test(v)))
     .nullable(),
   oauthConfig: oauthConfigSchema.nullable(),
-  /* deprecated */
-  isPrivate: z.boolean(),
-  /* deprecated */
-  isRestrictDomain: z.boolean(),
-  /* deprecated */
-  useEmailVerification: z.boolean(),
 });
 
 export const tenantInfoSchema = tenantSchema.pick({

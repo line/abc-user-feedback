@@ -36,6 +36,21 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
     queryOptions: { enabled: tenant?.useOAuth ?? false },
     variables: { callback_url },
   });
+  console.log('data: ', data);
+
+  if (tenant?.oauthConfig?.loginButtonType === 'GOOGLE') {
+    return (
+      <Button
+        variant="outline"
+        size="medium"
+        disabled={!data?.url}
+        onClick={() => router.push(data?.url ?? '')}
+      >
+        <img src="/assets/images/google.svg" />
+        Google {t('button.sign-in')}
+      </Button>
+    );
+  }
 
   return (
     <Button
@@ -44,7 +59,8 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
       disabled={!data?.url}
       onClick={() => router.push(data?.url ?? '')}
     >
-      OAuth 2.0 {t('button.sign-in')}
+      {tenant?.oauthConfig?.loginButtonName ??
+        `OAuth 2.0 ${t('button.sign-in')}`}
     </Button>
   );
 };
