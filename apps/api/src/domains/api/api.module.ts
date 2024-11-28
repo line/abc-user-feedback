@@ -37,6 +37,7 @@ import { APIController } from './api.controller';
 import { ChannelController } from './channel.controller';
 import { FeedbackController } from './feedback.controller';
 import { IssueController } from './issue.controller';
+import { ProjectController } from './project.controller';
 
 @Module({
   imports: [
@@ -66,6 +67,7 @@ import { IssueController } from './issue.controller';
     IssueController,
     APIController,
     ChannelController,
+    ProjectController,
   ],
 })
 export class APIModule {}

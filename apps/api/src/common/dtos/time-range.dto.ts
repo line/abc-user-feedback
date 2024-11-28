@@ -16,8 +16,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class TimeRange {
-  @ApiProperty()
+  @ApiProperty({ name: 'gte (UTC)' })
   gte: string;
-  @ApiProperty()
+  @ApiProperty({ name: 'lt (UTC)' })
   lt: string;
 }
