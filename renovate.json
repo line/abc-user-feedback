@@ -3,7 +3,8 @@
   "extends": ["config:recommended"],
   "ignorePaths": [
     "**/.github/workflows/e2e-test.yml",
-    "**/.github/workflows/integration-test.yml"
+    "**/.github/workflows/integration-test.yml",
+    "**/.github/workflows/publish-api-docs.yml"
   ],
   "baseBranches": ["dev"],
   "packageRules": [

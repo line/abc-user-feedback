@@ -8,6 +8,18 @@ jobs:
   publish-api-docs:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0.39
+        env:
+          MYSQL_ROOT_PASSWORD: userfeedback
+          MYSQL_DATABASE: e2e
+          MYSQL_USER: userfeedback
+          MYSQL_PASSWORD: userfeedback
+          TZ: UTC
+        ports:
+          - 13306:3306
+
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
