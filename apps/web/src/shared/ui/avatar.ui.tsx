@@ -20,7 +20,7 @@ interface Props {
 }
 
 const Avatar: React.FC<Props> = ({ name }) => {
-  return <Badge radius="large">{name.slice(0, 1)}</Badge>;
+  return <Badge radius="large">{name.trim().slice(0, 1)}</Badge>;
 };
 
 export default Avatar;

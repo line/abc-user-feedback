@@ -19,6 +19,7 @@ import {
   ComboboxGroup,
   ComboboxInput,
   ComboboxTrigger,
+  Tag,
 } from '@ufb/react';
 
 import { IssueBadge } from '@/entities/issue';
@@ -38,7 +39,9 @@ const IssueCell: React.FC<IProps> = (props) => {
     >
       {issues?.map((issue) => <IssueBadge key={issue.id} issue={issue} />)}
       <Combobox>
-        <ComboboxTrigger>test</ComboboxTrigger>
+        <ComboboxTrigger asChild>
+          <Tag variant="secondary">+</Tag>
+        </ComboboxTrigger>
         <ComboboxContent>
           <ComboboxInput></ComboboxInput>
           <ComboboxGroup></ComboboxGroup>
