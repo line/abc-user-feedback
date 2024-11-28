@@ -1,0 +1,35 @@
+name: Publish Api Docs to GitHub Pages
+
+on:
+  pull_request:
+    branches: [dev]
+
+jobs:
+  publish-api-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build app and swagger docs
+        run: |
+          npx corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+          cd apps/api
+          npm install -g ts-node
+          npx ts-node -r tsconfig-paths/register src/scripts/build-swagger-docs.ts
+
+      - name: Generate Swagger UI
+        uses: Legion2/swagger-ui-action@v1
+        with:
+          output: swagger-ui
+          spec-file: apps/api/swagger.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: swagger-ui
