@@ -2,7 +2,8 @@ name: Publish Api Docs to GitHub Pages
 
 on:
   pull_request:
-    branches: [dev]
+    branches:
+      - "feat/add-github-workflow-for-api-docs"
 
 jobs:
   publish-api-docs:
