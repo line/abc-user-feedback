@@ -30,19 +30,18 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
           cd apps/api
+          mkdir docs
           cp .env.example .env
           npm install -g ts-node
           npx ts-node -r tsconfig-paths/register src/scripts/build-swagger-docs.ts
 
-      - name: Generate Swagger UI
-        uses: Legion2/swagger-ui-action@v1
+      - name: Redocly CLI Test
+        uses: fluximus-prime/redocly-cli-github-action@v1
         with:
-          output: swagger-ui
-          spec-file: apps/api/swagger.json
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          args: "build-docs apps/api/swagger.json --output docs/docs.html"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: swagger-ui
+          publish_dir: docs
