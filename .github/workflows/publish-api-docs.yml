@@ -38,7 +38,7 @@ jobs:
       - name: Redocly CLI Test
         uses: fluximus-prime/redocly-cli-github-action@v1
         with:
-          args: "build-docs apps/api/swagger.json --output docs/docs.html"
+          args: "build-docs apps/api/swagger.json --output docs/index.html"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
