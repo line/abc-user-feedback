@@ -16,7 +16,7 @@
 
 import type { Color, IconNameType } from '@ufb/react';
 
-import type { Field } from './field.type';
+import type { Field, FieldFormat } from './field.type';
 
 export const FIELD_FORMAT_LIST = [
   'text',
@@ -28,10 +28,7 @@ export const FIELD_FORMAT_LIST = [
   'images',
 ] as const;
 
-export const FIELD_FORMAT_ICON_MAP: Record<
-  (typeof FIELD_FORMAT_LIST)[number],
-  IconNameType
-> = {
+export const FIELD_FORMAT_ICON_MAP: Record<FieldFormat, IconNameType> = {
   text: 'RiText',
   keyword: 'RiFontSize',
   number: 'RiHashtag',
@@ -45,3 +42,5 @@ export const FIELD_STATUS_COLOR_MAP: Record<Field['status'], Color> = {
   ACTIVE: 'green',
   INACTIVE: 'red',
 };
+
+export const DEFAULT_FIELD_KEYS = ['id', 'createdAt', 'updatedAt', 'issues'];

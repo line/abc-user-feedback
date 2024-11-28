@@ -13,31 +13,82 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import React, { useMemo } from 'react';
+import type { PaginationState } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getExpandedRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
 
-import { BasicTable } from '@/shared';
+import { BasicTable, TablePagination } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 
 import { getColumns } from '../feedback-table-columns';
 import type { Feedback } from '../feedback.type';
+import FeedbackDetailSheet from './feedback-detail-sheet.ui';
 
 interface Props {
   fields: FieldInfo[];
   feedbacks: Feedback[];
+  rowCount: number;
+  pageCount: number;
+  pagination: PaginationState;
+  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+  isLoading?: boolean;
 }
 
 const FeedbackTable: React.FC<Props> = (props) => {
-  const { fields, feedbacks } = props;
+  const {
+    fields,
+    feedbacks,
+    pageCount,
+    rowCount,
+    pagination,
+    setPagination,
+    isLoading,
+  } = props;
   const columns = useMemo(() => getColumns(fields), [fields]);
+  const overlay = useOverlay();
 
   const table = useReactTable({
     columns,
     data: feedbacks,
     getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount,
+    rowCount,
+    state: { pagination },
+    onPaginationChange: setPagination,
+    getRowId: (row) => String(row.id),
   });
 
-  return <BasicTable table={table} createButton className="table-fixed" />;
+  const openFeedbackDetail = (feedback: Feedback) => {
+    overlay.open(({ close, isOpen }) => (
+      <FeedbackDetailSheet
+        isOpen={isOpen}
+        close={close}
+        feedback={feedback}
+        fields={fields}
+      />
+    ));
+  };
+
+  return (
+    <>
+      <BasicTable
+        table={table}
+        className="table-fixed"
+        onClickRow={(_, row) => openFeedbackDetail(row)}
+        isLoading={isLoading}
+      />
+      <TablePagination table={table} />
+    </>
+  );
 };
 
 export default FeedbackTable;

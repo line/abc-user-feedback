@@ -13,16 +13,19 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useEffect, useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
+import type { PaginationState } from '@tanstack/react-table';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
 
-import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
+import { Button, Popover, PopoverTrigger, toast } from '@ufb/react';
+
+import { cn, DEFAULT_LOCALE, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
+import type { Channel } from '@/entities/channel';
+import { FeedbackTable, useFeedbackSearch } from '@/entities/feedback';
 import { ProjectGuard } from '@/entities/project';
-import { RouteCreateChannelButton } from '@/features/create-channel';
-import { MainLayout } from '@/widgets';
-import { FeedbackTable } from '@/widgets/feedback-table';
+import { Layout } from '@/widgets/layout';
 
 interface IProps {
   projectId: number;
@@ -31,12 +34,42 @@ interface IProps {
 
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId, channelId } = props;
-  const { data, status } = useOAIQuery({
+  const [currentChannelId, setCurrentChannelId] = useState<number | null>(null);
+  const [pagination, setPagination] = useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
 
-  const { t } = useTranslation();
+  const { data: channelData } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels/{channelId}',
+    variables: { channelId: currentChannelId!, projectId },
+    queryOptions: { enabled: !!currentChannelId },
+  });
+
+  const { data: feedbackData, isLoading } = useFeedbackSearch(
+    projectId,
+    currentChannelId!,
+    { query: {}, page: pagination.pageIndex + 1, limit: pagination.pageSize },
+    {
+      enabled: currentChannelId !== -1,
+      throwOnError(error) {
+        if (error.code === 'LargeWindow') {
+          toast.error('Please narrow down the search range.');
+        }
+        return false;
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (!data || currentChannelId) return;
+    setCurrentChannelId(data.items[0]?.id ?? null);
+  }, [data]);
 
   if (channelId && isNaN(channelId)) {
     return <div>Channel Id is Bad Request</div>;
@@ -44,25 +77,76 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   return (
     <>
-      <h1 className="font-20-bold mb-3">{t('main.feedback.title')}</h1>
-      {status === 'pending' ?
-        <p className="font-32-bold animate-bounce">Loading...</p>
-      : status === 'error' ?
-        <p className="font-32-bold">Error</p>
-      : data.meta.totalItems === 0 ?
-        <div className="flex min-h-[500px] flex-1 items-center justify-center">
-          <RouteCreateChannelButton projectId={projectId} type="blue" />
+      <div className="mb-4 flex justify-between">
+        <div className="bg-neutral-tertiary rounded-8 flex gap-2 p-2">
+          {data?.items.map((channel) => (
+            <button
+              key={channel.id}
+              className={cn('rounded-8 border p-2', {
+                'bg-white': currentChannelId === channel.id,
+              })}
+              onClick={() => setCurrentChannelId(channel.id)}
+            >
+              {channel.name}
+            </button>
+          ))}
         </div>
-      : <FeedbackTable projectId={projectId} channelId={channelId} />}
+        <div className="flex gap-2 [&>button]:min-w-min">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" iconL="RiCalendar2Line">
+                Date
+              </Button>
+            </PopoverTrigger>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" iconL="RiSearchLine">
+                Search
+              </Button>
+            </PopoverTrigger>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" iconL="RiEyeLine">
+                View
+              </Button>
+            </PopoverTrigger>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" iconL="RiLineHeight">
+                Expand
+              </Button>
+            </PopoverTrigger>
+          </Popover>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button variant="outline" iconL="RiDownload2Line">
+                Export
+              </Button>
+            </PopoverTrigger>
+          </Popover>
+        </div>
+      </div>
+      <FeedbackTable
+        fields={channelData?.fields ?? []}
+        feedbacks={feedbackData?.items ?? []}
+        pageCount={feedbackData?.meta.totalPages ?? 0}
+        rowCount={feedbackData?.meta.totalItems ?? 0}
+        pagination={pagination}
+        setPagination={setPagination}
+        isLoading={isLoading}
+      />
     </>
   );
 };
 
 FeedbackManagementPage.getLayout = (page: React.ReactElement<IProps>) => {
   return (
-    <MainLayout>
+    <Layout projectId={page.props.projectId} title="Feedback">
       <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
-    </MainLayout>
+    </Layout>
   );
 };
 

@@ -17,7 +17,7 @@ import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useQueryState } from 'nuqs';
-import { Trans, useTranslation } from 'react-i18next';
+import { Trans } from 'react-i18next';
 
 import { DateRangePicker, DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
@@ -29,8 +29,8 @@ import {
   IssueRank,
 } from '@/entities/dashboard';
 import { ProjectGuard } from '@/entities/project';
-import { MainLayout } from '@/widgets';
 import { DashbaordCardSlider } from '@/widgets/dashboard-card-slider';
+import { Layout } from '@/widgets/layout';
 
 interface IProps {
   projectId: number;
@@ -75,8 +75,6 @@ const options = [
 ];
 
 const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
-  const { t } = useTranslation();
-
   const [dateRange, setDateRange] = useQueryState(
     'dateRange',
     parseAsDateRange.withDefault(DEFAULT_DATE_RANGE),
@@ -91,22 +89,17 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
-        <h1 className="font-20-bold">
-          {t('main.dashboard.title')}
-          <span className="font-12-regular text-secondary ml-2">
-            Updated: {currentDate}
-          </span>
-        </h1>
-        <div>
-          <DateRangePicker
-            value={dateRange}
-            onChange={onChangeDateRange}
-            maxDate={dayjs().subtract(1, 'day').toDate()}
-            options={options}
-            maxDays={365}
-          />
-        </div>
+      <div>
+        <span className="font-12-regular text-secondary ml-2">
+          Updated: {currentDate}
+        </span>
+        <DateRangePicker
+          value={dateRange}
+          onChange={onChangeDateRange}
+          maxDate={dayjs().subtract(1, 'day').toDate()}
+          options={options}
+          maxDays={365}
+        />
       </div>
       <DashbaordCardSlider
         projectId={projectId}
@@ -152,9 +145,9 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
 DashboardPage.getLayout = (page: React.ReactElement<IProps>) => {
   return (
-    <MainLayout>
+    <Layout projectId={page.props.projectId} title="Dashboard">
       <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
-    </MainLayout>
+    </Layout>
   );
 };
 

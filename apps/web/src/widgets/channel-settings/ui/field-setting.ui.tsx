@@ -197,7 +197,14 @@ const FieldSetting: React.FC<IProps> = (props) => {
     >
       {isPreview && <SettingAlert description={t('help-card.field-preview')} />}
       {isPreview ?
-        <FeedbackTable feedbacks={feedbacks} fields={fields} />
+        <FeedbackTable
+          feedbacks={feedbacks}
+          fields={fields}
+          pageCount={1}
+          rowCount={feedbacks.length}
+          pagination={{ pageIndex: 0, pageSize: 10 }}
+          setPagination={() => {}}
+        />
       : <FieldTable
           fields={fields}
           onClickRow={(index, field) =>

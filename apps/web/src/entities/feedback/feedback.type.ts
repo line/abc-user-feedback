@@ -15,11 +15,12 @@
  */
 import type { Issue } from '../issue';
 
-export interface Feedback {
-  id: number;
-  createdAt: string;
-  updatedAt: string;
-  issues?: Issue[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [key: string]: any;
-}
+export type Feedback = Record<string, any>;
+// export interface Feedback {
+//   id: number;
+//   createdAt: string;
+//   updatedAt: string;
+//   issues?: Issue[];
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   [key: string]: any;
+// }

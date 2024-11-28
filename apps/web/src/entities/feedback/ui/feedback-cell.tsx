@@ -16,6 +16,8 @@
 import { memo } from 'react';
 import dayjs from 'dayjs';
 
+import { Badge } from '@ufb/react';
+
 import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 
@@ -35,20 +37,30 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
       : field.format === 'date' ?
         dayjs(value as string).format(DATE_TIME_FORMAT)
       : field.format === 'multiSelect' ?
-        (value as string[])
-          .sort(
-            (aKey, bKey) =>
-              (field.options ?? []).findIndex((option) => option.key === aKey) -
-              (field.options ?? []).findIndex((option) => option.key === bKey),
-          )
-          .map(
-            (key) =>
-              field.options?.find((option) => option.key === key)?.name ??
-              value,
-          )
-          .join(', ')
+        <div className="flex gap-2">
+          {(value as string[])
+            .sort(
+              (aKey, bKey) =>
+                (field.options ?? []).findIndex(
+                  (option) => option.key === aKey,
+                ) -
+                (field.options ?? []).findIndex(
+                  (option) => option.key === bKey,
+                ),
+            )
+            .map((key) => (
+              <Badge variant="subtle">
+                {
+                  (field.options?.find((option) => option.key === key)?.name ??
+                    value) as string
+                }
+              </Badge>
+            ))}
+        </div>
       : field.format === 'select' ?
-        (field.options?.find((option) => option.key === value)?.name ?? '')
+        <Badge variant="subtle">
+          {field.options?.find((option) => option.key === value)?.name ?? ''}
+        </Badge>
       : field.format === 'images' ?
         <ImagePreviewButton urls={value as string[]} />
       : field.format === 'text' ?

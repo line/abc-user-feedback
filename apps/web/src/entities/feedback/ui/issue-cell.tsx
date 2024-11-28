@@ -13,6 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxTrigger,
+} from '@ufb/react';
+
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
@@ -24,8 +32,18 @@ const IssueCell: React.FC<IProps> = (props) => {
   const { issues } = props;
 
   return (
-    <div className="flex flex-wrap items-center gap-1 rounded">
+    <div
+      className="flex flex-wrap items-center gap-1 rounded"
+      onClick={(e) => e.stopPropagation()}
+    >
       {issues?.map((issue) => <IssueBadge key={issue.id} issue={issue} />)}
+      <Combobox>
+        <ComboboxTrigger>test</ComboboxTrigger>
+        <ComboboxContent>
+          <ComboboxInput></ComboboxInput>
+          <ComboboxGroup></ComboboxGroup>
+        </ComboboxContent>
+      </Combobox>
     </div>
   );
 };

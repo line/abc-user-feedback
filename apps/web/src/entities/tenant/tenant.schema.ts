@@ -23,8 +23,8 @@ const oauthConfigSchema = z.object({
   accessTokenRequestURL: z.string().min(1),
   userProfileRequestURL: z.string().min(1),
   emailKey: z.string().min(1),
-  loginButtonType: z.enum(['CUSTOM', 'GOOGLE']),
-  loginButtonName: z.string(),
+  loginButtonType: z.enum(['CUSTOM', 'GOOGLE']).nullable(),
+  loginButtonName: z.string().nullable(),
 });
 export const tenantSchema = z.object({
   id: z.number(),

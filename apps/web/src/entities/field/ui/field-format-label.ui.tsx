@@ -13,9 +13,23 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { z } from 'zod';
+import { Icon } from '@ufb/react';
 
-export const SignInWithEmailSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-});
+import { FIELD_FORMAT_ICON_MAP } from '../field.constant';
+import type { FieldFormat } from '../field.type';
+
+interface Props {
+  name: string;
+  format: FieldFormat;
+}
+
+const FieldFormatLabel = ({ name, format }: Props) => {
+  return (
+    <div className="flex items-center gap-1">
+      <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
+      {name}
+    </div>
+  );
+};
+
+export default FieldFormatLabel;

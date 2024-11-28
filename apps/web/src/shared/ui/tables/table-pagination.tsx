@@ -35,61 +35,67 @@ const TablePagination = <T,>(props: IProps<T>) => {
   const { pagination } = table.getState();
 
   return (
-    <div className="text-neutral-tertiary flex items-center gap-2">
-      <p>Rows per page</p>
-      <Dropdown>
-        <DropdownTrigger asChild>
-          <Button
-            variant="outline"
-            size="small"
-            iconR="RiExpandUpDownFill"
-            className="!min-w-0"
-          >
-            {pagination.pageSize}
-          </Button>
-        </DropdownTrigger>
-        <DropdownContent>
-          {PAGE_SIZES.map((pageSize) => (
-            <DropdownItem
-              key={pageSize}
-              onClick={() => table.setPageSize(pageSize)}
-            >
-              {pageSize}
-            </DropdownItem>
-          ))}
-        </DropdownContent>
-      </Dropdown>
-      <p>
-        Page {pagination.pageIndex + 1} of {table.getPageCount()}
+    <div className="flex items-center justify-between">
+      <p className="text-neutral-tertiary">
+        {table.getSelectedRowModel().rows.length} of {table.getRowCount()}{' '}
+        row(s) selected.
       </p>
-      <IconButton
-        size="small"
-        variant="outline"
-        icon="RiArrowLeftDoubleFill"
-        onClick={table.firstPage}
-        disabled={!table.getCanPreviousPage()}
-      />
-      <IconButton
-        size="small"
-        variant="outline"
-        icon="RiArrowLeftSLine"
-        onClick={table.previousPage}
-        disabled={!table.getCanPreviousPage()}
-      />
-      <IconButton
-        size="small"
-        variant="outline"
-        icon="RiArrowRightSLine"
-        onClick={table.nextPage}
-        disabled={!table.getCanNextPage()}
-      />
-      <IconButton
-        size="small"
-        variant="outline"
-        icon="RiArrowRightDoubleFill"
-        onClick={table.lastPage}
-        disabled={!table.getCanNextPage()}
-      />
+      <div className="text-neutral-tertiary flex items-center gap-2">
+        <p>Rows per page</p>
+        <Dropdown>
+          <DropdownTrigger asChild>
+            <Button
+              variant="outline"
+              size="small"
+              iconR="RiExpandUpDownFill"
+              className="!min-w-0"
+            >
+              {pagination.pageSize}
+            </Button>
+          </DropdownTrigger>
+          <DropdownContent>
+            {PAGE_SIZES.map((pageSize) => (
+              <DropdownItem
+                key={pageSize}
+                onClick={() => table.setPageSize(pageSize)}
+              >
+                {pageSize}
+              </DropdownItem>
+            ))}
+          </DropdownContent>
+        </Dropdown>
+        <p>
+          Page {pagination.pageIndex + 1} of {table.getPageCount()}
+        </p>
+        <IconButton
+          size="small"
+          variant="outline"
+          icon="RiArrowLeftDoubleFill"
+          onClick={table.firstPage}
+          disabled={!table.getCanPreviousPage()}
+        />
+        <IconButton
+          size="small"
+          variant="outline"
+          icon="RiArrowLeftSLine"
+          onClick={table.previousPage}
+          disabled={!table.getCanPreviousPage()}
+        />
+        <IconButton
+          size="small"
+          variant="outline"
+          icon="RiArrowRightSLine"
+          onClick={table.nextPage}
+          disabled={!table.getCanNextPage()}
+        />
+        <IconButton
+          size="small"
+          variant="outline"
+          icon="RiArrowRightDoubleFill"
+          onClick={table.lastPage}
+          disabled={!table.getCanNextPage()}
+        />
+      </div>
     </div>
   );
 };

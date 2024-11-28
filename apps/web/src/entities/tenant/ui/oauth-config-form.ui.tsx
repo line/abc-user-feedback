@@ -34,7 +34,7 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
   return (
     <div className="flex flex-col gap-3">
       <RadioCardGroup
-        value={getValues('oauthConfig.loginButtonType')}
+        value={getValues('oauthConfig.loginButtonType') ?? 'CUSTOM'}
         onValueChange={(v: 'GOOGLE' | 'CUSTOM') =>
           setValue('oauthConfig.loginButtonType', v, { shouldDirty: true })
         }

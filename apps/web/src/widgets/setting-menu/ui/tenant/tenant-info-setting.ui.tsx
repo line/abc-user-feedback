@@ -60,7 +60,19 @@ const TenantInfoSetting: React.FC<IProps> = () => {
 
   const onSubmit = (input: TenantInfo) => {
     if (!tenant) return;
-    mutate({ ...tenant, ...input });
+    if (!tenant.oauthConfig) {
+      mutate({ ...tenant, ...input, oauthConfig: null });
+      return;
+    }
+    mutate({
+      ...tenant,
+      ...input,
+      oauthConfig: {
+        ...tenant.oauthConfig,
+        loginButtonName: tenant.oauthConfig.loginButtonName ?? '',
+        loginButtonType: tenant.oauthConfig.loginButtonType ?? 'CUSTOM',
+      },
+    });
   };
 
   return (

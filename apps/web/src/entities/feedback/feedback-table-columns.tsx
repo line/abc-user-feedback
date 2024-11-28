@@ -17,7 +17,8 @@ import { createColumnHelper } from '@tanstack/react-table';
 
 import { Icon } from '@ufb/react';
 
-import { ExpandableText, TableCheckbox } from '@/shared';
+import { cn, ExpandableText, TableCheckbox } from '@/shared';
+import { FieldFormatLabel } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 
 import { FIELD_FORMAT_ICON_MAP } from '../field/field.constant';
@@ -75,13 +76,14 @@ export const getColumns = (fieldData: FieldInfo[]) =>
       id: 'issues',
       size: 150,
       minSize: 150,
-      header: () => (
-        <div className="flex items-center gap-1">
-          <Icon name={FIELD_FORMAT_ICON_MAP.multiSelect} size={16} />
-          Issue
+      header: () => <FieldFormatLabel format="multiSelect" name="Issue" />,
+      cell: ({ getValue, row }) => (
+        <div className={cn({ 'overflow-hidden': !row.getIsExpanded() })}>
+          <div className="flex w-max">
+            <IssueCell issues={getValue()} />
+          </div>
         </div>
       ),
-      cell: (info) => <IssueCell issues={info.getValue()} />,
       enableSorting: false,
     }),
   ].concat(
@@ -93,24 +95,15 @@ export const getColumns = (fieldData: FieldInfo[]) =>
           size: field.format === 'text' ? 200 : 150,
           minSize: 75,
           header: () => (
-            <div className="flex items-center gap-1">
-              <Icon name={FIELD_FORMAT_ICON_MAP[field.format]} size={16} />
-              {field.name}
-            </div>
+            <FieldFormatLabel format={field.format} name={field.name} />
           ),
-          cell: (info) =>
-            field.property === 'EDITABLE' ?
-              <EditableCell
-                field={field}
-                value={info.getValue()}
-                isExpanded={info.row.getIsExpanded()}
-                feedbackId={info.row.original.id}
-              />
-            : <FeedbackCell
-                field={field}
-                isExpanded={info.row.getIsExpanded()}
-                value={info.getValue()}
-              />,
+          cell: (info) => (
+            <FeedbackCell
+              field={field}
+              isExpanded={info.row.getIsExpanded()}
+              value={info.getValue()}
+            />
+          ),
           enableSorting:
             field.format === 'date' &&
             (field.key === 'createdAt' || field.key === 'updatedAt'),

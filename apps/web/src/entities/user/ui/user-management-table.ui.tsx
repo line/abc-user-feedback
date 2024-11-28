@@ -53,6 +53,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   // const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
   const [pageCount, setPageCount] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
 
   const columns = useMemo(() => getUserColumns(), []);
   const table = useReactTable({
@@ -65,6 +66,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
     pageCount,
+    rowCount,
     getFilteredRowModel: getFilteredRowModel(),
   });
 
@@ -135,6 +137,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   useEffect(() => {
     setRows(userData?.items ?? []);
     setPageCount(userData?.meta.totalPages ?? 0);
+    setRowCount(userData?.meta.totalItems ?? 0);
   }, [userData]);
 
   const selectedRowIds = useMemo(() => {
@@ -217,13 +220,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
         isLoading={isLoading}
         createButton={createButton}
       />
-      <div className="flex items-center justify-between">
-        <p className="text-neutral-tertiary">
-          {table.getSelectedRowModel().rows.length} of{' '}
-          {userData?.meta.totalItems} row(s) selected.
-        </p>
-        <TablePagination table={table} />
-      </div>
+      <TablePagination table={table} />
     </>
   );
 };
