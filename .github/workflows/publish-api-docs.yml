@@ -2,7 +2,7 @@ name: Publish Api Docs to GitHub Pages
 
 on:
   pull_request:
-    branches: [dev, main]
+    branches: [main]
 
 jobs:
   publish-api-docs:
@@ -35,7 +35,7 @@ jobs:
           npm install -g ts-node
           npx ts-node -r tsconfig-paths/register src/scripts/build-swagger-docs.ts
 
-      - name: Redocly CLI Test
+      - name: Run Redocly CLI
         uses: fluximus-prime/redocly-cli-github-action@v1
         with:
           args: "build-docs apps/api/swagger.json --output docs/index.html"
