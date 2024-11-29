@@ -2,7 +2,7 @@ name: Publish Api Docs to GitHub Pages
 
 on:
   pull_request:
-    branches: [main]
+    branches: [dev, main]
 
 jobs:
   publish-api-docs:
@@ -32,7 +32,6 @@ jobs:
           cd apps/api
           mkdir docs
           cp .env.example .env
-          npm install -g ts-node
           npx ts-node -r tsconfig-paths/register src/scripts/build-swagger-docs.ts
 
       - name: Run Redocly CLI
