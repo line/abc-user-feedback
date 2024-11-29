@@ -30,7 +30,6 @@ jobs:
           pnpm install --frozen-lockfile
           pnpm build
           cd apps/api
-          mkdir docs
           cp .env.example .env
           npx ts-node -r tsconfig-paths/register src/scripts/build-swagger-docs.ts
 
