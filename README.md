@@ -6,6 +6,17 @@ ABC User Feedback is a standalone web application that manages Voice of Customer
 
 ![sample image](./assets/main.png)
 
+## Table of Contents
+
+- [Features](#Features)
+- [Getting Started](#Getting-Started)
+- [Configuration](#configuration)
+- [Integration](#Integration)
+- [Development](#Development)
+- [Contributing](#Contributing-Guidelines)
+- [License](#license)
+
+
 ## Features
 
 ABC User Feedback provides the following features:
@@ -56,21 +67,31 @@ docker pull line/abc-user-feedback-web
 docker pull line/abc-user-feedback-api
 ```
 
-### Configuration
+## Configuration
 
-**Frontend**
+### Frontend
 
 :point_right: [Go to Frontend README](./apps/web/README.md)
 
 You can configure the frontend for session password, maximum time span to query, etc.
 
-**Backend**
+### Backend
 
 :point_right: [Go to Backend README](./apps/api/README.md)
 
 You can configure the backend for MySQL, SMTP for email verification, OpenSearch-powered improved search experience, etc.
 
-## Setup Dev Environment using Command Line Tool without Dependencies
+## Integration
+
+If you want to integrate ABC User Feedback with your service, you can use the following features:
+
+1. RESTful Web API - [API document page](https://line.github.io/abc-user-feedback).
+1. Accept images from user - [S3 Integration](./GUIDE.md#image-storage-integration).
+1. Webhooks - [Webhook specification](./GUIDE.md#Webhook-Feature).
+
+## Development
+
+### Setup Dev Environment using Command Line Tool without Dependencies
 
 ABC User Feedback supports a command line tool(`auf-cli`) that easily runs both the frontend and backend.
 
@@ -84,7 +105,7 @@ npx auf-cli stop # stop app
 
 Please refer to the following npm package site: https://www.npmjs.com/package/auf-cli
 
-## Setup Dev Environment Manually (Local)
+### Setup Dev Environment Manually (Local)
 
 ABC User Feedback is using a monorepo (powered by [TurboRepo](https://turbo.build/)) with multiple apps and packages.
 
@@ -128,10 +149,6 @@ pnpm turbo run dev --filter=web
 # api
 pnpm turbo run dev --filter=api
 ```
-
-### ADMIN WEB GUIDE
-
-For detailed information on using the admin web interface, please refer to our [Admin Web Guide](./GUIDE.md).
 
 ### Build Docker Image
 
