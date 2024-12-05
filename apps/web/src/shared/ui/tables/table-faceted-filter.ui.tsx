@@ -44,36 +44,34 @@ const TableFacetedFilter = <TData, TValue>(props: Props<TData, TValue>) => {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <Button variant="outline" className="min-w-[88px]">
-          <Icon name="RiAddLine" size={16} />
-          {title}
-          {selectedValues.size > 0 && (
-            <>
-              <Divider
-                orientation="vertical"
-                className="mx-2 h-4"
-                variant="subtle"
-              />
-              <div className="flex gap-2">
-                {selectedValues.size > 2 ?
-                  <Badge variant="subtle">{selectedValues.size} selected</Badge>
-                : options
-                    .filter((option) => selectedValues.has(option.value))
-                    .map((option) => (
-                      <Badge
-                        key={option.value}
-                        variant="subtle"
-                        className="font-normal"
-                      >
-                        {option.label}
-                      </Badge>
-                    ))
-                }
-              </div>
-            </>
-          )}
-        </Button>
+      <DropdownTrigger className="min-w-[88px]">
+        <Icon name="RiAddLine" size={16} />
+        {title}
+        {selectedValues.size > 0 && (
+          <>
+            <Divider
+              orientation="vertical"
+              className="mx-2 h-4"
+              variant="subtle"
+            />
+            <div className="flex gap-2">
+              {selectedValues.size > 2 ?
+                <Badge variant="subtle">{selectedValues.size} selected</Badge>
+              : options
+                  .filter((option) => selectedValues.has(option.value))
+                  .map((option) => (
+                    <Badge
+                      key={option.value}
+                      variant="subtle"
+                      className="font-normal"
+                    >
+                      {option.label}
+                    </Badge>
+                  ))
+              }
+            </div>
+          </>
+        )}
       </DropdownTrigger>
       <DropdownContent>
         <DropdownGroup>

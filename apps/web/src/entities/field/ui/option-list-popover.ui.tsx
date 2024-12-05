@@ -21,6 +21,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
+  Icon,
   Tag,
 } from '@ufb/react';
 
@@ -35,9 +36,10 @@ const OptionListPopover: React.FC<IProps> = ({ options }) => {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <Tag iconR="RiInformation2Line" onClick={(e) => e.stopPropagation()}>
+      <DropdownTrigger asChild data-state="close">
+        <Tag onClick={(e) => e.stopPropagation()}>
           {t('main.setting.option-info')}
+          <Icon name="RiInformation2Line" />
         </Tag>
       </DropdownTrigger>
       <DropdownContent>

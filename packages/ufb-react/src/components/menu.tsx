@@ -108,6 +108,18 @@ const MenuDropdownTrigger = React.forwardRef<
 >(({ variant = "ghost", className, children, ...props }, ref) => {
   const { size = DefaultValue.size } = React.useContext(MenuContext);
 
+  if (props.asChild) {
+    return (
+      <DropdownTrigger
+        className={cn(menuItemVariants({ size, className }))}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </DropdownTrigger>
+    );
+  }
+
   return (
     <DropdownTrigger
       ref={ref}

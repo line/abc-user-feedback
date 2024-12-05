@@ -20,7 +20,11 @@ import { FormProvider, useForm } from 'react-hook-form';
 
 import { Button, Switch, toast } from '@ufb/react';
 
-import { SettingTemplate, useOAIMutation } from '@/shared';
+import {
+  SettingTemplate,
+  useOAIMutation,
+  useWarnIfUnsavedChanges,
+} from '@/shared';
 import type { AuthInfo } from '@/entities/tenant';
 import {
   authInfoScema,
@@ -79,6 +83,7 @@ const LoginSetting: React.FC<IProps> = () => {
       },
     });
   };
+  useWarnIfUnsavedChanges(formState.isDirty);
 
   return (
     <SettingTemplate

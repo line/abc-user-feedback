@@ -17,7 +17,7 @@
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { ToggleGroup, ToggleGroupItem } from '@ufb/react';
+import { Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
 import { FieldSettingSheet } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
@@ -88,18 +88,15 @@ const InputFieldStep: React.FC<IProps> = () => {
     <CreateChannelInputTemplate
       actionButton={
         <ToggleGroup type="single" value="">
-          <ToggleGroupItem
-            value="item-1"
-            onClick={() => openFieldFormSheet()}
-            icon="RiAddLine"
-          >
+          <ToggleGroupItem value="item-1" onClick={() => openFieldFormSheet()}>
+            <Icon name="RiAddLine" />
             {t('v2.button.name.add', { name: 'Field' })}
           </ToggleGroupItem>
           <ToggleGroupItem
             value="item-2"
-            icon="RiEyeLine"
             onClick={() => jumpStepByKey('field-preview')}
           >
+            <Icon name="RiEyeLine" />
             {t('v2.text.preview')}
           </ToggleGroupItem>
         </ToggleGroup>

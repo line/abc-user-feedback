@@ -43,11 +43,9 @@ const TablePagination = <T,>(props: IProps<T>) => {
       <div className="text-neutral-tertiary flex items-center gap-2">
         <p>Rows per page</p>
         <Dropdown>
-          <DropdownTrigger asChild>
-            <Button variant="outline" size="small">
-              {pagination.pageSize}
-              <Icon name="RiExpandUpDownFill" />
-            </Button>
+          <DropdownTrigger variant="outline">
+            {pagination.pageSize}
+            <Icon name="RiExpandUpDownFill" />
           </DropdownTrigger>
           <DropdownContent>
             {PAGE_SIZES.map((pageSize) => (

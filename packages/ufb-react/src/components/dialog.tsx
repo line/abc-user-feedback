@@ -19,13 +19,25 @@ const DialogTrigger = React.forwardRef<
   DialogPrimitive.DialogTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button>
 >(({ variant = "outline", className, children, ...props }, ref) => {
+  if (props.asChild) {
+    return (
+      <DialogPrimitive.Trigger
+        className={cn("dialog-trigger", className)}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </DialogPrimitive.Trigger>
+    );
+  }
+
   return (
     <DialogPrimitive.Trigger asChild>
       <Button
         variant={variant}
         className={cn("dialog-trigger", className)}
-        {...props}
         ref={ref}
+        {...props}
       >
         {children}
       </Button>

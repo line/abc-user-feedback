@@ -17,7 +17,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Popover, PopoverContent, PopoverTrigger, Tag } from '@ufb/react';
+import { Icon, Popover, PopoverContent, PopoverTrigger, Tag } from '@ufb/react';
 
 import type { FieldOptionInfo } from '../field.type';
 
@@ -43,14 +43,14 @@ const DeleteFieldOptionPopover: React.FC<IProps> = (props) => {
     >
       <PopoverTrigger asChild>
         <div className="relative">
-          <Tag
-            variant="secondary"
-            iconR="RiCloseLargeLine"
-            onClickIconR={() =>
-              option.id ? setTargetOptionIndex(index) : removeOption(index)
-            }
-          >
+          <Tag variant="secondary">
             {option.name}
+            <Icon
+              name="RiCloseLargeLine"
+              onClick={() =>
+                option.id ? setTargetOptionIndex(index) : removeOption(index)
+              }
+            />
           </Tag>
         </div>
       </PopoverTrigger>

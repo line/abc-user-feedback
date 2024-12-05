@@ -17,6 +17,17 @@ const SheetTrigger = React.forwardRef<
   SheetPrimitive.DialogTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button>
 >(({ variant = "outline", className, children, ...props }, ref) => {
+  if (props.asChild) {
+    return (
+      <SheetPrimitive.Trigger
+        className={cn("sheet-trigger", className)}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </SheetPrimitive.Trigger>
+    );
+  }
   return (
     <SheetPrimitive.Trigger asChild>
       <Button

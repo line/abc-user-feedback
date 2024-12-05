@@ -17,7 +17,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Divider, toast, ToggleGroup, ToggleGroupItem } from '@ufb/react';
+import { Divider, Icon, toast, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 import { Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
 
 import {
@@ -169,16 +169,16 @@ const FieldSetting: React.FC<IProps> = (props) => {
               <ToggleGroupItem
                 value="item-1"
                 onClick={openCreateFieldFormSheet}
-                icon="RiAddLine"
                 disabled={!perms.includes('channel_field_update')}
               >
+                <Icon name="RiAddLine" />
                 {t('v2.button.name.add', { name: 'Field' })}
               </ToggleGroupItem>
               <ToggleGroupItem
                 value="item-2"
-                icon="RiEyeLine"
                 onClick={() => setIsPreview(true)}
               >
+                <Icon name="RiEyeLine" />
                 {t('v2.text.preview')}
               </ToggleGroupItem>
             </ToggleGroup>

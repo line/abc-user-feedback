@@ -89,6 +89,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
             : selectedValues
           }
           onValuesChange={setSelectedValues}
+          disabled={!checked}
         >
           <SelectTrigger>
             <SelectValue placeholder={t('v2.placeholder.select')} />

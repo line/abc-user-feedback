@@ -41,10 +41,8 @@ const LocaleSelectBox: React.FC<IProps> = () => {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <Button variant="ghost">
-          <Icon name="RiTranslate2" />
-        </Button>
+      <DropdownTrigger variant="ghost">
+        <Icon name="RiTranslate2" />
       </DropdownTrigger>
       <DropdownContent>
         {router.locales

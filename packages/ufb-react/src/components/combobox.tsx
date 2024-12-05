@@ -203,7 +203,6 @@ const ComboboxTrigger = React.forwardRef<
 >(
   (
     {
-      asChild = false,
       variant = "outline",
       trigger,
       className,
@@ -236,10 +235,9 @@ const ComboboxTrigger = React.forwardRef<
       }
     }, []);
 
-    if (asChild) {
+    if (props.asChild) {
       return (
         <PopoverTrigger
-          asChild
           className={className}
           ref={ref}
           onMouseEnter={handleMouseEnter}

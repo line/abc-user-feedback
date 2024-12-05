@@ -17,7 +17,6 @@
 import type { Column } from '@tanstack/react-table';
 
 import {
-  Button,
   Dropdown,
   DropdownContent,
   DropdownItem,

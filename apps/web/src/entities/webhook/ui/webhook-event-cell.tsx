@@ -20,6 +20,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
+  Icon,
   Tag,
 } from '@ufb/react';
 
@@ -45,8 +46,15 @@ const WebhookEventCell: React.FC<IProps> = (props) => {
 
   return (
     <Dropdown>
-      <DropdownTrigger onClick={(e) => e.stopPropagation()} asChild>
-        <Tag iconR="RiInformation2Line">{t(`text.webhook-type.${type}`)}</Tag>
+      <DropdownTrigger
+        onClick={(e) => e.stopPropagation()}
+        asChild
+        data-state="closed"
+      >
+        <Tag>
+          {t(`text.webhook-type.${type}`)}
+          <Icon name="RiInformation2Line" />
+        </Tag>
       </DropdownTrigger>
       <DropdownContent onClick={(e) => e.stopPropagation()}>
         {(type === 'ISSUE_CREATION' || type === 'ISSUE_STATUS_CHANGE' ?

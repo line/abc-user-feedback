@@ -85,6 +85,20 @@ const DropdownTrigger = React.forwardRef<
       }
     }, []);
 
+    if (props.asChild) {
+      return (
+        <DropdownPrimitive.Trigger
+          className={cn("dropdown-trigger", className)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </DropdownPrimitive.Trigger>
+      );
+    }
+
     return (
       <DropdownPrimitive.Trigger asChild>
         <Button

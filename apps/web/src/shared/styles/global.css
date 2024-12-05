@@ -30,7 +30,7 @@
   }
 }
 
-.setting-action-buttons button {
+.setting-action-buttons .button {
   @apply min-w-[120px];
 }
 

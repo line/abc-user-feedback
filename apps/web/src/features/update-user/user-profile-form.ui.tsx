@@ -28,6 +28,7 @@ import {
   TextInput,
   useOAIMutation,
   useOAIQuery,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
@@ -80,6 +81,7 @@ const UserProfileForm: React.FC<IProps> = () => {
     reset(data);
   }, [data]);
 
+  useWarnIfUnsavedChanges(formState.isDirty);
   const openDeleteAccountDialog = () => {
     if (!user) return;
     overlay.open(({ close, isOpen }) => (

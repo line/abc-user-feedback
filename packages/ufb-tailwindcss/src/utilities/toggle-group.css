@@ -1,11 +1,11 @@
 .toggle-group-item-large {
-  @apply text-xlarge-strong min-h-52 px-24 py-8;
+  @apply text-xlarge-strong min-h-52 px-24 py-8 [&>svg]:h-24 [&>svg]:w-24;
 }
 .toggle-group-item-medium {
-  @apply text-large-strong min-h-44 px-16 py-8;
+  @apply text-large-strong min-h-44 px-16 py-8 [&>svg]:h-20 [&>svg]:w-20;
 }
 .toggle-group-item-small {
-  @apply text-base-strong h-36 min-h-36 px-12 py-6;
+  @apply text-base-strong h-36 min-h-36 px-12 py-6 [&>svg]:h-16 [&>svg]:w-16;
 }
 
 .toggle-group-item-radius-large {

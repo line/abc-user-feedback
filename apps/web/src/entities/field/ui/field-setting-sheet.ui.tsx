@@ -20,7 +20,6 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
-  Badge,
   Button,
   Checkbox,
   Icon,
@@ -250,13 +249,12 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   {(watch('options') ?? []).length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {watch('options')?.map((v, i) => (
-                        <Tag
-                          key={i}
-                          radius="large"
-                          iconR="RiCloseLargeLine"
-                          onClickIconR={() => removeOption(i)}
-                        >
+                        <Tag key={i} radius="large" variant="secondary">
                           {v.name}
+                          <Icon
+                            name="RiCloseLargeLine"
+                            onClick={() => removeOption(i)}
+                          />
                         </Tag>
                       ))}
                     </div>

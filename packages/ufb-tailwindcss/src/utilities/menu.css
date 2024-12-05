@@ -6,11 +6,11 @@
 }
 
 .menu-item-small {
-  @apply text-base-normal p-8 [&>svg]:h-24 [&>svg]:w-24;
+  @apply text-base-normal p-8 [&>svg]:h-16 [&>svg]:w-16;
 }
 .menu-item-medium {
-  @apply text-large-normal px-12 py-10 [&>svg]:h-20 [&>svg]:w-2;
+  @apply text-large-normal px-12 py-10 [&>svg]:h-20 [&>svg]:w-20;
 }
 .menu-item-large {
-  @apply text-xlarge-normal px-14 py-10 [&>svg]:h-16 [&>svg]:w-1;
+  @apply text-xlarge-normal px-14 py-10 [&>svg]:h-24 [&>svg]:w-24;
 }
