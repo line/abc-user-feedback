@@ -1,4 +1,4 @@
-# ABC User Feedback Guide
+# ABC User Feedback Integration Guide
 
 ## Image Storage Integration
 
@@ -8,13 +8,13 @@ ABC User Feedback supports the integration of image storage solutions to handle 
 
 There are two methods for uploading images associated with feedback:
 
-1. **Multipart Upload API**: This method requires setting up the [image configuration](#configuration). Once configured, you can use the multipart upload API to securely upload images directly to your storage service.
+1. **Multipart Upload API**: This method requires setting up the [image configuration](#S3-configuration). Once configured, you can use the multipart upload API to securely upload images directly to your storage service.
 
 2. **Feedback Creation API with Image URLs**: Alternatively, users can submit feedback with image URLs. This method does not require the image configuration setup; however, the image URLs must come from the whitelisted domains.
 
 **Note**: For detailed instructions on using these methods, please refer to the API documentation. You can see the documentation by accessing to `{API server host}/docs` or `{API server host}/docs/redoc`.
 
-### Configuration
+### S3 Configuration
 
 To enable image uploads directly to the server, you must configure the image storage settings. The service uses the following configuration parameters and you can set them in the setting menu.
 
