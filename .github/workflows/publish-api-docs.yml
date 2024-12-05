@@ -1,0 +1,45 @@
+name: Publish Api Docs to GitHub Pages
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  publish-api-docs:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0.39
+        env:
+          MYSQL_ROOT_PASSWORD: userfeedback
+          MYSQL_DATABASE: userfeedback
+          MYSQL_USER: userfeedback
+          MYSQL_PASSWORD: userfeedback
+          TZ: UTC
+        ports:
+          - 13306:3306
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - name: Build app and swagger docs
+        run: |
+          npx corepack enable
+          pnpm install --frozen-lockfile
+          pnpm build
+          cd apps/api
+          cp .env.example .env
+          npx ts-node -r tsconfig-paths/register src/scripts/build-swagger-docs.ts
+
+      - name: Run Redocly CLI
+        uses: fluximus-prime/redocly-cli-github-action@v1
+        with:
+          args: "build-docs apps/api/swagger.json --output docs/index.html"
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs
