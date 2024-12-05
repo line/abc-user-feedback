@@ -13,7 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { IconButton } from '@ufb/react';
+
+import { Button, Icon } from '@ufb/react';
 
 import Header from './header.ui';
 
@@ -26,9 +27,15 @@ const AnonymousLayout = (props: Props) => {
       <Header />
       <main className="flex-1 p-5">{children}</main>
       <footer className="flex justify-end gap-1 px-6 py-2">
-        <IconButton variant="ghost" icon="RiEarthFill" />
-        <IconButton variant="ghost" icon="github" />
-        <IconButton variant="ghost" icon="RiMailLine" />
+        <Button variant="ghost">
+          <Icon name="RiEarthFill" />
+        </Button>
+        <Button variant="ghost">
+          <Icon name="github" />
+        </Button>
+        <Button variant="ghost">
+          <Icon name="RiMailLine" />
+        </Button>
       </footer>
     </div>
   );

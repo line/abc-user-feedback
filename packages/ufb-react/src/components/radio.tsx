@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group";
+import { Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import { cn } from "../lib/utils";
@@ -41,14 +42,12 @@ const RadioItem = React.forwardRef<
       className={cn("radio-item", className)}
       {...props}
     >
-      <React.Fragment>
-        <span className="radio">
-          <RadioGroupPrimitive.Indicator className="radio-indicator">
-            <Icon name="RiCircleFill" size={6} />
-          </RadioGroupPrimitive.Indicator>
-        </span>
-        {children}
-      </React.Fragment>
+      <span className="radio">
+        <RadioGroupPrimitive.Indicator className="radio-indicator">
+          <Icon name="RiCircleFill" size={6} />
+        </RadioGroupPrimitive.Indicator>
+      </span>
+      <Slottable>{children}</Slottable>
     </RadioGroupPrimitive.Item>
   );
 });

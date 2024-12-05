@@ -18,11 +18,12 @@ import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 
 import {
+  Button,
   Dropdown,
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-  IconButton,
+  Icon,
 } from '@ufb/react';
 
 interface IProps extends React.PropsWithChildren {}
@@ -41,7 +42,9 @@ const LocaleSelectBox: React.FC<IProps> = () => {
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <IconButton icon="RiTranslate2" variant="ghost" />
+        <Button variant="ghost">
+          <Icon name="RiTranslate2" />
+        </Button>
       </DropdownTrigger>
       <DropdownContent>
         {router.locales

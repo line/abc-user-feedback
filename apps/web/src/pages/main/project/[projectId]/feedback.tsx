@@ -13,16 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import type { PaginationState } from '@tanstack/react-table';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { Button, Popover, PopoverTrigger, toast } from '@ufb/react';
+import { Button, Icon, Popover, PopoverTrigger, toast } from '@ufb/react';
 
 import { cn, DEFAULT_LOCALE, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import type { Channel } from '@/entities/channel';
 import { FeedbackTable, useFeedbackSearch } from '@/entities/feedback';
 import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
@@ -94,35 +93,40 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         <div className="flex gap-2 [&>button]:min-w-min">
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" iconL="RiCalendar2Line">
+              <Button variant="outline">
+                <Icon name="RiCalendar2Line" />
                 Date
               </Button>
             </PopoverTrigger>
           </Popover>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" iconL="RiSearchLine">
+              <Button variant="outline">
+                <Icon name="RiSearchLine" />
                 Search
               </Button>
             </PopoverTrigger>
           </Popover>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" iconL="RiEyeLine">
+              <Button variant="outline">
+                <Icon name="RiEyeLine" />
                 View
               </Button>
             </PopoverTrigger>
           </Popover>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" iconL="RiLineHeight">
+              <Button variant="outline">
+                <Icon name="RiLineHeight" />
                 Expand
               </Button>
             </PopoverTrigger>
           </Popover>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" iconL="RiDownload2Line">
+              <Button variant="outline">
+                <Icon name="RiDownload2Line" />
                 Export
               </Button>
             </PopoverTrigger>

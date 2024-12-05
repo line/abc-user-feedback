@@ -82,7 +82,12 @@ export class CreateUserService {
     const tenant = await this.tenantService.findOne();
     // check restrict domain
     const domain = email.split('@')[1];
-    if (!(tenant.allowDomains ?? []).includes(domain)) {
+
+    if (
+      tenant.allowDomains &&
+      tenant.allowDomains.length > 0 &&
+      !tenant.allowDomains.includes(domain)
+    ) {
       throw new NotAllowedDomainException();
     }
 

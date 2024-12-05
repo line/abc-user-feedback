@@ -22,7 +22,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-  IconButton,
+  Icon,
 } from '@ufb/react';
 
 import { useUserStore } from '@/entities/user';
@@ -45,8 +45,8 @@ const UserProfileBox: React.FC<Props> = () => {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <IconButton icon="RiUser6Line" variant="ghost" />
+      <DropdownTrigger variant="ghost">
+        <Icon name="RiUser6Line" />
       </DropdownTrigger>
       <DropdownContent align="end">
         <DropdownItem

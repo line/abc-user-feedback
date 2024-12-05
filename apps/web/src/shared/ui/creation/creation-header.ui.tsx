@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { IconButton } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 
 import Logo from '../logo.ui';
 
@@ -27,11 +27,9 @@ const CreationHeader: React.FC<Props> = ({ onClickGoBack }) => {
     <div className="flex h-12 items-center justify-between p-6">
       <Logo />
       {onClickGoBack && (
-        <IconButton
-          icon="RiLogoutBoxRLine"
-          variant="ghost"
-          onClick={onClickGoBack}
-        />
+        <Button variant="ghost" onClick={onClickGoBack}>
+          <Icon name="RiLogoutBoxRLine" />
+        </Button>
       )}
     </div>
   );

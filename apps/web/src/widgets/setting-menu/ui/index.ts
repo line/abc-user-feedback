@@ -14,6 +14,4 @@
  * under the License.
  */
 
-export { default as SettingMenuBox } from './setting-menu-box';
-
 export * from './tenant';

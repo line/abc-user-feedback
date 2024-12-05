@@ -1,11 +1,9 @@
 import React from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { Radius, Size } from "../lib/types";
-import type { IconNameType } from "./icon";
-import { SMALL_ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
-import { Icon } from "./icon";
 import useTheme from "./use-theme";
 
 type TagVariant = "primary" | "secondary" | "outline" | "destructive";
@@ -40,10 +38,7 @@ interface TagProps extends React.HTMLAttributes<HTMLElement> {
   variant?: TagVariant;
   size?: Size;
   radius?: Radius;
-  iconL?: IconNameType;
-  iconR?: IconNameType;
-  onClickIconL?: React.MouseEventHandler<SVGSVGElement>;
-  onClickIconR?: React.MouseEventHandler<SVGSVGElement>;
+  asChild?: boolean;
 }
 
 const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
@@ -51,19 +46,17 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
     variant = "primary",
     size,
     radius,
-    iconL,
-    iconR,
-    onClickIconL,
-    onClickIconR,
     className,
     children,
+    asChild,
     ...rest
   } = props;
 
   const { themeSize, themeRadius } = useTheme();
+  const Comp = asChild ? Slot : "span";
 
   return (
-    <span
+    <Comp
       {...rest}
       ref={ref}
       className={cn(
@@ -75,26 +68,8 @@ const Tag = React.forwardRef<HTMLElement, TagProps>((props, ref) => {
         }),
       )}
     >
-      <React.Fragment>
-        {iconL && (
-          <Icon
-            name={iconL}
-            size={SMALL_ICON_SIZE[size ?? themeSize]}
-            aria-hidden
-            onClick={onClickIconL}
-          />
-        )}
-        {children}
-        {iconR && (
-          <Icon
-            name={iconR}
-            size={SMALL_ICON_SIZE[size ?? themeSize]}
-            aria-hidden
-            onClick={onClickIconR}
-          />
-        )}
-      </React.Fragment>
-    </span>
+      {children}
+    </Comp>
   );
 });
 

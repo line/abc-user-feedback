@@ -21,7 +21,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-  IconButton,
+  Icon,
 } from '@ufb/react';
 
 const PAGE_SIZES = [10, 20, 30, 40, 50];
@@ -44,13 +44,9 @@ const TablePagination = <T,>(props: IProps<T>) => {
         <p>Rows per page</p>
         <Dropdown>
           <DropdownTrigger asChild>
-            <Button
-              variant="outline"
-              size="small"
-              iconR="RiExpandUpDownFill"
-              className="!min-w-0"
-            >
+            <Button variant="outline" size="small">
               {pagination.pageSize}
+              <Icon name="RiExpandUpDownFill" />
             </Button>
           </DropdownTrigger>
           <DropdownContent>
@@ -67,34 +63,38 @@ const TablePagination = <T,>(props: IProps<T>) => {
         <p>
           Page {pagination.pageIndex + 1} of {table.getPageCount()}
         </p>
-        <IconButton
+        <Button
           size="small"
           variant="outline"
-          icon="RiArrowLeftDoubleFill"
           onClick={table.firstPage}
           disabled={!table.getCanPreviousPage()}
-        />
-        <IconButton
+        >
+          <Icon name="RiArrowLeftDoubleFill" />
+        </Button>
+        <Button
           size="small"
           variant="outline"
-          icon="RiArrowLeftSLine"
           onClick={table.previousPage}
           disabled={!table.getCanPreviousPage()}
-        />
-        <IconButton
+        >
+          <Icon name="RiArrowLeftSLine" />
+        </Button>
+        <Button
           size="small"
           variant="outline"
-          icon="RiArrowRightSLine"
           onClick={table.nextPage}
           disabled={!table.getCanNextPage()}
-        />
-        <IconButton
+        >
+          <Icon name="RiArrowRightSLine" />
+        </Button>
+        <Button
           size="small"
           variant="outline"
-          icon="RiArrowRightDoubleFill"
           onClick={table.lastPage}
           disabled={!table.getCanNextPage()}
-        />
+        >
+          <Icon name="RiArrowRightDoubleFill" />
+        </Button>
       </div>
     </div>
   );

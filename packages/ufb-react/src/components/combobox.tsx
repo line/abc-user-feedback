@@ -1,8 +1,8 @@
 import * as React from "react";
+import { Slottable } from "@radix-ui/react-slot";
 import { Command as CommandPrimitive } from "cmdk";
 
 import type { TriggerType } from "../lib/types";
-import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
@@ -150,52 +150,46 @@ const ComboboxItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
     inset?: boolean;
-    iconL?: IconNameType;
-    iconR?: IconNameType;
-    caption?: React.ReactNode;
   }
->(({ inset, iconL, iconR, caption, children, className, ...props }, ref) => (
+>(({ inset, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
     className={cn("combobox-item", inset && "combobox-item-inset", className)}
     {...props}
   >
-    <React.Fragment>
-      {iconL && <Icon name={iconL} size={16} />}
-      <div className="combobox-item-text">{children}</div>
-      {caption && <span className="combobox-caption">{caption}</span>}
-      {iconR && <Icon name={iconR} size={16} />}
-    </React.Fragment>
+    {children}
   </CommandPrimitive.Item>
 ));
 
 ComboboxItem.displayName = CommandPrimitive.Item.displayName;
 
+const ComboboxCaption = React.forwardRef<
+  React.ElementRef<"span">,
+  React.ComponentPropsWithoutRef<"span">
+>(({ className, ...props }, ref) => (
+  <span ref={ref} className={cn("combobox-caption", className)} {...props} />
+));
+
+ComboboxCaption.displayName = "ComboboxCaption";
+
 const ComboboxSelectItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive.Item> & {
-    iconL?: IconNameType;
-    iconR?: IconNameType;
-    caption?: React.ReactNode;
     checked?: boolean;
   }
->(({ iconL, iconR, caption, checked, children, className, ...props }, ref) => (
+>(({ checked, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
     className={cn("combobox-item", className)}
     {...props}
   >
-    <React.Fragment>
-      <Icon
-        name="RiCheckLine"
-        size={20}
-        color={checked ? "currentColor" : "transparent"}
-      />
-      {iconL && <Icon name={iconL} size={16} />}
-      <div className="combobox-item-text">{children}</div>
-      {caption && <span className="combobox-caption">{caption}</span>}
-      {iconR && <Icon name={iconR} size={16} />}
-    </React.Fragment>
+    <Icon
+      name="RiCheckLine"
+      size={20}
+      color={checked ? "currentColor" : "transparent"}
+      className="combobox-check"
+    />
+    <Slottable>{children}</Slottable>
   </CommandPrimitive.Item>
 ));
 
@@ -212,7 +206,6 @@ const ComboboxTrigger = React.forwardRef<
       asChild = false,
       variant = "outline",
       trigger,
-      iconR,
       className,
       children,
       onMouseEnter,
@@ -262,12 +255,7 @@ const ComboboxTrigger = React.forwardRef<
         <Button
           ref={ref}
           variant={variant}
-          iconR={iconR}
-          className={cn(
-            "combobox-trigger",
-            iconR === "RiArrowDownSLine" && "combobox-trigger-icon-rotate",
-            className,
-          )}
+          className={cn("combobox-trigger", className)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           {...props}
@@ -283,6 +271,7 @@ ComboboxTrigger.displayName = "ComboboxTrigger";
 export {
   Combobox,
   ComboboxContent,
+  ComboboxCaption,
   ComboboxInput,
   ComboboxList,
   ComboboxEmpty,

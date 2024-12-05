@@ -22,6 +22,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
+  Icon,
 } from '@ufb/react';
 
 interface Props<T> extends React.PropsWithChildren {
@@ -31,28 +32,20 @@ interface Props<T> extends React.PropsWithChildren {
 const SortingTableHead = <T,>({ column, children }: Props<T>) => {
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <Button
-          variant="ghost"
-          size="small"
-          iconR="RiArrowUpDownFill"
-          className="!min-w-0 font-normal text-[var(--table-text-header)]"
-          data-state="open"
-        >
-          {children}
-        </Button>
+      <DropdownTrigger
+        variant="ghost"
+        className="font-normal text-[var(--table-text-header)]"
+      >
+        {children}
+        <Icon name="RiArrowUpDownFill" />
       </DropdownTrigger>
       <DropdownContent>
-        <DropdownItem
-          onClick={() => column.toggleSorting(false)}
-          iconL="RiArrowUpLine"
-        >
+        <DropdownItem onClick={() => column.toggleSorting(false)}>
+          <Icon name="RiArrowUpLine" />
           Ascending
         </DropdownItem>
-        <DropdownItem
-          onClick={() => column.toggleSorting(true)}
-          iconL="RiArrowDownLine"
-        >
+        <DropdownItem onClick={() => column.toggleSorting(true)}>
+          <Icon name="RiArrowDownLine" />
           Descending
         </DropdownItem>
       </DropdownContent>

@@ -20,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Accordion, Button, ScrollArea } from '@ufb/react';
+import { Accordion, Button, Icon, ScrollArea } from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared';
 import {
@@ -92,7 +92,8 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
           </Accordion>
         </ScrollArea>
         <div className="flex justify-end gap-2">
-          <Button onClick={gotoFeedback} iconL="RiSparklingFill">
+          <Button onClick={gotoFeedback}>
+            <Icon name="RiSparklingFill" />
             {t('button.start')}
           </Button>
         </div>

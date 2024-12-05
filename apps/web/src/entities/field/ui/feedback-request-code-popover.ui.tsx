@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 
 import {
   Button,
-  IconButton,
+  Icon,
   Popover,
   PopoverClose,
   PopoverContent,
@@ -91,7 +91,8 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button iconL="RiCodeBlock" variant="outline">
+        <Button variant="outline">
+          <Icon name="RiCodeBlock" />
           {t('main.setting.feedback-request-code')}
         </Button>
       </PopoverTrigger>
@@ -100,8 +101,10 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
           <h5 className="text-title-h5">
             {t('main.setting.feedback-request-code')}
           </h5>
-          <PopoverClose>
-            <IconButton icon="RiCloseLine" variant="ghost" />
+          <PopoverClose asChild>
+            <Button variant="ghost">
+              <Icon name="RiCloseLine" />
+            </Button>
           </PopoverClose>
         </div>
         {!apiKey && (

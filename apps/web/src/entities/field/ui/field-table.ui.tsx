@@ -21,7 +21,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 
-import { Button } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 
 import { BasicTable, TableFacetedFilter } from '@/shared';
 
@@ -68,11 +68,8 @@ const FieldTable: React.FC<IProps> = (props) => {
           title="Property"
         />
         {table.getState().columnFilters.length > 0 && (
-          <Button
-            variant="ghost"
-            iconL="RiCloseLine"
-            onClick={() => table.resetColumnFilters()}
-          >
+          <Button variant="ghost" onClick={() => table.resetColumnFilters()}>
+            <Icon name="RiCloseLine" />
             Reset
           </Button>
         )}

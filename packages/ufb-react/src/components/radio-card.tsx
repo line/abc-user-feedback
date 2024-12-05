@@ -100,15 +100,13 @@ const RadioCard = React.forwardRef<
       className={cn(radioCardVariants({ type, radius, className }))}
       {...props}
     >
-      <React.Fragment>
-        {icon && <Icon name={icon} size={24} />}
-        <span className="radio-card-text">
-          {title && <strong className="radio-card-title">{title}</strong>}
-          {description && (
-            <span className="radio-card-description">{description}</span>
-          )}
-        </span>
-      </React.Fragment>
+      {icon && <Icon name={icon} size={24} />}
+      <span className="radio-card-text">
+        {title && <strong className="radio-card-title">{title}</strong>}
+        {description && (
+          <span className="radio-card-description">{description}</span>
+        )}
+      </span>
     </RadioGroupPrimitive.Item>
   );
 });

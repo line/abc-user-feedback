@@ -24,7 +24,7 @@ import {
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Badge, Button, toast } from '@ufb/react';
+import { Badge, Button, Icon, toast } from '@ufb/react';
 
 import {
   BasicTable,
@@ -191,11 +191,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
             title="Project"
           />
           {table.getState().columnFilters.length > 0 && (
-            <Button
-              variant="ghost"
-              iconL="RiCloseLine"
-              onClick={() => table.resetColumnFilters()}
-            >
+            <Button variant="ghost" onClick={() => table.resetColumnFilters()}>
+              <Icon name="RiCloseLine" />
               Reset
             </Button>
           )}
@@ -205,8 +202,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
             variant="outline"
             className="!text-tint-red"
             onClick={openDeleteUsersDialog}
-            iconL="RiDeleteBin6Line"
           >
+            <Icon name="RiDeleteBin6Line" />
             {t('v2.button.name.delete', { name: 'User' })}
             <Badge variant="subtle" className="!text-tint-red">
               {selectedRowIds.length}

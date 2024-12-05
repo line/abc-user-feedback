@@ -16,7 +16,7 @@
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 import { Popover, PopoverModalContent } from '@ufb/ui';
 
 import type { MemberInfo } from '@/entities/member';
@@ -117,12 +117,12 @@ const InputMembersStep: React.FC<IProps> = () => {
       actionButton={
         <>
           <Button
-            iconL="RiExchange2Fill"
             variant="outline"
             onClick={() => {
               jumpStepByKey('roles');
             }}
           >
+            <Icon name="RiExchange2Fill" />
             {t('project-setting-menu.role-mgmt')}
           </Button>
           <Button onClick={openCreateMemberFormDialog}>

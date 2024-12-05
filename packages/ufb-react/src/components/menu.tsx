@@ -2,10 +2,7 @@ import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cva } from "class-variance-authority";
 
-import type { IconNameType } from "./icon";
-import { ICON_SIZE } from "../constants";
 import { cn } from "../lib/utils";
-import { Badge } from "./badge";
 import {
   Dropdown,
   DropdownContent,
@@ -71,11 +68,7 @@ const Menu = React.forwardRef<
 Menu.displayName = ToggleGroupPrimitive.Root.displayName;
 
 interface MenuItemProps
-  extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> {
-  iconL?: IconNameType;
-  iconR?: IconNameType;
-  badge?: React.ReactNode;
-}
+  extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> {}
 
 const menuItemVariants = cva("!menu-item", {
   variants: {
@@ -93,7 +86,7 @@ const menuItemVariants = cva("!menu-item", {
 const MenuItem = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Item>,
   MenuItemProps
->(({ iconL, iconR, badge, children, className, ...props }, ref) => {
+>(({ children, className, ...props }, ref) => {
   const { size = DefaultValue.size } = React.useContext(MenuContext);
   return (
     <ToggleGroupPrimitive.Item
@@ -101,14 +94,7 @@ const MenuItem = React.forwardRef<
       className={cn(menuItemVariants({ size, className }))}
       {...props}
     >
-      {iconL && <Icon name={iconL} size={ICON_SIZE[size]} />}
-      <span>{children}</span>
-      {badge && (
-        <Badge variant="bold" color="default" radius="large">
-          {badge}
-        </Badge>
-      )}
-      {iconR && <Icon name={iconR} size={ICON_SIZE[size]} />}
+      {children}
     </ToggleGroupPrimitive.Item>
   );
 });
@@ -118,40 +104,22 @@ const MenuDropdown = Dropdown;
 
 const MenuDropdownTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownTrigger>,
-  React.ComponentPropsWithoutRef<typeof DropdownTrigger> & {
-    badge?: React.ReactNode;
-  }
->(
-  (
-    { asChild, variant = "ghost", className, children, badge, ...props },
-    ref,
-  ) => {
-    const { size = DefaultValue.size } = React.useContext(MenuContext);
-    if (asChild) {
-      return (
-        <DropdownTrigger asChild ref={ref} className={className} {...props}>
-          {children}
-        </DropdownTrigger>
-      );
-    }
+  React.ComponentPropsWithoutRef<typeof DropdownTrigger>
+>(({ variant = "ghost", className, children, ...props }, ref) => {
+  const { size = DefaultValue.size } = React.useContext(MenuContext);
 
-    return (
-      <DropdownTrigger
-        ref={ref}
-        variant={variant}
-        className={cn(menuItemVariants({ size, className }))}
-        {...props}
-      >
-        <span>{children}</span>
-        {badge && (
-          <Badge variant="bold" color="default" radius="large">
-            {badge}
-          </Badge>
-        )}
-      </DropdownTrigger>
-    );
-  },
-);
+  return (
+    <DropdownTrigger
+      ref={ref}
+      variant={variant}
+      className={cn("justify-between", menuItemVariants({ size, className }))}
+      {...props}
+    >
+      <div className="flex">{children}</div>
+      <Icon name="RiArrowRightSLine" />
+    </DropdownTrigger>
+  );
+});
 MenuDropdownTrigger.displayName = "MenuDropdownTrigger";
 
 const MenuDropdownContent = DropdownContent;

@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, HTMLInputTypeAttribute } from "react";
 import React, { useRef } from "react";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { CaptionType, Radius, Size } from "../lib/types";
@@ -13,14 +14,7 @@ import { cn, composeRefs } from "../lib/utils";
 import { Icon } from "./icon";
 import useTheme from "./use-theme";
 
-type TextInputType = (
-  | "text"
-  | "email"
-  | "password"
-  | "search"
-  | "tel"
-  | "code"
-) &
+type TextInputType = ("text" | "email" | "password" | "search" | "tel") &
   HTMLInputTypeAttribute;
 
 const InputField = React.forwardRef<
@@ -192,6 +186,7 @@ interface InputCaptionProps extends React.ComponentPropsWithoutRef<"span"> {
   icon?: IconNameType;
   variant?: CaptionType;
   size?: Size;
+  asChild?: boolean;
 }
 
 const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
@@ -202,31 +197,31 @@ const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
       size,
       className,
       children,
+      asChild,
       ...rest
     } = props;
     const { themeSize } = useTheme();
+    const Comp = asChild ? Slot : "span";
 
     return (
-      <span
+      <Comp
         ref={ref}
         className={cn(
           inputCaptionVariants({ size: size ?? themeSize, variant, className }),
         )}
         {...rest}
       >
-        <React.Fragment>
-          <Icon
-            name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-            size={INPUT_CAPTION_ICON_SIZE[size ?? themeSize]}
-            className={cn(
-              inputCaptionIconVariants({
-                size: size ?? themeSize,
-              }),
-            )}
-          />
-          {children}
-        </React.Fragment>
-      </span>
+        <Icon
+          name={icon ?? CAPTION_DEFAULT_ICON[variant]}
+          size={INPUT_CAPTION_ICON_SIZE[size ?? themeSize]}
+          className={cn(
+            inputCaptionIconVariants({
+              size: size ?? themeSize,
+            }),
+          )}
+        />
+        <Slottable>{children}</Slottable>
+      </Comp>
     );
   },
 );

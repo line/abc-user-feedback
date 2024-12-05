@@ -18,7 +18,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button, toast } from '@ufb/react';
+import { Button, Icon, toast } from '@ufb/react';
 
 import {
   client,
@@ -141,7 +141,6 @@ const MemberSetting: React.FC<IProps> = (props) => {
       action={
         <>
           <Button
-            iconL="RiExchange2Fill"
             variant="outline"
             onClick={() =>
               router.push({
@@ -150,6 +149,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
               })
             }
           >
+            <Icon name="RiExchange2Fill" />
             {t('project-setting-menu.role-mgmt')}
           </Button>
           <Button

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { IconButton } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 
 interface Props extends React.PropsWithChildren {
   title: React.ReactNode;
@@ -28,11 +28,9 @@ const SettingTemplate: React.FC<Props> = (props) => {
       <div className="flex min-h-10 items-center justify-between">
         <h4 className="text-title-h4 flex-1">
           {onClickBack && (
-            <IconButton
-              icon="RiArrowLeftLine"
-              variant="ghost"
-              onClick={onClickBack}
-            />
+            <Button variant="ghost" onClick={onClickBack}>
+              <Icon name="RiArrowLeftLine" />
+            </Button>
           )}
           {title}
         </h4>

@@ -137,7 +137,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
             {table.getRowCount() === 0 ?
               <TableRow className="hover:bg-inherit">
                 <TableCell colSpan={table.getFlatHeaders().length}>
-                  <div className="my-10 flex flex-col items-center justify-center gap-4">
+                  <div className="my-10 flex flex-col items-center justify-center gap-4 [&>button]:min-w-[120px]">
                     <Image
                       width={200}
                       height={200}

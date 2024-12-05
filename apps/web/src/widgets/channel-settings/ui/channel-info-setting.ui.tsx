@@ -21,7 +21,7 @@ import { useOverlay } from '@toss/use-overlay';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button, toast } from '@ufb/react';
+import { Button, Icon, toast } from '@ufb/react';
 
 import {
   DeleteDialog,
@@ -114,10 +114,10 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
         <>
           <Button
             variant="outline"
-            iconL="RiDeleteBinFill"
             onClick={openDeleteDialog}
             disabled={!perms.includes('channel_delete')}
           >
+            <Icon name="RiDeleteBinFill" />
             {t('v2.button.name.delete', { name: 'Channel' })}
           </Button>
           <Button

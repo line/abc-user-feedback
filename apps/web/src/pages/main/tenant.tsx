@@ -19,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
-import { Menu, MenuItem } from '@ufb/react';
+import { Icon, Menu, MenuItem } from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared';
 import { DEFAULT_LOCALE } from '@/shared';
@@ -51,13 +51,16 @@ const TenantPage: NextPageWithLayout = () => {
             router.push({ pathname: router.pathname, query: { menu: value } })
           }
         >
-          <MenuItem value="tenant" iconL="RiInformation2Line">
+          <MenuItem value="tenant">
+            <Icon name="RiInformation2Line" />
             {t('tenant-setting-menu.tenant-info')}
           </MenuItem>
-          <MenuItem value="login" iconL="RiUser2Line">
+          <MenuItem value="login">
+            <Icon name="RiUser2Line" />
             {t('tenant-setting-menu.sign-up-mgmt')}
           </MenuItem>
-          <MenuItem value="user" iconL="RiShieldKeyholeLine">
+          <MenuItem value="user">
+            <Icon name="RiShieldKeyholeLine" />
             {t('tenant-setting-menu.user-mgmt')}
           </MenuItem>
         </Menu>

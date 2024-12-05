@@ -15,23 +15,23 @@
 }
 
 .combobox-item {
-  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center space-x-8 p-8 outline-none transition-colors hover:bg-[var(--combobox-fg-hover)] data-[selected=true]:bg-[var(--combobox-fg-hover)];
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center p-8 outline-none transition-colors hover:bg-[var(--combobox-fg-hover)] data-[selected=true]:bg-[var(--combobox-fg-hover)];
 }
 
 .combobox-item-inset {
   @apply pl-32;
 }
 
-.combobox-item-text {
-  @apply flex-1;
-}
-
 .combobox-item ~ .combobox-item {
   @apply mt-4;
 }
 
+.combobox-check {
+  @apply mr-8;
+}
+
 .combobox-caption {
-  @apply text-small-normal tracking-widest text-[var(--combobox-text-shortcut)];
+  @apply text-small-normal ml-auto tracking-widest text-[var(--combobox-text-shortcut)];
 }
 
 .combobox-separator {
@@ -68,8 +68,4 @@
   --combobox-border-default: var(--border-neutral-tertiary);
 
   @apply data-[state=open]:bg-[var(--combobox-fg-hover)] [&>svg:last-of-type]:!ml-auto;
-}
-
-.combobox-trigger-icon-rotate {
-  @apply [&>svg:last-of-type]:data-[state=open]:rotate-180;
 }

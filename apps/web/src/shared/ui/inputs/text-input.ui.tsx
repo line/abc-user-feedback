@@ -76,7 +76,6 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
               onChangeVisibility={(visible) =>
                 setInputType(visible ? 'text' : 'password')
               }
-              className="!min-w-0"
             />
           )}
           {right && (

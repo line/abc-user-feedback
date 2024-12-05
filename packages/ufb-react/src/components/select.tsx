@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
+import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { CaptionType } from "../lib/types";
@@ -129,6 +130,7 @@ Select.displayName = "Select";
 type SingleSelectProps = React.ComponentPropsWithoutRef<
   typeof SelectPrimitive.Root
 >;
+
 const SingleSelect = SelectPrimitive.Root;
 
 type MultipleSelectProps = React.ComponentPropsWithoutRef<
@@ -180,15 +182,13 @@ const SingleSelectValue = React.forwardRef<
 
   return (
     <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
-      <React.Fragment>
-        <SelectPrimitive.Icon asChild>
-          <Icon
-            name={itemByValue[value]?.icon}
-            size={ICON_SIZE[size ?? themeSize]}
-          />
-        </SelectPrimitive.Icon>
-        {itemByValue[value]?.children}
-      </React.Fragment>
+      <SelectPrimitive.Icon asChild>
+        <Icon
+          name={itemByValue[value]?.icon}
+          size={ICON_SIZE[size ?? themeSize]}
+        />
+      </SelectPrimitive.Icon>
+      <Slottable>{itemByValue[value]?.children}</Slottable>
     </SelectPrimitive.Value>
   );
 });
@@ -204,21 +204,19 @@ const MultipleSelectValue = React.forwardRef<
 
   return (
     <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
-      <React.Fragment>
-        {values.length > 0
-          ? values.map((value, index) => (
-              <Tag
-                key={index}
-                variant="outline"
-                size={size ?? themeSize}
-                className="select-tag"
-                iconL={itemByValue[value]?.icon}
-              >
-                {itemByValue[value]?.children}
-              </Tag>
-            ))
-          : placeholder}
-      </React.Fragment>
+      {values.length > 0
+        ? values.map((value, index) => (
+            <Tag
+              key={index}
+              variant="outline"
+              size={size ?? themeSize}
+              className="select-tag"
+            >
+              {itemByValue[value]?.children}
+              <Icon name={itemByValue[value]?.icon} />
+            </Tag>
+          ))
+        : placeholder}
     </SelectPrimitive.Value>
   );
 });
@@ -261,13 +259,11 @@ const SelectTrigger = React.forwardRef<
       )}
       {...props}
     >
-      <React.Fragment>
-        {icon && <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} />}
-        {children}
-        <SelectPrimitive.Icon asChild>
-          <Icon name="RiArrowDownSLine" size={ICON_SIZE[size ?? themeSize]} />
-        </SelectPrimitive.Icon>
-      </React.Fragment>
+      {icon && <Icon name={icon} size={ICON_SIZE[size ?? themeSize]} />}
+      <Slottable>{children}</Slottable>
+      <SelectPrimitive.Icon asChild>
+        <Icon name="RiArrowDownSLine" size={ICON_SIZE[size ?? themeSize]} />
+      </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
 });
@@ -371,19 +367,17 @@ const SingleSelectItem = React.forwardRef<
       )}
       {...props}
     >
-      <React.Fragment>
-        <span
-          className={cn(
-            selectItemCheckVariants({ check: icon ? "right" : "left" }),
-          )}
-        >
-          <SelectPrimitive.ItemIndicator>
-            <Icon name="RiCheckLine" size={20} />
-          </SelectPrimitive.ItemIndicator>
-        </span>
-        {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-      </React.Fragment>
+      <span
+        className={cn(
+          selectItemCheckVariants({ check: icon ? "right" : "left" }),
+        )}
+      >
+        <SelectPrimitive.ItemIndicator>
+          <Icon name="RiCheckLine" size={20} />
+        </SelectPrimitive.ItemIndicator>
+      </span>
+      {icon && <Icon name={icon} size={16} className="select-item-icon" />}
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   );
 });
@@ -416,19 +410,17 @@ const MultipleSelectItem = React.forwardRef<
       )}
       {...props}
     >
-      <React.Fragment>
-        {isSelected && (
-          <span
-            className={cn(
-              selectItemCheckVariants({ check: icon ? "right" : "left" }),
-            )}
-          >
-            <Icon name="RiCheckLine" size={20} />
-          </span>
-        )}
-        {icon && <Icon name={icon} size={16} className="select-item-icon" />}
-        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-      </React.Fragment>
+      {isSelected && (
+        <span
+          className={cn(
+            selectItemCheckVariants({ check: icon ? "right" : "left" }),
+          )}
+        >
+          <Icon name="RiCheckLine" size={20} />
+        </span>
+      )}
+      {icon && <Icon name={icon} size={16} className="select-item-icon" />}
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
   );
 });
@@ -475,6 +467,7 @@ interface SelectCaptionProps extends React.ComponentPropsWithoutRef<"span"> {
   variant?: CaptionType;
   icon?: IconNameType;
   size?: Size;
+  asChild?: boolean;
 }
 
 const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
@@ -485,25 +478,25 @@ const SelectCaption = React.forwardRef<HTMLElement, SelectCaptionProps>(
       size,
       className,
       children,
+      asChild,
       ...rest
     } = props;
     const { themeSize } = useTheme();
+    const Comp = asChild ? Slot : "span";
 
     return (
-      <span
+      <Comp
         ref={ref}
         className={cn(selectCaptionVariants({ variant, className }))}
         {...rest}
       >
-        <React.Fragment>
-          <Icon
-            name={icon ?? CAPTION_DEFAULT_ICON[variant]}
-            size={ICON_SIZE[size ?? themeSize]}
-            className="select-caption-icon"
-          />
-          {children}
-        </React.Fragment>
-      </span>
+        <Icon
+          name={icon ?? CAPTION_DEFAULT_ICON[variant]}
+          size={ICON_SIZE[size ?? themeSize]}
+          className="select-caption-icon"
+        />
+        <Slottable>{children}</Slottable>
+      </Comp>
     );
   },
 );

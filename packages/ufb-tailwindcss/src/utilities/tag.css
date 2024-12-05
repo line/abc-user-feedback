@@ -1,11 +1,11 @@
 .tag-small {
-  @apply text-small-strong gap-4 px-8 py-2;
+  @apply text-small-strong gap-4 px-8 py-2 [&>svg]:h-12 [&>svg]:w-12;
 }
 .tag-medium {
-  @apply text-base-strong gap-6 px-10 py-4;
+  @apply text-base-strong gap-6 px-10 py-4 [&>svg]:h-16 [&>svg]:w-16;
 }
 .tag-large {
-  @apply text-large-strong gap-8 px-12 py-4;
+  @apply text-large-strong gap-8 px-12 py-4 [&>svg]:h-16 [&>svg]:w-16;
 }
 
 .tag-radius-small {

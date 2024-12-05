@@ -16,7 +16,7 @@
 
 import Link from 'next/link';
 
-import { Divider, IconButton } from '@ufb/react';
+import { Button, Divider, Icon } from '@ufb/react';
 
 import { LanguageSelectBox, ThemeSelectBox } from '@/shared';
 import { useUserStore } from '@/entities/user';
@@ -41,7 +41,9 @@ const Header: React.FC<IProps> = ({ projectId }) => {
       <div className="flex items-center gap-3">
         {user?.type === 'SUPER' && (
           <Link href={{ pathname: '/main/tenant' }}>
-            <IconButton icon="RiBuildingLine" variant="ghost" />
+            <Button variant="ghost">
+              <Icon name="RiBuildingLine" />
+            </Button>
           </Link>
         )}
         <ThemeSelectBox />

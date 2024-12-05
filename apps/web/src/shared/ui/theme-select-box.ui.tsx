@@ -21,7 +21,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-  IconButton,
+  Icon,
 } from '@ufb/react';
 
 import { firstLeterPascal } from '../utils';
@@ -31,8 +31,8 @@ const ThemeSelectBox: React.FC = () => {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <IconButton icon="RiSunLine" variant="ghost" />
+      <DropdownTrigger variant="ghost">
+        <Icon name="RiSunLine" />
       </DropdownTrigger>
       <DropdownContent align="end">
         {themes.map((theme) => (

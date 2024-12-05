@@ -7,7 +7,6 @@ import { ALERT_DEFAULT_ICON } from "../constants";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
-import { IconButton } from "./icon-button";
 import useTheme from "./use-theme";
 
 const alertVariants = cva("alert", {
@@ -105,7 +104,7 @@ const AlertDescription = React.forwardRef<
 AlertDescription.displayName = "AlertDescription";
 
 interface AlertIconButtonProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof IconButton>, "icon"> {
+  extends Omit<React.ComponentPropsWithoutRef<typeof Button>, "icon"> {
   icon?: IconNameType;
 }
 
@@ -115,15 +114,16 @@ const AlertIconButton = React.forwardRef<
 >(({ icon, variant, size, className, ...props }, ref) => {
   const { radius } = React.useContext(AlertContext);
   return (
-    <IconButton
+    <Button
       ref={ref}
-      icon={icon ?? "RiCloseFill"}
       radius={radius ?? "medium"}
       size={size ?? "medium"}
       variant={variant ?? "ghost"}
       className={cn("alert-close", className)}
       {...props}
-    />
+    >
+      <Icon name={icon ?? "RiCloseFill"} />
+    </Button>
   );
 });
 

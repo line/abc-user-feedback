@@ -18,9 +18,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { Switch, toast } from '@ufb/react';
+import { Button, Switch, toast } from '@ufb/react';
 
-import { useOAIMutation } from '@/shared';
+import { SettingTemplate, useOAIMutation } from '@/shared';
 import type { AuthInfo } from '@/entities/tenant';
 import {
   authInfoScema,
@@ -28,8 +28,6 @@ import {
   OAuthConfigForm,
   useTenantStore,
 } from '@/entities/tenant';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {}
 
@@ -82,15 +80,18 @@ const LoginSetting: React.FC<IProps> = () => {
   };
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('tenant-setting-menu.sign-up-mgmt')}
-      actionBtn={{
-        children: t('button.save'),
-        onClick: handleSubmit(onSubmit),
-        form: 'form',
-        type: 'submit',
-        disabled: !formState.isDirty || isPending,
-      }}
+      action={
+        <Button
+          form="form"
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
+          disabled={!formState.isDirty || isPending}
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
       <FormProvider {...methods}>
         <form id="form" className="flex flex-col gap-6">
@@ -130,7 +131,7 @@ const LoginSetting: React.FC<IProps> = () => {
           </div>
         </form>
       </FormProvider>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

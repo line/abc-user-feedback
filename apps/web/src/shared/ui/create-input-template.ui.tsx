@@ -15,7 +15,7 @@
  */
 import { useTranslation } from 'react-i18next';
 
-import { Button, IconButton, ScrollArea } from '@ufb/react';
+import { Button, Icon, ScrollArea } from '@ufb/react';
 
 import SettingAlert from './setting-alert.ui';
 
@@ -61,11 +61,9 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
       <div className="flex items-center justify-between">
         <h3 className="text-title-h3">
           {onClickBack && (
-            <IconButton
-              icon="RiArrowLeftLine"
-              variant="ghost"
-              onClick={onClickBack}
-            />
+            <Button variant="ghost" onClick={onClickBack}>
+              <Icon name="RiArrowLeftLine" />
+            </Button>
           )}
           {title}
         </h3>

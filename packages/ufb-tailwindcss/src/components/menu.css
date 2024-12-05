@@ -20,7 +20,7 @@
   --menu-fg-hover: var(--fg-neutral-tertiary);
   --menu-fg-pressed: var(--fg-neutral-tertiary);
 
-  @apply rounded-8 relative flex w-full cursor-pointer select-none items-center space-x-8 text-left text-[var(--menu-text-default)] outline-none hover:bg-[var(--menu-fg-hover)] hover:text-[var(--menu-text-hover)] hover:opacity-100 data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--menu-fg-pressed)] data-[state=open]:bg-[var(--menu-fg-pressed)] data-[state=on]:text-[var(--menu-text-pressed)] data-[state=open]:text-[var(--menu-text-pressed)] data-[disabled]:opacity-50 [&>span]:flex-1 [&>svg]:flex-shrink-0;
+  @apply rounded-8 relative flex w-full cursor-pointer select-none items-center gap-8 text-left text-[var(--menu-text-default)] outline-none hover:bg-[var(--menu-fg-hover)] hover:text-[var(--menu-text-hover)] hover:opacity-100 data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--menu-fg-pressed)] data-[state=open]:bg-[var(--menu-fg-pressed)] data-[state=on]:text-[var(--menu-text-pressed)] data-[state=open]:text-[var(--menu-text-pressed)] data-[disabled]:opacity-50 [&>svg]:flex-shrink-0;
 
   /* default */
   @apply menu-item-small;

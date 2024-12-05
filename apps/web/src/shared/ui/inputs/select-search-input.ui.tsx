@@ -25,6 +25,7 @@ import {
   ComboboxList,
   ComboboxSelectItem,
   ComboboxTrigger,
+  Icon,
   InputField,
   InputLabel,
 } from '@ufb/react';
@@ -59,8 +60,9 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         {label} {required && <span className="text-tint-red">*</span>}
       </InputLabel>
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled} iconR="RiArrowDownSLine">
+        <ComboboxTrigger disabled={disabled}>
           {displayValue ?? value ?? t('v2.placeholder.select')}
+          <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
         <ComboboxContent align="start">
           <ComboboxInput placeholder={t('v2.placeholder.select')} />

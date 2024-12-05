@@ -9,7 +9,6 @@ import { ALERT_DEFAULT_ICON } from "../constants";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
-import { IconButton } from "./icon-button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 import useTheme from "./use-theme";
 
@@ -19,37 +18,20 @@ const DialogTrigger = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Trigger>,
   DialogPrimitive.DialogTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button>
->(
-  (
-    { asChild = false, variant = "outline", className, children, ...props },
-    ref,
-  ) => {
-    if (asChild) {
-      return (
-        <DialogPrimitive.Trigger
-          asChild
-          ref={ref}
-          className={className}
-          {...props}
-        >
-          {children}
-        </DialogPrimitive.Trigger>
-      );
-    }
-
-    return (
-      <DialogPrimitive.Trigger asChild>
-        <Button
-          variant={variant}
-          className={cn("dialog-trigger", className)}
-          {...props}
-        >
-          {children}
-        </Button>
-      </DialogPrimitive.Trigger>
-    );
-  },
-);
+>(({ variant = "outline", className, children, ...props }, ref) => {
+  return (
+    <DialogPrimitive.Trigger asChild>
+      <Button
+        variant={variant}
+        className={cn("dialog-trigger", className)}
+        {...props}
+        ref={ref}
+      >
+        {children}
+      </Button>
+    </DialogPrimitive.Trigger>
+  );
+});
 DialogTrigger.displayName = DialogPrimitive.DialogTrigger.displayName;
 
 const DialogPortal = DialogPrimitive.Portal;
@@ -111,13 +93,14 @@ const DialogContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close asChild>
-          <IconButton
-            icon="RiCloseLine"
+          <Button
             size="medium"
             variant="ghost"
             className="dialog-close"
             aria-label="Close"
-          />
+          >
+            <Icon name="RiCloseLine" />
+          </Button>
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>

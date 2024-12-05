@@ -8,7 +8,6 @@ import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
-import { IconButton } from "./icon-button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
 
 const Sheet = SheetPrimitive.Root;
@@ -17,37 +16,20 @@ const SheetTrigger = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Trigger>,
   SheetPrimitive.DialogTriggerProps &
     React.ComponentPropsWithoutRef<typeof Button>
->(
-  (
-    { asChild = false, variant = "outline", className, children, ...props },
-    ref,
-  ) => {
-    if (asChild) {
-      return (
-        <SheetPrimitive.Trigger
-          asChild
-          ref={ref}
-          className={className}
-          {...props}
-        >
-          {children}
-        </SheetPrimitive.Trigger>
-      );
-    }
-
-    return (
-      <SheetPrimitive.Trigger asChild>
-        <Button
-          variant={variant}
-          className={cn("sheet-trigger", className)}
-          {...props}
-        >
-          {children}
-        </Button>
-      </SheetPrimitive.Trigger>
-    );
-  },
-);
+>(({ variant = "outline", className, children, ...props }, ref) => {
+  return (
+    <SheetPrimitive.Trigger asChild>
+      <Button
+        variant={variant}
+        className={cn("sheet-trigger", className)}
+        ref={ref}
+        {...props}
+      >
+        {children}
+      </Button>
+    </SheetPrimitive.Trigger>
+  );
+});
 SheetTrigger.displayName = SheetPrimitive.Trigger.displayName;
 
 const SheetClose = React.forwardRef<
@@ -115,13 +97,14 @@ const SheetContent = React.forwardRef<
       >
         {children}
         <SheetPrimitive.Close asChild>
-          <IconButton
-            icon="RiCloseLine"
+          <Button
             size="medium"
             variant="ghost"
             className="sheet-close"
             aria-label="Close"
-          />
+          >
+            <Icon name="RiCloseLine" />
+          </Button>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>

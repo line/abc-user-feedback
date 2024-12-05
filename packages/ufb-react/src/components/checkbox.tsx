@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { Size } from "../lib/types";
@@ -77,19 +78,17 @@ const Checkbox = React.forwardRef<
         onCheckedChange={handleCheckedChange}
         {...props}
       >
-        <React.Fragment>
-          <span className={cn(checkVariants({ size }))}>
-            <CheckboxPrimitive.Indicator className={cn("checkbox-icon")}>
-              <Icon
-                name={
-                  checked === "indeterminate" ? "RiSubtractLine" : "RiCheckLine"
-                }
-                size={CHECK_ICON_SIZE[size ?? themeSize]}
-              />
-            </CheckboxPrimitive.Indicator>
-          </span>
-          {children}
-        </React.Fragment>
+        <span className={cn(checkVariants({ size }))}>
+          <CheckboxPrimitive.Indicator className={cn("checkbox-icon")}>
+            <Icon
+              name={
+                checked === "indeterminate" ? "RiSubtractLine" : "RiCheckLine"
+              }
+              size={CHECK_ICON_SIZE[size ?? themeSize]}
+            />
+          </CheckboxPrimitive.Indicator>
+        </span>
+        <Slottable>{children}</Slottable>
       </CheckboxPrimitive.Root>
     );
   },

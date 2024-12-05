@@ -30,7 +30,7 @@
   }
 }
 
-.button {
+.setting-action-buttons button {
   @apply min-w-[120px];
 }
 
@@ -41,9 +41,9 @@
 .sheet-footer button {
   @apply min-w-[84px];
 }
-.input-container button {
+/* .input-container button {
   @apply min-w-[84px];
-}
+} */
 
 @keyframes table-loading {
   100% {

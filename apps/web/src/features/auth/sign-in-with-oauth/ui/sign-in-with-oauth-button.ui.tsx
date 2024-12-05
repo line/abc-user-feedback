@@ -36,7 +36,6 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
     queryOptions: { enabled: tenant?.useOAuth ?? false },
     variables: { callback_url },
   });
-  console.log('data: ', data);
 
   if (tenant?.oauthConfig?.loginButtonType === 'GOOGLE') {
     return (

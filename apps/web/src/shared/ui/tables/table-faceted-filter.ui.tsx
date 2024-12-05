@@ -45,7 +45,7 @@ const TableFacetedFilter = <TData, TValue>(props: Props<TData, TValue>) => {
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <Button variant="outline" className="!min-w-[88px]">
+        <Button variant="outline" className="min-w-[88px]">
           <Icon name="RiAddLine" size={16} />
           {title}
           {selectedValues.size > 0 && (

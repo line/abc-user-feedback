@@ -1,11 +1,11 @@
-.button-large {
-  @apply text-xlarge-strong min-h-52 min-w-52 gap-8 px-20 py-8;
+.button-small {
+  @apply text-base-strong min-h-36 min-w-36 gap-4 px-12 py-6 [&.svg-only]:px-10 [&>svg]:h-16 [&>svg]:w-16;
 }
 .button-medium {
-  @apply text-large-strong min-h-44 min-w-44 gap-8 px-16 py-8;
+  @apply text-large-strong min-h-44 min-w-44 gap-8 px-16 py-8 [&.svg-only]:px-12 [&>svg]:h-20 [&>svg]:w-20;
 }
-.button-small {
-  @apply text-base-strong min-h-36 min-w-36 gap-4 px-12 py-6;
+.button-large {
+  @apply text-xlarge-strong min-h-52 min-w-52 gap-8 px-20 py-8 [&.svg-only]:px-12 [&>svg]:h-24 [&>svg]:w-24;
 }
 
 .button-radius-small {

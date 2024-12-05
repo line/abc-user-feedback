@@ -1,13 +1,11 @@
+import type { SlotProps } from "@radix-ui/react-slot";
 import type { VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { Slot, Slottable } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
 
 import type { ButtonVariant, Radius, Size } from "../lib/types";
-import type { IconNameType } from "./icon";
-import { ICON_SIZE } from "../constants";
-import { cn } from "../lib/utils";
-import { Icon } from "./icon";
+import { cn, composeRefs } from "../lib/utils";
 import { Spinner } from "./spinner";
 import useTheme from "./use-theme";
 
@@ -69,8 +67,6 @@ interface ButtonProps
   variant?: ButtonVariant;
   size?: Size;
   radius?: Radius;
-  iconL?: IconNameType;
-  iconR?: IconNameType;
   loading?: boolean;
   asChild?: boolean;
 }
@@ -84,8 +80,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       radius,
       disabled = false,
-      iconL,
-      iconR,
       loading = false,
       asChild = false,
       children,
@@ -95,6 +89,25 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : "button";
     const { themeSize, themeRadius } = useTheme();
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+    React.useEffect(() => {
+      if (!buttonRef.current) return;
+
+      const childNodes = buttonRef.current.childNodes;
+      const isSvgOnly = Array.from(childNodes).every(
+        (node) =>
+          ((node as HTMLElement).nodeType === Node.ELEMENT_NODE &&
+            (node as HTMLElement).tagName.toLowerCase() === "svg") ||
+          ((node as HTMLElement).nodeType === Node.TEXT_NODE &&
+            !(node as HTMLElement).textContent?.trim()),
+      );
+
+      if (isSvgOnly) {
+        buttonRef.current.classList.add("svg-only");
+      }
+    }, []);
+
     return (
       <Comp
         className={cn(
@@ -108,26 +121,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         type={type}
         disabled={disabled || loading}
-        ref={ref}
+        ref={composeRefs(buttonRef, ref)}
         {...props}
       >
-        {iconL && (
-          <Icon
-            name={iconL}
-            size={ICON_SIZE[size ?? themeSize]}
-            aria-hidden
-            className="button-leading-icon"
-          />
-        )}
         <Slottable>{children}</Slottable>
-        {iconR && (
-          <Icon
-            name={iconR}
-            size={ICON_SIZE[size ?? themeSize]}
-            aria-hidden
-            className="button-trailing-icon"
-          />
-        )}
         {loading && (
           <span className={cn(buttonLoadingVariants({ variant }))}>
             <Spinner size={size ?? themeSize} />

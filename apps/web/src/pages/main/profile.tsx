@@ -28,6 +28,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogTitle,
+  Icon,
   Menu,
   MenuItem,
 } from '@ufb/react';
@@ -98,10 +99,12 @@ const ProfilePage: NextPageWithLayout = () => {
             router.push({ pathname: router.pathname, query: { menu: value } })
           }
         >
-          <MenuItem value="profile" iconL="RiInformation2Line">
+          <MenuItem value="profile">
+            <Icon name="RiInformation2Line" />
             {t('main.profile.profile-info')}
           </MenuItem>
-          <MenuItem value="change-password" iconL="RiUser2Line">
+          <MenuItem value="change-password">
+            <Icon name="RiUser2Line" />
             {t('main.profile.change-password')}
           </MenuItem>
         </Menu>

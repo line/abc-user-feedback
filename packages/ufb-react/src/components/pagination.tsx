@@ -3,7 +3,7 @@ import * as React from "react";
 import type { ButtonProps } from "./button";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
-import { IconButton } from "./icon-button";
+import { Icon } from "./icon";
 
 const DefaultValue = {
   size: "small",
@@ -80,7 +80,6 @@ const PaginationPrevious = ({
   const { size, radius } = React.useContext(PaginationContext);
   return (
     <Button
-      iconL="RiArrowLeftSLine"
       variant="ghost"
       size={size ?? DefaultValue.size}
       radius={radius ?? DefaultValue.radius}
@@ -88,7 +87,10 @@ const PaginationPrevious = ({
       className={cn("pagination-previous", className)}
       asChild
     >
-      <a {...props}>Previous</a>
+      <a {...props}>
+        <Icon name="RiArrowLeftSLine" />
+        Previous
+      </a>
     </Button>
   );
 };
@@ -101,7 +103,6 @@ const PaginationNext = ({
   const { size, radius } = React.useContext(PaginationContext);
   return (
     <Button
-      iconR="RiArrowRightSLine"
       variant="ghost"
       size={size ?? DefaultValue.size}
       radius={radius ?? DefaultValue.radius}
@@ -109,7 +110,10 @@ const PaginationNext = ({
       className={cn("pagination-next", className)}
       asChild
     >
-      <a {...props}>Next</a>
+      <a {...props}>
+        Next
+        <Icon name="RiArrowRightSLine" />
+      </a>
     </Button>
   );
 };
@@ -121,15 +125,16 @@ const PaginationEllipsis = ({
 }: React.ComponentProps<"button">) => {
   const { size, radius } = React.useContext(PaginationContext);
   return (
-    <IconButton
+    <Button
       {...props}
-      icon="RiMoreLine"
       variant="ghost"
       aria-label="More Pages"
       size={size ?? DefaultValue.size}
       radius={radius ?? DefaultValue.radius}
       className={cn("pagination-ellipsis", className)}
-    />
+    >
+      <Icon name="RiMoreLine" />
+    </Button>
   );
 };
 PaginationEllipsis.displayName = "PaginationEllipsis";

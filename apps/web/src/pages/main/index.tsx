@@ -33,8 +33,7 @@ const MainIndexPage: NextPageWithLayout = () => {
 
   useEffect(() => {
     if (!data || !user) return;
-    console.log('user: ', user);
-    console.log('data: ', data);
+
     const [project] = data.items;
     if (project) {
       void router.push({

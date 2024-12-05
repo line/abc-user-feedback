@@ -21,7 +21,6 @@ export { default as SectionTemplate } from './section-template.ui';
 export { default as MainCard } from './main-card.ui';
 
 export { default as SubMenu } from './sub-menu.ui';
-export { default as CreateTemplate } from './create-template.ui';
 export { default as CreateInputTemplate } from './create-input-template.ui';
 export { default as CreateSectionTemplate } from './create-section-template.ui';
 export { default as DashboardCard } from './dashboard-card';

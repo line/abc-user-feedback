@@ -21,7 +21,7 @@ import {
   DropdownContent,
   DropdownItem,
   DropdownTrigger,
-  IconButton,
+  Icon,
 } from '@ufb/react';
 
 const LanguageMap: Record<string, string> = {
@@ -45,8 +45,8 @@ const LanguageSelectBox: React.FC<Props> = () => {
 
   return (
     <Dropdown>
-      <DropdownTrigger asChild>
-        <IconButton icon="RiTranslate2" variant="ghost" />
+      <DropdownTrigger variant="ghost">
+        <Icon name="RiTranslate2" />
       </DropdownTrigger>
       <DropdownContent align="end">
         {router.locales

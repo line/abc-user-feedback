@@ -73,7 +73,12 @@ export class MemberService {
       ...tenants[0],
     };
     const domain = email.split('@')[1];
-    if (!tenant.allowDomains?.includes(domain)) {
+
+    if (
+      tenant.allowDomains &&
+      tenant.allowDomains.length > 0 &&
+      !tenant.allowDomains.includes(domain)
+    ) {
       throw new NotAllowedDomainException();
     }
     return true;

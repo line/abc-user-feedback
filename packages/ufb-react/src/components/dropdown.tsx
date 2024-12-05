@@ -1,9 +1,9 @@
 import type { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu";
 import * as React from "react";
 import * as DropdownPrimitive from "@radix-ui/react-dropdown-menu";
+import { Slottable } from "@radix-ui/react-slot";
 
 import type { TriggerType } from "../lib/types";
-import type { IconNameType } from "./icon";
 import { cn } from "../lib/utils";
 import { Button } from "./button";
 import { Icon } from "./icon";
@@ -53,7 +53,6 @@ const DropdownTrigger = React.forwardRef<
 >(
   (
     {
-      asChild = false,
       variant = "outline",
       trigger,
       onMouseEnter,
@@ -86,21 +85,6 @@ const DropdownTrigger = React.forwardRef<
       }
     }, []);
 
-    if (asChild) {
-      return (
-        <DropdownPrimitive.Trigger
-          asChild
-          ref={ref}
-          className={className}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          {...props}
-        >
-          {children}
-        </DropdownPrimitive.Trigger>
-      );
-    }
-
     return (
       <DropdownPrimitive.Trigger asChild>
         <Button
@@ -108,6 +92,7 @@ const DropdownTrigger = React.forwardRef<
           className={cn("dropdown-trigger", className)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          ref={ref}
           {...props}
         >
           {children}
@@ -130,62 +115,31 @@ const DropdownSubTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.SubTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.SubTrigger> & {
     inset?: boolean;
-    iconL?: IconNameType;
-    iconR?: IconNameType;
-    caption?: React.ReactNode;
   }
->(
-  (
-    {
-      asChild = false,
-      iconL,
-      iconR,
-      caption,
-      className,
-      inset,
-      children,
-      ...props
-    },
-    ref,
-  ) => {
-    if (asChild) {
-      return (
-        <DropdownPrimitive.SubTrigger
-          asChild
-          ref={ref}
-          className={className}
-          {...props}
-        >
-          {children}
-        </DropdownPrimitive.SubTrigger>
-      );
-    }
-
-    return (
-      <DropdownPrimitive.SubTrigger
-        ref={ref}
-        className={cn(
-          "dropdown-sub-trigger",
-          inset && "dropdown-sub-trigger-inset",
-          className,
-        )}
-        {...props}
-      >
-        <React.Fragment>
-          {iconL && (
-            <Icon name={iconL} size={16} className="dropdown-icon-left" />
-          )}
-          <React.Fragment>{children}</React.Fragment>
-          {caption && <span className="dropdown-caption">{caption}</span>}
-          {iconR && (
-            <Icon name={iconR} size={16} className="dropdown-icon-right" />
-          )}
-        </React.Fragment>
-      </DropdownPrimitive.SubTrigger>
-    );
-  },
-);
+>(({ className, inset, children, ...props }, ref) => {
+  return (
+    <DropdownPrimitive.SubTrigger
+      ref={ref}
+      className={cn(
+        "dropdown-sub-trigger",
+        inset && "dropdown-sub-trigger-inset",
+        className,
+      )}
+      {...props}
+    >
+      {children}
+    </DropdownPrimitive.SubTrigger>
+  );
+});
 DropdownSubTrigger.displayName = DropdownPrimitive.SubTrigger.displayName;
+
+const DropdownCaption = React.forwardRef<
+  React.ElementRef<"span">,
+  React.ComponentPropsWithoutRef<"span">
+>(({ className, ...props }, ref) => (
+  <span ref={ref} className={cn("dropdown-caption", className)} {...props} />
+));
+DropdownCaption.displayName = "DropdownCaption";
 
 const DropdownSubContent = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.SubContent>,
@@ -258,22 +212,14 @@ const DropdownItem = React.forwardRef<
   React.ElementRef<typeof DropdownPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof DropdownPrimitive.Item> & {
     inset?: boolean;
-    iconL?: IconNameType;
-    iconR?: IconNameType;
-    caption?: React.ReactNode;
   }
->(({ iconL, iconR, caption, children, className, inset, ...props }, ref) => (
+>(({ children, className, inset, ...props }, ref) => (
   <DropdownPrimitive.Item
     ref={ref}
     className={cn("dropdown-item", inset && "dropdown-item-inset", className)}
     {...props}
   >
-    <React.Fragment>
-      {iconL && <Icon name={iconL} size={16} className="dropdown-icon-left" />}
-      <React.Fragment>{children}</React.Fragment>
-      {caption && <span className="dropdown-caption">{caption}</span>}
-      {iconR && <Icon name={iconR} size={16} className="dropdown-icon-right" />}
-    </React.Fragment>
+    {children}
   </DropdownPrimitive.Item>
 ));
 DropdownItem.displayName = DropdownPrimitive.Item.displayName;
@@ -288,14 +234,10 @@ const DropdownCheckboxItem = React.forwardRef<
     checked={checked}
     {...props}
   >
-    <React.Fragment>
-      <span className="dropdown-checkbox-icon">
-        <DropdownPrimitive.ItemIndicator>
-          <Icon name="RiCheckLine" size={16} />
-        </DropdownPrimitive.ItemIndicator>
-      </span>
-      {children}
-    </React.Fragment>
+    <DropdownPrimitive.ItemIndicator className="dropdown-checkbox-icon">
+      <Icon name="RiCheckLine" size={16} />
+    </DropdownPrimitive.ItemIndicator>
+    <Slottable>{children}</Slottable>
   </DropdownPrimitive.CheckboxItem>
 ));
 DropdownCheckboxItem.displayName = DropdownPrimitive.CheckboxItem.displayName;
@@ -309,12 +251,10 @@ const DropdownRadioItem = React.forwardRef<
     className={cn("dropdown-radio", className)}
     {...props}
   >
-    <React.Fragment>
-      <DropdownPrimitive.ItemIndicator className="dropdown-radio-icon">
-        <Icon name="RiCircleFill" size={8} className="fill-current" />
-      </DropdownPrimitive.ItemIndicator>
-      {children}
-    </React.Fragment>
+    <DropdownPrimitive.ItemIndicator className="dropdown-radio-icon">
+      <Icon name="RiCircleFill" size={8} className="fill-current" />
+    </DropdownPrimitive.ItemIndicator>
+    <Slottable>{children}</Slottable>
   </DropdownPrimitive.RadioItem>
 ));
 DropdownRadioItem.displayName = DropdownPrimitive.RadioItem.displayName;
@@ -349,6 +289,7 @@ export {
   Dropdown,
   DropdownTrigger,
   DropdownContent,
+  DropdownCaption,
   DropdownItem,
   DropdownCheckboxItem,
   DropdownRadioItem,

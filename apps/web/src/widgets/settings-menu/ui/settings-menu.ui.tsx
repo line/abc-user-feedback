@@ -27,6 +27,7 @@ import {
   AccordionTrigger,
   Badge,
   Button,
+  Icon,
   Menu,
   MenuDropdown,
   MenuDropdownContent,
@@ -187,10 +188,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
               </div>
             : data?.items.map(({ name, id }) => (
                 <MenuDropdown key={id}>
-                  <MenuDropdownTrigger
-                    iconR="RiArrowRightSLine"
-                    className="!pl-8"
-                  >
+                  <MenuDropdownTrigger className="!pl-8">
                     {name}
                   </MenuDropdownTrigger>
                   <MenuDropdownContent side="right" align="start">
@@ -212,10 +210,10 @@ const SettingsMenu: React.FC<Props> = (props) => {
       {data?.meta.totalItems !== 0 && (
         <MenuItem
           value=""
-          iconL="RiAddCircleFill"
           className="!text-tint-blue hover:!text-tint-blue"
           onClick={openChannelInProgress}
         >
+          <Icon name="RiAddCircleFill" />
           <div className="flex">
             <span className="flex-1">{t('v2.text.create-channel')}</span>
             {isCreatingChannel && (
@@ -248,7 +246,8 @@ const ProjectMenuItem = (props: ProjectMenuItemProps) => {
         query: { projectId, menu: value },
       }}
     >
-      <MenuItem value={value} iconL={icon} disabled={disabled}>
+      <MenuItem value={value} disabled={disabled}>
+        <Icon name={icon} />
         {label}
       </MenuItem>
     </Link>
@@ -275,11 +274,8 @@ const ChannelMenuItem = (props: ChannelMenuItemProps) => {
         query: { projectId, menu: value, channelId },
       }}
     >
-      <MenuDropdownItem
-        value={`${value}_${channelId}`}
-        iconL={icon}
-        disabled={disabled}
-      >
+      <MenuDropdownItem value={`${value}_${channelId}`} disabled={disabled}>
+        <Icon name={icon} />
         {label}
       </MenuDropdownItem>
     </Link>

@@ -17,6 +17,7 @@
 import {
   Button,
   Checkbox,
+  Icon,
   Table,
   TableBody,
   TableCell,
@@ -177,10 +178,10 @@ const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
               onClick={() => onClickRole?.(role)}
               variant="ghost"
               size="small"
-              iconR="RiEditFill"
               className="font-normal"
             >
               {role.name}
+              <Icon name="RiEditFill" />
             </Button>
           </TableHead>
         ))}

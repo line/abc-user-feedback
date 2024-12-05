@@ -14,8 +14,8 @@
  * under the License.
  */
 
-import { IconButton } from '@ufb/react';
-import { Icon } from '@ufb/ui';
+import { Button, Icon } from '@ufb/react';
+import { Icon as UIIcon } from '@ufb/ui';
 
 import Header from './header.ui';
 
@@ -38,13 +38,19 @@ const Layout: React.FC<IProps> = (props) => {
       </main>
       <footer className="bg-neutral-tertiary flex flex-col items-center p-4">
         <div className="flex items-center gap-2">
-          <Icon name="LogoBlack" />
+          <UIIcon name="LogoBlack" />
           <p className="text-title-h5">ABC User Feedback</p>
         </div>
         <div className="flex items-center gap-1">
-          <IconButton variant="ghost" icon="RiEarthFill" />
-          <IconButton variant="ghost" icon="RiGithubFill" />
-          <IconButton variant="ghost" icon="RiMailLine" />
+          <Button variant="ghost">
+            <Icon name="RiEarthFill" />
+          </Button>
+          <Button variant="ghost">
+            <Icon name="RiGithubFill" />
+          </Button>
+          <Button variant="ghost">
+            <Icon name="RiMailLine" />
+          </Button>
         </div>
         <div className="text-neutral-tertiary font-normal">
           © 2024 ABC Studio. All rights reserved

@@ -20,7 +20,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
-import { Button, toast } from '@ufb/react';
+import { Button, Icon, toast } from '@ufb/react';
 
 import {
   DeleteDialog,
@@ -96,11 +96,8 @@ const UserProfileForm: React.FC<IProps> = () => {
       title={t('tenant-setting-menu.tenant-info')}
       action={
         <>
-          <Button
-            variant="outline"
-            iconL="RiDeleteBinFill"
-            onClick={openDeleteAccountDialog}
-          >
+          <Button variant="outline" onClick={openDeleteAccountDialog}>
+            <Icon name="RiDeleteBinFill" />
             {t('main.profile.button.delete-account')}
           </Button>
           <Button
