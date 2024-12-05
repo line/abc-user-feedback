@@ -64,17 +64,18 @@ const LoginSetting: React.FC<IProps> = () => {
 
   const onSubmit = (input: AuthInfo) => {
     if (!tenant) return;
-    if (!tenant.oauthConfig) {
+    if (!input.oauthConfig) {
       mutate({ ...tenant, ...input, oauthConfig: null });
       return;
     }
+
     mutate({
       ...tenant,
       ...input,
       oauthConfig: {
-        ...tenant.oauthConfig,
-        loginButtonName: tenant.oauthConfig.loginButtonName ?? '',
-        loginButtonType: tenant.oauthConfig.loginButtonType ?? 'CUSTOM',
+        ...input.oauthConfig,
+        loginButtonName: input.oauthConfig.loginButtonName ?? '',
+        loginButtonType: input.oauthConfig.loginButtonType ?? 'CUSTOM',
       },
     });
   };

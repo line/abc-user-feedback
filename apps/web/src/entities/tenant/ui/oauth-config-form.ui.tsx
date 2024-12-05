@@ -27,14 +27,13 @@ interface IProps {
 }
 
 const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
-  const { register, formState, setValue, getValues, watch } =
-    useFormContext<AuthInfo>();
+  const { register, formState, setValue, watch } = useFormContext<AuthInfo>();
   const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-3">
       <RadioCardGroup
-        value={getValues('oauthConfig.loginButtonType') ?? 'CUSTOM'}
+        value={watch('oauthConfig.loginButtonType') ?? 'CUSTOM'}
         onValueChange={(v: 'GOOGLE' | 'CUSTOM') =>
           setValue('oauthConfig.loginButtonType', v, { shouldDirty: true })
         }
