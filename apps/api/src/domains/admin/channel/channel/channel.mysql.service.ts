@@ -15,11 +15,11 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
 import { Like, Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { isSelectFieldFormat } from '@/common/enums';
+import { paginateHelper } from '@/common/helper/paginate.helper';
 import { ChannelEntity } from './channel.entity';
 import type {
   FindAllChannelsByProjectIdDto,
@@ -66,11 +66,12 @@ export class ChannelMySQLService {
   async findAllByProjectId(dto: FindAllChannelsByProjectIdDto) {
     const { options, projectId, searchText = '' } = dto;
 
-    return await paginate(
-      this.repository.createQueryBuilder().setFindOptions({
+    return await paginateHelper(
+      this.repository.createQueryBuilder(),
+      {
         where: { project: { id: projectId }, name: Like(`%${searchText}%`) },
         order: { createdAt: 'ASC' },
-      }),
+      },
       options,
     );
   }

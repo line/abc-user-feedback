@@ -26,6 +26,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
 import { EventTypeEnum } from '@/common/enums';
+import { paginateHelper } from '@/common/helper/paginate.helper';
 import type { CountByProjectIdDto } from '@/domains/admin/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
@@ -141,8 +142,9 @@ export class IssueService {
       searchOptions.where = [andWhere];
     }
 
-    const result = await paginate(
-      this.repository.createQueryBuilder().setFindOptions(searchOptions),
+    const result = await paginateHelper(
+      this.repository.createQueryBuilder(),
+      searchOptions,
       { page, limit },
     );
 
