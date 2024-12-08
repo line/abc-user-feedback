@@ -392,8 +392,8 @@ importers:
         specifier: ^2.1.0
         version: 2.1.1
       cookies-next:
-        specifier: ^4.1.1
-        version: 4.3.0
+        specifier: ^5.0.0
+        version: 5.0.2(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       countries-and-timezones:
         specifier: ^3.6.0
         version: 3.7.2
@@ -4812,8 +4812,10 @@ packages:
   cookiejar@2.1.4:
     resolution: {integrity: sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==}
 
-  cookies-next@4.3.0:
-    resolution: {integrity: sha512-XxeCwLR30cWwRd94sa9X5lRCDLVujtx73tv+N0doQCFIDl83fuuYdxbu/WQUt9aSV7EJx7bkMvJldjvzuFqr4w==}
+  cookies-next@5.0.2:
+    resolution: {integrity: sha512-Ft5yXMbN6wMfgLiL5TMyPnxsjkW6UEjZw0YMoDMiF3F6iYdFPjiJEMugx/sivUr8G+0xPG80lBYqI2b+VquSuw==}
+    peerDependencies:
+      next: '>=15.0.0'
 
   copy-to-clipboard@3.3.3:
     resolution: {integrity: sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==}
@@ -14687,10 +14689,10 @@ snapshots:
 
   cookiejar@2.1.4: {}
 
-  cookies-next@4.3.0:
+  cookies-next@5.0.2(next@15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
-      '@types/cookie': 0.6.0
-      cookie: 0.7.2
+      cookie: 1.0.2
+      next: 15.0.4(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.49.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   copy-to-clipboard@3.3.3:
     dependencies:
