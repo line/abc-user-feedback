@@ -31,6 +31,7 @@ import { useTranslation } from 'react-i18next';
 import { Icon } from '@ufb/ui';
 
 import { DATE_TIME_FORMAT, ImageSlider, useOAIQuery } from '@/shared';
+import { linkify } from '@/shared/utils/text-linkify';
 import { useFeedbackSearch } from '@/entities/feedback';
 import { isDefaultField, sortField } from '@/entities/field';
 import { IssueBadge } from '@/entities/issue';
@@ -189,7 +190,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           <ImageSlider
                             urls={(feedbackData[field.key] ?? []) as string[]}
                           />
-                        : feedbackData[field.key]}
+                        : linkify(feedbackData[field.key])}
                       </FeedbackDetailCell>
                     </tr>
                   ))}
