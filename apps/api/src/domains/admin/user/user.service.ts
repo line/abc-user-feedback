@@ -15,12 +15,12 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
 import { In, Like, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 
+import { paginateHelper } from '@/common/helper/paginate.helper';
 import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
 import type { FindAllUsersDto } from './dtos';
@@ -74,12 +74,13 @@ export class UserService {
         }, {})
       : {};
 
-    return await paginate(
-      this.userRepo.createQueryBuilder().setFindOptions({
+    return await paginateHelper(
+      this.userRepo.createQueryBuilder(),
+      {
         where,
         order,
         relations: { members: { role: { project: true } } },
-      }),
+      },
       options,
     );
   }
