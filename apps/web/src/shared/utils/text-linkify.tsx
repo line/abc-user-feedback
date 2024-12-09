@@ -15,25 +15,30 @@
  */
 
 export const linkify = (text: string): React.ReactNode[] => {
-  const urlRegex = /https?:\/\/[^\s]+/g;
-  return text.split(urlRegex).reduce((acc, part, index, array) => {
-    if (index < array.length - 1) {
-      const match = text.match(urlRegex)?.[index];
-      return [
-        ...acc,
-        part,
+  const urlRegex =
+    /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+
+  const parts = text.split(urlRegex);
+  const matches = text.match(urlRegex) || [];
+  const result: React.ReactNode[] = [];
+
+  parts.forEach((part, index) => {
+    result.push(part);
+    if (index < matches.length) {
+      result.push(
         <a
           key={index}
-          href={match}
+          href={matches[index]}
           target="_blank"
           rel="noopener noreferrer"
           className="text-blue-primary underline"
           onClick={(e) => e.stopPropagation()}
         >
-          {match}
+          {matches[index]}
         </a>,
-      ];
+      );
     }
-    return [...acc, part];
-  }, [] as React.ReactNode[]);
+  });
+
+  return result;
 };
