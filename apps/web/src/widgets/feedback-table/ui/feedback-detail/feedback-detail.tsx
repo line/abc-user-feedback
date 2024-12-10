@@ -190,7 +190,7 @@ const FeedbackDetail: React.FC<IProps> = (props) => {
                           <ImageSlider
                             urls={(feedbackData[field.key] ?? []) as string[]}
                           />
-                        : linkify(feedbackData[field.key] ?? '')}
+                        : linkify(String(feedbackData[field.key] ?? ''))}
                       </FeedbackDetailCell>
                     </tr>
                   ))}

@@ -16,10 +16,10 @@
 
 export const linkify = (text: string): React.ReactNode[] => {
   const urlRegex =
-    /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+    /https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&//=]*)/g;
 
   const parts = text.split(urlRegex);
-  const matches = text.match(urlRegex) || [];
+  const matches = text.match(urlRegex) ?? [];
   const result: React.ReactNode[] = [];
 
   parts.forEach((part, index) => {
