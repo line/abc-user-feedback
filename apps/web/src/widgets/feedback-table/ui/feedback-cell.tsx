@@ -17,6 +17,7 @@ import { memo } from 'react';
 import dayjs from 'dayjs';
 
 import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
+import { linkify } from '@/shared/utils/text-linkify';
 import type { Field } from '@/entities/field';
 
 interface IProps extends React.PropsWithChildren {
@@ -52,7 +53,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
       : field.format === 'images' ?
         <ImagePreviewButton urls={value as string[]} />
       : field.format === 'text' ?
-        (value as string)
+        linkify(value as string)
       : String(value)}
     </ExpandableText>
   );
