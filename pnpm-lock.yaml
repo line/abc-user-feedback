@@ -499,7 +499,7 @@ importers:
         version: 6.6.3
       '@testing-library/react':
         specifier: ^16.0.0
-        version: 16.1.0(@testing-library/dom@10.3.2)(@types/react-dom@18.3.3(@types/react@18.3.15))(@types/react@18.3.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 16.1.0(@testing-library/dom@10.3.2)(@types/react-dom@18.3.4(@types/react@18.3.15))(@types/react@18.3.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
         specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.3.2)
@@ -520,7 +520,7 @@ importers:
         version: 7.0.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@types/react-dom':
         specifier: ^18.2.25
-        version: 18.3.3(@types/react@18.3.15)
+        version: 18.3.4(@types/react@18.3.15)
       '@ufb/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint
@@ -671,7 +671,7 @@ importers:
         version: 18.3.15
       '@types/react-dom':
         specifier: ^18.2.25
-        version: 18.3.3(@types/react@18.3.15)
+        version: 18.3.4(@types/react@18.3.15)
       '@ufb/eslint-config':
         specifier: workspace:*
         version: link:../../tooling/eslint
@@ -3845,8 +3845,8 @@ packages:
     resolution: {integrity: sha512-4tWwOUq589tozyQPBVEqGNng5DaZkomx5IVNuur868yYdgjH6RaL373/HKiVt1IDoNNXYiTGspm1F7kjrarM8Q==}
     deprecated: This is a stub types definition. react-datepicker provides its own type definitions, so you do not need this installed.
 
-  '@types/react-dom@18.3.3':
-    resolution: {integrity: sha512-uTYkxTLkYp41nq/ULXyXMtkNT1vu5fXJoqad6uTNCOGat5t9cLgF4vMNLBXsTOXpdOI44XzKPY1M5RRm0bQHuw==}
+  '@types/react-dom@18.3.4':
+    resolution: {integrity: sha512-HMqjZ3RJxmfoOn3sVc0T0fO6qSrLDnUQYB+azHKdBBz1eOt0Sq4wUu2Sf1/Dt18gqhECg0fZ33tkh/6YdwrSCw==}
     peerDependencies:
       '@types/react': ^18.0.0
 
@@ -13288,7 +13288,7 @@ snapshots:
       lodash: 4.17.21
       redent: 3.0.0
 
-  '@testing-library/react@16.1.0(@testing-library/dom@10.3.2)(@types/react-dom@18.3.3(@types/react@18.3.15))(@types/react@18.3.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+  '@testing-library/react@16.1.0(@testing-library/dom@10.3.2)(@types/react-dom@18.3.4(@types/react@18.3.15))(@types/react@18.3.15)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@babel/runtime': 7.26.0
       '@testing-library/dom': 10.3.2
@@ -13296,7 +13296,7 @@ snapshots:
       react-dom: 18.3.1(react@18.3.1)
     optionalDependencies:
       '@types/react': 18.3.15
-      '@types/react-dom': 18.3.3(@types/react@18.3.15)
+      '@types/react-dom': 18.3.4(@types/react@18.3.15)
 
   '@testing-library/user-event@14.5.2(@testing-library/dom@10.3.2)':
     dependencies:
@@ -13537,7 +13537,7 @@ snapshots:
       - react
       - react-dom
 
-  '@types/react-dom@18.3.3(@types/react@18.3.15)':
+  '@types/react-dom@18.3.4(@types/react@18.3.15)':
     dependencies:
       '@types/react': 18.3.15
 
