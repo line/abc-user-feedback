@@ -103,8 +103,8 @@ const CreateTenantPage: NextPageWithLayout = () => {
       }
       image={
         step === 'final' ?
-          '/assets/images/complete-tenant-setting.png'
-        : '/assets/images/tenant-info.png'
+          '/assets/images/complete-tenant-setting.svg'
+        : '/assets/images/tenant-setting.svg'
       }
       description={
         step === 'final' ?

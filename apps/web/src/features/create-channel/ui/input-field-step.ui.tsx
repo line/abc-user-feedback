@@ -40,16 +40,11 @@ const InputFieldStep: React.FC<IProps> = () => {
     onChangeInput('fields', input.fields.concat(field));
   };
 
-  const updateField = ({
-    field,
-    index,
-  }: {
-    index: number;
-    field: FieldInfo;
-  }) => {
+  const updateField = (input: { index: number; field: FieldInfo }) => {
+    const { field, index } = input;
     onChangeInput(
       'fields',
-      input.fields.map((v, i) => (i === index ? field : v)),
+      fields.map((v, i) => (i === index ? field : v)),
     );
   };
 
@@ -105,6 +100,7 @@ const InputFieldStep: React.FC<IProps> = () => {
       <FieldTable
         fields={input.fields}
         onClickRow={(index, field) => openFieldFormSheet({ index, field })}
+        reorder={(data) => onChangeInput('fields', data)}
       />
     </CreateChannelInputTemplate>
   );

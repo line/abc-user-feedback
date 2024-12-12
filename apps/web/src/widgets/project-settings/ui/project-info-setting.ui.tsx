@@ -141,11 +141,11 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
         </>
       }
     >
-      <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
-        <FormProvider {...methods}>
+      <FormProvider {...methods}>
+        <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
           <ProjectInfoForm type="update" />
-        </FormProvider>
-      </form>
+        </form>
+      </FormProvider>
     </SettingTemplate>
   );
 };

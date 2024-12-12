@@ -29,6 +29,7 @@ import {
   useOAIMutation,
   useOAIQuery,
   usePermissions,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 import type { ChannelImageConfig } from '@/entities/channel';
 import { channelImageConfigSchema, ImageConfigForm } from '@/entities/channel';
@@ -93,6 +94,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
       });
     }
   }, [data]);
+  useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (input: ChannelImageConfig) => {
     if (!data) return;

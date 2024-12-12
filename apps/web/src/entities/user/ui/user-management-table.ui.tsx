@@ -170,7 +170,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
 
   return (
     <>
-      <div className="mb-3 flex items-center justify-between">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TableFacetedFilter
             column={table.getColumn('type')}

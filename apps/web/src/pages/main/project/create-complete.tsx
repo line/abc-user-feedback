@@ -15,6 +15,7 @@
  */
 import React, { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -76,6 +77,17 @@ const CompleteProjectCreationPage: NextPage = () => {
           {t('v2.description.create-project')}
         </p>
       }
+      leftBottm={
+        <div className="flex justify-end">
+          <Image
+            src={`/assets/images/create-complete.svg`}
+            alt="Create Project"
+            className="align"
+            width={320}
+            height={320}
+          />
+        </div>
+      }
     >
       <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
         <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
@@ -107,7 +119,7 @@ const CompleteProjectCreationPage: NextPage = () => {
             </CreateSectionTemplate>
           </Accordion>
         </ScrollArea>
-        <div className="flex justify-end gap-2">
+        <div className="create-template-footer flex justify-end gap-2">
           <Button
             variant="outline"
             onClick={() => router.push({ pathname: Path.MAIN })}

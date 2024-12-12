@@ -14,6 +14,7 @@
  * under the License.
  */
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { Button } from '@ufb/react';
@@ -26,7 +27,12 @@ const UnauthorizedPage: NextPage = () => {
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-6">
-        <img src="/assets/images/404.png" />
+        <Image
+          src="/assets/images/403.svg"
+          alt="403"
+          width={320}
+          height={320}
+        />
         <div className="flex flex-col items-center gap-2">
           <h3 className="text-title-h3">Access restricted</h3>
           <p className="text-neutral-tertiary">

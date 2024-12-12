@@ -39,7 +39,7 @@ function DashboardTable<T>(props: IProps<T>) {
         <div className="flex items-center gap-1">
           <h3 className="font-20-bold">{title}</h3>
           {description && (
-            <DescriptionTooltip description={description} placement="bottom" />
+            <DescriptionTooltip description={description} side="bottom" />
           )}
         </div>
         <div className="flex items-center gap-2">

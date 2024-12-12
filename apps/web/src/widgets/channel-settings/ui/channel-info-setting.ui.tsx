@@ -51,6 +51,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
   });
+
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const { data, refetch } = useOAIQuery({
@@ -121,7 +122,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
             {t('v2.button.name.delete', { name: 'Channel' })}
           </Button>
           <Button
-            onClick={methods.handleSubmit(onSubmit)}
+            form="channelInfo"
             disabled={
               !perms.includes('channel_update') ||
               !methods.formState.isDirty ||
@@ -134,7 +135,9 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
       }
     >
       <FormProvider {...methods}>
-        <ChannelInfoForm type="update" />
+        <form id="channelInfo" onSubmit={methods.handleSubmit(onSubmit)}>
+          <ChannelInfoForm type="update" />
+        </form>
       </FormProvider>
     </SettingTemplate>
   );

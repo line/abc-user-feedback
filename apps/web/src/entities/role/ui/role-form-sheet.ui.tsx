@@ -183,7 +183,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         </SheetHeader>
         <SheetBody>
           <form
-            className="flex flex-col"
+            className="flex flex-col gap-4"
             onSubmit={handleSubmit((role) => onSubmit(role))}
             id="role"
           >

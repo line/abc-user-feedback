@@ -25,7 +25,7 @@ const SettingTemplate: React.FC<Props> = (props) => {
   const { title, action, children, onClickBack } = props;
   return (
     <div className="flex h-full flex-col gap-4">
-      <div className="flex min-h-10 items-center justify-between">
+      <div className="flex min-h-12 items-center justify-between">
         <h4 className="text-title-h4 flex-1">
           {onClickBack && (
             <Button variant="ghost" onClick={onClickBack}>
@@ -38,7 +38,7 @@ const SettingTemplate: React.FC<Props> = (props) => {
           {action}
         </div>
       </div>
-      {children}
+      <div className="flex h-full flex-col gap-4 overflow-auto">{children}</div>
     </div>
   );
 };

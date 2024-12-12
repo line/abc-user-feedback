@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,6 +42,7 @@ const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const { tenant } = useTenantStore();
   const { signInWithEmail } = useUserStore();
+  const [loginLoading, setLoginLoading] = useState(false);
 
   const { handleSubmit, register, formState, setError } = useForm<FormType>({
     resolver: zodResolver(signInWithEmailSchema),
@@ -48,6 +50,7 @@ const SignInPage: NextPageWithLayout = () => {
 
   const onSubmit = async (data: FormType) => {
     try {
+      setLoginLoading(true);
       await signInWithEmail(data);
       toast.success(t('v2.toast.success'));
     } catch (error) {
@@ -55,13 +58,15 @@ const SignInPage: NextPageWithLayout = () => {
       setError('email', { message: 'invalid email' });
       setError('password', { message: 'invalid password' });
       toast.error(message);
+    } finally {
+      setLoginLoading(false);
     }
   };
 
   return (
     <AnonymousTemplate
       title={t('button.sign-in')}
-      image="/assets/images/sign-in.png"
+      image="/assets/images/sign-in.svg"
       imageSub={
         <p className="text-title-h3 text-center">
           Listen to <br />
@@ -78,11 +83,7 @@ const SignInPage: NextPageWithLayout = () => {
         </div>
       )}
       {tenant?.useEmail && (
-        <form
-          id="sign-in"
-          className="flex flex-col gap-4"
-          onSubmit={handleSubmit(onSubmit)}
-        >
+        <form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
           <TextInput
             label="Email"
             placeholder={t('v2.placeholder.text')}
@@ -104,6 +105,7 @@ const SignInPage: NextPageWithLayout = () => {
           size="medium"
           type="submit"
           disabled={!formState.isValid}
+          loading={loginLoading}
           form="sign-in"
         >
           {t('button.sign-in')}

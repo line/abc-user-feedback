@@ -61,7 +61,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
       }));
 
-    for (let i = 1; i <= 20; i++) {
+    for (let i = 1; i <= 10; i++) {
       const fakeData: FeedbackColumnType = {
         id: i,
         createdAt: dayjs().add(i, 'hour').toString(),

@@ -14,4 +14,5 @@
  * under the License.
  */
 export { default as ChangePasswordForm } from './change-password-form.ui';
-export { default as UserProfileForm } from './user-profile-form.ui';
+export { default as UserProfileSetting } from './user-profile-setting.ui';
+export { default as ChangePasswordSetting } from './change-password-setting,.ui';

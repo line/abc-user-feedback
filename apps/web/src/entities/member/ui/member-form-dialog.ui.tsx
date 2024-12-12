@@ -14,7 +14,8 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import type { FormOverlayProps } from '@/shared';
@@ -24,7 +25,8 @@ import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
 
-import type { Member, MemberInfo } from '../member.type';
+import { memberInfoSchema } from '../member.schema';
+import type { MemberInfo } from '../member.type';
 
 interface Props extends FormOverlayProps<MemberInfo> {
   members: MemberInfo[];
@@ -52,10 +54,11 @@ const MemberFormDialog: React.FC<Props> = (props) => {
     limit: 1000,
     query: { type: ['GENERAL'] },
   });
-  console.log('userData: ', userData);
 
-  const [user, setUser] = useState<Member['user'] | undefined>(data?.user);
-  const [role, setRole] = useState<Member['role'] | undefined>(data?.role);
+  const { watch, setValue, handleSubmit, formState } = useForm<MemberInfo>({
+    resolver: zodResolver(memberInfoSchema),
+    defaultValues: data,
+  });
 
   return (
     <FormDialog
@@ -68,43 +71,56 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       isOpen={isOpen}
       deleteBtn={{ disabled: deleteDisabled, onClick: onClickDelete }}
       submitBtn={{
-        disabled: updateDisabled || !user || !role || role.id === data?.role.id,
-        onClick: async () => {
-          if (!user || !role) return;
-          await onSubmit({ user, role });
-        },
+        loading: formState.isSubmitting,
+        disabled: updateDisabled,
+        form: 'memberForm',
       }}
     >
-      {!data && <TextInput label="Project" value={project.name} disabled />}
-      <SelectSearchInput
-        label="Email"
-        value={user?.email}
-        onChange={(v) => {
-          setUser(userData?.items.find((user) => user.email === v));
-        }}
-        options={
-          userData?.items
-            .filter((v) => !members.some((member) => member.user.id === v.id))
-            .map((v) => ({ label: v.email, value: v.email })) ?? []
-        }
-        required
-        disabled={!!data}
-      />
-      {data && <TextInput label="Name" value={user?.name ?? ''} disabled />}
-      {data && (
-        <TextInput label="Department" value={user?.department ?? ''} disabled />
-      )}
-
-      <SelectInput
-        label="Role"
-        placeholder={t('v2.placeholder.select')}
-        value={role ? String(role.id) : undefined}
-        options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
-        onChange={(v) => {
-          setRole(roles.find((role) => String(role.id) === v));
-        }}
-        required
-      />
+      <form
+        id="memberForm"
+        className="flex flex-col gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        {!data && <TextInput label="Project" value={project.name} disabled />}
+        <SelectSearchInput
+          label="Email"
+          value={watch('user.email')}
+          onChange={(v) => {
+            const user = userData?.items.find((user) => user.email === v);
+            if (!user) return;
+            setValue('user', user);
+          }}
+          options={
+            userData?.items
+              .filter((v) => !members.some((member) => member.user.id === v.id))
+              .map((v) => ({ label: v.email, value: v.email })) ?? []
+          }
+          error={formState.errors.user?.message}
+          required
+          disabled={!!data}
+        />
+        {data && <TextInput label="Name" value={watch('user.name')} disabled />}
+        {data && (
+          <TextInput
+            label="Department"
+            value={watch('user.department')}
+            disabled
+          />
+        )}
+        <SelectInput
+          label="Role"
+          placeholder={t('v2.placeholder.select')}
+          value={(watch('role.id') as number | undefined)?.toString()}
+          options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
+          onChange={(v) => {
+            const role = roles.find((role) => String(role.id) === v);
+            if (!role) return;
+            setValue('role', role);
+          }}
+          error={formState.errors.role?.message}
+          required
+        />
+      </form>
     </FormDialog>
   );
 };

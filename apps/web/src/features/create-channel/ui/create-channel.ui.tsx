@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
@@ -42,6 +43,17 @@ const CreateChannel: React.FC<IProps> = () => {
           currentStepIndex={currentStep.index}
           stepTitle={CREATE_CHANNEL_STEPPER_TEXT}
         />
+      }
+      leftBottm={
+        <div className="flex justify-end">
+          <Image
+            src={`/assets/images/create-channel-${currentStep.key}.svg`}
+            alt="Create Project"
+            className="align"
+            width={320}
+            height={320}
+          />
+        </div>
       }
       onClickGoBack={() =>
         router.push({

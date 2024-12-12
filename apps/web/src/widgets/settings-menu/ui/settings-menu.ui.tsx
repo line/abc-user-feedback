@@ -214,7 +214,7 @@ const SettingsMenu: React.FC<Props> = (props) => {
           onClick={openChannelInProgress}
         >
           <Icon name="RiAddCircleFill" />
-          <div className="flex">
+          <div className="flex w-full">
             <span className="flex-1">{t('v2.text.create-channel')}</span>
             {isCreatingChannel && (
               <Badge color="red" variant="bold">

@@ -21,11 +21,6 @@ import { render, screen, waitFor } from '@/test-utils';
 import RequestResetPasswordWithEmail from './request-reset-password-with-email.ui';
 
 describe('RequestResetPasswordWithEmail', () => {
-  test('match snapshot', () => {
-    const component = render(<RequestResetPasswordWithEmail />);
-    expect(component.container).toMatchSnapshot();
-  });
-
   test('back button', async () => {
     render(<RequestResetPasswordWithEmail />);
     const backBtn = screen.getByRole('button', { name: 'button.back' });

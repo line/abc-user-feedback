@@ -42,18 +42,6 @@ server.use(
 );
 
 describe('DeleteAccountButton', () => {
-  test('match snapshot', () => {
-    jest.spyOn(user, 'useUserStore').mockImplementation(() => ({
-      signInWithEmail: jest.fn(),
-      _signIn: jest.fn(),
-      setUser: jest.fn(),
-      signInWithOAuth: jest.fn(),
-      signOut: jest.fn(),
-    }));
-    const component = render(<DeleteAccountButton user={TEST_USER} />);
-    expect(component.container).toMatchSnapshot();
-  });
-
   describe('Submittion', () => {
     const mockSignOut = jest.fn();
     beforeEach(async () => {

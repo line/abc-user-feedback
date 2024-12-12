@@ -37,20 +37,15 @@ export const getMemberColumns = (users: User[]) => [
     enableSorting: false,
     cell: ({ getValue }) => {
       const { t } = useTranslation();
-      return (
-        <>
-          {users.some((v) => v.email === getValue()) ?
-            getValue()
-          : <div className="flex items-center gap-1">
-              <span className="text-red-primary">{getValue()}</span>
-              <DescriptionTooltip
-                color="red"
-                description={t('main.create-project.error-member')}
-              />
-            </div>
-          }
-        </>
-      );
+      return users.some((v) => v.email === getValue()) ? getValue() : (
+          <div className="flex items-center gap-1">
+            <span className="text-red-primary">{getValue()}</span>
+            <DescriptionTooltip
+              color="red"
+              description={t('main.create-project.error-member')}
+            />
+          </div>
+        );
     },
   }),
   columnHelper.accessor('user.name', {

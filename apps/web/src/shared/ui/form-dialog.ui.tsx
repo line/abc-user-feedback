@@ -14,13 +14,13 @@
  * under the License.
  */
 
-import { useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import {
   Button,
   Dialog,
+  DialogBody,
   DialogClose,
   DialogContent,
   DialogFooter,
@@ -38,9 +38,10 @@ interface Props extends React.PropsWithChildren {
     onClick?: () => unknown;
   };
   submitBtn: {
-    disabled: boolean;
+    disabled?: boolean;
     onClick?: () => unknown;
     form?: string;
+    loading?: boolean;
   };
 }
 
@@ -48,7 +49,6 @@ const FormDialog: React.FC<Props> = (props) => {
   const { close, isOpen, title, children, deleteBtn, submitBtn } = props;
   const { t } = useTranslation();
   const overlay = useOverlay();
-  const [loading, setLoading] = useState(false);
 
   const openDeleteDialog = () => {
     overlay.open(({ close: dialogClose, isOpen }) => (
@@ -68,7 +68,7 @@ const FormDialog: React.FC<Props> = (props) => {
     <Dialog onOpenChange={close} open={isOpen} modal>
       <DialogContent radius="large">
         <DialogTitle>{title}</DialogTitle>
-        <div className="flex flex-col gap-3">{children}</div>
+        <DialogBody>{children}</DialogBody>
         <DialogFooter>
           {deleteBtn && (
             <div className="flex-1">
@@ -86,13 +86,7 @@ const FormDialog: React.FC<Props> = (props) => {
             type="submit"
             disabled={submitBtn.disabled}
             form={submitBtn.form}
-            loading={loading}
-            onClick={async () => {
-              setLoading(true);
-              await submitBtn.onClick?.();
-              setLoading(false);
-              close();
-            }}
+            loading={submitBtn.loading}
           >
             {t('v2.button.save')}
           </Button>

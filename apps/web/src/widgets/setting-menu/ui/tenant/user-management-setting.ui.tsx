@@ -20,7 +20,7 @@ import { Button, toast } from '@ufb/react';
 
 import { SettingTemplate, useOAIMutation } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
-import { InviteUserPopover, UserManagementTable } from '@/entities/user';
+import { InviteUserDialog, UserManagementTable } from '@/entities/user';
 
 interface IProps {}
 
@@ -39,15 +39,16 @@ const UserManagementSetting: React.FC<IProps> = () => {
     },
   });
 
-  const openApiKeyDialog = () => {
+  const openInviateUserDialog = () => {
     overlay.open(({ close, isOpen }) => (
-      <InviteUserPopover
+      <InviteUserDialog
         close={close}
         isOpen={isOpen}
         onSubmit={async ({ email, roleId, type }) => {
           if (type === 'SUPER') await mutateAsync({ email, userType: type });
-          if (type === 'GENERAL')
+          if (type === 'GENERAL') {
             await mutateAsync({ email, roleId, userType: type });
+          }
           close();
         }}
       />
@@ -58,14 +59,14 @@ const UserManagementSetting: React.FC<IProps> = () => {
     <SettingTemplate
       title={t('tenant-setting-menu.user-mgmt')}
       action={
-        <Button onClick={openApiKeyDialog} disabled={!tenant?.useEmail}>
+        <Button onClick={openInviateUserDialog} disabled={!tenant?.useEmail}>
           {t('v2.button.name.invite', { name: 'User' })}
         </Button>
       }
     >
       <UserManagementTable
         createButton={
-          <Button onClick={openApiKeyDialog} disabled={!tenant?.useEmail}>
+          <Button onClick={openInviateUserDialog} disabled={!tenant?.useEmail}>
             {t('v2.button.name.invite', { name: 'User' })}
           </Button>
         }

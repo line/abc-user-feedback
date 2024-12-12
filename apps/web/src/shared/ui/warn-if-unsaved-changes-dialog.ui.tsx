@@ -50,9 +50,7 @@ const WarnIfUnsavedChangesDialog: React.FC<Props> = (props) => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">{t('v2.button.cancel')}</Button>
-          </DialogClose>
+          <DialogClose>{t('v2.button.cancel')}</DialogClose>
           <Button variant="primary" onClick={onSubmit}>
             {t('v2.button.out')}
           </Button>

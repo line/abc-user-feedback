@@ -21,13 +21,6 @@ import { render, screen, waitFor } from '@/test-utils';
 import ResetPasswordWithEmailForm from './reset-password-with-email-form.ui';
 
 describe('ResetPasswordWithEmailForm', () => {
-  test('match snapshot', () => {
-    const component = render(
-      <ResetPasswordWithEmailForm code="code" email="email" />,
-    );
-    expect(component.container).toMatchSnapshot();
-  });
-
   test('validation', async () => {
     render(
       <ResetPasswordWithEmailForm code="code" email={faker.internet.email()} />,

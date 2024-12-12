@@ -57,7 +57,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-12 space-y-4">
+      <div className="mb-12 flex flex-col gap-4">
         <TextInput
           type="email"
           label="Email"
@@ -83,7 +83,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Button type="submit" disabled={!formState.isValid} loading={isPending}>
+        <Button type="submit" loading={isPending}>
           {t('button.setting')}
         </Button>
         <Button

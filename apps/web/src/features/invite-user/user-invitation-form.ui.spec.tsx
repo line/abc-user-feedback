@@ -21,11 +21,6 @@ import { render, screen, waitFor } from '@/test-utils';
 import UserInvitationForm from './user-invitation-form.ui';
 
 describe('ResetPasswordWithEmailForm', () => {
-  test('match snapshot', () => {
-    const component = render(<UserInvitationForm code="code" email="email" />);
-    expect(component.container).toMatchSnapshot();
-  });
-
   test('validation', async () => {
     render(<UserInvitationForm code="code" email={faker.internet.email()} />);
 

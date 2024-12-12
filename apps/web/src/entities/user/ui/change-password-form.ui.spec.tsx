@@ -1,0 +1,61 @@
+/**
+ * Copyright 2023 LINE Corporation
+ *
+ * LINE Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+import { faker } from '@faker-js/faker';
+import userEvent from '@testing-library/user-event';
+
+import { simpleMockHttp } from '@/msw';
+import { render, screen, waitFor } from '@/test-utils';
+import ChangePasswordForm from './change-password-form.ui';
+
+describe('ResetPasswordWithEmailForm', () => {
+  describe('Submittion', () => {
+    beforeEach(async () => {
+      render(<ChangePasswordForm />);
+
+      const passwordInput = screen.getByPlaceholderText(
+        'input.placeholder.password',
+      );
+      const newPasswordInput = screen.getByPlaceholderText(
+        'main.profile.placeholder.new-password',
+      );
+      const confirmPasswordInput = screen.getByPlaceholderText(
+        'main.profile.placeholder.confirm-new-password',
+      );
+      await userEvent.type(passwordInput, faker.string.alphanumeric(8));
+
+      const password = faker.string.alphanumeric(8);
+      await userEvent.type(newPasswordInput, password);
+      await userEvent.type(confirmPasswordInput, password);
+    });
+    test('on Success', async () => {
+      simpleMockHttp({
+        method: 'post',
+        path: '/api/admin/users/password/change',
+      });
+
+      const submitBtn = screen.getByRole('button', {
+        name: 'button.save',
+      });
+      await userEvent.click(submitBtn);
+
+      await waitFor(() =>
+        expect(
+          screen.getByText(new RegExp('v2.toast.success', 'i')),
+        ).toBeInTheDocument(),
+      );
+    });
+  });
+});

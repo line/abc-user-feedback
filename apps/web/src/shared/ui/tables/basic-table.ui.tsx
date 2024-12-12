@@ -58,7 +58,7 @@ interface IProps<T> {
   createButton?: React.ReactNode;
   className?: string;
   onClickRow?: (index: number, row: T) => void;
-  reoder?: (data: T[]) => void;
+  reorder?: (data: T[]) => void;
 }
 
 const BasicTable = <T,>(props: IProps<T>) => {
@@ -70,7 +70,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
     createButton,
     className,
     onClickRow,
-    reoder,
+    reorder,
   } = props;
 
   // reorder rows after drag & drop
@@ -79,7 +79,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
     if (over && active.id !== over.id) {
       const oldIndex = dataIds.indexOf(active.id as string);
       const newIndex = dataIds.indexOf(over.id as string);
-      reoder?.(
+      reorder?.(
         arrayMove(
           table.getRowModel().rows.map((v) => v.original),
           oldIndex,

@@ -27,11 +27,8 @@ const DEFAULT_TENANT: Tenant = {
   siteName: faker.string.sample(),
   description: null,
   allowDomains: [],
-  isPrivate: false,
   useEmail: true,
-  isRestrictDomain: false,
   oauthConfig: null,
-  useEmailVerification: true,
   useOAuth: true,
 };
 

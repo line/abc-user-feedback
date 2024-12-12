@@ -35,7 +35,7 @@ const ChartContainer: React.FC<IProps> = (props) => {
         <div className="flex items-center">
           <span className="font-20-bold">{title}</span>
           {description && (
-            <DescriptionTooltip description={description} placement="bottom" />
+            <DescriptionTooltip description={description} side="bottom" />
           )}
         </div>
         <div className="flex gap-3">

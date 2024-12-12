@@ -20,21 +20,21 @@ interface Props {
   onClickGoBack?: () => void;
   title: string;
   leftPanel: React.ReactNode;
+  leftBottm?: React.ReactNode;
 }
 
-const CreationLayout: React.FC<Props> = ({
-  children,
-  onClickGoBack,
-  title,
-  leftPanel,
-}) => {
+const CreationLayout: React.FC<Props> = (props) => {
+  const { children, onClickGoBack, title, leftPanel, leftBottm } = props;
   return (
     <>
       <CreationHeader onClickGoBack={onClickGoBack} />
       <div className="m-6 flex h-full gap-8">
-        <div className="w-[520px] flex-shrink-0 p-6">
-          <h2 className="text-title-h2 mb-6">{title}</h2>
-          {leftPanel}
+        <div className="flex w-[520px] flex-shrink-0 flex-col p-6">
+          <div className="flex-1">
+            <h2 className="text-title-h2 mb-6">{title}</h2>
+            {leftPanel}
+          </div>
+          {leftBottm}
         </div>
         {children}
       </div>

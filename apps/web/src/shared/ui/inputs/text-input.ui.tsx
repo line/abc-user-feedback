@@ -25,7 +25,7 @@ import {
   InputLabel,
 } from '@ufb/react';
 
-interface Props extends Omit<TextInputProps, 'error' | 'required'> {
+interface Props extends Omit<TextInputProps, 'error' | 'required' | 'value'> {
   required?: boolean;
   label: string;
   error?: string;
@@ -34,6 +34,7 @@ interface Props extends Omit<TextInputProps, 'error' | 'required'> {
   rightButton?: React.ReactNode;
   infoCaption?: string;
   successCaption?: string;
+  value?: string | readonly string[] | number | null;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
@@ -64,6 +65,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
           )}
           <Input
             {...textInputProps}
+            value={textInputProps.value ?? undefined}
             className="flex-1"
             error={typeof error !== 'undefined'}
             required={required}

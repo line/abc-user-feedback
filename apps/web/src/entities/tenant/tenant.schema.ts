@@ -15,17 +15,32 @@
  */
 import { z } from 'zod';
 
-const oauthConfigSchema = z.object({
-  clientId: z.string().min(1),
-  clientSecret: z.string().min(1),
-  authCodeRequestURL: z.string().min(1),
-  scopeString: z.string().min(1),
-  accessTokenRequestURL: z.string().min(1),
-  userProfileRequestURL: z.string().min(1),
-  emailKey: z.string().min(1),
-  loginButtonType: z.enum(['CUSTOM', 'GOOGLE']).nullable(),
-  loginButtonName: z.string().nullable(),
-});
+const oauthConfigSchema = z
+  .object({
+    clientId: z.string().min(1),
+    clientSecret: z.string().min(1),
+    authCodeRequestURL: z.string().min(1),
+    scopeString: z.string().min(1),
+    accessTokenRequestURL: z.string().min(1),
+    userProfileRequestURL: z.string().min(1),
+    emailKey: z.string().min(1),
+    loginButtonType: z.literal('CUSTOM'),
+    loginButtonName: z.string().min(1),
+  })
+  .or(
+    z.object({
+      clientId: z.string().min(1),
+      clientSecret: z.string().min(1),
+      authCodeRequestURL: z.string().min(1),
+      scopeString: z.string().min(1),
+      accessTokenRequestURL: z.string().min(1),
+      userProfileRequestURL: z.string().min(1),
+      emailKey: z.string().min(1),
+      loginButtonType: z.literal('GOOGLE').nullable(),
+      loginButtonName: z.string().nullable(),
+    }),
+  );
+
 export const tenantSchema = z.object({
   id: z.number(),
   siteName: z.string().min(1).max(20),

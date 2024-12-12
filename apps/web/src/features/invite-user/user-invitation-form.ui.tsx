@@ -19,9 +19,9 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
-import { TextInput, toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
-import { Path, useOAIMutation } from '@/shared';
+import { Path, TextInput, useOAIMutation } from '@/shared';
 
 import { userInvitationSchema } from './user-invitation.schema';
 
@@ -34,7 +34,6 @@ interface IProps {
 
 const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
   const { t } = useTranslation();
-
   const router = useRouter();
 
   const { handleSubmit, register, formState } = useForm<FormType>({
@@ -47,11 +46,8 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
     path: '/api/admin/auth/signUp/invitation',
     queryOptions: {
       async onSuccess() {
+        toast.success('Success');
         await router.push(Path.SIGN_IN);
-        toast.positive({ title: 'Success' });
-      },
-      onError(error) {
-        toast.negative({ title: 'Error', description: error.message });
       },
     },
   });
@@ -61,7 +57,7 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-6 space-y-4">
+      <div className="mb-12 flex flex-col gap-4">
         <TextInput
           label="Email"
           placeholder={t('input.placeholder.email')}
@@ -74,10 +70,7 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
           label={t('input.label.password')}
           placeholder={t('input.placeholder.password')}
           {...register('password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.password}
-          hint={formState.errors.password?.message}
+          error={formState.errors.password?.message}
           required
         />
         <TextInput
@@ -85,21 +78,14 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
           label={t('input.label.confirm-password')}
           placeholder={t('input.placeholder.confirm-password')}
           {...register('confirmPassword')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.confirmPassword}
-          hint={formState.errors.confirmPassword?.message}
+          error={formState.errors.confirmPassword?.message}
           required
         />
       </div>
       <div className="flex flex-col gap-2">
-        <button
-          type="submit"
-          className="btn btn-primary"
-          disabled={!formState.isValid || isPending}
-        >
+        <Button type="submit" loading={isPending}>
           {t('button.setting')}
-        </button>
+        </Button>
       </div>
     </form>
   );

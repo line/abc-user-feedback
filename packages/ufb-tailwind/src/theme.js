@@ -33,9 +33,6 @@ module.exports = {
       inverse: 'var(--fill-color-inverse)',
     },
     text: {
-      primary: 'var(--text-color-primary)',
-      secondary: 'var(--text-color-secondary)',
-      tertiary: 'var(--text-color-tertiary)',
       quaternary: 'var(--text-color-quaternary)',
       inverse: 'var(--text-color-inverse)',
     },
@@ -64,9 +61,6 @@ module.exports = {
     ...colors,
   },
   backgroundColor: {
-    primary: 'var(--background-color-primary)',
-    secondary: 'var(--background-color-secondary)',
-    tertiary: 'var(--background-color-tertiary)',
     dim: 'var(--background-color-dim)',
     fill: {
       primary: 'var(--fill-color-primary)',
@@ -76,11 +70,6 @@ module.exports = {
       inverse: 'var(--fill-color-inverse)',
     },
     ...colors,
-  },
-  borderRadius: {
-    DEFAULT: '8px',
-    full: '99999px',
-    none: '0',
   },
   boxShadow: {
     drop: '0px 4px 16px 0px rgb(var(--shadow-rgb) / 20%)',

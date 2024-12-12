@@ -40,9 +40,7 @@ const LoginSetting: React.FC<IProps> = () => {
 
   const { tenant, refetchTenant } = useTenantStore();
 
-  const methods = useForm<AuthInfo>({
-    resolver: zodResolver(authInfoScema),
-  });
+  const methods = useForm<AuthInfo>({ resolver: zodResolver(authInfoScema) });
 
   const { reset, handleSubmit, formState, watch, setValue } = methods;
   const { useEmail, useOAuth } = watch();
@@ -63,7 +61,7 @@ const LoginSetting: React.FC<IProps> = () => {
 
   useEffect(() => {
     if (!tenant) return;
-    reset(tenant);
+    reset(tenant, { keepDefaultValues: true });
   }, [tenant]);
 
   const onSubmit = (input: AuthInfo) => {
@@ -100,7 +98,7 @@ const LoginSetting: React.FC<IProps> = () => {
       }
     >
       <FormProvider {...methods}>
-        <form id="form" className="flex flex-col gap-6">
+        <form id="form" className="flex flex-col gap-4">
           <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-6">
             <div className="flex">
               <div className="flex-1">
@@ -118,9 +116,9 @@ const LoginSetting: React.FC<IProps> = () => {
             </div>
             {useEmail && <EmailConfigForm disabled={!useEmail} />}
           </div>
-          <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-6">
-            <div className="flex">
-              <div className="flex-1">
+          <div className="border-neutral-tertiary flex flex-col gap-6 rounded border p-6">
+            <div className="flex items-center justify-between">
+              <div>
                 <h5 className="text-title-h5 mb-1">OAuth2.0 Login</h5>
                 <p className="text-neutral-tertiary text-small-normal">
                   {t('v2.login-setting.oauth-description')}
@@ -128,9 +126,12 @@ const LoginSetting: React.FC<IProps> = () => {
               </div>
               <Switch
                 checked={useOAuth}
-                onCheckedChange={(checked) =>
-                  setValue('useOAuth', checked, { shouldDirty: true })
-                }
+                onCheckedChange={(checked) => {
+                  setValue('useOAuth', checked, { shouldDirty: true });
+                  if (checked && !watch('oauthConfig.loginButtonType')) {
+                    setValue('oauthConfig.loginButtonType', 'CUSTOM');
+                  }
+                }}
               />
             </div>
             {useOAuth && <OAuthConfigForm disabled={!useOAuth} />}

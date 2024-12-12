@@ -51,7 +51,7 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
 
   return (
     <form onSubmit={handleSubmit((data) => mutate(data))}>
-      <div className="mb-12 space-y-4">
+      <div className="mb-12 flex flex-col gap-4">
         <TextInput
           type="email"
           label="Email"

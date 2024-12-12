@@ -14,6 +14,7 @@
  * under the License.
  */
 export * from './user.model';
+export * from './user.schema';
 export * from './user.type';
 export * from './ui';
 export * from './lib';

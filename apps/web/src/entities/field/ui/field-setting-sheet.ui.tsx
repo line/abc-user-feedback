@@ -174,9 +174,9 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
         </SheetHeader>
         <SheetBody asChild>
           <form
-            onSubmit={handleSubmit(onSubmit)}
             id="field-setting"
-            className="flex flex-col gap-3"
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex flex-col gap-4"
           >
             <TextInput
               label="Key"

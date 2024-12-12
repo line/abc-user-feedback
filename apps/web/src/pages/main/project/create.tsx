@@ -15,6 +15,7 @@
  */
 import { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
+import Image from 'next/image';
 import { useOverlay } from '@toss/use-overlay';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useTranslation } from 'react-i18next';
@@ -26,6 +27,7 @@ import {
   DialogContent,
   DialogFooter,
   DialogTitle,
+  Icon,
 } from '@ufb/react';
 
 import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
@@ -37,8 +39,7 @@ const CreateProjectPage: NextPage = () => {
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 0 },
-    queryOptions: { retry: false },
+    variables: { limit: 1 },
   });
   const openWarningNoProjects = () => {
     overlay.open(({ close, isOpen }) => (
@@ -48,13 +49,19 @@ const CreateProjectPage: NextPage = () => {
             {t('v2.dialog.no-project-in-project-creation-page.title')}
           </DialogTitle>
           <DialogBody className="flex flex-col items-center gap-2">
-            <img src="/assets/images/no-projects-in-project-creation-page.png" />
+            <Image
+              src="/assets/images/no-projects-in-project-creation-page.svg"
+              alt=""
+              width={240}
+              height={240}
+            />
             <p>
               {t('v2.dialog.no-project-in-project-creation-page.description')}
             </p>
           </DialogBody>
           <DialogFooter>
             <DialogClose variant="primary">
+              <Icon name="RiFlashlightFill" />
               {t('v2.button.confirm')}
             </DialogClose>
           </DialogFooter>
@@ -64,7 +71,7 @@ const CreateProjectPage: NextPage = () => {
   };
 
   useEffect(() => {
-    if (!data || data.meta.totalItems > 0) return;
+    if (!data || data.items.length > 0) return;
     openWarningNoProjects();
   }, [data]);
 

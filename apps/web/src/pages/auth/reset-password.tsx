@@ -28,7 +28,7 @@ const ResetPasswordPage: NextPageWithLayout = () => {
   return (
     <AnonymousTemplate
       title={t('auth.reset-password.title')}
-      image="/assets/images/send-reset-password-email.png"
+      image="/assets/images/send-reset-password-email.svg"
     >
       <RequestResetPasswordWithEmail />
     </AnonymousTemplate>

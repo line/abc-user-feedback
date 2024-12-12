@@ -31,7 +31,7 @@ const TenantInfoForm: React.FC<IProps> = () => {
   useWarnIfUnsavedChanges(formState.isDirty);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <TextInput {...register('id')} label="Tenant ID" disabled />
       <TextInput
         {...register('siteName')}

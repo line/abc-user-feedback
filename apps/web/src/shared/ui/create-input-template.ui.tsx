@@ -74,9 +74,9 @@ const CreateInputTemplate: React.FC<IProps> = (props) => {
       {helpText && <SettingAlert description={helpText} />}
       {scrollable ?
         <ScrollArea className="h-full">{children}</ScrollArea>
-      : <div className="flex h-full flex-col">{children}</div>}
+      : <div className="flex h-full flex-col gap-4">{children}</div>}
       {!onClickBack && (
-        <div className="flex justify-end gap-2">
+        <div className="create-template-footer flex justify-end gap-2">
           {currentStepIndex !== 0 && (
             <Button variant="outline" onClick={onPrev}>
               {t('button.previous')}

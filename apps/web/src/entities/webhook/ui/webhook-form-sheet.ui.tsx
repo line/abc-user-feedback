@@ -176,7 +176,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
         </SheetHeader>
         <SheetBody asChild>
           <form
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-4"
             onSubmit={handleSubmit((webhook) =>
               onSubmit({
                 ...webhook,

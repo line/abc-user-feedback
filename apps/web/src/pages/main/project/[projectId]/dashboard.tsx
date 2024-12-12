@@ -88,7 +88,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const currentDate = dayjs().format('YYYY-MM-DD HH:mm');
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <div>
         <span className="font-12-regular text-secondary ml-2">
           Updated: {currentDate}

@@ -26,6 +26,7 @@ import {
   ComboboxSelectItem,
   ComboboxTrigger,
   Icon,
+  InputCaption,
   InputField,
   InputLabel,
 } from '@ufb/react';
@@ -38,6 +39,7 @@ interface Props {
   required?: boolean;
   disabled?: boolean;
   displayValue?: string;
+  error?: string;
 }
 
 const SelectSearchInput: React.FC<Props> = (props) => {
@@ -49,6 +51,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     required,
     disabled = false,
     displayValue,
+    error,
   } = props;
   const { t } = useTranslation();
 
@@ -60,7 +63,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         {label} {required && <span className="text-tint-red">*</span>}
       </InputLabel>
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled}>
+        <ComboboxTrigger disabled={disabled} className="font-normal">
           {displayValue ?? value ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
@@ -86,6 +89,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
+      {error && <InputCaption variant="error">{error}</InputCaption>}
     </InputField>
   );
 };

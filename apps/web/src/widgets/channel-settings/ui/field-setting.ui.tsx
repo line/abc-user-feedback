@@ -17,8 +17,22 @@ import { useEffect, useMemo, useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Divider, Icon, toast, ToggleGroup, ToggleGroupItem } from '@ufb/react';
-import { Popover, PopoverModalContent, PopoverTrigger } from '@ufb/ui';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Divider,
+  Icon,
+  toast,
+  ToggleGroup,
+  ToggleGroupItem,
+} from '@ufb/react';
 
 import {
   SettingAlert,
@@ -60,7 +74,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
     variables: { channelId, projectId },
   });
 
-  const { mutateAsync } = useOAIMutation({
+  const { mutateAsync, isPending } = useOAIMutation({
     method: 'put',
     path: '/api/admin/projects/{projectId}/channels/{channelId}/fields',
     pathParams: { channelId, projectId },
@@ -144,6 +158,34 @@ const FieldSetting: React.FC<IProps> = (props) => {
       />
     ));
   };
+  const openSaveFieldDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{t('modal.save-field.title')}</DialogTitle>
+          </DialogHeader>
+          <DialogBody>
+            <DialogDescription>
+              {t('modal.save-field.description')}
+            </DialogDescription>
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose>{t('v2.button.cancel')}</DialogClose>
+            <Button
+              loading={isPending}
+              onClick={async () => {
+                await saveFields();
+                close();
+              }}
+            >
+              {t('v2.button.save')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    ));
+  };
 
   return (
     <SettingTemplate
@@ -187,10 +229,12 @@ const FieldSetting: React.FC<IProps> = (props) => {
               orientation="vertical"
               className="my-2 h-auto"
             />
-            <SaveFieldPopover
-              onClickSave={saveFields}
+            <Button
               disabled={!isDirty || !perms.includes('channel_field_update')}
-            />
+              onClick={openSaveFieldDialog}
+            >
+              {t('button.save')}
+            </Button>
           </>
         )
       }
@@ -217,44 +261,4 @@ const FieldSetting: React.FC<IProps> = (props) => {
   );
 };
 
-interface ISaveFieldPopoverProps {
-  onClickSave: () => Promise<void>;
-  disabled: boolean;
-}
-const SaveFieldPopover: React.FC<ISaveFieldPopoverProps> = (props) => {
-  const { onClickSave, disabled } = props;
-
-  const { t } = useTranslation();
-
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <Popover modal open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <button
-          className="btn btn-primary btn-md min-w-[120px]"
-          disabled={disabled}
-          onClick={() => setIsOpen(true)}
-        >
-          {t('button.save')}
-        </button>
-      </PopoverTrigger>
-      <PopoverModalContent
-        title={t('modal.save-field.title')}
-        description={t('modal.save-field.description')}
-        submitButton={{
-          children: t('button.save'),
-          onClick: async () => {
-            await onClickSave();
-            setIsOpen(false);
-          },
-        }}
-        cancelButton={{
-          children: t('button.cancel'),
-          onClick: () => setIsOpen(false),
-        }}
-      />
-    </Popover>
-  );
-};
 export default FieldSetting;

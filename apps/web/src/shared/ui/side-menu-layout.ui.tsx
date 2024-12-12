@@ -23,7 +23,7 @@ const SideMenuLayout: React.FC<Props> = (props) => {
   return (
     <div className="flex h-full gap-8">
       <div className="w-[280px] flex-shrink-0 px-3 py-6">{sideMenu}</div>
-      <div className="border-neutral-tertiary h-[calc(100vh-200px)] w-full overflow-auto rounded border p-6">
+      <div className="border-neutral-tertiary h-[calc(100vh-200px)] w-full rounded border p-6">
         {children}
       </div>
     </div>

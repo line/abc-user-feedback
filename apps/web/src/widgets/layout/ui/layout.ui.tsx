@@ -31,7 +31,7 @@ const Layout: React.FC<IProps> = (props) => {
     <div>
       <Header projectId={projectId} />
       <main className="p-5">
-        <div className="h-20 px-6 py-3">
+        <div className="h-12 px-6">
           <h1 className="text-title-h3">{title}</h1>
         </div>
         <div className="min-h-[calc(100vh-200px)]">{children}</div>

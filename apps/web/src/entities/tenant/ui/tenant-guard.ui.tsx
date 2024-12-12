@@ -20,6 +20,7 @@ import { useRouter } from 'next/router';
 import { Path, useOAIQuery } from '@/shared';
 
 import { useTenantStore } from '../tenant.model';
+import type { Tenant } from '../tenant.type';
 
 interface IProps extends React.PropsWithChildren {}
 
@@ -34,7 +35,7 @@ const TenantGuard: React.FC<IProps> = ({ children }) => {
 
   useEffect(() => {
     if (error?.statusCode === 404) void router.push(Path.CREATE_TENANT);
-    if (data) setTenant(data);
+    if (data) setTenant(data as Tenant);
   }, [data, error]);
 
   if (status === 'pending') return <>Loading...</>;

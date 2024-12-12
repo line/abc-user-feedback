@@ -42,15 +42,15 @@ const FieldTable: React.FC<IProps> = (props) => {
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
     columns,
-    data: fields,
+    data: fields.sort((a, b) => a.order - b.order),
     enableColumnFilters: true,
     getFilteredRowModel: getFilteredRowModel(),
     getRowId: (row) => String(row.key),
   });
 
   return (
-    <>
-      <div className="mb-4 flex gap-3">
+    <div className="flex h-full flex-col gap-4">
+      <div className="flex gap-3">
         <TableFacetedFilter
           column={table.getColumn('status')}
           options={[
@@ -77,11 +77,11 @@ const FieldTable: React.FC<IProps> = (props) => {
       <BasicTable
         table={table}
         onClickRow={(index, row) => onClickRow?.(index, row)}
-        reoder={(data) => {
+        reorder={(data) => {
           reorder?.(data.map((field, index) => ({ ...field, order: index })));
         }}
       />
-    </>
+    </div>
   );
 };
 

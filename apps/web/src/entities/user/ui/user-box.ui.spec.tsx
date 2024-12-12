@@ -47,34 +47,4 @@ describe('UserBox', () => {
     expect(screen.getByText('header.profile')).toBeInTheDocument();
     expect(screen.getByText('header.sign-out')).toBeInTheDocument();
   });
-  test('snapshot', () => {
-    const user: User = {
-      department: null,
-      email: 'test@test.com',
-      id: faker.number.int(),
-      name: faker.string.sample(),
-      signUpMethod: 'EMAIL',
-      type: 'GENERAL',
-    };
-    useUserStore.setState({ user: user });
-    const { container } = render(<UserBox />);
-    expect(container).toMatchSnapshot();
-  });
-  test('snapshot when open', async () => {
-    const user: User = {
-      department: null,
-      email: 'test@test.com',
-      id: faker.number.int(),
-      name: faker.string.sample(),
-      signUpMethod: 'EMAIL',
-      type: 'GENERAL',
-    };
-    useUserStore.setState({ user: user });
-    const { container } = render(<UserBox />);
-    const userBox = screen.getByText(user.email);
-    await waitFor(async () => {
-      await userEvent.click(userBox);
-    });
-    expect(container).toMatchSnapshot();
-  });
 });

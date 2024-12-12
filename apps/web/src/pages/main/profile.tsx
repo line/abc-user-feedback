@@ -15,6 +15,7 @@
  */
 import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
@@ -37,7 +38,10 @@ import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import { useUserStore } from '@/entities/user';
-import { ChangePasswordForm, UserProfileForm } from '@/features/update-user';
+import {
+  ChangePasswordSetting,
+  UserProfileSetting,
+} from '@/features/update-user';
 import { Layout } from '@/widgets/layout';
 
 const ProfilePage: NextPageWithLayout = () => {
@@ -53,8 +57,7 @@ const ProfilePage: NextPageWithLayout = () => {
   );
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 0 },
-    queryOptions: { retry: false },
+    variables: { limit: 1 },
   });
 
   const openWarningNoProjects = () => {
@@ -65,7 +68,12 @@ const ProfilePage: NextPageWithLayout = () => {
             {t('v2.dialog.no-project-in-profile-page.title')}
           </DialogTitle>
           <DialogBody className="flex flex-col items-center gap-2">
-            <img src="/assets/images/no-projects-in-profile-page.png" />
+            <Image
+              src="/assets/images/no-projects-in-profile-page.svg"
+              alt=""
+              width={240}
+              height={240}
+            />
             <p>
               {t('v2.dialog.no-project-in-profile-page.description', {
                 name: user?.name ?? '--',
@@ -74,6 +82,7 @@ const ProfilePage: NextPageWithLayout = () => {
           </DialogBody>
           <DialogFooter>
             <DialogClose variant="primary">
+              <Icon name="RiFlashlightFill" />
               {t('v2.button.confirm')}
             </DialogClose>
           </DialogFooter>
@@ -83,7 +92,7 @@ const ProfilePage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (!data || data.meta.totalItems > 0) return;
+    if (!data || data.items.length > 0) return;
     openWarningNoProjects();
   }, [data]);
 
@@ -110,8 +119,8 @@ const ProfilePage: NextPageWithLayout = () => {
         </Menu>
       }
     >
-      {currentMenu === 'profile' && <UserProfileForm />}
-      {currentMenu === 'change-password' && <ChangePasswordForm />}
+      {currentMenu === 'profile' && <UserProfileSetting />}
+      {currentMenu === 'change-password' && <ChangePasswordSetting />}
     </SideMenuLayout>
   );
 };

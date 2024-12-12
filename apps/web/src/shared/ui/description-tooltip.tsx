@@ -14,33 +14,31 @@
  * under the License.
  */
 
-import type { Placement } from '@floating-ui/react';
-
-import { Icon, Tooltip, TooltipContent, TooltipTrigger } from '@ufb/ui';
+import { Icon, Tooltip, TooltipContent, TooltipTrigger } from '@ufb/react';
 
 import { displayString } from '../utils';
 
 export interface ITooltipProps {
   description: string;
-  placement?: Placement;
   color?: 'red';
+  side?: 'bottom' | 'top' | 'right' | 'left';
 }
 
 const DescriptionTooltip: React.FC<ITooltipProps> = ({
   description,
-  placement,
   color,
+  side,
 }) => {
   return (
-    <Tooltip placement={placement ?? 'bottom'}>
+    <Tooltip>
       <TooltipTrigger className="ml-1 align-middle">
         <Icon
-          name="InfoCircleFill"
+          name="RiInformationFill"
           size={16}
           className={color === 'red' ? 'text-red-primary' : 'text-tertiary'}
         />
       </TooltipTrigger>
-      <TooltipContent className="whitespace-pre-line">
+      <TooltipContent className="whitespace-pre-line" side={side}>
         {displayString(description)}
       </TooltipContent>
     </Tooltip>

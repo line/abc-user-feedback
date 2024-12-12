@@ -26,6 +26,7 @@ interface IProps {
   code: string;
   email: string;
 }
+
 const ResetPasswordPage: NextPageWithLayout<IProps> = (props) => {
   const { code, email } = props;
   const { t } = useTranslation();
@@ -33,7 +34,7 @@ const ResetPasswordPage: NextPageWithLayout<IProps> = (props) => {
   return (
     <AnonymousTemplate
       title={t('auth.reset-password.title')}
-      image="/assets/images/reset-password.png"
+      image="/assets/images/reset-password.svg"
     >
       <ResetPasswordWithEmailForm code={code} email={email} />
     </AnonymousTemplate>

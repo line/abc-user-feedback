@@ -74,7 +74,7 @@ const SelectInput: React.FC<Props> = (props) => {
           </SelectItem>
         ))}
       </SelectContent>
-      {error && <SelectCaption variant="default">{error}</SelectCaption>}
+      {error && <SelectCaption variant="error">{error}</SelectCaption>}
     </Select>
   );
 };

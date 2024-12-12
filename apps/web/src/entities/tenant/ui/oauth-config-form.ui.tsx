@@ -31,7 +31,7 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-6">
       <RadioCardGroup
         value={watch('oauthConfig.loginButtonType') ?? 'CUSTOM'}
         onValueChange={(v: 'GOOGLE' | 'CUSTOM') =>
@@ -41,72 +41,74 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
         <RadioCard value="GOOGLE" icon="RiGoogleFill" title="Google Login" />
         <RadioCard value="CUSTOM" icon="RiMailLine" title="Custom Login" />
       </RadioCardGroup>
-      <TextInput
-        {...register('oauthConfig.clientId')}
-        label="Client ID"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.clientSecret?.message}
-        disabled={disabled}
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.clientSecret')}
-        label="Client Secret"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.clientSecret?.message}
-        disabled={disabled}
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.authCodeRequestURL')}
-        label="Authorization Code Request URL"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.authCodeRequestURL?.message}
-        disabled={disabled}
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.scopeString')}
-        label="Scope"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.scopeString?.message}
-        disabled={disabled}
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.accessTokenRequestURL')}
-        label="Access Token Request URL"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.accessTokenRequestURL?.message}
-        disabled={disabled}
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.userProfileRequestURL')}
-        label="User Profile Request URL"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.userProfileRequestURL?.message}
-        disabled={disabled}
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.emailKey')}
-        label="Email Key in Response of User Profile"
-        placeholder={t('v2.placeholder.text')}
-        error={formState.errors.oauthConfig?.emailKey?.message}
-        disabled={disabled}
-        required
-      />
-      {watch('oauthConfig.loginButtonType') === 'CUSTOM' && (
+      <div className="flex flex-col gap-4">
         <TextInput
-          {...register('oauthConfig.loginButtonName')}
-          label="Login Button Name"
+          {...register('oauthConfig.clientId')}
+          label="Client ID"
           placeholder={t('v2.placeholder.text')}
-          error={formState.errors.oauthConfig?.loginButtonName?.message}
+          error={formState.errors.oauthConfig?.clientSecret?.message}
           disabled={disabled}
           required
         />
-      )}
+        <TextInput
+          {...register('oauthConfig.clientSecret')}
+          label="Client Secret"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.clientSecret?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.authCodeRequestURL')}
+          label="Authorization Code Request URL"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.authCodeRequestURL?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.scopeString')}
+          label="Scope"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.scopeString?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.accessTokenRequestURL')}
+          label="Access Token Request URL"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.accessTokenRequestURL?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.userProfileRequestURL')}
+          label="User Profile Request URL"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.userProfileRequestURL?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.emailKey')}
+          label="Email Key in Response of User Profile"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.emailKey?.message}
+          disabled={disabled}
+          required
+        />
+        {watch('oauthConfig.loginButtonType') === 'CUSTOM' && (
+          <TextInput
+            {...register('oauthConfig.loginButtonName')}
+            label="Login Button Name"
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.oauthConfig?.loginButtonName?.message}
+            disabled={disabled}
+            required
+          />
+        )}
+      </div>
     </div>
   );
 };

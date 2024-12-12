@@ -32,7 +32,7 @@ const DashboardCard: React.FC<IProps> = (props) => {
       <p className="line-clamp-2 flex-1">
         {title}
         {description && (
-          <DescriptionTooltip description={description} placement="bottom" />
+          <DescriptionTooltip description={description} side="bottom" />
         )}
       </p>
       <div className="flex items-center gap-2">

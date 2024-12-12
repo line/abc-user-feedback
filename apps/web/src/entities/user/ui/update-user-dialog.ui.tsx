@@ -39,7 +39,7 @@ const UpdateUserDialog: React.FC<IProps> = (props) => {
   } = props;
   const { t } = useTranslation();
 
-  const { setValue, watch, handleSubmit } = useForm<UpdateUser>({
+  const { setValue, watch, handleSubmit, formState } = useForm<UpdateUser>({
     resolver: zodResolver(updateUserSchema),
     defaultValues: data,
   });
@@ -51,16 +51,14 @@ const UpdateUserDialog: React.FC<IProps> = (props) => {
       isOpen={isOpen}
       submitBtn={{
         disabled: updateDisabled,
+        loading: formState.isSubmitting,
         form: 'update-user',
       }}
-      deleteBtn={{
-        disabled: deleteDisabled,
-        onClick: onClickDelete,
-      }}
+      deleteBtn={{ disabled: deleteDisabled, onClick: onClickDelete }}
     >
       <form
         id="update-user"
-        className="space-y-3"
+        className="flex flex-col gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         <TextInput label="Email" value={data.email} disabled />

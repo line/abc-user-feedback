@@ -114,7 +114,7 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
 
   return (
     <form onSubmit={handleSubmit((data) => onSubmit(data))}>
-      <div className="mb-12 space-y-4">
+      <div className="mb-12 flex flex-col gap-4">
         <div className="flex gap-2">
           <TextInput
             type="email"

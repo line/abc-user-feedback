@@ -29,6 +29,7 @@ export const memberSchema = z.object({
   role: roleSchema,
   createdAt: z.string(),
 });
+
 export const memberInfoSchema = memberSchema.partial({
   id: true,
   createdAt: true,

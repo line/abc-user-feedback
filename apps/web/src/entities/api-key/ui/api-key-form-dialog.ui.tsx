@@ -13,12 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import type { FormOverlayProps } from '@/shared';
 import { FormDialog, SelectInput, TextInput } from '@/shared';
 
+import { apiKeyFormSchema } from '../api-key.schema';
 import type { ApiKeyFormSchema } from '../api-key.type';
 
 interface Props extends FormOverlayProps<ApiKeyFormSchema> {}
@@ -26,9 +28,14 @@ interface Props extends FormOverlayProps<ApiKeyFormSchema> {}
 const ApiKeyFormDialog: React.FC<Props> = (props) => {
   const { data, close, isOpen, onSubmit, onClickDelete } = props;
   const { t } = useTranslation();
-  const [status, setStatus] = useState<ApiKeyFormSchema['status']>(
-    data?.status ?? 'active',
-  );
+
+  const { register, watch, setValue, handleSubmit, formState } =
+    useForm<ApiKeyFormSchema>({
+      resolver: zodResolver(apiKeyFormSchema),
+      defaultValues: data,
+    });
+
+  const { status } = watch();
 
   return (
     <FormDialog
@@ -36,24 +43,33 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
       close={close}
       title={t('v2.text.name.detail', { name: 'API Key' })}
       submitBtn={{
+        form: 'apiKeyForm',
         disabled: status === data?.status,
-        onClick: () => onSubmit({ value: data?.value ?? '', status }),
+        loading: formState.isSubmitting,
       }}
       deleteBtn={{
         disabled: false,
         onClick: onClickDelete,
       }}
     >
-      <TextInput label="API Key" value={data?.value} disabled />
-      <SelectInput
-        label="Status"
-        options={[
-          { label: 'Active', value: 'active' },
-          { label: 'Inactive', value: 'inactive' },
-        ]}
-        value={status}
-        onChange={(value) => setStatus(value as 'active' | 'inactive')}
-      />
+      <form
+        id="apiKeyForm"
+        className="flex flex-col gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <TextInput {...register('value')} label="API Key" disabled />
+        <SelectInput
+          label="Status"
+          options={[
+            { label: 'Active', value: 'active' },
+            { label: 'Inactive', value: 'inactive' },
+          ]}
+          value={status}
+          onChange={(value) =>
+            setValue('status', value as 'active' | 'inactive')
+          }
+        />
+      </form>
     </FormDialog>
   );
 };

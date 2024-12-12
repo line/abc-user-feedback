@@ -15,4 +15,6 @@
  */
 export { default as UserBox } from './user-box.ui';
 export { default as UserManagementTable } from './user-management-table.ui';
-export { default as InviteUserPopover } from './invite-user-popover';
+export { default as InviteUserDialog } from './invite-user-dialog.ui';
+export { default as UserProfileForm } from './user-profile-form.ui';
+export { default as ChangePasswordForm } from './change-password-form.ui';

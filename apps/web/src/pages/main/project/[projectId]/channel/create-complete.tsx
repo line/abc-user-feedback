@@ -91,7 +91,7 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
             </CreateSectionTemplate>
           </Accordion>
         </ScrollArea>
-        <div className="flex justify-end gap-2">
+        <div className="create-template-footer flex justify-end gap-2">
           <Button onClick={gotoFeedback}>
             <Icon name="RiSparklingFill" />
             {t('button.start')}

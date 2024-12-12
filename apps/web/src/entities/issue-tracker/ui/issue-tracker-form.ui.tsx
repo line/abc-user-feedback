@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { useFormContext } from 'react-hook-form';
 
 import { Icon, InputField, InputLabel } from '@ufb/react';
 
-import { cn, SelectInput, TextInput, useWarnIfUnsavedChanges } from '@/shared';
+import { cn, SelectInput, TextInput } from '@/shared';
 
 import type { IssueTracker } from '../issue-tracker.type';
 
@@ -27,11 +28,10 @@ interface IProps {
 
 const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
   const { register, watch, formState } = useFormContext<IssueTracker>();
-
-  useWarnIfUnsavedChanges(formState.isDirty);
+  console.log(watch('ticketDomain'));
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       <SelectInput
         options={[{ value: 'jira', label: 'Jira' }]}
         value="jira"
@@ -60,7 +60,8 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
           )}
         >
           <Icon name="RiPriceTag3Fill" size={16} />
-          {`${watch('ticketDomain') ?? 'https://example.com'}/browse/${watch('ticketKey') ?? 'PROJ'}-{Number}`}
+          {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
+          {`${watch('ticketDomain') || 'https://example.com'}/browse/${watch('ticketKey') || 'PROJ'}-{Number}`}
         </div>
       </InputField>
     </div>

@@ -19,8 +19,18 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  toast,
+} from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
-import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CreateInputTemplate,
@@ -72,16 +82,22 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
 
   const openCreateChannelError = () => {
     overlay.open(({ isOpen, close }) => (
-      <Popover modal open={isOpen} onOpenChange={() => close()}>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-channel.guide.invalid-channel')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: () => jumpStepByKey('channel-info'),
-          }}
-        />
-      </Popover>
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogHeader>{t('text.guide')}</DialogHeader>
+          <DialogBody>
+            <DialogDescription>
+              {t('main.create-channel.guide.invalid-channel')}
+            </DialogDescription>
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose>{t('v2.button.cancel')}</DialogClose>
+            <Button onClick={() => jumpStepByKey('channel-info')}>
+              {t('v2.button.confirm')}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
 
@@ -104,7 +120,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
         if (error.code === ErrorCode.Channel.ChannelAlreadyExists) {
           openCreateChannelError();
         } else {
-          toast.negative({ title: error.message });
+          toast.error(error.message);
         }
       },
     },

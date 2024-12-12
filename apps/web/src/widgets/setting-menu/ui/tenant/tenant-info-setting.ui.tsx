@@ -80,7 +80,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
       title={t('tenant-setting-menu.tenant-info')}
       action={
         <Button
-          form="form"
+          form="tenantInfo"
           type="submit"
           disabled={!methods.formState.isDirty || isPending}
         >
@@ -88,7 +88,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
         </Button>
       }
     >
-      <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
+      <form id="tenantInfo" onSubmit={methods.handleSubmit(onSubmit)}>
         <FormProvider {...methods}>
           <TenantInfoForm />
         </FormProvider>

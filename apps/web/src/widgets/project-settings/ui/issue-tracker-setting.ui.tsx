@@ -27,6 +27,7 @@ import {
   useOAIMutation,
   useOAIQuery,
   usePermissions,
+  useWarnIfUnsavedChanges,
 } from '@/shared';
 import type { IssueTracker } from '@/entities/issue-tracker';
 import { IssueTrackerForm, issueTrackerSchema } from '@/entities/issue-tracker';
@@ -72,6 +73,8 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     },
   });
 
+  useWarnIfUnsavedChanges(methods.formState.isDirty);
+
   useEffect(() => {
     methods.reset(data?.data ?? {});
   }, [data]);
@@ -90,7 +93,6 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
             modifyPending ||
             createPending
           }
-          onClick={methods.handleSubmit(onSubmit)}
         >
           {t('button.save')}
         </Button>
@@ -98,7 +100,9 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     >
       <SettingAlert description={t('help-card.issue-tracker')} />
       <FormProvider {...methods}>
-        <IssueTrackerForm />
+        <form onSubmit={methods.handleSubmit(onSubmit)}>
+          <IssueTrackerForm />
+        </form>
       </FormProvider>
     </SettingTemplate>
   );

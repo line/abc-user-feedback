@@ -28,7 +28,7 @@ import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 import { ThemeProvider } from 'next-themes';
 
-import { Toaster as Toaster2 } from '@ufb/react';
+import { Toaster as Toaster2, TooltipProvider } from '@ufb/react';
 import { Toaster } from '@ufb/ui';
 
 import { sessionStorage } from '@/shared';
@@ -83,11 +83,13 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <ThemeProvider attribute="class" defaultTheme="system">
           <OverlayProvider>
             <HydrationBoundary state={pageProps.dehydratedState}>
-              <TenantGuard>
-                {getLayout(<Component {...pageProps} />)}
-                <Toaster />
-                <Toaster2 />
-              </TenantGuard>
+              <TooltipProvider>
+                <TenantGuard>
+                  {getLayout(<Component {...pageProps} />)}
+                  <Toaster />
+                  <Toaster2 />
+                </TenantGuard>
+              </TooltipProvider>
             </HydrationBoundary>
             {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />} */}
           </OverlayProvider>

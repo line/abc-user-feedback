@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { Button } from '@ufb/react';
@@ -24,7 +25,12 @@ const NotFoundPage = () => {
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-6">
-        <img src="/assets/images/404.png" />
+        <Image
+          src="/assets/images/404.svg"
+          alt="404"
+          width={320}
+          height={320}
+        />
         <div className="flex flex-col items-center gap-2">
           <h3 className="text-title-h3">Page pot Found</h3>
           <p className="text-neutral-tertiary">

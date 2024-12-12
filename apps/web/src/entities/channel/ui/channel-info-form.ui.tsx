@@ -44,7 +44,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
         required
         disabled={readOnly}
         error={formState.errors.name?.message}
-      />{' '}
+      />
       <TextInput
         label="Description"
         {...register('description')}

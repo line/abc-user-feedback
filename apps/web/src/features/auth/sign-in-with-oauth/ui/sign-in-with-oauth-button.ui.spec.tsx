@@ -26,10 +26,6 @@ import { render, screen, waitFor } from '@/test-utils';
 import SignInWithOAuthButton from './sign-in-with-oauth-button.ui';
 
 describe('SignInWithOAuthButton', () => {
-  test('match snapshot', () => {
-    const component = render(<SignInWithOAuthButton />);
-    expect(component.container).toMatchSnapshot();
-  });
   test('loginUrl', async () => {
     useTenantStore.setState({ tenant: { useOAuth: true } as Tenant });
     const pathname = `/${Array.from({
