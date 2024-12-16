@@ -25,7 +25,10 @@ export async function paginateHelper(
   findOptions: FindManyOptions<any>,
   options: IPaginationOptions,
 ) {
-  const totalItems = await queryBuilder.getCount();
+  const totalItems = await queryBuilder
+    .clone()
+    .setFindOptions(findOptions)
+    .getCount();
   return await paginate(queryBuilder.setFindOptions(findOptions), {
     ...options,
     countQueries: false,
