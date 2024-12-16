@@ -9,11 +9,11 @@
 }
 
 .check-small {
-  @apply h-14 w-14;
+  @apply h-3.5 w-3.5;
 }
 .check-medium {
-  @apply h-16 w-16;
+  @apply h-4 w-4;
 }
 .check-large {
-  @apply h-20 w-20;
+  @apply h-5 w-5;
 }

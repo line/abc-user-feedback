@@ -23,7 +23,6 @@ import type { FieldInfo } from '@/entities/field';
 
 import { FIELD_FORMAT_ICON_MAP } from '../field/field.constant';
 import type { Feedback } from './feedback.type';
-import EditableCell from './ui/editable-cell';
 import FeedbackCell from './ui/feedback-cell';
 import IssueCell from './ui/issue-cell';
 
@@ -79,7 +78,7 @@ export const getColumns = (fieldData: FieldInfo[]) =>
       header: () => <FieldFormatLabel format="multiSelect" name="Issue" />,
       cell: ({ getValue, row }) => (
         <div className={cn({ 'overflow-hidden': !row.getIsExpanded() })}>
-          <div className="flex w-max">
+          <div className={cn('flex', { 'w-max': !row.getIsExpanded() })}>
             <IssueCell issues={getValue()} />
           </div>
         </div>

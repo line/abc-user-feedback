@@ -1,6 +1,6 @@
 /* todo remove */
 .navbar {
-  @apply border-b-neutral-tertiary bg-neutral-primary flex h-56 items-center border-b px-24 py-10;
+  @apply border-b-neutral-tertiary bg-neutral-primary flex min-h-14 items-center border-b px-6 py-2.5;
 }
 
 .navbar-menu {
@@ -8,15 +8,11 @@
 }
 
 .navbar-logo {
-  @apply flex p-6;
+  @apply flex p-1.5;
 }
 
 .navbar-divider {
-  @apply mx-16;
-}
-
-.navbar-select {
-  @apply w-[15rem];
+  @apply mx-1;
 }
 
 .navbar-dropdown {
@@ -24,9 +20,5 @@
 }
 
 .navbar-dropdown ~ .navbar-button {
-  @apply ml-12;
-}
-
-.navbar-dropdown-content {
-  @apply min-w-[7.5rem];
+  @apply ml-3;
 }

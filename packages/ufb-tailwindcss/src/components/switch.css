@@ -8,12 +8,12 @@
   --switch-fg-red: var(--fg-tint-red-bold);
   --switch-fg-green: var(--fg-tint-green-bold);
 
-  @apply text-base-normal relative inline-flex h-24 cursor-pointer items-center gap-8 text-[var(--switch-text-default)] before:box-content before:flex before:h-20 before:w-40 before:rounded-full before:p-2 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
+  @apply text-base-normal relative inline-flex h-6 cursor-pointer items-center gap-2 text-[var(--switch-text-default)] before:box-content before:flex before:h-5 before:w-10 before:rounded-full before:p-0.5 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
 
   /* default */
   @apply switch-default;
 }
 
 .switch-thumb {
-  @apply absolute left-2 top-2 flex h-20 w-20 translate-x-0 rounded-full bg-[var(--switch-fg-handle)] transition-transform data-[state=checked]:translate-x-full;
+  @apply absolute left-0.5 top-0.5 flex h-5 w-5 translate-x-0 rounded-full bg-[var(--switch-fg-handle)] transition-transform data-[state=checked]:translate-x-full;
 }

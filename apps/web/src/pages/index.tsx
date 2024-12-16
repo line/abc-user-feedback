@@ -15,12 +15,9 @@
  */
 import type { GetServerSideProps, NextPage } from 'next';
 
-import { Path, useOAIQuery } from '@/shared';
+import { Path } from '@/shared';
 
 const IndexPage: NextPage = () => {
-  const { data, isLoading } = useOAIQuery({
-    path: '/api/admin/projects',
-  });
   return <></>;
 };
 

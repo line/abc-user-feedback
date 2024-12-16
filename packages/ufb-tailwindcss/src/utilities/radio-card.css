@@ -1,15 +1,15 @@
 .radio-card-group-horizontal {
-  @apply flex-row space-x-8;
+  @apply flex-row space-x-2;
 }
 .radio-card-group-vertical {
-  @apply flex-col space-y-8;
+  @apply flex-col space-y-2;
 }
 
 .radio-card-horizontal {
-  @apply min-w-[10rem] flex-row items-center space-x-8 px-16 py-12 text-left;
+  @apply min-w-40 flex-row items-center space-x-2 px-4 py-3 text-left;
 }
 .radio-card-vertical {
-  @apply min-h-[7rem] min-w-[10rem] flex-col items-center justify-center space-y-8 px-24 py-12 text-center;
+  @apply min-h-28 min-w-40 flex-col items-center justify-center space-y-2 px-6 py-3 text-center;
 }
 
 .radio-card-radius-small {

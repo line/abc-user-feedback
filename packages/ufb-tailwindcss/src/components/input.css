@@ -26,15 +26,23 @@
   --input-fg-filled: var(--fg-neutral-primary);
   --input-fg-error: var(--fg-neutral-primary);
 
-  @apply flex flex-col space-y-6;
+  @apply flex flex-col gap-1.5;
 }
 
 .input-box {
-  @apply relative [&:has(.input-button)>.input-large]:!pr-48 [&:has(.input-button)>.input-medium]:!pr-40 [&:has(.input-button)>.input-small]:!pr-32 [&:has(.input-icon)>.input-large]:!pl-48 [&:has(.input-icon)>.input-medium]:!pl-40 [&:has(.input-icon)>.input-small]:!pl-32;
+  @apply relative;
+  @apply [&:has(.input-button)>.input-large]:!pr-12 [&:has(.input-button)>.input-medium]:!pr-10 [&:has(.input-button)>.input-small]:!pr-8;
+  @apply [&:has(.input-icon)>.input-large]:!pl-12 [&:has(.input-icon)>.input-medium]:!pl-10 [&:has(.input-icon)>.input-small]:!pl-8;
 }
 
 .input {
-  @apply w-full bg-[var(--input-fg-default)] text-[var(--input-text-filled)] shadow-[0_0_0_0.0625rem_inset_var(--input-border-default)] outline-none placeholder:text-[var(--input-text-default)] focus:bg-[var(--input-fg-typing)] focus:text-[var(--input-text-typing)] focus:shadow-[0_0_0_0.125rem_inset_var(--input-border-typing)] disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-search-cancel-button]:hidden;
+  @apply text-[var(--input-text-filled)] placeholder:text-[var(--input-text-default)] placeholder-shown:text-[var(--input-text-default)] focus-visible:text-[var(--input-text-typing)];
+  @apply border border-[var(--input-border-filled)] placeholder-shown:border placeholder-shown:border-[var(--input-border-default)] focus-visible:border-2 focus-visible:border-[var(--input-border-typing)];
+  @apply bg-[var(--input-fg-filled)] placeholder-shown:bg-[var(--input-fg-default)] focus-visible:bg-[var(--input-fg-typing)];
+
+  @apply w-full outline-none;
+  @apply disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-search-cancel-button]:hidden;
+
   /* default */
   @apply input-small input-radius-medium;
 }
@@ -68,14 +76,11 @@
 }
 
 .input-caption {
-  @apply flex gap-4;
+  @apply flex items-center gap-1;
 
   /* default */
   @apply input-caption-default input-caption-small;
 }
 .input-caption-icon {
   @apply flex-shrink-0;
-
-  /* default */
-  @apply input-caption-icon-small;
 }

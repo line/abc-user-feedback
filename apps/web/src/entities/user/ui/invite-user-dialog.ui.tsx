@@ -20,7 +20,7 @@ import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { FormOverlayProps } from '@/shared';
-import { FormDialog, SelectBox, TextInput, useOAIQuery } from '@/shared';
+import { FormDialog, SelectInput, TextInput, useOAIQuery } from '@/shared';
 import type { UserTypeEnum } from '@/entities/user';
 
 interface IForm {
@@ -58,7 +58,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
     { resolver: zodResolver(scheme), defaultValues },
   );
 
-  const { projectId, type, roleId } = watch();
+  const { projectId, type } = watch();
 
   const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
 
@@ -93,40 +93,38 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
           {...register('email')}
           required
         />
-        <SelectBox
+        <SelectInput
           label="Type"
-          onChange={(v) =>
-            v?.value && setValue('type', v.value as UserTypeEnum)
-          }
+          value="GENERAL"
           options={[
             { label: 'SUPER', value: 'SUPER' },
             { label: 'GENERAL', value: 'GENERAL' },
           ]}
-          defaultValue={{ label: type, value: type }}
+          onChange={(v) => setValue('type', v as UserTypeEnum)}
           required
         />
         {type === 'GENERAL' && (
           <>
-            <SelectBox
+            <SelectInput
               label="Project"
-              options={projectData?.items ?? []}
-              onChange={(v) => setValue('projectId', v?.id)}
-              getOptionValue={(option) => String(option.id)}
-              getOptionLabel={(option) => option.name}
-              isClearable
+              placeholder={t('v2.placeholder.select')}
+              options={(projectData?.items ?? []).map(({ id, name }) => ({
+                label: name,
+                value: id.toString(),
+              }))}
+              onChange={(v) => setValue('projectId', Number(v))}
               required
             />
             {projectId && (
-              <SelectBox
+              <SelectInput
                 label="Role"
+                placeholder={t('v2.placeholder.select')}
+                options={(roleData?.roles ?? []).map(({ id, name }) => ({
+                  label: name,
+                  value: id.toString(),
+                }))}
+                onChange={(v) => setValue('roleId', Number(v))}
                 required
-                options={roleData?.roles ?? []}
-                onChange={(v) => setValue('roleId', v?.id)}
-                value={
-                  roleData?.roles.find((role) => role.id === roleId) ?? null
-                }
-                getOptionValue={(option) => String(option.id)}
-                getOptionLabel={(option) => option.name}
               />
             )}
           </>

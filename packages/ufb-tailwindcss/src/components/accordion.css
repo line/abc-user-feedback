@@ -15,7 +15,7 @@
 }
 
 .accordion-trigger {
-  @apply text-base-strong flex w-full items-center justify-between p-16 text-left transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
+  @apply text-base-strong flex w-full items-center justify-between p-4 text-left transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
 }
 
 .accordion-trigger-bg {
@@ -23,7 +23,7 @@
 }
 
 .accordion-trigger-align-left {
-  @apply justify-start [&>svg:first-of-type]:mr-8;
+  @apply justify-start [&>svg:first-of-type]:mr-2;
 }
 
 .accordion-content-box {
@@ -31,5 +31,5 @@
 }
 
 .accordion-content {
-  @apply p-16;
+  @apply p-4;
 }

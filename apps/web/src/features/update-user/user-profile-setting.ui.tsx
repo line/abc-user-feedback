@@ -96,7 +96,7 @@ const UserProfileSetting = () => {
 
   return (
     <SettingTemplate
-      title={t('main.profile.title')}
+      title={t('main.profile.profile-info')}
       action={
         <>
           <Button variant="outline" onClick={openDeleteAccountDialog}>

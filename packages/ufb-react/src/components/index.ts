@@ -26,3 +26,5 @@ export * from "./table";
 export * from "./toggle-group";
 export * from "./tooltip";
 export * from "./use-theme";
+export * from "./tabs";
+export * from "./textarea";

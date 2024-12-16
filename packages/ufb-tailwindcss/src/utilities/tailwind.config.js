@@ -35,6 +35,9 @@ module.exports = {
     {
       pattern: /rounded(-|)(0|4|6|8|12|16|24|full|)/,
     },
+    {
+      pattern: /shadow(-|)(sm|md|lg|xl|2xl|inner|none|)/,
+    },
   ],
   theme,
   plugins: [

@@ -5,7 +5,7 @@
 .sheet {
   --sheet-border: var(--border-neutral-tertiary);
 
-  @apply data-[state=open]:animate-in data-[state=closed]:animate-out bg-neutral-primary text-neutral-primary fixed z-50 flex flex-col space-y-20 border-[var(--sheet-border)] p-20 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500;
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out bg-neutral-primary text-neutral-primary fixed z-50 flex flex-col space-y-5 border-[var(--sheet-border)] p-5 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500;
 
   /* default */
   @apply sheet-radius-small [&:not([class*=sheet-side])]:sheet-side-right;
@@ -18,19 +18,19 @@
 }
 
 .sheet-close {
-  @apply !absolute right-8 top-8 !m-0;
+  @apply !absolute right-2 top-2 !m-0;
 }
 
 .sheet-header {
-  @apply flex flex-shrink-0 flex-col space-y-4 text-left;
+  @apply flex flex-shrink-0 flex-col gap-1 text-left;
 }
 
 .sheet-footer {
-  @apply flex flex-shrink-0 justify-end space-x-8;
+  @apply flex flex-shrink-0 justify-end gap-2;
 }
 
 .sheet-icon {
-  @apply flex p-4;
+  @apply flex p-1;
 }
 
 .sheet-title {

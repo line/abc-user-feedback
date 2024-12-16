@@ -14,20 +14,34 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { enUS, ja, ko } from 'date-fns/locale';
+import type { Locale } from 'date-fns/locale';
+import { de, enUS, ja, ko, zhCN } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
-import ReactDatePicker from 'react-datepicker';
+import type { Matcher } from 'react-day-picker';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, Popover, PopoverContent, PopoverTrigger, toast } from '@ufb/ui';
+import {
+  Badge,
+  Button,
+  Calendar,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  toast,
+} from '@ufb/react';
 
 import type { DateRangeType } from '../types/date-range.type';
 import { cn } from '../utils';
 
+const locales: Record<string, Locale> = {
+  ko,
+  en: enUS,
+  ja,
+  zh: zhCN,
+  de,
+};
 dayjs.extend(weekday);
-
-const DATE_FORMAT = 'YYYY-MM-DD';
 
 interface IProps {
   onChange: (value: DateRangeType) => void;
@@ -63,17 +77,17 @@ const DateRangePicker: React.FC<IProps> = (props) => {
       },
       {
         label: t('text.date.before-days', { day: 7 }),
-        startDate: dayjs().subtract(7, 'day').startOf('day').toDate(),
+        startDate: dayjs().subtract(6, 'day').startOf('day').toDate(),
         endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 30 }),
-        startDate: dayjs().subtract(30, 'day').startOf('day').toDate(),
+        startDate: dayjs().subtract(29, 'day').startOf('day').toDate(),
         endDate: dayjs().endOf('day').toDate(),
       },
       {
         label: t('text.date.before-days', { day: 90 }),
-        startDate: dayjs().subtract(90, 'day').startOf('day').toDate(),
+        startDate: dayjs().subtract(89, 'day').startOf('day').toDate(),
         endDate: dayjs().endOf('day').toDate(),
       },
     ];
@@ -103,9 +117,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   const handleApply = () => {
     if (!currentValue?.startDate || !currentValue.endDate) return;
     if (maxDays && isOverMaxDays(currentValue, maxDays)) {
-      toast.negative({
-        title: t('text.date.date-range-over-max-days', { maxDays }),
-      });
+      toast.error(t('text.date.date-range-over-max-days', { maxDays }));
       return;
     }
     onChange(currentValue);
@@ -115,50 +127,20 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <div
-          className={cn([
-            'bg-fill-inverse hover:border-fill-primary inline-flex h-10 w-full cursor-pointer items-center justify-between gap-2 rounded border px-3.5 py-[9.5px]',
-            currentValue ? 'text-primary' : 'text-tertiary',
-            isOpen ? 'border-fill-primary' : 'border-fill-tertiary',
-          ])}
-          onClick={() => setIsOpen(true)}
-        >
-          <p className="font-14-regular">
-            {currentValue ?
-              `${
-                currentValue.startDate ?
-                  dayjs(currentValue.startDate).format(DATE_FORMAT)
-                : ''
-              } ~ ${
-                currentValue.endDate ?
-                  dayjs(currentValue.endDate).format(DATE_FORMAT)
-                : ''
-              }`
-            : 'YYYY-MM-DD ~ YYYY-MM-DD'}
-          </p>
-          <div className="flex flex-row items-center gap-2">
-            {isClearable && value && (
-              <Icon
-                name="CloseCircleFill"
-                size={20}
-                className="text-secondary opacity-50 hover:opacity-100"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onChange(null);
-                }}
-              />
-            )}
-            <Icon name="CalendarAStroke" size={20} className="text-tertiary" />
-          </div>
-        </div>
+        <Button variant="outline" className="gap-2 font-normal">
+          Date{' '}
+          <Badge variant="subtle">
+            {value && dayjs(value.endDate).diff(value.startDate, 'days') + 1}
+          </Badge>
+        </Button>
       </PopoverTrigger>
-      <PopoverContent isPortal className="bg-tertiary">
-        <div className="border-fill-secondary flex border-b">
-          <ul className="border-fill-secondary border-r p-2">
+      <PopoverContent className="p-2">
+        <div className="flex">
+          <ul>
             {(options ?? items).map(({ label, startDate, endDate }, index) => (
               <li
                 className={cn([
-                  'font-14-regular hover:bg-fill-secondary m-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
+                  'font-14-regular hover:bg-fill-secondary my-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
                   { 'bg-fill-tertiary': activeIdx === index },
                 ])}
                 key={index}
@@ -168,39 +150,35 @@ const DateRangePicker: React.FC<IProps> = (props) => {
               </li>
             ))}
           </ul>
-          <ReactDatePicker
-            locale={
-              i18n.language === 'ko' ? ko
-              : i18n.language === 'ja' ?
-                ja
-              : enUS
-            }
-            onChange={(v) => {
-              setCurrentValue({ startDate: v[0], endDate: v[1] });
-              setActiveIdx(-1);
+          <Calendar
+            locale={locales[i18n.language]}
+            className="border-none shadow-none"
+            mode="range"
+            onSelect={(value: { from?: Date; to?: Date } | undefined) => {
+              if (!value?.from || !value.to) return;
+              setCurrentValue({ startDate: value.from, endDate: value.to });
             }}
-            startDate={currentValue?.startDate ?? undefined}
-            endDate={currentValue?.endDate ?? undefined}
-            monthsShown={2}
-            minDate={minDate}
-            maxDate={maxDate}
-            disabledKeyboardNavigation
-            selectsRange
-            inline
-            autoFocus
+            selected={{
+              from: currentValue?.startDate ?? undefined,
+              to: currentValue?.endDate ?? undefined,
+            }}
+            numberOfMonths={2}
+            defaultMonth={
+              new Date(new Date().setMonth(new Date().getMonth() - 1))
+            }
+            disabled={{ before: minDate, after: maxDate } as Matcher}
           />
         </div>
-        <div className="float-right flex gap-2 p-2">
-          <button className="btn btn-md btn-secondary" onClick={handleCancel}>
+        <div className="float-right flex gap-2 [&>button]:min-w-20">
+          <Button variant="outline" onClick={handleCancel}>
             {t('button.cancel')}
-          </button>
-          <button
-            className="btn btn-md btn-primary"
+          </Button>
+          <Button
             disabled={!currentValue?.startDate || !currentValue.endDate}
             onClick={handleApply}
           >
             {t('button.save')}
-          </button>
+          </Button>
         </div>
       </PopoverContent>
     </Popover>

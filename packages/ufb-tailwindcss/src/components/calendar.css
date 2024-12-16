@@ -8,16 +8,15 @@
   --calendar-fg-hover: var(--fg-neutral-tertiary);
   --calendar-fg-range: var(--fg-neutral-tertiary);
 
-  @apply rounded-8 relative box-content w-[15.75rem] border border-[var(--calendar-border-default)] bg-[var(--calendar-fg-default)] p-8 shadow-sm;
+  @apply rounded-8 relative box-content w-fit border border-[var(--calendar-border-default)] bg-[var(--calendar-fg-default)] p-2 shadow-sm;
 }
 
 .calendar-months {
-  @apply flex flex-col space-y-4;
+  @apply flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0;
 }
 .calendar-month {
-  @apply space-y-4;
+  @apply w-[15.75rem] space-y-4;
 }
-
 .calendar-caption {
   @apply relative flex items-center justify-center pt-1;
 }
@@ -26,29 +25,29 @@
 }
 
 .calendar-nav {
-  @apply flex items-center space-x-1;
+  @apply flex items-center;
 }
 .calendar-nav-button {
-  @apply flex p-10 hover:opacity-50;
+  @apply flex p-2.5 hover:opacity-50;
 }
 .calendar-nav-button-previous {
-  @apply absolute left-1;
+  @apply absolute left-0;
 }
 .calendar-nav-button-next {
-  @apply absolute right-1;
+  @apply absolute right-0;
 }
 
 .calendar-table {
-  @apply !mt-16 w-full border-collapse;
+  @apply !mt-4 w-full border-collapse;
 }
 .calendar-head-row {
   @apply flex;
 }
 .calendar-head-cell {
-  @apply text-small-normal flex-1 px-8 py-2 font-normal text-[var(--calendar-text-week)];
+  @apply text-small-normal flex-1 px-2 py-0.5 font-normal text-[var(--calendar-text-week)];
 }
 .calendar-row {
-  @apply mt-2 flex w-full;
+  @apply mt-0.5 flex w-full;
 }
 .calendar-cell {
   @apply [&:has([aria-selected].day-range-end)]:rounded-r-8 first:[&:has([aria-selected])]:rounded-l-8 last:[&:has([aria-selected])]:rounded-r-8 [&:has(.calendar-day-range-start)]:rounded-l-8 [&:has(.calendar-day-range-end)]:rounded-r-8 text-base-normal relative h-[2.25rem] flex-1 p-0 text-center focus-within:relative focus-within:z-20 [&:has(.calendar-day-range-end)]:bg-[var(--calendar-fg-hover)] [&:has(.calendar-day-range-start)]:bg-[var(--calendar-fg-hover)];
@@ -62,7 +61,7 @@
   @apply bg-[var(--calendar-fg-pressed)] text-[--calendar-text-pressed];
 }
 .calendar-day-today {
-  @apply before:absolute before:left-1/2 before:top-0 before:flex before:h-4 before:w-4 before:-translate-x-1/2 before:rounded-full before:bg-[var(--calendar-fg-pressed)];
+  @apply before:absolute before:left-1/2 before:top-0 before:flex before:h-1 before:w-1 before:-translate-x-1/2 before:rounded-full before:bg-[var(--calendar-fg-pressed)];
 }
 .calendar-day-outside {
   @apply opacity-50 aria-selected:bg-[var(--calendar-fg-pressed)] aria-selected:text-[var(--calendar-text-pressed)] aria-selected:opacity-100;

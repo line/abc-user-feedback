@@ -75,19 +75,6 @@ const inputCaptionVariants = cva("input-caption", {
   },
 });
 
-const inputCaptionIconVariants = cva("input-caption-icon", {
-  variants: {
-    size: {
-      large: "input-caption-icon-large",
-      medium: "input-caption-icon-medium",
-      small: "input-caption-icon-small",
-    },
-    defaultVariants: {
-      size: undefined,
-    },
-  },
-});
-
 interface InputBoxProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: Size;
 }
@@ -146,7 +133,6 @@ const TextInput = React.forwardRef<HTMLInputElement, TextInputProps>(
         onBlur?.(e);
       }
     };
-
     return (
       <input
         {...rest}
@@ -214,11 +200,7 @@ const InputCaption = React.forwardRef<HTMLElement, InputCaptionProps>(
         <Icon
           name={icon ?? CAPTION_DEFAULT_ICON[variant]}
           size={INPUT_CAPTION_ICON_SIZE[size ?? themeSize]}
-          className={cn(
-            inputCaptionIconVariants({
-              size: size ?? themeSize,
-            }),
-          )}
+          className={cn("input-caption-icon")}
         />
         <Slottable>{children}</Slottable>
       </Comp>

@@ -1,16 +1,15 @@
 .menu-horizontal {
-  @apply flex-row space-x-12;
+  @apply flex-row gap-3;
 }
 .menu-vertical {
-  @apply min-w-[10rem] flex-col space-y-12;
-}
-
-.menu-item-small {
-  @apply text-base-normal p-8 [&>svg]:h-16 [&>svg]:w-16;
-}
-.menu-item-medium {
-  @apply text-large-normal px-12 py-10 [&>svg]:h-20 [&>svg]:w-20;
+  @apply min-w-[10rem] flex-col gap-3;
 }
 .menu-item-large {
-  @apply text-xlarge-normal px-14 py-10 [&>svg]:h-24 [&>svg]:w-24;
+  @apply text-xlarge-normal px-3.5 py-2.5 [&>svg]:h-6 [&>svg]:w-6;
+}
+.menu-item-medium {
+  @apply text-large-normal px-3 py-2.5 [&>svg]:h-5 [&>svg]:w-5;
+}
+.menu-item-small {
+  @apply text-base-normal p-2 [&>svg]:h-4 [&>svg]:w-4;
 }

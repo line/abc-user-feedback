@@ -3,7 +3,10 @@
   --tooltip-border: var(--border-neutral-tertiary);
   --tooltip-fg: var(--fg-neutral-primary);
 
-  @apply rounded-8 animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 text-base-normal z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-fg)] px-12 py-4 text-[var(--tooltip-text)] shadow-md;
+  @apply rounded-8 animate-in fade-in-0 zoom-in-95;
+  @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply text-base-normal z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-fg)] px-3 py-1 text-[var(--tooltip-text)] shadow-md;
 
   /* default */
   @apply tooltip-text-center;
@@ -17,18 +20,18 @@
 }
 
 [data-side="top"].tooltip .tooltip-arrow {
-  @apply -translate-y-1 translate-x-1;
+  @apply -translate-y-px translate-x-px;
 }
 [data-side="right"].tooltip .tooltip-arrow {
-  @apply -translate-y-1 translate-x-[0.5px];
+  @apply -translate-y-px translate-x-[0.5px];
 }
 [data-side="bottom"].tooltip .tooltip-arrow {
-  @apply -translate-x-1 -translate-y-1;
+  @apply -translate-x-px -translate-y-px;
 }
 [data-side="left"].tooltip .tooltip-arrow {
-  @apply -translate-x-[0.5px] -translate-y-1;
+  @apply -translate-x-[0.5px] -translate-y-px;
 }
 
 .tooltip-title {
-  @apply text-base-strong mb-4;
+  @apply text-base-strong mb-1;
 }

@@ -13,21 +13,21 @@
   --alert-icon-informative: var(--icon-tint-blue);
   --alert-fg-default: var(--fg-neutral-primary);
 
-  @apply relative inline-flex min-w-[356px] items-center space-x-8 border bg-[var(--alert-fg-default)] px-20 py-16;
+  @apply relative inline-flex min-w-[356px] items-center space-x-2 border bg-[var(--alert-fg-default)] px-5 py-4;
 
   /* default */
   @apply alert-radius-medium alert-default;
 }
 
 .alert-icon {
-  @apply mb-auto box-content flex-shrink-0 p-4;
+  @apply mb-auto box-content flex-shrink-0 p-1;
 
   /* default */
   @apply alert-icon-default;
 }
 
 .alert-content {
-  @apply flex flex-1 items-center space-x-8;
+  @apply flex flex-1 items-center space-x-2;
 }
 
 .alert-text-container {

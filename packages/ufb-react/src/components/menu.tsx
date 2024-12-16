@@ -106,7 +106,8 @@ const MenuDropdownTrigger = React.forwardRef<
   React.ElementRef<typeof DropdownTrigger>,
   React.ComponentPropsWithoutRef<typeof DropdownTrigger>
 >(({ variant = "ghost", className, children, ...props }, ref) => {
-  const { size = DefaultValue.size } = React.useContext(MenuContext);
+  const { size = DefaultValue.size, orientation } =
+    React.useContext(MenuContext);
 
   if (props.asChild) {
     return (
@@ -124,11 +125,14 @@ const MenuDropdownTrigger = React.forwardRef<
     <DropdownTrigger
       ref={ref}
       variant={variant}
-      className={cn("justify-between", menuItemVariants({ size, className }))}
+      className={cn(
+        "flex justify-between",
+        menuItemVariants({ size, className }),
+      )}
       {...props}
     >
-      <div className="flex">{children}</div>
-      <Icon name="RiArrowRightSLine" />
+      {children}
+      {orientation === "vertical" && <Icon name="RiArrowRightSLine" />}
     </DropdownTrigger>
   );
 });

@@ -34,7 +34,7 @@ const Layout: React.FC<IProps> = (props) => {
         <div className="h-12 px-6">
           <h1 className="text-title-h3">{title}</h1>
         </div>
-        <div className="min-h-[calc(100vh-200px)]">{children}</div>
+        <div className="h-[calc(100vh-150px)]">{children}</div>
       </main>
       <footer className="bg-neutral-tertiary flex flex-col items-center p-4">
         <div className="flex items-center gap-2">

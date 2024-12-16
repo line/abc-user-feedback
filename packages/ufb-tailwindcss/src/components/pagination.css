@@ -3,7 +3,7 @@
 }
 
 .pagination-content {
-  @apply flex flex-row items-center space-x-4;
+  @apply flex flex-row items-center space-x-1;
 }
 
 .pagination-item {

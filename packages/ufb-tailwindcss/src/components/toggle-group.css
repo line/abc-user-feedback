@@ -16,13 +16,13 @@
 }
 
 .toggle-group-item {
-  @apply inline-flex cursor-pointer items-center justify-center gap-4 bg-[var(--toggle-group-fg-default)] text-[var(--toggle-group-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-default)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=on]:bg-[var(--toggle-group-fg-pressed)] data-[state=on]:text-[var(--toggle-group-text-pressed)] data-[state=on]:shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-pressed)] [&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] [&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)] [&:not(:disabled)]:hover:shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-hover)] data-[state=on]:[&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] data-[state=on]:[&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)] data-[state=on]:[&:not(:disabled)]:hover:shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-hover)];
+  @apply inline-flex cursor-pointer items-center justify-center gap-1 bg-[var(--toggle-group-fg-default)] text-[var(--toggle-group-text-default)] shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-default)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=on]:bg-[var(--toggle-group-fg-pressed)] data-[state=on]:text-[var(--toggle-group-text-pressed)] data-[state=on]:shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-pressed)] [&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] [&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)] [&:not(:disabled)]:hover:shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-hover)] data-[state=on]:[&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] data-[state=on]:[&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)] data-[state=on]:[&:not(:disabled)]:hover:shadow-[0_0_0_0.0625rem_inset_var(--toggle-group-border-hover)];
 
   /* default */
   @apply toggle-group-item-small toggle-group-item-radius-medium;
 
   ~ .toggle-group-item {
-    @apply -ml-1;
+    @apply -ml-px;
   }
 }
 

@@ -15,7 +15,7 @@
 }
 
 .check {
-  @apply rounded-4 relative mr-8 flex items-center justify-center text-[var(--checkbox-icon-default)] shadow-[0_0_0_0.0625rem_inset_var(--checkbox-border-default)];
+  @apply rounded-4 relative mr-2 flex items-center justify-center text-[var(--checkbox-icon-default)] shadow-[0_0_0_0.0625rem_inset_var(--checkbox-border-default)];
 
   /* default */
   @apply check-small;

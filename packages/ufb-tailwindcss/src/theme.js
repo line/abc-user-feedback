@@ -93,5 +93,7 @@ module.exports = {
   },
   borderRadius,
   boxShadow,
-  spacing,
+  extend: {
+    spacing,
+  },
 };

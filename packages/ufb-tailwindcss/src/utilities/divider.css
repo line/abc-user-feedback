@@ -6,10 +6,10 @@
 }
 
 .divider-horizontal {
-  @apply mx-auto h-1 w-full;
+  @apply mx-auto h-px w-full;
 }
 .divider-vertical {
-  @apply my-auto h-full w-1;
+  @apply my-auto h-full w-px;
 }
 
 .divider.divider-horizontal-indent-8 {

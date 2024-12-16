@@ -1,15 +1,15 @@
 .input-error {
-  @apply bg-[var(--input-fg-error)] !shadow-[0_0_0_0.125rem_inset_var(--input-border-error)];
+  @apply !border-2 !border-[var(--input-border-error)] !bg-[var(--input-fg-error)];
 }
 
 .input-large {
-  @apply text-xlarge-normal h-52 px-20 py-10;
+  @apply text-xlarge-normal h-13 px-5 py-2.5;
 }
 .input-medium {
-  @apply text-large-normal h-44 px-16 py-10;
+  @apply text-large-normal h-11 px-4 py-2.5;
 }
 .input-small {
-  @apply text-base-normal h-36 px-12 py-8;
+  @apply text-base-normal h-9 px-3 py-2;
 }
 
 .input-radius-large {
@@ -23,23 +23,23 @@
 }
 
 .input-icon-large {
-  @apply left-16;
+  @apply left-4;
 }
 .input-icon-medium {
-  @apply left-14;
+  @apply left-3.5;
 }
 .input-icon-small {
-  @apply left-12;
+  @apply left-3;
 }
 
 .input-button-large {
-  @apply right-16;
+  @apply right-4;
 }
 .input-button-medium {
-  @apply right-14;
+  @apply right-3.5;
 }
 .input-button-small {
-  @apply right-12;
+  @apply right-3;
 }
 
 .input-caption-default {
@@ -63,14 +63,4 @@
 }
 .input-caption-large {
   @apply text-large-normal;
-}
-
-.input-caption-icon-small {
-  @apply mt-[0.188rem];
-}
-.input-caption-icon-medium {
-  @apply mt-[0.188rem];
-}
-.input-caption-icon-large {
-  @apply mt-2;
 }

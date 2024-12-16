@@ -37,7 +37,10 @@ const InputFieldStep: React.FC<IProps> = () => {
   const overlay = useOverlay();
 
   const createField = (field: FieldInfo) => {
-    onChangeInput('fields', input.fields.concat(field));
+    onChangeInput(
+      'fields',
+      input.fields.concat({ ...field, order: fields.length }),
+    );
   };
 
   const updateField = (input: { index: number; field: FieldInfo }) => {

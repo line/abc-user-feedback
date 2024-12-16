@@ -15,7 +15,7 @@
   @apply select-small;
 }
 .select-trigger {
-  @apply rounded-8 flex w-full items-center justify-start bg-[var(--select-fg-default)] text-left text-[var(--select-text-filled)] shadow-[0_0_0_0.0625rem_inset_var(--select-border-default)] transition-transform placeholder:text-[var(--select-text-default)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=open]:text-[var(--select-text-pressed)] data-[state=open]:shadow-[0_0_0_0.125rem_inset_var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
+  @apply rounded-8 flex w-full items-center justify-start bg-[var(--select-fg-default)] text-left text-[var(--select-text-filled)] shadow-[0_0_0_0.0625rem_inset_var(--select-border-default)] transition-transform focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-[var(--select-text-default)] data-[state=open]:text-[var(--select-text-pressed)] data-[state=open]:shadow-[0_0_0_0.125rem_inset_var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
 
   /* default */
   @apply select-trigger-medium;
@@ -29,46 +29,53 @@
   --select-text-default: var(--text-neutral-tertiary);
   --select-text-pressed: var(--text-neutral-primary);
   --select-text-filled: var(--text-neutral-primary);
+  --select-caption-default: var(--text-neutral-tertiary);
+  --select-caption-success: var(--text-tint-green);
+  --select-caption-error: var(--text-tint-red);
   --select-border-default: var(--border-neutral-tertiary);
   --select-border-pressed: var(--tint, var(--border-neutral-primary));
+  --select-border-error: var(--border-tint-red);
   --select-fg-default: var(--fg-neutral-primary);
   --select-fg-pressed: var(--fg-neutral-tertiary);
 
-  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-8 relative z-50 min-w-[--radix-select-trigger-width] overflow-hidden border border-[var(--select-border-default)] bg-[var(--select-fg-default)] p-4 text-[var(--select-text-filled)] shadow-md data-[side=bottom]:mt-4 data-[side=top]:mb-4;
+  @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
+  @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:mt-1 data-[side=top]:mb-1;
+  @apply rounded-8 relative z-50 min-w-[--radix-select-trigger-width] overflow-hidden border border-[var(--select-border-default)] bg-[var(--select-fg-default)] p-1 text-[var(--select-text-filled)] shadow-md;
 }
 
 .select-viewport {
-  @apply p-1;
+  @apply p-px;
 }
 
 .select-group-label {
-  @apply text-base-strong p-8;
+  @apply text-base-strong p-2;
 }
 
 .select-item {
-  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-8 outline-none transition-colors focus:bg-[var(--select-fg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-2 outline-none transition-colors focus:bg-[var(--select-fg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
 
   /* default */
   @apply [&:not(.select-item-right)]:select-item-left;
 }
 
 .select-item-icon {
-  @apply mr-4;
+  @apply mr-1;
 }
 
 .select-item-check {
-  @apply absolute flex h-16 w-16 items-center justify-center;
+  @apply absolute flex h-4 w-4 items-center justify-center;
 
   /* default */
   @apply [&:not(.select-item-check-right)]:select-item-check-left;
 }
 
 .select-separator {
-  @apply -mx-1 my-4 h-1 bg-[var(--select-border-default)];
+  @apply -mx-1 my-1 h-px bg-[var(--select-border-default)];
 }
 
 .select-tag {
-  @apply mr-6;
+  @apply mr-2.5;
 }
 
 .select-label {
@@ -76,11 +83,11 @@
 }
 
 .select-caption {
-  @apply text-base-normal flex gap-4;
+  @apply text-base-normal flex items-center gap-1;
 
   /* default */
   @apply select-caption-default;
 }
 .select-caption-icon {
-  @apply mt-2 flex-shrink-0;
+  @apply flex-shrink-0;
 }

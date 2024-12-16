@@ -197,13 +197,13 @@ SingleSelectValue.displayName = "SingleSelectValue";
 const MultipleSelectValue = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Value>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
->(({ placeholder }, ref) => {
+>(({ placeholder, ...props }, ref) => {
   const { size, values = [], itemByValue } = React.useContext(SelectContext);
 
   const { themeSize } = useTheme();
 
   return (
-    <SelectPrimitive.Value ref={ref} placeholder={placeholder}>
+    <SelectPrimitive.Value ref={ref} placeholder={placeholder} {...props}>
       {values.length > 0
         ? values.map((value, index) => (
             <Tag
@@ -278,7 +278,7 @@ const SelectContent = React.forwardRef<
   <SelectPrimitive.Portal>
     <SelectPrimitive.Content
       ref={ref}
-      className={cn("select-content", className)}
+      className={cn("select-content mt-1", className)}
       position={position}
       {...props}
     >
@@ -367,15 +367,13 @@ const SingleSelectItem = React.forwardRef<
       )}
       {...props}
     >
-      <span
+      <SelectPrimitive.ItemIndicator
         className={cn(
           selectItemCheckVariants({ check: icon ? "right" : "left" }),
         )}
       >
-        <SelectPrimitive.ItemIndicator>
-          <Icon name="RiCheckLine" size={20} />
-        </SelectPrimitive.ItemIndicator>
-      </span>
+        <Icon name="RiCheckLine" size={20} />
+      </SelectPrimitive.ItemIndicator>
       {icon && <Icon name={icon} size={16} className="select-item-icon" />}
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>

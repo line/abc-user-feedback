@@ -61,7 +61,7 @@ const LoginSetting: React.FC<IProps> = () => {
 
   useEffect(() => {
     if (!tenant) return;
-    reset(tenant, { keepDefaultValues: true });
+    reset(tenant);
   }, [tenant]);
 
   const onSubmit = (input: AuthInfo) => {
