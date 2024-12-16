@@ -157,10 +157,16 @@ const SettingsMenu: React.FC<Props> = (props) => {
       {projectMenuItems.map((item) => (
         <ProjectMenuItem key={item.label} {...item} projectId={projectId} />
       ))}
-      <Accordion type="single" iconAlign="left" collapsible divider={false}>
-        <AccordionItem value="item-1">
+      <Accordion
+        type="single"
+        iconAlign="left"
+        collapsible
+        divider={false}
+        value="channel-list"
+      >
+        <AccordionItem value="channel-list">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
-          <AccordionContent className={cn('p-0', {})}>
+          <AccordionContent className={cn('p-0')}>
             {data?.meta.totalItems === 0 ?
               <div className="border-neutral-tertiary flex w-full flex-col items-center justify-center gap-4 rounded border p-4">
                 <Image
