@@ -26,7 +26,7 @@ import {
   SheetTitle,
 } from '@ufb/react';
 
-import type { Field, FieldInfo } from '@/entities/field';
+import type { FieldInfo } from '@/entities/field';
 import { DEFAULT_FIELD_KEYS } from '@/entities/field/field.constant';
 
 import type { Feedback } from '../feedback.type';
@@ -43,7 +43,7 @@ const FeedbackDetailSheet = (props: Props) => {
   const { close, feedback, fields, isOpen } = props;
   const { t } = useTranslation();
   const rows = useMemo(() => {
-    return fields.map((field) => ({ field, value: feedback[field.key] }));
+    return fields.map((field) => ({ field, value: feedback?.[field.key] }));
   }, [feedback, fields]);
 
   return (

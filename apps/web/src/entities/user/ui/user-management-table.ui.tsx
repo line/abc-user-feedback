@@ -156,13 +156,17 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
       />
     ));
   };
+
   const openUpdateUserDialog = (data: UserMember) => {
     overlay.open(({ close, isOpen }) => (
       <UpdateUserDialog
         close={close}
         isOpen={isOpen}
         data={data}
-        onSubmit={(input) => updateUser({ id: data.id, body: input })}
+        onSubmit={async (input) => {
+          await updateUser({ id: data.id, body: input });
+          close();
+        }}
         onClickDelete={() => deleteUsers({ ids: [data.id] })}
       />
     ));

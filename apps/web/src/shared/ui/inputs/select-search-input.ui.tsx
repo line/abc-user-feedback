@@ -77,8 +77,8 @@ const SelectSearchInput: React.FC<Props> = (props) => {
                   key={option.value}
                   value={option.value}
                   checked={option.value === value}
-                  onSelect={(value) => {
-                    onChange(value);
+                  onSelect={() => {
+                    onChange(option.value);
                     setOpen(false);
                   }}
                 >

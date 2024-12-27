@@ -35,73 +35,82 @@ import OptionListPopover from './ui/option-list-popover.ui';
 
 const columnHelper = createColumnHelper<FieldInfo>();
 
-export const getFieldColumns = () => [
-  columnHelper.display({
-    id: 'drag-handle',
-    header: () => (
-      <Icon name="RiDraggable" className="text-neutral-tertiary" size={16} />
-    ),
-    cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
-    size: 10,
-  }),
-  columnHelper.accessor('key', {
-    header: 'Key',
-    cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
-  }),
-  columnHelper.accessor('name', {
-    header: 'Display Name',
-    cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
-  }),
-  columnHelper.accessor('format', {
-    header: 'Format',
-    cell: ({ getValue }) => (
-      <div className="flex items-center gap-1">
-        <Icon name={FIELD_FORMAT_ICON_MAP[getValue()]} size={16} />
-        {getValue()}
-      </div>
-    ),
-  }),
-  columnHelper.accessor('options', {
-    header: 'Select Option',
-    cell: ({ getValue }) => {
-      const options = getValue() ?? [];
-      return options.length > 0 ? <OptionListPopover options={options} /> : '-';
-    },
-  }),
-  columnHelper.accessor('property', {
-    header: 'Property',
-    cell: ({ getValue }) => (
-      <Tag variant="secondary" radius="large">
-        {FIELD_PROPERTY_TEXT[getValue()]}
-      </Tag>
-    ),
-    filterFn: (row, id, value: FieldInfo['property'][]) => {
-      return value.includes(row.getValue(id));
-    },
-  }),
-  columnHelper.accessor('status', {
-    header: 'Status',
-    cell: ({ getValue }) => (
-      <Badge color={FIELD_STATUS_COLOR_MAP[getValue()]} radius="large">
-        {getValue()}
-      </Badge>
-    ),
-    filterFn: (row, id, value: FieldInfo['status'][]) => {
-      return value.includes(row.getValue(id));
-    },
-  }),
-  columnHelper.accessor('description', {
-    header: 'Description',
-    cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
-  }),
-  columnHelper.accessor('createdAt', {
-    header: ({ column }) => (
-      <SortingTableHead column={column}>Created</SortingTableHead>
-    ),
-    cell: ({ getValue }) => (
-      <span>
-        {getValue() ? dayjs(getValue()).format(DATE_TIME_FORMAT) : '-'}
-      </span>
-    ),
-  }),
-];
+export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
+  [
+    reorder ?
+      columnHelper.display({
+        id: 'drag-handle',
+        header: () => (
+          <Icon
+            name="RiDraggable"
+            className="text-neutral-tertiary"
+            size={16}
+          />
+        ),
+        cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
+        size: 10,
+      })
+    : null,
+    columnHelper.accessor('key', {
+      header: 'Key',
+      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+    }),
+    columnHelper.accessor('name', {
+      header: 'Display Name',
+      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+    }),
+    columnHelper.accessor('format', {
+      header: 'Format',
+      cell: ({ getValue }) => (
+        <div className="flex items-center gap-1">
+          <Icon name={FIELD_FORMAT_ICON_MAP[getValue()]} size={16} />
+          {getValue()}
+        </div>
+      ),
+    }),
+    columnHelper.accessor('options', {
+      header: 'Select Option',
+      cell: ({ getValue }) => {
+        const options = getValue() ?? [];
+        return options.length > 0 ?
+            <OptionListPopover options={options} />
+          : '-';
+      },
+    }),
+    columnHelper.accessor('property', {
+      header: 'Property',
+      cell: ({ getValue }) => (
+        <Tag variant="secondary" radius="large">
+          {FIELD_PROPERTY_TEXT[getValue()]}
+        </Tag>
+      ),
+      filterFn: (row, id, value: FieldInfo['property'][]) => {
+        return value.includes(row.getValue(id));
+      },
+    }),
+    columnHelper.accessor('status', {
+      header: 'Status',
+      cell: ({ getValue }) => (
+        <Badge color={FIELD_STATUS_COLOR_MAP[getValue()]} radius="large">
+          {getValue()}
+        </Badge>
+      ),
+      filterFn: (row, id, value: FieldInfo['status'][]) => {
+        return value.includes(row.getValue(id));
+      },
+    }),
+    columnHelper.accessor('description', {
+      header: 'Description',
+      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+    }),
+    columnHelper.accessor('createdAt', {
+      header: ({ column }) => (
+        <SortingTableHead column={column}>Created</SortingTableHead>
+      ),
+      cell: ({ getValue }) => (
+        <span>
+          {getValue() ? dayjs(getValue()).format(DATE_TIME_FORMAT) : '-'}
+        </span>
+      ),
+    }),
+  ].filter((v) => !!v);

@@ -22,21 +22,24 @@ const ComboboxContext = React.createContext<{
 });
 
 const Combobox = ({
-  open = false,
+  open,
   onOpenChange,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Popover>) => {
   const [trigger, setTrigger] = React.useState<TriggerType>("click");
   const [isHover, setIsHover] = React.useState(false);
+
   return (
     <ComboboxContext.Provider
       value={{ trigger, setTrigger, isHover, setIsHover }}
     >
       <Popover
         {...props}
-        open={open || isHover}
+        open={trigger === "hover" ? !!open || isHover : open}
         onOpenChange={(open: boolean) => {
-          setIsHover(open);
+          if (trigger === "hover") {
+            setIsHover(open);
+          }
           onOpenChange?.(open);
         }}
       />

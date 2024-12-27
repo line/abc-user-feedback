@@ -63,11 +63,13 @@ const InputFieldStep: React.FC<IProps> = () => {
       <FieldSettingSheet
         isOpen={isOpen}
         close={close}
-        onSubmit={(newField) =>
-          input ?
-            updateField({ index: input.index, field: newField })
-          : createField(newField)
-        }
+        onSubmit={(newField) => {
+          if (input) {
+            updateField({ index: input.index, field: newField });
+            return;
+          }
+          createField(newField);
+        }}
         fieldRows={fields}
         data={input?.field}
         onClickDelete={
@@ -103,7 +105,6 @@ const InputFieldStep: React.FC<IProps> = () => {
       <FieldTable
         fields={input.fields}
         onClickRow={(index, field) => openFieldFormSheet({ index, field })}
-        reorder={(data) => onChangeInput('fields', data)}
       />
     </CreateChannelInputTemplate>
   );

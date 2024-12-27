@@ -32,7 +32,7 @@ const NotFoundPage = () => {
           height={320}
         />
         <div className="flex flex-col items-center gap-2">
-          <h3 className="text-title-h3">Page pot Found</h3>
+          <h3 className="text-title-h3">Page not Found</h3>
           <p className="text-neutral-tertiary">
             The page you are looking for isn’t here.
           </p>

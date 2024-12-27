@@ -37,7 +37,7 @@ interface IProps {
 const FieldTable: React.FC<IProps> = (props) => {
   const { fields, onClickRow, reorder } = props;
 
-  const columns = useMemo(() => getFieldColumns(), []);
+  const columns = useMemo(() => getFieldColumns(reorder), []);
 
   const table = useReactTable({
     getCoreRowModel: getCoreRowModel(),
@@ -77,9 +77,9 @@ const FieldTable: React.FC<IProps> = (props) => {
       <BasicTable
         table={table}
         onClickRow={(index, row) => onClickRow?.(index, row)}
-        reorder={(data) => {
-          reorder?.(data.map((field, index) => ({ ...field, order: index })));
-        }}
+        reorder={(data) =>
+          reorder?.(data.map((field, index) => ({ ...field, order: index })))
+        }
       />
     </div>
   );

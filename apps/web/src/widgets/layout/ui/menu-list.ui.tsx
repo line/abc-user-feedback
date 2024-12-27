@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useMemo } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { Menu, MenuItem } from '@ufb/react';
@@ -48,8 +49,15 @@ const MenuList: React.FC<Props> = ({ projectId }) => {
         }}
       >
         {MENU_ITEMS.map((v, i) => (
-          <MenuItem key={i} value={v}>
-            {firstLeterPascal(v)}
+          <MenuItem key={i} value={v} asChild>
+            <Link
+              href={{
+                pathname: `/main/project/[projectId]/${v}`,
+                query: { projectId },
+              }}
+            >
+              {firstLeterPascal(v)}
+            </Link>
           </MenuItem>
         ))}
       </Menu>

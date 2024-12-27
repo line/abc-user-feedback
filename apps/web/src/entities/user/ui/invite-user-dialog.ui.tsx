@@ -77,8 +77,8 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
       title={t('main.setting.dialog.invite-user.title')}
       submitBtn={{
         form: 'inviteUser',
-        loading: formState.isSubmitting,
       }}
+      formState={formState}
     >
       <form
         id="inviteUser"
@@ -100,7 +100,9 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
             { label: 'SUPER', value: 'SUPER' },
             { label: 'GENERAL', value: 'GENERAL' },
           ]}
-          onChange={(v) => setValue('type', v as UserTypeEnum)}
+          onChange={(v) =>
+            setValue('type', v as UserTypeEnum, { shouldDirty: true })
+          }
           required
         />
         {type === 'GENERAL' && (
@@ -112,7 +114,9 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
                 label: name,
                 value: id.toString(),
               }))}
-              onChange={(v) => setValue('projectId', Number(v))}
+              onChange={(v) =>
+                setValue('projectId', Number(v), { shouldDirty: true })
+              }
               required
             />
             {projectId && (
@@ -123,7 +127,9 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
                   label: name,
                   value: id.toString(),
                 }))}
-                onChange={(v) => setValue('roleId', Number(v))}
+                onChange={(v) =>
+                  setValue('roleId', Number(v), { shouldDirty: true })
+                }
                 required
               />
             )}

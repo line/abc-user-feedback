@@ -14,7 +14,9 @@
  * under the License.
  */
 
+import { useEffect } from 'react';
 import { useOverlay } from '@toss/use-overlay';
+import type { FieldValues, FormState } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -41,14 +43,20 @@ interface Props extends React.PropsWithChildren {
     disabled?: boolean;
     onClick?: () => unknown;
     form?: string;
-    loading?: boolean;
   };
+  formState?: FormState<FieldValues>;
 }
 
 const FormDialog: React.FC<Props> = (props) => {
-  const { close, isOpen, title, children, deleteBtn, submitBtn } = props;
+  const { close, isOpen, title, children, deleteBtn, submitBtn, formState } =
+    props;
   const { t } = useTranslation();
   const overlay = useOverlay();
+
+  useEffect(() => {
+    if (!formState?.isSubmitSuccessful) return;
+    close();
+  }, [formState?.isSubmitSuccessful]);
 
   const openDeleteDialog = () => {
     overlay.open(({ close: dialogClose, isOpen }) => (
@@ -84,9 +92,9 @@ const FormDialog: React.FC<Props> = (props) => {
           <DialogClose>{t('v2.button.cancel')}</DialogClose>
           <Button
             type="submit"
-            disabled={submitBtn.disabled}
+            disabled={!formState?.isDirty || submitBtn.disabled}
             form={submitBtn.form}
-            loading={submitBtn.loading}
+            loading={formState?.isSubmitting}
           >
             {t('v2.button.save')}
           </Button>

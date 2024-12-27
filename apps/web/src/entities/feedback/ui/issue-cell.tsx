@@ -13,24 +13,110 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
+import { useThrottle } from 'react-use';
+
 import {
   Combobox,
   ComboboxContent,
   ComboboxGroup,
   ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
   ComboboxTrigger,
   Tag,
+  toast,
 } from '@ufb/react';
 
-import { IssueBadge } from '@/entities/issue';
+import { client, useOAIMutation } from '@/shared';
+import { IssueBadge, useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
+
+import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
 
 interface IProps {
   issues?: Issue[];
+  feedbackId: number;
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { issues } = props;
+  const { issues, feedbackId } = props;
+
+  const { t } = useTranslation();
+
+  const router = useRouter();
+  const projectId = Number(router.query.projectId);
+  const channelId = Number(router.query.channelId);
+
+  const [inputValue, setInputValue] = useState('');
+  const throttledvalue = useThrottle(inputValue, 500);
+
+  const queryClient = useQueryClient();
+  const refetch = async () => {
+    await queryClient.invalidateQueries({
+      queryKey: [
+        '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+      ],
+    });
+  };
+  const {
+    data: allIssues,
+    refetch: allIssuesRefetch,
+    isLoading,
+  } = useIssueSearch(Number(projectId), {
+    limit: 100,
+    query: { searchText: throttledvalue },
+  });
+
+  const { mutate: attatchIssue } = useMutation({
+    mutationFn: async ({ issueId }: { issueId: number }) => {
+      const { data } = await client.post({
+        path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
+        pathParams: { projectId, channelId, feedbackId, issueId },
+      });
+      return data;
+    },
+    async onSuccess() {
+      await refetch();
+      toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
+  const { mutateAsync: detecthIssue } = useMutation({
+    mutationFn: async ({ issueId }: { issueId: number }) => {
+      const { data } = await client.delete({
+        path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
+        pathParams: { projectId, channelId, feedbackId, issueId },
+      });
+      return data;
+    },
+    async onSuccess() {
+      await refetch();
+      toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
+  });
+
+  const { mutateAsync: createIssue } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/issues',
+    pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        await refetch();
+        await allIssuesRefetch();
+        setInputValue('');
+        toast.success(t('v2.toast.success'));
+      },
+    },
+  });
 
   return (
     <div
@@ -40,11 +126,76 @@ const IssueCell: React.FC<IProps> = (props) => {
       {issues?.map((issue) => <IssueBadge key={issue.id} issue={issue} />)}
       <Combobox>
         <ComboboxTrigger asChild>
-          <Tag variant="secondary">+</Tag>
+          <Tag variant="secondary" className="cursor-pointer">
+            +
+          </Tag>
         </ComboboxTrigger>
         <ComboboxContent>
-          <ComboboxInput></ComboboxInput>
-          <ComboboxGroup></ComboboxGroup>
+          <ComboboxInput
+            onValueChange={(value) => setInputValue(value)}
+            value={inputValue}
+          />
+          <ComboboxList maxHeight="333px">
+            <ComboboxGroup
+              heading={
+                <span className="text-neutral-tertiary text-base-normal">
+                  Selected Issue
+                </span>
+              }
+            >
+              {issues?.map((issue) => (
+                <ComboboxItem
+                  key={issue.id}
+                  onSelect={() => detecthIssue({ issueId: issue.id })}
+                  className="flex justify-between"
+                >
+                  <IssueBadge key={issue.id} issue={issue} />
+                  <IssueCellEditCombobox issue={issue} />
+                </ComboboxItem>
+              ))}
+            </ComboboxGroup>
+            {isLoading && <div className="combobox-item">Loading...</div>}
+            {!isLoading && !!allIssues?.items.length && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    Issue List
+                  </span>
+                }
+              >
+                {allIssues.items
+                  .filter((v) => !issues?.some((issue) => issue.id === v.id))
+                  .map((issue) => (
+                    <ComboboxItem
+                      key={issue.id}
+                      onSelect={() => attatchIssue({ issueId: issue.id })}
+                      className="flex justify-between"
+                    >
+                      <IssueBadge key={issue.id} issue={issue} />
+                      <IssueCellEditCombobox issue={issue} />
+                    </ComboboxItem>
+                  ))}
+              </ComboboxGroup>
+            )}
+            {!!inputValue &&
+              !issues?.some((issue) => issue.name === inputValue) &&
+              !isLoading &&
+              !allIssues?.items.some((issue) => issue.name === inputValue) && (
+                <div
+                  className="combobox-item flex justify-between"
+                  onClick={async () => {
+                    const data = await createIssue({ name: inputValue });
+                    if (!data) return;
+                    attatchIssue({ issueId: data.id });
+                  }}
+                >
+                  <span>{inputValue}</span>
+                  <span className="text-neutral-tertiary text-small-normal">
+                    Create Issue
+                  </span>
+                </div>
+              )}
+          </ComboboxList>
         </ComboboxContent>
       </Combobox>
     </div>

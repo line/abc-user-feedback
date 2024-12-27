@@ -39,7 +39,7 @@ interface Props {
 const FeedbackTableViewOptions = ({ table, fields }: Props) => {
   return (
     <Combobox>
-      <ComboboxTrigger>
+      <ComboboxTrigger trigger="click">
         <Icon name="RiEyeLine" />
         View{' '}
         <Badge variant="subtle">{table.getVisibleFlatColumns().length}</Badge>

@@ -51,10 +51,10 @@ const UpdateUserDialog: React.FC<IProps> = (props) => {
       isOpen={isOpen}
       submitBtn={{
         disabled: updateDisabled,
-        loading: formState.isSubmitting,
         form: 'update-user',
       }}
       deleteBtn={{ disabled: deleteDisabled, onClick: onClickDelete }}
+      formState={formState}
     >
       <form
         id="update-user"
@@ -65,7 +65,9 @@ const UpdateUserDialog: React.FC<IProps> = (props) => {
         <SelectInput
           label="Type"
           value={watch('type')}
-          onChange={(v) => setValue('type', v as UserTypeEnum)}
+          onChange={(v) =>
+            setValue('type', v as UserTypeEnum, { shouldDirty: true })
+          }
           options={[
             { label: 'SUPER', value: 'SUPER' },
             { label: 'GENERAL', value: 'GENERAL' },

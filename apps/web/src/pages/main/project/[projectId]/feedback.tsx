@@ -22,7 +22,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import type { PaginationState } from '@tanstack/react-table';
-import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
@@ -46,13 +45,14 @@ import {
   useOAIQuery,
 } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
-import type { Feedback } from '@/entities/feedback';
-import { useFeedbackSearch } from '@/entities/feedback';
+import {
+  FeedbackDetailSheet,
+  FeedbackTableDownload,
+  FeedbackTableExpand,
+  FeedbackTableViewOptions,
+  useFeedbackSearch,
+} from '@/entities/feedback';
 import { getColumns } from '@/entities/feedback/feedback-table-columns';
-import FeedbackDetailSheet from '@/entities/feedback/ui/feedback-detail-sheet.ui';
-import FeedbackTableDownload from '@/entities/feedback/ui/feedback-table-download.ui';
-import FeedbackTableExpand from '@/entities/feedback/ui/feedback-table-expand.ui';
-import FeedbackTableViewOptions from '@/entities/feedback/ui/feedback-table-view-options.ui';
 import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
 
@@ -68,6 +68,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     'channelId',
     parseAsInteger.withDefault(-1),
   );
+
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -79,6 +80,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       .toDate(),
     endDate: dayjs().toDate(),
   });
+  const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
@@ -124,7 +126,6 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     () => getColumns(channelData?.fields ?? []),
     [channelData],
   );
-  const overlay = useOverlay();
 
   const table = useReactTable({
     columns,
@@ -144,17 +145,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
   }, [data]);
-
-  const openFeedbackDetail = (feedback: Feedback) => {
-    overlay.open(({ close, isOpen }) => (
-      <FeedbackDetailSheet
-        isOpen={isOpen}
-        close={close}
-        feedback={feedback}
-        fields={fields}
-      />
-    ));
-  };
+  const currentFeedback = feedbacks.find((v) => v.id === openFeedbackId);
 
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
@@ -170,9 +161,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           <TabsList>
             {data?.items.map((channel) => (
               <TabsTrigger key={channel.id} value={String(channel.id)}>
-                {channel.name}{' '}
+                {channel.name}
                 {currentChannelId === channel.id && (
-                  <>{feedbackData?.meta.totalItems}</>
+                  <span className="ml-1 font-bold">
+                    {feedbackData?.meta.totalItems}
+                  </span>
                 )}
               </TabsTrigger>
             ))}
@@ -182,7 +175,6 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           <DateRangePicker
             onChange={(v) => setDateRange(v)}
             value={dateRange}
-            minDate={dayjs().subtract(env.NEXT_PUBLIC_MAX_DAYS, 'day').toDate()}
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
@@ -202,10 +194,18 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       <BasicTable
         table={table}
         className="table-fixed"
-        onClickRow={(_, row) => openFeedbackDetail(row)}
+        onClickRow={(_, row) => setOpenFeedbackId(Number(row.id))}
         isLoading={isLoading}
       />
       <TablePagination table={table} />
+      {currentFeedback && (
+        <FeedbackDetailSheet
+          isOpen={!!openFeedbackId}
+          close={() => setOpenFeedbackId(null)}
+          feedback={currentFeedback}
+          fields={fields}
+        />
+      )}
     </div>
   );
 };

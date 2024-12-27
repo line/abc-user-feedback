@@ -25,6 +25,7 @@ import {
   Badge,
   Button,
   Calendar,
+  Icon,
   Popover,
   PopoverContent,
   PopoverTrigger,
@@ -127,10 +128,12 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="gap-2 font-normal">
+        <Button variant="outline" className="gap-2">
+          <Icon name="RiCalendar2Fill" />
           Date{' '}
           <Badge variant="subtle">
-            {value && dayjs(value.endDate).diff(value.startDate, 'days') + 1}
+            {value &&
+              `${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
           </Badge>
         </Button>
       </PopoverTrigger>
@@ -155,8 +158,10 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             className="border-none shadow-none"
             mode="range"
             onSelect={(value: { from?: Date; to?: Date } | undefined) => {
-              if (!value?.from || !value.to) return;
-              setCurrentValue({ startDate: value.from, endDate: value.to });
+              setCurrentValue({
+                startDate: value?.from ?? null,
+                endDate: value?.to ?? null,
+              });
             }}
             selected={{
               from: currentValue?.startDate ?? undefined,

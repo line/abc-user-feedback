@@ -28,7 +28,6 @@ interface IProps {
 
 const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
   const { register, watch, formState } = useFormContext<IssueTracker>();
-  console.log(watch('ticketDomain'));
 
   return (
     <div className="flex flex-col gap-4">

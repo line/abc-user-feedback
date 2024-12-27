@@ -55,10 +55,13 @@ const MemberFormDialog: React.FC<Props> = (props) => {
     query: { type: ['GENERAL'] },
   });
 
-  const { watch, setValue, handleSubmit, formState } = useForm<MemberInfo>({
-    resolver: zodResolver(memberInfoSchema),
-    defaultValues: data,
-  });
+  const { setValue, handleSubmit, formState, register, getValues, watch } =
+    useForm<MemberInfo>({
+      resolver: zodResolver(memberInfoSchema),
+      defaultValues: data,
+    });
+
+  watch();
 
   return (
     <FormDialog
@@ -70,11 +73,8 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       close={close}
       isOpen={isOpen}
       deleteBtn={{ disabled: deleteDisabled, onClick: onClickDelete }}
-      submitBtn={{
-        loading: formState.isSubmitting,
-        disabled: updateDisabled,
-        form: 'memberForm',
-      }}
+      submitBtn={{ disabled: updateDisabled, form: 'memberForm' }}
+      formState={formState}
     >
       <form
         id="memberForm"
@@ -88,7 +88,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           onChange={(v) => {
             const user = userData?.items.find((user) => user.email === v);
             if (!user) return;
-            setValue('user', user);
+            setValue('user', user, { shouldDirty: true });
           }}
           options={
             userData?.items
@@ -99,23 +99,23 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           required
           disabled={!!data}
         />
-        {data && <TextInput label="Name" value={watch('user.name')} disabled />}
+        {data && <TextInput label="Name" disabled {...register('user.name')} />}
         {data && (
           <TextInput
             label="Department"
-            value={watch('user.department')}
+            {...register('user.department')}
             disabled
           />
         )}
         <SelectInput
           label="Role"
           placeholder={t('v2.placeholder.select')}
-          value={(watch('role.id') as number | undefined)?.toString()}
+          value={(getValues('role.id') as number | undefined)?.toString()}
           options={roles.map((v) => ({ label: v.name, value: `${v.id}` }))}
           onChange={(v) => {
             const role = roles.find((role) => String(role.id) === v);
             if (!role) return;
-            setValue('role', role);
+            setValue('role', role, { shouldDirty: true });
           }}
           error={formState.errors.role?.message}
           required

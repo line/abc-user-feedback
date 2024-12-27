@@ -45,12 +45,12 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
       submitBtn={{
         form: 'apiKeyForm',
         disabled: status === data?.status,
-        loading: formState.isSubmitting,
       }}
       deleteBtn={{
         disabled: false,
         onClick: onClickDelete,
       }}
+      formState={formState}
     >
       <form
         id="apiKeyForm"
@@ -66,7 +66,9 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
           ]}
           value={status}
           onChange={(value) =>
-            setValue('status', value as 'active' | 'inactive')
+            setValue('status', value as 'active' | 'inactive', {
+              shouldDirty: true,
+            })
           }
         />
       </form>

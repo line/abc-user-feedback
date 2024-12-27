@@ -20,7 +20,15 @@ interface Props {
 }
 
 const Avatar: React.FC<Props> = ({ name }) => {
-  return <Badge radius="large">{name.trim().slice(0, 1)}</Badge>;
+  return (
+    <Badge radius="large">
+      {name
+        // eslint-disable-next-line no-control-regex
+        .replace(/[\x00-\x1F\x7F]/g, '')
+        .trim()
+        .slice(0, 1)}
+    </Badge>
+  );
 };
 
 export default Avatar;

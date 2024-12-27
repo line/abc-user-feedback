@@ -22,6 +22,7 @@ import { FieldFormatLabel } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 
 import { FIELD_FORMAT_ICON_MAP } from '../field/field.constant';
+import type { Issue } from '../issue';
 import type { Feedback } from './feedback.type';
 import FeedbackCell from './ui/feedback-cell';
 import IssueCell from './ui/issue-cell';
@@ -79,7 +80,10 @@ export const getColumns = (fieldData: FieldInfo[]) =>
       cell: ({ getValue, row }) => (
         <div className={cn({ 'overflow-hidden': !row.getIsExpanded() })}>
           <div className={cn('flex', { 'w-max': !row.getIsExpanded() })}>
-            <IssueCell issues={getValue()} />
+            <IssueCell
+              issues={getValue() as Issue[]}
+              feedbackId={Number(row.id)}
+            />
           </div>
         </div>
       ),
@@ -100,7 +104,7 @@ export const getColumns = (fieldData: FieldInfo[]) =>
             <FeedbackCell
               field={field}
               isExpanded={info.row.getIsExpanded()}
-              value={info.getValue()}
+              value={info.getValue() as unknown}
             />
           ),
           enableSorting:

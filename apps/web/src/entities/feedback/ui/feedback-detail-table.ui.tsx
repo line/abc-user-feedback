@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
+
 import { FieldFormatLabel } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 import type { Issue } from '@/entities/issue';
@@ -25,6 +27,11 @@ interface Props {
 }
 
 const FeedbackDetailTable = ({ rows }: Props) => {
+  const feedbackId = useMemo(() => {
+    return rows.find(({ field }) => field.key === 'id')?.value as
+      | number
+      | undefined;
+  }, [rows]);
   return (
     <table>
       <tbody>
@@ -34,8 +41,8 @@ const FeedbackDetailTable = ({ rows }: Props) => {
               <FieldFormatLabel format={field.format} name={field.name} />
             </th>
             <td className="py-2.5">
-              {field.key === 'issues' ?
-                <IssueCell issues={value as Issue[]} />
+              {field.key === 'issues' && feedbackId ?
+                <IssueCell issues={value as Issue[]} feedbackId={feedbackId} />
               : <FeedbackCell field={field} isExpanded value={value} />}
             </td>
           </tr>
