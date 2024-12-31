@@ -482,7 +482,8 @@
       "out": "나가기",
       "confirm": "확인",
       "next": "다음",
-      "previous": "이전"
+      "previous": "이전",
+      "addFilter": "필터 추가"
     },
     "project-setting-menu": {
       "project-info": "Project 정보",

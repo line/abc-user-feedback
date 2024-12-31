@@ -17,24 +17,34 @@
 import { Button, Icon } from '@ufb/react';
 import { Icon as UIIcon } from '@ufb/ui';
 
+import { cn } from '@/shared';
+
 import Header from './header.ui';
 
 interface IProps extends React.PropsWithChildren {
   projectId?: number;
   title: string;
+  isHeightDynamic?: boolean;
 }
 
 const Layout: React.FC<IProps> = (props) => {
-  const { children, projectId, title } = props;
+  const { children, projectId, title, isHeightDynamic } = props;
 
   return (
     <div>
       <Header projectId={projectId} />
       <main className="p-5">
-        <div className="h-12 px-6">
+        <div className="mb-3 h-12 px-6">
           <h1 className="text-title-h3">{title}</h1>
         </div>
-        <div className="h-[calc(100vh-150px)]">{children}</div>
+        <div
+          className={cn({
+            'h-[calc(100vh-150px)]': !isHeightDynamic,
+            'min-h-[calc(100vh-150px)]': isHeightDynamic,
+          })}
+        >
+          {children}
+        </div>
       </main>
       <footer className="bg-neutral-tertiary flex flex-col items-center p-4">
         <div className="flex items-center gap-2">

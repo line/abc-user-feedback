@@ -84,7 +84,7 @@ const FeedbackFilterPopover = (props: Props) => {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline">
-          <Icon name="RiSearchLine" />
+          <Icon name="RiFilter3Line" />
           Filter
         </Button>
       </PopoverTrigger>
@@ -228,14 +228,16 @@ const FeedbackFilterPopover = (props: Props) => {
           </table>
         </div>
         <div className="flex justify-between">
-          <Button onClick={addFilter}>Add Filter</Button>
+          <Button variant="outline" onClick={addFilter}>
+            {t('v2.button.addFilter')}
+          </Button>
           <div className="flex gap-2">
             <PopoverClose asChild>
               <Button variant="outline" onClick={() => resetFilters()}>
                 {t('v2.button.cancel')}
               </Button>
             </PopoverClose>
-            <Button>Apply</Button>
+            <Button>{t('v2.button.confirm')}</Button>
           </div>
         </div>
       </PopoverContent>

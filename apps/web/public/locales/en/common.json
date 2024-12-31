@@ -278,7 +278,7 @@
     "all": "All",
     "issue": {
       "init": "New",
-      "onReview": "Under Review",
+      "onReview": "On Review",
       "inProgress": "In Progress",
       "resolved": "Resolved",
       "pending": "On Hold"
@@ -489,7 +489,8 @@
         "register": "Register {{name}}",
         "add": "Add {{name}}",
         "invite": "Invite {{name}}"
-      }
+      },
+      "addFilter": "Add Filter"
     },
     "project-setting-menu": {
       "project-info": "Project Information",

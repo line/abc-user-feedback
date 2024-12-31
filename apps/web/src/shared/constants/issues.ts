@@ -23,12 +23,38 @@ export interface IssuesItem {
   key: IssueStatus;
   name: string;
   color: ColorType;
+  bgClassName?: string;
 }
 
 export const ISSUES: (t: TFunction) => IssuesItem[] = (t) => [
-  { key: 'INIT', name: t('text.issue.init'), color: 'red' },
-  { key: 'ON_REVIEW', name: t('text.issue.onReview'), color: 'blue' },
-  { key: 'IN_PROGRESS', name: t('text.issue.inProgress'), color: 'yellow' },
-  { key: 'RESOLVED', name: t('text.issue.resolved'), color: 'green' },
-  { key: 'PENDING', name: t('text.issue.pending'), color: 'purple' },
+  {
+    key: 'INIT',
+    name: t('text.issue.init'),
+    color: 'red',
+    bgClassName: 'bg-yellow-50',
+  },
+  {
+    key: 'ON_REVIEW',
+    name: t('text.issue.onReview'),
+    color: 'blue',
+    bgClassName: 'bg-green-50',
+  },
+  {
+    key: 'IN_PROGRESS',
+    name: t('text.issue.inProgress'),
+    color: 'yellow',
+    bgClassName: 'bg-teal-50',
+  },
+  {
+    key: 'RESOLVED',
+    name: t('text.issue.resolved'),
+    color: 'green',
+    bgClassName: 'bg-slate-50',
+  },
+  {
+    key: 'PENDING',
+    name: t('text.issue.pending'),
+    color: 'purple',
+    bgClassName: 'bg-indigo-50',
+  },
 ];

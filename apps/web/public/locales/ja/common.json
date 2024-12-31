@@ -476,7 +476,8 @@
       "out": "終了",
       "confirm": "確認",
       "next": "次へ",
-      "previous": "前へ"
+      "previous": "前へ",
+      "addFilter": "フィルタ追加"
     },
     "project-setting-menu": {
       "project-info": "Project情報",

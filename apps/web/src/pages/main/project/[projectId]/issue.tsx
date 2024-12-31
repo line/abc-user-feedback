@@ -50,7 +50,7 @@ const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
 
 IssueMangementPage.getLayout = (page: React.ReactElement<IProps>) => {
   return (
-    <Layout projectId={page.props.projectId} title="Issue">
+    <Layout projectId={page.props.projectId} title="Issue" isHeightDynamic>
       <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
     </Layout>
   );

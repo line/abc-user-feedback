@@ -16,7 +16,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { Path, useOAIQuery } from '@/shared';
+import { useOAIQuery } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;

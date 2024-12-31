@@ -488,7 +488,8 @@
       "out": "Beenden",
       "confirm": "Bestätigen",
       "next": "Weiter",
-      "previous": "Zurück"
+      "previous": "Zurück",
+      "addFilter": "Filter hinzufügen"
     },
     "project-setting-menu": {
       "project-info": "Project-Informationen",
