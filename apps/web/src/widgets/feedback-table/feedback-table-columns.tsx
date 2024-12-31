@@ -19,7 +19,6 @@ import { ExpandableText, TableCheckbox } from '@/shared';
 import type { Field } from '@/entities/field';
 import type { Issue } from '@/entities/issue';
 
-import EditableCell from './ui/editable-cell';
 import FeedbackCell from './ui/feedback-cell';
 import IssueCell from './ui/issue-cell';
 
@@ -96,19 +95,13 @@ export const getColumns = (fieldData: Field[]) =>
           size: field.format === 'text' ? 200 : 150,
           minSize: 75,
           header: field.name,
-          cell: (info) =>
-            field.property === 'EDITABLE' ?
-              <EditableCell
-                field={field}
-                value={info.getValue()}
-                isExpanded={info.row.getIsExpanded()}
-                feedbackId={info.row.original.id}
-              />
-            : <FeedbackCell
-                field={field}
-                isExpanded={info.row.getIsExpanded()}
-                value={info.getValue()}
-              />,
+          cell: (info) => (
+            <FeedbackCell
+              field={field}
+              isExpanded={info.row.getIsExpanded()}
+              value={info.getValue()}
+            />
+          ),
           enableSorting:
             field.format === 'date' &&
             (field.key === 'createdAt' || field.key === 'updatedAt'),

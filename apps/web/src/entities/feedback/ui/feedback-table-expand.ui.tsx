@@ -15,7 +15,7 @@
  */
 import type { Table } from '@tanstack/react-table';
 
-import { Button, Icon, Popover, PopoverTrigger } from '@ufb/react';
+import { Button, Icon } from '@ufb/react';
 
 import { cn } from '@/shared';
 
@@ -27,20 +27,16 @@ interface Props {
 
 const FeedbackTableExpand = ({ table }: Props) => {
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className={cn({
-            '!bg-neutral-tertiary': table.getIsAllRowsExpanded(),
-          })}
-          onClick={() => table.toggleAllRowsExpanded()}
-        >
-          <Icon name="RiLineHeight" />
-          Expand
-        </Button>
-      </PopoverTrigger>
-    </Popover>
+    <Button
+      variant="outline"
+      className={cn({
+        '!bg-neutral-tertiary': table.getIsAllRowsExpanded(),
+      })}
+      onClick={() => table.toggleAllRowsExpanded()}
+    >
+      <Icon name="RiLineHeight" />
+      Expand
+    </Button>
   );
 };
 

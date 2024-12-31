@@ -31,7 +31,7 @@ interface Props {
   children?: React.ReactNode;
   error?: string;
   onSelectValue: (value: string) => void;
-  clearError: () => void;
+  clearError?: () => void;
   inputValue: string;
   setInputValue: (value: string) => void;
   disabled?: boolean;
@@ -55,7 +55,7 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
         <ComboboxInput
           value={inputValue}
           onValueChange={(value) => {
-            if (error) clearError();
+            if (error) clearError?.();
             setInputValue(value);
           }}
         />

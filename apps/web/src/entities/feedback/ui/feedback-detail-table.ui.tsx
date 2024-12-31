@@ -19,31 +19,45 @@ import { FieldFormatLabel } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 import type { Issue } from '@/entities/issue';
 
-import FeedbackCell from './feedback-cell';
+import FeedbackDetailCell from './feedback-detail-cell.ui';
+import FeedbackDetailEditingCell from './feedback-detail-editing-cell.ui';
 import IssueCell from './issue-cell';
 
 interface Props {
-  rows: { field: FieldInfo; value: unknown }[];
+  rows: {
+    field: FieldInfo;
+    value: unknown;
+    onChangeFeedback: (fieldKey: string, value: unknown) => void;
+  }[];
+  isEditing?: boolean;
 }
 
-const FeedbackDetailTable = ({ rows }: Props) => {
-  const feedbackId = useMemo(() => {
-    return rows.find(({ field }) => field.key === 'id')?.value as
-      | number
-      | undefined;
-  }, [rows]);
+const FeedbackDetailTable = (props: Props) => {
+  const { rows, isEditing = false } = props;
+  const feedbackId = useMemo(
+    () =>
+      rows.find(({ field }) => field.key === 'id')?.value as number | undefined,
+    [rows],
+  );
+
   return (
     <table>
       <tbody>
-        {rows.map(({ field, value }) => (
+        {rows.map(({ field, value, onChangeFeedback }) => (
           <tr id={field.key}>
             <th className="text-neutral-tertiary min-w-[120px] py-2.5 align-top font-normal">
               <FieldFormatLabel format={field.format} name={field.name} />
             </th>
-            <td className="py-2.5">
+            <td className="w-full py-2.5">
               {field.key === 'issues' && feedbackId ?
                 <IssueCell issues={value as Issue[]} feedbackId={feedbackId} />
-              : <FeedbackCell field={field} isExpanded value={value} />}
+              : isEditing && field.property === 'EDITABLE' ?
+                <FeedbackDetailEditingCell
+                  field={field}
+                  value={value}
+                  onChangeFeedback={onChangeFeedback}
+                />
+              : <FeedbackDetailCell field={field} value={value} />}
             </td>
           </tr>
         ))}

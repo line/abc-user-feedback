@@ -13,27 +13,25 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { memo } from 'react';
+
 import dayjs from 'dayjs';
 
 import { Badge } from '@ufb/react';
 
-import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
+import { DATE_TIME_FORMAT, ImagePreviewButton } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 
-interface IProps {
-  isExpanded: boolean;
+interface Props {
   field: FieldInfo;
   value: unknown;
 }
 
-const FeedbackCell: React.FC<IProps> = memo((props) => {
-  const { isExpanded, field, value } = props;
-
+const FeedbackDetailEditingCell = (props: Props) => {
+  const { field, value } = props;
   return (
-    <ExpandableText isExpanded={isExpanded}>
+    <>
       {typeof value === 'undefined' ?
-        undefined
+        '-'
       : field.format === 'date' ?
         dayjs(value as string).format(DATE_TIME_FORMAT)
       : field.format === 'multiSelect' ?
@@ -63,11 +61,9 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
         </Badge>
       : field.format === 'images' ?
         <ImagePreviewButton urls={value as string[]} />
-      : field.format === 'text' ?
-        (value as string)
       : String(value)}
-    </ExpandableText>
+    </>
   );
-});
+};
 
-export default FeedbackCell;
+export default FeedbackDetailEditingCell;

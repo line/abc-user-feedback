@@ -29,7 +29,9 @@ interface Props {
   options: { label: string; value: string; icon?: IconNameType }[];
   label?: string;
   value?: string;
+  values?: string[];
   onChange?: (value: string) => void;
+  onValuesChange?: (value: string[]) => void;
   disabled?: boolean;
   required?: boolean;
   type?: 'single' | 'multiple';
@@ -43,7 +45,9 @@ const SelectInput: React.FC<Props> = (props) => {
     options,
     label,
     value,
+    values,
     onChange,
+    onValuesChange,
     disabled,
     required,
     type = 'single',
@@ -54,7 +58,9 @@ const SelectInput: React.FC<Props> = (props) => {
   return (
     <Select
       value={value}
+      values={values}
       onValueChange={onChange}
+      onValuesChange={onValuesChange}
       disabled={disabled}
       type={type}
       size={size}

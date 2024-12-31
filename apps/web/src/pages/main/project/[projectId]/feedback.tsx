@@ -26,27 +26,20 @@ import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
-import {
-  Button,
-  Icon,
-  Popover,
-  PopoverTrigger,
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  toast,
-} from '@ufb/react';
+import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
 import {
   BasicTable,
   DateRangePicker,
   DEFAULT_LOCALE,
   TablePagination,
+  useOAIMutation,
   useOAIQuery,
 } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
 import {
   FeedbackDetailSheet,
+  FeedbackFilterPopover,
   FeedbackTableDownload,
   FeedbackTableExpand,
   FeedbackTableViewOptions,
@@ -98,7 +91,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     },
   };
 
-  const { data: feedbackData, isLoading } = useFeedbackSearch(
+  const {
+    data: feedbackData,
+    isLoading,
+    refetch,
+  } = useFeedbackSearch(
     projectId,
     currentChannelId,
     {
@@ -145,7 +142,36 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
   }, [data]);
-  const currentFeedback = feedbacks.find((v) => v.id === openFeedbackId);
+  const currentFeedback = useMemo(
+    () => feedbacks.find((v) => v.id === openFeedbackId),
+    [feedbacks, openFeedbackId],
+  );
+  const { mutate: updateFeedback } = useOAIMutation({
+    method: 'put',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
+    pathParams: {
+      channelId: currentChannelId,
+      feedbackId: (currentFeedback?.id ?? 0) as number,
+      projectId,
+    },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        toast.success('Feedback updated successfully');
+      },
+    },
+  });
+  const { mutate: deleteFeedback } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks',
+    pathParams: { channelId: currentChannelId, projectId },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        toast.success('Feedback deleted successfully');
+      },
+    },
+  });
 
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
@@ -178,14 +204,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="outline">
-                <Icon name="RiSearchLine" />
-                Search
-              </Button>
-            </PopoverTrigger>
-          </Popover>
+          <FeedbackFilterPopover fields={fields} />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
           <FeedbackTableDownload fields={fields} query={query} />
@@ -200,6 +219,10 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       <TablePagination table={table} />
       {currentFeedback && (
         <FeedbackDetailSheet
+          updateFeedback={(feedback) => updateFeedback(feedback as never)}
+          onClickDelete={() =>
+            deleteFeedback({ feedbackIds: [currentFeedback.id as number] })
+          }
           isOpen={!!openFeedbackId}
           close={() => setOpenFeedbackId(null)}
           feedback={currentFeedback}
