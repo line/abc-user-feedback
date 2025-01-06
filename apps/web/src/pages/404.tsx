@@ -22,6 +22,7 @@ import { Path } from '@/shared';
 
 const NotFoundPage = () => {
   const router = useRouter();
+
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="flex flex-col items-center justify-center gap-6">

@@ -18,8 +18,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon } from '@ufb/react';
 
-import { cn, DateRangePicker, useOAIQuery } from '@/shared';
-import { FeedbackFilterPopover } from '@/entities/feedback';
+import { cn, DateRangePicker, TableSearchPopover, useOAIQuery } from '@/shared';
 import { useIssueSearch } from '@/entities/issue';
 import type { Issue, IssueStatus } from '@/entities/issue';
 
@@ -118,7 +117,34 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
-          <FeedbackFilterPopover fields={[]} />
+          <TableSearchPopover
+            filterFields={[
+              {
+                format: 'text',
+                key: 'name',
+                name: 'Title',
+              },
+              {
+                format: 'select',
+                key: 'status',
+                name: 'Status',
+                options: ISSUES(t).map((issue) => ({
+                  key: issue.key,
+                  name: issue.name,
+                })),
+              },
+              {
+                format: 'text',
+                key: 'description',
+                name: 'Description',
+              },
+              {
+                format: 'text',
+                key: 'ticket',
+                name: 'issueId',
+              },
+            ]}
+          />
         </div>
       </div>
       <div className="grid grid-cols-5 gap-4">

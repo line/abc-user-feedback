@@ -91,7 +91,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                 </TenantGuard>
               </TooltipProvider>
             </HydrationBoundary>
-            {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />} */}
           </OverlayProvider>
         </ThemeProvider>
       </QueryClientProvider>

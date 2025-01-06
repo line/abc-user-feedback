@@ -104,7 +104,6 @@ const SignInPage: NextPageWithLayout = () => {
         <Button
           size="medium"
           type="submit"
-          disabled={!formState.isValid}
           loading={loginLoading}
           form="sign-in"
         >

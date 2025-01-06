@@ -16,7 +16,7 @@
 
 import dayjs from 'dayjs';
 
-import { Calendar, Textarea, TextInput } from '@ufb/react';
+import { Calendar, InputField, Textarea, TextInput } from '@ufb/react';
 
 import { ImagePreviewButton, SelectInput } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
@@ -67,11 +67,12 @@ const FeedbackDetailEditingCell = (props: Props) => {
           onChange={(e) => setCurrentValue(e.target.value)}
         />
       : field.format === 'number' ?
-        <TextInput
-          type="number"
-          value={value as number}
-          onChange={(e) => setCurrentValue(e.target.value)}
-        />
+        <InputField>
+          <TextInput
+            value={value as number}
+            onChange={(e) => setCurrentValue(e.target.value)}
+          />
+        </InputField>
       : '-'}
     </>
   );

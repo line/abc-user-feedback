@@ -40,7 +40,7 @@ const ComboboxSelectInput: React.FC<Props> = (props) => {
   const [open, setOpen] = useState(false);
   return (
     <Combobox open={open} onOpenChange={setOpen}>
-      <ComboboxTrigger className="w-full">
+      <ComboboxTrigger className="!text-base-normal w-full">
         {value ?
           options.find((option) => option.value === value)?.label
         : placeholder}

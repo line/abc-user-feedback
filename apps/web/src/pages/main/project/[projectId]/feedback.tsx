@@ -33,13 +33,14 @@ import {
   DateRangePicker,
   DEFAULT_LOCALE,
   TablePagination,
+  TableSearchPopover,
   useOAIMutation,
   useOAIQuery,
 } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
+import type { FilterFieldFotmat } from '@/shared/ui/table-search-popover';
 import {
   FeedbackDetailSheet,
-  FeedbackFilterPopover,
   FeedbackTableDownload,
   FeedbackTableExpand,
   FeedbackTableViewOptions,
@@ -142,6 +143,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
   }, [data]);
+
   const currentFeedback = useMemo(
     () => feedbacks.find((v) => v.id === openFeedbackId),
     [feedbacks, openFeedbackId],
@@ -204,7 +206,17 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
-          <FeedbackFilterPopover fields={fields} />
+          <TableSearchPopover
+            filterFields={fields.map((field) => ({
+              key: field.key,
+              name: field.name,
+              options: field.key === 'issues' ? [] : field.options,
+              format: field.format as FilterFieldFotmat,
+            }))}
+            onSubmit={(filters) => {
+              console.log(filters);
+            }}
+          />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
           <FeedbackTableDownload fields={fields} query={query} />

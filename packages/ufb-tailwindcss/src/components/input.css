@@ -7,7 +7,6 @@
   --input-caption-default: var(--text-neutral-tertiary);
   --input-caption-success: var(--text-tint-green);
   --input-caption-error: var(--text-tint-red);
-
   --input-icon-default: var(--icon-neutral-tertiary);
   --input-icon-typing: var(--icon-neutral-primary);
   --input-icon-filled: var(--icon-neutral-primary);
@@ -15,12 +14,10 @@
   --input-icon-caption-default: var(--icon-neutral-tertiary);
   --input-icon-caption-success: var(--icon-tint-green);
   --input-icon-caption-error: var(--icon-tint-red);
-
   --input-border-default: var(--border-neutral-tertiary);
   --input-border-typing: var(--tint, var(--border-neutral-primary));
   --input-border-filled: var(--border-neutral-tertiary);
   --input-border-error: var(--border-tint-red);
-
   --input-fg-default: var(--fg-neutral-primary);
   --input-fg-typing: var(--fg-neutral-tertiary);
   --input-fg-filled: var(--fg-neutral-primary);
@@ -81,6 +78,7 @@
   /* default */
   @apply input-caption-default input-caption-small;
 }
+
 .input-caption-icon {
   @apply flex-shrink-0;
 }
