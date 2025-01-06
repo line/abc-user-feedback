@@ -118,6 +118,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableSearchPopover
+            onSubmit={(filters) => {
+              console.log(filters);
+            }}
             filterFields={[
               {
                 format: 'text',
