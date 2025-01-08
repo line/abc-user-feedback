@@ -43,6 +43,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   const methods = useForm<IssueTracker>({
     resolver: zodResolver(issueTrackerSchema),
   });
+  console.log('errors: ', methods.formState.errors);
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
@@ -79,20 +80,29 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     methods.reset(data?.data ?? {});
   }, [data]);
 
-  const onSubmit = (input: IssueTracker) =>
-    data ? modify({ data: input }) : create({ data: input });
+  const onSubmit = (input: IssueTracker) => {
+    if (input.ticketDomain?.endsWith('/')) {
+      input.ticketDomain = input.ticketDomain.slice(0, -1);
+    }
+    if (data) {
+      modify({ data: input });
+      return;
+    }
+    create({ data: input });
+  };
 
   return (
     <SettingTemplate
       title={t('project-setting-menu.issue-tracker-mgmt')}
       action={
         <Button
+          type="submit"
           disabled={
             !perms.includes('project_tracker_update') ||
-            !methods.formState.isDirty ||
-            modifyPending ||
-            createPending
+            !methods.formState.isDirty
           }
+          loading={createPending || modifyPending}
+          form="issue-tracker"
         >
           {t('button.save')}
         </Button>
@@ -100,7 +110,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     >
       <SettingAlert description={t('help-card.issue-tracker')} />
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <form id="issue-tracker" onSubmit={methods.handleSubmit(onSubmit)}>
           <IssueTrackerForm />
         </form>
       </FormProvider>

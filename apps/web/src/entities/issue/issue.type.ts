@@ -13,20 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type IssueStatus =
-  | 'INIT'
-  | 'ON_REVIEW'
-  | 'IN_PROGRESS'
-  | 'RESOLVED'
-  | 'PENDING';
+import type { z } from 'zod';
 
-export interface Issue {
-  id: number;
-  name: string;
-  description: string | null;
-  feedbackCount: number;
-  status: IssueStatus;
-  createdAt: string;
-  updatedAt: string;
-  externalIssueId?: string;
-}
+import type { issueFormSchema, issueSchema } from './issue.schema';
+
+export type Issue = z.infer<typeof issueSchema>;
+export type IssueStatus = Issue['status'];
+export type IssueFormSchema = z.infer<typeof issueFormSchema>;

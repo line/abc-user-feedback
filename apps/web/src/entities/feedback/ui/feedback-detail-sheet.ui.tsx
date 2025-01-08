@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -30,11 +30,12 @@ import {
   SheetTitle,
 } from '@ufb/react';
 
+import { SheetDetailTable } from '@/shared';
+import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
 import type { FieldInfo } from '@/entities/field';
 import { DEFAULT_FIELD_KEYS } from '@/entities/field/field.constant';
 
 import type { Feedback } from '../feedback.type';
-import FeedbackDetailTable from './feedback-detail-table.ui';
 
 interface Props {
   isOpen: boolean;
@@ -51,19 +52,40 @@ const FeedbackDetailSheet = (props: Props) => {
   const { t } = useTranslation();
 
   const [currentFeedback, setCurrentFeedback] = useState(feedback);
-  const [isEditing, setIsEditing] = useState(false);
-
-  const rows = useMemo(
-    () =>
-      fields.map((field) => ({
-        field,
-        value: currentFeedback[field.key],
-        onChangeFeedback: (fieldKey: string, value: unknown) => {
-          setCurrentFeedback((prev) => ({ ...prev, [fieldKey]: value }));
-        },
-      })),
-    [currentFeedback, fields],
-  );
+  const [mode, setMode] = useState<'edit' | 'view'>('view');
+  const onClickCancel = () => {
+    setMode('view');
+    setCurrentFeedback(feedback);
+  };
+  const onClickSubmit = () => {
+    const editedFeedback = fields.reduce((acc, cur) => {
+      if (cur.key === 'issues') return acc;
+      if (
+        typeof currentFeedback[cur.key] === 'undefined' ||
+        currentFeedback[cur.key] === null
+      ) {
+        return acc;
+      }
+      if (cur.property === 'EDITABLE') {
+        if (cur.format === 'number') {
+          return {
+            ...acc,
+            [cur.key]: Number(currentFeedback[cur.key]),
+          };
+        }
+        if (cur.format === 'date') {
+          return {
+            ...acc,
+            [cur.key]: dayjs(currentFeedback[cur.key] as string).toISOString(),
+          };
+        }
+        return { ...acc, [cur.key]: currentFeedback[cur.key] };
+      }
+      return acc;
+    }, {} as Feedback);
+    updateFeedback?.(editedFeedback);
+    setMode('edit');
+  };
 
   return (
     <Sheet open={isOpen} onOpenChange={close}>
@@ -74,13 +96,30 @@ const FeedbackDetailSheet = (props: Props) => {
           </SheetTitle>
         </SheetHeader>
         <SheetBody>
-          <FeedbackDetailTable
-            rows={rows.filter((v) => DEFAULT_FIELD_KEYS.includes(v.field.key))}
+          <SheetDetailTable
+            data={currentFeedback}
+            rows={
+              fields
+                .filter((v) => DEFAULT_FIELD_KEYS.includes(v.key))
+                .map((v) =>
+                  v.key === 'issues' ?
+                    { ...v, format: 'issue', feedbackId: feedback.id }
+                  : v,
+                ) as SheetDetailTableRow[]
+            }
           />
           <Divider variant="subtle" className="my-4" />
-          <FeedbackDetailTable
-            rows={rows.filter((v) => !DEFAULT_FIELD_KEYS.includes(v.field.key))}
-            isEditing={isEditing}
+          <SheetDetailTable
+            rows={
+              fields.filter(
+                (v) => !DEFAULT_FIELD_KEYS.includes(v.key),
+              ) as SheetDetailTableRow[]
+            }
+            mode={mode}
+            data={currentFeedback}
+            onChange={(key, value) =>
+              setCurrentFeedback((prev) => ({ ...prev, [key]: value }))
+            }
           />
         </SheetBody>
         <SheetFooter>
@@ -91,52 +130,20 @@ const FeedbackDetailSheet = (props: Props) => {
               </Button>
             </div>
           )}
-          {isEditing ?
+          {mode === 'edit' && (
             <>
-              <Button variant="secondary" onClick={() => setIsEditing(false)}>
+              <Button variant="secondary" onClick={onClickCancel}>
                 {t('v2.button.cancel')}
               </Button>
-              <Button
-                onClick={() => {
-                  const editedFeedback = fields.reduce((acc, cur) => {
-                    if (cur.key === 'issues') return acc;
-                    if (
-                      typeof currentFeedback[cur.key] === 'undefined' ||
-                      currentFeedback[cur.key] === null
-                    ) {
-                      return acc;
-                    }
-                    if (cur.property === 'EDITABLE') {
-                      if (cur.format === 'number') {
-                        return {
-                          ...acc,
-                          [cur.key]: Number(currentFeedback[cur.key]),
-                        };
-                      }
-                      if (cur.format === 'date') {
-                        return {
-                          ...acc,
-                          [cur.key]: dayjs(
-                            currentFeedback[cur.key],
-                          ).toISOString(),
-                        };
-                      }
-                      return { ...acc, [cur.key]: currentFeedback[cur.key] };
-                    }
-                    return acc;
-                  }, {});
-                  updateFeedback?.(editedFeedback);
-                  setIsEditing(false);
-                }}
-              >
-                {t('v2.button.save')}
-              </Button>
+              <Button onClick={onClickSubmit}>{t('v2.button.save')}</Button>
             </>
-          : <>
+          )}
+          {mode === 'view' && (
+            <>
               <SheetClose>{t('v2.button.cancel')}</SheetClose>
-              <Button onClick={() => setIsEditing(true)}>편집</Button>
+              <Button onClick={() => setMode('edit')}>편집</Button>
             </>
-          }
+          )}
         </SheetFooter>
       </SheetContent>
     </Sheet>

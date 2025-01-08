@@ -27,7 +27,7 @@ import {
 
 interface Props extends Omit<TextInputProps, 'error' | 'required' | 'value'> {
   required?: boolean;
-  label: string;
+  label?: string;
   error?: string;
   left?: React.ReactNode;
   right?: React.ReactNode;
@@ -55,9 +55,11 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
 
   return (
     <InputField className="w-full">
-      <InputLabel>
-        {label} {required && <span className="text-tint-red">*</span>}
-      </InputLabel>
+      {label && (
+        <InputLabel>
+          {label} {required && <span className="text-tint-red">*</span>}
+        </InputLabel>
+      )}
       <div className="input-container flex gap-2">
         <InputBox className="w-full flex-1">
           {left && (

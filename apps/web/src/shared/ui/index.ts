@@ -61,3 +61,4 @@ export { default as LanguageSelectBox } from './language-select-box.ui';
 export { default as AnonymousTemplate } from './anonymous-template.ui';
 export { default as ThemeSelectBox } from './theme-select-box.ui';
 export { default as TableSearchPopover } from './table-search-popover/table-search-popover.ui';
+export { default as SheetDetailTable } from './sheet-detail-table.ui';

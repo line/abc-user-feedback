@@ -483,7 +483,8 @@
       "confirm": "확인",
       "next": "다음",
       "previous": "이전",
-      "addFilter": "필터 추가"
+      "addFilter": "필터 추가",
+      "edit": "편집"
     },
     "project-setting-menu": {
       "project-info": "Project 정보",

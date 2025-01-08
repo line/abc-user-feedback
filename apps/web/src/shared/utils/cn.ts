@@ -15,8 +15,38 @@
  */
 import { clsx } from 'clsx';
 import type { ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { extendTailwindMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+  const customTwMerge = extendTailwindMerge({
+    extend: {
+      classGroups: {
+        'font-size': [
+          'text-title-h1',
+          'text-title-h2',
+          'text-title-h3',
+          'text-title-h4',
+          'text-title-h5',
+          'text-small-normal',
+          'text-small-strong',
+          'text-small-underline',
+          'text-small-delete',
+          'text-base-normal',
+          'text-base-strong',
+          'text-base-underline',
+          'text-base-delete',
+          'text-large-normal',
+          'text-large-strong',
+          'text-large-underline',
+          'text-large-delete',
+          'text-xlarge-normal',
+          'text-xlarge-strong',
+          'text-xlarge-underline',
+          'text-xlarge-delete',
+        ],
+      },
+    },
+  });
+
+  return customTwMerge(clsx(inputs));
 }

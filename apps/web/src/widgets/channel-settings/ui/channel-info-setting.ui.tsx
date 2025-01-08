@@ -122,12 +122,12 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
             {t('v2.button.name.delete', { name: 'Channel' })}
           </Button>
           <Button
+            type="submit"
             form="channelInfo"
             disabled={
-              !perms.includes('channel_update') ||
-              !methods.formState.isDirty ||
-              isPending
+              !perms.includes('channel_update') || !methods.formState.isDirty
             }
+            loading={isPending}
           >
             {t('button.save')}
           </Button>

@@ -15,46 +15,46 @@
  */
 import type { TFunction } from 'next-i18next';
 
-import type { ColorType } from '@ufb/ui';
+import type { Color } from '@ufb/react';
 
 import type { IssueStatus } from '@/entities/issue';
 
 export interface IssuesItem {
   key: IssueStatus;
+  status: IssueStatus;
   name: string;
-  color: ColorType;
-  bgClassName?: string;
+  color: Color;
 }
 
 export const ISSUES: (t: TFunction) => IssuesItem[] = (t) => [
   {
     key: 'INIT',
+    status: 'INIT',
     name: t('text.issue.init'),
-    color: 'red',
-    bgClassName: 'bg-yellow-50',
+    color: 'orange',
   },
   {
     key: 'ON_REVIEW',
+    status: 'ON_REVIEW',
     name: t('text.issue.onReview'),
-    color: 'blue',
-    bgClassName: 'bg-green-50',
+    color: 'green',
   },
   {
     key: 'IN_PROGRESS',
+    status: 'IN_PROGRESS',
     name: t('text.issue.inProgress'),
-    color: 'yellow',
-    bgClassName: 'bg-teal-50',
+    color: 'blue',
   },
   {
     key: 'RESOLVED',
+    status: 'RESOLVED',
     name: t('text.issue.resolved'),
-    color: 'green',
-    bgClassName: 'bg-slate-50',
+    color: 'default',
   },
   {
     key: 'PENDING',
+    status: 'PENDING',
     name: t('text.issue.pending'),
-    color: 'purple',
-    bgClassName: 'bg-indigo-50',
+    color: 'red',
   },
 ];

@@ -35,6 +35,7 @@ import { client, useOAIMutation } from '@/shared';
 import { IssueBadge, useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
+import { useFeedbackSearch } from '../lib';
 import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
 
 interface IProps {
@@ -43,7 +44,7 @@ interface IProps {
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { issues, feedbackId } = props;
+  const { feedbackId } = props;
 
   const { t } = useTranslation();
 
@@ -55,11 +56,24 @@ const IssueCell: React.FC<IProps> = (props) => {
   const throttledvalue = useThrottle(inputValue, 500);
 
   const queryClient = useQueryClient();
+
+  const { data } = useFeedbackSearch(
+    projectId,
+    channelId,
+    { query: { ids: [feedbackId] } },
+    { enabled: !props.issues },
+  );
+
+  const issues = (props.issues ?? data?.items[0]?.issues ?? []) as Issue[];
+
   const refetch = async () => {
     await queryClient.invalidateQueries({
       queryKey: [
         '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
       ],
+    });
+    await queryClient.invalidateQueries({
+      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
     });
   };
   const {
@@ -123,7 +137,9 @@ const IssueCell: React.FC<IProps> = (props) => {
       className="flex flex-wrap items-center gap-1 rounded"
       onClick={(e) => e.stopPropagation()}
     >
-      {issues?.map((issue) => <IssueBadge key={issue.id} issue={issue} />)}
+      {issues.map((issue) => (
+        <IssueBadge key={issue.id} issue={issue} />
+      ))}
       <Combobox>
         <ComboboxTrigger asChild>
           <Tag variant="secondary" className="cursor-pointer">
@@ -143,7 +159,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 </span>
               }
             >
-              {issues?.map((issue) => (
+              {issues.map((issue) => (
                 <ComboboxItem
                   key={issue.id}
                   onSelect={() => detecthIssue({ issueId: issue.id })}
@@ -164,7 +180,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 }
               >
                 {allIssues.items
-                  .filter((v) => !issues?.some((issue) => issue.id === v.id))
+                  .filter((v) => !issues.some((issue) => issue.id === v.id))
                   .map((issue) => (
                     <ComboboxItem
                       key={issue.id}
@@ -178,7 +194,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               </ComboboxGroup>
             )}
             {!!inputValue &&
-              !issues?.some((issue) => issue.name === inputValue) &&
+              !issues.some((issue) => issue.name === inputValue) &&
               !isLoading &&
               !allIssues?.items.some((issue) => issue.name === inputValue) && (
                 <div

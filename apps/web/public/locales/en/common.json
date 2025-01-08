@@ -474,6 +474,13 @@
   },
   "v2": {
     "button": {
+      "name": {
+        "create": "Create {{name}}",
+        "delete": "Delete {{name}}",
+        "register": "Register {{name}}",
+        "add": "Add {{name}}",
+        "invite": "Invite {{name}}"
+      },
       "create": "Create",
       "delete": "Delete",
       "register": "Register",
@@ -483,14 +490,8 @@
       "confirm": "Confirm",
       "next": "Next",
       "previous": "Previous",
-      "name": {
-        "create": "Create {{name}}",
-        "delete": "Delete {{name}}",
-        "register": "Register {{name}}",
-        "add": "Add {{name}}",
-        "invite": "Invite {{name}}"
-      },
-      "addFilter": "Add Filter"
+      "addFilter": "Add Filter",
+      "edit": "Edit"
     },
     "project-setting-menu": {
       "project-info": "Project Information",

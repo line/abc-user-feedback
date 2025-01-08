@@ -489,7 +489,8 @@
       "confirm": "确认",
       "next": "下一步",
       "previous": "上一步",
-      "addFilter": "添加过滤器"
+      "addFilter": "添加过滤器",
+      "edit": "编辑"
     },
     "project-setting-menu": {
       "project-info": "Project信息",

@@ -124,6 +124,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     onChange(currentValue);
     setIsOpen(false);
   };
+  console.log('value: ', value);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -131,10 +132,11 @@ const DateRangePicker: React.FC<IProps> = (props) => {
         <Button variant="outline" className="gap-2">
           <Icon name="RiCalendar2Fill" />
           Date{' '}
-          <Badge variant="subtle">
-            {value &&
-              `${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
-          </Badge>
+          {value && (
+            <Badge variant="subtle">
+              {`${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
+            </Badge>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-2">

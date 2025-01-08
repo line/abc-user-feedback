@@ -67,7 +67,7 @@ export const getColumns = (fieldData: FieldInfo[]) =>
       ),
       cell: (info) => (
         <ExpandableText isExpanded={info.row.getIsExpanded()}>
-          {info.getValue()}
+          {info.getValue() as number}
         </ExpandableText>
       ),
       enableSorting: false,
@@ -104,7 +104,7 @@ export const getColumns = (fieldData: FieldInfo[]) =>
             <FeedbackCell
               field={field}
               isExpanded={info.row.getIsExpanded()}
-              value={info.getValue() as unknown}
+              value={info.getValue()}
             />
           ),
           enableSorting:

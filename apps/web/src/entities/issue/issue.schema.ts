@@ -14,13 +14,27 @@
  * under the License.
  */
 
-import type { Issue } from '../issue';
+import { z } from 'zod';
 
-export type Feedback = Record<string, unknown>;
-// export interface Feedback {
-//   id: number;
-//   createdAt: string;
-//   updatedAt: string;
-//   issues?: Issue[];
-//   [key: string]: unknown;
-// }
+export const issueSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string().nullable(),
+  feedbackCount: z.number(),
+  status: z.union([
+    z.literal('INIT'),
+    z.literal('ON_REVIEW'),
+    z.literal('IN_PROGRESS'),
+    z.literal('RESOLVED'),
+    z.literal('PENDING'),
+  ]),
+  externalIssueId: z.string().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string().nullable(),
+});
+export const issueFormSchema = issueSchema.omit({
+  id: true,
+  feedbackCount: true,
+  updatedAt: true,
+  createdAt: true,
+});

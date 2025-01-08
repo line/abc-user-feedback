@@ -981,8 +981,8 @@ export interface components {
             items: components["schemas"]["GetAllUserResponse"][];
         };
         TimeRange: {
-            gte: string;
-            lt: string;
+            "gte (UTC)": string;
+            "lt (UTC)": string;
         };
         UserSearchQuery: {
             email?: string;

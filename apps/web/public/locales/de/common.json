@@ -489,7 +489,8 @@
       "confirm": "Bestätigen",
       "next": "Weiter",
       "previous": "Zurück",
-      "addFilter": "Filter hinzufügen"
+      "addFilter": "Filter hinzufügen",
+      "edit": "Bearbeiten"
     },
     "project-setting-menu": {
       "project-info": "Project-Informationen",
