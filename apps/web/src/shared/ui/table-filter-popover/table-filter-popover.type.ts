@@ -13,4 +13,27 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './table-search-popover.type';
+export type TableFilterFieldFotmat =
+  | 'text'
+  | 'keyword'
+  | 'number'
+  | 'date'
+  | 'select'
+  | 'multiSelect';
+
+export type TableFilterCondition = 'CONTAINS' | 'IS' | 'BETWEEN';
+export type TableFilterOperator = 'AND' | 'OR';
+
+export interface TableFilterField {
+  key: string;
+  name: string;
+  format: TableFilterFieldFotmat;
+  options?: { key: string; name: string }[];
+}
+export interface TableFilter {
+  value?: string;
+  key: string;
+  name: string;
+  format: TableFilterFieldFotmat;
+  condition: TableFilterCondition;
+}

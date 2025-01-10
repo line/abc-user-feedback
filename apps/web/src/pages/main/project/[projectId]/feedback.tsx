@@ -28,17 +28,21 @@ import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
+import type {
+  TableFilter,
+  TableFilterFieldFotmat,
+  TableFilterOperator,
+} from '@/shared';
 import {
   BasicTable,
   DateRangePicker,
   DEFAULT_LOCALE,
+  TableFilterPopover,
   TablePagination,
-  TableSearchPopover,
   useOAIMutation,
   useOAIQuery,
 } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
-import type { FilterFieldFotmat } from '@/shared/ui/table-search-popover';
 import {
   FeedbackDetailSheet,
   FeedbackTableDownload,
@@ -62,6 +66,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     'channelId',
     parseAsInteger.withDefault(-1),
   );
+  const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
+  const [operator, setOperator] = useState<TableFilterOperator>('AND');
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -85,12 +91,21 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId: currentChannelId, projectId },
   });
-  const query = {
+
+  const createdAtQuery = {
     createdAt: {
-      gte: dayjs(dateRange?.startDate).startOf('day').toISOString(),
-      lt: dayjs(dateRange?.endDate).endOf('day').toISOString(),
+      gte: dayjs(dateRange?.startDate).format('YYYY-MM-DD'),
+      lt: dayjs(dateRange?.endDate).add(1, 'day').format('YYYY-MM-DD'),
     },
+    condition: 'IS',
   };
+  const queries = useMemo(() => {
+    return tableFilters.map((filter) => ({
+      [filter.key]:
+        filter.format === 'number' ? Number(filter.value) : filter.value,
+      condition: filter.condition,
+    }));
+  }, [tableFilters]);
 
   const {
     data: feedbackData,
@@ -100,7 +115,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     projectId,
     currentChannelId,
     {
-      query,
+      queries: [createdAtQuery, ...queries],
+      operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
     },
@@ -206,20 +222,22 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
-          <TableSearchPopover
+          <TableFilterPopover
             filterFields={fields.map((field) => ({
               key: field.key,
               name: field.name,
               options: field.key === 'issues' ? [] : field.options,
-              format: field.format as FilterFieldFotmat,
+              format: field.format as TableFilterFieldFotmat,
             }))}
-            onSubmit={(filters) => {
-              console.log(filters);
+            onSubmit={(filters, op) => {
+              setTableFilters(filters);
+              setOperator(op);
             }}
+            tableFilters={tableFilters}
           />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
-          <FeedbackTableDownload fields={fields} query={query} />
+          <FeedbackTableDownload fields={fields} query={{}} />
         </div>
       </div>
       <BasicTable

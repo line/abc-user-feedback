@@ -13,24 +13,5 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export type FilterFieldFotmat =
-  | 'text'
-  | 'keyword'
-  | 'number'
-  | 'date'
-  | 'select'
-  | 'multiSelect';
-
-export type Operator = 'contains' | 'is';
-
-export interface FilterField {
-  key: string;
-  name: string;
-  format: FilterFieldFotmat;
-  options?: { key: string; name: string }[];
-}
-export interface Filter {
-  value?: string;
-  key: string;
-  operator: 'contains' | 'is' | 'between';
-}
+export * from './table-filter-popover.type';
+export { default as TableFilterPopover } from './table-filter-popover.ui';

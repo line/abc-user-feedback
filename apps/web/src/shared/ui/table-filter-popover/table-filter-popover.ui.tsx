@@ -18,6 +18,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
+  Badge,
   Button,
   Icon,
   Popover,
@@ -28,37 +29,39 @@ import {
 
 import { ComboboxSelectInput, SelectInput } from '@/shared';
 
-import TableSearchPopoverInput from './table-search-popover-input.ui';
-import TableSearchPopoverSelectOperator from './table-search-popover-select-operator.ui';
+import TableFilterPopoverInput from './table-filter-popover-input.ui';
+import TableFilterPopoverSelectOperator from './table-filter-popover-select-operator.ui';
 import type {
-  Filter,
-  FilterField,
-  FilterFieldFotmat,
-  Operator,
-} from './table-search-popover.type';
+  TableFilter,
+  TableFilterCondition,
+  TableFilterField,
+  TableFilterFieldFotmat,
+  TableFilterOperator,
+} from './table-filter-popover.type';
 
-const OperatorMap: Record<FilterFieldFotmat, Operator> = {
-  date: 'is',
-  keyword: 'is',
-  multiSelect: 'is',
-  select: 'is',
-  number: 'is',
-  text: 'contains',
+const OperatorMap: Record<TableFilterFieldFotmat, TableFilterCondition> = {
+  date: 'IS',
+  keyword: 'IS',
+  multiSelect: 'IS',
+  select: 'IS',
+  number: 'IS',
+  text: 'CONTAINS',
 };
 
 interface Props {
-  filterFields: FilterField[];
-  onSubmit: (filters: Filter[], joinOperator: 'and' | 'or') => void;
+  tableFilters: TableFilter[];
+  filterFields: TableFilterField[];
+  onSubmit: (filters: TableFilter[], operator: TableFilterOperator) => void;
 }
 
-const TableSearchPopover = (props: Props) => {
-  const { filterFields, onSubmit } = props;
+const TableFilerPopover = (props: Props) => {
+  const { filterFields, onSubmit, tableFilters } = props;
   const { t } = useTranslation();
 
-  const [filters, setFilters] = useState<Filter[]>([]);
+  const [filters, setFilters] = useState<TableFilter[]>(tableFilters);
   const [open, setOpen] = useState(false);
 
-  const [joinOperator, setJoinOperator] = useState<'and' | 'or'>('and');
+  const [operator, setOperator] = useState<TableFilterOperator>('AND');
 
   useEffect(() => {
     if (filters.length !== 0) return;
@@ -71,11 +74,16 @@ const TableSearchPopover = (props: Props) => {
     void setFilters([...filters, filterField]);
   };
 
-  const updateFilter = (index: number, field: FilterField) => {
+  const updateFilter = (index: number, field: TableFilterField) => {
     setFilters(
       filters.map((filter, i) =>
         i === index ?
-          { key: field.key, operator: OperatorMap[field.format] }
+          {
+            key: field.key,
+            name: field.name,
+            format: field.format,
+            condition: OperatorMap[field.format],
+          }
         : filter,
       ),
     );
@@ -86,9 +94,9 @@ const TableSearchPopover = (props: Props) => {
 
   const resetFilters = () => {
     if (!filterFields[0]) return;
-    const { format, key } = filterFields[0];
-    setFilters([{ key, operator: OperatorMap[format] }]);
-    setJoinOperator('and');
+    const { format, key, name } = filterFields[0];
+    setFilters([{ key, condition: OperatorMap[format], format, name }]);
+    setOperator('AND');
   };
 
   const onChangeValue = (index: number, value: string) => {
@@ -101,17 +109,17 @@ const TableSearchPopover = (props: Props) => {
     return filters[index]?.value;
   };
 
-  const renderOperator = (filter: Filter) => {
+  const renderOperator = (filter: TableFilter) => {
     const filterField = filterFields.find((field) => field.key === filter.key);
     if (!filterField) return <></>;
-    return <TableSearchPopoverSelectOperator filterField={filterField} />;
+    return <TableFilterPopoverSelectOperator filterField={filterField} />;
   };
 
-  const renderInput = (filter: Filter, index: number) => {
+  const renderInput = (filter: TableFilter, index: number) => {
     const filterField = filterFields.find((field) => field.key === filter.key);
     if (!filterField) return <></>;
     return (
-      <TableSearchPopoverInput
+      <TableFilterPopoverInput
         filterField={filterField}
         onChange={(value) => onChangeValue(index, value)}
         value={getValue(index)}
@@ -124,11 +132,14 @@ const TableSearchPopover = (props: Props) => {
       <PopoverTrigger asChild>
         <Button variant="outline">
           <Icon name="RiFilter3Line" />
-          Search
+          Filter
+          {tableFilters.length > 0 && (
+            <Badge variant="subtle">{tableFilters.length}</Badge>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="min-w-[500px] p-4">
-        <p className="text-title-h5">Search</p>
+        <p className="text-title-h5">Filter</p>
         <div className="py-4">
           <table>
             <tbody>
@@ -140,20 +151,20 @@ const TableSearchPopover = (props: Props) => {
                     : index === 1 ?
                       <SelectInput
                         options={[
-                          { label: 'And', value: 'and' },
-                          { label: 'Or', value: 'or' },
+                          { label: 'And', value: 'AND' },
+                          { label: 'Or', value: 'OR' },
                         ]}
-                        value={joinOperator}
+                        value={operator}
                         onChange={(value) =>
-                          setJoinOperator(value as 'and' | 'or')
+                          setOperator(value as TableFilterOperator)
                         }
                       />
                     : <SelectInput
                         options={[
-                          { label: 'And', value: 'and' },
-                          { label: 'Or', value: 'or' },
+                          { label: 'And', value: 'AND' },
+                          { label: 'Or', value: 'OR' },
                         ]}
-                        value={joinOperator}
+                        value={operator}
                         disabled
                       />
                     }
@@ -161,17 +172,16 @@ const TableSearchPopover = (props: Props) => {
                   <td>
                     <ComboboxSelectInput
                       onChange={(value) => {
-                        console.log('value: ', value);
                         const field = filterFields.find(
-                          (field) => field.key === value,
+                          (field) => field.name === value,
                         );
                         if (!field) return;
                         updateFilter(index, field);
                       }}
-                      value={filter.key}
+                      value={filter.name}
                       options={filterFields.map((field) => ({
                         label: field.name,
-                        value: field.key,
+                        value: field.name,
                       }))}
                     />
                   </td>
@@ -202,7 +212,7 @@ const TableSearchPopover = (props: Props) => {
             </PopoverClose>
             <Button
               onClick={() => {
-                onSubmit(filters, joinOperator);
+                onSubmit(filters, operator);
                 setOpen(false);
               }}
             >
@@ -215,4 +225,4 @@ const TableSearchPopover = (props: Props) => {
   );
 };
 
-export default TableSearchPopover;
+export default TableFilerPopover;

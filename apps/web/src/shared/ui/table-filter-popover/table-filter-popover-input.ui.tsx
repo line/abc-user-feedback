@@ -27,15 +27,15 @@ import {
 } from '@ufb/react';
 
 import { ComboboxSelectInput } from '../inputs';
-import type { FilterField } from './table-search-popover.type';
+import type { TableFilterField } from './table-filter-popover.type';
 
 interface Props {
-  filterField: FilterField;
+  filterField: TableFilterField;
   onChange: (value: string) => void;
   value?: string;
 }
 
-const TableSearchPopoverInput = (props: Props) => {
+const TableFilterPopoverInput = (props: Props) => {
   const { filterField, onChange, value } = props;
   const { t } = useTranslation();
 
@@ -91,4 +91,4 @@ const TableSearchPopoverInput = (props: Props) => {
   );
 };
 
-export default TableSearchPopoverInput;
+export default TableFilterPopoverInput;

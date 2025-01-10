@@ -15,13 +15,13 @@
  */
 
 import { SelectInput } from '../inputs';
-import type { FilterField } from './table-search-popover.type';
+import type { TableFilterField } from './table-filter-popover.type';
 
 interface Props {
-  filterField: FilterField;
+  filterField: TableFilterField;
 }
 
-const TableSearchPopoverSelectOperator = (props: Props) => {
+const TableFilterPopoverSelectOperator = (props: Props) => {
   const { filterField } = props;
   const operatorOptions = {
     text: [{ value: 'contains', label: 'Contains' }],
@@ -40,4 +40,4 @@ const TableSearchPopoverSelectOperator = (props: Props) => {
   );
 };
 
-export default TableSearchPopoverSelectOperator;
+export default TableFilterPopoverSelectOperator;

@@ -1134,24 +1134,7 @@ export interface components {
             name: string;
             permissions: ("feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_create" | "issue_update" | "issue_delete" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
         };
-        Query: {
-            /**
-             * @description Search text for feedback data
-             * @example payment
-             */
-            searchText?: string;
-            /** @example {
-             *       "gte": "2023-01-01",
-             *       "lt": "2023-12-31"
-             *     } */
-            createdAt?: components["schemas"]["TimeRange"];
-            /** @example {
-             *       "gte": "2023-01-01",
-             *       "lt": "2023-12-31"
-             *     } */
-            updatedAt?: components["schemas"]["TimeRange"];
-        };
-        FindFeedbacksByChannelIdRequestDto: {
+        FindFeedbacksByChannelIdRequestDtoV2: {
             /**
              * @default 10
              * @example 10
@@ -1163,7 +1146,9 @@ export interface components {
              */
             page?: number;
             /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
-            query?: components["schemas"]["Query"];
+            queries?: string[];
+            /** @description You can concatenate queries with 'AND' or 'OR' operators. */
+            operator?: string;
             /**
              * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
              * @example {
@@ -1213,7 +1198,9 @@ export interface components {
              */
             page?: number;
             /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
-            query?: components["schemas"]["Query"];
+            queries?: string[];
+            /** @description You can concatenate queries with 'AND' or 'OR' operators. */
+            operator?: string;
             /**
              * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
              * @example {
@@ -2379,7 +2366,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["FindFeedbacksByChannelIdRequestDto"];
+                "application/json": components["schemas"]["FindFeedbacksByChannelIdRequestDtoV2"];
             };
         };
         responses: {
