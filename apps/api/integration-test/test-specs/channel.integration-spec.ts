@@ -91,6 +91,7 @@ describe('ChannelController (integration)', () => {
 
     const dto = new SetupTenantRequestDto();
     dto.siteName = faker.string.sample();
+    dto.password = '12345678';
     await tenantService.create(dto);
 
     project = await projectService.create({
