@@ -19,7 +19,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { TenantNotFoundException } from '@/domains/admin/tenant/exceptions';
 import { NotAllowedDomainException } from '@/domains/admin/user/exceptions';
 import { UserService } from '@/domains/admin/user/user.service';
 import { TenantEntity } from '../../tenant/tenant.entity';

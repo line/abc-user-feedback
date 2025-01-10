@@ -14,23 +14,27 @@
  * under the License.
  */
 import type { TimeRange } from '@/common/dtos';
+import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 
-export class OsQueryDto {
-  bool: {
-    must: MustItem[];
-    should?: MustItem[];
-  };
-}
-
-export class MustItem {
-  match_phrase?: Record<string, string>;
-  range?: Record<string, TimeRange>;
-  term?: Record<string, string>;
-  ids?: {
-    values: string[];
-  };
-  bool?: {
-    must: MustItem[];
-    should?: MustItem[];
-  };
+export class ScrollFeedbacksDtoV2 {
+  channelId: number;
+  queries?: {
+    createdAt?: TimeRange;
+    updatedAt?: TimeRange;
+    ids?: number[];
+    [key: string]:
+      | string
+      | string[]
+      | TimeRange
+      | number
+      | number[]
+      | undefined;
+    condition: QueryV2ConditionsEnum;
+  }[];
+  sort?: Record<string, SortMethodEnum>;
+  operator?: 'AND' | 'OR';
+  fields: FieldEntity[];
+  size: number;
+  scrollId: string | null;
 }

@@ -35,6 +35,7 @@ import { FeedbackService } from './feedback.service';
 const MockFeedbackService = {
   create: jest.fn(),
   findByChannelId: jest.fn(),
+  findByChannelIdV2: jest.fn(),
   upsertFeedbackItem: jest.fn(),
   updateFeedback: jest.fn(),
   deleteByIds: jest.fn(),
@@ -91,7 +92,7 @@ describe('FeedbackController', () => {
     );
 
     await feedbackController.findByChannelId(channelId, dto);
-    expect(MockFeedbackService.findByChannelId).toBeCalledTimes(1);
+    expect(MockFeedbackService.findByChannelIdV2).toBeCalledTimes(1);
   });
   it('exportFeedbacks', async () => {
     const projectId = faker.number.int();

@@ -13,12 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { FieldFormatEnum, isSelectFieldFormat } from './field-format.enum';
-export { FieldPropertyEnum } from './field-property.enum';
-export { FieldStatusEnum } from './field-status.enum';
-export { IssueStatusEnum } from './issue-status.enum';
-export { SortMethodEnum } from './sort-method.enum';
-export { EventTypeEnum } from './event-type.enum';
-export { EventStatusEnum } from './event-status.enum';
-export { WebhookStatusEnum } from './webhook-status.enum';
-export { QueryV2ConditionsEnum } from './query-v2-conditions.enum';
+export enum QueryV2ConditionsEnum {
+  CONTAINS = 'CONTAINS',
+  IS = 'IS',
+}

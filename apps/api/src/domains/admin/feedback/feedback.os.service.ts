@@ -30,14 +30,17 @@ import type {
   ScrollFeedbacksDto,
   UpdateFeedbackESDto,
 } from './dtos';
+import { FindFeedbacksByChannelIdDtoV2 } from './dtos/find-feedbacks-by-channel-id-v2.dto';
 import type { OsQueryDto } from './dtos/os-query.dto';
 import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import { ScrollFeedbacksDtoV2 } from './dtos/scroll-feedbacks-v2.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
 
 interface OpenSearchQuery {
   bool: {
     must: any[];
+    should?: any[];
   };
 }
 
@@ -225,6 +228,125 @@ export class FeedbackOSService {
     };
   }
 
+  private osQueryBuliderV2(
+    queries: FindFeedbacksByChannelIdDtoV2['queries'],
+    sort: FindFeedbacksByChannelIdDtoV2['sort'] = {},
+    operator = 'AND',
+    fields: FieldEntity[],
+  ): { query: OsQueryDto; sort: string[] } {
+    const fieldsByKey = fields.reduce(
+      (fields: Record<string, FieldEntity>, field) => {
+        fields[field.key] = field;
+        return fields;
+      },
+      {},
+    );
+
+    const combinedOsQuery: OsQueryDto = {
+      bool: {
+        must: [],
+        should: [],
+      },
+    };
+
+    queries?.forEach((query) => {
+      const osQuery = Object.keys(query).reduce(
+        (osQuery: OpenSearchQuery, fieldKey) => {
+          if (fieldKey === 'ids') {
+            osQuery.bool.must.push({
+              ids: {
+                values: (query[fieldKey] ?? []).map((id) => id.toString()),
+              },
+            });
+
+            return osQuery;
+          }
+
+          if (fieldKey === 'condition') return osQuery;
+
+          if (!Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)) {
+            throw new BadRequestException('bad key in query');
+          }
+
+          const { format, key, options } = fieldsByKey[fieldKey];
+
+          if (format === FieldFormatEnum.select) {
+            osQuery.bool.must.push({
+              match_phrase: {
+                [key]: (options ?? []).find(
+                  (option) => option.key === query[fieldKey],
+                )?.key,
+              },
+            });
+          } else if (format === FieldFormatEnum.multiSelect) {
+            for (const value of query[fieldKey] as string[]) {
+              osQuery.bool.must.push({
+                match_phrase: {
+                  [key]: (options ?? []).find((option) => option.key === value)
+                    ?.key,
+                },
+              });
+            }
+          } else if (format === FieldFormatEnum.date) {
+            osQuery.bool.must.push({
+              range: {
+                [key]: query[fieldKey] as TimeRange,
+              },
+            });
+          } else if (
+            [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
+          ) {
+            osQuery.bool.must.push({
+              match_phrase: {
+                [key]: query[fieldKey] as string,
+              },
+            });
+          } else {
+            osQuery.bool.must.push({
+              term: {
+                [key]: query[fieldKey] as string,
+              },
+            });
+          }
+
+          return osQuery;
+        },
+        { bool: { must: [] } },
+      );
+
+      if (operator === 'AND') {
+        combinedOsQuery.bool.must.push(osQuery);
+      } else if (operator === 'OR') {
+        combinedOsQuery.bool.should?.push(osQuery);
+      } else {
+        throw new BadRequestException('Invalid operator');
+      }
+    });
+
+    return {
+      query: combinedOsQuery,
+      sort:
+        Object.keys(sort).length !== 0 ?
+          Object.keys(sort).map((fieldKey) => {
+            if (!Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)) {
+              throw new BadRequestException('bad key in sort');
+            }
+            const { key, format } = fieldsByKey[fieldKey];
+            if (this.isUnsortableFormat(format)) {
+              throw new BadRequestException('unsortable format', format);
+            }
+            if (isInvalidSortMethod(sort[fieldKey])) {
+              throw new BadRequestException('invalid sort method');
+            }
+
+            const sortMethod =
+              sort[fieldKey] === SortMethodEnum.ASC ? 'asc' : 'desc';
+            return key + ':' + sortMethod;
+          })
+        : ['id:desc'],
+    };
+  }
+
   async create({ channelId, feedback }: CreateFeedbackOSDto) {
     const osFeedbackData = {
       ...feedback.data,
@@ -286,6 +408,59 @@ export class FeedbackOSService {
     };
   }
 
+  async findByChannelIdV2(
+    dto: FindFeedbacksByChannelIdDtoV2,
+  ): Promise<Pagination<Feedback, IPaginationMeta>> {
+    const { channelId, limit, page, queries, sort, operator, fields } = dto;
+
+    for (let i = 0; i < (queries?.length ?? 0); i++) {
+      if (queries?.[i].issueIds) {
+        const feedbackIds = await this.issueIdsToFeedbackIds(
+          queries[i].issueIds as number[],
+        );
+
+        delete queries[i].issueIds;
+        if (queries[i].ids) {
+          queries[i].ids = [...(queries[i].ids ?? []), ...feedbackIds];
+        } else {
+          queries[i].ids = feedbackIds;
+        }
+      }
+    }
+
+    const osQuery = this.osQueryBuliderV2(
+      queries,
+      sort,
+      operator,
+      fields ?? [],
+    );
+    this.logger.log(osQuery);
+
+    const { items, total }: { items: Record<string, any>[]; total: number } =
+      await this.osRepository.getData({
+        index: channelId.toString(),
+        limit,
+        page,
+        ...osQuery,
+      });
+
+    const totalItems = await this.osRepository.getTotal(
+      channelId.toString(),
+      osQuery.query,
+    );
+
+    return {
+      items,
+      meta: {
+        itemCount: items.length,
+        totalItems,
+        itemsPerPage: limit,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
   async scroll(dto: ScrollFeedbacksDto) {
     const {
       channelId,
@@ -307,6 +482,42 @@ export class FeedbackOSService {
     }
 
     const osQuery = this.osQueryBulider(query, sort, fields);
+    this.logger.log(osQuery);
+    return await this.osRepository.scroll({
+      index: channelId.toString(),
+      size,
+      scrollId: currentScrollId,
+      ...osQuery,
+    });
+  }
+
+  async scrollV2(dto: ScrollFeedbacksDtoV2) {
+    const {
+      channelId,
+      size,
+      queries,
+      operator,
+      sort,
+      fields,
+      scrollId: currentScrollId,
+    } = dto;
+
+    for (let i = 0; i < (queries?.length ?? 0); i++) {
+      if (queries?.[i].issueIds) {
+        const feedbackIds = await this.issueIdsToFeedbackIds(
+          queries[i].issueIds as number[],
+        );
+
+        delete queries[i].issueIds;
+        if (queries[i].ids) {
+          queries[i].ids = [...(queries[i].ids ?? []), ...feedbackIds];
+        } else {
+          queries[i].ids = feedbackIds;
+        }
+      }
+    }
+
+    const osQuery = this.osQueryBuliderV2(queries, sort, operator, fields);
     this.logger.log(osQuery);
     return await this.osRepository.scroll({
       index: channelId.toString(),

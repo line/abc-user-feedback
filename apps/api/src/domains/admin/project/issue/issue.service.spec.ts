@@ -16,6 +16,7 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import type { SpyInstance } from 'jest-mock';
 import type { Repository, SelectQueryBuilder } from 'typeorm';
 import { Like } from 'typeorm';
 
@@ -94,9 +95,15 @@ describe('IssueService test suite', () => {
   describe('findIssuesByProjectId', () => {
     const projectId = faker.number.int();
     let dto: FindIssuesByProjectIdDto;
+    let spy;
+
     beforeEach(() => {
       dto = new FindIssuesByProjectIdDto();
       dto.projectId = projectId;
+    });
+
+    afterEach(() => {
+      (spy as SpyInstance).mockRestore();
     });
 
     it('finding issues succeeds with the createdAt query', async () => {
@@ -112,11 +119,11 @@ describe('IssueService test suite', () => {
           () =>
             createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
         );
-      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
+      spy = jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
+      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         order: {},
         where: [
@@ -164,11 +171,11 @@ describe('IssueService test suite', () => {
           () =>
             createQueryBuilder as unknown as SelectQueryBuilder<IssueEntity>,
         );
-      jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
+      spy = jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
+      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         order: {},
         where: [
@@ -196,7 +203,7 @@ describe('IssueService test suite', () => {
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
+      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         order: {},
         where: [
@@ -224,7 +231,7 @@ describe('IssueService test suite', () => {
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
+      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         order: {},
         where: [
@@ -264,7 +271,7 @@ describe('IssueService test suite', () => {
 
       const { meta } = await issueService.findIssuesByProjectId(dto);
 
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
+      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         order: {},
         where: [

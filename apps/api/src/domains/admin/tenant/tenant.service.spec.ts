@@ -58,6 +58,7 @@ describe('TenantService', () => {
     it('creation succeeds with valid data', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
       jest.spyOn(userRepo, 'save');
 

@@ -27,7 +27,6 @@ import { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
   NotAllowedDomainException,
-  NotAllowedUserCreateException,
   UserAlreadyExistsException,
 } from './exceptions';
 import { UserPasswordService } from './user-password.service';

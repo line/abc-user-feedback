@@ -17,7 +17,7 @@ import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import type { Repository, SelectQueryBuilder } from 'typeorm';
-import { Like } from 'typeorm';
+import { In, Like } from 'typeorm';
 
 import { SortMethodEnum } from '@/common/enums';
 import {
@@ -66,7 +66,7 @@ describe('UserService', () => {
         createdAt: SortMethodEnum.DESC,
       };
       dto.query = {
-        projectId: faker.number.int(),
+        projectId: [faker.number.int()],
         email: faker.internet.email(),
       };
       jest
@@ -82,11 +82,11 @@ describe('UserService', () => {
 
       expect(currentPage).toEqual(dto.options.page);
       expect(itemCount).toBeLessThanOrEqual(+dto.options.limit);
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(1);
+      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         where: {
           email: Like(`%${dto.query.email}%`),
-          members: { role: { project: { id: dto.query.projectId } } },
+          members: { role: { project: { id: In(dto.query.projectId!) } } },
         },
         order: dto.order,
         relations: { members: { role: { project: true } } },

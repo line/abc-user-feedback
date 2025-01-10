@@ -19,7 +19,6 @@ import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
 import { DateTime } from 'luxon';
-import { paginate } from 'nestjs-typeorm-paginate';
 import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
 import { In, Like, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';

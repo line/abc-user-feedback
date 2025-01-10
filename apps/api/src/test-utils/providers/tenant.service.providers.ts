@@ -16,11 +16,14 @@
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { ResetPasswordMailingService } from '@/shared/mailing/reset-password-mailing.service';
+
 import { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
+import { UserPasswordService } from '@/domains/admin/user/user-password.service';
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import {
   FeedbackRepositoryStub,
@@ -34,6 +37,8 @@ export const TenantServiceProviders = [
   TenantService,
   SchedulerRegistry,
   SchedulerLockService,
+  UserPasswordService,
+  ResetPasswordMailingService,
   { provide: getRepositoryToken(TenantEntity), useClass: TenantRepositoryStub },
   { provide: getRepositoryToken(UserEntity), useClass: UserRepositoryStub },
   {

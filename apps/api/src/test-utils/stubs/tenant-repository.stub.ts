@@ -65,6 +65,12 @@ export class TenantRepositoryStub {
     return 1;
   }
 
+  setAllowDomains(domains: string[] = []) {
+    if (this.tenant) {
+      this.tenant.allowDomains = domains;
+    }
+  }
+
   setUseOAuth(bool, config) {
     if (this.tenant) {
       this.tenant.useOAuth = bool;

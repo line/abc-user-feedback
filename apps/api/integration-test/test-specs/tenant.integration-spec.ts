@@ -69,6 +69,7 @@ describe('TenantController (integration)', () => {
     it('should create a tenant', async () => {
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
 
       return await request(app.getHttpServer() as Server)
         .post('/admin/tenants')
@@ -79,6 +80,7 @@ describe('TenantController (integration)', () => {
           expect(tenants).toHaveLength(1);
           const [tenant] = tenants;
           for (const key in dto) {
+            if (['email', 'password'].includes(key)) continue;
             const value = dto[key] as string;
             expect(tenant[key]).toEqual(value);
           }
@@ -91,6 +93,7 @@ describe('TenantController (integration)', () => {
       });
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
 
       return request(app.getHttpServer() as Server)
         .post('/admin/tenants')
@@ -166,6 +169,7 @@ describe('TenantController (integration)', () => {
       await tenantRepo.delete({});
       await userRepo.delete({});
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
 
       await request(app.getHttpServer() as Server)
         .post('/admin/tenants')
