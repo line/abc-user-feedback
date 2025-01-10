@@ -28,7 +28,8 @@ import {
 } from '@ufb/react';
 
 import type { Field } from '@/entities/field';
-import { useFeedbackDownload } from '@/widgets/feedback-table/lib';
+
+import useFeedbackDownload from '../lib/use-feedback-download';
 
 interface Props {
   fields: Field[];

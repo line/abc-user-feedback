@@ -30,25 +30,24 @@ import {
   ImagePreviewButton,
   ISSUES,
 } from '@/shared';
+import type { Feedback } from '@/entities/feedback';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
-import type { FeedbackColumnType } from '@/widgets/feedback-table/feedback-table-columns';
-import EditableCell from '@/widgets/feedback-table/ui/editable-cell';
 
 import type { FieldInfo } from '../field.type';
 
-const columnHelper = createColumnHelper<FeedbackColumnType>();
+const columnHelper = createColumnHelper<Feedback>();
 
 interface IProps {
   fields: FieldInfo[];
 }
 
 const PreviewTable: React.FC<IProps> = ({ fields }) => {
-  const [rows, setRows] = useState<FeedbackColumnType[]>([]);
+  const [rows, setRows] = useState<Feedback[]>([]);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const fakeRows: FeedbackColumnType[] = [];
+    const fakeRows: Feedback[] = [];
     const issues: Issue[] = faker.helpers
       .uniqueArray(() => faker.word.sample(), 10)
       .map((v, i) => ({
@@ -62,7 +61,7 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
       }));
 
     for (let i = 1; i <= 10; i++) {
-      const fakeData: FeedbackColumnType = {
+      const fakeData: Feedback = {
         id: i,
         createdAt: dayjs().add(i, 'hour').toString(),
         updatedAt: dayjs().add(i, 'hour').toString(),
@@ -115,13 +114,6 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
                   <IssueBadge key={i} issue={v} />
                 ))}
               </div>
-            : field.property === 'EDITABLE' ?
-              <EditableCell
-                field={field}
-                value={info.getValue() as unknown}
-                isExpanded={info.row.getIsExpanded()}
-                feedbackId={info.row.original.id}
-              />
             : typeof info.getValue() === 'undefined' ? undefined
             : field.format === 'date' ?
               dayjs(info.getValue() as string).format(DATE_TIME_FORMAT)

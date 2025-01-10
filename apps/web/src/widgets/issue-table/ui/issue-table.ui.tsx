@@ -18,14 +18,14 @@ import { useTranslation } from 'next-i18next';
 
 import { Button, Icon } from '@ufb/react';
 
+import type { TableFilterField } from '@/shared';
 import {
   DateRangePicker,
   ISSUES,
-  TableSearchPopover,
+  TableFilterPopover,
   useOAIMutation,
   useOAIQuery,
 } from '@/shared';
-import type { FilterField } from '@/shared/ui/table-search-popover';
 
 import { env } from '@/env';
 import { useIssueQuery } from '../lib';
@@ -52,7 +52,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
   });
 
-  const filterFields: FilterField[] = [
+  const filterFields: TableFilterField[] = [
     {
       format: 'text',
       key: 'name',
@@ -102,9 +102,10 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
-          <TableSearchPopover
+          <TableFilterPopover
             onSubmit={(filters) => console.log(filters)}
             filterFields={filterFields}
+            tableFilters={[]}
           />
         </div>
       </div>

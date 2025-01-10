@@ -60,7 +60,7 @@ const IssueCell: React.FC<IProps> = (props) => {
   const { data } = useFeedbackSearch(
     projectId,
     channelId,
-    { query: { ids: [feedbackId] } },
+    { queries: [{ id: feedbackId, condition: 'IS' }], operator: 'AND' },
     { enabled: !props.issues },
   );
 
