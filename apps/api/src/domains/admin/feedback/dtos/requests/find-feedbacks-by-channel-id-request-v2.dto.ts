@@ -46,6 +46,7 @@ export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
     required: false,
     description:
       "You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key.",
+    type: [QueryV2],
   })
   @IsOptional()
   queries?: QueryV2[];

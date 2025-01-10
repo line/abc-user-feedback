@@ -38,16 +38,6 @@ interface IBody
   > {
   queries: Record<string, unknown>[];
 }
-// interface IBody
-//   extends Omit<
-//     OAIRequestBody<
-//       '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
-//       'post'
-//     >,
-//     'query'
-//   > {
-//   query: Record<string, unknown>;
-// }
 
 const useFeedbackSearch = (
   projectId: number,

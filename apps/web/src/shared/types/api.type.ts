@@ -1134,6 +1134,18 @@ export interface components {
             name: string;
             permissions: ("feedback_download_read" | "feedback_update" | "feedback_delete" | "feedback_issue_update" | "issue_create" | "issue_update" | "issue_delete" | "project_update" | "project_delete" | "project_member_read" | "project_member_create" | "project_member_update" | "project_member_delete" | "project_role_read" | "project_role_create" | "project_role_update" | "project_role_delete" | "project_apikey_read" | "project_apikey_create" | "project_apikey_update" | "project_apikey_delete" | "project_tracker_read" | "project_tracker_update" | "project_webhook_read" | "project_webhook_create" | "project_webhook_update" | "project_webhook_delete" | "channel_create" | "channel_update" | "channel_delete" | "channel_field_read" | "channel_field_update" | "channel_image_read" | "channel_image_update")[];
         };
+        QueryV2: {
+            /** @example {
+             *       "gte": "2023-01-01",
+             *       "lt": "2023-12-31"
+             *     } */
+            createdAt?: components["schemas"]["TimeRange"];
+            /** @example {
+             *       "gte": "2023-01-01",
+             *       "lt": "2023-12-31"
+             *     } */
+            updatedAt?: components["schemas"]["TimeRange"];
+        };
         FindFeedbacksByChannelIdRequestDtoV2: {
             /**
              * @default 10
@@ -1146,7 +1158,7 @@ export interface components {
              */
             page?: number;
             /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
-            queries?: string[];
+            queries?: components["schemas"]["QueryV2"][];
             /** @description You can concatenate queries with 'AND' or 'OR' operators. */
             operator?: string;
             /**
@@ -1198,7 +1210,7 @@ export interface components {
              */
             page?: number;
             /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
-            queries?: string[];
+            queries?: components["schemas"]["QueryV2"][];
             /** @description You can concatenate queries with 'AND' or 'OR' operators. */
             operator?: string;
             /**
