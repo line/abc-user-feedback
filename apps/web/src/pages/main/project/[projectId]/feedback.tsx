@@ -30,6 +30,7 @@ import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
 import type {
   TableFilter,
+  TableFilterCondition,
   TableFilterFieldFotmat,
   TableFilterOperator,
 } from '@/shared';
@@ -97,15 +98,21 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       gte: dayjs(dateRange?.startDate).format('YYYY-MM-DD'),
       lt: dayjs(dateRange?.endDate).add(1, 'day').format('YYYY-MM-DD'),
     },
-    condition: 'IS',
+    condition: 'IS' as TableFilterCondition,
   };
+
   const queries = useMemo(() => {
-    return tableFilters.map((filter) => ({
-      [filter.key]:
-        filter.format === 'number' ? Number(filter.value) : filter.value,
-      condition: filter.condition,
-    }));
-  }, [tableFilters]);
+    return tableFilters
+      .map(
+        (filter) =>
+          ({
+            [filter.key]:
+              filter.format === 'number' ? Number(filter.value) : filter.value,
+            condition: filter.condition,
+          }) as Record<string, unknown>,
+      )
+      .concat(createdAtQuery);
+  }, [createdAtQuery, tableFilters]);
 
   const {
     data: feedbackData,
@@ -115,7 +122,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     projectId,
     currentChannelId,
     {
-      queries: [createdAtQuery, ...queries],
+      queries,
       operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
@@ -237,7 +244,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
-          <FeedbackTableDownload fields={fields} query={{}} />
+          <FeedbackTableDownload fields={fields} queries={queries} />
         </div>
       </div>
       <BasicTable

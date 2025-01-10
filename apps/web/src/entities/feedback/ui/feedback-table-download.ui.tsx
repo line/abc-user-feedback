@@ -32,10 +32,10 @@ import { useFeedbackDownload } from '@/widgets/feedback-table/lib';
 
 interface Props {
   fields: Field[];
-  query: Record<string, unknown>;
+  queries: Record<string, unknown>[];
 }
 
-const FeedbackTableDownload = ({ fields, query }: Props) => {
+const FeedbackTableDownload = ({ fields, queries }: Props) => {
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -50,7 +50,7 @@ const FeedbackTableDownload = ({ fields, query }: Props) => {
   );
 
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {
-    void toast.promise(download({ type, fieldIds, query }), {
+    void toast.promise(download({ type, fieldIds, queries }), {
       success: () => t('main.feedback.download.success'),
       error: () => t('main.feedback.download.error'),
       loading: t('main.feedback.download.loading'),
