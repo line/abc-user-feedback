@@ -18,7 +18,7 @@ services:
     ports:
       - 13306:3306
     volumes:
-      - ./volumes/mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
     networks:
       - app_network
 
@@ -42,7 +42,7 @@ services:
     ports:
       - 13307:3306
     volumes:
-      - ./volumes/mysql-for-e2e:/var/lib/mysql-for-e2e
+      - mysql-for-e2e:/var/lib/mysql-for-e2e
     networks:
       - app_network
 
@@ -55,7 +55,7 @@ services:
       - 25:25
       - 143:143
     volumes:
-      - ./volumes/smtp4dev:/smtp4dev
+      - smtp4dev:/smtp4dev
     networks:
       - app_network
 
@@ -80,7 +80,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - ./volumes/opensearch:/usr/share/opensearch/data
+      - opensearch:/usr/share/opensearch/data
     ports:
       - 9200:9200
       - 9600:9600
@@ -104,3 +104,9 @@ services:
 
 networks:
   app_network:
+
+volumes:
+  mysql:
+  mysql-for-e2e:
+  smtp4dev:
+  opensearch:
