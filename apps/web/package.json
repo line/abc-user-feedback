@@ -109,7 +109,6 @@
     "prettier": "catalog:",
     "tailwindcss": "^3.4.3",
     "ts-toolbelt": "^9.6.0",
-    "typescript": "catalog:",
-    "undici": "~6.21.0"
+    "typescript": "catalog:"
   }
 }
