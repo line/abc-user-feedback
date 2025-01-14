@@ -249,6 +249,16 @@ export class FeedbackOSService {
       },
     };
 
+    const createdAtCondition = queries?.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      combinedOsQuery.bool.must.push({
+        range: {
+          createdAt: { gte, lt },
+        },
+      });
+    }
+
     queries?.forEach((query) => {
       const osQuery = Object.keys(query).reduce(
         (osQuery: OpenSearchQuery, fieldKey) => {
@@ -288,6 +298,7 @@ export class FeedbackOSService {
               });
             }
           } else if (format === FieldFormatEnum.date) {
+            if (fieldKey === 'createdAt') return osQuery;
             osQuery.bool.must.push({
               range: {
                 [key]: query[fieldKey] as TimeRange,
@@ -314,10 +325,13 @@ export class FeedbackOSService {
         { bool: { must: [] } },
       );
 
+      if (osQuery.bool.must.length === 0) return;
+
       if (operator === 'AND') {
         combinedOsQuery.bool.must.push(osQuery);
       } else if (operator === 'OR') {
         combinedOsQuery.bool.should?.push(osQuery);
+        combinedOsQuery.bool.minimum_should_match = 1;
       } else {
         throw new BadRequestException('Invalid operator');
       }
