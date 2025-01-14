@@ -27,7 +27,7 @@ import {
   PopoverTrigger,
 } from '@ufb/react';
 
-import { ComboboxSelectInput, SelectInput } from '@/shared';
+import { SelectInput, SelectSearchInput } from '@/shared';
 
 import TableFilterPopoverInput from './table-filter-popover-input.ui';
 import TableFilterPopoverSelectOperator from './table-filter-popover-select-operator.ui';
@@ -44,6 +44,7 @@ const OperatorMap: Record<TableFilterFieldFotmat, TableFilterCondition> = {
   keyword: 'IS',
   multiSelect: 'IS',
   select: 'IS',
+  issue: 'IS',
   number: 'IS',
   text: 'CONTAINS',
 };
@@ -99,7 +100,7 @@ const TableFilerPopover = (props: Props) => {
     setOperator('AND');
   };
 
-  const onChangeValue = (index: number, value: string) => {
+  const onChangeValue = (index: number, value?: string) => {
     setFilters(
       filters.map((filter, i) => (i === index ? { ...filter, value } : filter)),
     );
@@ -127,6 +128,10 @@ const TableFilerPopover = (props: Props) => {
     );
   };
 
+  const submitFilters = () => {
+    onSubmit(filters, operator);
+    setOpen(false);
+  };
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -170,7 +175,7 @@ const TableFilerPopover = (props: Props) => {
                     }
                   </td>
                   <td>
-                    <ComboboxSelectInput
+                    <SelectSearchInput
                       onChange={(value) => {
                         const field = filterFields.find(
                           (field) => field.name === value,
@@ -210,14 +215,7 @@ const TableFilerPopover = (props: Props) => {
                 {t('v2.button.cancel')}
               </Button>
             </PopoverClose>
-            <Button
-              onClick={() => {
-                onSubmit(filters, operator);
-                setOpen(false);
-              }}
-            >
-              {t('v2.button.confirm')}
-            </Button>
+            <Button onClick={submitFilters}>{t('v2.button.confirm')}</Button>
           </div>
         </div>
       </PopoverContent>

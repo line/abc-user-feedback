@@ -15,3 +15,4 @@
  */
 
 export * from './tenant';
+export { default as SettingMenuList } from './setting-menu-list.ui';

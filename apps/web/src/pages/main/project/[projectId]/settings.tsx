@@ -35,8 +35,8 @@ import {
   RoleSetting,
   WebhookSetting,
 } from '@/widgets/project-settings';
-import { SettingsMenu } from '@/widgets/settings-menu';
-import type { SettingMenu, SubSettingMenu } from '@/widgets/settings-menu';
+import { SettingMenuList } from '@/widgets/setting-menu';
+import type { SettingMenu, SubSettingMenu } from '@/widgets/setting-menu';
 
 interface IProps {
   projectId: number;
@@ -53,7 +53,7 @@ const SettingsPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   return (
     <SideMenuLayout
       sideMenu={
-        <SettingsMenu
+        <SettingMenuList
           projectId={projectId}
           settingMenuValue={currentMenu}
           channelId={currentChannelId}

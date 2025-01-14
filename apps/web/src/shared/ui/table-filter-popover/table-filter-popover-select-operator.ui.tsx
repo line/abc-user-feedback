@@ -30,6 +30,7 @@ const TableFilterPopoverSelectOperator = (props: Props) => {
     date: [{ value: 'is', label: 'Is' }],
     select: [{ value: 'is', label: 'Is' }],
     multiSelect: [{ value: 'is', label: 'Is' }],
+    issue: [{ value: 'is', label: 'Is' }],
   };
 
   return (

@@ -14,7 +14,6 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
 
 import {
   Button,
@@ -26,18 +25,19 @@ import {
   TextInput,
 } from '@ufb/react';
 
-import { ComboboxSelectInput } from '../inputs';
+import { IssueSelectBox } from '@/entities/issue';
+
+import { SelectSearchInput } from '../inputs';
 import type { TableFilterField } from './table-filter-popover.type';
 
 interface Props {
   filterField: TableFilterField;
-  onChange: (value: string) => void;
+  onChange: (value?: string) => void;
   value?: string;
 }
 
 const TableFilterPopoverInput = (props: Props) => {
   const { filterField, onChange, value } = props;
-  const { t } = useTranslation();
 
   const inputProps = {
     className: 'w-full',
@@ -75,7 +75,7 @@ const TableFilterPopoverInput = (props: Props) => {
       )}
       {(filterField.format === 'select' ||
         filterField.format === 'multiSelect') && (
-        <ComboboxSelectInput
+        <SelectSearchInput
           options={
             filterField.options?.map((option) => ({
               label: option.name,
@@ -83,9 +83,11 @@ const TableFilterPopoverInput = (props: Props) => {
             })) ?? []
           }
           onChange={onChange}
-          placeholder={t('v2.placeholder.select')}
           value={value}
         />
+      )}
+      {filterField.format === 'issue' && (
+        <IssueSelectBox onChange={onChange} value={value} />
       )}
     </>
   );

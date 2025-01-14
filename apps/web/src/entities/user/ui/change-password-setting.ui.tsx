@@ -58,7 +58,12 @@ const ChangePasswordSetting = () => {
     <SettingTemplate
       title={t('main.profile.change-password')}
       action={
-        <Button form="reset_password" type="submit" loading={isPending}>
+        <Button
+          form="reset_password"
+          type="submit"
+          loading={isPending}
+          disabled={!methods.formState.isDirty}
+        >
           {t('button.save')}
         </Button>
       }

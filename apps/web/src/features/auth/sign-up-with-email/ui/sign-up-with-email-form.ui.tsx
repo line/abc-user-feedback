@@ -124,7 +124,8 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
             disabled={watch('emailState') !== 'NOT_VERIFIED'}
             error={formState.errors.email?.message}
             infoCaption={
-              watch('emailState') !== 'NOT_VERIFIED' ? '인증이 요청되었습니다.'
+              watch('emailState') !== 'NOT_VERIFIED' ?
+                t('v2.text.request-email-auth')
               : undefined
             }
             rightButton={

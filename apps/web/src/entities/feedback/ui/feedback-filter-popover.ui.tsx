@@ -29,7 +29,7 @@ import {
   TextInput,
 } from '@ufb/react';
 
-import { ComboboxSelectInput, SelectInput } from '@/shared';
+import { ComboboxSelectInput, SelectInput, SelectSearchInput } from '@/shared';
 import type { Field } from '@/entities/field';
 
 interface Props {
@@ -70,7 +70,7 @@ const FeedbackFilterPopover = (props: Props) => {
     setJoinOperator('and');
   };
 
-  const onChangeValue = (index: number, value: string) => {
+  const onChangeValue = (index: number, value?: string) => {
     setFilters(
       filters.map((filter, i) => (i === index ? { ...filter, value } : filter)),
     );
@@ -188,7 +188,7 @@ const FeedbackFilterPopover = (props: Props) => {
                       </Popover>
                     )}
                     {filter.field.format === 'select' && (
-                      <ComboboxSelectInput
+                      <SelectSearchInput
                         options={
                           filter.field.options?.map((option) => ({
                             label: option.name,
@@ -196,12 +196,11 @@ const FeedbackFilterPopover = (props: Props) => {
                           })) ?? []
                         }
                         onChange={(value) => onChangeValue(index, value)}
-                        placeholder={t('v2.placeholder.select')}
                         value={getValue(index)}
                       />
                     )}
                     {filter.field.format === 'multiSelect' && (
-                      <ComboboxSelectInput
+                      <SelectSearchInput
                         options={
                           filter.field.options?.map((option) => ({
                             label: option.name,
@@ -209,7 +208,6 @@ const FeedbackFilterPopover = (props: Props) => {
                           })) ?? []
                         }
                         onChange={(value) => onChangeValue(index, value)}
-                        placeholder={t('v2.placeholder.select')}
                         value={getValue(index)}
                       />
                     )}

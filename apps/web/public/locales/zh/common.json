@@ -548,13 +548,14 @@
       "in-progress": "进行中",
       "continue": "继续",
       "test-connection-failed": "连接测试失败",
-      "all-domains-allow": "允许所有域。"
+      "all-domains-allow": "允许所有域。",
+      "request-email-auth": "认证请求已发送到您的邮箱。"
     },
     "create-tenant": {
       "title": "租户设置",
       "site-name": "站点名称",
       "complete-title": "租户创建完成",
-      "description": "ABC User Feedback을 사용할 회사 또는 조직의 이름을 입력해 주세요. "
+      "description": "请输入要使用ABC User Feedback的公司或组织的名称。"
     },
     "placeholder": {
       "select": "请选择。",

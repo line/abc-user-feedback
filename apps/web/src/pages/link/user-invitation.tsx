@@ -19,7 +19,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { AnonymousTemplate, DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { UserInvitationForm } from '@/features/invite-user';
+import { InvitedUserSignupForm } from '@/entities/user';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 interface IProps {
@@ -35,7 +35,7 @@ const UserInvitationPage: NextPageWithLayout<IProps> = ({ code, email }) => {
       title={t('link.user-invitation.title')}
       image="/assets/images/reset-password.svg"
     >
-      <UserInvitationForm code={code} email={email} />
+      <InvitedUserSignupForm code={code} email={email} />
     </AnonymousTemplate>
   );
 };

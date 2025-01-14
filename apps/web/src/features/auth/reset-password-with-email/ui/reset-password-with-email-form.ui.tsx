@@ -83,7 +83,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Button type="submit" loading={isPending}>
+        <Button type="submit" loading={isPending} disabled={!formState.isDirty}>
           {t('button.setting')}
         </Button>
         <Button

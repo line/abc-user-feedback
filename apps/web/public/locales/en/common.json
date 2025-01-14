@@ -549,7 +549,8 @@
       "in-progress": "In Progress",
       "continue": "Continue",
       "test-connection-failed": "Test Connection failed",
-      "all-domains-allow": "All domains are allowed."
+      "all-domains-allow": "All domains are allowed.",
+      "request-email-auth": "Authentication has been requested."
     },
     "create-tenant": {
       "title": "Tenant Creation",

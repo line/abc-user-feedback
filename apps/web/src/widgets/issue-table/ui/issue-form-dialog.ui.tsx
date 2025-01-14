@@ -59,6 +59,7 @@ const IssueFormDialog = (props: Props) => {
           label="Title"
           required
           placeholder={t('v2.placeholder.text')}
+          error={formState.errors.name?.message}
         />
         <SelectInput
           label="Status"
@@ -70,10 +71,12 @@ const IssueFormDialog = (props: Props) => {
           onChange={(value) =>
             setValue('status', value as IssueFormSchema['status'], {
               shouldDirty: true,
+              shouldValidate: true,
             })
           }
           required
           placeholder={t('v2.placeholder.select')}
+          error={formState.errors.status?.message}
         />
         <InputField>
           <InputLabel>Description</InputLabel>

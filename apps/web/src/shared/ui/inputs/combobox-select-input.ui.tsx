@@ -49,7 +49,7 @@ const ComboboxSelectInput: React.FC<Props> = (props) => {
       <ComboboxContent>
         <ComboboxInput />
         <ComboboxList>
-          <ComboboxEmpty>Empty</ComboboxEmpty>
+          <ComboboxEmpty>No results found.</ComboboxEmpty>
           <ComboboxGroup>
             {options.map((option) => (
               <ComboboxSelectItem

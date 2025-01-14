@@ -23,21 +23,21 @@ import { Button, toast } from '@ufb/react';
 
 import { Path, TextInput, useOAIMutation } from '@/shared';
 
-import { userInvitationSchema } from './user-invitation.schema';
+import { invitedUserSignupSchema } from '../user.schema';
 
-type FormType = z.infer<typeof userInvitationSchema>;
+type FormType = z.infer<typeof invitedUserSignupSchema>;
 
 interface IProps {
   code: string;
   email: string;
 }
 
-const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
+const InvitedUserSignupForm: React.FC<IProps> = ({ code, email }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
   const { handleSubmit, register, formState } = useForm<FormType>({
-    resolver: zodResolver(userInvitationSchema),
+    resolver: zodResolver(invitedUserSignupSchema),
     defaultValues: { code, email },
   });
 
@@ -83,7 +83,7 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Button type="submit" loading={isPending}>
+        <Button type="submit" loading={isPending} disabled={!formState.isDirty}>
           {t('button.setting')}
         </Button>
       </div>
@@ -91,4 +91,4 @@ const UserInvitationForm: React.FC<IProps> = ({ code, email }) => {
   );
 };
 
-export default UserInvitationForm;
+export default InvitedUserSignupForm;

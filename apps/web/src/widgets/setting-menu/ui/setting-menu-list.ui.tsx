@@ -45,15 +45,15 @@ import {
 } from '@/shared';
 import { useCreateChannelStore } from '@/features/create-channel/create-channel-model';
 
-import type { SettingMenu } from '../setting-menu.type';
+import type { SettingMenu as SettingMenuList } from '../setting-menu.type';
 
 interface Props {
-  settingMenuValue: SettingMenu;
+  settingMenuValue: SettingMenuList;
   channelId?: number | null;
   projectId: number;
 }
 
-const SettingsMenu: React.FC<Props> = (props) => {
+const SettingMenuList: React.FC<Props> = (props) => {
   const { settingMenuValue, projectId, channelId } = props;
   const { t } = useTranslation();
   const { editingStepIndex, reset, jumpStepByIndex } = useCreateChannelStore();
@@ -288,4 +288,4 @@ const ChannelMenuItem = (props: ChannelMenuItemProps) => {
   );
 };
 
-export default SettingsMenu;
+export default SettingMenuList;

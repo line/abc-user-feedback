@@ -52,13 +52,13 @@ const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
   return (
     <SelectSearchInput
       label="Time Zone"
-      displayValue={getLabel(value)}
       options={options.map((option) => ({
         label: getLabel(option),
         value: getSelectValue(option),
       }))}
       value={getSelectValue(value)}
       onChange={(v) => {
+        if (!v) return;
         onChange?.(getTimezonValue(v));
       }}
       disabled={disabled}

@@ -36,6 +36,7 @@ import type {
 } from '@/shared';
 import {
   BasicTable,
+  client,
   DateRangePicker,
   DEFAULT_LOCALE,
   TableFilterPopover,
@@ -101,18 +102,40 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     condition: 'IS' as TableFilterCondition,
   };
 
-  const queries = useMemo(() => {
-    return tableFilters
-      .map(
-        (filter) =>
-          ({
-            [filter.key]:
-              filter.format === 'number' ? Number(filter.value) : filter.value,
-            condition: filter.condition,
-          }) as Record<string, unknown>,
-      )
-      .concat(createdAtQuery);
-  }, [createdAtQuery, tableFilters]);
+  const [queries, setQueries] = useState<Record<string, unknown>[]>([
+    createdAtQuery,
+  ]);
+
+  const changeQueries = async (tableFilters: TableFilter[]) => {
+    const getValue: Record<
+      TableFilterFieldFotmat,
+      (valeu: unknown) => unknown
+    > = {
+      number: (value) => Number(value),
+      issue: async (value) => {
+        const { data } = await client.post({
+          path: '/api/admin/projects/{projectId}/issues/search',
+          pathParams: { projectId },
+          body: { query: { searchText: value } },
+        });
+        const result = data?.items.find((v) => v.name === value);
+        return result ? [result.id] : [];
+      },
+      keyword: (value) => value,
+      multiSelect: (value) => value,
+      select: (value) => value,
+      text: (value) => value,
+      date: (value) => value,
+    };
+
+    const res = await Promise.all(
+      tableFilters.map(async ({ condition, format, key, value }) => ({
+        [key]: await getValue[format](value),
+        condition,
+      })),
+    );
+    setQueries(res.concat(createdAtQuery));
+  };
 
   const {
     data: feedbackData,
@@ -198,6 +221,15 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     },
   });
 
+  const updateTableFilters = async (
+    tableFilters: TableFilter[],
+    op: TableFilterOperator,
+  ) => {
+    await changeQueries(tableFilters);
+    setTableFilters(tableFilters);
+    setOperator(op);
+  };
+
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
@@ -233,13 +265,12 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             filterFields={fields.map((field) => ({
               key: field.key,
               name: field.name,
-              options: field.key === 'issues' ? [] : field.options,
-              format: field.format as TableFilterFieldFotmat,
+              options: field.options,
+              format: (field.key === 'issues' ?
+                'issue'
+              : field.format) as TableFilterFieldFotmat,
             }))}
-            onSubmit={(filters, op) => {
-              setTableFilters(filters);
-              setOperator(op);
-            }}
+            onSubmit={updateTableFilters}
             tableFilters={tableFilters}
           />
           <FeedbackTableViewOptions table={table} fields={fields} />

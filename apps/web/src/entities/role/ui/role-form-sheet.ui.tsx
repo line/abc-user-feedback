@@ -289,7 +289,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
             type="submit"
             className="min-w-[84px]"
             form="role"
-            disabled={!formState.isValid}
+            disabled={!formState.isDirty}
           >
             {t('v2.button.save')}
           </Button>

@@ -59,8 +59,7 @@ interface IProps {
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
-  const { value, onChange, maxDate, minDate, maxDays, isClearable, options } =
-    props;
+  const { value, onChange, maxDate, minDate, maxDays, options } = props;
 
   const { t, i18n } = useTranslation();
 
@@ -124,7 +123,6 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     onChange(currentValue);
     setIsOpen(false);
   };
-  console.log('value: ', value);
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>

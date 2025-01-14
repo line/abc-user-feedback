@@ -19,7 +19,8 @@ export type TableFilterFieldFotmat =
   | 'number'
   | 'date'
   | 'select'
-  | 'multiSelect';
+  | 'multiSelect'
+  | 'issue';
 
 export type TableFilterCondition = 'CONTAINS' | 'IS' | 'BETWEEN';
 export type TableFilterOperator = 'AND' | 'OR';

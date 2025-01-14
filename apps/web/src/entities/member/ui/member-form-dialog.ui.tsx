@@ -84,15 +84,16 @@ const MemberFormDialog: React.FC<Props> = (props) => {
         {!data && <TextInput label="Project" value={project.name} disabled />}
         <SelectSearchInput
           label="Email"
-          value={watch('user.email')}
-          onChange={(v) => {
-            const user = userData?.items.find((user) => user.email === v);
-            if (!user) return;
-            setValue('user', user, { shouldDirty: true });
+          value={watch('user')?.email}
+          onChange={(value) => {
+            const user = userData?.items.find((user) => user.email === value);
+            setValue('user', user, { shouldDirty: true, shouldValidate: true });
           }}
           options={
             userData?.items
-              .filter((v) => !members.some((member) => member.user.id === v.id))
+              .filter(
+                (v) => !members.some((member) => member.user?.id === v.id),
+              )
               .map((v) => ({ label: v.email, value: v.email })) ?? []
           }
           error={formState.errors.user?.message}

@@ -536,7 +536,8 @@
       "in-progress": "進行中",
       "continue": "続きから再開",
       "test-connection-failed": "接続テストに失敗しました",
-      "all-domains-allow": "すべてのドメインを許可します。"
+      "all-domains-allow": "すべてのドメインを許可します。",
+      "request-email-auth": "認証が要求されました。"
     },
     "create-tenant": {
       "title": "Tenant 作成",

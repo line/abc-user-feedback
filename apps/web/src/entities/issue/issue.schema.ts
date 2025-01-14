@@ -32,6 +32,7 @@ export const issueSchema = z.object({
   createdAt: z.string(),
   updatedAt: z.string().nullable(),
 });
+
 export const issueFormSchema = issueSchema.omit({
   id: true,
   feedbackCount: true,

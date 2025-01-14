@@ -37,11 +37,11 @@ import {
 import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
-import { useUserStore } from '@/entities/user';
 import {
   ChangePasswordSetting,
   UserProfileSetting,
-} from '@/features/update-user';
+  useUserStore,
+} from '@/entities/user';
 import { Layout } from '@/widgets/layout';
 
 const ProfilePage: NextPageWithLayout = () => {

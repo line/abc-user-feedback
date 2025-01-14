@@ -288,7 +288,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
             </div>
           )}
           <SheetClose>{t('v2.button.cancel')}</SheetClose>
-          <Button type="submit" form="webhook" disabled={!formState.isValid}>
+          <Button type="submit" form="webhook" disabled={!formState.isDirty}>
             {t('button.confirm')}
           </Button>
         </SheetFooter>

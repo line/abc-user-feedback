@@ -30,7 +30,6 @@ export const memberSchema = z.object({
   createdAt: z.string(),
 });
 
-export const memberInfoSchema = memberSchema.partial({
-  id: true,
-  createdAt: true,
-});
+export const memberInfoSchema = memberSchema
+  .partial({ id: true, createdAt: true, user: true })
+  .refine((data) => !!data.user, { path: ['user'] });

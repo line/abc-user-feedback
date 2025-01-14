@@ -46,6 +46,7 @@ const SignInPage: NextPageWithLayout = () => {
 
   const { handleSubmit, register, formState, setError } = useForm<FormType>({
     resolver: zodResolver(signInWithEmailSchema),
+    defaultValues: { email: '', password: '' },
   });
 
   const onSubmit = async (data: FormType) => {
@@ -106,6 +107,7 @@ const SignInPage: NextPageWithLayout = () => {
           type="submit"
           loading={loginLoading}
           form="sign-in"
+          disabled={!formState.isDirty}
         >
           {t('button.sign-in')}
         </Button>

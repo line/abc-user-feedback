@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 
@@ -38,6 +39,7 @@ interface IProps extends React.PropsWithChildren {
 
 const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const { dateRange, setDateRange } = useIssueQuery(projectId);
 
@@ -50,6 +52,13 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     method: 'post',
     path: '/api/admin/projects/{projectId}/issues',
     pathParams: { projectId },
+    queryOptions: {
+      async onSuccess() {
+        await queryClient.invalidateQueries({
+          queryKey: ['/api/admin/projects/{projectId}/issues/search'],
+        });
+      },
+    },
   });
 
   const filterFields: TableFilterField[] = [
