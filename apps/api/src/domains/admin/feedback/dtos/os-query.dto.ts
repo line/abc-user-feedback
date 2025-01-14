@@ -19,6 +19,7 @@ export class OsQueryDto {
   bool: {
     must: MustItem[];
     should?: MustItem[];
+    minimum_should_match?: number;
   };
 }
 

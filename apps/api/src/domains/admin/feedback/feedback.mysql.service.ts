@@ -302,92 +302,111 @@ export class FeedbackMySQLService {
       .select('feedbacks')
       .where('feedbacks.channel_id = :channelId', { channelId });
 
+    const createdAtCondition = queries.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      queryBuilder.andWhere('feedbacks.created_at >= :gte', { gte });
+      queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
+    }
+
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
-    for (const query of queries) {
-      for (const [fieldKey, value] of Object.entries(query)) {
-        if (fieldKey === 'ids') {
-          queryBuilder[method]('feedbacks.id IN(:value)', { value });
-        } else if (fieldKey === 'issueIds') {
-          queryBuilder[method](
-            'feedbacks_issues_issues.issues_id IN(:issueIds)',
-            {
-              issueIds: value,
-            },
-          );
-        } else if (fieldKey === 'createdAt') {
-          const { gte, lt } = value as TimeRange;
-          queryBuilder[method]('feedbacks.created_at >= :gte', { gte });
-          queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
-        } else if (fieldKey === 'updatedAt') {
-          const { gte, lt } = value as TimeRange;
-          queryBuilder[method]('feedbacks.updated_at >= :gte', { gte });
-          queryBuilder.andWhere('feedbacks.updated_at < :lt', { lt });
-        } else {
-          const { id, format }: { id: number; format: FieldFormatEnum } =
-            fields.find((v) => v.key === fieldKey) ?? {
-              id: 0,
-              format: FieldFormatEnum.date,
-            };
+    queryBuilder.andWhere(
+      new Brackets(async (qb) => {
+        let paramIndex = 0;
+        for (const query of queries) {
+          for (const [fieldKey, value] of Object.entries(query)) {
+            if (fieldKey === 'condition' || fieldKey === 'createdAt') continue;
 
-          if (format === FieldFormatEnum.select) {
-            const options = await this.optionRepository.find({
-              where: { field: { id } },
-            });
-            const option =
-              options.find((option) => option.key === value) ??
-              new OptionEntity();
+            const paramName = `value${paramIndex++}`;
 
-            queryBuilder[method](
-              `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
-              { optionId: option.key },
-            );
-          } else if (format === FieldFormatEnum.multiSelect) {
-            const options = await this.optionRepository.find({
-              where: { field: { id } },
-            });
+            if (fieldKey === 'id') {
+              qb[method](`feedbacks.id = :${paramName}`, {
+                [paramName]: value,
+              });
+            } else if (fieldKey === 'ids') {
+              qb[method](`feedbacks.id IN(:${paramName})`, {
+                [paramName]: value,
+              });
+            } else if (fieldKey === 'issueIds') {
+              qb[method]('feedbacks_issues_issues.issues_id IN(:issueIds)', {
+                issueIds: value,
+              });
+            } else if (fieldKey === 'updatedAt') {
+              const { gte, lt } = value as TimeRange;
+              qb[method](`feedbacks.updated_at >= :gte${paramName}`, {
+                [paramName]: gte,
+              });
+              qb[method](`feedbacks.updated_at < :lt${paramName}`, {
+                [paramName]: lt,
+              });
+            } else {
+              const { id, format }: { id: number; format: FieldFormatEnum } =
+                fields.find((v) => v.key === fieldKey) ?? {
+                  id: 0,
+                  format: FieldFormatEnum.date,
+                };
 
-            queryBuilder[method](
-              new Brackets((qb) => {
-                for (const optionKey of value as string[]) {
-                  const option =
-                    options.find((option) => option.key === optionKey) ??
-                    new OptionEntity();
-                  qb.orWhere(
-                    `JSON_CONTAINS(
-                      JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
-                      '"${option.key}"',
-                      '$')`,
-                  );
-                }
-              }),
-            );
-          } else if (format === FieldFormatEnum.text) {
-            queryBuilder[method](
-              `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :value`,
-              { value: `%${value as string | number}%` },
-            );
-          } else if (format === FieldFormatEnum.date) {
-            const { gte, lt } = value as TimeRange;
-            queryBuilder[method](
-              `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') >= :gte`,
-              { gte },
-            );
-            queryBuilder.andWhere(
-              `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') < :lt`,
-              { lt },
-            );
-          } else {
-            queryBuilder[method](
-              `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :value`,
-              {
-                value,
-              },
-            );
+              if (format === FieldFormatEnum.select) {
+                const options = await this.optionRepository.find({
+                  where: { field: { id } },
+                });
+                const option =
+                  options.find((option) => option.key === value) ??
+                  new OptionEntity();
+
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
+                  { optionId: option.key },
+                );
+              } else if (format === FieldFormatEnum.multiSelect) {
+                const options = await this.optionRepository.find({
+                  where: { field: { id } },
+                });
+
+                qb[method](
+                  new Brackets((subQb) => {
+                    for (const optionKey of value as string[]) {
+                      const option =
+                        options.find((option) => option.key === optionKey) ??
+                        new OptionEntity();
+                      subQb.orWhere(
+                        `JSON_CONTAINS(
+                        JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
+                        '"${option.key}"',
+                        '$')`,
+                      );
+                    }
+                  }),
+                );
+              } else if (format === FieldFormatEnum.text) {
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
+                  { [paramName]: `%${value as string | number}%` },
+                );
+              } else if (format === FieldFormatEnum.date) {
+                const { gte, lt } = value as TimeRange;
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') >= :gte${paramName}`,
+                  { [paramName]: gte },
+                );
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') < :lt${paramName}`,
+                  { [paramName]: lt },
+                );
+              } else {
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :${paramName}`,
+                  {
+                    [paramName]: value,
+                  },
+                );
+              }
+            }
           }
         }
-      }
-    }
+      }),
+    );
 
     queryBuilder.groupBy('feedbacks.id');
 
