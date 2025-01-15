@@ -39,7 +39,7 @@ const LanguageSelectBox: React.FC<Props> = () => {
 
   const onChangeLanguage = async (newLocale: string) => {
     const { pathname, asPath, query } = router;
-    setCookie('NEXT_LOCALE', newLocale);
+    await setCookie('NEXT_LOCALE', newLocale);
     await router.push({ pathname, query }, asPath, { locale: newLocale });
   };
 

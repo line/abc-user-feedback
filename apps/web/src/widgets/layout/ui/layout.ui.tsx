@@ -14,9 +14,6 @@
  * under the License.
  */
 
-import { Button, Icon } from '@ufb/react';
-import { Icon as UIIcon } from '@ufb/ui';
-
 import { cn } from '@/shared';
 
 import Header from './header.ui';
@@ -31,7 +28,7 @@ const Layout: React.FC<IProps> = (props) => {
   const { children, projectId, title, isHeightDynamic } = props;
 
   return (
-    <div>
+    <>
       <Header projectId={projectId} />
       <main className="p-5">
         <div className="mb-3 h-12 px-6">
@@ -39,34 +36,14 @@ const Layout: React.FC<IProps> = (props) => {
         </div>
         <div
           className={cn({
-            'h-[calc(100vh-150px)]': !isHeightDynamic,
-            'min-h-[calc(100vh-150px)]': isHeightDynamic,
+            'h-[calc(100vh-160px)]': !isHeightDynamic,
+            'min-h-[calc(100vh-160px)]': isHeightDynamic,
           })}
         >
           {children}
         </div>
       </main>
-      <footer className="bg-neutral-tertiary flex flex-col items-center p-4">
-        <div className="flex items-center gap-2">
-          <UIIcon name="LogoBlack" />
-          <p className="text-title-h5">ABC User Feedback</p>
-        </div>
-        <div className="flex items-center gap-1">
-          <Button variant="ghost">
-            <Icon name="RiEarthFill" />
-          </Button>
-          <Button variant="ghost">
-            <Icon name="RiGithubFill" />
-          </Button>
-          <Button variant="ghost">
-            <Icon name="RiMailLine" />
-          </Button>
-        </div>
-        <div className="text-neutral-tertiary font-normal">
-          © 2024 ABC Studio. All rights reserved
-        </div>
-      </footer>
-    </div>
+    </>
   );
 };
 

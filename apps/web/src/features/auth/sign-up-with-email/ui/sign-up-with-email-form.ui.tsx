@@ -199,7 +199,7 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
           size="medium"
           type="submit"
           loading={loading}
-          disabled={!formState.isValid}
+          disabled={!formState.isDirty || watch('emailState') !== 'VERIFIED'}
         >
           {submitText}
         </Button>

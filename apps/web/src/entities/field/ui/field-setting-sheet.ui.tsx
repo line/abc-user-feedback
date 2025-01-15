@@ -309,7 +309,11 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
             </div>
           )}
           <SheetClose>{t('v2.button.cancel')}</SheetClose>
-          <Button type="submit" form="field-setting" disabled={isDefaultField}>
+          <Button
+            type="submit"
+            form="field-setting"
+            disabled={isDefaultField || !formState.isDirty}
+          >
             {t('v2.button.confirm')}
           </Button>
         </SheetFooter>

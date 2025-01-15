@@ -35,6 +35,7 @@ const CreateTenantForm: React.FC<IProps> = (props) => {
 
   const { register, handleSubmit, formState } = useForm<CreateTenant>({
     resolver: zodResolver(createTenantFormSchema),
+    defaultValues: { siteName: '' },
   });
 
   return (
@@ -47,8 +48,7 @@ const CreateTenantForm: React.FC<IProps> = (props) => {
         placeholder="Please enter the site name"
         {...register('siteName')}
       />
-
-      <Button type="submit" disabled={!formState.isValid}>
+      <Button type="submit" disabled={!formState.isDirty}>
         {submitText}
       </Button>
     </form>

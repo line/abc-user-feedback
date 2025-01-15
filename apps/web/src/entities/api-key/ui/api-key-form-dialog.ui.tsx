@@ -42,10 +42,7 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
       isOpen={isOpen}
       close={close}
       title={t('v2.text.name.detail', { name: 'API Key' })}
-      submitBtn={{
-        form: 'apiKeyForm',
-        disabled: status === data?.status,
-      }}
+      submitBtn={{ form: 'apiKeyForm' }}
       deleteBtn={{
         disabled: false,
         onClick: onClickDelete,

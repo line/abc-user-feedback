@@ -77,6 +77,7 @@ const CreateRolePopover: React.FC<IProps> = ({ disabled, onCreate, roles }) => {
           children: t('button.confirm'),
           form: 'form',
           type: 'submit',
+          disabled: !formState.isDirty,
         }}
       >
         <form onSubmit={handleSubmit(onSubmit)} id="form">

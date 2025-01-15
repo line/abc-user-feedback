@@ -24,7 +24,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-const PAGE_SIZES = [10, 20, 30, 40, 50];
+const PAGE_SIZES = [20, 30, 40, 50];
 
 interface IProps<T> {
   table: Table<T>;

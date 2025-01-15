@@ -91,17 +91,18 @@ interface IProps {
   to: Date;
 }
 const limitOptions = [
-  { label: '5', value: 5 },
-  { label: '10', value: 10 },
-  { label: '15', value: 15 },
-  { label: '20', value: 20 },
+  { label: '5', value: '5' },
+  { label: '10', value: '10' },
+  { label: '15', value: '15' },
+  { label: '20', value: '20' },
 ];
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const issues = useMemo(() => ISSUES(t), [t]);
-  const [limit, setLimit] = useState(limitOptions[0]?.value ?? 0);
+  const [limit, setLimit] = useState(Number(limitOptions[0]?.value ?? 0));
+  console.log('limit: ', limit);
 
   const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
 
@@ -138,8 +139,8 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       table={table}
       selectData={{
         options: limitOptions,
-        defaultValue: limitOptions[0],
-        onChange: (v) => setLimit(v?.value ?? 5),
+        value: String(limit),
+        onChange: (v) => setLimit(Number(v)),
       }}
       filterContent={
         <div className="flex flex-col gap-3 px-4 py-3">

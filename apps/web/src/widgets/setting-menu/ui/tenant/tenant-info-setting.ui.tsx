@@ -18,8 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import { SettingTemplate, useOAIMutation } from '@/shared';
 import type { TenantInfo } from '@/entities/tenant';
@@ -45,10 +44,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await refetchTenant();
-        toast.positive({ title: t('v2.toast.success') });
-      },
-      onError(error) {
-        toast.negative({ title: error.message ?? 'Error' });
+        toast.success(t('v2.toast.success'));
       },
     },
   });

@@ -30,7 +30,7 @@ interface Props extends FormOverlayProps<IssueFormSchema> {
 }
 
 const IssueFormDialog = (props: Props) => {
-  const { data, close, isOpen, onSubmit, issueTracker } = props;
+  const { data, close, isOpen, onSubmit, issueTracker, updateDisabled } = props;
   const { t } = useTranslation();
 
   const { register, watch, setValue, handleSubmit, formState } =
@@ -46,7 +46,7 @@ const IssueFormDialog = (props: Props) => {
       isOpen={isOpen}
       close={close}
       title={t('v2.text.name.add', { name: 'Issue' })}
-      submitBtn={{ form: 'issueForm' }}
+      submitBtn={{ form: 'issueForm', disabled: updateDisabled }}
       formState={formState}
     >
       <form

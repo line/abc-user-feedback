@@ -19,8 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button } from '@ufb/react';
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
 import {
   HelpCardDocs,
@@ -57,10 +56,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        toast.positive({ title: t('v2.toast.success') });
-      },
-      onError(error) {
-        toast.negative({ title: error.message });
+        toast.success(t('v2.toast.success'));
       },
     },
   });

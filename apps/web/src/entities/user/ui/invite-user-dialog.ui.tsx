@@ -52,7 +52,7 @@ const defaultValues: IForm = {
 interface IProps extends FormOverlayProps<IForm> {}
 
 const InviteUserDialog: React.FC<IProps> = (props) => {
-  const { close, isOpen, onSubmit } = props;
+  const { close, isOpen, onSubmit, updateDisabled } = props;
   const { t } = useTranslation();
   const { register, watch, setValue, handleSubmit, formState } = useForm<IForm>(
     { resolver: zodResolver(scheme), defaultValues },
@@ -65,9 +65,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
   const { data: roleData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId: projectId ?? 0 },
-    queryOptions: {
-      enabled: !!projectId && type === 'GENERAL',
-    },
+    queryOptions: { enabled: !!projectId && type === 'GENERAL' },
   });
 
   return (
@@ -75,9 +73,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
       isOpen={isOpen}
       close={close}
       title={t('main.setting.dialog.invite-user.title')}
-      submitBtn={{
-        form: 'inviteUser',
-      }}
+      submitBtn={{ form: 'inviteUser', disabled: updateDisabled }}
       formState={formState}
     >
       <form
@@ -117,6 +113,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
               onChange={(v) =>
                 setValue('projectId', Number(v), { shouldDirty: true })
               }
+              error={formState.errors.projectId?.message}
               required
             />
             {projectId && (
@@ -130,6 +127,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
                 onChange={(v) =>
                   setValue('roleId', Number(v), { shouldDirty: true })
                 }
+                error={formState.errors.roleId?.message}
                 required
               />
             )}

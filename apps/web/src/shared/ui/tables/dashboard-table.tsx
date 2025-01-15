@@ -16,8 +16,7 @@
 import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 
-import type { ISelectBoxProps } from '@/shared';
-import { DescriptionTooltip, SelectBox } from '@/shared';
+import { DescriptionTooltip, SelectInput } from '@/shared';
 
 import ChartFilter from '../charts/chart-filter';
 import TableSortIcon from './table-sort-icon';
@@ -25,7 +24,11 @@ import TableSortIcon from './table-sort-icon';
 interface IProps<T> {
   title: string;
   description?: string;
-  selectData?: ISelectBoxProps<{ label: string; value: number }, false>;
+  selectData?: {
+    options: { value: string; label: string }[];
+    onChange: (value: string) => void;
+    value: string;
+  };
   table: Table<T>;
   filterContent?: React.ReactNode;
 }
@@ -43,7 +46,7 @@ function DashboardTable<T>(props: IProps<T>) {
           )}
         </div>
         <div className="flex items-center gap-2">
-          {selectData && <SelectBox {...selectData} />}
+          {selectData && <SelectInput {...selectData} />}
           {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
         </div>
       </div>

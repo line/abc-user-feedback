@@ -49,10 +49,7 @@ const UpdateUserDialog: React.FC<IProps> = (props) => {
       title={t('v2.text.name.detail', { name: 'User' })}
       close={close}
       isOpen={isOpen}
-      submitBtn={{
-        disabled: updateDisabled,
-        form: 'update-user',
-      }}
+      submitBtn={{ disabled: updateDisabled, form: 'update-user' }}
       deleteBtn={{ disabled: deleteDisabled, onClick: onClickDelete }}
       formState={formState}
     >

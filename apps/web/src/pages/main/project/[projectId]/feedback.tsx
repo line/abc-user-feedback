@@ -262,14 +262,16 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            filterFields={fields.map((field) => ({
-              key: field.key,
-              name: field.name,
-              options: field.options,
-              format: (field.key === 'issues' ?
-                'issue'
-              : field.format) as TableFilterFieldFotmat,
-            }))}
+            filterFields={fields
+              .filter(({ key }) => key !== 'createdAt')
+              .map((field) => ({
+                key: field.key,
+                name: field.name,
+                options: field.options,
+                format: (field.key === 'issues' ?
+                  'issue'
+                : field.format) as TableFilterFieldFotmat,
+              }))}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
           />
