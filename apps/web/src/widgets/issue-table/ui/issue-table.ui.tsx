@@ -118,7 +118,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           />
         </div>
       </div>
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-5 items-start gap-4">
         {ISSUES(t).map((issue) => (
           <IssueKanbanColumn
             key={issue.key}

@@ -14,15 +14,18 @@
  * under the License.
  */
 
-import { Badge, Icon } from '@ufb/react';
+import { useState } from 'react';
+
+import { Badge, Button } from '@ufb/react';
 
 import type { IssuesItem } from '@/shared';
 import { cn } from '@/shared';
-import { useIssueSearch } from '@/entities/issue';
+import { useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
 import IssueDetailSheet from './issue-detail-sheet.ui';
+import IssueKanbanColumnSorting from './issue-kanban-column-sorting.ui';
 
 const ISSUE_MAP: Record<
   Issue['status'],
@@ -43,9 +46,14 @@ interface Props {
 
 const IssueKanbanColumn = (props: Props) => {
   const { issue, projectId, issueTracker } = props;
-  const { data, isLoading } = useIssueSearch(projectId, {
-    query: { status: issue.status },
-  });
+
+  const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
+
+  const { data, hasNextPage, fetchNextPage, isFetching } =
+    useIssueSearchInfinite(projectId, {
+      query: { status: issue.status },
+      sort: { [sort.key]: sort.value },
+    });
 
   return (
     <div
@@ -63,26 +71,40 @@ const IssueKanbanColumn = (props: Props) => {
         <div className="flex items-center gap-1">
           {issue.name}
           <Badge variant="subtle" radius="large">
-            {data?.meta.totalItems}
+            {data.pages[0]?.meta.totalItems ?? 0}
           </Badge>
         </div>
-        <Icon name="RiArrowUpDownFill" size={20} />
+        <IssueKanbanColumnSorting
+          sort={sort}
+          onSubmit={(input) => setSort(input)}
+        />
       </div>
-      {!isLoading && data?.items.length === 0 ?
+      {data.pages[0]?.items.length === 0 ?
         <div className="flex h-12 items-center justify-center">
           <p className="text-neutral-tertiary text-center">
             There is no issue on this status.
           </p>
         </div>
-      : data?.items.map((item) => (
-          <IssueDetailSheet
-            key={item.id}
-            item={item}
-            issueTracker={issueTracker}
-            projectId={projectId}
-          />
-        ))
+      : data.pages
+          .flatMap((v) => v?.items ?? [])
+          .map((item) => (
+            <IssueDetailSheet
+              key={item.id}
+              item={item}
+              issueTracker={issueTracker}
+              projectId={projectId}
+            />
+          ))
       }
+      {hasNextPage && (
+        <Button
+          variant="secondary"
+          onClick={() => fetchNextPage()}
+          loading={isFetching}
+        >
+          More
+        </Button>
+      )}
     </div>
   );
 };

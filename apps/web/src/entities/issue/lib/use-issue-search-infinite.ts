@@ -59,7 +59,18 @@ const useIssueSearchInfinite = (
     initialPageParam: 1,
     initialData: {
       pageParams: [],
-      pages: [],
+      pages: [
+        {
+          items: [],
+          meta: {
+            currentPage: 1,
+            totalPages: 0,
+            totalItems: 0,
+            itemCount: 0,
+            itemsPerPage: 0,
+          },
+        },
+      ],
     },
   });
 
