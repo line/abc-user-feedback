@@ -69,11 +69,10 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     label: string;
     value: string;
   }>();
-
   useEffect(() => {
     const option = options.find((v) => v.value === value);
     setCurrentOption(option);
-  }, []);
+  }, [value]);
 
   const moreRef = useRef<HTMLDivElement>(null);
 

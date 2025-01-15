@@ -15,7 +15,12 @@
  */
 import type { z } from 'zod';
 
-import type { memberInfoSchema, memberSchema } from './member.schema';
+import type {
+  memberInfoFormSchema,
+  memberInfoSchema,
+  memberSchema,
+} from './member.schema';
 
 export type Member = z.infer<typeof memberSchema>;
 export type MemberInfo = z.infer<typeof memberInfoSchema>;
+export type MemberInfoForm = z.infer<typeof memberInfoFormSchema>;

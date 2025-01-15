@@ -53,7 +53,7 @@ interface Props {
   projectId: number;
 }
 
-const SettingMenuList: React.FC<Props> = (props) => {
+const SettingsMenuList: React.FC<Props> = (props) => {
   const { settingMenuValue, projectId, channelId } = props;
   const { t } = useTranslation();
   const { editingStepIndex, reset, jumpStepByIndex } = useCreateChannelStore();
@@ -288,4 +288,4 @@ const ChannelMenuItem = (props: ChannelMenuItemProps) => {
   );
 };
 
-export default SettingMenuList;
+export default SettingsMenuList;

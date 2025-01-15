@@ -25,8 +25,8 @@ import type { ProjectInfo } from '@/entities/project';
 import type { Role } from '@/entities/role';
 import { useUserSearch } from '@/entities/user';
 
-import { memberInfoSchema } from '../member.schema';
-import type { MemberInfo } from '../member.type';
+import { memberInfoFormSchema } from '../member.schema';
+import type { MemberInfo, MemberInfoForm } from '../member.type';
 
 interface Props extends FormOverlayProps<MemberInfo> {
   members: MemberInfo[];
@@ -56,9 +56,9 @@ const MemberFormDialog: React.FC<Props> = (props) => {
   });
 
   const { setValue, handleSubmit, formState, register, getValues, watch } =
-    useForm<MemberInfo>({
-      resolver: zodResolver(memberInfoSchema),
+    useForm<MemberInfoForm>({
       defaultValues: data,
+      resolver: zodResolver(memberInfoFormSchema),
     });
 
   watch();
@@ -79,7 +79,11 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       <form
         id="memberForm"
         className="flex flex-col gap-4"
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit((value) => {
+          const { role, user, createdAt, id } = value;
+          if (!user) return;
+          onSubmit({ role, user, createdAt, id });
+        })}
       >
         {!data && <TextInput label="Project" value={project.name} disabled />}
         <SelectSearchInput
@@ -91,9 +95,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           }}
           options={
             userData?.items
-              .filter(
-                (v) => !members.some((member) => member.user?.id === v.id),
-              )
+              .filter((v) => !members.some((member) => member.user.id === v.id))
               .map((v) => ({ label: v.email, value: v.email })) ?? []
           }
           error={formState.errors.user?.message}
