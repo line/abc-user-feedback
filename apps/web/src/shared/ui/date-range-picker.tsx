@@ -34,6 +34,7 @@ import {
 
 import type { DateRangeType } from '../types/date-range.type';
 import { cn } from '../utils';
+import { TextInput } from './inputs';
 
 const locales: Record<string, Locale> = {
   ko,
@@ -94,6 +95,10 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   }, [t]);
 
   const [currentValue, setCurrentValue] = useState<DateRangeType | null>(value);
+  const [currentInput, setCurrentInput] = useState<{
+    startDate: string;
+    endDate: string;
+  }>({ startDate: '', endDate: '' });
 
   const [isOpen, setIsOpen] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
@@ -101,7 +106,22 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   useEffect(() => {
     setActiveIdx(-1);
     setCurrentValue(value);
+    if (value) {
+      const { endDate, startDate } = value;
+      setCurrentInput({
+        startDate: startDate ? dayjs(startDate).format('YYYY-MM-DD') : '',
+        endDate: endDate ? dayjs(endDate).format('YYYY-MM-DD') : '',
+      });
+    }
   }, [value, isOpen]);
+
+  useEffect(() => {
+    if (!currentValue) return;
+    setCurrentInput({
+      startDate: dayjs(currentValue.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(currentValue.endDate).format('YYYY-MM-DD'),
+    });
+  }, [currentValue]);
 
   const handleChangeDateRange =
     (index: number, startDate: Date, endDate: Date) => () => {
@@ -123,6 +143,97 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     onChange(currentValue);
     setIsOpen(false);
   };
+  const formatDate = (value: string) => {
+    // 숫자 이외의 문자는 제거
+    let cleanedValue = value.replace(/\D/g, '');
+    if (cleanedValue.length > 8) cleanedValue = cleanedValue.slice(0, 8);
+
+    let formattedValue = '';
+    if (cleanedValue.length > 4) {
+      formattedValue += cleanedValue.slice(0, 4) + '-';
+      if (cleanedValue.length > 6) {
+        formattedValue += cleanedValue.slice(4, 6) + '-';
+        formattedValue += cleanedValue.slice(6, 8);
+      } else {
+        formattedValue += cleanedValue.slice(4);
+      }
+    } else {
+      formattedValue = cleanedValue;
+    }
+
+    return formattedValue;
+  };
+
+  const handleChange =
+    (type: 'startDate' | 'endDate') =>
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const formattedDate = formatDate(event.target.value);
+      setCurrentInput((prev) => ({ ...prev, [type]: formattedDate }));
+
+      if (dayjs(formattedDate).format('YYYY-MM-DD') !== formattedDate) return;
+      if (
+        type === 'startDate' &&
+        currentValue?.endDate &&
+        dayjs(formattedDate).isAfter(currentValue.endDate)
+      ) {
+        setCurrentValue({
+          startDate: currentValue.endDate,
+          endDate: currentValue.endDate,
+        });
+        setCurrentInput((prev) => ({
+          startDate: prev.endDate,
+          endDate: prev.endDate,
+        }));
+        return;
+      }
+      if (
+        type === 'endDate' &&
+        currentValue?.startDate &&
+        dayjs(formattedDate).isBefore(currentValue.startDate)
+      ) {
+        setCurrentValue({
+          startDate: currentValue.startDate,
+          endDate: currentValue.startDate,
+        });
+        setCurrentInput((prev) => ({
+          startDate: prev.startDate,
+          endDate: prev.startDate,
+        }));
+        return;
+      }
+
+      if (minDate && dayjs(formattedDate).isBefore(minDate)) {
+        setCurrentValue((prev) => ({
+          startDate: prev?.startDate ?? null,
+          endDate: prev?.endDate ?? null,
+          [type]: dayjs(minDate).toDate(),
+        }));
+        setCurrentInput((prev) => ({
+          ...prev,
+          [type]: dayjs(minDate).format('YYYY-MM-DD'),
+        }));
+        return;
+      }
+
+      if (maxDate && dayjs(formattedDate).isAfter(maxDate)) {
+        setCurrentValue((prev) => ({
+          startDate: prev?.startDate ?? null,
+          endDate: prev?.endDate ?? null,
+          [type]: dayjs(maxDate).toDate(),
+        }));
+        setCurrentInput((prev) => ({
+          ...prev,
+          [type]: dayjs(maxDate).format('YYYY-MM-DD'),
+        }));
+        return;
+      }
+
+      setCurrentValue((prev) => ({
+        startDate: prev?.startDate ?? null,
+        endDate: prev?.endDate ?? null,
+        [type]: dayjs(formattedDate).toDate(),
+      }));
+    };
 
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -153,26 +264,38 @@ const DateRangePicker: React.FC<IProps> = (props) => {
               </li>
             ))}
           </ul>
-          <Calendar
-            locale={locales[i18n.language]}
-            className="border-none shadow-none"
-            mode="range"
-            onSelect={(value: { from?: Date; to?: Date } | undefined) => {
-              setCurrentValue({
-                startDate: value?.from ?? null,
-                endDate: value?.to ?? null,
-              });
-            }}
-            selected={{
-              from: currentValue?.startDate ?? undefined,
-              to: currentValue?.endDate ?? undefined,
-            }}
-            numberOfMonths={2}
-            defaultMonth={
-              new Date(new Date().setMonth(new Date().getMonth() - 1))
-            }
-            disabled={{ before: minDate, after: maxDate } as Matcher}
-          />
+          <div>
+            <div className="flex gap-2">
+              <TextInput
+                value={currentInput.startDate}
+                onChange={handleChange('startDate')}
+              />
+              <TextInput
+                value={currentInput.endDate}
+                onChange={handleChange('endDate')}
+              />
+            </div>
+            <Calendar
+              locale={locales[i18n.language]}
+              className="border-none shadow-none"
+              mode="range"
+              onSelect={(value: { from?: Date; to?: Date } | undefined) => {
+                setCurrentValue({
+                  startDate: value?.from ?? null,
+                  endDate: value?.to ?? null,
+                });
+              }}
+              selected={{
+                from: currentValue?.startDate ?? undefined,
+                to: currentValue?.endDate ?? undefined,
+              }}
+              numberOfMonths={2}
+              defaultMonth={
+                new Date(new Date().setMonth(new Date().getMonth() - 1))
+              }
+              disabled={{ before: minDate, after: maxDate } as Matcher}
+            />
+          </div>
         </div>
         <div className="float-right flex gap-2 [&>button]:min-w-20">
           <Button variant="outline" onClick={handleCancel}>
