@@ -12,6 +12,7 @@ exports[`DeleteAccountButton match snapshot 1`] = `
     main.profile.button.delete-account
   </button>
   <div
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>
