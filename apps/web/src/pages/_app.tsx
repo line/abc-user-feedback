@@ -48,6 +48,8 @@ type AppPropsWithLayout = AppProps<PageProps> & {
 };
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
+  const { dehydratedState, ...otherProps } = pageProps;
+
   const [queryClient] = useState(() => new QueryClient());
 
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -72,9 +74,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
       <QueryClientProvider client={queryClient}>
         <OverlayProvider>
-          <HydrationBoundary state={pageProps.dehydratedState}>
+          <HydrationBoundary state={dehydratedState}>
             <TenantGuard>
-              {getLayout(<Component {...pageProps} />)}
+              {getLayout(<Component {...otherProps} />)}
               <Toaster />
             </TenantGuard>
           </HydrationBoundary>

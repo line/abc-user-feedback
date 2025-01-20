@@ -131,13 +131,13 @@ export const TooltipTrigger = React.forwardRef<
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
       children,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
       context.getReferenceProps({
         ref,
         ...props,
-        ...children.props,
+        ...(children.props ?? {}),
         'data-state': context.open ? 'open' : 'closed',
-      }),
+      } as unknown as React.HTMLProps<HTMLElement>),
     );
   }
 

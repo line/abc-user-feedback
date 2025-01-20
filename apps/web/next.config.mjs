@@ -10,10 +10,9 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'production',
-  swcMinify: true,
   i18n: i18nConfig.default.i18n,
   output: 'standalone',
-  experimental: { outputFileTracingRoot: path.join(__dirname, '../../') },
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@ufb/ui'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
