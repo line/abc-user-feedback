@@ -231,6 +231,7 @@ exports[`Sign In Page should render all allow 1`] = `
     </footer>
   </div>
   <div
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>
@@ -451,6 +452,7 @@ exports[`Sign In Page should render when isPrivate is false 1`] = `
     </footer>
   </div>
   <div
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>
@@ -592,6 +594,7 @@ exports[`Sign In Page should render when useEmail is false 1`] = `
     </footer>
   </div>
   <div
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>
@@ -809,6 +812,7 @@ exports[`Sign In Page should render when useOAuth is false 1`] = `
     </footer>
   </div>
   <div
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>
