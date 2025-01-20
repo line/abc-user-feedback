@@ -45,7 +45,10 @@ const Popper: React.FC<IProps> = (props) => {
 
   return (
     <>
-      {React.cloneElement(buttonChildren, { ref: buttonRef })}
+      {React.cloneElement(
+        buttonChildren as React.ReactElement<{ ref: React.RefObject<null> }>,
+        { ref: buttonRef },
+      )}
       <MUIPopper
         open={open}
         anchorEl={buttonRef.current}

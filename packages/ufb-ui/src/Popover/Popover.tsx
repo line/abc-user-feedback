@@ -151,7 +151,6 @@ export const PopoverTrigger = React.forwardRef<
   const context = usePopoverContext();
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-member-access
   const childrenRef = (children as any).ref;
-
   // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   const ref = useMergeRefs([context.refs.setReference, propRef, childrenRef]);
 
@@ -159,13 +158,13 @@ export const PopoverTrigger = React.forwardRef<
   if (asChild && React.isValidElement(children)) {
     return React.cloneElement(
       children,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+
       context.getReferenceProps({
         ref,
         ...props,
-        ...children.props,
+        ...(children.props ?? {}),
         'data-state': context.open ? 'open' : 'closed',
-      }),
+      } as unknown as React.HTMLProps<HTMLElement>),
     );
   }
 

@@ -16,7 +16,11 @@
 import type { RefObject } from 'react';
 import { useEffect, useState } from 'react';
 
-const useTruncatedElement = ({ ref }: { ref: RefObject<HTMLElement> }) => {
+const useTruncatedElement = ({
+  ref,
+}: {
+  ref: RefObject<HTMLElement | null>;
+}) => {
   const [isTruncated, setIsTruncated] = useState(false);
   const [isShowingMore, setIsShowingMore] = useState(false);
 

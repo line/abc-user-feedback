@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import type { Toast } from 'react-hot-toast';
 import { Toaster as HotToaster, toast as reactToast } from 'react-hot-toast';
 
 import type { IconNameType } from '../Icon';
@@ -28,11 +29,17 @@ interface IToastProps {
 
 export const toast = {
   positive: (input: IToastProps) =>
-    reactToast.custom((t) => <ToastBox type="positive" {...input} t={t} />),
+    reactToast.custom((t: Toast) => (
+      <ToastBox type="positive" {...input} t={t} />
+    )),
   negative: (input: IToastProps) =>
-    reactToast.custom((t) => <ToastBox type="negative" {...input} t={t} />),
+    reactToast.custom((t: Toast) => (
+      <ToastBox type="negative" {...input} t={t} />
+    )),
   accent: (input: IToastProps) =>
-    reactToast.custom((t) => <ToastBox type="accent" {...input} t={t} />),
+    reactToast.custom((t: Toast) => (
+      <ToastBox type="accent" {...input} t={t} />
+    )),
   promise: async (
     fn: Promise<void>,
     input: {
@@ -44,7 +51,7 @@ export const toast = {
   ) => {
     const { title, description } = input;
     const id = reactToast.custom(
-      (t) => (
+      (t: Toast) => (
         <ToastPromiseBox
           {...option}
           t={t}
@@ -58,7 +65,7 @@ export const toast = {
     );
     fn.then(() => {
       reactToast.custom(
-        (t) => (
+        (t: Toast) => (
           <ToastPromiseBox
             {...option}
             t={t}
@@ -73,7 +80,7 @@ export const toast = {
       );
     }).catch(() => {
       reactToast.custom(
-        (t) => (
+        (t: Toast) => (
           <ToastPromiseBox
             {...option}
             t={t}
