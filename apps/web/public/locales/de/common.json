@@ -534,7 +534,8 @@
         "api-key": "Es wurde noch kein API Key generiert.",
         "member": "Es wurden noch keine Member registriert.",
         "channel": "Es wurde noch kein Channel erstellt.",
-        "webhook": "Es wurde noch kein Webhook registriert."
+        "webhook": "Es wurde noch kein Webhook registriert.",
+        "feedback": "Es wurde noch kein Feedback gesammelt."
       },
       "create-project": "Project erstellen",
       "create-channel": "Channel erstellen",

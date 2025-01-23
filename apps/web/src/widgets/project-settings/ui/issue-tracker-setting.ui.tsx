@@ -43,7 +43,6 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   const methods = useForm<IssueTracker>({
     resolver: zodResolver(issueTrackerSchema),
   });
-  console.log('errors: ', methods.formState.errors);
 
   const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',

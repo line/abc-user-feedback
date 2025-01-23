@@ -58,8 +58,7 @@ const IssueKanbanColumn = (props: Props) => {
   return (
     <div
       className={cn(
-        'rounded-16 flex flex-col gap-2 px-2 py-3',
-        ISSUE_MAP[issue.status].bgClassName,
+        'rounded-16 bg-neutral-tertiary flex flex-col gap-2 px-2 py-3',
       )}
     >
       <div
@@ -70,9 +69,11 @@ const IssueKanbanColumn = (props: Props) => {
       >
         <div className="flex items-center gap-1">
           {issue.name}
-          <Badge variant="subtle" radius="large">
-            {data.pages[0]?.meta.totalItems ?? 0}
-          </Badge>
+          {data.pages[0]?.meta.totalItems ?
+            <Badge variant="subtle" radius="large">
+              {data.pages[0].meta.totalItems.toLocaleString()}
+            </Badge>
+          : <></>}
         </div>
         <IssueKanbanColumnSorting
           sort={sort}

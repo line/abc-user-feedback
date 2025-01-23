@@ -81,10 +81,11 @@ th {
   cursor: col-resize;
   user-select: none;
   touch-action: none;
-  width: 8px;
+  width: 4px;
   height: 100%;
   top: 0;
 }
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

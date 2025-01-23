@@ -528,7 +528,8 @@
         "api-key": "생성된 API Key가 없습니다.",
         "member": "등록된 Member가 없습니다.",
         "channel": "생성된 Channel이 없습니다.",
-        "webhook": "등록된 Webhook이 없습니다."
+        "webhook": "등록된 Webhook이 없습니다.",
+        "feedback": "생성된 피드백이 없습니다."
       },
       "create-project": "Project 생성",
       "create-channel": "Channel 생성",

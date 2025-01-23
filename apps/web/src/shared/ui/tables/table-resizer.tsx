@@ -30,10 +30,10 @@ const TableResizer = <T,>({ table, header }: IProps<T>) => {
       onMouseDown={header.getResizeHandler()}
       onTouchStart={header.getResizeHandler()}
       className={cn([
-        'resizer hover:text-primary z-auto',
-        header.column.getIsResizing() ?
-          'text-primary bg-secondary'
-        : 'text-tertiary',
+        'resizer hover:bg-neutral-secondary z-auto',
+        {
+          'bg-neutral-secondary': header.column.getIsResizing(),
+        },
       ])}
       style={{
         transform:
@@ -41,13 +41,7 @@ const TableResizer = <T,>({ table, header }: IProps<T>) => {
             `translateX(${table.getState().columnSizingInfo.deltaOffset}px)`
           : 'translateX(0px)',
       }}
-    >
-      <Icon
-        name="Handle"
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90"
-        size={16}
-      />
-    </div>
+    />
   );
 };
 

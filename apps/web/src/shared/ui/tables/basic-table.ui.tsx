@@ -59,6 +59,7 @@ interface IProps<T> {
   className?: string;
   onClickRow?: (index: number, row: T) => void;
   reorder?: (data: T[]) => void;
+  disableRound?: boolean;
 }
 
 const BasicTable = <T,>(props: IProps<T>) => {
@@ -71,6 +72,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
     className,
     onClickRow,
     reorder,
+    disableRound,
   } = props;
 
   // reorder rows after drag & drop
@@ -99,14 +101,22 @@ const BasicTable = <T,>(props: IProps<T>) => {
   );
 
   return (
-    <div className="border-neutral-tertiary h-full overflow-auto rounded border">
+    <div
+      className={cn(
+        'border-neutral-tertiary h-full overflow-auto rounded border',
+        { 'rounded-none': disableRound },
+      )}
+    >
       <DndContext
         collisionDetection={closestCenter}
         modifiers={[restrictToVerticalAxis]}
         sensors={sensors}
         onDragEnd={handleDragEnd}
       >
-        <Table className={cn(className, { 'h-full': dataIds.length === 0 })}>
+        <Table
+          className={cn(className, { 'h-full': dataIds.length === 0 })}
+          style={{ width: table.getCenterTotalSize() }}
+        >
           <TableHeader>
             <TableRow>
               {table.getFlatHeaders().map((header, i) => (

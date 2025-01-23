@@ -522,7 +522,8 @@
         "api-key": "生成されたAPI Keyがありません。",
         "member": "登録されたMemberがいません。",
         "channel": "作成されたChannelがありません。",
-        "webhook": "登録されたWebhookがありません。"
+        "webhook": "登録されたWebhookがありません。",
+        "feedback": "登録されたFeedbackありません。"
       },
       "create-project": "Project作成",
       "create-channel": "Channel作成",

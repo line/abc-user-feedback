@@ -24,40 +24,54 @@ import {
   Icon,
 } from '@ufb/react';
 
+import { cn } from '@/shared/utils';
+
 const PAGE_SIZES = [20, 30, 40, 50];
 
 interface IProps<T> {
   table: Table<T>;
+  disableRowSelect?: boolean;
+  disableLimit?: boolean;
 }
 
 const TablePagination = <T,>(props: IProps<T>) => {
-  const { table } = props;
+  const { table, disableRowSelect, disableLimit } = props;
   const { pagination } = table.getState();
 
   return (
-    <div className="flex items-center justify-between">
-      <p className="text-neutral-tertiary">
-        {table.getSelectedRowModel().rows.length} of {table.getRowCount()}{' '}
-        row(s) selected.
-      </p>
+    <div
+      className={cn('flex w-full items-center justify-between', {
+        'justify-end': disableRowSelect,
+      })}
+    >
+      {!disableRowSelect && (
+        <p className="text-neutral-tertiary">
+          {table.getSelectedRowModel().rows.length} of {table.getRowCount()}{' '}
+          row(s) selected.
+        </p>
+      )}
       <div className="text-neutral-tertiary flex items-center gap-2">
-        <p>Rows per page</p>
-        <Dropdown>
-          <DropdownTrigger variant="outline">
-            {pagination.pageSize}
-            <Icon name="RiExpandUpDownFill" />
-          </DropdownTrigger>
-          <DropdownContent>
-            {PAGE_SIZES.map((pageSize) => (
-              <DropdownItem
-                key={pageSize}
-                onClick={() => table.setPageSize(pageSize)}
-              >
-                {pageSize}
-              </DropdownItem>
-            ))}
-          </DropdownContent>
-        </Dropdown>
+        {!disableLimit && (
+          <>
+            <p>Rows per page</p>
+            <Dropdown>
+              <DropdownTrigger variant="outline">
+                {pagination.pageSize}
+                <Icon name="RiExpandUpDownFill" />
+              </DropdownTrigger>
+              <DropdownContent>
+                {PAGE_SIZES.map((pageSize) => (
+                  <DropdownItem
+                    key={pageSize}
+                    onClick={() => table.setPageSize(pageSize)}
+                  >
+                    {pageSize}
+                  </DropdownItem>
+                ))}
+              </DropdownContent>
+            </Dropdown>
+          </>
+        )}
         <p>
           Page {pagination.pageIndex + 1} of {table.getPageCount()}
         </p>

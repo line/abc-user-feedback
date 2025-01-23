@@ -102,7 +102,6 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
 
   const issues = useMemo(() => ISSUES(t), [t]);
   const [limit, setLimit] = useState(Number(limitOptions[0]?.value ?? 0));
-  console.log('limit: ', limit);
 
   const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
 

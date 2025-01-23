@@ -534,7 +534,8 @@
         "api-key": "尚未生成API Key。",
         "member": "尚未注册Member。",
         "channel": "尚未创建Channel。",
-        "webhook": "尚未注册Webhook。"
+        "webhook": "尚未注册Webhook。",
+        "feedback": "尚未收到Feedback。"
       },
       "create-project": "创建Project",
       "create-channel": "创建Channel",

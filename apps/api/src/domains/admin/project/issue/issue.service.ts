@@ -140,7 +140,6 @@ export class IssueService {
     } else {
       searchOptions.where = [andWhere];
     }
-    console.log('searchOptions: ', searchOptions);
 
     const result = await paginateHelper(
       this.repository.createQueryBuilder(),

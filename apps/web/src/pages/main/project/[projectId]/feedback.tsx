@@ -25,6 +25,7 @@ import type { PaginationState } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
+import { useTranslation } from 'react-i18next';
 
 import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
@@ -64,6 +65,8 @@ interface IProps {
 
 const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
+  const { t } = useTranslation();
+
   const [currentChannelId, setCurrentChannelId] = useQueryState<number>(
     'channelId',
     parseAsInteger.withDefault(-1),
@@ -73,7 +76,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
-    pageSize: 10,
+    pageSize: 20,
   });
 
   const [dateRange, setDateRange] = useState<DateRangeType>({
@@ -242,16 +245,21 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           onValueChange={(v) => setCurrentChannelId(Number(v))}
         >
           <TabsList>
-            {data?.items.map((channel) => (
-              <TabsTrigger key={channel.id} value={String(channel.id)}>
-                {channel.name}
-                {currentChannelId === channel.id && (
-                  <span className="ml-1 font-bold">
-                    {feedbackData?.meta.totalItems}
-                  </span>
-                )}
+            {data?.items.length === 0 ?
+              <TabsTrigger value="-1">
+                {t('v2.text.no-data.channel')}
               </TabsTrigger>
-            ))}
+            : data?.items.map((channel) => (
+                <TabsTrigger key={channel.id} value={String(channel.id)}>
+                  {channel.name}
+                  {currentChannelId === channel.id && (
+                    <span className="ml-1 font-bold">
+                      {feedbackData?.meta.totalItems}
+                    </span>
+                  )}
+                </TabsTrigger>
+              ))
+            }
           </TabsList>
         </Tabs>
         <div className="flex gap-2 [&>button]:min-w-20">
@@ -282,9 +290,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       </div>
       <BasicTable
         table={table}
-        className="table-fixed"
+        className="min-w-full table-fixed"
         onClickRow={(_, row) => setOpenFeedbackId(Number(row.id))}
         isLoading={isLoading}
+        emptyCaption={t('v2.text.no-data.feedback')}
+        resiable
       />
       <TablePagination table={table} />
       {currentFeedback && (

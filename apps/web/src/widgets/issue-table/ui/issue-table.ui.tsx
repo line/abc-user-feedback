@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 
-import { Button, Icon } from '@ufb/react';
+import { Button, Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
 import {
@@ -27,6 +28,7 @@ import {
   useOAIMutation,
   useOAIQuery,
 } from '@/shared';
+import CategoryTable from '@/shared/ui/category-table.ui';
 
 import { env } from '@/env';
 import { useIssueQuery } from '../lib';
@@ -44,6 +46,8 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const { dateRange, setDateRange } = useIssueQuery(projectId);
 
   const overlay = useOverlay();
+  const [viewType, setViewType] = useState('kanban');
+
   const { data: issueTracker } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
@@ -116,18 +120,35 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             filterFields={filterFields}
             tableFilters={[]}
           />
+          <ToggleGroup
+            type="single"
+            value={viewType}
+            onValueChange={setViewType}
+          >
+            <ToggleGroupItem value="kanban" className="w-24">
+              <Icon name="RiCarouselView" />
+              Kanban
+            </ToggleGroupItem>
+            <ToggleGroupItem value="list" className="w-24">
+              <Icon name="RiListCheck" />
+              List
+            </ToggleGroupItem>
+          </ToggleGroup>
         </div>
       </div>
-      <div className="grid grid-cols-5 items-start gap-4">
-        {ISSUES(t).map((issue) => (
-          <IssueKanbanColumn
-            key={issue.key}
-            issue={issue}
-            projectId={projectId}
-            issueTracker={issueTracker?.data}
-          />
-        ))}
-      </div>
+      {viewType === 'kanban' && (
+        <div className="grid grid-cols-5 items-start gap-4">
+          {ISSUES(t).map((issue) => (
+            <IssueKanbanColumn
+              key={issue.key}
+              issue={issue}
+              projectId={projectId}
+              issueTracker={issueTracker?.data}
+            />
+          ))}
+        </div>
+      )}
+      {viewType === 'list' && <CategoryTable projectId={projectId} />}
     </>
   );
 };
