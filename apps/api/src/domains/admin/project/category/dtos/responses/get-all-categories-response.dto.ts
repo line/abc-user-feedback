@@ -13,41 +13,37 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose, plainToInstance } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
-
-export class CreateIssueDto {
+class GetAllCategoriesResponse {
   @Expose()
-  projectId: number;
+  @ApiProperty()
+  id: number;
 
   @Expose()
+  @ApiProperty()
   name: string;
 
   @Expose()
-  status: IssueStatusEnum;
+  @ApiProperty()
+  createdAt: Date;
 
   @Expose()
-  description: string;
+  @ApiProperty()
+  updatedAt: Date;
+}
 
+export class GetAllCategoriesResponseDto {
   @Expose()
-  externalIssueId: string;
+  @ApiProperty({ type: [GetAllCategoriesResponse] })
+  @Type(() => GetAllCategoriesResponse)
+  items: GetAllCategoriesResponse[];
 
-  public static from(params: any): CreateIssueDto {
-    return plainToInstance(CreateIssueDto, params, {
+  public static transform(params: any) {
+    console.log(params);
+    return plainToInstance(GetAllCategoriesResponseDto, params, {
       excludeExtraneousValues: true,
-    });
-  }
-
-  static toIssueEntity(params: CreateIssueDto) {
-    const { name, status, description, externalIssueId, projectId } = params;
-    return IssueEntity.from({
-      name,
-      status,
-      description,
-      externalIssueId,
-      projectId,
     });
   }
 }

@@ -28,6 +28,7 @@ import { CommonEntity } from '@/common/entities';
 import { IssueStatusEnum } from '@/common/enums';
 import { FeedbackIssueStatisticsEntity } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.entity';
 import { FeedbackEntity } from '../../feedback/feedback.entity';
+import { CategoryEntity } from '../category/category.entity';
 import { ProjectEntity } from '../project/project.entity';
 
 @Entity('issues')
@@ -66,11 +67,37 @@ export class IssueEntity extends CommonEntity {
   })
   stats: Relation<FeedbackIssueStatisticsEntity>[];
 
-  static from({ name, projectId }: { name: string; projectId: number }) {
+  @ManyToOne(() => CategoryEntity, (category) => category.issues, {
+    onDelete: 'CASCADE',
+  })
+  category: Relation<CategoryEntity>;
+
+  static from({
+    name,
+    status,
+    description,
+    externalIssueId,
+    projectId,
+    categoryId,
+  }: {
+    name: string;
+    status: IssueStatusEnum;
+    description: string;
+    externalIssueId: string;
+    projectId: number;
+    categoryId?: number;
+  }) {
     const issue = new IssueEntity();
     issue.name = name;
+    issue.status = status;
+    issue.description = description;
+    issue.externalIssueId = externalIssueId;
     issue.project = new ProjectEntity();
     issue.project.id = projectId;
+    if (categoryId) {
+      issue.category = new CategoryEntity();
+      issue.category.id = categoryId;
+    }
 
     return issue;
   }

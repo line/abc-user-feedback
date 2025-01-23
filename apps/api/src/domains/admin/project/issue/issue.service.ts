@@ -30,9 +30,11 @@ import type { CountByProjectIdDto } from '@/domains/admin/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
+import { CategoryEntity } from '../category/category.entity';
 import { ProjectEntity } from '../project/project.entity';
 import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
 import { CreateIssueDto, UpdateIssueDto } from './dtos';
+import { UpdateIssueCategoryDto } from './dtos/update-issue-category.dto';
 import {
   IssueInvalidNameException,
   IssueNameDuplicatedException,
@@ -158,6 +160,28 @@ export class IssueService {
     return issue;
   }
 
+  async findByCategoryId({
+    limit,
+    page,
+    categoryId,
+  }: {
+    limit: number;
+    page: number;
+    categoryId: number;
+  }) {
+    const result = await paginateHelper(
+      this.repository.createQueryBuilder(),
+      {
+        where: {
+          category: { id: categoryId },
+        },
+      },
+      { page, limit },
+    );
+
+    return result;
+  }
+
   async findByName({ name }: { name: string }) {
     const issue = await this.repository.findOneBy({ name });
 
@@ -216,6 +240,23 @@ export class IssueService {
         issueId,
         previousStatus,
       });
+
+    return updatedIssue;
+  }
+
+  async updateByCategoryId(dto: UpdateIssueCategoryDto) {
+    const { issueId, categoryId } = dto;
+    const issue = await this.repository.findOne({
+      where: { id: issueId },
+      relations: { category: true },
+    });
+
+    if (!issue) throw new IssueNotFoundException();
+
+    issue.category = new CategoryEntity();
+    issue.category.id = categoryId;
+
+    const updatedIssue = await this.repository.save(issue);
 
     return updatedIssue;
   }

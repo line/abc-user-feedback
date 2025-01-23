@@ -15,19 +15,12 @@
  */
 import { Expose } from 'class-transformer';
 
-import { IssueStatusEnum } from '../../../../../common/enums';
-import { CreateIssueDto } from './create-issue.dto';
+import { CreateCategoryDto } from './create-category.dto';
 
-export class UpdateIssueDto extends CreateIssueDto {
+export class UpdateCategoryDto extends CreateCategoryDto {
   @Expose()
-  issueId: number;
-
-  @Expose()
-  declare description: string;
+  categoryId: number;
 
   @Expose()
-  declare status: IssueStatusEnum;
-
-  @Expose()
-  declare externalIssueId: string;
+  declare name: string;
 }

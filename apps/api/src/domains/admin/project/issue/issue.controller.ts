@@ -22,6 +22,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -31,6 +32,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { PaginationRequestDto } from '@/common/dtos';
 import { JwtAuthGuard } from '../../auth/guards';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
@@ -76,6 +78,31 @@ export class IssueController {
     return FindIssueByIdResponseDto.transform(
       await this.issueService.findById({ issueId }),
     );
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @ApiOkResponse({ type: [FindIssuesByProjectIdResponseDto] })
+  @Get('/category/:categoryId')
+  async findByCategoryId(
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+    @Query() query: PaginationRequestDto,
+  ) {
+    return FindIssuesByProjectIdResponseDto.transform(
+      await this.issueService.findByCategoryId({ ...query, categoryId }),
+    );
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @ApiBearerAuth()
+  @Put(':issueId/category/:categoryId')
+  async updateByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.updateByCategoryId({
+      issueId,
+      categoryId,
+    });
   }
 
   @ApiParam({ name: 'projectId', type: Number })

@@ -13,21 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, MaxLength, MinLength } from 'class-validator';
 
-import { IssueStatusEnum } from '../../../../../common/enums';
-import { CreateIssueDto } from './create-issue.dto';
-
-export class UpdateIssueDto extends CreateIssueDto {
-  @Expose()
-  issueId: number;
-
-  @Expose()
-  declare description: string;
-
-  @Expose()
-  declare status: IssueStatusEnum;
-
-  @Expose()
-  declare externalIssueId: string;
+export class CreateCategoryRequestDto {
+  @ApiProperty({ description: 'Category name', example: 'category' })
+  @IsString()
+  @MinLength(1)
+  @MaxLength(255)
+  name: string;
 }

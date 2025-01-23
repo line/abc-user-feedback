@@ -13,21 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
-
-import { IssueStatusEnum } from '../../../../../common/enums';
-import { CreateIssueDto } from './create-issue.dto';
-
-export class UpdateIssueDto extends CreateIssueDto {
-  @Expose()
+export class UpdateIssueCategoryDto {
   issueId: number;
-
-  @Expose()
-  declare description: string;
-
-  @Expose()
-  declare status: IssueStatusEnum;
-
-  @Expose()
-  declare externalIssueId: string;
+  categoryId: number;
 }
