@@ -57,12 +57,9 @@ export class CategoryService {
   }
 
   async findAllByProjectId(dto: FindAllCategoriesByProjectIdDto) {
-    console.log(dto.projectId);
     const categories = await this.repository.find({
       where: { project: { id: dto.projectId } },
     });
-
-    console.log(categories);
 
     return categories;
   }
@@ -81,8 +78,6 @@ export class CategoryService {
   async update(dto: UpdateCategoryDto) {
     const { name, categoryId } = dto;
     const category = await this.findById({ categoryId });
-
-    console.log(category);
 
     if (
       await this.repository.findOne({

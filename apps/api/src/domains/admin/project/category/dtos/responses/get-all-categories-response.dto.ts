@@ -41,7 +41,6 @@ export class GetAllCategoriesResponseDto {
   items: GetAllCategoriesResponse[];
 
   public static transform(params: any) {
-    console.log(params);
     return plainToInstance(GetAllCategoriesResponseDto, params, {
       excludeExtraneousValues: true,
     });
