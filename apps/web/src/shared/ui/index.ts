@@ -24,7 +24,6 @@ export { default as ImagePreviewButton } from './image-preview-button';
 export { default as DateRangePicker } from './date-range-picker';
 export { default as DescriptionTooltip } from './description-tooltip';
 export { default as HelpCardDocs } from './help-card-docs';
-export { default as ImageSlider } from './image-slider.ui';
 
 export * from './tables';
 export * from './charts';

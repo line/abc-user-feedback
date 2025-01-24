@@ -95,7 +95,7 @@ const DialogContent = React.forwardRef<
   const { themeRadius } = useTheme();
   return (
     <DialogPortal>
-      <DialogOverlay />
+      <DialogOverlay onClick={(e) => e.stopPropagation()} />
       <DialogPrimitive.Content
         ref={ref}
         className={cn(

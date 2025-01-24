@@ -36,7 +36,7 @@ interface Props {
   rowCount: number;
   pageCount: number;
   pagination: PaginationState;
-  setPagination: React.Dispatch<React.SetStateAction<PaginationState>>;
+  setPagination?: React.Dispatch<React.SetStateAction<PaginationState>>;
   isLoading?: boolean;
 }
 

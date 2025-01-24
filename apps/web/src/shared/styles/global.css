@@ -95,3 +95,42 @@ th {
   border-radius: 4px;
   background-color: var(--fill-color-secondary);
 }
+
+.swiper {
+  width: 100%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.swiper-slide {
+  background-size: cover;
+  background-position: center;
+}
+
+.main-swiper {
+  height: 400px;
+  width: 464px;
+  @apply bg-neutral-tertiary;
+}
+
+.thumbnail-swiper {
+  width: 464px;
+  height: 40px;
+}
+
+.thumbnail-swiper .swiper-slide {
+  width: 70px;
+  height: 100%;
+  opacity: 0.4;
+}
+
+.thumbnail-swiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  --swiper-navigation-size: 12px;
+  @apply button button-small button-radius-large button-outline !bg-neutral-primary;
+}

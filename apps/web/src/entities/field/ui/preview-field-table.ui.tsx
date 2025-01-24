@@ -42,7 +42,7 @@ interface IProps {
   fields: FieldInfo[];
 }
 
-const PreviewTable: React.FC<IProps> = ({ fields }) => {
+const PreviewFieldTable: React.FC<IProps> = ({ fields }) => {
   const [rows, setRows] = useState<Feedback[]>([]);
   const { t } = useTranslation();
 
@@ -146,6 +146,6 @@ const PreviewTable: React.FC<IProps> = ({ fields }) => {
 };
 
 export default memo(
-  PreviewTable,
+  PreviewFieldTable,
   (prev, next) => JSON.stringify(prev.fields) === JSON.stringify(next.fields),
 );

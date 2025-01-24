@@ -247,7 +247,6 @@ const FieldSetting: React.FC<IProps> = (props) => {
           pageCount={1}
           rowCount={feedbacks.length}
           pagination={{ pageIndex: 0, pageSize: 10 }}
-          setPagination={() => {}}
         />
       : <FieldTable
           fields={fields}

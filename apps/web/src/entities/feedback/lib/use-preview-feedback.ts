@@ -71,10 +71,9 @@ const usePreviewFeedback = (fields: FieldInfo[]) => {
           : field.format === 'number' ? faker.number.int()
           : field.format === 'text' ? faker.lorem.text()
           : faker.helpers.arrayElements(
-              Array.from(
-                { length: faker.number.int({ min: 1, max: 15 }) },
-                () => '/assets/images/sample_image.png',
-              ),
+              Array.from({
+                length: 15,
+              }).fill('/assets/images/sample_image.png'),
             );
       }
 

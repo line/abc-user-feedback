@@ -40,6 +40,10 @@ import { useUserStore } from '@/entities/user';
 import 'react-datepicker/dist/react-datepicker.css';
 import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
 
 const inter = Inter({ subsets: ['latin'] });
 
