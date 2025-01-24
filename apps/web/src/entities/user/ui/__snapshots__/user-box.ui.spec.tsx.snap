@@ -33,6 +33,7 @@ exports[`UserBox snapshot 1`] = `
     </button>
   </div>
   <div
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>
@@ -95,6 +96,7 @@ exports[`UserBox snapshot when open 1`] = `
   </div>
   <div
     data-floating-ui-inert=""
+    id="_rht_toaster"
     style="position: fixed; z-index: 9999; top: 16px; left: 16px; right: 16px; bottom: 16px; pointer-events: none;"
   />
 </div>

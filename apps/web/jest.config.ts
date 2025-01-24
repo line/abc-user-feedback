@@ -18,18 +18,12 @@ import type { Config } from 'jest';
 
 const createJestConfig = nextJest({ dir: './' });
 
-// Add any custom config to be passed to Jest
-// /** @type {import('jest').Config} */
 const jestConfig = {
   coverageProvider: 'v8',
   testEnvironment: 'jest-fixed-jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  setupFiles: ['<rootDir>/jest.polyfills.js'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  testEnvironmentOptions: {
-    customExportConditions: [''],
   },
   extensionsToTreatAsEsm: ['.ts'],
   transform: {
