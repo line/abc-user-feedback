@@ -16,30 +16,46 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional } from 'class-validator';
 
-import type { TimeRange } from '@/common/dtos';
-import { PaginationRequestDto } from '@/common/dtos';
-import type { SortMethodEnum } from '@/common/enums';
+import { PaginationRequestDto, TimeRange } from '@/common/dtos';
+import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 
-class QueryV2 {}
+class QueryV2 {
+  @ApiProperty({
+    required: false,
+    type: TimeRange,
+    example: { gte: '2023-01-01', lt: '2023-12-31' },
+  })
+  @IsOptional()
+  createdAt?: TimeRange;
+
+  @ApiProperty({
+    required: false,
+    type: TimeRange,
+    example: { gte: '2023-01-01', lt: '2023-12-31' },
+  })
+  @IsOptional()
+  updatedAt?: TimeRange;
+
+  [key: string]: string | string[] | TimeRange | number | number[] | undefined;
+
+  condition: QueryV2ConditionsEnum;
+}
 
 export class FindIssuesByProjectIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
-    description:
-      "You can query by key-value with this object. If you want to search by text, you can use 'searchText' key.",
+    description: 'You can query by key-value with this object.',
     example: { name: 'issue name' },
   })
   @IsOptional()
-  query?: {
-    searchText?: string;
-    [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
-  };
+  queries?: QueryV2[];
+
+  @ApiProperty({
+    required: false,
+    description: "You can concatenate queries with 'AND' or 'OR' operators.",
+  })
+  @IsOptional()
+  operator?: 'AND' | 'OR';
 
   @ApiProperty({
     required: false,

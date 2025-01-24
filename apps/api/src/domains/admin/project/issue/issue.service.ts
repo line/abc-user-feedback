@@ -13,26 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
 import { DateTime } from 'luxon';
+import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
-import { In, Like, Not, Raw, Repository } from 'typeorm';
+import { Brackets, In, Like, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
-import { EventTypeEnum } from '@/common/enums';
+import {
+  EventTypeEnum,
+  QueryV2ConditionsEnum,
+  SortMethodEnum,
+} from '@/common/enums';
 import { paginateHelper } from '@/common/helper/paginate.helper';
 import type { CountByProjectIdDto } from '@/domains/admin/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
+import { isInvalidSortMethod } from '../../feedback/feedback.common';
 import { CategoryEntity } from '../category/category.entity';
 import { ProjectEntity } from '../project/project.entity';
-import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
+import type {
+  FindByIssueIdDto,
+  FindIssuesByProjectIdDto,
+  FindIssuesByProjectIdDtoV2,
+} from './dtos';
 import { CreateIssueDto, UpdateIssueDto } from './dtos';
 import { UpdateIssueCategoryDto } from './dtos/update-issue-category.dto';
 import {
@@ -150,6 +160,122 @@ export class IssueService {
     );
 
     return result;
+  }
+  async findIssuesByProjectIdV2(
+    dto: FindIssuesByProjectIdDtoV2,
+  ): Promise<Pagination<IssueEntity, IPaginationMeta>> {
+    const {
+      projectId,
+      queries = [],
+      sort = {},
+      operator = 'AND',
+      page,
+      limit,
+    } = dto;
+
+    const queryBuilder = this.repository
+      .createQueryBuilder('issues')
+      .leftJoinAndSelect('issues.category', 'category')
+      .where('issues.project_id = :projectId', { projectId });
+
+    const method = operator === 'AND' ? 'andWhere' : 'orWhere';
+
+    queryBuilder.andWhere(
+      new Brackets((qb) => {
+        let paramIndex = 0;
+        for (const query of queries) {
+          const { condition } = query;
+          for (const [fieldKey, value] of Object.entries(query)) {
+            if (fieldKey === 'condition') continue;
+
+            const paramName = `value${paramIndex++}`;
+
+            if (fieldKey === 'createdAt') {
+              const { gte, lt } = value as TimeRange;
+              qb[method](`issues.created_at >= :gte${paramName}`, {
+                [`gte${paramName}`]: gte,
+              });
+              qb[method](`issues.created_at < :lt${paramName}`, {
+                [`lt${paramName}`]: lt,
+              });
+            } else if (fieldKey === 'updatedAt') {
+              const { gte, lt } = value as TimeRange;
+              qb[method](`issues.created_at >= :gte${paramName}`, {
+                [`gte${paramName}`]: gte,
+              });
+              qb[method](`issues.created_at < :lt${paramName}`, {
+                [`lt${paramName}`]: lt,
+              });
+            } else if (
+              fieldKey === 'status' &&
+              condition === QueryV2ConditionsEnum.IS
+            ) {
+              qb[method](`issues.status = :${paramName}`, {
+                [paramName]: value,
+              });
+            } else if (
+              fieldKey === 'externalIssueId' &&
+              condition === QueryV2ConditionsEnum.IS
+            ) {
+              qb[method](`issues.external_issue_id = :${paramName}`, {
+                [paramName]: value,
+              });
+            } else if (['name', 'description'].includes(fieldKey)) {
+              const operator =
+                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+              const valueFormat =
+                condition === QueryV2ConditionsEnum.IS ? value : `%${value}%`;
+              qb[method](`issues.${fieldKey} ${operator} :${paramName}`, {
+                [paramName]: valueFormat,
+              });
+            } else if (fieldKey === 'category') {
+              const operator =
+                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+              const valueFormat =
+                condition === QueryV2ConditionsEnum.IS ? value : `%${value}%`;
+              qb[method](`category.name ${operator} :${paramName}`, {
+                [paramName]: valueFormat,
+              });
+            }
+          }
+        }
+      }),
+    );
+
+    if (Object.keys(sort).length === 0) {
+      sort.id = SortMethodEnum.DESC;
+    }
+    Object.keys(sort).forEach((fieldName) => {
+      if (isInvalidSortMethod(sort[fieldName])) {
+        throw new BadRequestException('invalid sort method');
+      }
+
+      if (fieldName === 'feedbackCount') {
+        queryBuilder.addOrderBy(`issues.feedback_count`, sort[fieldName]);
+      } else if (fieldName === 'createdAt') {
+        queryBuilder.addOrderBy(`issues.created_at`, sort[fieldName]);
+      } else if (fieldName === 'updatedAt') {
+        queryBuilder.addOrderBy(`issues.updated_at`, sort[fieldName]);
+      }
+    });
+
+    const items = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .getMany();
+
+    const total = await queryBuilder.getCount();
+
+    return {
+      items,
+      meta: {
+        itemCount: items.length,
+        totalItems: total,
+        itemsPerPage: limit,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findById({ issueId }: FindByIssueIdDto) {

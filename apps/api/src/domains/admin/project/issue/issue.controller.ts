@@ -40,7 +40,7 @@ import { CreateIssueDto } from './dtos';
 import {
   CreateIssueRequestDto,
   DeleteIssuesRequestDto,
-  FindIssuesByProjectIdRequestDto,
+  FindIssuesByProjectIdRequestDtoV2,
   UpdateIssueRequestDto,
 } from './dtos/requests';
 import {
@@ -112,10 +112,10 @@ export class IssueController {
   @Post('search')
   async findAllByProjectId(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() body: FindIssuesByProjectIdRequestDto,
+    @Body() body: FindIssuesByProjectIdRequestDtoV2,
   ) {
     return FindIssuesByProjectIdResponseDto.transform(
-      await this.issueService.findIssuesByProjectId({
+      await this.issueService.findIssuesByProjectIdV2({
         ...body,
         projectId,
       }),

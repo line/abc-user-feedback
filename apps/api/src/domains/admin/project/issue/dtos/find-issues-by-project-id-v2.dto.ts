@@ -13,8 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { CreateIssueRequestDto } from './create-issue-request.dto';
-export { FindIssuesByProjectIdRequestDto } from './find-issues-by-project-id-request.dto';
-export { FindIssuesByProjectIdRequestDtoV2 } from './find-issues-by-project-id-request-v2.dto';
-export { UpdateIssueRequestDto } from './update-issue-request.dto';
-export { DeleteIssuesRequestDto } from './delete-issues-request.dto';
+import type { TimeRange } from '@/common/dtos';
+import { PaginationDto } from '@/common/dtos';
+import type {
+  QueryV2ConditionsEnum,
+  SortMethodEnum,
+} from '../../../../../common/enums';
+
+export class FindIssuesByProjectIdDtoV2 extends PaginationDto {
+  projectId: number;
+  queries?: {
+    createdAt?: TimeRange;
+    updatedAt?: TimeRange;
+    ids?: number[];
+    [key: string]:
+      | string
+      | string[]
+      | TimeRange
+      | number
+      | number[]
+      | undefined;
+    condition: QueryV2ConditionsEnum;
+  }[];
+  sort?: Record<string, SortMethodEnum>;
+  operator?: 'AND' | 'OR';
+}
