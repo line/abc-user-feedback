@@ -28,7 +28,7 @@
     "@ufb/tsconfig": "workspace:*",
     "eslint": "catalog:",
     "prettier": "catalog:",
-    "tailwindcss": "^3.4.3",
+    "tailwindcss": "^4.0.0",
     "typescript": "catalog:"
   }
 }
