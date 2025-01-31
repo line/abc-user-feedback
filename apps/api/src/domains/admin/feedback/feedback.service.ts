@@ -37,6 +37,7 @@ import {
   FieldFormatEnum,
   FieldPropertyEnum,
   FieldStatusEnum,
+  IssueStatusEnum,
 } from '@/common/enums';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
@@ -460,6 +461,9 @@ export class FeedbackService {
           issue = await this.issueService.create({
             name: issueName,
             projectId: channel.project.id,
+            status: IssueStatusEnum.INIT,
+            description: '',
+            externalIssueId: '',
           });
         }
 

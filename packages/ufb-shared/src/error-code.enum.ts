@@ -67,6 +67,12 @@ const Issue = {
   IssueNotFound: 'IssueNotFound',
 };
 
+const Category = {
+  CategoryNameDuplicated: 'CategoryNameDuplicated',
+  CategoryNameInvalid: 'CategoryNameInvalid',
+  CategoryNotFound: 'CategoryNotFound',
+};
+
 const Field = {
   FieldNameDuplicated: 'FieldNameDuplicated',
   FieldKeyDuplicated: 'FieldKeyDuplicated',
@@ -109,6 +115,7 @@ export const ErrorCode = {
   Project,
   Channel,
   Issue,
+  Category,
   Field,
   Option,
   Member,

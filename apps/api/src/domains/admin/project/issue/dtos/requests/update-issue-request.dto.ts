@@ -30,7 +30,7 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   @IsString()
   @IsNullable()
   @MaxLength(50)
-  description: string | null;
+  declare description: string;
 
   @ApiProperty({
     required: false,
@@ -40,7 +40,7 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   })
   @IsEnum(IssueStatusEnum)
   @IsOptional()
-  status?: IssueStatusEnum;
+  declare status: IssueStatusEnum;
 
   @ApiProperty({
     required: false,
@@ -49,5 +49,5 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   })
   @IsString()
   @IsOptional()
-  externalIssueId?: string;
+  declare externalIssueId: string;
 }

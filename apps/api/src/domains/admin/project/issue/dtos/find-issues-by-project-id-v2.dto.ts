@@ -13,21 +13,28 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
+import type { TimeRange } from '@/common/dtos';
+import { PaginationDto } from '@/common/dtos';
+import type {
+  QueryV2ConditionsEnum,
+  SortMethodEnum,
+} from '../../../../../common/enums';
 
-import { IssueStatusEnum } from '../../../../../common/enums';
-import { CreateIssueDto } from './create-issue.dto';
-
-export class UpdateIssueDto extends CreateIssueDto {
-  @Expose()
-  issueId: number;
-
-  @Expose()
-  declare description: string;
-
-  @Expose()
-  declare status: IssueStatusEnum;
-
-  @Expose()
-  declare externalIssueId: string;
+export class FindIssuesByProjectIdDtoV2 extends PaginationDto {
+  projectId: number;
+  queries?: {
+    categoryId?: number;
+    createdAt?: TimeRange;
+    updatedAt?: TimeRange;
+    [key: string]:
+      | string
+      | string[]
+      | TimeRange
+      | number
+      | number[]
+      | undefined;
+    condition: QueryV2ConditionsEnum;
+  }[];
+  sort?: Record<string, SortMethodEnum>;
+  operator?: 'AND' | 'OR';
 }

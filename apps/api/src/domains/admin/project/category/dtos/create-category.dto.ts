@@ -15,39 +15,26 @@
  */
 import { Expose, plainToInstance } from 'class-transformer';
 
-import { IssueStatusEnum } from '@/common/enums';
-import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
+import { CategoryEntity } from '@/domains/admin/project/category/category.entity';
 
-export class CreateIssueDto {
+export class CreateCategoryDto {
   @Expose()
   projectId: number;
 
   @Expose()
   name: string;
 
-  @Expose()
-  status: IssueStatusEnum;
-
-  @Expose()
-  description: string;
-
-  @Expose()
-  externalIssueId: string;
-
-  public static from(params: any): CreateIssueDto {
-    return plainToInstance(CreateIssueDto, params, {
+  public static from(params: any): CreateCategoryDto {
+    return plainToInstance(CreateCategoryDto, params, {
       excludeExtraneousValues: true,
     });
   }
 
-  static toIssueEntity(params: CreateIssueDto) {
-    const { name, status, description, externalIssueId, projectId } = params;
-    return IssueEntity.from({
-      name,
-      status,
-      description,
-      externalIssueId,
+  static toCategoryEntity(params: CreateCategoryDto) {
+    const { projectId, name } = params;
+    return CategoryEntity.from({
       projectId,
+      name,
     });
   }
 }

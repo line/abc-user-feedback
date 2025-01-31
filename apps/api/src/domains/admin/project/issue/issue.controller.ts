@@ -38,7 +38,7 @@ import { CreateIssueDto } from './dtos';
 import {
   CreateIssueRequestDto,
   DeleteIssuesRequestDto,
-  FindIssuesByProjectIdRequestDto,
+  FindIssuesByProjectIdRequestDtoV2,
   UpdateIssueRequestDto,
 } from './dtos/requests';
 import {
@@ -79,16 +79,29 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
+  @ApiBearerAuth()
+  @Put(':issueId/category/:categoryId')
+  async updateByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.updateByCategoryId({
+      issueId,
+      categoryId,
+    });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
   @Post('search')
   async findAllByProjectId(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() body: FindIssuesByProjectIdRequestDto,
+    @Body() body: FindIssuesByProjectIdRequestDtoV2,
   ) {
     return FindIssuesByProjectIdResponseDto.transform(
-      await this.issueService.findIssuesByProjectId({
+      await this.issueService.findIssuesByProjectIdV2({
         ...body,
         projectId,
       }),

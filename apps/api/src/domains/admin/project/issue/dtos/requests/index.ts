@@ -15,5 +15,6 @@
  */
 export { CreateIssueRequestDto } from './create-issue-request.dto';
 export { FindIssuesByProjectIdRequestDto } from './find-issues-by-project-id-request.dto';
+export { FindIssuesByProjectIdRequestDtoV2 } from './find-issues-by-project-id-request-v2.dto';
 export { UpdateIssueRequestDto } from './update-issue-request.dto';
 export { DeleteIssuesRequestDto } from './delete-issues-request.dto';

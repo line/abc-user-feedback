@@ -18,3 +18,4 @@ export { FindIssuesByProjectIdDto } from './find-issues-by-project-id.dto';
 export { UpdateIssueDto } from './update-issue.dto';
 export { FindByIssueIdDto } from './find-by-issue-id.dto';
 export { FindFeedbacksByIssueIdDto } from './find-feedbacks-by-issue-id.dto';
+export { FindIssuesByProjectIdDtoV2 } from './find-issues-by-project-id-v2.dto';

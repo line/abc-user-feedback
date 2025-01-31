@@ -41,12 +41,11 @@ class QueryV2 {
   condition: QueryV2ConditionsEnum;
 }
 
-export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
+export class FindIssuesByProjectIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
-    description:
-      'You can query by key-value with this object. (createdAt, updatedAt are kind of examples)',
-    type: [QueryV2],
+    description: 'You can query by key-value with this object.',
+    example: { name: 'issue name' },
   })
   @IsOptional()
   queries?: QueryV2[];
@@ -67,8 +66,7 @@ export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
   @IsOptional()
   sort?: Record<string, SortMethodEnum>;
 
-  constructor(limit = 10, page = 1, queries?: QueryV2[]) {
+  constructor(limit = 10, page = 1) {
     super(limit, page);
-    this.queries = queries;
   }
 }
