@@ -22,7 +22,6 @@ import {
   ParseIntPipe,
   Post,
   Put,
-  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -32,7 +31,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { PaginationRequestDto } from '@/common/dtos';
 import { JwtAuthGuard } from '../../auth/guards';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
