@@ -81,18 +81,6 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @ApiOkResponse({ type: [FindIssuesByProjectIdResponseDto] })
-  @Get('/category/:categoryId')
-  async findByCategoryId(
-    @Param('categoryId', ParseIntPipe) categoryId: number,
-    @Query() query: PaginationRequestDto,
-  ) {
-    return FindIssuesByProjectIdResponseDto.transform(
-      await this.issueService.findByCategoryId({ ...query, categoryId }),
-    );
-  }
-
-  @ApiParam({ name: 'projectId', type: Number })
   @ApiBearerAuth()
   @Put(':issueId/category/:categoryId')
   async updateByCategoryId(

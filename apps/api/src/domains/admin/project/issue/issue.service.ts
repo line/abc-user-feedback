@@ -178,6 +178,20 @@ export class IssueService {
       .leftJoinAndSelect('issues.category', 'category')
       .where('issues.project_id = :projectId', { projectId });
 
+    const createdAtCondition = queries.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      queryBuilder.andWhere('issues.created_at >= :gte', { gte });
+      queryBuilder.andWhere('issues.created_at < :lt', { lt });
+    }
+
+    const categoryIdCondition = queries.find((query) => query.categoryId);
+    if (categoryIdCondition?.categoryId) {
+      queryBuilder.andWhere('category.id = :categoryId', {
+        categoryId: categoryIdCondition.categoryId,
+      });
+    }
+
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
     queryBuilder.andWhere(
@@ -190,15 +204,7 @@ export class IssueService {
 
             const paramName = `value${paramIndex++}`;
 
-            if (fieldKey === 'createdAt') {
-              const { gte, lt } = value as TimeRange;
-              qb[method](`issues.created_at >= :gte${paramName}`, {
-                [`gte${paramName}`]: gte,
-              });
-              qb[method](`issues.created_at < :lt${paramName}`, {
-                [`lt${paramName}`]: lt,
-              });
-            } else if (fieldKey === 'updatedAt') {
+            if (fieldKey === 'updatedAt') {
               const { gte, lt } = value as TimeRange;
               qb[method](`issues.created_at >= :gte${paramName}`, {
                 [`gte${paramName}`]: gte,
@@ -283,28 +289,6 @@ export class IssueService {
     if (!issue) throw new IssueNotFoundException();
 
     return issue;
-  }
-
-  async findByCategoryId({
-    limit,
-    page,
-    categoryId,
-  }: {
-    limit: number;
-    page: number;
-    categoryId: number;
-  }) {
-    const result = await paginateHelper(
-      this.repository.createQueryBuilder(),
-      {
-        where: {
-          category: { id: categoryId },
-        },
-      },
-      { page, limit },
-    );
-
-    return result;
   }
 
   async findByName({ name }: { name: string }) {
