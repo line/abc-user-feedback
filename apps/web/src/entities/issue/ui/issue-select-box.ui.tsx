@@ -34,7 +34,7 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
   const throttedValue = useThrottle(inputValue, 500);
   const { data, fetchNextPage, hasNextPage, isFetching } =
     useIssueSearchInfinite(Number(projectId), {
-      query: { searchText: throttedValue },
+      queries: [{ name: throttedValue, condition: 'CONTAINS' }],
     });
 
   return (
