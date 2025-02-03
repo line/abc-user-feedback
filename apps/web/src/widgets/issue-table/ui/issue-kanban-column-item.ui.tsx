@@ -34,10 +34,11 @@ const initialStyles = {
 interface Props {
   item: Issue;
   issueTracker?: IssueTracker;
+  onClick?: () => void;
 }
 
 const IssueKanbanColumnItem = (props: Props) => {
-  const { item, issueTracker } = props;
+  const { item, issueTracker, onClick } = props;
   const { setNodeRef, listeners, isDragging, transform, attributes } =
     useSortable({ id: item.id });
 
@@ -68,6 +69,7 @@ const IssueKanbanColumnItem = (props: Props) => {
       }}
       {...attributes}
       {...listeners}
+      onClick={onClick}
     >
       <div className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default cursor-pointer border px-4 py-3 hover:opacity-60">
         <p className="text-neutral-primary text-base-strong">{item.name}</p>

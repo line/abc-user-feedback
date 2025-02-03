@@ -52,6 +52,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
+
   const { mutateAsync: createIssue } = useOAIMutation({
     method: 'post',
     path: '/api/admin/projects/{projectId}/issues',
@@ -94,7 +95,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         close={close}
         isOpen={isOpen}
         onSubmit={async (data) => {
-          await createIssue({ name: data.name });
+          await createIssue(data);
           close();
         }}
         issueTracker={issueTracker?.data}

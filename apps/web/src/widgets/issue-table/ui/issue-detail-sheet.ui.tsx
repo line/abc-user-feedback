@@ -28,10 +28,10 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
   toast,
 } from '@ufb/react';
 
+import type { FormOverlayProps } from '@/shared';
 import {
   client,
   ISSUES,
@@ -44,17 +44,19 @@ import type { Channel } from '@/entities/channel';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
-interface Props extends React.PropsWithChildren {
-  item: Issue;
-  issueTracker?: IssueTracker;
+interface Props extends Omit<FormOverlayProps<Issue>, 'onSubmit'> {
   projectId: number;
+  issueTracker?: IssueTracker;
+  data: Issue;
+  onSubmit?: undefined;
 }
 
 const IssueDetailSheet = (props: Props) => {
-  const { item, issueTracker, projectId, children } = props;
+  const { issueTracker, projectId, data, close, isOpen } = props;
+
   const { t } = useTranslation();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
-  const [currentItem, setCurrentItem] = useState(item);
+  const [currentItem, setCurrentItem] = useState(data);
 
   const TOP_ROWS: SheetDetailTableRow[] = [
     { format: 'text', key: 'id', name: 'ID' },
@@ -68,10 +70,12 @@ const IssueDetailSheet = (props: Props) => {
     { format: 'select', key: 'status', name: 'Status', options: ISSUES(t) },
     { format: 'ticket', key: 'externalIssueId', name: 'Ticket', issueTracker },
   ];
+
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
     variables: { projectId },
   });
+
   const { data: channelFeedbackCountData } = useQuery({
     queryKey: ['feedbackCountPerChannelByIssueId', channelData?.items],
     queryFn: async () => {
@@ -79,12 +83,12 @@ const IssueDetailSheet = (props: Props) => {
         feedbackCount: number | undefined;
       })[];
       for (const channel of channels) {
-        const { data } = await client.post({
+        const { data: feeedbakData } = await client.post({
           path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
           pathParams: { channelId: channel.id, projectId },
-          body: { limit: 0, query: { issueIds: [item.id] } as never },
+          body: { limit: 0, query: { issueIds: [data.id] } as never },
         });
-        channel.feedbackCount = data?.meta.totalItems;
+        channel.feedbackCount = feeedbakData?.meta.totalItems;
       }
       return channels;
     },
@@ -97,7 +101,7 @@ const IssueDetailSheet = (props: Props) => {
       method: 'delete',
       path: '/api/admin/projects/{projectId}/issues/{issueId}',
       pathParams: {
-        issueId: item.id,
+        issueId: data.id,
         projectId: projectId,
       },
       queryOptions: {
@@ -115,7 +119,7 @@ const IssueDetailSheet = (props: Props) => {
       method: 'put',
       path: '/api/admin/projects/{projectId}/issues/{issueId}',
       pathParams: {
-        issueId: item.id,
+        issueId: data.id,
         projectId: projectId,
       },
       queryOptions: {
@@ -130,16 +134,13 @@ const IssueDetailSheet = (props: Props) => {
     });
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <div onClick={() => console.log('hihi')}>{children}</div>
-      </SheetTrigger>
+    <Sheet open={isOpen} onOpenChange={close}>
       <SheetContent>
         <SheetHeader>
           <SheetTitle>{t('v2.text.name.detail', { name: 'Issue' })}</SheetTitle>
         </SheetHeader>
         <SheetBody>
-          <SheetDetailTable data={item} rows={TOP_ROWS} />
+          <SheetDetailTable data={data} rows={TOP_ROWS} />
           <Divider variant="subtle" className="my-4" />
           <SheetDetailTable
             data={currentItem}

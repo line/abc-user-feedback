@@ -13,24 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { BadgeProps } from '@ufb/react';
-import { Badge } from '@ufb/react';
-
-import { ISSUE_COLOR_MAP } from '../issue-color.constant';
-import type { Issue } from '../issue.type';
-
-interface IProps extends Omit<BadgeProps, 'color'> {
-  right?: React.ReactNode;
-  status: Issue['status'];
-  name: string;
-}
-
-const IssueBadge: React.FC<IProps> = ({ name, status, right, ...props }) => {
-  return (
-    <Badge color={ISSUE_COLOR_MAP[status]} {...props}>
-      {name} {right}
-    </Badge>
-  );
-};
-
-export default IssueBadge;
+export * from './category.type';

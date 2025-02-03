@@ -111,7 +111,7 @@ const PreviewFieldTable: React.FC<IProps> = ({ fields }) => {
             field.key === 'issues' ?
               <div className="scrollbar-hide flex items-center gap-1 overflow-hidden">
                 {(info.getValue() as Issue[] | undefined)?.map((v, i) => (
-                  <IssueBadge key={i} issue={v} />
+                  <IssueBadge key={i} name={v.name} status={v.status} />
                 ))}
               </div>
             : typeof info.getValue() === 'undefined' ? undefined

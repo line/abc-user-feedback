@@ -14,24 +14,10 @@
  * under the License.
  */
 
-import { BACKGROUND_COLOR_MAP, cn } from '@/shared';
+interface Props {}
 
-import { ISSUE_COLOR_MAP } from '../issue-color.constant';
-import type { IssueStatus } from '../issue.type';
-
-interface IProps {
-  issueKey?: IssueStatus;
-}
-
-const IssueCircle: React.FC<IProps> = ({ issueKey }) => {
-  return (
-    <div
-      className={cn([
-        'border-fill-secondary bg- mr-1.5 h-1.5 w-1.5 rounded-full border',
-        issueKey && BACKGROUND_COLOR_MAP[ISSUE_COLOR_MAP[issueKey]],
-      ])}
-    />
-  );
+const CategorySelectBox = (props: Props) => {
+  return <div></div>;
 };
 
-export default IssueCircle;
+export default CategorySelectBox;

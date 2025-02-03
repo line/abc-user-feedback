@@ -45,7 +45,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { data: searchedIssues } = useIssueSearch(
     projectId,
     {
-      query: { name: throttledSearchName },
+      queries: [{ name: throttledSearchName, condition: 'CONTAINS' }],
       page: 0,
       limit: 1000,
       sort: { feedbackCount: 'desc' },

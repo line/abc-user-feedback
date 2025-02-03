@@ -17,8 +17,11 @@
 import { useEffect, useState } from 'react';
 import {
   SortableContext,
+  useSortable,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useOverlay } from '@toss/use-overlay';
 
 import { Button } from '@ufb/react';
 
@@ -52,6 +55,24 @@ const IssueKanbanColumn = (props: Props) => {
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
+  const overlay = useOverlay();
+
+  const openIssueDetailOverlay = (data: Issue) => {
+    overlay.open(({ close, isOpen }) => (
+      <IssueDetailSheet
+        close={close}
+        data={data}
+        isOpen={isOpen}
+        projectId={projectId}
+        issueTracker={issueTracker}
+      />
+    ));
+  };
+
+  const { setNodeRef, transform, transition } = useSortable({
+    id: issue.key,
+    data: { type: 'container', children: items },
+  });
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
@@ -68,42 +89,48 @@ const IssueKanbanColumn = (props: Props) => {
   }, [data]);
 
   return (
-    <SortableContext items={items} strategy={verticalListSortingStrategy}>
-      <div className="rounded-16 bg-neutral-tertiary flex flex-col gap-2 px-2 py-3">
-        <IssueKanbanColumnHeader
-          issue={issue}
-          totalItems={meta.totalItems}
-          sort={sort}
-          onChangeSort={(input) => setSort(input)}
-        />
-        {items.length === 0 ?
-          <div className="flex h-12 items-center justify-center">
-            <p className="text-neutral-tertiary text-center">
-              There is no issue on this status.
-            </p>
-          </div>
-        : items.map((item) => (
-            <IssueDetailSheet
-              key={item.id}
-              item={item}
-              issueTracker={issueTracker}
-              projectId={projectId}
+    <div
+      ref={setNodeRef}
+      style={{
+        transition,
+        transform: CSS.Translate.toString(transform),
+      }}
+    >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        <div className="rounded-16 bg-neutral-tertiary flex flex-col gap-2 px-2 py-3">
+          <IssueKanbanColumnHeader
+            issue={issue}
+            totalItems={meta.totalItems}
+            sort={sort}
+            onChangeSort={(input) => setSort(input)}
+          />
+          {items.length === 0 ?
+            <div className="flex h-12 items-center justify-center">
+              <p className="text-neutral-tertiary text-center">
+                There is no issue on this status.
+              </p>
+            </div>
+          : items.map((item) => (
+              <IssueKanbanColumnItem
+                key={item.id}
+                item={item}
+                issueTracker={issueTracker}
+                onClick={() => openIssueDetailOverlay(item)}
+              />
+            ))
+          }
+          {hasNextPage && (
+            <Button
+              variant="secondary"
+              onClick={() => fetchNextPage()}
+              loading={isFetching}
             >
-              <IssueKanbanColumnItem item={item} issueTracker={issueTracker} />
-            </IssueDetailSheet>
-          ))
-        }
-        {hasNextPage && (
-          <Button
-            variant="secondary"
-            onClick={() => fetchNextPage()}
-            loading={isFetching}
-          >
-            More
-          </Button>
-        )}
-      </div>
-    </SortableContext>
+              More
+            </Button>
+          )}
+        </div>
+      </SortableContext>
+    </div>
   );
 };
 

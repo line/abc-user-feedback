@@ -46,6 +46,7 @@ export class FindIssuesByProjectIdRequestDtoV2 extends PaginationRequestDto {
     required: false,
     description: 'You can query by key-value with this object.',
     example: { name: 'issue name' },
+    type: [QueryV2],
   })
   @IsOptional()
   queries?: QueryV2[];

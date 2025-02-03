@@ -724,6 +724,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/projects/{projectId}/issues/{issueId}/category/{categoryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["IssueController_updateByCategoryId"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/projects/{projectId}/issues/search": {
         parameters: {
             query?: never;
@@ -862,6 +878,38 @@ export interface paths {
         get: operations["IssueTrackerController_findOne"];
         put: operations["IssueTrackerController_updateOne"];
         post: operations["IssueTrackerController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CategoryController_findAll"];
+        put?: never;
+        post: operations["CategoryController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/projects/{projectId}/categories/{categoryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: operations["CategoryController_update"];
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -1486,6 +1534,22 @@ export interface components {
              * @example payment issue
              */
             name: string;
+            /**
+             * @description Issue status
+             * @example IN_PROGRESS
+             * @enum {string}
+             */
+            status?: "INIT" | "ON_REVIEW" | "IN_PROGRESS" | "RESOLVED" | "PENDING";
+            /**
+             * @description Issue description
+             * @example This is a payment issue
+             */
+            description: string | null;
+            /**
+             * @description External Issue Id
+             * @example 123
+             */
+            externalIssueId?: string;
         };
         CreateIssueResponseDto: {
             /**
@@ -1539,7 +1603,7 @@ export interface components {
              */
             updatedAt: string;
         };
-        FindIssuesByProjectIdRequestDto: {
+        FindIssuesByProjectIdRequestDtoV2: {
             /**
              * @default 10
              * @example 10
@@ -1551,12 +1615,14 @@ export interface components {
              */
             page?: number;
             /**
-             * @description You can query by key-value with this object. If you want to search by text, you can use 'searchText' key.
+             * @description You can query by key-value with this object.
              * @example {
              *       "name": "issue name"
              *     }
              */
-            query?: Record<string, unknown>;
+            queries?: components["schemas"]["QueryV2"][];
+            /** @description You can concatenate queries with 'AND' or 'OR' operators. */
+            operator?: string;
             /**
              * @description You can sort by specific feedback key with sort method values: 'ASC', 'DESC'
              * @example {
@@ -1576,16 +1642,16 @@ export interface components {
              */
             name: string;
             /**
-             * @description Issue description
-             * @example This is a payment issue
-             */
-            description: string | null;
-            /**
              * @description Issue status
              * @example IN_PROGRESS
              * @enum {string}
              */
             status?: "INIT" | "ON_REVIEW" | "IN_PROGRESS" | "RESOLVED" | "PENDING";
+            /**
+             * @description Issue description
+             * @example This is a payment issue
+             */
+            description: string | null;
             /**
              * @description External Issue Id
              * @example 123
@@ -1668,6 +1734,38 @@ export interface components {
             data: components["schemas"]["IssueTrackerDataDto"];
             /** Format: date-time */
             createdAt: string;
+        };
+        CreateCategoryRequestDto: {
+            /**
+             * @description Category name
+             * @example category
+             */
+            name: string;
+        };
+        CreateCategoryResponseDto: {
+            /**
+             * @description Category id
+             * @example 1
+             */
+            id: number;
+        };
+        GetAllCategoriesResponse: {
+            id: number;
+            name: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            updatedAt: string;
+        };
+        GetAllCategoriesResponseDto: {
+            items: components["schemas"]["GetAllCategoriesResponse"][];
+        };
+        UpdateCategoryRequestDto: {
+            /**
+             * @description Category name
+             * @example category
+             */
+            name: string;
         };
         EventDto: {
             /** @enum {string} */
@@ -3198,6 +3296,27 @@ export interface operations {
             };
         };
     };
+    IssueController_updateByCategoryId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                issueId: number;
+                categoryId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     IssueController_findAllByProjectId: {
         parameters: {
             query?: never;
@@ -3209,7 +3328,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["FindIssuesByProjectIdRequestDto"];
+                "application/json": components["schemas"]["FindIssuesByProjectIdRequestDtoV2"];
             };
         };
         responses: {
@@ -3453,6 +3572,76 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["CreateIssueTrackerResponseDto"];
                 };
+            };
+        };
+    };
+    CategoryController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetAllCategoriesResponseDto"];
+                };
+            };
+        };
+    };
+    CategoryController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateCategoryRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateCategoryResponseDto"];
+                };
+            };
+        };
+    };
+    CategoryController_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                categoryId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateCategoryRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

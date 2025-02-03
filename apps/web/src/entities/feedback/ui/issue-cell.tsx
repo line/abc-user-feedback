@@ -82,7 +82,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     isLoading,
   } = useIssueSearch(Number(projectId), {
     limit: 100,
-    query: { searchText: throttledvalue },
+    queries: [{ name: throttledvalue, condition: 'CONTAINS' }],
   });
 
   const { mutate: attatchIssue } = useMutation({
@@ -138,7 +138,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       onClick={(e) => e.stopPropagation()}
     >
       {issues.map((issue) => (
-        <IssueBadge key={issue.id} issue={issue} />
+        <IssueBadge key={issue.id} name={issue.name} status={issue.status} />
       ))}
       <Combobox>
         <ComboboxTrigger asChild>
@@ -165,7 +165,11 @@ const IssueCell: React.FC<IProps> = (props) => {
                   onSelect={() => detecthIssue({ issueId: issue.id })}
                   className="flex justify-between"
                 >
-                  <IssueBadge key={issue.id} issue={issue} />
+                  <IssueBadge
+                    key={issue.id}
+                    name={issue.name}
+                    status={issue.status}
+                  />
                   <IssueCellEditCombobox issue={issue} />
                 </ComboboxItem>
               ))}
@@ -187,7 +191,11 @@ const IssueCell: React.FC<IProps> = (props) => {
                       onSelect={() => attatchIssue({ issueId: issue.id })}
                       className="flex justify-between"
                     >
-                      <IssueBadge key={issue.id} issue={issue} />
+                      <IssueBadge
+                        key={issue.id}
+                        name={issue.name}
+                        status={issue.status}
+                      />
                       <IssueCellEditCombobox issue={issue} />
                     </ComboboxItem>
                   ))}
@@ -200,7 +208,10 @@ const IssueCell: React.FC<IProps> = (props) => {
                 <div
                   className="combobox-item flex justify-between"
                   onClick={async () => {
-                    const data = await createIssue({ name: inputValue });
+                    const data = await createIssue({
+                      name: inputValue,
+                      description: '',
+                    });
                     if (!data) return;
                     attatchIssue({ issueId: data.id });
                   }}

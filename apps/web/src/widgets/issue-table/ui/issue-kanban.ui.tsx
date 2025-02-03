@@ -29,7 +29,6 @@ import type { IssueTracker } from '@/entities/issue-tracker';
 
 import IssueKanbanColumn from './issue-kanban-column.ui';
 import IssueKanbanDndContext from './issue-kanban-dnd-context.ui';
-import IssueKanbanDroppableContainer from './issue-kanban-droppable-container.ui';
 
 interface Props {
   projectId: number;
@@ -75,9 +74,7 @@ const IssueKanban = (props: Props) => {
       items={items}
       setItems={setItems}
       setContainers={setContainers}
-      updateStatus={(item, status) => {
-        mutate({ item, status });
-      }}
+      updateStatus={(item, status) => mutate({ item, status })}
     >
       <div className="grid grid-cols-5 items-start gap-4">
         <SortableContext
@@ -85,20 +82,14 @@ const IssueKanban = (props: Props) => {
           strategy={verticalListSortingStrategy}
         >
           {ISSUES(t).map((issue) => (
-            <IssueKanbanDroppableContainer
+            <IssueKanbanColumn
               key={issue.key}
-              id={issue.key}
+              issue={issue}
+              projectId={projectId}
+              issueTracker={issueTracker}
               items={items[issue.key] ?? []}
-            >
-              <IssueKanbanColumn
-                key={issue.key}
-                issue={issue}
-                projectId={projectId}
-                issueTracker={issueTracker}
-                items={items[issue.key] ?? []}
-                setItems={setItems}
-              />
-            </IssueKanbanDroppableContainer>
+              setItems={setItems}
+            />
           ))}
         </SortableContext>
       </div>

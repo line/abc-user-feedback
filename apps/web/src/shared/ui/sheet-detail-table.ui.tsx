@@ -55,6 +55,12 @@ type IssueRow = {
   editable?: false;
 };
 
+type CategoryRow = {
+  format: 'category';
+  feedbackId: number;
+  editable?: false;
+};
+
 export type SheetDetailTableRow = {
   key: string;
   name: string;

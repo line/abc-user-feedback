@@ -36,7 +36,7 @@ const IssueFormDialog = (props: Props) => {
   const { register, watch, setValue, handleSubmit, formState } =
     useForm<IssueFormSchema>({
       resolver: zodResolver(issueFormSchema),
-      defaultValues: data,
+      defaultValues: data ?? { status: 'INIT' },
     });
 
   const { status } = watch();

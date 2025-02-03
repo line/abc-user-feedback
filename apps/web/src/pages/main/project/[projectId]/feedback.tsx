@@ -119,7 +119,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         const { data } = await client.post({
           path: '/api/admin/projects/{projectId}/issues/search',
           pathParams: { projectId },
-          body: { query: { searchText: value } },
+          body: {
+            queries: [
+              { name: value, condition: 'IS' } as Record<string, unknown>,
+            ],
+          },
         });
         const result = data?.items.find((v) => v.name === value);
         return result ? [result.id] : [];

@@ -108,7 +108,11 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const { data } = useIssueSearch(projectId, {
     sort: { feedbackCount: 'DESC' },
     limit,
-    query: { statuses: currentIssueStatusList.map((v) => v.key) },
+    queries: currentIssueStatusList.map((v) => ({
+      status: v.key,
+      condition: 'IS',
+    })),
+    operator: 'OR',
   });
 
   const newData = useMemo(

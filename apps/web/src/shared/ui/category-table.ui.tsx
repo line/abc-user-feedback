@@ -14,16 +14,8 @@
  * under the License.
  */
 
-import { useMemo, useState } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useTranslation } from 'react-i18next';
-
-import { Badge, Icon } from '@ufb/react';
-
-import { getColumns } from '@/widgets/issue-table/issue-table-columns';
-
-import { cn } from '../utils';
-import { BasicTable, TablePagination } from './tables';
+import { useOAIQuery } from '../lib';
+import CategoryTableRow from './category-table-row.ui';
 
 interface Props {
   projectId: number;
@@ -31,42 +23,17 @@ interface Props {
 
 const CategoryTable = (props: Props) => {
   const { projectId } = props;
-  const { t } = useTranslation();
-  const [rows] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const columns = useMemo(() => getColumns(t, projectId), [projectId]);
-
-  const table = useReactTable({
-    columns,
-    data: rows,
-    getCoreRowModel: getCoreRowModel(),
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects/{projectId}/categories',
+    variables: { projectId },
   });
 
   return (
     <div>
-      <div
-        className={cn(
-          'bg-neutral-tertiary flex h-12 items-center rounded-t px-4',
-          { 'rounded-b': !isOpen },
-        )}
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <div className="flex gap-2">
-          <Icon
-            name="RiArrowDownSLine"
-            className={cn({ 'rotate-180': !isOpen })}
-          />
-          None
-          <Badge variant="outline" radius="large">
-            10
-          </Badge>
-        </div>
-      </div>
-      {isOpen && <BasicTable table={table} disableRound />}
-      <div className="flex h-12 w-full items-center rounded-b border border-t-0 px-4">
-        <TablePagination table={table} disableRowSelect disableLimit />
-      </div>
+      {data?.items.map((item) => (
+        <CategoryTableRow key={item.id} category={item} projectId={projectId} />
+      ))}
     </div>
   );
 };
