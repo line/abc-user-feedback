@@ -23,6 +23,8 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+
+RUN npm install -g corepack@latest
 RUN corepack enable
 RUN pnpm install --frozen-lockfile
 RUN pnpm install -w source-map-support

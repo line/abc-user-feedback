@@ -24,7 +24,8 @@ WORKDIR /app
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN npm install -g node-gyp
+
+RUN npm install -g node-gyp corepack@latest
 RUN corepack enable
 RUN pnpm install --frozen-lockfile
 
