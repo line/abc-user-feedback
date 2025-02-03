@@ -35,10 +35,7 @@ const MemberTable: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { data: userData } = useUserSearch({
-    limit: 1000,
-    query: { type: ['GENERAL'] },
-  });
+  const { data: userData } = useUserSearch({ limit: 1000 });
 
   const columns = useMemo(
     () => getMemberColumns(userData?.items ?? []),

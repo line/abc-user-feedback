@@ -33,7 +33,7 @@ import CategoryTable from '@/shared/ui/category-table.ui';
 import { env } from '@/env';
 import { useIssueQuery } from '../lib';
 import IssueFormDialog from './issue-form-dialog.ui';
-import IssueKanbanColumn from './issue-kanban-column.ui';
+import IssueKanban from './issue-kanban.ui';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
@@ -137,16 +137,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         </div>
       </div>
       {viewType === 'kanban' && (
-        <div className="grid grid-cols-5 items-start gap-4">
-          {ISSUES(t).map((issue) => (
-            <IssueKanbanColumn
-              key={issue.key}
-              issue={issue}
-              projectId={projectId}
-              issueTracker={issueTracker?.data}
-            />
-          ))}
-        </div>
+        <IssueKanban projectId={projectId} issueTracker={issueTracker?.data} />
       )}
       {viewType === 'list' && <CategoryTable projectId={projectId} />}
     </>

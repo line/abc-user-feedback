@@ -371,7 +371,7 @@ importers:
         specifier: ^0.11.0
         version: 0.11.1(typescript@5.7.2)(zod@3.24.1)
       '@tanstack/react-query':
-        specifier: ^5.31.0
+        specifier: ^5.45.1
         version: 5.62.14(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.16.0
@@ -419,7 +419,7 @@ importers:
         specifier: ^1.11.10
         version: 1.11.13
       framer-motion:
-        specifier: ^11.1.7
+        specifier: ^11.14.4
         version: 11.14.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       i18next:
         specifier: ^24.0.0

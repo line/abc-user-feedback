@@ -114,7 +114,9 @@ const BasicTable = <T,>(props: IProps<T>) => {
         onDragEnd={handleDragEnd}
       >
         <Table
-          className={cn(className, { 'h-full': dataIds.length === 0 })}
+          className={cn('min-w-full', className, {
+            'h-full': dataIds.length === 0,
+          })}
           style={{ width: table.getCenterTotalSize() }}
         >
           <TableHeader>

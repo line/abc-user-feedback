@@ -14,38 +14,33 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 
-import { Badge, Button } from '@ufb/react';
+import { Button } from '@ufb/react';
 
 import type { IssuesItem } from '@/shared';
-import { cn } from '@/shared';
 import { useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
 import IssueDetailSheet from './issue-detail-sheet.ui';
-import IssueKanbanColumnSorting from './issue-kanban-column-sorting.ui';
-
-const ISSUE_MAP: Record<
-  Issue['status'],
-  { bgClassName: string; fgClassName: string }
-> = {
-  INIT: { bgClassName: 'bg-yellow-50', fgClassName: 'bg-yellow-500' },
-  ON_REVIEW: { bgClassName: 'bg-green-50', fgClassName: 'bg-green-500' },
-  IN_PROGRESS: { bgClassName: 'bg-teal-50', fgClassName: 'bg-teal-500' },
-  RESOLVED: { bgClassName: 'bg-slate-50', fgClassName: 'bg-slate-500' },
-  PENDING: { bgClassName: 'bg-indigo-50', fgClassName: 'bg-indigo-500' },
-};
+import IssueKanbanColumnHeader from './issue-kanban-column-header.ui';
+import IssueKanbanColumnItem from './issue-kanban-column-item.ui';
 
 interface Props {
   issue: IssuesItem;
   projectId: number;
   issueTracker?: IssueTracker;
+  items: Issue[];
+  setItems: React.Dispatch<React.SetStateAction<Record<string, Issue[]>>>;
 }
 
 const IssueKanbanColumn = (props: Props) => {
-  const { issue, projectId, issueTracker } = props;
+  const { issue, projectId, issueTracker, items, setItems } = props;
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
 
@@ -55,58 +50,50 @@ const IssueKanbanColumn = (props: Props) => {
       sort: { [sort.key]: sort.value },
     });
 
+  useEffect(() => {
+    setItems((items) => ({
+      ...items,
+      [issue.status]: data.pages.flatMap((page) => page?.items ?? []),
+    }));
+  }, [data]);
+
   return (
-    <div
-      className={cn(
-        'rounded-16 bg-neutral-tertiary flex flex-col gap-2 px-2 py-3',
-      )}
-    >
-      <div
-        className={cn(
-          'text-neutral-inverse rounded-8 text-base-strong flex items-center justify-between px-4 py-2',
-          ISSUE_MAP[issue.status].fgClassName,
-        )}
-      >
-        <div className="flex items-center gap-1">
-          {issue.name}
-          {data.pages[0]?.meta.totalItems ?
-            <Badge variant="subtle" radius="large">
-              {data.pages[0].meta.totalItems.toLocaleString()}
-            </Badge>
-          : <></>}
-        </div>
-        <IssueKanbanColumnSorting
+    <SortableContext items={items} strategy={verticalListSortingStrategy}>
+      <div className="rounded-16 bg-neutral-tertiary flex flex-col gap-2 px-2 py-3">
+        <IssueKanbanColumnHeader
+          issue={issue}
+          totalItems={data.pages[0]?.meta.totalItems ?? 0}
           sort={sort}
-          onSubmit={(input) => setSort(input)}
+          onChangeSort={(input) => setSort(input)}
         />
-      </div>
-      {data.pages[0]?.items.length === 0 ?
-        <div className="flex h-12 items-center justify-center">
-          <p className="text-neutral-tertiary text-center">
-            There is no issue on this status.
-          </p>
-        </div>
-      : data.pages
-          .flatMap((v) => v?.items ?? [])
-          .map((item) => (
+        {items.length === 0 ?
+          <div className="flex h-12 items-center justify-center">
+            <p className="text-neutral-tertiary text-center">
+              There is no issue on this status.
+            </p>
+          </div>
+        : items.map((item) => (
             <IssueDetailSheet
               key={item.id}
               item={item}
               issueTracker={issueTracker}
               projectId={projectId}
-            />
+            >
+              <IssueKanbanColumnItem item={item} issueTracker={issueTracker} />
+            </IssueDetailSheet>
           ))
-      }
-      {hasNextPage && (
-        <Button
-          variant="secondary"
-          onClick={() => fetchNextPage()}
-          loading={isFetching}
-        >
-          More
-        </Button>
-      )}
-    </div>
+        }
+        {hasNextPage && (
+          <Button
+            variant="secondary"
+            onClick={() => fetchNextPage()}
+            loading={isFetching}
+          >
+            More
+          </Button>
+        )}
+      </div>
+    </SortableContext>
   );
 };
 

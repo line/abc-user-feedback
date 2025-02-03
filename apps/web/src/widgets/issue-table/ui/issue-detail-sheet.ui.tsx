@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
@@ -44,14 +44,14 @@ import type { Channel } from '@/entities/channel';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
-interface Props {
+interface Props extends React.PropsWithChildren {
   item: Issue;
   issueTracker?: IssueTracker;
   projectId: number;
 }
 
 const IssueDetailSheet = (props: Props) => {
-  const { item, issueTracker, projectId } = props;
+  const { item, issueTracker, projectId, children } = props;
   const { t } = useTranslation();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [currentItem, setCurrentItem] = useState(item);
@@ -132,27 +132,7 @@ const IssueDetailSheet = (props: Props) => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default cursor-pointer border px-4 py-3 hover:opacity-60">
-          <p className="text-neutral-primary text-base-strong">{item.name}</p>
-          <p className="text-neutral-tertiary">{item.description}</p>
-          <div className="text-neutral-secondary flex flex-wrap gap-x-2">
-            <div className="flex flex-shrink-0 items-center gap-1">
-              <Icon name="RiMessage2Line" size={12} />
-              <span>{item.feedbackCount}</span>
-              <span>feedbacks</span>
-            </div>
-            {item.externalIssueId && (
-              <div className="flex flex-shrink-0 items-center gap-1">
-                <Icon name="RiTicketLine" size={12} />
-                <span>
-                  {issueTracker?.ticketKey ?
-                    `${issueTracker.ticketKey}-${item.externalIssueId}`
-                  : item.externalIssueId}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+        <div onClick={() => console.log('hihi')}>{children}</div>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
