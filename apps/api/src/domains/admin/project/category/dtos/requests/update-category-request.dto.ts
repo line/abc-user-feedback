@@ -16,7 +16,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, MaxLength, MinLength } from 'class-validator';
 
-<<<<<<<< HEAD:apps/api/src/domains/admin/project/category/dtos/requests/update-category-request.dto.ts
 import { CreateCategoryRequestDto } from './create-category-request.dto';
 
 export class UpdateCategoryRequestDto extends CreateCategoryRequestDto {
@@ -29,28 +28,3 @@ export class UpdateCategoryRequestDto extends CreateCategoryRequestDto {
   @MaxLength(255)
   declare name: string;
 }
-========
-import { roleSchema } from '../role';
-import { userSchema } from '../user/user.schema';
-
-export const memberSchema = z.object({
-  id: z.number(),
-  user: userSchema.pick({
-    id: true,
-    email: true,
-    name: true,
-    department: true,
-  }),
-  role: roleSchema,
-  createdAt: z.string(),
-});
-
-export const memberInfoSchema = memberSchema.partial({
-  id: true,
-  createdAt: true,
-});
-
-export const memberInfoFormSchema = memberSchema
-  .partial({ id: true, createdAt: true, user: true })
-  .refine((data) => !!data.user, { path: ['user'] });
->>>>>>>> c43b0c82 (Merge 'dev'):apps/web/src/entities/member/member.schema.ts

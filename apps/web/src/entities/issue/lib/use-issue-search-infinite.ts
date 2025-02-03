@@ -26,14 +26,14 @@ type TData = OAIMutationResponse<
 interface IBody
   extends Omit<
     OAIRequestBody<'/api/admin/projects/{projectId}/issues/search', 'post'>,
-    'query'
+    'queries'
   > {
-  query?: Record<string, unknown>;
+  queries: Record<string, unknown>[];
 }
 
 const useIssueSearchInfinite = (
   projectId: number,
-  body: IBody = { limit: 10, page: 1, query: {}, sort: {} },
+  body: IBody = { limit: 10, page: 1, queries: [], sort: {} },
 ) => {
   return useInfiniteQuery<TData>({
     queryKey: [

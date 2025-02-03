@@ -41,16 +41,14 @@ const IssueKanbanDroppableContainer = (props: Props) => {
   return (
     <div
       ref={setNodeRef}
-      style={
-        {
-          transition,
-          transform: CSS.Translate.toString(transform),
-          opacity: isDragging ? 0.5 : undefined,
-          ...(isOverContainer ?
-            { backgroundColor: 'rgb(235, 235, 235, 1)' }
-          : {}),
-        } as React.CSSProperties
-      }
+      style={{
+        transition,
+        transform: CSS.Translate.toString(transform),
+        opacity: isDragging ? 0.5 : undefined,
+        ...(isOverContainer ?
+          { backgroundColor: 'rgb(235, 235, 235, 1)' }
+        : {}),
+      }}
     >
       {children}
     </div>

@@ -45,10 +45,11 @@ interface Props extends React.PropsWithChildren {
   items: Items;
   setItems: React.Dispatch<React.SetStateAction<Items>>;
   setContainers: React.Dispatch<React.SetStateAction<UniqueIdentifier[]>>;
+  updateStatus: (item: Issue, status: string) => void;
 }
 
 const IssueKanbanDndContext = (props: Props) => {
-  const { children, items, setItems, setContainers } = props;
+  const { children, items, setItems, setContainers, updateStatus } = props;
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -184,7 +185,6 @@ const IssueKanbanDndContext = (props: Props) => {
       setContainers((containers) => {
         const activeIndex = containers.indexOf(active.id);
         const overIndex = containers.indexOf(over.id);
-
         return arrayMove(containers, activeIndex, overIndex);
       });
     }
@@ -210,8 +210,12 @@ const IssueKanbanDndContext = (props: Props) => {
       const overItems = items[overContainer] ?? [];
 
       const activeIndex = activeItems.findIndex((v) => v.id === active.id);
-      const overIndex = overItems.findIndex((v) => v.id === overId);
 
+      const overIndex = overItems.findIndex((v) => v.id === overId);
+      const item = activeItems[activeIndex];
+      if (item) {
+        updateStatus(item, overContainer as string);
+      }
       if (activeIndex !== overIndex) {
         setItems((items) => ({
           ...items,

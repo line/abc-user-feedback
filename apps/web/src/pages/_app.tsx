@@ -23,6 +23,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { OverlayProvider } from '@toss/use-overlay';
 import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
@@ -97,6 +98,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                 </TenantGuard>
               </TooltipProvider>
             </HydrationBoundary>
+            {process.env.NODE_ENV === 'development' && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
           </OverlayProvider>
         </ThemeProvider>
       </QueryClientProvider>

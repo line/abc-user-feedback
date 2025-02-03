@@ -20,9 +20,10 @@ import {
   SortableContext,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import { ISSUES } from '@/shared';
+import { client, ISSUES } from '@/shared';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
@@ -39,6 +40,7 @@ const IssueKanban = (props: Props) => {
   const { projectId, issueTracker } = props;
 
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
 
   const [items, setItems] = useState<Record<UniqueIdentifier, Issue[]>>({
     INIT: [],
@@ -46,6 +48,22 @@ const IssueKanban = (props: Props) => {
     IN_PROGRESS: [],
     RESOLVED: [],
     PENDING: [],
+  });
+
+  const { mutate } = useMutation({
+    mutationFn: (input: { item: Issue; status: string }) => {
+      const { item, status } = input;
+      return client.put({
+        path: '/api/admin/projects/{projectId}/issues/{issueId}',
+        pathParams: { projectId, issueId: item.id },
+        body: { ...item, status: status as Issue['status'] },
+      });
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: ['/api/admin/projects/{projectId}/issues/search'],
+      });
+    },
   });
 
   const [containers, setContainers] = useState(
@@ -57,6 +75,9 @@ const IssueKanban = (props: Props) => {
       items={items}
       setItems={setItems}
       setContainers={setContainers}
+      updateStatus={(item, status) => {
+        mutate({ item, status });
+      }}
     >
       <div className="grid grid-cols-5 items-start gap-4">
         <SortableContext

@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-<<<<<<<< HEAD:apps/api/src/domains/admin/project/category/dtos/update-category.dto.ts
 import { Expose } from 'class-transformer';
 
 import { CreateCategoryDto } from './create-category.dto';
@@ -25,16 +24,3 @@ export class UpdateCategoryDto extends CreateCategoryDto {
   @Expose()
   declare name: string;
 }
-========
-
-import type { Issue } from '../issue';
-
-export type Feedback = Record<string, unknown>;
-// export interface Feedback {
-//   id: number;
-//   createdAt: string;
-//   updatedAt: string;
-//   issues?: Issue[];
-//   [key: string]: unknown;
-// }
->>>>>>>> c43b0c82 (Merge 'dev'):apps/web/src/entities/feedback/feedback.type.ts

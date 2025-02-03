@@ -31,6 +31,14 @@ import IssueDetailSheet from './issue-detail-sheet.ui';
 import IssueKanbanColumnHeader from './issue-kanban-column-header.ui';
 import IssueKanbanColumnItem from './issue-kanban-column-item.ui';
 
+const DEFAULT_META = {
+  currentPage: 1,
+  totalPages: 0,
+  totalItems: 0,
+  itemCount: 0,
+  itemsPerPage: 0,
+};
+
 interface Props {
   issue: IssuesItem;
   projectId: number;
@@ -43,10 +51,11 @@ const IssueKanbanColumn = (props: Props) => {
   const { issue, projectId, issueTracker, items, setItems } = props;
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
+  const [meta, setMeta] = useState(DEFAULT_META);
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      query: { status: issue.status },
+      queries: [{ status: issue.status, condition: 'IS' }],
       sort: { [sort.key]: sort.value },
     });
 
@@ -55,6 +64,7 @@ const IssueKanbanColumn = (props: Props) => {
       ...items,
       [issue.status]: data.pages.flatMap((page) => page?.items ?? []),
     }));
+    setMeta(data.pages[0]?.meta ?? DEFAULT_META);
   }, [data]);
 
   return (
@@ -62,7 +72,7 @@ const IssueKanbanColumn = (props: Props) => {
       <div className="rounded-16 bg-neutral-tertiary flex flex-col gap-2 px-2 py-3">
         <IssueKanbanColumnHeader
           issue={issue}
-          totalItems={data.pages[0]?.meta.totalItems ?? 0}
+          totalItems={meta.totalItems}
           sort={sort}
           onChangeSort={(input) => setSort(input)}
         />

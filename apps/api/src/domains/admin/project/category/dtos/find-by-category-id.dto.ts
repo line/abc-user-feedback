@@ -13,10 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-<<<<<<<< HEAD:apps/api/src/domains/admin/project/category/dtos/find-by-category-id.dto.ts
 export class FindByCategoryIdDto {
   categoryId: number;
 }
-========
-export { LoginButtonTypeEnum } from './login-button-type.enum';
->>>>>>>> c43b0c82 (Merge 'dev'):apps/api/src/domains/admin/tenant/entities/enums/index.ts
