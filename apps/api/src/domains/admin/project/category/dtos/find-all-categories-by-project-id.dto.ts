@@ -13,6 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export class FindAllCategoriesByProjectIdDto {
+
+import { PaginationDto } from '@/common/dtos';
+
+export class FindAllCategoriesByProjectIdDto extends PaginationDto {
   projectId: number;
 }

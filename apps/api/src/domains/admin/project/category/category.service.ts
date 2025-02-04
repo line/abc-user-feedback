@@ -15,9 +15,11 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { paginateHelper } from '@/common/helper/paginate.helper';
 import { CategoryEntity } from './category.entity';
 import {
   CreateCategoryDto,
@@ -56,12 +58,19 @@ export class CategoryService {
     return savedCategory;
   }
 
-  async findAllByProjectId(dto: FindAllCategoriesByProjectIdDto) {
-    const categories = await this.repository.find({
-      where: { project: { id: dto.projectId } },
-    });
-
-    return categories;
+  async findAllByProjectId(
+    dto: FindAllCategoriesByProjectIdDto,
+  ): Promise<Pagination<CategoryEntity, IPaginationMeta>> {
+    return await paginateHelper(
+      this.repository.createQueryBuilder(),
+      {
+        where: { project: { id: dto.projectId } },
+      },
+      {
+        page: dto.page,
+        limit: dto.limit,
+      },
+    );
   }
 
   async findById({ categoryId }: FindByCategoryIdDto) {
