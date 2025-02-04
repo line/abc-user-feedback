@@ -362,7 +362,7 @@ importers:
         specifier: ^0.11.0
         version: 0.11.1(typescript@5.6.3)(zod@3.24.1)
       '@tanstack/react-query':
-        specifier: ^5.31.0
+        specifier: ^5.45.1
         version: 5.64.2(react@19.0.0)
       '@tanstack/react-table':
         specifier: ^8.16.0
@@ -834,6 +834,7 @@ packages:
   '@aws-sdk/client-s3@3.733.0':
     resolution: {integrity: sha512-LmAbtNxrgbtB+YVt/HPPyKBgJWrvHOv5yNn98Ndlwm1mBgvI1N7+HQlI5ZWIKBCkwJtLtdS8ZVHzPtqnyWO+YA==}
     engines: {node: '>=18.0.0'}
+    deprecated: Please upgrade to >=3.735.0, which contains fixes for checksum validation in S3 getObject calls. Details https://github.com/aws/aws-sdk-js-v3/issues/6827
 
   '@aws-sdk/client-sso@3.731.0':
     resolution: {integrity: sha512-O4C/UYGgqMsBg21MMApFdgyh8BX568hQhbdoNFmRVTBoSnCZ3w+H4a1wBPX4Gyl0NX+ab6Xxo9rId8HiyPXJ0A==}
