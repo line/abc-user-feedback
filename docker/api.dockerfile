@@ -19,11 +19,13 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
+RUN npm install -g corepack@latest
+RUN corepack enable
+
 # First install dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN corepack enable
 RUN pnpm install --frozen-lockfile
 RUN pnpm install -w source-map-support
 
