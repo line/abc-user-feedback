@@ -20,9 +20,8 @@ RUN apk --no-cache add --virtual .builds-deps build-base python3
 
 WORKDIR /app
 
-RUN npm install -g corepack
+RUN npm install -g corepack@latest
 RUN corepack enable
-RUN corepack prepare pnpm@latest --activate
 
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
