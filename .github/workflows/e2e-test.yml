@@ -44,8 +44,7 @@ jobs:
       - name: Setup e2e test
         run: |
           cd apps/e2e
-          npx corepack enable
-          corepack prepare pnpm@latest --activate
+          npm install -g pnpm
           pnpm install --frozen-lockfile
           pnpm playwright install
 
