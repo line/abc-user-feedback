@@ -73,7 +73,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
         pathParams: { projectId },
       })
       .then(({ data }) => setCurrentIssues(data?.items ?? []));
-  }, []);
+  }, [projectId]);
 
   const { chartData, dataKeys } = useLineChartData(
     from,

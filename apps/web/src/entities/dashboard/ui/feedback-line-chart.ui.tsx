@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -67,6 +67,10 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
 
   const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
+
+  useEffect(() => {
+    setCurrentChannels(channels.slice(0, 5));
+  }, [channels]);
 
   const { data } = useOAIQuery({
     path: '/api/admin/statistics/feedback',

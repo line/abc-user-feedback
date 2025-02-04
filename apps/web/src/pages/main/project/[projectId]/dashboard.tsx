@@ -97,6 +97,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     if (!v?.startDate || !v.endDate) return;
     await setDateRange({ startDate: v.startDate, endDate: v.endDate });
   };
+
   const viewItems = [
     {
       label: t('dashboard-card.total-feedback.title'),
