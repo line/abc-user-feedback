@@ -81,7 +81,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  let channel: ChannelEntity;
+  const channel: ChannelEntity = new ChannelEntity();
   let fields: FieldEntity[];
   beforeEach(async () => {
     await clearEntities([projectRepo, channelRepo, fieldRepo]);

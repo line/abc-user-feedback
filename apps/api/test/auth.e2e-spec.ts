@@ -66,7 +66,7 @@ describe('AppController (e2e)', () => {
   let userRepo: Repository<UserEntity>;
   let codeRepo: Repository<CodeEntity>;
   let tenantRepo: Repository<TenantEntity>;
-  let ownerRole: RoleEntity;
+  const ownerRole: RoleEntity | undefined = undefined;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
