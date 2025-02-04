@@ -86,7 +86,7 @@ describe('UserService', () => {
       expect(createQueryBuilder.setFindOptions).toBeCalledWith({
         where: {
           email: Like(`%${dto.query.email}%`),
-          members: { role: { project: { id: In(dto.query.projectId!) } } },
+          members: { role: { project: { id: In(dto.query.projectId ?? []) } } },
         },
         order: dto.order,
         relations: { members: { role: { project: true } } },

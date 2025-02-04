@@ -161,6 +161,7 @@ export class IssueService {
 
     return result;
   }
+
   async findIssuesByProjectIdV2(
     dto: FindIssuesByProjectIdDtoV2,
   ): Promise<Pagination<IssueEntity, IPaginationMeta>> {
@@ -185,11 +186,17 @@ export class IssueService {
       queryBuilder.andWhere('issues.created_at < :lt', { lt });
     }
 
-    const categoryIdCondition = queries.find((query) => query.categoryId);
-    if (categoryIdCondition?.categoryId) {
-      queryBuilder.andWhere('category.id = :categoryId', {
-        categoryId: categoryIdCondition.categoryId,
-      });
+    const categoryIdCondition = queries.find(
+      (query) => typeof query.categoryId === 'number',
+    );
+    if (typeof categoryIdCondition?.categoryId === 'number') {
+      if (categoryIdCondition.categoryId === 0) {
+        queryBuilder.andWhere('issues.category_id is NULL');
+      } else {
+        queryBuilder.andWhere('issues.category_id = :categoryId', {
+          categoryId: categoryIdCondition.categoryId,
+        });
+      }
     }
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
@@ -230,7 +237,9 @@ export class IssueService {
               const operator =
                 condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
               const valueFormat =
-                condition === QueryV2ConditionsEnum.IS ? value : `%${value}%`;
+                condition === QueryV2ConditionsEnum.IS ?
+                  value
+                : `%${value?.toString()}%`;
               qb[method](`issues.${fieldKey} ${operator} :${paramName}`, {
                 [paramName]: valueFormat,
               });
@@ -238,7 +247,9 @@ export class IssueService {
               const operator =
                 condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
               const valueFormat =
-                condition === QueryV2ConditionsEnum.IS ? value : `%${value}%`;
+                condition === QueryV2ConditionsEnum.IS ?
+                  value
+                : `%${value?.toString()}%`;
               qb[method](`category.name ${operator} :${paramName}`, {
                 [paramName]: valueFormat,
               });

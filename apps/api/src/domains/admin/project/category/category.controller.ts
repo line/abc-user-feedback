@@ -21,6 +21,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -30,6 +31,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { PaginationRequestDto } from '@/common/dtos';
 import { JwtAuthGuard } from '../../auth/guards';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dtos';
@@ -68,12 +70,16 @@ export class CategoryController {
   @ApiBearerAuth()
   @ApiOkResponse({ type: GetAllCategoriesResponseDto })
   @Get()
-  async findAll(@Param('projectId', ParseIntPipe) projectId: number) {
-    return GetAllCategoriesResponseDto.transform({
-      items: await this.categoryService.findAllByProjectId({
+  async findAll(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Query() body: PaginationRequestDto,
+  ) {
+    return GetAllCategoriesResponseDto.transform(
+      await this.categoryService.findAllByProjectId({
         projectId,
+        ...body,
       }),
-    });
+    );
   }
 
   @ApiParam({ name: 'projectId', type: Number })

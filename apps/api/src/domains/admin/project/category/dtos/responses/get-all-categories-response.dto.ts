@@ -16,7 +16,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
-class GetAllCategoriesResponse {
+import { PaginationResponseDto } from '@/common/dtos';
+
+class GetAllCategoriesDto {
   @Expose()
   @ApiProperty()
   id: number;
@@ -34,13 +36,13 @@ class GetAllCategoriesResponse {
   updatedAt: Date;
 }
 
-export class GetAllCategoriesResponseDto {
+export class GetAllCategoriesResponseDto extends PaginationResponseDto<GetAllCategoriesDto> {
   @Expose()
-  @ApiProperty({ type: [GetAllCategoriesResponse] })
-  @Type(() => GetAllCategoriesResponse)
-  items: GetAllCategoriesResponse[];
+  @ApiProperty({ type: [GetAllCategoriesDto] })
+  @Type(() => GetAllCategoriesDto)
+  items: GetAllCategoriesDto[];
 
-  public static transform(params: any) {
+  public static transform(params: any): GetAllCategoriesResponseDto {
     return plainToInstance(GetAllCategoriesResponseDto, params, {
       excludeExtraneousValues: true,
     });
