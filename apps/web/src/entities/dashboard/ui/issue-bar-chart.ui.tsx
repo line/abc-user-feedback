@@ -45,7 +45,7 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
       }))}
       title={t('chart.issue-status-count.title')}
       description={t('chart.issue-status-count.description')}
-      height={400}
+      height={415}
       onClick={(data) => {
         if (!data) return;
         const issue = ISSUES(t).find((v) => v.name === data.name);

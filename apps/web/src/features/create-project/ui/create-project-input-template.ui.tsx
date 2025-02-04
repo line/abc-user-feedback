@@ -141,7 +141,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
       issueTracker: { data: input.issueTracker },
       members: input.members.map(({ role, user }) => ({
         roleName: role.name,
-        userId: user?.id ?? 0,
+        userId: user.id,
       })),
     });
   };

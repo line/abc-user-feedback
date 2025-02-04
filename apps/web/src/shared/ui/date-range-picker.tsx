@@ -118,8 +118,14 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (!currentValue) return;
     setCurrentInput({
-      startDate: dayjs(currentValue.startDate).format('YYYY-MM-DD'),
-      endDate: dayjs(currentValue.endDate).format('YYYY-MM-DD'),
+      startDate:
+        currentValue.startDate ?
+          dayjs(currentValue.startDate).format('YYYY-MM-DD')
+        : '',
+      endDate:
+        currentValue.endDate ?
+          dayjs(currentValue.endDate).format('YYYY-MM-DD')
+        : '',
     });
   }, [currentValue]);
 

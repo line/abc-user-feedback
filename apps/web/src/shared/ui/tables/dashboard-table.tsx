@@ -18,7 +18,6 @@ import { flexRender } from '@tanstack/react-table';
 
 import { DescriptionTooltip, SelectInput } from '@/shared';
 
-import ChartFilter from '../charts/chart-filter';
 import TableSortIcon from './table-sort-icon';
 
 interface IProps<T> {
@@ -37,8 +36,8 @@ function DashboardTable<T>(props: IProps<T>) {
   const { title, description, table, selectData, filterContent } = props;
 
   return (
-    <div className="border-fill-tertiary bg-tertiary rounded border">
-      <div className="flex justify-between p-4">
+    <div className="rounded-20 shadow-default flex h-[450px] flex-col border">
+      <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-1">
           <h3 className="font-20-bold">{title}</h3>
           {description && (
@@ -47,18 +46,18 @@ function DashboardTable<T>(props: IProps<T>) {
         </div>
         <div className="flex items-center gap-2">
           {selectData && <SelectInput {...selectData} />}
-          {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
+          {filterContent}
         </div>
       </div>
-      <div className="mb-5 h-[310px] overflow-x-hidden overflow-y-scroll">
-        <table className="mx-2 w-full">
+      <div className="mb-6 overflow-x-hidden overflow-y-scroll">
+        <table className="w-full">
           <thead>
-            <tr className="h-14">
+            <tr className="h-12 border-b border-t">
               {table.getFlatHeaders().map((header, i) => (
                 <th
                   key={i}
                   style={{ width: header.getSize() }}
-                  className="font-14-regular text-secondary px-3 text-left"
+                  className="text-base-normal px-3 text-left"
                 >
                   <div className="flex items-center gap-1">
                     {flexRender(
@@ -75,7 +74,7 @@ function DashboardTable<T>(props: IProps<T>) {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr className="h-14" key={row.index}>
+              <tr className="h-14 border-b" key={row.index}>
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={`${cell.id} ${cell.row.index}`}

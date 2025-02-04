@@ -16,7 +16,7 @@
 
 import { Switch } from '@ufb/react';
 
-import { cn, usePermissions } from '@/shared';
+import { usePermissions } from '@/shared';
 
 import type { Webhook, WebhookInfo } from '../webhook.type';
 

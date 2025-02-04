@@ -64,6 +64,7 @@ const ThirtyDaysFeedbackCard: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardCard
+      type="feedback"
       data={currentData?.count ?? 0}
       title={t('dashboard-card.n-days-feedback.title', { n: 30 })}
       description={t('dashboard-card.n-days-feedback.description', {

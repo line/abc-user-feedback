@@ -15,8 +15,6 @@
  */
 import type { Header, Table } from '@tanstack/react-table';
 
-import { Icon } from '@ufb/ui';
-
 import { cn } from '@/shared';
 
 interface IProps<T> {

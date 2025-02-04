@@ -61,11 +61,6 @@ const FeedbackDetailEditingCell = (props: Props) => {
         />
       : field.format === 'images' ?
         <ImagePreviewButton urls={value as string[]} />
-      : field.format === 'text' || field.format === 'keyword' ?
-        <Textarea
-          value={value as string}
-          onChange={(e) => setCurrentValue(e.target.value)}
-        />
       : field.format === 'number' ?
         <InputField>
           <TextInput
@@ -73,7 +68,11 @@ const FeedbackDetailEditingCell = (props: Props) => {
             onChange={(e) => setCurrentValue(e.target.value)}
           />
         </InputField>
-      : '-'}
+      : <Textarea
+          value={value as string}
+          onChange={(e) => setCurrentValue(e.target.value)}
+        />
+      }
     </>
   );
 };

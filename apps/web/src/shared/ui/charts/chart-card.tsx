@@ -15,37 +15,34 @@
  */
 
 import DescriptionTooltip from '../description-tooltip';
-import ChartFilter from './chart-filter';
 import Legend from './legend';
 
 interface IProps extends React.PropsWithChildren {
   title: string;
-  description?: string;
+  description: string;
   dataKeys?: { name: string; color: string }[];
   showLegend?: boolean;
   filterContent?: React.ReactNode;
 }
 
-const ChartContainer: React.FC<IProps> = (props) => {
+const ChartCard: React.FC<IProps> = (props) => {
   const { children, description, title, dataKeys, filterContent, showLegend } =
     props;
   return (
-    <div className="border-fill-tertiary bg-tertiary rounded border px-4">
-      <div className="flex h-[72px] items-center justify-between">
+    <div className="rounded-20 shadow-default h-full border px-6">
+      <div className="flex items-center justify-between py-6">
         <div className="flex items-center">
-          <span className="font-20-bold">{title}</span>
-          {description && (
-            <DescriptionTooltip description={description} side="bottom" />
-          )}
+          <span className="text-title-h4">{title}</span>
+          <DescriptionTooltip description={description} side="bottom" />
         </div>
         <div className="flex gap-3">
           {showLegend && <Legend dataKeys={dataKeys ?? []} />}
-          {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
+          {filterContent}
         </div>
       </div>
-      {children}
+      <div className="py-6 pt-0">{children}</div>
     </div>
   );
 };
 
-export default ChartContainer;
+export default ChartCard;

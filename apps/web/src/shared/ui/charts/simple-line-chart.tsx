@@ -17,26 +17,26 @@
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
-import type { TooltipProps } from 'recharts';
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
+import type { TooltipProps } from 'recharts';
 import type {
   NameType,
   ValueType,
 } from 'recharts/types/component/DefaultTooltipContent';
 
-import ChartContainer from './chart-container';
+import ChartCard from './chart-card';
 
 interface IProps {
   title: string;
-  description?: string;
+  description: string;
   height?: number;
   data: unknown[];
   dataKeys: { color: string; name: string }[];
@@ -58,7 +58,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
   } = props;
 
   return (
-    <ChartContainer
+    <ChartCard
       dataKeys={dataKeys}
       description={description}
       title={title}
@@ -66,14 +66,14 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
       filterContent={filterContent}
     >
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
-        <LineChart
+        <AreaChart
           width={500}
           height={300}
           data={data}
-          margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
+          margin={{ left: -20, right: 10, top: 10, bottom: 10 }}
         >
           <CartesianGrid
-            strokeDasharray="3 3"
+            vertical={false}
             stroke="var(--fill-color-secondary)"
           />
           <Tooltip
@@ -82,36 +82,45 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
           />
           <XAxis
             dataKey="date"
-            className="font-10-regular text-secondary"
+            className="text-neutral-tertiary text-small-normal"
             tickSize={15}
             tickLine={false}
             interval="equidistantPreserveStart"
           />
           <YAxis
             tickFormatter={(v: string) => v.toLocaleString()}
-            className="font-10-regular text-secondary"
+            className="text-neutral-tertiary text-small-normal"
             tickSize={15}
             tickLine={false}
             min={0}
           />
-          {dataKeys.map(({ color, name }) => (
-            <Line
+          <defs>
+            {dataKeys.map(({ color }, index) => (
+              <linearGradient
+                key={index}
+                id={String(index)}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor={color} stopOpacity={0.8} />
+                <stop offset="95%" stopColor={color} stopOpacity={0.1} />
+              </linearGradient>
+            ))}
+          </defs>
+          {dataKeys.map(({ color, name }, index) => (
+            <Area
               key={name}
               type="linear"
               dataKey={name}
               stroke={color}
-              activeDot={{ r: 8, stroke: 'var(--background-color-tertiary)' }}
-              dot={{
-                fill: color,
-                r: 4,
-                strokeWidth: 2,
-                stroke: 'var(--background-color-tertiary)',
-              }}
+              fill={`url(#${index})`}
             />
           ))}
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
-    </ChartContainer>
+    </ChartCard>
   );
 };
 
@@ -137,7 +146,7 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
 
   return (
     <div
-      className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
+      className="bg-neutral-primary max-w-[240px] rounded border px-4 py-3"
       style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
     >
       <h1 className="font-12-bold mb-3">

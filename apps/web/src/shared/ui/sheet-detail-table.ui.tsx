@@ -21,6 +21,7 @@ import {
   Calendar,
   Icon,
   InputField,
+  Tag,
   Textarea,
   TextInput,
 } from '@ufb/react';
@@ -51,12 +52,6 @@ type TicketRow = {
 };
 type IssueRow = {
   format: 'issue';
-  feedbackId: number;
-  editable?: false;
-};
-
-type CategoryRow = {
-  format: 'category';
   feedbackId: number;
   editable?: false;
 };
@@ -148,7 +143,13 @@ const SheetDetailTable = (props: Props) => {
           </a>
         : ((value as string | null) ?? '-');
     },
-    issue: (_, row) => <IssueCell feedbackId={(row as IssueRow).feedbackId} />,
+    issue: (_, row) => (
+      <IssueCell feedbackId={(row as IssueRow).feedbackId}>
+        <Tag variant="secondary" className="cursor-pointer">
+          +
+        </Tag>
+      </IssueCell>
+    ),
   };
 
   const renderEditModeField: RenderFieldMap<SheetDetailTableRow> = {

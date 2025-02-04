@@ -64,6 +64,7 @@ const YesterdayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardCard
+      type="feedback"
       data={currentData?.count ?? 0}
       title={t('dashboard-card.yesterday-feedback.title')}
       description={t('dashboard-card.yesterday-feedback.description', {

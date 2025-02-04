@@ -14,6 +14,7 @@
  * under the License.
  */
 
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'react-i18next';
 
@@ -45,7 +46,12 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
         disabled={!data?.url}
         onClick={() => router.push(data?.url ?? '')}
       >
-        <img src="/assets/images/google.svg" />
+        <Image
+          src="/assets/images/google.svg"
+          alt="Google"
+          width={24}
+          height={24}
+        />
         Google {t('button.sign-in')}
       </Button>
     );

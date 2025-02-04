@@ -65,6 +65,7 @@ const useWarnIfUnsavedChanges = (hasUnsavedChanges: boolean) => {
       openWarnIfUnsavedChangesDialog(url);
 
       router.events.emit('routeChangeError');
+      // eslint-disable-next-line @typescript-eslint/only-throw-error
       throw 'routeChange aborted.';
     };
     router.events.on('routeChangeStart', handleBeforeChangeRoute);

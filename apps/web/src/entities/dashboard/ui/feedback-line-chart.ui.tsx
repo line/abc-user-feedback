@@ -17,7 +17,14 @@ import { useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { PopoverCloseButton } from '@ufb/ui';
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxSelectItem,
+  ComboboxTrigger,
+  Icon,
+} from '@ufb/react';
 
 import { SimpleLineChart, useOAIQuery } from '@/shared';
 
@@ -94,41 +101,35 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
       dataKeys={dataKeys}
       data={chartData}
       filterContent={
-        <div className="flex flex-col gap-3 px-4 py-3">
-          <div className="flex justify-between">
-            <h1 className="font-16-bold">
-              Channel{' '}
-              <span>
-                {currentChannels.length}
-                <span className="text-tertiary">/{channels.length}</span>
-              </span>
-            </h1>
-            <PopoverCloseButton />
-          </div>
-          <ul>
-            {channels.map((channel) => (
-              <li key={channel.id} className="py-1">
-                <label className="flex cursor-pointer items-center gap-2 py-1">
-                  <input
-                    className="checkbox checkbox-sm"
-                    type="checkbox"
-                    checked={currentChannels.some(
+        <Combobox>
+          <ComboboxTrigger>
+            <Icon name="RiFilter3Line" />
+            Filter
+          </ComboboxTrigger>
+          <ComboboxContent>
+            <ComboboxList>
+              {channels.map((channel) => (
+                <ComboboxSelectItem
+                  key={channel.id}
+                  value={String(channel.id)}
+                  checked={currentChannels.some(({ id }) => id === channel.id)}
+                  onSelect={() => {
+                    const isChecked = currentChannels.some(
                       ({ id }) => id === channel.id,
-                    )}
-                    onChange={(e) =>
-                      e.currentTarget.checked ?
-                        setCurrentChannels((prev) => [...prev, channel])
-                      : setCurrentChannels((prev) =>
-                          prev.filter((v) => v.id !== channel.id),
-                        )
-                    }
-                  />
-                  <p className="font-12-regular flex-1">{channel.name}</p>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
+                    );
+                    setCurrentChannels((prev) =>
+                      isChecked ? prev.filter(({ id }) => id !== channel.id)
+                      : prev.length === 5 ? prev
+                      : [...prev, channel],
+                    );
+                  }}
+                >
+                  {channel.name}
+                </ComboboxSelectItem>
+              ))}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
       }
       showLegend
     />

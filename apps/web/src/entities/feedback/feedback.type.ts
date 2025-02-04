@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import type { Issue } from '../issue';
-
 export type Feedback = Record<string, unknown>;
+
+// import type { Issue } from '../issue';
 // export interface Feedback {
 //   id: number;
 //   createdAt: string;

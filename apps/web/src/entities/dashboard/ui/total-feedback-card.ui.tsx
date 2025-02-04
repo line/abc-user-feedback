@@ -44,6 +44,7 @@ const TotalFeedbackCard: React.FC<IProps> = ({ projectId, from, to }) => {
 
   return (
     <DashboardCard
+      type="feedback"
       data={data?.count ?? 0}
       title={t('dashboard-card.total-feedback.title')}
       description={t('dashboard-card.total-feedback.description', {

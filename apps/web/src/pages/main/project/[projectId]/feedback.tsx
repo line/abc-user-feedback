@@ -294,7 +294,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       </div>
       <BasicTable
         table={table}
-        className="min-w-full table-fixed"
+        className="min-w-full table-fixed [&>thead>tr]:hover:bg-inherit"
         onClickRow={(_, row) => setOpenFeedbackId(Number(row.id))}
         isLoading={isLoading}
         emptyCaption={t('v2.text.no-data.feedback')}

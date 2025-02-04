@@ -30,15 +30,17 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
   side,
 }) => {
   return (
-    <Tooltip>
+    <Tooltip delayDuration={0}>
       <TooltipTrigger className="ml-1 align-middle">
         <Icon
-          name="RiInformationFill"
+          name="RiInformation2Line"
           size={16}
-          className={color === 'red' ? 'text-red-primary' : 'text-tertiary'}
+          className={
+            color === 'red' ? 'text-red-primary' : 'icon-neutral-disabled'
+          }
         />
       </TooltipTrigger>
-      <TooltipContent className="whitespace-pre-line" side={side}>
+      <TooltipContent className="whitespace-pre-line text-left" side={side}>
         {displayString(description)}
       </TooltipContent>
     </Tooltip>

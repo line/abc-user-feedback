@@ -17,14 +17,13 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
-  Rectangle,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
 
-import ChartContainer from './chart-container';
+import ChartCard from './chart-card';
 
 interface Data {
   name: string;
@@ -33,7 +32,7 @@ interface Data {
 
 interface IProps {
   title: string;
-  description?: string;
+  description: string;
   height?: number;
   data: Data[];
   showLegend?: boolean;
@@ -43,33 +42,27 @@ interface IProps {
 const SimpleBarChart: React.FC<IProps> = (props) => {
   const { data, title, description, height, showLegend, onClick } = props;
   return (
-    <ChartContainer
-      description={description}
-      title={title}
-      showLegend={showLegend}
-    >
+    <ChartCard description={description} title={title} showLegend={showLegend}>
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
         <BarChart
           width={500}
           height={300}
           data={data}
-          margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
-          barSize={16}
+          margin={{ left: -20, right: 10, top: 10, bottom: 10 }}
+          barSize={80}
           onClick={(e: { activePayload?: { payload: Data }[] }) =>
             onClick?.(e.activePayload?.[0]?.payload)
           }
         >
           <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="var(--fill-color-secondary)"
             vertical={false}
+            stroke="var(--fill-color-secondary)"
           />
           <Tooltip
-            cursor={<Rectangle fill="#5D7BE729" />}
             formatter={(value) => value.toLocaleString()}
             content={({ payload, label }) => (
               <div
-                className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
+                className="bg-neutral-primary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
                 style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
               >
                 <p className="mb-2">{label}</p>
@@ -79,20 +72,18 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           />
           <XAxis
             dataKey="name"
-            className="font-10-regular text-secondary"
-            tickSize={15}
+            className="text-neutral-tertiary text-small-normal"
             tickLine={false}
           />
           <YAxis
             tickFormatter={(v: string) => v.toLocaleString()}
-            className="font-10-regular text-secondary"
-            tickSize={15}
+            className="text-neutral-tertiary text-small-normal"
             tickLine={false}
           />
-          <Bar dataKey="value" fill="#5D7BE7" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="value" fill="var(--sky400)" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
-    </ChartContainer>
+    </ChartCard>
   );
 };
 

@@ -50,7 +50,7 @@ describe('Sign In Page', () => {
     expect(oauthBtn).toBeInTheDocument();
   });
   test('should render when isPrivate is false', () => {
-    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT, isPrivate: true } });
+    useTenantStore.setState({ tenant: { ...DEFAULT_TENANT } });
     const signInPage = SignInPage.getLayout?.(<SignInPage />);
 
     const { container } = render(<>{signInPage}</>);

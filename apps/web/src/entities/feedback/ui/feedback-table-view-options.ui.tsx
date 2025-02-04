@@ -41,7 +41,7 @@ const FeedbackTableViewOptions = ({ table, fields }: Props) => {
     <Combobox>
       <ComboboxTrigger trigger="click">
         <Icon name="RiEyeLine" />
-        View{' '}
+        View
         <Badge variant="subtle">{table.getVisibleFlatColumns().length}</Badge>
       </ComboboxTrigger>
       <ComboboxContent>

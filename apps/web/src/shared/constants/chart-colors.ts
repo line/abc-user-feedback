@@ -14,9 +14,9 @@
  * under the License.
  */
 export const CHART_FIVE_COLORS = [
-  '#5D7BE7',
-  '#4BD8BA',
-  '#D3B854',
-  '#AED252',
-  '#D05772',
+  'var(--sky400)',
+  'var(--teal400)',
+  'var(--yellow400)',
+  'var(--orange500)',
+  'var(--rose400)',
 ];

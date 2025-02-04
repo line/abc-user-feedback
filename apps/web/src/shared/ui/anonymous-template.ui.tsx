@@ -14,6 +14,8 @@
  * under the License.
  */
 
+import Image from 'next/image';
+
 import { Icon } from '@ufb/react';
 
 import { useTenantStore } from '@/entities/tenant';
@@ -64,7 +66,7 @@ const AnonymousTemplate = (props: Props) => {
             'justify-center': !!imageSub,
           })}
         >
-          <img src={image} alt="sign-in-image" />
+          <Image src={image} alt="sign-in-image" width={240} height={240} />
           {imageSub}
         </div>
       </div>

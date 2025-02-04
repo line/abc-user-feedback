@@ -48,6 +48,7 @@ const CreateFeedbackPerIssueCard: React.FC<IProps> = (props) => {
           'YYYY/MM/DD',
         )}`,
       })}`}
+      type="issue"
     />
   );
 };

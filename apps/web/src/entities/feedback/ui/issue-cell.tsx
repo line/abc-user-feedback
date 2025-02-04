@@ -27,7 +27,6 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,
-  Tag,
   toast,
 } from '@ufb/react';
 
@@ -38,13 +37,13 @@ import type { Issue } from '@/entities/issue';
 import { useFeedbackSearch } from '../lib';
 import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
 
-interface IProps {
+interface IProps extends React.PropsWithChildren {
   issues?: Issue[];
-  feedbackId: number;
+  feedbackId?: number;
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { feedbackId } = props;
+  const { feedbackId, children, issues } = props;
 
   const { t } = useTranslation();
 
@@ -61,10 +60,10 @@ const IssueCell: React.FC<IProps> = (props) => {
     projectId,
     channelId,
     { queries: [{ id: feedbackId, condition: 'IS' }], operator: 'AND' },
-    { enabled: !props.issues },
+    { enabled: !issues },
   );
 
-  const issues = (props.issues ?? data?.items[0]?.issues ?? []) as Issue[];
+  const currentIssues = (issues ?? data?.items[0]?.issues ?? []) as Issue[];
 
   const refetch = async () => {
     await queryClient.invalidateQueries({
@@ -87,6 +86,8 @@ const IssueCell: React.FC<IProps> = (props) => {
 
   const { mutate: attatchIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
+      if (!feedbackId) return;
+
       const { data } = await client.post({
         path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
         pathParams: { projectId, channelId, feedbackId, issueId },
@@ -103,6 +104,8 @@ const IssueCell: React.FC<IProps> = (props) => {
   });
   const { mutateAsync: detecthIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
+      if (!feedbackId) return;
+
       const { data } = await client.delete({
         path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}/issue/{issueId}',
         pathParams: { projectId, channelId, feedbackId, issueId },
@@ -137,15 +140,11 @@ const IssueCell: React.FC<IProps> = (props) => {
       className="flex flex-wrap items-center gap-1 rounded"
       onClick={(e) => e.stopPropagation()}
     >
-      {issues.map((issue) => (
+      {currentIssues.map((issue) => (
         <IssueBadge key={issue.id} name={issue.name} status={issue.status} />
       ))}
       <Combobox>
-        <ComboboxTrigger asChild>
-          <Tag variant="secondary" className="cursor-pointer">
-            +
-          </Tag>
-        </ComboboxTrigger>
+        <ComboboxTrigger asChild>{children}</ComboboxTrigger>
         <ComboboxContent>
           <ComboboxInput
             onValueChange={(value) => setInputValue(value)}
@@ -159,7 +158,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 </span>
               }
             >
-              {issues.map((issue) => (
+              {currentIssues.map((issue) => (
                 <ComboboxItem
                   key={issue.id}
                   onSelect={() => detecthIssue({ issueId: issue.id })}
@@ -184,7 +183,9 @@ const IssueCell: React.FC<IProps> = (props) => {
                 }
               >
                 {allIssues.items
-                  .filter((v) => !issues.some((issue) => issue.id === v.id))
+                  .filter(
+                    (v) => !currentIssues.some((issue) => issue.id === v.id),
+                  )
                   .map((issue) => (
                     <ComboboxItem
                       key={issue.id}
@@ -202,7 +203,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               </ComboboxGroup>
             )}
             {!!inputValue &&
-              !issues.some((issue) => issue.name === inputValue) &&
+              !currentIssues.some((issue) => issue.name === inputValue) &&
               !isLoading &&
               !allIssues?.items.some((issue) => issue.name === inputValue) && (
                 <div
