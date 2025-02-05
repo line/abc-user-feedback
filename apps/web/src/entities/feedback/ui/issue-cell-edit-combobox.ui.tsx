@@ -98,7 +98,7 @@ const IssueCellEditCombobox = (props: Props) => {
         </span>
       </DropdownTrigger>
       <DropdownContent onClick={(e) => e.stopPropagation()} side="right">
-        <div>
+        <div className="border-b">
           <Input
             className="border-none"
             value={inputIssueName}

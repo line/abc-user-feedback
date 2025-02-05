@@ -21,7 +21,6 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
 
 import { Button } from '@ufb/react';
@@ -66,19 +65,12 @@ const IssueKanbanColumn = (props: Props) => {
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
-  const overlay = useOverlay();
 
-  const openIssueDetailOverlay = (data: Issue) => {
-    overlay.open(({ close, isOpen }) => (
-      <IssueDetailSheet
-        close={close}
-        data={data}
-        isOpen={isOpen}
-        projectId={projectId}
-        issueTracker={issueTracker}
-      />
-    ));
-  };
+  const [openIssueId, setOpenIssueId] = useState<number | null>(null);
+  const currentIssue = useMemo(
+    () => items.find((v) => v.id === openIssueId),
+    [items, openIssueId],
+  );
 
   const { setNodeRef, transform, transition } = useSortable({
     id: issue.key,
@@ -142,7 +134,7 @@ const IssueKanbanColumn = (props: Props) => {
                 key={item.id}
                 item={item}
                 issueTracker={issueTracker}
-                onClick={() => openIssueDetailOverlay(item)}
+                onClick={() => setOpenIssueId(item.id)}
               />
             ))
           }
@@ -157,6 +149,15 @@ const IssueKanbanColumn = (props: Props) => {
           )}
         </div>
       </SortableContext>
+      {currentIssue && (
+        <IssueDetailSheet
+          isOpen={!!currentIssue}
+          close={() => setOpenIssueId(null)}
+          data={currentIssue}
+          projectId={projectId}
+          issueTracker={issueTracker}
+        />
+      )}
     </div>
   );
 };

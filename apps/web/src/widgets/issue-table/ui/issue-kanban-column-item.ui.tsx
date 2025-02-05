@@ -67,11 +67,10 @@ const IssueKanbanColumnItem = (props: Props) => {
         scale: { duration: 0.25 },
         zIndex: { delay: isDragging ? 0 : 0.25 },
       }}
-      {...attributes}
-      {...listeners}
       onClick={onClick}
+      className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default flex items-stretch border"
     >
-      <div className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
+      <div className="flex flex-1 cursor-pointer flex-col gap-2 py-3 pl-4 hover:opacity-60">
         <div>
           <p className="text-neutral-primary text-base-strong">{item.name}</p>
           {item.description && (
@@ -100,6 +99,13 @@ const IssueKanbanColumnItem = (props: Props) => {
             {item.category.name}
           </Badge>
         )}
+      </div>
+      <div
+        className="hover:bg-neutral-tertiary flex w-4 items-center justify-center hover:cursor-grab active:cursor-grabbing"
+        {...attributes}
+        {...listeners}
+      >
+        <Icon name="RiDraggable" className="text-neutral-tertiary" />
       </div>
     </motion.div>
   );
