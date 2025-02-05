@@ -19,6 +19,7 @@ import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { ISSUES } from '@/shared';
+import type { Category } from '@/entities/category';
 import type { FieldInfo } from '@/entities/field';
 import type { Issue } from '@/entities/issue';
 
@@ -28,6 +29,10 @@ const usePreviewFeedback = (fields: FieldInfo[]) => {
   const { t } = useTranslation();
   const feedbacks = useMemo(() => {
     const feedbacks: Feedback[] = [];
+    const categories: Category[] = new Array(5).fill(0).map((_, i) => ({
+      id: i,
+      name: faker.word.sample(),
+    }));
     const issues: Issue[] = faker.helpers
       .uniqueArray(() => faker.word.sample(), 10)
       .map((v) => ({
@@ -38,6 +43,7 @@ const usePreviewFeedback = (fields: FieldInfo[]) => {
         updatedAt: faker.date.recent().toString(),
         name: v,
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
+        category: faker.helpers.arrayElement(categories),
       }));
 
     for (let i = 1; i <= 10; i++) {

@@ -30,6 +30,7 @@ import {
   ImagePreviewButton,
   ISSUES,
 } from '@/shared';
+import type { Category } from '@/entities/category';
 import type { Feedback } from '@/entities/feedback';
 import { IssueBadge } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
@@ -48,6 +49,10 @@ const PreviewFieldTable: React.FC<IProps> = ({ fields }) => {
 
   useEffect(() => {
     const fakeRows: Feedback[] = [];
+    const categories: Category[] = new Array(5).fill(0).map((_, i) => ({
+      id: i,
+      name: faker.word.sample(),
+    }));
     const issues: Issue[] = faker.helpers
       .uniqueArray(() => faker.word.sample(), 10)
       .map((v, i) => ({
@@ -58,6 +63,7 @@ const PreviewFieldTable: React.FC<IProps> = ({ fields }) => {
         updatedAt: faker.date.recent().toString(),
         name: v,
         status: faker.helpers.arrayElement(ISSUES(t).map((v) => v.key)),
+        category: faker.helpers.arrayElement(categories),
       }));
 
     for (let i = 1; i <= 10; i++) {
