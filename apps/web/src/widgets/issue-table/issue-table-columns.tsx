@@ -18,7 +18,7 @@ import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import type { TFunction } from 'next-i18next';
 
-import { Button } from '@ufb/react';
+import { Tag } from '@ufb/react';
 
 import { DATE_TIME_FORMAT, ExpandableText, ISSUES } from '@/shared';
 import CategoryCombobox from '@/shared/ui/category-combobox.ui';
@@ -93,13 +93,13 @@ export const getColumnsByCategory = (t: TFunction, projectId: number) => [
       const { category, id } = row.original;
       return (
         <CategoryCombobox issueId={id} category={category}>
-          <Button
+          <Tag
             variant="outline"
             size="small"
             onClick={(e) => e.stopPropagation()}
           >
             {category ? 'Edit' : 'Add'}
-          </Button>
+          </Tag>
         </CategoryCombobox>
       );
     },
