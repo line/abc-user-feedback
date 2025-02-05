@@ -13,10 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
 
-import { PaginationDto } from '@/common/dtos';
+import { PaginationRequestDto } from '@/common/dtos';
 
-export class FindAllCategoriesByProjectIdDto extends PaginationDto {
-  projectId: number;
-  categoryName?: string;
+export class GetAllCategoriesRequestDto extends PaginationRequestDto {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  categoryName: string;
 }

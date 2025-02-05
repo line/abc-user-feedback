@@ -16,6 +16,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -31,7 +32,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { PaginationRequestDto } from '@/common/dtos';
 import { JwtAuthGuard } from '../../auth/guards';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dtos';
@@ -39,6 +39,7 @@ import {
   CreateCategoryRequestDto,
   UpdateCategoryRequestDto,
 } from './dtos/requests';
+import { GetAllCategoriesRequestDto } from './dtos/requests/get-all-categories-request.dto';
 import {
   CreateCategoryResponseDto,
   GetAllCategoriesResponseDto,
@@ -72,7 +73,7 @@ export class CategoryController {
   @Get()
   async findAll(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Query() body: PaginationRequestDto,
+    @Query() body: GetAllCategoriesRequestDto,
   ) {
     return GetAllCategoriesResponseDto.transform(
       await this.categoryService.findAllByProjectId({
@@ -92,5 +93,16 @@ export class CategoryController {
     @Body() body: UpdateCategoryRequestDto,
   ) {
     await this.categoryService.update({ ...body, categoryId, projectId });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Delete(':categoryId')
+  async delete(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.categoryService.delete({ categoryId, projectId });
   }
 }

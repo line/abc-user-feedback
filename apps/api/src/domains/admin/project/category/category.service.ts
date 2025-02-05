@@ -19,7 +19,6 @@ import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { paginateHelper } from '@/common/helper/paginate.helper';
 import { CategoryEntity } from './category.entity';
 import {
   CreateCategoryDto,
@@ -61,16 +60,34 @@ export class CategoryService {
   async findAllByProjectId(
     dto: FindAllCategoriesByProjectIdDto,
   ): Promise<Pagination<CategoryEntity, IPaginationMeta>> {
-    return await paginateHelper(
-      this.repository.createQueryBuilder(),
-      {
-        where: { project: { id: dto.projectId } },
+    const queryBuilder = this.repository
+      .createQueryBuilder('category')
+      .leftJoin('category.project', 'project')
+      .where('project.id = :projectId', { projectId: dto.projectId });
+
+    if (dto.categoryName) {
+      queryBuilder.andWhere('category.name LIKE :categoryName', {
+        categoryName: `%${dto.categoryName}%`,
+      });
+    }
+
+    const items = await queryBuilder
+      .offset((dto.page - 1) * dto.limit)
+      .limit(dto.limit)
+      .getMany();
+
+    const total = await queryBuilder.getCount();
+
+    return {
+      items,
+      meta: {
+        itemCount: items.length,
+        totalItems: total,
+        itemsPerPage: dto.limit,
+        currentPage: dto.page,
+        totalPages: Math.ceil(total / dto.limit),
       },
-      {
-        page: dto.page,
-        limit: dto.limit,
-      },
-    );
+    };
   }
 
   async findById({ categoryId }: FindByCategoryIdDto) {
@@ -106,5 +123,19 @@ export class CategoryService {
     );
 
     return updatedCategory;
+  }
+
+  @Transactional()
+  async delete({
+    projectId,
+    categoryId,
+  }: {
+    projectId: number;
+    categoryId: number;
+  }) {
+    await this.repository.delete({
+      id: categoryId,
+      project: { id: projectId },
+    });
   }
 }

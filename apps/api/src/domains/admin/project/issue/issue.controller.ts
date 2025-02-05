@@ -92,6 +92,19 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
+  @ApiBearerAuth()
+  @Delete(':issueId/category/:categoryId')
+  async deleteByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.deleteByCategoryId({
+      issueId,
+      categoryId,
+    });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: FindIssuesByProjectIdResponseDto })
