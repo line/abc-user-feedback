@@ -14,26 +14,79 @@
  * under the License.
  */
 
-import { useOAIQuery } from '../lib';
+import { useEffect, useRef } from 'react';
+import { useInfiniteQuery } from '@tanstack/react-query';
+
+import { Icon } from '@ufb/react';
+
+import { client } from '../lib';
+import type { DateRangeType } from '../types';
 import CategoryTableRow from './category-table-row.ui';
 
 interface Props {
   projectId: number;
+  createdAtDateRange: DateRangeType;
+  queries: Record<string, unknown>[];
 }
 
 const CategoryTable = (props: Props) => {
-  const { projectId } = props;
+  const { projectId, createdAtDateRange, queries } = props;
+  const ref = useRef<HTMLDivElement>(null);
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/categories',
-    variables: { projectId },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ['/api/admin/projects/{projectId}/categories', projectId],
+      queryFn: async ({ pageParam }) => {
+        const { data } = await client.get({
+          path: '/api/admin/projects/{projectId}/categories',
+          pathParams: { projectId, page: pageParam },
+        });
+        return data;
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage.meta.currentPage < lastPage.meta.totalPages) {
+          return lastPage.meta.currentPage + 1;
+        }
+        return undefined;
+      },
+      initialPageParam: 1,
+      initialData: { pageParams: [], pages: [] },
+    });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        void fetchNextPage();
+      });
+    });
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div>
-      {data?.items.map((item) => (
-        <CategoryTableRow key={item.id} category={item} projectId={projectId} />
-      ))}
+    <div className="flex flex-col gap-3">
+      {[{ id: 0, name: 'None' }, ...data.pages.flatMap((v) => v.items)].map(
+        (item) => (
+          <CategoryTableRow
+            key={item.id}
+            category={item}
+            projectId={projectId}
+            createdAtDateRange={createdAtDateRange}
+            queries={queries}
+          />
+        ),
+      )}
+      {hasNextPage && <div ref={ref} className="h-px" />}
+      {isFetchingNextPage && (
+        <div className="flex justify-center">
+          <Icon name="RiLoader4Line" className="spinner" />
+        </div>
+      )}
     </div>
   );
 };

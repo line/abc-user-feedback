@@ -13,65 +13,69 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import dayjs from 'dayjs';
 
-import {
-  Button,
-  Calendar,
-  Icon,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  TextInput,
-} from '@ufb/react';
+import { TextInput } from '@ufb/react';
 
+import type { DateRangeType } from '@/shared/types';
 import { IssueSelectBox } from '@/entities/issue';
 
+import DateRangePicker from '../date-range-picker';
 import { SelectSearchInput } from '../inputs';
 import type { TableFilterField } from './table-filter-popover.type';
 
 interface Props {
   filterField: TableFilterField;
-  onChange: (value?: string) => void;
-  value?: string;
+  onChange: (value?: unknown) => void;
+  value?: unknown;
 }
 
 const TableFilterPopoverInput = (props: Props) => {
   const { filterField, onChange, value } = props;
 
-  const inputProps = {
-    className: 'w-full',
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
-      onChange(e.currentTarget.value),
-    value,
-  };
-
   return (
     <>
-      {filterField.format === 'text' && <TextInput {...inputProps} />}
-      {filterField.format === 'keyword' && <TextInput {...inputProps} />}
+      {filterField.format === 'text' && (
+        <TextInput
+          onChange={(e) => onChange(e.currentTarget.value)}
+          value={value as string | undefined}
+        />
+      )}
+      {filterField.format === 'keyword' && (
+        <TextInput
+          onChange={(e) => onChange(e.currentTarget.value)}
+          value={value as string | undefined}
+        />
+      )}
       {filterField.format === 'number' && (
-        <TextInput {...inputProps} type="number" />
+        <TextInput
+          onChange={(e) => onChange(Number(e.currentTarget.value))}
+          value={value as number | undefined}
+          type="number"
+        />
       )}
       {filterField.format === 'date' && (
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="!text-base-normal w-full justify-start"
-            >
-              <Icon name="RiCalendar2Line" />
-              {value ?? 'Select Date'}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent>
-            <Calendar
-              mode="single"
-              onSelect={(date) => onChange(dayjs(date).format('YYYY-MM-DD'))}
-              selected={dayjs(value).toDate()}
-            />
-          </PopoverContent>
-        </Popover>
+        <DateRangePicker
+          onChange={(v) =>
+            onChange({
+              gte: dayjs(v?.startDate).startOf('day').toISOString(),
+              lt: dayjs(v?.endDate).endOf('day').toISOString(),
+            })
+          }
+          value={
+            (value ?
+              {
+                startDate: dayjs(
+                  (value as { gte: string; lt: string }).gte,
+                ).toDate(),
+                endDate: dayjs(
+                  (value as { gte: string; lt: string }).lt,
+                ).toDate(),
+              }
+            : null) as DateRangeType
+          }
+        />
       )}
       {(filterField.format === 'select' ||
         filterField.format === 'multiSelect') && (
@@ -83,11 +87,11 @@ const TableFilterPopoverInput = (props: Props) => {
             })) ?? []
           }
           onChange={onChange}
-          value={value}
+          value={String(value)}
         />
       )}
       {filterField.format === 'issue' && (
-        <IssueSelectBox onChange={onChange} value={value} />
+        <IssueSelectBox onChange={onChange} value={String(value)} />
       )}
     </>
   );

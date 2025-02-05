@@ -15,8 +15,12 @@
  */
 
 import { useEffect, useMemo, useState } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useOverlay } from '@toss/use-overlay';
+import {
+  getCoreRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
 import { Badge, Icon } from '@ufb/react';
@@ -28,63 +32,94 @@ import { getColumnsByCategory } from '@/widgets/issue-table/issue-table-columns'
 import IssueDetailSheet from '@/widgets/issue-table/ui/issue-detail-sheet.ui';
 
 import { useOAIQuery } from '../lib';
+import type { DateRangeType } from '../types';
 import { cn } from '../utils';
 import { BasicTable, TablePagination } from './tables';
 
+const DEFAULT_META = {
+  currentPage: 1,
+  totalPages: 0,
+  totalItems: 0,
+  itemCount: 0,
+  itemsPerPage: 0,
+};
 interface Props {
   projectId: number;
   category: Category;
+  createdAtDateRange: DateRangeType;
+  queries: Record<string, unknown>[];
 }
 
 const CategoryTableRow = (props: Props) => {
-  const { projectId, category } = props;
-  const overlay = useOverlay();
+  const { projectId, category, createdAtDateRange, queries } = props;
 
   const { t } = useTranslation();
 
   const [rows, setRows] = useState<Issue[]>([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [meta, setMeta] = useState(DEFAULT_META);
+  const [isOpen, setIsOpen] = useState(category.id === 0);
+  const [openIssueId, setOpenIssueId] = useState<number | null>(null);
+
+  const currentIssue = useMemo(
+    () => rows.find((v) => v.id === openIssueId),
+    [rows, openIssueId],
+  );
 
   const columns = useMemo(
     () => getColumnsByCategory(t, projectId),
     [t, projectId],
   );
 
+  const currentQueries = useMemo(() => {
+    const result: Record<string, unknown>[] = [
+      { categoryId: category.id, condition: 'IS' },
+    ];
+
+    if (createdAtDateRange) {
+      result.push({
+        createdAt: {
+          gte: dayjs(createdAtDateRange.startDate).format('YYYY-MM-DD'),
+          lt: dayjs(createdAtDateRange.endDate).format('YYYY-MM-DD'),
+        },
+        condition: 'IS',
+      });
+    }
+    return result;
+  }, [createdAtDateRange]);
+
   const table = useReactTable({
     columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    pageCount: meta.totalPages,
+    rowCount: meta.totalItems,
+    manualPagination: true,
   });
 
-  const { data } = useIssueSearch(projectId, {
-    queries: [{ categoryId: category.id, condition: 'IS' }],
+  const { pagination } = table.getState();
+
+  const { data, isLoading } = useIssueSearch(projectId, {
+    queries: currentQueries.concat(...queries),
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
   });
+
   const { data: issueTracker } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
 
-  const openIssueDetailOverlay = (data: Issue) => {
-    overlay.open(({ close, isOpen }) => (
-      <IssueDetailSheet
-        close={close}
-        data={data}
-        isOpen={isOpen}
-        projectId={projectId}
-        issueTracker={issueTracker?.data}
-      />
-    ));
-  };
-
   useEffect(() => {
     setRows(data?.items ?? []);
+    setMeta(data?.meta ?? DEFAULT_META);
   }, [data]);
 
   return (
     <div>
       <div
         className={cn(
-          'bg-neutral-tertiary flex h-12 items-center rounded-t px-4',
+          'bg-neutral-tertiary flex h-12 cursor-pointer items-center rounded-t px-4',
           { 'rounded-b': !isOpen },
         )}
         onClick={() => setIsOpen(!isOpen)}
@@ -107,12 +142,23 @@ const CategoryTableRow = (props: Props) => {
           <BasicTable
             table={table}
             disableRound
-            onClickRow={(_, row) => openIssueDetailOverlay(row)}
+            onClickRow={(_, row) => setOpenIssueId(row.id)}
+            isLoading={isLoading}
+            emptyCaption="No issues found"
           />
           <div className="flex h-12 w-full items-center rounded-b border border-t-0 px-4">
             <TablePagination table={table} disableRowSelect disableLimit />
           </div>
         </>
+      )}
+      {currentIssue && (
+        <IssueDetailSheet
+          isOpen={!!currentIssue}
+          close={() => setOpenIssueId(null)}
+          data={currentIssue}
+          projectId={projectId}
+          issueTracker={issueTracker?.data}
+        />
       )}
     </div>
   );

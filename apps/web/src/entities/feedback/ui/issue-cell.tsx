@@ -75,6 +75,7 @@ const IssueCell: React.FC<IProps> = (props) => {
       queryKey: ['/api/admin/projects/{projectId}/issues/search'],
     });
   };
+
   const {
     data: allIssues,
     refetch: allIssuesRefetch,
@@ -98,9 +99,6 @@ const IssueCell: React.FC<IProps> = (props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
-    onError(error) {
-      toast.error(error.message);
-    },
   });
   const { mutateAsync: detecthIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -115,9 +113,6 @@ const IssueCell: React.FC<IProps> = (props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
-    },
-    onError(error) {
-      toast.error(error.message);
     },
   });
 
@@ -147,6 +142,7 @@ const IssueCell: React.FC<IProps> = (props) => {
         <ComboboxTrigger asChild>{children}</ComboboxTrigger>
         <ComboboxContent>
           <ComboboxInput
+            onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
             value={inputValue}
           />
@@ -163,6 +159,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   key={issue.id}
                   onSelect={() => detecthIssue({ issueId: issue.id })}
                   className="flex justify-between"
+                  value={issue.name}
                 >
                   <IssueBadge
                     key={issue.id}
@@ -191,6 +188,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                       key={issue.id}
                       onSelect={() => attatchIssue({ issueId: issue.id })}
                       className="flex justify-between"
+                      value={issue.name}
                     >
                       <IssueBadge
                         key={issue.id}

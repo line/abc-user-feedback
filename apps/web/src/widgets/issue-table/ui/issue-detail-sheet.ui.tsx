@@ -62,6 +62,7 @@ const IssueDetailSheet = (props: Props) => {
     { format: 'text', key: 'id', name: 'ID' },
     { format: 'date', key: 'createdAt', name: 'Created' },
     { format: 'date', key: 'updatedAt', name: 'Updated' },
+    { format: 'cateogry', key: 'category', name: 'Category', issueId: data.id },
   ];
 
   const BOTTON_ROWS: SheetDetailTableRow[] = [

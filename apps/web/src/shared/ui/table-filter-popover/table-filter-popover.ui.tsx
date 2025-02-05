@@ -40,7 +40,7 @@ import type {
 } from './table-filter-popover.type';
 
 const OperatorMap: Record<TableFilterFieldFotmat, TableFilterCondition> = {
-  date: 'IS',
+  date: 'BETWEEN',
   keyword: 'IS',
   multiSelect: 'IS',
   select: 'IS',
@@ -55,7 +55,7 @@ interface Props {
   onSubmit: (filters: TableFilter[], operator: TableFilterOperator) => void;
 }
 
-const TableFilerPopover = (props: Props) => {
+const TableFilterPopover = (props: Props) => {
   const { filterFields, onSubmit, tableFilters } = props;
   const { t } = useTranslation();
 
@@ -100,7 +100,7 @@ const TableFilerPopover = (props: Props) => {
     setOperator('AND');
   };
 
-  const onChangeValue = (index: number, value?: string) => {
+  const onChangeValue = (index: number, value?: unknown) => {
     setFilters(
       filters.map((filter, i) => (i === index ? { ...filter, value } : filter)),
     );
@@ -119,6 +119,7 @@ const TableFilerPopover = (props: Props) => {
   const renderInput = (filter: TableFilter, index: number) => {
     const filterField = filterFields.find((field) => field.key === filter.key);
     if (!filterField) return <></>;
+
     return (
       <TableFilterPopoverInput
         filterField={filterField}
@@ -132,6 +133,7 @@ const TableFilerPopover = (props: Props) => {
     onSubmit(filters, operator);
     setOpen(false);
   };
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -223,4 +225,4 @@ const TableFilerPopover = (props: Props) => {
   );
 };
 
-export default TableFilerPopover;
+export default TableFilterPopover;

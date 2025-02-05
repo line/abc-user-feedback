@@ -32,7 +32,7 @@ export interface TableFilterField {
   options?: { key: string; name: string }[];
 }
 export interface TableFilter {
-  value?: string;
+  value?: unknown;
   key: string;
   name: string;
   format: TableFilterFieldFotmat;

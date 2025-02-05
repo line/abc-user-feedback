@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   SortableContext,
   useSortable,
@@ -22,10 +22,11 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useOverlay } from '@toss/use-overlay';
+import dayjs from 'dayjs';
 
 import { Button } from '@ufb/react';
 
-import type { IssuesItem } from '@/shared';
+import type { DateRangeType, IssuesItem } from '@/shared';
 import { useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -48,10 +49,20 @@ interface Props {
   issueTracker?: IssueTracker;
   items: Issue[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, Issue[]>>>;
+  createdAtDateRange: DateRangeType;
+  queries: Record<string, unknown>[];
 }
 
 const IssueKanbanColumn = (props: Props) => {
-  const { issue, projectId, issueTracker, items, setItems } = props;
+  const {
+    issue,
+    projectId,
+    issueTracker,
+    items,
+    setItems,
+    createdAtDateRange,
+    queries,
+  } = props;
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
@@ -73,10 +84,26 @@ const IssueKanbanColumn = (props: Props) => {
     id: issue.key,
     data: { type: 'container', children: items },
   });
+  const currentQueries = useMemo(() => {
+    const result: Record<string, unknown>[] = [
+      { status: issue.status, condition: 'IS' },
+    ];
+
+    if (createdAtDateRange) {
+      result.push({
+        createdAt: {
+          gte: dayjs(createdAtDateRange.startDate).format('YYYY-MM-DD'),
+          lt: dayjs(createdAtDateRange.endDate).format('YYYY-MM-DD'),
+        },
+        condition: 'IS',
+      });
+    }
+    return result;
+  }, [createdAtDateRange]);
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      queries: [{ status: issue.status, condition: 'IS' }],
+      queries: currentQueries.concat(...queries),
       sort: { [sort.key]: sort.value },
     });
 

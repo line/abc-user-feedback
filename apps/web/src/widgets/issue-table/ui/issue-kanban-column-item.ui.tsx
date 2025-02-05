@@ -16,7 +16,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
 
-import { Icon } from '@ufb/react';
+import { Badge, Icon } from '@ufb/react';
 
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -71,9 +71,13 @@ const IssueKanbanColumnItem = (props: Props) => {
       {...listeners}
       onClick={onClick}
     >
-      <div className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default cursor-pointer border px-4 py-3 hover:opacity-60">
-        <p className="text-neutral-primary text-base-strong">{item.name}</p>
-        <p className="text-neutral-tertiary">{item.description}</p>
+      <div className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
+        <div>
+          <p className="text-neutral-primary text-base-strong">{item.name}</p>
+          {item.description && (
+            <p className="text-neutral-tertiary">{item.description}</p>
+          )}
+        </div>
         <div className="text-neutral-secondary flex flex-wrap gap-x-2">
           <div className="flex flex-shrink-0 items-center gap-1">
             <Icon name="RiMessage2Line" size={12} />
@@ -91,6 +95,11 @@ const IssueKanbanColumnItem = (props: Props) => {
             </div>
           )}
         </div>
+        {item.category && (
+          <Badge variant="subtle" className="w-fit">
+            {item.category.name}
+          </Badge>
+        )}
       </div>
     </motion.div>
   );

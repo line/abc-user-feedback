@@ -26,9 +26,11 @@ import {
   TextInput,
 } from '@ufb/react';
 
+import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
 
 import { DATE_TIME_FORMAT } from '../constants';
+import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
 import { SelectInput } from './inputs';
 
@@ -55,12 +57,16 @@ type IssueRow = {
   feedbackId: number;
   editable?: false;
 };
+type CategoryRow = {
+  format: 'cateogry';
+  issueId: number;
+};
 
 export type SheetDetailTableRow = {
   key: string;
   name: string;
   editable?: boolean;
-} & (PlainRow | SelectableRow | TicketRow | ImageRow | IssueRow);
+} & (PlainRow | SelectableRow | TicketRow | ImageRow | IssueRow | CategoryRow);
 
 type Format = SheetDetailTableRow['format'];
 
@@ -74,6 +80,7 @@ const FIELD_FORMAT_ICON_MAP: Record<Format, IconNameType> = {
   multiSelect: 'RiListCheck',
   images: 'RiImageLine',
   ticket: 'RiTicketLine',
+  cateogry: 'RiListOrdered2',
 };
 interface Props {
   rows: SheetDetailTableRow[];
@@ -150,6 +157,24 @@ const SheetDetailTable = (props: Props) => {
         </Tag>
       </IssueCell>
     ),
+    cateogry: (value, row) => {
+      const category = value as Category | undefined;
+      return (
+        <div className="flex items-center gap-2">
+          {category ?
+            <Badge variant="subtle">{category.name}</Badge>
+          : ''}
+          <CategoryCombobox
+            issueId={(row as CategoryRow).issueId}
+            category={category}
+          >
+            <Tag variant="outline" size="small" className="cursor-pointer">
+              <Icon name="RiMoreFill" />
+            </Tag>
+          </CategoryCombobox>
+        </div>
+      );
+    },
   };
 
   const renderEditModeField: RenderFieldMap<SheetDetailTableRow> = {
@@ -205,8 +230,7 @@ const SheetDetailTable = (props: Props) => {
         onValuesChange={(value) => onChange?.(row.key, value)}
       />
     ),
-    images: () => <></>,
-    issue: () => <></>,
+
     ticket: (value, row) => {
       const { issueTracker } = row as TicketRow;
       return (
@@ -228,6 +252,9 @@ const SheetDetailTable = (props: Props) => {
         </div>
       );
     },
+    images: () => <></>,
+    issue: () => <></>,
+    cateogry: () => <></>,
   };
 
   return (

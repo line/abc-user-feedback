@@ -13,14 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
+import { parseAsString, useQueryState } from 'nuqs';
 
 import { Button, Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
-import type { TableFilterField } from '@/shared';
+import type { DateRangeType, TableFilter, TableFilterField } from '@/shared';
 import {
   DateRangePicker,
   ISSUES,
@@ -31,7 +32,6 @@ import {
 import CategoryTable from '@/shared/ui/category-table.ui';
 
 import { env } from '@/env';
-import { useIssueQuery } from '../lib';
 import IssueFormDialog from './issue-form-dialog.ui';
 import IssueKanban from './issue-kanban.ui';
 
@@ -43,10 +43,26 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
 
-  const { dateRange, setDateRange } = useIssueQuery(projectId);
+  const [createdAtDateRange, setCreatedAtDateRange] =
+    useState<DateRangeType>(null);
+  const [filters, setFilters] = useState<TableFilter[]>([]);
+  const queries = useMemo(() => {
+    return filters.reduce(
+      (acc, filter) => {
+        return acc.concat({
+          [filter.key]: filter.value,
+          condition: filter.condition,
+        });
+      },
+      [] as Record<string, unknown>[],
+    );
+  }, [filters]);
 
   const overlay = useOverlay();
-  const [viewType, setViewType] = useState('kanban');
+  const [viewType, setViewType] = useQueryState(
+    'viewType',
+    parseAsString.withDefault('kanban'),
+  );
 
   const { data: issueTracker } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
@@ -73,20 +89,30 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       name: 'Title',
     },
     {
-      format: 'select',
-      key: 'status',
-      name: 'Status',
-      options: ISSUES(t).map((issue) => ({ key: issue.key, name: issue.name })),
-    },
-    {
       format: 'text',
       key: 'description',
       name: 'Description',
     },
     {
       format: 'text',
-      key: 'ticket',
-      name: 'Ticke',
+      key: 'category',
+      name: 'Category',
+    },
+    {
+      format: 'select',
+      key: 'status',
+      name: 'Status',
+      options: ISSUES(t).map((issue) => ({ key: issue.key, name: issue.name })),
+    },
+    {
+      format: 'keyword',
+      key: 'externalIssueId',
+      name: 'Ticket',
+    },
+    {
+      format: 'date',
+      key: 'updatedAt',
+      name: 'Updated',
     },
   ];
   const openIssueFormDialog = () => {
@@ -111,20 +137,23 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         </Button>
         <div className="flex gap-2">
           <DateRangePicker
-            onChange={(v) => setDateRange(v)}
-            value={dateRange}
+            onChange={(v) => setCreatedAtDateRange(v)}
+            value={createdAtDateRange}
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            onSubmit={(filters) => console.log(filters)}
+            onSubmit={setFilters}
             filterFields={filterFields}
-            tableFilters={[]}
+            tableFilters={filters}
           />
           <ToggleGroup
             type="single"
             value={viewType}
-            onValueChange={setViewType}
+            onValueChange={(v) => {
+              if (!v) return;
+              void setViewType(v);
+            }}
           >
             <ToggleGroupItem value="kanban" className="w-24">
               <Icon name="RiCarouselView" />
@@ -138,9 +167,20 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         </div>
       </div>
       {viewType === 'kanban' && (
-        <IssueKanban projectId={projectId} issueTracker={issueTracker?.data} />
+        <IssueKanban
+          projectId={projectId}
+          issueTracker={issueTracker?.data}
+          createdAtDateRange={createdAtDateRange}
+          queries={queries}
+        />
       )}
-      {viewType === 'list' && <CategoryTable projectId={projectId} />}
+      {viewType === 'list' && (
+        <CategoryTable
+          projectId={projectId}
+          createdAtDateRange={createdAtDateRange}
+          queries={queries}
+        />
+      )}
     </>
   );
 };

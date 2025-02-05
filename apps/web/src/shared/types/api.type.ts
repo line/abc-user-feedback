@@ -734,7 +734,7 @@ export interface paths {
         get?: never;
         put: operations["IssueController_updateByCategoryId"];
         post?: never;
-        delete?: never;
+        delete: operations["IssueController_deleteByCategoryId"];
         options?: never;
         head?: never;
         patch?: never;
@@ -910,7 +910,7 @@ export interface paths {
         get?: never;
         put: operations["CategoryController_update"];
         post?: never;
-        delete?: never;
+        delete: operations["CategoryController_delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -1558,6 +1558,18 @@ export interface components {
              */
             id: number;
         };
+        FindIssueByIdResponseCategoryDto: {
+            /**
+             * @description Category Id
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description Category Name
+             * @example 1
+             */
+            name: string;
+        };
         FindIssueByIdResponseDto: {
             /**
              * @description Issue id
@@ -1585,6 +1597,8 @@ export interface components {
              * @example 123
              */
             externalIssueId: string;
+            /** @description Category */
+            category: components["schemas"]["FindIssueByIdResponseCategoryDto"];
             /**
              * @description Feedback count of the issue
              * @example 100
@@ -1749,7 +1763,7 @@ export interface components {
              */
             id: number;
         };
-        GetAllCategoriesResponse: {
+        GetAllCategoriesDto: {
             id: number;
             name: string;
             /** Format: date-time */
@@ -1758,7 +1772,8 @@ export interface components {
             updatedAt: string;
         };
         GetAllCategoriesResponseDto: {
-            items: components["schemas"]["GetAllCategoriesResponse"][];
+            meta: components["schemas"]["PaginationMetaDto"];
+            items: components["schemas"]["GetAllCategoriesDto"][];
         };
         UpdateCategoryRequestDto: {
             /**
@@ -3317,6 +3332,27 @@ export interface operations {
             };
         };
     };
+    IssueController_deleteByCategoryId: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                issueId: number;
+                categoryId: number;
+                projectId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     IssueController_findAllByProjectId: {
         parameters: {
             query?: never;
@@ -3577,7 +3613,11 @@ export interface operations {
     };
     CategoryController_findAll: {
         parameters: {
-            query?: never;
+            query?: {
+                limit?: number;
+                page?: number;
+                categoryName?: string;
+            };
             header?: never;
             path: {
                 projectId: number;
@@ -3636,6 +3676,26 @@ export interface operations {
                 "application/json": components["schemas"]["UpdateCategoryRequestDto"];
             };
         };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CategoryController_delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                projectId: number;
+                categoryId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             200: {
                 headers: {

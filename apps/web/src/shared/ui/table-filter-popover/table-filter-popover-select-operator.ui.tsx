@@ -27,7 +27,7 @@ const TableFilterPopoverSelectOperator = (props: Props) => {
     text: [{ value: 'contains', label: 'Contains' }],
     keyword: [{ value: 'is', label: 'Is' }],
     number: [{ value: 'is', label: 'Is' }],
-    date: [{ value: 'is', label: 'Is' }],
+    date: [{ value: 'between', label: 'Between' }],
     select: [{ value: 'is', label: 'Is' }],
     multiSelect: [{ value: 'is', label: 'Is' }],
     issue: [{ value: 'is', label: 'Is' }],

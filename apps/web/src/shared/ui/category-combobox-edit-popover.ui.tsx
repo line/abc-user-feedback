@@ -15,8 +15,7 @@
  */
 
 import { useState } from 'react';
-import { useRouter } from 'next/router';
-import { useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -29,64 +28,59 @@ import {
 } from '@ufb/react';
 import { Input } from '@ufb/ui';
 
-import { useOAIMutation, usePermissions } from '@/shared';
-import type { Issue } from '@/entities/issue';
+import type { Category } from '@/entities/category';
+
+import { client } from '../lib';
 
 interface Props {
-  issue: Issue;
+  projectId: number;
+  cateogry: Category;
 }
 
-const IssueCellEditCombobox = (props: Props) => {
-  const { issue } = props;
+const CategoryComboboxEditPopover = (props: Props) => {
+  const { projectId, cateogry } = props;
 
   const { t } = useTranslation();
-  const perms = usePermissions();
-  const router = useRouter();
-  const projectId = Number(router.query.projectId);
-
-  const [inputIssueName, setInputIssueName] = useState(issue.name);
   const queryClient = useQueryClient();
+
   const refetch = async () => {
     await queryClient.invalidateQueries({
-      queryKey: [
-        '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
-      ],
+      queryKey: ['/api/admin/projects/{projectId}/categories'],
     });
     await queryClient.invalidateQueries({
       queryKey: ['/api/admin/projects/{projectId}/issues/search'],
     });
   };
 
-  const { mutate: update } = useOAIMutation({
-    method: 'put',
-    path: '/api/admin/projects/{projectId}/issues/{issueId}',
-    pathParams: { issueId: issue.id, projectId },
-    queryOptions: {
-      async onSuccess() {
-        await refetch();
-        toast.success(t('v2.toast.success'));
-      },
-      onError(error) {
-        toast.error(error.message);
-      },
+  const [inputValue, setInputValue] = useState(cateogry.name);
+
+  const { mutate: updateCategory } = useMutation({
+    mutationFn: async ({ name }: { name: string }) => {
+      const { data } = await client.put({
+        path: '/api/admin/projects/{projectId}/categories/{categoryId}',
+        pathParams: { projectId, categoryId: cateogry.id },
+        body: { name },
+      });
+      return data;
+    },
+    async onSuccess() {
+      await refetch();
+      toast.success(t('v2.toast.success'));
     },
   });
-
-  const { mutate: deleteIssue } = useOAIMutation({
-    method: 'delete',
-    path: '/api/admin/projects/{projectId}/issues/{issueId}',
-    pathParams: { projectId, issueId: issue.id },
-    queryOptions: {
-      async onSuccess() {
-        await refetch();
-        toast.success(t('v2.toast.success'));
-      },
-      onError(error) {
-        toast.error(error.message);
-      },
+  const { mutate: deleteCategory } = useMutation({
+    mutationFn: async () => {
+      const { data } = await client.delete({
+        path: '/api/admin/projects/{projectId}/categories/{categoryId}',
+        pathParams: { projectId, categoryId: cateogry.id },
+      });
+      return data;
+    },
+    async onSuccess() {
+      await refetch();
+      toast.success(t('v2.toast.success'));
     },
   });
-
   return (
     <Dropdown>
       <DropdownTrigger asChild>
@@ -101,28 +95,26 @@ const IssueCellEditCombobox = (props: Props) => {
         <div>
           <Input
             className="border-none"
-            value={inputIssueName}
-            onChange={(e) => setInputIssueName(e.currentTarget.value)}
-            disabled={!perms.includes('issue_update')}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.currentTarget.value)}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.stopPropagation();
-                update({ ...issue, name: inputIssueName });
+                updateCategory({ name: inputValue });
               }
             }}
           />
         </div>
         <DropdownItem
           className="gap-2"
-          onSelect={() => deleteIssue(undefined)}
-          disabled={!perms.includes('issue_delete')}
+          onSelect={() => deleteCategory(undefined)}
         >
           <Icon name="RiDeleteBin5Fill" size={16} />
-          Delete Issue
+          Delete Category
         </DropdownItem>
       </DropdownContent>
     </Dropdown>
   );
 };
 
-export default IssueCellEditCombobox;
+export default CategoryComboboxEditPopover;

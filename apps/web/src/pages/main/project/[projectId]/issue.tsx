@@ -16,10 +16,9 @@
 import type { GetServerSideProps } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
+import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ProjectGuard } from '@/entities/project';
-import { RouteCreateChannelButton } from '@/features/create-channel';
 import { IssueTable } from '@/widgets/issue-table';
 import { Layout } from '@/widgets/layout';
 
@@ -28,24 +27,8 @@ interface IProps {
 }
 const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
-  const { data, status } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
 
-  return (
-    <>
-      {status === 'pending' ?
-        <p className="font-32-bold animate-bounce">Loading...</p>
-      : status === 'error' ?
-        <p className="font-32-bold">Not Permission</p>
-      : data.meta.totalItems === 0 ?
-        <div className="flex min-h-[500px] flex-1 items-center justify-center">
-          <RouteCreateChannelButton projectId={projectId} type="blue" />
-        </div>
-      : <IssueTable projectId={projectId} />}
-    </>
-  );
+  return <IssueTable projectId={projectId} />;
 };
 
 IssueMangementPage.getLayout = (page: React.ReactElement<IProps>) => {

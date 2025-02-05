@@ -16,6 +16,8 @@
 
 import { z } from 'zod';
 
+import { categorySchema } from '../category/category.schema';
+
 export const issueSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -31,11 +33,12 @@ export const issueSchema = z.object({
   externalIssueId: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string().nullable(),
+  category: categorySchema.nullable(),
 });
 
-export const issueFormSchema = issueSchema.omit({
-  id: true,
-  feedbackCount: true,
-  updatedAt: true,
-  createdAt: true,
+export const issueFormSchema = issueSchema.pick({
+  name: true,
+  description: true,
+  status: true,
+  externalIssueId: true,
 });

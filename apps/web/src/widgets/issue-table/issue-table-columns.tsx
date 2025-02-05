@@ -21,6 +21,7 @@ import type { TFunction } from 'next-i18next';
 import { Button } from '@ufb/react';
 
 import { DATE_TIME_FORMAT, ExpandableText, ISSUES } from '@/shared';
+import CategoryCombobox from '@/shared/ui/category-combobox.ui';
 import type { Issue } from '@/entities/issue';
 import { IssueBadge } from '@/entities/issue';
 
@@ -88,10 +89,19 @@ export const getColumnsByCategory = (t: TFunction, projectId: number) => [
   columnHelper.display({
     id: 'Action',
     header: 'Category',
-    cell: () => (
-      <Button variant="outline" size="small">
-        Edit
-      </Button>
-    ),
+    cell: ({ row }) => {
+      const { category, id } = row.original;
+      return (
+        <CategoryCombobox issueId={id} category={category}>
+          <Button
+            variant="outline"
+            size="small"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {category ? 'Edit' : 'Add'}
+          </Button>
+        </CategoryCombobox>
+      );
+    },
   }),
 ];
