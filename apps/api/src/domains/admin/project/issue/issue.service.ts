@@ -364,6 +364,7 @@ export class IssueService {
     return updatedIssue;
   }
 
+  @Transactional()
   async updateByCategoryId(dto: UpdateIssueCategoryDto) {
     const { issueId, categoryId } = dto;
     const issue = await this.repository.findOne({
@@ -375,6 +376,32 @@ export class IssueService {
 
     issue.category = new CategoryEntity();
     issue.category.id = categoryId;
+
+    const updatedIssue = await this.repository.save(issue);
+
+    return updatedIssue;
+  }
+
+  @Transactional()
+  async deleteByCategoryId({
+    issueId,
+    categoryId,
+  }: {
+    issueId: number;
+    categoryId: number;
+  }) {
+    const issue = await this.repository.findOne({
+      where: { id: issueId },
+      relations: { category: true },
+    });
+
+    if (!issue) throw new IssueNotFoundException();
+
+    if (!issue.category || issue.category.id !== categoryId) {
+      throw new BadRequestException('Category id does not match');
+    }
+
+    issue.category = null;
 
     const updatedIssue = await this.repository.save(issue);
 

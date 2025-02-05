@@ -70,7 +70,7 @@ export class IssueEntity extends CommonEntity {
   @ManyToOne(() => CategoryEntity, (category) => category.issues, {
     onDelete: 'CASCADE',
   })
-  category: Relation<CategoryEntity>;
+  category: Relation<CategoryEntity> | null;
 
   static from({
     name,
