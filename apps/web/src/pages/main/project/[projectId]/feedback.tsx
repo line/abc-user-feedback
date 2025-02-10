@@ -103,15 +103,13 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   const createdAtQuery = {
     createdAt: {
-      gte: dayjs(dateRange?.startDate).format('YYYY-MM-DD'),
-      lt: dayjs(dateRange?.endDate).add(1, 'day').format('YYYY-MM-DD'),
+      gte: dayjs(dateRange?.startDate).toISOString(),
+      lt: dayjs(dateRange?.endDate).add(1, 'day').toISOString(),
     },
     condition: 'IS' as TableFilterCondition,
   };
 
-  const [queries, setQueries] = useState<Record<string, unknown>[]>([
-    createdAtQuery,
-  ]);
+  const [queries, setQueries] = useState<Record<string, unknown>[]>([]);
 
   const changeQueries = async (tableFilters: TableFilter[]) => {
     const getValue: Record<
@@ -145,11 +143,10 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         condition,
       })),
     );
-    setQueries(res.concat(createdAtQuery));
+    setQueries(res);
   };
 
   const fields = channelData?.fields ?? [];
-  // const feedbacks = feedbackData?.items ?? [];
 
   const columns = useMemo(
     () => getColumns(channelData?.fields ?? []),
@@ -183,7 +180,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     projectId,
     currentChannelId,
     {
-      queries,
+      queries: queries.concat(createdAtQuery),
       operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
