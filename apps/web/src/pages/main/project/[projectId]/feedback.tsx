@@ -44,6 +44,7 @@ import {
   TablePagination,
   useOAIMutation,
   useOAIQuery,
+  useSort,
 } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
 import {
@@ -73,6 +74,9 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   );
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const [rows, setRows] = useState<Record<string, unknown>[]>([]);
+  const [rowCount, setRowCount] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
 
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
@@ -144,6 +148,33 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     setQueries(res.concat(createdAtQuery));
   };
 
+  const fields = channelData?.fields ?? [];
+  // const feedbacks = feedbackData?.items ?? [];
+
+  const columns = useMemo(
+    () => getColumns(channelData?.fields ?? []),
+    [channelData],
+  );
+
+  const table = useReactTable({
+    columns,
+    data: rows,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount,
+    rowCount,
+    state: { pagination },
+    initialState: { sorting: [{ id: 'createdAt', desc: true }] },
+    manualSorting: true,
+    onPaginationChange: setPagination,
+    getRowId: (row) => String(row.id),
+  });
+
+  const { sorting } = table.getState();
+  const sort = useSort(sorting);
+
   const {
     data: feedbackData,
     isLoading,
@@ -156,6 +187,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
+      sort,
     },
     {
       enabled: currentChannelId !== -1,
@@ -168,38 +200,20 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     },
   );
 
-  const fields = channelData?.fields ?? [];
-  const feedbacks = feedbackData?.items ?? [];
-  const pageCount = feedbackData?.meta.totalPages ?? 0;
-  const rowCount = feedbackData?.meta.totalItems ?? 0;
-
-  const columns = useMemo(
-    () => getColumns(channelData?.fields ?? []),
-    [channelData],
-  );
-
-  const table = useReactTable({
-    columns,
-    data: feedbacks,
-    getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    manualPagination: true,
-    pageCount,
-    rowCount,
-    state: { pagination },
-    onPaginationChange: setPagination,
-    getRowId: (row) => String(row.id),
-  });
-
   useEffect(() => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
   }, [data]);
 
+  useEffect(() => {
+    setRows(feedbackData?.items ?? []);
+    setPageCount(feedbackData?.meta.totalPages ?? 0);
+    setRowCount(feedbackData?.meta.totalItems ?? 0);
+  }, [feedbackData]);
+
   const currentFeedback = useMemo(
-    () => feedbacks.find((v) => v.id === openFeedbackId),
-    [feedbacks, openFeedbackId],
+    () => rows.find((v) => v.id === openFeedbackId),
+    [rows, openFeedbackId],
   );
   const { mutate: updateFeedback } = useOAIMutation({
     method: 'put',

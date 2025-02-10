@@ -48,6 +48,7 @@ import { cn } from '@/shared/utils';
 import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
+import TableSortIcon from './table-sort-icon';
 
 interface IProps<T> {
   table: ReactTable<T>;
@@ -122,7 +123,11 @@ const BasicTable = <T,>(props: IProps<T>) => {
           <TableHeader>
             <TableRow>
               {table.getFlatHeaders().map((header, i) => (
-                <TableHead key={i} style={{ width: header.getSize() }}>
+                <TableHead
+                  key={i}
+                  style={{ width: header.getSize() }}
+                  className={cn({ 'hover:bg-inherit': resiable })}
+                >
                   <div
                     className={cn('flex flex-nowrap items-center', {
                       'overflow-hidden text-ellipsis':
@@ -132,6 +137,9 @@ const BasicTable = <T,>(props: IProps<T>) => {
                     {flexRender(
                       header.column.columnDef.header,
                       header.getContext(),
+                    )}
+                    {header.column.getCanSort() && (
+                      <TableSortIcon column={header.column} />
                     )}
                   </div>
                   {resiable && header.column.getCanResize() && (
@@ -144,7 +152,6 @@ const BasicTable = <T,>(props: IProps<T>) => {
               <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
             )}
           </TableHeader>
-
           <TableBody>
             {table.getRowCount() === 0 ?
               <TableRow className="hover:bg-inherit">

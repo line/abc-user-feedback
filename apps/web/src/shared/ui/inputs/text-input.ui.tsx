@@ -66,12 +66,11 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>((props, ref) => {
             <div className="absolute-y-center absolute left-2">{left}</div>
           )}
           <Input
+            ref={ref}
             {...textInputProps}
             value={textInputProps.value ?? undefined}
             className="flex-1"
             error={typeof error !== 'undefined'}
-            required={required}
-            ref={ref}
             size={size}
             type={inputType}
           />
