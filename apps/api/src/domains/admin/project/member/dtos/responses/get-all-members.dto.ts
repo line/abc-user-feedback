@@ -28,7 +28,7 @@ class MemberRoleDto {
   name: string;
 
   @Expose()
-  @ApiProperty({ type: [PermissionEnum] })
+  @ApiProperty({ type: PermissionEnum, isArray: true })
   permissions: PermissionEnum[];
 }
 class MemberUserDto {
