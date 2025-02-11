@@ -28,7 +28,7 @@ export class GetRoleByIdResponseDto {
   name: string;
 
   @Expose()
-  @ApiProperty({ type: [PermissionEnum] })
+  @ApiProperty({ type: [PermissionEnum], enumName: 'PermissionEnum' })
   permissions: PermissionEnum[];
 
   public static transform(plain: any): GetRoleByIdResponseDto {
