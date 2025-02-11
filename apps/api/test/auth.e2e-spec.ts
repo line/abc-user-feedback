@@ -37,7 +37,6 @@ import {
   InvitationUserSignUpRequestDto,
 } from '@/domains/admin/auth/dtos/requests';
 import type { SignInResponseDto } from '@/domains/admin/auth/dtos/responses/sign-in-response.dto';
-import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { UserDto } from '@/domains/admin/user/dtos/user.dto';
 import {
