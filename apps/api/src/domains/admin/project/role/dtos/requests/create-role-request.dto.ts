@@ -24,7 +24,7 @@ export class CreateRoleRequestDto {
   @IsString()
   name: string;
 
-  @ApiProperty({ type: PermissionEnum, isArray: true })
+  @ApiProperty({ type: [PermissionEnum] })
   @IsEnum(PermissionEnum, { each: true })
   @ArrayDistinct()
   permissions: PermissionEnum[];

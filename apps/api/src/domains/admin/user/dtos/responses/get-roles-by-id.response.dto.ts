@@ -65,7 +65,7 @@ class RoleItemDto {
   @Expose()
   name: string;
 
-  @ApiProperty({ type: PermissionEnum, isArray: true })
+  @ApiProperty({ type: [PermissionEnum] })
   @Expose()
   permissions: PermissionEnum[];
 
