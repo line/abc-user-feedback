@@ -342,7 +342,6 @@ describe('AppController (e2e)', () => {
       userEntity = await userRepo.save({
         email: faker.internet.email(),
         hashPassword: await userPasswordService.createHashPassword(password),
-        role: ownerRole,
         state: UserStateEnum.Active,
       });
     });
