@@ -31,6 +31,7 @@ class MemberRoleDto {
   @ApiProperty({
     type: [PermissionEnum],
     enum: PermissionEnum,
+    enumName: 'PermissionName',
     isArray: true,
   })
   permissions: PermissionEnum[];
