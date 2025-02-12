@@ -23,7 +23,6 @@ export class UserInvitationRequestDto {
   @IsEmail()
   email: string;
 
-  @ApiProperty({ type: UserTypeEnum, required: true, enum: UserTypeEnum })
   @IsEnum(UserTypeEnum)
   userType: UserTypeEnum;
 
