@@ -81,7 +81,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  const channel: ChannelEntity = new ChannelEntity();
+  let channel: ChannelEntity = new ChannelEntity();
   let fields: FieldEntity[];
   beforeEach(async () => {
     await clearEntities([projectRepo, channelRepo, fieldRepo]);
@@ -105,7 +105,7 @@ describe('AppController (e2e)', () => {
       imageConfig: null,
     });
 
-    const channel = await channelService.findById({ channelId });
+    channel = await channelService.findById({ channelId });
 
     fields = await fieldRepo.find({
       where: { channel: { id: channel.id } },

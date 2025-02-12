@@ -37,7 +37,6 @@ import {
   InvitationUserSignUpRequestDto,
 } from '@/domains/admin/auth/dtos/requests';
 import type { SignInResponseDto } from '@/domains/admin/auth/dtos/responses/sign-in-response.dto';
-import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { UserDto } from '@/domains/admin/user/dtos/user.dto';
 import {
@@ -66,7 +65,6 @@ describe('AppController (e2e)', () => {
   let userRepo: Repository<UserEntity>;
   let codeRepo: Repository<CodeEntity>;
   let tenantRepo: Repository<TenantEntity>;
-  const ownerRole: RoleEntity | undefined = undefined;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -342,7 +340,6 @@ describe('AppController (e2e)', () => {
       userEntity = await userRepo.save({
         email: faker.internet.email(),
         hashPassword: await userPasswordService.createHashPassword(password),
-        role: ownerRole,
         state: UserStateEnum.Active,
       });
     });
