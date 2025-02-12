@@ -47,6 +47,7 @@ jobs:
           npm install -g corepack@latest
           pnpm install --frozen-lockfile
           pnpm playwright install
+          pnpm build
 
       - name: Run e2e tests
         run: |
