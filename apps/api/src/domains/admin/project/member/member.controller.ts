@@ -17,12 +17,10 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
   ParseIntPipe,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -31,11 +29,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { SortMethodEnum } from '@/common/enums';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
 import {
   CreateMemberRequestDto,
+  GetAllMemberRequestDto,
   UpdateMemberRequestDto,
 } from './dtos/requests';
 import { GetAllMemberResponseDto } from './dtos/responses';
@@ -49,15 +47,18 @@ export class MemberController {
 
   @RequirePermission(PermissionEnum.project_member_read)
   @ApiOkResponse({ type: GetAllMemberResponseDto })
-  @Get()
-  async getAllRolesByProjectId(
+  @Post('/search')
+  async searchMembers(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Query('createdAt') createdAtSort: SortMethodEnum,
+    @Body() body: GetAllMemberRequestDto,
   ) {
+    const { limit, page, queries, operator } = body;
     return GetAllMemberResponseDto.transform(
-      await this.memberService.findByProjectId({
+      await this.memberService.findAll({
+        options: { limit, page },
+        queries,
+        operator,
         projectId,
-        sort: { createdAt: createdAtSort },
       }),
     );
   }

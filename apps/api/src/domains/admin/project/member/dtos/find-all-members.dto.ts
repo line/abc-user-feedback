@@ -13,7 +13,21 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { CreateMemberDto } from './create-member.dto';
-export { UpdateMemberDto } from './update-member.dto';
-export { FindByProjectIdDto } from './find-by-project-id.dto';
-export { FindAllMembersDto } from './find-all-members.dto';
+import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
+
+import type { TimeRange } from '@/common/dtos';
+import type { QueryV2ConditionsEnum } from '@/common/enums';
+
+export class FindAllMembersDto {
+  projectId: number;
+  options: IPaginationOptions;
+  queries?: {
+    email?: string;
+    name?: string | null;
+    department?: string | null;
+    role?: string;
+    createdAt?: TimeRange;
+    condition: QueryV2ConditionsEnum;
+  }[];
+  operator?: 'AND' | 'OR';
+}
