@@ -26,7 +26,7 @@ interface Props {
   value: unknown;
 }
 
-const FeedbackDetailEditingCell = (props: Props) => {
+const FeedbackDetailCell = (props: Props) => {
   const { field, value } = props;
   return (
     <>
@@ -66,4 +66,4 @@ const FeedbackDetailEditingCell = (props: Props) => {
   );
 };
 
-export default FeedbackDetailEditingCell;
+export default FeedbackDetailCell;
