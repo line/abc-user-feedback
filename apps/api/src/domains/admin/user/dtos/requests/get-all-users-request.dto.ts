@@ -17,7 +17,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import { SortMethodEnum } from '@/common/enums';
+import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 import { ArrayDistinct } from '@/common/validators';
 import { UserTypeEnum } from '../../entities/enums';
 
@@ -45,24 +45,29 @@ class UserSearchQuery {
   department?: string | null;
 
   @IsOptional()
-  @IsEnum(UserTypeEnum, { each: true })
-  @ArrayDistinct()
+  @IsEnum(UserTypeEnum)
   type?: UserTypeEnum[];
-
-  @ApiProperty({ required: false, type: TimeRange })
-  @IsOptional()
-  createdAt?: TimeRange;
 
   @ApiProperty({ required: false, type: [Number] })
   @IsOptional()
   @ArrayDistinct()
   projectId?: number[];
+
+  @ApiProperty({ required: false, type: TimeRange })
+  @IsOptional()
+  createdAt?: TimeRange;
+
+  condition: QueryV2ConditionsEnum;
 }
 
 export class GetAllUsersRequestDto extends PaginationRequestDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  query?: UserSearchQuery;
+  queries?: UserSearchQuery[];
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  operator?: 'AND' | 'OR';
 
   @ApiProperty({ required: false })
   @IsOptional()
