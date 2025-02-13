@@ -14,6 +14,7 @@
  * under the License.
  */
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
@@ -77,20 +78,26 @@ const IssueDetailSheet = (props: Props) => {
     variables: { projectId },
   });
 
-  const { data: channelFeedbackCountData } = useQuery({
-    queryKey: ['feedbackCountPerChannelByIssueId', channelData?.items],
+  const { data: channelFeedbackCountData, isLoading } = useQuery({
+    queryKey: [
+      '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+      channelData?.items.map((v) => v.id),
+      data.id,
+    ],
     queryFn: async () => {
       const channels = (channelData?.items ?? []) as (Channel & {
-        feedbackCount: number | undefined;
+        feedbackCount: number;
       })[];
+
       for (const channel of channels) {
         const { data: feeedbakData } = await client.post({
           path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
           pathParams: { channelId: channel.id, projectId },
-          body: { limit: 0, query: { issueIds: [data.id] } as never },
+          body: { limit: 0, queries: [{ issueIds: [data.id] }] as never },
         });
-        channel.feedbackCount = feeedbakData?.meta.totalItems;
+        channel.feedbackCount = feeedbakData?.meta.totalItems ?? 0;
       }
+
       return channels;
     },
   });
@@ -152,15 +159,30 @@ const IssueDetailSheet = (props: Props) => {
             }
           />
           <Divider variant="subtle" className="my-4" />
-          <div className="space-y-2">
+          <div className="flex flex-col gap-2">
+            {isLoading && <Icon name="RiLoader5Line" className="spinner" />}
             {channelFeedbackCountData?.map((v) => (
-              <div className="bg-neutral-primary border-neutral-tertiary rounded-8 flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
-                <div className="text-base-strong">{v.name}</div>
-                <div className="text-neutral-secondary text-small-normal flex items-center gap-1">
-                  <Icon name="RiListIndefinite" size={12} />
-                  {v.feedbackCount} feedbacks
+              <Link
+                key={v.id}
+                href={{
+                  pathname: '/main//project/[projectId]/feedback',
+                  query: {
+                    projectId,
+                    channelId: v.id,
+                    queries: JSON.stringify([
+                      { issueIds: [data.id], condition: 'IS' },
+                    ]),
+                  },
+                }}
+              >
+                <div className="bg-neutral-primary border-neutral-tertiary rounded-8 flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
+                  <div className="text-base-strong">{v.name}</div>
+                  <div className="text-neutral-secondary text-small-normal flex items-center gap-1">
+                    <Icon name="RiListIndefinite" size={12} />
+                    {v.feedbackCount} feedbacks
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </SheetBody>

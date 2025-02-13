@@ -22,22 +22,15 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import type { PaginationState } from '@tanstack/react-table';
-import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { useTranslation } from 'react-i18next';
 
 import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
-import type {
-  TableFilter,
-  TableFilterCondition,
-  TableFilterFieldFotmat,
-  TableFilterOperator,
-} from '@/shared';
+import type { TableFilterFieldFotmat } from '@/shared';
 import {
   BasicTable,
-  client,
   DateRangePicker,
   DEFAULT_LOCALE,
   TableFilterPopover,
@@ -46,12 +39,13 @@ import {
   useOAIQuery,
   useSort,
 } from '@/shared';
-import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
+import type { NextPageWithLayout } from '@/shared/types';
 import {
   FeedbackDetailSheet,
   FeedbackTableDownload,
   FeedbackTableExpand,
   FeedbackTableViewOptions,
+  useFeedbackQueryConverter,
   useFeedbackSearch,
 } from '@/entities/feedback';
 import { getColumns } from '@/entities/feedback/feedback-table-columns';
@@ -72,8 +66,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     'channelId',
     parseAsInteger.withDefault(-1),
   );
-  const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
-  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [rowCount, setRowCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
@@ -83,12 +76,6 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     pageSize: 20,
   });
 
-  const [dateRange, setDateRange] = useState<DateRangeType>({
-    startDate: dayjs()
-      .subtract(env.NEXT_PUBLIC_MAX_DAYS - 1, 'day')
-      .toDate(),
-    endDate: dayjs().toDate(),
-  });
   const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
   const { data } = useOAIQuery({
@@ -101,50 +88,17 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     variables: { channelId: currentChannelId, projectId },
   });
 
-  const createdAtQuery = {
-    createdAt: {
-      gte: dayjs(dateRange?.startDate).toISOString(),
-      lt: dayjs(dateRange?.endDate).add(1, 'day').toISOString(),
-    },
-    condition: 'IS' as TableFilterCondition,
-  };
-
-  const [queries, setQueries] = useState<Record<string, unknown>[]>([]);
-
-  const changeQueries = async (tableFilters: TableFilter[]) => {
-    const getValue: Record<
-      TableFilterFieldFotmat,
-      (valeu: unknown) => unknown
-    > = {
-      number: (value) => Number(value),
-      issue: async (value) => {
-        const { data } = await client.post({
-          path: '/api/admin/projects/{projectId}/issues/search',
-          pathParams: { projectId },
-          body: {
-            queries: [
-              { name: value, condition: 'IS' } as Record<string, unknown>,
-            ],
-          },
-        });
-        const result = data?.items.find((v) => v.name === value);
-        return result ? [result.id] : [];
-      },
-      keyword: (value) => value,
-      multiSelect: (value) => value,
-      select: (value) => value,
-      text: (value) => value,
-      date: (value) => value,
-    };
-
-    const res = await Promise.all(
-      tableFilters.map(async ({ condition, format, key, value }) => ({
-        [key]: await getValue[format](value),
-        condition,
-      })),
-    );
-    setQueries(res);
-  };
+  const {
+    queries,
+    tableFilters,
+    dateRange,
+    operator,
+    updateTableFilters,
+    updateDateRage,
+  } = useFeedbackQueryConverter({
+    projectId,
+    fields: channelData?.fields ?? [],
+  });
 
   const fields = channelData?.fields ?? [];
 
@@ -180,14 +134,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     projectId,
     currentChannelId,
     {
-      queries: queries.concat(createdAtQuery),
+      queries: queries,
       operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
       sort,
     },
     {
-      enabled: currentChannelId !== -1,
+      enabled: currentChannelId !== -1 && queries.length > 0,
       throwOnError(error) {
         if (error.code === 'LargeWindow') {
           toast.error('Please narrow down the search range.');
@@ -239,22 +193,13 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     },
   });
 
-  const updateTableFilters = async (
-    tableFilters: TableFilter[],
-    op: TableFilterOperator,
-  ) => {
-    await changeQueries(tableFilters);
-    setTableFilters(tableFilters);
-    setOperator(op);
-  };
-
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <div className="flex justify-between">
+      <div className="flex flex-wrap justify-between gap-2">
         <Tabs
           value={String(currentChannelId)}
           onValueChange={(v) => setCurrentChannelId(Number(v))}
@@ -279,7 +224,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         </Tabs>
         <div className="flex gap-2 [&>button]:min-w-20">
           <DateRangePicker
-            onChange={(v) => setDateRange(v)}
+            onChange={(v) => updateDateRage(v)}
             value={dateRange}
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
@@ -288,7 +233,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             filterFields={fields
               .filter(({ key }) => key !== 'createdAt')
               .map((field) => ({
-                key: field.key,
+                key: field.key === 'issues' ? 'issueIds' : field.key,
                 name: field.name,
                 options: field.options,
                 format: (field.key === 'issues' ?

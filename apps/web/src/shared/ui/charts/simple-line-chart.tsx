@@ -70,7 +70,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
           width={500}
           height={300}
           data={data}
-          margin={{ left: -20, right: 10, top: 10, bottom: 10 }}
+          margin={{ left: 0, right: 10, top: 10, bottom: 10 }}
         >
           <CartesianGrid
             vertical={false}
