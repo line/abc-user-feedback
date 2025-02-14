@@ -14,21 +14,12 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
-import { ArrayDistinct } from '@/common/validators';
-import { UserTypeEnum } from '../../entities/enums';
+import { QueryV2ConditionsEnum } from '@/common/enums';
 
-class UserOrder {
-  @ApiProperty({ enum: SortMethodEnum })
-  @IsEnum(SortMethodEnum)
-  @IsOptional()
-  createdAt?: SortMethodEnum;
-}
-
-class UserSearchQuery {
+class MemberSearchQuery {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
@@ -44,16 +35,10 @@ class UserSearchQuery {
   @IsString()
   department?: string | null;
 
-  @ApiProperty({ required: false, type: [UserTypeEnum], enum: UserTypeEnum })
+  @ApiProperty({ required: false })
   @IsOptional()
-  @IsEnum(UserTypeEnum, { each: true })
-  @ArrayDistinct()
-  type?: UserTypeEnum[];
-
-  @ApiProperty({ required: false, type: [Number] })
-  @IsOptional()
-  @ArrayDistinct()
-  projectId?: number[];
+  @IsString()
+  role?: string;
 
   @ApiProperty({ required: false, type: TimeRange })
   @IsOptional()
@@ -62,16 +47,12 @@ class UserSearchQuery {
   condition: QueryV2ConditionsEnum;
 }
 
-export class GetAllUsersRequestDto extends PaginationRequestDto {
+export class GetAllMemberRequestDto extends PaginationRequestDto {
   @ApiProperty({ required: false })
   @IsOptional()
-  queries?: UserSearchQuery[];
+  queries?: MemberSearchQuery[];
 
   @ApiProperty({ required: false })
   @IsOptional()
   operator?: 'AND' | 'OR';
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  order?: UserOrder;
 }
