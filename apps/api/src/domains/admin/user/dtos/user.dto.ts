@@ -36,6 +36,7 @@ export class UserDto {
   department: string | null;
 
   @Expose()
+  @ApiProperty({ enum: UserTypeEnum })
   type: UserTypeEnum;
 
   @Expose()

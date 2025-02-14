@@ -30,6 +30,7 @@ export class UpdateUserRequestDto {
   @IsNullable()
   department: string | null;
 
+  @ApiProperty({ type: UserTypeEnum, enum: UserTypeEnum, required: false })
   @IsOptional()
   @IsEnum(UserTypeEnum)
   type?: UserTypeEnum;

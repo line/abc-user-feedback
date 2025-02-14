@@ -31,6 +31,7 @@ const MockIssueService = {
   create: jest.fn(),
   findById: jest.fn(),
   findIssuesByProjectId: jest.fn(),
+  findIssuesByProjectIdV2: jest.fn(),
   update: jest.fn(),
   deleteById: jest.fn(),
   deleteByIds: jest.fn(),
@@ -88,7 +89,7 @@ describe('IssueController', () => {
         limit: 10,
       });
 
-      expect(MockIssueService.findIssuesByProjectId).toBeCalledTimes(1);
+      expect(MockIssueService.findIssuesByProjectIdV2).toBeCalledTimes(1);
     });
   });
   describe('update', () => {

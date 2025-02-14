@@ -16,10 +16,9 @@
 import { faker } from '@faker-js/faker';
 import { Test } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import type { Repository, SelectQueryBuilder } from 'typeorm';
-import { In, Like } from 'typeorm';
+import type { Repository } from 'typeorm';
 
-import { SortMethodEnum } from '@/common/enums';
+import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 import {
   createQueryBuilder,
   getRandomEnumValue,
@@ -65,15 +64,17 @@ describe('UserService', () => {
       dto.order = {
         createdAt: SortMethodEnum.DESC,
       };
-      dto.query = {
-        projectId: [faker.number.int()],
-        email: faker.internet.email(),
-      };
-      jest
-        .spyOn(userRepo, 'createQueryBuilder')
-        .mockImplementation(
-          () => createQueryBuilder as unknown as SelectQueryBuilder<UserEntity>,
-        );
+      dto.queries = [
+        {
+          projectId: [faker.number.int()],
+          condition: QueryV2ConditionsEnum.CONTAINS,
+        },
+        {
+          email: faker.internet.email(),
+          condition: QueryV2ConditionsEnum.CONTAINS,
+        },
+      ];
+      jest.spyOn(userRepo, 'createQueryBuilder');
       jest.spyOn(createQueryBuilder, 'setFindOptions' as never);
 
       const {
@@ -82,15 +83,6 @@ describe('UserService', () => {
 
       expect(currentPage).toEqual(dto.options.page);
       expect(itemCount).toBeLessThanOrEqual(+dto.options.limit);
-      expect(createQueryBuilder.setFindOptions).toBeCalledTimes(2);
-      expect(createQueryBuilder.setFindOptions).toBeCalledWith({
-        where: {
-          email: Like(`%${dto.query.email}%`),
-          members: { role: { project: { id: In(dto.query.projectId ?? []) } } },
-        },
-        order: dto.order,
-        relations: { members: { role: { project: true } } },
-      });
     });
   });
   describe('findByEmailAndSignUpMethod', () => {

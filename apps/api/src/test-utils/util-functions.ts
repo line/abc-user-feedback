@@ -213,6 +213,7 @@ export const createQueryBuilder: Record<string, object> = {
   select: () => createQueryBuilder,
   innerJoin: () => createQueryBuilder,
   leftJoin: () => createQueryBuilder,
+  leftJoinAndSelect: () => createQueryBuilder,
   where: () => createQueryBuilder,
   andWhere: () => createQueryBuilder,
   groupBy: () => createQueryBuilder,

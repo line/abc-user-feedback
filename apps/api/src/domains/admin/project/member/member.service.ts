@@ -131,7 +131,7 @@ export class MemberService {
                   [paramName]:
                     condition === QueryV2ConditionsEnum.IS ?
                       value
-                    : `%${value}%`,
+                    : `%${value?.toString()}%`,
                 },
               );
             } else if (fieldKey === 'name') {
@@ -141,7 +141,7 @@ export class MemberService {
                   [paramName]:
                     condition === QueryV2ConditionsEnum.IS ?
                       value
-                    : `%${value}%`,
+                    : `%${value?.toString()}%`,
                 },
               );
             } else if (fieldKey === 'email') {
@@ -151,7 +151,7 @@ export class MemberService {
                   [paramName]:
                     condition === QueryV2ConditionsEnum.IS ?
                       value
-                    : `%${value}%`,
+                    : `%${value?.toString()}%`,
                 },
               );
             } else if (fieldKey === 'department') {
@@ -161,7 +161,7 @@ export class MemberService {
                   [paramName]:
                     condition === QueryV2ConditionsEnum.IS ?
                       value
-                    : `%${value}%`,
+                    : `%${value?.toString()}%`,
                 },
               );
             }

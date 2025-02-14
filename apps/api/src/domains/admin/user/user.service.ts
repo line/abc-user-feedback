@@ -61,7 +61,6 @@ export class UserService {
     }
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
-    console.log(method);
 
     queryBuilder.andWhere(
       new Brackets((qb) => {
