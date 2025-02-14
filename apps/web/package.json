@@ -34,7 +34,7 @@
     "@floating-ui/react": "^0.27.0",
     "@headlessui/react": "2.2.0",
     "@headlessui/tailwindcss": "^0.2.0",
-    "@hookform/resolvers": "^3.3.4",
+    "@hookform/resolvers": "^4.0.0",
     "@mui/base": "5.0.0-beta.69",
     "@t3-oss/env-nextjs": "^0.12.0",
     "@tanstack/react-query": "^5.45.1",
