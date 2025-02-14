@@ -40,7 +40,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.3.8",
     "@nestjs/platform-fastify": "^10.3.8",
-    "@nestjs/schedule": "^4.0.2",
+    "@nestjs/schedule": "^5.0.0",
     "@nestjs/swagger": "^11.0.0",
     "@nestjs/terminus": "^10.2.3",
     "@nestjs/typeorm": "^11.0.0",
