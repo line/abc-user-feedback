@@ -62,7 +62,7 @@
     "pino": "^9.0.0",
     "react": "^19.0.0",
     "react-beautiful-dnd": "^13.1.1",
-    "react-datepicker": "^7.0.0",
+    "react-datepicker": "^8.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.51.3",
     "react-hot-toast": "^2.4.1",
