@@ -90,8 +90,8 @@ importers:
         specifier: ^11.0.0
         version: 11.0.0(@nestjs/common@11.0.9(class-transformer@0.5.1)(class-validator@0.14.1)(reflect-metadata@0.2.2)(rxjs@7.8.1))(@nestjs/core@11.0.9)(reflect-metadata@0.2.2)(rxjs@7.8.1)(typeorm@0.3.20(mysql2@3.12.0)(ts-node@10.9.2(@swc/core@1.10.16(@swc/helpers@0.5.15))(@types/node@22.13.4)(typescript@5.7.3)))
       '@opensearch-project/opensearch':
-        specifier: ^2.7.0
-        version: 2.13.0
+        specifier: ^3.0.0
+        version: 3.3.0
       '@swc/cli':
         specifier: ^0.6.0
         version: 0.6.0(@swc/core@1.10.16(@swc/helpers@0.5.15))(chokidar@3.6.0)
@@ -2903,9 +2903,9 @@ packages:
   '@open-draft/until@2.1.0':
     resolution: {integrity: sha512-U69T3ItWHvLwGg5eJ0n3I62nWuE6ilHlmz7zM0npLBRvPRd7e6NYmg54vvRtP5mZG7kZqZCFVdsTWo7BPtBujg==}
 
-  '@opensearch-project/opensearch@2.13.0':
-    resolution: {integrity: sha512-Bu3jJ7pKzumbMMeefu7/npAWAvFu5W9SlbBow1ulhluqUpqc7QoXe0KidDrMy7Dy3BQrkI6llR3cWL4lQTZOFw==}
-    engines: {node: '>=10', yarn: ^1.22.10}
+  '@opensearch-project/opensearch@3.3.0':
+    resolution: {integrity: sha512-EJSeyVEy4fMLsbIoCYisz2VFRRXBfkxKSEBVSFEzXMT71pAF26+XhQiv+nhzqAu5w18qS1bhAAIMUriT5bThNQ==}
+    engines: {node: '>=14', yarn: ^1.22.10}
 
   '@opentelemetry/api@1.9.0':
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
@@ -12720,10 +12720,10 @@ snapshots:
 
   '@open-draft/until@2.1.0': {}
 
-  '@opensearch-project/opensearch@2.13.0':
+  '@opensearch-project/opensearch@3.3.0':
     dependencies:
       aws4: 1.13.2
-      debug: 4.3.7
+      debug: 4.4.0(supports-color@9.4.0)
       hpagent: 1.2.0
       json11: 2.0.0
       ms: 2.1.3
