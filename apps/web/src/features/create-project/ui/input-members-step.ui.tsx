@@ -13,14 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Icon } from '@ufb/react';
 import { Popover, PopoverModalContent } from '@ufb/ui';
 
+import { BasicTable } from '@/shared';
 import type { MemberInfo } from '@/entities/member';
-import { MemberFormDialog, MemberTable } from '@/entities/member';
+import { MemberFormDialog } from '@/entities/member';
+import { getMemberColumns } from '@/entities/member/member-columns';
 import { useUserSearch } from '@/entities/user';
 
 import { useCreateProjectStore } from '../create-project-model';
@@ -35,7 +43,7 @@ const InputMembersStep: React.FC<IProps> = () => {
   const { t } = useTranslation();
   const { data: userData } = useUserSearch({
     limit: 1000,
-    query: { type: ['GENERAL'] },
+    queries: [{ type: ['GENERAL'] }] as Record<string, unknown>[],
   });
 
   const createMember = (member: MemberInfo) => {
@@ -110,7 +118,17 @@ const InputMembersStep: React.FC<IProps> = () => {
       />
     ));
   };
+  const columns = useMemo(
+    () => getMemberColumns(userData?.items ?? []),
+    [userData],
+  );
 
+  const table = useReactTable({
+    columns,
+    data: input.members,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
   return (
     <CreateProjectInputTemplate
       validate={validate}
@@ -131,8 +149,9 @@ const InputMembersStep: React.FC<IProps> = () => {
         </>
       }
     >
-      <MemberTable
-        data={input.members}
+      <BasicTable
+        table={table}
+        emptyCaption={t('v2.text.no-data.member')}
         onClickRow={openUpdateMemberFormDialog}
       />
     </CreateProjectInputTemplate>

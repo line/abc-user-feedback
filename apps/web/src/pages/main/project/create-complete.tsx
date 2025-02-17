@@ -32,6 +32,7 @@ import {
 } from '@/shared';
 import { ApiKeyTable } from '@/entities/api-key';
 import { MemberTable } from '@/entities/member';
+import { useMembmerSearch } from '@/entities/member/lib';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm } from '@/entities/project';
 import { RoleTable } from '@/entities/role';
@@ -56,11 +57,7 @@ const CompleteProjectCreationPage: NextPage = () => {
     path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId },
   });
-
-  const { data: members } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/members',
-    variables: { projectId, createdAt: 'ASC' },
-  });
+  const { data: members } = useMembmerSearch(projectId, {});
 
   const projectInfoFormMethods = useForm<ProjectInfo>();
 
@@ -110,7 +107,7 @@ const CompleteProjectCreationPage: NextPage = () => {
             <CreateSectionTemplate
               title={t('project-setting-menu.member-mgmt')}
             >
-              <MemberTable data={members?.members ?? []} />
+              <MemberTable data={members?.items ?? []} />
             </CreateSectionTemplate>
             <CreateSectionTemplate
               title={t('project-setting-menu.api-key-mgmt')}
