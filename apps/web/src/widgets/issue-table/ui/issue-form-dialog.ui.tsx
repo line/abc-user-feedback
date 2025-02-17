@@ -30,7 +30,14 @@ interface Props extends FormOverlayProps<IssueFormSchema> {
 }
 
 const IssueFormDialog = (props: Props) => {
-  const { data, close, isOpen, onSubmit, issueTracker, updateDisabled } = props;
+  const {
+    data,
+    close,
+    isOpen,
+    onSubmit,
+    issueTracker,
+    disabledUpdate: updateDisabled,
+  } = props;
   const { t } = useTranslation();
 
   const { register, watch, setValue, handleSubmit, formState } =

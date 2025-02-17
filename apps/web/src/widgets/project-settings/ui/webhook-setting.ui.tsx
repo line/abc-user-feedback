@@ -121,8 +121,8 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
           await deleteWebhook({ webhookId: webhook.id });
           close();
         }}
-        updateDisabled={!perms.includes('project_webhook_update')}
-        deleteDisabled={!perms.includes('project_webhook_delete')}
+        disabledUpdate={!perms.includes('project_webhook_update')}
+        disabledDelete={!perms.includes('project_webhook_delete')}
       />
     ));
   };

@@ -18,4 +18,6 @@ export interface EntityTable<T> {
   data: T[];
   onClickRow?: (index: number, row: T) => void;
   createButton?: React.ReactNode;
+  disabledUpdate?: boolean;
+  disabledDelete?: boolean;
 }

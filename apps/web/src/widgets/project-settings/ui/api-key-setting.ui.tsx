@@ -137,6 +137,8 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
             {t('v2.button.create')}
           </Button>
         }
+        disabledUpdate={!perms.includes('project_apikey_update')}
+        disabledDelete={!perms.includes('project_apikey_delete')}
       />
     </SettingTemplate>
   );

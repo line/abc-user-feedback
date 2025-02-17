@@ -33,7 +33,8 @@ import {
 
 import type { Category } from '@/entities/category';
 
-import { client, useOAIQuery } from '../lib';
+import { client, useOAIQuery, usePermissions } from '../lib';
+import { cn } from '../utils';
 import CategoryComboboxEditPopover from './category-combobox-edit-popover.ui';
 
 interface Props extends React.PropsWithChildren {
@@ -44,6 +45,7 @@ interface Props extends React.PropsWithChildren {
 const CategoryCombobox = (props: Props) => {
   const { category, issueId, children } = props;
 
+  const perms = usePermissions();
   const router = useRouter();
   const projectId = Number(router.query.projectId);
   const { t } = useTranslation();
@@ -111,7 +113,14 @@ const CategoryCombobox = (props: Props) => {
 
   return (
     <Combobox>
-      <ComboboxTrigger asChild>{children}</ComboboxTrigger>
+      <ComboboxTrigger asChild>
+        <button
+          disabled={!perms.includes('issue_update')}
+          className={cn({ 'opacity-50': !perms.includes('issue_update') })}
+        >
+          {children}
+        </button>
+      </ComboboxTrigger>
       <ComboboxContent>
         <ComboboxInput
           onClick={(e) => e.stopPropagation()}

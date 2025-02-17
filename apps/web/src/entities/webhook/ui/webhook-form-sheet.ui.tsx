@@ -65,7 +65,16 @@ interface Props extends FormOverlayProps<WebhookInfo> {
 }
 
 const WebhookFormSheet: React.FC<Props> = (props) => {
-  const { channels, close, isOpen, onSubmit, data, onClickDelete } = props;
+  const {
+    channels,
+    close,
+    isOpen,
+    onSubmit,
+    data,
+    onClickDelete,
+    disabledDelete,
+    disabledUpdate,
+  } = props;
 
   const { t } = useTranslation();
   const overlay = useOverlay();
@@ -291,13 +300,21 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
         <SheetFooter>
           {onClickDelete && (
             <div className="flex-1">
-              <Button onClick={openDeleteDialog} variant="destructive">
+              <Button
+                onClick={openDeleteDialog}
+                variant="destructive"
+                disabled={disabledDelete}
+              >
                 {t('v2.button.delete')}
               </Button>
             </div>
           )}
           <SheetClose>{t('v2.button.cancel')}</SheetClose>
-          <Button type="submit" form="webhook" disabled={!formState.isDirty}>
+          <Button
+            type="submit"
+            form="webhook"
+            disabled={!formState.isDirty || disabledUpdate}
+          >
             {t('button.confirm')}
           </Button>
         </SheetFooter>

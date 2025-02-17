@@ -26,7 +26,15 @@ import type { ApiKeyFormSchema } from '../api-key.type';
 interface Props extends FormOverlayProps<ApiKeyFormSchema> {}
 
 const ApiKeyFormDialog: React.FC<Props> = (props) => {
-  const { data, close, isOpen, onSubmit, onClickDelete } = props;
+  const {
+    data,
+    close,
+    isOpen,
+    onSubmit,
+    onClickDelete,
+    disabledDelete,
+    disabledUpdate,
+  } = props;
   const { t } = useTranslation();
 
   const { register, watch, setValue, handleSubmit, formState } =
@@ -42,9 +50,9 @@ const ApiKeyFormDialog: React.FC<Props> = (props) => {
       isOpen={isOpen}
       close={close}
       title={t('v2.text.name.detail', { name: 'API Key' })}
-      submitBtn={{ form: 'apiKeyForm' }}
+      submitBtn={{ form: 'apiKeyForm', disabled: disabledUpdate }}
       deleteBtn={{
-        disabled: false,
+        disabled: !!disabledDelete,
         onClick: onClickDelete,
       }}
       formState={formState}

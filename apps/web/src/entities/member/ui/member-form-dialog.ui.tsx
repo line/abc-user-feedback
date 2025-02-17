@@ -44,8 +44,8 @@ const MemberFormDialog: React.FC<Props> = (props) => {
     onSubmit,
     onClickDelete,
     members,
-    deleteDisabled = false,
-    updateDisabled = false,
+    disabledDelete: deleteDisabled = false,
+    disabledUpdate: updateDisabled = false,
   } = props;
 
   const { t } = useTranslation();

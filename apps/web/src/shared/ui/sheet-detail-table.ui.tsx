@@ -150,13 +150,7 @@ const SheetDetailTable = (props: Props) => {
           </a>
         : ((value as string | null) ?? '-');
     },
-    issue: (_, row) => (
-      <IssueCell feedbackId={(row as IssueRow).feedbackId}>
-        <Tag variant="outline" className="w-8 cursor-pointer justify-center">
-          +
-        </Tag>
-      </IssueCell>
-    ),
+    issue: (_, row) => <IssueCell feedbackId={(row as IssueRow).feedbackId} />,
     cateogry: (value, row) => {
       const category = value as Category | undefined;
       return (

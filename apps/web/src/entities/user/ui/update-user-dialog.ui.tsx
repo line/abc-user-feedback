@@ -34,8 +34,8 @@ const UpdateUserDialog: React.FC<IProps> = (props) => {
     data,
     onSubmit,
     onClickDelete,
-    deleteDisabled = false,
-    updateDisabled = false,
+    disabledDelete: deleteDisabled = false,
+    disabledUpdate: updateDisabled = false,
   } = props;
   const { t } = useTranslation();
 

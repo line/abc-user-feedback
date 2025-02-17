@@ -60,7 +60,6 @@ const SettingsMenuList: React.FC<Props> = (props) => {
 
   const router = useRouter();
   const overlay = useOverlay();
-
   const menuValue =
     channelId ? `${settingMenuValue}_${channelId}` : settingMenuValue;
 
@@ -180,6 +179,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
                 </p>
                 <Button
                   className="w-full"
+                  disabled={!perms.includes('channel_create')}
                   onClick={() =>
                     router.push({
                       pathname: Path.CREATE_CHANNEL,
@@ -218,6 +218,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
           value=""
           className="!text-tint-blue hover:!text-tint-blue"
           onClick={openChannelInProgress}
+          disabled={!perms.includes('channel_create')}
         >
           <Icon name="RiAddCircleFill" />
           <div className="flex w-full">

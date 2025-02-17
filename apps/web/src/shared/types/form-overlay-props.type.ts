@@ -20,6 +20,6 @@ export interface FormOverlayProps<T = unknown> {
   data?: T;
   onSubmit: (data: T) => unknown;
   onClickDelete?: () => unknown;
-  updateDisabled?: boolean;
-  deleteDisabled?: boolean;
+  disabledUpdate?: boolean;
+  disabledDelete?: boolean;
 }

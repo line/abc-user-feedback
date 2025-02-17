@@ -32,10 +32,19 @@ import ApiKeyFormDialog from './api-key-form-dialog.ui';
 interface IProps extends Omit<EntityTable<ApiKey>, 'onClickRow'> {
   onClickDelete?: (id: number) => Promise<void> | void;
   onClickUpdate?: (type: ApiKeyUpdateType, id: number) => Promise<void> | void;
+  disabledUpdate?: boolean;
 }
 
 const ApiKeyTable: React.FC<IProps> = (props) => {
-  const { isLoading, onClickDelete, onClickUpdate, createButton, data } = props;
+  const {
+    isLoading,
+    onClickDelete,
+    onClickUpdate,
+    createButton,
+    data,
+    disabledUpdate,
+    disabledDelete,
+  } = props;
 
   const { t } = useTranslation();
   const overlay = useOverlay();
@@ -68,6 +77,8 @@ const ApiKeyTable: React.FC<IProps> = (props) => {
           await onClickDelete?.(apiKey.id);
           close();
         }}
+        disabledDelete={disabledDelete}
+        disabledUpdate={disabledUpdate}
       />
     ));
   };

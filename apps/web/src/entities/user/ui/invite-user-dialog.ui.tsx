@@ -52,7 +52,7 @@ const defaultValues: IForm = {
 interface IProps extends FormOverlayProps<IForm> {}
 
 const InviteUserDialog: React.FC<IProps> = (props) => {
-  const { close, isOpen, onSubmit, updateDisabled } = props;
+  const { close, isOpen, onSubmit, disabledUpdate: updateDisabled } = props;
   const { t } = useTranslation();
   const { register, watch, setValue, handleSubmit, formState } = useForm<IForm>(
     { resolver: zodResolver(scheme), defaultValues },

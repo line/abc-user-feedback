@@ -52,16 +52,22 @@ import type { Role } from '../role.type';
 interface IProps {
   roles: Role[];
   onClickRole?: (role: Role) => void;
+  disabledUpdate?: boolean;
+  disabledDelete?: boolean;
 }
 
 const RoleTable: React.FC<IProps> = (props) => {
-  const { onClickRole, roles } = props;
+  const { onClickRole, roles, disabledUpdate } = props;
 
   const colSpan = roles.length + 2;
 
   return (
     <Table className="border-separate border-spacing-0 rounded border">
-      <RoleTableHead roles={roles} onClickRole={onClickRole} />
+      <RoleTableHead
+        roles={roles}
+        onClickRole={onClickRole}
+        disabled={disabledUpdate}
+      />
       <TableBody>
         <RoleTitleRow colspan={colSpan} title="Feedback" />
         <PermissionRows
@@ -163,10 +169,11 @@ const RoleTable: React.FC<IProps> = (props) => {
 interface IRoleTableHeadProps {
   roles: Role[];
   onClickRole?: (role: Role) => void;
+  disabled?: boolean;
 }
 
 const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
-  const { roles, onClickRole } = props;
+  const { roles, onClickRole, disabled } = props;
 
   return (
     <TableHeader>
@@ -179,6 +186,7 @@ const RoleTableHead: React.FC<IRoleTableHeadProps> = (props) => {
               variant="ghost"
               size="small"
               className="font-normal"
+              disabled={disabled}
             >
               {role.name}
               <Icon name="RiEditFill" />

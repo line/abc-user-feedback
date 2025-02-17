@@ -27,23 +27,24 @@ import {
   ComboboxItem,
   ComboboxList,
   ComboboxTrigger,
+  Tag,
   toast,
 } from '@ufb/react';
 
-import { client, useOAIMutation } from '@/shared';
+import { client, cn, useOAIMutation, usePermissions } from '@/shared';
 import { IssueBadge, useIssueSearch } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackSearch } from '../lib';
 import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
 
-interface IProps extends React.PropsWithChildren {
+interface IProps {
   issues?: Issue[];
   feedbackId?: number;
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { feedbackId, children, issues } = props;
+  const { feedbackId, issues } = props;
 
   const { t } = useTranslation();
 
@@ -51,6 +52,7 @@ const IssueCell: React.FC<IProps> = (props) => {
   const projectId = Number(router.query.projectId);
   const channelId = Number(router.query.channelId);
 
+  const perms = usePermissions(projectId);
   const [inputValue, setInputValue] = useState('');
   const throttledvalue = useThrottle(inputValue, 500);
 
@@ -136,7 +138,23 @@ const IssueCell: React.FC<IProps> = (props) => {
       onClick={(e) => e.stopPropagation()}
     >
       <Combobox>
-        <ComboboxTrigger asChild>{children}</ComboboxTrigger>
+        <ComboboxTrigger asChild>
+          <button
+            disabled={!perms.includes('feedback_issue_update')}
+            className={cn({
+              'opacity-50': !perms.includes('feedback_issue_update'),
+            })}
+          >
+            <Tag
+              variant="outline"
+              className={cn('w-8 cursor-pointer justify-center', {
+                'hover:bg-inherit': !perms.includes('feedback_issue_update'),
+              })}
+            >
+              +
+            </Tag>
+          </button>
+        </ComboboxTrigger>
         <ComboboxContent>
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
@@ -157,6 +175,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   onSelect={() => detecthIssue({ issueId: issue.id })}
                   className="flex justify-between"
                   value={issue.name}
+                  disabled={!perms.includes('feedback_issue_update')}
                 >
                   <IssueBadge
                     key={issue.id}
@@ -188,6 +207,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                       onSelect={() => attatchIssue({ issueId: issue.id })}
                       className="flex justify-between"
                       value={issue.name}
+                      disabled={!perms.includes('feedback_issue_update')}
                     >
                       <IssueBadge
                         key={issue.id}
@@ -200,6 +220,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               </ComboboxGroup>
             )}
             {!!inputValue &&
+              perms.includes('issue_create') &&
               !currentIssues.some((issue) => issue.name === inputValue) &&
               !isLoading &&
               !allIssues?.items.some((issue) => issue.name === inputValue) && (

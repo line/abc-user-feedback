@@ -37,6 +37,7 @@ import {
   TablePagination,
   useOAIMutation,
   useOAIQuery,
+  usePermissions,
   useSort,
 } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
@@ -62,6 +63,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
   const { t } = useTranslation();
 
+  const perms = usePermissions(projectId);
   const [currentChannelId, setCurrentChannelId] = useQueryState<number>(
     'channelId',
     parseAsInteger.withDefault(-1),
@@ -293,7 +295,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
-          <FeedbackTableDownload fields={fields} queries={queries} />
+          <FeedbackTableDownload
+            fields={fields}
+            queries={queries}
+            disabled={!perms.includes('feedback_download_read')}
+          />
         </div>
       </div>
       <BasicTable
@@ -314,6 +320,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           close={() => setOpenFeedbackId(null)}
           feedback={currentFeedback}
           fields={fields}
+          projectId={projectId}
         />
       )}
     </div>

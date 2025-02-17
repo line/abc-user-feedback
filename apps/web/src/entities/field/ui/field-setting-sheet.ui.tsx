@@ -62,6 +62,8 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     isOpen,
     onSubmit: onSave,
     onClickDelete,
+    disabledUpdate,
+    disabledDelete,
   } = props;
 
   const { t } = useTranslation();
@@ -300,7 +302,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           {data && (
             <div className="flex-1">
               <Button
-                disabled={isOriginalData || isDefaultField}
+                disabled={isOriginalData || isDefaultField || disabledDelete}
                 variant="destructive"
                 onClick={() => onClickDelete?.()}
               >
@@ -312,7 +314,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           <Button
             type="submit"
             form="field-setting"
-            disabled={isDefaultField || !formState.isDirty}
+            disabled={isDefaultField || !formState.isDirty || disabledUpdate}
           >
             {t('v2.button.confirm')}
           </Button>

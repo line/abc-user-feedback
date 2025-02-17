@@ -15,7 +15,7 @@
  */
 import { createColumnHelper } from '@tanstack/react-table';
 
-import { Icon, Tag } from '@ufb/react';
+import { Icon } from '@ufb/react';
 
 import { cn, ExpandableText, TableCheckbox } from '@/shared';
 import { FieldFormatLabel } from '@/entities/field';
@@ -83,14 +83,7 @@ export const getColumns = (fieldData: FieldInfo[]) =>
             <IssueCell
               issues={getValue() as Issue[]}
               feedbackId={Number(row.id)}
-            >
-              <Tag
-                variant="outline"
-                className="w-8 cursor-pointer justify-center"
-              >
-                +
-              </Tag>
-            </IssueCell>
+            />
           </div>
         </div>
       ),

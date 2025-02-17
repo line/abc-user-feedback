@@ -33,6 +33,7 @@ import {
   TableFilterPopover,
   useOAIMutation,
   useOAIQuery,
+  usePermissions,
 } from '@/shared';
 import CategoryTable from '@/shared/ui/category-table.ui';
 
@@ -47,6 +48,7 @@ interface IProps extends React.PropsWithChildren {
 const IssueTable: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const queryClient = useQueryClient();
+  const perms = usePermissions(projectId);
 
   const [createdAtDateRange, setCreatedAtDateRange] =
     useState<DateRangeType>(null);
@@ -146,7 +148,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
   return (
     <>
       <div className="mb-3 flex justify-between">
-        <Button variant="outline" onClick={openIssueFormDialog}>
+        <Button
+          variant="outline"
+          onClick={openIssueFormDialog}
+          disabled={!perms.includes('issue_create')}
+        >
           <Icon name="RiAddLine" /> {t('main.feedback.issue-cell.create-issue')}
         </Button>
         <div className="flex gap-2">

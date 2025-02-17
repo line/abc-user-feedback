@@ -36,7 +36,7 @@ interface Props extends React.PropsWithChildren {
   close: () => void;
   title: React.ReactNode;
   deleteBtn?: {
-    disabled: boolean;
+    disabled?: boolean;
     onClick?: () => unknown;
   };
   submitBtn: {

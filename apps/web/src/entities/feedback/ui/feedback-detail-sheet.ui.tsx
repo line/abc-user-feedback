@@ -30,7 +30,7 @@ import {
   SheetTitle,
 } from '@ufb/react';
 
-import { SheetDetailTable } from '@/shared';
+import { SheetDetailTable, usePermissions } from '@/shared';
 import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
 import type { FieldInfo } from '@/entities/field';
 import { DEFAULT_FIELD_KEYS } from '@/entities/field/field.constant';
@@ -44,13 +44,22 @@ interface Props {
   feedback: Feedback;
   onClickDelete?: () => void;
   updateFeedback?: (feedback: Feedback) => void;
+  projectId: number;
 }
 
 const FeedbackDetailSheet = (props: Props) => {
-  const { close, feedback, fields, isOpen, onClickDelete, updateFeedback } =
-    props;
+  const {
+    close,
+    feedback,
+    fields,
+    isOpen,
+    onClickDelete,
+    updateFeedback,
+    projectId,
+  } = props;
   const { t } = useTranslation();
 
+  const perms = usePermissions(projectId);
   const [currentFeedback, setCurrentFeedback] = useState(feedback);
   const [mode, setMode] = useState<'edit' | 'view'>('view');
   const onClickCancel = () => {
@@ -125,7 +134,11 @@ const FeedbackDetailSheet = (props: Props) => {
         <SheetFooter>
           {onClickDelete && (
             <div className="flex-1">
-              <Button variant="destructive" onClick={onClickDelete}>
+              <Button
+                variant="destructive"
+                onClick={onClickDelete}
+                disabled={!perms.includes('feedback_delete')}
+              >
                 {t('v2.button.delete')}
               </Button>
             </div>
@@ -141,7 +154,12 @@ const FeedbackDetailSheet = (props: Props) => {
           {mode === 'view' && (
             <>
               <SheetClose>{t('v2.button.cancel')}</SheetClose>
-              <Button onClick={() => setMode('edit')}>편집</Button>
+              <Button
+                onClick={() => setMode('edit')}
+                disabled={!perms.includes('feedback_update')}
+              >
+                {t('v2.button.edit')}
+              </Button>
             </>
           )}
         </SheetFooter>

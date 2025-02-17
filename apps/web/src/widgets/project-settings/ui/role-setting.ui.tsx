@@ -82,6 +82,9 @@ const RoleSetting: React.FC<IProps> = (props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
 
   const { mutateAsync: deleteRole } = useMutation({
@@ -94,6 +97,9 @@ const RoleSetting: React.FC<IProps> = (props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 
@@ -126,8 +132,8 @@ const RoleSetting: React.FC<IProps> = (props) => {
           await deleteRole({ roleId: role.id });
           close();
         }}
-        deleteDisabled={!perms.includes('project_role_delete')}
-        updateDisabled={!perms.includes('project_role_update')}
+        disabledDelete={!perms.includes('project_role_delete')}
+        disabledUpdate={!perms.includes('project_role_update')}
       />
     ));
   };
@@ -154,6 +160,7 @@ const RoleSetting: React.FC<IProps> = (props) => {
         <RoleTable
           roles={data?.roles ?? []}
           onClickRole={openUpdateRoleSheet}
+          disabledUpdate={!perms.includes('project_role_update')}
         />
       </div>
     </SettingTemplate>

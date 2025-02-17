@@ -39,6 +39,7 @@ import {
   SheetDetailTable,
   useOAIMutation,
   useOAIQuery,
+  usePermissions,
 } from '@/shared';
 import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
 import type { Channel } from '@/entities/channel';
@@ -55,6 +56,7 @@ interface Props extends Omit<FormOverlayProps<Issue>, 'onSubmit'> {
 const IssueDetailSheet = (props: Props) => {
   const { issueTracker, projectId, data, close, isOpen } = props;
 
+  const perms = usePermissions(projectId);
   const { t } = useTranslation();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [currentItem, setCurrentItem] = useState(data);
@@ -192,6 +194,7 @@ const IssueDetailSheet = (props: Props) => {
               variant="destructive"
               onClick={() => deleteIssue(undefined)}
               loading={isPendingDeletingIssue}
+              disabled={!perms.includes('issue_delete')}
             >
               {t('v2.button.delete')}
             </Button>
@@ -212,7 +215,10 @@ const IssueDetailSheet = (props: Props) => {
           {mode === 'view' && (
             <>
               <SheetClose>{t('v2.button.cancel')}</SheetClose>
-              <Button onClick={() => setMode('edit')}>
+              <Button
+                onClick={() => setMode('edit')}
+                disabled={!perms.includes('issue_update')}
+              >
                 {t('v2.button.edit')}
               </Button>
             </>

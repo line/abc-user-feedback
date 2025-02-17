@@ -65,7 +65,16 @@ interface Props extends FormOverlayProps<RoleInfo> {
 }
 
 const RoleFormSheet: React.FC<Props> = (props) => {
-  const { close, isOpen, data, onSubmit: onSave, onClickDelete, rows } = props;
+  const {
+    close,
+    isOpen,
+    data,
+    onSubmit: onSave,
+    onClickDelete,
+    rows,
+    disabledDelete: deleteDisabled,
+    disabledUpdate: updateDisabled,
+  } = props;
 
   const overlay = useOverlay();
 
@@ -75,7 +84,6 @@ const RoleFormSheet: React.FC<Props> = (props) => {
     reset,
     handleSubmit,
     setValue,
-    getValues,
     watch,
     formState,
     setError,
@@ -84,7 +92,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
     defaultValues: { name: '', permissions: [] },
   });
 
-  const permissions = watch('permissions');
+  const currentPerms = watch('permissions');
 
   const otherRoles = useMemo(
     () => rows.filter((v) => v.name !== data?.name),
@@ -95,19 +103,18 @@ const RoleFormSheet: React.FC<Props> = (props) => {
     reset(data);
   }, [data]);
 
-  const checkPermission = (checked: boolean, perm: PermissionType) => {
-    const permssions = getValues('permissions');
-    setValue(
-      'permissions',
-      checked ? [...permssions, perm] : permssions.filter((v) => v !== perm),
-    );
+  const checkPermission = (checked: boolean, targetPerm: PermissionType) => {
+    const current = new Set(currentPerms);
+    if (checked) current.add(targetPerm);
+    else current.delete(targetPerm);
+
     if (
       checked &&
-      (perm.includes('create') ||
-        perm.includes('update') ||
-        perm.includes('delete'))
+      (targetPerm.includes('create') ||
+        targetPerm.includes('update') ||
+        targetPerm.includes('delete'))
     ) {
-      const permPrefix = perm.split('_').slice(0, -1).join('_');
+      const permPrefix = targetPerm.split('_').slice(0, -1).join('_');
 
       const relatedPerms = PermissionList.filter((v) => {
         const vPrefix = v.split('_').slice(0, -1).join('_');
@@ -117,15 +124,16 @@ const RoleFormSheet: React.FC<Props> = (props) => {
           !v.includes('download')
         );
       });
-      relatedPerms.forEach((perm) => {
-        setValue(
-          'permissions',
-          permssions.includes(perm) ? permssions : [...permssions, perm],
-        );
+      relatedPerms.forEach((relatedPerm) => {
+        current.add(relatedPerm);
       });
     }
-    if (!checked && perm.includes('read') && !perm.includes('download')) {
-      const permprefix = perm.split('_').slice(0, -1).join('_');
+    if (
+      !checked &&
+      targetPerm.includes('read') &&
+      !targetPerm.includes('download')
+    ) {
+      const permprefix = targetPerm.split('_').slice(0, -1).join('_');
 
       const relatedPerms = PermissionList.filter((v) => {
         const vPrefix = v.split('_').slice(0, -1).join('_');
@@ -136,16 +144,16 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         );
       });
 
-      relatedPerms.forEach((perm) => {
-        setValue(
-          'permissions',
-          permssions.includes(perm) ?
-            permssions.filter((v) => v !== perm)
-          : permssions,
-        );
+      relatedPerms.forEach((relatedPerm) => {
+        current.delete(relatedPerm);
       });
     }
+
+    setValue('permissions', Array.from(current.values()), {
+      shouldDirty: true,
+    });
   };
+
   const openDeleteDialog = () => {
     overlay.open(({ close: dialogClose, isOpen }) => (
       <DeleteDialog
@@ -198,77 +206,77 @@ const RoleFormSheet: React.FC<Props> = (props) => {
                 title="Feedback"
                 permmissionsText={FeedbackPermissionText}
                 permissions={FeedbackPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Issue"
                 permmissionsText={IssuePermissionText}
                 permissions={IssuePermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Project Info"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectInfoPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Member"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectMemberPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Role"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectRolePermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Api Key"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectApiKeyPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Issue Tracker"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectTrackerPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Webhook"
                 permmissionsText={ProjectPermissionText}
                 permissions={ProjectWebhookPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Channel Info"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelInfoPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Channel Field"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelFieldPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
                 title="Channel Image Setting"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelImageSettingPermissionList}
-                currentPermissions={permissions}
+                currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
             </Accordion>
@@ -277,7 +285,11 @@ const RoleFormSheet: React.FC<Props> = (props) => {
         <SheetFooter>
           {data && onClickDelete && (
             <div className="flex-1">
-              <Button variant="destructive" onClick={openDeleteDialog}>
+              <Button
+                variant="destructive"
+                onClick={openDeleteDialog}
+                disabled={deleteDisabled}
+              >
                 {t('v2.button.delete')}
               </Button>
             </div>
@@ -289,7 +301,7 @@ const RoleFormSheet: React.FC<Props> = (props) => {
             type="submit"
             className="min-w-[84px]"
             form="role"
-            disabled={!formState.isDirty}
+            disabled={!formState.isDirty || updateDisabled}
           >
             {t('v2.button.save')}
           </Button>

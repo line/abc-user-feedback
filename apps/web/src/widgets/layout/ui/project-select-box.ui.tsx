@@ -32,7 +32,8 @@ import {
   TooltipTrigger,
 } from '@ufb/react';
 
-import { CreatingDialog, Path, useOAIQuery } from '@/shared';
+import { cn, CreatingDialog, Path, useOAIQuery } from '@/shared';
+import { useUserStore } from '@/entities/user';
 import { useCreateProjectStore } from '@/features/create-project/create-project-model';
 
 interface IProps {
@@ -45,6 +46,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
 
   const { editingStepIndex, reset, jumpStepByIndex } = useCreateProjectStore();
   const overlay = useOverlay();
+  const { user } = useUserStore();
 
   const { data } = useOAIQuery({ path: '/api/admin/projects' });
 
@@ -98,9 +100,12 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
               ))}
             </SelectGroup>
             <SelectSeparator />
-            <div
-              className="select-item text-tint-blue select-item-left p-2"
+            <button
+              className={cn('select-item text-tint-blue select-item-left p-2', {
+                'opacity-50': user?.type !== 'SUPER',
+              })}
               onClick={openCreateProjectDialog}
+              disabled={user?.type !== 'SUPER'}
             >
               <span className="select-item-check select-item-check-left">
                 <Icon name="RiAddCircleFill" size={16} />
@@ -113,7 +118,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
                   </span>
                 )}
               </div>
-            </div>
+            </button>
           </SelectContent>
         </Select>
       </TooltipTrigger>

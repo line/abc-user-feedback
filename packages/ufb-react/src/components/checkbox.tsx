@@ -48,7 +48,7 @@ const Checkbox = React.forwardRef<
 >(
   (
     {
-      checked: defaultChecked = false,
+      checked = false,
       size,
       children,
       className,
@@ -58,17 +58,17 @@ const Checkbox = React.forwardRef<
     ref,
   ) => {
     const { themeSize } = useTheme();
-    const [checked, setChecked] =
-      React.useState<CheckboxPrimitive.CheckedState>(false);
+    // const [checked, setChecked] =
+    //   React.useState<CheckboxPrimitive.CheckedState>(false);
 
     const handleCheckedChange = (checked: CheckboxPrimitive.CheckedState) => {
-      setChecked(checked);
+      // setChecked(checked);
       onCheckedChange?.(checked);
     };
 
-    React.useEffect(() => {
-      setChecked(defaultChecked);
-    }, [defaultChecked]);
+    // React.useEffect(() => {
+    //   setChecked(defaultChecked);
+    // }, [defaultChecked]);
 
     return (
       <CheckboxPrimitive.Root

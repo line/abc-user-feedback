@@ -26,7 +26,11 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
-import type { TableFilter, TableFilterOperator } from '@/shared';
+import type {
+  TableFilter,
+  TableFilterField,
+  TableFilterOperator,
+} from '@/shared';
 import {
   BasicTable,
   client,
@@ -182,8 +186,8 @@ const MemberSetting: React.FC<IProps> = (props) => {
         project={projectData}
         roles={rolesData.roles}
         members={data?.items ?? []}
-        deleteDisabled={!perms.includes('project_member_delete')}
-        updateDisabled={!perms.includes('project_member_update')}
+        disabledDelete={!perms.includes('project_member_delete')}
+        disabledUpdate={!perms.includes('project_member_update')}
       />
     ));
   };
@@ -201,6 +205,43 @@ const MemberSetting: React.FC<IProps> = (props) => {
       />
     ));
   };
+  const filterFields: TableFilterField[] = [
+    {
+      key: 'name',
+      format: 'string',
+      name: 'Name',
+      matchType: ['CONTAINS', 'IS'],
+    },
+    {
+      key: 'email',
+      format: 'string',
+      name: 'Email',
+      matchType: ['CONTAINS', 'IS'],
+    },
+    {
+      key: 'department',
+      format: 'string',
+      name: 'Department',
+      matchType: ['CONTAINS', 'IS'],
+    },
+    {
+      key: 'role',
+      format: 'select',
+      name: 'Role',
+      options:
+        rolesData?.roles.map((role) => ({
+          key: role.name,
+          name: role.name,
+        })) ?? [],
+      matchType: ['IS'],
+    },
+    {
+      key: 'createdAt',
+      format: 'date',
+      name: 'Joined',
+      matchType: ['IS', 'BETWEEN'],
+    },
+  ];
 
   return (
     <SettingTemplate
@@ -208,6 +249,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
       action={
         <>
           <Button
+            disabled={!perms.includes('project_role_read')}
             variant="outline"
             onClick={() =>
               router.push({
@@ -230,43 +272,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     >
       <div className="flex justify-between">
         <TableFilterPopover
-          filterFields={[
-            {
-              key: 'name',
-              format: 'string',
-              name: 'Name',
-              matchType: ['CONTAINS', 'IS'],
-            },
-            {
-              key: 'email',
-              format: 'string',
-              name: 'Email',
-              matchType: ['CONTAINS', 'IS'],
-            },
-            {
-              key: 'department',
-              format: 'string',
-              name: 'Department',
-              matchType: ['CONTAINS', 'IS'],
-            },
-            {
-              key: 'role',
-              format: 'select',
-              name: 'Role',
-              options:
-                rolesData?.roles.map((role) => ({
-                  key: role.name,
-                  name: role.name,
-                })) ?? [],
-              matchType: ['IS'],
-            },
-            {
-              key: 'createdAt',
-              format: 'date',
-              name: 'Joined',
-              matchType: ['IS', 'BETWEEN'],
-            },
-          ]}
+          filterFields={filterFields}
           onSubmit={(tableFilters, operator) => {
             setTableFilters(tableFilters);
             setOperator(operator);
@@ -278,6 +284,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
             className="!text-red-primary"
             variant="outline"
             onClick={openDeleteDialog}
+            disabled={!perms.includes('project_member_delete')}
           >
             <Icon name="RiDeleteBinFill" />
             {t('v2.button.name.delete', { name: 'Member' })}

@@ -91,9 +91,11 @@ const IssueCellEditCombobox = (props: Props) => {
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <Badge onClick={(e) => e.stopPropagation()} variant="subtle">
-          Edit
-        </Badge>
+        <button>
+          <Badge onClick={(e) => e.stopPropagation()} variant="subtle">
+            Edit
+          </Badge>
+        </button>
       </DropdownTrigger>
       <DropdownContent onClick={(e) => e.stopPropagation()} side="right">
         <div className="border-b">

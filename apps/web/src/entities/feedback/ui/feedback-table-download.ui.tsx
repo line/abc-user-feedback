@@ -34,9 +34,11 @@ import useFeedbackDownload from '../lib/use-feedback-download';
 interface Props {
   fields: Field[];
   queries: Record<string, unknown>[];
+  disabled: boolean;
 }
 
-const FeedbackTableDownload = ({ fields, queries }: Props) => {
+const FeedbackTableDownload = (props: Props) => {
+  const { fields, queries, disabled } = props;
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -60,7 +62,7 @@ const FeedbackTableDownload = ({ fields, queries }: Props) => {
 
   return (
     <Dropdown>
-      <DropdownTrigger>
+      <DropdownTrigger disabled={disabled}>
         <Icon name="RiDownload2Line" />
         Export
       </DropdownTrigger>
