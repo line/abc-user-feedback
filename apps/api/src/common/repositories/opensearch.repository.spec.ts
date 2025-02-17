@@ -90,6 +90,7 @@ describe('Opensearch Repository Test suite', () => {
                 ngram_analyzer: {
                   filter: ['lowercase', 'asciifolding', 'cjk_width'],
                   tokenizer: 'ngram_tokenizer',
+                  type: 'custom',
                 },
               },
               tokenizer: {
