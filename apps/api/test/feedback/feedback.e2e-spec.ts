@@ -132,15 +132,15 @@ describe('AppController (e2e)', () => {
           body: Record<string, any> & { issueNames?: string[] };
         }) => {
           expect(body.id).toBeDefined();
-          const esResult = await osService.get<OpenSearchResponse>({
+          const esResult = await osService.get({
             id: body.id as string,
             index: channel.id.toString(),
           });
 
-          delete esResult.body._source[
+          delete esResult.body._source?.[
             (fields.find((v) => v.name === 'createdAt') ?? { id: 0 }).id
           ];
-          expect(toApi(dto, fields)).toMatchObject(esResult.body._source);
+          expect(toApi(dto, fields)).toMatchObject(esResult.body._source ?? {});
         },
       );
   });
@@ -194,12 +194,12 @@ describe('AppController (e2e)', () => {
       .send({ value: newValue })
       .expect(200)
       .then(async () => {
-        const { body } = await osService.get<OpenSearchResponse>({
+        const { body } = await osService.get({
           id: feedbackId.toString(),
           index: channel.id.toString(),
         });
 
-        expect(body._source[targetField.id]).toEqual(
+        expect(body._source?.[targetField.id]).toEqual(
           targetField.format === FieldFormatEnum.select ?
             ((targetField.options ?? []).find((v) => v.name === newValue) ??
               { id: 0 }.id)

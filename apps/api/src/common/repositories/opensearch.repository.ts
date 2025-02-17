@@ -66,6 +66,7 @@ export class OpensearchRepository {
           analysis: {
             analyzer: {
               ngram_analyzer: {
+                type: 'custom',
                 filter: ['lowercase', 'asciifolding', 'cjk_width'],
                 tokenizer: 'ngram_tokenizer',
               },
@@ -105,12 +106,9 @@ export class OpensearchRepository {
     });
     if (!existence.body) throw new NotFoundException('index is not found');
 
-    const response =
-      await this.opensearchClient.indices.getMapping<OpenSearchMappingResponse>(
-        {
-          index: indexName,
-        },
-      );
+    const response = await this.opensearchClient.indices.getMapping({
+      index: indexName,
+    });
 
     const mappingKeys = Object.keys(
       response.body[indexName].mappings.properties as object,
@@ -127,7 +125,7 @@ export class OpensearchRepository {
       refresh: true,
     });
 
-    return { id: body._id as number };
+    return { id: body._id as unknown as number };
   }
 
   async getData(dto: GetDataDto) {
@@ -137,7 +135,7 @@ export class OpensearchRepository {
       sort.push('_id:desc');
     }
     try {
-      const { body } = await this.opensearchClient.search<OpenSearchResponse>({
+      const { body } = await this.opensearchClient.search({
         index,
         from: (page - 1) * limit,
         size: limit,
@@ -149,7 +147,10 @@ export class OpensearchRepository {
         items: body.hits.hits.map((v) => ({
           ...v._source,
         })) as Record<string, any>[],
-        total: body.hits.total.value,
+        total:
+          typeof body.hits.total === 'number' ?
+            body.hits.total
+          : (body.hits.total?.value ?? 0),
       };
     } catch (error) {
       if (error instanceof errors.OpenSearchClientError) {
@@ -167,14 +168,14 @@ export class OpensearchRepository {
     if (sort.length === 0) sort.push('_id:desc');
 
     if (scrollId) {
-      const { body } = await this.opensearchClient.scroll<OpenSearchResponse>({
+      const { body } = await this.opensearchClient.scroll({
         scroll_id: scrollId,
         scroll: '1m',
       });
       return this.convertToScrollData(body);
     }
 
-    const { body } = await this.opensearchClient.search<OpenSearchResponse>({
+    const { body } = await this.opensearchClient.search({
       index,
       size,
       sort,
@@ -184,7 +185,7 @@ export class OpensearchRepository {
     return this.convertToScrollData(body);
   }
 
-  private convertToScrollData(body: OpenSearchResponse) {
+  private convertToScrollData(body) {
     return {
       data: body.hits.hits.map((v) => ({
         ...v._source,

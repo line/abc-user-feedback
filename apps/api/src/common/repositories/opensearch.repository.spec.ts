@@ -20,6 +20,7 @@ import {
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import type { Client } from '@opensearch-project/opensearch';
+import type { TextProperty } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 
 import { getMockProvider } from '@/test-utils/util-functions';
 import { CreateDataDto, PutMappingsDto } from './dtos';
@@ -55,7 +56,7 @@ const COMPLICATE_JSON = {
 const MAPPING_JSON = {
   KEY1: {
     type: 'text',
-  },
+  } as TextProperty,
 };
 
 describe('Opensearch Repository Test suite', () => {

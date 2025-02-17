@@ -21,6 +21,7 @@ import type { TestingModule } from '@nestjs/testing';
 import { Test } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { Client } from '@opensearch-project/opensearch';
+import type { Indices_Get_Response } from '@opensearch-project/opensearch/api/indices/get';
 import request from 'supertest';
 import type { DataSource, Repository } from 'typeorm';
 
@@ -164,17 +165,15 @@ describe('AppController (e2e)', () => {
             }),
         );
 
-        const result: { body: OpenSearchIndex[] } = await osService.indices.get(
-          {
-            index: body.id.toString(),
-          },
-        );
+        const result: Indices_Get_Response = await osService.indices.get({
+          index: body.id.toString(),
+        });
         expect(Object.keys(result.body)[0]).toEqual(body.id);
 
         Object.entries<Record<string, { type: string }>>(
-          result.body[body.id].mappings.properties as ArrayLike<
-            Record<string, { type: string }>
-          >,
+          result.body[body.id].mappings?.properties as
+            | Record<string, Record<string, { type: string }>>
+            | ArrayLike<Record<string, { type: string }>>,
         ).forEach(([fieldId, { type }]) => {
           const field =
             fields.find(({ id }) => id === parseInt(fieldId)) ??
