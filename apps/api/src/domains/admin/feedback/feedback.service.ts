@@ -240,6 +240,7 @@ export class FeedbackService {
 
     do {
       if (this.configService.get('opensearch.use')) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { data, scrollId } = await this.feedbackOSService.scroll({
           channelId,
           query,
@@ -326,6 +327,7 @@ export class FeedbackService {
 
     do {
       if (this.configService.get('opensearch.use')) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { data, scrollId } = await this.feedbackOSService.scroll({
           channelId: channelId,
           query: query,
@@ -335,6 +337,7 @@ export class FeedbackService {
           scrollId: currentScrollId as unknown as string,
         });
         feedbacks = data;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         currentScrollId = scrollId;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelId({

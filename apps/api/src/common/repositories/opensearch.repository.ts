@@ -13,6 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Inject,
   Injectable,
@@ -31,23 +35,6 @@ import type {
   UpdateDataDto,
 } from './dtos';
 import { LargeWindowException } from './large-window.exception';
-
-interface OpenSearchResponse {
-  hits: {
-    hits: { _source: Record<string, any> }[];
-    total: { value: number };
-  };
-  _scroll_id: number;
-}
-
-type OpenSearchMappingResponse = Record<
-  string,
-  {
-    mappings: {
-      properties: Record<string, any>;
-    };
-  }
->;
 
 @Injectable()
 export class OpensearchRepository {
@@ -90,8 +77,10 @@ export class OpensearchRepository {
   }
 
   async putMappings({ index, mappings }: PutMappingsDto) {
-    const { body } = await this.opensearchClient.indices.exists({ index });
-    if (!body) throw new NotFoundException('index is not found');
+    const { statusCode } = await this.opensearchClient.indices.exists({
+      index,
+    });
+    if (statusCode !== 200) throw new NotFoundException('index is not found');
 
     return await this.opensearchClient.indices.putMapping({
       index,
@@ -104,7 +93,8 @@ export class OpensearchRepository {
     const existence = await this.opensearchClient.indices.exists({
       index: indexName,
     });
-    if (!existence.body) throw new NotFoundException('index is not found');
+    if (existence.statusCode !== 200)
+      throw new NotFoundException('index is not found');
 
     const response = await this.opensearchClient.indices.getMapping({
       index: indexName,
@@ -225,6 +215,6 @@ export class OpensearchRepository {
       body: { query },
     });
 
-    return body.count as number;
+    return body.count;
   }
 }

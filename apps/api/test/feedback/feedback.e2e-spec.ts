@@ -36,11 +36,6 @@ import { ProjectService } from '@/domains/admin/project/project/project.service'
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
 import { clearEntities } from '@/test-utils/util-functions';
 
-interface OpenSearchResponse {
-  _source: Record<string, any>;
-  total: { value: number };
-}
-
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 

@@ -50,11 +50,6 @@ import {
   signInTestUser,
 } from '@/test-utils/util-functions';
 
-interface OpenSearchResponse {
-  _source: Record<string, any>;
-  total: { value: number };
-}
-
 describe('FeedbackController (integration)', () => {
   let app: INestApplication;
 

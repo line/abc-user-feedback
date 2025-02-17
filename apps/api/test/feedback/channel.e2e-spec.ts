@@ -51,12 +51,6 @@ import {
   DEFAULT_FIELD_COUNT,
 } from '@/test-utils/util-functions';
 
-interface OpenSearchIndex {
-  mappings: {
-    properties: ArrayLike<Record<string, { type: string }>>;
-  };
-}
-
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
