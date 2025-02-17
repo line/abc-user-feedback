@@ -461,6 +461,24 @@
     "field-setting-get-out": "まだ保存されていないフィールド情報があります。 それでも出られますか。"
   },
   "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "アカウント作成",
+        "button": {
+          "request-auth-code": "認証コード要請",
+          "verify-auth-code": "認証コード確認"
+        }
+      },
+      "reset-password": {
+        "title": "パスワードリセット",
+        "button": { "send-email": "メール送信" }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "パスワードリセット"
+      }
+    },
     "button": {
       "name": {
         "create": "{{name}}作成",
@@ -537,8 +555,10 @@
       "in-progress": "進行中",
       "continue": "続きから再開",
       "test-connection-failed": "接続テストに失敗しました",
-      "all-domains-allow": "すべてのドメインを許可します。",
-      "request-email-auth": "認証が要求されました。"
+      "all-email-domains-allow": "すべてのEmailドメインを許可します。",
+      "request-email-auth": "認証が要求されました。",
+      "all-image-url-allow": "すべてのImage URLを許可します。",
+      "select-project": "Projectを選択してください。"
     },
     "create-tenant": {
       "title": "Tenant 作成",

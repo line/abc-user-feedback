@@ -473,6 +473,24 @@
     "field-setting-get-out": "You have some field information that has not been saved. You can still leave if you want."
   },
   "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "Create an Account",
+        "button": {
+          "request-auth-code": "Request Code",
+          "verify-auth-code": "Verify Code"
+        },
+        "reset-password": {
+          "title": "Reset Password",
+          "button": { "send-email": "Send Email" }
+        }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "Reset Password"
+      }
+    },
     "button": {
       "name": {
         "create": "Create {{name}}",
@@ -550,8 +568,10 @@
       "in-progress": "In Progress",
       "continue": "Continue",
       "test-connection-failed": "Test Connection failed",
-      "all-domains-allow": "All domains are allowed.",
-      "request-email-auth": "Authentication has been requested."
+      "all-email-domains-allow": "All email domains are allowed.",
+      "request-email-auth": "Authentication has been requested.",
+      "all-image-url-allow": "All Image URLs are allowed.",
+      "select-project": "Please select a project."
     },
     "create-tenant": {
       "title": "Tenant Creation",

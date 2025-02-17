@@ -473,6 +473,24 @@
     "field-setting-get-out": "Bitte beachten Sie, dass die Feldinformationen noch nicht gespeichert sind. Trotzdem würden Sie rausgehen."
   },
   "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "Konto erstellen",
+        "button": {
+          "request-auth-code": "Code anfordern",
+          "verify-auth-code": "Code überprüfen"
+        },
+        "reset-password": {
+          "title": "Passwort zurücksetzen",
+          "button": { "send-email": "E-Mail senden" }
+        }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "Passwort zurücksetzen"
+      }
+    },
     "button": {
       "name": {
         "create": "{{name}} erstellen",
@@ -549,8 +567,10 @@
       "in-progress": "In Bearbeitung",
       "continue": "Fortfahren",
       "test-connection-failed": "Verbindungstest fehlgeschlagen",
-      "all-domains-allow": "Alle Domains sind erlaubt.",
-      "request-email-auth": "Authentifizierung wurde angefordert."
+      "all-email-domains-allow": "Alle E-Mail-Domains sind erlaubt.",
+      "request-email-auth": "Authentifizierung wurde angefordert.",
+      "all-image-url-allow": "Alle Image-URLs sind erlaubt.",
+      "select-project": "Bitte wählen Sie ein Projekt aus."
     },
     "create-tenant": {
       "title": "Tenant-Erstellung",

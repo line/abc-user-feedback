@@ -473,6 +473,24 @@
     "field-setting-get-out": "还有未保存的字段信息。 你还是要出去吗。"
   },
   "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "创建账户",
+        "button": {
+          "request-auth-code": "请求码",
+          "verify-auth-code": "验证码"
+        }
+      },
+      "reset-password": {
+        "title": "重置密码",
+        "button": { "send-email": "发送邮件" }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "重置密码"
+      }
+    },
     "button": {
       "name": {
         "create": "创建{{name}}",
@@ -549,8 +567,10 @@
       "in-progress": "进行中",
       "continue": "继续",
       "test-connection-failed": "连接测试失败",
-      "all-domains-allow": "允许所有域。",
-      "request-email-auth": "认证请求已发送到您的邮箱。"
+      "all-email-domains-allow": "允许所有电子邮件域。",
+      "request-email-auth": "认证请求已发送到您的邮箱。",
+      "all-image-url-allow": "允许所有图片URL。",
+      "select-project": "选择Project"
     },
     "create-tenant": {
       "title": "租户设置",

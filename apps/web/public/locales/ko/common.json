@@ -484,9 +484,6 @@
         "title": "비밀번호 변경"
       }
     },
-    "sign-in": {
-      "reset-password": "비밀번호 재설정"
-    },
     "button": {
       "name": {
         "create": "{{name}} 생성",
@@ -568,7 +565,8 @@
       "test-connection-failed": "연동 테스트에 실패했습니다.",
       "all-email-domains-allow": "모든 이메일 도메인을 허용합니다.",
       "request-email-auth": "인증이 요청되었습니다.",
-      "all-image-url-allow": "모든 Image URL의 도메인을 허용합니다."
+      "all-image-url-allow": "모든 Image URL의 도메인을 허용합니다.",
+      "select-project": "프로젝트를 선택해 주세요."
     },
     "create-tenant": {
       "tenant": {
