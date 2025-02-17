@@ -44,22 +44,14 @@ interface Props {
   feedback: Feedback;
   onClickDelete?: () => void;
   updateFeedback?: (feedback: Feedback) => void;
-  projectId: number;
 }
 
 const FeedbackDetailSheet = (props: Props) => {
-  const {
-    close,
-    feedback,
-    fields,
-    isOpen,
-    onClickDelete,
-    updateFeedback,
-    projectId,
-  } = props;
+  const { close, feedback, fields, isOpen, onClickDelete, updateFeedback } =
+    props;
   const { t } = useTranslation();
 
-  const perms = usePermissions(projectId);
+  const perms = usePermissions();
   const [currentFeedback, setCurrentFeedback] = useState(feedback);
   const [mode, setMode] = useState<'edit' | 'view'>('view');
   const onClickCancel = () => {

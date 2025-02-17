@@ -320,7 +320,6 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           close={() => setOpenFeedbackId(null)}
           feedback={currentFeedback}
           fields={fields}
-          projectId={projectId}
         />
       )}
     </div>
