@@ -135,9 +135,6 @@ const IssueCell: React.FC<IProps> = (props) => {
       className="flex flex-wrap items-center gap-1 rounded"
       onClick={(e) => e.stopPropagation()}
     >
-      {currentIssues.map((issue) => (
-        <IssueBadge key={issue.id} name={issue.name} status={issue.status} />
-      ))}
       <Combobox>
         <ComboboxTrigger asChild>{children}</ComboboxTrigger>
         <ComboboxContent>
@@ -166,7 +163,9 @@ const IssueCell: React.FC<IProps> = (props) => {
                     name={issue.name}
                     status={issue.status}
                   />
-                  <IssueCellEditCombobox issue={issue} />
+                  <span className="text-neutral-tertiary text-small-normal">
+                    Remove
+                  </span>
                 </ComboboxItem>
               ))}
             </ComboboxGroup>
@@ -217,13 +216,16 @@ const IssueCell: React.FC<IProps> = (props) => {
                 >
                   <span>{inputValue}</span>
                   <span className="text-neutral-tertiary text-small-normal">
-                    Create Issue
+                    Create
                   </span>
                 </div>
               )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>
+      {currentIssues.map((issue) => (
+        <IssueBadge key={issue.id} name={issue.name} status={issue.status} />
+      ))}
     </div>
   );
 };

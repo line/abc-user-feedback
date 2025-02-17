@@ -39,7 +39,7 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
         }
       >
         <RadioCard value="GOOGLE" icon="RiGoogleFill" title="Google Login" />
-        <RadioCard value="CUSTOM" icon="RiMailLine" title="Custom Login" />
+        <RadioCard value="CUSTOM" icon="RiToolsFill" title="Custom Login" />
       </RadioCardGroup>
       <div className="flex flex-col gap-4">
         <TextInput

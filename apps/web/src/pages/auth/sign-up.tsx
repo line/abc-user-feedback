@@ -47,7 +47,7 @@ const SignUpPage: NextPageWithLayout = () => {
 
   return (
     <AnonymousTemplate
-      title={t('auth.sign-up.title')}
+      title={t('v2.auth.sign-up.title')}
       image="/assets/images/sign-up.svg"
     >
       <SignUpWithEmailForm

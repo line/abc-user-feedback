@@ -30,7 +30,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
     <div className="flex flex-col gap-4">
       <TextInput
         type="password"
-        label={t('input.label.password')}
+        label="Current Password"
         placeholder={t('input.placeholder.password')}
         error={formState.errors.password?.message}
         {...register('password')}
@@ -38,7 +38,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       />
       <TextInput
         type="password"
-        label={t('main.profile.label.new-password')}
+        label="New Password"
         placeholder={t('main.profile.placeholder.new-password')}
         error={formState.errors.newPassword?.message}
         {...register('newPassword')}
@@ -46,7 +46,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       />
       <TextInput
         type="password"
-        label={t('main.profile.label.confirm-new-password')}
+        label="Confirm New Password"
         placeholder={t('main.profile.placeholder.confirm-new-password')}
         error={formState.errors.confirmNewPassword?.message}
         {...register('confirmNewPassword')}

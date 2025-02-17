@@ -15,30 +15,31 @@
  */
 
 import { SelectInput } from '../inputs';
-import type { TableFilterField } from './table-filter-popover.type';
+import type {
+  TableFilter,
+  TableFilterCondition,
+  TableFilterField,
+} from './table-filter-popover.type';
 
 interface Props {
-  filterField: TableFilterField;
+  field: TableFilterField;
+  filter: TableFilter;
+  onChange: (value: TableFilterCondition) => void;
 }
 
-const TableFilterPopoverSelectOperator = (props: Props) => {
-  const { filterField } = props;
-  const operatorOptions = {
-    text: [{ value: 'contains', label: 'Contains' }],
-    keyword: [{ value: 'is', label: 'Is' }],
-    number: [{ value: 'is', label: 'Is' }],
-    date: [{ value: 'between', label: 'Between' }],
-    select: [{ value: 'is', label: 'Is' }],
-    multiSelect: [{ value: 'is', label: 'Is' }],
-    issue: [{ value: 'is', label: 'Is' }],
-  };
+const TableFilterPopoverSelectCondition = (props: Props) => {
+  const { field, onChange, filter } = props;
 
   return (
     <SelectInput
-      value={operatorOptions[filterField.format][0]?.value}
-      options={operatorOptions[filterField.format]}
+      value={filter.condition}
+      options={field.matchType.map((type) => ({
+        label: type,
+        value: type,
+      }))}
+      onChange={(value) => onChange(value as TableFilterCondition)}
     />
   );
 };
 
-export default TableFilterPopoverSelectOperator;
+export default TableFilterPopoverSelectCondition;

@@ -20,6 +20,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
 import {
+  Badge,
   Dropdown,
   DropdownContent,
   DropdownItem,
@@ -90,12 +91,9 @@ const IssueCellEditCombobox = (props: Props) => {
   return (
     <Dropdown>
       <DropdownTrigger asChild>
-        <span
-          className="text-neutral-tertiary text-small-normal"
-          onClick={(e) => e.stopPropagation()}
-        >
+        <Badge onClick={(e) => e.stopPropagation()} variant="subtle">
           Edit
-        </span>
+        </Badge>
       </DropdownTrigger>
       <DropdownContent onClick={(e) => e.stopPropagation()} side="right">
         <div className="border-b">

@@ -47,45 +47,12 @@ const toQuery = (
     const result = data?.items.find((v) => v.name === value);
     return result ? [result.id] : [];
   },
-  keyword: (value) => value,
-  multiSelect: (value) => value,
+  string: (value) => value,
   select: (value) => value,
-  text: (value) => value,
   date: (value) => value,
+  ticket: (value) => value,
+  multiSelect: (value) => value,
 });
-
-// const toTableFilter = async (
-//   projectId: number,
-//   fields: Field[],
-//   value: Record<string, unknown>,
-// ): Promise<TableFilter> => {
-//   const fieldKey = Object.keys(value).find((v) => v !== 'condition');
-//   if (!fieldKey) throw new Error('Field key not found');
-//   let currentValue = value[fieldKey];
-
-//   if (fieldKey === 'issueIds') {
-//     if (!currentValue) throw new Error('Issue not found');
-//     const { data } = await client.get({
-//       path: '/api/admin/projects/{projectId}/issues/{issueId}',
-//       pathParams: {
-//         projectId,
-//         issueId: Number((currentValue as string[])[0]),
-//       },
-//     });
-//     currentValue = data.id;
-//   }
-
-//   const field = fields.find((f) => f.key === fieldKey);
-//   if (!field) throw new Error('Field not found');
-
-//   return {
-//     key: fieldKey,
-//     name: field.name,
-//     format: field.format as TableFilterFieldFotmat,
-//     value: currentValue,
-//     condition: value.condition as TableFilterCondition,
-//   };
-// };
 
 const DEFAULT_DATE_RANGE = {
   startDate: dayjs()
@@ -179,15 +146,6 @@ const useFeedbackQueryConverter = (input: {
         }
       : null;
   }, [queries]);
-
-  // const updateQueries = async (queries: Record<string, unknown>[]) => {
-  //   const result = await Promise.all(
-  //     queries.map(async (query) => toTableFilter(projectId, fields, query)),
-  //   );
-
-  //   await updateTableFilters(result);
-  //   await setQueries(queries);
-  // };
 
   return {
     queries,

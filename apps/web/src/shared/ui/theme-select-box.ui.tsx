@@ -18,8 +18,8 @@ import { useTheme } from 'next-themes';
 
 import {
   Dropdown,
+  DropdownCheckboxItem,
   DropdownContent,
-  DropdownItem,
   DropdownTrigger,
   Icon,
 } from '@ufb/react';
@@ -27,7 +27,7 @@ import {
 import { firstLeterPascal } from '../utils';
 
 const ThemeSelectBox: React.FC = () => {
-  const { themes, setTheme } = useTheme();
+  const { themes, setTheme, theme: currentTheme } = useTheme();
 
   return (
     <Dropdown>
@@ -36,9 +36,13 @@ const ThemeSelectBox: React.FC = () => {
       </DropdownTrigger>
       <DropdownContent align="end">
         {themes.map((theme) => (
-          <DropdownItem key={theme} onClick={() => setTheme(theme)}>
+          <DropdownCheckboxItem
+            key={theme}
+            onClick={() => setTheme(theme)}
+            checked={theme === currentTheme}
+          >
             {firstLeterPascal(theme)}
-          </DropdownItem>
+          </DropdownCheckboxItem>
         ))}
       </DropdownContent>
     </Dropdown>

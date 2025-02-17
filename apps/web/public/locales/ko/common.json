@@ -466,6 +466,27 @@
     "field-setting-get-out": "아직 저장되지 않은 필드 정보가 있어요. 그래도 나가시겠어요."
   },
   "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "회원가입",
+        "button": {
+          "request-auth-code": "인증 요청",
+          "verify-auth-code": "인증 확인"
+        }
+      },
+      "reset-password": {
+        "title": "비밀번호 재설정",
+        "button": { "send-email": "이메일 보내기" }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "비밀번호 변경"
+      }
+    },
+    "sign-in": {
+      "reset-password": "비밀번호 재설정"
+    },
     "button": {
       "name": {
         "create": "{{name}} 생성",
@@ -515,12 +536,14 @@
         "description": "중간에 나가도 나중에 이어서 진행할 수 있습니다. "
       },
       "no-project-in-profile-page": {
-        "title": "이런...",
-        "description": "{{name}}님. 현재 등록된 Project 정보가 없습니다. \n 등록 대상 Project 관리자에게 Member 등록을 요청하거나 또는 문의해 보세요."
+        "title": "소속된 Project가 없습니다.",
+        "description": "아직 소속된 Project가 없습니다.\nProject 관리자에게 Member 등록을 요청하거나 또는 문의해 보세요."
       },
-      "no-project-in-project-creation-page": {
+      "no-project-dialog-in-project-creation-page": {
         "title": "환영합니다!",
-        "description": "User Feedback은 Tenant-Project-Channel 계층 구조를 가지고 있습니다. 피드백을 수집 또는 관리하기 위해서는 수집 대상의 Project와 수집 방식의 Channel을 이어서 생성해 주셔야 합니다. "
+        "step1-description": "ABC User Feedback에서는 Channel > Project > Tenant 구조로 피드백을 관리합니다. 그래서 Project와 Channel을 모두 생성해 주셔야 합니다.",
+        "step2-description": "Project는 피드백 대상이 되는 프로덕트를 의미합니다. 관리하고 있는 프로덕트 정보를 기준으로 Project를 생성하면 좋습니다.",
+        "step3-description": "Channel은 피드백 수집 방식을 의미합니다. 담당하고 있는 프로덕트에서 어떤 방식으로 피드백을 수집하고 있는지를 기준으로 Channel을 생성하면 좋습니다. "
       }
     },
     "text": {
@@ -543,14 +566,23 @@
       "in-progress": "진행중",
       "continue": "이어서 하기",
       "test-connection-failed": "연동 테스트에 실패했습니다.",
-      "all-domains-allow": "모든 도메인을 허용합니다.",
-      "request-email-auth": "인증이 요청되었습니다."
+      "all-email-domains-allow": "모든 이메일 도메인을 허용합니다.",
+      "request-email-auth": "인증이 요청되었습니다.",
+      "all-image-url-allow": "모든 Image URL의 도메인을 허용합니다."
     },
     "create-tenant": {
-      "title": "Tenant 생성",
-      "complete-title": "Tenant 생성 완료",
-      "description": "ABC User Feedback을 사용할 회사 또는 조직의 이름을 입력해 주세요.",
-      "complete-description": "Tenant 설정을 완료했습니다. 생성한 마스터 계정으로 첫 로그인을 시도해 보세요."
+      "tenant": {
+        "title": "Tenant 생성",
+        "description": "ABC User Feedback을 관리할 회사/조직/팀 이름을 입력해 주세요."
+      },
+      "user": {
+        "title": "마스터 계정 생성",
+        "description": "최초 로그인을 위해서는 마스터 계정을 생성해 주셔야 합니다. "
+      },
+      "final": {
+        "title": "Tenant 생성 완료",
+        "description": "Tenant 생성이 완료되었어요.\n이제 마스터 계정으로 로그인을 시도해 보세요."
+      }
     },
     "placeholder": {
       "select": "선택해주세요.",

@@ -45,10 +45,10 @@ import {
 
 import { cn } from '@/shared/utils';
 
+import SortingTableHead from '../sorting-table-head.ui';
 import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
-import TableSortIcon from './table-sort-icon';
 
 interface IProps<T> {
   table: ReactTable<T>;
@@ -67,7 +67,6 @@ const BasicTable = <T,>(props: IProps<T>) => {
   const {
     table,
     emptyCaption,
-    resiable = false,
     isLoading = false,
     createButton,
     className,
@@ -115,34 +114,39 @@ const BasicTable = <T,>(props: IProps<T>) => {
         onDragEnd={handleDragEnd}
       >
         <Table
-          className={cn('min-w-full', className, {
+          className={cn('min-w-full table-fixed', className, {
             'h-full': dataIds.length === 0,
           })}
           style={{ width: table.getCenterTotalSize() }}
         >
           <TableHeader>
-            <TableRow>
+            <TableRow className="hover:bg-inherit">
               {table.getFlatHeaders().map((header, i) => (
                 <TableHead
                   key={i}
                   style={{ width: header.getSize() }}
-                  className={cn({ 'hover:bg-inherit': resiable })}
+                  className="hover:bg-inherit"
                 >
                   <div
                     className={cn('flex flex-nowrap items-center', {
                       'overflow-hidden text-ellipsis':
-                        resiable && header.column.getCanResize(),
+                        header.column.getCanResize(),
                     })}
                   >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
+                    {header.column.getCanSort() ?
+                      <SortingTableHead column={header.column}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </SortingTableHead>
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )
+                    }
                   </div>
-                  {resiable && header.column.getCanResize() && (
+                  {header.column.getCanResize() && (
                     <TableResizer header={header} table={table} />
                   )}
                 </TableHead>

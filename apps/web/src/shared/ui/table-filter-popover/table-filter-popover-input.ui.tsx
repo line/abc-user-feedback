@@ -15,83 +15,183 @@
  */
 
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/react';
+import {
+  Calendar,
+  Icon,
+  InputBox,
+  InputField,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  TextInput,
+} from '@ufb/react';
 
 import type { DateRangeType } from '@/shared/types';
 import { IssueSelectBox } from '@/entities/issue';
 
 import DateRangePicker from '../date-range-picker';
-import { SelectSearchInput } from '../inputs';
-import type { TableFilterField } from './table-filter-popover.type';
+import { SelectInput, SelectSearchInput } from '../inputs';
+import type {
+  TableFilter,
+  TableFilterField,
+} from './table-filter-popover.type';
 
 interface Props {
-  filterField: TableFilterField;
+  filterfieid: TableFilterField;
+  filter: TableFilter;
   onChange: (value?: unknown) => void;
-  value?: unknown;
 }
 
 const TableFilterPopoverInput = (props: Props) => {
-  const { filterField, onChange, value } = props;
+  const { filter, onChange, filterfieid } = props;
+  const value = filter.value;
+  const { t } = useTranslation();
 
   return (
     <>
-      {filterField.format === 'text' && (
-        <TextInput
-          onChange={(e) => onChange(e.currentTarget.value)}
-          value={value as string | undefined}
-        />
+      {filterfieid.format === 'ticket' && (
+        <InputField>
+          <InputBox className="input input-small input-radius-medium">
+            {filterfieid.ticketKey && <span>{filterfieid.ticketKey} - </span>}
+            <input
+              placeholder={t('v2.placeholder.text')}
+              onChange={(e) => onChange(e.currentTarget.value)}
+              value={value as string | undefined}
+            />
+          </InputBox>
+        </InputField>
       )}
-      {filterField.format === 'keyword' && (
-        <TextInput
-          onChange={(e) => onChange(e.currentTarget.value)}
-          value={value as string | undefined}
-        />
+      {filterfieid.format === 'string' && (
+        <InputField>
+          <TextInput
+            placeholder={t('v2.placeholder.text')}
+            onChange={(e) => onChange(e.currentTarget.value)}
+            value={(value as string | undefined) ?? ''}
+          />
+        </InputField>
       )}
-      {filterField.format === 'number' && (
-        <TextInput
-          onChange={(e) => onChange(Number(e.currentTarget.value))}
-          value={value as number | undefined}
-          type="number"
-        />
+      {filterfieid.format === 'number' && (
+        <InputField>
+          <TextInput
+            placeholder={t('v2.placeholder.text')}
+            onChange={(e) => onChange(Number(e.currentTarget.value))}
+            value={(value as number | undefined) ?? ''}
+            type="number"
+          />
+        </InputField>
       )}
-      {filterField.format === 'date' && (
-        <DateRangePicker
-          onChange={(v) =>
-            onChange({
-              gte: dayjs(v?.startDate).startOf('day').toISOString(),
-              lt: dayjs(v?.endDate).endOf('day').toISOString(),
-            })
-          }
-          value={
-            (value ?
-              {
-                startDate: dayjs(
-                  (value as { gte: string; lt: string }).gte,
-                ).toDate(),
-                endDate: dayjs(
-                  (value as { gte: string; lt: string }).lt,
-                ).toDate(),
+      {filterfieid.format === 'date' && (
+        <>
+          {filter.condition === 'BETWEEN' ?
+            <DateRangePicker
+              onChange={(v) =>
+                onChange({
+                  gte: dayjs(v?.startDate).startOf('day').toISOString(),
+                  lt: dayjs(v?.endDate).endOf('day').toISOString(),
+                })
               }
-            : null) as DateRangeType
+              value={
+                (value ?
+                  {
+                    startDate: dayjs(
+                      (value as { gte: string; lt: string }).gte,
+                    ).toDate(),
+                    endDate: dayjs(
+                      (value as { gte: string; lt: string }).lt,
+                    ).toDate(),
+                  }
+                : null) as DateRangeType
+              }
+            >
+              <InputField className="w-full">
+                <InputBox>
+                  <Icon
+                    name="RiCalendarEventLine"
+                    className="absolute-y-center absolute left-2"
+                    size={16}
+                  />
+                  <TextInput
+                    placeholder={t('v2.placeholder.text')}
+                    className="pl-7"
+                    value={
+                      value ?
+                        `${dayjs((value as { gte: string; lt: string }).gte).format('YYYY-MM-DD')} ~ ${dayjs((value as { gte: string; lt: string }).lt).format('YYYY-MM-DD')}`
+                      : ''
+                    }
+                  />
+                </InputBox>
+              </InputField>
+            </DateRangePicker>
+          : <Popover>
+              <PopoverTrigger>
+                <InputField>
+                  <InputBox>
+                    <Icon
+                      name="RiCalendarEventLine"
+                      className="absolute-y-center absolute left-2"
+                      size={16}
+                    />
+                    <TextInput
+                      placeholder={t('v2.placeholder.text')}
+                      className="pl-7"
+                      value={
+                        value ? dayjs(value as string).format('YYYY-MM-DD') : ''
+                      }
+                    />
+                  </InputBox>
+                </InputField>
+              </PopoverTrigger>
+              <PopoverContent>
+                <Calendar
+                  mode="single"
+                  onSelect={(date) => onChange(dayjs(date).toISOString())}
+                  selected={dayjs(value as string).toDate()}
+                />
+              </PopoverContent>
+            </Popover>
           }
-        />
+        </>
       )}
-      {(filterField.format === 'select' ||
-        filterField.format === 'multiSelect') && (
+      {filterfieid.format === 'select' && (
         <SelectSearchInput
-          options={
-            filterField.options?.map((option) => ({
-              label: option.name,
-              value: option.key,
-            })) ?? []
+          options={filterfieid.options.map((option) => ({
+            label: option.name,
+            value: option.name,
+          }))}
+          onChange={(value) =>
+            onChange(filterfieid.options.find((v) => v.name === value)?.key)
           }
-          onChange={onChange}
-          value={String(value)}
+          value={filterfieid.options.find((v) => v.key === value)?.name}
         />
       )}
-      {filterField.format === 'issue' && (
-        <IssueSelectBox onChange={onChange} value={String(value)} />
+      {filterfieid.format === 'multiSelect' && (
+        <SelectInput
+          type="multiple"
+          options={filterfieid.options.map((option) => ({
+            label: option.name,
+            value: option.name,
+          }))}
+          onValuesChange={(values) => {
+            onChange(
+              filterfieid.options
+                .filter((v) => values.includes(v.name))
+                .map((v) => v.key),
+            );
+          }}
+          values={filterfieid.options
+            .filter((v) =>
+              (value as (string | number)[] | undefined)?.includes(v.key),
+            )
+            .map((v) => v.name)}
+        />
+      )}
+      {filterfieid.format === 'issue' && (
+        <IssueSelectBox
+          onChange={onChange}
+          value={value ? String(value) : undefined}
+        />
       )}
     </>
   );

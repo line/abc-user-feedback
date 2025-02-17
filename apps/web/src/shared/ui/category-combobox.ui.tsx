@@ -160,7 +160,7 @@ const CategoryCombobox = (props: Props) => {
               >
                 <span>{inputValue}</span>
                 <span className="text-neutral-tertiary text-small-normal">
-                  Create Category
+                  Create
                 </span>
               </div>
             )}

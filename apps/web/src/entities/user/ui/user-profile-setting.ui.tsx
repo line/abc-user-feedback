@@ -99,7 +99,11 @@ const UserProfileSetting = () => {
       title={t('main.profile.profile-info')}
       action={
         <>
-          <Button variant="outline" onClick={openDeleteAccountDialog}>
+          <Button
+            variant="outline"
+            className="!text-tint-red"
+            onClick={openDeleteAccountDialog}
+          >
             <Icon name="RiDeleteBinFill" />
             {t('main.profile.button.delete-account')}
           </Button>

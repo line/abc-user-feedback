@@ -57,10 +57,12 @@ interface IProps {
     startDate: Date;
     endDate: Date;
   }[];
+  children?: React.ReactNode;
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
-  const { value, onChange, maxDate, minDate, maxDays, options } = props;
+  const { value, onChange, maxDate, minDate, maxDays, options, children } =
+    props;
 
   const { t, i18n } = useTranslation();
 
@@ -149,9 +151,9 @@ const DateRangePicker: React.FC<IProps> = (props) => {
     onChange(currentValue);
     setIsOpen(false);
   };
+
   const formatDate = (value: string) => {
-    // 숫자 이외의 문자는 제거
-    let cleanedValue = value.replace(/\D/g, '');
+    let cleanedValue = value.replace(/\D/g, ''); // 숫자 이외의 문자는 제거
     if (cleanedValue.length > 8) cleanedValue = cleanedValue.slice(0, 8);
 
     let formattedValue = '';
@@ -244,15 +246,18 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="gap-2">
-          <Icon name="RiCalendar2Fill" />
-          Date{' '}
-          {value && (
-            <Badge variant="subtle">
-              {`${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
-            </Badge>
-          )}
-        </Button>
+        {children ?
+          <button className="w-full">{children}</button>
+        : <Button variant="outline" className="gap-2">
+            <Icon name="RiCalendar2Fill" />
+            Date{' '}
+            {value && (
+              <Badge variant="subtle">
+                {`${dayjs(value.startDate).format('YYYY-MM-DD')} ~ ${dayjs(value.endDate).format('YYYY-MM-DD')}`}
+              </Badge>
+            )}
+          </Button>
+        }
       </PopoverTrigger>
       <PopoverContent className="p-2">
         <div className="flex">

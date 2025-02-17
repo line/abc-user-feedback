@@ -21,7 +21,12 @@ import { parseAsString, useQueryState } from 'nuqs';
 
 import { Button, Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
-import type { DateRangeType, TableFilter, TableFilterField } from '@/shared';
+import type {
+  DateRangeType,
+  TableFilter,
+  TableFilterField,
+  TableFilterOperator,
+} from '@/shared';
 import {
   DateRangePicker,
   ISSUES,
@@ -45,7 +50,9 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const [createdAtDateRange, setCreatedAtDateRange] =
     useState<DateRangeType>(null);
+
   const [filters, setFilters] = useState<TableFilter[]>([]);
+  const [operator, setOperator] = useState<TableFilterOperator>('AND');
   const queries = useMemo(() => {
     return filters.reduce(
       (acc, filter) => {
@@ -84,35 +91,42 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const filterFields: TableFilterField[] = [
     {
-      format: 'text',
+      format: 'string',
       key: 'name',
       name: 'Title',
+      matchType: ['CONTAINS', 'IS'],
     },
     {
-      format: 'text',
+      format: 'string',
       key: 'description',
       name: 'Description',
+      matchType: ['CONTAINS', 'IS'],
     },
     {
-      format: 'text',
+      format: 'string',
       key: 'category',
       name: 'Category',
+      matchType: ['CONTAINS', 'IS'],
     },
     {
-      format: 'select',
+      format: 'multiSelect',
       key: 'status',
       name: 'Status',
+      matchType: ['IS'],
       options: ISSUES(t).map((issue) => ({ key: issue.key, name: issue.name })),
     },
     {
-      format: 'keyword',
+      format: 'ticket',
       key: 'externalIssueId',
       name: 'Ticket',
+      matchType: ['IS'],
+      ticketKey: issueTracker?.data.ticketKey,
     },
     {
       format: 'date',
       key: 'updatedAt',
       name: 'Updated',
+      matchType: ['BETWEEN', 'IS'],
     },
   ];
   const openIssueFormDialog = () => {
@@ -143,8 +157,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            onSubmit={setFilters}
             filterFields={filterFields}
+            onSubmit={(f, o) => {
+              setFilters(f);
+              setOperator(o);
+            }}
             tableFilters={filters}
           />
           <ToggleGroup
@@ -172,6 +189,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           issueTracker={issueTracker?.data}
           createdAtDateRange={createdAtDateRange}
           queries={queries}
+          operator={operator}
         />
       )}
       {viewType === 'list' && (
@@ -179,6 +197,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           projectId={projectId}
           createdAtDateRange={createdAtDateRange}
           queries={queries}
+          operator={operator}
         />
       )}
     </>

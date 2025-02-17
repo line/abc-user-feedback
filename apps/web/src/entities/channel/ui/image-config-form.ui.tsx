@@ -138,41 +138,43 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
         <h5 className="text-title-h5">
           {t('title-box.image-storage-integration')}
         </h5>
-        <TextInput
-          label="Access Key ID"
-          placeholder={t('placeholder', { name: 'Access Key ID' })}
-          {...register('accessKeyId')}
-          error={formState.errors.accessKeyId?.message}
-          disabled={readOnly}
-        />
-        <TextInput
-          {...register('secretAccessKey')}
-          label="Secret Access Key"
-          placeholder={t('placeholder', { name: 'Secret Access Key' })}
-          error={formState.errors.secretAccessKey?.message}
-          disabled={readOnly}
-        />
-        <TextInput
-          {...register('endpoint')}
-          label="End Point"
-          placeholder={t('placeholder', { name: 'End Point' })}
-          error={formState.errors.endpoint?.message}
-          disabled={readOnly}
-        />
-        <TextInput
-          {...register('region')}
-          label="Region"
-          placeholder={t('placeholder', { name: 'Region' })}
-          error={formState.errors.region?.message}
-          disabled={readOnly}
-        />
-        <TextInput
-          {...register('bucket')}
-          label="Bucket Name"
-          placeholder={t('placeholder', { name: 'Bucket Name' })}
-          error={formState.errors.bucket?.message}
-          disabled={readOnly}
-        />
+        <div className="flex flex-col gap-4">
+          <TextInput
+            label="Access Key ID"
+            placeholder={t('placeholder', { name: 'Access Key ID' })}
+            {...register('accessKeyId')}
+            error={formState.errors.accessKeyId?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('secretAccessKey')}
+            label="Secret Access Key"
+            placeholder={t('placeholder', { name: 'Secret Access Key' })}
+            error={formState.errors.secretAccessKey?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('endpoint')}
+            label="End Point"
+            placeholder={t('placeholder', { name: 'End Point' })}
+            error={formState.errors.endpoint?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('region')}
+            label="Region"
+            placeholder={t('placeholder', { name: 'Region' })}
+            error={formState.errors.region?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('bucket')}
+            label="Bucket Name"
+            placeholder={t('placeholder', { name: 'Bucket Name' })}
+            error={formState.errors.bucket?.message}
+            disabled={readOnly}
+          />
+        </div>
         <div className="flex items-center gap-2">
           <Button
             type="button"
@@ -198,14 +200,15 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
             setInputValue={setInputDomain}
             onSelectValue={addDomainWhiteList}
             error={formState.errors.domainWhiteList?.message}
+            placeholder="example.com"
           >
-            Add Domain URL
+            Whitelist
           </ComboboxInputbox>
           <Divider orientation="vertical" className="h-5" variant="subtle" />
           <div className="flex items-center gap-2">
             {!domainWhiteList || domainWhiteList.length === 0 ?
               <p className="text-neutral-tertiary">
-                모든 Image URL의 도메인을 허용합니다.
+                {t('v2.text.all-image-url-allow')}
               </p>
             : domainWhiteList.map((domain, index) => (
                 <Badge

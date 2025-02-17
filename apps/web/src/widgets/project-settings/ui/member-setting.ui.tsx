@@ -13,22 +13,35 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Icon, toast } from '@ufb/react';
+import { Badge, Button, Icon, toast } from '@ufb/react';
 
+import type { TableFilter, TableFilterOperator } from '@/shared';
 import {
+  BasicTable,
   client,
+  DeleteDialog,
   SettingTemplate,
+  TableFilterPopover,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
 } from '@/shared';
 import type { MemberInfo } from '@/entities/member';
-import { MemberFormDialog, MemberTable } from '@/entities/member';
+import { MemberFormDialog } from '@/entities/member';
+import { useMembmerSearch } from '@/entities/member/lib';
+import { getMemberColumns } from '@/entities/member/member-columns';
+import { useUserSearch } from '@/entities/user';
 
 interface IProps {
   projectId: number;
@@ -42,11 +55,50 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const queryClient = useQueryClient();
   const overlay = useOverlay();
   const router = useRouter();
+  const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
+  const [operator, setOperator] = useState<TableFilterOperator>('AND');
 
-  const { data, refetch, isPending } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/members',
-    variables: { projectId, createdAt: 'ASC' },
+  const queries = useMemo(() => {
+    return tableFilters.reduce(
+      (acc, filter) => {
+        return acc.concat({
+          [filter.key]: filter.value,
+          condition: filter.condition,
+        });
+      },
+      [] as Record<string, unknown>[],
+    );
+  }, [tableFilters]);
+
+  const { data: userData } = useUserSearch({ limit: 1000 });
+
+  const columns = useMemo(
+    () => getMemberColumns(userData?.items ?? []),
+    [userData],
+  );
+
+  const { data, refetch, isPending } = useMembmerSearch(projectId, {
+    limit: 1000,
+    operator,
+    queries,
   });
+
+  const table = useReactTable({
+    columns,
+    data: data?.items ?? [],
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getRowId: (row) => String(row.id),
+  });
+  const { rowSelection } = table.getState();
+  const rowSelectionIds = useMemo(
+    () =>
+      Object.entries(rowSelection).reduce(
+        (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
+        [] as number[],
+      ),
+    [rowSelection],
+  );
 
   const { mutateAsync: createMember } = useOAIMutation({
     method: 'post',
@@ -79,6 +131,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+      table.resetRowSelection();
     },
   });
 
@@ -102,7 +155,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     if (!rolesData || !projectData) return;
     overlay.open(({ isOpen, close }) => (
       <MemberFormDialog
-        members={data?.members ?? []}
+        members={data?.items ?? []}
         onSubmit={({ role, user }) =>
           createMember({ roleId: role.id, userId: user.id })
         }
@@ -128,9 +181,23 @@ const MemberSetting: React.FC<IProps> = (props) => {
         onClickDelete={() => deleteMember({ memberId })}
         project={projectData}
         roles={rolesData.roles}
-        members={data?.members ?? []}
+        members={data?.items ?? []}
         deleteDisabled={!perms.includes('project_member_delete')}
         updateDisabled={!perms.includes('project_member_update')}
+      />
+    ));
+  };
+
+  const openDeleteDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          for (const memberId of rowSelectionIds) {
+            await deleteMember({ memberId });
+          }
+        }}
       />
     ));
   };
@@ -161,10 +228,69 @@ const MemberSetting: React.FC<IProps> = (props) => {
         </>
       }
     >
-      <MemberTable
+      <div className="flex justify-between">
+        <TableFilterPopover
+          filterFields={[
+            {
+              key: 'name',
+              format: 'string',
+              name: 'Name',
+              matchType: ['CONTAINS', 'IS'],
+            },
+            {
+              key: 'email',
+              format: 'string',
+              name: 'Email',
+              matchType: ['CONTAINS', 'IS'],
+            },
+            {
+              key: 'department',
+              format: 'string',
+              name: 'Department',
+              matchType: ['CONTAINS', 'IS'],
+            },
+            {
+              key: 'role',
+              format: 'select',
+              name: 'Role',
+              options:
+                rolesData?.roles.map((role) => ({
+                  key: role.name,
+                  name: role.name,
+                })) ?? [],
+              matchType: ['IS'],
+            },
+            {
+              key: 'createdAt',
+              format: 'date',
+              name: 'Joined',
+              matchType: ['IS', 'BETWEEN'],
+            },
+          ]}
+          onSubmit={(tableFilters, operator) => {
+            setTableFilters(tableFilters);
+            setOperator(operator);
+          }}
+          tableFilters={tableFilters}
+        />
+        {rowSelectionIds.length > 0 && (
+          <Button
+            className="!text-red-primary"
+            variant="outline"
+            onClick={openDeleteDialog}
+          >
+            <Icon name="RiDeleteBinFill" />
+            {t('v2.button.name.delete', { name: 'Member' })}
+            <Badge variant="subtle" className="!text-red-primary">
+              {rowSelectionIds.length}
+            </Badge>
+          </Button>
+        )}
+      </div>
+      <BasicTable
+        table={table}
         isLoading={isPending}
-        data={data?.members ?? []}
-        onClickRow={openUpdateMemberFormDialog}
+        emptyCaption={t('v2.text.no-data.member')}
         createButton={
           <Button
             disabled={!perms.includes('project_member_create')}
@@ -173,6 +299,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
             {t('v2.button.register')}
           </Button>
         }
+        onClickRow={openUpdateMemberFormDialog}
       />
     </SettingTemplate>
   );

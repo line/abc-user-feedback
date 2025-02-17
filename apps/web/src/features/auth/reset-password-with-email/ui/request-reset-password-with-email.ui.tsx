@@ -55,10 +55,9 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
         <TextInput
           type="email"
           label="Email"
-          placeholder={t('input.placeholder.email')}
+          placeholder={t('v2.placeholder.text')}
           error={formState.errors.email?.message}
           {...register('email')}
-          required
         />
       </div>
       <div className="flex flex-col gap-2">

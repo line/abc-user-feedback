@@ -43,6 +43,7 @@ interface Props extends React.PropsWithChildren {
     disabled?: boolean;
     onClick?: () => unknown;
     form?: string;
+    text?: string;
   };
   formState?: FormState<FieldValues>;
 }
@@ -96,7 +97,7 @@ const FormDialog: React.FC<Props> = (props) => {
             form={submitBtn.form}
             loading={formState?.isSubmitting}
           >
-            {t('v2.button.save')}
+            {submitBtn.text ?? t('v2.button.save')}
           </Button>
         </DialogFooter>
       </DialogContent>

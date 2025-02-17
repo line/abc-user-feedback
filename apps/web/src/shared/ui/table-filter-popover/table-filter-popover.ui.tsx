@@ -30,24 +30,13 @@ import {
 import { SelectInput, SelectSearchInput } from '@/shared';
 
 import TableFilterPopoverInput from './table-filter-popover-input.ui';
-import TableFilterPopoverSelectOperator from './table-filter-popover-select-operator.ui';
+import TableFilterPopoverSelectCondition from './table-filter-popover-select-condition.ui';
 import type {
   TableFilter,
   TableFilterCondition,
   TableFilterField,
-  TableFilterFieldFotmat,
   TableFilterOperator,
 } from './table-filter-popover.type';
-
-const OperatorMap: Record<TableFilterFieldFotmat, TableFilterCondition> = {
-  date: 'BETWEEN',
-  keyword: 'IS',
-  multiSelect: 'IS',
-  select: 'IS',
-  issue: 'IS',
-  number: 'IS',
-  text: 'CONTAINS',
-};
 
 interface Props {
   tableFilters: TableFilter[];
@@ -61,13 +50,12 @@ const TableFilterPopover = (props: Props) => {
 
   const [filters, setFilters] = useState<TableFilter[]>(tableFilters);
   const [open, setOpen] = useState(false);
-
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
 
   useEffect(() => {
     if (filters.length !== 0) return;
     resetFilters();
-  }, [filterFields]);
+  }, [tableFilters]);
 
   const addFilter = () => {
     const filterField = filters[0];
@@ -76,14 +64,14 @@ const TableFilterPopover = (props: Props) => {
   };
 
   const updateFilter = (index: number, field: TableFilterField) => {
-    setFilters(
-      filters.map((filter, i) =>
+    setFilters((prev) =>
+      prev.map((filter, i) =>
         i === index ?
           {
             key: field.key,
             name: field.name,
             format: field.format,
-            condition: OperatorMap[field.format],
+            condition: field.matchType[0] ?? filter.condition,
           }
         : filter,
       ),
@@ -95,25 +83,44 @@ const TableFilterPopover = (props: Props) => {
 
   const resetFilters = () => {
     if (!filterFields[0]) return;
-    const { format, key, name } = filterFields[0];
-    setFilters([{ key, condition: OperatorMap[format], format, name }]);
+    const { format, key, name, matchType } = filterFields[0];
+
+    if (!matchType[0]) return;
+    setFilters([{ key, condition: matchType[0], format, name }]);
     setOperator('AND');
   };
 
   const onChangeValue = (index: number, value?: unknown) => {
-    setFilters(
-      filters.map((filter, i) => (i === index ? { ...filter, value } : filter)),
+    setFilters((prev) =>
+      prev.map((filter, i) => (i === index ? { ...filter, value } : filter)),
     );
   };
 
-  const getValue = (index: number) => {
-    return filters[index]?.value;
+  const onChangeCondition = (
+    index: number,
+    condition: TableFilterCondition,
+  ) => {
+    setFilters((prev) =>
+      prev.map((filter, i) =>
+        i === index ? { ...filter, condition } : filter,
+      ),
+    );
   };
 
-  const renderOperator = (filter: TableFilter) => {
+  const renderOperator = (filter: TableFilter, index: number) => {
     const filterField = filterFields.find((field) => field.key === filter.key);
     if (!filterField) return <></>;
-    return <TableFilterPopoverSelectOperator filterField={filterField} />;
+
+    return (
+      <TableFilterPopoverSelectCondition
+        field={filterField}
+        filter={filter}
+        onChange={(value) => {
+          onChangeCondition(index, value);
+          onChangeValue(index, undefined);
+        }}
+      />
+    );
   };
 
   const renderInput = (filter: TableFilter, index: number) => {
@@ -122,9 +129,9 @@ const TableFilterPopover = (props: Props) => {
 
     return (
       <TableFilterPopoverInput
-        filterField={filterField}
+        filterfieid={filterField}
+        filter={filter}
         onChange={(value) => onChangeValue(index, value)}
-        value={getValue(index)}
       />
     );
   };
@@ -151,10 +158,10 @@ const TableFilterPopover = (props: Props) => {
           <table>
             <tbody>
               {filters.map((filter, index) => (
-                <tr key={index} className="[&>td]:p-1.5">
+                <tr key={index} className="[&>td]:p-1">
                   <td>
                     {index === 0 ?
-                      'Where'
+                      <p className="min-w-20">Where</p>
                     : index === 1 ?
                       <SelectInput
                         options={[
@@ -192,7 +199,7 @@ const TableFilterPopover = (props: Props) => {
                       }))}
                     />
                   </td>
-                  <td>{renderOperator(filter)}</td>
+                  <td>{renderOperator(filter, index)}</td>
                   <td>{renderInput(filter, index)}</td>
                   <td>
                     <Button

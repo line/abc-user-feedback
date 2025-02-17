@@ -63,7 +63,7 @@ class UserSearchQuery {
 }
 
 export class GetAllUsersRequestDto extends PaginationRequestDto {
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: [UserSearchQuery] })
   @IsOptional()
   queries?: UserSearchQuery[];
 

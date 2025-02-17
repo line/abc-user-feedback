@@ -73,7 +73,11 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
       isOpen={isOpen}
       close={close}
       title={t('main.setting.dialog.invite-user.title')}
-      submitBtn={{ form: 'inviteUser', disabled: updateDisabled }}
+      submitBtn={{
+        form: 'inviteUser',
+        disabled: updateDisabled,
+        text: t('v2.button.confirm'),
+      }}
       formState={formState}
     >
       <form

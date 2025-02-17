@@ -35,6 +35,7 @@ interface Props {
   inputValue: string;
   setInputValue: (value: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }
 
 const ComboboxInputBox: React.FC<Props> = (props) => {
@@ -46,6 +47,7 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
     inputValue,
     setInputValue,
     disabled,
+    placeholder,
   } = props;
   const { t } = useTranslation();
   return (
@@ -53,6 +55,7 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
       <ComboboxTrigger disabled={disabled}>{children}</ComboboxTrigger>
       <ComboboxContent>
         <ComboboxInput
+          placeholder={placeholder}
           value={inputValue}
           onValueChange={(value) => {
             if (error) clearError?.();
@@ -70,8 +73,15 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
                 </div>
               </ComboboxItem>
             : inputValue ?
-              <ComboboxItem onSelect={(value) => onSelectValue(value)}>
+              <ComboboxItem
+                onSelect={(value) => onSelectValue(value)}
+                className="justify-between"
+                value={inputValue}
+              >
                 {inputValue}
+                <span className="text-neutral-tertiary text-small-normal">
+                  Add
+                </span>
               </ComboboxItem>
             : <></>}
           </ComboboxGroup>

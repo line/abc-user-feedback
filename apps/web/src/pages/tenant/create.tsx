@@ -96,52 +96,46 @@ const CreateTenantPage: NextPageWithLayout = () => {
 
   return (
     <AnonymousTemplate
-      title={
-        step === 'final' ?
-          t('v2.create-tenant.complete-title')
-        : t('v2.create-tenant.title')
-      }
+      title={t(`v2.create-tenant.${step}.title`)}
+      description={t(`v2.create-tenant.${step}.description`)}
       image={
         step === 'final' ?
           '/assets/images/complete-tenant-setting.svg'
         : '/assets/images/tenant-setting.svg'
       }
-      description={
-        step === 'final' ?
-          t('v2.create-tenant.complete-description')
-        : t('v2.create-tenant.description')
-      }
     >
-      {step === 'tenant' && (
-        <CreateTenantForm
-          onSubmit={({ siteName }) => {
-            setData((prev) => ({ ...prev, tenant: { siteName } }));
-            void setStep('user');
-          }}
-          submitText={t('button.next')}
-        />
-      )}
-      {step === 'user' && (
-        <SignUpWithEmailForm
-          onSubmit={(user) => {
-            setData((prev) => ({ ...prev, user }));
-            void setStep('final');
-          }}
-          submitText={t('button.next')}
-          initialValues={data.user}
-        />
-      )}
-      {step === 'final' && (
-        <>
-          <div className="mb-44 flex flex-col gap-4">
-            <TextInput label="Name" value={data.tenant?.siteName} disabled />
-            <TextInput label="Email" value={data.user?.email} disabled />
-          </div>
-          <Button size="medium" onClick={onClickComplete} loading={isPending}>
-            {t('v2.button.confirm')}
-          </Button>
-        </>
-      )}
+      <div className="flex min-h-[300px] flex-col">
+        {step === 'tenant' && (
+          <CreateTenantForm
+            onSubmit={({ siteName }) => {
+              setData((prev) => ({ ...prev, tenant: { siteName } }));
+              void setStep('user');
+            }}
+            submitText={t('button.next')}
+          />
+        )}
+        {step === 'user' && (
+          <SignUpWithEmailForm
+            onSubmit={(user) => {
+              setData((prev) => ({ ...prev, user }));
+              void setStep('final');
+            }}
+            submitText={t('button.next')}
+            initialValues={data.user}
+          />
+        )}
+        {step === 'final' && (
+          <>
+            <div className="mb-44 flex flex-col gap-4">
+              <TextInput label="Name" value={data.tenant?.siteName} disabled />
+              <TextInput label="Email" value={data.user?.email} disabled />
+            </div>
+            <Button size="medium" onClick={onClickComplete} loading={isPending}>
+              {t('v2.button.confirm')}
+            </Button>
+          </>
+        )}
+      </div>
     </AnonymousTemplate>
   );
 };

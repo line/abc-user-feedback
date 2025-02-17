@@ -32,6 +32,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  TooltipProvider,
 } from '@ufb/react';
 
 import type { FormOverlayProps } from '@/shared';
@@ -232,50 +233,58 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
             </InputField>
             <div className="flex flex-col gap-2">
               <p className="input-label">Event</p>
-              <WebhookEventCard
-                channels={channels}
-                checked={getEventChecked('FEEDBACK_CREATION')}
-                onChangeChecked={toggleEventType('FEEDBACK_CREATION')}
-                eventChannels={getEventChannels('FEEDBACK_CREATION')}
-                onChangeEventChannels={onChangeEventChannels(
-                  'FEEDBACK_CREATION',
-                )}
-                title={t('v2.webhook-card.feedback-creation.title')}
-                description={t('v2.webhook-card.feedback-creation.description')}
-              />
-              <WebhookEventCard
-                channels={channels}
-                checked={getEventChecked('ISSUE_ADDITION')}
-                onChangeChecked={toggleEventType('ISSUE_ADDITION')}
-                eventChannels={getEventChannels('ISSUE_ADDITION')}
-                onChangeEventChannels={onChangeEventChannels('ISSUE_ADDITION')}
-                title={t('v2.webhook-card.issue-addition.title')}
-                description={t('v2.webhook-card.issue-addition.description')}
-              />
-              <WebhookEventCard
-                channels={channels}
-                checked={getEventChecked('ISSUE_STATUS_CHANGE')}
-                onChangeChecked={toggleEventType('ISSUE_STATUS_CHANGE')}
-                eventChannels={getEventChannels('ISSUE_STATUS_CHANGE')}
-                onChangeEventChannels={onChangeEventChannels(
-                  'ISSUE_STATUS_CHANGE',
-                )}
-                title={t('v2.webhook-card.issue-status-change.title')}
-                description={t(
-                  'v2.webhook-card.issue-status-change.description',
-                )}
-                eventChannelDisabled
-              />
-              <WebhookEventCard
-                channels={channels}
-                checked={getEventChecked('ISSUE_CREATION')}
-                onChangeChecked={toggleEventType('ISSUE_CREATION')}
-                eventChannels={getEventChannels('ISSUE_CREATION')}
-                onChangeEventChannels={onChangeEventChannels('ISSUE_CREATION')}
-                title={t('v2.webhook-card.issue-creation.title')}
-                description={t('v2.webhook-card.issue-creation.description')}
-                eventChannelDisabled
-              />
+              <TooltipProvider>
+                <WebhookEventCard
+                  channels={channels}
+                  checked={getEventChecked('FEEDBACK_CREATION')}
+                  onChangeChecked={toggleEventType('FEEDBACK_CREATION')}
+                  eventChannels={getEventChannels('FEEDBACK_CREATION')}
+                  onChangeEventChannels={onChangeEventChannels(
+                    'FEEDBACK_CREATION',
+                  )}
+                  title={t('v2.webhook-card.feedback-creation.title')}
+                  description={t(
+                    'v2.webhook-card.feedback-creation.description',
+                  )}
+                />
+                <WebhookEventCard
+                  channels={channels}
+                  checked={getEventChecked('ISSUE_ADDITION')}
+                  onChangeChecked={toggleEventType('ISSUE_ADDITION')}
+                  eventChannels={getEventChannels('ISSUE_ADDITION')}
+                  onChangeEventChannels={onChangeEventChannels(
+                    'ISSUE_ADDITION',
+                  )}
+                  title={t('v2.webhook-card.issue-addition.title')}
+                  description={t('v2.webhook-card.issue-addition.description')}
+                />
+                <WebhookEventCard
+                  channels={channels}
+                  checked={getEventChecked('ISSUE_STATUS_CHANGE')}
+                  onChangeChecked={toggleEventType('ISSUE_STATUS_CHANGE')}
+                  eventChannels={getEventChannels('ISSUE_STATUS_CHANGE')}
+                  onChangeEventChannels={onChangeEventChannels(
+                    'ISSUE_STATUS_CHANGE',
+                  )}
+                  title={t('v2.webhook-card.issue-status-change.title')}
+                  description={t(
+                    'v2.webhook-card.issue-status-change.description',
+                  )}
+                  eventChannelDisabled
+                />
+                <WebhookEventCard
+                  channels={channels}
+                  checked={getEventChecked('ISSUE_CREATION')}
+                  onChangeChecked={toggleEventType('ISSUE_CREATION')}
+                  eventChannels={getEventChannels('ISSUE_CREATION')}
+                  onChangeEventChannels={onChangeEventChannels(
+                    'ISSUE_CREATION',
+                  )}
+                  title={t('v2.webhook-card.issue-creation.title')}
+                  description={t('v2.webhook-card.issue-creation.description')}
+                  eventChannelDisabled
+                />
+              </TooltipProvider>
             </div>
           </form>
         </SheetBody>

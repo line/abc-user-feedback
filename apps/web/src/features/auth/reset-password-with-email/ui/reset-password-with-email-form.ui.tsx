@@ -57,43 +57,37 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="mb-12 flex flex-col gap-4">
+      <div className="mb-10 flex flex-col gap-4">
         <TextInput
           type="email"
           label="Email"
-          placeholder={t('input.placeholder.email')}
+          placeholder={t('v2.placeholder.text')}
           {...register('email')}
           disabled
         />
         <TextInput
           type="password"
-          label={t('input.label.password')}
-          placeholder={t('input.placeholder.password')}
+          label="Password"
+          placeholder={t('v2.placeholder.text')}
           error={formState.errors.password?.message}
           {...register('password')}
-          required
         />
         <TextInput
           type="password"
-          label={t('input.label.confirm-password')}
-          placeholder={t('input.placeholder.confirm-password')}
+          label="Confirm Password"
+          placeholder={t('v2.placeholder.text')}
           error={formState.errors.confirmPassword?.message}
           {...register('confirmPassword')}
-          required
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <Button type="submit" loading={isPending} disabled={!formState.isDirty}>
-          {t('button.setting')}
-        </Button>
-        <Button
-          variant="outline"
-          type="button"
-          onClick={() => router.push(Path.SIGN_IN)}
-        >
-          {t('button.back')}
-        </Button>
-      </div>
+      <Button
+        type="submit"
+        loading={isPending}
+        disabled={!formState.isDirty}
+        size="medium"
+      >
+        {t('v2.button.confirm')}
+      </Button>
     </form>
   );
 };

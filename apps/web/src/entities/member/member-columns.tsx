@@ -23,7 +23,7 @@ import {
   Avatar,
   DATE_TIME_FORMAT,
   DescriptionTooltip,
-  SortingTableHead,
+  TableCheckbox,
 } from '@/shared';
 
 import type { User } from '../user';
@@ -32,6 +32,26 @@ import type { MemberInfo } from './member.type';
 const columnHelper = createColumnHelper<MemberInfo>();
 
 export const getMemberColumns = (users: User[]) => [
+  columnHelper.display({
+    id: 'select',
+    header: ({ table }) => (
+      <TableCheckbox
+        checked={table.getIsAllRowsSelected()}
+        indeterminate={table.getIsSomeRowsSelected()}
+        onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCheckbox
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        indeterminate={row.getIsSomeSelected()}
+        onCheckedChange={(checked) => row.toggleSelected(checked)}
+      />
+    ),
+    size: 50,
+    enableSorting: false,
+  }),
   columnHelper.accessor('user.email', {
     header: 'Email',
     enableSorting: false,
@@ -73,9 +93,7 @@ export const getMemberColumns = (users: User[]) => [
     enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {
-    header: ({ column }) => (
-      <SortingTableHead column={column}>Joined</SortingTableHead>
-    ),
+    header: 'Joined',
     cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
   }),
 ];

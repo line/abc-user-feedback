@@ -23,6 +23,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@ufb/react';
 
 import { cn } from '@/shared';
@@ -62,52 +65,53 @@ const WebhookEventCard: React.FC<Props> = (props) => {
     onChangeEventChannels(v.map((v) => Number(v)));
 
   return (
-    <button
-      type="button"
-      className={cn(
-        'flex cursor-pointer items-center gap-3 rounded border px-3 py-4 text-left',
-        {
-          'opacity-50': !checked,
-          'border-[var(--button-primary-text-default)]': checked,
-        },
-      )}
-      onClick={() => onChangeChecked(!checked)}
-    >
-      <div className="flex-1 flex-shrink-0">
-        <p className="text-base-strong">{title}</p>
-        <p className="text-base-normal text-neutral-tertiary">{description}</p>
-      </div>
-      <div
-        className="flex-1 flex-shrink-0"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <Select
-          type="multiple"
-          values={
-            eventChannelDisabled ?
-              channels.map((v) => String(v.id))
-            : selectedValues
-          }
-          onValuesChange={setSelectedValues}
-          disabled={!checked}
+    <Tooltip>
+      <TooltipTrigger>
+        <button
+          type="button"
+          className={cn(
+            'flex h-20 w-full cursor-pointer items-center gap-3 rounded border px-3 py-4 text-left',
+            {
+              'opacity-50': !checked,
+              'border-2 border-[#2563EB]': checked,
+            },
+          )}
+          onClick={() => onChangeChecked(!checked)}
         >
-          <SelectTrigger>
-            <SelectValue placeholder={t('v2.placeholder.select')} />
-          </SelectTrigger>
-          <SelectContent>
-            {channels.map((channel) => (
-              <SelectItem
-                key={channel.id}
-                value={String(channel.id)}
-                disabled={!checked || eventChannelDisabled}
-              >
-                {channel.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-    </button>
+          <div className="flex-1">
+            <p className="text-base-strong">{title}</p>
+          </div>
+          <div onClick={(e) => e.stopPropagation()}>
+            <Select
+              type="multiple"
+              values={
+                eventChannelDisabled ?
+                  channels.map((v) => String(v.id))
+                : selectedValues
+              }
+              onValuesChange={setSelectedValues}
+              disabled={!checked}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t('v2.placeholder.select')} />
+              </SelectTrigger>
+              <SelectContent>
+                {channels.map((channel) => (
+                  <SelectItem
+                    key={channel.id}
+                    value={String(channel.id)}
+                    disabled={!checked || eventChannelDisabled}
+                  >
+                    {channel.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </button>
+      </TooltipTrigger>
+      <TooltipContent side="left">{description}</TooltipContent>
+    </Tooltip>
   );
 };
 

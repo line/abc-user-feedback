@@ -52,7 +52,10 @@ const MemberFormDialog: React.FC<Props> = (props) => {
 
   const { data: userData } = useUserSearch({
     limit: 1000,
-    query: { type: ['GENERAL'] },
+    queries: [{ type: ['GENERAL'], condition: 'IS' }] as Record<
+      string,
+      unknown
+    >[],
   });
 
   const { setValue, handleSubmit, formState, register, getValues, watch } =

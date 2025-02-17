@@ -35,6 +35,12 @@ const EmailConfigForm: React.FC<Props> = ({ disabled }) => {
   const allowDomains = watch('allowDomains');
 
   const addDomainWhiteList = (value: string) => {
+    if (!value.startsWith('@')) {
+      setError('allowDomains', { message: t('hint.invalid-domain') });
+      return;
+    }
+    value = value.slice(1);
+
     if (allowDomains?.includes(value)) {
       setError('allowDomains', {
         message: t('hint.name-already-exists', { name: 'Domain' }),
@@ -70,6 +76,7 @@ const EmailConfigForm: React.FC<Props> = ({ disabled }) => {
         onSelectValue={addDomainWhiteList}
         error={formState.errors.allowDomains?.message}
         disabled={disabled}
+        placeholder="@example.com"
       >
         Whiltelist 설정
       </ComboboxInputbox>
@@ -77,7 +84,7 @@ const EmailConfigForm: React.FC<Props> = ({ disabled }) => {
       <div className="flex items-center gap-2">
         {!allowDomains || allowDomains.length === 0 ?
           <p className="text-neutral-tertiary">
-            {t('v2.text.all-domains-allow')}
+            {t('v2.text.all-email-domains-allow')}
           </p>
         : allowDomains.map((domain, index) => (
             <Badge key={index} className="flex items-center" variant="subtle">

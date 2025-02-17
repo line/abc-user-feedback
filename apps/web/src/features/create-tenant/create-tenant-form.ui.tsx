@@ -40,14 +40,16 @@ const CreateTenantForm: React.FC<IProps> = (props) => {
 
   return (
     <form
-      className="flex flex-col gap-4"
+      className="flex h-full flex-col gap-4"
       onSubmit={handleSubmit((data) => onSubmit(data))}
     >
-      <TextInput
-        label={t('tenant.create.site-name')}
-        placeholder="Please enter the site name"
-        {...register('siteName')}
-      />
+      <div className="flex flex-1 flex-col gap-4">
+        <TextInput
+          label="Name"
+          placeholder={t('v2.placeholder.text')}
+          {...register('siteName')}
+        />
+      </div>
       <Button type="submit" disabled={!formState.isDirty}>
         {submitText}
       </Button>

@@ -63,7 +63,7 @@ const ProfilePage: NextPageWithLayout = () => {
   const openWarningNoProjects = () => {
     overlay.open(({ close, isOpen }) => (
       <Dialog open={isOpen} onOpenChange={close}>
-        <DialogContent>
+        <DialogContent radius="large">
           <DialogTitle>
             {t('v2.dialog.no-project-in-profile-page.title')}
           </DialogTitle>
@@ -74,7 +74,7 @@ const ProfilePage: NextPageWithLayout = () => {
               width={240}
               height={240}
             />
-            <p>
+            <p className="w-full whitespace-pre-line px-4">
               {t('v2.dialog.no-project-in-profile-page.description', {
                 name: user?.name ?? '--',
               })}
@@ -82,7 +82,6 @@ const ProfilePage: NextPageWithLayout = () => {
           </DialogBody>
           <DialogFooter>
             <DialogClose variant="primary">
-              <Icon name="RiFlashlightFill" />
               {t('v2.button.confirm')}
             </DialogClose>
           </DialogFooter>
@@ -92,7 +91,7 @@ const ProfilePage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (!data || data.items.length > 0) return;
+    // if (!data || data.items.length > 0) return;
     openWarningNoProjects();
   }, [data]);
 

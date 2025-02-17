@@ -26,11 +26,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
+import type { TableFilter, TableFilterOperator } from '@/shared';
 import {
   BasicTable,
   client,
   DeleteDialog,
-  TableFacetedFilter,
+  TableFilterPopover,
   TablePagination,
   useOAIMutation,
   useOAIQuery,
@@ -50,10 +51,23 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
 
-  // const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [rowCount, setRowCount] = useState(0);
+  const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
+  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const queries = useMemo(() => {
+    return tableFilters.reduce(
+      (acc, filter) => {
+        return acc.concat({
+          [filter.key]:
+            filter.key === 'projectId' ? [filter.value] : filter.value,
+          condition: filter.condition,
+        });
+      },
+      [] as Record<string, unknown>[],
+    );
+  }, [tableFilters]);
 
   const columns = useMemo(() => getUserColumns(), []);
   const table = useReactTable({
@@ -70,25 +84,10 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     rowCount,
   });
 
-  const { sorting, pagination, columnFilters } = table.getState();
+  const { sorting, pagination } = table.getState();
   const sort = useSort(sorting);
 
   const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
-
-  const query = useMemo(() => {
-    return columnFilters.reduce(
-      (acc, { id, value }) => {
-        if (id === 'members') {
-          return {
-            ...acc,
-            projectId: (value as string[]).map((v) => parseInt(v)),
-          };
-        }
-        return { ...acc, [id]: value };
-      },
-      {} as Record<string, unknown>,
-    );
-  }, [columnFilters]);
 
   const {
     data: userData,
@@ -98,7 +97,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     order: sort as { createdAt: 'ASC' | 'DESC' },
-    query,
+    queries,
+    operator,
   });
 
   const { mutateAsync: deleteUsers } = useOAIMutation({
@@ -176,30 +176,60 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     <>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <TableFacetedFilter
-            column={table.getColumn('type')}
-            options={[
-              { label: 'Super', value: 'SUPER' },
-              { label: 'General', value: 'GENERAL' },
+          <TableFilterPopover
+            filterFields={[
+              {
+                key: 'name',
+                format: 'string',
+                name: 'Name',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'email',
+                format: 'string',
+                name: 'Email',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'department',
+                format: 'string',
+                name: 'Department',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'createdAt',
+                format: 'date',
+                name: 'Created',
+                matchType: ['BETWEEN', 'IS'],
+              },
+              {
+                key: 'type',
+                format: 'select',
+                name: 'Type',
+                options: [
+                  { key: 'SUPER', name: 'Admin' },
+                  { key: 'GENERAL', name: 'General' },
+                ],
+                matchType: ['IS'],
+              },
+              {
+                key: 'projectId',
+                format: 'select',
+                name: 'Project',
+                options:
+                  projects?.items.map((v) => ({
+                    key: String(v.id),
+                    name: v.name,
+                  })) ?? [],
+                matchType: ['IS'],
+              },
             ]}
-            title="Type"
+            tableFilters={tableFilters}
+            onSubmit={(filters, oprator) => {
+              setTableFilters(filters);
+              setOperator(oprator);
+            }}
           />
-          <TableFacetedFilter
-            column={table.getColumn('members')}
-            options={
-              projects?.items.map((v) => ({
-                label: v.name,
-                value: String(v.id),
-              })) ?? []
-            }
-            title="Project"
-          />
-          {table.getState().columnFilters.length > 0 && (
-            <Button variant="ghost" onClick={() => table.resetColumnFilters()}>
-              <Icon name="RiCloseLine" />
-              Reset
-            </Button>
-          )}
         </div>
         {selectedRowIds.length > 0 && (
           <Button

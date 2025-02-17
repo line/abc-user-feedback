@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 
 import { Badge, Icon } from '@ufb/react';
 
+import CategoryCombobox from '@/shared/ui/category-combobox.ui';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 
@@ -94,11 +95,21 @@ const IssueKanbanColumnItem = (props: Props) => {
             </div>
           )}
         </div>
-        {item.category && (
+
+        {item.category ?
           <Badge variant="subtle" className="w-fit">
             {item.category.name}
           </Badge>
-        )}
+        : <CategoryCombobox issueId={item.id} category={item.category}>
+            <Badge
+              variant="outline"
+              className="w-fit cursor-pointer"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Add Category
+            </Badge>
+          </CategoryCombobox>
+        }
       </div>
       <div
         className="hover:bg-neutral-tertiary flex w-4 items-center justify-center hover:cursor-grab active:cursor-grabbing"

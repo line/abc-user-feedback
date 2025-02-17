@@ -47,7 +47,7 @@ const AnonymousTemplate = (props: Props) => {
             <div>
               <h3 className="text-xlarge-strong">{title}</h3>
               {description && (
-                <p className="text-small-normal text-neutral-tertiary">
+                <p className="text-small-normal text-neutral-tertiary whitespace-pre-line">
                   {description}
                 </p>
               )}

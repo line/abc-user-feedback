@@ -49,3 +49,4 @@ export { default as AnonymousTemplate } from './anonymous-template.ui';
 export { default as ThemeSelectBox } from './theme-select-box.ui';
 export { default as SheetDetailTable } from './sheet-detail-table.ui';
 export * from './table-filter-popover';
+export { default as NoProjectDialogInProjectCreation } from './no-project-dialog-in-project-creation.ui';

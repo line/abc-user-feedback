@@ -84,7 +84,10 @@ export const getColumns = (fieldData: FieldInfo[]) =>
               issues={getValue() as Issue[]}
               feedbackId={Number(row.id)}
             >
-              <Tag variant="secondary" className="cursor-pointer">
+              <Tag
+                variant="outline"
+                className="w-8 cursor-pointer justify-center"
+              >
                 +
               </Tag>
             </IssueCell>

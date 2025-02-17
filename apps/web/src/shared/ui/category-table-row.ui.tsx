@@ -31,9 +31,10 @@ import { useIssueSearch } from '@/entities/issue';
 import { getColumnsByCategory } from '@/widgets/issue-table/issue-table-columns';
 import IssueDetailSheet from '@/widgets/issue-table/ui/issue-detail-sheet.ui';
 
-import { useOAIQuery } from '../lib';
+import { useOAIQuery, useSort } from '../lib';
 import type { DateRangeType } from '../types';
 import { cn } from '../utils';
+import type { TableFilterOperator } from './table-filter-popover';
 import { BasicTable, TablePagination } from './tables';
 
 const DEFAULT_META = {
@@ -48,10 +49,11 @@ interface Props {
   category: Category;
   createdAtDateRange: DateRangeType;
   queries: Record<string, unknown>[];
+  operator: TableFilterOperator;
 }
 
 const CategoryTableRow = (props: Props) => {
-  const { projectId, category, createdAtDateRange, queries } = props;
+  const { projectId, category, createdAtDateRange, queries, operator } = props;
 
   const { t } = useTranslation();
 
@@ -59,7 +61,6 @@ const CategoryTableRow = (props: Props) => {
   const [meta, setMeta] = useState(DEFAULT_META);
   const [isOpen, setIsOpen] = useState(category.id === 0);
   const [openIssueId, setOpenIssueId] = useState<number | null>(null);
-
   const currentIssue = useMemo(
     () => rows.find((v) => v.id === openIssueId),
     [rows, openIssueId],
@@ -97,12 +98,14 @@ const CategoryTableRow = (props: Props) => {
     manualPagination: true,
   });
 
-  const { pagination } = table.getState();
-
+  const { pagination, sorting } = table.getState();
+  const sort = useSort(sorting);
   const { data, isLoading } = useIssueSearch(projectId, {
     queries: currentQueries.concat(...queries),
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
+    operator,
+    sort,
   });
 
   const { data: issueTracker } = useOAIQuery({

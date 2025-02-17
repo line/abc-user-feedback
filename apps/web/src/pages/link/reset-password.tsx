@@ -33,7 +33,7 @@ const ResetPasswordPage: NextPageWithLayout<IProps> = (props) => {
 
   return (
     <AnonymousTemplate
-      title={t('auth.reset-password.title')}
+      title={t('v2.link.reset-password.title')}
       image="/assets/images/reset-password.svg"
     >
       <ResetPasswordWithEmailForm code={code} email={email} />

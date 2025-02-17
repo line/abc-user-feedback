@@ -139,7 +139,7 @@ const SheetDetailTable = (props: Props) => {
     images: (value) => <ImagePreviewButton urls={value as string[]} />,
     ticket: (value, row) => {
       const { issueTracker } = row as TicketRow;
-      return issueTracker?.ticketDomain && issueTracker.ticketKey ?
+      return issueTracker?.ticketDomain && issueTracker.ticketKey && value ?
           <a
             href={`${issueTracker.ticketDomain}/browse/${issueTracker.ticketKey}-${value as string}`}
             target="_blank"
@@ -152,7 +152,7 @@ const SheetDetailTable = (props: Props) => {
     },
     issue: (_, row) => (
       <IssueCell feedbackId={(row as IssueRow).feedbackId}>
-        <Tag variant="secondary" className="cursor-pointer">
+        <Tag variant="outline" className="w-8 cursor-pointer justify-center">
           +
         </Tag>
       </IssueCell>
@@ -169,7 +169,7 @@ const SheetDetailTable = (props: Props) => {
             category={category}
           >
             <Tag variant="outline" size="small" className="cursor-pointer">
-              <Icon name="RiMoreFill" />
+              {category ? 'Edit' : 'Add'}
             </Tag>
           </CategoryCombobox>
         </div>

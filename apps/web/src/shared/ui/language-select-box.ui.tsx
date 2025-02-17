@@ -18,8 +18,8 @@ import { setCookie } from 'cookies-next';
 
 import {
   Dropdown,
+  DropdownCheckboxItem,
   DropdownContent,
-  DropdownItem,
   DropdownTrigger,
   Icon,
 } from '@ufb/react';
@@ -52,9 +52,13 @@ const LanguageSelectBox: React.FC<Props> = () => {
         {router.locales
           ?.filter((v) => v !== 'default')
           .map((v) => (
-            <DropdownItem key={v} onClick={() => onChangeLanguage(v)}>
+            <DropdownCheckboxItem
+              key={v}
+              onClick={() => onChangeLanguage(v)}
+              checked={router.locale === v}
+            >
               {LanguageMap[v] ?? v.toLocaleUpperCase()}
-            </DropdownItem>
+            </DropdownCheckboxItem>
           ))}
       </DropdownContent>
     </Dropdown>

@@ -22,15 +22,17 @@ import { Icon } from '@ufb/react';
 import { client } from '../lib';
 import type { DateRangeType } from '../types';
 import CategoryTableRow from './category-table-row.ui';
+import type { TableFilterOperator } from './table-filter-popover';
 
 interface Props {
   projectId: number;
   createdAtDateRange: DateRangeType;
   queries: Record<string, unknown>[];
+  operator: TableFilterOperator;
 }
 
 const CategoryTable = (props: Props) => {
-  const { projectId, createdAtDateRange, queries } = props;
+  const { projectId, createdAtDateRange, queries, operator } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
@@ -61,10 +63,7 @@ const CategoryTable = (props: Props) => {
       });
     });
 
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-
+    if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
 
@@ -78,6 +77,7 @@ const CategoryTable = (props: Props) => {
             projectId={projectId}
             createdAtDateRange={createdAtDateRange}
             queries={queries}
+            operator={operator}
           />
         ),
       )}

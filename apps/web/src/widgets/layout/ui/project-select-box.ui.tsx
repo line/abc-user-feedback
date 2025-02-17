@@ -27,6 +27,9 @@ import {
   SelectSeparator,
   SelectTrigger,
   SelectValue,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@ufb/react';
 
 import { CreatingDialog, Path, useOAIQuery } from '@/shared';
@@ -76,39 +79,46 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <Select
-      type="single"
-      value={projectId ? String(projectId) : ''}
-      onValueChange={(value) => onChangeProject(value)}
-    >
-      <SelectTrigger className="min-w-60">
-        <SelectValue placeholder="Select project" />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          {data?.items.map(({ id, name }) => (
-            <SelectItem key={id} value={String(id)}>
-              {name}
-            </SelectItem>
-          ))}
-        </SelectGroup>
-        <SelectSeparator />
-        <div
-          className="select-item text-tint-blue select-item-left p-2"
-          onClick={openCreateProjectDialog}
+    <Tooltip delayDuration={0}>
+      <TooltipTrigger disabled>
+        <Select
+          type="single"
+          value={projectId ? String(projectId) : ''}
+          onValueChange={(value) => onChangeProject(value)}
         >
-          <span className="select-item-check select-item-check-left">
-            <Icon name="RiAddCircleFill" size={16} />
-          </span>
-          <div className="flex w-[215px] items-center justify-between gap-2">
-            <span>{t('v2.text.create-project')}</span>
-            {editingStepIndex !== null && (
-              <span className="text-tint-red">{t('v2.text.in-progress')}</span>
-            )}
-          </div>
-        </div>
-      </SelectContent>
-    </Select>
+          <SelectTrigger className="min-w-60">
+            <SelectValue placeholder="Select project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              {data?.items.map(({ id, name }) => (
+                <SelectItem key={id} value={String(id)}>
+                  {name}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+            <SelectSeparator />
+            <div
+              className="select-item text-tint-blue select-item-left p-2"
+              onClick={openCreateProjectDialog}
+            >
+              <span className="select-item-check select-item-check-left">
+                <Icon name="RiAddCircleFill" size={16} />
+              </span>
+              <div className="flex w-[215px] items-center justify-between gap-2">
+                <span>{t('v2.text.create-project')}</span>
+                {editingStepIndex !== null && (
+                  <span className="text-tint-red">
+                    {t('v2.text.in-progress')}
+                  </span>
+                )}
+              </div>
+            </div>
+          </SelectContent>
+        </Select>
+      </TooltipTrigger>
+      {!projectId && <TooltipContent>프로젝트를 선택해 주세요.</TooltipContent>}
+    </Tooltip>
   );
 };
 

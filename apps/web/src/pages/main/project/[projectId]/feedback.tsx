@@ -28,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
-import type { TableFilterFieldFotmat } from '@/shared';
+import type { TableFilterField } from '@/shared';
 import {
   BasicTable,
   DateRangePicker,
@@ -193,6 +193,63 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     },
   });
 
+  const filterFields = useMemo(() => {
+    return fields
+      .filter((field) => field.key !== 'createdAt' && field.format !== 'images')
+      .map((field) => {
+        if (field.format === 'text') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'string',
+            matchType: ['CONTAINS'],
+          };
+        }
+        if (field.format === 'keyword') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'string',
+            matchType: ['IS'],
+          };
+        }
+        if (field.format === 'number') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'number',
+            matchType: ['IS'],
+          };
+        }
+        if (field.format === 'date') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'date',
+            matchType: ['BETWEEN', 'IS'],
+          };
+        }
+
+        if (field.format === 'select' || field.format === 'multiSelect') {
+          if (field.key === 'issues') {
+            return {
+              format: 'issue',
+              key: 'issueIds',
+              name: field.name,
+              matchType: ['IS'],
+            };
+          }
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'select',
+            options: field.options,
+            matchType: ['BETWEEN', 'IS'],
+          };
+        }
+      })
+      .filter((v) => !!v?.key) as TableFilterField[];
+  }, [fields]);
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
@@ -230,16 +287,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            filterFields={fields
-              .filter(({ key }) => key !== 'createdAt')
-              .map((field) => ({
-                key: field.key === 'issues' ? 'issueIds' : field.key,
-                name: field.name,
-                options: field.options,
-                format: (field.key === 'issues' ?
-                  'issue'
-                : field.format) as TableFilterFieldFotmat,
-              }))}
+            filterFields={filterFields}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
           />
@@ -250,7 +298,6 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       </div>
       <BasicTable
         table={table}
-        className="min-w-full table-fixed [&>thead>tr]:hover:bg-inherit"
         onClickRow={(_, row) => setOpenFeedbackId(row.id as number)}
         isLoading={isLoading}
         emptyCaption={t('v2.text.no-data.feedback')}

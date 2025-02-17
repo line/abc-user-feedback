@@ -48,7 +48,7 @@ class MemberSearchQuery {
 }
 
 export class GetAllMemberRequestDto extends PaginationRequestDto {
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: false, type: [MemberSearchQuery] })
   @IsOptional()
   queries?: MemberSearchQuery[];
 

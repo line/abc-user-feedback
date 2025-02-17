@@ -120,7 +120,7 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
             type="email"
             {...register('email')}
             label="Email"
-            placeholder={t('input.placeholder.email')}
+            placeholder={t('v2.placeholder.text')}
             disabled={watch('emailState') !== 'NOT_VERIFIED'}
             error={formState.errors.email?.message}
             infoCaption={
@@ -134,8 +134,9 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
                 onClick={() => fetchCode({ email: getValues('email') })}
                 loading={fetchCodeStatus === 'pending'}
                 disabled={watch('emailState') === 'VERIFIED'}
+                className="min-w-[96px]"
               >
-                {t('auth.sign-up.button.request-auth-code')}
+                {t('v2.auth.sign-up.button.request-auth-code')}
               </Button>
             }
           />
@@ -144,10 +145,10 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
           <div className="flex gap-2">
             <TextInput
               type="text"
-              label={t('auth.sign-up.label.auth-code')}
+              label="Authentication code"
               {...register('code')}
               disabled={watch('emailState') === 'VERIFIED'}
-              placeholder={t('auth.sign-up.placeholder.auth-code')}
+              placeholder={t('v2.placeholder.text')}
               error={formState.errors.code?.message}
               right={
                 (watch('emailState') === 'VERIFING' ||
@@ -167,8 +168,9 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
                     if (!code) return;
                     verifyCode({ code, email: getValues('email') });
                   }}
+                  className="min-w-[96px]"
                 >
-                  {t('auth.sign-up.button.verify-auth-code')}
+                  {t('v2.auth.sign-up.button.verify-auth-code')}
                 </Button>
               }
               successCaption={
@@ -181,15 +183,15 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
         )}
         <TextInput
           type="password"
-          label={t('input.label.password')}
-          placeholder={t('input.placeholder.password')}
+          label="Password"
+          placeholder={t('v2.placeholder.text')}
           error={formState.errors.password?.message}
           {...register('password')}
         />
         <TextInput
           type="password"
-          label={t('input.label.confirm-password')}
-          placeholder={t('input.placeholder.confirm-password')}
+          label="Confirm Password"
+          placeholder={t('v2.placeholder.text')}
           error={formState.errors.confirmPassword?.message}
           {...register('confirmPassword')}
         />
