@@ -44,7 +44,7 @@
     "@nestjs/swagger": "^11.0.0",
     "@nestjs/terminus": "^11.0.0",
     "@nestjs/typeorm": "^11.0.0",
-    "@opensearch-project/opensearch": "^2.7.0",
+    "@opensearch-project/opensearch": "^3.0.0",
     "@swc/cli": "^0.6.0",
     "@swc/helpers": "^0.5.10",
     "@types/passport-jwt": "^4.0.1",

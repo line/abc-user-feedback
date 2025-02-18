@@ -15,6 +15,11 @@
  */
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import {
+  DateProperty,
+  Property,
+  TextProperty,
+} from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { Transactional } from 'typeorm-transactional';
 
 import { FieldFormatEnum } from '@/common/enums';
@@ -43,7 +48,7 @@ export class FieldService {
 
   fieldsToMapping(fields: FieldEntity[]) {
     return fields.reduce(
-      (mapping: Record<string, { type: string }>, field) =>
+      (mapping: Record<string, Property>, field) =>
         Object.assign(mapping, {
           [field.key]:
             (
@@ -51,17 +56,19 @@ export class FieldService {
                 field.format,
               )
             ) ?
-              {
+              ({
                 type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
                 analyzer: 'ngram_analyzer',
                 search_analyzer: 'ngram_analyzer',
-              }
+              } as TextProperty)
             : field.format === FieldFormatEnum.date ?
-              {
+              ({
                 type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
                 format: `yyyy-MM-dd HH:mm:ss||yyyy-MM-dd HH:mm:ssZ||yyyy-MM-dd HH:mm:ssZZZZZ||yyyy-MM-dd||epoch_millis||strict_date_optional_time`,
-              }
-            : { type: FIELD_TYPES_TO_MAPPING_TYPES[field.format] },
+              } as DateProperty)
+            : ({
+                type: FIELD_TYPES_TO_MAPPING_TYPES[field.format],
+              } as Property),
         }),
       {},
     );
