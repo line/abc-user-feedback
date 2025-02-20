@@ -38,7 +38,6 @@ import { arrayMove } from '@dnd-kit/sortable';
 
 import type { Issue } from '@/entities/issue';
 
-// type Items = Record<UniqueIdentifier, Issue[]>;
 type Items = Record<UniqueIdentifier, Issue[]>;
 
 interface Props extends React.PropsWithChildren {
@@ -56,9 +55,6 @@ const IssueKanbanDndContext = (props: Props) => {
   const lastOverId = useRef<UniqueIdentifier | null>(null);
 
   const [clonedItems, setClonedItems] = useState<Items | null>(null);
-
-  // const isSortingContainer =
-  //   activeId != null ? containers.includes(activeId) : false;
 
   const collisionDetectionStrategy: CollisionDetection = useCallback(
     (args) => {

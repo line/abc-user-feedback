@@ -1,3 +1,18 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 import * as React from "react";
 import { Slottable } from "@radix-ui/react-slot";
 import { Command as CommandPrimitive } from "cmdk";
@@ -81,12 +96,17 @@ const ComboboxContent = React.forwardRef<
 });
 ComboboxContent.displayName = CommandPrimitive.displayName;
 
+interface ComboboxInputProps
+  extends React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input> {
+  icon?: React.ReactNode;
+}
+
 const ComboboxInput = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Input>,
-  React.ComponentPropsWithoutRef<typeof CommandPrimitive.Input>
->(({ className, ...props }, ref) => (
+  ComboboxInputProps
+>(({ icon, className, ...props }, ref) => (
   <div className="combobox-input-box" cmdk-input-wrapper="">
-    <Icon name="RiSearchLine" size={16} className="combobox-icon" />
+    {icon ?? <Icon name="RiSearchLine" size={16} />}
     <CommandPrimitive.Input
       ref={ref}
       className={cn("combobox-input", className)}

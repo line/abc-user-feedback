@@ -1,3 +1,18 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
 import * as React from "react";
 import * as ToggleGroupPrimitive from "@radix-ui/react-toggle-group";
 import { cva } from "class-variance-authority";
@@ -67,9 +82,6 @@ const Menu = React.forwardRef<
 );
 Menu.displayName = ToggleGroupPrimitive.Root.displayName;
 
-interface MenuItemProps
-  extends React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item> {}
-
 const menuItemVariants = cva("!menu-item", {
   variants: {
     size: {
@@ -85,7 +97,7 @@ const menuItemVariants = cva("!menu-item", {
 
 const MenuItem = React.forwardRef<
   React.ElementRef<typeof ToggleGroupPrimitive.Item>,
-  MenuItemProps
+  React.ComponentPropsWithoutRef<typeof ToggleGroupPrimitive.Item>
 >(({ children, className, ...props }, ref) => {
   const { size = DefaultValue.size } = React.useContext(MenuContext);
   return (
