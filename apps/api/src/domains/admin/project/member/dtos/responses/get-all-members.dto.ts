@@ -29,7 +29,7 @@ class MemberRoleDto {
   name: string;
 
   @Expose()
-  @ApiProperty({ type: [PermissionEnum], enum: PermissionEnum })
+  @ApiProperty()
   permissions: PermissionEnum[];
 }
 class MemberUserDto {

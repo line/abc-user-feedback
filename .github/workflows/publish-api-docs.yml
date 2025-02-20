@@ -26,7 +26,7 @@ jobs:
 
       - name: Build app and swagger docs
         run: |
-          npx corepack enable
+          npm install -g corepack@latest
           pnpm install --frozen-lockfile
           pnpm build
           cd apps/api

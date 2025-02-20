@@ -53,7 +53,7 @@ jobs:
 
       - name: Setup integration test (with opensearch)
         run: |
-          npx corepack enable
+          npm install -g corepack@latest
           pnpm install --frozen-lockfile
           pnpm build
           echo "BASE_URL=http://localhost:3000" >> ./apps/api/.env

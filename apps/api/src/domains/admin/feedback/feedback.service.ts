@@ -347,6 +347,7 @@ export class FeedbackService {
           scrollId: currentScrollId as unknown as string,
         });
         feedbacks = data;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         currentScrollId = scrollId;
       } else {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({

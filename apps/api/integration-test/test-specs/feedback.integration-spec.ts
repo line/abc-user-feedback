@@ -50,11 +50,6 @@ import {
   signInTestUser,
 } from '@/test-utils/util-functions';
 
-interface OpenSearchResponse {
-  _source: Record<string, any>;
-  total: { value: number };
-}
-
 describe('FeedbackController (integration)', () => {
   let app: INestApplication;
 
@@ -154,15 +149,15 @@ describe('FeedbackController (integration)', () => {
           }) => {
             expect(body.id).toBeDefined();
             if (configService.get('opensearch.use')) {
-              const esResult = await osService.get<OpenSearchResponse>({
+              const esResult = await osService.get({
                 id: body.id as string,
                 index: channel.id.toString(),
               });
 
               ['id', 'createdAt', 'updatedAt'].forEach(
-                (field) => delete esResult.body._source[field],
+                (field) => delete esResult.body._source?.[field],
               );
-              expect(dto).toMatchObject(esResult.body._source);
+              expect(dto).toMatchObject(esResult.body._source ?? {});
             } else {
               const feedback = await feedbackService.findById({
                 channelId: channel.id,
@@ -266,17 +261,17 @@ describe('FeedbackController (integration)', () => {
         .expect(200)
         .then(async () => {
           if (configService.get('opensearch.use')) {
-            const esResult = await osService.get<OpenSearchResponse>({
+            const esResult = await osService.get({
               id: feedback.id.toString(),
               index: channel.id.toString(),
             });
 
             ['id', 'createdAt', 'updatedAt'].forEach(
-              (field) => delete esResult.body._source[field],
+              (field) => delete esResult.body._source?.[field],
             );
 
             dto.data[availableFieldKey] = 'test';
-            expect(dto.data).toMatchObject(esResult.body._source);
+            expect(dto.data).toMatchObject(esResult.body._source ?? {});
           } else {
             const updatedFeedback = await feedbackService.findById({
               channelId: channel.id,
@@ -325,17 +320,17 @@ describe('FeedbackController (integration)', () => {
         .expect(200)
         .then(async () => {
           if (configService.get('opensearch.use')) {
-            const esResult = await osService.get<OpenSearchResponse>({
+            const esResult = await osService.get({
               id: feedback.id.toString(),
               index: channel.id.toString(),
             });
 
             ['id', 'createdAt', 'updatedAt'].forEach(
-              (field) => delete esResult.body._source[field],
+              (field) => delete esResult.body._source?.[field],
             );
 
             dto.data[availableFieldKey] = '?';
-            expect(dto.data).toMatchObject(esResult.body._source);
+            expect(dto.data).toMatchObject(esResult.body._source ?? {});
           } else {
             const updatedFeedback = await feedbackService.findById({
               channelId: channel.id,

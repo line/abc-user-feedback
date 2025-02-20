@@ -20,6 +20,7 @@ import {
 } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import type { Client } from '@opensearch-project/opensearch';
+import type { TextProperty } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 
 import { getMockProvider } from '@/test-utils/util-functions';
 import { CreateDataDto, PutMappingsDto } from './dtos';
@@ -55,7 +56,7 @@ const COMPLICATE_JSON = {
 const MAPPING_JSON = {
   KEY1: {
     type: 'text',
-  },
+  } as TextProperty,
 };
 
 describe('Opensearch Repository Test suite', () => {
@@ -89,6 +90,7 @@ describe('Opensearch Repository Test suite', () => {
                 ngram_analyzer: {
                   filter: ['lowercase', 'asciifolding', 'cjk_width'],
                   tokenizer: 'ngram_tokenizer',
+                  type: 'custom',
                 },
               },
               tokenizer: {
@@ -118,7 +120,7 @@ describe('Opensearch Repository Test suite', () => {
       dto.mappings = MAPPING_JSON;
       jest
         .spyOn(osClient.indices, 'exists')
-        .mockResolvedValue({ body: true } as never);
+        .mockResolvedValue({ statusCode: 200 } as never);
       jest.spyOn(osClient.indices, 'putMapping');
 
       await osRepo.putMappings(dto);
@@ -136,7 +138,7 @@ describe('Opensearch Repository Test suite', () => {
       dto.mappings = MAPPING_JSON;
       jest
         .spyOn(osClient.indices, 'exists')
-        .mockResolvedValue({ body: false } as never);
+        .mockResolvedValue({ statusCode: 404 } as never);
       jest.spyOn(osClient.indices, 'putMapping');
 
       await expect(osRepo.putMappings(dto)).rejects.toThrowError(
@@ -158,7 +160,7 @@ describe('Opensearch Repository Test suite', () => {
       dto.data = COMPLICATE_JSON;
       jest
         .spyOn(osClient.indices, 'exists')
-        .mockResolvedValue({ body: true } as never);
+        .mockResolvedValue({ statusCode: 200 } as never);
       jest.spyOn(osClient.indices, 'getMapping').mockResolvedValue({
         body: {
           ['channel_' + index]: {
@@ -232,7 +234,7 @@ describe('Opensearch Repository Test suite', () => {
       };
       jest
         .spyOn(osClient.indices, 'exists')
-        .mockResolvedValue({ body: true } as never);
+        .mockResolvedValue({ statusCode: 200 } as never);
       jest.spyOn(osClient.indices, 'getMapping').mockResolvedValue({
         body: {
           ['channel_' + index]: {
