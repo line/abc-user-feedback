@@ -73,7 +73,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
                         className="h-2 w-2 flex-shrink-0 rounded-full"
                       />
                       <p className="text-small-normal break-all">
-                        {payload.name}
+                        {(payload as { name: string | undefined }).name}
                       </p>
                     </div>
                     <p>{value?.toLocaleString()}</p>

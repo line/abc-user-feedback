@@ -142,9 +142,9 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
     const dates = dayjs(end).diff(dayjs(start), 'day') + 1;
     return dates > 0 ? dates : 365 + dates;
   }, [label]);
+  console.log('payload: ', payload);
 
   if (!active || !payload) return null;
-
   return (
     <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
       <h1 className="text-base-strong mb-1">
@@ -167,7 +167,9 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
                   style={{ background: color }}
                   className="h-2 w-2 flex-shrink-0 rounded-full"
                 />
-                <p className="break-all">{name ? name : payload?.date}</p>
+                <p className="break-all">
+                  {name ? name : (payload as { date: string | undefined }).date}
+                </p>
               </div>
             )}
             <p>{value?.toLocaleString()}</p>

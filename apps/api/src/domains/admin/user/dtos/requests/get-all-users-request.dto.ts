@@ -44,7 +44,12 @@ class UserSearchQuery {
   @IsString()
   department?: string | null;
 
-  @ApiProperty({ required: false, type: [UserTypeEnum], enum: UserTypeEnum })
+  @ApiProperty({
+    required: false,
+    type: [UserTypeEnum],
+    enum: UserTypeEnum,
+    enumName: 'UserTypeEnum',
+  })
   @IsOptional()
   @IsEnum(UserTypeEnum, { each: true })
   @ArrayDistinct()

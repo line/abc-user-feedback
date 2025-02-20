@@ -247,6 +247,7 @@ export class FeedbackService {
 
     do {
       if (this.configService.get('opensearch.use')) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId,
           queries,
@@ -337,6 +338,7 @@ export class FeedbackService {
 
     do {
       if (this.configService.get('opensearch.use')) {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId: channelId,
           queries: queries,

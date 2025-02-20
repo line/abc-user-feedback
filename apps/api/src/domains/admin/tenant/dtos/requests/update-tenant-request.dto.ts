@@ -56,6 +56,7 @@ export class OAuthConfigRequestDto {
   emailKey: string;
 
   @ApiProperty({
+    enumName: 'LoginButtonTypeEnum',
     type: LoginButtonTypeEnum,
     enum: LoginButtonTypeEnum,
   })

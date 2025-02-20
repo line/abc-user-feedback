@@ -54,6 +54,7 @@ export class OAuthConfigResponseDto {
 
   @Expose()
   @ApiProperty({
+    enumName: 'LoginButtonTypeEnum',
     enum: LoginButtonTypeEnum,
     type: LoginButtonTypeEnum,
     nullable: true,
