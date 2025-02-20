@@ -111,6 +111,12 @@
       "resolved": "Resolved",
       "pending": "On Hold"
     },
+    "webhook-type": {
+      "FEEDBACK_CREATION": "Feedback Created",
+      "ISSUE_CREATION": "Issue Created",
+      "ISSUE_STATUS_CHANGE": "Issue Status Changed",
+      "ISSUE_ADDITION": "Issue Added"
+    },
     "date": {
       "today": "Today",
       "yesterday": "Yesterday",

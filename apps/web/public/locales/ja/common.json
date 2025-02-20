@@ -111,6 +111,12 @@
       "resolved": "完了",
       "pending": "進行せず"
     },
+    "webhook-type": {
+      "FEEDBACK_CREATION": "フィードバックの作成",
+      "ISSUE_CREATION": "イシュー作成",
+      "ISSUE_STATUS_CHANGE": "イシューステータス変更",
+      "ISSUE_ADDITION": "イシュー追加"
+    },
     "date": {
       "today": "今日",
       "yesterday": "昨日",

@@ -111,6 +111,12 @@
       "resolved": "已解决",
       "pending": "待定"
     },
+    "webhook-type": {
+      "FEEDBACK_CREATION": "反馈已创建",
+      "ISSUE_CREATION": "问题已创建",
+      "ISSUE_STATUS_CHANGE": "问题状态已更改",
+      "ISSUE_ADDITION": "已添加问题"
+    },
     "date": {
       "today": "今天",
       "yesterday": "昨天",

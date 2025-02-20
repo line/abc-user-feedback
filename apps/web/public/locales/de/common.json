@@ -111,6 +111,12 @@
       "resolved": "Gelöst",
       "pending": "Ausstehend"
     },
+    "webhook-type": {
+      "FEEDBACK_CREATION": "Feedback erstellt",
+      "ISSUE_CREATION": "Problem erstellt",
+      "ISSUE_STATUS_CHANGE": "Problemstatus geändert",
+      "ISSUE_ADDITION": "Problem hinzugefügt"
+    },
     "date": {
       "today": "Heute",
       "yesterday": "Gestern",

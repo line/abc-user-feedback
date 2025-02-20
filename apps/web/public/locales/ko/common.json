@@ -110,6 +110,12 @@
       "resolved": "완료",
       "pending": "진행하지 않음"
     },
+    "webhook-type": {
+      "FEEDBACK_CREATION": "피드백 생성",
+      "ISSUE_CREATION": "이슈 생성",
+      "ISSUE_STATUS_CHANGE": "이슈 상태 변경",
+      "ISSUE_ADDITION": "이슈 등록"
+    },
     "date": {
       "today": "오늘",
       "yesterday": "어제",

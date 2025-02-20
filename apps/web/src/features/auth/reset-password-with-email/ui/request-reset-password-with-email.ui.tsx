@@ -67,7 +67,7 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
           loading={isPending}
           disabled={!formState.isValid}
         >
-          {t('auth.reset-password.button.send-email')}
+          {t('v2.auth.reset-password.button.send-email')}
         </Button>
         <Button
           size="medium"
