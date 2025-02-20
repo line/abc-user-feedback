@@ -69,10 +69,22 @@ const IssueDetailSheet = (props: Props) => {
   ];
 
   const BOTTON_ROWS: SheetDetailTableRow[] = [
-    { format: 'keyword', key: 'name', name: 'Title' },
-    { format: 'text', key: 'description', name: 'Description' },
-    { format: 'select', key: 'status', name: 'Status', options: ISSUES(t) },
-    { format: 'ticket', key: 'externalIssueId', name: 'Ticket', issueTracker },
+    { format: 'keyword', key: 'name', name: 'Title', editable: true },
+    { format: 'text', key: 'description', name: 'Description', editable: true },
+    {
+      format: 'select',
+      key: 'status',
+      name: 'Status',
+      options: ISSUES(t),
+      editable: true,
+    },
+    {
+      format: 'ticket',
+      key: 'externalIssueId',
+      name: 'Ticket',
+      issueTracker,
+      editable: true,
+    },
   ];
 
   const { data: channelData } = useOAIQuery({

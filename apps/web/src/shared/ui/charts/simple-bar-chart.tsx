@@ -60,13 +60,25 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
           />
           <Tooltip
             formatter={(value) => value.toLocaleString()}
-            content={({ payload, label }) => (
-              <div
-                className="bg-neutral-primary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
-                style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
-              >
-                <p className="mb-2">{label}</p>
-                <p>{payload?.[0]?.value?.toLocaleString()}</p>
+            content={({ payload }) => (
+              <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
+                {payload?.map(({ color, value, payload }, i) => (
+                  <div
+                    key={i}
+                    className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+                  >
+                    <div className="flex items-center gap-2">
+                      <div
+                        style={{ background: color }}
+                        className="h-2 w-2 flex-shrink-0 rounded-full"
+                      />
+                      <p className="text-small-normal break-all">
+                        {payload.name}
+                      </p>
+                    </div>
+                    <p>{value?.toLocaleString()}</p>
+                  </div>
+                ))}
               </div>
             )}
           />
@@ -79,6 +91,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
             tickFormatter={(v: string) => v.toLocaleString()}
             className="text-neutral-tertiary text-small-normal"
             tickLine={false}
+            axisLine={false}
           />
           <Bar dataKey="value" fill="var(--sky400)" radius={[8, 8, 0, 0]} />
         </BarChart>

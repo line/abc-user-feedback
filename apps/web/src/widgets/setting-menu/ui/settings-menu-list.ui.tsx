@@ -163,7 +163,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
         divider={false}
         value="channel-list"
       >
-        <AccordionItem value="channel-list">
+        <AccordionItem value="channel-list" className="bg-primary">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
           <AccordionContent className={cn('p-0')}>
             {data?.meta.totalItems === 0 ?

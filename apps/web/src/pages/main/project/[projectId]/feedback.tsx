@@ -168,7 +168,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     () => rows.find((v) => v.id === openFeedbackId),
     [rows, openFeedbackId],
   );
-  const { mutate: updateFeedback } = useOAIMutation({
+  const { mutateAsync: updateFeedback } = useOAIMutation({
     method: 'put',
     path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
     pathParams: {

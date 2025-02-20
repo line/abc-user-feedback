@@ -13,6 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
+
 import type { IconNameType } from '@ufb/react';
 import { Icon } from '@ufb/react';
 
@@ -36,8 +38,10 @@ const TYPE_MAP: Record<
 const DashboardCard: React.FC<IProps> = (props) => {
   const { title, data, percentage, description, type } = props;
 
+  const count = Number(data);
+
   return (
-    <div className="shadow-default rounded-20 flex h-[128px] w-[296px] flex-col border p-5">
+    <div className="shadow-default rounded-20 border-neutral-tertiary bg-neutral-primary flex h-[128px] w-[296px] flex-col border p-5">
       <div className="flex flex-1 flex-col gap-1.5">
         <div
           className={cn(
@@ -57,40 +61,34 @@ const DashboardCard: React.FC<IProps> = (props) => {
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <p className="text-title-h4">
-          {typeof data === 'number' ? data.toLocaleString() : data}
-        </p>
-        {typeof percentage !== 'undefined' && isFinite(percentage) ?
-          <div className="flex items-center gap-0.5">
-            <Icon
-              name={
-                percentage === 0 ? 'RiSubtractFill'
-                : percentage > 0 ?
-                  'RiArrowUpSFill'
-                : 'RiArrowDownSFill'
-              }
-              className={
-                percentage === 0 ? 'text-neutral-tertiary'
-                : percentage > 0 ?
-                  'text-tint-green'
-                : 'text-tint-red'
-              }
-              size={12}
-            />
-            <p
+        <NumberFlowGroup>
+          <NumberFlow
+            value={isNaN(count) ? 0 : count}
+            format={{ style: 'decimal' }}
+            className="text-title-h4"
+          />
+          {typeof percentage !== 'undefined' && isFinite(percentage) ?
+            <NumberFlow
+              value={percentage / 100}
+              format={{
+                style: 'percent',
+                maximumFractionDigits: 1,
+                signDisplay: 'always',
+              }}
               className={cn(
                 percentage === 0 && 'text-neutral-tertiary',
                 percentage > 0 && 'text-tint-green',
                 percentage < 0 && 'text-tint-red',
                 'text-small-strong',
               )}
-            >
-              {parseFloat(Math.abs(percentage).toFixed(1))}%
-            </p>
-          </div>
-        : typeof percentage !== 'undefined' && isNaN(percentage) ?
-          <Icon name="RiSubtractFill" className="text-secondary" size={12} />
-        : <></>}
+            />
+          : <Icon
+              name="RiSubtractFill"
+              className="text-neutral-tertiary"
+              size={12}
+            />
+          }
+        </NumberFlowGroup>
       </div>
     </div>
   );

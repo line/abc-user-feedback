@@ -16,7 +16,7 @@
 
 import { Icon, Tooltip, TooltipContent, TooltipTrigger } from '@ufb/react';
 
-import { displayString } from '../utils';
+import { cn, displayString } from '../utils';
 
 export interface ITooltipProps {
   description: string;
@@ -31,13 +31,14 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
 }) => {
   return (
     <Tooltip delayDuration={0}>
-      <TooltipTrigger className="ml-1 align-middle">
+      <TooltipTrigger asChild>
         <Icon
           name="RiInformation2Line"
-          size={16}
-          className={
-            color === 'red' ? 'text-red-primary' : 'icon-neutral-disabled'
-          }
+          size={12}
+          className={cn(
+            color === 'red' ? 'text-red-primary' : 'text-neutral-tertiary',
+            'ml-1',
+          )}
         />
       </TooltipTrigger>
       <TooltipContent className="whitespace-pre-line text-left" side={side}>

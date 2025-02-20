@@ -17,22 +17,13 @@
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import {
-  Calendar,
-  Icon,
-  InputBox,
-  InputField,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-  TextInput,
-} from '@ufb/react';
+import { Icon, InputBox, InputField, TextInput } from '@ufb/react';
 
 import type { DateRangeType } from '@/shared/types';
 import { IssueSelectBox } from '@/entities/issue';
 
 import DateRangePicker from '../date-range-picker';
-import { SelectInput, SelectSearchInput } from '../inputs';
+import { DatePicker, SelectInput, SelectSearchInput } from '../inputs';
 import type {
   TableFilter,
   TableFilterField,
@@ -124,33 +115,10 @@ const TableFilterPopoverInput = (props: Props) => {
                 </InputBox>
               </InputField>
             </DateRangePicker>
-          : <Popover>
-              <PopoverTrigger>
-                <InputField>
-                  <InputBox>
-                    <Icon
-                      name="RiCalendarEventLine"
-                      className="absolute-y-center absolute left-2"
-                      size={16}
-                    />
-                    <TextInput
-                      placeholder={t('v2.placeholder.text')}
-                      className="pl-7"
-                      value={
-                        value ? dayjs(value as string).format('YYYY-MM-DD') : ''
-                      }
-                    />
-                  </InputBox>
-                </InputField>
-              </PopoverTrigger>
-              <PopoverContent>
-                <Calendar
-                  mode="single"
-                  onSelect={(date) => onChange(dayjs(date).toISOString())}
-                  selected={dayjs(value as string).toDate()}
-                />
-              </PopoverContent>
-            </Popover>
+          : <DatePicker
+              value={value as string | undefined}
+              onChange={onChange}
+            />
           }
         </>
       )}

@@ -29,8 +29,8 @@ const ChartCard: React.FC<IProps> = (props) => {
   const { children, description, title, dataKeys, filterContent, showLegend } =
     props;
   return (
-    <div className="rounded-20 shadow-default h-full border px-6">
-      <div className="flex items-center justify-between py-6">
+    <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary h-full border">
+      <div className="border-neutral-tertiary flex items-center justify-between border-b px-6 py-5">
         <div className="flex items-center">
           <span className="text-title-h4">{title}</span>
           <DescriptionTooltip description={description} side="bottom" />
@@ -40,7 +40,7 @@ const ChartCard: React.FC<IProps> = (props) => {
           {filterContent}
         </div>
       </div>
-      <div className="py-6 pt-0">{children}</div>
+      <div className="p-6">{children}</div>
     </div>
   );
 };

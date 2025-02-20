@@ -15,15 +15,15 @@
  */
 import type { TFunction } from 'next-i18next';
 
-import type { Color } from '@ufb/react';
-
 import type { IssueStatus } from '@/entities/issue';
+
+import type { BadgeColor } from './color-map';
 
 export interface IssuesItem {
   key: IssueStatus;
   status: IssueStatus;
   name: string;
-  color: Color;
+  color: BadgeColor;
 }
 
 export const ISSUES: (t: TFunction) => IssuesItem[] = (t) => [
@@ -31,7 +31,7 @@ export const ISSUES: (t: TFunction) => IssuesItem[] = (t) => [
     key: 'INIT',
     status: 'INIT',
     name: t('text.issue.init'),
-    color: 'orange',
+    color: 'yellow',
   },
   {
     key: 'ON_REVIEW',
@@ -43,18 +43,18 @@ export const ISSUES: (t: TFunction) => IssuesItem[] = (t) => [
     key: 'IN_PROGRESS',
     status: 'IN_PROGRESS',
     name: t('text.issue.inProgress'),
-    color: 'blue',
+    color: 'sky',
   },
   {
     key: 'RESOLVED',
     status: 'RESOLVED',
     name: t('text.issue.resolved'),
-    color: 'default',
+    color: 'zinc',
   },
   {
     key: 'PENDING',
     status: 'PENDING',
     name: t('text.issue.pending'),
-    color: 'red',
+    color: 'indigo',
   },
 ];

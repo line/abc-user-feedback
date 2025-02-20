@@ -13,8 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as TextInput } from './text-input.ui';
-export { default as SelectInput } from './select-input.ui';
-export { default as SelectSearchInput } from './select-search-input.ui';
-export { default as ComboboxInputbox } from './combobox-input-box.ui';
-export { default as DatePicker } from './date-picker.ui';
+export const BADGE_COLOR_MAP = {
+  red: 'bg-red-500',
+  blue: 'bg-blue-500',
+  green: 'bg-green-500',
+  yellow: 'bg-yellow-500',
+  sky: 'bg-sky-500',
+  zinc: 'bg-zinc-500',
+  indigo: 'bg-indigo-500',
+  orange: 'bg-orange-500',
+};
+
+export type BadgeColor = keyof typeof BADGE_COLOR_MAP;

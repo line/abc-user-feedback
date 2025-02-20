@@ -149,7 +149,7 @@ const CategoryTableRow = (props: Props) => {
             isLoading={isLoading}
             emptyCaption="No issues found"
           />
-          <div className="flex h-12 w-full items-center rounded-b border border-t-0 px-4">
+          <div className="border-neutral-tertiary flex h-12 w-full items-center rounded-b border border-t-0 px-4">
             <TablePagination table={table} disableRowSelect disableLimit />
           </div>
         </>

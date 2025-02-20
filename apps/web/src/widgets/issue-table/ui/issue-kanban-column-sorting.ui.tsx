@@ -47,31 +47,41 @@ const IssueKanbanColumnSorting = (props: Props) => {
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger>
-        <Icon name="RiArrowUpDownFill" size={20} />
+      <PopoverTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8">
+          <Icon
+            name="RiArrowUpDownFill"
+            size={16}
+            className="text-neutral-inverse"
+          />
+        </Button>
       </PopoverTrigger>
-      <PopoverContent className="flex flex-col gap-5 p-5">
+      <PopoverContent className="flex min-w-[320px] flex-col gap-5 p-5">
         <p className="text-title-h5">Sort</p>
         <div className="flex gap-2">
-          <SelectInput
-            options={[
-              { label: 'Created', value: 'createdAt' },
-              { label: 'Updated', value: 'updatedAt' },
-              { label: 'Feedbacks', value: 'feedbackCount' },
-            ]}
-            value={currentKey}
-            onChange={(value) => setCurrentKey(value)}
-          />
-          <SelectInput
-            options={[
-              { label: 'Desc', value: 'DESC' },
-              { label: 'Asc', value: 'ASC' },
-            ]}
-            value={currentValue}
-            onChange={(value) => setCurrentValue(value)}
-          />
+          <div className="flex-1">
+            <SelectInput
+              options={[
+                { label: 'Created', value: 'createdAt' },
+                { label: 'Updated', value: 'updatedAt' },
+                { label: 'Feedbacks', value: 'feedbackCount' },
+              ]}
+              value={currentKey}
+              onChange={(value) => setCurrentKey(value)}
+            />
+          </div>
+          <div className="flex-1">
+            <SelectInput
+              options={[
+                { label: 'Desc', value: 'DESC' },
+                { label: 'Asc', value: 'ASC' },
+              ]}
+              value={currentValue}
+              onChange={(value) => setCurrentValue(value)}
+            />
+          </div>
         </div>
-        <div className="flex-end flex gap-2">
+        <div className="flex justify-end gap-2 [&>button]:min-w-20">
           <Button variant="outline" onClick={() => setOpen(false)}>
             {t('v2.button.cancel')}
           </Button>

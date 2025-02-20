@@ -36,7 +36,7 @@ function DashboardTable<T>(props: IProps<T>) {
   const { title, description, table, selectData, filterContent } = props;
 
   return (
-    <div className="rounded-20 shadow-default flex h-[450px] flex-col border">
+    <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary flex h-[450px] flex-col border">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-1">
           <h3 className="font-20-bold">{title}</h3>
@@ -52,7 +52,7 @@ function DashboardTable<T>(props: IProps<T>) {
       <div className="mb-6 overflow-x-hidden overflow-y-scroll">
         <table className="w-full">
           <thead>
-            <tr className="h-12 border-b border-t">
+            <tr className="border-neutral-tertiary h-12 border-b border-t">
               {table.getFlatHeaders().map((header, i) => (
                 <th
                   key={i}
@@ -74,7 +74,10 @@ function DashboardTable<T>(props: IProps<T>) {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr className="h-14 border-b" key={row.index}>
+              <tr
+                className="border-neutral-tertiary h-14 border-b"
+                key={row.index}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={`${cell.id} ${cell.row.index}`}

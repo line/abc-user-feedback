@@ -19,15 +19,17 @@ import type { BadgeProps } from '@ufb/react';
 import { Badge } from '@ufb/react';
 
 import { ISSUES } from '@/shared';
+import { BADGE_COLOR_MAP } from '@/shared/constants/color-map';
+import type { BadgeColor } from '@/shared/constants/color-map';
 
 import type { Issue, IssueStatus } from '../issue.type';
 
-const ISSUE_COLOR_MAP: Record<IssueStatus, string> = {
-  INIT: 'bg-yellow-500',
-  ON_REVIEW: 'bg-green-500',
-  IN_PROGRESS: 'bg-teal-500',
-  RESOLVED: 'bg-slate-500',
-  PENDING: 'bg-indigo-500',
+const ISSUE_COLOR_MAP: Record<IssueStatus, BadgeColor> = {
+  INIT: 'yellow',
+  ON_REVIEW: 'green',
+  IN_PROGRESS: 'sky',
+  RESOLVED: 'zinc',
+  PENDING: 'indigo',
 };
 interface IProps extends Omit<BadgeProps, 'color'> {
   right?: React.ReactNode;
@@ -39,7 +41,7 @@ const IssueBadge: React.FC<IProps> = ({ name, status, right, ...props }) => {
   const { t } = useTranslation();
 
   return (
-    <Badge {...props} className={ISSUE_COLOR_MAP[status]}>
+    <Badge {...props} className={BADGE_COLOR_MAP[ISSUE_COLOR_MAP[status]]}>
       {name ?? ISSUES(t).find((v) => v.key === status)?.name} {right}
     </Badge>
   );

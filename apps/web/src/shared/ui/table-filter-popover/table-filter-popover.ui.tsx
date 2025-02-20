@@ -58,9 +58,9 @@ const TableFilterPopover = (props: Props) => {
   }, [tableFilters]);
 
   const addFilter = () => {
-    const filterField = filters[0];
-    if (!filterField) return;
-    void setFilters([...filters, filterField]);
+    const filterField = filters[filters.length - 1];
+    if (!filterField) resetFilters();
+    else setFilters([...filters, filterField]);
   };
 
   const updateFilter = (index: number, field: TableFilterField) => {
@@ -152,73 +152,75 @@ const TableFilterPopover = (props: Props) => {
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="min-w-[500px] p-4">
+      <PopoverContent className="min-w-[620px] p-4">
         <p className="text-title-h5">Filter</p>
         <div className="py-4">
-          <table>
-            <tbody>
-              {filters.map((filter, index) => (
-                <tr key={index} className="[&>td]:p-1">
-                  <td>
-                    {index === 0 ?
-                      <p className="min-w-20">Where</p>
-                    : index === 1 ?
-                      <SelectInput
-                        options={[
-                          { label: 'And', value: 'AND' },
-                          { label: 'Or', value: 'OR' },
-                        ]}
-                        value={operator}
-                        onChange={(value) =>
-                          setOperator(value as TableFilterOperator)
-                        }
+          {filters.length > 0 ?
+            <table className="w-full">
+              <tbody>
+                {filters.map((filter, index) => (
+                  <tr key={index} className="[&>td]:p-1">
+                    <td>
+                      {index === 0 ?
+                        <p className="min-w-20">Where</p>
+                      : index === 1 ?
+                        <SelectInput
+                          options={[
+                            { label: 'And', value: 'AND' },
+                            { label: 'Or', value: 'OR' },
+                          ]}
+                          value={operator}
+                          onChange={(value) =>
+                            setOperator(value as TableFilterOperator)
+                          }
+                        />
+                      : <SelectInput
+                          options={[
+                            { label: 'And', value: 'AND' },
+                            { label: 'Or', value: 'OR' },
+                          ]}
+                          value={operator}
+                          disabled
+                        />
+                      }
+                    </td>
+                    <td>
+                      <SelectSearchInput
+                        onChange={(value) => {
+                          const field = filterFields.find(
+                            (field) => field.name === value,
+                          );
+                          if (!field) return;
+                          updateFilter(index, field);
+                        }}
+                        value={filter.name}
+                        options={filterFields.map((field) => ({
+                          label: field.name,
+                          value: field.name,
+                        }))}
                       />
-                    : <SelectInput
-                        options={[
-                          { label: 'And', value: 'AND' },
-                          { label: 'Or', value: 'OR' },
-                        ]}
-                        value={operator}
-                        disabled
-                      />
-                    }
-                  </td>
-                  <td>
-                    <SelectSearchInput
-                      onChange={(value) => {
-                        const field = filterFields.find(
-                          (field) => field.name === value,
-                        );
-                        if (!field) return;
-                        updateFilter(index, field);
-                      }}
-                      value={filter.name}
-                      options={filterFields.map((field) => ({
-                        label: field.name,
-                        value: field.name,
-                      }))}
-                    />
-                  </td>
-                  <td>{renderOperator(filter, index)}</td>
-                  <td>{renderInput(filter, index)}</td>
-                  <td>
-                    <Button
-                      variant="outline"
-                      onClick={() => deleteFilter(index)}
-                    >
-                      <Icon name="RiDeleteBin6Line" />
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                    <td>{renderOperator(filter, index)}</td>
+                    <td>{renderInput(filter, index)}</td>
+                    <td>
+                      <Button
+                        variant="outline"
+                        onClick={() => deleteFilter(index)}
+                      >
+                        <Icon name="RiDeleteBin6Line" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          : <p className="text-neutral-tertiary">필터 조건을 추가해 주세요.</p>}
         </div>
         <div className="flex justify-between">
           <Button variant="outline" onClick={addFilter}>
             {t('v2.button.addFilter')}
           </Button>
-          <div className="flex gap-2">
+          <div className="flex gap-2 [&>button]:min-w-20">
             <PopoverClose asChild>
               <Button variant="outline" onClick={() => resetFilters()}>
                 {t('v2.button.cancel')}

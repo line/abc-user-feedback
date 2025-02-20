@@ -34,7 +34,7 @@ const ThemeSelectBox: React.FC = () => {
       <DropdownTrigger variant="ghost">
         <Icon name="RiSunLine" />
       </DropdownTrigger>
-      <DropdownContent align="end">
+      <DropdownContent align="end" className="w-[120px]">
         {themes.map((theme) => (
           <DropdownCheckboxItem
             key={theme}

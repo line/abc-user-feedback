@@ -43,7 +43,7 @@ interface Props {
   fields: FieldInfo[];
   feedback: Feedback;
   onClickDelete?: () => void;
-  updateFeedback?: (feedback: Feedback) => void;
+  updateFeedback?: (feedback: Feedback) => Promise<unknown>;
 }
 
 const FeedbackDetailSheet = (props: Props) => {
@@ -54,11 +54,13 @@ const FeedbackDetailSheet = (props: Props) => {
   const perms = usePermissions();
   const [currentFeedback, setCurrentFeedback] = useState(feedback);
   const [mode, setMode] = useState<'edit' | 'view'>('view');
+
   const onClickCancel = () => {
     setMode('view');
     setCurrentFeedback(feedback);
   };
-  const onClickSubmit = () => {
+
+  const onClickSubmit = async () => {
     const editedFeedback = fields.reduce((acc, cur) => {
       if (cur.key === 'issues') return acc;
       if (
@@ -84,8 +86,9 @@ const FeedbackDetailSheet = (props: Props) => {
       }
       return acc;
     }, {} as Feedback);
-    updateFeedback?.(editedFeedback);
-    setMode('edit');
+    await updateFeedback?.(editedFeedback);
+
+    setMode('view');
   };
 
   return (
@@ -112,9 +115,12 @@ const FeedbackDetailSheet = (props: Props) => {
           <Divider variant="subtle" className="my-4" />
           <SheetDetailTable
             rows={
-              fields.filter(
-                (v) => !DEFAULT_FIELD_KEYS.includes(v.key),
-              ) as SheetDetailTableRow[]
+              fields
+                .filter((v) => !DEFAULT_FIELD_KEYS.includes(v.key))
+                .map((v) => ({
+                  ...v,
+                  editable: v.property === 'EDITABLE',
+                })) as SheetDetailTableRow[]
             }
             mode={mode}
             data={currentFeedback}

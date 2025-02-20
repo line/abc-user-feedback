@@ -150,9 +150,10 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   );
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 pb-14">
       <div className="flex items-center justify-between">
-        <span className="font-12-regular text-secondary ml-2">
+        <span className="text-neutral-tertiary ml-2 flex items-center gap-1">
+          <Icon name="RiRefreshLine" size={12} />
           Updated: {currentDate}
         </span>
         <div className="flex items-center gap-2">

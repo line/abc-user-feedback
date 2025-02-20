@@ -21,15 +21,12 @@ import { cn } from '@/shared';
 
 import IssueKanbanColumnSorting from './issue-kanban-column-sorting.ui';
 
-const ISSUE_MAP: Record<
-  IssuesItem['status'],
-  { bgClassName: string; fgClassName: string }
-> = {
-  INIT: { bgClassName: 'bg-yellow-50', fgClassName: 'bg-yellow-500' },
-  ON_REVIEW: { bgClassName: 'bg-green-50', fgClassName: 'bg-green-500' },
-  IN_PROGRESS: { bgClassName: 'bg-teal-50', fgClassName: 'bg-teal-500' },
-  RESOLVED: { bgClassName: 'bg-slate-50', fgClassName: 'bg-slate-500' },
-  PENDING: { bgClassName: 'bg-indigo-50', fgClassName: 'bg-indigo-500' },
+const ISSUE_MAP: Record<IssuesItem['status'], { fgClassName: string }> = {
+  INIT: { fgClassName: 'bg-yellow-500' },
+  ON_REVIEW: { fgClassName: 'bg-green-500' },
+  IN_PROGRESS: { fgClassName: 'bg-sky-500' },
+  RESOLVED: { fgClassName: 'bg-zinc-500' },
+  PENDING: { fgClassName: 'bg-indigo-500' },
 };
 
 interface Props {
@@ -44,7 +41,7 @@ const IssueKanbanColumnHeader = (props: Props) => {
   return (
     <div
       className={cn(
-        'text-neutral-inverse rounded-8 text-base-strong flex items-center justify-between px-4 py-2',
+        'text-neutral-inverse rounded-8 text-base-strong flex items-center justify-between px-4 py-1',
         ISSUE_MAP[issue.status].fgClassName,
       )}
     >

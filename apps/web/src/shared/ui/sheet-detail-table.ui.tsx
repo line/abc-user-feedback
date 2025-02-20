@@ -15,24 +15,18 @@
  */
 import dayjs from 'dayjs';
 
-import type { Color, IconNameType } from '@ufb/react';
-import {
-  Badge,
-  Calendar,
-  Icon,
-  InputField,
-  Tag,
-  Textarea,
-  TextInput,
-} from '@ufb/react';
+import type { IconNameType } from '@ufb/react';
+import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
 
 import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
 
 import { DATE_TIME_FORMAT } from '../constants';
+import type { BadgeColor } from '../constants/color-map';
+import { BADGE_COLOR_MAP } from '../constants/color-map';
 import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
-import { SelectInput } from './inputs';
+import { DatePicker, SelectInput } from './inputs';
 
 type PlainRow = {
   format: 'text' | 'keyword' | 'number' | 'date' | 'images';
@@ -45,7 +39,7 @@ type ImageRow = {
 
 type SelectableRow = {
   format: 'select' | 'multiSelect';
-  options: { key: string; name: string; color?: Color }[];
+  options: { key: string; name: string; color?: BadgeColor }[];
 };
 
 type TicketRow = {
@@ -107,7 +101,10 @@ const SheetDetailTable = (props: Props) => {
         (option) => option.key === value,
       );
       return (
-        <Badge variant="subtle" color={option?.color}>
+        <Badge
+          variant={option?.color ? 'bold' : 'subtle'}
+          className={option?.color ? BADGE_COLOR_MAP[option.color] : ''}
+        >
           {option?.name ?? ''}
         </Badge>
       );
@@ -129,7 +126,10 @@ const SheetDetailTable = (props: Props) => {
               (option) => option.key === key,
             );
             return (
-              <Badge variant="subtle" color={option?.color}>
+              <Badge
+                variant={option?.color ? 'bold' : 'subtle'}
+                className={option?.color ? BADGE_COLOR_MAP[option.color] : ''}
+              >
                 {(option?.name ?? value) as string}
               </Badge>
             );
@@ -155,9 +155,7 @@ const SheetDetailTable = (props: Props) => {
       const category = value as Category | undefined;
       return (
         <div className="flex items-center gap-2">
-          {category ?
-            <Badge variant="subtle">{category.name}</Badge>
-          : ''}
+          {category && <Badge variant="subtle">{category.name}</Badge>}
           <CategoryCombobox
             issueId={(row as CategoryRow).issueId}
             category={category}
@@ -176,6 +174,7 @@ const SheetDetailTable = (props: Props) => {
       <Textarea
         value={value as string}
         onChange={(e) => onChange?.(row.key, e.currentTarget.value)}
+        className="resize-none"
       />
     ),
     keyword: (value, row) => (
@@ -195,12 +194,14 @@ const SheetDetailTable = (props: Props) => {
         />
       </InputField>
     ),
-    date: (value, row) => (
-      <Calendar
-        selected={dayjs(value as string).toDate()}
-        onDayClick={(date) => onChange?.(row.key, date)}
-      />
-    ),
+    date: (value, row) => {
+      return (
+        <DatePicker
+          value={value as string | undefined}
+          onChange={(date) => onChange?.(row.key, date)}
+        />
+      );
+    },
     select: (value, row) => {
       return (
         <SelectInput
@@ -266,11 +267,11 @@ const SheetDetailTable = (props: Props) => {
                 </div>
               </th>
               <td className="w-full py-2.5">
-                {mode === 'view' &&
-                  (typeof value === 'undefined' ? '-' : (
-                    renderViewModeField[format](value, row)
-                  ))}
-                {mode === 'edit' && renderEditModeField[format](value, row)}
+                {mode === 'edit' && row.editable ?
+                  renderEditModeField[format](value, row)
+                : typeof value === 'undefined' ?
+                  '-'
+                : renderViewModeField[format](value, row)}
               </td>
             </tr>
           );

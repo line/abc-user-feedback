@@ -93,6 +93,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
             tickSize={15}
             tickLine={false}
             min={0}
+            axisLine={false}
           />
           <defs>
             {dataKeys.map(({ color }, index) => (
@@ -145,11 +146,8 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
   if (!active || !payload) return null;
 
   return (
-    <div
-      className="bg-neutral-primary max-w-[240px] rounded border px-4 py-3"
-      style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
-    >
-      <h1 className="font-12-bold mb-3">
+    <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
+      <h1 className="text-base-strong mb-1">
         {label}
         {days && (
           <span className="text-secondary ml-1">
@@ -158,18 +156,21 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
         )}
       </h1>
       <div className="flex flex-col gap-1">
-        {payload.map(({ color, name, value }, i) => (
-          <div className="flex items-center justify-between gap-4" key={i}>
+        {payload.map(({ color, name, value, payload }, i) => (
+          <div
+            key={i}
+            className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+          >
             {!noLabel && (
               <div className="flex items-center gap-2">
                 <div
                   style={{ background: color }}
                   className="h-2 w-2 flex-shrink-0 rounded-full"
                 />
-                <p className="font-12-regular break-all">{name}</p>
+                <p className="break-all">{name ? name : payload?.date}</p>
               </div>
             )}
-            <p className="font-12-regular">{value?.toLocaleString()}</p>
+            <p>{value?.toLocaleString()}</p>
           </div>
         ))}
       </div>
