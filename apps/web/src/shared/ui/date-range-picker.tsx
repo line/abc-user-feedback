@@ -265,8 +265,8 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             {(options ?? items).map(({ label, startDate, endDate }, index) => (
               <li
                 className={cn([
-                  'font-14-regular hover:bg-fill-secondary my-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
-                  { 'bg-fill-tertiary': activeIdx === index },
+                  'hover:bg-neutral-tertiary my-1 w-[184px] rounded-sm px-2 py-2 hover:cursor-pointer',
+                  { 'bg-neutral-tertiary': activeIdx === index },
                 ])}
                 key={index}
                 onClick={handleChangeDateRange(index, startDate, endDate)}

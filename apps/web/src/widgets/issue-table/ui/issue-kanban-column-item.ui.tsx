@@ -91,17 +91,12 @@ const IssueKanbanColumnItem = (props: Props) => {
             </div>
           )}
         </div>
-
         {item.category ?
           <Badge variant="subtle" className="w-fit">
             {item.category.name}
           </Badge>
         : <CategoryCombobox issueId={item.id} category={item.category}>
-            <Badge
-              variant="outline"
-              className="w-fit cursor-pointer"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <Badge variant="outline" className="w-fit cursor-pointer">
               Add Category
             </Badge>
           </CategoryCombobox>

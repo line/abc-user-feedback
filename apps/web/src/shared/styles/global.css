@@ -12,7 +12,7 @@
   .table-loading {
     position: relative;
     overflow: hidden;
-    @apply bg-blue-primary;
+    @apply bg-tint-blue-bold;
   }
 
   .table-loading::after {
@@ -59,8 +59,7 @@
 }
 
 body {
-  @apply font-14-regular bg-primary min-w-[1280px];
-  /* font-family: LINESeedJP, LINESeedKR, LINESeedEN, sans-serif; */
+  @apply text-base-normal bg-primary min-w-[1280px];
 }
 
 a {
@@ -70,7 +69,9 @@ a {
 th {
   position: relative;
 }
-
+button {
+  width: fit-content;
+}
 /* Table resizing */
 .resizer {
   position: absolute;
@@ -90,7 +91,7 @@ th {
 
 ::-webkit-scrollbar-thumb {
   border-radius: 4px;
-  background-color: var(--fill-color-secondary);
+  background-color: var(--fg-neutral-tertiary);
 }
 
 .swiper {

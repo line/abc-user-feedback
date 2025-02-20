@@ -25,9 +25,9 @@ import {
   DropdownItem,
   DropdownTrigger,
   Icon,
+  TextInput,
   toast,
 } from '@ufb/react';
-import { Input } from '@ufb/ui';
 
 import type { Category } from '@/entities/category';
 
@@ -97,7 +97,7 @@ const CategoryComboboxEditPopover = (props: Props) => {
       </DropdownTrigger>
       <DropdownContent onClick={(e) => e.stopPropagation()} side="right">
         <div className="border-b">
-          <Input
+          <TextInput
             className="border-none"
             value={inputValue}
             onChange={(e) => setInputValue(e.currentTarget.value)}

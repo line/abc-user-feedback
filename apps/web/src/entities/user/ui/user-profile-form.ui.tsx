@@ -35,13 +35,13 @@ const UserProfileForm: React.FC<Props> = (props: Props) => {
       <TextInput label="Type" value={user.type} disabled />
       <TextInput
         label="Name"
-        placeholder={t('main.profile.placeholder.name')}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.name?.message}
         {...register('name')}
       />
       <TextInput
         label="Department"
-        placeholder={t('main.profile.placeholder.department')}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.department?.message}
         {...register('department')}
       />

@@ -74,7 +74,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
         >
           <CartesianGrid
             vertical={false}
-            stroke="var(--fill-color-secondary)"
+            stroke="var(--border-neutral-tertiary)"
           />
           <Tooltip
             content={(props) => <CustomTooltip {...props} noLabel={noLabel} />}
@@ -142,7 +142,6 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
     const dates = dayjs(end).diff(dayjs(start), 'day') + 1;
     return dates > 0 ? dates : 365 + dates;
   }, [label]);
-  console.log('payload: ', payload);
 
   if (!active || !payload) return null;
   return (
@@ -150,7 +149,7 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
       <h1 className="text-base-strong mb-1">
         {label}
         {days && (
-          <span className="text-secondary ml-1">
+          <span className="text-neutral-secondary ml-1">
             ({t('text.days', { days })})
           </span>
         )}

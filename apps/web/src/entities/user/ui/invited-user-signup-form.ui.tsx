@@ -60,23 +60,23 @@ const InvitedUserSignupForm: React.FC<IProps> = ({ code, email }) => {
       <div className="mb-12 flex flex-col gap-4">
         <TextInput
           label="Email"
-          placeholder={t('input.placeholder.email')}
+          placeholder={t('v2.placeholder.text')}
           type="email"
           value={email}
           disabled
         />
         <TextInput
           type="password"
-          label={t('input.label.password')}
-          placeholder={t('input.placeholder.password')}
+          label="Password"
+          placeholder={t('v2.placeholder.text')}
           {...register('password')}
           error={formState.errors.password?.message}
           required
         />
         <TextInput
           type="password"
-          label={t('input.label.confirm-password')}
-          placeholder={t('input.placeholder.confirm-password')}
+          label="Confirm Password"
+          placeholder={t('v2.placeholder.text')}
           {...register('confirmPassword')}
           error={formState.errors.confirmPassword?.message}
           required

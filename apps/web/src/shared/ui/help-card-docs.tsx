@@ -42,7 +42,7 @@ const HelpCardDocs: React.FC<IProps> = ({ i18nKey }) => {
         components={{
           docs: (
             <span
-              className="text-blue-primary mr-1 cursor-pointer"
+              className="text-tint-blue mr-1 cursor-pointer"
               onClick={() => window.open(urlMap[i18nKey], '_blank')}
             />
           ),

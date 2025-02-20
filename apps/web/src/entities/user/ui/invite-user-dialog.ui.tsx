@@ -88,7 +88,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
         <TextInput
           type="email"
           label="Email"
-          placeholder={t('input.placeholder.email')}
+          placeholder={t('v2.placeholder.text')}
           error={formState.errors.email?.message}
           {...register('email')}
           required

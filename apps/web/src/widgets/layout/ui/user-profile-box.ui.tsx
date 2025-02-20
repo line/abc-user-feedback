@@ -48,17 +48,11 @@ const UserProfileBox: React.FC<Props> = () => {
       <DropdownTrigger variant="ghost">
         <Icon name="RiUser6Line" />
       </DropdownTrigger>
-      <DropdownContent align="end">
-        <DropdownItem
-          className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
-          onClick={handleClickProfile}
-        >
+      <DropdownContent align="end" className="min-w-[120px]">
+        <DropdownItem onClick={handleClickProfile}>
           {t('header.profile')}
         </DropdownItem>
-        <DropdownItem
-          className="hover:bg-fill-quaternary cursor-pointer p-3 hover:cursor-pointer"
-          onClick={handleClickSignout}
-        >
+        <DropdownItem onClick={handleClickSignout}>
           {t('header.sign-out')}
         </DropdownItem>
       </DropdownContent>

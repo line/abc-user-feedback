@@ -108,11 +108,11 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
           </PopoverClose>
         </div>
         {!apiKey && (
-          <p className="text-red-primary">
+          <p className="text-tint-red">
             No API KEY with Active status. Please create API KEY.
           </p>
         )}
-        <pre className="bg-fill-quaternary font-10-regular whitespace-pre-wrap rounded p-4">
+        <pre className="bg-neutral-tertiary text-small-normal whitespace-pre-wrap rounded p-4">
           {`curl --request POST ${
             env.NEXT_PUBLIC_API_BASE_URL
           }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${

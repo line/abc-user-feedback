@@ -17,7 +17,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
-import { Badge } from '@ufb/ui';
+import { Badge } from '@ufb/react';
 
 import {
   Avatar,
@@ -85,17 +85,17 @@ export const getUserColumns = () => [
       return value.includes(row.getValue(id));
     },
     cell: ({ getValue }) => {
-      return <Badge type="secondary">{getValue()}</Badge>;
+      return <Badge variant="subtle">{getValue()}</Badge>;
     },
   }),
   columnHelper.accessor('members', {
     header: 'Project',
     cell: ({ getValue, row }) =>
-      row.original.type === 'SUPER' ? <Badge type="secondary">All</Badge>
+      row.original.type === 'SUPER' ? <Badge variant="subtle">All</Badge>
       : getValue().length > 0 ?
         <div className="flex flex-wrap gap-2">
           {getValue().map((member) => (
-            <Badge key={member.id} type="secondary">
+            <Badge key={member.id} variant="subtle">
               {member.role.project.name} ({member.role.name})
             </Badge>
           ))}

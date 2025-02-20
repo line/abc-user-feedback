@@ -117,7 +117,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
             variant="outline"
             onClick={openDeleteDialog}
             disabled={!perms.includes('channel_delete')}
-            className="!text-red-primary"
+            className="!text-tint-red"
           >
             <Icon name="RiDeleteBinFill" />
             {t('v2.button.name.delete', { name: 'Channel' })}

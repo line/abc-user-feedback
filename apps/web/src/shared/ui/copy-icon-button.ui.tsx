@@ -16,7 +16,7 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { Icon, toast } from '@ufb/react';
+import { Button, Icon, toast } from '@ufb/react';
 
 interface Props {
   data: string;
@@ -26,8 +26,8 @@ const CopyIconButton: React.FC<Props> = (props) => {
   const { data } = props;
   const { t } = useTranslation();
   return (
-    <button
-      className="icon-btn icon-btn-sm icon-btn-tertiary"
+    <Button
+      variant="ghost"
       onClick={async (e) => {
         e.stopPropagation();
         try {
@@ -41,7 +41,7 @@ const CopyIconButton: React.FC<Props> = (props) => {
       }}
     >
       <Icon name="RiLinkM" size={16} className="cursor-pointer" />
-    </button>
+    </Button>
   );
 };
 

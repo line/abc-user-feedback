@@ -211,7 +211,7 @@ const RoleTitleRow: React.FC<IRoleTitleRowProps> = ({
   return (
     <TableRow className={cn({ 'bg-neutral-tertiary': !sub })}>
       <TableCell colSpan={colspan}>
-        <p className="font-12-bold">{title}</p>
+        <p className="text-base-strong">{title}</p>
       </TableCell>
     </TableRow>
   );

@@ -53,7 +53,6 @@ module.exports = {
     ),
   ],
   plugins: [
-    require('@ufb/tailwind'),
     require('@ufb/tailwindcss'),
     // @ts-ignore
     require('tailwind-scrollbar-hide'),

@@ -16,9 +16,7 @@
 import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 
-import { DescriptionTooltip, SelectInput } from '@/shared';
-
-import TableSortIcon from './table-sort-icon';
+import { DescriptionTooltip, SelectInput, SortingTableHead } from '@/shared';
 
 interface IProps<T> {
   title: string;
@@ -39,7 +37,7 @@ function DashboardTable<T>(props: IProps<T>) {
     <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary flex h-[450px] flex-col border">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-1">
-          <h3 className="font-20-bold">{title}</h3>
+          <h3 className="text-title-h4">{title}</h3>
           {description && (
             <DescriptionTooltip description={description} side="bottom" />
           )}
@@ -60,13 +58,18 @@ function DashboardTable<T>(props: IProps<T>) {
                   className="text-base-normal px-3 text-left"
                 >
                   <div className="flex items-center gap-1">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
+                    {header.column.getCanSort() ?
+                      <SortingTableHead column={header.column}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </SortingTableHead>
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )
+                    }
                   </div>
                 </th>
               ))}

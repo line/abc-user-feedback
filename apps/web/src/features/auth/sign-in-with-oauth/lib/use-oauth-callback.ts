@@ -16,7 +16,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { toast } from '@ufb/ui';
+import { toast } from '@ufb/react';
 
 import { Path } from '@/shared';
 import { useUserStore } from '@/entities/user';
@@ -34,7 +34,7 @@ export const useOAuthCallback = () => {
     if (!code) return;
 
     signInWithOAuth({ code, callback_url }).catch(() => {
-      toast.negative({ title: 'OAuth2.0 Login Error' });
+      toast.error('OAuth2.0 Login Error');
       void router.replace(Path.SIGN_IN);
       setStatus('error');
     });

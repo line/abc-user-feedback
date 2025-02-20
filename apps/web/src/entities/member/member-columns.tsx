@@ -59,7 +59,7 @@ export const getMemberColumns = (users: User[]) => [
       const { t } = useTranslation();
       return users.some((v) => v.email === getValue()) ? getValue() : (
           <div className="flex items-center gap-1">
-            <span className="text-red-primary">{getValue()}</span>
+            <span className="text-tint-red">{getValue()}</span>
             <DescriptionTooltip
               color="red"
               description={t('main.create-project.error-member')}

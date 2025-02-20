@@ -141,7 +141,7 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
         <div className="flex flex-col gap-4">
           <TextInput
             label="Access Key ID"
-            placeholder={t('placeholder', { name: 'Access Key ID' })}
+            placeholder={t('v2.placeholder.text')}
             {...register('accessKeyId')}
             error={formState.errors.accessKeyId?.message}
             disabled={readOnly}
@@ -149,28 +149,28 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
           <TextInput
             {...register('secretAccessKey')}
             label="Secret Access Key"
-            placeholder={t('placeholder', { name: 'Secret Access Key' })}
+            placeholder={t('v2.placeholder.text')}
             error={formState.errors.secretAccessKey?.message}
             disabled={readOnly}
           />
           <TextInput
             {...register('endpoint')}
             label="End Point"
-            placeholder={t('placeholder', { name: 'End Point' })}
+            placeholder={t('v2.placeholder.text')}
             error={formState.errors.endpoint?.message}
             disabled={readOnly}
           />
           <TextInput
             {...register('region')}
             label="Region"
-            placeholder={t('placeholder', { name: 'Region' })}
+            placeholder={t('v2.placeholder.text')}
             error={formState.errors.region?.message}
             disabled={readOnly}
           />
           <TextInput
             {...register('bucket')}
             label="Bucket Name"
-            placeholder={t('placeholder', { name: 'Bucket Name' })}
+            placeholder={t('v2.placeholder.text')}
             error={formState.errors.bucket?.message}
             disabled={readOnly}
           />

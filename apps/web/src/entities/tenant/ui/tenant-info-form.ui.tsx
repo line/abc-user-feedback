@@ -36,14 +36,14 @@ const TenantInfoForm: React.FC<IProps> = () => {
       <TextInput
         {...register('siteName')}
         label="Name"
-        placeholder={t('placeholder', { name: 'Tenant Name' })}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.siteName?.message}
         required
       />
       <TextInput
         {...register('description')}
         label="Description"
-        placeholder={t('placeholder', { name: 'Description' })}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.description?.message}
       />
     </div>

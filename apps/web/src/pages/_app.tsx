@@ -29,8 +29,7 @@ import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 import { ThemeProvider } from 'next-themes';
 
-import { Toaster as Toaster2, TooltipProvider } from '@ufb/react';
-import { Toaster } from '@ufb/ui';
+import { Toaster, TooltipProvider } from '@ufb/react';
 
 import { sessionStorage } from '@/shared';
 import type { Jwt, NextPageWithLayout } from '@/shared/types';
@@ -38,8 +37,6 @@ import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
 // NOTE: DON'T Change the following import order
-import 'react-datepicker/dist/react-datepicker.css';
-import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
 import 'swiper/css';
 import 'swiper/css/free-mode';
@@ -94,7 +91,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                 <TenantGuard>
                   {getLayout(<Component {...otherProps} />)}
                   <Toaster />
-                  <Toaster2 />
                 </TenantGuard>
               </TooltipProvider>
             </HydrationBoundary>

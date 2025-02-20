@@ -36,7 +36,7 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
           name="RiInformation2Line"
           size={12}
           className={cn(
-            color === 'red' ? 'text-red-primary' : 'text-neutral-tertiary',
+            color === 'red' ? 'text-tint-red' : 'text-neutral-tertiary',
             'ml-1',
           )}
         />

@@ -1,34 +1,4 @@
 {
-  "tenant": {
-    "create": {
-      "title": "租户设置",
-      "site-name": "站点名称"
-    }
-  },
-  "auth": {
-    "sign-in": {
-      "reset-password": "重置密码"
-    },
-    "sign-up": {
-      "title": "创建账户",
-      "label": {
-        "auth-code": "认证码"
-      },
-      "placeholder": {
-        "auth-code": "请输入认证码"
-      },
-      "button": {
-        "request-auth-code": "请求码",
-        "verify-auth-code": "验证码"
-      }
-    },
-    "reset-password": {
-      "title": "重置密码",
-      "button": {
-        "send-email": "发送邮件"
-      }
-    }
-  },
   "link": {
     "reset-password": {
       "title": "重置密码"
@@ -38,147 +8,37 @@
     }
   },
   "main": {
-    "index": {
-      "total-project": "项目总数",
-      "total-channel": "频道总数",
-      "total-feedback": "反馈总数",
-      "create-project": "创建项目",
-      "no-project": "无注册项目。"
-    },
     "profile": {
-      "title": "个人资料",
       "profile-info": "个人信息",
       "change-password": "更改密码",
-      "label": {
-        "user-type": "用户类型",
-        "new-password": "新密码",
-        "confirm-new-password": "确认新密码"
-      },
-      "placeholder": {
-        "name": "请输入姓名",
-        "department": "请输入部门",
-        "new-password": "请输入新密码",
-        "confirm-new-password": "请确认新密码"
-      },
       "button": {
         "delete-account": "删除账户"
-      },
-      "dialog": {
-        "delete-account": {
-          "title": "删除账户",
-          "description1": "您确定要删除您的账户吗？",
-          "description2": "账户删除后将无法使用服务。"
-        }
       }
     },
-    "dashboard": {
-      "title": "仪表盘"
-    },
     "feedback": {
-      "title": "反馈",
-      "column-setting": "列设置",
       "issue-cell": {
-        "issue-list": "问题列表",
-        "register-issue": "注册问题",
-        "create-issue": "创建问题",
-        "input-issue": "输入问题",
-        "delete-issue": "删除问题"
+        "create-issue": "创建问题"
       },
       "download": {
         "loading": "下载中...",
         "success": "下载完成",
-        "error": "下载失败",
-        "loading-description": "正在下载{{count, number}}项",
-        "success-description": "已下载{{count, number}}项",
-        "error-description": "下载{{count, number}}项失败"
-      },
-      "button": {
-        "all-download": "全部下载",
-        "select-download": "下载选中项 ({{count, number}})",
-        "excel-download": "下载Excel",
-        "csv-download": "下载CSV"
-      },
-      "dialog": {
-        "delete-feedback": {
-          "title": "删除反馈",
-          "description": "您确定要删除选中的反馈吗？"
-        }
-      }
-    },
-    "issue": {
-      "title": "问题",
-      "setting": "问题设置",
-      "dialog": {
-        "delete-issue": {
-          "title": "删除问题",
-          "description": "您确定要删除选中的问题吗？"
-        }
+        "error": "下载失败"
       }
     },
     "setting": {
-      "title": "设置",
       "button": {
-        "create-project": "创建项目",
-        "create-channel": "创建频道",
-        "create-api-key": "创建API密钥",
-        "register-member": "注册成员"
+        "create-channel": "创建频道"
       },
-      "sign-up-mgmt": {
-        "ufb-login": "UFB登录",
-        "oauth-login": "OAuth 2.0 登录",
-        "all-login": "所有登录",
-        "possibility": "直接注册可能",
-        "impossibility": "无法直接注册",
-        "no-domain-restriction": "无域名限制",
-        "domain-restriction": "域名限制",
-        "domain-restriction-tooltip": "设置允许用户注册的电子邮件域。"
-      },
-      "role-mgmt": {
-        "edit-role": "编辑角色",
-        "update-role-name": "更新角色名称",
-        "delete-role": "删除角色"
-      },
-      "api-key-status": {
-        "active": "活跃",
-        "inactive": "不活跃"
-      },
-      "field-status": {
-        "active": "活跃",
-        "inactive": "不活跃"
-      },
-      "register-member": "请注册成员。",
       "same-key": "输入与键值相同的内容",
       "feedback-request-code": "反馈请求码",
       "option-info": "选项信息",
       "field-mgmt": {
-        "description": "点击'预览'以保存更改。",
-        "preview": "预览",
-        "preview-caption": "预览显示为示例数据。",
-        "preview-description": "可以确认注册的场地是什么样子。"
+        "preview": "预览"
       },
       "dialog": {
-        "edit-user": {
-          "title": "编辑用户"
-        },
-        "delete-project": {
-          "title": "删除项目",
-          "description": "删除项目将移除所有相关问题和反馈。\n请在下方输入项目名称以确认删除。"
-        },
-        "delete-channel": {
-          "title": "删除频道",
-          "description": "删除频道将移除所有相关反馈。\n请在下方输入频道名称以确认删除。"
-        },
         "create-role": {
           "title": "创建角色",
           "description": "请输入一个新的角色名称。"
-        },
-        "update-role-name": {
-          "title": "更新角色名称",
-          "description": "请输入角色名称。"
-        },
-        "edit-api-key": {
-          "title": "编辑API密钥",
-          "description": "如果禁用API KEY，API将无法作为相应的KEY使用。 仅当不使用API KEY时，请更改为非活动。"
         },
         "delete-option": {
           "title": "删除选项",
@@ -187,17 +47,6 @@
         "delete-role": {
           "title": "删除角色",
           "description": "您确定要删除这个角色吗？\n分配给这个角色的成员也将被移除。"
-        },
-        "edit-member": {
-          "title": "编辑成员",
-          "description": "角色决定了对菜单和可用功能的访问。\n在选择正确的角色之前，请验证成员的详细信息。"
-        },
-        "register-member": {
-          "title": "注册成员"
-        },
-        "delete-member": {
-          "title": "删除成员",
-          "description": "您确定要删除这个成员吗？"
         },
         "add-field": {
           "title": "添加字段"
@@ -224,7 +73,6 @@
     "create-channel": {
       "title": "创建频道",
       "complete-title": "频道创建完成",
-      "finish-channel-creation": "设置已完成。\n开始使用用户反馈！",
       "guide": {
         "invalid-channel": "检测到无效的频道信息。"
       }
@@ -255,27 +103,7 @@
     "start": "开始",
     "generate": "產生"
   },
-  "input": {
-    "label": {
-      "password": "密码",
-      "confirm-password": "确认密码"
-    },
-    "placeholder": {
-      "input": "请输入值",
-      "email": "请输入电子邮件",
-      "password": "请输入密码",
-      "confirm-password": "确认密码"
-    }
-  },
   "text": {
-    "search-result": "搜索结果",
-    "number-count": "{{count, number}}项",
-    "no-data": "没有可用数据",
-    "per-page": "每页项目数",
-    "select-option": "选择'{{name}}'",
-    "select-count": "已选择：{{count,number}}",
-    "search-filter": "搜索过滤器",
-    "all": "全部",
     "issue": {
       "init": "新建",
       "onReview": "审核中",
@@ -289,34 +117,8 @@
       "before-days": "{{day, number}}天前",
       "date-range-over-max-days": "查询期限限制为{{maxDays}}天"
     },
-    "equal-search": "精确匹配",
-    "like-search": "包含",
-    "helper": "帮助",
-    "no-channel": "没有注册频道",
     "guide": "指南",
-    "more": "更多",
-    "shrink": "收起",
-    "feedback-detail": "反馈详情",
-    "create-channel-in-progress": "频道创建中",
-    "create-project-in-progress": "项目创建中",
-    "days": "{{days}}天",
-    "webhook-type": {
-      "FEEDBACK_CREATION": "反馈已创建",
-      "ISSUE_CREATION": "问题已创建",
-      "ISSUE_STATUS_CHANGE": "问题状态已更改",
-      "ISSUE_ADDITION": "已添加问题"
-    }
-  },
-  "toast": {
-    "sign-in": "登录成功",
-    "register": "注册完成",
-    "delete": "删除成功",
-    "save": "保存更改",
-    "invite": "邀请已发送",
-    "active": "已激活",
-    "inactive": "已停用",
-    "add": "添加成功",
-    "copy": "已复制到剪贴板"
+    "days": "{{days}}天"
   },
   "dialog": {
     "continue": {
@@ -326,16 +128,6 @@
         "continue": "继续",
         "restart": "重新开始"
       }
-    },
-    "create-webhook": {
-      "title": "创建Webhook"
-    },
-    "update-webhook": {
-      "title": "更新Webhook"
-    },
-    "delete-webhook": {
-      "title": "删除Webhook",
-      "description": "删除Webhook将移除所有相关数据。"
     }
   },
   "dashboard-card": {
@@ -400,22 +192,11 @@
   },
   "popover": {
     "select-issue": {
-      "search-issue": "搜索问题",
-      "max-issue-count": "最多可以选择五个问题。",
-      "issue-list": "问题列表"
-    },
-    "select-issue-status": {
-      "issue-status": "问题状态"
+      "max-issue-count": "最多可以选择五个问题。"
     }
   },
   "tooltip": {
-    "issue-feedback-count": "与此问题相关的反馈数量。",
-    "webhook-feedback-creation": "当特定频道收集到反馈时触发。",
-    "webhook-issue-addition": "当特定频道的反馈添加问题时触发。",
-    "webhook-issue-creation": "创建问题时触发，不论频道。",
-    "webhook-issue-status-change": "问题状态改变时触发，不论频道。",
-    "field-property": "如果您想保留字段内容的原始文本， 如果您想修改 Read Only 内容， 请设置为 Editible 。",
-    "field-status": "表示是否使用字段。 请将禁用的字段更改为Inactive。"
+    "issue-feedback-count": "与此问题相关的反馈数量。"
   },
   "tenant-setting-menu": {
     "tenant-info": "租户信息",
@@ -466,11 +247,6 @@
   },
   "title-box": {
     "image-storage-integration": "图片存储集成"
-  },
-  "placeholder": "请输入{{name}}。",
-  "system-popup": {
-    "create-project/channel-get-out": "您确定要退出{{type}}的创建过程吗？\n您可以稍后继续此过程。",
-    "field-setting-get-out": "还有未保存的字段信息。 你还是要出去吗。"
   },
   "v2": {
     "auth": {

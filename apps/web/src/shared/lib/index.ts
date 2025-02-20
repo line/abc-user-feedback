@@ -16,10 +16,7 @@
 export { default as useOAIQuery } from './useOAIQuery';
 export { default as useOAIMutation } from './useOAIMutation';
 
-export { default as useQueryParamsState } from './use-query-params-state';
-
 export { default as useSort } from './use-sort';
-export { default as useLocalColumnSetting } from './use-local-column-setting';
 export { default as usePermissions } from './use-permissions';
 
 export { default as sessionStorage } from './session-storage';

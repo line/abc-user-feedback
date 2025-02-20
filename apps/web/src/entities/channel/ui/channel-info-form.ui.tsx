@@ -40,7 +40,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
       <TextInput
         label="Name"
         {...register('name')}
-        placeholder={t('placeholder', { name: 'Name' })}
+        placeholder={t('v2.placeholder.text')}
         required
         disabled={readOnly}
         error={formState.errors.name?.message}
@@ -48,7 +48,7 @@ const ChannelInfoForm: React.FC<IProps> = (props) => {
       <TextInput
         label="Description"
         {...register('description')}
-        placeholder={t('placeholder', { name: 'Description' })}
+        placeholder={t('v2.placeholder.text')}
         disabled={readOnly}
         error={formState.errors.description?.message}
       />

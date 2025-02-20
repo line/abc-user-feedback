@@ -391,15 +391,9 @@ importers:
       '@ufb/shared':
         specifier: workspace:*
         version: link:../../packages/ufb-shared
-      '@ufb/tailwind':
-        specifier: workspace:*
-        version: link:../../packages/ufb-tailwind
       '@ufb/tailwindcss':
         specifier: workspace:*
         version: link:../../packages/ufb-tailwindcss
-      '@ufb/ui':
-        specifier: workspace:*
-        version: link:../../packages/ufb-ui
       axios:
         specifier: ^1.7.2
         version: 1.7.9
@@ -460,9 +454,6 @@ importers:
       react-beautiful-dnd:
         specifier: ^13.1.1
         version: 13.1.1(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react-datepicker:
-        specifier: ^8.0.0
-        version: 8.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
@@ -539,9 +530,6 @@ importers:
       '@types/react-beautiful-dnd':
         specifier: ^13.1.8
         version: 13.1.8
-      '@types/react-datepicker':
-        specifier: ^7.0.0
-        version: 7.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@types/react-dom':
         specifier: ^19.0.0
         version: 19.0.3(@types/react@19.0.8)
@@ -736,45 +724,6 @@ importers:
         specifier: 'catalog:'
         version: 5.7.2
 
-  packages/ufb-tailwind:
-    devDependencies:
-      '@ufb/eslint-config':
-        specifier: workspace:*
-        version: link:../../tooling/eslint
-      '@ufb/prettier-config':
-        specifier: workspace:*
-        version: link:../../tooling/prettier
-      autoprefixer:
-        specifier: ^10.4.19
-        version: 10.4.20(postcss@8.4.49)
-      eslint:
-        specifier: 'catalog:'
-        version: 9.8.0
-      glob:
-        specifier: ^11.0.0
-        version: 11.0.1
-      postcss:
-        specifier: ^8.4.38
-        version: 8.4.49
-      postcss-cli:
-        specifier: ^11.0.0
-        version: 11.0.0(jiti@2.4.2)(postcss@8.4.49)
-      postcss-import:
-        specifier: ^16.1.0
-        version: 16.1.0(postcss@8.4.49)
-      postcss-nesting:
-        specifier: ^13.0.0
-        version: 13.0.1(postcss@8.4.49)
-      prejss-cli:
-        specifier: ^0.3.3
-        version: 0.3.3
-      prettier:
-        specifier: 'catalog:'
-        version: 3.4.2
-      tailwindcss:
-        specifier: ^3.4.3
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.10.6(@swc/helpers@0.5.15))(@types/node@22.13.4)(typescript@5.7.3))
-
   packages/ufb-tailwindcss:
     devDependencies:
       '@ufb/eslint-config':
@@ -813,58 +762,6 @@ importers:
       tailwindcss:
         specifier: ^3.4.3
         version: 3.4.17(ts-node@10.9.2(@swc/core@1.10.6(@swc/helpers@0.5.15))(@types/node@22.13.4)(typescript@5.7.3))
-
-  packages/ufb-ui:
-    dependencies:
-      '@floating-ui/react':
-        specifier: ^0.27.0
-        version: 0.27.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      react:
-        specifier: ^19.0.0
-        version: 19.0.0
-      react-dom:
-        specifier: ^19.0.0
-        version: 19.0.0(react@19.0.0)
-      react-hot-toast:
-        specifier: ^2.4.1
-        version: 2.4.1(csstype@3.1.3)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-    devDependencies:
-      '@swc/core':
-        specifier: ^1.4.16
-        version: 1.10.6(@swc/helpers@0.5.15)
-      '@swc/jest':
-        specifier: ^0.2.36
-        version: 0.2.37(@swc/core@1.10.6(@swc/helpers@0.5.15))
-      '@types/react':
-        specifier: ^19.0.0
-        version: 19.0.8
-      '@types/react-dom':
-        specifier: ^19.0.0
-        version: 19.0.3(@types/react@19.0.8)
-      '@ufb/eslint-config':
-        specifier: workspace:*
-        version: link:../../tooling/eslint
-      '@ufb/prettier-config':
-        specifier: workspace:*
-        version: link:../../tooling/prettier
-      '@ufb/tailwind':
-        specifier: workspace:*
-        version: link:../ufb-tailwind
-      '@ufb/tsconfig':
-        specifier: workspace:*
-        version: link:../../tooling/typescript
-      eslint:
-        specifier: 'catalog:'
-        version: 9.8.0
-      prettier:
-        specifier: 'catalog:'
-        version: 3.4.2
-      tailwindcss:
-        specifier: ^3.4.3
-        version: 3.4.17(ts-node@10.9.2(@swc/core@1.10.6(@swc/helpers@0.5.15))(@types/node@22.13.4)(typescript@5.7.2))
-      typescript:
-        specifier: 'catalog:'
-        version: 5.7.2
 
   tooling/eslint:
     dependencies:
@@ -4888,10 +4785,6 @@ packages:
 
   '@types/react-beautiful-dnd@13.1.8':
     resolution: {integrity: sha512-E3TyFsro9pQuK4r8S/OL6G99eq7p8v29sX0PM7oT8Z+PJfZvSQTx4zTQbUJ+QZXioAF0e7TGBEcA1XhYhCweyQ==}
-
-  '@types/react-datepicker@7.0.0':
-    resolution: {integrity: sha512-4tWwOUq589tozyQPBVEqGNng5DaZkomx5IVNuur868yYdgjH6RaL373/HKiVt1IDoNNXYiTGspm1F7kjrarM8Q==}
-    deprecated: This is a stub types definition. react-datepicker provides its own type definitions, so you do not need this installed.
 
   '@types/react-dom@19.0.3':
     resolution: {integrity: sha512-0Knk+HJiMP/qOZgMyNFamlIjw9OFCsyC2ZbigmEEyXXixgre6IQpm/4V+r3qH4GC1JPvRJKInw+on2rV6YZLeA==}
@@ -9455,12 +9348,6 @@ packages:
     peerDependencies:
       react: ^16.8.5 || ^17.0.0 || ^18.0.0
       react-dom: ^16.8.5 || ^17.0.0 || ^18.0.0
-
-  react-datepicker@8.1.0:
-    resolution: {integrity: sha512-11gIOrBGK1MOvl4+wxGv4YxTqXf+uoRPtKstYhb/P1cBdRdOP1sL26VE31apmDnvw8wSYfJe9AWwWbKqmM9tzw==}
-    peerDependencies:
-      react: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
-      react-dom: ^16.9.0 || ^17 || ^18 || ^19 || ^19.0.0-rc
 
   react-day-picker@8.10.1:
     resolution: {integrity: sha512-TMx7fNbhLk15eqcMt+7Z7S2KF7mfTId/XJDjKE8f+IUcFn0l08/kI4FiYTL/0yuOLmEcbR4Fwe3GJf/NiiMnPA==}
@@ -15818,13 +15705,6 @@ snapshots:
     dependencies:
       '@types/react': 19.0.8
 
-  '@types/react-datepicker@7.0.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
-    dependencies:
-      react-datepicker: 8.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-    transitivePeerDependencies:
-      - react
-      - react-dom
-
   '@types/react-dom@19.0.3(@types/react@19.0.8)':
     dependencies:
       '@types/react': 19.0.8
@@ -21411,14 +21291,6 @@ snapshots:
       use-memo-one: 1.1.3(react@19.0.0)
     transitivePeerDependencies:
       - react-native
-
-  react-datepicker@8.1.0(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
-    dependencies:
-      '@floating-ui/react': 0.27.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
-      clsx: 2.1.1
-      date-fns: 4.1.0
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
 
   react-day-picker@8.10.1(date-fns@4.1.0)(react@19.0.0):
     dependencies:

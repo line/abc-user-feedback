@@ -45,7 +45,7 @@ const TicketLink: React.FC<IProps> = ({ value, projectId }) => {
     value ?
       issueTracker ?
         <a
-          className="text-blue-primary"
+          className="text-tint-blue"
           href={link}
           target="_blank"
           rel="noreferrer"

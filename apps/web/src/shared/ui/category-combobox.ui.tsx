@@ -115,6 +115,7 @@ const CategoryCombobox = (props: Props) => {
     <Combobox>
       <ComboboxTrigger asChild>
         <button
+          onClick={(e) => e.stopPropagation()}
           disabled={!perms.includes('issue_update')}
           className={cn({ 'opacity-50': !perms.includes('issue_update') })}
         >

@@ -156,7 +156,12 @@ const BasicTable = <T,>(props: IProps<T>) => {
               <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
             )}
           </TableHeader>
-          <TableBody className="[&>tr]:last-of-type:border-b-0">
+          <TableBody
+            className={cn({
+              '[&>tr]:last-of-type:border-b-0':
+                table.getRowCount() === 0 || disableRound,
+            })}
+          >
             {table.getRowCount() === 0 ?
               <TableRow className="hover:bg-inherit">
                 <TableCell colSpan={table.getFlatHeaders().length}>

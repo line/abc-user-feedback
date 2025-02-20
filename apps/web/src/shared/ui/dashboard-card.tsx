@@ -55,10 +55,10 @@ const DashboardCard: React.FC<IProps> = (props) => {
             className="text-neutral-inverse"
           />
         </div>
-        <p>
+        <h3>
           {title}
           <DescriptionTooltip description={description} side="bottom" />
-        </p>
+        </h3>
       </div>
       <div className="flex items-center gap-2">
         <NumberFlowGroup>

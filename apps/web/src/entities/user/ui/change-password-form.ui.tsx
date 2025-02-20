@@ -31,7 +31,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       <TextInput
         type="password"
         label="Current Password"
-        placeholder={t('input.placeholder.password')}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.password?.message}
         {...register('password')}
         required
@@ -39,7 +39,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       <TextInput
         type="password"
         label="New Password"
-        placeholder={t('main.profile.placeholder.new-password')}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.newPassword?.message}
         {...register('newPassword')}
         required
@@ -47,7 +47,7 @@ const ChangePasswordForm: React.FC<IProps> = () => {
       <TextInput
         type="password"
         label="Confirm New Password"
-        placeholder={t('main.profile.placeholder.confirm-new-password')}
+        placeholder={t('v2.placeholder.text')}
         error={formState.errors.confirmNewPassword?.message}
         {...register('confirmNewPassword')}
         required

@@ -1,34 +1,4 @@
 {
-  "tenant": {
-    "create": {
-      "title": "Mandanten-Einstellungen",
-      "site-name": "Seitenname"
-    }
-  },
-  "auth": {
-    "sign-in": {
-      "reset-password": "Passwort zurücksetzen"
-    },
-    "sign-up": {
-      "title": "Konto erstellen",
-      "label": {
-        "auth-code": "Authentifizierungscode"
-      },
-      "placeholder": {
-        "auth-code": "Bitte Authentifizierungscode eingeben"
-      },
-      "button": {
-        "request-auth-code": "Code anfordern",
-        "verify-auth-code": "Code überprüfen"
-      }
-    },
-    "reset-password": {
-      "title": "Passwort zurücksetzen",
-      "button": {
-        "send-email": "E-Mail senden"
-      }
-    }
-  },
   "link": {
     "reset-password": {
       "title": "Passwort zurücksetzen"
@@ -38,147 +8,37 @@
     }
   },
   "main": {
-    "index": {
-      "total-project": "Projekte",
-      "total-channel": "Kanäle",
-      "total-feedback": "Rückmeldungen",
-      "create-project": "Projekt erstellen",
-      "no-project": "Keine registrierten Projekte."
-    },
     "profile": {
-      "title": "Profil",
       "profile-info": "Profil-Informationen",
       "change-password": "Passwort ändern",
-      "label": {
-        "user-type": "Typ",
-        "new-password": "Neues Passwort",
-        "confirm-new-password": "Neues Passwort bestätigen"
-      },
-      "placeholder": {
-        "name": "Bitte Namen eingeben",
-        "department": "Bitte Abteilung eingeben",
-        "new-password": "Bitte neues Passwort eingeben",
-        "confirm-new-password": "Bitte neues Passwort bestätigen"
-      },
       "button": {
         "delete-account": "Konto löschen"
-      },
-      "dialog": {
-        "delete-account": {
-          "title": "Konto löschen",
-          "description1": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
-          "description2": "Der Service wird nach Löschung des Kontos nicht mehr verfügbar sein."
-        }
       }
     },
-    "dashboard": {
-      "title": "Übersicht"
-    },
     "feedback": {
-      "title": "Feedback",
-      "column-setting": "Spalteneinstellungen",
       "issue-cell": {
-        "issue-list": "Problemliste",
-        "register-issue": "Problem registrieren",
-        "create-issue": "Problem erstellen",
-        "input-issue": "Problem eingeben",
-        "delete-issue": "Problem löschen"
+        "create-issue": "Problem erstellen"
       },
       "download": {
         "loading": "Herunterladen...",
         "success": "Download abgeschlossen",
-        "error": "Download fehlgeschlagen",
-        "loading-description": "{{count, number}} Elemente werden heruntergeladen",
-        "success-description": "{{count, number}} Elemente heruntergeladen",
-        "error-description": "Fehler beim Herunterladen von {{count, number}} Elementen"
-      },
-      "button": {
-        "all-download": "Alles herunterladen",
-        "select-download": "Ausgewähltes herunterladen ({{count, number}})",
-        "excel-download": "Excel herunterladen",
-        "csv-download": "CSV herunterladen"
-      },
-      "dialog": {
-        "delete-feedback": {
-          "title": "Feedback löschen",
-          "description": "Sind Sie sicher, dass Sie das ausgewählte Feedback löschen möchten?"
-        }
-      }
-    },
-    "issue": {
-      "title": "Problem",
-      "setting": "Problemeinstellungen",
-      "dialog": {
-        "delete-issue": {
-          "title": "Probleme löschen",
-          "description": "Sind Sie sicher, dass Sie die ausgewählten Probleme löschen möchten?"
-        }
+        "error": "Download fehlgeschlagen"
       }
     },
     "setting": {
-      "title": "Einstellungen",
       "button": {
-        "create-project": "Projekt erstellen",
-        "create-channel": "Kanal erstellen",
-        "create-api-key": "API-Schlüssel erstellen",
-        "register-member": "Mitglied registrieren"
+        "create-channel": "Kanal erstellen"
       },
-      "sign-up-mgmt": {
-        "ufb-login": "UFB-Anmeldung",
-        "oauth-login": "OAuth 2.0 Anmeldung",
-        "all-login": "Alle Anmeldungen",
-        "possibility": "Direkte Anmeldung möglich",
-        "impossibility": "Keine direkte Anmeldung",
-        "no-domain-restriction": "Keine Domainbeschränkungen",
-        "domain-restriction": "Domainbeschränkungen",
-        "domain-restriction-tooltip": "Legen Sie die für die Benutzerregistrierung erlaubte E-Mail-Domain fest."
-      },
-      "role-mgmt": {
-        "edit-role": "Rolle bearbeiten",
-        "update-role-name": "Rollenname aktualisieren",
-        "delete-role": "Rolle löschen"
-      },
-      "api-key-status": {
-        "active": "Aktiv",
-        "inactive": "Inaktiv"
-      },
-      "field-status": {
-        "active": "Aktiv",
-        "inactive": "Inaktiv"
-      },
-      "register-member": "Bitte Mitglied registrieren.",
       "same-key": "Geben Sie den gleichen Wert wie den Schlüssel ein",
       "feedback-request-code": "Feedback-Anforderungscode",
       "option-info": "Optionsinformationen",
       "field-mgmt": {
-        "description": "Klicken Sie auf 'Vorschau', um Änderungen zu speichern.",
-        "preview": "Vorschau",
-        "preview-caption": "Die Vorschau wird als Beispieldaten angezeigt.",
-        "preview-description": "Hier können Sie sehen, wie die registrierten Felder aussehen werden."
+        "preview": "Vorschau"
       },
       "dialog": {
-        "edit-user": {
-          "title": "Benutzer bearbeiten"
-        },
-        "delete-project": {
-          "title": "Projekt löschen",
-          "description": "Das Löschen eines Projekts entfernt alle zugehörigen Probleme und Feedbacks.\nBitte geben Sie den Projektnamen unten ein, um die Löschung zu bestätigen."
-        },
-        "delete-channel": {
-          "title": "Kanal löschen",
-          "description": "Das Löschen eines Kanals entfernt alle zugehörigen Feedbacks.\nBitte geben Sie den Kanalnamen unten ein, um die Löschung zu bestätigen."
-        },
         "create-role": {
           "title": "Rolle erstellen",
           "description": "Bitte geben Sie einen neuen Rollennamen ein."
-        },
-        "update-role-name": {
-          "title": "Rollenname aktualisieren",
-          "description": "Bitte geben Sie den Rollennamen ein."
-        },
-        "edit-api-key": {
-          "title": "API-Schlüssel bearbeiten",
-          "description": "Wenn Sie API KEY deaktivieren, wird die API mit diesem Schlüssel deaktiviert. Bitte ändern Sie diese Option nur, wenn Sie den API-Schlüssel nicht verwenden."
         },
         "delete-option": {
           "title": "Option löschen",
@@ -187,17 +47,6 @@
         "delete-role": {
           "title": "Rolle löschen",
           "description": "Sind Sie sicher, dass Sie diese Rolle löschen möchten?\nMitglieder, die dieser Rolle zugewiesen sind, werden ebenfalls entfernt."
-        },
-        "edit-member": {
-          "title": "Mitglied bearbeiten",
-          "description": "Rollen bestimmen den Zugang zu Menüs und verfügbaren Funktionen.\nBitte überprüfen Sie die Details des Mitglieds, bevor Sie die richtige Rolle auswählen."
-        },
-        "register-member": {
-          "title": "Mitglied registrieren"
-        },
-        "delete-member": {
-          "title": "Mitglied löschen",
-          "description": "Sind Sie sicher, dass Sie dieses Mitglied löschen möchten?"
         },
         "add-field": {
           "title": "Feld hinzufügen"
@@ -224,7 +73,6 @@
     "create-channel": {
       "title": "Kanal erstellen",
       "complete-title": "Kanal erstellt",
-      "finish-channel-creation": "Einrichtung ist abgeschlossen.\nBeginnen Sie mit der Nutzung des User Feedbacks!",
       "guide": {
         "invalid-channel": "Ungültige Kanalinformationen erkannt."
       }
@@ -255,27 +103,7 @@
     "start": "Starten",
     "generate": "Generieren"
   },
-  "input": {
-    "label": {
-      "password": "Passwort",
-      "confirm-password": "Passwort bestätigen"
-    },
-    "placeholder": {
-      "input": "Wert eingeben",
-      "email": "E-Mail eingeben",
-      "password": "Passwort eingeben",
-      "confirm-password": "Passwort bestätigen"
-    }
-  },
   "text": {
-    "search-result": "Suchergebnisse",
-    "number-count": "{{count, number}} Elemente",
-    "no-data": "Keine Daten verfügbar",
-    "per-page": "Elemente pro Seite",
-    "select-option": "Wähle '{{name}}'",
-    "select-count": "Ausgewählt: {{count,number}}",
-    "search-filter": "Suchfilter",
-    "all": "Alle",
     "issue": {
       "init": "Neu",
       "onReview": "In Überprüfung",
@@ -289,34 +117,8 @@
       "before-days": "Vor {{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
     },
-    "equal-search": "Exakte Übereinstimmung",
-    "like-search": "Enthält",
-    "helper": "Hilfe",
-    "no-channel": "Keine Kanäle registriert",
     "guide": "Richtlinien",
-    "more": "Mehr",
-    "shrink": "Weniger",
-    "feedback-detail": "Feedback-Details",
-    "create-channel-in-progress": "Kanalerstellung in Bearbeitung",
-    "create-project-in-progress": "Projekterstellung in Bearbeitung",
-    "days": "{{days}} Tage",
-    "webhook-type": {
-      "FEEDBACK_CREATION": "Feedback erstellt",
-      "ISSUE_CREATION": "Problem erstellt",
-      "ISSUE_STATUS_CHANGE": "Problemstatus geändert",
-      "ISSUE_ADDITION": "Problem hinzugefügt"
-    }
-  },
-  "toast": {
-    "sign-in": "Erfolgreich angemeldet",
-    "register": "Registrierung abgeschlossen",
-    "delete": "Erfolgreich gelöscht",
-    "save": "Änderungen gespeichert",
-    "invite": "Einladung gesendet",
-    "active": "Aktiviert",
-    "inactive": "Deaktiviert",
-    "add": "Erfolgreich hinzugefügt",
-    "copy": "In Zwischenablage kopiert"
+    "days": "{{days}} Tage"
   },
   "dialog": {
     "continue": {
@@ -326,16 +128,6 @@
         "continue": "Fortfahren",
         "restart": "Neu starten"
       }
-    },
-    "create-webhook": {
-      "title": "Webhook erstellen"
-    },
-    "update-webhook": {
-      "title": "Webhook bearbeiten"
-    },
-    "delete-webhook": {
-      "title": "Webhook löschen",
-      "description": "Das Löschen eines Webhooks entfernt alle zugehörigen Daten."
     }
   },
   "dashboard-card": {
@@ -400,22 +192,11 @@
   },
   "popover": {
     "select-issue": {
-      "search-issue": "Problem suchen",
-      "max-issue-count": "Es können bis zu fünf Probleme ausgewählt werden.",
-      "issue-list": "Problemliste"
-    },
-    "select-issue-status": {
-      "issue-status": "Problemstatus"
+      "max-issue-count": "Es können bis zu fünf Probleme ausgewählt werden."
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Anzahl des Feedbacks, das mit diesem Problem verbunden ist.",
-    "webhook-feedback-creation": "Wird ausgelöst, wenn Feedback für einen bestimmten Kanal gesammelt wird.",
-    "webhook-issue-addition": "Wird ausgelöst, wenn einem Feedback in einem bestimmten Kanal ein Problem hinzugefügt wird.",
-    "webhook-issue-creation": "Wird ausgelöst, wenn unabhängig vom Kanal ein Problem erstellt wird.",
-    "webhook-issue-status-change": "Wird ausgelöst, wenn sich der Status eines Problems ändert, unabhängig vom Kanal.",
-    "field-property": "Wenn Sie den Inhalt des Feldes als Original behalten möchten, dann setzen Sie ihn bitte auf Editable, wenn Sie nur den Inhalt des Feldes ändern möchten.",
-    "field-status": "Gibt an, ob ein Feld verwendet werden soll oder nicht. Bitte ändern Sie die Felder, die Sie nicht verwenden, auf Inactive."
+    "issue-feedback-count": "Anzahl des Feedbacks, das mit diesem Problem verbunden ist."
   },
   "tenant-setting-menu": {
     "tenant-info": "Mandanten-Informationen",
@@ -466,11 +247,6 @@
   },
   "title-box": {
     "image-storage-integration": "Bild-Speicher-Integration"
-  },
-  "placeholder": "Bitte geben Sie {{name}} ein.",
-  "system-popup": {
-    "create-project/channel-get-out": "Sind Sie sicher, dass Sie den Erstellungsprozess für einen {{type}} verlassen möchten?\nSie können diesen Prozess später fortsetzen.",
-    "field-setting-get-out": "Bitte beachten Sie, dass die Feldinformationen noch nicht gespeichert sind. Trotzdem würden Sie rausgehen."
   },
   "v2": {
     "auth": {

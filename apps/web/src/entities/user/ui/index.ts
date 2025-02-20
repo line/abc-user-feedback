@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as UserBox } from './user-box.ui';
 export { default as UserManagementTable } from './user-management-table.ui';
 export { default as InviteUserDialog } from './invite-user-dialog.ui';
 export { default as UserProfileForm } from './user-profile-form.ui';

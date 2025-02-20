@@ -99,6 +99,7 @@ const IssueKanbanColumn = (props: Props) => {
     useIssueSearchInfinite(projectId, {
       queries: currentQueries.concat(...queries),
       sort: { [sort.key]: sort.value },
+      limit: 5,
       operator,
     });
 

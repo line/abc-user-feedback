@@ -19,8 +19,16 @@ import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
+import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  toast,
+} from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
-import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CreateInputTemplate,
@@ -74,31 +82,43 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
   });
 
   const openMemberError = () => {
-    return overlay.open(({ isOpen, close }) => (
-      <Popover open={isOpen} onOpenChange={() => close()} modal>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-project.guide.invalid-member')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: () => jumpStepByKey('members'),
-          }}
-        />
-      </Popover>
+    overlay.open(({ isOpen, close }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogTitle>{t('text.guide')}</DialogTitle>
+          <DialogBody>
+            {t('main.create-project.guide.invalid-member')}
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose
+              variant="primary"
+              onClick={() => jumpStepByKey('members')}
+            >
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
   const openProjectError = () => {
-    return overlay.open(({ isOpen, close }) => (
-      <Popover open={isOpen} onOpenChange={() => close()} modal>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-project.guide.invalid-project')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: () => jumpStepByKey('project-info'),
-          }}
-        />
-      </Popover>
+    overlay.open(({ isOpen, close }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogTitle>{t('text.guide')}</DialogTitle>
+          <DialogBody>
+            {t('main.create-project.guide.invalid-project')}
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose
+              variant="primary"
+              onClick={() => jumpStepByKey('project-info')}
+            >
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
 
@@ -120,7 +140,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
         } else if (error.code === ErrorCode.Project.ProjectAlreadyExists) {
           openProjectError();
         } else {
-          toast.negative({ title: error.message });
+          toast.error(error.message);
         }
       },
     },

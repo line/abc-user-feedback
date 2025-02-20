@@ -281,14 +281,14 @@ const MemberSetting: React.FC<IProps> = (props) => {
         />
         {rowSelectionIds.length > 0 && (
           <Button
-            className="!text-red-primary"
+            className="!text-tint-red"
             variant="outline"
             onClick={openDeleteDialog}
             disabled={!perms.includes('project_member_delete')}
           >
             <Icon name="RiDeleteBinFill" />
             {t('v2.button.name.delete', { name: 'Member' })}
-            <Badge variant="subtle" className="!text-red-primary">
+            <Badge variant="subtle" className="!text-tint-red">
               {rowSelectionIds.length}
             </Badge>
           </Button>

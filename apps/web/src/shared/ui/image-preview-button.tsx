@@ -30,9 +30,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  Icon,
   Tag,
 } from '@ufb/react';
-import { Icon } from '@ufb/ui';
 
 import { cn } from '@/shared';
 
@@ -62,7 +62,7 @@ const ImagePreviewButton: React.FC<IProps> = (props) => {
             setOpen(!open);
           }}
         >
-          <Icon name="MediaImageFill" size={12} />
+          <Icon name="RiImageFill" size={12} />
           Image
         </Tag>
       </DialogTrigger>

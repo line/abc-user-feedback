@@ -144,7 +144,7 @@ const SheetDetailTable = (props: Props) => {
             href={`${issueTracker.ticketDomain}/browse/${issueTracker.ticketKey}-${value as string}`}
             target="_blank"
             rel="noreferrer"
-            className="text-blue-500 underline"
+            className="text-tint-blue underline"
           >
             {`${issueTracker.ticketKey}-${value as string}`}
           </a>

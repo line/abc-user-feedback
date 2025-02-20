@@ -124,7 +124,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
             variant="outline"
             onClick={openDeleteDialog}
             disabled={!perms.includes('project_delete')}
-            className="!text-red-primary"
+            className="!text-tint-red"
           >
             <Icon name="RiDeleteBinFill" />
             {t('v2.button.name.delete', { name: 'Project' })}

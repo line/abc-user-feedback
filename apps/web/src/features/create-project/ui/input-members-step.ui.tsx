@@ -22,8 +22,16 @@ import {
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
-import { Button, Icon } from '@ufb/react';
-import { Popover, PopoverModalContent } from '@ufb/ui';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  Icon,
+} from '@ufb/react';
 
 import { BasicTable } from '@/shared';
 import type { MemberInfo } from '@/entities/member';
@@ -65,17 +73,20 @@ const InputMembersStep: React.FC<IProps> = () => {
   };
 
   const openInvalidateMemberModal = () => {
-    return overlay.open(({ isOpen, close }) => (
-      <Popover modal open={isOpen} onOpenChange={() => close()}>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-project.guide.invalid-member')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: close,
-          }}
-        />
-      </Popover>
+    overlay.open(({ isOpen, close }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogTitle>{t('text.guide')}</DialogTitle>
+          <DialogBody>
+            {t('main.create-project.guide.invalid-member')}
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose variant="primary">
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
 

@@ -56,7 +56,7 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
         >
           <CartesianGrid
             vertical={false}
-            stroke="var(--fill-color-secondary)"
+            stroke="var(--border-neutral-tertiary)"
           />
           <Tooltip
             formatter={(value) => value.toLocaleString()}
