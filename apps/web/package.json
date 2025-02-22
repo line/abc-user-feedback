@@ -87,7 +87,7 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@types/jest": "^29.5.12",
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.5",
     "@types/react": "^19.0.0",
     "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-datepicker": "^7.0.0",
