@@ -15,7 +15,6 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
-import { IsNotEmpty } from 'class-validator';
 
 import { LoginButtonTypeEnum } from '../../entities/enums/login-button-type.enum';
 

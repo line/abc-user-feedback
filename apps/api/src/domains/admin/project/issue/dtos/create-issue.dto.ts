@@ -29,7 +29,7 @@ export class CreateIssueDto {
   status: IssueStatusEnum;
 
   @Expose()
-  description: string;
+  description: string | null;
 
   @Expose()
   externalIssueId: string;

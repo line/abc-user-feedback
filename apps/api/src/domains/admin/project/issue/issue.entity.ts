@@ -39,7 +39,7 @@ export class IssueEntity extends CommonEntity {
   name: string;
 
   @Column('varchar', { nullable: true })
-  description: string;
+  description?: string | null;
 
   @Column('enum', { enum: IssueStatusEnum, default: IssueStatusEnum.INIT })
   @Index()
@@ -82,7 +82,7 @@ export class IssueEntity extends CommonEntity {
   }: {
     name: string;
     status: IssueStatusEnum;
-    description: string;
+    description?: string | null;
     externalIssueId: string;
     projectId: number;
     categoryId?: number;
