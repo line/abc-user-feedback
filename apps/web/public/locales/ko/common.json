@@ -382,19 +382,19 @@
     "webhook-card": {
       "feedback-creation": {
         "title": "Feedback 생성",
-        "description": "Feedback이 생성되면."
+        "description": "피드백이 수집될 때마다 이벤트를 발동합니다."
       },
       "issue-addition": {
         "title": "Issue 등록",
-        "description": "문제가 Feedback에 등록된 경우."
+        "description": "이슈를 등록할 때마다 이벤트를 발동합니다."
       },
       "issue-status-change": {
         "title": "Issue 상태 변경",
-        "description": "Issue의 상태가 변경되는 경우."
+        "description": "이슈 상태를 변경할 때마다 이벤트를 발동합니다."
       },
       "issue-creation": {
         "title": "Issue 생성",
-        "description": "Issue가 생성될 때."
+        "description": "이슈를 신규 생성할 때마다 이벤트를 발동합니다."
       }
     },
     "error": {

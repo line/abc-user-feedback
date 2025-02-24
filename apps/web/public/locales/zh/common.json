@@ -372,19 +372,19 @@
     "webhook-card": {
       "feedback-creation": {
         "title": "创建Feedback",
-        "description": "当创建Feedback时。"
+        "description": "每次收集到反馈都会启动事件。"
       },
       "issue-addition": {
         "title": "注册Issue",
-        "description": "当问题被注册到Feedback时。"
+        "description": "每次注册热点时都会启动活动。"
       },
       "issue-status-change": {
         "title": "Issue状态变更",
-        "description": "当Issue的状态发生变化时。"
+        "description": "每次更改热点状态时都会启动活动。"
       },
       "issue-creation": {
         "title": "创建Issue",
-        "description": "当创建Issue时。"
+        "description": "每次新建热点时都会启动事件。"
       }
     },
     "error": {

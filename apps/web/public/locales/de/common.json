@@ -372,19 +372,19 @@
     "webhook-card": {
       "feedback-creation": {
         "title": "Feedback-Erstellung",
-        "description": "Wenn Feedback erstellt wird."
+        "description": "Jedes Mal, wenn ein Feedback gesammelt wird, wird ein Ereignis ausgelöst."
       },
       "issue-addition": {
         "title": "Issue-Registrierung",
-        "description": "Wenn ein Issue zum Feedback hinzugefügt wird."
+        "description": "Jedes Mal, wenn ich ein Thema registriere, rufe ich ein Ereignis an."
       },
       "issue-status-change": {
         "title": "Issue-Statusänderung",
-        "description": "Wenn sich der Status eines Issues ändert."
+        "description": "Jedes Mal, wenn wir den Status eines Problems ändern, rufen wir ein Ereignis auf."
       },
       "issue-creation": {
         "title": "Issue-Erstellung",
-        "description": "Wenn ein Issue erstellt wird."
+        "description": "Jedes Mal, wenn wir ein neues Thema erstellen, rufen wir ein Ereignis auf"
       }
     },
     "error": {

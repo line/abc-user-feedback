@@ -373,19 +373,19 @@
     "webhook-card": {
       "feedback-creation": {
         "title": "Feedback Creation",
-        "description": "When Feedback is created."
+        "description": "Every time feedback is collected, an event is triggered."
       },
       "issue-addition": {
         "title": "Issue Registration",
-        "description": "When an issue is registered to Feedback."
+        "description": "Every time I register an issue, I trigger an event."
       },
       "issue-status-change": {
         "title": "Issue Status Change",
-        "description": "When the status of an Issue changes."
+        "description": "Every time you change the issue status, you trigger an event."
       },
       "issue-creation": {
         "title": "Issue Creation",
-        "description": "When an Issue is created."
+        "description": "Every time you create a new issue, you trigger an event."
       }
     },
     "error": {

@@ -372,19 +372,19 @@
     "webhook-card": {
       "feedback-creation": {
         "title": "Feedback作成",
-        "description": "Feedbackが作成された時"
+        "description": "フィードバックが収集されるたびにイベントを発動します。"
       },
       "issue-addition": {
         "title": "Issue登録",
-        "description": "FeedbackにIssueが登録された時"
+        "description": "イシューを登録するたびにイベントを発動します。"
       },
       "issue-status-change": {
         "title": "Issueステータス変更",
-        "description": "Issueのステータスが変更された時"
+        "description": "イシューステータスを変更するたびにイベントを発動します。"
       },
       "issue-creation": {
         "title": "Issue作成",
-        "description": "Issueが作成された時"
+        "description": "イシューを新規作成するたびにイベントを発動します。"
       }
     },
     "error": {
