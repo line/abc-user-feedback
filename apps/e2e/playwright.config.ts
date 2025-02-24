@@ -50,14 +50,9 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "clear database",
-      testMatch: /clear-database\.ts/,
-    },
-    {
       name: "global setup",
       testMatch: /global\.setup\.ts/,
       teardown: "global teardown",
-      dependencies: ["clear database"],
     },
     {
       name: "global teardown",

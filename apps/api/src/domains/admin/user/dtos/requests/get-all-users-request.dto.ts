@@ -25,7 +25,6 @@ import {
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
-import { QueryOperatorEnum } from '@/common/enums/query-operator.enum';
 import { ArrayDistinct } from '@/common/validators';
 import { UserTypeEnum } from '../../entities/enums';
 
@@ -85,8 +84,7 @@ export class GetAllUsersRequestDto extends PaginationRequestDto {
 
   @ApiProperty({ required: false })
   @IsOptional()
-  @IsEnum(QueryOperatorEnum)
-  operator?: QueryOperatorEnum;
+  operator?: 'AND' | 'OR';
 
   @ApiProperty({ required: false })
   @IsOptional()
