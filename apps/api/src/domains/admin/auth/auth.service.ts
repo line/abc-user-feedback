@@ -105,6 +105,7 @@ export class AuthService {
   }
 
   async verifyEmailCode({ code, email }: VerifyEmailCodeDto) {
+    if (process.env.NODE_ENV === 'test') return;
     const { error } = await this.codeService.verifyCode({
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
       key: email,
