@@ -88,7 +88,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: "cd ../api && pnpm start",
+      command: "cd ../api && pnpm build && pnpm start",
       port: 4000,
       reuseExistingServer: true,
       env: {
