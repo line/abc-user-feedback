@@ -60,7 +60,10 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
 
   const { projectId, type } = watch();
 
-  const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
+  const { data: projectData } = useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000 },
+  });
 
   const { data: roleData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',

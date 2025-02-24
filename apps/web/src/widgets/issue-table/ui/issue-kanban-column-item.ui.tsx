@@ -96,7 +96,7 @@ const IssueKanbanColumnItem = (props: Props) => {
             {item.category.name}
           </Badge>
         : <CategoryCombobox issueId={item.id} category={item.category}>
-            <Badge variant="outline" className="w-fit cursor-pointer">
+            <Badge variant="outline" className="cursor-pointer">
               Add Category
             </Badge>
           </CategoryCombobox>

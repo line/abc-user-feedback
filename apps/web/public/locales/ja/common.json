@@ -355,10 +355,18 @@
       "select-project": "Projectを選択してください。"
     },
     "create-tenant": {
-      "title": "Tenant 作成",
-      "complete-title": "Tenant 作成完了",
-      "description": "ABC User Feedbackを使用する会社または組織の名前を入力してください。",
-      "complete-description": "Tenant 設定を完了しました。作成したマスターアカウントで初めてログインを試みてください。"
+      "tenant": {
+        "title": "テナント作成",
+        "description": "ABC User Feedbackを管理する会社/組織/チームの名前を入力してください。"
+      },
+      "user": {
+        "title": "マスターアカウント作成",
+        "description": "最初のログインには、マスターアカウントを作成する必要があります。"
+      },
+      "final": {
+        "title": "テナント作成完了",
+        "description": "テナントの作成が完了しました。\nマスターアカウントでログインを試みてください。"
+      }
     },
     "placeholder": {
       "select": "選択してください",

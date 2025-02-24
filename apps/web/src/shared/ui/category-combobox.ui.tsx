@@ -117,7 +117,10 @@ const CategoryCombobox = (props: Props) => {
         <button
           onClick={(e) => e.stopPropagation()}
           disabled={!perms.includes('issue_update')}
-          className={cn({ 'opacity-50': !perms.includes('issue_update') })}
+          className={cn(
+            { 'opacity-50': !perms.includes('issue_update') },
+            'w-fit',
+          )}
         >
           {children}
         </button>

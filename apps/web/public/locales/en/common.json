@@ -356,10 +356,18 @@
       "select-project": "Please select a project."
     },
     "create-tenant": {
-      "title": "Tenant Creation",
-      "complete-title": "Tenant Creation Complete",
-      "description": "Please enter the name of the company or organization that will use ABC User Feedback.",
-      "complete-description": "Tenant setup is complete. Try logging in for the first time with the master account you created."
+      "tenant": {
+        "title": "Create Tenant",
+        "description": "Please enter the name of the company/organization/team that will manage ABC User Feedback."
+      },
+      "user": {
+        "title": "Create Master Account",
+        "description": "You need to create a master account for the initial login."
+      },
+      "final": {
+        "title": "Tenant Creation Complete",
+        "description": "Tenant creation is complete.\nNow try logging in with the master account."
+      }
     },
     "placeholder": {
       "select": "Please select.",

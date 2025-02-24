@@ -96,7 +96,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
 
   return (
     <AnonymousTemplate
-      title={t(`v2.create-tenant.${step}.title`)}
+      title={t('v2.create-tenant.tenant.title')}
       description={t(`v2.create-tenant.${step}.description`)}
       image={
         step === 'final' ?

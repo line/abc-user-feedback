@@ -87,7 +87,10 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { sorting, pagination } = table.getState();
   const sort = useSort(sorting);
 
-  const { data: projects } = useOAIQuery({ path: '/api/admin/projects' });
+  const { data: projects } = useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000 },
+  });
 
   const {
     data: userData,

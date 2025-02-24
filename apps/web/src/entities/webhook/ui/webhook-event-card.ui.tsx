@@ -66,7 +66,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
 
   return (
     <Tooltip>
-      <TooltipTrigger>
+      <TooltipTrigger asChild>
         <button
           type="button"
           className={cn(
@@ -92,7 +92,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
               onValuesChange={setSelectedValues}
               disabled={!checked}
             >
-              <SelectTrigger>
+              <SelectTrigger className="max-w-[250px]">
                 <SelectValue placeholder={t('v2.placeholder.select')} />
               </SelectTrigger>
               <SelectContent>

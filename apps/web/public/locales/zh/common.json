@@ -355,10 +355,18 @@
       "select-project": "选择Project"
     },
     "create-tenant": {
-      "title": "租户设置",
-      "site-name": "站点名称",
-      "complete-title": "租户创建完成",
-      "description": "请输入要使用ABC User Feedback的公司或组织的名称。"
+      "tenant": {
+        "title": "创建Tenant",
+        "description": "请输入将管理ABC User Feedback的公司/组织/团队名称。"
+      },
+      "user": {
+        "title": "创建主帐户",
+        "description": "首次登录需要创建一个主帐户。"
+      },
+      "final": {
+        "title": "Tenant创建完成",
+        "description": "Tenant创建已完成。\n现在尝试使用主帐户登录。"
+      }
     },
     "placeholder": {
       "select": "请选择。",

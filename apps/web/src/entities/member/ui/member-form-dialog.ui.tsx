@@ -64,8 +64,6 @@ const MemberFormDialog: React.FC<Props> = (props) => {
       resolver: zodResolver(memberInfoFormSchema),
     });
 
-  watch();
-
   return (
     <FormDialog
       title={

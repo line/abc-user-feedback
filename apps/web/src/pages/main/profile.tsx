@@ -91,7 +91,7 @@ const ProfilePage: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    // if (!data || data.items.length > 0) return;
+    if (!data || data.items.length > 0) return;
     openWarningNoProjects();
   }, [data]);
 

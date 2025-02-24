@@ -176,7 +176,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
 
   return (
     <Sheet onOpenChange={close} open={isOpen} modal>
-      <SheetContent className="w-[720px]">
+      <SheetContent className="min-w-[500px]">
         <SheetHeader>
           <SheetTitle>
             {data ?

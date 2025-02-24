@@ -48,7 +48,10 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const overlay = useOverlay();
   const { user } = useUserStore();
 
-  const { data } = useOAIQuery({ path: '/api/admin/projects' });
+  const { data } = useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000 },
+  });
 
   const onChangeProject = async (currentProjectId?: string) => {
     await router.push({

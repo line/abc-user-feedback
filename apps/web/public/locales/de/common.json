@@ -355,10 +355,18 @@
       "select-project": "Bitte wählen Sie ein Projekt aus."
     },
     "create-tenant": {
-      "title": "Tenant-Erstellung",
-      "complete-title": "Tenant-Erstellung abgeschlossen",
-      "description": "Bitte geben Sie den Namen des Unternehmens oder der Organisation ein, die ABC User Feedback verwenden wird.",
-      "complete-description": "Tenant-Einrichtung ist abgeschlossen. Versuchen Sie, sich mit dem erstellten Master-Konto zum ersten Mal anzumelden."
+      "tenant": {
+        "title": "Tenant erstellen",
+        "description": "Bitte geben Sie den Namen des Unternehmens/der Organisation/des Teams ein, das ABC User Feedback verwalten wird."
+      },
+      "user": {
+        "title": "Hauptkonto erstellen",
+        "description": "Für die erste Anmeldung müssen Sie ein Hauptkonto erstellen."
+      },
+      "final": {
+        "title": "Tenant-Erstellung abgeschlossen",
+        "description": "Die Tenant-Erstellung ist abgeschlossen.\nVersuchen Sie nun, sich mit dem Hauptkonto anzumelden."
+      }
     },
     "placeholder": {
       "select": "Bitte auswählen.",
