@@ -15,8 +15,8 @@ setup("tenant create and authenticate", async ({ page }) => {
   await page.locator("input[name='email']").fill("user@feedback.com");
 
   await page.getByRole("button", { name: "Request Code", exact: true }).click();
-  await page.waitForTimeout(1000);
 
+  await page.waitForSelector('input[name="code"]', { state: "visible" });
   await page.locator("input[name='code']").click();
   await page.locator("input[name='code']").fill("000000");
 
