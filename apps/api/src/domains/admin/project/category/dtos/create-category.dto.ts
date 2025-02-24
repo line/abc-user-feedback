@@ -14,14 +14,18 @@
  * under the License.
  */
 import { Expose, plainToInstance } from 'class-transformer';
+import { IsNumber, IsString, MaxLength } from 'class-validator';
 
 import { CategoryEntity } from '@/domains/admin/project/category/category.entity';
 
 export class CreateCategoryDto {
   @Expose()
+  @IsNumber()
   projectId: number;
 
   @Expose()
+  @IsString()
+  @MaxLength(255)
   name: string;
 
   public static from(params: any): CreateCategoryDto {

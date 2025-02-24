@@ -30,7 +30,7 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   @IsString()
   @IsNullable()
   @MaxLength(50)
-  declare description: string;
+  declare description: string | null;
 
   @ApiProperty({
     required: false,

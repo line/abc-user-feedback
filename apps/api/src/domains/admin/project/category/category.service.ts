@@ -133,9 +133,13 @@ export class CategoryService {
     projectId: number;
     categoryId: number;
   }) {
-    await this.repository.delete({
+    const { affected } = await this.repository.delete({
       id: categoryId,
       project: { id: projectId },
     });
+
+    if (affected === 0) {
+      throw new CategoryNotFoundException();
+    }
   }
 }

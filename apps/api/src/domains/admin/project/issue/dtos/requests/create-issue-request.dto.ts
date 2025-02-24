@@ -51,7 +51,7 @@ export class CreateIssueRequestDto {
   @IsNullable()
   @MaxLength(50)
   @IsOptional()
-  description: string;
+  description: string | null;
 
   @ApiProperty({
     required: false,

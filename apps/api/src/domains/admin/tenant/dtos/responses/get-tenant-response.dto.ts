@@ -59,7 +59,6 @@ export class OAuthConfigResponseDto {
     type: LoginButtonTypeEnum,
     nullable: true,
   })
-  @IsNotEmpty()
   loginButtonType: LoginButtonTypeEnum | null;
 
   @Expose()
