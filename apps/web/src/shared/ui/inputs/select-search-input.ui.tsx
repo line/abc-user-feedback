@@ -99,7 +99,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
         </InputLabel>
       )}
       <Combobox open={open} onOpenChange={setOpen}>
-        <ComboboxTrigger disabled={disabled} className="font-normal">
+        <ComboboxTrigger disabled={disabled} className="w-full font-normal">
           {currentOption?.label ?? value ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
