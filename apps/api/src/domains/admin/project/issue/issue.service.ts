@@ -214,10 +214,10 @@ export class IssueService {
 
             if (fieldKey === 'updatedAt') {
               const { gte, lt } = value as TimeRange;
-              qb[method](`issues.created_at >= :gte${paramName}`, {
+              qb[method](`issues.updated_at >= :gte${paramName}`, {
                 [`gte${paramName}`]: gte,
               });
-              qb[method](`issues.created_at < :lt${paramName}`, {
+              qb[method](`issues.updated_at < :lt${paramName}`, {
                 [`lt${paramName}`]: lt,
               });
             } else if (
