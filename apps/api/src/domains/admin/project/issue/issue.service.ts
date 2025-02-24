@@ -37,6 +37,7 @@ import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum'
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
 import { isInvalidSortMethod } from '../../feedback/feedback.common';
 import { CategoryEntity } from '../category/category.entity';
+import { CategoryNotFoundException } from '../category/exceptions';
 import { ProjectEntity } from '../project/project.entity';
 import type {
   FindByIssueIdDto,
@@ -373,6 +374,11 @@ export class IssueService {
     });
 
     if (!issue) throw new IssueNotFoundException();
+
+    const category = await this.repository.findOne({
+      where: { id: categoryId },
+    });
+    if (!category) throw new CategoryNotFoundException();
 
     issue.category = new CategoryEntity();
     issue.category.id = categoryId;

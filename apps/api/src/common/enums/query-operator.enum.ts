@@ -13,23 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber } from 'class-validator';
-
-export class UpdateIssueCategoryDto {
-  @ApiProperty({
-    description: 'ID of the issue to update',
-    example: 1,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  issueId: number;
-
-  @ApiProperty({
-    description: 'ID of the category to assign to the issue',
-    example: 1,
-  })
-  @IsNumber()
-  @IsNotEmpty()
-  categoryId: number;
+export enum QueryOperatorEnum {
+  AND = 'AND',
+  OR = 'OR',
 }

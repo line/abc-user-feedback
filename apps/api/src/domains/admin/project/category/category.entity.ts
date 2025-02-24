@@ -29,7 +29,7 @@ import { IssueEntity } from '../issue/issue.entity';
 
 @Entity('categories')
 @Index(['createdAt'])
-@Unique('category-name-unique', ['name'])
+@Unique('category-name-unique', ['name', 'project'])
 export class CategoryEntity extends CommonEntity {
   @Column('varchar', { length: 255 })
   name: string;
