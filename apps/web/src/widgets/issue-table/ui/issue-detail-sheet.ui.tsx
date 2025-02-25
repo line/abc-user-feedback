@@ -179,7 +179,7 @@ const IssueDetailSheet = (props: Props) => {
               <Link
                 key={v.id}
                 href={{
-                  pathname: '/main//project/[projectId]/feedback',
+                  pathname: '/main/project/[projectId]/feedback',
                   query: {
                     projectId,
                     channelId: v.id,

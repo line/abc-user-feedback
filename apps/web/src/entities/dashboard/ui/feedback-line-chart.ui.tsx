@@ -26,7 +26,8 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { SimpleLineChart, useOAIQuery } from '@/shared';
+import { InfiniteScrollArea, SimpleLineChart, useOAIQuery } from '@/shared';
+import type { Channel } from '@/entities/channel';
 
 import { useLineChartData } from '../lib';
 
@@ -35,41 +36,22 @@ interface IProps {
   from: Date;
   to: Date;
 }
-
+const LIMIT = 5;
 const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
   const { from, projectId, to } = props;
-
-  const { data } = useOAIQuery({
+  const [page, setPage] = useState(1);
+  const { data: channels } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
+    variables: { projectId, limit: page * LIMIT },
   });
-
-  if (!data) return <></>;
-  return <FeedbackLineChart from={from} to={to} channels={data.items} />;
-};
-
-interface IFeedbackLineChartProps {
-  channels: {
-    id: number;
-    name: string;
-    description: string;
-    createdAt: string;
-    updatedAt: string;
-  }[];
-  from: Date;
-  to: Date;
-}
-
-const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
-  const { channels, from, to } = props;
 
   const { t } = useTranslation();
 
-  const [currentChannels, setCurrentChannels] = useState(channels.slice(0, 5));
+  const [currentChannels, setCurrentChannels] = useState<Channel[]>([]);
   const dayCount = useMemo(() => dayjs(to).diff(from, 'day') + 1, [from, to]);
 
   useEffect(() => {
-    setCurrentChannels(channels.slice(0, 5));
+    setCurrentChannels(channels?.items.slice(0, 5) ?? []);
   }, [channels]);
 
   const { data } = useOAIQuery({
@@ -111,8 +93,8 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
             Filter
           </ComboboxTrigger>
           <ComboboxContent>
-            <ComboboxList>
-              {channels.map((channel) => (
+            <ComboboxList maxHeight="200px">
+              {channels?.items.map((channel) => (
                 <ComboboxSelectItem
                   key={channel.id}
                   value={String(channel.id)}
@@ -123,7 +105,7 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
                     );
                     setCurrentChannels((prev) =>
                       isChecked ? prev.filter(({ id }) => id !== channel.id)
-                      : prev.length === 5 ? prev
+                      : prev.length === 5 ? [...prev.slice(1), channel]
                       : [...prev, channel],
                     );
                   }}
@@ -131,6 +113,13 @@ const FeedbackLineChart: React.FC<IFeedbackLineChartProps> = (props) => {
                   {channel.name}
                 </ComboboxSelectItem>
               ))}
+              <InfiniteScrollArea
+                hasNextPage={
+                  (channels?.meta.itemCount ?? 0) <
+                  (channels?.meta.totalItems ?? 0)
+                }
+                fetchNextPage={() => setPage((prev) => prev + 1)}
+              />
             </ComboboxList>
           </ComboboxContent>
         </Combobox>

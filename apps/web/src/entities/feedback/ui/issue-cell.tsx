@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
@@ -31,8 +31,14 @@ import {
   toast,
 } from '@ufb/react';
 
-import { client, cn, useOAIMutation, usePermissions } from '@/shared';
-import { IssueBadge, useIssueSearch } from '@/entities/issue';
+import {
+  client,
+  cn,
+  InfiniteScrollArea,
+  useOAIMutation,
+  usePermissions,
+} from '@/shared';
+import { IssueBadge, useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 
 import { useFeedbackSearch } from '../lib';
@@ -79,13 +85,21 @@ const IssueCell: React.FC<IProps> = (props) => {
   };
 
   const {
-    data: allIssues,
+    data: allIssueData,
     refetch: allIssuesRefetch,
-    isLoading,
-  } = useIssueSearch(Number(projectId), {
-    limit: 100,
+    fetchNextPage,
+    hasNextPage,
+  } = useIssueSearchInfinite(Number(projectId), {
+    limit: 10,
     queries: [{ name: throttledvalue, condition: 'CONTAINS' }],
   });
+
+  const allIssues = useMemo(() => {
+    return allIssueData.pages
+      .map((v) => v?.items)
+      .filter((v) => !!v)
+      .flat();
+  }, [allIssueData]);
 
   const { mutate: attatchIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -188,8 +202,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 </ComboboxItem>
               ))}
             </ComboboxGroup>
-            {isLoading && <div className="combobox-item">Loading...</div>}
-            {!isLoading && !!allIssues?.items.length && (
+            {!!allIssues.length && (
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -197,7 +210,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   </span>
                 }
               >
-                {allIssues.items
+                {allIssues
                   .filter(
                     (v) => !currentIssues.some((issue) => issue.id === v.id),
                   )
@@ -217,13 +230,16 @@ const IssueCell: React.FC<IProps> = (props) => {
                       <IssueCellEditCombobox issue={issue} />
                     </ComboboxItem>
                   ))}
+                <InfiniteScrollArea
+                  fetchNextPage={fetchNextPage}
+                  hasNextPage={hasNextPage}
+                />
               </ComboboxGroup>
             )}
             {!!inputValue &&
               perms.includes('issue_create') &&
               !currentIssues.some((issue) => issue.name === inputValue) &&
-              !isLoading &&
-              !allIssues?.items.some((issue) => issue.name === inputValue) && (
+              !allIssues.some((issue) => issue.name === inputValue) && (
                 <div
                   className="combobox-item flex justify-between"
                   onClick={async () => {

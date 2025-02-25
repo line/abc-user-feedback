@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -30,6 +30,8 @@ import {
   InputField,
   InputLabel,
 } from '@ufb/react';
+
+import InfiniteScrollArea from '../infinite-scroll-area.ui';
 
 interface Props {
   label?: string;
@@ -69,27 +71,11 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     label: string;
     value: string;
   }>();
+
   useEffect(() => {
     const option = options.find((v) => v.value === value);
     setCurrentOption(option);
   }, [value]);
-
-  const moreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        void fetchNextPage?.();
-      });
-    });
-
-    if (moreRef.current) {
-      observer.observe(moreRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
 
   return (
     <InputField>
@@ -109,29 +95,32 @@ const SelectSearchInput: React.FC<Props> = (props) => {
             value={inputValue}
             onValueChange={setInputValue}
           />
-          <ComboboxList className="max-h-[200px]">
-            {isFetching ?
-              <div className="combobox-item">Loading...</div>
-            : <ComboboxEmpty>No results found.</ComboboxEmpty>}
-            <ComboboxGroup>
-              {options.map((option) => (
-                <ComboboxSelectItem
-                  key={option.value}
-                  value={option.value}
-                  checked={option.value === value}
-                  onSelect={() => {
-                    const newValue =
-                      option.value === value ? undefined : option.value;
-                    setCurrentOption(option);
-                    onChange?.(newValue);
-                    setOpen(false);
-                  }}
-                >
-                  {option.label}
-                </ComboboxSelectItem>
-              ))}
-            </ComboboxGroup>
-            {hasNextPage && <div ref={moreRef} className="h-2" />}
+          <ComboboxList maxHeight="200px">
+            <ComboboxEmpty>No results found.</ComboboxEmpty>
+            {!isFetching && (
+              <ComboboxGroup>
+                {options.map((option) => (
+                  <ComboboxSelectItem
+                    key={option.value}
+                    value={option.value}
+                    checked={option.value === value}
+                    onSelect={() => {
+                      const newValue =
+                        option.value === value ? undefined : option.value;
+                      setCurrentOption(option);
+                      onChange?.(newValue);
+                      setOpen(false);
+                    }}
+                  >
+                    {option.label}
+                  </ComboboxSelectItem>
+                ))}
+                <InfiniteScrollArea
+                  hasNextPage={hasNextPage}
+                  fetchNextPage={fetchNextPage}
+                />
+              </ComboboxGroup>
+            )}
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

@@ -37,7 +37,6 @@ import {
 } from '@/shared';
 import CategoryTable from '@/shared/ui/category-table.ui';
 
-import { env } from '@/env';
 import IssueFormDialog from './issue-form-dialog.ui';
 import IssueKanban from './issue-kanban.ui';
 
@@ -160,7 +159,6 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             onChange={(v) => setCreatedAtDateRange(v)}
             value={createdAtDateRange}
             maxDate={new Date()}
-            maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
             filterFields={filterFields}

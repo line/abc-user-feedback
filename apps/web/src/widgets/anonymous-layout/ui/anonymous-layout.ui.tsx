@@ -30,12 +30,16 @@ const AnonymousLayout = (props: Props) => {
         <Button variant="ghost">
           <Icon name="RiEarthFill" />
         </Button>
-        <Button variant="ghost">
-          <Icon name="github" />
-        </Button>
-        <Button variant="ghost">
-          <Icon name="RiMailLine" />
-        </Button>
+        <a href="https://github.com/line/abc-user-feedback" target="_blank">
+          <Button variant="ghost">
+            <Icon name="github" />
+          </Button>
+        </a>
+        <a href="mailto:dl_abc_userfeedback@linecorp.com" target="_blank">
+          <Button variant="ghost">
+            <Icon name="RiMailLine" />
+          </Button>
+        </a>
       </footer>
     </div>
   );

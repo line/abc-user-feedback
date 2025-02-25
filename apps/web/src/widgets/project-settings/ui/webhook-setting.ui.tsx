@@ -43,12 +43,12 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
 
   const { data, refetch, isPending } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/webhooks',
-    variables: { projectId },
+    variables: { projectId, limit: 1000 },
   });
 
   const { data: channels } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
+    variables: { projectId, limit: 1000 },
   });
 
   const { mutateAsync: deleteWebhook } = useMutation({

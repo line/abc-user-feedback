@@ -14,9 +14,11 @@
  * under the License.
  */
 
+import { useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { useThrottle } from 'react-use';
 
 import type { FormOverlayProps } from '@/shared';
 import { FormDialog, SelectSearchInput, TextInput } from '@/shared';
@@ -33,6 +35,7 @@ interface Props extends FormOverlayProps<MemberInfo> {
   project: ProjectInfo;
   roles: Role[];
 }
+const LIMIT = 10;
 
 const MemberFormDialog: React.FC<Props> = (props) => {
   const {
@@ -49,13 +52,18 @@ const MemberFormDialog: React.FC<Props> = (props) => {
   } = props;
 
   const { t } = useTranslation();
+  const [page, setPage] = useState(1);
 
-  const { data: userData } = useUserSearch({
-    limit: 500,
-    queries: [{ type: ['GENERAL'], condition: 'IS' }] as Record<
-      string,
-      unknown
-    >[],
+  const [inputValue, setInputValue] = useState('');
+  const throttledInputValue = useThrottle(inputValue, 1000);
+
+  const { data: userData, isLoading } = useUserSearch({
+    limit: LIMIT * page,
+    page: 0,
+    queries: [
+      { type: ['GENERAL'], condition: 'IS' },
+      { email: throttledInputValue, condition: 'CONTAINS' },
+    ] as Record<string, unknown>[],
   });
 
   const { setValue, handleSubmit, formState, register, getValues, watch } =
@@ -92,7 +100,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           value={watch('user')?.email}
           onChange={(value) => {
             const user = userData?.items.find((user) => user.email === value);
-            setValue('user', user, { shouldDirty: true, shouldValidate: true });
+            setValue('user', user, { shouldDirty: true });
           }}
           options={
             userData?.items
@@ -102,6 +110,16 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           error={formState.errors.user?.message}
           required
           disabled={!!data}
+          fetchNextPage={() => setPage((prev) => prev + 1)}
+          hasNextPage={
+            (userData?.meta.itemCount ?? 0) < (userData?.meta.totalItems ?? 0)
+          }
+          inputValue={inputValue}
+          setInputValue={(v) => {
+            setInputValue(v);
+            setPage(1);
+          }}
+          isFetching={isLoading}
         />
         {data && <TextInput label="Name" disabled {...register('user.name')} />}
         {data && (

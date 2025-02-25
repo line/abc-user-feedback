@@ -321,8 +321,8 @@
         "description": "途中で離れても後で続きから再開できます。"
       },
       "no-project-in-profile-page": {
-        "title": "あらら...",
-        "description": "{{name}}さん、現在登録されたプロジェクト情報がありません。 \n プロジェクト管理者にメンバー登録を依頼するか、問い合わせてみてください。"
+        "title": "所属プロジェクトがありません。",
+        "description": "まだ所属しているプロジェクトがありません。\nプロジェクト管理者にメンバー登録を依頼するか、問い合わせてみてください。"
       },
       "no-project-in-project-creation-page": {
         "title": "ようこそ！",

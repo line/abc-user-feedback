@@ -28,7 +28,7 @@ import {
   TooltipTrigger,
 } from '@ufb/react';
 
-import { cn } from '@/shared';
+import { cn, InfiniteScrollArea } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 interface Props {
@@ -105,6 +105,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
                     {channel.name}
                   </SelectItem>
                 ))}
+                <InfiniteScrollArea />
               </SelectContent>
             </Select>
           </div>

@@ -18,6 +18,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
   getCoreRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
@@ -44,8 +45,7 @@ import {
 import type { Member, MemberInfo } from '@/entities/member';
 import { MemberFormDialog } from '@/entities/member';
 import { useMembmerSearch } from '@/entities/member/lib';
-import { getMemberColumns } from '@/entities/member/member-columns';
-import { useUserSearch } from '@/entities/user';
+import { memberColumns } from '@/entities/member/member-columns';
 
 interface IProps {
   projectId: number;
@@ -63,6 +63,9 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
   const [rows, setRows] = useState<Member[]>([]);
 
+  const [pageCount, setPageCount] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
+
   const queries = useMemo(() => {
     return tableFilters.reduce(
       (acc, filter) => {
@@ -75,28 +78,38 @@ const MemberSetting: React.FC<IProps> = (props) => {
     );
   }, [tableFilters]);
 
-  const { data: userData } = useUserSearch();
+  const table = useReactTable({
+    columns: memberColumns,
+    data: rows,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getRowId: (row) => String(row.id),
+    initialState: { pagination: { pageIndex: 0, pageSize: 20 } },
+    manualPagination: true,
+    pageCount,
+    rowCount,
+  });
 
-  const columns = useMemo(
-    () => getMemberColumns(userData?.items ?? []),
-    [userData],
-  );
+  const { rowSelection, pagination } = table.getState();
 
   const { data, refetch, isPending } = useMembmerSearch(projectId, {
-    limit: 1000,
+    page: 1,
+    limit: pagination.pageSize * pagination.pageIndex,
     operator,
     queries,
   });
 
-  const table = useReactTable({
-    columns,
-    data: rows,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getRowId: (row) => String(row.id),
-  });
-
-  const { rowSelection } = table.getState();
+  useEffect(() => {
+    if (isPending) return;
+    setRows(data?.items ?? []);
+    setPageCount(
+      data?.meta.totalPages === 1 ?
+        pagination.pageIndex + 1
+      : pagination.pageIndex + 2,
+    );
+    setRowCount(data?.meta.totalItems ?? 0);
+  }, [data, pagination, isPending]);
 
   const rowSelectionIds = useMemo(
     () =>
@@ -157,9 +170,6 @@ const MemberSetting: React.FC<IProps> = (props) => {
       toast.success(t('v2.toast.success'));
     },
   });
-  useEffect(() => {
-    setRows(data?.items ?? []);
-  }, [data]);
 
   const openCreateMemberFormDialog = () => {
     if (!rolesData || !projectData) return;
@@ -313,6 +323,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
           </Button>
         }
         onClickRow={openUpdateMemberFormDialog}
+        isInfiniteScroll
       />
     </SettingTemplate>
   );

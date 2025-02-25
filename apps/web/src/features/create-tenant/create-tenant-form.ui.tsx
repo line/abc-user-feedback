@@ -47,6 +47,7 @@ const CreateTenantForm: React.FC<IProps> = (props) => {
         <TextInput
           label="Name"
           placeholder={t('v2.placeholder.text')}
+          error={formState.errors.siteName?.message}
           {...register('siteName')}
         />
       </div>

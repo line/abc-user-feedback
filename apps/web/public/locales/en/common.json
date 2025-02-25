@@ -322,8 +322,8 @@
         "description": "Even if you leave in the middle, you can continue later."
       },
       "no-project-in-profile-page": {
-        "title": "Oh no...",
-        "description": "{{name}}, there is currently no registered project information. \n Please request member registration from the project manager or make an inquiry."
+        "title": "No Project Assigned.",
+        "description": "You are not assigned to any project yet.\nPlease request the project manager to register you as a member or inquire further."
       },
       "no-project-in-project-creation-page": {
         "title": "Welcome!",

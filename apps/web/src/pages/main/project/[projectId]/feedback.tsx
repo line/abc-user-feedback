@@ -82,7 +82,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
+    variables: { projectId, limit: 1000 },
   });
 
   const { data: channelData } = useOAIQuery({
@@ -183,7 +183,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       },
     },
   });
-  const { mutate: deleteFeedback } = useOAIMutation({
+  const { mutateAsync: deleteFeedback } = useOAIMutation({
     method: 'delete',
     path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks',
     pathParams: { channelId: currentChannelId, projectId },
@@ -246,7 +246,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             name: field.name,
             format: 'select',
             options: field.options,
-            matchType: ['BETWEEN', 'IS'],
+            matchType: ['IS'],
           };
         }
       })
@@ -258,10 +258,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <div className="flex flex-wrap justify-between gap-2">
+      <div className="flex justify-between gap-2">
         <Tabs
           value={String(currentChannelId)}
           onValueChange={(v) => setCurrentChannelId(Number(v))}
+          className="overflow-auto"
         >
           <TabsList>
             {data?.items.length === 0 ?

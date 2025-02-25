@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { useThrottle } from 'react-use';
@@ -30,9 +30,15 @@ import {
   toast,
 } from '@ufb/react';
 
-import { client, getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
+import {
+  client,
+  getDayCount,
+  InfiniteScrollArea,
+  SimpleLineChart,
+  useOAIQuery,
+} from '@/shared';
 import type { Issue } from '@/entities/issue';
-import { IssueBadge, useIssueSearch } from '@/entities/issue';
+import { IssueBadge, useIssueSearchInfinite } from '@/entities/issue';
 
 import { useLineChartData } from '../lib';
 
@@ -89,10 +95,21 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     })),
   );
 
-  const { data: allIssues, isLoading } = useIssueSearch(Number(projectId), {
-    limit: 100,
+  const {
+    data: allIssueData,
+    fetchNextPage,
+    hasNextPage,
+  } = useIssueSearchInfinite(Number(projectId), {
+    limit: 10,
     queries: [{ name: throttledSearchName, condition: 'CONTAINS' }],
   });
+
+  const allIssues = useMemo(() => {
+    return allIssueData.pages
+      .map((v) => v?.items)
+      .filter((v) => !!v)
+      .flat();
+  }, [allIssueData]);
 
   const handleIssueCheck = (issue: Issue) => {
     if (currentIssues.length === 5) {
@@ -127,7 +144,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
               onValueChange={(value) => setSearchName(value)}
               value={searchName}
             />
-            <ComboboxList maxHeight="333px">
+            <ComboboxList maxHeight="200px">
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -144,8 +161,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                   </ComboboxItem>
                 ))}
               </ComboboxGroup>
-              {isLoading && <div className="combobox-item">Loading...</div>}
-              {!isLoading && !!allIssues?.items.length && (
+              {!!allIssues.length && (
                 <ComboboxGroup
                   heading={
                     <span className="text-neutral-tertiary text-base-normal">
@@ -153,7 +169,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                     </span>
                   }
                 >
-                  {allIssues.items
+                  {allIssues
                     .filter(
                       (v) => !currentIssues.some((issue) => issue.id === v.id),
                     )
@@ -165,6 +181,10 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                         <IssueBadge name={issue.name} status={issue.status} />
                       </ComboboxItem>
                     ))}
+                  <InfiniteScrollArea
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                  />
                 </ComboboxGroup>
               )}
             </ComboboxList>

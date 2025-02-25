@@ -15,23 +15,17 @@
  */
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
 
 import { Badge } from '@ufb/react';
 
-import {
-  Avatar,
-  DATE_TIME_FORMAT,
-  DescriptionTooltip,
-  TableCheckbox,
-} from '@/shared';
+import { Avatar, DATE_TIME_FORMAT, TableCheckbox } from '@/shared';
 
-import type { User } from '../user';
 import type { MemberInfo } from './member.type';
+import MemberNameCell from './ui/member-name-cell.ui';
 
 const columnHelper = createColumnHelper<MemberInfo>();
 
-export const getMemberColumns = (users: User[]) => [
+export const memberColumns = [
   columnHelper.display({
     id: 'select',
     header: ({ table }) => (
@@ -55,18 +49,7 @@ export const getMemberColumns = (users: User[]) => [
   columnHelper.accessor('user.email', {
     header: 'Email',
     enableSorting: false,
-    cell: ({ getValue }) => {
-      const { t } = useTranslation();
-      return users.some((v) => v.email === getValue()) ? getValue() : (
-          <div className="flex items-center gap-1">
-            <span className="text-tint-red">{getValue()}</span>
-            <DescriptionTooltip
-              color="red"
-              description={t('main.create-project.error-member')}
-            />
-          </div>
-        );
-    },
+    cell: ({ getValue }) => <MemberNameCell email={getValue()} />,
   }),
   columnHelper.accessor('user.name', {
     header: 'Name',

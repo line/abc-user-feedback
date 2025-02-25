@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import {
   getCoreRowModel,
   getSortedRowModel,
@@ -23,9 +22,8 @@ import { useTranslation } from 'react-i18next';
 
 import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
-import { useUserSearch } from '@/entities/user';
 
-import { getMemberColumns } from '../member-columns';
+import { memberColumns } from '../member-columns';
 import type { MemberInfo } from '../member.type';
 
 interface IProps extends EntityTable<MemberInfo> {}
@@ -35,15 +33,8 @@ const MemberTable: React.FC<IProps> = (props) => {
 
   const { t } = useTranslation();
 
-  const { data: userData } = useUserSearch({ limit: 1000 });
-
-  const columns = useMemo(
-    () => getMemberColumns(userData?.items ?? []),
-    [userData],
-  );
-
   const table = useReactTable({
-    columns,
+    columns: memberColumns,
     data,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

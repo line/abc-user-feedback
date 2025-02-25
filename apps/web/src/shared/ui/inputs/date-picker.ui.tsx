@@ -36,8 +36,8 @@ const DatePicker = (props: Props) => {
 
   return (
     <Popover>
-      <PopoverTrigger>
-        <InputField className="w-full">
+      <PopoverTrigger asChild>
+        <InputField>
           <InputBox>
             <Icon
               name="RiCalendarEventLine"

@@ -42,7 +42,7 @@ const ApiKeySetting: React.FC<IProps> = ({ projectId }) => {
 
   const { data, refetch, status } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/api-keys',
-    variables: { projectId },
+    variables: { projectId, limit: 1000 },
   });
 
   const { mutateAsync: softDelete } = useMutation({

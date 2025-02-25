@@ -19,13 +19,12 @@ import {
   Badge,
   Combobox,
   ComboboxContent,
-  ComboboxItem,
   ComboboxList,
+  ComboboxSelectItem,
   ComboboxTrigger,
   Icon,
 } from '@ufb/react';
 
-import { cn } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 import { FieldFormatLabel } from '@/entities/field';
 
@@ -56,24 +55,15 @@ const FeedbackTableViewOptions = ({ table, fields }: Props) => {
               const field = fields.find((f) => f.key === column.id);
               if (!field) return null;
               return (
-                <ComboboxItem
+                <ComboboxSelectItem
                   key={column.id}
-                  className={cn('gap-3', {
-                    'bg-neutral-tertiary': column.getIsVisible(),
-                  })}
                   onSelect={() =>
                     column.toggleVisibility(!column.getIsVisible())
                   }
+                  checked={column.getIsVisible()}
                 >
                   <FieldFormatLabel format={field.format} name={field.name} />
-                  <Icon
-                    name="RiCheckLine"
-                    className={cn(
-                      'ml-auto size-4 shrink-0',
-                      column.getIsVisible() ? 'opacity-100' : 'opacity-0',
-                    )}
-                  />
-                </ComboboxItem>
+                </ComboboxSelectItem>
               );
             })}
         </ComboboxList>

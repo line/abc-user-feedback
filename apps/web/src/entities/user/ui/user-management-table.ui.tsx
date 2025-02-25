@@ -32,7 +32,6 @@ import {
   client,
   DeleteDialog,
   TableFilterPopover,
-  TablePagination,
   useOAIMutation,
   useOAIQuery,
   useSort,
@@ -52,8 +51,10 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const overlay = useOverlay();
 
   const [rows, setRows] = useState<UserMember[]>([]);
+
   const [pageCount, setPageCount] = useState(0);
   const [rowCount, setRowCount] = useState(0);
+
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
   const queries = useMemo(() => {
@@ -72,13 +73,17 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   }, [tableFilters]);
 
   const columns = useMemo(() => getUserColumns(), []);
+
   const table = useReactTable({
     columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => String(row.id),
     enableColumnFilters: true,
-    initialState: { sorting: [{ id: 'createdAt', desc: true }] },
+    initialState: {
+      sorting: [{ id: 'createdAt', desc: true }],
+      pagination: { pageIndex: 0, pageSize: 20 },
+    },
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
@@ -99,8 +104,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     refetch,
     isLoading,
   } = useUserSearch({
-    page: pagination.pageIndex + 1,
-    limit: pagination.pageSize,
+    page: 1,
+    limit: pagination.pageSize * pagination.pageIndex,
     order: sort as { createdAt: 'ASC' | 'DESC' },
     queries,
     operator,
@@ -140,10 +145,15 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   });
 
   useEffect(() => {
+    if (isLoading) return;
     setRows(userData?.items ?? []);
-    setPageCount(userData?.meta.totalPages ?? 0);
+    setPageCount(
+      userData?.meta.totalPages === 1 ?
+        pagination.pageIndex + 1
+      : pagination.pageIndex + 2,
+    );
     setRowCount(userData?.meta.totalItems ?? 0);
-  }, [userData]);
+  }, [userData, pagination, isLoading]);
 
   const selectedRowIds = useMemo(() => {
     return Object.entries(table.getState().rowSelection).reduce(
@@ -255,8 +265,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
         onClickRow={(_, row) => openUpdateUserDialog(row)}
         isLoading={isLoading}
         createButton={createButton}
+        isInfiniteScroll
       />
-      <TablePagination table={table} />
     </>
   );
 };

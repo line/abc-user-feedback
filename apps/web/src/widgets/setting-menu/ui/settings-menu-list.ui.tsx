@@ -65,7 +65,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
+    variables: { projectId, limit: 1000 },
   });
   const perms = usePermissions(projectId);
 
@@ -161,11 +161,11 @@ const SettingsMenuList: React.FC<Props> = (props) => {
         iconAlign="left"
         collapsible
         divider={false}
-        value="channel-list"
+        defaultValue="channel-list"
       >
         <AccordionItem value="channel-list" className="bg-primary">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
-          <AccordionContent className={cn('p-0')}>
+          <AccordionContent className={cn('max-h-[300px] overflow-auto p-0')}>
             {data?.meta.totalItems === 0 ?
               <div className="border-neutral-tertiary flex w-full flex-col items-center justify-center gap-4 rounded border p-4">
                 <Image
@@ -197,7 +197,11 @@ const SettingsMenuList: React.FC<Props> = (props) => {
                   <MenuDropdownTrigger className="!pl-8">
                     {name}
                   </MenuDropdownTrigger>
-                  <MenuDropdownContent side="right" align="start">
+                  <MenuDropdownContent
+                    side="right"
+                    align="start"
+                    className="overflow-auto"
+                  >
                     {channelMenuItems.map((item) => (
                       <ChannelMenuItem
                         key={item.label}

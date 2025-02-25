@@ -36,13 +36,7 @@ const AnonymousTemplate = (props: Props) => {
   return (
     <div className="flex h-full items-center justify-center">
       <div className="flex items-stretch justify-center gap-4">
-        <div
-          className="border-neutral-tertiary rounded-24 flex w-[520px] flex-col gap-10 border p-8"
-          style={{
-            boxShadow:
-              '0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)',
-          }}
-        >
+        <div className="border-neutral-tertiary rounded-24 shadow-default flex w-[520px] flex-col gap-10 border p-8">
           <div className="flex h-[54px] justify-between">
             <div>
               <h3 className="text-xlarge-strong">{title}</h3>

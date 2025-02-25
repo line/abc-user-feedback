@@ -36,12 +36,13 @@ import type { Category } from '@/entities/category';
 import { client, useOAIQuery, usePermissions } from '../lib';
 import { cn } from '../utils';
 import CategoryComboboxEditPopover from './category-combobox-edit-popover.ui';
+import InfiniteScrollArea from './infinite-scroll-area.ui';
 
 interface Props extends React.PropsWithChildren {
   category?: Category | null;
   issueId: number;
 }
-
+const LIMIT = 5;
 const CategoryCombobox = (props: Props) => {
   const { category, issueId, children } = props;
 
@@ -52,12 +53,13 @@ const CategoryCombobox = (props: Props) => {
 
   const [inputValue, setInputValue] = useState('');
   const throttledvalue = useThrottle(inputValue, 500);
+  const [page, setPage] = useState(1);
 
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/categories',
-    variables: { projectId, categoryName: throttledvalue },
+    variables: { projectId, categoryName: throttledvalue, limit: page * LIMIT },
   });
 
   const refetch = async () => {
@@ -131,7 +133,7 @@ const CategoryCombobox = (props: Props) => {
           onValueChange={(value) => setInputValue(value)}
           value={inputValue}
         />
-        <ComboboxList onClick={(e) => e.stopPropagation()}>
+        <ComboboxList onClick={(e) => e.stopPropagation()} maxHeight="200px">
           <ComboboxGroup
             heading={
               <span className="text-neutral-tertiary text-base-normal">
@@ -156,6 +158,12 @@ const CategoryCombobox = (props: Props) => {
                 />
               </ComboboxSelectItem>
             ))}
+            <InfiniteScrollArea
+              fetchNextPage={() => setPage(page + 1)}
+              hasNextPage={
+                (data?.meta.itemCount ?? 0) < (data?.meta.totalItems ?? 0)
+              }
+            />
           </ComboboxGroup>
           {isLoading && <div className="combobox-item">Loading...</div>}
           {!!inputValue &&

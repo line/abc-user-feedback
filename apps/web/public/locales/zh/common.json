@@ -321,8 +321,8 @@
         "description": "即使中途离开，之后也可以继续。"
       },
       "no-project-in-profile-page": {
-        "title": "哦不...",
-        "description": "{{name}}，当前没有注册的项目信息。 \n 请向项目管理员请求成员注册或进行咨询。"
+        "title": "没有所属项目。",
+        "description": "您还没有所属的项目。\n请请求项目管理员将您注册为成员或进行咨询。"
       },
       "no-project-in-project-creation-page": {
         "title": "欢迎！",

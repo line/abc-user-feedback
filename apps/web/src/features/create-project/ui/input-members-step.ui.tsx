@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
 import {
   getCoreRowModel,
   getSortedRowModel,
@@ -36,7 +35,7 @@ import {
 import { BasicTable } from '@/shared';
 import type { MemberInfo } from '@/entities/member';
 import { MemberFormDialog } from '@/entities/member';
-import { getMemberColumns } from '@/entities/member/member-columns';
+import { memberColumns } from '@/entities/member/member-columns';
 import { useUserSearch } from '@/entities/user';
 
 import { useCreateProjectStore } from '../create-project-model';
@@ -102,6 +101,7 @@ const InputMembersStep: React.FC<IProps> = () => {
     }
     return true;
   };
+
   const openCreateMemberFormDialog = () => {
     overlay.open(({ isOpen, close }) => (
       <MemberFormDialog
@@ -129,13 +129,9 @@ const InputMembersStep: React.FC<IProps> = () => {
       />
     ));
   };
-  const columns = useMemo(
-    () => getMemberColumns(userData?.items ?? []),
-    [userData],
-  );
 
   const table = useReactTable({
-    columns,
+    columns: memberColumns,
     data: input.members,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),

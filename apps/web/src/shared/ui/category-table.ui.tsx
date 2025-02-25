@@ -14,7 +14,6 @@
  * under the License.
  */
 
-import { useEffect, useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import { Icon } from '@ufb/react';
@@ -22,6 +21,7 @@ import { Icon } from '@ufb/react';
 import { client } from '../lib';
 import type { DateRangeType } from '../types';
 import CategoryTableRow from './category-table-row.ui';
+import InfiniteScrollArea from './infinite-scroll-area.ui';
 import type { TableFilterOperator } from './table-filter-popover';
 
 interface Props {
@@ -33,7 +33,6 @@ interface Props {
 
 const CategoryTable = (props: Props) => {
   const { projectId, createdAtDateRange, queries, operator } = props;
-  const ref = useRef<HTMLDivElement>(null);
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -55,18 +54,6 @@ const CategoryTable = (props: Props) => {
       initialData: { pageParams: [], pages: [] },
     });
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        void fetchNextPage();
-      });
-    });
-
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <div className="flex flex-col gap-3">
       {[{ id: 0, name: 'None' }, ...data.pages.flatMap((v) => v.items)].map(
@@ -81,7 +68,10 @@ const CategoryTable = (props: Props) => {
           />
         ),
       )}
-      {hasNextPage && <div ref={ref} className="h-px" />}
+      <InfiniteScrollArea
+        fetchNextPage={fetchNextPage}
+        hasNextPage={hasNextPage}
+      />
       {isFetchingNextPage && (
         <div className="flex justify-center">
           <Icon name="RiLoader4Line" className="spinner" />

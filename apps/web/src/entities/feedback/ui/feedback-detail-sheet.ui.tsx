@@ -15,6 +15,7 @@
  */
 
 import { useState } from 'react';
+import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -30,7 +31,7 @@ import {
   SheetTitle,
 } from '@ufb/react';
 
-import { SheetDetailTable, usePermissions } from '@/shared';
+import { DeleteDialog, SheetDetailTable, usePermissions } from '@/shared';
 import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
 import type { FieldInfo } from '@/entities/field';
 import { DEFAULT_FIELD_KEYS } from '@/entities/field/field.constant';
@@ -42,7 +43,7 @@ interface Props {
   close: () => void;
   fields: FieldInfo[];
   feedback: Feedback;
-  onClickDelete?: () => void;
+  onClickDelete?: () => Promise<unknown>;
   updateFeedback?: (feedback: Feedback) => Promise<unknown>;
 }
 
@@ -54,6 +55,7 @@ const FeedbackDetailSheet = (props: Props) => {
   const perms = usePermissions();
   const [currentFeedback, setCurrentFeedback] = useState(feedback);
   const [mode, setMode] = useState<'edit' | 'view'>('view');
+  const overlay = useOverlay();
 
   const onClickCancel = () => {
     setMode('view');
@@ -89,6 +91,20 @@ const FeedbackDetailSheet = (props: Props) => {
     await updateFeedback?.(editedFeedback);
 
     setMode('view');
+  };
+
+  const openDeleteDialog = () => {
+    overlay.open(({ close: dialogClose, isOpen }) => (
+      <DeleteDialog
+        close={dialogClose}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          await onClickDelete?.();
+          dialogClose();
+          close();
+        }}
+      />
+    ));
   };
 
   return (
@@ -134,7 +150,7 @@ const FeedbackDetailSheet = (props: Props) => {
             <div className="flex-1">
               <Button
                 variant="destructive"
-                onClick={onClickDelete}
+                onClick={openDeleteDialog}
                 disabled={!perms.includes('feedback_delete')}
               >
                 {t('v2.button.delete')}

@@ -321,8 +321,8 @@
         "description": "Sie können später jederzeit fortfahren."
       },
       "no-project-in-profile-page": {
-        "title": "Oh nein...",
-        "description": "{{name}}님. Derzeit sind keine registrierten Projektinformationen verfügbar. \n Bitte wenden Sie sich an den zuständigen Projektmanager, um sich als Mitglied registrieren zu lassen, oder stellen Sie eine Anfrage."
+        "title": "Kein zugehöriges Projekt.",
+        "description": "Es gibt noch kein zugehöriges Projekt.\nBitte bitten Sie den Projektmanager um die Registrierung als Mitglied oder fragen Sie nach."
       },
       "no-project-in-project-creation-page": {
         "title": "Willkommen!",

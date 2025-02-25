@@ -39,18 +39,18 @@ import { useCreateProjectStore } from '@/features/create-project/create-project-
 interface IProps {
   projectId?: number;
 }
-
 const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const router = useRouter();
   const { t } = useTranslation();
 
   const { editingStepIndex, reset, jumpStepByIndex } = useCreateProjectStore();
+
   const overlay = useOverlay();
   const { user } = useUserStore();
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 100 },
+    variables: { limit: 1000 },
   });
 
   const onChangeProject = async (currentProjectId?: string) => {
@@ -94,7 +94,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
           <SelectTrigger className="min-w-60">
             <SelectValue placeholder="Select project" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent maxHeight="300px">
             <SelectGroup>
               {data?.items.map(({ id, name }) => (
                 <SelectItem key={id} value={String(id)}>
@@ -105,7 +105,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
             <SelectSeparator />
             <button
               className={cn('select-item text-tint-blue select-item-left p-2', {
-                'opacity-50': user?.type !== 'SUPER',
+                'cursor-auto opacity-50': user?.type !== 'SUPER',
               })}
               onClick={openCreateProjectDialog}
               disabled={user?.type !== 'SUPER'}
