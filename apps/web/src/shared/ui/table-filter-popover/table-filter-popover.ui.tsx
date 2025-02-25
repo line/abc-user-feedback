@@ -55,7 +55,7 @@ const TableFilterPopover = (props: Props) => {
   useEffect(() => {
     if (filters.length !== 0) return;
     resetFilters();
-  }, [tableFilters]);
+  }, [tableFilters, filterFields]);
 
   const addFilter = () => {
     const filterField = filters[filters.length - 1];

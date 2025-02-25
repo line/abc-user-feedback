@@ -15,27 +15,33 @@
  */
 import { z } from 'zod';
 
-const oauthConfigSchema = z
-  .object({
-    clientId: z.string().min(1),
-    clientSecret: z.string().min(1),
-    authCodeRequestURL: z.string().min(1),
-    scopeString: z.string().min(1),
-    accessTokenRequestURL: z.string().min(1),
-    userProfileRequestURL: z.string().min(1),
-    emailKey: z.string().min(1),
+const oauthInputConfigSchema = z.object({
+  clientId: z.string(),
+  clientSecret: z.string(),
+  authCodeRequestURL: z.string(),
+  scopeString: z.string(),
+  accessTokenRequestURL: z.string(),
+  userProfileRequestURL: z.string(),
+  emailKey: z.string(),
+});
+
+const oauthInputRequiredConfigSchema = oauthInputConfigSchema.extend({
+  clientId: z.string().min(1),
+  clientSecret: z.string().min(1),
+  authCodeRequestURL: z.string().min(1),
+  scopeString: z.string().min(1),
+  accessTokenRequestURL: z.string().min(1),
+  userProfileRequestURL: z.string().min(1),
+  emailKey: z.string().min(1),
+});
+
+const oauthConfigSchema = oauthInputConfigSchema
+  .extend({
     loginButtonType: z.literal('CUSTOM'),
     loginButtonName: z.string().min(1),
   })
   .or(
-    z.object({
-      clientId: z.string().min(1),
-      clientSecret: z.string().min(1),
-      authCodeRequestURL: z.string().min(1),
-      scopeString: z.string().min(1),
-      accessTokenRequestURL: z.string().min(1),
-      userProfileRequestURL: z.string().min(1),
-      emailKey: z.string().min(1),
+    oauthInputConfigSchema.extend({
       loginButtonType: z.literal('GOOGLE').nullable(),
       loginButtonName: z.string().nullable(),
     }),
@@ -58,6 +64,7 @@ export const tenantInfoSchema = tenantSchema.pick({
   siteName: true,
   description: true,
 });
+
 export const authInfoScema = tenantSchema
   .pick({
     useEmail: true,
@@ -67,6 +74,6 @@ export const authInfoScema = tenantSchema
   })
   .refine((schema) =>
     schema.useOAuth ?
-      oauthConfigSchema.safeParse(schema.oauthConfig).success
+      z.object({ oauthConfig: oauthInputRequiredConfigSchema }).parse(schema)
     : true,
   );

@@ -61,7 +61,9 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
       (acc, filter) => {
         return acc.concat({
           [filter.key]:
-            filter.key === 'projectId' ? [filter.value] : filter.value,
+            filter.key === 'projectId' || filter.key === 'type' ?
+              [filter.value]
+            : filter.value,
           condition: filter.condition,
         });
       },
@@ -182,15 +184,15 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
           <TableFilterPopover
             filterFields={[
               {
-                key: 'name',
-                format: 'string',
-                name: 'Name',
-                matchType: ['CONTAINS', 'IS'],
-              },
-              {
                 key: 'email',
                 format: 'string',
                 name: 'Email',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'name',
+                format: 'string',
+                name: 'Name',
                 matchType: ['CONTAINS', 'IS'],
               },
               {
@@ -200,17 +202,11 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
                 matchType: ['CONTAINS', 'IS'],
               },
               {
-                key: 'createdAt',
-                format: 'date',
-                name: 'Created',
-                matchType: ['BETWEEN', 'IS'],
-              },
-              {
                 key: 'type',
                 format: 'select',
                 name: 'Type',
                 options: [
-                  { key: 'SUPER', name: 'Admin' },
+                  { key: 'SUPER', name: 'Super' },
                   { key: 'GENERAL', name: 'General' },
                 ],
                 matchType: ['IS'],
@@ -225,6 +221,12 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
                     name: v.name,
                   })) ?? [],
                 matchType: ['IS'],
+              },
+              {
+                key: 'createdAt',
+                format: 'date',
+                name: 'Created',
+                matchType: ['BETWEEN', 'IS'],
               },
             ]}
             tableFilters={tableFilters}

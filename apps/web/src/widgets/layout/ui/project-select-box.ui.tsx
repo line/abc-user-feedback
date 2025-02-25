@@ -50,7 +50,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
 
   const { data } = useOAIQuery({
     path: '/api/admin/projects',
-    variables: { limit: 1000 },
+    variables: { limit: 100 },
   });
 
   const onChangeProject = async (currentProjectId?: string) => {

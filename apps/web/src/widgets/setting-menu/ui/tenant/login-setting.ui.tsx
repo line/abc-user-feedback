@@ -43,6 +43,7 @@ const LoginSetting: React.FC<IProps> = () => {
   const methods = useForm<AuthInfo>({ resolver: zodResolver(authInfoScema) });
 
   const { reset, handleSubmit, formState, watch, setValue } = methods;
+  console.log('formState: ', formState.errors);
   const { useEmail, useOAuth } = watch();
 
   const { mutate, isPending } = useOAIMutation({
@@ -66,6 +67,10 @@ const LoginSetting: React.FC<IProps> = () => {
 
   const onSubmit = (input: AuthInfo) => {
     if (!tenant) return;
+    if (!input.useEmail && !input.useOAuth) {
+      toast.error("You can't disable both email and OAuth login");
+      return;
+    }
     if (!input.oauthConfig) {
       mutate({ ...tenant, ...input, oauthConfig: null });
       return;
@@ -129,7 +134,9 @@ const LoginSetting: React.FC<IProps> = () => {
                 onCheckedChange={(checked) => {
                   setValue('useOAuth', checked, { shouldDirty: true });
                   if (checked && !watch('oauthConfig.loginButtonType')) {
-                    setValue('oauthConfig.loginButtonType', 'CUSTOM');
+                    setValue('oauthConfig.loginButtonType', 'CUSTOM', {
+                      shouldDirty: true,
+                    });
                   }
                 }}
               />

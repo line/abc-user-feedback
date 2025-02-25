@@ -40,7 +40,7 @@ const useMembmerSearch = (
     queryFn: async () => {
       const { data: result } = await client.post({
         path: '/api/admin/projects/{projectId}/members/search',
-        body,
+        body: { limit: 1000, ...body },
         pathParams: { projectId },
       });
       return result;

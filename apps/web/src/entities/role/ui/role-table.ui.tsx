@@ -32,7 +32,6 @@ import { useInputRoleStore } from '../input-role.model';
 import {
   ChannelFieldPermissionList,
   ChannelImageSettingPermissionList,
-  ChannelInfoPermissionList,
   ChannelPermissionText,
   FeedbackPermissionList,
   FeedbackPermissionText,
@@ -87,9 +86,7 @@ const RoleTable: React.FC<IProps> = (props) => {
         <RoleTitleRow colspan={colSpan} title="Project Info" sub />
         <PermissionRows
           permText={ProjectPermissionText}
-          permissions={ProjectInfoPermissionList.filter(
-            (v) => v !== 'project_delete',
-          )}
+          permissions={ProjectInfoPermissionList}
           roles={roles}
         />
 
@@ -127,19 +124,12 @@ const RoleTable: React.FC<IProps> = (props) => {
           permissions={ProjectWebhookPermissionList}
           roles={roles}
         />
-        <PermissionRows
-          permText={ProjectPermissionText}
-          permissions={['project_delete']}
-          roles={roles}
-        />
 
         <RoleTitleRow colspan={colSpan} title="Channel" />
         <RoleTitleRow title="Channel Info" colspan={colSpan} sub />
         <PermissionRows
           permText={ChannelPermissionText}
-          permissions={ChannelInfoPermissionList.filter(
-            (v) => v !== 'channel_create' && v !== 'channel_delete',
-          )}
+          permissions={['channel_update', 'channel_delete']}
           roles={roles}
         />
 
@@ -156,9 +146,10 @@ const RoleTable: React.FC<IProps> = (props) => {
           permissions={ChannelImageSettingPermissionList}
           roles={roles}
         />
+        <RoleTitleRow title="Create Channel" colspan={colSpan} sub />
         <PermissionRows
           permText={ChannelPermissionText}
-          permissions={['channel_create', 'channel_delete']}
+          permissions={['channel_create']}
           roles={roles}
         />
       </TableBody>

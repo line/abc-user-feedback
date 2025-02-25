@@ -38,15 +38,14 @@ const DEFAULT_ROLES: Role[] = [
     id: 2,
     name: 'Editor',
     permissions: PermissionList.filter(
-      (v) => v !== 'project_delete' && v !== 'channel_delete',
+      (v) =>
+        v.includes('issue') || v.includes('feedback') || v.includes('read'),
     ),
   },
   {
     id: 3,
     name: 'Viewer',
-    permissions: [...PermissionList]
-      .filter((v) => v.includes('read') && !v.includes('download'))
-      .filter((v) => v !== 'project_apikey_read' && v !== 'channel_image_read'),
+    permissions: [],
   },
 ];
 

@@ -42,7 +42,7 @@ const WebhookTable: React.FC<IProps> = (props) => {
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
-    enableSorting: false,
+    getSortedRowModel: getCoreRowModel(),
     getRowId: (originalRow) => String(originalRow.id),
   });
 

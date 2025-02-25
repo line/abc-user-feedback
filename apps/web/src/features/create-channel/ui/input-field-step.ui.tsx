@@ -105,6 +105,7 @@ const InputFieldStep: React.FC<IProps> = () => {
       <FieldTable
         fields={input.fields}
         onClickRow={(index, field) => openFieldFormSheet({ index, field })}
+        disableFilter
       />
     </CreateChannelInputTemplate>
   );

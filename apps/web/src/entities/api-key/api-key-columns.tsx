@@ -19,7 +19,7 @@ import dayjs from 'dayjs';
 
 import { Badge } from '@ufb/react';
 
-import { CopyIconButton, DATE_TIME_FORMAT, SortingTableHead } from '@/shared';
+import { CopyIconButton, DATE_TIME_FORMAT } from '@/shared';
 
 import type { ApiKey } from './api-key.type';
 
@@ -34,6 +34,7 @@ export const getApiKeyColumns = () => [
         <CopyIconButton data={getValue()} />
       </div>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('deletedAt', {
     header: 'Status',
@@ -42,11 +43,10 @@ export const getApiKeyColumns = () => [
         {getValue() === null ? 'Active' : 'Inactive'}
       </Badge>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {
-    header: ({ column }) => (
-      <SortingTableHead column={column}>Created</SortingTableHead>
-    ),
+    header: 'Created',
     cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
   }),
 ];

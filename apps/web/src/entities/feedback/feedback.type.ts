@@ -15,12 +15,3 @@
  */
 
 export type Feedback = Record<string, unknown>;
-
-// import type { Issue } from '../issue';
-// export interface Feedback {
-//   id: number;
-//   createdAt: string;
-//   updatedAt: string;
-//   issues?: Issue[];
-//   [key: string]: unknown;
-// }

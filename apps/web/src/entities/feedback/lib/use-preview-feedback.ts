@@ -73,7 +73,11 @@ const usePreviewFeedback = (fields: FieldInfo[]) => {
               (field.options ?? []).map((v) => v.name),
             )
           : field.format === 'select' ?
-            faker.helpers.arrayElement((field.options ?? []).map((v) => v.name))
+            (field.options ?? []).length > 0 ?
+              faker.helpers.arrayElement(
+                (field.options ?? []).map((v) => v.name),
+              )
+            : undefined
           : field.format === 'number' ? faker.number.int()
           : field.format === 'text' ? faker.lorem.text()
           : faker.helpers.arrayElements(

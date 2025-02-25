@@ -64,6 +64,7 @@ const EmailConfigForm: React.FC<Props> = ({ disabled }) => {
     setValue(
       'allowDomains',
       allowDomains.filter((_, i) => i !== index),
+      { shouldDirty: true },
     );
   };
 
@@ -88,7 +89,7 @@ const EmailConfigForm: React.FC<Props> = ({ disabled }) => {
           </p>
         : allowDomains.map((domain, index) => (
             <Badge key={index} className="flex items-center" variant="subtle">
-              {domain}
+              @{domain}
               <Icon
                 name="RiCloseLine"
                 onClick={() => removeDomainWhiteList(index)}

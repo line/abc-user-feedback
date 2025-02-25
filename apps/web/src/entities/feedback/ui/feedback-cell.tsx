@@ -32,7 +32,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
 
   return (
     <ExpandableText isExpanded={isExpanded}>
-      {typeof value === 'undefined' ?
+      {typeof value === 'undefined' || value === null ?
         undefined
       : field.format === 'date' ?
         dayjs(value as string).format(DATE_TIME_FORMAT)

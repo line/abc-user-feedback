@@ -16,7 +16,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 
-import { cn, DATE_TIME_FORMAT, SortingTableHead } from '@/shared';
+import { cn, DATE_TIME_FORMAT } from '@/shared';
 
 import WebhookEventCell from './ui/webhook-event-cell';
 import WebhookSwitch from './ui/webhook-switch.ui';
@@ -35,7 +35,8 @@ export const getWebhookColumns = (
         <WebhookSwitch webhook={row.original} onChangeUpdate={onUpdate} />
       </div>
     ),
-    size: 50,
+    size: 100,
+    enableSorting: false,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
@@ -46,6 +47,7 @@ export const getWebhookColumns = (
         {getValue()}
       </span>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('url', {
     header: 'URL',
@@ -58,6 +60,7 @@ export const getWebhookColumns = (
         {getValue()}
       </span>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('events', {
     header: 'Event Trigger',
@@ -79,11 +82,10 @@ export const getWebhookColumns = (
           ))}
       </div>
     ),
+    enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {
-    header: ({ column }) => (
-      <SortingTableHead column={column}>Created</SortingTableHead>
-    ),
+    header: 'Created',
     cell: ({ getValue, row }) => (
       <span
         className={cn({ 'opacity-50': row.original.status === 'INACTIVE' })}

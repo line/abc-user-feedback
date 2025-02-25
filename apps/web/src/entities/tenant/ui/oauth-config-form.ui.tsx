@@ -46,7 +46,7 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
           {...register('oauthConfig.clientId')}
           label="Client ID"
           placeholder={t('v2.placeholder.text')}
-          error={formState.errors.oauthConfig?.clientSecret?.message}
+          error={formState.errors.oauthConfig?.clientId?.message}
           disabled={disabled}
           required
         />

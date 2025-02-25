@@ -73,63 +73,6 @@ const useIssueSearchInfinite = (
       ],
     },
   });
-
-  // getNextPageParam: (lastPage) => {
-  //   if (!lastPage) return undefined;
-
-  //   if (lastPage.meta.currentPage < lastPage.meta.totalPages) {
-  //     return { ...body, page: lastPage.meta.currentPage + 1 };
-  //   }
-
-  //   return undefined;
-  // },
-  // initialData: {
-  //   pageParams: [
-  //   ],
-  //   pages: [],
-  // },
-  // initialPageParam: {
-  //   page: 1,
-  // },
-
-  // return useQuery<TData>({
-  //   queryKey: [
-  //     '/api/admin/projects/{projectId}/issues/search',
-  //     projectId,
-  //     body,
-  //   ],
-  //   queryFn: async () => {
-  //     const { data: result } = await client.post({
-  //       path: '/api/admin/projects/{projectId}/issues/search',
-  //       pathParams: { projectId },
-  //       body,
-  //     });
-  //     return result;
-  //   },
-  //   ...options,
-  // });
 };
-// const useIssueSearch = (
-//   projectId: number,
-//   body: IBody = { limit: 10, page: 1, query: {}, sort: {} },
-//   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'>,
-// ) => {
-//   return useQuery<TData>({
-//     queryKey: [
-//       '/api/admin/projects/{projectId}/issues/search',
-//       projectId,
-//       body,
-//     ],
-//     queryFn: async () => {
-//       const { data: result } = await client.post({
-//         path: '/api/admin/projects/{projectId}/issues/search',
-//         pathParams: { projectId },
-//         body,
-//       });
-//       return result;
-//     },
-//     ...options,
-//   });
-// };
 
 export default useIssueSearchInfinite;

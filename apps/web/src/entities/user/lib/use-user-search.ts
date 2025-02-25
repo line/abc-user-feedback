@@ -32,7 +32,7 @@ const useUserSearch = (
     queryFn: async () => {
       const { data: result } = await client.post({
         path: '/api/admin/users/search',
-        body,
+        body: { limit: 1000, ...body },
       });
       return result;
     },

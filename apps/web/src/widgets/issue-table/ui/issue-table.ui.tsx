@@ -105,10 +105,11 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       matchType: ['CONTAINS', 'IS'],
     },
     {
-      format: 'string',
-      key: 'category',
-      name: 'Category',
-      matchType: ['CONTAINS', 'IS'],
+      format: 'ticket',
+      key: 'externalIssueId',
+      name: 'Ticket',
+      matchType: ['IS'],
+      ticketKey: issueTracker?.data.ticketKey,
     },
     {
       format: 'multiSelect',
@@ -118,17 +119,16 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       options: ISSUES(t).map((issue) => ({ key: issue.key, name: issue.name })),
     },
     {
-      format: 'ticket',
-      key: 'externalIssueId',
-      name: 'Ticket',
-      matchType: ['IS'],
-      ticketKey: issueTracker?.data.ticketKey,
-    },
-    {
       format: 'date',
       key: 'updatedAt',
       name: 'Updated',
       matchType: ['BETWEEN', 'IS'],
+    },
+    {
+      format: 'string',
+      key: 'category',
+      name: 'Category',
+      matchType: ['CONTAINS', 'IS'],
     },
   ];
   const openIssueFormDialog = () => {

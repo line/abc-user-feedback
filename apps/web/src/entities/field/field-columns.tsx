@@ -18,12 +18,7 @@ import dayjs from 'dayjs';
 
 import { Badge, Icon, Tag } from '@ufb/react';
 
-import {
-  DATE_TIME_FORMAT,
-  displayString,
-  RowDragHandleCell,
-  SortingTableHead,
-} from '@/shared';
+import { DATE_TIME_FORMAT, displayString, RowDragHandleCell } from '@/shared';
 
 import { FIELD_PROPERTY_TEXT } from './field-utils';
 import {
@@ -49,15 +44,18 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
         ),
         cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
         size: 10,
+        enableSorting: false,
       })
     : null,
     columnHelper.accessor('key', {
       header: 'Key',
       cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      enableSorting: false,
     }),
     columnHelper.accessor('name', {
       header: 'Display Name',
       cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      enableSorting: false,
     }),
     columnHelper.accessor('format', {
       header: 'Format',
@@ -67,6 +65,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           {getValue()}
         </div>
       ),
+      enableSorting: false,
     }),
     columnHelper.accessor('options', {
       header: 'Select Option',
@@ -76,6 +75,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
             <OptionListPopover options={options} />
           : '-';
       },
+      enableSorting: false,
     }),
     columnHelper.accessor('property', {
       header: 'Property',
@@ -84,9 +84,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           {FIELD_PROPERTY_TEXT[getValue()]}
         </Tag>
       ),
-      filterFn: (row, id, value: FieldInfo['property'][]) => {
-        return value.includes(row.getValue(id));
-      },
+      enableSorting: false,
     }),
     columnHelper.accessor('status', {
       header: 'Status',
@@ -95,18 +93,15 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           {getValue()}
         </Badge>
       ),
-      filterFn: (row, id, value: FieldInfo['status'][]) => {
-        return value.includes(row.getValue(id));
-      },
+      enableSorting: false,
     }),
     columnHelper.accessor('description', {
       header: 'Description',
       cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      enableSorting: false,
     }),
     columnHelper.accessor('createdAt', {
-      header: ({ column }) => (
-        <SortingTableHead column={column}>Created</SortingTableHead>
-      ),
+      header: 'Created',
       cell: ({ getValue }) => (
         <span>
           {getValue() ? dayjs(getValue()).format(DATE_TIME_FORMAT) : '-'}

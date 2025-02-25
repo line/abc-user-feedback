@@ -51,7 +51,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
   const { t } = useTranslation();
 
   const { data: userData } = useUserSearch({
-    limit: 1000,
+    limit: 500,
     queries: [{ type: ['GENERAL'], condition: 'IS' }] as Record<
       string,
       unknown

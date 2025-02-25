@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -41,7 +41,7 @@ import {
   useOAIQuery,
   usePermissions,
 } from '@/shared';
-import type { MemberInfo } from '@/entities/member';
+import type { Member, MemberInfo } from '@/entities/member';
 import { MemberFormDialog } from '@/entities/member';
 import { useMembmerSearch } from '@/entities/member/lib';
 import { getMemberColumns } from '@/entities/member/member-columns';
@@ -61,6 +61,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const router = useRouter();
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const [rows, setRows] = useState<Member[]>([]);
 
   const queries = useMemo(() => {
     return tableFilters.reduce(
@@ -74,7 +75,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     );
   }, [tableFilters]);
 
-  const { data: userData } = useUserSearch({ limit: 1000 });
+  const { data: userData } = useUserSearch();
 
   const columns = useMemo(
     () => getMemberColumns(userData?.items ?? []),
@@ -89,12 +90,14 @@ const MemberSetting: React.FC<IProps> = (props) => {
 
   const table = useReactTable({
     columns,
-    data: data?.items ?? [],
+    data: rows,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getRowId: (row) => String(row.id),
   });
+
   const { rowSelection } = table.getState();
+
   const rowSelectionIds = useMemo(
     () =>
       Object.entries(rowSelection).reduce(
@@ -154,6 +157,9 @@ const MemberSetting: React.FC<IProps> = (props) => {
       toast.success(t('v2.toast.success'));
     },
   });
+  useEffect(() => {
+    setRows(data?.items ?? []);
+  }, [data]);
 
   const openCreateMemberFormDialog = () => {
     if (!rolesData || !projectData) return;
@@ -207,15 +213,15 @@ const MemberSetting: React.FC<IProps> = (props) => {
   };
   const filterFields: TableFilterField[] = [
     {
-      key: 'name',
-      format: 'string',
-      name: 'Name',
-      matchType: ['CONTAINS', 'IS'],
-    },
-    {
       key: 'email',
       format: 'string',
       name: 'Email',
+      matchType: ['CONTAINS', 'IS'],
+    },
+    {
+      key: 'name',
+      format: 'string',
+      name: 'Name',
       matchType: ['CONTAINS', 'IS'],
     },
     {

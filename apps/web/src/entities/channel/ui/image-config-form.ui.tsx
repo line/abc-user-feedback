@@ -72,6 +72,7 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
     setValue(
       'domainWhiteList',
       domainWhiteList.filter((_, i) => i !== index),
+      { shouldDirty: true },
     );
   };
   const { mutate: testConection } = useOAIMutation({

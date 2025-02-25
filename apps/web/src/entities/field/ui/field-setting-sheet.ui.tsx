@@ -102,11 +102,10 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
   } = useForm<FieldInfo>({
     resolver: zodResolver(fieldInfoSchema),
     defaultValues: data ?? defaultValues,
-    mode: 'onSubmit',
   });
 
   useEffect(() => {
-    if (isSameKey) setValue('name', watch('key'));
+    if (isSameKey) setValue('name', watch('key'), { shouldDirty: true });
   }, [isSameKey, watch('key')]);
 
   const addOption = () => {
@@ -124,6 +123,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           name: optionInput,
           key: optionInput,
         }),
+        { shouldDirty: true },
       );
       setOptionInput('');
       clearErrors('options');
@@ -139,6 +139,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
           setValue(
             'options',
             (watch('options') ?? []).filter((_, i) => i !== targetIndex),
+            { shouldDirty: true },
           );
         }}
         description={t('main.setting.dialog.delete-option.description')}
@@ -209,7 +210,9 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
               <SelectInput
                 label="Format"
                 onChange={(value) =>
-                  setValue('format', value as FieldInfo['format'])
+                  setValue('format', value as FieldInfo['format'], {
+                    shouldDirty: true,
+                  })
                 }
                 options={FIELD_FORMAT_LIST.map((v) => ({
                   label: v,
@@ -246,6 +249,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                         {t('button.register')}
                       </Button>
                     }
+                    required
                   />
 
                   {(watch('options') ?? []).length > 0 && (
@@ -271,7 +275,9 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
               ]}
               value={watch('property')}
               onChange={(value) =>
-                setValue('property', value as FieldInfo['property'])
+                setValue('property', value as FieldInfo['property'], {
+                  shouldDirty: true,
+                })
               }
               disabled={isDefaultField}
               required
@@ -284,7 +290,9 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
               ]}
               value={watch('status')}
               onChange={(value) =>
-                setValue('status', value as FieldInfo['status'])
+                setValue('status', value as FieldInfo['status'], {
+                  shouldDirty: true,
+                })
               }
               disabled={isDefaultField}
               required

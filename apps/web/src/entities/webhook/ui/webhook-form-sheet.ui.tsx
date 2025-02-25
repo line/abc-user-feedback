@@ -241,7 +241,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
               )}
             </InputField>
             <div className="flex flex-col gap-2">
-              <p className="input-label">Event</p>
+              <p className="input-label">Event Trigger</p>
               <TooltipProvider>
                 <WebhookEventCard
                   channels={channels}

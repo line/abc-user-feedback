@@ -47,7 +47,7 @@ const useIssueSearch = (
       const { data: result } = await client.post({
         path: '/api/admin/projects/{projectId}/issues/search',
         pathParams: { projectId },
-        body,
+        body: { limit: 100, ...body },
       });
       return result;
     },
