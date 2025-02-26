@@ -31,7 +31,7 @@ jobs:
           --health-cmd="curl -s http://localhost:5080 | grep -q 'smtp4dev'"
           --health-interval=10s
           --health-timeout=5s
-          --health-retries=3
+          --health-retries=7
 
       # opensearch:
       #   image: opensearchproject/opensearch:2.4.1
