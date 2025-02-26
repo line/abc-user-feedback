@@ -27,6 +27,11 @@ jobs:
           - 5080:80
           - 25:25
           - 143:143
+        options: >-
+          --health-cmd="curl -f http://localhost:5080 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
 
       # opensearch:
       #   image: opensearchproject/opensearch:2.4.1
@@ -52,11 +57,3 @@ jobs:
         run: |
           pnpm build
           pnpm test:e2e
-
-      - name: Upload Playwright artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-results
-          path: |
-            apps/e2e/playwright-results
-            apps/e2e/test-results

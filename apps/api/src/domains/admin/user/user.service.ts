@@ -43,7 +43,7 @@ export class UserService {
   ) {}
 
   async findAll(dto: FindAllUsersDto) {
-    const { queries = [], operator = 'AND' } = dto;
+    const { queries = [], operator = 'AND', order } = dto;
     const page = Number(dto.options.page);
     const limit = Number(dto.options.limit);
 
@@ -85,9 +85,9 @@ export class UserService {
                 condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
               const valueFormat =
                 condition === QueryV2ConditionsEnum.IS ?
-                  value
-                : `%${value?.toString()}%`;
-              qb[method](`users.${fieldKey} ${operator} :${paramName}`, {
+                  value?.toString().toLowerCase()
+                : `%${value?.toString().toLowerCase()}%`;
+              qb[method](`LOWER(users.${fieldKey}) ${operator} :${paramName}`, {
                 [paramName]: valueFormat,
               });
             }
@@ -95,6 +95,10 @@ export class UserService {
         }
       }),
     );
+
+    if (order?.createdAt) {
+      queryBuilder.addOrderBy(`users.created_at`, order.createdAt);
+    }
 
     const items = await queryBuilder
       .offset((page - 1) * limit)
