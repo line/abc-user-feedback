@@ -28,7 +28,7 @@ jobs:
           - 25:25
           - 143:143
         options: >-
-          --health-cmd="curl -f http://localhost:5080 || exit 1"
+          --health-cmd="curl -s http://localhost:5080 | grep -q 'smtp4dev'"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
