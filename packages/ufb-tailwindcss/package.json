@@ -1,0 +1,32 @@
+{
+  "name": "@ufb/tailwindcss",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "types": "index.d.ts",
+  "typings": "index.d.ts",
+  "scripts": {
+    "build": "node src/build",
+    "build:postcss-base": "postcss --config src/base src/base/*.css --base src --dir dist",
+    "build:prejss-base": "prejss-cli dist/base.css --format commonjs",
+    "build:postcss-utilities": "postcss --config src/utilities src/utilities/*.css --base src --dir dist",
+    "build:prejss-utilities": "prejss-cli dist/utilities.css --format commonjs",
+    "build:postcss-components": "postcss --config src/components src/components/*.css --base src --dir dist",
+    "build:prejss-components": "prejss-cli dist/components.css --format commonjs",
+    "clean": "rm -rf .turbo node_modules dist"
+  },
+  "devDependencies": {
+    "@ufb/eslint-config": "workspace:*",
+    "@ufb/prettier-config": "workspace:*",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^9.0.0",
+    "glob": "^11.0.0",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
+    "postcss-nesting": "^13.0.0",
+    "prejss-cli": "^0.3.3",
+    "prettier": "^3.3.3",
+    "tailwindcss": "^3.4.3"
+  }
+}

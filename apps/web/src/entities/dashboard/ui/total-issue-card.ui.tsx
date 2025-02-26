@@ -44,6 +44,7 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
 
   return (
     <DashboardCard
+      type="issue"
       data={data?.count ?? 0}
       title={t('dashboard-card.total-issue.title')}
       description={t('dashboard-card.total-issue.description', {

@@ -19,8 +19,6 @@ export const FeedbackPermissionList = [
   'feedback_update',
   'feedback_delete',
   'feedback_issue_update',
-  'issue_create',
-  'issue_delete',
 ] as const;
 
 export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
@@ -28,14 +26,18 @@ export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
   feedback_update: 'Edit Feedback',
   feedback_delete: 'Delete Feedback',
   feedback_issue_update: 'Attach/Detach Issue in Feedback',
-  issue_create: 'Create Issue',
-  issue_delete: 'Delete Issue',
 };
 
-export const IssuePermissionList = ['issue_update'] as const;
+export const IssuePermissionList = [
+  'issue_create',
+  'issue_update',
+  'issue_delete',
+] as const;
 
 export const IssuePermissionText: Record<IssuePermissionType, string> = {
+  issue_create: 'Create Issue',
   issue_update: 'Edit Issue',
+  issue_delete: 'Delete Issue',
 };
 
 export const ProjectPermissionList = [

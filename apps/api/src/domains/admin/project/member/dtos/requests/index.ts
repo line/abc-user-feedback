@@ -13,5 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+export { GetAllMemberRequestDto } from './get-all-member-request.dto';
 export { CreateMemberRequestDto } from './create-member-request.dto';
 export { UpdateMemberRequestDto } from './update-member-request.dto';

@@ -14,6 +14,10 @@
  * under the License.
  */
 
+import type { Color, IconNameType } from '@ufb/react';
+
+import type { Field, FieldFormat } from './field.type';
+
 export const FIELD_FORMAT_LIST = [
   'text',
   'keyword',
@@ -23,3 +27,20 @@ export const FIELD_FORMAT_LIST = [
   'multiSelect',
   'images',
 ] as const;
+
+export const FIELD_FORMAT_ICON_MAP: Record<FieldFormat, IconNameType> = {
+  text: 'RiText',
+  keyword: 'RiFontSize',
+  number: 'RiHashtag',
+  date: 'RiCalendarEventLine',
+  select: 'RiCheckboxCircleLine',
+  multiSelect: 'RiListCheck',
+  images: 'RiImageLine',
+};
+
+export const FIELD_STATUS_COLOR_MAP: Record<Field['status'], Color> = {
+  ACTIVE: 'green',
+  INACTIVE: 'red',
+};
+
+export const DEFAULT_FIELD_KEYS = ['id', 'createdAt', 'updatedAt', 'issues'];

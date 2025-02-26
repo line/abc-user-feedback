@@ -34,9 +34,9 @@ interface IBody
       '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
       'post'
     >,
-    'query'
+    'queries'
   > {
-  query: Record<string, unknown>;
+  queries: Record<string, unknown>[];
 }
 
 const useFeedbackSearch = (

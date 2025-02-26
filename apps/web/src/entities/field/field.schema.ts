@@ -51,6 +51,7 @@ export const fieldSchema = z.object({
   options: z.array(fieldOptionSchema).optional(),
   createdAt: z.string(),
   updatedAt: z.string(),
+  order: z.number(),
 });
 
 export const fieldInfoSchema = fieldSchema
@@ -62,6 +63,7 @@ export const fieldInfoSchema = fieldSchema
     property: true,
     status: true,
     options: true,
+    order: true,
   })
   .merge(
     z.object({

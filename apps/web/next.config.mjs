@@ -1,20 +1,17 @@
-import path from 'path';
 import { fileURLToPath } from 'url';
 import createJiti from 'jiti';
 
 import * as i18nConfig from './next-i18next.config.js';
 
 createJiti(fileURLToPath(import.meta.url))('./src/env');
-const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'production',
   i18n: i18nConfig.default.i18n,
   output: 'standalone',
-  outputFileTracingRoot: path.join(__dirname, '../../'),
   eslint: { ignoreDuringBuilds: true },
-  transpilePackages: ['@ufb/ui'],
+  transpilePackages: ['@ufb/react'],
   compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
   webpack(config) {

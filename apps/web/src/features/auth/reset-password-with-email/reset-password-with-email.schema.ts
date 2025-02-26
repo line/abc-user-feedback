@@ -22,7 +22,15 @@ export const resetPasswordWithEmailSchema = z
     code: z.string(),
     email: z.string().email(),
   })
-  .refine((schema) => schema.password === schema.confirmPassword, {
-    message: 'Password not matched',
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    message: 'must equal Password',
     path: ['confirmPassword'],
+  })
+  .refine(({ password }) => /[a-zA-Z!@#$%^&*(),.?":{}|<>]/.test(password), {
+    message: 'must contain at least one letter or special character',
+    path: ['password'],
+  })
+  .refine(({ password }) => !/(.)\1/.test(password), {
+    message: 'must not contain consecutive identical characters',
+    path: ['password'],
   });

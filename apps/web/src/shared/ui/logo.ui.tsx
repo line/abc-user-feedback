@@ -17,8 +17,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { Icon } from '@ufb/ui';
-
 import { Path } from '@/shared';
 
 interface IProps {}
@@ -31,7 +29,7 @@ const Logo: React.FC<IProps> = () => {
       href={Path.isProtectPage(router.pathname) ? Path.MAIN : Path.SIGN_IN}
     >
       <Image src="/assets/images/logo.svg" alt="logo" width={24} height={24} />
-      <Icon name="Title" className="h-[24px] w-[123px]" />
+      <h1 className="text-title-h5">ABC User Feedback</h1>
     </Link>
   );
 };

@@ -16,6 +16,8 @@
 import type { UseMutationOptions } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 
+import { toast } from '@ufb/react';
+
 import type {
   IFetchError,
   OAIMethodPathKeys,
@@ -65,6 +67,9 @@ export default function useOAIMutation<
       });
 
       return data as TResponse;
+    },
+    onError(error) {
+      toast.error(error.message);
     },
     ...queryOptions,
   });

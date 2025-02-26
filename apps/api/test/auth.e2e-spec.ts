@@ -95,8 +95,6 @@ describe('AppController (e2e)', () => {
 
     await tenantRepo.save({
       allowDomains: [],
-      isPrivate: false,
-      isRestrictDomain: false,
       siteName: faker.string.sample(),
     });
   });

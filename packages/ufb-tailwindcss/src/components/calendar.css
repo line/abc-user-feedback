@@ -1,0 +1,107 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.calendar {
+  --calendar-text-default: var(--text-neutral-primary);
+  --calendar-text-pressed: var(--text-neutral-inverse);
+  --calendar-text-week: var(--text-neutral-tertiary);
+  --calendar-border-default: var(--border-neutral-tertiary);
+  --calendar-fg-default: var(--fg-neutral-primary);
+  --calendar-fg-pressed: var(--tint, var(--fg-neutral-inverse));
+  --calendar-fg-hover: var(--fg-neutral-tertiary);
+  --calendar-fg-range: var(--fg-neutral-tertiary);
+
+  @apply rounded-8 relative box-content w-fit border border-[var(--calendar-border-default)] bg-[var(--calendar-fg-default)] p-2 shadow-sm;
+}
+
+.calendar-months {
+  @apply flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0;
+}
+
+.calendar-month {
+  @apply w-[15.75rem] space-y-4;
+}
+
+.calendar-caption {
+  @apply relative flex items-center justify-center pt-1;
+}
+
+.calendar-caption-label {
+  @apply text-base-strong text-[var(--calendar-text-default)];
+}
+
+.calendar-nav {
+  @apply flex items-center;
+}
+
+.calendar-nav-button {
+  @apply flex p-2.5 hover:opacity-50;
+}
+
+.calendar-nav-button-previous {
+  @apply absolute left-0;
+}
+
+.calendar-nav-button-next {
+  @apply absolute right-0;
+}
+
+.calendar-table {
+  @apply !mt-4 w-full border-collapse;
+}
+
+.calendar-head-row {
+  @apply flex;
+}
+
+.calendar-head-cell {
+  @apply text-small-normal flex-1 px-2 py-0.5 font-normal text-[var(--calendar-text-week)];
+}
+
+.calendar-row {
+  @apply mt-0.5 flex w-full;
+}
+
+.calendar-cell {
+  @apply [&:has([aria-selected].day-range-end)]:rounded-r-8 first:[&:has([aria-selected])]:rounded-l-8 last:[&:has([aria-selected])]:rounded-r-8 [&:has(.calendar-day-range-start)]:rounded-l-8 [&:has(.calendar-day-range-end)]:rounded-r-8 text-base-normal relative h-[2.25rem] flex-1 p-0 text-center focus-within:relative focus-within:z-20 [&:has(.calendar-day-range-end)]:bg-[var(--calendar-fg-hover)] [&:has(.calendar-day-range-start)]:bg-[var(--calendar-fg-hover)];
+}
+
+.calendar-day {
+  @apply rounded-8 text-base-normal relative flex h-full w-full items-center justify-center overflow-hidden p-0 transition-colors aria-selected:opacity-100 [&:not(.calendar-day-selected)]:hover:bg-[var(--calendar-fg-hover)];
+}
+
+.calendar-day-selected {
+  @apply bg-[var(--calendar-fg-pressed)] text-[--calendar-text-pressed];
+}
+
+.calendar-day-today {
+  @apply before:absolute before:left-1/2 before:top-0 before:flex before:h-1 before:w-1 before:-translate-x-1/2 before:rounded-full before:bg-[var(--calendar-fg-pressed)];
+}
+
+.calendar-day-outside {
+  @apply opacity-50 aria-selected:bg-[var(--calendar-fg-pressed)] aria-selected:text-[var(--calendar-text-pressed)] aria-selected:opacity-100;
+}
+
+.calendar-day-disabled {
+  @apply opacity-50;
+}
+
+.calendar-day-range-middle {
+  @apply rounded-0 aria-selected:bg-[var(--calendar-fg-hover)] aria-selected:text-[var(--calendar-text-default)];
+}
+
+.calendar-day-hidden {
+  @apply invisible;
+}

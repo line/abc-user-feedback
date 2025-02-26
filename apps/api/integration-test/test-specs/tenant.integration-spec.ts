@@ -69,6 +69,7 @@ describe('TenantController (integration)', () => {
     it('should create a tenant', async () => {
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
 
       return await request(app.getHttpServer() as Server)
         .post('/admin/tenants')
@@ -79,6 +80,7 @@ describe('TenantController (integration)', () => {
           expect(tenants).toHaveLength(1);
           const [tenant] = tenants;
           for (const key in dto) {
+            if (['email', 'password'].includes(key)) continue;
             const value = dto[key] as string;
             expect(tenant[key]).toEqual(value);
           }
@@ -87,12 +89,11 @@ describe('TenantController (integration)', () => {
     it('should return bad request since tenant is already exists', async () => {
       await tenantRepo.save({
         siteName: faker.string.sample(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const dto = new SetupTenantRequestDto();
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
 
       return request(app.getHttpServer() as Server)
         .post('/admin/tenants')
@@ -111,8 +112,6 @@ describe('TenantController (integration)', () => {
     beforeEach(async () => {
       tenant = await tenantRepo.save({
         siteName: faker.string.sample(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const { jwt } = await signInTestUser(dataSource, authService);
@@ -122,8 +121,6 @@ describe('TenantController (integration)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return await request(app.getHttpServer() as Server)
@@ -136,8 +133,6 @@ describe('TenantController (integration)', () => {
             where: { id: tenant.id },
           });
           expect(updatedTenant?.siteName).toEqual(dto.siteName);
-          expect(updatedTenant?.isPrivate).toEqual(dto.isPrivate);
-          expect(updatedTenant?.isRestrictDomain).toEqual(dto.isRestrictDomain);
           expect(updatedTenant?.allowDomains).toEqual(dto.allowDomains);
         });
     });
@@ -147,8 +142,6 @@ describe('TenantController (integration)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return request(app.getHttpServer() as Server)
@@ -161,8 +154,6 @@ describe('TenantController (integration)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return await request(app.getHttpServer() as Server)
@@ -178,6 +169,7 @@ describe('TenantController (integration)', () => {
       await tenantRepo.delete({});
       await userRepo.delete({});
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
 
       await request(app.getHttpServer() as Server)
         .post('/admin/tenants')

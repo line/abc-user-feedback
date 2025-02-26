@@ -17,12 +17,16 @@
 import type { z } from 'zod';
 
 import type {
+  changePasswordSchema,
   updateUserSchema,
   userMemberSchema,
+  userProfileSchema,
   userSchema,
 } from './user.schema';
 
 export type User = z.infer<typeof userSchema>;
+export type UserProfile = z.infer<typeof userProfileSchema>;
 export type UserMember = z.infer<typeof userMemberSchema>;
 export type UserTypeEnum = User['type'];
 export type UpdateUser = z.infer<typeof updateUserSchema>;
+export type ChangePassword = z.infer<typeof changePasswordSchema>;

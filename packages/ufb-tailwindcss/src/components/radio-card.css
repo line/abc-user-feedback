@@ -1,0 +1,47 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.radio-card-group {
+  --radio-card-text-title: var(--text-neutral-primary);
+  --radio-card-text-description: var(--text-neutral-tertiary);
+  --radio-card-border-default: var(--border-neutral-tertiary);
+  --radio-card-border-selected: var(--tint, var(--border-neutral-primary));
+  --radio-card-fg-default: var(--fg-neutral-primary);
+  --radio-card-fg-hover: var(--fg-neutral-tertiary);
+
+  @apply inline-flex;
+
+  /* default */
+  @apply [&:not(.radio-card-group-vertical)]:radio-card-group-horizontal;
+}
+
+.radio-card {
+  @apply relative inline-flex border border-[var(--radio-card-border-default)] bg-[var(--radio-card-fg-default)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:border-2 data-[state=checked]:border-[var(--radio-card-border-selected)] [&:not(:disabled)]:hover:bg-[var(--radio-card-fg-hover)];
+
+  /* default */
+  @apply [&:not(.radio-card-horizontal)]:radio-card-vertical radio-card-radius-medium;
+}
+
+.radio-card-text {
+  @apply block text-inherit;
+}
+
+.radio-card-title {
+  @apply text-base-strong block text-[var(--radio-card-text-title)];
+}
+
+.radio-card-description {
+  @apply text-base-normal block text-[var(--radio-card-text-description)];
+}

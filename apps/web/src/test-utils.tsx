@@ -20,8 +20,6 @@ import type { RenderOptions } from '@testing-library/react';
 import { render, within } from '@testing-library/react';
 import { MemoryRouterProvider } from 'next-router-mock/MemoryRouterProvider';
 
-import { Toaster } from '@ufb/ui';
-
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   const [queryClient] = useState(
     () => new QueryClient({ defaultOptions: { queries: { retry: false } } }),
@@ -30,7 +28,6 @@ const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <MemoryRouterProvider>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-      <Toaster />
     </MemoryRouterProvider>
   );
 };

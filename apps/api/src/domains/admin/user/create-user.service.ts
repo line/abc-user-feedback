@@ -27,7 +27,6 @@ import { SignUpMethodEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
   NotAllowedDomainException,
-  NotAllowedUserCreateException,
   UserAlreadyExistsException,
 } from './exceptions';
 import { UserPasswordService } from './user-password.service';
@@ -53,9 +52,6 @@ export class CreateUserService {
 
   async createEmailUser(dto: CreateEmailUserDto) {
     const { password, ...rest } = dto;
-
-    const tenant = await this.tenantService.findOne();
-    if (tenant.isPrivate) throw new NotAllowedUserCreateException();
 
     return await this.createUser({
       ...rest,
@@ -85,9 +81,11 @@ export class CreateUserService {
     const tenant = await this.tenantService.findOne();
     // check restrict domain
     const domain = email.split('@')[1];
+
     if (
-      tenant.isRestrictDomain &&
-      !(tenant.allowDomains ?? []).includes(domain)
+      tenant.allowDomains &&
+      tenant.allowDomains.length > 0 &&
+      !tenant.allowDomains.includes(domain)
     ) {
       throw new NotAllowedDomainException();
     }

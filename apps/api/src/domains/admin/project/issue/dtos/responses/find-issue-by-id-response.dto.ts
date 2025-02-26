@@ -14,9 +14,19 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 
 import { IssueStatusEnum } from '@/common/enums';
+
+class FindIssueByIdResponseCategoryDto {
+  @Expose()
+  @ApiProperty({ description: 'Category Id', example: 1 })
+  id: number;
+
+  @Expose()
+  @ApiProperty({ description: 'Category Name', example: 1 })
+  name: string;
+}
 
 export class FindIssueByIdResponseDto {
   @Expose()
@@ -45,6 +55,11 @@ export class FindIssueByIdResponseDto {
   @Expose()
   @ApiProperty({ description: 'External Issue Id', example: '123' })
   externalIssueId: string;
+
+  @Expose()
+  @ApiProperty({ description: 'Category' })
+  @Type(() => FindIssueByIdResponseCategoryDto)
+  category?: FindIssueByIdResponseCategoryDto;
 
   @Expose()
   @ApiProperty({ description: 'Feedback count of the issue', example: 100 })

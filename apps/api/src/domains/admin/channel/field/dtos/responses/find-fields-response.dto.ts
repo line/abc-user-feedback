@@ -55,6 +55,10 @@ export class FindFieldsResponseDto {
 
   @Expose()
   @ApiProperty()
+  order: number;
+
+  @Expose()
+  @ApiProperty()
   name: string;
 
   @Expose()
@@ -62,7 +66,7 @@ export class FindFieldsResponseDto {
   key: string;
 
   @Expose()
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   description: string | null;
 
   @Expose()

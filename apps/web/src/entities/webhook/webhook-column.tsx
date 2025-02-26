@@ -18,8 +18,6 @@ import dayjs from 'dayjs';
 
 import { cn, DATE_TIME_FORMAT } from '@/shared';
 
-import { UpdateWebhookPopover } from './ui';
-import DeleteWebhookPopover from './ui/delete-webhook-popover.ui';
 import WebhookEventCell from './ui/webhook-event-cell';
 import WebhookSwitch from './ui/webhook-switch.ui';
 import type { Webhook, WebhookInfo } from './webhook.type';
@@ -28,50 +26,48 @@ const columnHelper = createColumnHelper<Webhook>();
 
 export const getWebhookColumns = (
   projectId: number,
-  onDelete: (webhookId: number) => void,
-  onUpdate: (webhookId: number, input: WebhookInfo) => void,
+  onUpdate: (id: number, data: WebhookInfo) => void,
 ) => [
   columnHelper.accessor('status', {
-    header: '',
-    cell: ({ row }) => {
-      return (
-        <div className="flex justify-center">
-          <WebhookSwitch webhook={row.original} onChangeUpdate={onUpdate} />
-        </div>
-      );
-    },
-    size: 65,
+    header: () => <p className="w-full text-center">On/Off</p>,
+    cell: ({ row }) => (
+      <div className="flex justify-center">
+        <WebhookSwitch webhook={row.original} onChangeUpdate={onUpdate} />
+      </div>
+    ),
+    size: 100,
+    enableSorting: false,
   }),
   columnHelper.accessor('name', {
     header: 'Name',
     cell: ({ getValue, row }) => (
       <span
-        className={cn({ 'text-tertiary': row.original.status === 'INACTIVE' })}
+        className={cn({ 'opacity-50': row.original.status === 'INACTIVE' })}
       >
         {getValue()}
       </span>
     ),
-    size: 75,
+    enableSorting: false,
   }),
   columnHelper.accessor('url', {
     header: 'URL',
     cell: ({ getValue, row }) => (
       <span
-        className={cn('line-clamp-2 break-all', {
-          'text-tertiary': row.original.status === 'INACTIVE',
+        className={cn('line-clamp-1 break-all', {
+          'opacity-50': row.original.status === 'INACTIVE',
         })}
       >
         {getValue()}
       </span>
     ),
-    size: 100,
+    enableSorting: false,
   }),
   columnHelper.accessor('events', {
-    header: 'Event',
+    header: 'Event Trigger',
     cell: ({ getValue, row }) => (
       <div
-        className={cn('my-1 flex flex-wrap gap-x-2.5 gap-y-1', {
-          'text-tertiary': row.original.status === 'INACTIVE',
+        className={cn('my-1 flex flex-wrap gap-1', {
+          'opacity-50': row.original.status === 'INACTIVE',
         })}
       >
         {getValue()
@@ -81,45 +77,22 @@ export const getWebhookColumns = (
               key={v.id}
               channels={v.channels}
               type={v.type}
-              webhookStatus={row.original.status}
+              projectId={projectId}
             />
           ))}
       </div>
     ),
-    size: 300,
+    enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue, row }) => (
       <span
-        className={cn({ 'text-tertiary': row.original.status === 'INACTIVE' })}
+        className={cn({ 'opacity-50': row.original.status === 'INACTIVE' })}
       >
         {dayjs(getValue()).format(DATE_TIME_FORMAT)}
       </span>
     ),
     size: 150,
-  }),
-  columnHelper.display({
-    id: 'edit',
-    header: 'Edit',
-    cell: ({ row }) => (
-      <UpdateWebhookPopover
-        projectId={projectId}
-        webhook={row.original}
-        onClickUpdate={onUpdate}
-      />
-    ),
-    size: 50,
-  }),
-  columnHelper.display({
-    id: 'delete',
-    header: 'Delete',
-    cell: ({ row }) => (
-      <DeleteWebhookPopover
-        webhookId={row.original.id}
-        onClickDelete={onDelete}
-      />
-    ),
-    size: 50,
   }),
 ];

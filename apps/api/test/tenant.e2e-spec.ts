@@ -88,8 +88,6 @@ describe('AppController (e2e)', () => {
     it('already exists', async () => {
       await tenantRepo.save({
         siteName: faker.string.sample(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const dto = new SetupTenantRequestDto();
@@ -107,8 +105,6 @@ describe('AppController (e2e)', () => {
     beforeEach(async () => {
       tenant = await tenantRepo.save({
         siteName: faker.string.sample(),
-        isPrivate: faker.datatype.boolean(),
-        isRestrictDomain: faker.datatype.boolean(),
         allowDomains: [],
       });
       const { jwt } = await signInTestUser(dataSource, authService);
@@ -118,8 +114,6 @@ describe('AppController (e2e)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return request(app.getHttpServer() as Server)
@@ -132,8 +126,6 @@ describe('AppController (e2e)', () => {
             where: { id: tenant.id },
           });
           expect(updatedTenant?.siteName).toEqual(dto.siteName);
-          expect(updatedTenant?.isPrivate).toEqual(dto.isPrivate);
-          expect(updatedTenant?.isRestrictDomain).toEqual(dto.isRestrictDomain);
           expect(updatedTenant?.allowDomains).toEqual(dto.allowDomains);
         });
     });
@@ -143,8 +135,6 @@ describe('AppController (e2e)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return request(app.getHttpServer() as Server)
@@ -158,8 +148,6 @@ describe('AppController (e2e)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return request(app.getHttpServer() as Server)
@@ -172,8 +160,6 @@ describe('AppController (e2e)', () => {
       const dto = new UpdateTenantRequestDto();
 
       dto.siteName = faker.string.sample();
-      dto.isPrivate = faker.datatype.boolean();
-      dto.isRestrictDomain = faker.datatype.boolean();
       dto.allowDomains = [];
 
       return request(app.getHttpServer() as Server)

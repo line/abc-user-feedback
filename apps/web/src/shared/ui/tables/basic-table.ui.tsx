@@ -13,90 +13,202 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo } from 'react';
+import Image from 'next/image';
+import {
+  closestCenter,
+  DndContext,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import type { DragEndEvent } from '@dnd-kit/core';
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers';
+import {
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
 
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@ufb/react';
+
 import { cn } from '@/shared/utils';
 
-import CheckedTableHead from './checked-table-head';
+import InfiniteScrollArea from '../infinite-scroll-area.ui';
+import SortingTableHead from '../sorting-table-head.ui';
+import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
 import TableResizer from './table-resizer';
-import TableSortIcon from './table-sort-icon';
 
 interface IProps<T> {
   table: ReactTable<T>;
   emptyComponent?: React.ReactNode;
+  emptyCaption?: string;
   resiable?: boolean;
   isLoading?: boolean;
-  onClickDelete?: () => void;
+  createButton?: React.ReactNode;
+  className?: string;
+  onClickRow?: (index: number, row: T) => void;
+  reorder?: (data: T[]) => void;
+  disableRound?: boolean;
+  isInfiniteScroll?: boolean;
 }
 
-function BasicTable<T>(props: IProps<T>) {
+const BasicTable = <T,>(props: IProps<T>) => {
   const {
     table,
-    emptyComponent,
-    resiable = false,
+    emptyCaption,
     isLoading = false,
-    onClickDelete,
+    createButton,
+    className,
+    onClickRow,
+    reorder,
+    disableRound,
+    isInfiniteScroll,
   } = props;
 
+  // reorder rows after drag & drop
+  function handleDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = dataIds.indexOf(active.id as string);
+      const newIndex = dataIds.indexOf(over.id as string);
+      reorder?.(
+        arrayMove(
+          table.getRowModel().rows.map((v) => v.original),
+          oldIndex,
+          newIndex,
+        ),
+      );
+    }
+  }
+  const dataIds = useMemo(() => {
+    return table.getRowModel().rows.map((row) => row.id);
+  }, [table.getRowModel().rows]);
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {}),
+    useSensor(TouchSensor, {}),
+    useSensor(KeyboardSensor, {}),
+  );
+  console.log(table.getCanNextPage());
+
   return (
-    <div className="overflow-auto">
-      <table className="table w-full table-fixed">
-        <thead>
-          <tr>
-            {table.getIsSomeRowsSelected() ?
-              <CheckedTableHead table={table} onClickDelete={onClickDelete} />
-            : table.getFlatHeaders().map((header, i) => (
-                <th key={i} style={{ width: header.getSize() }}>
+    <div
+      className={cn(
+        'border-neutral-tertiary h-full overflow-auto rounded border',
+        { 'rounded-none': disableRound },
+      )}
+    >
+      <DndContext
+        collisionDetection={closestCenter}
+        modifiers={[restrictToVerticalAxis]}
+        sensors={sensors}
+        onDragEnd={handleDragEnd}
+      >
+        <Table
+          className={cn('min-w-full table-fixed', className, {
+            'h-full': dataIds.length === 0,
+          })}
+          style={{ width: table.getCenterTotalSize() }}
+        >
+          <TableHeader>
+            <TableRow className="hover:bg-inherit">
+              {table.getFlatHeaders().map((header, i) => (
+                <TableHead
+                  key={i}
+                  style={{ width: header.getSize() }}
+                  className="hover:bg-inherit"
+                >
                   <div
                     className={cn('flex flex-nowrap items-center', {
                       'overflow-hidden text-ellipsis':
-                        resiable && header.column.getCanResize(),
+                        header.column.getCanResize(),
                     })}
                   >
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
+                    {header.column.getCanSort() ?
+                      <SortingTableHead column={header.column}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </SortingTableHead>
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )
+                    }
                   </div>
-                  {resiable && header.column.getCanResize() && (
+                  {header.column.getCanResize() && (
                     <TableResizer header={header} table={table} />
                   )}
-                </th>
-              ))
-            }
-          </tr>
-          {isLoading && (
-            <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
-          )}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.length === 0 ?
-            <tr>
-              <td colSpan={table.getFlatHeaders().length}>{emptyComponent}</td>
-            </tr>
-          : table.getRowModel().rows.map((row) => (
-              <tr key={row.index}>
-                {row.getVisibleCells().map((cell) => (
-                  <td
-                    key={`${cell.id} ${cell.row.index}`}
-                    className="border-none"
-                    style={{ width: cell.column.getSize() }}
-                  >
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
+                </TableHead>
+              ))}
+            </TableRow>
+            {isLoading && (
+              <TableLoadingRow colSpan={table.getVisibleFlatColumns().length} />
+            )}
+          </TableHeader>
+          <TableBody
+            className={cn({
+              '[&>tr]:last-of-type:border-b-0':
+                table.getRowCount() === 0 || disableRound,
+            })}
+          >
+            {table.getRowCount() === 0 ?
+              <TableRow className="hover:bg-inherit">
+                <TableCell colSpan={table.getFlatHeaders().length}>
+                  <div className="my-10 flex flex-col items-center justify-center gap-4 [&>button]:min-w-[120px]">
+                    <Image
+                      width={200}
+                      height={200}
+                      src="/assets/images/empty-image.png"
+                      alt="empty image"
+                    />
+                    <p className="text-small text-neutral-tertiary">
+                      {emptyCaption}
+                    </p>
+                    {createButton}
+                  </div>
+                </TableCell>
+              </TableRow>
+            : <SortableContext
+                items={dataIds}
+                strategy={verticalListSortingStrategy}
+              >
+                {table.getRowModel().rows.map((row) => (
+                  <DraggableRow
+                    key={row.id}
+                    row={row}
+                    onClickRow={() =>
+                      onClickRow?.(Number(row.index), row.original)
+                    }
+                  />
                 ))}
-              </tr>
-            ))
-          }
-        </tbody>
-      </table>
+                {isInfiniteScroll && (
+                  <InfiniteScrollArea
+                    fetchNextPage={table.nextPage}
+                    hasNextPage={table.getCanNextPage()}
+                  />
+                )}
+              </SortableContext>
+            }
+          </TableBody>
+        </Table>
+      </DndContext>
     </div>
   );
-}
+};
 
 export default BasicTable;

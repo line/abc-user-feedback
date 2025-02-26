@@ -1,0 +1,67 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.badge {
+  --badge-bold-text-default: var(--text-neutral-inverse);
+  --badge-bold-text-blue: var(--text-neutral-inverse);
+  --badge-bold-text-orange: var(--text-neutral-inverse);
+  --badge-bold-text-red: var(--text-neutral-inverse);
+  --badge-bold-text-green: var(--text-neutral-inverse);
+  --badge-bold-border-default: var(--border-neutral-transparent);
+  --badge-bold-border-blue: var(--border-neutral-transparent);
+  --badge-bold-border-orange: var(--border-neutral-transparent);
+  --badge-bold-border-red: var(--border-neutral-transparent);
+  --badge-bold-border-green: var(--border-neutral-transparent);
+  --badge-bold-fg-default: var(--fg-neutral-inverse);
+  --badge-bold-fg-blue: var(--fg-tint-blue-bold);
+  --badge-bold-fg-orange: var(--fg-tint-orange-bold);
+  --badge-bold-fg-red: var(--fg-tint-red-bold);
+  --badge-bold-fg-green: var(--fg-tint-green-bold);
+  --badge-subtle-text-default: var(--text-neutral-primary);
+  --badge-subtle-text-blue: var(--text-tint-blue);
+  --badge-subtle-text-orange: var(--text-tint-orange);
+  --badge-subtle-text-red: var(--text-tint-red);
+  --badge-subtle-text-green: var(--text-tint-green);
+  --badge-subtle-border-default: var(--border-neutral-transparent);
+  --badge-subtle-border-blue: var(--border-neutral-transparent);
+  --badge-subtle-border-orange: var(--border-neutral-transparent);
+  --badge-subtle-border-red: var(--border-neutral-transparent);
+  --badge-subtle-border-green: var(--border-neutral-transparent);
+  --badge-subtle-fg-default: var(--fg-neutral-tertiary);
+  --badge-subtle-fg-blue: var(--fg-tint-blue-subtle);
+  --badge-subtle-fg-orange: var(--fg-tint-orange-subtle);
+  --badge-subtle-fg-red: var(--fg-tint-red-subtle);
+  --badge-subtle-fg-green: var(--fg-tint-green-subtle);
+  --badge-outline-text-default: var(--text-neutral-primary);
+  --badge-outline-text-blue: var(--text-tint-blue);
+  --badge-outline-text-orange: var(--text-tint-orange);
+  --badge-outline-text-red: var(--text-tint-red);
+  --badge-outline-text-green: var(--text-tint-green);
+  --badge-outline-border-default: var(--border-neutral-tertiary);
+  --badge-outline-border-blue: var(--border-tint-blue);
+  --badge-outline-border-orange: var(--border-tint-orange);
+  --badge-outline-border-red: var(--border-tint-red);
+  --badge-outline-border-green: var(--border-tint-green);
+  --badge-outline-fg-default: var(--fg-neutral-primary);
+  --badge-outline-fg-blue: var(--fg-neutral-primary);
+  --badge-outline-fg-orange: var(--fg-neutral-primary);
+  --badge-outline-fg-red: var(--fg-neutral-primary);
+  --badge-outline-fg-green: var(--fg-neutral-primary);
+
+  @apply text-small-strong inline-flex whitespace-nowrap px-2 py-0.5;
+
+  /* default */
+  @apply badge-bold-default badge-radius-medium;
+}

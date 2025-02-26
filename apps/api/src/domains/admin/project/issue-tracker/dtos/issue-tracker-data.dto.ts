@@ -18,11 +18,11 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Expose } from 'class-transformer';
 
 export class IssueTrackerDataDto {
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @Expose()
   ticketDomain: string | null;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @Expose()
   ticketKey: string | null;
 }

@@ -16,9 +16,18 @@
 export const CREATE_CHANNEL_STEP_KEY_LIST = [
   'channel-info',
   'field',
-  'image-config',
   'field-preview',
 ] as const;
+
+export const CREATE_CHANNEL_MAIN_STEP_LIST: CreateChannelStepKey[] = [
+  'channel-info',
+  'field',
+];
+export const CREATE_CHANNEL_STEP_MAP: Record<CreateChannelStepKey, number> = {
+  'channel-info': 0,
+  field: 1,
+  'field-preview': 1,
+};
 
 export const LAST_CREATE_CHANNEL_STEP = CREATE_CHANNEL_STEP_KEY_LIST.length;
 export const FIRST_CREATE_CHANNEL_STEP = 0;

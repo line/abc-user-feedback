@@ -1,0 +1,57 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.sheet-overlay {
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 bg-dim fixed inset-0 z-50;
+}
+
+.sheet {
+  --sheet-border: var(--border-neutral-tertiary);
+
+  @apply data-[state=open]:animate-in data-[state=closed]:animate-out bg-neutral-primary text-neutral-primary fixed z-50 flex flex-col space-y-5 border-[var(--sheet-border)] p-5 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500;
+
+  /* default */
+  @apply sheet-radius-small [&:not([class*=sheet-side])]:sheet-side-right;
+}
+
+.sheet-trigger {
+  --sheet-fg-open: var(--fg-neutral-tertiary);
+
+  @apply data-[state=open]:bg-[var(--sheet-fg-open)];
+}
+
+.sheet-close {
+  @apply !absolute right-2 top-2 !m-0;
+}
+
+.sheet-header {
+  @apply flex flex-shrink-0 flex-col gap-1 text-left;
+}
+
+.sheet-footer {
+  @apply flex flex-shrink-0 justify-end gap-2;
+}
+
+.sheet-icon {
+  @apply flex p-1;
+}
+
+.sheet-title {
+  @apply text-xlarge-strong;
+}
+
+.sheet-description {
+  @apply text-neutral-secondary text-base-normal;
+}

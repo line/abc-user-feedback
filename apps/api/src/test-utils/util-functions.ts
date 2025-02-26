@@ -89,6 +89,7 @@ export const getRandomEnumValues = <T extends object>(
 export const createTenant = async (tenantService: TenantService) => {
   const dto = new SetupTenantRequestDto();
   dto.siteName = faker.string.sample();
+  dto.password = '12345678';
   await tenantService.create(dto);
 };
 
@@ -208,10 +209,11 @@ export const signInTestUser = async (
 export const DEFAULT_FIELD_COUNT = 2;
 
 export const createQueryBuilder: Record<string, object> = {
-  setFindOptions: () => jest.fn().mockImplementation(() => createQueryBuilder),
+  setFindOptions: () => createQueryBuilder,
   select: () => createQueryBuilder,
   innerJoin: () => createQueryBuilder,
   leftJoin: () => createQueryBuilder,
+  leftJoinAndSelect: () => createQueryBuilder,
   where: () => createQueryBuilder,
   andWhere: () => createQueryBuilder,
   groupBy: () => createQueryBuilder,
@@ -226,6 +228,7 @@ export const createQueryBuilder: Record<string, object> = {
   limit: () => createQueryBuilder,
   getMany: () => createQueryBuilder,
   getCount: () => createQueryBuilder,
+  clone: () => createQueryBuilder,
 };
 
 export const mockRepository = () => ({

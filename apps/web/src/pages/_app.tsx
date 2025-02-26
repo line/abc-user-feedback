@@ -15,6 +15,7 @@
  */
 import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
+import { Inter } from 'next/font/google';
 import Head from 'next/head';
 import type { DehydratedState } from '@tanstack/react-query';
 import {
@@ -26,8 +27,9 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { OverlayProvider } from '@toss/use-overlay';
 import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
+import { ThemeProvider } from 'next-themes';
 
-import { Toaster } from '@ufb/ui';
+import { Toaster, TooltipProvider } from '@ufb/react';
 
 import { sessionStorage } from '@/shared';
 import type { Jwt, NextPageWithLayout } from '@/shared/types';
@@ -35,9 +37,13 @@ import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 
 // NOTE: DON'T Change the following import order
-import 'react-datepicker/dist/react-datepicker.css';
-import '@/shared/styles/react-datepicker.css';
 import '@/shared/styles/global.css';
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+
+const inter = Inter({ subsets: ['latin'] });
 
 interface PageProps {
   dehydratedState?: DehydratedState;
@@ -69,19 +75,30 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <Head>
-        <title>User Feedback</title>
+        <title>ABC User Feedback</title>
         <link rel="shortcut icon" href="/assets/images/logo.svg" />
       </Head>
+      <style jsx global>{`
+        html {
+          font-family: ${inter.style.fontFamily};
+        }
+      `}</style>
       <QueryClientProvider client={queryClient}>
-        <OverlayProvider>
-          <HydrationBoundary state={dehydratedState}>
-            <TenantGuard>
-              {getLayout(<Component {...otherProps} />)}
-              <Toaster />
-            </TenantGuard>
-          </HydrationBoundary>
-          {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
-        </OverlayProvider>
+        <ThemeProvider attribute="class" defaultTheme="system">
+          <OverlayProvider>
+            <HydrationBoundary state={dehydratedState}>
+              <TooltipProvider>
+                <TenantGuard>
+                  {getLayout(<Component {...otherProps} />)}
+                  <Toaster />
+                </TenantGuard>
+              </TooltipProvider>
+            </HydrationBoundary>
+            {process.env.NODE_ENV === 'development' && (
+              <ReactQueryDevtools initialIsOpen={false} />
+            )}
+          </OverlayProvider>
+        </ThemeProvider>
       </QueryClientProvider>
     </>
   );

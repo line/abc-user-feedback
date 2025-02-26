@@ -1,0 +1,94 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.input-error {
+  @apply !border-2 !border-[var(--input-border-error)] !bg-[var(--input-fg-error)];
+}
+
+.input-large {
+  @apply text-xlarge-normal h-13 px-5 py-2.5;
+}
+
+.input-medium {
+  @apply text-large-normal h-11 px-4 py-2.5;
+}
+
+.input-small {
+  @apply text-base-normal h-9 px-3 py-2;
+}
+
+.input-radius-large {
+  @apply rounded-full;
+}
+
+.input-radius-medium {
+  @apply rounded-8;
+}
+
+.input-radius-small {
+  @apply rounded-0;
+}
+
+.input-icon-large {
+  @apply left-4;
+}
+
+.input-icon-medium {
+  @apply left-3.5;
+}
+
+.input-icon-small {
+  @apply left-3;
+}
+
+.input-button-large {
+  @apply right-4;
+}
+
+.input-button-medium {
+  @apply right-3.5;
+}
+
+.input-button-small {
+  @apply right-3;
+}
+
+.input-caption-default {
+  @apply text-[var(--input-caption-default)];
+}
+
+.input-caption-success {
+  @apply text-[var(--input-caption-success)];
+}
+
+.input-caption-info {
+  @apply text-[var(--input-caption-default)];
+}
+
+.input-caption-error {
+  @apply text-[var(--input-caption-error)];
+}
+
+.input-caption-small {
+  @apply text-base-normal;
+}
+
+.input-caption-medium {
+  @apply text-base-normal;
+}
+
+.input-caption-large {
+  @apply text-large-normal;
+}

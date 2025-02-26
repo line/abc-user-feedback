@@ -38,6 +38,7 @@ import {
   RemoveIssueDto,
   UpdateFeedbackMySQLDto,
 } from './dtos';
+import { FindFeedbacksByChannelIdDtoV2 } from './dtos/find-feedbacks-by-channel-id-v2.dto';
 import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
@@ -228,6 +229,184 @@ export class FeedbackMySQLService {
         }
       }
     }
+
+    queryBuilder.groupBy('feedbacks.id');
+
+    if (Object.keys(sort).length === 0) {
+      sort.id = SortMethodEnum.DESC;
+    }
+    Object.keys(sort).map((fieldName) => {
+      if (isInvalidSortMethod(sort[fieldName])) {
+        throw new BadRequestException('invalid sort method');
+      }
+
+      if (fieldName === 'id') {
+        queryBuilder.addOrderBy('id', sort[fieldName]);
+      } else if (fieldName === 'createdAt') {
+        queryBuilder.addOrderBy('created_at', sort[fieldName]);
+      } else if (fieldName === 'updatedAt') {
+        queryBuilder.addOrderBy('updated_at', sort[fieldName]);
+      } else {
+        queryBuilder.addOrderBy(fieldName, sort[fieldName]);
+      }
+    });
+
+    const items = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .getMany();
+
+    const total = await queryBuilder.getCount();
+
+    const feedbacks = items.map((item) => {
+      return {
+        ...item.data,
+        id: item.id,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+    });
+
+    return {
+      items: feedbacks,
+      meta: {
+        itemCount: feedbacks.length,
+        totalItems: total,
+        itemsPerPage: limit,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
+  }
+
+  async findByChannelIdV2(
+    dto: FindFeedbacksByChannelIdDtoV2,
+  ): Promise<Pagination<Feedback, IPaginationMeta>> {
+    const {
+      page,
+      limit,
+      channelId,
+      queries = [],
+      sort = {},
+      operator,
+      fields = [new FieldEntity()],
+    } = dto;
+
+    const queryBuilder = this.feedbackRepository
+      .createQueryBuilder('feedbacks')
+      .leftJoin(
+        'feedbacks_issues_issues',
+        'feedbacks_issues_issues',
+        'feedbacks_issues_issues.feedbacks_id = feedbacks.id',
+      )
+      .select('feedbacks')
+      .where('feedbacks.channel_id = :channelId', { channelId });
+
+    const createdAtCondition = queries.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      queryBuilder.andWhere('feedbacks.created_at >= :gte', { gte });
+      queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
+    }
+
+    const method = operator === 'AND' ? 'andWhere' : 'orWhere';
+
+    queryBuilder.andWhere(
+      new Brackets(async (qb) => {
+        let paramIndex = 0;
+        for (const query of queries) {
+          for (const [fieldKey, value] of Object.entries(query)) {
+            if (fieldKey === 'condition' || fieldKey === 'createdAt') continue;
+
+            const paramName = `value${paramIndex++}`;
+
+            if (fieldKey === 'id') {
+              qb[method](`feedbacks.id = :${paramName}`, {
+                [paramName]: value,
+              });
+            } else if (fieldKey === 'ids') {
+              qb[method](`feedbacks.id IN(:${paramName})`, {
+                [paramName]: value,
+              });
+            } else if (fieldKey === 'issueIds') {
+              qb[method]('feedbacks_issues_issues.issues_id IN(:issueIds)', {
+                issueIds: value,
+              });
+            } else if (fieldKey === 'updatedAt') {
+              const { gte, lt } = value as TimeRange;
+              qb[method](`feedbacks.updated_at >= :gte${paramName}`, {
+                [paramName]: gte,
+              });
+              qb[method](`feedbacks.updated_at < :lt${paramName}`, {
+                [paramName]: lt,
+              });
+            } else {
+              const { id, format }: { id: number; format: FieldFormatEnum } =
+                fields.find((v) => v.key === fieldKey) ?? {
+                  id: 0,
+                  format: FieldFormatEnum.date,
+                };
+
+              if (format === FieldFormatEnum.select) {
+                const options = await this.optionRepository.find({
+                  where: { field: { id } },
+                });
+                const option =
+                  options.find((option) => option.key === value) ??
+                  new OptionEntity();
+
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
+                  { optionId: option.key },
+                );
+              } else if (format === FieldFormatEnum.multiSelect) {
+                const options = await this.optionRepository.find({
+                  where: { field: { id } },
+                });
+
+                qb[method](
+                  new Brackets((subQb) => {
+                    for (const optionKey of value as string[]) {
+                      const option =
+                        options.find((option) => option.key === optionKey) ??
+                        new OptionEntity();
+                      subQb.orWhere(
+                        `JSON_CONTAINS(
+                        JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
+                        '"${option.key}"',
+                        '$')`,
+                      );
+                    }
+                  }),
+                );
+              } else if (format === FieldFormatEnum.text) {
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
+                  { [paramName]: `%${value as string | number}%` },
+                );
+              } else if (format === FieldFormatEnum.date) {
+                const { gte, lt } = value as TimeRange;
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') >= :gte${paramName}`,
+                  { [paramName]: gte },
+                );
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') < :lt${paramName}`,
+                  { [paramName]: lt },
+                );
+              } else {
+                qb[method](
+                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :${paramName}`,
+                  {
+                    [paramName]: value,
+                  },
+                );
+              }
+            }
+          }
+        }
+      }),
+    );
 
     queryBuilder.groupBy('feedbacks.id');
 

@@ -26,14 +26,14 @@ import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from '@/app.module';
-import { FieldFormatEnum } from '@/common/enums';
+import { FieldFormatEnum, QueryV2ConditionsEnum } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import { AuthService } from '@/domains/admin/auth/auth.service';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { ChannelService } from '@/domains/admin/channel/channel/channel.service';
 import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import type { CreateFeedbackDto } from '@/domains/admin/feedback/dtos';
-import type { FindFeedbacksByChannelIdRequestDto } from '@/domains/admin/feedback/dtos/requests';
+import type { FindFeedbacksByChannelIdRequestDtoV2 } from '@/domains/admin/feedback/dtos/requests/find-feedbacks-by-channel-id-request-v2.dto';
 import type { FindFeedbacksByChannelIdResponseDto } from '@/domains/admin/feedback/dtos/responses';
 import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
@@ -180,6 +180,7 @@ describe('FeedbackController (integration)', () => {
         channelId: channel.id,
         data: {},
       };
+      let availableFieldKey = '';
       fields
         .filter(
           ({ key }) =>
@@ -190,7 +191,10 @@ describe('FeedbackController (integration)', () => {
         )
         .forEach(({ key, format, options }) => {
           dto.data[key] = getRandomValue(format, options);
+          availableFieldKey = key;
         });
+
+      dto.data[availableFieldKey] = 'test';
 
       await feedbackService.create(dto);
 
@@ -199,10 +203,14 @@ describe('FeedbackController (integration)', () => {
       );
       if (!keywordField) return;
 
-      const findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
-        query: {
-          searchText: dto.data[keywordField.key] as string,
-        },
+      const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
+        queries: [
+          {
+            [availableFieldKey]: 'test',
+            condition: QueryV2ConditionsEnum.IS,
+          },
+        ],
+        operator: 'AND',
         limit: 10,
         page: 1,
       };
@@ -215,7 +223,7 @@ describe('FeedbackController (integration)', () => {
         .send(findFeedbackDto)
         .expect(201)
         .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
-          expect(body.meta.itemCount).toBeGreaterThan(0);
+          expect(body.meta.itemCount).toEqual(1);
         });
     });
   });
@@ -371,13 +379,17 @@ describe('FeedbackController (integration)', () => {
 
       await tenantService.deleteOldFeedbacks();
 
-      const findFeedbackDto = {
-        query: {
-          createdAt: {
-            gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
-            lt: DateTime.now().toFormat('yyyy-MM-dd'),
+      const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
+        queries: [
+          {
+            createdAt: {
+              gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
+              lt: DateTime.now().toFormat('yyyy-MM-dd'),
+            },
+            condition: QueryV2ConditionsEnum.IS,
           },
-        },
+        ],
+        operator: 'AND',
         limit: 10,
         page: 1,
       };

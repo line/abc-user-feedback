@@ -65,6 +65,7 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardCard
+      type="feedback"
       data={(currentData?.count ?? 0).toLocaleString()}
       title={t('dashboard-card.today-feedback.title')}
       description={t('dashboard-card.today-feedback.description', {

@@ -5,28 +5,23 @@ export default () => {
   test.describe("create-feedback suite", () => {
     test.afterEach(async ({ page }) => {
       await page
-        .locator(
-          "#__next > div > div > main > div > div.overflow-x-auto > table > tbody > tr:nth-child(1) > td:nth-child(1) > div > input"
-        )
+        .getByRole("cell", { name: "1", exact: true })
+        .locator("div")
         .click();
       await page.getByRole("button", { name: "Delete" }).click();
-      await page
-        .getByRole("dialog")
-        .getByRole("button", { name: "Delete" })
-        .click();
+      await page.waitForTimeout(1000);
+      await page.getByRole("button", { name: "Delete" }).click();
+      await page.waitForTimeout(1000);
 
-      await expect(page.getByText("Deleted Successfully")).toBeVisible();
+      await expect(page.locator("tbody")).not.toContainText("test text");
     });
 
     test("creating a feedback succeeds", async ({ page }) => {
       await page.goto("http://localhost:3000");
       await page.waitForTimeout(1000);
 
-      await page.getByText("SeededTestProject").click();
-      await page.getByText("FeedbackIssueSetting").hover();
-      await page.getByRole("button", { name: "Feedback", exact: true }).click();
-      await page.getByRole("button", { name: "Column Settings" }).hover();
-      await page.getByText("SeededTestChannel", { exact: true }).click();
+      await page.getByRole("radio", { name: "Feedback" }).click();
+      await page.waitForTimeout(1000);
       await page.waitForURL(/.*channelId.*/, { timeout: 1000 });
 
       const url = new URL(page.url());

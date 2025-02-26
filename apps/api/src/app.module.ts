@@ -42,6 +42,7 @@ import { OptionModule } from './domains/admin/channel/option/option.module';
 import { FeedbackModule } from './domains/admin/feedback/feedback.module';
 import { HistoryModule } from './domains/admin/history/history.module';
 import { ApiKeyModule } from './domains/admin/project/api-key/api-key.module';
+import { CategoryModule } from './domains/admin/project/category/category.module';
 import { IssueTrackerModule } from './domains/admin/project/issue-tracker/issue-tracker.module';
 import { IssueModule } from './domains/admin/project/issue/issue.module';
 import { MemberModule } from './domains/admin/project/member/member.module';
@@ -64,6 +65,7 @@ export const domainModules = [
   FieldModule,
   OptionModule,
   FeedbackModule,
+  CategoryModule,
   HealthModule,
   MigrationModule,
   ApiKeyModule,

@@ -13,46 +13,46 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo } from 'react';
-import type { GetStaticProps } from 'next';
-import { useRouter } from 'next/router';
+import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, LogoWithTitle } from '@/shared';
+import { AnonymousTemplate, DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
-import { UserInvitationForm } from '@/features/invite-user';
-import { MainLayout } from '@/widgets';
+import { InvitedUserSignupForm } from '@/entities/user';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
-const UserInvitationPage: NextPageWithLayout = () => {
+interface IProps {
+  code: string;
+  email: string;
+}
+
+const UserInvitationPage: NextPageWithLayout<IProps> = ({ code, email }) => {
   const { t } = useTranslation();
-  const router = useRouter();
-
-  const code = useMemo(
-    () => (router.query.code ?? '') as string,
-    [router.query],
-  );
-  const email = useMemo(
-    () => (router.query.email ?? '') as string,
-    [router.query],
-  );
 
   return (
-    <div className="relative">
-      <LogoWithTitle title={t('link.user-invitation.title')} />
-      <UserInvitationForm code={code} email={email} />
-    </div>
+    <AnonymousTemplate
+      title={t('link.user-invitation.title')}
+      image="/assets/images/reset-password.svg"
+    >
+      <InvitedUserSignupForm code={code} email={email} />
+    </AnonymousTemplate>
   );
 };
 
 UserInvitationPage.getLayout = (page) => {
-  return <MainLayout center> {page}</MainLayout>;
+  return <AnonymousLayout>{page}</AnonymousLayout>;
 };
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps<IProps> = async ({
+  locale,
+  query,
+}) => {
   return {
     props: {
       ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      code: (query.code ?? '') as string,
+      email: (query.email ?? '') as string,
     },
   };
 };

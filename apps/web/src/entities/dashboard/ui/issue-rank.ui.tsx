@@ -25,31 +25,43 @@ import {
 import type { TFunction } from 'i18next';
 import { useTranslation } from 'next-i18next';
 
-import { Icon, PopoverCloseButton } from '@ufb/ui';
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxSelectItem,
+  ComboboxTrigger,
+  Icon,
+} from '@ufb/react';
 
 import { DescriptionTooltip, ISSUES, Path } from '@/shared';
 import { DashboardTable } from '@/shared/ui';
-import { useIssueSearch } from '@/entities/issue';
+import type { IssueStatus } from '@/entities/issue';
+import { IssueBadge, useIssueSearch } from '@/entities/issue';
 
 interface IssueTableData {
   id: number;
   no: number;
-  status: string;
+  status: IssueStatus;
   name: string;
   count: number;
 }
 
 const columnHelper = createColumnHelper<IssueTableData>();
-const columns = (t: TFunction) => [
-  columnHelper.accessor('no', { header: 'No', enableSorting: false, size: 50 }),
+const getColumns = (t: TFunction) => [
+  columnHelper.accessor('no', {
+    header: 'No',
+    enableSorting: false,
+    size: 100,
+  }),
   columnHelper.accessor('name', {
     header: 'Issue',
     enableSorting: false,
     cell({ getValue, row }) {
       const router = useRouter();
       return (
-        <div className="flex items-center gap-1">
-          <p>{getValue()}</p>
+        <>
+          <span>{getValue()}</span>
           <Link
             href={{
               pathname: Path.ISSUE,
@@ -57,17 +69,17 @@ const columns = (t: TFunction) => [
             }}
             target="_blank"
             rel="noreferrer"
+            className="ml-1"
           >
             <Icon
-              name="RightCircleStroke"
+              name="RiExternalLinkFill"
               size={16}
-              className="text-tertiary cursor-pointer"
+              className="cursor-pointer"
             />
           </Link>
-        </div>
+        </>
       );
     },
-    size: 200,
   }),
   columnHelper.accessor('count', {
     header: () => (
@@ -77,12 +89,13 @@ const columns = (t: TFunction) => [
       </div>
     ),
     cell: ({ getValue }) => <p>{getValue().toLocaleString()}</p>,
-    size: 50,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
     enableSorting: false,
-    size: 50,
+    cell({ getValue }) {
+      return <IssueBadge status={getValue()} />;
+    },
   }),
 ];
 interface IProps {
@@ -91,24 +104,28 @@ interface IProps {
   to: Date;
 }
 const limitOptions = [
-  { label: '5', value: 5 },
-  { label: '10', value: 10 },
-  { label: '15', value: 15 },
-  { label: '20', value: 20 },
+  { label: '5', value: '5' },
+  { label: '10', value: '10' },
+  { label: '15', value: '15' },
+  { label: '20', value: '20' },
 ];
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
 
   const issues = useMemo(() => ISSUES(t), [t]);
-  const [limit, setLimit] = useState(limitOptions[0]?.value ?? 0);
+  const [limit, setLimit] = useState(Number(limitOptions[0]?.value ?? 0));
 
   const [currentIssueStatusList, setCurrentIssueStatusList] = useState(issues);
 
   const { data } = useIssueSearch(projectId, {
     sort: { feedbackCount: 'DESC' },
     limit,
-    query: { statuses: currentIssueStatusList.map((v) => v.key) },
+    queries: currentIssueStatusList.map((v) => ({
+      status: v.key,
+      condition: 'IS',
+    })),
+    operator: 'OR',
   });
 
   const newData = useMemo(
@@ -118,17 +135,18 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
         no: i + 1,
         count: item.feedbackCount,
         name: item.name,
-        status: ISSUES(t).find((v) => v.key === item.status)?.name ?? '',
+        status: item.status,
       })) ?? [],
     [data, t],
   );
+  const columns = useMemo(() => getColumns(t), [t]);
 
   const table = useReactTable({
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    columns: columns(t),
+    columns,
     data: newData,
     enableSorting: true,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
@@ -138,45 +156,40 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
       table={table}
       selectData={{
         options: limitOptions,
-        defaultValue: limitOptions[0],
-        onChange: (v) => setLimit(v?.value ?? 5),
+        value: String(limit),
+        onChange: (v) => setLimit(Number(v)),
       }}
       filterContent={
-        <div className="flex flex-col gap-3 px-4 py-3">
-          <div className="flex justify-between">
-            <h1 className="font-16-bold">
-              {t('popover.select-issue-status.issue-status')}{' '}
-              <span>
-                {currentIssueStatusList.length}
-                <span className="text-tertiary">/5</span>
-              </span>
-            </h1>
-            <PopoverCloseButton />
-          </div>
-          <ul>
-            {issues.map((issue) => (
-              <li key={issue.key} className="py-1">
-                <label className="flex cursor-pointer items-center gap-2 py-1">
-                  <input
-                    className="checkbox checkbox-sm"
-                    type="checkbox"
-                    checked={currentIssueStatusList.some(
+        <Combobox>
+          <ComboboxTrigger>
+            <Icon name="RiFilter3Line" />
+            Filter
+          </ComboboxTrigger>
+          <ComboboxContent>
+            <ComboboxList>
+              {issues.map((issue) => (
+                <ComboboxSelectItem
+                  key={issue.key}
+                  checked={currentIssueStatusList.some(
+                    ({ key }) => key === issue.key,
+                  )}
+                  onSelect={() => {
+                    const isChecked = currentIssueStatusList.some(
                       ({ key }) => key === issue.key,
-                    )}
-                    onChange={(e) =>
-                      e.currentTarget.checked ?
-                        setCurrentIssueStatusList((prev) => [...prev, issue])
-                      : setCurrentIssueStatusList((prev) =>
-                          prev.filter((v) => v.key !== issue.key),
-                        )
-                    }
-                  />
-                  <p className="font-12-regular flex-1">{issue.name}</p>
-                </label>
-              </li>
-            ))}
-          </ul>
-        </div>
+                    );
+                    setCurrentIssueStatusList((prev) =>
+                      isChecked ?
+                        prev.filter((v) => v.key !== issue.key)
+                      : [...prev, issue],
+                    );
+                  }}
+                >
+                  {issue.name}
+                </ComboboxSelectItem>
+              ))}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
       }
     />
   );

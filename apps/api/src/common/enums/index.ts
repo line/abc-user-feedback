@@ -21,3 +21,4 @@ export { SortMethodEnum } from './sort-method.enum';
 export { EventTypeEnum } from './event-type.enum';
 export { EventStatusEnum } from './event-status.enum';
 export { WebhookStatusEnum } from './webhook-status.enum';
+export { QueryV2ConditionsEnum } from './query-v2-conditions.enum';

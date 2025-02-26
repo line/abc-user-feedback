@@ -30,6 +30,7 @@ import type { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/i
 import { IssueStatisticsEntity } from '@/domains/admin/statistics/issue/issue-statistics.entity';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { ChannelEntity } from '../../channel/channel/channel.entity';
+import { CategoryEntity } from '../category/category.entity';
 import { IssueEntity } from '../issue/issue.entity';
 import { RoleEntity } from '../role/role.entity';
 import { WebhookEntity } from '../webhook/webhook.entity';
@@ -102,6 +103,11 @@ export class ProjectEntity extends CommonEntity {
     cascade: true,
   })
   stats: Relation<IssueStatisticsEntity>[];
+
+  @OneToMany(() => CategoryEntity, (category) => category.project, {
+    cascade: true,
+  })
+  categories: Relation<CategoryEntity>[];
 
   static from({
     tenantId,

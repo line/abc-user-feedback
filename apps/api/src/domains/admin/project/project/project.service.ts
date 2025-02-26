@@ -16,10 +16,10 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
 import { Like, Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { paginateHelper } from '@/common/helper/paginate.helper';
 import { OpensearchRepository } from '@/common/repositories';
 import { FeedbackIssueStatisticsService } from '@/domains/admin/statistics/feedback-issue/feedback-issue-statistics.service';
 import { FeedbackStatisticsService } from '@/domains/admin/statistics/feedback/feedback-statistics.service';
@@ -74,7 +74,6 @@ export class ProjectService {
 
     return {
       ...tenants[0],
-      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
   }
 
@@ -174,23 +173,25 @@ export class ProjectService {
 
   async findAll({ options, user, searchText = '' }: FindAllProjectsDto) {
     if (user.type === UserTypeEnum.SUPER) {
-      return await paginate(
-        this.projectRepo.createQueryBuilder().setFindOptions({
+      return await paginateHelper(
+        this.projectRepo.createQueryBuilder(),
+        {
           where: { name: Like(`%${searchText}%`) },
           order: { createdAt: 'ASC' },
-        }),
+        },
         options,
       );
     }
 
-    return await paginate(
-      this.projectRepo.createQueryBuilder().setFindOptions({
+    return await paginateHelper(
+      this.projectRepo.createQueryBuilder(),
+      {
         where: {
           name: Like(`%${searchText}%`),
           roles: { members: { user: { id: user.id } } },
         },
         order: { createdAt: 'ASC' },
-      }),
+      },
       options,
     );
   }

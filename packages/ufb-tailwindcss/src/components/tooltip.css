@@ -1,0 +1,56 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.tooltip {
+  --tooltip-text: var(--text-neutral-primary);
+  --tooltip-border: var(--border-neutral-tertiary);
+  --tooltip-fg: var(--fg-neutral-primary);
+
+  @apply rounded-8 animate-in fade-in-0 zoom-in-95;
+  @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply text-base-normal z-50 flex flex-col overflow-hidden whitespace-pre-wrap border border-[var(--tooltip-border)] bg-[var(--tooltip-fg)] px-3 py-1 text-[var(--tooltip-text)] shadow-md;
+
+  /* default */
+  @apply tooltip-text-center;
+}
+
+.tooltip-arrow-border {
+  @apply fill-current text-[var(--tooltip-border)];
+}
+
+.tooltip-arrow {
+  @apply fill-current text-[var(--tooltip-fg)];
+}
+
+[data-side="top"].tooltip .tooltip-arrow {
+  @apply -translate-y-px translate-x-px;
+}
+
+[data-side="right"].tooltip .tooltip-arrow {
+  @apply -translate-y-px translate-x-[0.5px];
+}
+
+[data-side="bottom"].tooltip .tooltip-arrow {
+  @apply -translate-x-px -translate-y-px;
+}
+
+[data-side="left"].tooltip .tooltip-arrow {
+  @apply -translate-x-[0.5px] -translate-y-px;
+}
+
+.tooltip-title {
+  @apply text-base-strong mb-1;
+}

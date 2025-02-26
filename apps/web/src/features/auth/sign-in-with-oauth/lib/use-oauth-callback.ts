@@ -13,37 +13,32 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { toast } from '@ufb/ui';
+import { toast } from '@ufb/react';
 
 import { Path } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
-interface IQuery {
-  code: string;
-  callback_url?: string;
-}
-
 export const useOAuthCallback = () => {
+  const router = useRouter();
+
   const { signInWithOAuth } = useUserStore();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
-  const router = useRouter();
-
-  const query = useMemo(() => {
-    const { code, callback_url } = router.query;
-    return { code, callback_url } as IQuery;
-  }, [router.query]);
+  const code = router.query.code as string | undefined;
+  const callback_url = router.query.callback_url as string | undefined;
 
   useEffect(() => {
-    signInWithOAuth(query).catch(() => {
-      toast.negative({ title: 'OAuth2.0 Login Error' });
+    if (!code) return;
+
+    signInWithOAuth({ code, callback_url }).catch(() => {
+      toast.error('OAuth2.0 Login Error');
       void router.replace(Path.SIGN_IN);
       setStatus('error');
     });
-  }, [query]);
+  }, [code, callback_url]);
 
   return { status };
 };

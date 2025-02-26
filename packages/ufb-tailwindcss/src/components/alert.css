@@ -1,0 +1,66 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.alert {
+  --alert-text-default: var(--text-neutral-primary);
+  --alert-text-description: var(--text-neutral-secondary);
+  --alert-border-default: var(--border-neutral-tertiary);
+  --alert-border-warning: var(--border-tint-orange);
+  --alert-border-success: var(--border-tint-green);
+  --alert-border-error: var(--border-tint-red);
+  --alert-border-informative: var(--border-tint-blue);
+  --alert-icon-default: var(--icon-neutral-primary);
+  --alert-icon-warning: var(--icon-tint-orange);
+  --alert-icon-success: var(--icon-tint-green);
+  --alert-icon-error: var(--icon-tint-red);
+  --alert-icon-informative: var(--icon-tint-blue);
+  --alert-fg-default: var(--fg-neutral-primary);
+
+  @apply relative inline-flex min-w-[356px] items-center space-x-2 border bg-[var(--alert-fg-default)] px-5 py-4;
+
+  /* default */
+  @apply alert-radius-medium alert-default;
+}
+
+.alert-icon {
+  @apply mb-auto box-content flex-shrink-0 p-1;
+
+  /* default */
+  @apply alert-icon-default;
+}
+
+.alert-content {
+  @apply flex flex-1 items-center space-x-2;
+}
+
+.alert-text-container {
+  @apply flex flex-1 flex-col items-start justify-center;
+}
+
+.alert-title {
+  @apply text-title-h5 flex flex-1 flex-col text-[var(--alert-text-default)];
+}
+
+.alert-description {
+  @apply text-base-normal text-[var(--alert-text-description)];
+}
+
+.alert-button {
+  @apply flex-shrink-0;
+}
+
+.alert-close {
+  @apply flex-shrink-0;
+}

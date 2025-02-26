@@ -65,6 +65,7 @@ const TodayIssueCard: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardCard
+      type="issue"
       data={currentData?.count ?? 0}
       title={t('dashboard-card.today-issue.title')}
       description={t('dashboard-card.today-issue.description', {

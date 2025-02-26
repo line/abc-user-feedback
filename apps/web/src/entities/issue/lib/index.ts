@@ -14,3 +14,4 @@
  * under the License.
  */
 export { default as useIssueSearch } from './use-issue-search';
+export { default as useIssueSearchInfinite } from './use-issue-search-infinite';

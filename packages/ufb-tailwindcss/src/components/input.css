@@ -1,0 +1,99 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.input-field {
+  --input-text-default: var(--text-neutral-tertiary);
+  --input-text-typing: var(--text-neutral-primary);
+  --input-text-filled: var(--text-neutral-primary);
+  --input-text-error: var(--text-neutral-primary);
+  --input-label-default: var(--text-neutral-primary);
+  --input-caption-default: var(--text-neutral-tertiary);
+  --input-caption-success: var(--text-tint-green);
+  --input-caption-error: var(--text-tint-red);
+  --input-icon-default: var(--icon-neutral-tertiary);
+  --input-icon-typing: var(--icon-neutral-primary);
+  --input-icon-filled: var(--icon-neutral-primary);
+  --input-icon-error: var(--icon-neutral-primary);
+  --input-icon-caption-default: var(--icon-neutral-tertiary);
+  --input-icon-caption-success: var(--icon-tint-green);
+  --input-icon-caption-error: var(--icon-tint-red);
+  --input-border-default: var(--border-neutral-tertiary);
+  --input-border-typing: var(--tint, var(--border-neutral-primary));
+  --input-border-filled: var(--border-neutral-tertiary);
+  --input-border-error: var(--border-tint-red);
+  --input-fg-default: var(--fg-neutral-primary);
+  --input-fg-typing: var(--fg-neutral-tertiary);
+  --input-fg-filled: var(--fg-neutral-primary);
+  --input-fg-error: var(--fg-neutral-primary);
+
+  @apply flex flex-col gap-1.5;
+}
+
+.input-box {
+  @apply relative;
+  @apply [&:has(.input-button)>.input-large]:!pr-12 [&:has(.input-button)>.input-medium]:!pr-10 [&:has(.input-button)>.input-small]:!pr-8;
+  @apply [&:has(.input-icon)>.input-large]:!pl-12 [&:has(.input-icon)>.input-medium]:!pl-10 [&:has(.input-icon)>.input-small]:!pl-8;
+}
+
+.input {
+  @apply text-[var(--input-text-filled)] placeholder:text-[var(--input-text-default)] placeholder-shown:text-[var(--input-text-default)] focus-visible:text-[var(--input-text-typing)];
+  @apply border border-[var(--input-border-filled)] placeholder-shown:border placeholder-shown:border-[var(--input-border-default)] focus-visible:border-2 focus-visible:border-[var(--input-border-typing)];
+  @apply bg-[var(--input-fg-filled)] placeholder-shown:bg-[var(--input-fg-default)] focus-visible:bg-[var(--input-fg-typing)];
+
+  @apply w-full outline-none;
+  @apply disabled:cursor-not-allowed disabled:opacity-50 [&::-webkit-search-cancel-button]:hidden;
+
+  /* default */
+  @apply input-small input-radius-medium;
+}
+
+.input-button {
+  @apply absolute-y-center flex flex-shrink-0 items-center justify-center disabled:cursor-not-allowed disabled:opacity-50;
+
+  /* default */
+  @apply input-button-small;
+}
+
+.input-button.show-only-on-focus-and-has-value {
+  @apply hidden;
+}
+
+.input-box:focus-within
+  .input:not(:placeholder-shown)
+  ~ .input-button.show-only-on-focus-and-has-value {
+  @apply flex;
+}
+
+.input-icon {
+  @apply absolute-y-center flex;
+
+  /* default */
+  @apply input-icon-small;
+}
+
+.input-label {
+  @apply text-base-normal font-normal text-[var(--input-label-default)];
+}
+
+.input-caption {
+  @apply flex items-center gap-1;
+
+  /* default */
+  @apply input-caption-default input-caption-small;
+}
+
+.input-caption-icon {
+  @apply flex-shrink-0;
+}

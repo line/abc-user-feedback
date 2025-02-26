@@ -37,6 +37,7 @@ import {
   FieldFormatEnum,
   FieldPropertyEnum,
   FieldStatusEnum,
+  IssueStatusEnum,
 } from '@/common/enums';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
@@ -57,6 +58,7 @@ import {
   RemoveIssueDto,
   UpdateFeedbackDto,
 } from './dtos';
+import { FindFeedbacksByChannelIdDtoV2 } from './dtos/find-feedbacks-by-channel-id-v2.dto';
 import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { validateValue } from './feedback.common';
 import { FeedbackMySQLService } from './feedback.mysql.service';
@@ -113,6 +115,9 @@ export class FeedbackService {
         continue;
       }
       if ('searchText' === fieldKey) {
+        continue;
+      }
+      if ('condition' === fieldKey) {
         continue;
       }
       if (!(fieldKey in fieldsByKey)) {
@@ -197,7 +202,8 @@ export class FeedbackService {
   private async generateXLSXFile({
     projectId,
     channelId,
-    query,
+    queries,
+    operator,
     sort,
     fields,
     fieldsByKey,
@@ -205,8 +211,9 @@ export class FeedbackService {
   }: {
     projectId: number;
     channelId: number;
-    query: FindFeedbacksByChannelIdDto['query'];
-    sort: FindFeedbacksByChannelIdDto['sort'];
+    queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    operator: FindFeedbacksByChannelIdDtoV2['operator'];
+    sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
     fieldsByKey: Record<string, FieldEntity>;
     fieldsToExport: FieldEntity[];
@@ -241,9 +248,10 @@ export class FeedbackService {
     do {
       if (this.configService.get('opensearch.use')) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { data, scrollId } = await this.feedbackOSService.scroll({
+        const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId,
-          query,
+          queries,
+          operator,
           sort,
           fields,
           size: pageSize,
@@ -252,9 +260,10 @@ export class FeedbackService {
         feedbacks = data;
         currentScrollId = scrollId as unknown as string;
       } else {
-        const { items } = await this.feedbackMySQLService.findByChannelId({
+        const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId,
-          query,
+          queries,
+          operator,
           sort,
           fields,
           limit: pageSize,
@@ -295,7 +304,8 @@ export class FeedbackService {
   private async generateCSVFile({
     projectId,
     channelId,
-    query,
+    queries,
+    operator,
     sort,
     fields,
     fieldsByKey,
@@ -303,8 +313,9 @@ export class FeedbackService {
   }: {
     projectId: number;
     channelId: number;
-    query: FindFeedbacksByChannelIdDto['query'];
-    sort: FindFeedbacksByChannelIdDto['sort'];
+    queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    operator: FindFeedbacksByChannelIdDtoV2['operator'];
+    sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
     fieldsByKey: Record<string, FieldEntity>;
     fieldsToExport: FieldEntity[];
@@ -328,9 +339,10 @@ export class FeedbackService {
     do {
       if (this.configService.get('opensearch.use')) {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const { data, scrollId } = await this.feedbackOSService.scroll({
+        const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId: channelId,
-          query: query,
+          queries: queries,
+          operator: operator,
           sort: sort,
           fields: fields,
           size: pageSize,
@@ -340,9 +352,10 @@ export class FeedbackService {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         currentScrollId = scrollId;
       } else {
-        const { items } = await this.feedbackMySQLService.findByChannelId({
+        const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId: channelId,
-          query: query,
+          queries: queries,
+          operator: operator,
           sort: sort,
           fields: fields,
           limit: pageSize,
@@ -451,6 +464,9 @@ export class FeedbackService {
           issue = await this.issueService.create({
             name: issueName,
             projectId: channel.project.id,
+            status: IssueStatusEnum.INIT,
+            description: '',
+            externalIssueId: '',
           });
         }
 
@@ -490,6 +506,39 @@ export class FeedbackService {
       this.configService.get('opensearch.use') ?
         await this.feedbackOSService.findByChannelId(dto)
       : await this.feedbackMySQLService.findByChannelId(dto);
+
+    const issuesByFeedbackIds = await this.issueService.findIssuesByFeedbackIds(
+      feedbacksByPagination.items.map(
+        (feedback: Feedback) => feedback.id as number,
+      ),
+    );
+
+    feedbacksByPagination.items.forEach((feedback: Feedback) => {
+      feedback.issues = issuesByFeedbackIds[feedback.id as number];
+    });
+
+    return feedbacksByPagination;
+  }
+
+  async findByChannelIdV2(
+    dto: FindFeedbacksByChannelIdDtoV2,
+  ): Promise<Pagination<Feedback, IPaginationMeta>> {
+    const fields = await this.fieldService.findByChannelId({
+      channelId: dto.channelId,
+    });
+    if (fields.length === 0) {
+      throw new BadRequestException('invalid channel');
+    }
+    dto.fields = fields;
+
+    for (let i = 0; i < (dto.queries?.length ?? 0); i++) {
+      this.validateQuery(dto.queries?.[i] ?? {}, fields);
+    }
+
+    const feedbacksByPagination =
+      this.configService.get('opensearch.use') ?
+        await this.feedbackOSService.findByChannelIdV2(dto)
+      : await this.feedbackMySQLService.findByChannelIdV2(dto);
 
     const issuesByFeedbackIds = await this.issueService.findIssuesByFeedbackIds(
       feedbacksByPagination.items.map(
@@ -627,7 +676,8 @@ export class FeedbackService {
     streamableFile: StreamableFile;
     feedbackIds: number[];
   }> {
-    const { projectId, channelId, query, sort, type, fieldIds } = dto;
+    const { projectId, channelId, queries, operator, sort, type, fieldIds } =
+      dto;
 
     const fields = await this.fieldService.findByChannelId({
       channelId: channelId,
@@ -642,7 +692,9 @@ export class FeedbackService {
       }
     }
 
-    this.validateQuery(query, fields);
+    for (let i = 0; i < (dto.queries?.length ?? 0); i++) {
+      this.validateQuery(dto.queries?.[i] ?? {}, fields);
+    }
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
@@ -656,7 +708,8 @@ export class FeedbackService {
         return this.generateXLSXFile({
           projectId,
           channelId,
-          query,
+          queries,
+          operator,
           sort,
           fields,
           fieldsByKey,
@@ -666,7 +719,8 @@ export class FeedbackService {
         return this.generateCSVFile({
           projectId,
           channelId,
-          query,
+          queries,
+          operator,
           sort,
           fields,
           fieldsByKey,

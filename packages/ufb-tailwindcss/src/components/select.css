@@ -1,0 +1,110 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.select {
+  --select-text-default: var(--text-neutral-tertiary);
+  --select-text-pressed: var(--text-neutral-primary);
+  --select-text-filled: var(--text-neutral-primary);
+  --select-caption-default: var(--text-neutral-tertiary);
+  --select-caption-success: var(--text-tint-green);
+  --select-caption-error: var(--text-tint-red);
+  --select-border-default: var(--border-neutral-tertiary);
+  --select-border-pressed: var(--tint, var(--border-neutral-primary));
+  --select-border-error: var(--border-tint-red);
+  --select-fg-default: var(--fg-neutral-primary);
+  --select-fg-pressed: var(--fg-neutral-tertiary);
+
+  /* default */
+  @apply select-small;
+}
+
+.select-trigger {
+  @apply rounded-8 before:rounded-8 relative flex w-full items-center justify-start bg-[var(--select-fg-default)] text-left text-[var(--select-text-filled)] transition-transform before:absolute before:inset-0 before:flex before:border before:border-[var(--select-border-default)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-[var(--select-text-default)] data-[state=open]:text-[var(--select-text-pressed)] data-[state=open]:before:border-2 data-[state=open]:before:border-[var(--select-border-pressed)] [&>span]:flex [&>span]:flex-1 [&>span]:items-center [&>span]:overflow-hidden [&>svg:last-of-type]:data-[state=open]:rotate-180;
+
+  /* default */
+  @apply select-trigger-medium;
+}
+
+.select-trigger-error {
+  @apply before:!border-2 before:!border-[var(--select-border-error)];
+}
+
+.select-content {
+  --select-text-default: var(--text-neutral-tertiary);
+  --select-text-pressed: var(--text-neutral-primary);
+  --select-text-filled: var(--text-neutral-primary);
+  --select-caption-default: var(--text-neutral-tertiary);
+  --select-caption-success: var(--text-tint-green);
+  --select-caption-error: var(--text-tint-red);
+  --select-border-default: var(--border-neutral-tertiary);
+  --select-border-pressed: var(--tint, var(--border-neutral-primary));
+  --select-border-error: var(--border-tint-red);
+  --select-fg-default: var(--fg-neutral-primary);
+  --select-fg-pressed: var(--fg-neutral-tertiary);
+
+  @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
+  @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[side=bottom]:mt-1 data-[side=top]:mb-1;
+  @apply rounded-8 relative z-50 min-w-[--radix-select-trigger-width] overflow-hidden border border-[var(--select-border-default)] bg-[var(--select-fg-default)] p-1 text-[var(--select-text-filled)] shadow-md;
+}
+
+.select-viewport {
+  @apply p-px;
+}
+
+.select-group-label {
+  @apply text-base-strong p-2;
+}
+
+.select-item {
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center py-2 outline-none transition-colors focus:bg-[var(--select-fg-pressed)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+
+  /* default */
+  @apply [&:not(.select-item-right)]:select-item-left;
+}
+
+.select-item-icon {
+  @apply mr-1;
+}
+
+.select-item-check {
+  @apply absolute flex h-4 w-4 items-center justify-center;
+
+  /* default */
+  @apply [&:not(.select-item-check-right)]:select-item-check-left;
+}
+
+.select-separator {
+  @apply -mx-1 my-1 h-px bg-[var(--select-border-default)];
+}
+
+.select-tag {
+  @apply mr-2.5;
+}
+
+.select-label {
+  @apply text-base-normal font-normal text-[var(--select-text-filled)];
+}
+
+.select-caption {
+  @apply text-base-normal flex items-center gap-1;
+
+  /* default */
+  @apply select-caption-default;
+}
+
+.select-caption-icon {
+  @apply flex-shrink-0;
+}

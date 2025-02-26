@@ -23,7 +23,7 @@ export const signUpWithEmailSchema = z
     password: z.string().min(8),
     confirmPassword: z.string().min(8),
   })
-  .refine(
-    (schema) => schema.password === schema.confirmPassword,
-    'Password not matched',
-  );
+  .refine((schema) => schema.password === schema.confirmPassword, {
+    message: 'Password not matched',
+    path: ['confirmPassword'],
+  });

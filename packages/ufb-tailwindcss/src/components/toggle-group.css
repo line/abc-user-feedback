@@ -1,0 +1,50 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.toggle-group {
+  --toggle-group-text-default: var(--text-neutral-primary);
+  --toggle-group-text-hover: var(--text-neutral-primary);
+  --toggle-group-text-pressed: var(--tint, var(--text-neutral-primary));
+  --toggle-group-icon-default: var(--icon-neutral-primary);
+  --toggle-group-icon-hover: var(--icon-neutral-primary);
+  --toggle-group-icon-pressed: var(--tint, var(--icon-neutral-primary));
+  --toggle-group-border-default: var(--border-neutral-tertiary);
+  --toggle-group-border-hover: var(--border-neutral-tertiary);
+  --toggle-group-border-pressed: var(--border-neutral-tertiary);
+  --toggle-group-fg-default: var(--fg-neutral-primary);
+  --toggle-group-fg-hover: var(--fg-neutral-tertiary);
+  --toggle-group-fg-pressed: var(--fg-neutral-tertiary);
+
+  @apply relative inline-flex items-center justify-center;
+}
+
+.toggle-group-item {
+  @apply inline-flex cursor-pointer items-center justify-center gap-1 border border-[var(--toggle-group-border-default)] bg-[var(--toggle-group-fg-default)] text-[var(--toggle-group-text-default)] transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=on]:border-[var(--toggle-group-border-pressed)] data-[state=on]:bg-[var(--toggle-group-fg-pressed)] data-[state=on]:text-[var(--toggle-group-text-pressed)] [&:not(:disabled)]:hover:border-[var(--toggle-group-border-hover)] [&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] [&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)] data-[state=on]:[&:not(:disabled)]:hover:border-[var(--toggle-group-border-hover)] data-[state=on]:[&:not(:disabled)]:hover:bg-[var(--toggle-group-fg-hover)] data-[state=on]:[&:not(:disabled)]:hover:text-[var(--toggle-group-text-hover)];
+
+  /* default */
+  @apply toggle-group-item-small toggle-group-item-radius-medium;
+
+  ~ .toggle-group-item {
+    @apply -ml-px;
+  }
+}
+
+.toggle-group-icon {
+  @apply pointer-events-none;
+}
+
+.toggle-group-input {
+  @apply absolute m-0 block h-0 w-0 overflow-hidden p-0;
+}

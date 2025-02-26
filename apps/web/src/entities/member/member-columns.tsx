@@ -14,88 +14,69 @@
  * under the License.
  */
 import { createColumnHelper } from '@tanstack/react-table';
-import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
-import { DescriptionTooltip } from '@/shared';
-import type { Role } from '@/entities/role';
+import { Badge } from '@ufb/react';
 
-import type { User } from '../user';
-import type { Member } from './member.type';
-import DeleteMemberPopover from './ui/delete-member-popover.ui';
-import UpdateMemberPopover from './ui/update-member-popover.ui';
+import { Avatar, DATE_TIME_FORMAT, TableCheckbox } from '@/shared';
 
-const columnHelper = createColumnHelper<Member>();
+import type { MemberInfo } from './member.type';
+import MemberNameCell from './ui/member-name-cell.ui';
 
-export const getMemberColumns = (
-  users: User[],
-  roles: Role[],
-  onClickDelete?: (index: number) => void,
-  onClickUpdate?: (member: Member) => void,
-) => [
+const columnHelper = createColumnHelper<MemberInfo>();
+
+export const memberColumns = [
+  columnHelper.display({
+    id: 'select',
+    header: ({ table }) => (
+      <TableCheckbox
+        checked={table.getIsAllRowsSelected()}
+        indeterminate={table.getIsSomeRowsSelected()}
+        onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
+      />
+    ),
+    cell: ({ row }) => (
+      <TableCheckbox
+        checked={row.getIsSelected()}
+        disabled={!row.getCanSelect()}
+        indeterminate={row.getIsSomeSelected()}
+        onCheckedChange={(checked) => row.toggleSelected(checked)}
+      />
+    ),
+    size: 50,
+    enableSorting: false,
+  }),
   columnHelper.accessor('user.email', {
     header: 'Email',
     enableSorting: false,
-    cell: ({ getValue }) => {
-      const { t } = useTranslation();
-      return (
-        <>
-          {users.some((v) => v.email === getValue()) ?
-            getValue()
-          : <div className="flex items-center gap-1">
-              <span className="text-red-primary">{getValue()}</span>
-              <DescriptionTooltip
-                color="red"
-                description={t('main.create-project.error-member')}
-              />
-            </div>
-          }
-        </>
-      );
-    },
+    cell: ({ getValue }) => <MemberNameCell email={getValue()} />,
   }),
   columnHelper.accessor('user.name', {
     header: 'Name',
     enableSorting: false,
-    cell: ({ getValue }) => ((getValue() ?? '').length > 0 ? getValue() : '-'),
+    cell: ({ getValue }) => {
+      const name = getValue();
+      return name ?
+          <>
+            <Avatar name={name} />
+            {name}
+          </>
+        : '-';
+    },
   }),
   columnHelper.accessor('user.department', {
     header: 'Department',
     enableSorting: false,
-    cell: ({ getValue }) => ((getValue() ?? '').length > 0 ? getValue() : '-'),
+    cell: ({ getValue }) =>
+      getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
   }),
   columnHelper.accessor('role.name', {
     header: 'Role',
-    cell: ({ getValue }) => getValue(),
+    cell: ({ getValue }) => <Badge variant="subtle">{getValue()}</Badge>,
     enableSorting: false,
   }),
-  ...(onClickUpdate ?
-    [
-      columnHelper.display({
-        id: 'edit',
-        header: 'Edit',
-        cell: ({ row }) => (
-          <UpdateMemberPopover
-            roles={roles}
-            member={row.original}
-            onClickUpdate={onClickUpdate}
-          />
-        ),
-        size: 75,
-      }),
-    ]
-  : []),
-  ...(onClickDelete ?
-    [
-      columnHelper.display({
-        id: 'delete',
-        header: 'Delete',
-        cell: ({ row }) => (
-          <DeleteMemberPopover
-            onClickDelete={() => onClickDelete(row.original.id)}
-          />
-        ),
-        size: 75,
-      }),
-    ]
-  : []),
+  columnHelper.accessor('createdAt', {
+    header: 'Joined',
+    cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
+  }),
 ];

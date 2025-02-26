@@ -36,6 +36,7 @@ module.exports = tseslint.config(
       ...tseslint.configs.stylisticTypeChecked,
     ],
     rules: {
+      '@typescript-eslint/consistent-type-definitions': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },

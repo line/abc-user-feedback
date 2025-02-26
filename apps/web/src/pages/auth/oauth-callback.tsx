@@ -27,11 +27,11 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       {status === 'loading' && (
-        <p className="font-32-bold animate-bounce">Loading...</p>
+        <p className="text-large-strong animate-bounce">Loading...</p>
       )}
       {status === 'error' && (
         <div>
-          <p className="font-32-bold">Error!!!</p>
+          <p className="text-large-strong">Error!!!</p>
           <button className="btn" onClick={() => router.replace(Path.SIGN_IN)}>
             Go to home
           </button>

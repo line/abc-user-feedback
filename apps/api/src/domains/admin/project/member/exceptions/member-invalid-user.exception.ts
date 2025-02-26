@@ -21,7 +21,7 @@ export class MemberInvalidUserException extends BadRequestException {
   constructor() {
     super({
       code: ErrorCode.Member.MemberInvalidUser,
-      message: '',
+      message: 'Invalid User',
     });
   }
 }

@@ -13,21 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { z } from 'zod';
+import type { z } from 'zod';
 
-import { roleSchema } from '../role';
-import { userSchema } from '../user/user.schema';
-
-export const memberSchema = z.object({
-  id: z.number(),
-  user: userSchema.pick({
-    id: true,
-    email: true,
-    name: true,
-    department: true,
-  }),
-  role: roleSchema,
-  createdAt: z.string(),
-});
+import type {
+  memberInfoFormSchema,
+  memberInfoSchema,
+  memberSchema,
+} from './member.schema';
 
 export type Member = z.infer<typeof memberSchema>;
+export type MemberInfo = z.infer<typeof memberInfoSchema>;
+export type MemberInfoForm = z.infer<typeof memberInfoFormSchema>;

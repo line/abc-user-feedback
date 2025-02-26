@@ -13,12 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as TenantSettingMenu } from './tenant-setting-menu';
-export { default as ProjectSettingMenu } from './project-setting-menu';
-export { default as ChannelSettingMenu } from './channel-setting-menu';
-
-export { default as SettingMenuBox } from './setting-menu-box';
 
 export * from './tenant';
-export * from './project';
-export * from './channel';
+export { default as SettingsMenuList } from './settings-menu-list.ui';

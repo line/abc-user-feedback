@@ -15,17 +15,21 @@
  */
 import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
-import type { SortMethodEnum } from '@/common/enums';
+import type { TimeRange } from '@/common/dtos';
+import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 import type { UserTypeEnum } from '../entities/enums';
 
 export class FindAllUsersDto {
   options: IPaginationOptions;
-  query?: {
+  queries?: {
     email?: string;
     name?: string | null;
     department?: string | null;
-    type?: UserTypeEnum;
-    projectId?: number;
-  };
+    type?: UserTypeEnum[];
+    projectId?: number[];
+    createdAt?: TimeRange;
+    condition: QueryV2ConditionsEnum;
+  }[];
+  operator?: 'AND' | 'OR';
   order?: { createdAt?: SortMethodEnum };
 }

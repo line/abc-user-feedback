@@ -1,0 +1,54 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.tag-small {
+  @apply text-small-strong h-5.5 gap-1 px-2 [&>svg]:h-3 [&>svg]:w-3;
+}
+
+.tag-medium {
+  @apply text-base-strong h-7 gap-1.5 px-2.5 [&>svg]:h-4 [&>svg]:w-4;
+}
+
+.tag-large {
+  @apply text-large-strong h-8 gap-2 px-3 [&>svg]:h-4 [&>svg]:w-4;
+}
+
+.tag-radius-small {
+  @apply rounded-0;
+}
+
+.tag-radius-medium {
+  @apply rounded-6;
+}
+
+.tag-radius-large {
+  @apply rounded-full;
+}
+
+.tag-primary {
+  @apply bg-[var(--tag-primary-fg-default)] text-[var(--tag-primary-text-default)];
+}
+
+.tag-secondary {
+  @apply bg-[var(--tag-secondary-fg-default)] text-[var(--tag-secondary-text-default)];
+}
+
+.tag-destructive {
+  @apply bg-[var(--tag-destructive-fg-default)] text-[var(--tag-destructive-text-default)];
+}
+
+.tag-outline {
+  @apply border border-[var(--tag-outline-border-default)] bg-[var(--tag-outline-fg-default)] text-[var(--tag-outline-text-default)] hover:bg-[var(--tag-outline-fg-hover)];
+}

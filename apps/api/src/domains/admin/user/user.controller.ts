@@ -80,11 +80,12 @@ export class UserController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async searchUsers(@Body() body: GetAllUsersRequestDto) {
-    const { limit, page, query, order } = body;
+    const { limit, page, queries, order, operator } = body;
     const users = await this.userService.findAll({
       options: { limit, page },
-      query,
+      queries,
       order,
+      operator,
     });
     return GetAllUserResponseDto.transform(users);
   }

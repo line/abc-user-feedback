@@ -31,7 +31,7 @@ class RoleProjectDto {
   @Expose()
   updatedAt: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   @Expose()
   deletedAt: string | null;
 

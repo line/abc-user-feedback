@@ -1,0 +1,55 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.accordion {
+  --accordion-text-default: var(--text-neutral-primary);
+  --accordion-border-default: var(--border-neutral-tertiary);
+  --accordion-fg-default: var(--bg-primary);
+  --accordion-fg-filled: var(--bg-tertiary);
+
+  @apply h-fit overflow-hidden bg-[var(--accordion-fg-default)] text-[var(--accordion-text-default)];
+}
+
+.accordion-border {
+  @apply border border-[var(--accordion-border-default)] [&>div:last-of-type]:border-b-0;
+}
+
+.accordion-item {
+  @apply border-neutral-transparent;
+}
+
+.accordion-item-border {
+  @apply border-b border-[var(--accordion-border-default)];
+}
+
+.accordion-trigger {
+  @apply text-base-strong flex w-full items-center justify-between p-4 text-left transition-all [&>svg]:shrink-0 [&>svg]:transition-transform [&>svg]:duration-75 [&[data-state=open]>svg]:rotate-180;
+}
+
+.accordion-trigger-bg {
+  @apply bg-[var(--accordion-fg-filled)];
+}
+
+.accordion-trigger-align-left {
+  @apply justify-start [&>svg:first-of-type]:mr-2;
+}
+
+.accordion-content-box {
+  @apply data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down text-base-normal overflow-hidden transition-all;
+}
+
+.accordion-content {
+  @apply p-4;
+}

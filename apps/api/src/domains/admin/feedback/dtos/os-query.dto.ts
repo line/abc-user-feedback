@@ -18,6 +18,8 @@ import type { TimeRange } from '@/common/dtos';
 export class OsQueryDto {
   bool: {
     must: MustItem[];
+    should?: MustItem[];
+    minimum_should_match?: number;
   };
 }
 
@@ -27,5 +29,9 @@ export class MustItem {
   term?: Record<string, string>;
   ids?: {
     values: string[];
+  };
+  bool?: {
+    must: MustItem[];
+    should?: MustItem[];
   };
 }

@@ -14,4 +14,4 @@
  * under the License.
  */
 export { default as IssueBadge } from './issue-badge.ui';
-export { default as IssueCircle } from './issue-circle.ui';
+export { default as IssueSelectBox } from './issue-select-box.ui';

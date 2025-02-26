@@ -27,14 +27,14 @@ type TData = OAIMutationResponse<
 interface IBody
   extends Omit<
     OAIRequestBody<'/api/admin/projects/{projectId}/issues/search', 'post'>,
-    'query'
+    'queries'
   > {
-  query?: Record<string, unknown>;
+  queries: Record<string, unknown>[];
 }
 
 const useIssueSearch = (
   projectId: number,
-  body: IBody = { limit: 10, page: 1, query: {}, sort: {} },
+  body: IBody = { limit: 10, page: 1, queries: [], sort: {} },
   options?: Omit<UseQueryOptions<TData>, 'queryKey' | 'queryFn'>,
 ) => {
   return useQuery<TData>({

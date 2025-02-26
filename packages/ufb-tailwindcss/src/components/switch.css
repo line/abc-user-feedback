@@ -1,0 +1,34 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.switch {
+  --switch-text-default: var(--text-neutral-primary);
+  --switch-fg-handle: var(--fg-neutral-primary);
+  --switch-fg-disabled: var(--fg-neutral-disabled);
+  --switch-fg-default: var(--fg-neutral-inverse);
+  --switch-fg-blue: var(--fg-tint-blue-bold);
+  --switch-fg-orange: var(--fg-tint-orange-bold);
+  --switch-fg-red: var(--fg-tint-red-bold);
+  --switch-fg-green: var(--fg-tint-green-bold);
+
+  @apply text-base-normal relative inline-flex h-6 cursor-pointer items-center gap-2 text-[var(--switch-text-default)] before:box-content before:flex before:h-5 before:w-10 before:rounded-full before:p-0.5 before:transition-colors disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:before:bg-[var(--switch-fg-disabled)];
+
+  /* default */
+  @apply switch-default;
+}
+
+.switch-thumb {
+  @apply absolute left-0.5 top-0.5 flex h-5 w-5 translate-x-0 rounded-full bg-[var(--switch-fg-handle)] transition-transform data-[state=checked]:translate-x-full;
+}

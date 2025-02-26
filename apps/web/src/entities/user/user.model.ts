@@ -63,7 +63,7 @@ export const useUserStore = create<State & Action>((set, get) => ({
   signOut: async () => {
     await axios.get('/api/logout');
     sessionStorage.removeItem('jwt');
-    router.reload();
+    await router.push(Path.SIGN_IN);
   },
   setUser: async () => {
     const jwt = sessionStorage.getItem('jwt');
@@ -78,11 +78,9 @@ export const useUserStore = create<State & Action>((set, get) => ({
         pathParams: { id: parseInt(sub) },
         options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } },
       });
-
       set({ user: data });
     }
   },
-
   async _signIn(jwt) {
     sessionStorage.setItem('jwt', jwt);
     get().setUser();

@@ -1,0 +1,38 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.radio-group {
+  --radio-text-default: var(--text-neutral-primary);
+  --radio-border-default: var(--border-neutral-tertiary);
+  --radio-fg-default: var(--fg-neutral-primary);
+  --radio-fg-select: var(--tint, var(--fg-neutral-inverse));
+
+  @apply flex;
+
+  /* default */
+  @apply [&:not(.radio-group-vertical)]:radio-group-horizontal;
+}
+
+.radio-item {
+  @apply text-base-normal flex items-center py-2 text-[var(--radio-text-default)] disabled:cursor-not-allowed disabled:opacity-50;
+}
+
+.radio {
+  @apply relative mr-2 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[var(--radio-fg-default)] before:absolute before:inset-0 before:flex before:rounded-full before:border before:border-[var(--radio-border-default)];
+}
+
+.radio-indicator {
+  @apply absolute left-0 top-0 flex h-full w-full items-center justify-center rounded-full bg-[var(--radio-fg-select)] text-[var(--radio-fg-default)] focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+}
