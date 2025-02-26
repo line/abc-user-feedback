@@ -10,6 +10,8 @@ export default () => {
         .click();
       await page.getByRole("button", { name: "Delete" }).click();
       await page.waitForTimeout(1000);
+      await page.getByRole("button", { name: "Delete" }).click();
+      await page.waitForTimeout(1000);
 
       await expect(page.locator("tbody")).not.toContainText("test text");
     });
