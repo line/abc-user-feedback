@@ -181,6 +181,15 @@ export class AuthService {
   async signIn(user: UserDto): Promise<JwtDto> {
     const { email, id, department, name, type } = user;
 
+    const { allowDomains } = await this.tenantService.findOne();
+
+    if (email && allowDomains && allowDomains.length > 0) {
+      const domain = email.substring(email.lastIndexOf('@') + 1);
+      if (!allowDomains.includes(domain)) {
+        throw new BadRequestException('Signed in with invalid domain.');
+      }
+    }
+
     const { state } = await this.userService.findById(id);
 
     if (state === UserStateEnum.Blocked) throw new UserBlockedException();
