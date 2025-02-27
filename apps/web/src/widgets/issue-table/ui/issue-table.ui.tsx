@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
+import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
-import { parseAsString, useQueryState } from 'nuqs';
+import { createParser, parseAsString, useQueryState } from 'nuqs';
 
 import { Button, Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
 
@@ -54,8 +55,23 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
 
   const [filters, setFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
-  const queries = useMemo(() => {
-    return filters.reduce(
+  const [queries, setQueries] = useQueryState<Record<string, unknown>[]>(
+    'queries',
+    createParser({
+      parse(value) {
+        return JSON.parse(value) as Record<string, unknown>[];
+      },
+      serialize(value) {
+        return JSON.stringify(value);
+      },
+    }).withDefault([]),
+  );
+
+  const updateFilter = async (
+    tableFilters: TableFilter[],
+    operator: TableFilterOperator,
+  ) => {
+    const result = tableFilters.reduce(
       (acc, filter) => {
         return acc.concat({
           [filter.key]: filter.value,
@@ -64,7 +80,42 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       },
       [] as Record<string, unknown>[],
     );
-  }, [filters]);
+
+    if (createdAtDateRange) {
+      await setQueries(
+        result
+          .filter((v) => !v.createdAt)
+          .concat({
+            createdAt: {
+              gte: dayjs(createdAtDateRange.startDate).toISOString(),
+              lt: dayjs(createdAtDateRange.endDate).toISOString(),
+            },
+            condition: 'BETWEEN',
+          }),
+      );
+    } else {
+      await setQueries(result);
+    }
+    setOperator(operator);
+  };
+  const onChangeDateRange = async (value: DateRangeType) => {
+    setCreatedAtDateRange(value);
+    if (!value) {
+      await setQueries((queries) => queries.filter((v) => !v.createdAt));
+    } else {
+      await setQueries((queries) =>
+        queries
+          .filter((v) => !v.createdAt)
+          .concat({
+            createdAt: {
+              gte: dayjs(value.startDate).toISOString(),
+              lt: dayjs(value.endDate).toISOString(),
+            },
+            condition: 'BETWEEN',
+          }),
+      );
+    }
+  };
 
   const overlay = useOverlay();
   const [viewType, setViewType] = useQueryState(
@@ -104,18 +155,18 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       matchType: ['CONTAINS', 'IS'],
     },
     {
+      format: 'select',
+      key: 'status',
+      name: 'Status',
+      matchType: ['IS'],
+      options: ISSUES(t).map((issue) => ({ key: issue.key, name: issue.name })),
+    },
+    {
       format: 'ticket',
       key: 'externalIssueId',
       name: 'Ticket',
       matchType: ['IS'],
       ticketKey: issueTracker?.data.ticketKey,
-    },
-    {
-      format: 'multiSelect',
-      key: 'status',
-      name: 'Status',
-      matchType: ['IS'],
-      options: ISSUES(t).map((issue) => ({ key: issue.key, name: issue.name })),
     },
     {
       format: 'date',
@@ -130,6 +181,28 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       matchType: ['CONTAINS', 'IS'],
     },
   ];
+
+  useEffect(() => {
+    const tableFilter = queries.map((v) => {
+      const key = Object.keys(v)[0];
+      if (!key || typeof key !== 'string' || key === 'createdAt') return null;
+
+      const value = v[key];
+      const field = filterFields.find((v) => v.key === key);
+      if (!field) return null;
+
+      return {
+        key,
+        name: field.name,
+        value,
+        format: field.format,
+        condition: v.condition,
+      };
+    });
+
+    setFilters(tableFilter.filter((v) => !!v) as TableFilter[]);
+  }, [queries]);
+
   const openIssueFormDialog = () => {
     overlay.open(({ close, isOpen }) => (
       <IssueFormDialog
@@ -156,16 +229,13 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         </Button>
         <div className="flex gap-2">
           <DateRangePicker
-            onChange={(v) => setCreatedAtDateRange(v)}
+            onChange={onChangeDateRange}
             value={createdAtDateRange}
             maxDate={new Date()}
           />
           <TableFilterPopover
             filterFields={filterFields}
-            onSubmit={(f, o) => {
-              setFilters(f);
-              setOperator(o);
-            }}
+            onSubmit={updateFilter}
             tableFilters={filters}
           />
           <ToggleGroup
@@ -191,7 +261,6 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
         <IssueKanban
           projectId={projectId}
           issueTracker={issueTracker?.data}
-          createdAtDateRange={createdAtDateRange}
           queries={queries}
           operator={operator}
         />
@@ -199,7 +268,6 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       {viewType === 'list' && (
         <CategoryTable
           projectId={projectId}
-          createdAtDateRange={createdAtDateRange}
           queries={queries}
           operator={operator}
         />

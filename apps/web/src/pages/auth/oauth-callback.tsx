@@ -32,7 +32,7 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
       {status === 'error' && (
         <div>
           <p className="text-large-strong">Error!!!</p>
-          <button className="btn" onClick={() => router.replace(Path.SIGN_IN)}>
+          <button className="btn" onClick={() => router.push(Path.SIGN_IN)}>
             Go to home
           </button>
         </div>

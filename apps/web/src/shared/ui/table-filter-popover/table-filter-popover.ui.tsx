@@ -53,9 +53,14 @@ const TableFilterPopover = (props: Props) => {
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
 
   useEffect(() => {
-    if (filters.length !== 0) return;
-    resetFilters();
-  }, [tableFilters, filterFields]);
+    if (open) {
+      if (tableFilters.length === 0) {
+        resetFilters();
+      } else {
+        setFilters(tableFilters);
+      }
+    }
+  }, [open, tableFilters]);
 
   const addFilter = () => {
     const filterField = filters[filters.length - 1];

@@ -56,8 +56,11 @@ const FeedbackDetailEditingCell = (props: Props) => {
             value: option.key,
             label: option.name,
           }))}
-          value={value as string}
-          onChange={setCurrentValue}
+          value={value as string | undefined}
+          onChange={(v) => {
+            console.log('v: ', v);
+            setCurrentValue(v);
+          }}
         />
       : field.format === 'images' ?
         <ImagePreviewButton urls={value as string[]} />

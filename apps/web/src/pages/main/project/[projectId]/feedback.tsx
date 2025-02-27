@@ -235,8 +235,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         if (field.format === 'select' || field.format === 'multiSelect') {
           if (field.key === 'issues') {
             return {
-              format: 'issue',
               key: 'issueIds',
+              format: 'issue',
               name: field.name,
               matchType: ['IS'],
             };
@@ -244,7 +244,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           return {
             key: field.key,
             name: field.name,
-            format: 'select',
+            format: field.format,
             options: field.options,
             matchType: ['IS'],
           };
@@ -252,6 +252,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       })
       .filter((v) => !!v?.key) as TableFilterField[];
   }, [fields]);
+
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
@@ -297,6 +298,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
           <FeedbackTableDownload
+            table={table}
             fields={fields}
             queries={queries}
             disabled={!perms.includes('feedback_download_read')}

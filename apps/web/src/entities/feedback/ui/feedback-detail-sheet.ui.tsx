@@ -31,7 +31,12 @@ import {
   SheetTitle,
 } from '@ufb/react';
 
-import { DeleteDialog, SheetDetailTable, usePermissions } from '@/shared';
+import {
+  DeleteDialog,
+  isObjectEqual,
+  SheetDetailTable,
+  usePermissions,
+} from '@/shared';
 import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
 import type { FieldInfo } from '@/entities/field';
 import { DEFAULT_FIELD_KEYS } from '@/entities/field/field.constant';
@@ -56,6 +61,7 @@ const FeedbackDetailSheet = (props: Props) => {
   const [currentFeedback, setCurrentFeedback] = useState(feedback);
   const [mode, setMode] = useState<'edit' | 'view'>('view');
   const overlay = useOverlay();
+  const [isLoading, setIsLoading] = useState(false);
 
   const onClickCancel = () => {
     setMode('view');
@@ -72,12 +78,6 @@ const FeedbackDetailSheet = (props: Props) => {
         return acc;
       }
       if (cur.property === 'EDITABLE') {
-        if (cur.format === 'number') {
-          return {
-            ...acc,
-            [cur.key]: Number(currentFeedback[cur.key]),
-          };
-        }
         if (cur.format === 'date') {
           return {
             ...acc,
@@ -88,9 +88,13 @@ const FeedbackDetailSheet = (props: Props) => {
       }
       return acc;
     }, {} as Feedback);
-    await updateFeedback?.(editedFeedback);
-
-    setMode('view');
+    try {
+      setIsLoading(true);
+      await updateFeedback?.(editedFeedback);
+    } finally {
+      setIsLoading(false);
+      setMode('view');
+    }
   };
 
   const openDeleteDialog = () => {
@@ -162,7 +166,16 @@ const FeedbackDetailSheet = (props: Props) => {
               <Button variant="secondary" onClick={onClickCancel}>
                 {t('v2.button.cancel')}
               </Button>
-              <Button onClick={onClickSubmit}>{t('v2.button.save')}</Button>
+              <Button
+                disabled={isObjectEqual(
+                  { ...feedback, updatedAt: '' },
+                  { ...currentFeedback, updatedAt: '' },
+                )}
+                onClick={onClickSubmit}
+                loading={isLoading}
+              >
+                {t('v2.button.save')}
+              </Button>
             </>
           )}
           {mode === 'view' && (

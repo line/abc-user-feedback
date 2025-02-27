@@ -190,7 +190,7 @@ const SheetDetailTable = (props: Props) => {
         <TextInput
           value={value as number}
           type="number"
-          onChange={(e) => onChange?.(row.key, e.currentTarget.value)}
+          onChange={(e) => onChange?.(row.key, Number(e.currentTarget.value))}
         />
       </InputField>
     ),
@@ -209,8 +209,10 @@ const SheetDetailTable = (props: Props) => {
             value: option.key,
             label: option.name,
           }))}
-          value={value as string}
-          onChange={(value) => onChange?.(row.key, value)}
+          value={(value ?? '') as string}
+          onChange={(value) => {
+            onChange?.(row.key, value);
+          }}
         />
       );
     },
@@ -259,7 +261,7 @@ const SheetDetailTable = (props: Props) => {
           const { format, key, name } = row;
           const value = data[key];
           return (
-            <tr>
+            <tr key={key}>
               <th className="text-neutral-tertiary min-w-[120px] py-2.5 align-top font-normal">
                 <div className="flex items-center gap-1">
                   <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />

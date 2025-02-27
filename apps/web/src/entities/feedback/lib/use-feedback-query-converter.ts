@@ -94,7 +94,6 @@ const useFeedbackQueryConverter = (input: {
     );
 
     setOperator(operator);
-    setTableFilters(tableFilters);
     if (dateRange) {
       await setQueries(
         result
@@ -130,7 +129,54 @@ const useFeedbackQueryConverter = (input: {
   useEffect(() => {
     if (queries.length !== 0) return;
     void updateDateRage(DEFAULT_DATE_RANGE);
-  }, []);
+  }, [queries]);
+
+  useEffect(() => {
+    if (input.fields.length === 0) return;
+    void Promise.all(
+      queries.map(async (v) => {
+        const key = Object.keys(v)[0];
+        if (!key || typeof key !== 'string' || key === 'createdAt') return null;
+        if (key === 'issueIds' && Array.isArray(v[key])) {
+          const value = v[key];
+          const field = input.fields.find((v) => v.key === 'issues');
+          if (!field) return null;
+          try {
+            const { data } = await client.get({
+              path: '/api/admin/projects/{projectId}/issues/{issueId}',
+              pathParams: { projectId, issueId: Number(value[0]) },
+            });
+
+            return {
+              key,
+              name: field.name,
+              value: data.name,
+              format: 'issue',
+              condition: v.condition,
+            };
+          } catch {
+            return null;
+          }
+        } else {
+          const value = v[key];
+
+          const field = input.fields.find((v) => v.key === key);
+
+          if (!field) return null;
+
+          return {
+            key,
+            name: field.name,
+            value,
+            format: field.format,
+            condition: v.condition,
+          };
+        }
+      }),
+    ).then((tableFilter) =>
+      setTableFilters(tableFilter.filter((v) => !!v) as TableFilter[]),
+    );
+  }, [queries, input.fields]);
 
   const dateRange = useMemo(() => {
     const dateQuery = queries.find((v) => v.createdAt);

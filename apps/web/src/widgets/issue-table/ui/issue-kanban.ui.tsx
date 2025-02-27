@@ -23,7 +23,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-import type { DateRangeType, TableFilterOperator } from '@/shared';
+import type { TableFilterOperator } from '@/shared';
 import { client, ISSUES } from '@/shared';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -34,14 +34,12 @@ import IssueKanbanDndContext from './issue-kanban-dnd-context.ui';
 interface Props {
   projectId: number;
   issueTracker?: IssueTracker;
-  createdAtDateRange: DateRangeType;
   queries: Record<string, unknown>[];
   operator: TableFilterOperator;
 }
 
 const IssueKanban = (props: Props) => {
-  const { projectId, issueTracker, createdAtDateRange, queries, operator } =
-    props;
+  const { projectId, issueTracker, queries, operator } = props;
 
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -94,7 +92,6 @@ const IssueKanban = (props: Props) => {
               issueTracker={issueTracker}
               items={items[issue.key] ?? []}
               setItems={setItems}
-              createdAtDateRange={createdAtDateRange}
               queries={queries}
               operator={operator}
             />

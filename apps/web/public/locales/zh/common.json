@@ -324,9 +324,11 @@
         "title": "没有所属项目。",
         "description": "您还没有所属的项目。\n请请求项目管理员将您注册为成员或进行咨询。"
       },
-      "no-project-in-project-creation-page": {
+      "no-project-dialog-in-project-creation-page": {
         "title": "欢迎！",
-        "description": "用户反馈具有租户-项目-频道层次结构。要收集或管理反馈，您需要为收集目标创建一个项目，并为收集方法创建一个频道。"
+        "step1-description": "在ABC User Feedback中，反馈通过Channel > Project > Tenant结构进行管理。因此，您需要同时创建Project和Channel。",
+        "step2-description": "Project指的是作为反馈对象的产品。根据您管理的产品信息创建Project是个不错的选择。",
+        "step3-description": "Channel指的是反馈收集方式。根据您负责的产品如何收集反馈来创建Channel是个不错的选择。"
       }
     },
     "text": {

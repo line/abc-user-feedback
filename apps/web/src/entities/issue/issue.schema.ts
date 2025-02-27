@@ -20,7 +20,7 @@ import { categorySchema } from '../category/category.schema';
 
 export const issueSchema = z.object({
   id: z.number(),
-  name: z.string(),
+  name: z.string().min(1),
   description: z.string().nullable(),
   feedbackCount: z.number(),
   status: z.union([

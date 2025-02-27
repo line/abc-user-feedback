@@ -18,7 +18,6 @@ import { useRouter } from 'next/router';
 
 import { toast } from '@ufb/react';
 
-import { Path } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
 export const useOAuthCallback = () => {
@@ -35,7 +34,6 @@ export const useOAuthCallback = () => {
 
     signInWithOAuth({ code, callback_url }).catch(() => {
       toast.error('OAuth2.0 Login Error');
-      void router.replace(Path.SIGN_IN);
       setStatus('error');
     });
   }, [code, callback_url]);

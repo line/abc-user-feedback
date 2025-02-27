@@ -70,7 +70,7 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @ApiOkResponse({ type: [FindIssueByIdResponseDto] })
+  @ApiOkResponse({ type: FindIssueByIdResponseDto })
   @Get(':issueId')
   async findById(@Param('issueId', ParseIntPipe) issueId: number) {
     return FindIssueByIdResponseDto.transform(

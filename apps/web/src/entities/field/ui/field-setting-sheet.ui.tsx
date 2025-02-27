@@ -249,9 +249,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                         {t('button.register')}
                       </Button>
                     }
-                    required
                   />
-
                   {(watch('options') ?? []).length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {watch('options')?.map((v, i) => (

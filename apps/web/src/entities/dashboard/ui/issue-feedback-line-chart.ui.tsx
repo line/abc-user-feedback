@@ -21,6 +21,7 @@ import { useThrottle } from 'react-use';
 import {
   Combobox,
   ComboboxContent,
+  ComboboxEmpty,
   ComboboxGroup,
   ComboboxInput,
   ComboboxItem,
@@ -145,6 +146,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
               value={searchName}
             />
             <ComboboxList maxHeight="200px">
+              <ComboboxEmpty>No results found.</ComboboxEmpty>
               <ComboboxGroup
                 heading={
                   <span className="text-neutral-tertiary text-base-normal">
@@ -161,7 +163,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                   </ComboboxItem>
                 ))}
               </ComboboxGroup>
-              {!!allIssues.length && (
+              {allIssues.length > 0 && (
                 <ComboboxGroup
                   heading={
                     <span className="text-neutral-tertiary text-base-normal">
@@ -176,6 +178,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                     .map((issue) => (
                       <ComboboxItem
                         key={issue.id}
+                        value={issue.name}
                         onSelect={() => handleIssueCheck(issue)}
                       >
                         <IssueBadge name={issue.name} status={issue.status} />

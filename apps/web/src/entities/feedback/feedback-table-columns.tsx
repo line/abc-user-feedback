@@ -32,7 +32,7 @@ const columnHelper = createColumnHelper<Feedback>();
 export const getColumns = (fieldData: FieldInfo[]) =>
   [
     columnHelper.display({
-      id: 'select',
+      id: 'feedback-checkbox',
       header: ({ table }) => (
         <TableCheckbox
           {...{

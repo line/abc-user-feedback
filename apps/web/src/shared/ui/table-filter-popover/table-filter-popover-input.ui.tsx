@@ -39,7 +39,6 @@ const TableFilterPopoverInput = (props: Props) => {
   const { filter, onChange, filterfieid } = props;
   const value = filter.value;
   const { t } = useTranslation();
-
   return (
     <>
       {filterfieid.format === 'ticket' && (
@@ -128,15 +127,16 @@ const TableFilterPopoverInput = (props: Props) => {
             label: option.name,
             value: option.name,
           }))}
-          onChange={(value) =>
-            onChange(filterfieid.options.find((v) => v.name === value)?.key)
-          }
+          onChange={(value) => {
+            onChange(filterfieid.options.find((v) => v.name === value)?.key);
+          }}
           value={filterfieid.options.find((v) => v.key === value)?.name}
         />
       )}
       {filterfieid.format === 'multiSelect' && (
         <SelectInput
           type="multiple"
+          placeholder={t('v2.placeholder.select')}
           options={filterfieid.options.map((option) => ({
             label: option.name,
             value: option.name,
@@ -144,7 +144,7 @@ const TableFilterPopoverInput = (props: Props) => {
           onValuesChange={(values) => {
             onChange(
               filterfieid.options
-                .filter((v) => values.includes(v.name))
+                .filter((v) => values?.includes(v.name))
                 .map((v) => v.key),
             );
           }}

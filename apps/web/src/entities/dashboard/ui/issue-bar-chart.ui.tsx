@@ -51,8 +51,8 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
         const issue = ISSUES(t).find((v) => v.name === data.name);
         window.open(
           Path.ISSUE.replace('[projectId]', projectId.toString()) +
-            '?status=' +
-            issue?.key,
+            '?queries=' +
+            JSON.stringify([{ status: issue?.key, condition: 'IS' }]),
           '_blank',
         );
       }}

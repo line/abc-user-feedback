@@ -34,9 +34,9 @@ const TenantGuard: React.FC<IProps> = ({ children }) => {
   });
 
   useEffect(() => {
-    if (error?.statusCode === 404) void router.push(Path.CREATE_TENANT);
+    if (error?.statusCode === 404) void router.replace(Path.CREATE_TENANT);
     if (data) setTenant(data as Tenant);
-  }, [data, error]);
+  }, [data, error, router.pathname]);
 
   if (status === 'pending') return <>Loading...</>;
   return children;

@@ -14,7 +14,11 @@
  * under the License.
  */
 import { useMemo } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
 import type { EntityTable } from '@/shared';
@@ -42,7 +46,7 @@ const WebhookTable: React.FC<IProps> = (props) => {
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
     getRowId: (originalRow) => String(originalRow.id),
   });
 

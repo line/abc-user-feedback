@@ -28,6 +28,7 @@ import {
   ComboboxList,
   ComboboxSelectItem,
   ComboboxTrigger,
+  Icon,
   toast,
 } from '@ufb/react';
 
@@ -170,7 +171,7 @@ const CategoryCombobox = (props: Props) => {
             !data?.items.some((v) => v.name === inputValue) &&
             !isLoading && (
               <div
-                className="combobox-item flex justify-between"
+                className="combobox-item"
                 onClick={async () => {
                   const data = await createCategory({
                     name: inputValue,
@@ -179,7 +180,8 @@ const CategoryCombobox = (props: Props) => {
                   attachCategory({ categoryId: data.id });
                 }}
               >
-                <span>{inputValue}</span>
+                <Icon name="RiCheckLine" className="combobox-check invisible" />
+                <span className="flex-1">{inputValue}</span>
                 <span className="text-neutral-tertiary text-small-normal">
                   Create
                 </span>

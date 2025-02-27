@@ -102,7 +102,6 @@ const BasicTable = <T,>(props: IProps<T>) => {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {}),
   );
-  console.log(table.getCanNextPage());
 
   return (
     <div
