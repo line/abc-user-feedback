@@ -20,5 +20,5 @@ export class DeleteManyMemberRequestDto {
   @ApiProperty()
   @IsArray()
   @IsNumber({}, { each: true })
-  memberIds: number;
+  memberIds: number[];
 }
