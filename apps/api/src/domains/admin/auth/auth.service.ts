@@ -183,7 +183,7 @@ export class AuthService {
 
     const { allowDomains } = await this.tenantService.findOne();
 
-    if (email && allowDomains) {
+    if (email && allowDomains && allowDomains.length > 0) {
       const domain = email.substring(email.lastIndexOf('@') + 1);
       if (!allowDomains.includes(domain)) {
         throw new BadRequestException('Signed in with invalid domain.');
