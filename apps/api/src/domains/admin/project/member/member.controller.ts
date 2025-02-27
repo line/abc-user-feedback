@@ -36,6 +36,7 @@ import {
   GetAllMemberRequestDto,
   UpdateMemberRequestDto,
 } from './dtos/requests';
+import { DeleteManyMemberRequestDto } from './dtos/requests/delete-many-member-request.dto';
 import { GetAllMemberResponseDto } from './dtos/responses';
 import { MemberService } from './member.service';
 
@@ -85,5 +86,12 @@ export class MemberController {
   @Delete('/:memberId')
   async delete(@Param('memberId', ParseIntPipe) memberId: number) {
     await this.memberService.delete(memberId);
+  }
+
+  @RequirePermission(PermissionEnum.project_member_delete)
+  @ApiParam({ name: 'projectId', type: Number })
+  @Delete()
+  async deleteMany(@Body() body: DeleteManyMemberRequestDto) {
+    await this.memberService.deleteMany(body);
   }
 }

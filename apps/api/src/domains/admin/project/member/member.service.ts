@@ -26,6 +26,7 @@ import { TenantEntity } from '../../tenant/tenant.entity';
 import { RoleService } from '../role/role.service';
 import type { FindAllMembersDto, FindByProjectIdDto } from './dtos';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
+import { DeleteManyMemberRequestDto } from './dtos/requests/delete-many-member-request.dto';
 import {
   MemberAlreadyExistsException,
   MemberNotFoundException,
@@ -231,5 +232,15 @@ export class MemberService {
     const member = new MemberEntity();
     member.id = memberId;
     await this.repository.remove(member);
+  }
+
+  @Transactional()
+  async deleteMany(members: DeleteManyMemberRequestDto) {
+    await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(MemberEntity)
+      .where('id IN (:...ids)', { ids: members.memberIds })
+      .execute();
   }
 }
