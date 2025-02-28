@@ -42,12 +42,12 @@ import {
   usePermissions,
   useWarnIfUnsavedChanges,
 } from '@/shared';
-import { FeedbackTable, usePreviewFeedback } from '@/entities/feedback';
 import type { FieldInfo } from '@/entities/field';
 import {
   FeedbackRequestCodePopover,
   FieldSettingSheet,
   FieldTable,
+  PreviewFieldTable,
 } from '@/entities/field';
 
 const objectsEqual = (
@@ -99,7 +99,6 @@ const FieldSetting: React.FC<IProps> = (props) => {
       : true),
     [data, fields],
   );
-  const feedbacks = usePreviewFeedback(fields);
 
   useWarnIfUnsavedChanges(isDirty);
 
@@ -241,13 +240,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
     >
       {isPreview && <SettingAlert description={t('help-card.field-preview')} />}
       {isPreview ?
-        <FeedbackTable
-          feedbacks={feedbacks}
-          fields={fields}
-          pageCount={1}
-          rowCount={feedbacks.length}
-          pagination={{ pageIndex: 0, pageSize: 10 }}
-        />
+        <PreviewFieldTable fields={fields} />
       : <FieldTable
           fields={fields}
           onClickRow={(index, field) =>

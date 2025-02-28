@@ -47,10 +47,11 @@ import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
 interface IProps {
   issues?: Issue[];
   feedbackId?: number;
+  isPreview?: boolean;
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { feedbackId, issues } = props;
+  const { feedbackId, issues, isPreview = false } = props;
 
   const { t } = useTranslation();
 
@@ -159,14 +160,16 @@ const IssueCell: React.FC<IProps> = (props) => {
               'opacity-50': !perms.includes('feedback_issue_update'),
             })}
           >
-            <Tag
-              variant="outline"
-              className={cn('w-8 cursor-pointer justify-center', {
-                'hover:bg-inherit': !perms.includes('feedback_issue_update'),
-              })}
-            >
-              +
-            </Tag>
+            {!isPreview && (
+              <Tag
+                variant="outline"
+                className={cn('w-8 cursor-pointer justify-center', {
+                  'hover:bg-inherit': !perms.includes('feedback_issue_update'),
+                })}
+              >
+                +
+              </Tag>
+            )}
           </button>
         </ComboboxTrigger>
         <ComboboxContent>

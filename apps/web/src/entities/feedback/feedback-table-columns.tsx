@@ -29,32 +29,37 @@ import IssueCell from './ui/issue-cell';
 
 const columnHelper = createColumnHelper<Feedback>();
 
-export const getColumns = (fieldData: FieldInfo[]) =>
+export const getColumns = (fieldData: FieldInfo[], isPreview?: boolean) =>
   [
-    columnHelper.display({
-      id: 'feedback-checkbox',
-      header: ({ table }) => (
-        <TableCheckbox
-          {...{
-            checked: table.getIsAllRowsSelected(),
-            indeterminate: table.getIsSomeRowsSelected(),
-            onCheckedChange: (checked) => table.toggleAllRowsSelected(checked),
-          }}
-        />
-      ),
-      cell: ({ row }) => (
-        <TableCheckbox
-          {...{
-            checked: row.getIsSelected(),
-            disabled: !row.getCanSelect(),
-            indeterminate: row.getIsSomeSelected(),
-            onCheckedChange: (checked) => row.toggleSelected(checked),
-          }}
-        />
-      ),
-      size: 50,
-      enableResizing: false,
-    }),
+    ...(isPreview ?
+      []
+    : [
+        columnHelper.display({
+          id: 'feedback-checkbox',
+          header: ({ table }) => (
+            <TableCheckbox
+              {...{
+                checked: table.getIsAllRowsSelected(),
+                indeterminate: table.getIsSomeRowsSelected(),
+                onCheckedChange: (checked) =>
+                  table.toggleAllRowsSelected(checked),
+              }}
+            />
+          ),
+          cell: ({ row }) => (
+            <TableCheckbox
+              {...{
+                checked: row.getIsSelected(),
+                disabled: !row.getCanSelect(),
+                indeterminate: row.getIsSomeSelected(),
+                onCheckedChange: (checked) => row.toggleSelected(checked),
+              }}
+            />
+          ),
+          size: 50,
+          enableResizing: false,
+        }),
+      ]),
     columnHelper.accessor('id', {
       id: 'id',
       size: 100,
@@ -83,6 +88,7 @@ export const getColumns = (fieldData: FieldInfo[]) =>
             <IssueCell
               issues={getValue() as Issue[]}
               feedbackId={Number(row.id)}
+              isPreview={isPreview}
             />
           </div>
         </div>

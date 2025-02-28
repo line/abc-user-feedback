@@ -115,8 +115,19 @@ const TableFilterPopoverInput = (props: Props) => {
               </InputField>
             </DateRangePicker>
           : <DatePicker
-              value={value as string | undefined}
-              onChange={onChange}
+              value={
+                typeof value === 'object' ?
+                  dayjs((value as { gte: string; lt: string }).gte).format(
+                    'YYYY-MM-DD',
+                  )
+                : (value as string | undefined)
+              }
+              onChange={(v) =>
+                onChange({
+                  gte: dayjs(v).startOf('day').toISOString(),
+                  lt: dayjs(v).endOf('day').toISOString(),
+                })
+              }
             />
           }
         </>
