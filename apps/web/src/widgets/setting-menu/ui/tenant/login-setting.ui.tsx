@@ -43,7 +43,7 @@ const LoginSetting: React.FC<IProps> = () => {
   const methods = useForm<AuthInfo>({ resolver: zodResolver(authInfoScema) });
 
   const { reset, handleSubmit, formState, watch, setValue } = methods;
-  console.log('formState: ', formState.errors);
+
   const { useEmail, useOAuth } = watch();
 
   const { mutate, isPending } = useOAIMutation({
