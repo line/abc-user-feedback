@@ -14,11 +14,11 @@
  * under the License.
  */
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useThrottle } from 'react-use';
 
-import { SelectSearchInput } from '@/shared';
+import { client, SelectSearchInput } from '@/shared';
 
 import { useIssueSearchInfinite } from '../lib';
 
@@ -29,14 +29,30 @@ interface Props {
 
 const IssueSelectBox = ({ onChange, value }: Props) => {
   const router = useRouter();
-  const projectId = router.query.projectId as string;
+  const projectId = Number(router.query.projectId as string);
+  const [issueName, setIssueName] = useState(value);
+
   const [inputValue, setInputValue] = useState('');
   const throttedValue = useThrottle(inputValue, 500);
   const { data, fetchNextPage, hasNextPage, isFetching } =
-    useIssueSearchInfinite(Number(projectId), {
+    useIssueSearchInfinite(projectId, {
       queries: [{ name: throttedValue, condition: 'CONTAINS' }],
     });
-  console.log('page: ', data.pages);
+
+  useEffect(() => {
+    if (!value) return;
+    const issueId = parseInt(value);
+    if (isNaN(issueId)) {
+      setIssueName(value);
+      return;
+    }
+    void client
+      .get({
+        path: '/api/admin/projects/{projectId}/issues/{issueId}',
+        pathParams: { projectId, issueId },
+      })
+      .then(({ data }) => setIssueName(data.name));
+  }, [value]);
 
   return (
     <SelectSearchInput
@@ -45,7 +61,7 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
           page.items.map(({ name }) => ({ label: name, value: name }))
         : [],
       )}
-      value={value}
+      value={issueName}
       onChange={onChange}
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}

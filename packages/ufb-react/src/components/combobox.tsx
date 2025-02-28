@@ -13,16 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import * as React from "react";
-import { Slottable } from "@radix-ui/react-slot";
-import { Command as CommandPrimitive } from "cmdk";
+import * as React from 'react';
+import { Slottable } from '@radix-ui/react-slot';
+import { Command as CommandPrimitive } from 'cmdk';
 
-import type { TriggerType } from "../lib/types";
-import { cn } from "../lib/utils";
-import { Button } from "./button";
-import { Icon } from "./icon";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
-import { ScrollArea, ScrollBar } from "./scroll-area";
+import type { TriggerType } from '../lib/types';
+import { cn } from '../lib/utils';
+import { Button } from './button';
+import { Icon } from './icon';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
+import { ScrollArea, ScrollBar } from './scroll-area';
 
 const ComboboxContext = React.createContext<{
   trigger: TriggerType;
@@ -30,8 +30,8 @@ const ComboboxContext = React.createContext<{
   setTrigger: React.Dispatch<React.SetStateAction<TriggerType>>;
   setIsHover: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
-  trigger: "click",
-  setTrigger: () => "click",
+  trigger: 'click',
+  setTrigger: () => 'click',
   isHover: false,
   setIsHover: () => false,
 });
@@ -41,7 +41,7 @@ const Combobox = ({
   onOpenChange,
   ...props
 }: React.ComponentPropsWithoutRef<typeof Popover>) => {
-  const [trigger, setTrigger] = React.useState<TriggerType>("click");
+  const [trigger, setTrigger] = React.useState<TriggerType>('click');
   const [isHover, setIsHover] = React.useState(false);
 
   return (
@@ -50,9 +50,9 @@ const Combobox = ({
     >
       <Popover
         {...props}
-        open={trigger === "hover" ? !!open || isHover : open}
+        open={trigger === 'hover' ? !!open || isHover : open}
         onOpenChange={(open: boolean) => {
-          if (trigger === "hover") {
+          if (trigger === 'hover') {
             setIsHover(open);
           }
           onOpenChange?.(open);
@@ -69,14 +69,14 @@ const ComboboxContent = React.forwardRef<
   const { trigger, setIsHover } = React.useContext(ComboboxContext);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (trigger === "hover") {
+    if (trigger === 'hover') {
       setIsHover(true);
     }
     onMouseEnter?.(e);
   };
 
   const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (trigger === "hover") {
+    if (trigger === 'hover') {
       setIsHover(false);
     }
     onMouseLeave?.(e);
@@ -88,7 +88,7 @@ const ComboboxContent = React.forwardRef<
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       {...props}
-      className={cn("combobox-content", className)}
+      className={cn('combobox-content', className)}
     >
       <CommandPrimitive>{children}</CommandPrimitive>
     </PopoverContent>
@@ -109,7 +109,7 @@ const ComboboxInput = React.forwardRef<
     {icon ?? <Icon name="RiSearchLine" size={16} />}
     <CommandPrimitive.Input
       ref={ref}
-      className={cn("combobox-input", className)}
+      className={cn('combobox-input', className)}
       {...props}
     />
   </div>
@@ -126,7 +126,7 @@ const ComboboxList = React.forwardRef<
   <ScrollArea maxHeight={maxHeight}>
     <CommandPrimitive.List
       ref={ref}
-      className={cn("combobox-list", className)}
+      className={cn('combobox-list', className)}
       {...props}
     />
     <ScrollBar />
@@ -150,7 +150,7 @@ const ComboboxGroup = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Group
     ref={ref}
-    className={cn("combobox-group", className)}
+    className={cn('combobox-group', className)}
     {...props}
   />
 ));
@@ -163,7 +163,7 @@ const ComboboxSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CommandPrimitive.Separator
     ref={ref}
-    className={cn("combobox-separator", className)}
+    className={cn('combobox-separator', className)}
     {...props}
   />
 ));
@@ -177,7 +177,7 @@ const ComboboxItem = React.forwardRef<
 >(({ inset, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
-    className={cn("combobox-item", inset && "combobox-item-inset", className)}
+    className={cn('combobox-item', inset && 'combobox-item-inset', className)}
     {...props}
   >
     {children}
@@ -187,13 +187,13 @@ const ComboboxItem = React.forwardRef<
 ComboboxItem.displayName = CommandPrimitive.Item.displayName;
 
 const ComboboxCaption = React.forwardRef<
-  React.ElementRef<"span">,
-  React.ComponentPropsWithoutRef<"span">
+  React.ElementRef<'span'>,
+  React.ComponentPropsWithoutRef<'span'>
 >(({ className, ...props }, ref) => (
-  <span ref={ref} className={cn("combobox-caption", className)} {...props} />
+  <span ref={ref} className={cn('combobox-caption', className)} {...props} />
 ));
 
-ComboboxCaption.displayName = "ComboboxCaption";
+ComboboxCaption.displayName = 'ComboboxCaption';
 
 const ComboboxSelectItem = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive.Item>,
@@ -203,20 +203,20 @@ const ComboboxSelectItem = React.forwardRef<
 >(({ checked, children, className, ...props }, ref) => (
   <CommandPrimitive.Item
     ref={ref}
-    className={cn("combobox-item", className)}
+    className={cn('combobox-item', className)}
     {...props}
   >
     <Icon
       name="RiCheckLine"
       size={20}
-      color={checked ? "currentColor" : "transparent"}
+      color={checked ? 'currentColor' : 'transparent'}
       className="combobox-check"
     />
     <Slottable>{children}</Slottable>
   </CommandPrimitive.Item>
 ));
 
-ComboboxSelectItem.displayName = "ComboboxSelectItem";
+ComboboxSelectItem.displayName = 'ComboboxSelectItem';
 
 const ComboboxTrigger = React.forwardRef<
   React.ElementRef<typeof Button>,
@@ -226,7 +226,7 @@ const ComboboxTrigger = React.forwardRef<
 >(
   (
     {
-      variant = "outline",
+      variant = 'outline',
       trigger,
       className,
       children,
@@ -239,14 +239,14 @@ const ComboboxTrigger = React.forwardRef<
     const { setTrigger, setIsHover } = React.useContext(ComboboxContext);
 
     const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         setIsHover(true);
       }
       onMouseEnter?.(e);
     };
 
     const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (trigger === "hover") {
+      if (trigger === 'hover') {
         setIsHover(false);
       }
       onMouseLeave?.(e);
@@ -276,7 +276,7 @@ const ComboboxTrigger = React.forwardRef<
         <Button
           ref={ref}
           variant={variant}
-          className={cn("combobox-trigger", className)}
+          className={cn('combobox-trigger', className)}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           {...props}
@@ -287,7 +287,7 @@ const ComboboxTrigger = React.forwardRef<
     );
   },
 );
-ComboboxTrigger.displayName = "ComboboxTrigger";
+ComboboxTrigger.displayName = 'ComboboxTrigger';
 
 export {
   Combobox,

@@ -64,6 +64,7 @@ const IssueKanbanColumnItem = (props: Props) => {
         scale: { duration: 0.25 },
         zIndex: { delay: isDragging ? 0 : 0.25 },
       }}
+      onClick={onClick}
       className="bg-neutral-primary border-neutral-tertiary rounded-8 shadow-default flex items-stretch border"
     >
       <div className="flex flex-1 cursor-pointer flex-col gap-2 py-3 pl-4 hover:opacity-60">

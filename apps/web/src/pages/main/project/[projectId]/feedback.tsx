@@ -90,6 +90,65 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     variables: { channelId: currentChannelId, projectId },
   });
 
+  const fields = channelData?.fields ?? [];
+  const filterFields = useMemo(() => {
+    return fields
+      .filter((field) => field.key !== 'createdAt' && field.format !== 'images')
+      .map((field) => {
+        if (field.format === 'text') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'string',
+            matchType: ['CONTAINS'],
+          };
+        }
+        if (field.format === 'keyword') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'string',
+            matchType: ['IS'],
+          };
+        }
+        if (field.format === 'number') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'number',
+            matchType: ['IS'],
+          };
+        }
+        if (field.format === 'date') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: 'date',
+            matchType: ['BETWEEN', 'IS'],
+          };
+        }
+
+        if (field.format === 'select' || field.format === 'multiSelect') {
+          if (field.key === 'issues') {
+            return {
+              key: 'issueIds',
+              format: 'issue',
+              name: field.name,
+              matchType: ['IS'],
+            };
+          }
+          return {
+            key: field.key,
+            name: field.name,
+            format: field.format,
+            options: field.options,
+            matchType: ['IS'],
+          };
+        }
+      })
+      .filter((v) => !!v?.key) as TableFilterField[];
+  }, [fields]);
+
   const {
     queries,
     tableFilters,
@@ -99,10 +158,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     updateDateRage,
   } = useFeedbackQueryConverter({
     projectId,
-    fields: channelData?.fields ?? [],
+    filterFields,
   });
-
-  const fields = channelData?.fields ?? [];
 
   const columns = useMemo(
     () => getColumns(channelData?.fields ?? []),
@@ -195,64 +252,6 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     },
   });
 
-  const filterFields = useMemo(() => {
-    return fields
-      .filter((field) => field.key !== 'createdAt' && field.format !== 'images')
-      .map((field) => {
-        if (field.format === 'text') {
-          return {
-            key: field.key,
-            name: field.name,
-            format: 'string',
-            matchType: ['CONTAINS'],
-          };
-        }
-        if (field.format === 'keyword') {
-          return {
-            key: field.key,
-            name: field.name,
-            format: 'string',
-            matchType: ['IS'],
-          };
-        }
-        if (field.format === 'number') {
-          return {
-            key: field.key,
-            name: field.name,
-            format: 'number',
-            matchType: ['IS'],
-          };
-        }
-        if (field.format === 'date') {
-          return {
-            key: field.key,
-            name: field.name,
-            format: 'date',
-            matchType: ['BETWEEN', 'IS'],
-          };
-        }
-
-        if (field.format === 'select' || field.format === 'multiSelect') {
-          if (field.key === 'issues') {
-            return {
-              key: 'issueIds',
-              format: 'issue',
-              name: field.name,
-              matchType: ['IS'],
-            };
-          }
-          return {
-            key: field.key,
-            name: field.name,
-            format: field.format,
-            options: field.options,
-            matchType: ['IS'],
-          };
-        }
-      })
-      .filter((v) => !!v?.key) as TableFilterField[];
-  }, [fields]);
-
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
@@ -285,7 +284,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         </Tabs>
         <div className="flex gap-2 [&>button]:min-w-20">
           <DateRangePicker
-            onChange={(v) => updateDateRage(v)}
+            onChange={updateDateRage}
             value={dateRange}
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}

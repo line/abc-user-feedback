@@ -27,8 +27,6 @@ import type {
 } from '@/shared';
 import { client } from '@/shared';
 
-import { env } from '@/env';
-
 const toQuery = (
   projectId: number,
 ): Record<TableFilterFieldFotmat, (valeu: unknown) => unknown> => ({
@@ -54,14 +52,7 @@ const toQuery = (
   multiSelect: (value) => value,
 });
 
-const DEFAULT_DATE_RANGE = {
-  gte: dayjs()
-    .subtract(env.NEXT_PUBLIC_MAX_DAYS - 1, 'day')
-    .toDate(),
-  lt: dayjs().endOf('day').toDate(),
-};
-
-const useFeedbackQueryConverter = (input: {
+const useIssueQueryConverter = (input: {
   projectId: number;
   filterFields: TableFilterField[];
 }) => {
@@ -77,7 +68,7 @@ const useFeedbackQueryConverter = (input: {
       serialize(value) {
         return JSON.stringify(value);
       },
-    }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
+    }).withDefault([]),
   );
 
   const dateRange = useMemo(() => {
@@ -142,10 +133,6 @@ const useFeedbackQueryConverter = (input: {
           condition,
         })),
       );
-      if (result.length === 0 && !dateRange) {
-        await setQueries([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]);
-        return;
-      }
 
       setOperator(operator);
       if (dateRange) {
@@ -177,4 +164,4 @@ const useFeedbackQueryConverter = (input: {
   };
 };
 
-export default useFeedbackQueryConverter;
+export default useIssueQueryConverter;
