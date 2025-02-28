@@ -28,7 +28,11 @@ export class GetAllRolesResponseRoleDto {
   name: string;
 
   @Expose()
-  @ApiProperty()
+  @ApiProperty({
+    type: [PermissionEnum],
+    enum: PermissionEnum,
+    enumName: 'PermissionEnum',
+  })
   permissions: PermissionEnum[];
 }
 

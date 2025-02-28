@@ -36,6 +36,7 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
     useIssueSearchInfinite(Number(projectId), {
       queries: [{ name: throttedValue, condition: 'CONTAINS' }],
     });
+  console.log('page: ', data.pages);
 
   return (
     <SelectSearchInput

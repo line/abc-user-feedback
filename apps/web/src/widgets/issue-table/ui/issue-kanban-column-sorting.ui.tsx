@@ -67,7 +67,7 @@ const IssueKanbanColumnSorting = (props: Props) => {
                 { label: 'Feedbacks', value: 'feedbackCount' },
               ]}
               value={currentKey}
-              onChange={(value) => setCurrentKey(value)}
+              onChange={(value) => value && setCurrentKey(value)}
             />
           </div>
           <div className="flex-1">
@@ -77,7 +77,7 @@ const IssueKanbanColumnSorting = (props: Props) => {
                 { label: 'Asc', value: 'ASC' },
               ]}
               value={currentValue}
-              onChange={(value) => setCurrentValue(value)}
+              onChange={(value) => value && setCurrentValue(value)}
             />
           </div>
         </div>

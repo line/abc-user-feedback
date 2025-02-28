@@ -26,7 +26,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { InfiniteScrollArea, SimpleLineChart, useOAIQuery } from '@/shared';
+import { SimpleLineChart, useOAIQuery } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import { useLineChartData } from '../lib';
@@ -36,13 +36,11 @@ interface IProps {
   from: Date;
   to: Date;
 }
-const LIMIT = 5;
 const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
   const { from, projectId, to } = props;
-  const [page, setPage] = useState(1);
   const { data: channels } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: page * LIMIT },
+    variables: { projectId, limit: 1000 },
   });
 
   const { t } = useTranslation();
@@ -113,13 +111,6 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
                   {channel.name}
                 </ComboboxSelectItem>
               ))}
-              <InfiniteScrollArea
-                hasNextPage={
-                  (channels?.meta.itemCount ?? 0) <
-                  (channels?.meta.totalItems ?? 0)
-                }
-                fetchNextPage={() => setPage((prev) => prev + 1)}
-              />
             </ComboboxList>
           </ComboboxContent>
         </Combobox>

@@ -23,7 +23,7 @@ interface IProps<T> {
   description?: string;
   selectData?: {
     options: { value: string; label: string }[];
-    onChange: (value: string) => void;
+    onChange: (value?: string) => void;
     value: string;
   };
   table: Table<T>;
