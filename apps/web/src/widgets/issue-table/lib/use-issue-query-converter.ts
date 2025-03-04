@@ -113,7 +113,7 @@ const useIssueQueryConverter = (input: {
 
         const field = filterFields.find((v) => v.key === key);
         if (!field) return null;
-        console.log('field: ', field);
+
         return {
           key,
           name: field.name,

@@ -16,6 +16,7 @@
 import dayjs from 'dayjs';
 
 import {
+  Button,
   Calendar,
   Icon,
   InputBox,
@@ -26,9 +27,11 @@ import {
   TextInput,
 } from '@ufb/react';
 
+import { cn } from '@/shared/utils';
+
 interface Props {
   value?: string;
-  onChange: (value: string) => void;
+  onChange: (value?: string) => void;
 }
 
 const DatePicker = (props: Props) => {
@@ -46,10 +49,22 @@ const DatePicker = (props: Props) => {
             />
             <TextInput
               placeholder="0000-00-00"
-              className="cursor-pointer pl-7"
+              className={cn('cursor-pointer pl-7', { 'pr-9': !!value })}
               value={value ? dayjs(value).format('YYYY-MM-DD') : ''}
               readOnly
             />
+            {!!value && (
+              <Button
+                className="absolute-y-center absolute right-0"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onChange(undefined);
+                }}
+                variant="ghost"
+              >
+                <Icon name="RiCloseCircleLine" size={16} />
+              </Button>
+            )}
           </InputBox>
         </InputField>
       </PopoverTrigger>

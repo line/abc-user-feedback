@@ -30,7 +30,7 @@ const CreateSectionTemplate: React.FC<IProps> = ({ title, children }) => {
       <AccordionTrigger className="bg-neutral-tertiary">
         {title}
       </AccordionTrigger>
-      <AccordionContent>{children}</AccordionContent>
+      <AccordionContent className="overflow-auto">{children}</AccordionContent>
     </AccordionItem>
   );
 };

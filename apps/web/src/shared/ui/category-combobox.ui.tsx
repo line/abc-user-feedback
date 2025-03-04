@@ -84,6 +84,9 @@ const CategoryCombobox = (props: Props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
   const { mutate: detachCategory } = useMutation({
     mutationFn: async ({ categoryId }: { categoryId: number }) => {
@@ -96,6 +99,9 @@ const CategoryCombobox = (props: Props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 
@@ -111,6 +117,9 @@ const CategoryCombobox = (props: Props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

@@ -116,6 +116,9 @@ const IssueCell: React.FC<IProps> = (props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
   const { mutateAsync: detecthIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -130,6 +133,9 @@ const IssueCell: React.FC<IProps> = (props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

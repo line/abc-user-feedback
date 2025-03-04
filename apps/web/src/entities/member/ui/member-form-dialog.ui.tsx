@@ -57,7 +57,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
   const [inputValue, setInputValue] = useState('');
   const throttledInputValue = useThrottle(inputValue, 1000);
 
-  const { data: userData, isLoading } = useUserSearch({
+  const { data: userData } = useUserSearch({
     limit: LIMIT * page,
     page: 0,
     queries: [
@@ -119,7 +119,6 @@ const MemberFormDialog: React.FC<Props> = (props) => {
             setInputValue(v);
             setPage(1);
           }}
-          isFetching={isLoading}
         />
         {data && <TextInput label="Name" disabled {...register('user.name')} />}
         {data && (

@@ -136,8 +136,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
-    onError({ message }) {
-      toast.error(message);
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

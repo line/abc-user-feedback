@@ -120,7 +120,7 @@
     "date": {
       "today": "Today",
       "yesterday": "Yesterday",
-      "before-days": "{{day, number}} Days Ago",
+      "before-days": "{{day, number}} Days",
       "date-range-over-max-days": "Inquiry period is limited to {{maxDays}} days"
     },
     "guide": "Guidelines",

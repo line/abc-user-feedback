@@ -39,7 +39,11 @@ export const fieldSchema = z.object({
     .string()
     .trim()
     .min(1, { message: i18n?.t('hint.required') })
-    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
+    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) })
+    .regex(
+      /^[A-Za-z0-9_]*$/,
+      'String can only contain letters, numbers, and underscores, with no spaces or other special characters.',
+    ),
   name: z
     .string()
     .trim()

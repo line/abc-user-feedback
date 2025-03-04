@@ -34,7 +34,6 @@ const TenantGuard: React.FC<IProps> = ({ children }) => {
   });
 
   useEffect(() => {
-    console.log('error: ', error);
     if (error?.statusCode === 404) void router.replace(Path.CREATE_TENANT);
     if (data) setTenant(data as Tenant);
   }, [data, error, router.pathname]);

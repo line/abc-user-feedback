@@ -17,9 +17,10 @@
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
-import { Icon, InputBox, InputField, TextInput } from '@ufb/react';
+import { Button, Icon, InputBox, InputField, TextInput } from '@ufb/react';
 
 import type { DateRangeType } from '@/shared/types';
+import { cn } from '@/shared/utils';
 import { IssueSelectBox } from '@/entities/issue';
 
 import DateRangePicker from '../date-range-picker';
@@ -74,13 +75,17 @@ const TableFilterPopoverInput = (props: Props) => {
       )}
       {filterfieid.format === 'date' && (
         <>
-          {filter.condition === 'BETWEEN' ?
+          {filter.condition === 'BETWEEN' && (
             <DateRangePicker
               onChange={(v) =>
-                onChange({
-                  gte: dayjs(v?.startDate).startOf('day').toISOString(),
-                  lt: dayjs(v?.endDate).endOf('day').toISOString(),
-                })
+                onChange(
+                  v ?
+                    {
+                      gte: dayjs(v.startDate).startOf('day').toISOString(),
+                      lt: dayjs(v.endDate).endOf('day').toISOString(),
+                    }
+                  : undefined,
+                )
               }
               value={
                 (value ?
@@ -104,17 +109,31 @@ const TableFilterPopoverInput = (props: Props) => {
                   />
                   <TextInput
                     placeholder={t('v2.placeholder.text')}
-                    className="pl-7"
+                    className={cn('cursor-pointer pl-7', { 'pr-9': !!value })}
                     value={
                       value ?
                         `${dayjs((value as { gte: string; lt: string }).gte).format('YYYY-MM-DD')} ~ ${dayjs((value as { gte: string; lt: string }).lt).format('YYYY-MM-DD')}`
                       : ''
                     }
                   />
+                  {!!value && (
+                    <Button
+                      className="absolute-y-center absolute right-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onChange(undefined);
+                      }}
+                      variant="ghost"
+                    >
+                      <Icon name="RiCloseCircleLine" size={16} />
+                    </Button>
+                  )}
                 </InputBox>
               </InputField>
             </DateRangePicker>
-          : <DatePicker
+          )}
+          {filter.condition === 'IS' && (
+            <DatePicker
               value={
                 typeof value === 'object' ?
                   dayjs((value as { gte: string; lt: string }).gte).format(
@@ -123,13 +142,17 @@ const TableFilterPopoverInput = (props: Props) => {
                 : (value as string | undefined)
               }
               onChange={(v) =>
-                onChange({
-                  gte: dayjs(v).startOf('day').toISOString(),
-                  lt: dayjs(v).endOf('day').toISOString(),
-                })
+                onChange(
+                  v ?
+                    {
+                      gte: dayjs(v).startOf('day').toISOString(),
+                      lt: dayjs(v).endOf('day').toISOString(),
+                    }
+                  : undefined,
+                )
               }
             />
-          }
+          )}
         </>
       )}
       {filterfieid.format === 'select' && (

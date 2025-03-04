@@ -20,7 +20,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Accordion, Button, Icon, ScrollArea } from '@ufb/react';
+import { Accordion, Button, Icon } from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared';
 import {
@@ -73,24 +73,23 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
     >
       <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
         <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
-        <ScrollArea className="h-full">
-          <Accordion
-            type="multiple"
-            defaultValue={[t('channel-setting-menu.channel-info')]}
+        <Accordion
+          type="multiple"
+          defaultValue={[t('channel-setting-menu.channel-info')]}
+          className="overflow-auto"
+        >
+          <CreateSectionTemplate
+            title={t('channel-setting-menu.channel-info')}
+            defaultOpen
           >
-            <CreateSectionTemplate
-              title={t('channel-setting-menu.channel-info')}
-              defaultOpen
-            >
-              <FormProvider {...channelInfoFormMethods}>
-                <ChannelInfoForm readOnly />
-              </FormProvider>
-            </CreateSectionTemplate>
-            <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
-              <FieldTable fields={data?.fields ?? []} />
-            </CreateSectionTemplate>
-          </Accordion>
-        </ScrollArea>
+            <FormProvider {...channelInfoFormMethods}>
+              <ChannelInfoForm readOnly />
+            </FormProvider>
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
+            <FieldTable fields={data?.fields ?? []} disableFilter />
+          </CreateSectionTemplate>
+        </Accordion>
         <div className="create-template-footer flex justify-end gap-2">
           <Button onClick={gotoFeedback}>
             <Icon name="RiSparklingFill" />

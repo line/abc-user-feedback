@@ -130,7 +130,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
       />
     ));
   };
-  console.log('rendering');
+
   return (
     <>
       <div className="mb-3 flex justify-between">

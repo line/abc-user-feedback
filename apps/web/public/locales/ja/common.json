@@ -120,7 +120,7 @@
     "date": {
       "today": "今日",
       "yesterday": "昨日",
-      "before-days": "{{day, number}}日前",
+      "before-days": "{{day, number}}日",
       "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
     },
     "guide": "案内",

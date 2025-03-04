@@ -120,7 +120,7 @@
     "date": {
       "today": "今天",
       "yesterday": "昨天",
-      "before-days": "{{day, number}}天前",
+      "before-days": "{{day, number}}天",
       "date-range-over-max-days": "查询期限限制为{{maxDays}}天"
     },
     "guide": "指南",

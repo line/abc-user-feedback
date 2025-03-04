@@ -34,13 +34,16 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
 
   const [inputValue, setInputValue] = useState('');
   const throttedValue = useThrottle(inputValue, 500);
-  const { data, fetchNextPage, hasNextPage, isFetching } =
-    useIssueSearchInfinite(projectId, {
-      queries: [{ name: throttedValue, condition: 'CONTAINS' }],
-    });
+  const { data, fetchNextPage, hasNextPage } = useIssueSearchInfinite(
+    projectId,
+    { queries: [{ name: throttedValue, condition: 'CONTAINS' }] },
+  );
 
   useEffect(() => {
-    if (!value) return;
+    if (!value) {
+      setIssueName(undefined);
+      return;
+    }
     const issueId = parseInt(value);
     if (isNaN(issueId)) {
       setIssueName(value);
@@ -62,12 +65,11 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
         : [],
       )}
       value={issueName}
-      onChange={onChange}
+      onChange={(v) => onChange(v)}
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
       inputValue={inputValue}
       setInputValue={setInputValue}
-      isFetching={isFetching}
     />
   );
 };

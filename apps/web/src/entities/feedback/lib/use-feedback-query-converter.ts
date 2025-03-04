@@ -71,12 +71,8 @@ const useFeedbackQueryConverter = (input: {
   const [queries, setQueries] = useQueryState<Record<string, unknown>[]>(
     'queries',
     createParser({
-      parse(value) {
-        return JSON.parse(value) as Record<string, unknown>[];
-      },
-      serialize(value) {
-        return JSON.stringify(value);
-      },
+      parse: (value) => JSON.parse(value) as Record<string, unknown>[],
+      serialize: (value) => JSON.stringify(value),
     }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
   );
 
@@ -122,7 +118,7 @@ const useFeedbackQueryConverter = (input: {
 
         const field = filterFields.find((v) => v.key === key);
         if (!field) return null;
-        console.log('field: ', field);
+
         return {
           key,
           name: field.name,
@@ -168,8 +164,12 @@ const useFeedbackQueryConverter = (input: {
   );
 
   return {
-    queries,
-    tableFilters,
+    queries: queries.filter((v) =>
+      filterFields.some((vv) => vv.key === Object.keys(v)[0]),
+    ),
+    tableFilters: tableFilters.filter((v) =>
+      filterFields.some((vv) => vv.key === v.key),
+    ),
     operator,
     dateRange,
     updateTableFilters: onChageTableFilters,

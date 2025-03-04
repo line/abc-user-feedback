@@ -24,6 +24,7 @@ import IssueCell from '@/entities/feedback/ui/issue-cell';
 import { DATE_TIME_FORMAT } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
+import { linkify } from '../utils';
 import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput } from './inputs';
@@ -92,7 +93,7 @@ const SheetDetailTable = (props: Props) => {
   const { rows, data, mode = 'view', onChange } = props;
 
   const renderViewModeField: RenderFieldMap<SheetDetailTableRow> = {
-    text: (value) => (value as string | null) ?? '-',
+    text: (value) => (value ? linkify(String(value)) : '-'),
     keyword: (value) => (value as string | null) ?? '-',
     number: (value) => (value as string | null) ?? '-',
     date: (value) => dayjs(value as string).format(DATE_TIME_FORMAT),

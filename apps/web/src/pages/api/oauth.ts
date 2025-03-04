@@ -55,7 +55,6 @@ const handler = createNextApiHandler({
             .send({ message: error.message, code: error.name });
         }
         if (error instanceof AxiosError && error.response) {
-          console.log('error.response.data: ', error.response.data);
           return res.status(error.response.status).send(error.response.data);
         }
         return res.status(500).send({ message: 'Unknown Error' });

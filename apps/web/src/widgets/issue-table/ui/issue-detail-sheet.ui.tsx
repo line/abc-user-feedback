@@ -188,30 +188,32 @@ const IssueDetailSheet = (props: Props) => {
           <Divider variant="subtle" className="my-4" />
           <div className="flex flex-col gap-2">
             {isLoading && <Icon name="RiLoader5Line" className="spinner" />}
-            {channelFeedbackCountData?.map((v) => (
-              <Link
-                key={v.id}
-                href={{
-                  pathname: '/main/project/[projectId]/feedback',
-                  query: {
-                    projectId,
-                    channelId: v.id,
-                    queries: JSON.stringify([
-                      { issueIds: [data.id], condition: 'IS' },
-                    ]),
-                  },
-                }}
-                target="_blank"
-              >
-                <div className="bg-neutral-primary border-neutral-tertiary rounded-8 flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
-                  <div className="text-base-strong">{v.name}</div>
-                  <div className="text-neutral-secondary text-small-normal flex items-center gap-1">
-                    <Icon name="RiListIndefinite" size={12} />
-                    {v.feedbackCount} feedbacks
+            {channelFeedbackCountData
+              ?.filter((v) => !!v.feedbackCount)
+              .map((v) => (
+                <Link
+                  key={v.id}
+                  href={{
+                    pathname: '/main/project/[projectId]/feedback',
+                    query: {
+                      projectId,
+                      channelId: v.id,
+                      queries: JSON.stringify([
+                        { issueIds: [data.id], condition: 'IS' },
+                      ]),
+                    },
+                  }}
+                  target="_blank"
+                >
+                  <div className="bg-neutral-primary border-neutral-tertiary rounded-8 flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
+                    <div className="text-base-strong">{v.name}</div>
+                    <div className="text-neutral-secondary text-small-normal flex items-center gap-1">
+                      <Icon name="RiListIndefinite" size={12} />
+                      {v.feedbackCount} feedbacks
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
           </div>
         </SheetBody>
         <SheetFooter>

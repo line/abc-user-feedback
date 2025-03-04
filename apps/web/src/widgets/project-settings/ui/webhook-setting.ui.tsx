@@ -59,6 +59,9 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
   const { mutateAsync: updateWebhook } = useMutation({
     mutationFn: (input: { webhookId: number; body: WebhookInfo }) =>
@@ -70,6 +73,9 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

@@ -21,7 +21,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Accordion, Button, ScrollArea } from '@ufb/react';
+import { Accordion, Button } from '@ufb/react';
 
 import {
   CreateSectionTemplate,
@@ -88,34 +88,29 @@ const CompleteProjectCreationPage: NextPage = () => {
     >
       <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
         <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
-        <ScrollArea className="h-full">
-          <Accordion
-            type="multiple"
-            defaultValue={[t('project-setting-menu.project-info')]}
+        <Accordion
+          type="multiple"
+          defaultValue={[t('project-setting-menu.project-info')]}
+          className="overflow-auto"
+        >
+          <CreateSectionTemplate
+            title={t('project-setting-menu.project-info')}
+            defaultOpen
           >
-            <CreateSectionTemplate
-              title={t('project-setting-menu.project-info')}
-              defaultOpen
-            >
-              <FormProvider {...projectInfoFormMethods}>
-                <ProjectInfoForm type="update" readOnly />
-              </FormProvider>
-            </CreateSectionTemplate>
-            <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
-              <RoleTable roles={roles?.roles ?? []} />
-            </CreateSectionTemplate>
-            <CreateSectionTemplate
-              title={t('project-setting-menu.member-mgmt')}
-            >
-              <MemberTable data={members?.items ?? []} />
-            </CreateSectionTemplate>
-            <CreateSectionTemplate
-              title={t('project-setting-menu.api-key-mgmt')}
-            >
-              <ApiKeyTable data={apiKeys?.items ?? []} />
-            </CreateSectionTemplate>
-          </Accordion>
-        </ScrollArea>
+            <FormProvider {...projectInfoFormMethods}>
+              <ProjectInfoForm type="update" readOnly />
+            </FormProvider>
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
+            <RoleTable roles={roles?.roles ?? []} />
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
+            <MemberTable data={members?.items ?? []} />
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
+            <ApiKeyTable data={apiKeys?.items ?? []} />
+          </CreateSectionTemplate>
+        </Accordion>
         <div className="create-template-footer flex justify-end gap-2">
           <Button
             variant="outline"

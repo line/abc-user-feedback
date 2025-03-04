@@ -23,6 +23,8 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
+import { toast } from '@ufb/react';
+
 import type { TableFilterOperator } from '@/shared';
 import { client, ISSUES } from '@/shared';
 import type { Issue } from '@/entities/issue';
@@ -65,6 +67,9 @@ const IssueKanban = (props: Props) => {
       await queryClient.invalidateQueries({
         queryKey: ['/api/admin/projects/{projectId}/issues/search'],
       });
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

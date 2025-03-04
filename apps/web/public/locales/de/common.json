@@ -120,7 +120,7 @@
     "date": {
       "today": "Heute",
       "yesterday": "Gestern",
-      "before-days": "Vor {{day, number}} Tagen",
+      "before-days": "{{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
     },
     "guide": "Richtlinien",

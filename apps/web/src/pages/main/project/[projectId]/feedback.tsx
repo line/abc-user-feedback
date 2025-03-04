@@ -21,7 +21,12 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import type { PaginationState } from '@tanstack/react-table';
+import type {
+  OnChangeFn,
+  PaginationState,
+  Updater,
+  VisibilityState,
+} from '@tanstack/react-table';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 import { useTranslation } from 'react-i18next';
@@ -78,6 +83,26 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     pageIndex: 0,
     pageSize: 20,
   });
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<number, VisibilityState>
+  >({});
+  const onChangeColumnVisibility: OnChangeFn<VisibilityState> = (
+    updaterOrValue: Updater<VisibilityState>,
+  ) => {
+    if (typeof updaterOrValue !== 'function') {
+      setColumnVisibility({
+        ...columnVisibility,
+        [currentChannelId]: updaterOrValue,
+      });
+    } else {
+      setColumnVisibility((prev) => ({
+        ...prev,
+        [currentChannelId]: updaterOrValue(
+          columnVisibility[currentChannelId] ?? {},
+        ),
+      }));
+    }
+  };
 
   const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
@@ -173,10 +198,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     manualPagination: true,
     pageCount,
     rowCount,
-    state: { pagination },
+    state: { pagination, columnVisibility: columnVisibility[currentChannelId] },
     initialState: { sorting: [{ id: 'createdAt', desc: true }] },
     manualSorting: true,
     onPaginationChange: setPagination,
+    onColumnVisibilityChange: onChangeColumnVisibility,
     getRowId: (row) => String(row.id),
   });
 
@@ -212,6 +238,10 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
   }, [data]);
+
+  useEffect(() => {
+    table.setPageIndex(0);
+  }, [currentChannelId]);
 
   useEffect(() => {
     setRows(feedbackData?.items ?? []);
