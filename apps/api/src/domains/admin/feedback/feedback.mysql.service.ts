@@ -311,8 +311,10 @@ export class FeedbackMySQLService {
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
+    const options = await this.optionRepository.find();
+
     queryBuilder.andWhere(
-      new Brackets(async (qb) => {
+      new Brackets((qb) => {
         let paramIndex = 0;
         for (const query of queries) {
           for (const [fieldKey, value] of Object.entries(query)) {
@@ -341,16 +343,11 @@ export class FeedbackMySQLService {
                 [paramName]: lt,
               });
             } else {
-              const { id, format }: { id: number; format: FieldFormatEnum } =
-                fields.find((v) => v.key === fieldKey) ?? {
-                  id: 0,
-                  format: FieldFormatEnum.date,
-                };
+              const { format }: { format: FieldFormatEnum } = fields.find(
+                (v) => v.key === fieldKey,
+              ) ?? { format: FieldFormatEnum.date };
 
               if (format === FieldFormatEnum.select) {
-                const options = await this.optionRepository.find({
-                  where: { field: { id } },
-                });
                 const option =
                   options.find((option) => option.key === value) ??
                   new OptionEntity();
@@ -360,10 +357,6 @@ export class FeedbackMySQLService {
                   { optionId: option.key },
                 );
               } else if (format === FieldFormatEnum.multiSelect) {
-                const options = await this.optionRepository.find({
-                  where: { field: { id } },
-                });
-
                 qb[method](
                   new Brackets((subQb) => {
                     for (const optionKey of value as string[]) {

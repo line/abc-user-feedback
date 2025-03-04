@@ -161,7 +161,7 @@ export class FeedbackController {
     )}.${type}`;
     void res.header(
       'Content-Disposition',
-      `attachment; filename="${filename}"`,
+      `attachment; filename="${encodeURIComponent(filename)}"`,
     );
 
     switch (type) {
