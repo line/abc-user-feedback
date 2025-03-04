@@ -314,7 +314,7 @@ export class FeedbackMySQLService {
     const options = await this.optionRepository.find();
 
     queryBuilder.andWhere(
-      new Brackets(async (qb) => {
+      new Brackets((qb) => {
         let paramIndex = 0;
         for (const query of queries) {
           for (const [fieldKey, value] of Object.entries(query)) {
@@ -343,11 +343,9 @@ export class FeedbackMySQLService {
                 [paramName]: lt,
               });
             } else {
-              const { id, format }: { id: number; format: FieldFormatEnum } =
-                fields.find((v) => v.key === fieldKey) ?? {
-                  id: 0,
-                  format: FieldFormatEnum.date,
-                };
+              const { format }: { format: FieldFormatEnum } = fields.find(
+                (v) => v.key === fieldKey,
+              ) ?? { format: FieldFormatEnum.date };
 
               if (format === FieldFormatEnum.select) {
                 const option =
