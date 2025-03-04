@@ -311,6 +311,8 @@ export class FeedbackMySQLService {
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
+    const options = await this.optionRepository.find();
+
     queryBuilder.andWhere(
       new Brackets(async (qb) => {
         let paramIndex = 0;
@@ -348,9 +350,6 @@ export class FeedbackMySQLService {
                 };
 
               if (format === FieldFormatEnum.select) {
-                const options = await this.optionRepository.find({
-                  where: { field: { id } },
-                });
                 const option =
                   options.find((option) => option.key === value) ??
                   new OptionEntity();
@@ -360,10 +359,6 @@ export class FeedbackMySQLService {
                   { optionId: option.key },
                 );
               } else if (format === FieldFormatEnum.multiSelect) {
-                const options = await this.optionRepository.find({
-                  where: { field: { id } },
-                });
-
                 qb[method](
                   new Brackets((subQb) => {
                     for (const optionKey of value as string[]) {
