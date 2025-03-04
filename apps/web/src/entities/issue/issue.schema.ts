@@ -20,8 +20,8 @@ import { categorySchema } from '../category/category.schema';
 
 export const issueSchema = z.object({
   id: z.number(),
-  name: z.string().min(1),
-  description: z.string().nullable(),
+  name: z.string().trim().min(1).max(20),
+  description: z.string().trim().max(50).nullable(),
   feedbackCount: z.number(),
   status: z.union([
     z.literal('INIT'),
@@ -30,7 +30,7 @@ export const issueSchema = z.object({
     z.literal('RESOLVED'),
     z.literal('PENDING'),
   ]),
-  externalIssueId: z.string().optional(),
+  externalIssueId: z.string().trim().optional(),
   createdAt: z.string(),
   updatedAt: z.string().nullable(),
   category: categorySchema.nullable(),

@@ -16,23 +16,19 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { useOAIQuery } from '@/shared';
+import { useAllProjects } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
 }
 
 const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
-  const { data, status } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000, page: 1 },
-  });
+  const { data, status } = useAllProjects();
   const router = useRouter();
 
   useEffect(() => {
     if (!data) return;
-    const project = data.items.find((v) => v.id === projectId);
-    if (!project) {
+    if (!data.items.some((v) => v.id === projectId)) {
       void router.replace('/403');
     }
   }, [data]);

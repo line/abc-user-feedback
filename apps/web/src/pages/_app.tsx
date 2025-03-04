@@ -87,7 +87,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <ThemeProvider attribute="class" defaultTheme="system">
           <OverlayProvider>
             <HydrationBoundary state={dehydratedState}>
-              <TooltipProvider>
+              <TooltipProvider delayDuration={0}>
                 <TenantGuard>
                   {getLayout(<Component {...otherProps} />)}
                   <Toaster />

@@ -13,15 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import useOAIQuery from './useOAIQuery';
 
-export interface IFetchError {
-  code: string;
-  message?: string;
-  statusCode: number;
-  path: string;
-  axiosError?: {
-    error: string;
-    error_description: string;
-    status: number;
-  };
-}
+const useAllProjects = () => {
+  return useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000 },
+  });
+};
+export default useAllProjects;

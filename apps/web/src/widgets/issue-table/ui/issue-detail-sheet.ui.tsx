@@ -40,8 +40,8 @@ import {
   isObjectEqual,
   ISSUES,
   SheetDetailTable,
+  useAllChannels,
   useOAIMutation,
-  useOAIQuery,
   usePermissions,
 } from '@/shared';
 import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
@@ -90,10 +90,7 @@ const IssueDetailSheet = (props: Props) => {
     },
   ];
 
-  const { data: channelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
+  const { data: channelData } = useAllChannels(projectId);
 
   const { data: channelFeedbackCountData, isLoading } = useQuery({
     queryKey: [

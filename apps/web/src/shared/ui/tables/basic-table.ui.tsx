@@ -196,10 +196,14 @@ const BasicTable = <T,>(props: IProps<T>) => {
                   />
                 ))}
                 {isInfiniteScroll && (
-                  <InfiniteScrollArea
-                    fetchNextPage={table.nextPage}
-                    hasNextPage={table.getCanNextPage()}
-                  />
+                  <tr>
+                    <td>
+                      <InfiniteScrollArea
+                        fetchNextPage={table.nextPage}
+                        hasNextPage={table.getCanNextPage()}
+                      />
+                    </td>
+                  </tr>
                 )}
               </SortableContext>
             }

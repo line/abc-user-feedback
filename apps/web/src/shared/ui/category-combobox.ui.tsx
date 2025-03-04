@@ -173,10 +173,10 @@ const CategoryCombobox = (props: Props) => {
               <div
                 className="combobox-item"
                 onClick={async () => {
-                  const data = await createCategory({
-                    name: inputValue,
-                  });
+                  const name = inputValue.trim();
+                  const data = await createCategory({ name });
                   if (!data) return;
+                  setInputValue(name);
                   attachCategory({ categoryId: data.id });
                 }}
               >

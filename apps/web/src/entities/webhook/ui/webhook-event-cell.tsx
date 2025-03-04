@@ -24,7 +24,7 @@ import {
   Tag,
 } from '@ufb/react';
 
-import { useOAIQuery } from '@/shared';
+import { useAllChannels } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import type { WebhookEventType } from '../webhook.type';
@@ -39,10 +39,7 @@ const WebhookEventCell: React.FC<IProps> = (props) => {
   const { channels, type, projectId } = props;
   const { t } = useTranslation();
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
+  const { data } = useAllChannels(projectId);
 
   return (
     <Dropdown>

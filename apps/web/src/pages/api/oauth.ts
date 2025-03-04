@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { getIronSession } from 'iron-session';
 import { z } from 'zod';
 
@@ -53,6 +53,10 @@ const handler = createNextApiHandler({
           return res
             .status(500)
             .send({ message: error.message, code: error.name });
+        }
+        if (error instanceof AxiosError && error.response) {
+          console.log('error.response.data: ', error.response.data);
+          return res.status(error.response.status).send(error.response.data);
         }
         return res.status(500).send({ message: 'Unknown Error' });
       }

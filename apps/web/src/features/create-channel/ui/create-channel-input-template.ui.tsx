@@ -15,7 +15,6 @@
  */
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'react-i18next';
 
@@ -36,6 +35,7 @@ import {
   CreateInputTemplate,
   isObjectEqual,
   Path,
+  useAllChannels,
   useOAIMutation,
   useWarnIfSavedChanges,
 } from '@/shared';
@@ -76,9 +76,8 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
 
   const router = useRouter();
   const projectId = Number(router.query.projectId);
-  const queryClient = useQueryClient();
-
   const overlay = useOverlay();
+  const { refetch } = useAllChannels(projectId);
 
   const openCreateChannelError = () => {
     overlay.open(({ isOpen, close }) => (
@@ -107,14 +106,12 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess(data) {
+        await refetch();
         await router.replace({
           pathname: Path.CREATE_CHANNEL_COMPLETE,
           query: { projectId, channelId: data?.id },
         });
         reset();
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/projects/{projectId}/channels'],
-        });
       },
       onError(error) {
         if (error.code === ErrorCode.Channel.ChannelAlreadyExists) {

@@ -17,22 +17,24 @@ import { i18n } from 'next-i18next';
 import { z } from 'zod';
 
 export const channelImageConfigSchema = z.object({
-  accessKeyId: z.string(),
-  secretAccessKey: z.string(),
-  endpoint: z.string(),
-  region: z.string(),
-  bucket: z.string(),
-  domainWhiteList: z.array(z.string()).nullable(),
+  accessKeyId: z.string().trim(),
+  secretAccessKey: z.string().trim(),
+  endpoint: z.string().trim(),
+  region: z.string().trim(),
+  bucket: z.string().trim(),
+  domainWhiteList: z.array(z.string().trim()).nullable(),
 });
 
 export const channelSchema = z.object({
   id: z.number(),
   name: z
     .string()
+    .trim()
     .min(1, { message: i18n?.t('hint.required') })
     .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
   description: z
     .string()
+    .trim()
     .max(50, { message: i18n?.t('hint.max-length', { length: 50 }) })
     .nullable(),
   createdAt: z.string(),

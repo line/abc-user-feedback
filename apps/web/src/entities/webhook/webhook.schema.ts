@@ -32,7 +32,7 @@ export const webhookEventSchema = z.object({
 
 export const webhookSchema = z.object({
   id: z.number(),
-  name: z.string().min(1).max(20),
+  name: z.string().trim().min(1).max(20),
   url: z.string().url(),
   status: z.enum(['ACTIVE', 'INACTIVE']),
   events: z.array(webhookEventSchema),

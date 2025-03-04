@@ -112,6 +112,7 @@ const CreateTenantPage: NextPageWithLayout = () => {
               void setStep('user');
             }}
             submitText={t('button.next')}
+            defaultValues={data.tenant}
           />
         )}
         {step === 'user' && (

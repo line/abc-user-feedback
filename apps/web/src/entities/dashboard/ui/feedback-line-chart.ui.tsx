@@ -26,7 +26,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { SimpleLineChart, useOAIQuery } from '@/shared';
+import { SimpleLineChart, useAllChannels, useOAIQuery } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import { useLineChartData } from '../lib';
@@ -38,10 +38,7 @@ interface IProps {
 }
 const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
   const { from, projectId, to } = props;
-  const { data: channels } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: 1000 },
-  });
+  const { data: channels } = useAllChannels(projectId);
 
   const { t } = useTranslation();
 

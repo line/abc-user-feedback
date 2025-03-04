@@ -104,7 +104,9 @@ const CategoryComboboxEditPopover = (props: Props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.stopPropagation();
-                updateCategory({ name: inputValue });
+                const name = inputValue.trim();
+                updateCategory({ name });
+                setInputValue(name);
               }
             }}
           />

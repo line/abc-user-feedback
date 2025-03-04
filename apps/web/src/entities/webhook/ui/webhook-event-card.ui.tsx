@@ -65,7 +65,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
     onChangeEventChannels(v.map((v) => Number(v)));
 
   return (
-    <Tooltip>
+    <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <button
           type="button"

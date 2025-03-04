@@ -79,7 +79,7 @@ const FormDialog: React.FC<Props> = (props) => {
         <DialogTitle>{title}</DialogTitle>
         <DialogBody>{children}</DialogBody>
         <DialogFooter>
-          {deleteBtn && (
+          {deleteBtn?.onClick && (
             <div className="flex-1">
               <Button
                 variant="destructive"

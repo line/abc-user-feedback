@@ -44,7 +44,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     resolver: zodResolver(issueTrackerSchema),
   });
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
@@ -77,7 +77,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
 
   useEffect(() => {
     methods.reset(data?.data ?? {});
-  }, [data]);
+  }, [data, isRefetching]);
 
   const onSubmit = (input: IssueTracker) => {
     if (input.ticketDomain?.endsWith('/')) {

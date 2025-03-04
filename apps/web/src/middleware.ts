@@ -28,7 +28,6 @@ export async function middleware(req: NextRequest) {
   if (Path.isErrorPage(req.nextUrl.pathname)) return res;
 
   const session = await getIronSession<JwtSession>(req, res, ironOption);
-
   const isProtected = Path.isProtectPage(req.nextUrl.pathname);
 
   if (session.jwt && !isProtected) {

@@ -27,7 +27,10 @@ interface IProps {
 }
 
 const PreviewFieldTable: React.FC<IProps> = ({ fields }) => {
-  const columns = useMemo(() => getColumns(fields, true), [fields]);
+  const columns = useMemo(
+    () => getColumns(fields, true).filter((v) => v.id !== 'feedback-checkbox'),
+    [fields],
+  );
   const feedbacks = usePreviewFeedback(fields);
 
   const table = useReactTable({

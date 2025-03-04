@@ -35,6 +35,7 @@ import {
   DEFAULT_LOCALE,
   TableFilterPopover,
   TablePagination,
+  useAllChannels,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -80,17 +81,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: 1000 },
-  });
+  const { data } = useAllChannels(projectId);
 
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId: currentChannelId, projectId },
   });
 
-  const fields = channelData?.fields ?? [];
+  const fields = (channelData?.fields ?? []).sort((a, b) => a.order - b.order);
   const filterFields = useMemo(() => {
     return fields
       .filter((field) => field.key !== 'createdAt' && field.format !== 'images')

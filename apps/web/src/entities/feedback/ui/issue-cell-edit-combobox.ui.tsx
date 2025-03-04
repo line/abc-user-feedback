@@ -107,7 +107,9 @@ const IssueCellEditCombobox = (props: Props) => {
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.stopPropagation();
-                update({ ...issue, name: inputIssueName });
+                const name = inputIssueName.trim();
+                update({ ...issue, name });
+                setInputIssueName(name);
               }
             }}
           />

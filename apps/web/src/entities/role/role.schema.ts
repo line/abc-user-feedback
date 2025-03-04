@@ -23,6 +23,7 @@ export const roleSchema = z.object({
   id: z.number(),
   name: z
     .string()
+    .trim()
     .min(1, { message: i18n?.t('hint.required') })
     .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
   permissions: z.array(z.enum(PermissionList)),

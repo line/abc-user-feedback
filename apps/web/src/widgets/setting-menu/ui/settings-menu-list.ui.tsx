@@ -40,7 +40,7 @@ import {
   cn,
   CreatingDialog,
   Path,
-  useOAIQuery,
+  useAllChannels,
   usePermissions,
 } from '@/shared';
 import { useCreateChannelStore } from '@/features/create-channel/create-channel-model';
@@ -63,10 +63,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
   const menuValue =
     channelId ? `${settingMenuValue}_${channelId}` : settingMenuValue;
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: 1000 },
-  });
+  const { data } = useAllChannels(projectId);
   const perms = usePermissions(projectId);
 
   const projectMenuItems: Omit<ProjectMenuItemProps, 'projectId'>[] = [

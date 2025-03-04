@@ -25,6 +25,7 @@ import {
   HelpCardDocs,
   SettingAlert,
   SettingTemplate,
+  useAllChannels,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -46,10 +47,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId, limit: 1000 },
   });
 
-  const { data: channels } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: 1000 },
-  });
+  const { data: channels } = useAllChannels(projectId);
 
   const { mutateAsync: deleteWebhook } = useMutation({
     mutationFn: (input: { webhookId: number }) =>

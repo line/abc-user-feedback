@@ -16,45 +16,50 @@
 import { z } from 'zod';
 
 const oauthInputConfigSchema = z.object({
-  clientId: z.string(),
-  clientSecret: z.string(),
-  authCodeRequestURL: z.string(),
-  scopeString: z.string(),
-  accessTokenRequestURL: z.string(),
-  userProfileRequestURL: z.string(),
-  emailKey: z.string(),
+  clientId: z.string().trim(),
+  clientSecret: z.string().trim(),
+  authCodeRequestURL: z.string().trim(),
+  scopeString: z.string().trim(),
+  accessTokenRequestURL: z.string().trim(),
+  userProfileRequestURL: z.string().trim(),
+  emailKey: z.string().trim(),
 });
 
 const oauthInputRequiredConfigSchema = oauthInputConfigSchema.extend({
-  clientId: z.string().min(1),
-  clientSecret: z.string().min(1),
-  authCodeRequestURL: z.string().min(1),
-  scopeString: z.string().min(1),
-  accessTokenRequestURL: z.string().min(1),
-  userProfileRequestURL: z.string().min(1),
-  emailKey: z.string().min(1),
+  clientId: z.string().trim().min(1),
+  clientSecret: z.string().trim().min(1),
+  authCodeRequestURL: z.string().trim().min(1),
+  scopeString: z.string().trim().min(1),
+  accessTokenRequestURL: z.string().trim().min(1),
+  userProfileRequestURL: z.string().trim().min(1),
+  emailKey: z.string().trim().min(1),
 });
 
 const oauthConfigSchema = oauthInputConfigSchema
   .extend({
     loginButtonType: z.literal('CUSTOM'),
-    loginButtonName: z.string().min(1),
+    loginButtonName: z.string().trim().min(1),
   })
   .or(
     oauthInputConfigSchema.extend({
       loginButtonType: z.literal('GOOGLE').nullable(),
-      loginButtonName: z.string().nullable(),
+      loginButtonName: z.string().trim().nullable(),
     }),
   );
 
 export const tenantSchema = z.object({
   id: z.number(),
-  siteName: z.string().min(1).max(20),
-  description: z.string().max(50).nullable(),
+  siteName: z.string().trim().min(1).max(20),
+  description: z.string().trim().max(50).nullable(),
   useEmail: z.boolean(),
   useOAuth: z.boolean(),
   allowDomains: z
-    .array(z.string().refine((v) => /[a-z]+\.[a-z]{2,3}/.test(v)))
+    .array(
+      z
+        .string()
+        .trim()
+        .refine((v) => /[a-z]+\.[a-z]{2,3}/.test(v)),
+    )
     .nullable(),
   oauthConfig: oauthConfigSchema.nullable(),
 });

@@ -17,7 +17,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
@@ -29,6 +28,7 @@ import {
   DeleteDialog,
   Path,
   SettingTemplate,
+  useAllProjects,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -46,14 +46,14 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   const router = useRouter();
   const perms = usePermissions(projectId);
-  const queryClient = useQueryClient();
   const overlay = useOverlay();
+  const { refetch: refetchChannels } = useAllProjects();
 
   const methods = useForm<ProjectInfo>({
     resolver: zodResolver(projectInfoSchema),
   });
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
     variables: { projectId },
   });
@@ -65,9 +65,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/projects'],
-        });
+        await refetchChannels();
         toast.success(t('v2.toast.success'));
       },
       onError(error) {
@@ -86,10 +84,8 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     pathParams: { projectId },
     queryOptions: {
       async onSuccess() {
+        await refetchChannels();
         await router.push(Path.MAIN);
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/projects'],
-        });
         toast.success(t('v2.toast.success'));
       },
     },
@@ -97,7 +93,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [data]);
+  }, [data, isRefetching]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

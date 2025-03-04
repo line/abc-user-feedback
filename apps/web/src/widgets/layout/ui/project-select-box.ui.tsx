@@ -32,7 +32,7 @@ import {
   TooltipTrigger,
 } from '@ufb/react';
 
-import { cn, CreatingDialog, Path, useOAIQuery } from '@/shared';
+import { cn, CreatingDialog, Path, useAllProjects } from '@/shared';
 import { useUserStore } from '@/entities/user';
 import { useCreateProjectStore } from '@/features/create-project/create-project-model';
 
@@ -48,10 +48,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const overlay = useOverlay();
   const { user } = useUserStore();
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000 },
-  });
+  const { data } = useAllProjects();
 
   const onChangeProject = async (currentProjectId?: string) => {
     await router.push({
@@ -84,8 +81,8 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <Tooltip delayDuration={0}>
-      <TooltipTrigger disabled>
+    <Tooltip>
+      <TooltipTrigger asChild>
         <Select
           type="single"
           value={projectId ? String(projectId) : ''}
@@ -125,9 +122,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
           </SelectContent>
         </Select>
       </TooltipTrigger>
-      {!projectId && (
-        <TooltipContent>{t('v2.text.select-project')}</TooltipContent>
-      )}
+      <TooltipContent>{t('v2.text.select-project')}</TooltipContent>
     </Tooltip>
   );
 };

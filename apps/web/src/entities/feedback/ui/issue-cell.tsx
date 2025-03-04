@@ -246,11 +246,13 @@ const IssueCell: React.FC<IProps> = (props) => {
                 <div
                   className="combobox-item flex justify-between"
                   onClick={async () => {
+                    const name = inputValue.trim();
                     const data = await createIssue({
-                      name: inputValue,
+                      name,
                       description: '',
                     });
                     if (!data) return;
+                    setInputValue(name);
                     attatchIssue({ issueId: data.id });
                   }}
                 >

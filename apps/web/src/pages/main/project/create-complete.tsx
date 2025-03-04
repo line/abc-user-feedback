@@ -119,7 +119,9 @@ const CompleteProjectCreationPage: NextPage = () => {
         <div className="create-template-footer flex justify-end gap-2">
           <Button
             variant="outline"
-            onClick={() => router.push({ pathname: Path.MAIN })}
+            onClick={() =>
+              router.push({ pathname: Path.DASHBOARD, query: { projectId } })
+            }
           >
             {t('button.next-time')}
           </Button>
