@@ -22,17 +22,11 @@ export const env = createEnv({
       .enum(['development', 'production', 'test'])
       .default('development'),
   },
-  server: {
-    API_BASE_URL: z.string().url(),
-    SESSION_PASSWORD: z.string().min(32),
-  },
   client: {
     NEXT_PUBLIC_MAX_DAYS: z.coerce.number().default(90),
     NEXT_PUBLIC_API_BASE_URL: z.string().url(),
   },
   runtimeEnv: {
-    API_BASE_URL: process.env.API_BASE_URL,
-    SESSION_PASSWORD: process.env.SESSION_PASSWORD,
     NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NODE_ENV: process.env.NODE_ENV,

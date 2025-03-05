@@ -18,9 +18,9 @@ import type { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
 
 import {
   Dialog,

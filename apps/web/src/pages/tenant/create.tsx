@@ -17,9 +17,9 @@ import { useEffect, useState } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
 
 import { Button, toast } from '@ufb/react';
 

@@ -17,7 +17,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import {

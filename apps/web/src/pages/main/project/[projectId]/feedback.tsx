@@ -27,9 +27,9 @@ import type {
   Updater,
   VisibilityState,
 } from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
 
 import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 

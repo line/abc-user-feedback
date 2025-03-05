@@ -510,7 +510,7 @@ export interface paths {
     get?: never;
     put?: never;
     post: operations['MemberController_create'];
-    delete?: never;
+    delete: operations['MemberController_deleteMany'];
     options?: never;
     head?: never;
     patch?: never;
@@ -1406,6 +1406,9 @@ export interface components {
     UpdateMemberRequestDto: {
       roleId: number;
     };
+    DeleteManyMemberRequestDto: {
+      memberIds: string[];
+    };
     TimezoneDto: {
       countryCode: string;
       name: string;
@@ -2095,7 +2098,9 @@ export interface operations {
   };
   AuthController_handleCallback: {
     parameters: {
-      query?: never;
+      query?: {
+        code?: unknown;
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -2106,7 +2111,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          'application/json': components['schemas']['SignInResponseDto'];
+        };
       };
     };
   };
@@ -2840,6 +2847,29 @@ export interface operations {
     };
     responses: {
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  MemberController_deleteMany: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeleteManyMemberRequestDto'];
+      };
+    };
+    responses: {
+      200: {
         headers: {
           [name: string]: unknown;
         };

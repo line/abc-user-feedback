@@ -71,8 +71,12 @@ const useFeedbackQueryConverter = (input: {
   const [queries, setQueries] = useQueryState<Record<string, unknown>[]>(
     'queries',
     createParser({
-      parse: (value) => JSON.parse(value) as Record<string, unknown>[],
-      serialize: (value) => JSON.stringify(value),
+      parse: (value) => {
+        return JSON.parse(value) as Record<string, unknown>[];
+      },
+      serialize: (value) => {
+        return JSON.stringify(value);
+      },
     }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
   );
 
@@ -91,23 +95,20 @@ const useFeedbackQueryConverter = (input: {
       : null;
   }, [queries]);
 
-  const onChangeDateRange = useCallback(
-    async (value: DateRangeType) => {
-      if (!value) return;
-      await setQueries((queries) =>
-        queries
-          .filter((v) => !v.createdAt)
-          .concat({
-            createdAt: {
-              gte: dayjs(value.startDate).toISOString(),
-              lt: dayjs(value.endDate).toISOString(),
-            },
-            condition: 'IS',
-          }),
-      );
-    },
-    [queries],
-  );
+  const onChangeDateRange = useCallback(async (value: DateRangeType) => {
+    if (!value) return;
+    await setQueries((queries) =>
+      queries
+        .filter((v) => !v.createdAt)
+        .concat({
+          createdAt: {
+            gte: dayjs(value.startDate).toISOString(),
+            lt: dayjs(value.endDate).toISOString(),
+          },
+          condition: 'IS',
+        }),
+    );
+  }, []);
 
   const tableFilters = useMemo(() => {
     return queries
@@ -164,8 +165,10 @@ const useFeedbackQueryConverter = (input: {
   );
 
   return {
-    queries: queries.filter((v) =>
-      filterFields.some((vv) => vv.key === Object.keys(v)[0]),
+    queries: queries.filter(
+      (v) =>
+        filterFields.some((vv) => vv.key === Object.keys(v)[0]) ||
+        Object.keys(v)[0] === 'createdAt',
     ),
     tableFilters: tableFilters.filter((v) =>
       filterFields.some((vv) => vv.key === v.key),

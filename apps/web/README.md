@@ -66,7 +66,6 @@ pnpm build
 | Environment              | Description                                             | Default Value                                |
 | ------------------------ | ------------------------------------------------------- | -------------------------------------------- |
 | NEXT_PUBLIC_API_BASE_URL | api base url in client side (ex. http://localhost:4000) |                                              |
-| API_BASE_URL             | api base url in server side                             |                                              |
 | SESSION_PASSWORD         | session password                                        | complex_password_at_least_32_characters_long |
 
 ### Optional Environment Variables

@@ -16,7 +16,7 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Button, toast } from '@ufb/react';
 

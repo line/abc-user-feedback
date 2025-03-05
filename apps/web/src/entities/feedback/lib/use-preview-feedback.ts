@@ -16,7 +16,7 @@
 import { useMemo } from 'react';
 import { faker } from '@faker-js/faker';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { ISSUES } from '@/shared';
 import type { Category } from '@/entities/category';

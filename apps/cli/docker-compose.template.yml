@@ -10,7 +10,6 @@ services:
     environment:
       - NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL}
       - NEXT_PUBLIC_MAX_DAYS=${NEXT_PUBLIC_MAX_DAYS}
-      - API_BASE_URL=${API_BASE_URL}
       - SESSION_PASSWORD=${SESSION_PASSWORD}
     depends_on:
       - api

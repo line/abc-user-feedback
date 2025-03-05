@@ -17,7 +17,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useThrottle } from 'react-use';
 
 import {

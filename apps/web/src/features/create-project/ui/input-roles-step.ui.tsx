@@ -14,7 +14,7 @@
  * under the License.
  */
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Button } from '@ufb/react';
 

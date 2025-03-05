@@ -16,8 +16,8 @@
 
 import { useEffect } from 'react';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import type { FieldValues, FormState } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import {
   Button,

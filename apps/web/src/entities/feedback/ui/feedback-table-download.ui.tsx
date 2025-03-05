@@ -17,7 +17,7 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import type { Table } from '@tanstack/react-table';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import {
   Dropdown,

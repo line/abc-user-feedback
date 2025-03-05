@@ -261,11 +261,11 @@
         "button": {
           "request-auth-code": "Request Code",
           "verify-auth-code": "Verify Code"
-        },
-        "reset-password": {
-          "title": "Reset Password",
-          "button": { "send-email": "Send Email" }
         }
+      },
+      "reset-password": {
+        "title": "Reset Password",
+        "button": { "send-email": "Send Email" }
       }
     },
     "link": {

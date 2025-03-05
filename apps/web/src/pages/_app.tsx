@@ -25,16 +25,13 @@ import {
 } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { OverlayProvider } from '@toss/use-overlay';
-import axios from 'axios';
 import { appWithTranslation } from 'next-i18next';
 import { ThemeProvider } from 'next-themes';
 
 import { Toaster, TooltipProvider } from '@ufb/react';
 
-import { sessionStorage } from '@/shared';
-import type { Jwt, NextPageWithLayout } from '@/shared/types';
+import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
-import { useUserStore } from '@/entities/user';
 
 // NOTE: DON'T Change the following import order
 import '@/shared/styles/global.css';
@@ -42,6 +39,10 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
+
+import { useRouter } from 'next/router';
+
+import { useUserStore } from '@/entities/user';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -57,19 +58,26 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   const { dehydratedState, ...otherProps } = pageProps;
 
   const [queryClient] = useState(() => new QueryClient());
-
   const getLayout = Component.getLayout ?? ((page) => page);
-  const { setUser } = useUserStore();
-
-  const initializeJwt = async () => {
-    const { data } = await axios.get<{ jwt?: Jwt }>('/api/jwt');
-    if (!data.jwt) return;
-    sessionStorage.setItem('jwt', data.jwt);
-    setUser();
-  };
+  const { setUser, user, randomId } = useUserStore();
+  const router = useRouter();
 
   useEffect(() => {
-    void initializeJwt();
+    if (user) return;
+    setUser();
+  }, [user]);
+
+  useEffect(() => {
+    const broadcastChannel = new BroadcastChannel('ufb');
+    const fn = (event: MessageEvent<{ type: string; payload: number }>) => {
+      if (event.data.type === 'reload' && event.data.payload !== randomId) {
+        router.reload();
+      }
+    };
+    broadcastChannel.addEventListener('message', fn);
+    return () => {
+      broadcastChannel.close();
+    };
   }, []);
 
   return (

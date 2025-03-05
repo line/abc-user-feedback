@@ -15,7 +15,7 @@
  */
 
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Button, Icon, InputBox, InputField, TextInput } from '@ufb/react';
 

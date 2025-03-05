@@ -18,8 +18,8 @@ import type { Locale } from 'date-fns/locale';
 import { de, enUS, ja, ko, zhCN } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
+import { useTranslation } from 'next-i18next';
 import type { Matcher } from 'react-day-picker';
-import { useTranslation } from 'react-i18next';
 
 import {
   Badge,

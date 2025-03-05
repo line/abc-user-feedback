@@ -15,9 +15,9 @@
  */
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
 
 import { Icon, Menu, MenuItem } from '@ufb/react';
 

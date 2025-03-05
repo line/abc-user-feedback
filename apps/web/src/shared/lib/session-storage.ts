@@ -13,6 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import type { O } from 'ts-toolbelt';
 
 import { EMPTY_FUNCTION } from '../utils/empty-function';
@@ -41,19 +42,28 @@ class sessionStorage {
     else this.storage = window.sessionStorage;
   }
 
-  getItem<T extends SessionStorageKeyType>(key: T): SessionStorageValueType<T> {
+  async getItem<T extends SessionStorageKeyType>(
+    key: T,
+  ): Promise<SessionStorageValueType<T>> {
     const value = this.storage.getItem(key);
+    const cookieValue = await getCookie(key);
+    if (cookieValue) {
+      this.storage.setItem(key, JSON.stringify(cookieValue));
+      return this.parseJSON(cookieValue) as SessionStorageValueType<T>;
+    }
     return this.parseJSON(value) as SessionStorageValueType<T>;
   }
 
-  setItem<T extends SessionStorageKeyType>(
+  async setItem<T extends SessionStorageKeyType>(
     key: T,
     value: SessionStorageValueType<T>,
   ) {
+    await setCookie(key, JSON.stringify(value));
     this.storage.setItem(key, JSON.stringify(value));
   }
 
-  removeItem<T extends SessionStorageKeyType>(key: T) {
+  async removeItem<T extends SessionStorageKeyType>(key: T) {
+    await deleteCookie(key);
     this.storage.removeItem(key);
   }
 

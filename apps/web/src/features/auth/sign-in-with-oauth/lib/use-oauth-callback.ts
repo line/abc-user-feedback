@@ -29,12 +29,11 @@ export const useOAuthCallback = () => {
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const code = router.query.code as string | undefined;
-  const callback_url = router.query.callback_url as string | undefined;
 
   useEffect(() => {
     if (!code) return;
 
-    signInWithOAuth({ code, callback_url }).catch((error) => {
+    signInWithOAuth({ code }).catch((error) => {
       if (error instanceof AxiosError && error.response) {
         const message = error.response.data as IFetchError;
         toast.error(
@@ -49,7 +48,7 @@ export const useOAuthCallback = () => {
       }
       setStatus('error');
     });
-  }, [code, callback_url]);
+  }, [code]);
 
   return { status };
 };

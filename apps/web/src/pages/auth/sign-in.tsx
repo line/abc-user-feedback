@@ -17,9 +17,9 @@ import { useState } from 'react';
 import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import { Button, toast } from '@ufb/react';

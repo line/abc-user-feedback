@@ -15,8 +15,8 @@
  */
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
 import { Button, toast } from '@ufb/react';

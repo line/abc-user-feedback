@@ -22,7 +22,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
