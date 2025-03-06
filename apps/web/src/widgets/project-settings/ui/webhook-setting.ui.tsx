@@ -16,7 +16,7 @@
 
 import { useMutation } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Button, toast } from '@ufb/react';
 
@@ -25,6 +25,7 @@ import {
   HelpCardDocs,
   SettingAlert,
   SettingTemplate,
+  useAllChannels,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -46,10 +47,7 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     variables: { projectId, limit: 1000 },
   });
 
-  const { data: channels } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: 1000 },
-  });
+  const { data: channels } = useAllChannels(projectId);
 
   const { mutateAsync: deleteWebhook } = useMutation({
     mutationFn: (input: { webhookId: number }) =>
@@ -60,6 +58,9 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
   const { mutateAsync: updateWebhook } = useMutation({
@@ -72,6 +73,9 @@ const WebhookSetting: React.FC<IProps> = ({ projectId }) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

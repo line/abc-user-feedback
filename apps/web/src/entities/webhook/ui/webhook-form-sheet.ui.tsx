@@ -16,8 +16,8 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import {
   Button,
@@ -146,6 +146,7 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
         }
         return { ...event, channelIds: ids };
       }),
+      { shouldDirty: true },
     );
   };
 
@@ -155,8 +156,13 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
     setValue(
       'events',
       getValues('events').map((event) =>
-        event.type === type ? { ...event, status } : event,
+        event.type === type ?
+          event.channelIds.length === 0 && status === 'ACTIVE' ?
+            { ...event, channelIds: channels.map((v) => v.id), status }
+          : { ...event, status }
+        : event,
       ),
+      { shouldDirty: true },
     );
   };
 
@@ -228,7 +234,11 @@ const WebhookFormSheet: React.FC<Props> = (props) => {
                 />
                 <Button
                   type="button"
-                  onClick={() => setValue('token', window.crypto.randomUUID())}
+                  onClick={() =>
+                    setValue('token', window.crypto.randomUUID(), {
+                      shouldDirty: true,
+                    })
+                  }
                   className="!min-w-[84px] flex-shrink-0"
                 >
                   {t('button.generate')}

@@ -115,24 +115,25 @@ const SheetContent = React.forwardRef<
     ref,
   ) => (
     <SheetPortal>
-      <SheetOverlay />
-      <SheetPrimitive.Content
-        ref={ref}
-        className={cn(sheetVariants({ side, radius }), className)}
-        {...props}
-      >
-        {children}
-        <SheetPrimitive.Close asChild>
-          <Button
-            size="medium"
-            variant="ghost"
-            className="sheet-close"
-            aria-label="Close"
-          >
-            <Icon name="RiCloseLine" />
-          </Button>
-        </SheetPrimitive.Close>
-      </SheetPrimitive.Content>
+      <SheetOverlay onClick={(e) => e.stopPropagation()}>
+        <SheetPrimitive.Content
+          ref={ref}
+          className={cn(sheetVariants({ side, radius }), className)}
+          {...props}
+        >
+          {children}
+          <SheetPrimitive.Close asChild>
+            <Button
+              size="medium"
+              variant="ghost"
+              className="sheet-close"
+              aria-label="Close"
+            >
+              <Icon name="RiCloseLine" />
+            </Button>
+          </SheetPrimitive.Close>
+        </SheetPrimitive.Content>
+      </SheetOverlay>
     </SheetPortal>
   ),
 );

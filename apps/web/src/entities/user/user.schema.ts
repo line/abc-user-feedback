@@ -20,8 +20,8 @@ export const userSchema = z.object({
   id: z.number(),
   email: z.string().email(),
   type: z.union([z.literal('SUPER'), z.literal('GENERAL')]),
-  name: z.string().nullable(),
-  department: z.string().nullable(),
+  name: z.string().max(20).trim().nullable(),
+  department: z.string().max(20).trim().nullable(),
   signUpMethod: z.union([z.literal('OAUTH'), z.literal('EMAIL')]),
 });
 export const userProfileSchema = userSchema.pick({

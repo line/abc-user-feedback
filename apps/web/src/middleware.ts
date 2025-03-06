@@ -15,27 +15,20 @@
  */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { getIronSession } from 'iron-session';
 
 import { DEFAULT_LOCALE, Path } from '@/shared/constants';
 
-import type { JwtSession } from '@/server/iron-option';
-import { ironOption } from './server/iron-option';
+export function middleware(req: NextRequest) {
+  if (Path.isErrorPage(req.nextUrl.pathname)) return NextResponse.next();
 
-export async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-
-  if (Path.isErrorPage(req.nextUrl.pathname)) return res;
-
-  const session = await getIronSession<JwtSession>(req, res, ironOption);
-
+  const jwt = req.cookies.get('jwt')?.value;
   const isProtected = Path.isProtectPage(req.nextUrl.pathname);
 
-  if (session.jwt && !isProtected) {
+  if (jwt && !isProtected) {
     return NextResponse.redirect(new URL(Path.MAIN, req.url));
   }
 
-  if (!session.jwt && isProtected) {
+  if (!jwt && isProtected) {
     const parmas = new URLSearchParams(req.nextUrl.search);
     if (parmas.get('callback_url')) {
       return NextResponse.redirect(
@@ -60,7 +53,7 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
   }
 
-  return res;
+  return NextResponse.next();
 }
 
 export const config = {

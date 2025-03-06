@@ -21,10 +21,15 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import type { PaginationState } from '@tanstack/react-table';
+import type {
+  OnChangeFn,
+  PaginationState,
+  Updater,
+  VisibilityState,
+} from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
 
 import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
 
@@ -35,6 +40,7 @@ import {
   DEFAULT_LOCALE,
   TableFilterPopover,
   TablePagination,
+  useAllChannels,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -77,124 +83,37 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     pageIndex: 0,
     pageSize: 20,
   });
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<number, VisibilityState>
+  >({});
+  const onChangeColumnVisibility: OnChangeFn<VisibilityState> = (
+    updaterOrValue: Updater<VisibilityState>,
+  ) => {
+    if (typeof updaterOrValue !== 'function') {
+      setColumnVisibility({
+        ...columnVisibility,
+        [currentChannelId]: updaterOrValue,
+      });
+    } else {
+      setColumnVisibility((prev) => ({
+        ...prev,
+        [currentChannelId]: updaterOrValue(
+          columnVisibility[currentChannelId] ?? {},
+        ),
+      }));
+    }
+  };
 
   const [openFeedbackId, setOpenFeedbackId] = useState<number | null>(null);
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId, limit: 1000 },
-  });
+  const { data } = useAllChannels(projectId);
 
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId: currentChannelId, projectId },
   });
 
-  const {
-    queries,
-    tableFilters,
-    dateRange,
-    operator,
-    updateTableFilters,
-    updateDateRage,
-  } = useFeedbackQueryConverter({
-    projectId,
-    fields: channelData?.fields ?? [],
-  });
-
-  const fields = channelData?.fields ?? [];
-
-  const columns = useMemo(
-    () => getColumns(channelData?.fields ?? []),
-    [channelData],
-  );
-
-  const table = useReactTable({
-    columns,
-    data: rows,
-    getCoreRowModel: getCoreRowModel(),
-    getExpandedRowModel: getExpandedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    manualPagination: true,
-    pageCount,
-    rowCount,
-    state: { pagination },
-    initialState: { sorting: [{ id: 'createdAt', desc: true }] },
-    manualSorting: true,
-    onPaginationChange: setPagination,
-    getRowId: (row) => String(row.id),
-  });
-
-  const { sorting } = table.getState();
-  const sort = useSort(sorting);
-
-  const {
-    data: feedbackData,
-    isLoading,
-    refetch,
-  } = useFeedbackSearch(
-    projectId,
-    currentChannelId,
-    {
-      queries: queries,
-      operator: operator,
-      page: pagination.pageIndex + 1,
-      limit: pagination.pageSize,
-      sort,
-    },
-    {
-      enabled: currentChannelId !== -1 && queries.length > 0,
-      throwOnError(error) {
-        if (error.code === 'LargeWindow') {
-          toast.error('Please narrow down the search range.');
-        }
-        return false;
-      },
-    },
-  );
-
-  useEffect(() => {
-    if (!data || currentChannelId !== -1) return;
-    void setCurrentChannelId(data.items[0]?.id ?? null);
-  }, [data]);
-
-  useEffect(() => {
-    setRows(feedbackData?.items ?? []);
-    setPageCount(feedbackData?.meta.totalPages ?? 0);
-    setRowCount(feedbackData?.meta.totalItems ?? 0);
-  }, [feedbackData]);
-
-  const currentFeedback = useMemo(
-    () => rows.find((v) => v.id === openFeedbackId),
-    [rows, openFeedbackId],
-  );
-  const { mutateAsync: updateFeedback } = useOAIMutation({
-    method: 'put',
-    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
-    pathParams: {
-      channelId: currentChannelId,
-      feedbackId: (currentFeedback?.id ?? 0) as number,
-      projectId,
-    },
-    queryOptions: {
-      onSuccess: async () => {
-        await refetch();
-        toast.success('Feedback updated successfully');
-      },
-    },
-  });
-  const { mutateAsync: deleteFeedback } = useOAIMutation({
-    method: 'delete',
-    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks',
-    pathParams: { channelId: currentChannelId, projectId },
-    queryOptions: {
-      onSuccess: async () => {
-        await refetch();
-        toast.success('Feedback deleted successfully');
-      },
-    },
-  });
-
+  const fields = (channelData?.fields ?? []).sort((a, b) => a.order - b.order);
   const filterFields = useMemo(() => {
     return fields
       .filter((field) => field.key !== 'createdAt' && field.format !== 'images')
@@ -235,8 +154,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         if (field.format === 'select' || field.format === 'multiSelect') {
           if (field.key === 'issues') {
             return {
-              format: 'issue',
               key: 'issueIds',
+              format: 'issue',
               name: field.name,
               matchType: ['IS'],
             };
@@ -244,7 +163,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           return {
             key: field.key,
             name: field.name,
-            format: 'select',
+            format: field.format,
             options: field.options,
             matchType: ['IS'],
           };
@@ -252,6 +171,115 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       })
       .filter((v) => !!v?.key) as TableFilterField[];
   }, [fields]);
+
+  const {
+    queries,
+    tableFilters,
+    dateRange,
+    operator,
+    updateTableFilters,
+    updateDateRage,
+  } = useFeedbackQueryConverter({
+    projectId,
+    filterFields,
+  });
+
+  const columns = useMemo(
+    () => getColumns(channelData?.fields ?? []),
+    [channelData],
+  );
+
+  const table = useReactTable({
+    columns,
+    data: rows,
+    getCoreRowModel: getCoreRowModel(),
+    getExpandedRowModel: getExpandedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    pageCount,
+    rowCount,
+    state: { pagination, columnVisibility: columnVisibility[currentChannelId] },
+    initialState: { sorting: [{ id: 'createdAt', desc: true }] },
+    manualSorting: true,
+    onPaginationChange: setPagination,
+    onColumnVisibilityChange: onChangeColumnVisibility,
+    getRowId: (row) => String(row.id),
+  });
+
+  const { sorting } = table.getState();
+  const sort = useSort(sorting);
+
+  const {
+    data: feedbackData,
+    isLoading,
+    refetch,
+  } = useFeedbackSearch(
+    projectId,
+    currentChannelId,
+    {
+      queries: queries,
+      operator: operator,
+      page: pagination.pageIndex + 1,
+      limit: pagination.pageSize,
+      sort,
+    },
+    {
+      enabled: currentChannelId !== -1 && queries.length > 0,
+      throwOnError(error) {
+        if (error.code === 'LargeWindow') {
+          toast.error('Please narrow down the search range.');
+        }
+        return false;
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (!data || currentChannelId !== -1) return;
+    void setCurrentChannelId(data.items[0]?.id ?? null);
+  }, [data]);
+
+  useEffect(() => {
+    table.setPageIndex(0);
+  }, [currentChannelId]);
+
+  useEffect(() => {
+    setRows(feedbackData?.items ?? []);
+    setPageCount(feedbackData?.meta.totalPages ?? 0);
+    setRowCount(feedbackData?.meta.totalItems ?? 0);
+  }, [feedbackData]);
+
+  const currentFeedback = useMemo(
+    () => rows.find((v) => v.id === openFeedbackId),
+    [rows, openFeedbackId],
+  );
+  const { mutateAsync: updateFeedback } = useOAIMutation({
+    method: 'put',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/{feedbackId}',
+    pathParams: {
+      channelId: currentChannelId,
+      feedbackId: (currentFeedback?.id ?? 0) as number,
+      projectId,
+    },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        toast.success('Feedback updated successfully');
+      },
+    },
+  });
+  const { mutateAsync: deleteFeedback } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks',
+    pathParams: { channelId: currentChannelId, projectId },
+    queryOptions: {
+      onSuccess: async () => {
+        await refetch();
+        toast.success('Feedback deleted successfully');
+      },
+    },
+  });
+
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
   }
@@ -284,7 +312,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         </Tabs>
         <div className="flex gap-2 [&>button]:min-w-20">
           <DateRangePicker
-            onChange={(v) => updateDateRage(v)}
+            onChange={updateDateRage}
             value={dateRange}
             maxDate={new Date()}
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
@@ -297,6 +325,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
           <FeedbackTableDownload
+            table={table}
             fields={fields}
             queries={queries}
             disabled={!perms.includes('feedback_download_read')}

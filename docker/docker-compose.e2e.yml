@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   web:
@@ -10,11 +10,10 @@ services:
     ports:
       - 3000:3000
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - "host.docker.internal:host-gateway"
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
       - NEXT_PUBLIC_MAX_DAYS=90
-      - API_BASE_URL=http://host.docker.internal:4000
       - SESSION_PASSWORD=sessionpasswordsessionpasswordsessionpassword
     depends_on:
       - api
@@ -28,7 +27,7 @@ services:
     ports:
       - 4000:4000
     extra_hosts:
-      - 'host.docker.internal:host-gateway'
+      - "host.docker.internal:host-gateway"
     environment:
       - JWT_SECRET=jwtsecretjwtsecretjwtsecret
       - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@host.docker.internal:13307/e2e

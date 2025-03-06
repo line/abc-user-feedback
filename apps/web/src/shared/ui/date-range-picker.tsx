@@ -18,8 +18,8 @@ import type { Locale } from 'date-fns/locale';
 import { de, enUS, ja, ko, zhCN } from 'date-fns/locale';
 import dayjs from 'dayjs';
 import weekday from 'dayjs/plugin/weekday';
+import { useTranslation } from 'next-i18next';
 import type { Matcher } from 'react-day-picker';
-import { useTranslation } from 'react-i18next';
 
 import {
   Badge,
@@ -292,8 +292,12 @@ const DateRangePicker: React.FC<IProps> = (props) => {
               mode="range"
               onSelect={(value: { from?: Date; to?: Date } | undefined) => {
                 setCurrentValue({
-                  startDate: value?.from ?? null,
-                  endDate: value?.to ?? null,
+                  startDate:
+                    value?.from ?
+                      dayjs(value.from).startOf('day').toDate()
+                    : null,
+                  endDate:
+                    value?.to ? dayjs(value.to).endOf('day').toDate() : null,
                 });
               }}
               selected={{
@@ -328,7 +332,7 @@ const isOverMaxDays = (date: DateRangeType, maxDays: number) => {
   if (!date) return false;
   if (!date.startDate || !date.endDate) return false;
 
-  return maxDays < dayjs(date.endDate).diff(date.startDate, 'days');
+  return maxDays < dayjs(date.endDate).diff(date.startDate, 'days') + 1;
 };
 
 export default DateRangePicker;

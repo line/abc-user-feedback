@@ -110,26 +110,27 @@ const DialogContent = React.forwardRef<
   const { themeRadius } = useTheme();
   return (
     <DialogPortal>
-      <DialogOverlay onClick={(e) => e.stopPropagation()} />
-      <DialogPrimitive.Content
-        ref={ref}
-        className={cn(
-          dialogContentVariants({ radius: radius ?? themeRadius, className }),
-        )}
-        {...props}
-      >
-        {children}
-        <DialogPrimitive.Close asChild>
-          <Button
-            size="medium"
-            variant="ghost"
-            className="dialog-close"
-            aria-label="Close"
-          >
-            <Icon name="RiCloseLine" />
-          </Button>
-        </DialogPrimitive.Close>
-      </DialogPrimitive.Content>
+      <DialogOverlay onClick={(e) => e.stopPropagation()}>
+        <DialogPrimitive.Content
+          ref={ref}
+          className={cn(
+            dialogContentVariants({ radius: radius ?? themeRadius, className }),
+          )}
+          {...props}
+        >
+          {children}
+          <DialogPrimitive.Close asChild>
+            <Button
+              size="medium"
+              variant="ghost"
+              className="dialog-close"
+              aria-label="Close"
+            >
+              <Icon name="RiCloseLine" />
+            </Button>
+          </DialogPrimitive.Close>
+        </DialogPrimitive.Content>
+      </DialogOverlay>
     </DialogPortal>
   );
 });

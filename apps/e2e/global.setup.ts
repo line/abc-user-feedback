@@ -23,10 +23,10 @@ setup("tenant create and authenticate", async ({ page }) => {
   await page.getByRole("button", { name: "Verify Code", exact: true }).click();
 
   await page.locator("input[name='password']").click();
-  await page.locator("input[name='password']").fill("12345678");
+  await page.locator("input[name='password']").fill("12345678!");
 
   await page.locator("input[name='confirmPassword']").click();
-  await page.locator("input[name='confirmPassword']").fill("12345678");
+  await page.locator("input[name='confirmPassword']").fill("12345678!");
 
   await page.getByRole("button", { name: "Next", exact: true }).click();
   await page.waitForTimeout(1000);
@@ -44,7 +44,7 @@ setup("tenant create and authenticate", async ({ page }) => {
   await page.locator("input[name='email']").click();
   await page.locator("input[name='email']").fill("user@feedback.com");
   await page.locator("input[name='password']").click();
-  await page.locator("input[name='password']").fill("12345678");
+  await page.locator("input[name='password']").fill("12345678!");
   await page.getByRole("button", { name: "Sign In", exact: true }).click();
   await page.waitForTimeout(1000);
 

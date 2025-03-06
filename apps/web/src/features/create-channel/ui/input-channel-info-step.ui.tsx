@@ -19,7 +19,7 @@ import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
-import { useOAIQuery } from '@/shared';
+import { useAllChannels } from '@/shared';
 import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
@@ -33,10 +33,7 @@ const InputChannelInfoStep: React.FC<IProps> = () => {
   const { onChangeInput, input, setEditingStepIndex } = useCreateChannelStore();
   const router = useRouter();
   const projectId = Number(router.query.projectId);
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
+  const { data } = useAllChannels(projectId);
 
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),

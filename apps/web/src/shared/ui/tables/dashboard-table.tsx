@@ -23,7 +23,7 @@ interface IProps<T> {
   description?: string;
   selectData?: {
     options: { value: string; label: string }[];
-    onChange: (value: string) => void;
+    onChange: (value?: string) => void;
     value: string;
   };
   table: Table<T>;
@@ -34,7 +34,7 @@ function DashboardTable<T>(props: IProps<T>) {
   const { title, description, table, selectData, filterContent } = props;
 
   return (
-    <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary flex h-[450px] flex-col border">
+    <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary flex h-[462px] flex-col border">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-1">
           <h3 className="text-title-h4">{title}</h3>

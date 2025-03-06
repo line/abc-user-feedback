@@ -53,15 +53,6 @@ export const getColumnsByCategory = (t: TFunction, projectId: number) => [
     size: 200,
     minSize: 100,
   }),
-  columnHelper.accessor('externalIssueId', {
-    header: 'Ticket',
-    cell: ({ getValue }) => (
-      <TicketLink value={getValue()} projectId={projectId} />
-    ),
-    enableSorting: false,
-    size: 100,
-    minSize: 50,
-  }),
   columnHelper.accessor('status', {
     header: 'Status',
     enableSorting: false,
@@ -73,6 +64,15 @@ export const getColumnsByCategory = (t: TFunction, projectId: number) => [
     ),
     size: 100,
     minSize: 100,
+  }),
+  columnHelper.accessor('externalIssueId', {
+    header: 'Ticket',
+    cell: ({ getValue }) => (
+      <TicketLink value={getValue()} projectId={projectId} />
+    ),
+    enableSorting: false,
+    size: 100,
+    minSize: 50,
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',
@@ -93,11 +93,7 @@ export const getColumnsByCategory = (t: TFunction, projectId: number) => [
       const { category, id } = row.original;
       return (
         <CategoryCombobox issueId={id} category={category}>
-          <Tag
-            variant="outline"
-            size="small"
-            onClick={(e) => e.stopPropagation()}
-          >
+          <Tag variant="outline" size="small">
             {category ? 'Edit' : 'Add'}
           </Tag>
         </CategoryCombobox>

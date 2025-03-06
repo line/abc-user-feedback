@@ -15,12 +15,18 @@
  */
 
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { z } from 'zod';
 
 import type { FormOverlayProps } from '@/shared';
-import { FormDialog, SelectInput, TextInput, useOAIQuery } from '@/shared';
+import {
+  FormDialog,
+  SelectInput,
+  TextInput,
+  useAllProjects,
+  useOAIQuery,
+} from '@/shared';
 import type { UserTypeEnum } from '@/entities/user';
 
 interface IForm {
@@ -60,10 +66,7 @@ const InviteUserDialog: React.FC<IProps> = (props) => {
 
   const { projectId, type } = watch();
 
-  const { data: projectData } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000 },
-  });
+  const { data: projectData } = useAllProjects();
 
   const { data: roleData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/roles',

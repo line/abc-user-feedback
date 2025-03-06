@@ -20,8 +20,7 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Badge, Icon } from '@ufb/react';
 
@@ -32,7 +31,6 @@ import { getColumnsByCategory } from '@/widgets/issue-table/issue-table-columns'
 import IssueDetailSheet from '@/widgets/issue-table/ui/issue-detail-sheet.ui';
 
 import { useOAIQuery, useSort } from '../lib';
-import type { DateRangeType } from '../types';
 import { cn } from '../utils';
 import type { TableFilterOperator } from './table-filter-popover';
 import { BasicTable, TablePagination } from './tables';
@@ -47,13 +45,12 @@ const DEFAULT_META = {
 interface Props {
   projectId: number;
   category: Category;
-  createdAtDateRange: DateRangeType;
   queries: Record<string, unknown>[];
   operator: TableFilterOperator;
 }
 
 const CategoryTableRow = (props: Props) => {
-  const { projectId, category, createdAtDateRange, queries, operator } = props;
+  const { projectId, category, queries, operator } = props;
 
   const { t } = useTranslation();
 
@@ -71,23 +68,6 @@ const CategoryTableRow = (props: Props) => {
     [t, projectId],
   );
 
-  const currentQueries = useMemo(() => {
-    const result: Record<string, unknown>[] = [
-      { categoryId: category.id, condition: 'IS' },
-    ];
-
-    if (createdAtDateRange) {
-      result.push({
-        createdAt: {
-          gte: dayjs(createdAtDateRange.startDate).format('YYYY-MM-DD'),
-          lt: dayjs(createdAtDateRange.endDate).format('YYYY-MM-DD'),
-        },
-        condition: 'IS',
-      });
-    }
-    return result;
-  }, [createdAtDateRange]);
-
   const table = useReactTable({
     columns,
     data: rows,
@@ -96,12 +76,13 @@ const CategoryTableRow = (props: Props) => {
     pageCount: meta.totalPages,
     rowCount: meta.totalItems,
     manualPagination: true,
+    getRowId: (row) => String(row.id),
   });
 
   const { pagination, sorting } = table.getState();
   const sort = useSort(sorting);
   const { data, isLoading } = useIssueSearch(projectId, {
-    queries: currentQueries.concat(...queries),
+    queries: queries.concat([{ categoryId: category.id, condition: 'IS' }]),
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     operator,

@@ -13,19 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { SessionOptions } from 'iron-session';
+import useOAIQuery from './useOAIQuery';
 
-import { env } from '@/env';
-
-export const ironOption: SessionOptions = {
-  cookieName: 'user-feedback',
-  password: env.SESSION_PASSWORD,
-  cookieOptions: {
-    sameSite: 'lax',
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-  },
+const useAllChannels = (projectId: number | string) => {
+  return useOAIQuery({
+    path: '/api/admin/projects/{projectId}/channels',
+    variables: { projectId: Number(projectId), limit: 1000 },
+  });
 };
-export interface JwtSession {
-  jwt?: { accessToken: string; refreshToken: string };
-}
+export default useAllChannels;

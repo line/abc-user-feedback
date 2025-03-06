@@ -16,6 +16,8 @@
 
 import { Button, Icon } from '@ufb/react';
 
+import { useAllProjects } from '@/shared/lib';
+
 import Logo from '../logo.ui';
 
 interface Props {
@@ -23,10 +25,11 @@ interface Props {
 }
 
 const CreationHeader: React.FC<Props> = ({ onClickGoBack }) => {
+  const { data } = useAllProjects();
   return (
     <div className="flex h-12 items-center justify-between p-6">
       <Logo />
-      {onClickGoBack && (
+      {onClickGoBack && data?.meta.totalItems !== 0 && (
         <Button variant="ghost" onClick={onClickGoBack}>
           <Icon name="RiLogoutBoxRLine" />
         </Button>

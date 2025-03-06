@@ -16,7 +16,8 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 
 import {
   Button,
@@ -35,10 +36,12 @@ import {
 import type { FormOverlayProps } from '@/shared';
 import {
   client,
+  DeleteDialog,
+  isObjectEqual,
   ISSUES,
   SheetDetailTable,
+  useAllChannels,
   useOAIMutation,
-  useOAIQuery,
   usePermissions,
 } from '@/shared';
 import type { SheetDetailTableRow } from '@/shared/ui/sheet-detail-table.ui';
@@ -60,7 +63,7 @@ const IssueDetailSheet = (props: Props) => {
   const { t } = useTranslation();
   const [mode, setMode] = useState<'view' | 'edit'>('view');
   const [currentItem, setCurrentItem] = useState(data);
-
+  const overlay = useOverlay();
   const TOP_ROWS: SheetDetailTableRow[] = [
     { format: 'text', key: 'id', name: 'ID' },
     { format: 'date', key: 'createdAt', name: 'Created' },
@@ -87,10 +90,7 @@ const IssueDetailSheet = (props: Props) => {
     },
   ];
 
-  const { data: channelData } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/channels',
-    variables: { projectId },
-  });
+  const { data: channelData } = useAllChannels(projectId);
 
   const { data: channelFeedbackCountData, isLoading } = useQuery({
     queryKey: [
@@ -118,7 +118,7 @@ const IssueDetailSheet = (props: Props) => {
 
   const queryClient = useQueryClient();
 
-  const { mutate: deleteIssue, isPending: isPendingDeletingIssue } =
+  const { mutateAsync: deleteIssue, isPending: isPendingDeletingIssue } =
     useOAIMutation({
       method: 'delete',
       path: '/api/admin/projects/{projectId}/issues/{issueId}',
@@ -155,6 +155,19 @@ const IssueDetailSheet = (props: Props) => {
       },
     });
 
+  const openDeleteDialog = () => {
+    overlay.open(({ close: dialogClose, isOpen }) => (
+      <DeleteDialog
+        close={dialogClose}
+        isOpen={isOpen}
+        onClickDelete={async () => {
+          await deleteIssue(undefined);
+          dialogClose();
+          close();
+        }}
+      />
+    ));
+  };
   return (
     <Sheet open={isOpen} onOpenChange={close}>
       <SheetContent>
@@ -175,36 +188,39 @@ const IssueDetailSheet = (props: Props) => {
           <Divider variant="subtle" className="my-4" />
           <div className="flex flex-col gap-2">
             {isLoading && <Icon name="RiLoader5Line" className="spinner" />}
-            {channelFeedbackCountData?.map((v) => (
-              <Link
-                key={v.id}
-                href={{
-                  pathname: '/main/project/[projectId]/feedback',
-                  query: {
-                    projectId,
-                    channelId: v.id,
-                    queries: JSON.stringify([
-                      { issueIds: [data.id], condition: 'IS' },
-                    ]),
-                  },
-                }}
-              >
-                <div className="bg-neutral-primary border-neutral-tertiary rounded-8 flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
-                  <div className="text-base-strong">{v.name}</div>
-                  <div className="text-neutral-secondary text-small-normal flex items-center gap-1">
-                    <Icon name="RiListIndefinite" size={12} />
-                    {v.feedbackCount} feedbacks
+            {channelFeedbackCountData
+              ?.filter((v) => !!v.feedbackCount)
+              .map((v) => (
+                <Link
+                  key={v.id}
+                  href={{
+                    pathname: '/main/project/[projectId]/feedback',
+                    query: {
+                      projectId,
+                      channelId: v.id,
+                      queries: JSON.stringify([
+                        { issueIds: [data.id], condition: 'IS' },
+                      ]),
+                    },
+                  }}
+                  target="_blank"
+                >
+                  <div className="bg-neutral-primary border-neutral-tertiary rounded-8 flex cursor-pointer flex-col gap-2 border px-4 py-3 hover:opacity-60">
+                    <div className="text-base-strong">{v.name}</div>
+                    <div className="text-neutral-secondary text-small-normal flex items-center gap-1">
+                      <Icon name="RiListIndefinite" size={12} />
+                      {v.feedbackCount} feedbacks
+                    </div>
                   </div>
-                </div>
-              </Link>
-            ))}
+                </Link>
+              ))}
           </div>
         </SheetBody>
         <SheetFooter>
           <div className="flex-1">
             <Button
               variant="destructive"
-              onClick={() => deleteIssue(undefined)}
+              onClick={openDeleteDialog}
               loading={isPendingDeletingIssue}
               disabled={!perms.includes('issue_delete')}
             >
@@ -219,6 +235,10 @@ const IssueDetailSheet = (props: Props) => {
               <Button
                 onClick={() => editIssue(currentItem)}
                 loading={isPendingEditingIssue}
+                disabled={isObjectEqual(
+                  { ...data, updatedAt: '' },
+                  { ...currentItem, updatedAt: '' },
+                )}
               >
                 {t('v2.button.save')}
               </Button>

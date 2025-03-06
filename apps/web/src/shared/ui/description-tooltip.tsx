@@ -30,7 +30,7 @@ const DescriptionTooltip: React.FC<ITooltipProps> = ({
   side,
 }) => {
   return (
-    <Tooltip delayDuration={0}>
+    <Tooltip>
       <TooltipTrigger asChild>
         <Icon
           name="RiInformation2Line"

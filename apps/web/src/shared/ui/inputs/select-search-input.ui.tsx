@@ -14,7 +14,7 @@
  * under the License.
  */
 import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import {
   Combobox,
@@ -45,7 +45,6 @@ interface Props {
   hasNextPage?: boolean;
   inputValue?: string;
   setInputValue?: (value: string) => void;
-  isFetching?: boolean;
 }
 
 const SelectSearchInput: React.FC<Props> = (props) => {
@@ -61,7 +60,6 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     hasNextPage,
     inputValue,
     setInputValue,
-    isFetching,
   } = props;
 
   const { t } = useTranslation();
@@ -97,30 +95,28 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            {!isFetching && (
-              <ComboboxGroup>
-                {options.map((option) => (
-                  <ComboboxSelectItem
-                    key={option.value}
-                    value={option.value}
-                    checked={option.value === value}
-                    onSelect={() => {
-                      const newValue =
-                        option.value === value ? undefined : option.value;
-                      setCurrentOption(option);
-                      onChange?.(newValue);
-                      setOpen(false);
-                    }}
-                  >
-                    {option.label}
-                  </ComboboxSelectItem>
-                ))}
-                <InfiniteScrollArea
-                  hasNextPage={hasNextPage}
-                  fetchNextPage={fetchNextPage}
-                />
-              </ComboboxGroup>
-            )}
+            <ComboboxGroup>
+              {options.map((option) => (
+                <ComboboxSelectItem
+                  key={option.value}
+                  value={option.value}
+                  checked={option.value === value}
+                  onSelect={() => {
+                    const newValue =
+                      option.value === value ? undefined : option.value;
+                    setCurrentOption(option);
+                    onChange?.(newValue);
+                    setOpen(false);
+                  }}
+                >
+                  {option.label}
+                </ComboboxSelectItem>
+              ))}
+            </ComboboxGroup>
+            <InfiniteScrollArea
+              hasNextPage={hasNextPage}
+              fetchNextPage={fetchNextPage}
+            />
           </ComboboxList>
         </ComboboxContent>
       </Combobox>

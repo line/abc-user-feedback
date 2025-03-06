@@ -27,7 +27,23 @@ type CustomNextApiHandler<T extends Zod.ZodType> = (
   res: NextApiResponse,
 ) => unknown;
 
-const handler =
+const queryHandler =
+  <T extends Zod.ZodType<unknown>>(schema?: T) =>
+  (input: CustomNextApiHandler<T>) => {
+    if (!schema) return input;
+
+    return (req: NextApiRequest, res: NextApiResponse) => {
+      const { success, error, data } = schema.safeParse(req.query);
+      req.query = data as Record<string, string>;
+      if (success) return input(req, res);
+
+      return res
+        .status(400)
+        .json({ error: { message: 'Invalid request', error } });
+    };
+  };
+
+const bodyHandler =
   <T extends Zod.ZodType<unknown>>(schema?: T) =>
   (input: CustomNextApiHandler<T>) => {
     if (!schema) return input;
@@ -44,8 +60,12 @@ const handler =
   };
 
 export const procedure = {
-  input: <T extends Zod.ZodType>(schema?: T) => ({ handle: handler(schema) }),
-  handle: handler(),
+  input: <T extends Zod.ZodType>(schema?: T) => ({
+    handle: queryHandler(schema),
+  }),
+  query: <T extends Zod.ZodType>(schema?: T) => ({
+    handle: bodyHandler(schema),
+  }),
 };
 
 export const createNextApiHandler = (

@@ -16,8 +16,8 @@
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { Button, Icon, toast } from '@ufb/react';
 
@@ -45,7 +45,7 @@ const UserProfileSetting = () => {
     resolver: zodResolver(userProfileSchema),
   });
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/users/{id}',
     variables: { id: user?.id ?? 0 },
   });
@@ -77,7 +77,7 @@ const UserProfileSetting = () => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [data]);
+  }, [data, isRefetching]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

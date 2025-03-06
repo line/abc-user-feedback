@@ -21,11 +21,10 @@ import {
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import dayjs from 'dayjs';
 
 import { Button } from '@ufb/react';
 
-import type { DateRangeType, IssuesItem, TableFilterOperator } from '@/shared';
+import type { IssuesItem, TableFilterOperator } from '@/shared';
 import { useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -48,22 +47,13 @@ interface Props {
   issueTracker?: IssueTracker;
   items: Issue[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, Issue[]>>>;
-  createdAtDateRange: DateRangeType;
   queries: Record<string, unknown>[];
   operator: TableFilterOperator;
 }
 
 const IssueKanbanColumn = (props: Props) => {
-  const {
-    issue,
-    projectId,
-    issueTracker,
-    items,
-    setItems,
-    createdAtDateRange,
-    queries,
-    operator,
-  } = props;
+  const { issue, projectId, issueTracker, items, setItems, queries, operator } =
+    props;
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
@@ -78,26 +68,10 @@ const IssueKanbanColumn = (props: Props) => {
     id: issue.key,
     data: { type: 'container', children: items },
   });
-  const currentQueries = useMemo(() => {
-    const result: Record<string, unknown>[] = [
-      { status: issue.status, condition: 'IS' },
-    ];
-
-    if (createdAtDateRange) {
-      result.push({
-        createdAt: {
-          gte: dayjs(createdAtDateRange.startDate).format('YYYY-MM-DD'),
-          lt: dayjs(createdAtDateRange.endDate).format('YYYY-MM-DD'),
-        },
-        condition: 'IS',
-      });
-    }
-    return result;
-  }, [createdAtDateRange]);
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      queries: currentQueries.concat(...queries),
+      queries: queries.concat([{ status: issue.status, condition: 'IS' }]),
       sort: { [sort.key]: sort.value },
       limit: 5,
       operator,

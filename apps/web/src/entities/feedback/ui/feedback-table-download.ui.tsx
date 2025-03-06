@@ -16,7 +16,8 @@
 
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import type { Table } from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
 
 import {
   Dropdown,
@@ -29,16 +30,18 @@ import {
 
 import type { Field } from '@/entities/field';
 
+import type { Feedback } from '../feedback.type';
 import useFeedbackDownload from '../lib/use-feedback-download';
 
 interface Props {
   fields: Field[];
   queries: Record<string, unknown>[];
   disabled: boolean;
+  table: Table<Feedback>;
 }
 
 const FeedbackTableDownload = (props: Props) => {
-  const { fields, queries, disabled } = props;
+  const { fields, queries, disabled, table } = props;
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -48,8 +51,14 @@ const FeedbackTableDownload = (props: Props) => {
   });
 
   const fieldIds = useMemo(
-    () => fields.sort((a, b) => a.order - b.order).map((v) => v.id),
-    [fields],
+    () =>
+      fields
+        .filter((v) =>
+          table.getVisibleFlatColumns().some((column) => column.id === v.key),
+        )
+        .sort((a, b) => a.order - b.order)
+        .map((v) => v.id),
+    [fields, table],
   );
 
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {

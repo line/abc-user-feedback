@@ -16,8 +16,8 @@
 import { useEffect, useMemo, useState } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import {
   Button,
@@ -249,9 +249,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                         {t('button.register')}
                       </Button>
                     }
-                    required
                   />
-
                   {(watch('options') ?? []).length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">
                       {watch('options')?.map((v, i) => (

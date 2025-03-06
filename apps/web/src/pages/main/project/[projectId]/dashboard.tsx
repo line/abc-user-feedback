@@ -47,11 +47,6 @@ interface IProps {
   projectId: number;
 }
 
-const DEFAULT_DATE_RANGE = {
-  startDate: dayjs().subtract(31, 'day').startOf('day').toDate(),
-  endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
-};
-
 const options = [
   {
     label: <Trans i18nKey="text.date.yesterday" />,
@@ -89,7 +84,10 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
   const [dateRange, setDateRange] = useQueryState(
     'dateRange',
-    parseAsDateRange.withDefault(DEFAULT_DATE_RANGE),
+    parseAsDateRange.withDefault({
+      startDate: dayjs().subtract(1, 'y').startOf('day').toDate(),
+      endDate: dayjs().endOf('day').toDate(),
+    }),
   );
   const [invisibles, setInvisibles] = useState<Record<string, boolean>>({});
 

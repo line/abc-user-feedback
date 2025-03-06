@@ -19,20 +19,18 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Icon } from '@ufb/react';
 
 import { client } from '../lib';
-import type { DateRangeType } from '../types';
 import CategoryTableRow from './category-table-row.ui';
 import InfiniteScrollArea from './infinite-scroll-area.ui';
 import type { TableFilterOperator } from './table-filter-popover';
 
 interface Props {
   projectId: number;
-  createdAtDateRange: DateRangeType;
   queries: Record<string, unknown>[];
   operator: TableFilterOperator;
 }
 
 const CategoryTable = (props: Props) => {
-  const { projectId, createdAtDateRange, queries, operator } = props;
+  const { projectId, queries, operator } = props;
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -62,7 +60,6 @@ const CategoryTable = (props: Props) => {
             key={item.id}
             category={item}
             projectId={projectId}
-            createdAtDateRange={createdAtDateRange}
             queries={queries}
             operator={operator}
           />

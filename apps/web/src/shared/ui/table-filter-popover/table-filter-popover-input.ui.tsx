@@ -15,11 +15,12 @@
  */
 
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
-import { Icon, InputBox, InputField, TextInput } from '@ufb/react';
+import { Button, Icon, InputBox, InputField, TextInput } from '@ufb/react';
 
 import type { DateRangeType } from '@/shared/types';
+import { cn } from '@/shared/utils';
 import { IssueSelectBox } from '@/entities/issue';
 
 import DateRangePicker from '../date-range-picker';
@@ -39,7 +40,6 @@ const TableFilterPopoverInput = (props: Props) => {
   const { filter, onChange, filterfieid } = props;
   const value = filter.value;
   const { t } = useTranslation();
-
   return (
     <>
       {filterfieid.format === 'ticket' && (
@@ -75,13 +75,17 @@ const TableFilterPopoverInput = (props: Props) => {
       )}
       {filterfieid.format === 'date' && (
         <>
-          {filter.condition === 'BETWEEN' ?
+          {filter.condition === 'BETWEEN' && (
             <DateRangePicker
               onChange={(v) =>
-                onChange({
-                  gte: dayjs(v?.startDate).startOf('day').toISOString(),
-                  lt: dayjs(v?.endDate).endOf('day').toISOString(),
-                })
+                onChange(
+                  v ?
+                    {
+                      gte: dayjs(v.startDate).startOf('day').toISOString(),
+                      lt: dayjs(v.endDate).endOf('day').toISOString(),
+                    }
+                  : undefined,
+                )
               }
               value={
                 (value ?
@@ -105,21 +109,50 @@ const TableFilterPopoverInput = (props: Props) => {
                   />
                   <TextInput
                     placeholder={t('v2.placeholder.text')}
-                    className="pl-7"
+                    className={cn('cursor-pointer pl-7', { 'pr-9': !!value })}
                     value={
                       value ?
                         `${dayjs((value as { gte: string; lt: string }).gte).format('YYYY-MM-DD')} ~ ${dayjs((value as { gte: string; lt: string }).lt).format('YYYY-MM-DD')}`
                       : ''
                     }
                   />
+                  {!!value && (
+                    <Button
+                      className="absolute-y-center absolute right-0"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onChange(undefined);
+                      }}
+                      variant="ghost"
+                    >
+                      <Icon name="RiCloseCircleLine" size={16} />
+                    </Button>
+                  )}
                 </InputBox>
               </InputField>
             </DateRangePicker>
-          : <DatePicker
-              value={value as string | undefined}
-              onChange={onChange}
+          )}
+          {filter.condition === 'IS' && (
+            <DatePicker
+              value={
+                typeof value === 'object' ?
+                  dayjs((value as { gte: string; lt: string }).gte).format(
+                    'YYYY-MM-DD',
+                  )
+                : (value as string | undefined)
+              }
+              onChange={(v) =>
+                onChange(
+                  v ?
+                    {
+                      gte: dayjs(v).startOf('day').toISOString(),
+                      lt: dayjs(v).endOf('day').toISOString(),
+                    }
+                  : undefined,
+                )
+              }
             />
-          }
+          )}
         </>
       )}
       {filterfieid.format === 'select' && (
@@ -128,15 +161,16 @@ const TableFilterPopoverInput = (props: Props) => {
             label: option.name,
             value: option.name,
           }))}
-          onChange={(value) =>
-            onChange(filterfieid.options.find((v) => v.name === value)?.key)
-          }
+          onChange={(value) => {
+            onChange(filterfieid.options.find((v) => v.name === value)?.key);
+          }}
           value={filterfieid.options.find((v) => v.key === value)?.name}
         />
       )}
       {filterfieid.format === 'multiSelect' && (
         <SelectInput
           type="multiple"
+          placeholder={t('v2.placeholder.select')}
           options={filterfieid.options.map((option) => ({
             label: option.name,
             value: option.name,
@@ -144,7 +178,7 @@ const TableFilterPopoverInput = (props: Props) => {
           onValuesChange={(values) => {
             onChange(
               filterfieid.options
-                .filter((v) => values.includes(v.name))
+                .filter((v) => values?.includes(v.name))
                 .map((v) => v.key),
             );
           }}

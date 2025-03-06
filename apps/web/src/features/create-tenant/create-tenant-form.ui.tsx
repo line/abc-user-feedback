@@ -14,8 +14,8 @@
  * under the License.
  */
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { Button } from '@ufb/react';
 
@@ -27,15 +27,16 @@ import type { CreateTenant } from './create-tenant-form.type';
 interface IProps {
   onSubmit: (data: CreateTenant) => void;
   submitText: string;
+  defaultValues?: CreateTenant | null;
 }
 
 const CreateTenantForm: React.FC<IProps> = (props) => {
-  const { onSubmit, submitText } = props;
+  const { onSubmit, submitText, defaultValues } = props;
   const { t } = useTranslation();
 
   const { register, handleSubmit, formState } = useForm<CreateTenant>({
     resolver: zodResolver(createTenantFormSchema),
-    defaultValues: { siteName: '' },
+    defaultValues: defaultValues ?? undefined,
   });
 
   return (
@@ -51,9 +52,7 @@ const CreateTenantForm: React.FC<IProps> = (props) => {
           {...register('siteName')}
         />
       </div>
-      <Button type="submit" disabled={!formState.isDirty}>
-        {submitText}
-      </Button>
+      <Button type="submit">{submitText}</Button>
     </form>
   );
 };

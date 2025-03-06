@@ -16,8 +16,8 @@
 
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { Button, toast } from '@ufb/react';
 
@@ -44,7 +44,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     resolver: zodResolver(issueTrackerSchema),
   });
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
   });
@@ -77,7 +77,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
 
   useEffect(() => {
     methods.reset(data?.data ?? {});
-  }, [data]);
+  }, [data, isRefetching]);
 
   const onSubmit = (input: IssueTracker) => {
     if (input.ticketDomain?.endsWith('/')) {

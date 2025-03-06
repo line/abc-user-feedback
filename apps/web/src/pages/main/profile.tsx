@@ -18,9 +18,9 @@ import type { GetStaticProps } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
-import { useTranslation } from 'react-i18next';
 
 import {
   Dialog,
@@ -34,7 +34,7 @@ import {
   MenuItem,
 } from '@ufb/react';
 
-import { DEFAULT_LOCALE, useOAIQuery } from '@/shared';
+import { DEFAULT_LOCALE, useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import {
@@ -55,10 +55,7 @@ const ProfilePage: NextPageWithLayout = () => {
     'menu',
     parseAsString.withDefault('profile'),
   );
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1 },
-  });
+  const { data } = useAllProjects();
 
   const openWarningNoProjects = () => {
     overlay.open(({ close, isOpen }) => (

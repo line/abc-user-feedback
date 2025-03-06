@@ -15,7 +15,7 @@
  */
 
 import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import {
   Select,
@@ -65,7 +65,7 @@ const WebhookEventCard: React.FC<Props> = (props) => {
     onChangeEventChannels(v.map((v) => Number(v)));
 
   return (
-    <Tooltip>
+    <Tooltip delayDuration={0}>
       <TooltipTrigger asChild>
         <button
           type="button"

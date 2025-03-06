@@ -14,8 +14,8 @@
  * under the License.
  */
 import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { Badge, Button, Divider, Icon, toast } from '@ufb/react';
 

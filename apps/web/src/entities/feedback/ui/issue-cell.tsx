@@ -16,7 +16,7 @@
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useThrottle } from 'react-use';
 
 import {
@@ -47,10 +47,11 @@ import IssueCellEditCombobox from './issue-cell-edit-combobox.ui';
 interface IProps {
   issues?: Issue[];
   feedbackId?: number;
+  isPreview?: boolean;
 }
 
 const IssueCell: React.FC<IProps> = (props) => {
-  const { feedbackId, issues } = props;
+  const { feedbackId, issues, isPreview = false } = props;
 
   const { t } = useTranslation();
 
@@ -115,6 +116,9 @@ const IssueCell: React.FC<IProps> = (props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
   const { mutateAsync: detecthIssue } = useMutation({
     mutationFn: async ({ issueId }: { issueId: number }) => {
@@ -129,6 +133,9 @@ const IssueCell: React.FC<IProps> = (props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 
@@ -159,14 +166,16 @@ const IssueCell: React.FC<IProps> = (props) => {
               'opacity-50': !perms.includes('feedback_issue_update'),
             })}
           >
-            <Tag
-              variant="outline"
-              className={cn('w-8 cursor-pointer justify-center', {
-                'hover:bg-inherit': !perms.includes('feedback_issue_update'),
-              })}
-            >
-              +
-            </Tag>
+            {!isPreview && (
+              <Tag
+                variant="outline"
+                className={cn('w-8 cursor-pointer justify-center', {
+                  'hover:bg-inherit': !perms.includes('feedback_issue_update'),
+                })}
+              >
+                +
+              </Tag>
+            )}
           </button>
         </ComboboxTrigger>
         <ComboboxContent>
@@ -243,11 +252,13 @@ const IssueCell: React.FC<IProps> = (props) => {
                 <div
                   className="combobox-item flex justify-between"
                   onClick={async () => {
+                    const name = inputValue.trim();
                     const data = await createIssue({
-                      name: inputValue,
+                      name,
                       description: '',
                     });
                     if (!data) return;
+                    setInputValue(name);
                     attatchIssue({ issueId: data.id });
                   }}
                 >

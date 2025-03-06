@@ -16,10 +16,9 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { Button, Icon, toast } from '@ufb/react';
 
@@ -27,6 +26,7 @@ import {
   DeleteDialog,
   Path,
   SettingTemplate,
+  useAllChannels,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -44,17 +44,16 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const { t } = useTranslation();
 
   const perms = usePermissions(projectId);
-  const queryClient = useQueryClient();
   const overlay = useOverlay();
   const router = useRouter();
-
+  const { refetch: refetchChannels } = useAllChannels(projectId);
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
   });
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
@@ -66,9 +65,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/projects/{projectId}/channels'],
-        });
+        await refetchChannels();
         toast.success(t('v2.toast.success'));
       },
     },
@@ -80,9 +77,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/projects/{projectId}/channels'],
-        });
+        await refetchChannels();
         toast.success(t('v2.toast.success'));
         await router.push({ pathname: Path.SETTINGS, query: { projectId } });
       },
@@ -91,7 +86,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [data]);
+  }, [data, isRefetching]);
 
   const openDeleteDialog = () => {
     overlay.open(({ close, isOpen }) => (

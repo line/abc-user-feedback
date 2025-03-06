@@ -18,18 +18,14 @@ import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, Path, useOAIQuery } from '@/shared';
+import { DEFAULT_LOCALE, Path, useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useUserStore } from '@/entities/user';
 
 const MainIndexPage: NextPageWithLayout = () => {
   const router = useRouter();
   const { user } = useUserStore();
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1 },
-    queryOptions: { retry: false },
-  });
+  const { data } = useAllProjects();
 
   useEffect(() => {
     if (!data || !user) return;

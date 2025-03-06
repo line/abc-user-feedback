@@ -120,7 +120,7 @@
     "date": {
       "today": "Today",
       "yesterday": "Yesterday",
-      "before-days": "{{day, number}} Days Ago",
+      "before-days": "{{day, number}} Days",
       "date-range-over-max-days": "Inquiry period is limited to {{maxDays}} days"
     },
     "guide": "Guidelines",
@@ -261,11 +261,11 @@
         "button": {
           "request-auth-code": "Request Code",
           "verify-auth-code": "Verify Code"
-        },
-        "reset-password": {
-          "title": "Reset Password",
-          "button": { "send-email": "Send Email" }
         }
+      },
+      "reset-password": {
+        "title": "Reset Password",
+        "button": { "send-email": "Send Email" }
       }
     },
     "link": {
@@ -325,9 +325,11 @@
         "title": "No Project Assigned.",
         "description": "You are not assigned to any project yet.\nPlease request the project manager to register you as a member or inquire further."
       },
-      "no-project-in-project-creation-page": {
+      "no-project-dialog-in-project-creation-page": {
         "title": "Welcome!",
-        "description": "User Feedback has a Tenant-Project-Channel hierarchy. To collect or manage feedback, you need to create a project for the collection target and a channel for the collection method."
+        "step1-description": "In ABC User Feedback, feedback is managed using a Channel > Project > Tenant structure. Therefore, you need to create both a Project and a Channel.",
+        "step2-description": "A Project refers to the product that is the subject of feedback. It's good to create a Project based on the product information you manage.",
+        "step3-description": "A Channel refers to the method of feedback collection. It's good to create a Channel based on how you collect feedback for the product you are responsible for."
       }
     },
     "text": {
@@ -385,15 +387,15 @@
       },
       "issue-addition": {
         "title": "Issue Registration",
-        "description": "Every time I register an issue, I trigger an event."
+        "description": "Every time you register an issue, an event is triggered."
       },
       "issue-status-change": {
         "title": "Issue Status Change",
-        "description": "Every time you change the issue status, you trigger an event."
+        "description": "Every time you change the issue status, an event is triggered."
       },
       "issue-creation": {
         "title": "Issue Creation",
-        "description": "Every time you create a new issue, you trigger an event."
+        "description": "Every time you create a new issue, an event is triggered."
       }
     },
     "error": {

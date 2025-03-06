@@ -102,7 +102,6 @@ const BasicTable = <T,>(props: IProps<T>) => {
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {}),
   );
-  console.log(table.getCanNextPage());
 
   return (
     <div
@@ -197,10 +196,14 @@ const BasicTable = <T,>(props: IProps<T>) => {
                   />
                 ))}
                 {isInfiniteScroll && (
-                  <InfiniteScrollArea
-                    fetchNextPage={table.nextPage}
-                    hasNextPage={table.getCanNextPage()}
-                  />
+                  <tr>
+                    <td>
+                      <InfiniteScrollArea
+                        fetchNextPage={table.nextPage}
+                        hasNextPage={table.getCanNextPage()}
+                      />
+                    </td>
+                  </tr>
                 )}
               </SortableContext>
             }

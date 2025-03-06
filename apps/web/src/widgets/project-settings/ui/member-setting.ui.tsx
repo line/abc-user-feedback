@@ -23,7 +23,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
@@ -153,6 +153,9 @@ const MemberSetting: React.FC<IProps> = (props) => {
       toast.success(t('v2.toast.success'));
       table.resetRowSelection();
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
 
   const { mutateAsync: updateMember } = useMutation({
@@ -168,6 +171,9 @@ const MemberSetting: React.FC<IProps> = (props) => {
         queryKey: ['/api/admin/users/{userId}/roles'],
       });
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

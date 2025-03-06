@@ -23,10 +23,12 @@ export const fieldOptionSchema = z.object({
   id: z.number(),
   key: z
     .string()
+    .trim()
     .min(1, { message: i18n?.t('hint.required') })
     .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
   name: z
     .string()
+    .trim()
     .min(1, { message: i18n?.t('hint.required') })
     .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
 });
@@ -35,14 +37,21 @@ export const fieldSchema = z.object({
   id: z.number(),
   key: z
     .string()
+    .trim()
     .min(1, { message: i18n?.t('hint.required') })
-    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
+    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) })
+    .regex(
+      /^[A-Za-z0-9_]*$/,
+      'String can only contain letters, numbers, and underscores, with no spaces or other special characters.',
+    ),
   name: z
     .string()
+    .trim()
     .min(1, { message: i18n?.t('hint.required') })
     .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
   description: z
     .string()
+    .trim()
     .max(50, { message: i18n?.t('hint.max-length', { length: 50 }) })
     .nullable(),
   format: z.enum(FIELD_FORMAT_LIST),

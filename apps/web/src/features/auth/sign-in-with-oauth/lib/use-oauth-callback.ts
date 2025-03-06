@@ -15,10 +15,11 @@
  */
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { AxiosError } from 'axios';
 
 import { toast } from '@ufb/react';
 
-import { Path } from '@/shared';
+import type { IFetchError } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
 export const useOAuthCallback = () => {
@@ -28,17 +29,26 @@ export const useOAuthCallback = () => {
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
   const code = router.query.code as string | undefined;
-  const callback_url = router.query.callback_url as string | undefined;
 
   useEffect(() => {
     if (!code) return;
 
-    signInWithOAuth({ code, callback_url }).catch(() => {
-      toast.error('OAuth2.0 Login Error');
-      void router.replace(Path.SIGN_IN);
+    signInWithOAuth({ code }).catch((error) => {
+      if (error instanceof AxiosError && error.response) {
+        const message = error.response.data as IFetchError;
+        toast.error(
+          message.message ??
+            message.axiosError?.error ??
+            'An error occurred during OAuth2.0 login. Please contact the administrator.',
+        );
+      } else {
+        toast.error(
+          'An error occurred during OAuth2.0 login. Please contact the administrator.',
+        );
+      }
       setStatus('error');
     });
-  }, [code, callback_url]);
+  }, [code]);
 
   return { status };
 };

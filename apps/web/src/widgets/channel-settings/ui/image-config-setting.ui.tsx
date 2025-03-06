@@ -16,8 +16,8 @@
 
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
 import { Button, toast } from '@ufb/react';
 
@@ -44,7 +44,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
 
   const perms = usePermissions(projectId);
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
@@ -89,7 +89,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         region: '',
       });
     }
-  }, [data]);
+  }, [data, isRefetching]);
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (input: ChannelImageConfig) => {

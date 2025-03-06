@@ -510,7 +510,7 @@ export interface paths {
     get?: never;
     put?: never;
     post: operations['MemberController_create'];
-    delete?: never;
+    delete: operations['MemberController_deleteMany'];
     options?: never;
     head?: never;
     patch?: never;
@@ -1044,6 +1044,8 @@ export interface components {
       meta: components['schemas']['PaginationMetaDto'];
       items: components['schemas']['GetAllUserResponse'][];
     };
+    /** @enum {string} */
+    UserTypeEnum: 'SUPER' | 'GENERAL';
     TimeRange: {
       'gte (UTC)': string;
       'lt (UTC)': string;
@@ -1052,7 +1054,7 @@ export interface components {
       email?: string;
       name?: Record<string, unknown>;
       department?: Record<string, unknown>;
-      type?: ('SUPER' | 'GENERAL')[];
+      type?: components['schemas']['UserTypeEnum'][];
       projectId?: number[];
       createdAt?: components['schemas']['TimeRange'];
     };
@@ -1088,6 +1090,42 @@ export interface components {
       /** @enum {string} */
       signUpMethod: 'EMAIL' | 'OAUTH';
     };
+    /** @enum {string} */
+    PermissionEnum:
+      | 'feedback_download_read'
+      | 'feedback_update'
+      | 'feedback_delete'
+      | 'feedback_issue_update'
+      | 'issue_create'
+      | 'issue_update'
+      | 'issue_delete'
+      | 'project_update'
+      | 'project_delete'
+      | 'project_member_read'
+      | 'project_member_create'
+      | 'project_member_update'
+      | 'project_member_delete'
+      | 'project_role_read'
+      | 'project_role_create'
+      | 'project_role_update'
+      | 'project_role_delete'
+      | 'project_apikey_read'
+      | 'project_apikey_create'
+      | 'project_apikey_update'
+      | 'project_apikey_delete'
+      | 'project_tracker_read'
+      | 'project_tracker_update'
+      | 'project_webhook_read'
+      | 'project_webhook_create'
+      | 'project_webhook_update'
+      | 'project_webhook_delete'
+      | 'channel_create'
+      | 'channel_update'
+      | 'channel_delete'
+      | 'channel_field_read'
+      | 'channel_field_update'
+      | 'channel_image_read'
+      | 'channel_image_update';
     RoleProjectDto: {
       id: number;
       createdAt: string;
@@ -1102,42 +1140,7 @@ export interface components {
       updatedAt: string;
       deletedAt: Record<string, unknown>;
       name: string;
-      permissions: (
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'project_webhook_read'
-        | 'project_webhook_create'
-        | 'project_webhook_update'
-        | 'project_webhook_delete'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-        | 'channel_image_read'
-        | 'channel_image_update'
-      )[];
+      permissions: components['schemas']['PermissionEnum'][];
       project: components['schemas']['RoleProjectDto'];
     };
     GetRolesByIdResponseDto: {
@@ -1172,6 +1175,8 @@ export interface components {
       email: string;
       password: string;
     };
+    /** @enum {string} */
+    LoginButtonTypeEnum: 'CUSTOM' | 'GOOGLE';
     OAuthConfigRequestDto: {
       clientId: string;
       clientSecret: string;
@@ -1180,8 +1185,7 @@ export interface components {
       accessTokenRequestURL: string;
       userProfileRequestURL: string;
       emailKey: string;
-      /** @enum {string} */
-      loginButtonType: 'CUSTOM' | 'GOOGLE';
+      loginButtonType: components['schemas']['LoginButtonTypeEnum'];
       loginButtonName: string;
     };
     UpdateTenantRequestDto: {
@@ -1201,8 +1205,7 @@ export interface components {
       accessTokenRequestURL: string;
       userProfileRequestURL: string;
       emailKey: string;
-      /** @enum {string|null} */
-      loginButtonType: 'CUSTOM' | 'GOOGLE' | null;
+      loginButtonType: components['schemas']['LoginButtonTypeEnum'] | null;
       loginButtonName: string | null;
     };
     GetTenantResponseDto: {
@@ -1220,42 +1223,7 @@ export interface components {
     GetAllRolesResponseRoleDto: {
       id: number;
       name: string;
-      permissions: (
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'project_webhook_read'
-        | 'project_webhook_create'
-        | 'project_webhook_update'
-        | 'project_webhook_delete'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-        | 'channel_image_read'
-        | 'channel_image_update'
-      )[];
+      permissions: components['schemas']['PermissionEnum'][];
     };
     GetAllRolesResponseDto: {
       roles: components['schemas']['GetAllRolesResponseRoleDto'][];
@@ -1263,81 +1231,11 @@ export interface components {
     };
     CreateRoleRequestDto: {
       name: string;
-      permissions: (
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'project_webhook_read'
-        | 'project_webhook_create'
-        | 'project_webhook_update'
-        | 'project_webhook_delete'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-        | 'channel_image_read'
-        | 'channel_image_update'
-      )[];
+      permissions: string[];
     };
     UpdateRoleRequestDto: {
       name: string;
-      permissions: (
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'project_webhook_read'
-        | 'project_webhook_create'
-        | 'project_webhook_update'
-        | 'project_webhook_delete'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-        | 'channel_image_read'
-        | 'channel_image_update'
-      )[];
+      permissions: string[];
     };
     QueryV2: {
       /** @example {
@@ -1488,42 +1386,7 @@ export interface components {
     MemberRoleDto: {
       id: number;
       name: string;
-      permissions: (
-        | 'feedback_download_read'
-        | 'feedback_update'
-        | 'feedback_delete'
-        | 'feedback_issue_update'
-        | 'issue_create'
-        | 'issue_update'
-        | 'issue_delete'
-        | 'project_update'
-        | 'project_delete'
-        | 'project_member_read'
-        | 'project_member_create'
-        | 'project_member_update'
-        | 'project_member_delete'
-        | 'project_role_read'
-        | 'project_role_create'
-        | 'project_role_update'
-        | 'project_role_delete'
-        | 'project_apikey_read'
-        | 'project_apikey_create'
-        | 'project_apikey_update'
-        | 'project_apikey_delete'
-        | 'project_tracker_read'
-        | 'project_tracker_update'
-        | 'project_webhook_read'
-        | 'project_webhook_create'
-        | 'project_webhook_update'
-        | 'project_webhook_delete'
-        | 'channel_create'
-        | 'channel_update'
-        | 'channel_delete'
-        | 'channel_field_read'
-        | 'channel_field_update'
-        | 'channel_image_read'
-        | 'channel_image_update'
-      )[];
+      permissions: components['schemas']['PermissionEnum'][];
     };
     GetAllMember: {
       id: number;
@@ -1542,6 +1405,9 @@ export interface components {
     };
     UpdateMemberRequestDto: {
       roleId: number;
+    };
+    DeleteManyMemberRequestDto: {
+      memberIds: string[];
     };
     TimezoneDto: {
       countryCode: string;
@@ -2232,7 +2098,9 @@ export interface operations {
   };
   AuthController_handleCallback: {
     parameters: {
-      query?: never;
+      query?: {
+        code?: unknown;
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -2243,7 +2111,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          'application/json': components['schemas']['SignInResponseDto'];
+        };
       };
     };
   };
@@ -2984,6 +2854,29 @@ export interface operations {
       };
     };
   };
+  MemberController_deleteMany: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['DeleteManyMemberRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   MemberController_update: {
     parameters: {
       query?: never;
@@ -3499,7 +3392,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          'application/json': components['schemas']['FindIssueByIdResponseDto'][];
+          'application/json': components['schemas']['FindIssueByIdResponseDto'];
         };
       };
     };

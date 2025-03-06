@@ -21,17 +21,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import {
   DEFAULT_LOCALE,
   NoProjectDialogInProjectCreation,
-  useOAIQuery,
+  useAllProjects,
 } from '@/shared';
 import { CreateProject } from '@/features/create-project';
 
 const CreateProjectPage: NextPage = () => {
   const overlay = useOverlay();
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1 },
-  });
+  const { data } = useAllProjects();
   const openWarningNoProjects = () => {
     overlay.open(({ close, isOpen }) => (
       <NoProjectDialogInProjectCreation isOpen={isOpen} close={close} />

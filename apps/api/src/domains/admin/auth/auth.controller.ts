@@ -105,6 +105,8 @@ export class AuthController {
   }
 
   @UseGuards(UseOAuthGuard)
+  @ApiQuery({ name: 'code', required: false })
+  @ApiOkResponse({ type: SignInResponseDto })
   @Get('signIn/oauth')
   async handleCallback(@Query() query: { code: string }) {
     return await this.authService.signInByOAuth(query.code);

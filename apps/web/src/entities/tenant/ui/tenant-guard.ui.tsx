@@ -28,17 +28,15 @@ const TenantGuard: React.FC<IProps> = ({ children }) => {
   const router = useRouter();
   const { setTenant } = useTenantStore();
 
-  const { data, status, error } = useOAIQuery({
+  const { data, error } = useOAIQuery({
     path: '/api/admin/tenants',
-    queryOptions: { retry: 0, refetchOnWindowFocus: false },
   });
 
   useEffect(() => {
-    if (error?.statusCode === 404) void router.push(Path.CREATE_TENANT);
+    if (error?.statusCode === 404) void router.replace(Path.CREATE_TENANT);
     if (data) setTenant(data as Tenant);
-  }, [data, error]);
+  }, [data, error, router.pathname]);
 
-  if (status === 'pending') return <>Loading...</>;
   return children;
 };
 

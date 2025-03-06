@@ -58,7 +58,6 @@ export default function useOAIMutation<
     TBody,
     (Record<string, unknown> | TPath | undefined)[]
   >({
-    mutationKey: [method, path, pathParams],
     mutationFn: async (body: TBody) => {
       const { data } = await client.request({
         method,

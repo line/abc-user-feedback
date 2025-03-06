@@ -17,7 +17,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useThrottle } from 'react-use';
 
 import {
@@ -28,6 +28,7 @@ import {
   ComboboxList,
   ComboboxSelectItem,
   ComboboxTrigger,
+  Icon,
   toast,
 } from '@ufb/react';
 
@@ -42,7 +43,7 @@ interface Props extends React.PropsWithChildren {
   category?: Category | null;
   issueId: number;
 }
-const LIMIT = 5;
+const LIMIT = 20;
 const CategoryCombobox = (props: Props) => {
   const { category, issueId, children } = props;
 
@@ -83,6 +84,9 @@ const CategoryCombobox = (props: Props) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
   const { mutate: detachCategory } = useMutation({
     mutationFn: async ({ categoryId }: { categoryId: number }) => {
@@ -95,6 +99,9 @@ const CategoryCombobox = (props: Props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 
@@ -110,6 +117,9 @@ const CategoryCombobox = (props: Props) => {
     async onSuccess() {
       await refetch();
       toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
     },
   });
 
@@ -170,16 +180,17 @@ const CategoryCombobox = (props: Props) => {
             !data?.items.some((v) => v.name === inputValue) &&
             !isLoading && (
               <div
-                className="combobox-item flex justify-between"
+                className="combobox-item"
                 onClick={async () => {
-                  const data = await createCategory({
-                    name: inputValue,
-                  });
+                  const name = inputValue.trim();
+                  const data = await createCategory({ name });
                   if (!data) return;
+                  setInputValue(name);
                   attachCategory({ categoryId: data.id });
                 }}
               >
-                <span>{inputValue}</span>
+                <Icon name="RiCheckLine" className="combobox-check invisible" />
+                <span className="flex-1">{inputValue}</span>
                 <span className="text-neutral-tertiary text-small-normal">
                   Create
                 </span>

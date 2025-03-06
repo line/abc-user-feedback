@@ -18,7 +18,12 @@ import dayjs from 'dayjs';
 
 import { Badge } from '@ufb/react';
 
-import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
+import {
+  DATE_TIME_FORMAT,
+  ExpandableText,
+  ImagePreviewButton,
+  linkify,
+} from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 
 interface IProps {
@@ -34,38 +39,44 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
     <ExpandableText isExpanded={isExpanded}>
       {typeof value === 'undefined' || value === null ?
         undefined
-      : field.format === 'date' ?
-        dayjs(value as string).format(DATE_TIME_FORMAT)
-      : field.format === 'multiSelect' ?
-        <div className="flex gap-2">
-          {(value as string[])
-            .sort(
-              (aKey, bKey) =>
-                (field.options ?? []).findIndex(
-                  (option) => option.key === aKey,
-                ) -
-                (field.options ?? []).findIndex(
-                  (option) => option.key === bKey,
-                ),
-            )
-            .map((key) => (
-              <Badge variant="subtle">
-                {
-                  (field.options?.find((option) => option.key === key)?.name ??
-                    value) as string
-                }
-              </Badge>
-            ))}
-        </div>
-      : field.format === 'select' ?
-        <Badge variant="subtle">
-          {field.options?.find((option) => option.key === value)?.name ?? ''}
-        </Badge>
-      : field.format === 'images' ?
-        <ImagePreviewButton urls={value as string[]} />
-      : field.format === 'text' ?
-        (value as string)
-      : String(value)}
+      : <>
+          {field.format === 'date' &&
+            dayjs(value as string).format(DATE_TIME_FORMAT)}
+          {field.format === 'multiSelect' && (
+            <div className="flex gap-2">
+              {(value as string[])
+                .sort(
+                  (aKey, bKey) =>
+                    (field.options ?? []).findIndex(
+                      (option) => option.key === aKey,
+                    ) -
+                    (field.options ?? []).findIndex(
+                      (option) => option.key === bKey,
+                    ),
+                )
+                .map((key) => (
+                  <Badge variant="subtle">
+                    {
+                      (field.options?.find((option) => option.key === key)
+                        ?.name ?? value) as string
+                    }
+                  </Badge>
+                ))}
+            </div>
+          )}
+          {field.format === 'select' && (
+            <Badge variant="subtle">
+              {field.options?.find((option) => option.key === value)?.name ??
+                ''}
+            </Badge>
+          )}
+          {field.format === 'images' && (
+            <ImagePreviewButton urls={value as string[]} />
+          )}
+          {field.format === 'text' && linkify(value as string)}
+          {field.format === 'keyword' && value}
+        </>
+      }
     </ExpandableText>
   );
 });

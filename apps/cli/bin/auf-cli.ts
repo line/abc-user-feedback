@@ -109,7 +109,6 @@ program
     const webEnvVars = [
       'NEXT_PUBLIC_API_BASE_URL',
       'NEXT_PUBLIC_MAX_DAYS',
-      'API_BASE_URL',
       'SESSION_PASSWORD',
     ];
 

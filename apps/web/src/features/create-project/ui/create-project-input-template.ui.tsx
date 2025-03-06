@@ -17,7 +17,7 @@
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import {
   Dialog,
@@ -34,8 +34,8 @@ import {
   CreateInputTemplate,
   isObjectEqual,
   Path,
+  useAllProjects,
   useOAIMutation,
-  useOAIQuery,
   useWarnIfSavedChanges,
 } from '@/shared';
 
@@ -76,10 +76,7 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
 
   const router = useRouter();
   const overlay = useOverlay();
-  const { refetch } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000, page: 1 },
-  });
+  const { refetch } = useAllProjects();
 
   const openMemberError = () => {
     overlay.open(({ isOpen, close }) => (

@@ -13,16 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
-import { http, HttpResponse } from 'msw';
+import useOAIQuery from './useOAIQuery';
 
-import { env } from '@/env';
-
-export const signInWithOAuthMockHandlers = [
-  http.get(
-    `${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/auth/signIn/oauth/loginURL`,
-    () => {
-      return HttpResponse.json({ url: faker.internet.url() }, { status: 200 });
-    },
-  ),
-];
+const useAllProjects = () => {
+  return useOAIQuery({
+    path: '/api/admin/projects',
+    variables: { limit: 1000 },
+  });
+};
+export default useAllProjects;

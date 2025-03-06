@@ -16,7 +16,7 @@
 
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import {
   Icon,
@@ -32,7 +32,7 @@ import {
   TooltipTrigger,
 } from '@ufb/react';
 
-import { cn, CreatingDialog, Path, useOAIQuery } from '@/shared';
+import { cn, CreatingDialog, Path, useAllProjects } from '@/shared';
 import { useUserStore } from '@/entities/user';
 import { useCreateProjectStore } from '@/features/create-project/create-project-model';
 
@@ -48,10 +48,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   const overlay = useOverlay();
   const { user } = useUserStore();
 
-  const { data } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000 },
-  });
+  const { data } = useAllProjects();
 
   const onChangeProject = async (currentProjectId?: string) => {
     await router.push({
@@ -84,8 +81,8 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <Tooltip delayDuration={0}>
-      <TooltipTrigger disabled>
+    <Tooltip>
+      <TooltipTrigger asChild>
         <Select
           type="single"
           value={projectId ? String(projectId) : ''}

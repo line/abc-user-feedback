@@ -120,7 +120,7 @@
     "date": {
       "today": "今日",
       "yesterday": "昨日",
-      "before-days": "{{day, number}}日前",
+      "before-days": "{{day, number}}日",
       "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
     },
     "guide": "案内",
@@ -324,9 +324,11 @@
         "title": "所属プロジェクトがありません。",
         "description": "まだ所属しているプロジェクトがありません。\nプロジェクト管理者にメンバー登録を依頼するか、問い合わせてみてください。"
       },
-      "no-project-in-project-creation-page": {
+      "no-project-dialog-in-project-creation-page": {
         "title": "ようこそ！",
-        "description": "ユーザーフィードバックは、テナント-プロジェクト-チャネルの階層構造を持っています。フィードバックを収集または管理するには、収集対象のプロジェクトと収集方法のチャネルを作成する必要があります。"
+        "step1-description": "ABC User Feedbackでは、Channel > Project > Tenantの構造でフィードバックを管理します。そのため、ProjectとChannelの両方を作成する必要があります。",
+        "step2-description": "Projectはフィードバック対象となるプロダクトを意味します。管理しているプロダクト情報に基づいてProjectを作成すると良いです。",
+        "step3-description": "Channelはフィードバック収集方法を意味します。担当しているプロダクトでどのようにフィードバックを収集しているかに基づいてChannelを作成すると良いです。"
       }
     },
     "text": {

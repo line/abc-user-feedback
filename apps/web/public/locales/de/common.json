@@ -120,7 +120,7 @@
     "date": {
       "today": "Heute",
       "yesterday": "Gestern",
-      "before-days": "Vor {{day, number}} Tagen",
+      "before-days": "{{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
     },
     "guide": "Richtlinien",
@@ -324,9 +324,11 @@
         "title": "Kein zugehöriges Projekt.",
         "description": "Es gibt noch kein zugehöriges Projekt.\nBitte bitten Sie den Projektmanager um die Registrierung als Mitglied oder fragen Sie nach."
       },
-      "no-project-in-project-creation-page": {
+      "no-project-dialog-in-project-creation-page": {
         "title": "Willkommen!",
-        "description": "User Feedback hat eine Tenant-Project-Channel-Hierarchie. Um Feedback zu sammeln oder zu verwalten, müssen Sie ein Projekt für das Sammelziel und einen Kanal für die Sammelmethode erstellen."
+        "step1-description": "In ABC User Feedback verwalten wir Feedback in einer Channel > Project > Tenant Struktur. Daher müssen Sie sowohl ein Project als auch einen Channel erstellen.",
+        "step2-description": "Ein Project bezieht sich auf das Produkt, für das Feedback gesammelt wird. Es ist gut, ein Project basierend auf den von Ihnen verwalteten Produktinformationen zu erstellen.",
+        "step3-description": "Ein Channel bezieht sich auf die Methode der Feedback-Sammlung. Es ist gut, einen Channel basierend darauf zu erstellen, wie Sie Feedback für das von Ihnen betreute Produkt sammeln."
       }
     },
     "text": {

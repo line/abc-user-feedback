@@ -65,7 +65,12 @@ const getColumns = (t: TFunction) => [
           <Link
             href={{
               pathname: Path.ISSUE,
-              query: { projectId: router.query.projectId, id: row.original.id },
+              query: {
+                projectId: router.query.projectId,
+                queries: JSON.stringify([
+                  { name: row.original.name, condition: 'IS' },
+                ]),
+              },
             }}
             target="_blank"
             rel="noreferrer"
@@ -89,6 +94,7 @@ const getColumns = (t: TFunction) => [
       </div>
     ),
     cell: ({ getValue }) => <p>{getValue().toLocaleString()}</p>,
+    enableSorting: false,
   }),
   columnHelper.accessor('status', {
     header: 'Status',

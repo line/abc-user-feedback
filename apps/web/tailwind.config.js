@@ -37,6 +37,5 @@ module.exports = {
     require('@ufb/tailwindcss'),
     // @ts-ignore
     require('tailwind-scrollbar-hide'),
-    require('@headlessui/tailwindcss'),
   ],
 };

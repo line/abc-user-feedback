@@ -22,7 +22,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
@@ -32,8 +32,8 @@ import {
   client,
   DeleteDialog,
   TableFilterPopover,
+  useAllProjects,
   useOAIMutation,
-  useOAIQuery,
   useSort,
 } from '@/shared';
 
@@ -82,7 +82,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     enableColumnFilters: true,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
-      pagination: { pageIndex: 0, pageSize: 20 },
+      pagination: { pageIndex: 0, pageSize: 30 },
     },
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -94,10 +94,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { sorting, pagination } = table.getState();
   const sort = useSort(sorting);
 
-  const { data: projects } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000 },
-  });
+  const { data: projects } = useAllProjects();
 
   const {
     data: userData,
@@ -139,8 +136,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
       await refetch();
       toast.success(t('v2.toast.success'));
     },
-    onError({ message }) {
-      toast.error(message);
+    onError(error) {
+      toast.error(error.message);
     },
   });
 

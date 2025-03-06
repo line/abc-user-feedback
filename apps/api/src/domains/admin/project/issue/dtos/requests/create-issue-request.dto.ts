@@ -46,6 +46,7 @@ export class CreateIssueRequestDto {
     nullable: true,
     description: 'Issue description',
     example: 'This is a payment issue',
+    type: String,
   })
   @IsString()
   @IsNullable()

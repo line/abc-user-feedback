@@ -19,4 +19,9 @@ export interface IFetchError {
   message?: string;
   statusCode: number;
   path: string;
+  axiosError?: {
+    error: string;
+    error_description: string;
+    status: number;
+  };
 }

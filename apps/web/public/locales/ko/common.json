@@ -119,7 +119,7 @@
     "date": {
       "today": "오늘",
       "yesterday": "어제",
-      "before-days": "{{day, number}}일전",
+      "before-days": "{{day, number}}일",
       "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
     "guide": "안내",

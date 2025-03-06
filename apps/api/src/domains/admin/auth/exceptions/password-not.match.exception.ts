@@ -13,11 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { UnauthorizedException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 
 import { ErrorCode } from '@ufb/shared';
 
-export class PasswordNotMatchException extends UnauthorizedException {
+export class PasswordNotMatchException extends NotFoundException {
   constructor() {
     super({
       code: ErrorCode.Auth.PasswordNotMatch,
