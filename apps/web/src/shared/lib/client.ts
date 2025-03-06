@@ -17,7 +17,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-import { getRequestUrl, Path, sessionStorage } from '@/shared';
+import { cookieStorage, getRequestUrl, Path } from '@/shared';
 import type {
   Jwt,
   OAIMethodPathKeys,
@@ -42,7 +42,7 @@ class client {
 
   constructor() {
     this.axiosInstance.interceptors.request.use(async (config) => {
-      const token = await sessionStorage.getItem('jwt');
+      const token = await cookieStorage.getItem('jwt');
       if (token) {
         config.headers.setAuthorization(`Bearer ${token.accessToken}`);
       }
@@ -53,19 +53,19 @@ class client {
       async (failedRequest: { response: AxiosResponse }) => {
         if (failedRequest.response.status !== 401) return;
         try {
-          const jwt = await sessionStorage.getItem('jwt');
+          const jwt = await cookieStorage.getItem('jwt');
           const { data } = await axios.get<Jwt>(
             `${env.NEXT_PUBLIC_API_BASE_URL}/api/admin/auth/refresh`,
             { headers: { Authorization: `Bearer ${jwt?.refreshToken}` } },
           );
 
-          await sessionStorage.setItem('jwt', data);
+          await cookieStorage.setItem('jwt', data);
 
           failedRequest.response.config.headers.setAuthorization(
             `Bearer ${data.accessToken}`,
           );
         } catch {
-          await sessionStorage.removeItem('jwt');
+          await cookieStorage.removeItem('jwt');
           window.location.assign(Path.SIGN_IN);
         }
       },

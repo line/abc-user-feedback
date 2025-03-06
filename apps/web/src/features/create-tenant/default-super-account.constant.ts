@@ -15,5 +15,5 @@
  */
 export const DEFAULT_SUPER_ACCOUNT = {
   email: 'user@feedback.com',
-  password: '12345678',
+  password: '12345678!',
 };

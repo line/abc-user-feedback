@@ -20,7 +20,7 @@ import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
 import { create } from 'zustand';
 
-import { client, Path, sessionStorage } from '@/shared';
+import { client, cookieStorage, Path } from '@/shared';
 import type { Jwt } from '@/shared/types';
 
 import type { User } from './user.type';
@@ -61,11 +61,11 @@ export const useUserStore = create<State & Action>((set, get) => ({
     get()._signIn(jwt);
   },
   signOut: async () => {
-    await sessionStorage.removeItem('jwt');
+    await cookieStorage.removeItem('jwt');
     await router.push(Path.SIGN_IN);
   },
   setUser: async () => {
-    const jwt = await sessionStorage.getItem('jwt');
+    const jwt = await cookieStorage.getItem('jwt');
     if (!jwt) return;
 
     const { sub, exp } = jwtDecode<JwtPayload>(jwt.accessToken);
@@ -81,7 +81,7 @@ export const useUserStore = create<State & Action>((set, get) => ({
     }
   },
   async _signIn(jwt) {
-    await sessionStorage.setItem('jwt', jwt);
+    await cookieStorage.setItem('jwt', jwt);
     const broadcastChannel = new BroadcastChannel('ufb');
     broadcastChannel.postMessage({ type: 'reload', payload: get().randomId });
     get().setUser();

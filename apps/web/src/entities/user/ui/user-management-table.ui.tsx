@@ -82,7 +82,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     enableColumnFilters: true,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
-      pagination: { pageIndex: 0, pageSize: 20 },
+      pagination: { pageIndex: 0, pageSize: 30 },
     },
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

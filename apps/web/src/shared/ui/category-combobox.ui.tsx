@@ -43,7 +43,7 @@ interface Props extends React.PropsWithChildren {
   category?: Category | null;
   issueId: number;
 }
-const LIMIT = 5;
+const LIMIT = 20;
 const CategoryCombobox = (props: Props) => {
   const { category, issueId, children } = props;
 

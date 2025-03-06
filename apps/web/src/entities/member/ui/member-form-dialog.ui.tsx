@@ -35,7 +35,7 @@ interface Props extends FormOverlayProps<MemberInfo> {
   project: ProjectInfo;
   roles: Role[];
 }
-const LIMIT = 10;
+const LIMIT = 20;
 
 const MemberFormDialog: React.FC<Props> = (props) => {
   const {
