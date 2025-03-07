@@ -332,7 +332,7 @@ const isOverMaxDays = (date: DateRangeType, maxDays: number) => {
   if (!date) return false;
   if (!date.startDate || !date.endDate) return false;
 
-  return maxDays < dayjs(date.endDate).diff(date.startDate, 'days') + 1;
+  return maxDays <= dayjs(date.endDate).diff(date.startDate, 'days');
 };
 
 export default DateRangePicker;

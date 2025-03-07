@@ -78,7 +78,7 @@ const FeedbackDetailSheet = (props: Props) => {
             [cur.key]:
               currentFeedback[cur.key] ?
                 dayjs(currentFeedback[cur.key] as string).toISOString()
-              : undefined,
+              : null,
           };
         }
         return { ...acc, [cur.key]: currentFeedback[cur.key] };
@@ -137,7 +137,7 @@ const FeedbackDetailSheet = (props: Props) => {
                 .filter((v) => !DEFAULT_FIELD_KEYS.includes(v.key))
                 .map((v) => ({
                   ...v,
-                  editable: v.property === 'EDITABLE',
+                  editable: v.property === 'EDITABLE' && v.status === 'ACTIVE',
                 })) as SheetDetailTableRow[]
             }
             mode={mode}

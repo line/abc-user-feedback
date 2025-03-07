@@ -266,14 +266,14 @@ const RoleFormSheet: React.FC<Props> = (props) => {
                 onChckedChange={checkPermission}
               />
               <PermissionRows
-                title="Channel Field"
+                title="Field"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelFieldPermissionList}
                 currentPermissions={currentPerms}
                 onChckedChange={checkPermission}
               />
               <PermissionRows
-                title="Channel Image Setting"
+                title="Image Setting"
                 permmissionsText={ChannelPermissionText}
                 permissions={ChannelImageSettingPermissionList}
                 currentPermissions={currentPerms}

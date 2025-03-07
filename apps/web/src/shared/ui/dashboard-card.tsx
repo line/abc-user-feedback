@@ -31,8 +31,8 @@ const TYPE_MAP: Record<
   'feedback' | 'issue',
   { icon: IconNameType; color: string }
 > = {
-  feedback: { icon: 'RiMegaphoneLine', color: 'bg-teal-400' },
-  issue: { icon: 'RiMessage2Line', color: 'bg-sky-500' },
+  feedback: { icon: 'RiMessage2Line', color: 'bg-sky-500' },
+  issue: { icon: 'RiMegaphoneLine', color: 'bg-teal-400' },
 };
 
 const DashboardCard: React.FC<IProps> = (props) => {

@@ -38,6 +38,7 @@ import {
   DeleteDialog,
   SettingTemplate,
   TableFilterPopover,
+  TablePagination,
   useOAIMutation,
   useOAIQuery,
   usePermissions,
@@ -94,8 +95,8 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const { rowSelection, pagination } = table.getState();
 
   const { data, refetch, isPending } = useMembmerSearch(projectId, {
-    page: 1,
-    limit: pagination.pageSize * pagination.pageIndex,
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
     operator,
     queries,
   });
@@ -103,11 +104,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (isPending) return;
     setRows(data?.items ?? []);
-    setPageCount(
-      data?.meta.totalPages === 1 ?
-        pagination.pageIndex + 1
-      : pagination.pageIndex + 2,
-    );
+    setPageCount(data?.meta.totalPages ?? 0);
     setRowCount(data?.meta.totalItems ?? 0);
   }, [data, pagination, isPending]);
 
@@ -329,8 +326,8 @@ const MemberSetting: React.FC<IProps> = (props) => {
           </Button>
         }
         onClickRow={openUpdateMemberFormDialog}
-        isInfiniteScroll
       />
+      <TablePagination table={table} />
     </SettingTemplate>
   );
 };

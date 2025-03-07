@@ -83,7 +83,9 @@ const FieldTable: React.FC<IProps> = (props) => {
         table={table}
         onClickRow={(index, row) => onClickRow?.(index, row)}
         reorder={(data) =>
-          reorder?.(data.map((field, index) => ({ ...field, order: index })))
+          reorder?.(
+            data.map((field, index) => ({ ...field, order: index + 1 })),
+          )
         }
       />
     </div>

@@ -121,6 +121,7 @@
       "today": "今日",
       "yesterday": "昨日",
       "before-days": "{{day, number}}日",
+      "last-days": "過去{{day, number}}日",
       "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
     },
     "guide": "案内",
@@ -344,7 +345,8 @@
       "name": {
         "detail": "{{name}}詳細",
         "add": "{{name}}追加",
-        "register": "{{name}}登録"
+        "register": "{{name}}登録",
+        "create": "{{name}}作成"
       },
       "summary": "概要",
       "preview": "プレビュー",

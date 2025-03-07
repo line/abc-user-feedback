@@ -121,6 +121,7 @@
       "today": "今天",
       "yesterday": "昨天",
       "before-days": "{{day, number}}天",
+      "last-days": "过去{{days, number}}天",
       "date-range-over-max-days": "查询期限限制为{{maxDays}}天"
     },
     "guide": "指南",
@@ -344,7 +345,8 @@
       "name": {
         "detail": "{{name}}详情",
         "add": "添加{{name}}",
-        "register": "注册{{name}}"
+        "register": "注册{{name}}",
+        "create": "创建{{name}}"
       },
       "summary": "摘要",
       "preview": "预览",

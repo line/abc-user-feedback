@@ -52,7 +52,7 @@ const IssueFormDialog = (props: Props) => {
     <FormDialog
       isOpen={isOpen}
       close={close}
-      title={t('v2.text.name.add', { name: 'Issue' })}
+      title={t('v2.text.name.create', { name: 'Issue' })}
       submitBtn={{ form: 'issueForm', disabled: updateDisabled }}
       formState={formState}
     >

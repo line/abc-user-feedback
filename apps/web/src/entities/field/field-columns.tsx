@@ -78,6 +78,9 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
         </Tag>
       ),
       enableSorting: false,
+      filterFn: (row, _, value: string[]) => {
+        return value.some((property) => property === row.getValue('property'));
+      },
     }),
     columnHelper.accessor('status', {
       header: 'Status',
@@ -87,6 +90,9 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
         </Badge>
       ),
       enableSorting: false,
+      filterFn: (row, _, value: string[]) => {
+        return value.some((status) => status === row.getValue('status'));
+      },
     }),
     columnHelper.accessor('description', {
       header: 'Description',

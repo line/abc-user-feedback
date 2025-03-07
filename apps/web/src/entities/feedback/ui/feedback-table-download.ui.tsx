@@ -53,7 +53,6 @@ const FeedbackTableDownload = (props: Props) => {
   });
 
   const visibleColumns = table.getVisibleFlatColumns();
-  const { rowSelection } = table.getState();
 
   const fieldIds = useMemo(
     () =>
@@ -65,9 +64,6 @@ const FeedbackTableDownload = (props: Props) => {
   );
 
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {
-    // const feedbackIds = Object.entries(rowSelection)
-    //   .filter(([, v]) => v)
-    //   .map(([k]) => k);
     void toast.promise(download({ type, fieldIds, queries, operator }), {
       success: () => t('main.feedback.download.success'),
       error: () => t('main.feedback.download.error'),
