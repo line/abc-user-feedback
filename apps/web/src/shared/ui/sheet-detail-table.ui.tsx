@@ -14,6 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
@@ -27,7 +28,7 @@ import { BADGE_COLOR_MAP } from '../constants/color-map';
 import { linkify } from '../utils';
 import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
-import { DatePicker, SelectInput } from './inputs';
+import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
 
 type PlainRow = {
   format: 'text' | 'keyword' | 'number' | 'date' | 'images';
@@ -91,50 +92,55 @@ type RenderFieldMap<T extends SheetDetailTableRow> = Record<
 
 const SheetDetailTable = (props: Props) => {
   const { rows, data, mode = 'view', onChange } = props;
+  const { t } = useTranslation();
 
   const renderViewModeField: RenderFieldMap<SheetDetailTableRow> = {
     text: (value) => (value ? linkify(String(value)) : '-'),
-    keyword: (value) => (value as string | null) ?? '-',
+    keyword: (value) => ((value as string | null) ? (value as string) : '-'),
     number: (value) => (value as string | null) ?? '-',
-    date: (value) => dayjs(value as string).format(DATE_TIME_FORMAT),
+    date: (value) =>
+      value ? dayjs(value as string).format(DATE_TIME_FORMAT) : '-',
     select: (value, row) => {
       const option = (row as SelectableRow).options.find(
         (option) => option.key === value,
       );
-      return (
-        <Badge
-          variant={option?.color ? 'bold' : 'subtle'}
-          className={option?.color ? BADGE_COLOR_MAP[option.color] : ''}
-        >
-          {option?.name ?? ''}
-        </Badge>
-      );
+      return option ?
+          <Badge
+            variant={option.color ? 'bold' : 'subtle'}
+            className={option.color ? BADGE_COLOR_MAP[option.color] : ''}
+          >
+            {option.name}
+          </Badge>
+        : '-';
     },
     multiSelect: (value, row) => (
       <div className="flex gap-2">
-        {(value as string[])
-          .sort(
-            (aKey, bKey) =>
-              (row as SelectableRow).options.findIndex(
-                (option) => option.key === aKey,
-              ) -
-              (row as SelectableRow).options.findIndex(
-                (option) => option.key === bKey,
-              ),
-          )
-          .map((key) => {
-            const option = (row as SelectableRow).options.find(
-              (option) => option.key === key,
-            );
-            return (
-              <Badge
-                variant={option?.color ? 'bold' : 'subtle'}
-                className={option?.color ? BADGE_COLOR_MAP[option.color] : ''}
-              >
-                {(option?.name ?? value) as string}
-              </Badge>
-            );
-          })}
+        {((value ?? []) as string[]).length === 0 ?
+          '-'
+        : (value as string[])
+            .sort(
+              (aKey, bKey) =>
+                (row as SelectableRow).options.findIndex(
+                  (option) => option.key === aKey,
+                ) -
+                (row as SelectableRow).options.findIndex(
+                  (option) => option.key === bKey,
+                ),
+            )
+            .map((key) => {
+              const option = (row as SelectableRow).options.find(
+                (option) => option.key === key,
+              );
+              return (
+                <Badge
+                  variant={option?.color ? 'bold' : 'subtle'}
+                  className={option?.color ? BADGE_COLOR_MAP[option.color] : ''}
+                >
+                  {(option?.name ?? value) as string}
+                </Badge>
+              );
+            })
+        }
       </div>
     ),
     images: (value) => <ImagePreviewButton urls={value as string[]} />,
@@ -199,20 +205,26 @@ const SheetDetailTable = (props: Props) => {
       return (
         <DatePicker
           value={value as string | undefined}
-          onChange={(date) => onChange?.(row.key, date)}
+          onChange={(date) => onChange?.(row.key, date ?? null)}
         />
       );
     },
     select: (value, row) => {
       return (
-        <SelectInput
+        <SelectSearchInput
           options={(row as SelectableRow).options.map((option) => ({
-            value: option.key,
+            value: option.name,
             label: option.name,
           }))}
-          value={(value ?? '') as string}
+          value={
+            (row as SelectableRow).options.find((v) => v.key === value)?.name
+          }
           onChange={(value) => {
-            onChange?.(row.key, value);
+            onChange?.(
+              row.key,
+              (row as SelectableRow).options.find((v) => v.name === value)
+                ?.key ?? null,
+            );
           }}
         />
       );
@@ -226,6 +238,7 @@ const SheetDetailTable = (props: Props) => {
         }))}
         values={value as string[]}
         onValuesChange={(value) => onChange?.(row.key, value)}
+        placeholder={t('v2.placeholder.select')}
       />
     ),
 

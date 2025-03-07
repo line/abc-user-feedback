@@ -318,7 +318,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            filterFields={filterFields}
+            filterFields={filterFields.filter((v) =>
+              table
+                .getVisibleFlatColumns()
+                .some((column) => column.id === v.key),
+            )}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
           />

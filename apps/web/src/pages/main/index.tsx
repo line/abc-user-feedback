@@ -18,6 +18,8 @@ import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
+import { Icon } from '@ufb/react';
+
 import { DEFAULT_LOCALE, Path, useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useUserStore } from '@/entities/user';
@@ -46,7 +48,11 @@ const MainIndexPage: NextPageWithLayout = () => {
     void router.push({ pathname: '/main/profile' });
   }, [data]);
 
-  return <></>;
+  return (
+    <div className="flex h-screen items-center justify-center">
+      <Icon name="RiLoader2Line" className="animate-spin" size={40} />
+    </div>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

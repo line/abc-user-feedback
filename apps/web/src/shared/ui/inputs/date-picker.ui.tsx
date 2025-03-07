@@ -30,7 +30,7 @@ import {
 import { cn } from '@/shared/utils';
 
 interface Props {
-  value?: string;
+  value?: string | null;
   onChange: (value?: string) => void;
 }
 

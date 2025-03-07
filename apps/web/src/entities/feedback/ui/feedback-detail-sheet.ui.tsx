@@ -71,23 +71,21 @@ const FeedbackDetailSheet = (props: Props) => {
   const onClickSubmit = async () => {
     const editedFeedback = fields.reduce((acc, cur) => {
       if (cur.key === 'issues') return acc;
-      if (
-        typeof currentFeedback[cur.key] === 'undefined' ||
-        currentFeedback[cur.key] === null
-      ) {
-        return acc;
-      }
       if (cur.property === 'EDITABLE') {
         if (cur.format === 'date') {
           return {
             ...acc,
-            [cur.key]: dayjs(currentFeedback[cur.key] as string).toISOString(),
+            [cur.key]:
+              currentFeedback[cur.key] ?
+                dayjs(currentFeedback[cur.key] as string).toISOString()
+              : undefined,
           };
         }
         return { ...acc, [cur.key]: currentFeedback[cur.key] };
       }
       return acc;
     }, {} as Feedback);
+
     try {
       setIsLoading(true);
       await updateFeedback?.(editedFeedback);

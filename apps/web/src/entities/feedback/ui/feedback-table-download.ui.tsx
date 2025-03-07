@@ -28,6 +28,7 @@ import {
   toast,
 } from '@ufb/react';
 
+import type { TableFilterOperator } from '@/shared';
 import type { Field } from '@/entities/field';
 
 import type { Feedback } from '../feedback.type';
@@ -38,10 +39,11 @@ interface Props {
   queries: Record<string, unknown>[];
   disabled: boolean;
   table: Table<Feedback>;
+  operator: TableFilterOperator;
 }
 
 const FeedbackTableDownload = (props: Props) => {
-  const { fields, queries, disabled, table } = props;
+  const { fields, queries, disabled, table, operator } = props;
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -50,19 +52,23 @@ const FeedbackTableDownload = (props: Props) => {
     params: { channelId: Number(channelId), projectId: Number(projectId) },
   });
 
+  const visibleColumns = table.getVisibleFlatColumns();
+  const { rowSelection } = table.getState();
+
   const fieldIds = useMemo(
     () =>
       fields
-        .filter((v) =>
-          table.getVisibleFlatColumns().some((column) => column.id === v.key),
-        )
+        .filter((v) => visibleColumns.some((column) => column.id === v.key))
         .sort((a, b) => a.order - b.order)
         .map((v) => v.id),
-    [fields, table],
+    [fields, visibleColumns],
   );
 
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {
-    void toast.promise(download({ type, fieldIds, queries }), {
+    // const feedbackIds = Object.entries(rowSelection)
+    //   .filter(([, v]) => v)
+    //   .map(([k]) => k);
+    void toast.promise(download({ type, fieldIds, queries, operator }), {
       success: () => t('main.feedback.download.success'),
       error: () => t('main.feedback.download.error'),
       loading: t('main.feedback.download.loading'),
