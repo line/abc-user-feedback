@@ -361,8 +361,7 @@ export class FeedbackMySQLService {
                   { optionId: option.key },
                 );
               } else if (format === FieldFormatEnum.multiSelect) {
-                const condition =
-                  query.condition || QueryV2ConditionsEnum.CONTAINS;
+                const condition = query.condition;
                 const values = value as string[];
 
                 if (condition === QueryV2ConditionsEnum.IS) {
@@ -377,7 +376,7 @@ export class FeedbackMySQLService {
                     )`,
                     { arrayLength: values.length },
                   );
-                } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
+                } else {
                   if (values.length > 0) {
                     qb[method](
                       new Brackets((subQb) => {

@@ -283,7 +283,7 @@ export class FeedbackOSService {
           }
 
           const { format, key, options } = fieldsByKey[fieldKey];
-          const condition = query.condition || QueryV2ConditionsEnum.CONTAINS;
+          const condition = query.condition;
           const values = query[fieldKey] as string[];
 
           if (format === FieldFormatEnum.select) {
@@ -332,7 +332,7 @@ export class FeedbackOSService {
                   bool: { must_not: [{ exists: { field: key } }] },
                 });
               }
-            } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
+            } else {
               if (values.length > 0) {
                 osQuery.bool.must.push({
                   terms: {
