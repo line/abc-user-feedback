@@ -20,7 +20,11 @@ import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { In, Repository } from 'typeorm';
 
 import type { TimeRange } from '@/common/dtos';
-import { FieldFormatEnum, SortMethodEnum } from '@/common/enums';
+import {
+  FieldFormatEnum,
+  QueryV2ConditionsEnum,
+  SortMethodEnum,
+} from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import type { FieldEntity } from '../channel/field/field.entity';
 import type {
@@ -279,6 +283,8 @@ export class FeedbackOSService {
           }
 
           const { format, key, options } = fieldsByKey[fieldKey];
+          const condition = query.condition || QueryV2ConditionsEnum.CONTAINS;
+          const values = query[fieldKey] as string[];
 
           if (format === FieldFormatEnum.select) {
             osQuery.bool.must.push({
@@ -289,13 +295,59 @@ export class FeedbackOSService {
               },
             });
           } else if (format === FieldFormatEnum.multiSelect) {
-            for (const value of query[fieldKey] as string[]) {
-              osQuery.bool.must.push({
-                match_phrase: {
-                  [key]: (options ?? []).find((option) => option.key === value)
-                    ?.key,
-                },
-              });
+            if (condition === QueryV2ConditionsEnum.IS) {
+              if (values.length > 0) {
+                osQuery.bool.must.push({
+                  bool: {
+                    must: [
+                      {
+                        terms_set: {
+                          [key]: {
+                            terms: values.map(
+                              (value) =>
+                                (options ?? []).find(
+                                  (option) => option.key === value,
+                                )?.key,
+                            ),
+                            minimum_should_match_script: {
+                              source: 'params.num_terms',
+                              params: { num_terms: values.length },
+                            },
+                          },
+                        },
+                      },
+                      {
+                        script: {
+                          script: {
+                            source: `doc['${key}'].length == params.num_terms`,
+                            params: { num_terms: values.length },
+                          },
+                        },
+                      },
+                    ],
+                  },
+                });
+              } else {
+                osQuery.bool.must.push({
+                  bool: { must_not: [{ exists: { field: key } }] },
+                });
+              }
+            } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
+              if (values.length > 0) {
+                osQuery.bool.must.push({
+                  terms: {
+                    [key]: values.map(
+                      (value) =>
+                        (options ?? []).find((option) => option.key === value)
+                          ?.key,
+                    ),
+                  },
+                });
+              } else {
+                osQuery.bool.must.push({
+                  bool: { must_not: [{ exists: { field: key } }] },
+                });
+              }
             }
           } else if (format === FieldFormatEnum.date) {
             if (fieldKey === 'createdAt') return osQuery;
