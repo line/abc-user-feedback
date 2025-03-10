@@ -27,4 +27,9 @@ export class ExportFeedbacksRequestDto extends FindFeedbacksByChannelIdRequestDt
   @IsOptional()
   @IsArray()
   fieldIds?: number[];
+
+  @ApiProperty({ required: false, type: [Number] })
+  @IsOptional()
+  @IsArray()
+  filterFeedbackIds?: number[];
 }
