@@ -137,7 +137,9 @@ const FeedbackDetailSheet = (props: Props) => {
                 .filter((v) => !DEFAULT_FIELD_KEYS.includes(v.key))
                 .map((v) => ({
                   ...v,
-                  editable: v.property === 'EDITABLE' && v.status === 'ACTIVE',
+                  editable: v.property === 'EDITABLE',
+                  disabled:
+                    v.property === 'EDITABLE' && v.status === 'INACTIVE',
                 })) as SheetDetailTableRow[]
             }
             mode={mode}

@@ -23,8 +23,6 @@ import { firstLeterPascal } from '@/shared';
 
 const MENU_ITEMS = ['dashboard', 'feedback', 'issue', 'settings'] as const;
 
-type MenuType = (typeof MENU_ITEMS)[number];
-
 interface Props {
   projectId?: number;
 }
@@ -40,24 +38,19 @@ const MenuList: React.FC<Props> = ({ projectId }) => {
         type="single"
         className="navbar-menu"
         disabled={!projectId}
-        onValueChange={async (value: MenuType | '') => {
-          if (!value) return;
-          await router.push({
-            pathname: `/main/project/[projectId]/${value}`,
-            query: { projectId },
-          });
-        }}
       >
         {MENU_ITEMS.map((v, i) => (
           <MenuItem key={i} value={v} asChild>
-            <Link
-              href={{
-                pathname: `/main/project/[projectId]/${v}`,
-                query: { projectId },
-              }}
-            >
-              {firstLeterPascal(v)}
-            </Link>
+            {projectId ?
+              <Link
+                href={{
+                  pathname: `/main/project/[projectId]/${v}`,
+                  query: { projectId },
+                }}
+              >
+                {firstLeterPascal(v)}
+              </Link>
+            : <span>{firstLeterPascal(v)}</span>}
           </MenuItem>
         ))}
       </Menu>

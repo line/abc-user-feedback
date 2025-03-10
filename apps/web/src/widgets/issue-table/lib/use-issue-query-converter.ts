@@ -89,6 +89,10 @@ const useIssueQueryConverter = (input: {
   const onChangeDateRange = useCallback(
     async (value: DateRangeType) => {
       if (!value) return;
+      if (value.startDate === null || value.endDate === null) {
+        await setQueries((queries) => queries.filter((v) => !v.createdAt));
+        return;
+      }
       await setQueries((queries) =>
         queries
           .filter((v) => !v.createdAt)

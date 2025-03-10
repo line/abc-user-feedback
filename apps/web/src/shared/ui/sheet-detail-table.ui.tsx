@@ -62,6 +62,7 @@ export type SheetDetailTableRow = {
   key: string;
   name: string;
   editable?: boolean;
+  disabled?: boolean;
 } & (PlainRow | SelectableRow | TicketRow | ImageRow | IssueRow | CategoryRow);
 
 type Format = SheetDetailTableRow['format'];
@@ -78,6 +79,7 @@ const FIELD_FORMAT_ICON_MAP: Record<Format, IconNameType> = {
   ticket: 'RiTicketLine',
   cateogry: 'RiListOrdered2',
 };
+
 interface Props {
   rows: SheetDetailTableRow[];
   data: Record<string, unknown>;
@@ -182,6 +184,7 @@ const SheetDetailTable = (props: Props) => {
         value={value as string}
         onChange={(e) => onChange?.(row.key, e.currentTarget.value)}
         className="resize-none"
+        disabled={row.disabled}
       />
     ),
     keyword: (value, row) => (
@@ -189,6 +192,7 @@ const SheetDetailTable = (props: Props) => {
         <TextInput
           value={value as number}
           onChange={(e) => onChange?.(row.key, e.currentTarget.value)}
+          disabled={row.disabled}
         />
       </InputField>
     ),
@@ -198,17 +202,17 @@ const SheetDetailTable = (props: Props) => {
           value={value as number}
           type="number"
           onChange={(e) => onChange?.(row.key, Number(e.currentTarget.value))}
+          disabled={row.disabled}
         />
       </InputField>
     ),
-    date: (value, row) => {
-      return (
-        <DatePicker
-          value={value as string | undefined}
-          onChange={(date) => onChange?.(row.key, date ?? null)}
-        />
-      );
-    },
+    date: (value, row) => (
+      <DatePicker
+        value={value as string | undefined}
+        onChange={(date) => onChange?.(row.key, date ?? null)}
+        disabled={row.disabled}
+      />
+    ),
     select: (value, row) => {
       return (
         <SelectSearchInput
@@ -226,6 +230,7 @@ const SheetDetailTable = (props: Props) => {
                 ?.key ?? null,
             );
           }}
+          disabled={row.disabled}
         />
       );
     },
@@ -239,6 +244,7 @@ const SheetDetailTable = (props: Props) => {
         values={value as string[]}
         onValuesChange={(value) => onChange?.(row.key, value)}
         placeholder={t('v2.placeholder.select')}
+        disabled={row.disabled}
       />
     ),
 
@@ -258,6 +264,7 @@ const SheetDetailTable = (props: Props) => {
             <TextInput
               value={value as string}
               onChange={(e) => onChange?.(row.key, e.currentTarget.value)}
+              disabled={row.disabled}
             />
           </InputField>
         </div>
