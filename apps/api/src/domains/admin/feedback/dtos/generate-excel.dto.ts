@@ -36,4 +36,5 @@ export class GenerateExcelDto {
   operator?: 'AND' | 'OR';
   type: 'xlsx' | 'csv';
   fieldIds?: number[];
+  filterFeedbackIds?: number[];
 }

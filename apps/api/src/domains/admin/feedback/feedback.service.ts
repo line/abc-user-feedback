@@ -208,6 +208,7 @@ export class FeedbackService {
     fields,
     fieldsByKey,
     fieldsToExport,
+    filterFeedbackIds,
   }: {
     projectId: number;
     channelId: number;
@@ -217,6 +218,7 @@ export class FeedbackService {
     fields: FieldEntity[];
     fieldsByKey: Record<string, FieldEntity>;
     fieldsToExport: FieldEntity[];
+    filterFeedbackIds: number[] | undefined;
   }) {
     if (!existsSync('/tmp')) {
       await fs.mkdir('/tmp');
@@ -278,6 +280,11 @@ export class FeedbackService {
         );
 
       for (const feedback of feedbacks) {
+        if (
+          filterFeedbackIds &&
+          !filterFeedbackIds.includes(feedback.id as number)
+        )
+          continue;
         feedback.issues = issuesByFeedbackIds[feedback.id as number];
         const convertedFeedback = this.convertFeedback(
           timezone,
@@ -310,6 +317,7 @@ export class FeedbackService {
     fields,
     fieldsByKey,
     fieldsToExport,
+    filterFeedbackIds,
   }: {
     projectId: number;
     channelId: number;
@@ -319,6 +327,7 @@ export class FeedbackService {
     fields: FieldEntity[];
     fieldsByKey: Record<string, FieldEntity>;
     fieldsToExport: FieldEntity[];
+    filterFeedbackIds: number[] | undefined;
   }) {
     const stream = new PassThrough();
     const csvStream = fastcsv.format({
@@ -370,6 +379,12 @@ export class FeedbackService {
         );
 
       for (const feedback of feedbacks) {
+        if (
+          filterFeedbackIds &&
+          !filterFeedbackIds.includes(feedback.id as number)
+        )
+          continue;
+
         feedback.issues = issuesByFeedbackIds[feedback.id as number];
         const convertedFeedback = this.convertFeedback(
           timezone,
@@ -676,8 +691,16 @@ export class FeedbackService {
     streamableFile: StreamableFile;
     feedbackIds: number[];
   }> {
-    const { projectId, channelId, queries, operator, sort, type, fieldIds } =
-      dto;
+    const {
+      projectId,
+      channelId,
+      queries,
+      operator,
+      sort,
+      type,
+      fieldIds,
+      filterFeedbackIds,
+    } = dto;
 
     const fields = await this.fieldService.findByChannelId({
       channelId: channelId,
@@ -714,6 +737,7 @@ export class FeedbackService {
           fields,
           fieldsByKey,
           fieldsToExport,
+          filterFeedbackIds,
         });
       case 'csv':
         return this.generateCSVFile({
@@ -725,6 +749,7 @@ export class FeedbackService {
           fields,
           fieldsByKey,
           fieldsToExport,
+          filterFeedbackIds,
         });
     }
   }
