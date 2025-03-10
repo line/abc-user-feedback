@@ -1325,6 +1325,7 @@ export interface components {
       sort?: Record<string, unknown>;
       type: string;
       fieldIds?: number[];
+      filterFeedbackIds?: number[];
     };
     DeleteFeedbacksRequestDto: {
       /**

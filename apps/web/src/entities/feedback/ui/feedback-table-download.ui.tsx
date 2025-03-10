@@ -60,7 +60,7 @@ const FeedbackTableDownload = (props: Props) => {
     () =>
       Object.entries(rowSelection)
         .filter(([_, v]) => !!v)
-        .map(([k]) => k),
+        .map(([k]) => Number(k)),
     [rowSelection],
   );
 
@@ -74,11 +74,20 @@ const FeedbackTableDownload = (props: Props) => {
   );
 
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {
-    void toast.promise(download({ type, fieldIds, queries, operator }), {
-      success: () => t('main.feedback.download.success'),
-      error: () => t('main.feedback.download.error'),
-      loading: t('main.feedback.download.loading'),
-    });
+    void toast.promise(
+      download({
+        type,
+        fieldIds,
+        queries,
+        operator,
+        filterFeedbackIds: feedbackIds.length > 0 ? feedbackIds : undefined,
+      }),
+      {
+        success: () => t('main.feedback.download.success'),
+        error: () => t('main.feedback.download.error'),
+        loading: t('main.feedback.download.loading'),
+      },
+    );
   };
 
   return (
