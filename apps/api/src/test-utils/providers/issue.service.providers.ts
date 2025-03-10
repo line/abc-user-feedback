@@ -16,6 +16,7 @@
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
+import { CategoryEntity } from '@/domains/admin/project/category/category.entity';
 import { IssueEntity } from '../../domains/admin/project/issue/issue.entity';
 import { IssueService } from '../../domains/admin/project/issue/issue.service';
 import { IssueRepositoryStub } from '../stubs';
@@ -26,6 +27,10 @@ export const IssueServiceProviders = [
   {
     provide: getRepositoryToken(IssueEntity),
     useValue: IssueRepositoryStub,
+  },
+  {
+    provide: getRepositoryToken(CategoryEntity),
+    useValue: {},
   },
   ...IssueStatisticsServiceProviders,
   EventEmitter2,

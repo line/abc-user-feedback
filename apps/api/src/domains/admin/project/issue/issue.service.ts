@@ -61,6 +61,8 @@ export class IssueService {
     private readonly repository: Repository<IssueEntity>,
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoryRepository: Repository<CategoryEntity>,
     private readonly issueStatisticsService: IssueStatisticsService,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly schedulerLockService: SchedulerLockService,
@@ -375,7 +377,7 @@ export class IssueService {
 
     if (!issue) throw new IssueNotFoundException();
 
-    const category = await this.repository.findOne({
+    const category = await this.categoryRepository.findOne({
       where: { id: categoryId },
     });
     if (!category) throw new CategoryNotFoundException();

@@ -22,7 +22,11 @@ import { Brackets, In, QueryFailedError, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
-import { FieldFormatEnum, SortMethodEnum } from '@/common/enums';
+import {
+  FieldFormatEnum,
+  QueryV2ConditionsEnum,
+  SortMethodEnum,
+} from '@/common/enums';
 import type { ClsServiceType } from '@/types/cls-service.type';
 import { ChannelEntity } from '../channel/channel/channel.entity';
 import { FieldEntity } from '../channel/field/field.entity';
@@ -357,21 +361,40 @@ export class FeedbackMySQLService {
                   { optionId: option.key },
                 );
               } else if (format === FieldFormatEnum.multiSelect) {
-                qb[method](
-                  new Brackets((subQb) => {
-                    for (const optionKey of value as string[]) {
-                      const option =
-                        options.find((option) => option.key === optionKey) ??
-                        new OptionEntity();
-                      subQb.orWhere(
-                        `JSON_CONTAINS(
+                const condition = query.condition;
+                const values = value as string[];
+
+                if (condition === QueryV2ConditionsEnum.IS) {
+                  qb[method](
+                    `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) = :arrayLength AND JSON_CONTAINS(
+                      (SELECT JSON_ARRAYAGG(jt.value) FROM JSON_TABLE(
                         JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
-                        '"${option.key}"',
-                        '$')`,
-                      );
-                    }
-                  }),
-                );
+                        '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
+                      ) AS jt),
+                      JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
+                      '$'
+                    )`,
+                    { arrayLength: values.length },
+                  );
+                } else {
+                  if (values.length > 0) {
+                    qb[method](
+                      new Brackets((subQb) => {
+                        for (const optionKey of values) {
+                          subQb.andWhere(
+                            `JSON_CONTAINS(
+                              JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
+                              '"${optionKey}"',
+                              '$'
+                            )`,
+                          );
+                        }
+                      }),
+                    );
+                  } else {
+                    qb[method]('1 = 0');
+                  }
+                }
               } else if (format === FieldFormatEnum.text) {
                 qb[method](
                   `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
