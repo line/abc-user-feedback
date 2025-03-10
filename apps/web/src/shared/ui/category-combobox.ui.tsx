@@ -25,10 +25,9 @@ import {
   ComboboxContent,
   ComboboxGroup,
   ComboboxInput,
+  ComboboxItem,
   ComboboxList,
-  ComboboxSelectItem,
   ComboboxTrigger,
-  Icon,
   toast,
 } from '@ufb/react';
 
@@ -147,27 +146,59 @@ const CategoryCombobox = (props: Props) => {
           <ComboboxGroup
             heading={
               <span className="text-neutral-tertiary text-base-normal">
+                Selected Category
+              </span>
+            }
+          >
+            {data?.items
+              .filter((v) => category?.id === v.id)
+              .map(({ id, name }) => (
+                <ComboboxItem
+                  key={id}
+                  value={name}
+                  onSelect={() => {
+                    if (category?.id === id) detachCategory({ categoryId: id });
+                    if (category?.id !== id) attachCategory({ categoryId: id });
+                  }}
+                >
+                  <span className="flex-1">{name}</span>
+                  <span className="text-neutral-tertiary text-small-normal">
+                    Remove
+                  </span>
+                </ComboboxItem>
+              ))}
+            <InfiniteScrollArea
+              fetchNextPage={() => setPage(page + 1)}
+              hasNextPage={
+                (data?.meta.itemCount ?? 0) < (data?.meta.totalItems ?? 0)
+              }
+            />
+          </ComboboxGroup>
+          <ComboboxGroup
+            heading={
+              <span className="text-neutral-tertiary text-base-normal">
                 Category List
               </span>
             }
           >
-            {data?.items.map(({ id, name }) => (
-              <ComboboxSelectItem
-                key={id}
-                checked={category?.id === id}
-                value={name}
-                onSelect={() => {
-                  if (category?.id === id) detachCategory({ categoryId: id });
-                  if (category?.id !== id) attachCategory({ categoryId: id });
-                }}
-              >
-                <span className="flex-1">{name}</span>
-                <CategoryComboboxEditPopover
-                  projectId={projectId}
-                  cateogry={{ id, name }}
-                />
-              </ComboboxSelectItem>
-            ))}
+            {data?.items
+              .filter((v) => category?.id !== v.id)
+              .map(({ id, name }) => (
+                <ComboboxItem
+                  key={id}
+                  value={name}
+                  onSelect={() => {
+                    if (category?.id === id) detachCategory({ categoryId: id });
+                    if (category?.id !== id) attachCategory({ categoryId: id });
+                  }}
+                >
+                  <span className="flex-1">{name}</span>
+                  <CategoryComboboxEditPopover
+                    projectId={projectId}
+                    cateogry={{ id, name }}
+                  />
+                </ComboboxItem>
+              ))}
             <InfiniteScrollArea
               fetchNextPage={() => setPage(page + 1)}
               hasNextPage={
@@ -189,7 +220,6 @@ const CategoryCombobox = (props: Props) => {
                   attachCategory({ categoryId: data.id });
                 }}
               >
-                <Icon name="RiCheckLine" className="combobox-check invisible" />
                 <span className="flex-1">{inputValue}</span>
                 <span className="text-neutral-tertiary text-small-normal">
                   Create

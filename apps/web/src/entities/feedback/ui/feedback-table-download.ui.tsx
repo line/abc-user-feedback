@@ -23,6 +23,7 @@ import {
   Dropdown,
   DropdownContent,
   DropdownItem,
+  DropdownLabel,
   DropdownTrigger,
   Icon,
   toast,
@@ -40,10 +41,11 @@ interface Props {
   disabled: boolean;
   table: Table<Feedback>;
   operator: TableFilterOperator;
+  totalItems: number;
 }
 
 const FeedbackTableDownload = (props: Props) => {
-  const { fields, queries, disabled, table, operator } = props;
+  const { fields, queries, disabled, table, operator, totalItems } = props;
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -53,6 +55,14 @@ const FeedbackTableDownload = (props: Props) => {
   });
 
   const visibleColumns = table.getVisibleFlatColumns();
+  const { rowSelection } = table.getState();
+  const feedbackIds = useMemo(
+    () =>
+      Object.entries(rowSelection)
+        .filter(([_, v]) => !!v)
+        .map(([k]) => k),
+    [rowSelection],
+  );
 
   const fieldIds = useMemo(
     () =>
@@ -78,6 +88,9 @@ const FeedbackTableDownload = (props: Props) => {
         Export
       </DropdownTrigger>
       <DropdownContent>
+        <DropdownLabel>
+          {feedbackIds.length > 0 ? feedbackIds.length : totalItems} Items
+        </DropdownLabel>
         <DropdownItem onClick={exportFeedbackResponse('xlsx')}>
           Excel
         </DropdownItem>

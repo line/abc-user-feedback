@@ -297,6 +297,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
             setOperator(operator);
           }}
           tableFilters={tableFilters}
+          table={table}
         />
         {rowSelectionIds.length > 0 && (
           <Button

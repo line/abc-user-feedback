@@ -356,7 +356,8 @@
       "all-email-domains-allow": "Alle E-Mail-Domains sind erlaubt.",
       "request-email-auth": "Authentifizierung wurde angefordert.",
       "all-image-url-allow": "Alle Image-URLs sind erlaubt.",
-      "select-project": "Bitte wählen Sie ein Projekt aus."
+      "select-project": "Bitte wählen Sie ein Projekt aus.",
+      "no-category": "Keine Kategorie"
     },
     "create-tenant": {
       "tenant": {

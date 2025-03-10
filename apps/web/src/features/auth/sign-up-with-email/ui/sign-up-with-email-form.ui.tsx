@@ -56,7 +56,7 @@ const SignUpWithEmailForm: React.FC<IProps> = (props) => {
         { ...initialValues }
       : { emailState: 'NOT_VERIFIED', code: '' },
   });
-  console.log('formState: ', formState);
+  console.log('formState: ', formState.errors);
 
   const [expiredTime, setExpiredTime] = useState<string>();
   const [leftTime, setLeftTime] = useState('');

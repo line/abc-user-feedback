@@ -55,6 +55,7 @@ interface Props {
 
 const SettingsMenuList: React.FC<Props> = (props) => {
   const { settingMenuValue, projectId, channelId } = props;
+
   const { t } = useTranslation();
   const { editingStepIndex, reset, jumpStepByIndex } = useCreateChannelStore();
 
@@ -162,7 +163,7 @@ const SettingsMenuList: React.FC<Props> = (props) => {
       >
         <AccordionItem value="channel-list" className="bg-primary">
           <AccordionTrigger className="p-2">Channel List</AccordionTrigger>
-          <AccordionContent className={cn('max-h-[300px] overflow-auto p-0')}>
+          <AccordionContent className="p-0">
             {data?.meta.totalItems === 0 ?
               <div className="border-neutral-tertiary flex w-full flex-col items-center justify-center gap-4 rounded border p-4">
                 <Image
@@ -191,7 +192,11 @@ const SettingsMenuList: React.FC<Props> = (props) => {
               </div>
             : data?.items.map(({ name, id }) => (
                 <MenuDropdown key={id}>
-                  <MenuDropdownTrigger className="!pl-8">
+                  <MenuDropdownTrigger
+                    className={cn('!pl-8', {
+                      '!bg-neutral-tertiary': channelId === id,
+                    })}
+                  >
                     {name}
                   </MenuDropdownTrigger>
                   <MenuDropdownContent

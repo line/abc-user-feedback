@@ -113,7 +113,9 @@ const CategoryTableRow = (props: Props) => {
             name="RiArrowDownSLine"
             className={cn({ 'rotate-180': !isOpen })}
           />
-          {category.name}
+          <span className={cn({ 'text-neutral-tertiary': category.id === 0 })}>
+            {category.name}
+          </span>
           {data?.meta.totalItems ?
             <Badge variant="outline" radius="large">
               {data.meta.totalItems}

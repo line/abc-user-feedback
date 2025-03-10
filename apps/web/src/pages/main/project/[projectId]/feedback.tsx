@@ -290,12 +290,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       },
     },
   });
+
   const selectedRowIds = useMemo(() => {
     return Object.entries(table.getState().rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
       [] as number[],
     );
   }, [table.getState().rowSelection]);
+
   const openDeleteUsersDialog = () => {
     overlay.open(({ close, isOpen }) => (
       <DeleteDialog
@@ -357,13 +359,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            filterFields={filterFields.filter((v) =>
-              table
-                .getVisibleFlatColumns()
-                .some((column) => column.id === v.key),
+            filterFields={filterFields.filter(
+              (v) =>
+                v.key === 'issueIds' ||
+                table.getAllColumns().some((column) => column.id === v.key),
             )}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
+            table={table}
           />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
@@ -373,6 +376,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             queries={queries}
             disabled={!perms.includes('feedback_download_read')}
             operator={operator}
+            totalItems={feedbackData?.meta.totalItems ?? 0}
           />
         </div>
       </div>
@@ -394,6 +398,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           close={() => setOpenFeedbackId(null)}
           feedback={currentFeedback}
           fields={fields}
+          channelId={currentChannelId}
         />
       )}
     </div>

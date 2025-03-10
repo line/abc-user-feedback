@@ -356,7 +356,8 @@
       "all-email-domains-allow": "すべてのEmailドメインを許可します。",
       "request-email-auth": "認証が要求されました。",
       "all-image-url-allow": "すべてのImage URLを許可します。",
-      "select-project": "Projectを選択してください。"
+      "select-project": "Projectを選択してください。",
+      "no-category": "カテゴリがありません。"
     },
     "create-tenant": {
       "tenant": {

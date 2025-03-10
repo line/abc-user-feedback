@@ -108,7 +108,6 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     queries,
     operator,
   });
-  console.log('pagination.pageSize: ', pagination.pageSize);
 
   const { mutateAsync: deleteUsers } = useOAIMutation({
     method: 'delete',
@@ -239,6 +238,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
               setTableFilters(filters);
               setOperator(oprator);
             }}
+            table={table}
           />
         </div>
         {selectedRowIds.length > 0 && (
