@@ -135,6 +135,7 @@ const SheetDetailTable = (props: Props) => {
               );
               return (
                 <Badge
+                  key={option?.key}
                   variant={option?.color ? 'bold' : 'subtle'}
                   className={option?.color ? BADGE_COLOR_MAP[option.color] : ''}
                 >
