@@ -163,7 +163,7 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   };
 
   const formatDate = (value: string) => {
-    let cleanedValue = value.replace(/\D/g, ''); // 숫자 이외의 문자는 제거
+    let cleanedValue = value.replace(/\D/g, '');
     if (cleanedValue.length > 8) cleanedValue = cleanedValue.slice(0, 8);
 
     let formattedValue = '';

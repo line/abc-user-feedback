@@ -16,7 +16,6 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { compressToBase64, decompressFromBase64 } from 'lz-string';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
@@ -64,13 +63,10 @@ const useIssueQueryConverter = (input: {
     'queries',
     createParser({
       parse: (value) => {
-        return JSON.parse(decompressFromBase64(value)) as Record<
-          string,
-          unknown
-        >[];
+        return JSON.parse(atob(value)) as Record<string, unknown>[];
       },
       serialize: (value) => {
-        return compressToBase64(JSON.stringify(value));
+        return btoa(JSON.stringify(value));
       },
     }).withDefault([]),
   );

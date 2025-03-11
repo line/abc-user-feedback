@@ -27,7 +27,7 @@ const AnonymousLayout = (props: Props) => {
       <Header />
       <main className="flex-1 p-5">{children}</main>
       <footer className="flex justify-end gap-1 px-6 py-2">
-        <Button variant="ghost">
+        <Button variant="ghost" disabled>
           <Icon name="RiEarthFill" />
         </Button>
         <a href="https://github.com/line/abc-user-feedback" target="_blank">

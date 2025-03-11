@@ -46,7 +46,7 @@ const ResetPasswordWithEmailForm: React.FC<IProps> = ({ code, email }) => {
     path: '/api/admin/users/password/reset',
     queryOptions: {
       async onSuccess() {
-        toast.success('Success');
+        toast.success(t('v2.toast.success'));
         await router.push(Path.SIGN_IN);
       },
     },

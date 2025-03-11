@@ -16,7 +16,6 @@
 import { useEffect, useState } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
@@ -60,21 +59,16 @@ const CreateTenantPage: NextPageWithLayout = () => {
     user: null,
   });
 
-  const { tenant, refetchTenant } = useTenantStore();
-
-  const queryClient = useQueryClient();
+  const { tenant } = useTenantStore();
 
   const { mutate: createTenant, isPending } = useOAIMutation({
     method: 'post',
     path: '/api/admin/tenants',
     queryOptions: {
       async onSuccess() {
-        await queryClient.invalidateQueries({
-          queryKey: ['/api/admin/tenants'],
-        });
         await router.replace(Path.SIGN_IN);
-        await refetchTenant();
-        toast.success('Success');
+        router.reload();
+        toast.success(t('v2.toast.success'));
       },
     },
   });

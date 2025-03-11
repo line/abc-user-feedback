@@ -209,7 +209,7 @@ const SheetDetailTable = (props: Props) => {
     ),
     date: (value, row) => (
       <DatePicker
-        value={value as string | undefined}
+        value={value as string | undefined | null}
         onChange={(date) => onChange?.(row.key, date ?? null)}
         disabled={row.disabled}
       />
