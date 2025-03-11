@@ -81,7 +81,12 @@ const FeedbackDetailSheet = (props: Props) => {
 
   const onClickSubmit = async () => {
     const editedFeedback = fields
-      .filter((v) => v.property === 'EDITABLE' && v.status === 'ACTIVE')
+      .filter(
+        (v) =>
+          v.property === 'EDITABLE' &&
+          v.status === 'ACTIVE' &&
+          v.format !== 'images',
+      )
       .reduce((acc, cur) => {
         if (cur.key === 'issues') return acc;
         if (cur.format === 'date') {
@@ -93,13 +98,10 @@ const FeedbackDetailSheet = (props: Props) => {
               : null,
           };
         }
-        if (cur.format === 'select') {
-          return {
-            ...acc,
-            [cur.key]: currentFeedback[cur.key] ?? null,
-          };
-        }
-        return acc;
+        return {
+          ...acc,
+          [cur.key]: currentFeedback[cur.key] ?? null,
+        };
       }, {} as Feedback);
 
     try {
