@@ -40,6 +40,7 @@ const TableFilterPopoverInput = (props: Props) => {
   const { filter, onChange, filterfieid } = props;
   const value = filter.value;
   const { t } = useTranslation();
+
   return (
     <>
       {filterfieid.format === 'ticket' && (

@@ -116,7 +116,6 @@ const useFeedbackQueryConverter = (input: {
         const key = Object.keys(v)[0];
         if (!key || typeof key !== 'string' || key === 'createdAt') return null;
         const value = v[key];
-
         const field = filterFields.find((v) => v.key === key);
         if (!field) return null;
 

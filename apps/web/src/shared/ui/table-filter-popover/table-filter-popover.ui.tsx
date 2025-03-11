@@ -49,6 +49,7 @@ interface Props {
 
 const TableFilterPopover = (props: Props) => {
   const { filterFields, onSubmit, tableFilters, table } = props;
+
   const { t } = useTranslation();
 
   const [filters, setFilters] = useState<TableFilter[]>(tableFilters);

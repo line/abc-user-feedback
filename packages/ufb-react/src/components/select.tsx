@@ -106,7 +106,11 @@ const Select = ({
   }, [value]);
 
   React.useEffect(() => {
-    if (values.every((v) => multipleValues.includes(v))) return;
+    if (
+      values.every((v) => multipleValues.includes(v)) &&
+      multipleValues.every((v) => values.includes(v))
+    )
+      return;
     setMultipleValues(values);
   }, [values]);
 
