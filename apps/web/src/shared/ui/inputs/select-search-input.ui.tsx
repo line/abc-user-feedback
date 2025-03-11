@@ -36,7 +36,7 @@ import InfiniteScrollArea from '../infinite-scroll-area.ui';
 interface Props {
   label?: string;
   value?: string | null;
-  onChange?: (value?: string | null) => void;
+  onChange?: (value?: string) => void;
   options: { label: string; value: string }[];
   required?: boolean;
   disabled?: boolean;
