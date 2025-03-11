@@ -75,6 +75,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           )}
           {field.format === 'text' && linkify(value as string)}
           {field.format === 'keyword' && value}
+          {field.format === 'number' && value}
         </>
       }
     </ExpandableText>

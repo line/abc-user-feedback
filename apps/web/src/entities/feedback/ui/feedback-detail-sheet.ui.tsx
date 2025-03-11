@@ -98,10 +98,19 @@ const FeedbackDetailSheet = (props: Props) => {
               : null,
           };
         }
-        return {
-          ...acc,
-          [cur.key]: currentFeedback[cur.key] ?? null,
-        };
+        if (cur.format === 'multiSelect') {
+          return {
+            ...acc,
+            [cur.key]: currentFeedback[cur.key] ?? [],
+          };
+        }
+        if (cur.format === 'select') {
+          return {
+            ...acc,
+            [cur.key]: currentFeedback[cur.key] ?? null,
+          };
+        }
+        return { ...acc, [cur.key]: currentFeedback[cur.key] };
       }, {} as Feedback);
 
     try {
