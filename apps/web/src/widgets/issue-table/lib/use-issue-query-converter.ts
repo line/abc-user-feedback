@@ -112,6 +112,7 @@ const useIssueQueryConverter = (input: {
     return queries
       .map((v) => {
         const key = Object.keys(v)[0];
+
         if (!key || typeof key !== 'string' || key === 'createdAt') return null;
         const value = v[key];
 

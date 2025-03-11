@@ -182,7 +182,7 @@ const IssueDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${btoa(JSON.stringify([{ condition: 'IS', name: data.name }]))}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${btoa(JSON.stringify([{ name: data.name, condition: 'IS' }]))}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,
@@ -219,10 +219,7 @@ const IssueDetailSheet = (props: Props) => {
                       channelId: v.id,
                       queries: btoa(
                         JSON.stringify([
-                          {
-                            issueIds: [data.id],
-                            condition: 'IS',
-                          },
+                          { issueIds: [data.id], condition: 'IS' },
                         ]),
                       ),
                     },
