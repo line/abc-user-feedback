@@ -161,21 +161,30 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           };
         }
 
-        if (field.format === 'select' || field.format === 'multiSelect') {
-          if (field.key === 'issues') {
-            return {
-              key: 'issueIds',
-              format: 'issue',
-              name: field.name,
-              matchType: ['IS'],
-            };
-          }
+        if (field.key === 'issues') {
+          return {
+            key: 'issueIds',
+            format: 'issue',
+            name: field.name,
+            matchType: ['IS'],
+          };
+        }
+        if (field.format === 'select') {
           return {
             key: field.key,
             name: field.name,
             format: field.format,
             options: field.options,
             matchType: ['IS'],
+          };
+        }
+        if (field.format === 'multiSelect') {
+          return {
+            key: field.key,
+            name: field.name,
+            format: field.format,
+            options: field.options,
+            matchType: ['IS', 'CONTAINS'],
           };
         }
       })
@@ -251,7 +260,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   useEffect(() => {
     table.setPageIndex(0);
-  }, [currentChannelId]);
+    table.resetRowSelection();
+  }, [currentChannelId, pagination.pageSize]);
 
   useEffect(() => {
     setRows(feedbackData?.items ?? []);
@@ -274,7 +284,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        toast.success('Feedback updated successfully');
+        toast.success(t('v2.toast.success'));
       },
     },
   });
@@ -285,7 +295,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
-        toast.success('Feedback deleted successfully');
+        toast.success(t('v2.toast.success'));
         table.resetRowSelection();
       },
     },

@@ -40,7 +40,7 @@ const SignUpPage: NextPageWithLayout = () => {
     queryOptions: {
       async onSuccess() {
         await router.push(Path.SIGN_IN);
-        toast.success('Success');
+        toast.success(t('v2.toast.success'));
       },
     },
   });

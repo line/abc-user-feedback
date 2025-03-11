@@ -81,14 +81,18 @@ export const useUserStore = create<State & Action>((set, get) => ({
     }
   },
   async _signIn(jwt) {
-    await cookieStorage.setItem('jwt', jwt);
-    const broadcastChannel = new BroadcastChannel('ufb');
-    broadcastChannel.postMessage({ type: 'reload', payload: get().randomId });
-    get().setUser();
-    if (router.query.callback_url) {
-      await router.push(router.query.callback_url as string);
-    } else {
-      await router.push({ pathname: Path.MAIN });
+    try {
+      await cookieStorage.setItem('jwt', jwt);
+      const broadcastChannel = new BroadcastChannel('ufb');
+      broadcastChannel.postMessage({ type: 'reload', payload: get().randomId });
+      get().setUser();
+      if (router.query.callback_url) {
+        await router.push(router.query.callback_url as string);
+      } else {
+        await router.push({ pathname: Path.MAIN });
+      }
+    } catch (error) {
+      console.log('error: ', error);
     }
   },
 }));

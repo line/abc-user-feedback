@@ -17,12 +17,12 @@
 import { useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
-import { compressToBase64 } from 'lz-string';
 import { useTranslation } from 'next-i18next';
 
 import {
   Button,
   Divider,
+  Icon,
   Sheet,
   SheetBody,
   SheetClose,
@@ -31,6 +31,7 @@ import {
   SheetHeader,
   SheetTitle,
   Tag,
+  toast,
 } from '@ufb/react';
 
 import {
@@ -92,11 +93,16 @@ const FeedbackDetailSheet = (props: Props) => {
               : null,
           };
         }
+        if (cur.format === 'select') {
+          return {
+            ...acc,
+            [cur.key]: currentFeedback[cur.key] ?? null,
+          };
+        }
         return acc;
       }, {} as Feedback);
 
     try {
-      setIsLoading(true);
       await updateFeedback?.(editedFeedback);
     } finally {
       setIsLoading(false);
@@ -128,11 +134,14 @@ const FeedbackDetailSheet = (props: Props) => {
               variant="outline"
               size="small"
               className="cursor-pointer"
-              onClick={() =>
-                navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${compressToBase64(JSON.stringify([{ id: feedback.id, condition: 'IS' }]))}&channelId=${channelId}`,
-                )
-              }
+              onClick={async () => {
+                await navigator.clipboard.writeText(
+                  `${window.location.origin}/${window.location.pathname}?queries=${btoa(JSON.stringify([{ id: feedback.id, condition: 'IS' }]))}&channelId=${channelId}`,
+                );
+                toast(t('v2.toast.copy'), {
+                  icon: <Icon name="RiCheckboxMultipleFill" />,
+                });
+              }}
             >
               URL Copy
             </Tag>

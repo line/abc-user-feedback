@@ -12,6 +12,7 @@ const nextConfig = {
   output: 'standalone',
   eslint: { ignoreDuringBuilds: true },
   transpilePackages: ['@ufb/react'],
+  compiler: { removeConsole: process.env.NODE_ENV === 'production' },
   images: { remotePatterns: [{ hostname: '*' }] },
   webpack(config) {
     // @ts-ignore

@@ -31,7 +31,7 @@ import { cn } from '@/shared/utils';
 
 interface Props {
   value?: string | null;
-  onChange: (value?: string) => void;
+  onChange: (value?: string | null) => void;
   disabled?: boolean;
 }
 

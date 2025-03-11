@@ -17,7 +17,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
-import { compressToBase64 } from 'lz-string';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -181,11 +180,14 @@ const IssueDetailSheet = (props: Props) => {
               variant="outline"
               size="small"
               className="cursor-pointer"
-              onClick={() =>
-                navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${compressToBase64(JSON.stringify([{ condition: 'IS', name: data.name }]))}`,
-                )
-              }
+              onClick={async () => {
+                await navigator.clipboard.writeText(
+                  `${window.location.origin}/${window.location.pathname}?queries=${btoa(JSON.stringify([{ condition: 'IS', name: data.name }]))}`,
+                );
+                toast(t('v2.toast.copy'), {
+                  icon: <Icon name="RiCheckboxMultipleFill" />,
+                });
+              }}
             >
               URL Copy
             </Tag>
@@ -215,7 +217,7 @@ const IssueDetailSheet = (props: Props) => {
                     query: {
                       projectId,
                       channelId: v.id,
-                      queries: compressToBase64(
+                      queries: btoa(
                         JSON.stringify([
                           {
                             issueIds: [data.id],

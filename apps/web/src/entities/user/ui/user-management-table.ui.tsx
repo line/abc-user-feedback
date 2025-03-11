@@ -149,6 +149,11 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     setRowCount(userData?.meta.totalItems ?? 0);
   }, [userData, pagination, isLoading]);
 
+  useEffect(() => {
+    table.setPageIndex(0);
+    table.resetRowSelection();
+  }, [pagination.pageSize]);
+
   const selectedRowIds = useMemo(() => {
     return Object.entries(table.getState().rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
