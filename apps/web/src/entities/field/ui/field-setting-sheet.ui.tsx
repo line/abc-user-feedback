@@ -153,12 +153,16 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
       setError('key', { message: 'Key is duplicated' });
       return;
     }
-    const checkDuplicatedName = otherFields.find(
-      (v) => v.name.toLowerCase() === input.name.toLowerCase(),
-    );
+    const checkDuplicatedName = otherFields.find((v) => v.name === input.name);
     if (checkDuplicatedName) {
       setError('name', { message: 'Name is duplicated' });
       return;
+    }
+    if (input.format === 'select' || input.format === 'multiSelect') {
+      if (!input.options || input.options.length === 0) {
+        setError('options', { message: 'Option is required' });
+        return;
+      }
     }
     await onSave({ ...data, ...input });
     reset(defaultValues);
@@ -249,6 +253,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                         {t('button.register')}
                       </Button>
                     }
+                    required
                   />
                   {(watch('options') ?? []).length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-2">

@@ -42,7 +42,11 @@ async function bootstrap() {
 
   await app.register(multiPart);
 
-  app.enableCors({ origin: '*', exposedHeaders: ['Content-Disposition'] });
+  app.enableCors({
+    origin: '*',
+    exposedHeaders: ['Content-Disposition'],
+    methods: '*',
+  });
 
   app.setGlobalPrefix(globalPrefix, {
     exclude: ['/docs/redoc'],

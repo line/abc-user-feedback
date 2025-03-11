@@ -121,6 +121,7 @@
       "today": "Today",
       "yesterday": "Yesterday",
       "before-days": "{{day, number}} Days",
+      "last-days": "Last {{day, number}} Days",
       "date-range-over-max-days": "Inquiry period is limited to {{maxDays}} days"
     },
     "guide": "Guidelines",
@@ -345,7 +346,8 @@
       "name": {
         "detail": "{{name}} Details",
         "add": "Add {{name}}",
-        "register": "Register {{name}}"
+        "register": "Register {{name}}",
+        "create": "Create {{name}}"
       },
       "summary": "Summary",
       "preview": "Preview",
@@ -355,7 +357,8 @@
       "all-email-domains-allow": "All email domains are allowed.",
       "request-email-auth": "Authentication has been requested.",
       "all-image-url-allow": "All Image URLs are allowed.",
-      "select-project": "Please select a project."
+      "select-project": "Please select a project.",
+      "no-category": "No Category"
     },
     "create-tenant": {
       "tenant": {

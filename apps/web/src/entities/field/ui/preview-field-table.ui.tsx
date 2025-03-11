@@ -41,7 +41,7 @@ const PreviewFieldTable: React.FC<IProps> = ({ fields }) => {
   });
 
   return (
-    <div className="overflow-auto">
+    <div className="h-full overflow-auto">
       <BasicTable table={table} className="table-fixed" />
     </div>
   );

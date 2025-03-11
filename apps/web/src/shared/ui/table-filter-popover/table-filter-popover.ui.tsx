@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import type { Table } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -42,10 +43,12 @@ interface Props {
   tableFilters: TableFilter[];
   filterFields: TableFilterField[];
   onSubmit: (filters: TableFilter[], operator: TableFilterOperator) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  table?: Table<any>;
 }
 
 const TableFilterPopover = (props: Props) => {
-  const { filterFields, onSubmit, tableFilters } = props;
+  const { filterFields, onSubmit, tableFilters, table } = props;
   const { t } = useTranslation();
 
   const [filters, setFilters] = useState<TableFilter[]>(tableFilters);
@@ -199,10 +202,17 @@ const TableFilterPopover = (props: Props) => {
                           updateFilter(index, field);
                         }}
                         value={filter.name}
-                        options={filterFields.map((field) => ({
-                          label: field.name,
-                          value: field.name,
-                        }))}
+                        options={filterFields
+                          .filter(
+                            (v) =>
+                              v.key === 'issueIds' ||
+                              (table ?
+                                table
+                                  .getVisibleFlatColumns()
+                                  .some((column) => column.id === v.key)
+                              : true),
+                          )
+                          .map(({ name }) => ({ label: name, value: name }))}
                       />
                     </td>
                     <td>{renderOperator(filter, index)}</td>

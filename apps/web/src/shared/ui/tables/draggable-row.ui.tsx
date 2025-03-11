@@ -51,7 +51,11 @@ const DraggableRow = <T,>(props: Props<T>) => {
       className={cn({ 'cursor-pointer': !!onClickRow })}
     >
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id} style={{ width: cell.column.getSize() }}>
+        <TableCell
+          key={cell.id}
+          style={{ width: cell.column.getSize() }}
+          className="truncate"
+        >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}

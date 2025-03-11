@@ -27,17 +27,27 @@ import type {
   Updater,
   VisibilityState,
 } from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
-import { Tabs, TabsList, TabsTrigger, toast } from '@ufb/react';
+import {
+  Badge,
+  Button,
+  Icon,
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  toast,
+} from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
 import {
   BasicTable,
   DateRangePicker,
   DEFAULT_LOCALE,
+  DeleteDialog,
   TableFilterPopover,
   TablePagination,
   useAllChannels,
@@ -78,7 +88,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   const [rows, setRows] = useState<Record<string, unknown>[]>([]);
   const [rowCount, setRowCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
-
+  const overlay = useOverlay();
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 20,
@@ -276,9 +286,27 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       onSuccess: async () => {
         await refetch();
         toast.success('Feedback deleted successfully');
+        table.resetRowSelection();
       },
     },
   });
+
+  const selectedRowIds = useMemo(() => {
+    return Object.entries(table.getState().rowSelection).reduce(
+      (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
+      [] as number[],
+    );
+  }, [table.getState().rowSelection]);
+
+  const openDeleteUsersDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={() => deleteFeedback({ feedbackIds: selectedRowIds })}
+      />
+    ));
+  };
 
   if (currentChannelId && isNaN(currentChannelId)) {
     return <div>Channel Id is Bad Request</div>;
@@ -311,6 +339,19 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           </TabsList>
         </Tabs>
         <div className="flex gap-2 [&>button]:min-w-20">
+          {selectedRowIds.length > 0 && (
+            <Button
+              variant="outline"
+              className="!text-tint-red"
+              onClick={openDeleteUsersDialog}
+            >
+              <Icon name="RiDeleteBin6Line" />
+              {t('v2.button.name.delete', { name: 'Feedback' })}
+              <Badge variant="subtle" className="!text-tint-red">
+                {selectedRowIds.length}
+              </Badge>
+            </Button>
+          )}
           <DateRangePicker
             onChange={updateDateRage}
             value={dateRange}
@@ -318,9 +359,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             maxDays={env.NEXT_PUBLIC_MAX_DAYS}
           />
           <TableFilterPopover
-            filterFields={filterFields}
+            filterFields={filterFields.filter(
+              (v) =>
+                v.key === 'issueIds' ||
+                table.getAllColumns().some((column) => column.id === v.key),
+            )}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
+            table={table}
           />
           <FeedbackTableViewOptions table={table} fields={fields} />
           <FeedbackTableExpand table={table} />
@@ -329,6 +375,8 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             fields={fields}
             queries={queries}
             disabled={!perms.includes('feedback_download_read')}
+            operator={operator}
+            totalItems={feedbackData?.meta.totalItems ?? 0}
           />
         </div>
       </div>
@@ -350,6 +398,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
           close={() => setOpenFeedbackId(null)}
           feedback={currentFeedback}
           fields={fields}
+          channelId={currentChannelId}
         />
       )}
     </div>

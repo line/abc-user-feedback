@@ -16,6 +16,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { compressToBase64, decompressFromBase64 } from 'lz-string';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
@@ -72,10 +73,13 @@ const useFeedbackQueryConverter = (input: {
     'queries',
     createParser({
       parse: (value) => {
-        return JSON.parse(value) as Record<string, unknown>[];
+        return JSON.parse(decompressFromBase64(value)) as Record<
+          string,
+          unknown
+        >[];
       },
       serialize: (value) => {
-        return JSON.stringify(value);
+        return compressToBase64(JSON.stringify(value));
       },
     }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
   );

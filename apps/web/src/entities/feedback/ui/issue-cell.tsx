@@ -188,7 +188,7 @@ const IssueCell: React.FC<IProps> = (props) => {
             <ComboboxGroup
               heading={
                 <span className="text-neutral-tertiary text-base-normal">
-                  Selected Issue
+                  Selected Issue List
                 </span>
               }
             >
@@ -250,7 +250,7 @@ const IssueCell: React.FC<IProps> = (props) => {
               !currentIssues.some((issue) => issue.name === inputValue) &&
               !allIssues.some((issue) => issue.name === inputValue) && (
                 <div
-                  className="combobox-item flex justify-between"
+                  className="combobox-item"
                   onClick={async () => {
                     const name = inputValue.trim();
                     const data = await createIssue({
@@ -262,7 +262,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                     attatchIssue({ issueId: data.id });
                   }}
                 >
-                  <span>{inputValue}</span>
+                  <span className="flex-1">{inputValue}</span>
                   <span className="text-neutral-tertiary text-small-normal">
                     Create
                   </span>

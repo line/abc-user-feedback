@@ -15,6 +15,7 @@
  */
 
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { Icon } from '@ufb/react';
 
@@ -31,6 +32,7 @@ interface Props {
 
 const CategoryTable = (props: Props) => {
   const { projectId, queries, operator } = props;
+  const { t } = useTranslation();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -54,17 +56,18 @@ const CategoryTable = (props: Props) => {
 
   return (
     <div className="flex flex-col gap-3">
-      {[{ id: 0, name: 'None' }, ...data.pages.flatMap((v) => v.items)].map(
-        (item) => (
-          <CategoryTableRow
-            key={item.id}
-            category={item}
-            projectId={projectId}
-            queries={queries}
-            operator={operator}
-          />
-        ),
-      )}
+      {[
+        { id: 0, name: t('v2.text.no-category') },
+        ...data.pages.flatMap((v) => v.items),
+      ].map((item) => (
+        <CategoryTableRow
+          key={item.id}
+          category={item}
+          projectId={projectId}
+          queries={queries}
+          operator={operator}
+        />
+      ))}
       <InfiniteScrollArea
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}

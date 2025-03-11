@@ -95,12 +95,7 @@
     "complete": "완료",
     "next-time": "다음에",
     "start": "시작하기",
-    "generate": "생성",
-    "name": {
-      "create": "{{name}} 생성",
-      "delete": "{{name}} 삭제",
-      "register": "{{name}} 등록"
-    }
+    "generate": "생성"
   },
   "text": {
     "issue": {
@@ -120,6 +115,7 @@
       "today": "오늘",
       "yesterday": "어제",
       "before-days": "{{day, number}}일",
+      "last-days": "지난 {{day, number}}일",
       "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
     },
     "guide": "안내",
@@ -344,7 +340,8 @@
       "name": {
         "detail": "{{name}} 상세",
         "add": "{{name}} 추가",
-        "register": "{{name}} 등록"
+        "register": "{{name}} 등록",
+        "create": "{{name}} 생성"
       },
       "summary": "요약",
       "preview": "미리보기",
@@ -354,7 +351,8 @@
       "all-email-domains-allow": "모든 이메일 도메인을 허용합니다.",
       "request-email-auth": "인증이 요청되었습니다.",
       "all-image-url-allow": "모든 Image URL의 도메인을 허용합니다.",
-      "select-project": "프로젝트를 선택해 주세요."
+      "select-project": "프로젝트를 선택해 주세요.",
+      "no-category": "카테고리 미등록"
     },
     "create-tenant": {
       "tenant": {

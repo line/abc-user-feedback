@@ -133,14 +133,14 @@ const RoleTable: React.FC<IProps> = (props) => {
           roles={roles}
         />
 
-        <RoleTitleRow title="Channel Field" colspan={colSpan} sub />
+        <RoleTitleRow title="Field" colspan={colSpan} sub />
         <PermissionRows
           permText={ChannelPermissionText}
           permissions={ChannelFieldPermissionList}
           roles={roles}
         />
 
-        <RoleTitleRow title="Channel Image Setting" colspan={colSpan} sub />
+        <RoleTitleRow title="Image Setting" colspan={colSpan} sub />
         <PermissionRows
           permText={ChannelPermissionText}
           permissions={ChannelImageSettingPermissionList}

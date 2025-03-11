@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
+import { compressToBase64 } from 'lz-string';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -30,6 +31,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  Tag,
   toast,
 } from '@ufb/react';
 
@@ -168,11 +170,26 @@ const IssueDetailSheet = (props: Props) => {
       />
     ));
   };
+
   return (
     <Sheet open={isOpen} onOpenChange={close}>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>{t('v2.text.name.detail', { name: 'Issue' })}</SheetTitle>
+          <SheetTitle className="flex items-center gap-2">
+            {t('v2.text.name.detail', { name: 'Issue' })}
+            <Tag
+              variant="outline"
+              size="small"
+              className="cursor-pointer"
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `${window.location.origin}/${window.location.pathname}?queries=${compressToBase64(JSON.stringify([{ condition: 'IS', name: data.name }]))}`,
+                )
+              }
+            >
+              URL Copy
+            </Tag>
+          </SheetTitle>
         </SheetHeader>
         <SheetBody>
           <SheetDetailTable data={data} rows={TOP_ROWS} />
@@ -198,9 +215,14 @@ const IssueDetailSheet = (props: Props) => {
                     query: {
                       projectId,
                       channelId: v.id,
-                      queries: JSON.stringify([
-                        { issueIds: [data.id], condition: 'IS' },
-                      ]),
+                      queries: compressToBase64(
+                        JSON.stringify([
+                          {
+                            issueIds: [data.id],
+                            condition: 'IS',
+                          },
+                        ]),
+                      ),
                     },
                   }}
                   target="_blank"

@@ -32,6 +32,7 @@ import {
   client,
   DeleteDialog,
   TableFilterPopover,
+  TablePagination,
   useAllProjects,
   useOAIMutation,
   useSort,
@@ -82,7 +83,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     enableColumnFilters: true,
     initialState: {
       sorting: [{ id: 'createdAt', desc: true }],
-      pagination: { pageIndex: 0, pageSize: 30 },
+      pagination: { pageIndex: 0, pageSize: 20 },
     },
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
@@ -101,8 +102,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     refetch,
     isLoading,
   } = useUserSearch({
-    page: 1,
-    limit: pagination.pageSize * pagination.pageIndex,
+    page: pagination.pageIndex + 1,
+    limit: pagination.pageSize,
     order: sort as { createdAt: 'ASC' | 'DESC' },
     queries,
     operator,
@@ -144,11 +145,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   useEffect(() => {
     if (isLoading) return;
     setRows(userData?.items ?? []);
-    setPageCount(
-      userData?.meta.totalPages === 1 ?
-        pagination.pageIndex + 1
-      : pagination.pageIndex + 2,
-    );
+    setPageCount(userData?.meta.totalPages ?? 0);
     setRowCount(userData?.meta.totalItems ?? 0);
   }, [userData, pagination, isLoading]);
 
@@ -241,6 +238,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
               setTableFilters(filters);
               setOperator(oprator);
             }}
+            table={table}
           />
         </div>
         {selectedRowIds.length > 0 && (
@@ -262,8 +260,8 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
         onClickRow={(_, row) => openUpdateUserDialog(row)}
         isLoading={isLoading}
         createButton={createButton}
-        isInfiniteScroll
       />
+      <TablePagination table={table} />
     </>
   );
 };

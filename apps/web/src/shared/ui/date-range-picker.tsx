@@ -51,7 +51,7 @@ interface IProps {
   minDate?: Date;
   maxDate?: Date;
   maxDays?: number;
-  isClearable?: boolean;
+  clearable?: boolean;
   options?: {
     label: string | React.ReactNode;
     startDate: Date;
@@ -61,8 +61,16 @@ interface IProps {
 }
 
 const DateRangePicker: React.FC<IProps> = (props) => {
-  const { value, onChange, maxDate, minDate, maxDays, options, children } =
-    props;
+  const {
+    value,
+    onChange,
+    maxDate,
+    minDate,
+    maxDays,
+    options,
+    children,
+    clearable,
+  } = props;
 
   const { t, i18n } = useTranslation();
 
@@ -143,7 +151,9 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   };
 
   const handleApply = () => {
-    if (!currentValue?.startDate || !currentValue.endDate) return;
+    if (!clearable && (!currentValue?.startDate || !currentValue.endDate)) {
+      return;
+    }
     if (maxDays && isOverMaxDays(currentValue, maxDays)) {
       toast.error(t('text.date.date-range-over-max-days', { maxDays }));
       return;
@@ -175,6 +185,14 @@ const DateRangePicker: React.FC<IProps> = (props) => {
   const handleChange =
     (type: 'startDate' | 'endDate') =>
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!event.target.value) {
+        setCurrentValue((prev) => ({
+          startDate: prev?.startDate ?? null,
+          endDate: prev?.endDate ?? null,
+          [type]: null,
+        }));
+        return;
+      }
       const formattedDate = formatDate(event.target.value);
       setCurrentInput((prev) => ({ ...prev, [type]: formattedDate }));
 
@@ -317,7 +335,12 @@ const DateRangePicker: React.FC<IProps> = (props) => {
             {t('button.cancel')}
           </Button>
           <Button
-            disabled={!currentValue?.startDate || !currentValue.endDate}
+            disabled={
+              clearable ?
+                (!!currentValue?.startDate || !!currentValue?.endDate) &&
+                (!currentValue.startDate || !currentValue.endDate)
+              : !currentValue?.startDate || !currentValue.endDate
+            }
             onClick={handleApply}
           >
             {t('button.save')}
@@ -332,7 +355,7 @@ const isOverMaxDays = (date: DateRangeType, maxDays: number) => {
   if (!date) return false;
   if (!date.startDate || !date.endDate) return false;
 
-  return maxDays < dayjs(date.endDate).diff(date.startDate, 'days') + 1;
+  return maxDays <= dayjs(date.endDate).diff(date.startDate, 'days');
 };
 
 export default DateRangePicker;

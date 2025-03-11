@@ -32,7 +32,7 @@ const AnonymousLayout = (props: Props) => {
         </Button>
         <a href="https://github.com/line/abc-user-feedback" target="_blank">
           <Button variant="ghost">
-            <Icon name="github" />
+            <Icon name="RiGithubFill" />
           </Button>
         </a>
         <a href="mailto:dl_abc_userfeedback@linecorp.com" target="_blank">

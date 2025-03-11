@@ -121,6 +121,7 @@
       "today": "Heute",
       "yesterday": "Gestern",
       "before-days": "{{day, number}} Tagen",
+      "last-days": "Letzten {{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
     },
     "guide": "Richtlinien",
@@ -344,7 +345,8 @@
       "name": {
         "detail": "{{name}} Details",
         "add": "{{name}} hinzufügen",
-        "register": "{{name}} registrieren"
+        "register": "{{name}} registrieren",
+        "create": "{{name}} erstellen"
       },
       "summary": "Zusammenfassung",
       "preview": "Vorschau",
@@ -354,7 +356,8 @@
       "all-email-domains-allow": "Alle E-Mail-Domains sind erlaubt.",
       "request-email-auth": "Authentifizierung wurde angefordert.",
       "all-image-url-allow": "Alle Image-URLs sind erlaubt.",
-      "select-project": "Bitte wählen Sie ein Projekt aus."
+      "select-project": "Bitte wählen Sie ein Projekt aus.",
+      "no-category": "Keine Kategorie"
     },
     "create-tenant": {
       "tenant": {

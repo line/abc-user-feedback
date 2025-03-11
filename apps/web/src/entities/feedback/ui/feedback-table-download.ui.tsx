@@ -23,11 +23,13 @@ import {
   Dropdown,
   DropdownContent,
   DropdownItem,
+  DropdownLabel,
   DropdownTrigger,
   Icon,
   toast,
 } from '@ufb/react';
 
+import type { TableFilterOperator } from '@/shared';
 import type { Field } from '@/entities/field';
 
 import type { Feedback } from '../feedback.type';
@@ -38,10 +40,12 @@ interface Props {
   queries: Record<string, unknown>[];
   disabled: boolean;
   table: Table<Feedback>;
+  operator: TableFilterOperator;
+  totalItems: number;
 }
 
 const FeedbackTableDownload = (props: Props) => {
-  const { fields, queries, disabled, table } = props;
+  const { fields, queries, disabled, table, operator, totalItems } = props;
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -50,23 +54,40 @@ const FeedbackTableDownload = (props: Props) => {
     params: { channelId: Number(channelId), projectId: Number(projectId) },
   });
 
+  const visibleColumns = table.getVisibleFlatColumns();
+  const { rowSelection } = table.getState();
+  const feedbackIds = useMemo(
+    () =>
+      Object.entries(rowSelection)
+        .filter(([_, v]) => !!v)
+        .map(([k]) => Number(k)),
+    [rowSelection],
+  );
+
   const fieldIds = useMemo(
     () =>
       fields
-        .filter((v) =>
-          table.getVisibleFlatColumns().some((column) => column.id === v.key),
-        )
+        .filter((v) => visibleColumns.some((column) => column.id === v.key))
         .sort((a, b) => a.order - b.order)
         .map((v) => v.id),
-    [fields, table],
+    [fields, visibleColumns],
   );
 
   const exportFeedbackResponse = (type: 'xlsx' | 'csv') => () => {
-    void toast.promise(download({ type, fieldIds, queries }), {
-      success: () => t('main.feedback.download.success'),
-      error: () => t('main.feedback.download.error'),
-      loading: t('main.feedback.download.loading'),
-    });
+    void toast.promise(
+      download({
+        type,
+        fieldIds,
+        queries,
+        operator,
+        filterFeedbackIds: feedbackIds.length > 0 ? feedbackIds : undefined,
+      }),
+      {
+        success: () => t('main.feedback.download.success'),
+        error: () => t('main.feedback.download.error'),
+        loading: t('main.feedback.download.loading'),
+      },
+    );
   };
 
   return (
@@ -76,6 +97,9 @@ const FeedbackTableDownload = (props: Props) => {
         Export
       </DropdownTrigger>
       <DropdownContent>
+        <DropdownLabel>
+          {feedbackIds.length > 0 ? feedbackIds.length : totalItems} Items
+        </DropdownLabel>
         <DropdownItem onClick={exportFeedbackResponse('xlsx')}>
           Excel
         </DropdownItem>

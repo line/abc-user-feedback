@@ -101,29 +101,27 @@ const SignInPage: NextPageWithLayout = () => {
           />
         </form>
       )}
-      <div className="flex flex-col gap-4">
-        <Button
-          size="medium"
-          type="submit"
-          loading={loginLoading}
-          form="sign-in"
-          disabled={!formState.isDirty}
-        >
-          {t('button.sign-in')}
-        </Button>
-        <div className="flex flex-col gap-3">
-          {tenant?.useEmail && (
+      {tenant?.useEmail && (
+        <div className="flex flex-col gap-4">
+          <Button
+            size="medium"
+            type="submit"
+            loading={loginLoading}
+            form="sign-in"
+            disabled={!formState.isDirty}
+          >
+            {t('button.sign-in')}
+          </Button>
+          <div className="flex flex-col gap-3">
             <Link href="/auth/reset-password" className="text-center underline">
               {t('link.reset-password.title')}
             </Link>
-          )}
-          {tenant?.useEmail && (
             <Link href="/auth/sign-up" className="text-center underline">
               {t('button.sign-up')}
             </Link>
-          )}
+          </div>
         </div>
-      </div>
+      )}
     </AnonymousTemplate>
   );
 };

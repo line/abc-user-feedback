@@ -54,29 +54,29 @@ const options = [
     endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 7 }} />,
-    startDate: dayjs().subtract(8, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 7 }} />,
+    startDate: dayjs().subtract(7, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 30 }} />,
-    startDate: dayjs().subtract(31, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 30 }} />,
+    startDate: dayjs().subtract(30, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 90 }} />,
-    startDate: dayjs().subtract(91, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 90 }} />,
+    startDate: dayjs().subtract(90, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 180 }} />,
-    startDate: dayjs().subtract(181, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 180 }} />,
+    startDate: dayjs().subtract(180, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 365 }} />,
-    startDate: dayjs().subtract(366, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 365 }} />,
+    startDate: dayjs().subtract(365, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
 ];
 
@@ -86,7 +86,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     'dateRange',
     parseAsDateRange.withDefault({
       startDate: dayjs().subtract(1, 'y').startOf('day').toDate(),
-      endDate: dayjs().endOf('day').toDate(),
+      endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
     }),
   );
   const [invisibles, setInvisibles] = useState<Record<string, boolean>>({});

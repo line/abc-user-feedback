@@ -17,6 +17,7 @@
 import { useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
+import { compressToBase64 } from 'lz-string';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -29,6 +30,7 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
+  Tag,
 } from '@ufb/react';
 
 import {
@@ -50,11 +52,19 @@ interface Props {
   feedback: Feedback;
   onClickDelete?: () => Promise<unknown>;
   updateFeedback?: (feedback: Feedback) => Promise<unknown>;
+  channelId: number;
 }
 
 const FeedbackDetailSheet = (props: Props) => {
-  const { close, feedback, fields, isOpen, onClickDelete, updateFeedback } =
-    props;
+  const {
+    close,
+    feedback,
+    fields,
+    isOpen,
+    onClickDelete,
+    updateFeedback,
+    channelId,
+  } = props;
   const { t } = useTranslation();
 
   const perms = usePermissions();
@@ -69,25 +79,22 @@ const FeedbackDetailSheet = (props: Props) => {
   };
 
   const onClickSubmit = async () => {
-    const editedFeedback = fields.reduce((acc, cur) => {
-      if (cur.key === 'issues') return acc;
-      if (
-        typeof currentFeedback[cur.key] === 'undefined' ||
-        currentFeedback[cur.key] === null
-      ) {
-        return acc;
-      }
-      if (cur.property === 'EDITABLE') {
+    const editedFeedback = fields
+      .filter((v) => v.property === 'EDITABLE' && v.status === 'ACTIVE')
+      .reduce((acc, cur) => {
+        if (cur.key === 'issues') return acc;
         if (cur.format === 'date') {
           return {
             ...acc,
-            [cur.key]: dayjs(currentFeedback[cur.key] as string).toISOString(),
+            [cur.key]:
+              currentFeedback[cur.key] ?
+                dayjs(currentFeedback[cur.key] as string).toISOString()
+              : null,
           };
         }
-        return { ...acc, [cur.key]: currentFeedback[cur.key] };
-      }
-      return acc;
-    }, {} as Feedback);
+        return acc;
+      }, {} as Feedback);
+
     try {
       setIsLoading(true);
       await updateFeedback?.(editedFeedback);
@@ -115,8 +122,20 @@ const FeedbackDetailSheet = (props: Props) => {
     <Sheet open={isOpen} onOpenChange={close}>
       <SheetContent className="max-w-[600px]">
         <SheetHeader>
-          <SheetTitle>
+          <SheetTitle className="flex items-center gap-2">
             {t('v2.text.name.detail', { name: 'Feedback' })}
+            <Tag
+              variant="outline"
+              size="small"
+              className="cursor-pointer"
+              onClick={() =>
+                navigator.clipboard.writeText(
+                  `${window.location.origin}/${window.location.pathname}?queries=${compressToBase64(JSON.stringify([{ id: feedback.id, condition: 'IS' }]))}&channelId=${channelId}`,
+                )
+              }
+            >
+              URL Copy
+            </Tag>
           </SheetTitle>
         </SheetHeader>
         <SheetBody>
@@ -140,6 +159,8 @@ const FeedbackDetailSheet = (props: Props) => {
                 .map((v) => ({
                   ...v,
                   editable: v.property === 'EDITABLE',
+                  disabled:
+                    v.property === 'EDITABLE' && v.status === 'INACTIVE',
                 })) as SheetDetailTableRow[]
             }
             mode={mode}
