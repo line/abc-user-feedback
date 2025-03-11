@@ -197,9 +197,8 @@ export class IssueController {
   }
 
   @ApiOperation({
-    summary: 'Update Issue with Category',
-    description:
-      'Update an issue with a new category within the specified project.',
+    summary: 'Add Category to Issue',
+    description: 'Add a new category to an issue within the specified project.',
   })
   @ApiParam({
     name: 'projectId',
@@ -231,9 +230,9 @@ export class IssueController {
   }
 
   @ApiOperation({
-    summary: 'Update Issue to Separate Category',
+    summary: 'Remove Category from Issue',
     description:
-      'Separate a category from the specified issue within the specified project.',
+      'Remove a category from the specified issue within the specified project.',
   })
   @ApiParam({
     name: 'projectId',
