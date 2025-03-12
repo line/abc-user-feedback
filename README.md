@@ -4,12 +4,8 @@
 
 ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. The product is being applied and used in services worth 10 million MAU.
 
-![sample image](./assets/main.png)
-
-
-
 <p align="center">
-  <video src="https://github.com/user-attachments/assets/a2ef7a1a-41ec-4cec-b7d1-bda5fbd7d48b" width="100%" />
+  <video src="https://github.com/user-attachments/assets/a2ef7a1a-41ec-4cec-b7d1-bda5fbd7d48b" width="100%" autoplay />
 </p>
 
 ## Table of Contents
