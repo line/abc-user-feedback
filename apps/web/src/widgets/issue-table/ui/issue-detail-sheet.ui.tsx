@@ -17,6 +17,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
+import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -182,7 +183,7 @@ const IssueDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${btoa(JSON.stringify([{ name: data.name, condition: 'IS' }]))}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ name: data.name, condition: 'IS' }]))}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,
