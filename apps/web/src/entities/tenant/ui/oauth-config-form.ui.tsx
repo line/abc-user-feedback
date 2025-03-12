@@ -30,10 +30,12 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
   const { register, formState, setValue, watch } = useFormContext<AuthInfo>();
   const { t } = useTranslation();
 
+  const loginButtonType = watch('oauthConfig.loginButtonType') ?? 'CUSTOM';
+
   return (
     <div className="flex flex-col gap-6">
       <RadioCardGroup
-        value={watch('oauthConfig.loginButtonType') ?? 'CUSTOM'}
+        value={loginButtonType}
         onValueChange={(v: 'GOOGLE' | 'CUSTOM') =>
           setValue('oauthConfig.loginButtonType', v, { shouldDirty: true })
         }
@@ -98,7 +100,7 @@ const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
           disabled={disabled}
           required
         />
-        {watch('oauthConfig.loginButtonType') === 'CUSTOM' && (
+        {loginButtonType === 'CUSTOM' && (
           <TextInput
             {...register('oauthConfig.loginButtonName')}
             label="Login Button Name"
