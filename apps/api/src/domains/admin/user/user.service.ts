@@ -101,7 +101,9 @@ export class UserService {
 
     if ('skip' in queryBuilder) {
       queryBuilder.skip((page - 1) * limit).take(limit);
-    } else if ('offset' in queryBuilder) {
+    }
+    // Handle the case where offset is used in jest
+    else if ('offset' in queryBuilder) {
       (queryBuilder as SelectQueryBuilder<UserEntity>)
         .offset((page - 1) * limit)
         .limit(limit);
