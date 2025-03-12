@@ -16,16 +16,39 @@ ABC User Feedback is a standalone web application that manages Voice of Customer
 - [Contributing](#Contributing-Guidelines)
 - [License](#license)
 
-
 ## Features
 
 ABC User Feedback provides the following features:
 
-![data field image](./assets/01-data-field.png)
-![feedback tag image](./assets/02-feedback-tag.png)
+### Feedback Tag
+
+You can assign tags to each feedback to categorize them by topic.
+![data field image](./assets/01-feedback-tag.png)
+
+### Kanban Mode
+
+Experience the advantage of organizing and visualizing issue groups efficiently with Kanban mode.
+![feedback tag image](./assets/02-Issue-Kanban.png)
+
+### Issue Tracker
+
+The Issue feature has a status indicator that lets you use it as a simple issue tracker. You can also link each issue to a ticket in your own issue tracker system.
 ![issue tracker image](./assets/03-issue-tracker.png)
+
+### Single Sign-on
+
+Authentication offers OAuth to accommodate enterprise-level single sign-on (SSO) requirements.
 ![single sign-on image](./assets/04-single-signon.png)
+
+### Role Management
+
+Role Based Access Control (RBAC).
+
 ![role management image](./assets/05-role-management.png)
+
+### Dashboard
+
+Dashboard help you visualize statistical data about your feedback and issues so you can learn about them at a glance.
 ![dashboard image](./assets/06-dashboard.png)
 
 ## Getting Started
