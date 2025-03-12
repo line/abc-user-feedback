@@ -13,5 +13,4 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { default as RouteCreateChannelButton } from './route-create-channel-button.ui';
 export { default as CreateChannel } from './create-channel.ui';

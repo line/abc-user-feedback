@@ -16,16 +16,16 @@
 import type { Table } from '@tanstack/react-table';
 import { flexRender } from '@tanstack/react-table';
 
-import type { ISelectBoxProps } from '@/shared';
-import { DescriptionTooltip, SelectBox } from '@/shared';
-
-import ChartFilter from '../charts/chart-filter';
-import TableSortIcon from './table-sort-icon';
+import { DescriptionTooltip, SelectInput, SortingTableHead } from '@/shared';
 
 interface IProps<T> {
   title: string;
   description?: string;
-  selectData?: ISelectBoxProps<{ label: string; value: number }, false>;
+  selectData?: {
+    options: { value: string; label: string }[];
+    onChange: (value?: string) => void;
+    value: string;
+  };
   table: Table<T>;
   filterContent?: React.ReactNode;
 }
@@ -34,37 +34,42 @@ function DashboardTable<T>(props: IProps<T>) {
   const { title, description, table, selectData, filterContent } = props;
 
   return (
-    <div className="border-fill-tertiary bg-tertiary rounded border">
-      <div className="flex justify-between p-4">
+    <div className="rounded-20 shadow-default border-neutral-tertiary bg-neutral-primary flex h-[462px] flex-col border">
+      <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-1">
-          <h3 className="font-20-bold">{title}</h3>
+          <h3 className="text-title-h4">{title}</h3>
           {description && (
-            <DescriptionTooltip description={description} placement="bottom" />
+            <DescriptionTooltip description={description} side="bottom" />
           )}
         </div>
         <div className="flex items-center gap-2">
-          {selectData && <SelectBox {...selectData} />}
-          {filterContent && <ChartFilter>{filterContent}</ChartFilter>}
+          {selectData && <SelectInput {...selectData} />}
+          {filterContent}
         </div>
       </div>
-      <div className="mb-5 h-[310px] overflow-x-hidden overflow-y-scroll">
-        <table className="mx-2 w-full">
+      <div className="mb-6 overflow-x-hidden overflow-y-scroll">
+        <table className="w-full">
           <thead>
-            <tr className="h-14">
+            <tr className="border-neutral-tertiary h-12 border-b border-t">
               {table.getFlatHeaders().map((header, i) => (
                 <th
                   key={i}
                   style={{ width: header.getSize() }}
-                  className="font-14-regular text-secondary px-3 text-left"
+                  className="text-base-normal px-3 text-left"
                 >
                   <div className="flex items-center gap-1">
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext(),
-                    )}
-                    {header.column.getCanSort() && (
-                      <TableSortIcon column={header.column} />
-                    )}
+                    {header.column.getCanSort() ?
+                      <SortingTableHead column={header.column}>
+                        {flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                      </SortingTableHead>
+                    : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )
+                    }
                   </div>
                 </th>
               ))}
@@ -72,7 +77,10 @@ function DashboardTable<T>(props: IProps<T>) {
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr className="h-14" key={row.index}>
+              <tr
+                className="border-neutral-tertiary h-14 border-b"
+                key={row.index}
+              >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={`${cell.id} ${cell.row.index}`}

@@ -13,11 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useQueryState } from 'nuqs';
 import { Trans, useTranslation } from 'react-i18next';
+
+import {
+  Badge,
+  Combobox,
+  ComboboxContent,
+  ComboboxList,
+  ComboboxSelectItem,
+  ComboboxTrigger,
+  Icon,
+} from '@ufb/react';
 
 import { DateRangePicker, DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
@@ -29,17 +40,12 @@ import {
   IssueRank,
 } from '@/entities/dashboard';
 import { ProjectGuard } from '@/entities/project';
-import { MainLayout } from '@/widgets';
-import { DashbaordCardSlider } from '@/widgets/dashboard-card-slider';
+import { DashboardCardList } from '@/widgets/dashboard-card-list';
+import { Layout } from '@/widgets/layout';
 
 interface IProps {
   projectId: number;
 }
-
-const DEFAULT_DATE_RANGE = {
-  startDate: dayjs().subtract(31, 'day').startOf('day').toDate(),
-  endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
-};
 
 const options = [
   {
@@ -48,57 +54,107 @@ const options = [
     endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 7 }} />,
-    startDate: dayjs().subtract(8, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 7 }} />,
+    startDate: dayjs().subtract(7, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 30 }} />,
-    startDate: dayjs().subtract(31, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 30 }} />,
+    startDate: dayjs().subtract(30, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 90 }} />,
-    startDate: dayjs().subtract(91, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 90 }} />,
+    startDate: dayjs().subtract(90, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 180 }} />,
-    startDate: dayjs().subtract(181, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 180 }} />,
+    startDate: dayjs().subtract(180, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
   {
-    label: <Trans i18nKey="text.date.before-days" tOptions={{ day: 365 }} />,
-    startDate: dayjs().subtract(366, 'days').toDate(),
-    endDate: dayjs().subtract(1, 'days').toDate(),
+    label: <Trans i18nKey="text.date.last-days" tOptions={{ day: 365 }} />,
+    startDate: dayjs().subtract(365, 'days').startOf('day').toDate(),
+    endDate: dayjs().subtract(1, 'days').endOf('day').toDate(),
   },
 ];
 
 const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
-
   const [dateRange, setDateRange] = useQueryState(
     'dateRange',
-    parseAsDateRange.withDefault(DEFAULT_DATE_RANGE),
+    parseAsDateRange.withDefault({
+      startDate: dayjs().subtract(1, 'y').startOf('day').toDate(),
+      endDate: dayjs().subtract(1, 'day').endOf('day').toDate(),
+    }),
   );
+  const [invisibles, setInvisibles] = useState<Record<string, boolean>>({});
 
   const onChangeDateRange = async (v: DateRangeType) => {
     if (!v?.startDate || !v.endDate) return;
     await setDateRange({ startDate: v.startDate, endDate: v.endDate });
   };
 
+  const viewItems = [
+    {
+      label: t('dashboard-card.total-feedback.title'),
+      value: 'TotalFeedbackCard',
+    },
+    {
+      label: t('dashboard-card.today-feedback.title'),
+      value: 'TodayFeedbackCard',
+    },
+    {
+      label: t('dashboard-card.yesterday-feedback.title'),
+      value: 'YesterdayFeedbackCard',
+    },
+    {
+      label: t('dashboard-card.n-days-feedback.title', { n: 7 }),
+      value: 'SevenDaysFeedbackCard',
+    },
+    {
+      label: t('dashboard-card.n-days-feedback.title', { n: 30 }),
+      value: 'ThirtyDaysFeedbackCard',
+    },
+    { label: t('dashboard-card.total-issue.title'), value: 'TotalIssueCard' },
+    {
+      label: t('dashboard-card.issue-ratio.title'),
+      value: 'CreateFeedbackPerIssueCard',
+    },
+    { label: t('dashboard-card.today-issue.title'), value: 'TodayIssueCard' },
+    {
+      label: t('dashboard-card.yesterday-issue.title'),
+      value: 'YesterdayIssueCard',
+    },
+    {
+      label: t('dashboard-card.n-days-issue.title', { n: 7 }),
+      value: 'SevenDaysIssueCard',
+    },
+    {
+      label: t('dashboard-card.n-days-issue.title', { n: 30 }),
+      value: 'ThirtyDaysIssueCard',
+    },
+  ];
+
   const currentDate = dayjs().format('YYYY-MM-DD HH:mm');
+  const viewCount = useMemo(
+    () =>
+      viewItems.reduce(
+        (acc, { value }) => (invisibles[value] ? acc : acc + 1),
+        0,
+      ),
+    [invisibles],
+  );
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5 pb-14">
       <div className="flex items-center justify-between">
-        <h1 className="font-20-bold">
-          {t('main.dashboard.title')}
-          <span className="font-12-regular text-secondary ml-2">
-            Updated: {currentDate}
-          </span>
-        </h1>
-        <div>
+        <span className="text-neutral-tertiary ml-2 flex items-center gap-1">
+          <Icon name="RiRefreshLine" size={12} />
+          Updated: {currentDate}
+        </span>
+        <div className="flex items-center gap-2">
           <DateRangePicker
             value={dateRange}
             onChange={onChangeDateRange}
@@ -106,14 +162,40 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
             options={options}
             maxDays={365}
           />
+          <Combobox>
+            <ComboboxTrigger>
+              <Icon name="RiEyeLine" />
+              View
+              <Badge variant="subtle">{viewCount}</Badge>
+            </ComboboxTrigger>
+            <ComboboxContent>
+              <ComboboxList>
+                {viewItems.map(({ label, value }) => (
+                  <ComboboxSelectItem
+                    key={value}
+                    value={value}
+                    onSelect={() => {
+                      setInvisibles((prev) => ({
+                        ...prev,
+                        [value]: !prev[value],
+                      }));
+                    }}
+                    checked={!invisibles[value]}
+                  >
+                    {label}
+                  </ComboboxSelectItem>
+                ))}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
         </div>
       </div>
-      <DashbaordCardSlider
+      <DashboardCardList
         projectId={projectId}
         from={dateRange.startDate}
         to={dateRange.endDate}
+        invisible={invisibles}
       />
-
       <FeedbackLineChart
         from={dateRange.startDate}
         to={dateRange.endDate}
@@ -124,8 +206,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
         to={dateRange.endDate}
         projectId={projectId}
       />
-
-      <div className="flex gap-6">
+      <div className="flex items-stretch gap-5">
         <div className="flex-1">
           <IssueBarChart
             from={dateRange.startDate}
@@ -152,9 +233,9 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
 DashboardPage.getLayout = (page: React.ReactElement<IProps>) => {
   return (
-    <MainLayout>
+    <Layout projectId={page.props.projectId} title="Dashboard">
       <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
-    </MainLayout>
+    </Layout>
   );
 };
 

@@ -1,0 +1,110 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.dropdown-content {
+  --dropdown-text-default: var(--text-neutral-primary);
+  --dropdown-text-pressed: var(--tint, var(--text-neutral-primary));
+  --dropdown-text-empty: var(--text-neutral-secondary);
+  --dropdown-text-shortcut: var(--text-neutral-tertiary);
+  --dropdown-fg-default: var(--fg-neutral-primary);
+  --dropdown-fg-hover: var(--fg-neutral-tertiary);
+  --dropdown-fg-pressed: var(--fg-neutral-tertiary);
+  --dropdown-border-default: var(--border-neutral-tertiary);
+
+  @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
+  @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply rounded-8 z-50 min-w-[--radix-dropdown-menu-trigger-width] overflow-hidden border p-1 shadow-md;
+  @apply border-[var(--dropdown-border-default)] bg-[var(--dropdown-fg-default)] text-[var(--dropdown-text-default)];
+}
+
+.dropdown-trigger {
+  @apply data-[state=open]:bg-[var(--dropdown-fg-pressed)];
+}
+
+.dropdown-sub-trigger {
+  @apply rounded-6 text-base-normal flex cursor-pointer select-none items-center p-2 outline-none focus:bg-[var(--dropdown-fg-hover)] data-[state=open]:bg-[var(--dropdown-fg-pressed)] data-[state=open]:text-[var(--dropdown-text-pressed)];
+}
+
+.dropdown-sub-trigger-inset {
+  @apply pl-8;
+}
+
+.dropdown-sub-content {
+  --dropdown-text-default: var(--text-neutral-primary);
+  --dropdown-text-pressed: var(--tint, var(--text-neutral-primary));
+  --dropdown-text-empty: var(--text-neutral-secondary);
+  --dropdown-text-shortcut: var(--text-neutral-tertiary);
+  --dropdown-fg-default: var(--fg-neutral-primary);
+  --dropdown-fg-hover: var(--fg-neutral-tertiary);
+  --dropdown-fg-pressed: var(--fg-neutral-tertiary);
+  --dropdown-border-default: var(--border-neutral-tertiary);
+
+  @apply data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95;
+  @apply data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95;
+  @apply data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply data-[side=bottom]:mt-1 data-[side=left]:mr-1 data-[side=right]:ml-1 data-[side=top]:mb-1;
+  @apply rounded-8 z-50 min-w-[--radix-dropdown-menu-trigger-width] overflow-hidden border p-1 shadow-lg;
+  @apply border-[var(--dropdown-border-default)] bg-[var(--dropdown-fg-default)] text-[var(--dropdown-text-default)];
+}
+
+.dropdown-item {
+  @apply rounded-6 text-base-normal relative flex cursor-pointer select-none items-center gap-2 p-2 outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[state=on]:bg-[var(--dropdown-fg-pressed)] data-[state=on]:text-[var(--dropdown-text-pressed)] data-[disabled]:opacity-50;
+  @apply [&>svg]:h-4 [&>svg]:w-4;
+}
+
+.dropdown-item-inset {
+  @apply pl-8;
+}
+
+.dropdown-checkbox {
+  @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+.dropdown-checkbox-icon {
+  @apply absolute left-2 flex h-4 w-4 items-center justify-center;
+}
+
+.dropdown-radio {
+  @apply rounded-8 text-base-normal relative flex cursor-pointer select-none items-center py-2 pl-8 outline-none transition-colors focus:bg-[var(--dropdown-fg-hover)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50;
+}
+
+.dropdown-radio-icon {
+  @apply absolute left-3.5 flex h-2 w-2 items-center justify-center;
+}
+
+.dropdown-item ~ .dropdown-item {
+  @apply mt-1;
+}
+
+.dropdown-label {
+  @apply text-base-strong space-x-2 p-2;
+}
+
+.dropdown-label-inset {
+  @apply pl-8;
+}
+
+.dropdown-caption {
+  @apply text-small-normal ml-auto tracking-widest text-[var(--dropdown-text-shortcut)];
+}
+
+.dropdown-separator {
+  @apply -mx-1 my-1 h-px bg-[var(--dropdown-border-default)];
+}
+
+.dropdown-empty {
+  @apply text-base-normal flex items-center justify-center p-6 text-[var(--dropdown-text-empty)];
+}

@@ -17,29 +17,32 @@ import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, LogoWithTitle } from '@/shared';
+import { AnonymousTemplate, DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ResetPasswordWithEmailForm } from '@/features/auth/reset-password-with-email';
-import { MainLayout } from '@/widgets';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 interface IProps {
   code: string;
   email: string;
 }
+
 const ResetPasswordPage: NextPageWithLayout<IProps> = (props) => {
   const { code, email } = props;
   const { t } = useTranslation();
 
   return (
-    <div className="relative">
-      <LogoWithTitle title={t('link.reset-password.title')} />
+    <AnonymousTemplate
+      title={t('v2.link.reset-password.title')}
+      image="/assets/images/reset-password.svg"
+    >
       <ResetPasswordWithEmailForm code={code} email={email} />
-    </div>
+    </AnonymousTemplate>
   );
 };
 
 ResetPasswordPage.getLayout = (page) => {
-  return <MainLayout center>{page}</MainLayout>;
+  return <AnonymousLayout>{page}</AnonymousLayout>;
 };
 
 export const getServerSideProps: GetServerSideProps<IProps> = async ({

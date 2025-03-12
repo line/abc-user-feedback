@@ -14,5 +14,4 @@
  * under the License.
  */
 export { default as WebhookTable } from './webhook-table.ui';
-export { default as CreateWebhookPopover } from './create-webhook-popover';
-export { default as UpdateWebhookPopover } from './update-webhook-popover';
+export { default as WebhookFormSheet } from './webhook-form-sheet.ui';

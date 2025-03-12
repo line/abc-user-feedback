@@ -1,0 +1,34 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.menu-horizontal {
+  @apply flex-row gap-3;
+}
+
+.menu-vertical {
+  @apply min-w-[10rem] flex-col gap-3;
+}
+
+.menu-item-large {
+  @apply text-xlarge-normal px-3.5 py-2.5 [&>svg]:h-6 [&>svg]:w-6;
+}
+
+.menu-item-medium {
+  @apply text-large-normal px-3 py-2.5 [&>svg]:h-5 [&>svg]:w-5;
+}
+
+.menu-item-small {
+  @apply text-base-normal p-2 [&>svg]:h-4 [&>svg]:w-4;
+}

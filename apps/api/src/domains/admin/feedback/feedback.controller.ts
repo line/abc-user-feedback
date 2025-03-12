@@ -46,8 +46,8 @@ import { UserDto } from '../user/dtos';
 import {
   DeleteFeedbacksRequestDto,
   ExportFeedbacksRequestDto,
-  FindFeedbacksByChannelIdRequestDto,
 } from './dtos/requests';
+import { FindFeedbacksByChannelIdRequestDtoV2 } from './dtos/requests/find-feedbacks-by-channel-id-request-v2.dto';
 import {
   AddIssueResponseDto,
   FindFeedbacksByChannelIdResponseDto,
@@ -87,10 +87,10 @@ export class FeedbackController {
   @Post('search')
   async findByChannelId(
     @Param('channelId', ParseIntPipe) channelId: number,
-    @Body() body: FindFeedbacksByChannelIdRequestDto,
+    @Body() body: FindFeedbacksByChannelIdRequestDtoV2,
   ) {
     return FindFeedbacksByChannelIdResponseDto.transform(
-      await this.feedbackService.findByChannelId({ ...body, channelId }),
+      await this.feedbackService.findByChannelIdV2({ ...body, channelId }),
     );
   }
 
@@ -139,7 +139,7 @@ export class FeedbackController {
     @Res() res: FastifyReply,
     @CurrentUser() user: UserDto,
   ) {
-    const { query, sort, type, fieldIds } = body;
+    const { queries, operator, sort, type, fieldIds, filterFeedbackIds } = body;
     const channel = await this.channelService.findById({ channelId });
     const projectName = channel.project.name;
     const channelName = channel.name;
@@ -148,10 +148,12 @@ export class FeedbackController {
       await this.feedbackService.generateFile({
         projectId,
         channelId,
-        query,
+        queries,
+        operator,
         sort,
         type,
         fieldIds,
+        filterFeedbackIds,
       });
     const stream = streamableFile.getStream();
 
@@ -160,7 +162,7 @@ export class FeedbackController {
     )}.${type}`;
     void res.header(
       'Content-Disposition',
-      `attachment; filename="${filename}"`,
+      `attachment; filename="${encodeURIComponent(filename)}"`,
     );
 
     switch (type) {

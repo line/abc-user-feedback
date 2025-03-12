@@ -13,37 +13,42 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { AxiosError } from 'axios';
 
-import { toast } from '@ufb/ui';
+import { toast } from '@ufb/react';
 
-import { Path } from '@/shared';
+import type { IFetchError } from '@/shared';
 import { useUserStore } from '@/entities/user';
 
-interface IQuery {
-  code: string;
-  callback_url?: string;
-}
-
 export const useOAuthCallback = () => {
+  const router = useRouter();
+
   const { signInWithOAuth } = useUserStore();
   const [status, setStatus] = useState<'loading' | 'error'>('loading');
 
-  const router = useRouter();
-
-  const query = useMemo(() => {
-    const { code, callback_url } = router.query;
-    return { code, callback_url } as IQuery;
-  }, [router.query]);
+  const code = router.query.code as string | undefined;
 
   useEffect(() => {
-    signInWithOAuth(query).catch(() => {
-      toast.negative({ title: 'OAuth2.0 Login Error' });
-      void router.replace(Path.SIGN_IN);
+    if (!code) return;
+
+    signInWithOAuth({ code }).catch((error) => {
+      if (error instanceof AxiosError && error.response) {
+        const message = error.response.data as IFetchError;
+        toast.error(
+          message.message ??
+            message.axiosError?.error ??
+            'An error occurred during OAuth2.0 login. Please contact the administrator.',
+        );
+      } else {
+        toast.error(
+          'An error occurred during OAuth2.0 login. Please contact the administrator.',
+        );
+      }
       setStatus('error');
     });
-  }, [query]);
+  }, [code]);
 
   return { status };
 };

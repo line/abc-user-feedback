@@ -98,13 +98,13 @@ export class MigrationService {
 
     for (const channel of channels) {
       const channelId = channel.id;
-      const { body } = await this.opensearchClient.indices.exists({
+      const { body, statusCode } = await this.opensearchClient.indices.exists({
         index: 'channel_' + channelId.toString(),
       });
       this.logger.log({ channel });
       this.logger.log({ body });
 
-      if (!body) {
+      if (statusCode !== 200) {
         this.logger.log(`migration for ${channelId} started`);
         const fields = await this.fieldService.findByChannelId({ channelId });
         await this.osRepository.createIndex({ index: channelId.toString() });

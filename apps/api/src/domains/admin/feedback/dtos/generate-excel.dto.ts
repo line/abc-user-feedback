@@ -14,13 +14,12 @@
  * under the License.
  */
 import type { TimeRange } from '@/common/dtos';
-import type { SortMethodEnum } from '@/common/enums';
+import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 
 export class GenerateExcelDto {
   projectId: number;
   channelId: number;
-  query?: {
-    searchText?: string;
+  queries?: {
     createdAt?: TimeRange;
     updatedAt?: TimeRange;
     ids?: number[];
@@ -31,8 +30,11 @@ export class GenerateExcelDto {
       | number
       | number[]
       | undefined;
-  };
+    condition: QueryV2ConditionsEnum;
+  }[];
   sort?: Record<string, SortMethodEnum>;
+  operator?: 'AND' | 'OR';
   type: 'xlsx' | 'csv';
   fieldIds?: number[];
+  filterFeedbackIds?: number[];
 }

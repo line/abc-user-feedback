@@ -57,7 +57,7 @@ class TimezoneDto {
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ type: String })
   @IsString()
   offset: TimezoneOffset;
 }
@@ -69,7 +69,7 @@ export class CreateProjectRequestDto {
   @MaxLength(20)
   name: string;
 
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   @IsString()
   @IsNullable()
   @MaxLength(50)

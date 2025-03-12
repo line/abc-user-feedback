@@ -17,22 +17,26 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import dayjs from 'dayjs';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import { useInterval } from 'react-use';
-import type { z } from 'zod';
 
-import { TextInput, toast } from '@ufb/ui';
+import { Button } from '@ufb/react';
 
-import { Path, useOAIMutation } from '@/shared';
+import { TextInput, useOAIMutation } from '@/shared';
 
 import { signUpWithEmailSchema } from '../sign-up-with-email.schema';
+import type { SignUpWithEmailType } from '../sign-up-with-email.type';
 
-type FormType = z.infer<typeof signUpWithEmailSchema>;
+interface IProps {
+  onSubmit: (data: SignUpWithEmailType) => void;
+  loading?: boolean;
+  submitText: string;
+  initialValues?: SignUpWithEmailType | null;
+}
 
-interface IProps {}
-
-const SignUpWithEmailForm: React.FC<IProps> = () => {
+const SignUpWithEmailForm: React.FC<IProps> = (props) => {
+  const { onSubmit, loading, submitText, initialValues } = props;
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -45,28 +49,16 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
     watch,
     setError,
     clearErrors,
-  } = useForm<FormType>({
+  } = useForm<SignUpWithEmailType>({
     resolver: zodResolver(signUpWithEmailSchema),
-    defaultValues: { emailState: 'NOT_VERIFIED', code: '' },
+    defaultValues:
+      initialValues ?
+        { ...initialValues }
+      : { emailState: 'NOT_VERIFIED', code: '' },
   });
 
   const [expiredTime, setExpiredTime] = useState<string>();
   const [leftTime, setLeftTime] = useState('');
-
-  const { mutate: signUp, status: signUpStatus } = useOAIMutation({
-    method: 'post',
-    path: '/api/admin/auth/signUp/email',
-    queryOptions: {
-      async onSuccess() {
-        await router.push(Path.SIGN_IN);
-        toast.positive({ title: 'Success' });
-      },
-      onError(error) {
-        const { code, message } = error;
-        toast.negative({ title: message, description: code });
-      },
-    },
-  });
 
   const { mutate: fetchCode, status: fetchCodeStatus } = useOAIMutation({
     method: 'post',
@@ -76,12 +68,10 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
         setValue('emailState', 'VERIFING');
         setExpiredTime(data?.expiredAt);
         clearErrors('email');
-        toast.positive({ title: 'Success' });
       },
       onError(error) {
         const { message } = error;
         setError('email', { message });
-        toast.negative({ title: message });
       },
     },
   });
@@ -93,12 +83,10 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
       onSuccess() {
         setValue('emailState', 'VERIFIED');
         clearErrors('code');
-        toast.positive({ title: 'Success' });
       },
       onError(error) {
         const { message } = error;
         setError('code', { message });
-        toast.negative({ title: message });
       },
     },
   });
@@ -125,117 +113,101 @@ const SignUpWithEmailForm: React.FC<IProps> = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit((data) => signUp(data))}>
-      <div className="mb-12 space-y-4">
-        <TextInput
-          size="lg"
-          type="email"
-          {...register('email')}
-          label="Email"
-          placeholder={t('input.placeholder.email')}
-          disabled={watch('emailState') === 'VERIFIED'}
-          isValid={!formState.errors.email}
-          isSubmitted={
-            fetchCodeStatus === 'error' || fetchCodeStatus === 'success'
-          }
-          isSubmitting={fetchCodeStatus === 'pending'}
-          hint={formState.errors.email?.message}
-          rightChildren={
-            <button
-              type="button"
-              className="btn btn-secondary btn-xs btn-rounded"
-              onClick={() => fetchCode({ email: getValues('email') })}
-              disabled={
-                watch('emailState') === 'VERIFIED' ||
-                fetchCodeStatus === 'pending'
-              }
-            >
-              {t('auth.sign-up.button.request-auth-code')}
-            </button>
-          }
-          required
-        />
-        {watch('emailState') !== 'NOT_VERIFIED' && (
+    <form onSubmit={handleSubmit((data) => onSubmit(data))}>
+      <div className="mb-12 flex flex-col gap-4">
+        <div className="flex gap-2">
           <TextInput
-            size="lg"
-            type="code"
-            label={t('auth.sign-up.label.auth-code')}
-            {...register('code')}
-            disabled={watch('emailState') === 'VERIFIED'}
-            placeholder={t('auth.sign-up.placeholder.auth-code')}
-            isValid={!formState.errors.code}
-            isSubmitted={
-              verifyCodeStatus === 'error' || verifyCodeStatus === 'success'
+            type="email"
+            {...register('email')}
+            label="Email"
+            placeholder={t('v2.placeholder.text')}
+            disabled={watch('emailState') !== 'NOT_VERIFIED'}
+            error={formState.errors.email?.message}
+            infoCaption={
+              watch('emailState') !== 'NOT_VERIFIED' ?
+                t('v2.text.request-email-auth')
+              : undefined
             }
-            isSubmitting={verifyCodeStatus === 'pending'}
-            hint={formState.errors.code?.message}
-            rightChildren={
-              <div className="flex items-center gap-2">
-                {(watch('emailState') === 'VERIFING' ||
+            rightButton={
+              <Button
+                type="button"
+                onClick={() => fetchCode({ email: getValues('email') })}
+                loading={fetchCodeStatus === 'pending'}
+                disabled={watch('emailState') === 'VERIFIED'}
+                className="min-w-[96px]"
+              >
+                {t('v2.auth.sign-up.button.request-auth-code')}
+              </Button>
+            }
+          />
+        </div>
+        {watch('emailState') !== 'NOT_VERIFIED' && (
+          <div className="flex gap-2">
+            <TextInput
+              type="text"
+              label="Authentication code"
+              {...register('code')}
+              disabled={watch('emailState') === 'VERIFIED'}
+              placeholder={t('v2.placeholder.text')}
+              error={formState.errors.code?.message}
+              right={
+                (watch('emailState') === 'VERIFING' ||
                   watch('emailState') === 'EXPIRED') && (
                   <p className="font-16-regular">{leftTime}</p>
-                )}
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-xs btn-rounded"
+                )
+              }
+              rightButton={
+                <Button
+                  loading={verifyCodeStatus === 'pending'}
                   disabled={
                     watch('emailState') === 'VERIFIED' ||
-                    watch('code').length !== 6 ||
-                    verifyCodeStatus === 'pending'
+                    watch('code').length !== 6
                   }
                   onClick={() => {
                     const code = getValues('code');
                     if (!code) return;
                     verifyCode({ code, email: getValues('email') });
                   }}
+                  className="min-w-[96px]"
                 >
-                  {t('auth.sign-up.button.verify-auth-code')}
-                </button>
-              </div>
-            }
-            required
-          />
+                  {t('v2.auth.sign-up.button.verify-auth-code')}
+                </Button>
+              }
+              successCaption={
+                watch('emailState') === 'VERIFIED' ? '인증되었습니다.' : (
+                  undefined
+                )
+              }
+            />
+          </div>
         )}
         <TextInput
-          size="lg"
           type="password"
-          label={t('input.label.password')}
-          placeholder={t('input.placeholder.password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.password}
-          hint={formState.errors.password?.message}
+          label="Password"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.password?.message}
           {...register('password')}
-          required
         />
         <TextInput
-          size="lg"
           type="password"
-          label={t('input.label.confirm-password')}
-          placeholder={t('input.placeholder.confirm-password')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.confirmPassword}
-          hint={formState.errors.confirmPassword?.message}
+          label="Confirm Password"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.confirmPassword?.message}
           {...register('confirmPassword')}
-          required
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <button
+      <div className="flex flex-col gap-4">
+        <Button
+          size="medium"
           type="submit"
-          className="btn btn-lg btn-primary"
-          disabled={!formState.isValid || signUpStatus === 'pending'}
+          loading={loading}
+          disabled={!formState.isDirty || watch('emailState') !== 'VERIFIED'}
         >
-          {t('button.sign-up')}
-        </button>
-        <button
-          type="button"
-          className="btn btn-lg btn-secondary"
-          onClick={router.back}
-        >
+          {submitText}
+        </Button>
+        <Button size="medium" variant="outline" onClick={router.back}>
           {t('button.back')}
-        </button>
+        </Button>
       </div>
     </form>
   );

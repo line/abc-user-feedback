@@ -23,9 +23,7 @@ export const isDefaultField = (field: FieldInfo) =>
   field.key === 'issues';
 
 export const sortField = (a: FieldInfo, b: FieldInfo) => {
-  const aNum = isDefaultField(a) ? 1 : 2;
-  const bNum = isDefaultField(b) ? 1 : 2;
-  return aNum - bNum;
+  return a.order - b.order;
 };
 
 export const FIELD_PROPERTY_TEXT: Record<FieldProperty, string> = {

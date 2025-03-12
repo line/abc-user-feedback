@@ -16,6 +16,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
+import { LoginButtonTypeEnum } from '../../entities/enums/login-button-type.enum';
+
 export class OAuthConfigResponseDto {
   @Expose()
   @ApiProperty()
@@ -48,6 +50,19 @@ export class OAuthConfigResponseDto {
   @Expose()
   @ApiProperty()
   emailKey: string;
+
+  @Expose()
+  @ApiProperty({
+    enumName: 'LoginButtonTypeEnum',
+    enum: LoginButtonTypeEnum,
+    type: LoginButtonTypeEnum,
+    nullable: true,
+  })
+  loginButtonType: LoginButtonTypeEnum | null;
+
+  @Expose()
+  @ApiProperty({ nullable: true, type: String })
+  loginButtonName: string | null;
 }
 
 export class GetTenantResponseDto {
@@ -60,7 +75,7 @@ export class GetTenantResponseDto {
   siteName: string;
 
   @Expose()
-  @ApiProperty({ nullable: true })
+  @ApiProperty({ nullable: true, type: String })
   description: string | null;
 
   @Expose()
@@ -72,20 +87,8 @@ export class GetTenantResponseDto {
   useOAuth: boolean;
 
   @Expose()
-  @ApiProperty()
-  isPrivate: boolean;
-
-  @Expose()
-  @ApiProperty()
-  isRestrictDomain: boolean;
-
-  @Expose()
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: [String] })
   allowDomains: string[] | null;
-
-  @Expose()
-  @ApiProperty()
-  useEmailVerification: boolean;
 
   @Expose()
   @ApiProperty({ type: OAuthConfigResponseDto, nullable: true })

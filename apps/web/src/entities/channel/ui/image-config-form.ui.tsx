@@ -14,10 +14,12 @@
  * under the License.
  */
 import { useState } from 'react';
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
-import { Badge, TextInput } from '@ufb/ui';
+import { Badge, Button, Divider, Icon, toast } from '@ufb/react';
+
+import { ComboboxInputbox, TextInput, useOAIMutation } from '@/shared';
 
 import type { ChannelImageConfig } from '../channel.type';
 
@@ -31,28 +33,36 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
   const { t } = useTranslation();
 
   const [inputDomain, setInputDomain] = useState('');
+  const [connectionError, setConnectionError] = useState(false);
 
-  const { register, formState, watch, setValue, setError, clearErrors } =
-    useFormContext<ChannelImageConfig>();
+  const {
+    register,
+    formState,
+    watch,
+    setValue,
+    setError,
+    clearErrors,
+    getValues,
+  } = useFormContext<ChannelImageConfig>();
 
   const domainWhiteList = watch('domainWhiteList');
 
-  const addDomainWhiteList = () => {
-    if (!domainWhiteList) return;
-
-    if (domainWhiteList.includes(inputDomain)) {
+  const addDomainWhiteList = (value: string) => {
+    if (domainWhiteList?.includes(value)) {
       setError('domainWhiteList', {
         message: t('hint.name-already-exists', { name: 'Domain' }),
       });
       return;
     }
 
-    if (!/[a-z]+\.[a-z]{2,3}/.test(inputDomain)) {
+    if (!/[a-z]+\.[a-z]{2,3}/.test(value)) {
       setError('domainWhiteList', { message: t('hint.invalid-domain') });
       return;
     }
 
-    setValue('domainWhiteList', domainWhiteList.concat(inputDomain));
+    setValue('domainWhiteList', (domainWhiteList ?? []).concat(value), {
+      shouldDirty: true,
+    });
     clearErrors('domainWhiteList');
     setInputDomain('');
   };
@@ -62,117 +72,162 @@ const ImageConfigForm: React.FC<IProps> = (props) => {
     setValue(
       'domainWhiteList',
       domainWhiteList.filter((_, i) => i !== index),
+      { shouldDirty: true },
     );
+  };
+  const { mutate: testConection } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/projects/{projectId}/channels/image-upload-url-test',
+    pathParams: { projectId: 0 },
+    queryOptions: {
+      onSuccess(data) {
+        if (data?.success) {
+          toast.success(t('v2.toast.success'));
+        } else {
+          setError('accessKeyId', { message: '' });
+          setError('bucket', { message: '' });
+          setError('endpoint', { message: '' });
+          setError('region', { message: '' });
+          setError('root', { message: '' });
+          setError('secretAccessKey', { message: '' });
+          toast.error('Test Connection failed');
+          setConnectionError(false);
+          setConnectionError(true);
+        }
+      },
+      onError() {
+        toast.error('Test Connection failed');
+        setConnectionError(true);
+      },
+    },
+  });
+
+  const handleTestConnection = () => {
+    let isError = false;
+    const { accessKeyId, bucket, endpoint, region, secretAccessKey } =
+      getValues();
+    if (accessKeyId.length === 0) {
+      setError('accessKeyId', { message: t('hint.required') });
+      isError = true;
+    }
+    if (bucket.length === 0) {
+      setError('bucket', { message: t('hint.required') });
+      isError = true;
+    }
+    if (endpoint.length === 0) {
+      setError('endpoint', { message: t('hint.required') });
+      isError = true;
+    }
+    if (region.length === 0) {
+      setError('region', { message: t('hint.required') });
+      isError = true;
+    }
+    if (secretAccessKey.length === 0) {
+      setError('secretAccessKey', { message: t('hint.required') });
+      isError = true;
+    }
+    if (isError) {
+      setConnectionError(true);
+      return;
+    }
+    testConection(getValues());
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <TextInput
-        label="Access Key ID"
-        placeholder={t('placeholder', { name: 'Access Key ID' })}
-        {...register('accessKeyId')}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.accessKeyId?.message}
-        isValid={!formState.errors.accessKeyId}
-        disabled={readOnly}
-      />
-      <TextInput
-        {...register('secretAccessKey')}
-        label="Secret Access Key"
-        placeholder={t('placeholder', { name: 'Secret Access Key' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.secretAccessKey?.message}
-        isValid={!formState.errors.secretAccessKey}
-        disabled={readOnly}
-      />
-      <TextInput
-        {...register('endpoint')}
-        label="End Point"
-        placeholder={t('placeholder', { name: 'End Point' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.endpoint?.message}
-        isValid={!formState.errors.endpoint}
-        disabled={readOnly}
-      />
-      <TextInput
-        {...register('region')}
-        label="Region"
-        placeholder={t('placeholder', { name: 'Region' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.region?.message}
-        isValid={!formState.errors.region}
-        disabled={readOnly}
-      />
-      <TextInput
-        {...register('bucket')}
-        label="Bucket Name"
-        placeholder={t('placeholder', { name: 'Bucket Name' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.bucket?.message}
-        isValid={!formState.errors.bucket}
-        disabled={readOnly}
-      />
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-2">
-          <h2 className="font-20-bold">Image URL Domain Whitelist</h2>
-          <input
-            type="checkbox"
-            className="toggle toggle-sm"
-            checked={!!domainWhiteList}
-            onChange={(e) => {
-              setValue('domainWhiteList', e.target.checked ? [] : null, {
-                shouldDirty: true,
-              });
-            }}
+    <div>
+      <div className="border-neutral-tertiary mb-4 flex flex-col gap-6 rounded border p-4">
+        <h5 className="text-title-h5">
+          {t('title-box.image-storage-integration')}
+        </h5>
+        <div className="flex flex-col gap-4">
+          <TextInput
+            label="Access Key ID"
+            placeholder={t('v2.placeholder.text')}
+            {...register('accessKeyId')}
+            error={formState.errors.accessKeyId?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('secretAccessKey')}
+            label="Secret Access Key"
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.secretAccessKey?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('endpoint')}
+            label="End Point"
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.endpoint?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('region')}
+            label="Region"
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.region?.message}
+            disabled={readOnly}
+          />
+          <TextInput
+            {...register('bucket')}
+            label="Bucket Name"
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.bucket?.message}
             disabled={readOnly}
           />
         </div>
-        {domainWhiteList && (
-          <>
-            <TextInput
-              label="URL Domain"
-              placeholder="example.com"
-              value={inputDomain}
-              onChange={(e) => setInputDomain(e.target.value)}
-              rightChildren={
-                <button
-                  type="button"
-                  className="btn btn-xs btn-rounded btn-primary"
-                  onClick={addDomainWhiteList}
-                  disabled={readOnly}
-                >
-                  {t('button.register')}
-                </button>
-              }
-              isValid={!formState.errors.domainWhiteList}
-              hint={formState.errors.domainWhiteList?.message}
-              isSubmitting={formState.isSubmitting}
-              isSubmitted={formState.isSubmitted}
-              required
-              disabled={readOnly}
-            />
-            <div className="flex items-center gap-2">
-              {domainWhiteList.map((domain, index) => (
+        <div className="flex items-center gap-2">
+          <Button
+            type="button"
+            className="btn btn-secondary"
+            onClick={handleTestConnection}
+          >
+            Test Connection
+          </Button>
+          {connectionError && (
+            <div className="text-tint-red flex items-center gap-1">
+              <Icon name="RiErrorWarningFill" size={20} />
+              <span>{t('v2.text.test-connection-failed')}</span>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="border-neutral-tertiary flex flex-col gap-2 rounded border p-4">
+        <h5 className="text-title-h5">Image URL Domain Whitelist</h5>
+        <div className="flex gap-4">
+          <ComboboxInputbox
+            clearError={() => clearErrors('domainWhiteList')}
+            inputValue={inputDomain}
+            setInputValue={setInputDomain}
+            onSelectValue={addDomainWhiteList}
+            error={formState.errors.domainWhiteList?.message}
+            placeholder="example.com"
+          >
+            Whitelist
+          </ComboboxInputbox>
+          <Divider orientation="vertical" className="h-5" variant="subtle" />
+          <div className="flex items-center gap-2">
+            {!domainWhiteList || domainWhiteList.length === 0 ?
+              <p className="text-neutral-tertiary">
+                {t('v2.text.all-image-url-allow')}
+              </p>
+            : domainWhiteList.map((domain, index) => (
                 <Badge
                   key={index}
-                  type="secondary"
-                  right={{
-                    iconName: 'Close',
-                    onClick: () => removeDomainWhiteList(index),
-                    disabled: readOnly,
-                  }}
+                  className="flex items-center"
+                  variant="subtle"
                 >
                   {domain}
+                  <Icon
+                    name="RiCloseLine"
+                    onClick={() => removeDomainWhiteList(index)}
+                    size={16}
+                  />
                 </Badge>
-              ))}
-            </div>
-          </>
-        )}
+              ))
+            }
+          </div>
+        </div>
       </div>
     </div>
   );

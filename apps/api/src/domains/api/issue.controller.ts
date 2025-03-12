@@ -195,4 +195,71 @@ export class IssueController {
   ) {
     await this.issueService.deleteByIds(issueIds);
   }
+
+  @ApiOperation({
+    summary: 'Add Category to Issue',
+    description: 'Add a new category to an issue within the specified project.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'categoryId',
+    type: Number,
+    description: 'Category id',
+    example: 1,
+  })
+  @Put(':issueId/category/:categoryId')
+  async updateByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.updateByCategoryId({
+      issueId,
+      categoryId,
+    });
+  }
+
+  @ApiOperation({
+    summary: 'Remove Category from Issue',
+    description:
+      'Remove a category from the specified issue within the specified project.',
+  })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'issueId',
+    type: Number,
+    description: 'Issue id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'categoryId',
+    type: Number,
+    description: 'Category id',
+    example: 1,
+  })
+  @Delete(':issueId/category/:categoryId')
+  async deleteByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.deleteByCategoryId({
+      issueId,
+      categoryId,
+    });
+  }
 }

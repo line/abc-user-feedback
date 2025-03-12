@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
-import { TextInput } from '@ufb/ui';
+import { TextInput } from '@/shared';
 
 import type { ProjectInfo } from '../project.type';
 import TimezoneSelectBox from './timezone-select-box';
@@ -34,35 +34,31 @@ const ProjectInfoForm: React.FC<IProps> = (props) => {
     useFormContext<ProjectInfo>();
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-4">
       {type === 'update' && (
-        <TextInput {...register('id')} label="Project ID" disabled />
+        <TextInput label="ID" {...register('id')} disabled />
       )}
       <TextInput
+        label="Name"
         {...register('name')}
-        label="Project Name"
-        placeholder={t('placeholder', { name: 'Project Name' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.name?.message}
-        isValid={!formState.errors.name}
+        placeholder={t('v2.placeholder.text')}
         required
         disabled={readOnly}
+        error={formState.errors.name?.message}
       />
       <TextInput
+        label="Description"
         {...register('description')}
-        label="Project Description"
-        placeholder={t('placeholder', { name: 'Project Description' })}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.description?.message}
-        isValid={!formState.errors.description}
+        placeholder={t('v2.placeholder.text')}
         disabled={readOnly}
+        error={formState.errors.description?.message}
       />
       <TimezoneSelectBox
         value={watch('timezone')}
-        onChange={(value) => setValue('timezone', value, { shouldDirty: true })}
-        disabled={readOnly}
+        onChange={(value) =>
+          value && setValue('timezone', value, { shouldDirty: true })
+        }
+        disabled={readOnly || type === 'update'}
       />
     </div>
   );

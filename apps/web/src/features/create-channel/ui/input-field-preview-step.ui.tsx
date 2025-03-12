@@ -22,10 +22,10 @@ import CreateChannelInputTemplate from './create-channel-input-template.ui';
 interface IProps {}
 
 const InputFieldPreviewStep: React.FC<IProps> = () => {
-  const { input } = useCreateChannelStore();
+  const { input, jumpStepByKey } = useCreateChannelStore();
 
   return (
-    <CreateChannelInputTemplate>
+    <CreateChannelInputTemplate onClickBack={() => jumpStepByKey('field')}>
       <PreviewFieldTable
         fields={input.fields.filter((v) => v.status === 'ACTIVE')}
       />

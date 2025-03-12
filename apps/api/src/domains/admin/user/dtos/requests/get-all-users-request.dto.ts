@@ -14,10 +14,18 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+  ValidateNested,
+} from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import { SortMethodEnum } from '@/common/enums';
+import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import { ArrayDistinct } from '@/common/validators';
 import { UserTypeEnum } from '../../entities/enums';
 
 class UserOrder {
@@ -43,25 +51,40 @@ class UserSearchQuery {
   @IsString()
   department?: string | null;
 
-  @ApiProperty({ required: false, enum: UserTypeEnum })
+  @ApiProperty({
+    required: false,
+    type: [UserTypeEnum],
+    enum: UserTypeEnum,
+    enumName: 'UserTypeEnum',
+  })
   @IsOptional()
-  @IsEnum(UserTypeEnum)
-  type?: UserTypeEnum;
+  @IsEnum(UserTypeEnum, { each: true })
+  @ArrayDistinct()
+  type?: UserTypeEnum[];
+
+  @ApiProperty({ required: false, type: [Number] })
+  @IsOptional()
+  @ArrayDistinct()
+  @IsNumber({}, { each: true })
+  projectId?: number[];
 
   @ApiProperty({ required: false, type: TimeRange })
   @IsOptional()
   createdAt?: TimeRange;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsNumber()
-  projectId?: number;
+  condition: QueryV2ConditionsEnum;
 }
 
 export class GetAllUsersRequestDto extends PaginationRequestDto {
+  @ApiProperty({ required: false, type: [UserSearchQuery] })
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => UserSearchQuery)
+  queries?: UserSearchQuery[];
+
   @ApiProperty({ required: false })
   @IsOptional()
-  query?: UserSearchQuery;
+  operator?: 'AND' | 'OR';
 
   @ApiProperty({ required: false })
   @IsOptional()

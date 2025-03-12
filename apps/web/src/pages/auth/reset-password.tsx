@@ -17,24 +17,26 @@ import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, LogoWithTitle } from '@/shared';
+import { AnonymousTemplate, DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { RequestResetPasswordWithEmail } from '@/features/auth/reset-password-with-email';
-import { MainLayout } from '@/widgets';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
   return (
-    <div className="relative">
-      <LogoWithTitle title={t('auth.reset-password.title')} />
+    <AnonymousTemplate
+      title={t('v2.auth.reset-password.title')}
+      image="/assets/images/send-reset-password-email.svg"
+    >
       <RequestResetPasswordWithEmail />
-    </div>
+    </AnonymousTemplate>
   );
 };
 
 ResetPasswordPage.getLayout = (page) => {
-  return <MainLayout center>{page}</MainLayout>;
+  return <AnonymousLayout>{page}</AnonymousLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

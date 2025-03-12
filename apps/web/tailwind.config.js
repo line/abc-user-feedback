@@ -11,23 +11,31 @@ module.exports = {
     screens: {
       lg: '960px',
     },
-    boxShadow: {
-      drop: '0px 4px 16px 0px rgb(var(--shadow-rgb) / 20%)',
-      top: '0 -0.031rem 0 rgb(var(--shadow-rgb) / 10%)',
-      bottom: '0 0.031rem 0 rgb(var(--shadow-rgb) / 10%)',
-      'floating-depth-1': '0 0 0.063rem rgb(var(--shadow-rgb) / 30%)',
-      'floating-depth-2': '0 0.25rem 0.5rem rgb(var(--shadow-rgb) / 10%)',
-      'floating-depth-3': '0 0.25rem 1rem rgb(var(--shadow-rgb) / 20%)',
+    extend: {
+      borderRadius: {
+        0: '0',
+        4: '0.25rem',
+        6: '0.375rem',
+        8: '0.5rem',
+        12: '0.75rem',
+        16: '1rem',
+        20: '1.25rem',
+        24: '1.5rem',
+        full: '62.4375rem',
+      },
     },
   },
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
     require('path').join(__dirname, '../../packages/ufb-ui/src/**/*.{ts,tsx}'),
+    require('path').join(
+      __dirname,
+      '../../packages/ufb-react/src/**/*.{ts,tsx}',
+    ),
   ],
   plugins: [
-    require('@ufb/tailwind'),
+    require('@ufb/tailwindcss'),
     // @ts-ignore
     require('tailwind-scrollbar-hide'),
-    require('@headlessui/tailwindcss'),
   ],
 };

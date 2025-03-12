@@ -14,7 +14,7 @@
       "persistent": true
     },
     "web#dev": {
-      "dependsOn": ["@ufb/tailwind#build", "@ufb/shared#build"]
+      "dependsOn": ["@ufb/shared#build", "@ufb/tailwindcss#build"]
     },
     "api#dev": {
       "dependsOn": ["@ufb/shared#build"]
@@ -23,7 +23,7 @@
       "outputs": ["node_modules/.cache/.prettiercache"],
       "outputLogs": "new-only"
     },
-    "@ufb/tailwind#build": {
+    "@ufb/tailwindcss#build": {
       "outputs": ["dist/**"]
     },
     "@ufb/shared#build": {
@@ -51,7 +51,6 @@
   "globalEnv": [
     "NODE_ENV",
     "SESSION_PASSWORD",
-    "API_BASE_URL",
     "NEXT_PUBLIC_API_BASE_URL",
     "OPENSEARCH_USE",
     "OPENSEARCH_NODE",

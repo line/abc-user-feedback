@@ -22,14 +22,14 @@ interface IProps extends React.PropsWithChildren {
 
 const ExpandableText: React.FC<IProps> = ({ children, isExpanded }) => {
   return (
-    <p
+    <div
       className={cn('cursor-text', {
         'whitespace-pre-wrap break-all': isExpanded,
         truncate: !isExpanded,
       })}
     >
       {children}
-    </p>
+    </div>
   );
 };
 export default ExpandableText;

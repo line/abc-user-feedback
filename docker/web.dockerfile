@@ -20,12 +20,13 @@ RUN apk --no-cache add --virtual .builds-deps build-base python3
 
 WORKDIR /app
 
+RUN npm install -g node-gyp corepack@latest
+RUN corepack enable
+
 # First install the dependencies (as they change less often)
 COPY .gitignore .gitignore
 COPY --from=builder /app/out/json/ .
 COPY --from=builder /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
-RUN npm install -g node-gyp
-RUN corepack enable
 RUN pnpm install --frozen-lockfile
 
 # Build the project

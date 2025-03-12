@@ -14,36 +14,57 @@
  * under the License.
  */
 
-import { CreateTemplate } from '@/shared';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
+
+import { CreationLayout, CreationStepper, Path } from '@/shared';
 
 import { useCreateChannelStore } from '../create-channel-model';
-import { CREATE_CHANNEL_STEP_KEY_LIST } from '../create-channel-type';
+import { CREATE_CHANNEL_MAIN_STEP_LIST } from '../create-channel-type';
 import {
   CREATE_CHANNEL_COMPONENTS,
   CREATE_CHANNEL_STEPPER_TEXT,
-  CREATE_PROJECT_HELP_TEXT,
 } from '../create-channel.constant';
 
 interface IProps {}
 
-const CreateProject: React.FC<IProps> = () => {
-  const { currentStep, editingStep, getCurrentStepKey } =
-    useCreateChannelStore();
-
-  const currentStepKey = getCurrentStepKey();
+const CreateChannel: React.FC<IProps> = () => {
+  const { currentStep } = useCreateChannelStore();
+  const { t } = useTranslation();
+  const router = useRouter();
 
   return (
-    <CreateTemplate
-      type="channel"
-      currentStep={currentStep}
-      steps={CREATE_CHANNEL_STEP_KEY_LIST}
-      editingStep={editingStep}
-      stepTitle={CREATE_CHANNEL_STEPPER_TEXT}
-      helpText={CREATE_PROJECT_HELP_TEXT[currentStepKey]}
+    <CreationLayout
+      title={t('main.create-channel.title')}
+      leftPanel={
+        <CreationStepper
+          steps={CREATE_CHANNEL_MAIN_STEP_LIST}
+          currentStepIndex={currentStep.index}
+          stepTitle={CREATE_CHANNEL_STEPPER_TEXT}
+        />
+      }
+      leftBottm={
+        <div className="flex justify-end">
+          <Image
+            src={`/assets/images/create-channel-${currentStep.key}.svg`}
+            alt="Create Project"
+            className="align"
+            width={320}
+            height={320}
+          />
+        </div>
+      }
+      onClickGoBack={() =>
+        router.push({
+          pathname: Path.PROJECT_MAIN,
+          query: { projectId: router.query.projectId },
+        })
+      }
     >
-      {CREATE_CHANNEL_COMPONENTS[currentStepKey]}
-    </CreateTemplate>
+      {CREATE_CHANNEL_COMPONENTS[currentStep.key]}
+    </CreationLayout>
   );
 };
 
-export default CreateProject;
+export default CreateChannel;

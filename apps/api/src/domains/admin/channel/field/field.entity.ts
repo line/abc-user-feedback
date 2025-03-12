@@ -55,6 +55,9 @@ export class FieldEntity extends CommonEntity {
   @Column('enum', { enum: FieldStatusEnum })
   status: FieldStatusEnum;
 
+  @Column('int', { default: 0 })
+  order: number | null;
+
   @ManyToOne(() => ChannelEntity, (channel) => channel.fields, {
     onDelete: 'CASCADE',
     orphanedRowAction: 'delete',
@@ -75,6 +78,7 @@ export class FieldEntity extends CommonEntity {
     format,
     property,
     status,
+    order,
   }: {
     channelId: number;
     name: string;
@@ -83,6 +87,7 @@ export class FieldEntity extends CommonEntity {
     format: FieldFormatEnum;
     property: FieldPropertyEnum;
     status: FieldStatusEnum;
+    order?: number | null;
   }) {
     const field = new FieldEntity();
     field.channel = new ChannelEntity();
@@ -93,6 +98,7 @@ export class FieldEntity extends CommonEntity {
     field.format = format;
     field.property = property;
     field.status = status;
+    field.order = order ?? 0;
 
     return field;
   }

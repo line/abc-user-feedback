@@ -13,56 +13,40 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useTranslation } from 'react-i18next';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
 
-import { Icon } from '@ufb/ui';
-
+import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
-import type { Role } from '@/entities/role';
-import { useUserSearch } from '@/entities/user';
 
-import { getMemberColumns } from '../member-columns';
-import type { Member } from '../member.type';
+import { memberColumns } from '../member-columns';
+import type { MemberInfo } from '../member.type';
 
-interface IProps {
-  isLoading?: boolean;
-  members: Member[];
-  roles: Role[];
-  onDeleteMember?: (id: number) => void;
-  onUpdateMember?: (newMember: Member) => void;
-}
+interface IProps extends EntityTable<MemberInfo> {}
 
 const MemberTable: React.FC<IProps> = (props) => {
-  const { isLoading, members, roles, onDeleteMember, onUpdateMember } = props;
+  const { isLoading, createButton, data, onClickRow } = props;
+
   const { t } = useTranslation();
 
-  const { data: userData } = useUserSearch({
-    limit: 1000,
-    query: { type: 'GENERAL' },
-  });
-
   const table = useReactTable({
-    columns: getMemberColumns(
-      userData?.items ?? [],
-      roles,
-      onDeleteMember,
-      onUpdateMember,
-    ),
-    data: members,
+    columns: memberColumns,
+    data,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
     <BasicTable
       table={table}
       isLoading={isLoading}
-      emptyComponent={
-        <div className="my-32 flex flex-col items-center justify-center gap-3">
-          <Icon name="DriverRegisterFill" className="text-tertiary" size={56} />
-          <p>{t('main.setting.register-member')}</p>
-        </div>
-      }
+      emptyCaption={t('v2.text.no-data.member')}
+      createButton={createButton}
+      onClickRow={onClickRow}
     />
   );
 };

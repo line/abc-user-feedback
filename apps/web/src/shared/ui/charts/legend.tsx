@@ -26,7 +26,7 @@ const Legend: React.FC<IProps> = ({ dataKeys }) => {
             className="h-2 w-2 rounded-full"
             style={{ backgroundColor: v.color }}
           />
-          <p>{v.name}</p>
+          <p className="text-small-normal text-neutral-secondary">{v.name}</p>
         </div>
       ))}
     </div>

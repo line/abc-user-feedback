@@ -2,11 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  form {
+    @apply flex flex-col gap-4;
+  }
+}
+
 @layer components {
   .table-loading {
     position: relative;
     overflow: hidden;
-    @apply bg-blue-primary;
+    @apply bg-tint-blue-bold;
   }
 
   .table-loading::after {
@@ -25,9 +31,24 @@
     animation: table-loading 1s ease-out infinite;
     content: '';
   }
-  .card {
-    @apply border-fill-tertiary bg-tertiary rounded border p-6;
+  .dialog-content {
+    @apply max-w-[504px];
   }
+}
+
+.setting-action-buttons .button {
+  @apply min-w-[120px];
+}
+.create-template-footer .button {
+  @apply min-w-[120px];
+}
+
+.dialog-footer button {
+  @apply min-w-[84px];
+}
+
+.sheet-footer button {
+  @apply min-w-[84px];
 }
 
 @keyframes table-loading {
@@ -38,8 +59,7 @@
 }
 
 body {
-  @apply font-14-regular text-primary bg-primary;
-  font-family: LINESeedJP, LINESeedKR, LINESeedEN, sans-serif;
+  @apply text-base-normal bg-primary min-w-[1280px];
 }
 
 a {
@@ -49,7 +69,9 @@ a {
 th {
   position: relative;
 }
-
+/* button {
+  width: fit-content;
+} */
 /* Table resizing */
 .resizer {
   position: absolute;
@@ -57,117 +79,56 @@ th {
   cursor: col-resize;
   user-select: none;
   touch-action: none;
-  width: 8px;
+  width: 4px;
   height: 100%;
   top: 0;
 }
 
-@font-face {
-  font-family: 'LINESeedEN';
-  font-style: thin;
-  font-weight: 100;
-  src:
-    local(※),
-    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Th.woff') format('woff'),
-    url('/fonts/LINESeedEN/TTF/LINESeedEN-Th.ttf') format('truetype');
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
 }
 
-@font-face {
-  font-family: 'LINESeedEN';
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local(※),
-    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Rg.woff') format('woff'),
-    url('/fonts/LINESeedEN/TTF/LINESeedEN-Rg.ttf') format('truetype');
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: var(--fg-neutral-tertiary);
 }
 
-@font-face {
-  font-family: 'LINESeedEN';
-  font-style: bold;
-  font-weight: 700;
-  src:
-    local(※),
-    url('/fonts/LINESeedEN/WOFF2/LINESeedEN-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedEN/WOFF/LINESeedEN-Bd.woff') format('woff'),
-    url('/fonts/LINESeedEN/TTF/LINESeedEN-Bd.ttf') format('truetype');
+.swiper {
+  width: 100%;
+  height: 300px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-@font-face {
-  font-family: 'LINESeedJP';
-  font-style: thin;
-  font-weight: 100;
-  src:
-    local(※),
-    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Th.woff') format('woff'),
-    url('/fonts/LINESeedJP/TTF/LINESeedJP-Th.ttf') format('truetype');
+.swiper-slide {
+  background-size: cover;
+  background-position: center;
 }
 
-@font-face {
-  font-family: 'LINESeedJP';
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local(※),
-    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Rg.woff') format('woff'),
-    url('/fonts/LINESeedJP/TTF/LINESeedJP-Rg.ttf') format('truetype');
+.main-swiper {
+  height: 400px;
+  width: 464px;
+  @apply bg-neutral-tertiary;
 }
 
-@font-face {
-  font-family: 'LINESeedJP';
-  font-style: bold;
-  font-weight: 700;
-  src:
-    local(※),
-    url('/fonts/LINESeedJP/WOFF2/LINESeedJP-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedJP/WOFF/LINESeedJP-Bd.woff') format('woff'),
-    url('/fonts/LINESeedJP/TTF/LINESeedJP-Bd.ttf') format('truetype');
+.thumbnail-swiper {
+  width: 464px;
+  height: 40px;
 }
 
-@font-face {
-  font-family: 'LINESeedKR';
-  font-style: thin;
-  font-weight: 100;
-  src:
-    local(※),
-    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Th.woff2') format('woff2'),
-    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Th.woff') format('woff'),
-    url('/fonts/LINESeedKR/TTF/LINESeedKR-Th.ttf') format('truetype');
+.thumbnail-swiper .swiper-slide {
+  width: 70px;
+  height: 100%;
+  opacity: 0.4;
 }
 
-@font-face {
-  font-family: 'LINESeedKR';
-  font-style: normal;
-  font-weight: 400;
-  src:
-    local(※),
-    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Rg.woff2') format('woff2'),
-    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Rg.woff') format('woff'),
-    url('/fonts/LINESeedKR/TTF/LINESeedKR-Rg.ttf') format('truetype');
+.thumbnail-swiper .swiper-slide-thumb-active {
+  opacity: 1;
 }
 
-@font-face {
-  font-family: 'LINESeedKR';
-  font-style: bold;
-  font-weight: 700;
-  src:
-    local(※),
-    url('/fonts/LINESeedKR/WOFF2/LINESeedKR-Bd.woff2') format('woff2'),
-    url('/fonts/LINESeedKR/WOFF/LINESeedKR-Bd.woff') format('woff'),
-    url('/fonts/LINESeedKR/TTF/LINESeedKR-Bd.ttf') format('truetype');
-}
-
-html {
-  --body-background-color: #ffffff;
-}
-html.dark {
-  --body-background-color: #191919;
-}
-
-input:focus::placeholder {
-  color: transparent;
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  --swiper-navigation-size: 12px;
+  @apply button button-small button-radius-large button-outline !bg-neutral-primary;
 }

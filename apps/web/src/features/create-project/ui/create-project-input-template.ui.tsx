@@ -14,79 +14,108 @@
  * under the License.
  */
 
+import { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
+import {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  toast,
+} from '@ufb/react';
 import { ErrorCode } from '@ufb/shared';
-import { Popover, PopoverModalContent, toast } from '@ufb/ui';
 
 import {
   CreateInputTemplate,
+  isObjectEqual,
   Path,
+  useAllProjects,
   useOAIMutation,
-  useOAIQuery,
+  useWarnIfSavedChanges,
 } from '@/shared';
 
-import { useCreateProjectStore } from '../create-project-model';
-import { CREATE_PROJECT_STEP_KEY_LIST } from '../create-project-type';
-import { CREATE_PROJECT_STEPPER_TEXT } from '../create-project.constant';
+import {
+  CREATE_PROJECT_DEFAULT_INPUT,
+  useCreateProjectStore,
+} from '../create-project-model';
+import { CREATE_PROJECT_MAIN_STEP_LIST } from '../create-project-type';
+import {
+  CREATE_PROJECT_HELP_TEXT,
+  CREATE_PROJECT_STEPPER_TEXT,
+} from '../create-project.constant';
 
 interface IProps extends React.PropsWithChildren {
   actionButton?: React.ReactNode;
   validate?: () => Promise<boolean> | boolean;
   disableNextBtn?: boolean;
   isLoading?: boolean;
+  onClickBack?: () => void;
+  scrollable?: boolean;
 }
 
 const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
-  const { children, actionButton, validate, disableNextBtn, isLoading } = props;
+  const {
+    children,
+    actionButton,
+    validate,
+    disableNextBtn,
+    isLoading,
+    onClickBack,
+    scrollable = false,
+  } = props;
 
   const { t } = useTranslation();
 
-  const {
-    currentStep,
-    nextStep,
-    prevStep,
-    getCurrentStepKey,
-    input,
-    jumpStepByKey,
-    reset,
-  } = useCreateProjectStore();
+  const { currentStep, nextStep, prevStep, input, jumpStepByKey, reset } =
+    useCreateProjectStore();
 
   const router = useRouter();
   const overlay = useOverlay();
-  const { refetch } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000, page: 1 },
-  });
+  const { refetch } = useAllProjects();
 
   const openMemberError = () => {
-    return overlay.open(({ isOpen, close }) => (
-      <Popover open={isOpen} onOpenChange={() => close()} modal>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-project.guide.invalid-member')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: () => jumpStepByKey('members'),
-          }}
-        />
-      </Popover>
+    overlay.open(({ isOpen, close }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogTitle>{t('text.guide')}</DialogTitle>
+          <DialogBody>
+            {t('main.create-project.guide.invalid-member')}
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose
+              variant="primary"
+              onClick={() => jumpStepByKey('members')}
+            >
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
   const openProjectError = () => {
-    return overlay.open(({ isOpen, close }) => (
-      <Popover open={isOpen} onOpenChange={() => close()} modal>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-project.guide.invalid-project')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: () => jumpStepByKey('project-info'),
-          }}
-        />
-      </Popover>
+    overlay.open(({ isOpen, close }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogTitle>{t('text.guide')}</DialogTitle>
+          <DialogBody>
+            {t('main.create-project.guide.invalid-project')}
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose
+              variant="primary"
+              onClick={() => jumpStepByKey('project-info')}
+            >
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
 
@@ -108,11 +137,18 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
         } else if (error.code === ErrorCode.Project.ProjectAlreadyExists) {
           openProjectError();
         } else {
-          toast.negative({ title: error.message });
+          toast.error(error.message);
         }
       },
     },
   });
+
+  const isDefaultInput = useMemo(
+    () => isObjectEqual(CREATE_PROJECT_DEFAULT_INPUT, input),
+    [input],
+  );
+
+  useWarnIfSavedChanges(!isDefaultInput, Path.CREATE_PROJECT_COMPLETE);
 
   const onComplete = () => {
     mutate({
@@ -120,24 +156,27 @@ const CreateProjectInputTemplate: React.FC<IProps> = (props) => {
       roles: input.roles,
       apiKeys: input.apiKeys,
       issueTracker: { data: input.issueTracker },
-      members: input.members.map((v) => ({
-        roleName: v.role.name,
-        userId: v.user.id,
+      members: input.members.map(({ role, user }) => ({
+        roleName: role.name,
+        userId: user.id,
       })),
     });
   };
 
   return (
     <CreateInputTemplate
-      currentStep={currentStep}
-      lastStep={CREATE_PROJECT_STEP_KEY_LIST.length - 1}
+      currentStepIndex={currentStep.index}
+      lastStep={CREATE_PROJECT_MAIN_STEP_LIST.length - 1}
       onNext={nextStep}
       onPrev={prevStep}
-      title={CREATE_PROJECT_STEPPER_TEXT[getCurrentStepKey()]}
+      title={CREATE_PROJECT_STEPPER_TEXT[currentStep.key]}
       actionButton={actionButton}
       onComplete={onComplete}
       validate={validate}
       disableNextBtn={disableNextBtn ?? isLoading}
+      helpText={CREATE_PROJECT_HELP_TEXT[currentStep.key]}
+      onClickBack={onClickBack}
+      scrollable={scrollable}
     >
       {children}
     </CreateInputTemplate>

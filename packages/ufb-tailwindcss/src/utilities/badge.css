@@ -1,0 +1,86 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.badge-bold-default {
+  @apply border border-[var(--badge-bold-border-default)] bg-[var(--badge-bold-fg-default)] text-[var(--badge-bold-text-default)];
+}
+
+.badge-bold-blue {
+  @apply border border-[var(--badge-bold-border-blue)] bg-[var(--badge-bold-fg-blue)] text-[var(--badge-bold-text-blue)];
+}
+
+.badge-bold-orange {
+  @apply border border-[var(--badge-bold-border-orange)] bg-[var(--badge-bold-fg-orange)] text-[var(--badge-bold-text-orange)];
+}
+
+.badge-bold-red {
+  @apply border border-[var(--badge-bold-border-red)] bg-[var(--badge-bold-fg-red)] text-[var(--badge-bold-text-red)];
+}
+
+.badge-bold-green {
+  @apply border border-[var(--badge-bold-border-green)] bg-[var(--badge-bold-fg-green)] text-[var(--badge-bold-text-green)];
+}
+
+.badge-subtle-default {
+  @apply border border-[var(--badge-subtle-border-default)] bg-[var(--badge-subtle-fg-default)] text-[var(--badge-subtle-text-default)];
+}
+
+.badge-subtle-blue {
+  @apply border border-[var(--badge-subtle-border-blue)] bg-[var(--badge-subtle-fg-blue)] text-[var(--badge-subtle-text-blue)];
+}
+
+.badge-subtle-orange {
+  @apply border border-[var(--badge-subtle-border-orange)] bg-[var(--badge-subtle-fg-orange)] text-[var(--badge-subtle-text-orange)];
+}
+
+.badge-subtle-red {
+  @apply border border-[var(--badge-subtle-border-red)] bg-[var(--badge-subtle-fg-red)] text-[var(--badge-subtle-text-red)];
+}
+
+.badge-subtle-green {
+  @apply border border-[var(--badge-subtle-border-green)] bg-[var(--badge-subtle-fg-green)] text-[var(--badge-subtle-text-green)];
+}
+
+.badge-outline-default {
+  @apply border border-[var(--badge-outline-border-default)] bg-[var(--badge-outline-fg-default)] text-[var(--badge-outline-text-default)];
+}
+
+.badge-outline-blue {
+  @apply border border-[var(--badge-outline-border-blue)] bg-[var(--badge-outline-fg-blue)] text-[var(--badge-outline-text-blue)];
+}
+
+.badge-outline-orange {
+  @apply border border-[var(--badge-outline-border-orange)] bg-[var(--badge-outline-fg-orange)] text-[var(--badge-outline-text-orange)];
+}
+
+.badge-outline-red {
+  @apply border border-[var(--badge-outline-border-red)] bg-[var(--badge-outline-fg-red)] text-[var(--badge-outline-text-red)];
+}
+
+.badge-outline-green {
+  @apply border border-[var(--badge-outline-border-green)] bg-[var(--badge-outline-fg-green)] text-[var(--badge-outline-text-green)];
+}
+
+.badge-radius-small {
+  @apply rounded-0;
+}
+
+.badge-radius-medium {
+  @apply rounded-6;
+}
+
+.badge-radius-large {
+  @apply rounded-full;
+}

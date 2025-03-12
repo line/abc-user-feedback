@@ -1,34 +1,4 @@
 {
-  "tenant": {
-    "create": {
-      "title": "Mandanten-Einstellungen",
-      "site-name": "Seitenname"
-    }
-  },
-  "auth": {
-    "sign-in": {
-      "reset-password": "Passwort zurücksetzen"
-    },
-    "sign-up": {
-      "title": "Konto erstellen",
-      "label": {
-        "auth-code": "Authentifizierungscode"
-      },
-      "placeholder": {
-        "auth-code": "Bitte Authentifizierungscode eingeben"
-      },
-      "button": {
-        "request-auth-code": "Code anfordern",
-        "verify-auth-code": "Code überprüfen"
-      }
-    },
-    "reset-password": {
-      "title": "Passwort zurücksetzen",
-      "button": {
-        "send-email": "E-Mail senden"
-      }
-    }
-  },
   "link": {
     "reset-password": {
       "title": "Passwort zurücksetzen"
@@ -38,147 +8,37 @@
     }
   },
   "main": {
-    "index": {
-      "total-project": "Projekte",
-      "total-channel": "Kanäle",
-      "total-feedback": "Rückmeldungen",
-      "create-project": "Projekt erstellen",
-      "no-project": "Keine registrierten Projekte."
-    },
     "profile": {
-      "title": "Profil",
       "profile-info": "Profil-Informationen",
       "change-password": "Passwort ändern",
-      "label": {
-        "user-type": "Typ",
-        "new-password": "Neues Passwort",
-        "confirm-new-password": "Neues Passwort bestätigen"
-      },
-      "placeholder": {
-        "name": "Bitte Namen eingeben",
-        "department": "Bitte Abteilung eingeben",
-        "new-password": "Bitte neues Passwort eingeben",
-        "confirm-new-password": "Bitte neues Passwort bestätigen"
-      },
       "button": {
         "delete-account": "Konto löschen"
-      },
-      "dialog": {
-        "delete-account": {
-          "title": "Konto löschen",
-          "description1": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
-          "description2": "Der Service wird nach Löschung des Kontos nicht mehr verfügbar sein."
-        }
       }
     },
-    "dashboard": {
-      "title": "Übersicht"
-    },
     "feedback": {
-      "title": "Feedback",
-      "column-setting": "Spalteneinstellungen",
       "issue-cell": {
-        "issue-list": "Problemliste",
-        "register-issue": "Problem registrieren",
-        "create-issue": "Problem erstellen",
-        "input-issue": "Problem eingeben",
-        "delete-issue": "Problem löschen"
+        "create-issue": "Problem erstellen"
       },
       "download": {
         "loading": "Herunterladen...",
         "success": "Download abgeschlossen",
-        "error": "Download fehlgeschlagen",
-        "loading-description": "{{count, number}} Elemente werden heruntergeladen",
-        "success-description": "{{count, number}} Elemente heruntergeladen",
-        "error-description": "Fehler beim Herunterladen von {{count, number}} Elementen"
-      },
-      "button": {
-        "all-download": "Alles herunterladen",
-        "select-download": "Ausgewähltes herunterladen ({{count, number}})",
-        "excel-download": "Excel herunterladen",
-        "csv-download": "CSV herunterladen"
-      },
-      "dialog": {
-        "delete-feedback": {
-          "title": "Feedback löschen",
-          "description": "Sind Sie sicher, dass Sie das ausgewählte Feedback löschen möchten?"
-        }
-      }
-    },
-    "issue": {
-      "title": "Problem",
-      "setting": "Problemeinstellungen",
-      "dialog": {
-        "delete-issue": {
-          "title": "Probleme löschen",
-          "description": "Sind Sie sicher, dass Sie die ausgewählten Probleme löschen möchten?"
-        }
+        "error": "Download fehlgeschlagen"
       }
     },
     "setting": {
-      "title": "Einstellungen",
       "button": {
-        "create-project": "Projekt erstellen",
-        "create-channel": "Kanal erstellen",
-        "create-api-key": "API-Schlüssel erstellen",
-        "register-member": "Mitglied registrieren"
+        "create-channel": "Kanal erstellen"
       },
-      "sign-up-mgmt": {
-        "ufb-login": "UFB-Anmeldung",
-        "oauth-login": "OAuth 2.0 Anmeldung",
-        "all-login": "Alle Anmeldungen",
-        "possibility": "Direkte Anmeldung möglich",
-        "impossibility": "Keine direkte Anmeldung",
-        "no-domain-restriction": "Keine Domainbeschränkungen",
-        "domain-restriction": "Domainbeschränkungen",
-        "domain-restriction-tooltip": "Legen Sie die für die Benutzerregistrierung erlaubte E-Mail-Domain fest."
-      },
-      "role-mgmt": {
-        "edit-role": "Rolle bearbeiten",
-        "update-role-name": "Rollenname aktualisieren",
-        "delete-role": "Rolle löschen"
-      },
-      "api-key-status": {
-        "active": "Aktiv",
-        "inactive": "Inaktiv"
-      },
-      "field-status": {
-        "active": "Aktiv",
-        "inactive": "Inaktiv"
-      },
-      "register-member": "Bitte Mitglied registrieren.",
       "same-key": "Geben Sie den gleichen Wert wie den Schlüssel ein",
       "feedback-request-code": "Feedback-Anforderungscode",
       "option-info": "Optionsinformationen",
       "field-mgmt": {
-        "description": "Klicken Sie auf 'Vorschau', um Änderungen zu speichern.",
-        "preview": "Vorschau",
-        "preview-caption": "Die Vorschau wird als Beispieldaten angezeigt.",
-        "preview-description": "Hier können Sie sehen, wie die registrierten Felder aussehen werden."
+        "preview": "Vorschau"
       },
       "dialog": {
-        "edit-user": {
-          "title": "Benutzer bearbeiten"
-        },
-        "delete-project": {
-          "title": "Projekt löschen",
-          "description": "Das Löschen eines Projekts entfernt alle zugehörigen Probleme und Feedbacks.\nBitte geben Sie den Projektnamen unten ein, um die Löschung zu bestätigen."
-        },
-        "delete-channel": {
-          "title": "Kanal löschen",
-          "description": "Das Löschen eines Kanals entfernt alle zugehörigen Feedbacks.\nBitte geben Sie den Kanalnamen unten ein, um die Löschung zu bestätigen."
-        },
         "create-role": {
           "title": "Rolle erstellen",
           "description": "Bitte geben Sie einen neuen Rollennamen ein."
-        },
-        "update-role-name": {
-          "title": "Rollenname aktualisieren",
-          "description": "Bitte geben Sie den Rollennamen ein."
-        },
-        "edit-api-key": {
-          "title": "API-Schlüssel bearbeiten",
-          "description": "Wenn Sie API KEY deaktivieren, wird die API mit diesem Schlüssel deaktiviert. Bitte ändern Sie diese Option nur, wenn Sie den API-Schlüssel nicht verwenden."
         },
         "delete-option": {
           "title": "Option löschen",
@@ -187,17 +47,6 @@
         "delete-role": {
           "title": "Rolle löschen",
           "description": "Sind Sie sicher, dass Sie diese Rolle löschen möchten?\nMitglieder, die dieser Rolle zugewiesen sind, werden ebenfalls entfernt."
-        },
-        "edit-member": {
-          "title": "Mitglied bearbeiten",
-          "description": "Rollen bestimmen den Zugang zu Menüs und verfügbaren Funktionen.\nBitte überprüfen Sie die Details des Mitglieds, bevor Sie die richtige Rolle auswählen."
-        },
-        "register-member": {
-          "title": "Mitglied registrieren"
-        },
-        "delete-member": {
-          "title": "Mitglied löschen",
-          "description": "Sind Sie sicher, dass Sie dieses Mitglied löschen möchten?"
         },
         "add-field": {
           "title": "Feld hinzufügen"
@@ -224,7 +73,6 @@
     "create-channel": {
       "title": "Kanal erstellen",
       "complete-title": "Kanal erstellt",
-      "finish-channel-creation": "Einrichtung ist abgeschlossen.\nBeginnen Sie mit der Nutzung des User Feedbacks!",
       "guide": {
         "invalid-channel": "Ungültige Kanalinformationen erkannt."
       }
@@ -255,27 +103,7 @@
     "start": "Starten",
     "generate": "Generieren"
   },
-  "input": {
-    "label": {
-      "password": "Passwort",
-      "confirm-password": "Passwort bestätigen"
-    },
-    "placeholder": {
-      "input": "Wert eingeben",
-      "email": "E-Mail eingeben",
-      "password": "Passwort eingeben",
-      "confirm-password": "Passwort bestätigen"
-    }
-  },
   "text": {
-    "search-result": "Suchergebnisse",
-    "number-count": "{{count, number}} Elemente",
-    "no-data": "Keine Daten verfügbar",
-    "per-page": "Elemente pro Seite",
-    "select-option": "Wähle '{{name}}'",
-    "select-count": "Ausgewählt: {{count,number}}",
-    "search-filter": "Suchfilter",
-    "all": "Alle",
     "issue": {
       "init": "Neu",
       "onReview": "In Überprüfung",
@@ -283,40 +111,21 @@
       "resolved": "Gelöst",
       "pending": "Ausstehend"
     },
-    "date": {
-      "today": "Heute",
-      "yesterday": "Gestern",
-      "before-days": "Vor {{day, number}} Tagen",
-      "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
-    },
-    "equal-search": "Exakte Übereinstimmung",
-    "like-search": "Enthält",
-    "helper": "Hilfe",
-    "no-channel": "Keine Kanäle registriert",
-    "guide": "Richtlinien",
-    "more": "Mehr",
-    "shrink": "Weniger",
-    "feedback-detail": "Feedback-Details",
-    "create-channel-in-progress": "Kanalerstellung in Bearbeitung",
-    "create-project-in-progress": "Projekterstellung in Bearbeitung",
-    "days": "{{days}} Tage",
     "webhook-type": {
       "FEEDBACK_CREATION": "Feedback erstellt",
       "ISSUE_CREATION": "Problem erstellt",
       "ISSUE_STATUS_CHANGE": "Problemstatus geändert",
       "ISSUE_ADDITION": "Problem hinzugefügt"
-    }
-  },
-  "toast": {
-    "sign-in": "Erfolgreich angemeldet",
-    "register": "Registrierung abgeschlossen",
-    "delete": "Erfolgreich gelöscht",
-    "save": "Änderungen gespeichert",
-    "invite": "Einladung gesendet",
-    "active": "Aktiviert",
-    "inactive": "Deaktiviert",
-    "add": "Erfolgreich hinzugefügt",
-    "copy": "In Zwischenablage kopiert"
+    },
+    "date": {
+      "today": "Heute",
+      "yesterday": "Gestern",
+      "before-days": "{{day, number}} Tagen",
+      "last-days": "Letzten {{day, number}} Tagen",
+      "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
+    },
+    "guide": "Richtlinien",
+    "days": "{{days}} Tage"
   },
   "dialog": {
     "continue": {
@@ -326,16 +135,6 @@
         "continue": "Fortfahren",
         "restart": "Neu starten"
       }
-    },
-    "create-webhook": {
-      "title": "Webhook erstellen"
-    },
-    "update-webhook": {
-      "title": "Webhook bearbeiten"
-    },
-    "delete-webhook": {
-      "title": "Webhook löschen",
-      "description": "Das Löschen eines Webhooks entfernt alle zugehörigen Daten."
     }
   },
   "dashboard-card": {
@@ -400,22 +199,11 @@
   },
   "popover": {
     "select-issue": {
-      "search-issue": "Problem suchen",
-      "max-issue-count": "Es können bis zu fünf Probleme ausgewählt werden.",
-      "issue-list": "Problemliste"
-    },
-    "select-issue-status": {
-      "issue-status": "Problemstatus"
+      "max-issue-count": "Es können bis zu fünf Probleme ausgewählt werden."
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Anzahl des Feedbacks, das mit diesem Problem verbunden ist.",
-    "webhook-feedback-creation": "Wird ausgelöst, wenn Feedback für einen bestimmten Kanal gesammelt wird.",
-    "webhook-issue-addition": "Wird ausgelöst, wenn einem Feedback in einem bestimmten Kanal ein Problem hinzugefügt wird.",
-    "webhook-issue-creation": "Wird ausgelöst, wenn unabhängig vom Kanal ein Problem erstellt wird.",
-    "webhook-issue-status-change": "Wird ausgelöst, wenn sich der Status eines Problems ändert, unabhängig vom Kanal.",
-    "field-property": "Wenn Sie den Inhalt des Feldes als Original behalten möchten, dann setzen Sie ihn bitte auf Editable, wenn Sie nur den Inhalt des Feldes ändern möchten.",
-    "field-status": "Gibt an, ob ein Feld verwendet werden soll oder nicht. Bitte ändern Sie die Felder, die Sie nicht verwenden, auf Inactive."
+    "issue-feedback-count": "Anzahl des Feedbacks, das mit diesem Problem verbunden ist."
   },
   "tenant-setting-menu": {
     "tenant-info": "Mandanten-Informationen",
@@ -447,16 +235,15 @@
     }
   },
   "help-card": {
-    "project-info": "Sammeln Sie Feedback für jedes Projekt einzeln. Bitte registrieren Sie die Projektinformationen basierend auf dem Produkt, für das Sie Feedback verwalten möchten (z.B. Produktname).",
-    "role": "Legen Sie Berechtigungen für den Zugriff und die Nutzung des Projekts fest.",
-    "member": "Registrieren oder verwalten Sie Mitglieder, die am Projekt teilnehmen.",
-    "api-key": "Es verwaltet die User Feedback API Key Informationen. Wenn Sie die API verwenden wollen, erstellen und verwenden Sie den Schlüssel. Weitere Informationen finden Sie unter API <icon></icon> <docs>Docs</docs>.",
-    "issue-tracker": "Verknüpfen und verwalten Sie User Feedback mit Ihrem Issue-Tracking-System. Bitte geben Sie die Details Ihres Issue-Tracking-Systems ein.",
-    "channel-info": "Definieren Sie die Feedbackfelder, die über den Kanal gesammelt werden sollen. Bitte registrieren Sie Kanalinformationen unter Berücksichtigung des Feedbackwegs und der Eigenschaften (z.B. VOC, App-Bewertung).",
-    "field": "Definieren Sie die Feedbackfelder, die über User Feedback für jeden registrierten Kanal gesammelt werden sollen. Konfigurieren Sie vorab die Felder, die über die API gesammelt oder direkt im ADMIN registriert werden sollen.",
-    "image-config": "Für Feedback in Bildformat, integrieren Sie einen Bild-Speicher und richten Sie eine Whitelist für Bild-URL-Domains ein.\nBeziehen Sie sich auf die Bild <icon></icon> <docs>Dokumentation</docs> für Details.",
-    "field-preview": "Vorschau der konfigurierten Felder in der Feldverwaltung. Die Vorschau zeigt Beispieldaten zur Veranschaulichung.",
-    "webhook": "Nutzen Sie Webhooks, um auf eine Vielzahl von Ereignissen innerhalb von User Feedback zu reagieren. Für weitere Details, beziehen Sie sich auf die Webhook <icon></icon> <docs>Dokumentation</docs>."
+    "project-info": "Project bezeichnet das Produkt, für das Feedback gesammelt werden soll. Bitte geben Sie Informationen unter Berücksichtigung des Produkts ein, für das Sie Feedback verwalten möchten.",
+    "member": "Sie können Member registrieren und verwalten, die am Project teilnehmen werden.",
+    "api-key": "Dies ist der Bildschirm zur Verwaltung des User Feedback API Keys. Bitte generieren und verwenden Sie einen Key zur Nutzung der API. Weitere Details finden Sie in der API <docs>Docs</docs>.",
+    "issue-tracker": "Dies ist der Bildschirm zum Einrichten der Verbindung zwischen User Feedback und Issue Tracking System. Bitte geben Sie die Informationen für das von Ihnen verwendete Issue Tracking System ein.",
+    "channel-info": "Channel ist eine Einheit, die Feedback-Sammelpfade oder Sammelmethoden unterscheidet. Bitte geben Sie Informationen unter Berücksichtigung der Channel-Eigenschaften ein.",
+    "field": "Sie können Feedback-Daten, die im Channel gesammelt werden sollen, in Field-Einheiten definieren. Bitte fügen Sie Fields unter Berücksichtigung des Datentyps und der Eigenschaften hinzu.",
+    "image-config": "Beim Sammeln von Feedback im Image-Format können Sie hier die Image Storage-Integration einrichten und die Whitelist für Image URL-Domains konfigurieren. Weitere Details finden Sie in der Image <docs>Docs</docs>.",
+    "field-preview": "Bietet eine Vorschau darauf, wie Ihr Feedback basierend auf den registrierten Field-Informationen aussehen wird. Die Vorschau verwendet Beispieldaten zur Veranschaulichung.",
+    "webhook": "Dies ist der Bildschirm, auf dem Sie Webhook-Integration entsprechend den in User Feedback auftretenden Event-Triggern einrichten können. Weitere Details finden Sie in der Webhook <docs>Docs</docs>."
   },
   "hint": {
     "required": "Erforderlich",
@@ -468,9 +255,163 @@
   "title-box": {
     "image-storage-integration": "Bild-Speicher-Integration"
   },
-  "placeholder": "Bitte geben Sie {{name}} ein.",
-  "system-popup": {
-    "create-project/channel-get-out": "Sind Sie sicher, dass Sie den Erstellungsprozess für einen {{type}} verlassen möchten?\nSie können diesen Prozess später fortsetzen.",
-    "field-setting-get-out": "Bitte beachten Sie, dass die Feldinformationen noch nicht gespeichert sind. Trotzdem würden Sie rausgehen."
+  "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "Konto erstellen",
+        "button": {
+          "request-auth-code": "Code anfordern",
+          "verify-auth-code": "Code überprüfen"
+        },
+        "reset-password": {
+          "title": "Passwort zurücksetzen",
+          "button": { "send-email": "E-Mail senden" }
+        }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "Passwort zurücksetzen"
+      }
+    },
+    "button": {
+      "name": {
+        "create": "{{name}} erstellen",
+        "delete": "{{name}} löschen",
+        "register": "{{name}} registrieren",
+        "add": "{{name}} hinzufügen"
+      },
+      "create": "Erstellen",
+      "delete": "Löschen",
+      "register": "Registrieren",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "out": "Beenden",
+      "confirm": "Bestätigen",
+      "next": "Weiter",
+      "previous": "Zurück",
+      "addFilter": "Filter hinzufügen",
+      "edit": "Bearbeiten"
+    },
+    "project-setting-menu": {
+      "project-info": "Project-Informationen",
+      "member-mgmt": "Member-Verwaltung",
+      "role-mgmt": "Role-Verwaltung",
+      "api-key-mgmt": "API Key-Verwaltung",
+      "issue-tracker-mgmt": "Issue Tracker-Verwaltung",
+      "webhook-integration": "Webhook-Integration",
+      "delete-project": "Project löschen"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel-Informationen",
+      "field-mgmt": "Field-Verwaltung",
+      "image-mgmt": "Image-Verwaltung",
+      "delete-channel": "Channel löschen"
+    },
+    "dialog": {
+      "delete": {
+        "title": "Möchten Sie wirklich löschen?",
+        "description": "Beim Löschen werden alle zugehörigen Informationen unwiderruflich entfernt."
+      },
+      "warn-if-unsaved-changes": {
+        "title": "Möchten Sie die Seite verlassen?",
+        "description": "Wenn Sie die Seite jetzt verlassen, gehen nicht gespeicherte Eingaben verloren."
+      },
+      "warn-if-saved-changes": {
+        "title": "Möchten Sie die Seite verlassen?",
+        "description": "Sie können später jederzeit fortfahren."
+      },
+      "no-project-in-profile-page": {
+        "title": "Kein zugehöriges Projekt.",
+        "description": "Es gibt noch kein zugehöriges Projekt.\nBitte bitten Sie den Projektmanager um die Registrierung als Mitglied oder fragen Sie nach."
+      },
+      "no-project-dialog-in-project-creation-page": {
+        "title": "Willkommen!",
+        "step1-description": "In ABC User Feedback verwalten wir Feedback in einer Channel > Project > Tenant Struktur. Daher müssen Sie sowohl ein Project als auch einen Channel erstellen.",
+        "step2-description": "Ein Project bezieht sich auf das Produkt, für das Feedback gesammelt wird. Es ist gut, ein Project basierend auf den von Ihnen verwalteten Produktinformationen zu erstellen.",
+        "step3-description": "Ein Channel bezieht sich auf die Methode der Feedback-Sammlung. Es ist gut, einen Channel basierend darauf zu erstellen, wie Sie Feedback für das von Ihnen betreute Produkt sammeln."
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "Es wurde noch kein API Key generiert.",
+        "member": "Es wurden noch keine Member registriert.",
+        "channel": "Es wurde noch kein Channel erstellt.",
+        "webhook": "Es wurde noch kein Webhook registriert.",
+        "feedback": "Es wurde noch kein Feedback gesammelt."
+      },
+      "create-project": "Project erstellen",
+      "create-channel": "Channel erstellen",
+      "name": {
+        "detail": "{{name}} Details",
+        "add": "{{name}} hinzufügen",
+        "register": "{{name}} registrieren",
+        "create": "{{name}} erstellen"
+      },
+      "summary": "Zusammenfassung",
+      "preview": "Vorschau",
+      "in-progress": "In Bearbeitung",
+      "continue": "Fortfahren",
+      "test-connection-failed": "Verbindungstest fehlgeschlagen",
+      "all-email-domains-allow": "Alle E-Mail-Domains sind erlaubt.",
+      "request-email-auth": "Authentifizierung wurde angefordert.",
+      "all-image-url-allow": "Alle Image-URLs sind erlaubt.",
+      "select-project": "Bitte wählen Sie ein Projekt aus.",
+      "no-category": "Keine Kategorie"
+    },
+    "create-tenant": {
+      "tenant": {
+        "title": "Tenant erstellen",
+        "description": "Bitte geben Sie den Namen des Unternehmens/der Organisation/des Teams ein, das ABC User Feedback verwalten wird."
+      },
+      "user": {
+        "title": "Hauptkonto erstellen",
+        "description": "Für die erste Anmeldung müssen Sie ein Hauptkonto erstellen."
+      },
+      "final": {
+        "title": "Tenant-Erstellung abgeschlossen",
+        "description": "Die Tenant-Erstellung ist abgeschlossen.\nVersuchen Sie nun, sich mit dem Hauptkonto anzumelden."
+      }
+    },
+    "placeholder": {
+      "select": "Bitte auswählen.",
+      "text": "Bitte eingeben.",
+      "text-or-generate": "Bitte eingeben oder generieren."
+    },
+    "toast": {
+      "success": "Erfolgreich verarbeitet.",
+      "copy": "In die Zwischenablage kopiert."
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback-Erstellung",
+        "description": "Jedes Mal, wenn ein Feedback gesammelt wird, wird ein Ereignis ausgelöst."
+      },
+      "issue-addition": {
+        "title": "Issue-Registrierung",
+        "description": "Jedes Mal, wenn ich ein Thema registriere, rufe ich ein Ereignis an."
+      },
+      "issue-status-change": {
+        "title": "Issue-Statusänderung",
+        "description": "Jedes Mal, wenn wir den Status eines Problems ändern, rufen wir ein Ereignis auf."
+      },
+      "issue-creation": {
+        "title": "Issue-Erstellung",
+        "description": "Jedes Mal, wenn wir ein neues Thema erstellen, rufen wir ein Ereignis auf"
+      }
+    },
+    "error": {
+      "duplicated": "Es existieren bereits doppelte Informationen.",
+      "lessThenNcharacters": "Bitte geben Sie maximal {{n}} Zeichen ein.",
+      "required": "Eingabe erforderlich."
+    },
+    "description": {
+      "create-project": "Project wurde erfolgreich erstellt.\nAls Nächstes müssen Sie einen Channel erstellen, um Feedback zu sammeln.\nFahren Sie mit 'Channel erstellen' zum nächsten Schritt fort.",
+      "create-channel": "Channel wurde erfolgreich erstellt.\nSie können jetzt Benutzerfeedback sammeln und verwalten.\nKlicken Sie auf 'Starten', um die vollständige Funktionalität zu nutzen."
+    },
+    "login-setting": {
+      "oauth-description": "Bietet eine Möglichkeit, sich mit OAuth2.0 anzumelden.",
+      "email-description": "Bietet eine Möglichkeit, sich über E-Mail-Verifizierung zu registrieren und anzumelden."
+    }
   }
 }

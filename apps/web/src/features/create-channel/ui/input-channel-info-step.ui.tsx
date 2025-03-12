@@ -15,9 +15,11 @@
  */
 
 import { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
 
+import { useAllChannels } from '@/shared';
 import { EMPTY_FUNCTION } from '@/shared/utils/empty-function';
 import type { ChannelInfo } from '@/entities/channel';
 import { ChannelInfoForm, channelInfoSchema } from '@/entities/channel';
@@ -28,7 +30,10 @@ import CreateChannelInputTemplate from './create-channel-input-template.ui';
 interface IProps {}
 
 const InputChannelInfoStep: React.FC<IProps> = () => {
-  const { onChangeInput, input } = useCreateChannelStore();
+  const { onChangeInput, input, setEditingStepIndex } = useCreateChannelStore();
+  const router = useRouter();
+  const projectId = Number(router.query.projectId);
+  const { data } = useAllChannels(projectId);
 
   const methods = useForm<ChannelInfo>({
     resolver: zodResolver(channelInfoSchema),
@@ -40,6 +45,7 @@ const InputChannelInfoStep: React.FC<IProps> = () => {
       const newValues = channelInfoSchema.safeParse(values);
       if (!newValues.data) return;
       onChangeInput('channelInfo', newValues.data);
+      setEditingStepIndex(0);
     });
     return () => subscription.unsubscribe();
   }, []);
@@ -49,6 +55,13 @@ const InputChannelInfoStep: React.FC<IProps> = () => {
       validate={async () => {
         const isValid = await methods.trigger();
         await methods.handleSubmit(EMPTY_FUNCTION)();
+        const isDuplicated = data?.items.some(
+          (v) => v.name === methods.getValues('name'),
+        );
+        if (isDuplicated) {
+          methods.setError('name', { message: 'Duplicated name' });
+          return false;
+        }
         return isValid;
       }}
     >

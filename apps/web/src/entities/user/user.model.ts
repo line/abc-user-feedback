@@ -15,19 +15,19 @@
  */
 
 import router from 'next/router';
-import axios from 'axios';
 import dayjs from 'dayjs';
 import type { JwtPayload } from 'jwt-decode';
 import { jwtDecode } from 'jwt-decode';
 import { create } from 'zustand';
 
-import { client, Path, sessionStorage } from '@/shared';
+import { client, cookieStorage, Path } from '@/shared';
 import type { Jwt } from '@/shared/types';
 
 import type { User } from './user.type';
 
 interface State {
   user: User | null;
+  randomId: number;
 }
 
 interface Action {
@@ -35,10 +35,7 @@ interface Action {
     email: string;
     password: string;
   }) => Promise<void>;
-  signInWithOAuth: (input: {
-    code: string;
-    callback_url?: string;
-  }) => Promise<void>;
+  signInWithOAuth: (input: { code: string }) => Promise<void>;
   signOut: () => Promise<void>;
   setUser: () => void;
   _signIn: (jwt: Jwt) => void;
@@ -46,27 +43,29 @@ interface Action {
 
 export const useUserStore = create<State & Action>((set, get) => ({
   user: null,
+  randomId: Math.random(),
   signInWithEmail: async ({ email, password }) => {
-    const { data: jwt } = await axios.post<Jwt>('/api/login', {
-      email,
-      password,
+    const { data: jwt } = await client.post({
+      path: '/api/admin/auth/signIn/email',
+      body: { email, password },
     });
+    if (!jwt) return;
+
     get()._signIn(jwt);
   },
-  signInWithOAuth: async ({ code, callback_url }) => {
-    const { data: jwt } = await axios.post<Jwt>('/api/oauth', {
-      code,
-      callback_url,
+  signInWithOAuth: async ({ code }) => {
+    const { data: jwt } = await client.get({
+      path: '/api/admin/auth/signIn/oauth',
+      query: { code },
     });
     get()._signIn(jwt);
   },
   signOut: async () => {
-    await axios.get('/api/logout');
-    sessionStorage.removeItem('jwt');
-    router.reload();
+    await cookieStorage.removeItem('jwt');
+    await router.push(Path.SIGN_IN);
   },
   setUser: async () => {
-    const jwt = sessionStorage.getItem('jwt');
+    const jwt = await cookieStorage.getItem('jwt');
     if (!jwt) return;
 
     const { sub, exp } = jwtDecode<JwtPayload>(jwt.accessToken);
@@ -78,18 +77,22 @@ export const useUserStore = create<State & Action>((set, get) => ({
         pathParams: { id: parseInt(sub) },
         options: { headers: { Authorization: `Bearer ${jwt.accessToken}` } },
       });
-
       set({ user: data });
     }
   },
-
   async _signIn(jwt) {
-    sessionStorage.setItem('jwt', jwt);
-    get().setUser();
-    if (router.query.callback_url) {
-      await router.push(router.query.callback_url as string);
-    } else {
-      await router.push({ pathname: Path.MAIN });
+    try {
+      await cookieStorage.setItem('jwt', jwt);
+      const broadcastChannel = new BroadcastChannel('ufb');
+      broadcastChannel.postMessage({ type: 'reload', payload: get().randomId });
+      get().setUser();
+      if (router.query.callback_url) {
+        await router.push(router.query.callback_url as string);
+      } else {
+        await router.push({ pathname: Path.MAIN });
+      }
+    } catch (error) {
+      console.log('error: ', error);
     }
   },
 }));

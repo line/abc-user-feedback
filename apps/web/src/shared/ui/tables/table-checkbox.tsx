@@ -13,31 +13,26 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { HTMLProps } from 'react';
-import { useEffect, useRef } from 'react';
 
-interface IProps extends HTMLProps<HTMLInputElement> {
-  indeterminate?: boolean;
+import { Checkbox } from '@ufb/react';
+
+interface IProps {
+  checked: boolean;
+  disabled?: boolean;
+  indeterminate: boolean;
+  onCheckedChange: (checked: boolean) => void;
 }
 
-const TableCheckbox: React.FC<IProps> = ({ indeterminate, ...rest }) => {
-  const ref = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!ref.current) return;
-    if (typeof indeterminate === 'boolean') {
-      ref.current.indeterminate = !rest.checked && indeterminate;
-    }
-  }, [ref, indeterminate]);
+const TableCheckbox: React.FC<IProps> = (props) => {
+  const { checked, disabled = false, indeterminate, onCheckedChange } = props;
 
   return (
     <div className="flex items-center">
-      <input
-        type="checkbox"
-        ref={ref}
-        className="checkbox checkbox-sm"
+      <Checkbox
         onClick={(e) => e.stopPropagation()}
-        {...rest}
+        checked={indeterminate ? 'indeterminate' : checked}
+        disabled={disabled}
+        onCheckedChange={(checked) => onCheckedChange(!!checked)}
       />
     </div>
   );

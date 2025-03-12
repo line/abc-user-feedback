@@ -13,49 +13,83 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useTranslation } from 'react-i18next';
+import { useMemo } from 'react';
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 
-import { Icon } from '@ufb/ui';
-
+import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
 
 import { getApiKeyColumns } from '../api-key-columns';
 import type { ApiKey, ApiKeyUpdateType } from '../api-key.type';
+import ApiKeyFormDialog from './api-key-form-dialog.ui';
 
-interface IProps {
-  isLoading?: boolean;
-  apiKeys: ApiKey[];
-  onClickDelete?: (id: number) => void;
-  onClickUpdate?: (type: ApiKeyUpdateType, id: number) => void;
+interface IProps extends Omit<EntityTable<ApiKey>, 'onClickRow'> {
+  onClickDelete?: (id: number) => Promise<void> | void;
+  onClickUpdate?: (type: ApiKeyUpdateType, id: number) => Promise<void> | void;
+  disabledUpdate?: boolean;
 }
 
 const ApiKeyTable: React.FC<IProps> = (props) => {
-  const { isLoading, apiKeys, onClickDelete, onClickUpdate } = props;
+  const {
+    isLoading,
+    onClickDelete,
+    onClickUpdate,
+    createButton,
+    data,
+    disabledUpdate,
+    disabledDelete,
+  } = props;
 
   const { t } = useTranslation();
+  const overlay = useOverlay();
+  const columns = useMemo(() => getApiKeyColumns(), []);
 
   const table = useReactTable({
-    columns: getApiKeyColumns(onClickDelete, onClickUpdate),
-    data: apiKeys,
+    columns,
+    data,
     getCoreRowModel: getCoreRowModel(),
-    enableSorting: false,
+    getSortedRowModel: getSortedRowModel(),
   });
+
+  const openApiKeyDialog = (apiKey: ApiKey) => {
+    overlay.open(({ close, isOpen }) => (
+      <ApiKeyFormDialog
+        close={close}
+        isOpen={isOpen}
+        data={{
+          status: apiKey.deletedAt === null ? 'active' : 'inactive',
+          value: apiKey.value,
+        }}
+        onSubmit={async (input) => {
+          await onClickUpdate?.(
+            input.status === 'active' ? 'recover' : 'softDelete',
+            apiKey.id,
+          );
+          close();
+        }}
+        onClickDelete={async () => {
+          await onClickDelete?.(apiKey.id);
+          close();
+        }}
+        disabledDelete={disabledDelete}
+        disabledUpdate={disabledUpdate}
+      />
+    ));
+  };
 
   return (
     <BasicTable
       isLoading={isLoading}
       table={table}
-      emptyComponent={
-        <div className="my-32 flex flex-col items-center justify-center gap-3">
-          <Icon
-            name="WarningTriangleFill"
-            className="text-quaternary"
-            size={32}
-          />
-          <p className="text-secondary">{t('text.no-data')}</p>
-        </div>
-      }
+      emptyCaption={t('v2.text.no-data.api-key')}
+      createButton={createButton}
+      onClickRow={(_, row) => openApiKeyDialog(row)}
     />
   );
 };

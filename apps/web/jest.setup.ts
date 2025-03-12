@@ -17,8 +17,6 @@
 import { faker } from '@faker-js/faker';
 import nextRouterMock from 'next-router-mock';
 
-import { server } from './src/msw';
-
 import '@testing-library/jest-dom';
 
 Object.defineProperty(window, 'matchMedia', {
@@ -37,23 +35,9 @@ Object.defineProperty(window, 'matchMedia', {
 // headless-ui
 global.ResizeObserver = require('resize-observer-polyfill');
 
-// iron-session
-const crypto = require('crypto');
-
-Object.defineProperty(globalThis, 'crypto', {
-  value: {
-    getRandomValues: (arr: any[]) => crypto.randomBytes(arr.length),
-  },
-});
-
 jest.mock('react-i18next', () => ({
   useTranslation: () => ({ t: (str: string) => str }),
 }));
-
-// msw
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 afterEach(() => jest.resetAllMocks());
 
@@ -63,8 +47,6 @@ jest.mock('next/router', () => ({
 
 jest.mock('@t3-oss/env-nextjs', () => ({
   createEnv: () => ({
-    API_BASE_URL: process.env.API_BASE_URL,
-    SESSION_PASSWORD: process.env.SESSION_PASSWORD,
     NEXT_PUBLIC_MAX_DAYS: process.env.NEXT_PUBLIC_MAX_DAYS,
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
     NODE_ENV: process.env.NODE_ENV,

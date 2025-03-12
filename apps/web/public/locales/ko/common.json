@@ -1,32 +1,4 @@
 {
-  "tenant": {
-    "create": {
-      "title": "Tenant 설정",
-      "site-name": "사이트 이름"
-    }
-  },
-  "auth": {
-    "sign-in": {
-      "reset-password": "비밀번호 재설정"
-    },
-    "sign-up": {
-      "title": "계정 만들기",
-      "label": {
-        "auth-code": "인증코드"
-      },
-      "placeholder": {
-        "auth-code": "인증코드 입력"
-      },
-      "button": {
-        "request-auth-code": "인증 요청",
-        "verify-auth-code": "인증 확인"
-      }
-    },
-    "reset-password": {
-      "title": "비밀번호 재설정하기",
-      "button": { "send-email": "이메일 보내기" }
-    }
-  },
   "link": {
     "reset-password": {
       "title": "비밀번호 재설정"
@@ -36,145 +8,37 @@
     }
   },
   "main": {
-    "index": {
-      "total-project": "전체 Project 수",
-      "total-channel": "전체 Channel 수",
-      "total-feedback": "전체 피드백 수",
-      "create-project": "Project 생성",
-      "no-project": "등록된 프로젝트가 없습니다."
-    },
     "profile": {
-      "title": "프로필",
       "profile-info": "Profile 정보",
       "change-password": "Password 변경",
-      "label": {
-        "user-type": "Type",
-        "new-password": "새로운 비밀번호",
-        "confirm-new-password": "새로운 비밀번호 확인"
-      },
-      "placeholder": {
-        "name": "Name을 입력해주세요.",
-        "department": "Department를 입력해주세요.",
-        "new-password": "새로운 비밀번호를 입력해주세요.",
-        "confirm-new-password": "새로운 비밀번호를 한번 더 입력해주세요"
-      },
       "button": {
         "delete-account": "회원 탈퇴"
-      },
-      "dialog": {
-        "delete-account": {
-          "title": "회원 탈퇴",
-          "description1": "정말로 탈퇴하시나요?",
-          "description2": "회원 탈퇴 후 서비스를 이용할 수 없습니다."
-        }
       }
     },
-    "dashboard": {
-      "title": "대시보드"
-    },
     "feedback": {
-      "title": "피드백",
-      "column-setting": "컬럼설정",
       "issue-cell": {
-        "issue-list": "이슈 목록",
-        "register-issue": "이슈 등록",
-        "create-issue": "이슈 생성",
-        "input-issue": "이슈 입력",
-        "delete-issue": "이슈 삭제"
+        "create-issue": "이슈 생성"
       },
       "download": {
         "loading": "다운로드 중입니다.",
         "success": "다운로드가 완료되었습니다.",
-        "error": "다운로드에 실패하였습니다.",
-        "loading-description": "총 {{count, number}}개 다운로드 중입니다.",
-        "success-description": "총 {{count, number}}개 다운로드를 완료했습니다.",
-        "error-description": "총 {{count, number}}개 다운로드를 실패했하였습니다."
-      },
-      "button": {
-        "all-download": "전체 다운로드",
-        "select-download": "{{count, number}}개 다운로드",
-        "excel-download": "엑셀 다운로드",
-        "csv-download": "CSV 다운로드"
-      },
-      "dialog": {
-        "delete-feedback": {
-          "title": "피드백 삭제",
-          "description": "선택한 피드백을 모두 삭제 하시겠어요?"
-        }
-      }
-    },
-    "issue": {
-      "title": "이슈",
-      "setting": "이슈 설정",
-      "dialog": {
-        "delete-issue": {
-          "title": "이슈 삭제",
-          "description": "선택한 이슈를 모두 삭제 하시겠어요?"
-        }
+        "error": "다운로드에 실패하였습니다."
       }
     },
     "setting": {
-      "title": "설정",
       "button": {
-        "create-project": "Project 생성",
-        "create-channel": "Channel 생성",
-        "create-api-key": "Key 생성",
-        "register-member": "Member 등록"
+        "create-channel": "Channel 생성"
       },
-      "sign-up-mgmt": {
-        "ufb-login": "UFB 로그인",
-        "oauth-login": "OAuth2.0 로그인",
-        "all-login": "모두",
-        "possibility": "직접 회원가입 가능",
-        "impossibility": "직접 회원가입 불가능",
-        "no-domain-restriction": "도메인 제한 없음",
-        "domain-restriction": "도메인 제한 있음",
-        "domain-restriction-tooltip": "회원가입 할 수 있는 이메일의 도메인을 설정할 수 있습니다."
-      },
-      "role-mgmt": {
-        "edit-role": "Role 수정",
-        "update-role-name": "Role Name 수정",
-        "delete-role": "Role 삭제"
-      },
-      "api-key-status": {
-        "active": "활성",
-        "inactive": "비활성"
-      },
-      "field-status": {
-        "active": "활성",
-        "inactive": "비활성"
-      },
-      "register-member": "Member를 등록해주세요.",
       "same-key": "Key 정보와 동일하게 입력",
       "feedback-request-code": "피드백 요청 코드",
       "option-info": "옵션 정보",
       "field-mgmt": {
-        "description": "저장을 하려면 미리보기를 먼저 눌러주세요.",
-        "preview": "미리보기",
-        "preview-caption": "미리보기는 예시 데이터로 나타납니다.",
-        "preview-description": "등록한 필드가 어떤 모습일지 확인할 수 있어요."
+        "preview": "미리보기"
       },
       "dialog": {
-        "edit-user": { "title": "User 편집" },
-        "delete-project": {
-          "title": "Project 삭제",
-          "description": "Project를 삭제하면 Issue/Feedback 데이터가 모두 삭제됩니다.\n삭제를 계속 진행하려면 아래 텍스트를 입력해주세요."
-        },
-        "delete-channel": {
-          "title": "Channel 삭제",
-          "description": "Channel을 삭제하면 피드백 데이터가 모두 삭제됩니다.\n삭제를 계속 진행하려면 아래 텍스트를 입력해주세요."
-        },
         "create-role": {
           "title": "Role 생성",
           "description": "신규 Role Name을 입력해주세요."
-        },
-        "update-role-name": {
-          "title": "Role Name 수정",
-          "description": "Role의 Name을 수정해주세요."
-        },
-        "edit-api-key": {
-          "title": "API KEY 편집",
-          "description": "API KEY를 비활성화하면 해당 KEY로 API를 사용할 수 없게 됩니다. API KEY를 사용하지 않는 경우에만 비활성으로 변경해 주세요."
         },
         "delete-option": {
           "title": "옵선 삭제",
@@ -183,15 +47,6 @@
         "delete-role": {
           "title": "Role 삭제",
           "description": "Role을 삭제하시겠어요?\n해당 Role을 가진 Member도 같이 없어집니다."
-        },
-        "edit-member": {
-          "title": "Member 편집",
-          "description": "Role 정보에 따라 접근 가능한 메뉴와\n사용할 수 있는 기능이 달라집니다.\nMember 정보를 확인하고 알맞은 Role 정보를 선택해주세요."
-        },
-        "register-member": { "title": "Member 등록" },
-        "delete-member": {
-          "title": "Member 삭제",
-          "description": "Member를 삭제하시겠습니까?"
         },
         "add-field": { "title": "Field 추가" },
         "edit-field": { "title": "Field 수정" },
@@ -212,7 +67,6 @@
     "create-channel": {
       "title": "Channel 생성",
       "complete-title": "Channel 생성이 완료되었습니다.",
-      "finish-channel-creation": "모든 준비가 완료됐습니다.\nUserFeedback 이용을 시작해보세요!",
       "guide": {
         "invalid-channel": "유효하지 않은 Project 정보가 존재합니다."
       }
@@ -243,27 +97,7 @@
     "start": "시작하기",
     "generate": "생성"
   },
-  "input": {
-    "label": {
-      "password": "비밀번호",
-      "confirm-password": "비밀번호 확인"
-    },
-    "placeholder": {
-      "input": "입력해주세요.",
-      "email": "Email 입력",
-      "password": "비밀번호 입력",
-      "confirm-password": "비밀번호 입력"
-    }
-  },
   "text": {
-    "search-result": "검색 결과",
-    "number-count": "{{count, number}}개",
-    "no-data": "등록된 데이터가 없습니다.",
-    "per-page": "페이지 당",
-    "select-option": "{{name}} 선택",
-    "select-count": "{{count, number}}개 선택",
-    "search-filter": "필터 검색",
-    "all": "전체",
     "issue": {
       "init": "신규",
       "onReview": "검토중",
@@ -271,40 +105,21 @@
       "resolved": "완료",
       "pending": "진행하지 않음"
     },
-    "date": {
-      "today": "오늘",
-      "yesterday": "어제",
-      "before-days": "{{day, number}}일전",
-      "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
-    },
-    "equal-search": "완전 일치",
-    "like-search": "부분 일치",
-    "helper": "도움말",
-    "no-channel": "등록된 Channel이 없습니다.",
-    "guide": "안내",
-    "more": "더보기",
-    "shrink": "줄이기",
-    "feedback-detail": "피드백 상세",
-    "create-channel-in-progress": "생성중인 Channel이 있습니다.",
-    "create-project-in-progress": "생성중인 Project가 있습니다.",
-    "days": "{{days}}일",
     "webhook-type": {
       "FEEDBACK_CREATION": "피드백 생성",
       "ISSUE_CREATION": "이슈 생성",
       "ISSUE_STATUS_CHANGE": "이슈 상태 변경",
       "ISSUE_ADDITION": "이슈 등록"
-    }
-  },
-  "toast": {
-    "sign-in": "로그인 성공",
-    "register": "등록 완료",
-    "delete": "삭제 완료",
-    "save": "저장 완료",
-    "invite": "초대 완료",
-    "active": "활성화",
-    "inactive": "비활성화",
-    "add": "추가 완료",
-    "copy": "복사 완료"
+    },
+    "date": {
+      "today": "오늘",
+      "yesterday": "어제",
+      "before-days": "{{day, number}}일",
+      "last-days": "지난 {{day, number}}일",
+      "date-range-over-max-days": "조회 기간은 최대 {{maxDays}}일까지만 입력 가능합니다."
+    },
+    "guide": "안내",
+    "days": "{{days}}일"
   },
   "dialog": {
     "continue": {
@@ -314,16 +129,6 @@
         "continue": "이어서하기",
         "restart": "처음부터"
       }
-    },
-    "create-webhook": {
-      "title": "Webhook 생성"
-    },
-    "update-webhook": {
-      "title": "Webhook 편집"
-    },
-    "delete-webhook": {
-      "title": "Webhook 삭제",
-      "description": "Webhook를 삭제하면 연동된 데이터가 모두 삭제됩니다."
     }
   },
   "dashboard-card": {
@@ -388,26 +193,15 @@
   },
   "popover": {
     "select-issue": {
-      "search-issue": "이슈 검색",
-      "max-issue-count": "최대 5개까지 이슈를 선택할 수 있습니다. ",
-      "issue-list": "이슈 목록"
-    },
-    "select-issue-status": {
-      "issue-status": "이슈 상태"
+      "max-issue-count": "최대 5개까지 이슈를 선택할 수 있습니다. "
     }
   },
   "tooltip": {
-    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다.",
-    "webhook-feedback-creation": "채널별 피드백이 수집될 때마다 해당 이벤트를 발동합니다.",
-    "webhook-issue-addition": "채널별 이슈를 등록할 때마다 해당 이벤트를 발동합니다.",
-    "webhook-issue-creation": "채널에 상관없이 이슈를 생성할 때마다 해당 이벤트를 발동합니다.",
-    "webhook-issue-status-change": "채널에 상관없이 이슈상태를 변경할 때마다 해당 이벤트를 발동합니다.",
-    "field-property": "필드 내용의 원본을 유지하고 싶다면 Read Only 내용을 수정하고 싶다면 Editible로 설정해 주세요.",
-    "field-status": "필드 사용 여부를 의미합니다. 사용하지 않는 필드는 Inactive로 변경해 주세요."
+    "issue-feedback-count": "해당 이슈에 등록된 피드백 개수입니다."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant 정보",
-    "sign-up-mgmt": "Login & Signup 관리",
+    "sign-up-mgmt": "Login 관리",
     "user-mgmt": "User 관리"
   },
   "project-setting-menu": {
@@ -435,16 +229,15 @@
     }
   },
   "help-card": {
-    "project-info": "Project 단위로 피드백을 수집할 수 있습니다. 피드백을 관리할 프로덕트 기준으로 Project 정보를 등록해 주세요. (ex. Product Name)",
-    "role": "Project에 접근하고 사용할 수 있는 권한을 설정할 수 있습니다.",
-    "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다. ",
-    "api-key": "User Feedback API Key 정보를 관리합니다. API를 활용하려면 Key를 생성해서 이용해 주세요. 자세한 내용은 API <icon></icon> <docs>Docs</docs>참고해 주세요.",
-    "issue-tracker": "UserFeedback 피드백과 Issue Tracking System을 연결해서 관리할 수 있습니다.\n사용 중인 Issue Tracking System 정보를 입력해 주세요.",
-    "channel-info": "Channel을 통해 수집하고 싶은 피드백 필드를 정의할 수 있습니다. 피드백 경로와 성격을 고려하여 Channel 정보를 등록해주세요. (ex. VOC, APP Reivew)",
-    "field": "등록한 Channel에 맞춰 UserFeedback으로 수집하고 싶은 피드백 필드를 정의합니다. API를 통해 수집하고 싶은 필드나 ADMIN에서 직접 등록하고 싶은 필드를 미리 설정해보세요. ",
-    "image-config": "Image 포맷에 대해 피드백을 수집할 때 Image Storage와 연동할 수 있고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있습니다.\n자세한 내용은 Image <icon></icon> <docs>Docs</docs>를 참고해 주세요.",
-    "field-preview": "Field 관리에서 설정한 필드가 어떻게 보일지 미리 확인할 수 있습니다. 미리보기는 임의의 데이터로 보여주기 때문에 실제와 다릅니다.",
-    "webhook": "Webhook을 사용하면 User Feedback에서 발생하는 다양한 이벤트를 활용할 수 있습니다. 자세한 내용은 Webhook <icon></icon> <docs>Docs</docs>를 참고해 주세요."
+    "project-info": "Project는 피드백 수집 대상의 프로덕트를 의미합니다. 피드백을 관리할 프로덕트를 고려하여 정보를 입력해 주세요.",
+    "member": "Project에 참여할 Member를 등록하거나 관리할 수 있습니다.",
+    "api-key": "User Feedback API Key를 관리하는 화면입니다. API를 활용하려면 Key를 생성하여 이용해 주세요. 자세한 내용은 API <docs>Docs</docs>를 참고해 주세요.",
+    "issue-tracker": "User Feedback과 Issue Tracking System 연결을 설정하는 화면입니다. 사용 중인 Issue Tracking System 정보를 입력해 주세요.",
+    "channel-info": "Channel은 피드백 수집 경로 또는 수집 방식을 구분하는 단위입니다. Channel의 특성을 고려하여 정보를 입력해 주세요.",
+    "field": "Channel에 수집할 피드백 데이터를 Field 단위로 정의할 수 있습니다. 데이터 유형 및 속성을 고려해 Field를 추가해 주세요. ",
+    "image-config": "Image 포맷의 피드백을 수집하는 경우, Image Storage와 연동을 설정하고 Image URL 도메인에 대한 화이트리스트를 설정할 수 있는 화면입니다. 자세한 내용은 Image <docs>Docs</docs>를 참고해 주세요.",
+    "field-preview": "등록한 Field 정보를 토대로 피드백이 어떤 모습일지 미리보기를 제공합니다. 참고로 미리보기는 예시 데이터를 활용해 나타냅니다.",
+    "webhook": "User Feedback에서 발생하는 이벤트 트리거에 맞춰 Webhook 연동을 설정할 수 있는 화면입니다. 자세한 내용은 Webhook <docs>Docs</docs>를 참고해 주세요. "
   },
   "hint": {
     "required": "필수 입력 대상입니다.",
@@ -456,9 +249,164 @@
   "title-box": {
     "image-storage-integration": "Image Storage 연동"
   },
-  "placeholder": "{{name}}을 입력해주세요.",
-  "system-popup": {
-    "create-project/channel-get-out": "{{type}} 생성 과정에서 나가겠어요?\n나가더라도 나중에 이어서 진행할 수 있습니다.",
-    "field-setting-get-out": "아직 저장되지 않은 필드 정보가 있어요. 그래도 나가시겠어요."
+  "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "회원가입",
+        "button": {
+          "request-auth-code": "인증 요청",
+          "verify-auth-code": "인증 확인"
+        }
+      },
+      "reset-password": {
+        "title": "비밀번호 재설정",
+        "button": { "send-email": "이메일 보내기" }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "비밀번호 변경"
+      }
+    },
+    "button": {
+      "name": {
+        "create": "{{name}} 생성",
+        "delete": "{{name}} 삭제",
+        "register": "{{name}} 등록",
+        "add": "{{name}} 추가",
+        "invite": "{{name}} 초대"
+      },
+      "create": "생성하기",
+      "delete": "삭제",
+      "register": "등록하기",
+      "save": "저장",
+      "cancel": "취소",
+      "out": "나가기",
+      "confirm": "확인",
+      "next": "다음",
+      "previous": "이전",
+      "addFilter": "필터 추가",
+      "edit": "편집"
+    },
+    "project-setting-menu": {
+      "project-info": "Project 정보",
+      "member-mgmt": "Member 관리",
+      "role-mgmt": "Role 관리",
+      "api-key-mgmt": "API Key 관리",
+      "issue-tracker-mgmt": "Issue Tracker 관리",
+      "webhook-integration": "Webhook 연동",
+      "delete-project": "Project 삭제"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel 정보",
+      "field-mgmt": "Field 관리",
+      "image-mgmt": "Image 관리",
+      "delete-channel": "Channel 삭제"
+    },
+    "dialog": {
+      "delete": {
+        "title": "삭제 하시겠습니까?",
+        "description": "삭제를 하면 관련된 정보가 모두 사라집니다."
+      },
+      "warn-if-unsaved-changes": {
+        "title": "페이지를 나가시겠습니까?",
+        "description": "중간에 나가면 입력한 내용이 저장되지 않습니다."
+      },
+      "warn-if-saved-changes": {
+        "title": "페이지를 나가시겠습니까?",
+        "description": "중간에 나가도 나중에 이어서 진행할 수 있습니다. "
+      },
+      "no-project-in-profile-page": {
+        "title": "소속된 Project가 없습니다.",
+        "description": "아직 소속된 Project가 없습니다.\nProject 관리자에게 Member 등록을 요청하거나 또는 문의해 보세요."
+      },
+      "no-project-dialog-in-project-creation-page": {
+        "title": "환영합니다!",
+        "step1-description": "ABC User Feedback에서는 Channel > Project > Tenant 구조로 피드백을 관리합니다. 그래서 Project와 Channel을 모두 생성해 주셔야 합니다.",
+        "step2-description": "Project는 피드백 대상이 되는 프로덕트를 의미합니다. 관리하고 있는 프로덕트 정보를 기준으로 Project를 생성하면 좋습니다.",
+        "step3-description": "Channel은 피드백 수집 방식을 의미합니다. 담당하고 있는 프로덕트에서 어떤 방식으로 피드백을 수집하고 있는지를 기준으로 Channel을 생성하면 좋습니다. "
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "생성된 API Key가 없습니다.",
+        "member": "등록된 Member가 없습니다.",
+        "channel": "생성된 Channel이 없습니다.",
+        "webhook": "등록된 Webhook이 없습니다.",
+        "feedback": "생성된 피드백이 없습니다."
+      },
+      "create-project": "Project 생성",
+      "create-channel": "Channel 생성",
+      "name": {
+        "detail": "{{name}} 상세",
+        "add": "{{name}} 추가",
+        "register": "{{name}} 등록",
+        "create": "{{name}} 생성"
+      },
+      "summary": "요약",
+      "preview": "미리보기",
+      "in-progress": "진행중",
+      "continue": "이어서 하기",
+      "test-connection-failed": "연동 테스트에 실패했습니다.",
+      "all-email-domains-allow": "모든 이메일 도메인을 허용합니다.",
+      "request-email-auth": "인증이 요청되었습니다.",
+      "all-image-url-allow": "모든 Image URL의 도메인을 허용합니다.",
+      "select-project": "프로젝트를 선택해 주세요.",
+      "no-category": "카테고리 미등록"
+    },
+    "create-tenant": {
+      "tenant": {
+        "title": "Tenant 생성",
+        "description": "ABC User Feedback을 관리할 회사/조직/팀 이름을 입력해 주세요."
+      },
+      "user": {
+        "title": "마스터 계정 생성",
+        "description": "최초 로그인을 위해서는 마스터 계정을 생성해 주셔야 합니다. "
+      },
+      "final": {
+        "title": "Tenant 생성 완료",
+        "description": "Tenant 생성이 완료되었어요.\n이제 마스터 계정으로 로그인을 시도해 보세요."
+      }
+    },
+    "placeholder": {
+      "select": "선택해주세요.",
+      "text": "입력해주세요.",
+      "text-or-generate": "입력 또는 생성해주세요."
+    },
+    "toast": {
+      "success": "성공적으로 처리되었습니다.",
+      "copy": "클립보드에 복사되었습니다."
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback 생성",
+        "description": "피드백이 수집될 때마다 이벤트를 발동합니다."
+      },
+      "issue-addition": {
+        "title": "Issue 등록",
+        "description": "이슈를 등록할 때마다 이벤트를 발동합니다."
+      },
+      "issue-status-change": {
+        "title": "Issue 상태 변경",
+        "description": "이슈 상태를 변경할 때마다 이벤트를 발동합니다."
+      },
+      "issue-creation": {
+        "title": "Issue 생성",
+        "description": "이슈를 신규 생성할 때마다 이벤트를 발동합니다."
+      }
+    },
+    "error": {
+      "duplicated": "중복된 정보가 존재합니다.",
+      "lessThenNcharacters": "{{n}}자 이하로 입력해 주세요.",
+      "required": "입력해 주세요."
+    },
+    "description": {
+      "create-project": "성공적으로 Project를 생성했습니다.\n다음은 피드백을 수집하기 위해 Channel을 생성해 줘야 합니다.\n‘Channel 생성'을 통해 다음 단계로 진행해 보세요.",
+      "create-channel": "성공적으로 Channel을 생성했습니다.\n이제 유저 피드백을 수집하고 관리할 준비가 되었습니다.\n‘시작하기'를 통해 본격적으로 경험해 보세요."
+    },
+    "login-setting": {
+      "oauth-description": "OAuth2.0을 활용해 로그인할 수 있는 방식을 제공합니다.",
+      "email-description": "Email 인증을 통해 회원가입 및 로그인할 수 있는 방식을 제공합니다."
+    }
   }
 }

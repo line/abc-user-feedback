@@ -15,7 +15,7 @@
  */
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { DashboardCard, useOAIQuery } from '@/shared';
 
@@ -65,6 +65,7 @@ const TodayFeedbackCard: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardCard
+      type="feedback"
       data={(currentData?.count ?? 0).toLocaleString()}
       title={t('dashboard-card.today-feedback.title')}
       description={t('dashboard-card.today-feedback.description', {

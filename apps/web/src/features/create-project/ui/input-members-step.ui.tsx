@@ -13,16 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import {
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
-import { Popover, PopoverModalContent } from '@ufb/ui';
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  Icon,
+} from '@ufb/react';
 
-import type { Member } from '@/entities/member';
-import { CreateMemberPopover, MemberTable } from '@/entities/member';
-import type { Role } from '@/entities/role';
+import { BasicTable } from '@/shared';
+import type { MemberInfo } from '@/entities/member';
+import { MemberFormDialog } from '@/entities/member';
+import { memberColumns } from '@/entities/member/member-columns';
 import { useUserSearch } from '@/entities/user';
-import type { User } from '@/entities/user';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
@@ -30,53 +44,48 @@ import CreateProjectInputTemplate from './create-project-input-template.ui';
 interface IProps {}
 
 const InputMembersStep: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateProjectStore();
+  const { input, onChangeInput, jumpStepByKey } = useCreateProjectStore();
   const overlay = useOverlay();
 
   const { t } = useTranslation();
   const { data: userData } = useUserSearch({
     limit: 1000,
-    query: { type: 'GENERAL' },
+    queries: [{ type: ['GENERAL'] }] as Record<string, unknown>[],
   });
 
-  const createMember = (user: User, role: Role) => {
+  const createMember = (member: MemberInfo) => {
+    onChangeInput('members', input.members.concat(member));
+  };
+
+  const updateMember = (index: number, newMember: MemberInfo) => {
     onChangeInput(
       'members',
-      input.members.concat({
-        id: (input.members[input.members.length - 1]?.id ?? 0) + 1,
-        user,
-        role,
-        createdAt: new Date().toISOString(),
-      }),
+      input.members.map((m, i) => (i === index ? newMember : m)),
     );
   };
 
-  const updateMember = (member: Member) => {
+  const deleteMember = (index: number) => {
     onChangeInput(
       'members',
-      input.members.map((m) => (m.id === member.id ? member : m)),
-    );
-  };
-
-  const deleteMember = (memberId: number) => {
-    onChangeInput(
-      'members',
-      input.members.filter((m) => m.id !== memberId),
+      input.members.filter((_, i) => index !== i),
     );
   };
 
   const openInvalidateMemberModal = () => {
-    return overlay.open(({ isOpen, close }) => (
-      <Popover modal open={isOpen} onOpenChange={() => close()}>
-        <PopoverModalContent
-          title={t('text.guide')}
-          description={t('main.create-project.guide.invalid-member')}
-          submitButton={{
-            children: t('button.confirm'),
-            onClick: close,
-          }}
-        />
-      </Popover>
+    overlay.open(({ isOpen, close }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent>
+          <DialogTitle>{t('text.guide')}</DialogTitle>
+          <DialogBody>
+            {t('main.create-project.guide.invalid-member')}
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose variant="primary">
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     ));
   };
 
@@ -93,23 +102,64 @@ const InputMembersStep: React.FC<IProps> = () => {
     return true;
   };
 
+  const openCreateMemberFormDialog = () => {
+    overlay.open(({ isOpen, close }) => (
+      <MemberFormDialog
+        members={input.members}
+        onSubmit={({ role, user }) => createMember({ role, user })}
+        project={input.projectInfo}
+        roles={input.roles}
+        close={close}
+        isOpen={isOpen}
+      />
+    ));
+  };
+
+  const openUpdateMemberFormDialog = (index: number, member: MemberInfo) => {
+    overlay.open(({ close, isOpen }) => (
+      <MemberFormDialog
+        close={close}
+        isOpen={isOpen}
+        data={member}
+        onSubmit={(newMember) => updateMember(index, newMember)}
+        onClickDelete={() => deleteMember(index)}
+        project={input.projectInfo}
+        roles={input.roles}
+        members={input.members}
+      />
+    ));
+  };
+
+  const table = useReactTable({
+    columns: memberColumns,
+    data: input.members,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+  });
   return (
     <CreateProjectInputTemplate
+      validate={validate}
       actionButton={
-        <CreateMemberPopover
-          members={input.members}
-          onCreate={createMember}
-          project={input.projectInfo}
-          roles={input.roles}
-        />
+        <>
+          <Button
+            variant="outline"
+            onClick={() => {
+              jumpStepByKey('roles');
+            }}
+          >
+            <Icon name="RiExchange2Fill" />
+            {t('project-setting-menu.role-mgmt')}
+          </Button>
+          <Button onClick={openCreateMemberFormDialog}>
+            {t('v2.button.name.register', { name: 'Member' })}
+          </Button>
+        </>
       }
-      validate={() => validate()}
     >
-      <MemberTable
-        members={input.members}
-        roles={input.roles}
-        onDeleteMember={deleteMember}
-        onUpdateMember={updateMember}
+      <BasicTable
+        table={table}
+        emptyCaption={t('v2.text.no-data.member')}
+        onClickRow={openUpdateMemberFormDialog}
       />
     </CreateProjectInputTemplate>
   );

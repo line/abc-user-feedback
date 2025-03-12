@@ -15,6 +15,7 @@
  */
 import { Expose, plainToInstance } from 'class-transformer';
 
+import { IssueStatusEnum } from '@/common/enums';
 import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 
 export class CreateIssueDto {
@@ -24,6 +25,15 @@ export class CreateIssueDto {
   @Expose()
   name: string;
 
+  @Expose()
+  status: IssueStatusEnum;
+
+  @Expose()
+  description: string | null;
+
+  @Expose()
+  externalIssueId: string;
+
   public static from(params: any): CreateIssueDto {
     return plainToInstance(CreateIssueDto, params, {
       excludeExtraneousValues: true,
@@ -31,7 +41,13 @@ export class CreateIssueDto {
   }
 
   static toIssueEntity(params: CreateIssueDto) {
-    const { name, projectId } = params;
-    return IssueEntity.from({ name, projectId });
+    const { name, status, description, externalIssueId, projectId } = params;
+    return IssueEntity.from({
+      name,
+      status,
+      description,
+      externalIssueId,
+      projectId,
+    });
   }
 }

@@ -14,6 +14,6 @@
  * under the License.
  */
 export { default as TenantGuard } from './tenant-guard.ui';
-export { default as TenantCard } from './tenant-card.ui';
 export { default as TenantInfoForm } from './tenant-info-form.ui';
 export { default as OAuthConfigForm } from './oauth-config-form.ui';
+export { default as EmailConfigForm } from './email-config-form.ui';

@@ -20,7 +20,6 @@ import { HelpCardDocs } from '@/shared';
 
 import type { CreateProjectStepKey } from './create-project-type';
 import InputApiKeyStep from './ui/input-api-key-step.ui';
-import InputIssueTrackerStep from './ui/input-issue-tracker-step.ui';
 import InputMembersStep from './ui/input-members-step.ui';
 import InputProjectInfoStep from './ui/input-project-info-step.ui';
 import InputRolesStep from './ui/input-roles-step.ui';
@@ -32,7 +31,6 @@ export const CREATE_PROJECT_COMPONENTS: Record<
   'project-info': <InputProjectInfoStep />,
   roles: <InputRolesStep />,
   'api-keys': <InputApiKeyStep />,
-  'issue-tracker': <InputIssueTrackerStep />,
   members: <InputMembersStep />,
 };
 
@@ -44,16 +42,14 @@ export const CREATE_PROJECT_STEPPER_TEXT: Record<
   roles: <Trans i18nKey="project-setting-menu.role-mgmt" />,
   members: <Trans i18nKey="project-setting-menu.member-mgmt" />,
   'api-keys': <Trans i18nKey="project-setting-menu.api-key-mgmt" />,
-  'issue-tracker': <Trans i18nKey="project-setting-menu.issue-tracker-mgmt" />,
 };
 
 export const CREATE_PROJECT_HELP_TEXT: Record<
   CreateProjectStepKey,
-  React.ReactNode
+  React.ReactNode | undefined
 > = {
   'project-info': <Trans i18nKey="help-card.project-info" />,
-  roles: <Trans i18nKey="help-card.role" />,
+  roles: undefined,
   members: <Trans i18nKey="help-card.member" />,
   'api-keys': <HelpCardDocs i18nKey="help-card.api-key" />,
-  'issue-tracker': <Trans i18nKey="help-card.issue-tracker" />,
 };

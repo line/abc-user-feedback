@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "build:ui": "turbo @ufb/ui#build",
     "clean": "git clean -xdf node_modules",
     "clean:workspaces": "turbo clean",
     "dev": "turbo dev --parallel",
@@ -26,7 +25,7 @@
     "turbo": "^2.0.9",
     "typescript": "^5.5.4"
   },
-  "packageManager": "pnpm@9.15.0",
+  "packageManager": "pnpm@9.15.9",
   "engines": {
     "node": ">=20.11.1"
   }

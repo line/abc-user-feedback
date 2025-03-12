@@ -14,8 +14,11 @@
  * under the License.
  */
 
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
+
+import { Button } from '@ufb/react';
 
 import { useOAIQuery } from '@/shared';
 import { useTenantStore } from '@/entities/tenant';
@@ -35,15 +38,35 @@ const SignInWithOAuthButton: React.FC<IProps> = () => {
     variables: { callback_url },
   });
 
+  if (tenant?.oauthConfig?.loginButtonType === 'GOOGLE') {
+    return (
+      <Button
+        variant="outline"
+        size="medium"
+        disabled={!data?.url}
+        onClick={() => router.push(data?.url ?? '')}
+      >
+        <Image
+          src="/assets/images/google.svg"
+          alt="Google"
+          width={24}
+          height={24}
+        />
+        Google {t('button.sign-in')}
+      </Button>
+    );
+  }
+
   return (
-    <button
-      type="button"
-      className="btn btn-lg btn-blue"
+    <Button
+      variant="outline"
+      size="medium"
       disabled={!data?.url}
       onClick={() => router.push(data?.url ?? '')}
     >
-      OAuth2.0 {t('button.sign-in')}
-    </button>
+      {tenant?.oauthConfig?.loginButtonName ??
+        `OAuth 2.0 ${t('button.sign-in')}`}
+    </Button>
   );
 };
 

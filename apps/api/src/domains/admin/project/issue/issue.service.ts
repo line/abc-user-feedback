@@ -13,26 +13,39 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CronJob } from 'cron';
 import { DateTime } from 'luxon';
-import { paginate } from 'nestjs-typeorm-paginate';
+import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import type { FindManyOptions, FindOptionsWhere } from 'typeorm';
-import { In, Like, Not, Raw, Repository } from 'typeorm';
+import { Brackets, In, Like, Not, Raw, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import type { TimeRange } from '@/common/dtos';
-import { EventTypeEnum } from '@/common/enums';
+import {
+  EventTypeEnum,
+  QueryV2ConditionsEnum,
+  SortMethodEnum,
+} from '@/common/enums';
+import { paginateHelper } from '@/common/helper/paginate.helper';
 import type { CountByProjectIdDto } from '@/domains/admin/feedback/dtos';
 import { IssueStatisticsService } from '@/domains/admin/statistics/issue/issue-statistics.service';
 import { LockTypeEnum } from '@/domains/operation/scheduler-lock/lock-type.enum';
 import { SchedulerLockService } from '@/domains/operation/scheduler-lock/scheduler-lock.service';
+import { isInvalidSortMethod } from '../../feedback/feedback.common';
+import { CategoryEntity } from '../category/category.entity';
+import { CategoryNotFoundException } from '../category/exceptions';
 import { ProjectEntity } from '../project/project.entity';
-import type { FindByIssueIdDto, FindIssuesByProjectIdDto } from './dtos';
+import type {
+  FindByIssueIdDto,
+  FindIssuesByProjectIdDto,
+  FindIssuesByProjectIdDtoV2,
+} from './dtos';
 import { CreateIssueDto, UpdateIssueDto } from './dtos';
+import { UpdateIssueCategoryDto } from './dtos/update-issue-category.dto';
 import {
   IssueInvalidNameException,
   IssueNameDuplicatedException,
@@ -48,6 +61,8 @@ export class IssueService {
     private readonly repository: Repository<IssueEntity>,
     @InjectRepository(ProjectEntity)
     private readonly projectRepository: Repository<ProjectEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoryRepository: Repository<CategoryEntity>,
     private readonly issueStatisticsService: IssueStatisticsService,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly schedulerLockService: SchedulerLockService,
@@ -141,12 +156,146 @@ export class IssueService {
       searchOptions.where = [andWhere];
     }
 
-    const result = await paginate(
-      this.repository.createQueryBuilder().setFindOptions(searchOptions),
+    const result = await paginateHelper(
+      this.repository.createQueryBuilder(),
+      searchOptions,
       { page, limit },
     );
 
     return result;
+  }
+
+  async findIssuesByProjectIdV2(
+    dto: FindIssuesByProjectIdDtoV2,
+  ): Promise<Pagination<IssueEntity, IPaginationMeta>> {
+    const {
+      projectId,
+      queries = [],
+      sort = {},
+      operator = 'AND',
+      page,
+      limit,
+    } = dto;
+
+    const queryBuilder = this.repository
+      .createQueryBuilder('issues')
+      .leftJoinAndSelect('issues.category', 'category')
+      .where('issues.project_id = :projectId', { projectId });
+
+    const createdAtCondition = queries.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      queryBuilder.andWhere('issues.created_at >= :gte', { gte });
+      queryBuilder.andWhere('issues.created_at < :lt', { lt });
+    }
+
+    const categoryIdCondition = queries.find(
+      (query) => typeof query.categoryId === 'number',
+    );
+    if (typeof categoryIdCondition?.categoryId === 'number') {
+      if (categoryIdCondition.categoryId === 0) {
+        queryBuilder.andWhere('issues.category_id is NULL');
+      } else {
+        queryBuilder.andWhere('issues.category_id = :categoryId', {
+          categoryId: categoryIdCondition.categoryId,
+        });
+      }
+    }
+
+    const method = operator === 'AND' ? 'andWhere' : 'orWhere';
+
+    queryBuilder.andWhere(
+      new Brackets((qb) => {
+        let paramIndex = 0;
+        for (const query of queries) {
+          const { condition } = query;
+          for (const [fieldKey, value] of Object.entries(query)) {
+            if (fieldKey === 'condition') continue;
+
+            const paramName = `value${paramIndex++}`;
+
+            if (fieldKey === 'updatedAt') {
+              const { gte, lt } = value as TimeRange;
+              qb[method](`issues.updated_at >= :gte${paramName}`, {
+                [`gte${paramName}`]: gte,
+              });
+              qb[method](`issues.updated_at < :lt${paramName}`, {
+                [`lt${paramName}`]: lt,
+              });
+            } else if (
+              fieldKey === 'status' &&
+              condition === QueryV2ConditionsEnum.IS
+            ) {
+              qb[method](`issues.status = :${paramName}`, {
+                [paramName]: value,
+              });
+            } else if (
+              fieldKey === 'externalIssueId' &&
+              condition === QueryV2ConditionsEnum.IS
+            ) {
+              qb[method](`issues.external_issue_id = :${paramName}`, {
+                [paramName]: value,
+              });
+            } else if (['name', 'description'].includes(fieldKey)) {
+              const operator =
+                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+              const valueFormat =
+                condition === QueryV2ConditionsEnum.IS ?
+                  value
+                : `%${value?.toString()}%`;
+              qb[method](`issues.${fieldKey} ${operator} :${paramName}`, {
+                [paramName]: valueFormat,
+              });
+            } else if (fieldKey === 'category') {
+              const operator =
+                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+              const valueFormat =
+                condition === QueryV2ConditionsEnum.IS ?
+                  value
+                : `%${value?.toString()}%`;
+              qb[method](`category.name ${operator} :${paramName}`, {
+                [paramName]: valueFormat,
+              });
+            }
+          }
+        }
+      }),
+    );
+
+    if (Object.keys(sort).length === 0) {
+      sort.id = SortMethodEnum.DESC;
+    }
+    Object.keys(sort).forEach((fieldName) => {
+      if (isInvalidSortMethod(sort[fieldName])) {
+        throw new BadRequestException('invalid sort method');
+      }
+
+      if (fieldName === 'feedbackCount') {
+        queryBuilder.addOrderBy(`issues.feedback_count`, sort[fieldName]);
+      } else if (fieldName === 'createdAt') {
+        queryBuilder.addOrderBy(`issues.created_at`, sort[fieldName]);
+      } else if (fieldName === 'updatedAt') {
+        queryBuilder.addOrderBy(`issues.updated_at`, sort[fieldName]);
+      }
+    });
+
+    const items = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .getMany();
+
+    const total = await queryBuilder.getCount();
+
+    return {
+      items,
+      meta: {
+        itemCount: items.length,
+        totalItems: total,
+        itemsPerPage: limit,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findById({ issueId }: FindByIssueIdDto) {
@@ -214,6 +363,55 @@ export class IssueService {
         issueId,
         previousStatus,
       });
+
+    return updatedIssue;
+  }
+
+  @Transactional()
+  async updateByCategoryId(dto: UpdateIssueCategoryDto) {
+    const { issueId, categoryId } = dto;
+    const issue = await this.repository.findOne({
+      where: { id: issueId },
+      relations: { category: true },
+    });
+
+    if (!issue) throw new IssueNotFoundException();
+
+    const category = await this.categoryRepository.findOne({
+      where: { id: categoryId },
+    });
+    if (!category) throw new CategoryNotFoundException();
+
+    issue.category = new CategoryEntity();
+    issue.category.id = categoryId;
+
+    const updatedIssue = await this.repository.save(issue);
+
+    return updatedIssue;
+  }
+
+  @Transactional()
+  async deleteByCategoryId({
+    issueId,
+    categoryId,
+  }: {
+    issueId: number;
+    categoryId: number;
+  }) {
+    const issue = await this.repository.findOne({
+      where: { id: issueId },
+      relations: { category: true },
+    });
+
+    if (!issue) throw new IssueNotFoundException();
+
+    if (!issue.category || issue.category.id !== categoryId) {
+      throw new BadRequestException('Category id does not match');
+    }
+
+    issue.category = null;
+
+    const updatedIssue = await this.repository.save(issue);
 
     return updatedIssue;
   }

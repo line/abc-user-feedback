@@ -13,64 +13,121 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import type { GetStaticProps } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
 
-import { DEFAULT_LOCALE, Path } from '@/shared';
-import type { NextPageWithLayout } from '@/shared/types';
+import { Button, toast } from '@ufb/react';
+
+import { AnonymousTemplate, DEFAULT_LOCALE, TextInput } from '@/shared';
+import type { IFetchError, NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
-import { SignInWithEmailForm } from '@/features/auth/sign-in-with-email';
+import { useUserStore } from '@/entities/user';
 import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
-import { MainLayout } from '@/widgets';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+const signInWithEmailSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(8),
+});
+
+type FormType = z.infer<typeof signInWithEmailSchema>;
 
 const SignInPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
   const { tenant } = useTenantStore();
+  const { signInWithEmail } = useUserStore();
+  const [loginLoading, setLoginLoading] = useState(false);
+
+  const { handleSubmit, register, formState, setError } = useForm<FormType>({
+    resolver: zodResolver(signInWithEmailSchema),
+    defaultValues: { email: '', password: '' },
+  });
+
+  const onSubmit = async (data: FormType) => {
+    try {
+      setLoginLoading(true);
+      await signInWithEmail(data);
+      toast.success(t('v2.toast.success'));
+    } catch (error) {
+      const { message } = error as IFetchError;
+      setError('email', { message: 'invalid email' });
+      setError('password', { message: 'invalid password' });
+      toast.error(message);
+    } finally {
+      setLoginLoading(false);
+    }
+  };
 
   return (
-    <div className="relative">
-      <div className="mb-8 flex flex-col items-center gap-1">
-        <Image
-          src="/assets/images/logo-horizontal.svg"
-          alt="logo"
-          width={124.5}
-          height={50}
-        />
-        <div className="font-14-regular w-full text-center">
-          {tenant?.siteName}
-        </div>
-      </div>
-      {tenant?.useEmail && <SignInWithEmailForm />}
-      <div className="my-1 flex flex-col gap-1">
-        {tenant?.useEmail && tenant.useOAuth && (
-          <div className="relative my-5">
-            <span className="absolute-center text-secondary bg-primary absolute px-2 py-1">
-              OR
-            </span>
-            <hr />
-          </div>
-        )}
-        {tenant?.useOAuth && <SignInWithOAuthButton />}
-      </div>
-      {tenant?.useEmail && !tenant.isPrivate && (
-        <div className="absolute -bottom-28 left-1/2 -translate-x-1/2">
-          <Link
-            href={Path.PASSWORD_RESET}
-            className="text-blue-primary font-14-regular"
-          >
-            {t('auth.sign-in.reset-password')}
-          </Link>
+    <AnonymousTemplate
+      title={t('button.sign-in')}
+      image="/assets/images/sign-in.svg"
+      imageSub={
+        <p className="text-title-h3 text-center">
+          Listen to <br />
+          users' voice & improve.
+        </p>
+      }
+    >
+      {tenant?.useOAuth && <SignInWithOAuthButton />}
+      {tenant?.useOAuth && tenant.useEmail && (
+        <div className="flex items-center gap-2">
+          <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
+          <span className="text-neutral-tertiary">or With Email</span>
+          <div className="border-neutral-tertiary flex-1 border-b-[1px]" />
         </div>
       )}
-    </div>
+      {tenant?.useEmail && (
+        <form id="sign-in" onSubmit={handleSubmit(onSubmit)}>
+          <TextInput
+            label="Email"
+            placeholder={t('v2.placeholder.text')}
+            type="email"
+            {...register('email')}
+            error={formState.errors.email?.message}
+          />
+          <TextInput
+            label="Password"
+            placeholder={t('v2.placeholder.text')}
+            type="password"
+            {...register('password')}
+            error={formState.errors.password?.message}
+          />
+        </form>
+      )}
+      {tenant?.useEmail && (
+        <div className="flex flex-col gap-4">
+          <Button
+            size="medium"
+            type="submit"
+            loading={loginLoading}
+            form="sign-in"
+            disabled={!formState.isDirty}
+          >
+            {t('button.sign-in')}
+          </Button>
+          <div className="flex flex-col gap-3">
+            <Link href="/auth/reset-password" className="text-center underline">
+              {t('link.reset-password.title')}
+            </Link>
+            <Link href="/auth/sign-up" className="text-center underline">
+              {t('button.sign-up')}
+            </Link>
+          </div>
+        </div>
+      )}
+    </AnonymousTemplate>
   );
 };
 
 SignInPage.getLayout = (page) => {
-  return <MainLayout center>{page}</MainLayout>;
+  return <AnonymousLayout>{page}</AnonymousLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

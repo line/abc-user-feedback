@@ -15,7 +15,7 @@
  */
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { DashboardCard, useOAIQuery } from '@/shared';
 
@@ -63,6 +63,7 @@ const SevenDaysIssueCard: React.FC<IProps> = ({ projectId }) => {
 
   return (
     <DashboardCard
+      type="issue"
       data={currentData?.count ?? 0}
       title={t('dashboard-card.n-days-issue.title', { n: 7 })}
       description={t('dashboard-card.n-days-issue.description', {

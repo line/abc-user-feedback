@@ -13,15 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 import { useThrottle } from 'react-use';
 
-import { Badge, Icon, toast } from '@ufb/ui';
+import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxTrigger,
+  Icon,
+  toast,
+} from '@ufb/react';
 
-import { client, getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
-import { useIssueSearch } from '@/entities/issue';
+import {
+  client,
+  getDayCount,
+  InfiniteScrollArea,
+  SimpleLineChart,
+  useOAIQuery,
+} from '@/shared';
+import type { Issue } from '@/entities/issue';
+import { IssueBadge, useIssueSearchInfinite } from '@/entities/issue';
 
 import { useLineChartData } from '../lib';
 
@@ -34,29 +52,9 @@ interface IProps {
 const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
   const { t } = useTranslation();
 
-  const [showInput, setShowInput] = useState(false);
-
   const [searchName, setSearchName] = useState('');
   const throttledSearchName = useThrottle(searchName, 1000);
-  const [currentIssues, setCurrentIssues] = useState<
-    { id: number; name: string }[]
-  >([]);
-
-  const { data: searchedIssues } = useIssueSearch(
-    projectId,
-    {
-      query: { name: throttledSearchName },
-      page: 0,
-      limit: 1000,
-      sort: { feedbackCount: 'desc' },
-    },
-    {
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-      refetchOnReconnect: false,
-      refetchInterval: false,
-    },
-  );
+  const [currentIssues, setCurrentIssues] = useState<Issue[]>([]);
 
   const { data } = useOAIQuery({
     path: '/api/admin/statistics/feedback-issue',
@@ -82,7 +80,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
         pathParams: { projectId },
       })
       .then(({ data }) => setCurrentIssues(data?.items ?? []));
-  }, []);
+  }, [projectId]);
 
   const { chartData, dataKeys } = useLineChartData(
     from,
@@ -98,15 +96,31 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     })),
   );
 
-  const handleIssueCheck = (issue: { id: number; name: string }) => {
+  const {
+    data: allIssueData,
+    fetchNextPage,
+    hasNextPage,
+  } = useIssueSearchInfinite(Number(projectId), {
+    limit: 10,
+    queries: [{ name: throttledSearchName, condition: 'CONTAINS' }],
+  });
+
+  const allIssues = useMemo(() => {
+    return allIssueData.pages
+      .map((v) => v?.items)
+      .filter((v) => !!v)
+      .flat();
+  }, [allIssueData]);
+
+  const handleIssueCheck = (issue: Issue) => {
     if (currentIssues.length === 5) {
-      toast.negative({ title: t('popover.select-issue.max-issue-count') });
+      toast.error(t('popover.select-issue.max-issue-count'));
       return;
     }
     setCurrentIssues((prev) => [...prev, issue]);
     setSearchName('');
   };
-  const handleIssueUncheck = (issue: { id: number; name: string }) => {
+  const handleIssueUncheck = (issue: Issue) => {
     setCurrentIssues((prev) => prev.filter((v) => v.id !== issue.id));
   };
 
@@ -121,58 +135,64 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       data={chartData}
       showLegend
       filterContent={
-        <>
-          <div className="border-b-fill-tertiary flex flex-wrap gap-2 border-b-[1px] px-3 py-2">
-            {currentIssues.map((v) => (
-              <Badge key={v.id} type="tertiary">
-                <span className="font-12-regular">{v.name}</span>
-                <Icon
-                  className="ml-1 cursor-pointer"
-                  name="Close"
-                  size={12}
-                  onClick={() => handleIssueUncheck(v)}
-                />
-              </Badge>
-            ))}
-            {showInput ?
-              <input
-                className="input-sm h-[28px] w-[90px]"
-                onChange={(e) => setSearchName(e.target.value)}
-                value={searchName}
-                onBlur={() => setShowInput(false)}
-                autoFocus
-              />
-            : <div
-                className="border-fill-tertiary flex cursor-pointer items-center gap-1 rounded-[20px] border px-3 py-1"
-                onClick={() => setShowInput(true)}
+        <Combobox>
+          <ComboboxTrigger>
+            <Icon name="RiFilter3Line" />
+            Filter
+          </ComboboxTrigger>
+          <ComboboxContent>
+            <ComboboxInput
+              onValueChange={(value) => setSearchName(value)}
+              value={searchName}
+            />
+            <ComboboxList maxHeight="200px">
+              <ComboboxEmpty>No results found.</ComboboxEmpty>
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    Selected Issue
+                  </span>
+                }
               >
-                <Icon name="Search" size={12} />
-                <span className="font-12-regular">
-                  {t('popover.select-issue.search-issue')}
-                </span>
-              </div>
-            }
-          </div>
-          <p className="font-14-regular text-secondary px-3 py-2">
-            {t('popover.select-issue.issue-list')}
-          </p>
-          <ul className="max-h-[150px] overflow-auto">
-            {searchedIssues?.items
-              .filter(
-                (issue) => !currentIssues.some(({ id }) => id === issue.id),
-              )
-              .map((issue) => (
-                <li key={issue.id} className="px-3 py-2">
-                  <label
-                    className="flex cursor-pointer items-center gap-2 py-1"
-                    onClick={() => handleIssueCheck(issue)}
+                {currentIssues.map((issue) => (
+                  <ComboboxItem
+                    key={issue.id}
+                    onSelect={() => handleIssueUncheck(issue)}
                   >
-                    <p className="font-12-regular flex-1">{issue.name}</p>
-                  </label>
-                </li>
-              ))}
-          </ul>
-        </>
+                    <IssueBadge name={issue.name} status={issue.status} />
+                  </ComboboxItem>
+                ))}
+              </ComboboxGroup>
+              {allIssues.length > 0 && (
+                <ComboboxGroup
+                  heading={
+                    <span className="text-neutral-tertiary text-base-normal">
+                      Issue List
+                    </span>
+                  }
+                >
+                  {allIssues
+                    .filter(
+                      (v) => !currentIssues.some((issue) => issue.id === v.id),
+                    )
+                    .map((issue) => (
+                      <ComboboxItem
+                        key={issue.id}
+                        value={issue.name}
+                        onSelect={() => handleIssueCheck(issue)}
+                      >
+                        <IssueBadge name={issue.name} status={issue.status} />
+                      </ComboboxItem>
+                    ))}
+                  <InfiniteScrollArea
+                    fetchNextPage={fetchNextPage}
+                    hasNextPage={hasNextPage}
+                  />
+                </ComboboxGroup>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
       }
     />
   );

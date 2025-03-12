@@ -169,7 +169,9 @@ export class FieldMySQLService {
 
     const updatingFieldDtos = fields.filter(
       (v) =>
-        v.id && !['id', 'createdAt', 'updatedAt', 'issues'].includes(v.key),
+        v.id &&
+        (!['id', 'createdAt', 'updatedAt', 'issues'].includes(v.key) ||
+          v.order),
     );
 
     const fieldEntities = await this.repository.findBy({

@@ -15,24 +15,24 @@
  */
 import { useEffect } from 'react';
 import type { GetServerSideProps } from 'next';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
+import { Accordion, Button, Icon } from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared';
 import {
   CreateSectionTemplate,
+  CreationLayout,
   DEFAULT_LOCALE,
   Path,
   useOAIQuery,
 } from '@/shared';
-import { ChannelInfoForm, ImageConfigForm } from '@/entities/channel';
-import type { ChannelImageConfig, ChannelInfo } from '@/entities/channel';
-import { FieldTable, PreviewFieldTable } from '@/entities/field';
+import { ChannelInfoForm } from '@/entities/channel';
+import type { ChannelInfo } from '@/entities/channel';
+import { FieldTable } from '@/entities/field';
 import { ProjectGuard } from '@/entities/project';
 
 interface IProps {
@@ -53,94 +53,51 @@ const CompleteChannelCreationPage: NextPageWithLayout<IProps> = () => {
   });
 
   const channelInfoFormMethods = useForm<ChannelInfo>();
-  const imageConfigFormMethods = useForm<ChannelImageConfig>();
 
   useEffect(() => {
     if (!data) return;
     channelInfoFormMethods.reset(data);
-    imageConfigFormMethods.reset(data.imageConfig);
   }, [data]);
 
   const gotoFeedback = () =>
     router.push({ pathname: Path.FEEDBACK, query: { channelId, projectId } });
 
   return (
-    <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
-      <Header goOut={gotoFeedback} />
-      <div className="flex flex-col items-center gap-3 py-6">
-        <Icon
-          name="Check"
-          size={48}
-          className="bg-blue-primary text-above-primary rounded-full"
-        />
-        <p className="font-20-bold">
-          {t('main.create-channel.complete-title')}
+    <CreationLayout
+      title={t('main.create-channel.complete-title')}
+      leftPanel={
+        <p className="text-neutral-secondary text-large-normal whitespace-pre-line">
+          {t('v2.description.create-channel')}
         </p>
-      </div>
-      <CreateSectionTemplate
-        title={t('channel-setting-menu.channel-info')}
-        defaultOpen
-      >
-        <FormProvider {...channelInfoFormMethods}>
-          <ChannelInfoForm readOnly />
-        </FormProvider>
-      </CreateSectionTemplate>
-      <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
-        <FieldTable fields={data?.fields ?? []} />
-      </CreateSectionTemplate>
-      <CreateSectionTemplate title={t('channel-setting-menu.image-mgmt')}>
-        <FormProvider {...imageConfigFormMethods}>
-          <ImageConfigForm readOnly />
-        </FormProvider>
-      </CreateSectionTemplate>
-      <CreateSectionTemplate title={t('main.setting.field-mgmt.preview')}>
-        <PreviewFieldTable fields={data?.fields ?? []} />
-      </CreateSectionTemplate>
-
-      <div className="border-fill-tertiary flex rounded border p-6">
-        <div className="flex flex-1 items-center gap-2.5">
-          <Image
-            src="/assets/images/logo.svg"
-            alt="logo"
-            width={24}
-            height={24}
-          />
-          <p className="font-12-regular whitespace-pre-line">
-            {t('main.create-channel.finish-channel-creation')}
-          </p>
-        </div>
-        <button
-          className="btn btn-lg btn-blue w-[160px]"
-          onClick={gotoFeedback}
+      }
+    >
+      <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+        <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
+        <Accordion
+          type="multiple"
+          defaultValue={[t('channel-setting-menu.channel-info')]}
+          className="overflow-auto"
         >
-          {t('button.start')}
-        </button>
+          <CreateSectionTemplate
+            title={t('channel-setting-menu.channel-info')}
+            defaultOpen
+          >
+            <FormProvider {...channelInfoFormMethods}>
+              <ChannelInfoForm readOnly />
+            </FormProvider>
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('channel-setting-menu.field-mgmt')}>
+            <FieldTable fields={data?.fields ?? []} disableFilter />
+          </CreateSectionTemplate>
+        </Accordion>
+        <div className="create-template-footer flex justify-end gap-2">
+          <Button onClick={gotoFeedback}>
+            <Icon name="RiSparklingFill" />
+            {t('button.start')}
+          </Button>
+        </div>
       </div>
-    </div>
-  );
-};
-
-const Header: React.FC<{ goOut: () => void }> = ({ goOut }) => {
-  const { t } = useTranslation();
-  return (
-    <div className="flex h-12 items-center justify-between">
-      <div className="flex items-center gap-1">
-        <Image
-          src="/assets/images/logo.svg"
-          alt="logo"
-          width={24}
-          height={24}
-        />
-        <Icon name="Title" className="h-[24px] w-[123px]" />
-      </div>
-      <button
-        className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
-        onClick={goOut}
-      >
-        <Icon name="Out" size={16} />
-        <span className="font-12-bold uppercase">{t('button.get-out')}</span>
-      </button>
-    </div>
+    </CreationLayout>
   );
 };
 

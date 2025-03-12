@@ -31,6 +31,7 @@ import { IssueEntity } from '../project/issue/issue.entity';
 import { ProjectEntity } from '../project/project/project.entity';
 import { UserTypeEnum } from '../user/entities/enums';
 import { UserEntity } from '../user/entities/user.entity';
+import { UserPasswordService } from '../user/user-password.service';
 import type { FeedbackCountByTenantIdDto } from './dtos';
 import { SetupTenantDto, UpdateTenantDto } from './dtos';
 import {
@@ -57,6 +58,7 @@ export class TenantService {
     private readonly feedbackService: FeedbackService,
     private readonly schedulerRegistry: SchedulerRegistry,
     private readonly schedulerLockService: SchedulerLockService,
+    private readonly userPasswordService: UserPasswordService,
   ) {}
 
   @Transactional()
@@ -69,9 +71,10 @@ export class TenantService {
     );
 
     const user = new UserEntity();
-    user.email = 'user@feedback.com';
-    user.hashPassword =
-      '$2b$10$87iuFh.Yty8esbdmuB4bz.NNVh0thMWtf0MPfajzqjvxHfRf6zR0C';
+    user.email = dto.email;
+    user.hashPassword = await this.userPasswordService.createHashPassword(
+      dto.password,
+    );
     user.type = UserTypeEnum.SUPER;
     await this.userRepo.save(user);
 
@@ -90,7 +93,6 @@ export class TenantService {
 
     return {
       ...tenants[0],
-      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
   }
 

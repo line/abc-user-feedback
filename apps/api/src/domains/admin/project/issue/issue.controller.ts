@@ -38,7 +38,7 @@ import { CreateIssueDto } from './dtos';
 import {
   CreateIssueRequestDto,
   DeleteIssuesRequestDto,
-  FindIssuesByProjectIdRequestDto,
+  FindIssuesByProjectIdRequestDtoV2,
   UpdateIssueRequestDto,
 } from './dtos/requests';
 import {
@@ -70,12 +70,38 @@ export class IssueController {
   }
 
   @ApiParam({ name: 'projectId', type: Number })
-  @ApiOkResponse({ type: [FindIssueByIdResponseDto] })
+  @ApiOkResponse({ type: FindIssueByIdResponseDto })
   @Get(':issueId')
   async findById(@Param('issueId', ParseIntPipe) issueId: number) {
     return FindIssueByIdResponseDto.transform(
       await this.issueService.findById({ issueId }),
     );
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @ApiBearerAuth()
+  @Put(':issueId/category/:categoryId')
+  async updateByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.updateByCategoryId({
+      issueId,
+      categoryId,
+    });
+  }
+
+  @ApiParam({ name: 'projectId', type: Number })
+  @ApiBearerAuth()
+  @Delete(':issueId/category/:categoryId')
+  async deleteByCategoryId(
+    @Param('issueId', ParseIntPipe) issueId: number,
+    @Param('categoryId', ParseIntPipe) categoryId: number,
+  ) {
+    await this.issueService.deleteByCategoryId({
+      issueId,
+      categoryId,
+    });
   }
 
   @ApiParam({ name: 'projectId', type: Number })
@@ -85,10 +111,10 @@ export class IssueController {
   @Post('search')
   async findAllByProjectId(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Body() body: FindIssuesByProjectIdRequestDto,
+    @Body() body: FindIssuesByProjectIdRequestDtoV2,
   ) {
     return FindIssuesByProjectIdResponseDto.transform(
-      await this.issueService.findIssuesByProjectId({
+      await this.issueService.findIssuesByProjectIdV2({
         ...body,
         projectId,
       }),

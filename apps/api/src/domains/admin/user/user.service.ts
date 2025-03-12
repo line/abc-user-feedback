@@ -15,12 +15,12 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
-import { In, Like, Raw, Repository } from 'typeorm';
+import { Brackets, In, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 
+import { QueryV2ConditionsEnum } from '@/common/enums';
 import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
 import type { FindAllUsersDto } from './dtos';
@@ -33,11 +33,6 @@ import {
   UserNotFoundException,
 } from './exceptions';
 
-interface ValueRange {
-  lt: string | number;
-  gte: string | number;
-}
-
 @Injectable()
 export class UserService {
   constructor(
@@ -47,35 +42,81 @@ export class UserService {
     private readonly codeService: CodeService,
   ) {}
 
-  async findAll({ options, query, order }: FindAllUsersDto) {
-    const where =
-      query ?
-        Object.entries(query).reduce((prev, [key, value]) => {
-          if (key === 'projectId') {
-            return { ...prev, members: { role: { project: { id: value } } } };
-          }
-          if (key === 'createdAt') {
-            const { lt, gte } = value as unknown as ValueRange;
-            return {
-              ...prev,
-              createdAt: Raw((alias) => `${alias} >= :gte AND ${alias} < :lt`, {
-                lt,
-                gte,
-              }),
-            };
-          }
-          return { ...prev, [key]: Like(`%${value}%`) };
-        }, {})
-      : {};
+  async findAll(dto: FindAllUsersDto) {
+    const { queries = [], operator = 'AND', order } = dto;
+    const page = Number(dto.options.page);
+    const limit = Number(dto.options.limit);
 
-    return await paginate(
-      this.userRepo.createQueryBuilder().setFindOptions({
-        where,
-        order,
-        relations: { members: { role: { project: true } } },
+    const queryBuilder = this.userRepo
+      .createQueryBuilder('users')
+      .leftJoinAndSelect('users.members', 'members')
+      .leftJoinAndSelect('members.role', 'role')
+      .leftJoinAndSelect('role.project', 'project');
+
+    const createdAtCondition = queries.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      queryBuilder.andWhere('users.created_at >= :gte', { gte });
+      queryBuilder.andWhere('users.created_at < :lt', { lt });
+    }
+
+    const method = operator === 'AND' ? 'andWhere' : 'orWhere';
+
+    queryBuilder.andWhere(
+      new Brackets((qb) => {
+        let paramIndex = 0;
+        for (const query of queries) {
+          const { condition } = query;
+          for (const [fieldKey, value] of Object.entries(query)) {
+            if (fieldKey === 'condition') continue;
+
+            const paramName = `value${paramIndex++}`;
+
+            if (fieldKey === 'type') {
+              qb[method](`users.type IN (:...${paramName})`, {
+                [paramName]: value,
+              });
+            } else if (fieldKey === 'projectId') {
+              qb[method](`project.id IN (:...${paramName})`, {
+                [paramName]: value,
+              });
+            } else if (['email', 'name', 'department'].includes(fieldKey)) {
+              const operator =
+                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+              const valueFormat =
+                condition === QueryV2ConditionsEnum.IS ?
+                  value?.toString().toLowerCase()
+                : `%${value?.toString().toLowerCase()}%`;
+              qb[method](`LOWER(users.${fieldKey}) ${operator} :${paramName}`, {
+                [paramName]: valueFormat,
+              });
+            }
+          }
+        }
       }),
-      options,
     );
+
+    if (order?.createdAt) {
+      queryBuilder.addOrderBy(`users.created_at`, order.createdAt);
+    }
+
+    const items = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .getMany();
+
+    const total = await queryBuilder.getCount();
+
+    return {
+      items,
+      meta: {
+        itemCount: items.length,
+        totalItems: total,
+        itemsPerPage: limit,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   async findByEmailAndSignUpMethod(

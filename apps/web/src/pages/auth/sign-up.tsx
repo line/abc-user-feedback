@@ -14,27 +14,53 @@
  * under the License.
  */
 import type { GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE, LogoWithTitle } from '@/shared';
+import { toast } from '@ufb/react';
+
+import {
+  AnonymousTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  useOAIMutation,
+} from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
-import { MainLayout } from '@/widgets';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 const SignUpPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
+  const router = useRouter();
+
+  const { mutate: signUp, isPending } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/auth/signUp/email',
+    queryOptions: {
+      async onSuccess() {
+        await router.push(Path.SIGN_IN);
+        toast.success(t('v2.toast.success'));
+      },
+    },
+  });
 
   return (
-    <div className="relative">
-      <LogoWithTitle title={t('auth.sign-up.title')} />
-      <SignUpWithEmailForm />
-    </div>
+    <AnonymousTemplate
+      title={t('v2.auth.sign-up.title')}
+      image="/assets/images/sign-up.svg"
+    >
+      <SignUpWithEmailForm
+        onSubmit={signUp}
+        loading={isPending}
+        submitText={t('button.sign-up')}
+      />
+    </AnonymousTemplate>
   );
 };
 
 SignUpPage.getLayout = (page) => {
-  return <MainLayout center>{page}</MainLayout>;
+  return <AnonymousLayout>{page}</AnonymousLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

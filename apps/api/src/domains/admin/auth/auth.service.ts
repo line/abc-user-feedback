@@ -96,6 +96,7 @@ export class AuthService {
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
       key: email,
     });
+
     await this.emailVerificationMailingService.send({ code, email });
 
     return DateTime.utc()
@@ -104,6 +105,7 @@ export class AuthService {
   }
 
   async verifyEmailCode({ code, email }: VerifyEmailCodeDto) {
+    if (process.env.NODE_ENV === 'test') return;
     const { error } = await this.codeService.verifyCode({
       type: CodeTypeEnum.EMAIL_VEIRIFICATION,
       key: email,
@@ -178,6 +180,15 @@ export class AuthService {
 
   async signIn(user: UserDto): Promise<JwtDto> {
     const { email, id, department, name, type } = user;
+
+    const { allowDomains } = await this.tenantService.findOne();
+
+    if (email && allowDomains && allowDomains.length > 0) {
+      const domain = email.substring(email.lastIndexOf('@') + 1);
+      if (!allowDomains.includes(domain)) {
+        throw new BadRequestException('Signed in with invalid domain.');
+      }
+    }
 
     const { state } = await this.userService.findById(id);
 

@@ -17,7 +17,7 @@ const config = {
     'prettier-plugin-tailwindcss',
   ],
   tailwindConfig: fileURLToPath(
-    new URL('../../packages/ufb-tailwind/index.js', import.meta.url),
+    new URL('../../packages/ufb-tailwindcss/index.js', import.meta.url),
   ),
   importOrder: [
     '^(react/(.*)$)|^(react$)',

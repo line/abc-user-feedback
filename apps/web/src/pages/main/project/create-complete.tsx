@@ -17,29 +17,31 @@ import React, { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
-import { Icon } from '@ufb/ui';
+import { Accordion, Button } from '@ufb/react';
 
 import {
   CreateSectionTemplate,
+  CreationLayout,
   DEFAULT_LOCALE,
   Path,
   useOAIQuery,
 } from '@/shared';
 import { ApiKeyTable } from '@/entities/api-key';
-import type { IssueTracker } from '@/entities/issue-tracker';
-import { IssueTrackerForm } from '@/entities/issue-tracker';
 import { MemberTable } from '@/entities/member';
+import { useMembmerSearch } from '@/entities/member/lib';
 import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm } from '@/entities/project';
 import { RoleTable } from '@/entities/role';
+import { useCreateChannelStore } from '@/features/create-channel';
 
 const CompleteProjectCreationPage: NextPage = () => {
   const { t } = useTranslation();
   const router = useRouter();
+  const { reset } = useCreateChannelStore();
   const projectId = Number(router.query.projectId);
 
   const { data: project } = useOAIQuery({
@@ -55,121 +57,83 @@ const CompleteProjectCreationPage: NextPage = () => {
     path: '/api/admin/projects/{projectId}/roles',
     variables: { projectId },
   });
-  const { data: issueTracker } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/issue-tracker',
-    variables: { projectId },
-  });
-  const { data: members } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/members',
-    variables: { projectId, createdAt: 'ASC' },
-  });
+  const { data: members } = useMembmerSearch(projectId, {});
 
   const projectInfoFormMethods = useForm<ProjectInfo>();
-  const issueTrackerFormMethods = useForm<IssueTracker>();
 
   useEffect(() => {
-    if (!project || !issueTracker) return;
+    if (!project) return;
     projectInfoFormMethods.reset(project);
-    issueTrackerFormMethods.reset(issueTracker.data);
-  }, [project, issueTracker]);
+  }, [project]);
 
   return (
-    <div className="m-auto flex min-h-screen w-[1040px] flex-col gap-4 pb-6">
-      <Header />
-      <div className="flex flex-col items-center gap-3 py-6">
-        <Icon
-          name="Check"
-          size={48}
-          className="bg-blue-primary text-above-primary rounded-full"
-        />
-        <p className="font-20-bold">
-          {t('main.create-project.complete-title')}
+    <CreationLayout
+      title={t('main.create-project.complete-title')}
+      leftPanel={
+        <p className="text-neutral-secondary text-large-normal whitespace-pre-line">
+          {t('v2.description.create-project')}
         </p>
-      </div>
-      <CreateSectionTemplate
-        title={t('project-setting-menu.project-info')}
-        defaultOpen
-      >
-        <FormProvider {...projectInfoFormMethods}>
-          <ProjectInfoForm type="update" readOnly />
-        </FormProvider>
-      </CreateSectionTemplate>
-      <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
-        <RoleTable roles={roles?.roles ?? []} />
-      </CreateSectionTemplate>
-      <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
-        <MemberTable
-          members={members?.members ?? []}
-          roles={roles?.roles ?? []}
-        />
-      </CreateSectionTemplate>
-      <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
-        <ApiKeyTable apiKeys={apiKeys?.items ?? []} />
-      </CreateSectionTemplate>
-      <CreateSectionTemplate
-        title={t('project-setting-menu.issue-tracker-mgmt')}
-      >
-        <FormProvider {...issueTrackerFormMethods}>
-          <IssueTrackerForm readOnly />
-        </FormProvider>
-      </CreateSectionTemplate>
-      <div className="border-fill-tertiary flex rounded border p-6">
-        <div className="flex flex-1 items-center gap-2.5">
-          <Icon
-            name="InfoCircleFill"
-            size={24}
-            className="text-green-primary"
+      }
+      leftBottm={
+        <div className="flex justify-end">
+          <Image
+            src={`/assets/images/create-complete.svg`}
+            alt="Create Project"
+            className="align"
+            width={320}
+            height={320}
           />
-          <p className="font-12-regular whitespace-pre-line">
-            {t('main.create-project.continue-channel-creation')}
-          </p>
         </div>
-        <div className="flex gap-2">
-          <button
-            className="btn btn-lg btn-secondary w-[160px]"
-            onClick={() => router.push({ pathname: Path.MAIN })}
+      }
+    >
+      <div className="border-neutral-tertiary flex h-[calc(100vh-100px)] w-full flex-col gap-4 overflow-auto rounded border p-6">
+        <h3 className="text-title-h3">{t('v2.text.summary')}</h3>
+        <Accordion
+          type="multiple"
+          defaultValue={[t('project-setting-menu.project-info')]}
+          className="overflow-auto"
+        >
+          <CreateSectionTemplate
+            title={t('project-setting-menu.project-info')}
+            defaultOpen
           >
-            {t('button.next-time')}
-          </button>
-          <button
-            className="btn btn-lg btn-blue w-[160px]"
+            <FormProvider {...projectInfoFormMethods}>
+              <ProjectInfoForm type="update" readOnly />
+            </FormProvider>
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('project-setting-menu.role-mgmt')}>
+            <RoleTable roles={roles?.roles ?? []} />
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('project-setting-menu.member-mgmt')}>
+            <MemberTable data={members?.items ?? []} />
+          </CreateSectionTemplate>
+          <CreateSectionTemplate title={t('project-setting-menu.api-key-mgmt')}>
+            <ApiKeyTable data={apiKeys?.items ?? []} />
+          </CreateSectionTemplate>
+        </Accordion>
+        <div className="create-template-footer flex justify-end gap-2">
+          <Button
+            variant="outline"
             onClick={() =>
-              router.push({
-                pathname: Path.CREATE_CHANNEL,
-                query: { projectId },
-              })
+              router.push({ pathname: Path.DASHBOARD, query: { projectId } })
             }
           >
+            {t('button.next-time')}
+          </Button>
+          <Button
+            onClick={async () => {
+              reset();
+              await router.push({
+                pathname: Path.CREATE_CHANNEL,
+                query: { projectId },
+              });
+            }}
+          >
             {t('main.setting.button.create-channel')}
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
-  );
-};
-
-const Header: React.FC = () => {
-  const { t } = useTranslation();
-  const router = useRouter();
-  return (
-    <div className="flex h-12 items-center justify-between">
-      <div className="flex items-center gap-1">
-        <Image
-          src="/assets/images/logo.svg"
-          alt="logo"
-          width={24}
-          height={24}
-        />
-        <Icon name="Title" className="h-[24px] w-[123px]" />
-      </div>
-      <button
-        className="btn btn-sm btn-secondary min-w-0 gap-1 px-2"
-        onClick={() => router.push(Path.MAIN)}
-      >
-        <Icon name="Out" size={16} />
-        <span className="font-12-bold uppercase">{t('button.get-out')}</span>
-      </button>
-    </div>
+    </CreationLayout>
   );
 };
 

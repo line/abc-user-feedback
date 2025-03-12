@@ -18,58 +18,20 @@ import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
 import type { TFunction } from 'next-i18next';
 
-import {
-  DATE_TIME_FORMAT,
-  ExpandableText,
-  ISSUES,
-  TableCheckbox,
-} from '@/shared';
+import { Tag } from '@ufb/react';
+
+import { DATE_TIME_FORMAT, ExpandableText, ISSUES } from '@/shared';
+import CategoryCombobox from '@/shared/ui/category-combobox.ui';
 import type { Issue } from '@/entities/issue';
-import { IssueBadge, IssueCircle } from '@/entities/issue';
+import { IssueBadge } from '@/entities/issue';
 
 import TicketLink from './ui/ticket-link.ui';
 
 const columnHelper = createColumnHelper<Issue>();
 
-export const getColumns = (t: TFunction, projectId: number) => [
-  columnHelper.display({
-    id: 'select',
-    header: ({ table }) => (
-      <TableCheckbox
-        checked={table.getIsAllRowsSelected()}
-        indeterminate={table.getIsSomeRowsSelected()}
-        onChange={table.getToggleAllRowsSelectedHandler()}
-      />
-    ),
-    cell: ({ row }) => (
-      <TableCheckbox
-        checked={row.getIsSelected()}
-        disabled={!row.getCanSelect()}
-        indeterminate={row.getIsSomeSelected()}
-        onChange={row.getToggleSelectedHandler()}
-      />
-    ),
-    size: 40,
-    enableResizing: false,
-  }),
-  columnHelper.accessor('id', {
-    header: 'ID',
-    cell: ({ getValue, row }) => (
-      <ExpandableText isExpanded={row.getIsExpanded()}>
-        {getValue()}
-      </ExpandableText>
-    ),
-    size: 50,
-    minSize: 50,
-    enableSorting: false,
-  }),
+export const getColumnsByCategory = (t: TFunction, projectId: number) => [
   columnHelper.accessor('name', {
-    header: 'Name',
-    cell: ({ row }) => (
-      <div className="overflow-hidden">
-        <IssueBadge issue={row.original} />
-      </div>
-    ),
+    header: 'Title',
     size: 150,
     minSize: 50,
     enableSorting: false,
@@ -88,17 +50,17 @@ export const getColumns = (t: TFunction, projectId: number) => [
       </ExpandableText>
     ),
     enableSorting: false,
-    size: 300,
+    size: 200,
     minSize: 100,
   }),
   columnHelper.accessor('status', {
     header: 'Status',
     enableSorting: false,
-    cell: ({ getValue }) => (
-      <div className="flex items-center gap-1">
-        <IssueCircle issueKey={getValue()} />
-        {ISSUES(t).find((v) => v.key === getValue())?.name}
-      </div>
+    cell: ({ row }) => (
+      <IssueBadge
+        name={ISSUES(t).find((v) => v.key === row.original.status)?.name ?? '-'}
+        status={row.original.status}
+      />
     ),
     size: 100,
     minSize: 100,
@@ -115,13 +77,27 @@ export const getColumns = (t: TFunction, projectId: number) => [
   columnHelper.accessor('createdAt', {
     header: 'Created',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
-    size: 100,
+    size: 150,
     minSize: 50,
   }),
   columnHelper.accessor('updatedAt', {
     header: 'Updated',
     cell: ({ getValue }) => <>{dayjs(getValue()).format(DATE_TIME_FORMAT)}</>,
-    size: 100,
+    size: 150,
     minSize: 50,
+  }),
+  columnHelper.display({
+    id: 'Action',
+    header: 'Category',
+    cell: ({ row }) => {
+      const { category, id } = row.original;
+      return (
+        <CategoryCombobox issueId={id} category={category}>
+          <Tag variant="outline" size="small">
+            {category ? 'Edit' : 'Add'}
+          </Tag>
+        </CategoryCombobox>
+      );
+    },
   }),
 ];

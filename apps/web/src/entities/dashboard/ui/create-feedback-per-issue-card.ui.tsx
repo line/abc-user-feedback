@@ -14,7 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { DashboardCard, useOAIQuery } from '@/shared';
 
@@ -48,6 +48,7 @@ const CreateFeedbackPerIssueCard: React.FC<IProps> = (props) => {
           'YYYY/MM/DD',
         )}`,
       })}`}
+      type="issue"
     />
   );
 };

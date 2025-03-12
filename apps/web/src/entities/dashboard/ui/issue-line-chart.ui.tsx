@@ -14,7 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { getDayCount, SimpleLineChart, useOAIQuery } from '@/shared';
 
@@ -61,7 +61,6 @@ const IssueLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       height={400}
       data={chartData}
       dataKeys={dataKeys}
-      noLabel
     />
   );
 };

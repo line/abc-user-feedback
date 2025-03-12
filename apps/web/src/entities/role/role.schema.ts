@@ -21,6 +21,15 @@ import { PermissionList } from './permission.type';
 
 export const roleSchema = z.object({
   id: z.number(),
-  name: z.string().min(1, i18n?.t('hint.required')).max(20),
+  name: z
+    .string()
+    .trim()
+    .min(1, { message: i18n?.t('hint.required') })
+    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
   permissions: z.array(z.enum(PermissionList)),
+});
+
+// id optional로 변경
+export const roleInfoSchema = roleSchema.extend({
+  id: z.number().optional(),
 });

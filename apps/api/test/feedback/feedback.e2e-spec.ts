@@ -36,11 +36,6 @@ import { ProjectService } from '@/domains/admin/project/project/project.service'
 import { createFieldDto, getRandomValue } from '@/test-utils/fixtures';
 import { clearEntities } from '@/test-utils/util-functions';
 
-interface OpenSearchResponse {
-  _source: Record<string, any>;
-  total: { value: number };
-}
-
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
@@ -81,7 +76,7 @@ describe('AppController (e2e)', () => {
     await app.close();
   });
 
-  let channel: ChannelEntity;
+  let channel: ChannelEntity = new ChannelEntity();
   let fields: FieldEntity[];
   beforeEach(async () => {
     await clearEntities([projectRepo, channelRepo, fieldRepo]);
@@ -105,7 +100,7 @@ describe('AppController (e2e)', () => {
       imageConfig: null,
     });
 
-    const channel = await channelService.findById({ channelId });
+    channel = await channelService.findById({ channelId });
 
     fields = await fieldRepo.find({
       where: { channel: { id: channel.id } },
@@ -132,15 +127,15 @@ describe('AppController (e2e)', () => {
           body: Record<string, any> & { issueNames?: string[] };
         }) => {
           expect(body.id).toBeDefined();
-          const esResult = await osService.get<OpenSearchResponse>({
+          const esResult = await osService.get({
             id: body.id as string,
             index: channel.id.toString(),
           });
 
-          delete esResult.body._source[
+          delete esResult.body._source?.[
             (fields.find((v) => v.name === 'createdAt') ?? { id: 0 }).id
           ];
-          expect(toApi(dto, fields)).toMatchObject(esResult.body._source);
+          expect(toApi(dto, fields)).toMatchObject(esResult.body._source ?? {});
         },
       );
   });
@@ -194,12 +189,12 @@ describe('AppController (e2e)', () => {
       .send({ value: newValue })
       .expect(200)
       .then(async () => {
-        const { body } = await osService.get<OpenSearchResponse>({
+        const { body } = await osService.get({
           id: feedbackId.toString(),
           index: channel.id.toString(),
         });
 
-        expect(body._source[targetField.id]).toEqual(
+        expect(body._source?.[targetField.id]).toEqual(
           targetField.format === FieldFormatEnum.select ?
             ((targetField.options ?? []).find((v) => v.name === newValue) ??
               { id: 0 }.id)

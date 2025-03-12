@@ -16,6 +16,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Expose, plainToInstance, Type } from 'class-transformer';
 
+import { PaginationResponseDto } from '@/common/dtos';
 import { PermissionEnum } from '@/domains/admin/project/role/permission.enum';
 
 class MemberRoleDto {
@@ -28,7 +29,11 @@ class MemberRoleDto {
   name: string;
 
   @Expose()
-  @ApiProperty({ type: [PermissionEnum], enum: PermissionEnum })
+  @ApiProperty({
+    type: [PermissionEnum],
+    enum: PermissionEnum,
+    enumName: 'PermissionEnum',
+  })
   permissions: PermissionEnum[];
 }
 class MemberUserDto {
@@ -68,19 +73,14 @@ class GetAllMember {
   @ApiProperty()
   createdAt: Date;
 }
-
-export class GetAllMemberResponseDto {
+export class GetAllMemberResponseDto extends PaginationResponseDto<GetAllMember> {
   @Expose()
   @ApiProperty({ type: [GetAllMember] })
   @Type(() => GetAllMember)
-  members: GetAllMember[];
+  items: GetAllMember[];
 
-  @Expose()
-  @ApiProperty()
-  total: number;
-
-  public static transform(plain: unknown): GetAllMemberResponseDto {
-    return plainToInstance(GetAllMemberResponseDto, plain, {
+  public static transform(params: any) {
+    return plainToInstance(GetAllMemberResponseDto, params, {
       excludeExtraneousValues: true,
     });
   }

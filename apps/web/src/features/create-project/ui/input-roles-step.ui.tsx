@@ -13,8 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { Role } from '@/entities/role';
-import { CreateRolePopover, RoleTable } from '@/entities/role';
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
+
+import { Button } from '@ufb/react';
+
+import type { PermissionType, Role } from '@/entities/role';
+import { RoleFormSheet, RoleTable } from '@/entities/role';
 
 import { useCreateProjectStore } from '../create-project-model';
 import CreateProjectInputTemplate from './create-project-input-template.ui';
@@ -22,15 +27,17 @@ import CreateProjectInputTemplate from './create-project-input-template.ui';
 interface IProps {}
 
 const InputRolesStep: React.FC<IProps> = () => {
-  const { onChangeInput, input } = useCreateProjectStore();
+  const { onChangeInput, input, jumpStepByKey } = useCreateProjectStore();
+  const overlay = useOverlay();
+  const { t } = useTranslation();
 
-  const onCreateRole = (name: string) => {
+  const onCreateRole = (name: string, permissions: PermissionType[]) => {
     onChangeInput(
       'roles',
       input.roles.concat({
         id: (input.roles[input.roles.length - 1]?.id ?? 0) + 1,
         name,
-        permissions: [],
+        permissions,
       }),
     );
   };
@@ -49,18 +56,51 @@ const InputRolesStep: React.FC<IProps> = () => {
     );
   };
 
+  const openUpdateRoleSheet = (role: Role) => {
+    overlay.open(({ isOpen, close }) => (
+      <RoleFormSheet
+        isOpen={isOpen}
+        close={close}
+        data={role}
+        rows={input.roles}
+        onSubmit={({ name, permissions }) => {
+          onUpdateRole({ name, permissions, id: role.id });
+          close();
+        }}
+        onClickDelete={() => {
+          onDeleteRole(role);
+          close();
+        }}
+      />
+    ));
+  };
+
+  const openCreateRoleSheet = () => {
+    overlay.open(({ isOpen, close }) => (
+      <RoleFormSheet
+        isOpen={isOpen}
+        close={close}
+        rows={input.roles}
+        onSubmit={({ name, permissions }) => {
+          onCreateRole(name, permissions);
+          close();
+        }}
+      />
+    ));
+  };
+
   return (
     <CreateProjectInputTemplate
+      onClickBack={() => jumpStepByKey('members')}
       actionButton={
-        <CreateRolePopover onCreate={onCreateRole} roles={input.roles} />
+        <Button onClick={openCreateRoleSheet}>
+          {t('v2.button.name.create', { name: 'Role' })}
+        </Button>
       }
       disableNextBtn={input.roles.length === 0}
+      scrollable
     >
-      <RoleTable
-        roles={input.roles}
-        onUpdateRole={onUpdateRole}
-        onDeleteRole={onDeleteRole}
-      />
+      <RoleTable roles={input.roles} onClickRole={openUpdateRoleSheet} />
     </CreateProjectInputTemplate>
   );
 };

@@ -14,7 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import { DashboardCard, useOAIQuery } from '@/shared';
 
@@ -44,6 +44,7 @@ const TotalIssueCard: React.FC<IProps> = ({ from, to, projectId }) => {
 
   return (
     <DashboardCard
+      type="issue"
       data={data?.count ?? 0}
       title={t('dashboard-card.total-issue.title')}
       description={t('dashboard-card.total-issue.description', {

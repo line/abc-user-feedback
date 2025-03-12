@@ -13,32 +13,130 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
-import { DEFAULT_LOCALE, Path } from '@/shared';
+import { Button, toast } from '@ufb/react';
+
+import {
+  AnonymousTemplate,
+  DEFAULT_LOCALE,
+  Path,
+  TextInput,
+  useOAIMutation,
+} from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
+import type { SignUpWithEmailType } from '@/features/auth/sign-up-with-email';
+import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
 import { CreateTenantForm } from '@/features/create-tenant';
-import { MainLayout } from '@/widgets';
+import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+import { env } from '@/env';
+
+const STEPS = ['tenant', 'user', 'final'] as const;
 
 const CreateTenantPage: NextPageWithLayout = () => {
   const router = useRouter();
+  const { t } = useTranslation();
+
+  const [step, setStep] = useQueryState(
+    'step',
+    parseAsStringLiteral(STEPS)
+      .withDefault('tenant')
+      .withOptions({ history: 'push' }),
+  );
+
+  const [data, setData] = useState<{
+    tenant: { siteName: string } | null;
+    user: SignUpWithEmailType | null;
+  }>({
+    tenant: null,
+    user: null,
+  });
 
   const { tenant } = useTenantStore();
 
+  const { mutate: createTenant, isPending } = useOAIMutation({
+    method: 'post',
+    path: '/api/admin/tenants',
+    queryOptions: {
+      async onSuccess() {
+        await router.replace(Path.SIGN_IN);
+        router.reload();
+        toast.success(t('v2.toast.success'));
+      },
+    },
+  });
+
+  const onClickComplete = () => {
+    if (!data.tenant || !data.user) return;
+    createTenant({
+      siteName: data.tenant.siteName,
+      email: data.user.email,
+      password: data.user.password,
+    });
+  };
+
   useEffect(() => {
+    if (env.NODE_ENV === 'development') return;
     if (!tenant) return;
-    void router.replace(Path.SIGN_IN);
+    void router.replace(Path.MAIN);
   }, [tenant]);
 
-  return <CreateTenantForm />;
+  return (
+    <AnonymousTemplate
+      title={t('v2.create-tenant.tenant.title')}
+      description={t(`v2.create-tenant.${step}.description`)}
+      image={
+        step === 'final' ?
+          '/assets/images/complete-tenant-setting.svg'
+        : '/assets/images/tenant-setting.svg'
+      }
+    >
+      <div className="flex min-h-[300px] flex-col">
+        {step === 'tenant' && (
+          <CreateTenantForm
+            onSubmit={({ siteName }) => {
+              setData((prev) => ({ ...prev, tenant: { siteName } }));
+              void setStep('user');
+            }}
+            submitText={t('button.next')}
+            defaultValues={data.tenant}
+          />
+        )}
+        {step === 'user' && (
+          <SignUpWithEmailForm
+            onSubmit={(user) => {
+              setData((prev) => ({ ...prev, user }));
+              void setStep('final');
+            }}
+            submitText={t('button.next')}
+            initialValues={data.user}
+          />
+        )}
+        {step === 'final' && (
+          <>
+            <div className="mb-44 flex flex-col gap-4">
+              <TextInput label="Name" value={data.tenant?.siteName} disabled />
+              <TextInput label="Email" value={data.user?.email} disabled />
+            </div>
+            <Button size="medium" onClick={onClickComplete} loading={isPending}>
+              {t('v2.button.confirm')}
+            </Button>
+          </>
+        )}
+      </div>
+    </AnonymousTemplate>
+  );
 };
 
 CreateTenantPage.getLayout = (page) => {
-  return <MainLayout center> {page}</MainLayout>;
+  return <AnonymousLayout> {page}</AnonymousLayout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

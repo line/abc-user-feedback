@@ -14,127 +14,97 @@
  * under the License.
  */
 import { createColumnHelper } from '@tanstack/react-table';
+import dayjs from 'dayjs';
 
-import { Badge, Icon } from '@ufb/ui';
+import { Badge, Icon, Tag } from '@ufb/react';
 
-import { cn, displayString, usePermissions } from '@/shared';
+import { DATE_TIME_FORMAT, displayString, RowDragHandleCell } from '@/shared';
 
-import { FIELD_PROPERTY_TEXT, isDefaultField } from './field-utils';
+import { FIELD_PROPERTY_TEXT } from './field-utils';
+import {
+  FIELD_FORMAT_ICON_MAP,
+  FIELD_STATUS_COLOR_MAP,
+} from './field.constant';
 import type { FieldInfo } from './field.type';
-import FieldSettingPopover from './ui/field-setting-popover.ui';
 import OptionListPopover from './ui/option-list-popover.ui';
 
 const columnHelper = createColumnHelper<FieldInfo>();
 
-export const getFieldColumns = (
-  fieldRows: FieldInfo[],
-  onClickDelete?: (input: { index: number }) => void,
-  onClickModify?: (input: { index: number; field: FieldInfo }) => void,
-  isInputStep?: boolean,
-) => [
-  columnHelper.accessor('key', {
-    header: 'Key',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-    size: 120,
-  }),
-  columnHelper.accessor('name', {
-    header: 'Display Name',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-    size: 150,
-  }),
-  columnHelper.accessor('format', {
-    header: 'Format',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-    size: 100,
-  }),
-  columnHelper.accessor('description', {
-    header: 'Description',
-    cell: ({ getValue, row }) => (
-      <span className={cn({ 'text-secondary': isDefaultField(row.original) })}>
-        {displayString(getValue())}
-      </span>
-    ),
-  }),
-  columnHelper.accessor('options', {
-    header: 'Options',
-    cell: ({ getValue }) => {
-      const options = getValue() ?? [];
-      return options.length > 0 ? <OptionListPopover options={options} /> : '-';
-    },
-    size: 100,
-  }),
-  columnHelper.accessor('property', {
-    header: 'Property',
-    cell: ({ getValue }) => {
-      return <Badge type="secondary">{FIELD_PROPERTY_TEXT[getValue()]}</Badge>;
-    },
-    size: 120,
-  }),
-  ...(onClickDelete ?
-    [
+export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
+  [
+    reorder ?
       columnHelper.display({
-        id: 'delete',
-        header: () => <p className="w-full text-center">Delete</p>,
-        cell: ({ row }) => {
-          const perms = usePermissions();
-          return (
-            <div className="text-center">
-              <button
-                className="icon-btn icon-btn-sm icon-btn-tertiary"
-                disabled={
-                  isDefaultField(row.original) ||
-                  (!isInputStep && !!row.original.createdAt) ||
-                  (!isInputStep && !perms.includes('channel_field_update'))
-                }
-                onClick={() => onClickDelete({ index: row.index })}
-              >
-                <Icon name="TrashFill" />
-              </button>
-            </div>
-          );
-        },
-        size: 125,
-      }),
-    ]
-  : []),
-  ...(onClickModify ?
-    [
-      columnHelper.display({
-        id: 'edit',
-        header: () => <p className="text-center">Edit</p>,
-        cell: ({ row }) => {
-          const perms = usePermissions();
-
-          return (
-            <div className="text-center">
-              <FieldSettingPopover
-                onSave={(input) =>
-                  onClickModify({ field: input, index: row.index })
-                }
-                data={row.original}
-                disabled={
-                  isDefaultField(row.original) ||
-                  (!isInputStep && !perms.includes('channel_field_update'))
-                }
-                fieldRows={fieldRows}
-              />
-            </div>
-          );
-        },
-        size: 125,
-      }),
-    ]
-  : []),
-];
+        id: 'drag-handle',
+        cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
+        size: 10,
+        enableSorting: false,
+      })
+    : null,
+    columnHelper.accessor('key', {
+      header: 'Key',
+      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      enableSorting: false,
+    }),
+    columnHelper.accessor('name', {
+      header: 'Display Name',
+      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      enableSorting: false,
+    }),
+    columnHelper.accessor('format', {
+      header: 'Format',
+      cell: ({ getValue }) => (
+        <div className="flex items-center gap-1">
+          <Icon name={FIELD_FORMAT_ICON_MAP[getValue()]} size={16} />
+          {getValue()}
+        </div>
+      ),
+      enableSorting: false,
+    }),
+    columnHelper.accessor('options', {
+      header: 'Select Option',
+      cell: ({ getValue }) => {
+        const options = getValue() ?? [];
+        return options.length > 0 ?
+            <OptionListPopover options={options} />
+          : '-';
+      },
+      enableSorting: false,
+    }),
+    columnHelper.accessor('property', {
+      header: 'Property',
+      cell: ({ getValue }) => (
+        <Tag variant="secondary" radius="large">
+          {FIELD_PROPERTY_TEXT[getValue()]}
+        </Tag>
+      ),
+      enableSorting: false,
+      filterFn: (row, _, value: string[]) => {
+        return value.some((property) => property === row.getValue('property'));
+      },
+    }),
+    columnHelper.accessor('status', {
+      header: 'Status',
+      cell: ({ getValue }) => (
+        <Badge color={FIELD_STATUS_COLOR_MAP[getValue()]} radius="large">
+          {getValue()}
+        </Badge>
+      ),
+      enableSorting: false,
+      filterFn: (row, _, value: string[]) => {
+        return value.some((status) => status === row.getValue('status'));
+      },
+    }),
+    columnHelper.accessor('description', {
+      header: 'Description',
+      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      enableSorting: false,
+    }),
+    columnHelper.accessor('createdAt', {
+      header: 'Created',
+      cell: ({ getValue }) => (
+        <span>
+          {getValue() ? dayjs(getValue()).format(DATE_TIME_FORMAT) : '-'}
+        </span>
+      ),
+    }),
+  ].filter((v) => !!v);

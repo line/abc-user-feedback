@@ -15,11 +15,23 @@
  */
 export const CREATE_PROJECT_STEP_KEY_LIST = [
   'project-info',
-  'roles',
   'members',
-  'issue-tracker',
+  'roles',
   'api-keys',
 ] as const;
+
+export const CREATE_PROJECT_STEP_MAP: Record<CreateProjectStepKey, number> = {
+  'project-info': 0,
+  members: 1,
+  roles: 1,
+  'api-keys': 2,
+};
+
+export const CREATE_PROJECT_MAIN_STEP_LIST: CreateProjectStepKey[] = [
+  'project-info',
+  'members',
+  'api-keys',
+];
 
 export const LAST_CREATE_PROJECT_STEP = CREATE_PROJECT_STEP_KEY_LIST.length;
 export const FIRST_CREATE_PROJECT_STEP = 0;

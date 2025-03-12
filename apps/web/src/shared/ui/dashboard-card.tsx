@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Icon } from '@ufb/ui';
+import NumberFlow, { NumberFlowGroup } from '@number-flow/react';
+
+import type { IconNameType } from '@ufb/react';
+import { Icon } from '@ufb/react';
 
 import { cn, DescriptionTooltip } from '@/shared';
 
@@ -21,54 +24,71 @@ interface IProps {
   title: string;
   data: string | number;
   percentage?: number;
-  description?: string;
+  description: string;
+  type: 'feedback' | 'issue';
 }
+const TYPE_MAP: Record<
+  'feedback' | 'issue',
+  { icon: IconNameType; color: string }
+> = {
+  feedback: { icon: 'RiMessage2Line', color: 'bg-sky-500' },
+  issue: { icon: 'RiMegaphoneLine', color: 'bg-teal-400' },
+};
 
 const DashboardCard: React.FC<IProps> = (props) => {
-  const { title, data, percentage, description } = props;
+  const { title, data, percentage, description, type } = props;
+
+  const count = Number(data);
 
   return (
-    <div className="card flex h-[108px] w-[220px] flex-col gap-2.5 p-3">
-      <p className="line-clamp-2 flex-1">
-        {title}
-        {description && (
-          <DescriptionTooltip description={description} placement="bottom" />
-        )}
-      </p>
+    <div className="shadow-default rounded-20 border-neutral-tertiary bg-neutral-primary flex h-[128px] w-[296px] flex-col border p-5">
+      <div className="flex flex-1 flex-col gap-1.5">
+        <div
+          className={cn(
+            'flex h-5 w-5 items-center justify-center rounded-full',
+            TYPE_MAP[type].color,
+          )}
+        >
+          <Icon
+            name={TYPE_MAP[type].icon}
+            size={12}
+            className="text-neutral-inverse"
+          />
+        </div>
+        <h3>
+          {title}
+          <DescriptionTooltip description={description} side="bottom" />
+        </h3>
+      </div>
       <div className="flex items-center gap-2">
-        <p className="font-24-bold">
-          {typeof data === 'number' ? data.toLocaleString() : data}
-        </p>
-        {typeof percentage !== 'undefined' && isFinite(percentage) ?
-          <div className="flex items-center gap-0.5">
-            <Icon
-              name={
-                percentage === 0 ? 'StableLine'
-                : percentage > 0 ?
-                  'TriangleUp'
-                : 'TriangleDown'
-              }
-              className={
-                percentage === 0 ? 'text-secondary'
-                : percentage > 0 ?
-                  'text-blue-primary'
-                : 'text-red-primary'
-              }
-              size={16}
-            />
-            <p
+        <NumberFlowGroup>
+          <NumberFlow
+            value={isNaN(count) ? 0 : count}
+            format={{ style: 'decimal' }}
+            className="text-title-h4"
+          />
+          {typeof percentage !== 'undefined' && isFinite(percentage) ?
+            <NumberFlow
+              value={percentage / 100}
+              format={{
+                style: 'percent',
+                maximumFractionDigits: 1,
+                signDisplay: 'always',
+              }}
               className={cn(
-                percentage === 0 && 'text-secondary',
-                percentage > 0 && 'text-blue-primary',
-                percentage < 0 && 'text-red-primary',
+                percentage === 0 && 'text-neutral-tertiary',
+                percentage > 0 && 'text-tint-green',
+                percentage < 0 && 'text-tint-red',
+                'text-small-strong',
               )}
-            >
-              {parseFloat(Math.abs(percentage).toFixed(1))}%
-            </p>
-          </div>
-        : typeof percentage !== 'undefined' && isNaN(percentage) ?
-          <Icon name="StableLine" className="text-secondary" size={16} />
-        : <></>}
+            />
+          : <Icon
+              name="RiSubtractFill"
+              className="text-neutral-tertiary"
+              size={12}
+            />
+          }
+        </NumberFlowGroup>
       </div>
     </div>
   );

@@ -1,0 +1,51 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.button {
+  --button-primary-text-default: var(--text-neutral-inverse);
+  --button-secondary-text-default: var(--text-neutral-primary);
+  --button-destructive-text-default: var(--text-neutral-inverse);
+  --button-ghost-text-default: var(--text-neutral-primary);
+  --button-outline-text-default: var(--tint, var(--text-neutral-primary));
+  --button-primary-icon-default: var(--icon-neutral-inverse);
+  --button-secondary-icon-default: var(--icon-neutral-primary);
+  --button-destructive-icon-default: var(--icon-neutral-inverse);
+  --button-ghost-icon-default: var(--icon-neutral-primary);
+  --button-outline-icon-default: var(--tint, var(--icon-neutral-primary));
+  --button-primary-border-default: var(--border-neutral-transparent);
+  --button-secondary-border-default: var(--border-neutral-transparent);
+  --button-destructive-border-default: var(--border-neutral-transparent);
+  --button-ghost-border-default: var(--border-neutral-transparent);
+  --button-outline-border-default: var(--border-neutral-tertiary);
+  --button-primary-fg-default: var(--tint, var(--fg-neutral-inverse));
+  --button-secondary-fg-default: var(--fg-neutral-tertiary);
+  --button-destructive-fg-default: var(--fg-tint-red-bold);
+  --button-ghost-fg-default: var(--fg-neutral-transparent);
+  --button-ghost-fg-hover: var(--fg-neutral-secondary);
+  --button-outline-fg-default: var(--fg-neutral-transparent);
+  --button-outline-fg-hover: var(--tint-subtle, var(--fg-neutral-secondary));
+
+  @apply relative inline-flex h-fit cursor-pointer items-center justify-center transition-opacity disabled:cursor-not-allowed disabled:opacity-50 [&:not(:disabled)]:hover:opacity-80;
+
+  /* default */
+  @apply button-small button-radius-medium button-primary;
+}
+
+.button-loading {
+  @apply absolute-center pointer-events-none flex shadow-none;
+
+  /* default */
+  @apply button-loading-primary;
+}

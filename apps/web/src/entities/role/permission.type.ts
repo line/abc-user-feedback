@@ -19,8 +19,6 @@ export const FeedbackPermissionList = [
   'feedback_update',
   'feedback_delete',
   'feedback_issue_update',
-  'issue_create',
-  'issue_delete',
 ] as const;
 
 export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
@@ -28,14 +26,18 @@ export const FeedbackPermissionText: Record<FeedbackPermissionType, string> = {
   feedback_update: 'Edit Feedback',
   feedback_delete: 'Delete Feedback',
   feedback_issue_update: 'Attach/Detach Issue in Feedback',
-  issue_create: 'Create Issue',
-  issue_delete: 'Delete Issue',
 };
 
-export const IssuePermissionList = ['issue_update'] as const;
+export const IssuePermissionList = [
+  'issue_create',
+  'issue_update',
+  'issue_delete',
+] as const;
 
 export const IssuePermissionText: Record<IssuePermissionType, string> = {
+  issue_create: 'Create Issue',
   issue_update: 'Edit Issue',
+  issue_delete: 'Delete Issue',
 };
 
 export const ProjectPermissionList = [
@@ -100,7 +102,7 @@ export const ProjectWebhookPermissionList = [
 ] as const;
 
 export const ProjectPermissionText: Record<ProjectPermissionType, string> = {
-  project_update: 'Edit Project Information',
+  project_update: 'Edit Project Info',
   project_delete: 'Delete Project',
   project_member_read: 'Read Project Member',
   project_member_create: 'Create Project Member',
@@ -150,8 +152,8 @@ export const ChannelPermissionList = [
 
 export const ChannelPermissionText: Record<ChannelPermissionType, string> = {
   channel_update: 'Edit Channel Info',
-  channel_field_read: 'Read Channel Field',
-  channel_field_update: 'Edit Channel Field',
+  channel_field_read: 'Read Field',
+  channel_field_update: 'Edit Field',
   channel_image_read: 'Read Image Setting',
   channel_image_update: 'Edit Image Setting',
   channel_create: 'Create Channel',

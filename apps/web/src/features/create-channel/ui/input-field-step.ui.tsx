@@ -14,7 +14,12 @@
  * under the License.
  */
 
-import { FieldSettingPopover } from '@/entities/field';
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
+
+import { Icon, ToggleGroup, ToggleGroupItem } from '@ufb/react';
+
+import { FieldSettingSheet } from '@/entities/field';
 import type { FieldInfo } from '@/entities/field';
 import FieldTable from '@/entities/field/ui/field-table.ui';
 
@@ -24,22 +29,25 @@ import CreateChannelInputTemplate from './create-channel-input-template.ui';
 interface IProps {}
 
 const InputFieldStep: React.FC<IProps> = () => {
-  const { input, onChangeInput } = useCreateChannelStore();
+  const { input, onChangeInput, jumpStepByKey } = useCreateChannelStore();
+  const fields = input.fields;
+
+  const { t } = useTranslation();
+
+  const overlay = useOverlay();
 
   const createField = (field: FieldInfo) => {
-    onChangeInput('fields', input.fields.concat(field));
-  };
-
-  const updateField = ({
-    field,
-    index,
-  }: {
-    index: number;
-    field: FieldInfo;
-  }) => {
     onChangeInput(
       'fields',
-      input.fields.map((v, i) => (i === index ? field : v)),
+      input.fields.concat({ ...field, order: fields.length }),
+    );
+  };
+
+  const updateField = (input: { index: number; field: FieldInfo }) => {
+    const { field, index } = input;
+    onChangeInput(
+      'fields',
+      fields.map((v, i) => (i === index ? field : v)),
     );
   };
 
@@ -50,17 +58,54 @@ const InputFieldStep: React.FC<IProps> = () => {
     );
   };
 
+  const openFieldFormSheet = (input?: { index: number; field: FieldInfo }) => {
+    overlay.open(({ close, isOpen }) => (
+      <FieldSettingSheet
+        isOpen={isOpen}
+        close={close}
+        onSubmit={(newField) => {
+          if (input) {
+            updateField({ index: input.index, field: newField });
+            return;
+          }
+          createField(newField);
+        }}
+        fieldRows={fields}
+        data={input?.field}
+        onClickDelete={
+          input ?
+            () => {
+              deleteField({ index: input.index });
+              close();
+            }
+          : undefined
+        }
+      />
+    ));
+  };
+
   return (
     <CreateChannelInputTemplate
       actionButton={
-        <FieldSettingPopover onSave={createField} fieldRows={input.fields} />
+        <ToggleGroup type="single" value="">
+          <ToggleGroupItem value="item-1" onClick={() => openFieldFormSheet()}>
+            <Icon name="RiAddLine" />
+            {t('v2.button.name.add', { name: 'Field' })}
+          </ToggleGroupItem>
+          <ToggleGroupItem
+            value="item-2"
+            onClick={() => jumpStepByKey('field-preview')}
+          >
+            <Icon name="RiEyeLine" />
+            {t('v2.text.preview')}
+          </ToggleGroupItem>
+        </ToggleGroup>
       }
     >
       <FieldTable
-        isInputStep
         fields={input.fields}
-        onDeleteField={deleteField}
-        onModifyField={updateField}
+        onClickRow={(index, field) => openFieldFormSheet({ index, field })}
+        disableFilter
       />
     </CreateChannelInputTemplate>
   );

@@ -16,6 +16,8 @@
 import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
+import { Button } from '@ufb/react';
+
 import { Path } from '@/shared';
 import { useOAuthCallback } from '@/features/auth/sign-in-with-oauth';
 
@@ -25,17 +27,16 @@ const OAuthCallbackPage: NextPage<IProps> = () => {
   const { status } = useOAuthCallback();
   const router = useRouter();
   return (
-    <div className="flex h-screen w-screen items-center justify-center">
+    <div className="flex h-screen w-screen flex-col items-center justify-center gap-4">
       {status === 'loading' && (
-        <p className="font-32-bold animate-bounce">Loading...</p>
+        <p className="text-title-h1 animate-bounce">Loading...</p>
       )}
       {status === 'error' && (
-        <div>
-          <p className="font-32-bold">Error!!!</p>
-          <button className="btn" onClick={() => router.replace(Path.SIGN_IN)}>
-            Go to home
-          </button>
-        </div>
+        <>
+          <p className="text-title-h1">Error!!!</p>
+          <p className="text-title-h4">Please check the toast.</p>
+          <Button onClick={() => router.push(Path.SIGN_IN)}>Go to home</Button>
+        </>
       )}
     </div>
   );

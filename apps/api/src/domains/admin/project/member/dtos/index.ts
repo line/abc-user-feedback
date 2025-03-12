@@ -16,3 +16,4 @@
 export { CreateMemberDto } from './create-member.dto';
 export { UpdateMemberDto } from './update-member.dto';
 export { FindByProjectIdDto } from './find-by-project-id.dto';
+export { FindAllMembersDto } from './find-all-members.dto';

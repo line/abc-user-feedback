@@ -15,20 +15,18 @@
  */
 import { useEffect } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 
-import { toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
-import { useOAIMutation } from '@/shared';
+import { SettingTemplate, useOAIMutation } from '@/shared';
 import type { TenantInfo } from '@/entities/tenant';
 import {
   TenantInfoForm,
   tenantInfoSchema,
   useTenantStore,
 } from '@/entities/tenant';
-
-import SettingMenuTemplate from '../setting-menu-template';
 
 interface IProps {}
 
@@ -46,10 +44,7 @@ const TenantInfoSetting: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await refetchTenant();
-        toast.positive({ title: t('toast.save') });
-      },
-      onError(error) {
-        toast.negative({ title: error.message ?? 'Error' });
+        toast.success(t('v2.toast.success'));
       },
     },
   });
@@ -61,25 +56,40 @@ const TenantInfoSetting: React.FC<IProps> = () => {
 
   const onSubmit = (input: TenantInfo) => {
     if (!tenant) return;
-    mutate({ ...tenant, ...input });
+    if (!tenant.oauthConfig) {
+      mutate({ ...tenant, ...input, oauthConfig: null });
+      return;
+    }
+    mutate({
+      ...tenant,
+      ...input,
+      oauthConfig: {
+        ...tenant.oauthConfig,
+        loginButtonName: tenant.oauthConfig.loginButtonName ?? '',
+        loginButtonType: tenant.oauthConfig.loginButtonType ?? 'CUSTOM',
+      },
+    });
   };
 
   return (
-    <SettingMenuTemplate
+    <SettingTemplate
       title={t('tenant-setting-menu.tenant-info')}
-      actionBtn={{
-        form: 'form',
-        type: 'submit',
-        children: t('button.save'),
-        disabled: !methods.formState.isDirty || isPending,
-      }}
+      action={
+        <Button
+          form="tenantInfo"
+          type="submit"
+          disabled={!methods.formState.isDirty || isPending}
+        >
+          {t('button.save')}
+        </Button>
+      }
     >
-      <form id="form" onSubmit={methods.handleSubmit(onSubmit)}>
+      <form id="tenantInfo" onSubmit={methods.handleSubmit(onSubmit)}>
         <FormProvider {...methods}>
           <TenantInfoForm />
         </FormProvider>
       </form>
-    </SettingMenuTemplate>
+    </SettingTemplate>
   );
 };
 

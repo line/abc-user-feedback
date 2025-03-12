@@ -14,42 +14,82 @@
  * under the License.
  */
 
+import { useMemo } from 'react';
 import {
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
 
-import { BasicTable } from '@/shared';
+import { Button, Icon } from '@ufb/react';
+
+import { BasicTable, TableFacetedFilter } from '@/shared';
 
 import { getFieldColumns } from '../field-columns';
-import type { FieldInfo, FieldStatus } from '../field.type';
+import type { FieldInfo } from '../field.type';
 
 interface IProps {
-  isInputStep?: boolean;
   fields: FieldInfo[];
-  onDeleteField?: (input: { index: number }) => void;
-  onModifyField?: (input: { index: number; field: FieldInfo }) => void;
-  fieldStatus?: FieldStatus;
+  onClickRow?: (index: number, field: FieldInfo) => void;
+  reorder?: (data: FieldInfo[]) => void;
+  disableFilter?: boolean;
 }
 
 const FieldTable: React.FC<IProps> = (props) => {
-  const { isInputStep, fields, onDeleteField, onModifyField, fieldStatus } =
-    props;
+  const { fields, onClickRow, reorder, disableFilter } = props;
+
+  const columns = useMemo(() => getFieldColumns(reorder), []);
 
   const table = useReactTable({
+    columns,
+    data: fields.sort((a, b) => a.order - b.order),
+    enableColumnFilters: true,
     getCoreRowModel: getCoreRowModel(),
-    columns: getFieldColumns(fields, onDeleteField, onModifyField, isInputStep),
-    data: fields,
-    enableSorting: false,
-    state: { globalFilter: fieldStatus },
-    enableGlobalFilter: true,
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: (row, _, value) =>
-      fieldStatus ? row.original.status === value : true,
+    getSortedRowModel: getSortedRowModel(),
+    getRowId: (row) => String(row.key),
   });
 
-  return <BasicTable table={table} />;
+  return (
+    <div className="flex h-full flex-col gap-4">
+      {!disableFilter && (
+        <div className="flex gap-3">
+          <TableFacetedFilter
+            column={table.getColumn('status')}
+            options={[
+              { label: 'Inactive', value: 'INACTIVE' },
+              { label: 'Active', value: 'ACTIVE' },
+            ]}
+            title="Status"
+          />
+          <TableFacetedFilter
+            column={table.getColumn('property')}
+            options={[
+              { label: 'Editable', value: 'EDITABLE' },
+              { label: 'Read Only', value: 'READ_ONLY' },
+            ]}
+            title="Property"
+          />
+          {table.getState().columnFilters.length > 0 && (
+            <Button variant="ghost" onClick={() => table.resetColumnFilters()}>
+              <Icon name="RiCloseLine" />
+              Reset
+            </Button>
+          )}
+        </div>
+      )}
+      <BasicTable
+        table={table}
+        onClickRow={(index, row) => onClickRow?.(index, row)}
+        reorder={(data) =>
+          reorder?.(
+            data.map((field, index) => ({ ...field, order: index + 1 })),
+          )
+        }
+      />
+    </div>
+  );
 };
 
 export default FieldTable;

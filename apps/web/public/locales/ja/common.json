@@ -1,32 +1,4 @@
 {
-  "tenant": {
-    "create": {
-      "title": "基本設定",
-      "site-name": "サイト名"
-    }
-  },
-  "auth": {
-    "sign-in": {
-      "reset-password": "パスワードリセット"
-    },
-    "sign-up": {
-      "title": "アカウントの作成",
-      "label": {
-        "auth-code": "認証コード"
-      },
-      "placeholder": {
-        "auth-code": "認証コード入力"
-      },
-      "button": {
-        "request-auth-code": "要請する",
-        "verify-auth-code": "認証する"
-      }
-    },
-    "reset-password": {
-      "title": "パスワードリセット",
-      "button": { "send-email": "電子メールを送る" }
-    }
-  },
   "link": {
     "reset-password": {
       "title": "パスワードリセット"
@@ -36,145 +8,37 @@
     }
   },
   "main": {
-    "index": {
-      "total-project": "全体プロジェクト数",
-      "total-channel": "全チャンネル数",
-      "total-feedback": "全体フィードバック数",
-      "create-project": "Project生成",
-      "no-project": "登録されたプロジェクトがありません。"
-    },
     "profile": {
-      "title": "プロフィール",
       "profile-info": "Profile情報",
       "change-password": "Password変更",
-      "label": {
-        "user-type": "Type",
-        "new-password": "新しいパスワード",
-        "confirm-new-password": "新しいパスワードの確認"
-      },
-      "placeholder": {
-        "name": "Nameを入力してください。",
-        "department": "Departmentを入力してください。",
-        "new-password": "新しいパスワードを入力してください。",
-        "confirm-new-password": "新しいパスワードの確認を入力してください。"
-      },
       "button": {
         "delete-account": "アカウント削除"
-      },
-      "dialog": {
-        "delete-account": {
-          "title": "アカウント削除",
-          "description1": "本当に削除するんですか？",
-          "description2": "アカウントを削除した後、サービスは利用できません。"
-        }
       }
     },
-    "dashboard": {
-      "title": "ダッシュボード"
-    },
     "feedback": {
-      "title": "フィードバック",
-      "column-setting": "カラムの設定",
       "issue-cell": {
-        "issue-list": "イシューリスト",
-        "register-issue": "イシュー登録",
-        "create-issue": "イシュー作成",
-        "input-issue": "イシュー入力",
-        "delete-issue": "イシュー削除"
+        "create-issue": "イシュー作成"
       },
       "download": {
         "loading": "ダウンロード中...",
         "success": "ダウンロードが完了しました。",
-        "error": "ダウンロードに失敗しました。",
-        "loading-description": "{{count, number}}個ダウンロード。",
-        "success-description": "{{count, number}}個ダウンロード。",
-        "error-description": "{{count, number}}個ダウンロード"
-      },
-      "button": {
-        "all-download": "すべてダウンロード",
-        "select-download": "{{count, number}}個ダウンロード",
-        "excel-download": "Excelダウンロード",
-        "csv-download": "CSVダウンロード"
-      },
-      "dialog": {
-        "delete-feedback": {
-          "title": "フィードバックの削除",
-          "description": "選択したフィードバックをすべて削除してよろしいですか？"
-        }
-      }
-    },
-    "issue": {
-      "title": "イシュー",
-      "setting": "イシュー設定",
-      "dialog": {
-        "delete-issue": {
-          "title": "イシュー削除",
-          "description": "選択したイシューをすべて削除しますか？"
-        }
+        "error": "ダウンロードに失敗しました。"
       }
     },
     "setting": {
-      "title": "設定",
       "button": {
-        "create-project": "Project生成",
-        "create-channel": "Channel生成",
-        "create-api-key": "Key生成",
-        "register-member": "Member 登録"
+        "create-channel": "Channel生成"
       },
-      "sign-up-mgmt": {
-        "ufb-login": "UFB ログイン",
-        "oauth-login": "OAuth2.0 ログイン",
-        "all-login": "すべて",
-        "possibility": "直接サインアップ可能",
-        "impossibility": "直接サインアップ不可",
-        "no-domain-restriction": "ドメイン制限なし",
-        "domain-restriction": "ドメインの制限",
-        "domain-restriction-tooltip": "ユーザとして登録できる電子メールのドメインを設定できます。"
-      },
-      "role-mgmt": {
-        "edit-role": "Role編集",
-        "update-role-name": "Role Name修正",
-        "delete-role": "Role削除"
-      },
-      "api-key-status": {
-        "active": "アクティブ",
-        "inactive": "非アクティブ"
-      },
-      "field-status": {
-        "active": "アクティブ",
-        "inactive": "非アクティブ"
-      },
-      "register-member": "会員を登録してください。",
       "same-key": "Key と同様に入力",
       "feedback-request-code": "フィードバック要求コード",
       "option-info": "オプション情報",
       "field-mgmt": {
-        "description": "保存するにはプレビューを先に押してください。",
-        "preview": "プレビュー",
-        "preview-caption": "プレビューは、例示データとして表示されます。",
-        "preview-description": "登録したフィールドがどのような姿なのか確認することができます。"
+        "preview": "プレビュー"
       },
       "dialog": {
-        "edit-user": { "title": "User 編集" },
-        "delete-project": {
-          "title": "Project 削除",
-          "description": "Projectを削除すると、すべてのイシュー/フィードバックデータが削除されます。\n削除を続行するには、以下のテキストを入力してください。"
-        },
-        "delete-channel": {
-          "title": "Channel 削除",
-          "description": "Channelを削除すると、すべてのフィードバック データが削除されます。\n削除を続行するには、以下のテキストを入力してください。"
-        },
         "create-role": {
           "title": "Role 生成",
           "description": "新規Role Nameを入力してください。"
-        },
-        "update-role-name": {
-          "title": "Role Name修正",
-          "description": "Role Name을 입력해주세요."
-        },
-        "edit-api-key": {
-          "title": "API KEY 編集",
-          "description": "API KEYを無効にすると、そのKEYでAPIが使用できなくなります。 API KEYを使用しない場合のみ、無効に変更してください。"
         },
         "delete-option": {
           "title": "オプションの削除",
@@ -184,18 +48,15 @@
           "title": "Role 削除",
           "description": "Roleを削除しますか？\n該当Roleを持つ会員も一緒にいなくなります。"
         },
-        "edit-member": {
-          "title": "Member 編集",
-          "description": "Roleは、アクセス可能なメニューから使用可能な機能によって異なります。\nMemberを確認し、正しいRoleを選択してください。"
+        "add-field": {
+          "title": "Field 追加"
         },
-        "register-member": { "title": "Member 登録" },
-        "delete-member": {
-          "title": "Member 削除",
-          "description": "Memberを削除してよろしいですか？"
+        "edit-field": {
+          "title": "Field 修整"
         },
-        "add-field": { "title": "Field 追加" },
-        "edit-field": { "title": "Field 修整" },
-        "invite-user": { "title": "User 招待" }
+        "invite-user": {
+          "title": "User 招待"
+        }
       }
     },
     "create-project": {
@@ -212,7 +73,6 @@
     "create-channel": {
       "title": "Channel生成",
       "complete-title": "Channelの作成が完了しました。",
-      "finish-channel-creation": "すべての準備が完了しました。\nUser Feedbackの利用を始めてみてください！",
       "guide": {
         "invalid-channel": "無効なChannel情報が存在します。"
       }
@@ -243,27 +103,7 @@
     "start": "はじまり",
     "generate": "生成"
   },
-  "input": {
-    "label": {
-      "password": "パスワード",
-      "confirm-password": "パスワード確認"
-    },
-    "placeholder": {
-      "input": "入力してください",
-      "email": "Emailを入力してください。",
-      "password": "パスワードを入力してください。",
-      "confirm-password": "パスワード確認を入力してください。"
-    }
-  },
   "text": {
-    "search-result": "検索結果",
-    "number-count": "{{count, number}}個",
-    "no-data": "データなし",
-    "per-page": "ページあたり",
-    "select-option": "{{name}} 選択",
-    "select-count": "{{count,number}}個選択",
-    "search-filter": "検索フィルタ",
-    "all": "全体",
     "issue": {
       "init": "新規",
       "onReview": "検討中",
@@ -271,40 +111,21 @@
       "resolved": "完了",
       "pending": "進行せず"
     },
-    "date": {
-      "today": "今日",
-      "yesterday": "昨日",
-      "before-days": "{{day, number}}日前",
-      "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
-    },
-    "equal-search": "完全一致",
-    "like-search": "部分一致",
-    "helper": "ヘルプ",
-    "no-channel": "登録されたチャンネルがありません。",
-    "guide": "案内",
-    "more": "もっと",
-    "shrink": "縮む",
-    "feedback-detail": "フィードバック詳細",
-    "create-channel-in-progress": "作成中のChannelがあります。",
-    "create-project-in-progress": "作成中のProjectがあります。",
-    "days": "{{days}}日",
     "webhook-type": {
       "FEEDBACK_CREATION": "フィードバックの作成",
       "ISSUE_CREATION": "イシュー作成",
       "ISSUE_STATUS_CHANGE": "イシューステータス変更",
       "ISSUE_ADDITION": "イシュー追加"
-    }
-  },
-  "toast": {
-    "sign-in": "ログイン成功",
-    "register": "登録済み",
-    "delete": "削除済み",
-    "save": "貯蔵",
-    "invite": "招待完了",
-    "active": "活性化",
-    "inactive": "無効化",
-    "add": "追加完了",
-    "copy": "コピー完了"
+    },
+    "date": {
+      "today": "今日",
+      "yesterday": "昨日",
+      "before-days": "{{day, number}}日",
+      "last-days": "過去{{day, number}}日",
+      "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
+    },
+    "guide": "案内",
+    "days": "{{days}}日"
   },
   "dialog": {
     "continue": {
@@ -314,16 +135,6 @@
         "continue": "続行",
         "restart": "再起動"
       }
-    },
-    "create-webhook": {
-      "title": "Webhook生成"
-    },
-    "update-webhook": {
-      "title": "Webhook編集"
-    },
-    "delete-webhook": {
-      "title": "Webhook削除",
-      "description": "Webhookを削除すると、連動したデータがすべて削除されます。"
     }
   },
   "dashboard-card": {
@@ -388,26 +199,15 @@
   },
   "popover": {
     "select-issue": {
-      "search-issue": "問題の検索",
-      "max-issue-count": "最大5つまでイシューを選択できます。",
-      "issue-list": "イシューリスト"
-    },
-    "select-issue-status": {
-      "issue-status": "イシューステータス"
+      "max-issue-count": "最大5つまでイシューを選択できます。"
     }
   },
   "tooltip": {
-    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。",
-    "webhook-feedback-creation": "このイベントは、チャネル固有のフィードバックが収集されるたびにトリガーされます。",
-    "webhook-issue-addition": "このイベントは、チャネル固有のフィードバックに問題が登録されるたびにトリガーされます。",
-    "webhook-issue-creation": "このイベントは、チャネルに関係なく、問題が発生するたびにトリガーされます。",
-    "webhook-issue-status-change": "このイベントは、チャネルに関係なく、イシューステータスが変更されるたびにトリガーされます。",
-    "field-property": "フィールド内容の原本を維持したいならRead Only内容を修正したいならEditibleに設定してください。",
-    "field-status": "フィールドを使用するかどうかを意味します。 使用しないフィールドはInactiveに変更してください。"
+    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant情報",
-    "sign-up-mgmt": "Login & Signup管理",
+    "sign-up-mgmt": "Login管理",
     "user-mgmt": "User管理"
   },
   "project-setting-menu": {
@@ -435,16 +235,15 @@
     }
   },
   "help-card": {
-    "project-info": "Project単位でフィードバックを収集することができます。 フィードバックを管理するプロダクトを基準にProject情報を登録してください。 (ex. Product Name)",
-    "role": "Projectにfアクセスして使用する権限を設定できます。",
-    "member": "Projectに参加する Memberを登録または管理することができます。",
-    "api-key": "ユーザーフィードバックAPIキー情報を管理します。 API を使用する場合は、キーを作成して使用します。 詳細については、API <icon></icon> <docs>Docs</docs>をご参考ください。",
-    "issue-tracker": "UserFeedbackフィードバックとIssue Tracking Systemを接続して管理することができます。\n使用中のIssue Tracking System情報を入力してください。",
-    "channel-info": "Channelを通じて収集したいフィードバックフィールドを定義できます。 フィードバック経路と性格を考慮してChannel情報を登録してください。(ex. VOC, APP Reivew)",
-    "field": "登録したChannelに合わせてUser Feedbackで収集したいフィードバックフィールドを定義します。 APIを通じて収集したいフィールドやADMINで直接登録したいフィールドをあらかじめ設定してみてください。",
-    "image-config": "Imageフォーマットに対してフィードバックを収集するとき、Image Storageと連動することができ、Image URLドメインに対するホワイトリストを設定することができます。\n詳細については、Image <icon></icon> <docs>Docs</docs>を参照してください。",
-    "field-preview": "Field管理で設定したフィールドがどのように見えるかを事前に確認することができます。 プレビューは任意のデータで表示されるため、実際とは異なります。",
-    "webhook": "Webhook は、User Feedback 内で発生するさまざまなイベントに使用されます。 詳細はWebhook <icon></icon> <docs>Docs</docs> をご覧ください。"
+    "project-info": "Projectはフィードバック収集対象の製品を指します。フィードバックを管理する製品を考慮して情報を入力してください。",
+    "member": "Projectに参加するMemberを登録・管理することができます。",
+    "api-key": "User Feedback API Keyを管理する画面です。APIをご利用いただくにはKeyを生成してご使用ください。詳しくはAPI <docs>Docs</docs>をご参照ください。",
+    "issue-tracker": "User FeedbackとIssue Tracking Systemの連携を設定する画面です。ご利用中のIssue Tracking Systemの情報を入力してください。",
+    "channel-info": "Channelはフィードバック収集経路または収集方法を区分する単位です。Channelの特性を考慮して情報を入力してください。",
+    "field": "Channelで収集するフィードバックデータをField単位で定義できます。データタイプと属性を考慮してFieldを追加してください。",
+    "image-config": "Image形式のフィードバックを収集する場合、Image Storageとの連携を設定し、Image URLドメインのホワイトリストを設定できる画面です。詳しくはImage <docs>Docs</docs>をご参照ください。",
+    "field-preview": "登録したField情報に基づいてフィードバックがどのように表示されるかをプレビュー表示します。プレビューではサンプルデータを使用して表示しています。",
+    "webhook": "User Feedbackで発生するイベントトリガーに応じてWebhook連携を設定できる画面です。詳しくはWebhook <docs>Docs</docs>をご参照ください。"
   },
   "hint": {
     "required": "必須入力対象です。",
@@ -456,9 +255,163 @@
   "title-box": {
     "image-storage-integration": "Image Storageの連動"
   },
-  "placeholder": "{{name}}を入力してください。",
-  "system-popup": {
-    "create-project/channel-get-out": "{{type}}の作成過程で出ますか？\n出ても後で続けて進めることができます。",
-    "field-setting-get-out": "まだ保存されていないフィールド情報があります。 それでも出られますか。"
+  "v2": {
+    "auth": {
+      "sign-up": {
+        "title": "アカウント作成",
+        "button": {
+          "request-auth-code": "認証コード要請",
+          "verify-auth-code": "認証コード確認"
+        }
+      },
+      "reset-password": {
+        "title": "パスワードリセット",
+        "button": { "send-email": "メール送信" }
+      }
+    },
+    "link": {
+      "reset-password": {
+        "title": "パスワードリセット"
+      }
+    },
+    "button": {
+      "name": {
+        "create": "{{name}}作成",
+        "delete": "{{name}}削除",
+        "register": "{{name}}登録",
+        "add": "{{name}}追加"
+      },
+      "create": "作成する",
+      "delete": "削除",
+      "register": "登録する",
+      "save": "保存",
+      "cancel": "キャンセル",
+      "out": "終了",
+      "confirm": "確認",
+      "next": "次へ",
+      "previous": "前へ",
+      "addFilter": "フィルタ追加",
+      "edit": "編集"
+    },
+    "project-setting-menu": {
+      "project-info": "Project情報",
+      "member-mgmt": "Member管理",
+      "role-mgmt": "Role管理",
+      "api-key-mgmt": "API Key管理",
+      "issue-tracker-mgmt": "Issue Tracker管理",
+      "webhook-integration": "Webhook連携",
+      "delete-project": "Project削除"
+    },
+    "channel-setting-menu": {
+      "channel-info": "Channel情報",
+      "field-mgmt": "Field管理",
+      "image-mgmt": "Image管理",
+      "delete-channel": "Channel削除"
+    },
+    "dialog": {
+      "delete": {
+        "title": "削除してよろしいですか？",
+        "description": "削除すると関連する情報がすべて消去されます。"
+      },
+      "warn-if-unsaved-changes": {
+        "title": "ページを離れてよろしいですか？",
+        "description": "途中で離れると入力した内容は保存されません。"
+      },
+      "warn-if-saved-changes": {
+        "title": "ページを離れてよろしいですか？",
+        "description": "途中で離れても後で続きから再開できます。"
+      },
+      "no-project-in-profile-page": {
+        "title": "所属プロジェクトがありません。",
+        "description": "まだ所属しているプロジェクトがありません。\nプロジェクト管理者にメンバー登録を依頼するか、問い合わせてみてください。"
+      },
+      "no-project-dialog-in-project-creation-page": {
+        "title": "ようこそ！",
+        "step1-description": "ABC User Feedbackでは、Channel > Project > Tenantの構造でフィードバックを管理します。そのため、ProjectとChannelの両方を作成する必要があります。",
+        "step2-description": "Projectはフィードバック対象となるプロダクトを意味します。管理しているプロダクト情報に基づいてProjectを作成すると良いです。",
+        "step3-description": "Channelはフィードバック収集方法を意味します。担当しているプロダクトでどのようにフィードバックを収集しているかに基づいてChannelを作成すると良いです。"
+      }
+    },
+    "text": {
+      "no-data": {
+        "api-key": "生成されたAPI Keyがありません。",
+        "member": "登録されたMemberがいません。",
+        "channel": "作成されたChannelがありません。",
+        "webhook": "登録されたWebhookがありません。",
+        "feedback": "登録されたFeedbackありません。"
+      },
+      "create-project": "Project作成",
+      "create-channel": "Channel作成",
+      "name": {
+        "detail": "{{name}}詳細",
+        "add": "{{name}}追加",
+        "register": "{{name}}登録",
+        "create": "{{name}}作成"
+      },
+      "summary": "概要",
+      "preview": "プレビュー",
+      "in-progress": "進行中",
+      "continue": "続きから再開",
+      "test-connection-failed": "接続テストに失敗しました",
+      "all-email-domains-allow": "すべてのEmailドメインを許可します。",
+      "request-email-auth": "認証が要求されました。",
+      "all-image-url-allow": "すべてのImage URLを許可します。",
+      "select-project": "Projectを選択してください。",
+      "no-category": "カテゴリがありません。"
+    },
+    "create-tenant": {
+      "tenant": {
+        "title": "テナント作成",
+        "description": "ABC User Feedbackを管理する会社/組織/チームの名前を入力してください。"
+      },
+      "user": {
+        "title": "マスターアカウント作成",
+        "description": "最初のログインには、マスターアカウントを作成する必要があります。"
+      },
+      "final": {
+        "title": "テナント作成完了",
+        "description": "テナントの作成が完了しました。\nマスターアカウントでログインを試みてください。"
+      }
+    },
+    "placeholder": {
+      "select": "選択してください",
+      "text": "入力してください",
+      "text-or-generate": "入力または生成してください"
+    },
+    "toast": {
+      "success": "正常に処理されました",
+      "copy": "クリップボードにコピーしました"
+    },
+    "webhook-card": {
+      "feedback-creation": {
+        "title": "Feedback作成",
+        "description": "フィードバックが収集されるたびにイベントを発動します。"
+      },
+      "issue-addition": {
+        "title": "Issue登録",
+        "description": "イシューを登録するたびにイベントを発動します。"
+      },
+      "issue-status-change": {
+        "title": "Issueステータス変更",
+        "description": "イシューステータスを変更するたびにイベントを発動します。"
+      },
+      "issue-creation": {
+        "title": "Issue作成",
+        "description": "イシューを新規作成するたびにイベントを発動します。"
+      }
+    },
+    "error": {
+      "duplicated": "重複する情報が存在します",
+      "lessThenNcharacters": "{{n}}文字以内で入力してください",
+      "required": "入力してください"
+    },
+    "description": {
+      "create-project": "Projectの作成が完了しました。\n次は、フィードバックを収集するためにChannelを作成する必要があります。\n「Channel作成」から次のステップへ進んでください。",
+      "create-channel": "Channelの作成が完了しました。\nこれでユーザーフィードバックの収集・管理の準備が整いました。\n「はじめる」から本格的にご利用ください。"
+    },
+    "login-setting": {
+      "oauth-description": "OAuth2.0を活用してログインできる方法を提供します。",
+      "email-description": "Email認証を通じて会員登録およびログインできる方法を提供します。"
+    }
   }
 }

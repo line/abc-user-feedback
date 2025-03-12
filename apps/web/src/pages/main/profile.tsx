@@ -13,78 +13,116 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useState } from 'react';
+import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useTranslation } from 'react-i18next';
+import { parseAsString, useQueryState } from 'nuqs';
 
 import {
-  DEFAULT_LOCALE,
-  DescriptionTooltip,
-  SectionTemplate,
-  SubMenu,
-} from '@/shared';
-import type { NextPageWithLayout } from '@/shared/types';
-import { useUserStore } from '@/entities/user';
-import { DeleteAccountButton } from '@/features/delete-user';
-import { ChangePasswordForm, UserProfileForm } from '@/features/update-user';
-import { MainLayout } from '@/widgets';
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTitle,
+  Icon,
+  Menu,
+  MenuItem,
+} from '@ufb/react';
 
-const MENU_ITEMS = [
-  { key: 'profile-info', iconName: 'InfoCircleFill' },
-  { key: 'change-password', iconName: 'LockFill' },
-] as const;
+import { DEFAULT_LOCALE, useAllProjects } from '@/shared';
+import type { NextPageWithLayout } from '@/shared/types';
+import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
+import {
+  ChangePasswordSetting,
+  UserProfileSetting,
+  useUserStore,
+} from '@/entities/user';
+import { Layout } from '@/widgets/layout';
 
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
 
+  const overlay = useOverlay();
   const { user } = useUserStore();
+  const router = useRouter();
 
-  const [tabKey, setTabKey] = useState<(typeof MENU_ITEMS)[number]['key']>(
-    MENU_ITEMS[0].key,
+  const [currentMenu] = useQueryState<string>(
+    'menu',
+    parseAsString.withDefault('profile'),
   );
+  const { data } = useAllProjects();
+
+  const openWarningNoProjects = () => {
+    overlay.open(({ close, isOpen }) => (
+      <Dialog open={isOpen} onOpenChange={close}>
+        <DialogContent radius="large">
+          <DialogTitle>
+            {t('v2.dialog.no-project-in-profile-page.title')}
+          </DialogTitle>
+          <DialogBody className="flex flex-col items-center gap-2">
+            <Image
+              src="/assets/images/no-projects-in-profile-page.svg"
+              alt=""
+              width={240}
+              height={240}
+            />
+            <p className="w-full whitespace-pre-line px-4">
+              {t('v2.dialog.no-project-in-profile-page.description', {
+                name: user?.name ?? '--',
+              })}
+            </p>
+          </DialogBody>
+          <DialogFooter>
+            <DialogClose variant="primary">
+              {t('v2.button.confirm')}
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    ));
+  };
+
+  useEffect(() => {
+    if (!data || data.items.length > 0) return;
+    openWarningNoProjects();
+  }, [data]);
 
   return (
-    <SectionTemplate
-      className="flex h-full flex-col"
-      title={
-        <>
-          {t('main.profile.title')}
-          <DescriptionTooltip description="Profile Description" />
-        </>
+    <SideMenuLayout
+      sideMenu={
+        <Menu
+          type="single"
+          orientation="vertical"
+          className="w-full p-0"
+          value={currentMenu}
+          onValueChange={(value) =>
+            router.push({ pathname: router.pathname, query: { menu: value } })
+          }
+        >
+          <MenuItem value="profile">
+            <Icon name="RiInformation2Line" />
+            {t('main.profile.profile-info')}
+          </MenuItem>
+          <MenuItem value="change-password">
+            <Icon name="RiUser2Line" />
+            {t('main.profile.change-password')}
+          </MenuItem>
+        </Menu>
       }
     >
-      <div className="flex flex-1 items-stretch gap-4">
-        <div className="card w-[400px]">
-          <SubMenu
-            items={MENU_ITEMS.map(({ key, iconName }) => ({
-              iconName,
-              name: t(`main.profile.${key}`),
-              active: tabKey === key,
-              onClick: () => setTabKey(key),
-              disabled:
-                key === 'change-password' && user?.signUpMethod === 'OAUTH',
-            }))}
-          />
-        </div>
-        <div className="card flex-1">
-          {tabKey === MENU_ITEMS[0].key && user && (
-            <>
-              <UserProfileForm user={user} />
-              <div className="mt-6 flex justify-end">
-                <DeleteAccountButton user={user} />
-              </div>
-            </>
-          )}
-          {tabKey === MENU_ITEMS[1].key && <ChangePasswordForm />}
-        </div>
-      </div>
-    </SectionTemplate>
+      {currentMenu === 'profile' && <UserProfileSetting />}
+      {currentMenu === 'change-password' && <ChangePasswordSetting />}
+    </SideMenuLayout>
   );
 };
 
 ProfilePage.getLayout = (page) => {
-  return <MainLayout>{page}</MainLayout>;
+  return <Layout title="Profile">{page}</Layout>;
 };
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {

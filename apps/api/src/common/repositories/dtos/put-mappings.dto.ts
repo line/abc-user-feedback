@@ -13,7 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
+import type { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
+
 export class PutMappingsDto {
   index: string;
-  mappings: Record<string, { type: string }>;
+  mappings: Record<string, Property>;
 }

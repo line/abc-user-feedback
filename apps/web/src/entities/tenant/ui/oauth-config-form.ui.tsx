@@ -13,88 +13,102 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { TextInput } from '@ufb/ui';
+import { RadioCard, RadioCardGroup } from '@ufb/react';
+
+import { TextInput } from '@/shared';
 
 import type { AuthInfo } from '../tenant.type';
 
-interface IProps {}
+interface IProps {
+  disabled?: boolean;
+}
 
-const OAuthConfigForm: React.FC<IProps> = () => {
-  const { register, formState } = useFormContext<AuthInfo>();
+const OAuthConfigForm: React.FC<IProps> = ({ disabled }) => {
+  const { register, formState, setValue, watch } = useFormContext<AuthInfo>();
+  const { t } = useTranslation();
+
   return (
-    <div className="flex flex-col gap-3 rounded border p-3">
-      <TextInput
-        {...register('oauthConfig.clientId')}
-        label="Client ID"
-        hint={formState.errors.oauthConfig?.clientSecret?.message}
-        isValid={!formState.errors.oauthConfig?.clientSecret}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.clientSecret')}
-        label="Client Secret"
-        hint={formState.errors.oauthConfig?.clientSecret?.message}
-        isValid={!formState.errors.oauthConfig?.clientSecret}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.authCodeRequestURL')}
-        label="Authorization Code Request URL"
-        hint={formState.errors.oauthConfig?.authCodeRequestURL?.message}
-        isValid={!formState.errors.oauthConfig?.authCodeRequestURL}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.scopeString')}
-        label="Scope"
-        hint={formState.errors.oauthConfig?.scopeString?.message}
-        isValid={!formState.errors.oauthConfig?.scopeString}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.accessTokenRequestURL')}
-        label="Access Token Request URL"
-        hint={formState.errors.oauthConfig?.accessTokenRequestURL?.message}
-        isValid={!formState.errors.oauthConfig?.accessTokenRequestURL}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.userProfileRequestURL')}
-        label="User Profile Request URL"
-        hint={formState.errors.oauthConfig?.userProfileRequestURL?.message}
-        isValid={!formState.errors.oauthConfig?.userProfileRequestURL}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
-      <TextInput
-        {...register('oauthConfig.emailKey')}
-        label="Email Key in Response of User Profile"
-        hint={formState.errors.oauthConfig?.emailKey?.message}
-        isValid={!formState.errors.oauthConfig?.emailKey}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
-        size="sm"
-        required
-      />
+    <div className="flex flex-col gap-6">
+      <RadioCardGroup
+        value={watch('oauthConfig.loginButtonType') ?? 'CUSTOM'}
+        onValueChange={(v: 'GOOGLE' | 'CUSTOM') =>
+          setValue('oauthConfig.loginButtonType', v, { shouldDirty: true })
+        }
+      >
+        <RadioCard value="GOOGLE" icon="RiGoogleFill" title="Google Login" />
+        <RadioCard value="CUSTOM" icon="RiToolsFill" title="Custom Login" />
+      </RadioCardGroup>
+      <div className="flex flex-col gap-4">
+        <TextInput
+          {...register('oauthConfig.clientId')}
+          label="Client ID"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.clientId?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.clientSecret')}
+          label="Client Secret"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.clientSecret?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.authCodeRequestURL')}
+          label="Authorization Code Request URL"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.authCodeRequestURL?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.scopeString')}
+          label="Scope"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.scopeString?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.accessTokenRequestURL')}
+          label="Access Token Request URL"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.accessTokenRequestURL?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.userProfileRequestURL')}
+          label="User Profile Request URL"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.userProfileRequestURL?.message}
+          disabled={disabled}
+          required
+        />
+        <TextInput
+          {...register('oauthConfig.emailKey')}
+          label="Email Key in Response of User Profile"
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.oauthConfig?.emailKey?.message}
+          disabled={disabled}
+          required
+        />
+        {watch('oauthConfig.loginButtonType') === 'CUSTOM' && (
+          <TextInput
+            {...register('oauthConfig.loginButtonName')}
+            label="Login Button Name"
+            placeholder={t('v2.placeholder.text')}
+            error={formState.errors.oauthConfig?.loginButtonName?.message}
+            disabled={disabled}
+            required
+          />
+        )}
+      </div>
     </div>
   );
 };

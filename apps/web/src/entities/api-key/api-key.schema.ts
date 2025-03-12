@@ -15,9 +15,14 @@
  */
 import { z } from 'zod';
 
-export const apiKeyTypeSchema = z.object({
+export const apiKeySchema = z.object({
   id: z.number(),
   value: z.string(),
   createdAt: z.string(),
   deletedAt: z.string().nullable(),
+});
+
+export const apiKeyFormSchema = z.object({
+  value: z.string(),
+  status: z.union([z.literal('active'), z.literal('inactive')]),
 });

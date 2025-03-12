@@ -14,36 +14,37 @@
  * under the License.
  */
 
+import { useTranslation } from 'next-i18next';
 import { useFormContext } from 'react-hook-form';
 
-import { TextInput } from '@ufb/ui';
+import { TextInput, useWarnIfUnsavedChanges } from '@/shared';
 
 import type { TenantInfo } from '../tenant.type';
 
 interface IProps {}
 
 const TenantInfoForm: React.FC<IProps> = () => {
+  const { t } = useTranslation();
+
   const { register, formState } = useFormContext<TenantInfo>();
 
+  useWarnIfUnsavedChanges(formState.isDirty);
+
   return (
-    <div className="flex flex-col gap-6">
-      <TextInput {...register('id')} label="Tenant ID" disabled />
+    <div className="flex flex-col gap-4">
+      <TextInput {...register('id')} label="ID" disabled />
       <TextInput
         {...register('siteName')}
-        label="Tenant Name"
-        hint={formState.errors.siteName?.message}
-        isValid={!formState.errors.siteName}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
+        label="Name"
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.siteName?.message}
         required
       />
       <TextInput
         {...register('description')}
         label="Description"
-        hint={formState.errors.siteName?.message}
-        isValid={!formState.errors.siteName}
-        isSubmitted={formState.isSubmitted}
-        isSubmitting={formState.isSubmitting}
+        placeholder={t('v2.placeholder.text')}
+        error={formState.errors.description?.message}
       />
     </div>
   );

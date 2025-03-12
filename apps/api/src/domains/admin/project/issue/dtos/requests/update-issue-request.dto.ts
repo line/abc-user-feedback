@@ -22,6 +22,7 @@ import { CreateIssueRequestDto } from './create-issue-request.dto';
 
 export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   @ApiProperty({
+    type: String,
     nullable: true,
     description: 'Issue description',
     example: 'This is a payment issue',
@@ -29,7 +30,7 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   @IsString()
   @IsNullable()
   @MaxLength(50)
-  description: string | null;
+  declare description: string | null;
 
   @ApiProperty({
     required: false,
@@ -39,7 +40,7 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   })
   @IsEnum(IssueStatusEnum)
   @IsOptional()
-  status?: IssueStatusEnum;
+  declare status: IssueStatusEnum;
 
   @ApiProperty({
     required: false,
@@ -48,5 +49,5 @@ export class UpdateIssueRequestDto extends CreateIssueRequestDto {
   })
   @IsString()
   @IsOptional()
-  externalIssueId?: string;
+  declare externalIssueId: string;
 }

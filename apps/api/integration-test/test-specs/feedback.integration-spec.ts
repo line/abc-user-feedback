@@ -26,14 +26,14 @@ import type { DataSource, Repository } from 'typeorm';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 
 import { AppModule } from '@/app.module';
-import { FieldFormatEnum } from '@/common/enums';
+import { FieldFormatEnum, QueryV2ConditionsEnum } from '@/common/enums';
 import { OpensearchRepository } from '@/common/repositories';
 import { AuthService } from '@/domains/admin/auth/auth.service';
 import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
 import { ChannelService } from '@/domains/admin/channel/channel/channel.service';
 import { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 import type { CreateFeedbackDto } from '@/domains/admin/feedback/dtos';
-import type { FindFeedbacksByChannelIdRequestDto } from '@/domains/admin/feedback/dtos/requests';
+import type { FindFeedbacksByChannelIdRequestDtoV2 } from '@/domains/admin/feedback/dtos/requests/find-feedbacks-by-channel-id-request-v2.dto';
 import type { FindFeedbacksByChannelIdResponseDto } from '@/domains/admin/feedback/dtos/responses';
 import { FeedbackService } from '@/domains/admin/feedback/feedback.service';
 import { ProjectEntity } from '@/domains/admin/project/project/project.entity';
@@ -49,11 +49,6 @@ import {
   createTenant,
   signInTestUser,
 } from '@/test-utils/util-functions';
-
-interface OpenSearchResponse {
-  _source: Record<string, any>;
-  total: { value: number };
-}
 
 describe('FeedbackController (integration)', () => {
   let app: INestApplication;
@@ -154,15 +149,15 @@ describe('FeedbackController (integration)', () => {
           }) => {
             expect(body.id).toBeDefined();
             if (configService.get('opensearch.use')) {
-              const esResult = await osService.get<OpenSearchResponse>({
+              const esResult = await osService.get({
                 id: body.id as string,
                 index: channel.id.toString(),
               });
 
               ['id', 'createdAt', 'updatedAt'].forEach(
-                (field) => delete esResult.body._source[field],
+                (field) => delete esResult.body._source?.[field],
               );
-              expect(dto).toMatchObject(esResult.body._source);
+              expect(dto).toMatchObject(esResult.body._source ?? {});
             } else {
               const feedback = await feedbackService.findById({
                 channelId: channel.id,
@@ -185,6 +180,7 @@ describe('FeedbackController (integration)', () => {
         channelId: channel.id,
         data: {},
       };
+      let availableFieldKey = '';
       fields
         .filter(
           ({ key }) =>
@@ -195,7 +191,10 @@ describe('FeedbackController (integration)', () => {
         )
         .forEach(({ key, format, options }) => {
           dto.data[key] = getRandomValue(format, options);
+          availableFieldKey = key;
         });
+
+      dto.data[availableFieldKey] = 'test';
 
       await feedbackService.create(dto);
 
@@ -204,10 +203,14 @@ describe('FeedbackController (integration)', () => {
       );
       if (!keywordField) return;
 
-      const findFeedbackDto: FindFeedbacksByChannelIdRequestDto = {
-        query: {
-          searchText: dto.data[keywordField.key] as string,
-        },
+      const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
+        queries: [
+          {
+            [availableFieldKey]: 'test',
+            condition: QueryV2ConditionsEnum.IS,
+          },
+        ],
+        operator: 'AND',
         limit: 10,
         page: 1,
       };
@@ -220,7 +223,7 @@ describe('FeedbackController (integration)', () => {
         .send(findFeedbackDto)
         .expect(201)
         .then(({ body }: { body: FindFeedbacksByChannelIdResponseDto }) => {
-          expect(body.meta.itemCount).toBeGreaterThan(0);
+          expect(body.meta.itemCount).toEqual(1);
         });
     });
   });
@@ -258,17 +261,17 @@ describe('FeedbackController (integration)', () => {
         .expect(200)
         .then(async () => {
           if (configService.get('opensearch.use')) {
-            const esResult = await osService.get<OpenSearchResponse>({
+            const esResult = await osService.get({
               id: feedback.id.toString(),
               index: channel.id.toString(),
             });
 
             ['id', 'createdAt', 'updatedAt'].forEach(
-              (field) => delete esResult.body._source[field],
+              (field) => delete esResult.body._source?.[field],
             );
 
             dto.data[availableFieldKey] = 'test';
-            expect(dto.data).toMatchObject(esResult.body._source);
+            expect(dto.data).toMatchObject(esResult.body._source ?? {});
           } else {
             const updatedFeedback = await feedbackService.findById({
               channelId: channel.id,
@@ -317,17 +320,17 @@ describe('FeedbackController (integration)', () => {
         .expect(200)
         .then(async () => {
           if (configService.get('opensearch.use')) {
-            const esResult = await osService.get<OpenSearchResponse>({
+            const esResult = await osService.get({
               id: feedback.id.toString(),
               index: channel.id.toString(),
             });
 
             ['id', 'createdAt', 'updatedAt'].forEach(
-              (field) => delete esResult.body._source[field],
+              (field) => delete esResult.body._source?.[field],
             );
 
             dto.data[availableFieldKey] = '?';
-            expect(dto.data).toMatchObject(esResult.body._source);
+            expect(dto.data).toMatchObject(esResult.body._source ?? {});
           } else {
             const updatedFeedback = await feedbackService.findById({
               channelId: channel.id,
@@ -376,13 +379,17 @@ describe('FeedbackController (integration)', () => {
 
       await tenantService.deleteOldFeedbacks();
 
-      const findFeedbackDto = {
-        query: {
-          createdAt: {
-            gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
-            lt: DateTime.now().toFormat('yyyy-MM-dd'),
+      const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
+        queries: [
+          {
+            createdAt: {
+              gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
+              lt: DateTime.now().toFormat('yyyy-MM-dd'),
+            },
+            condition: QueryV2ConditionsEnum.IS,
           },
-        },
+        ],
+        operator: 'AND',
         limit: 10,
         page: 1,
       };

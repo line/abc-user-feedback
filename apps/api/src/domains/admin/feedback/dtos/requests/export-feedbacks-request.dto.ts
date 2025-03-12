@@ -16,9 +16,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsOptional, IsString } from 'class-validator';
 
-import { FindFeedbacksByChannelIdRequestDto } from './find-feedbacks-by-channel-id-request.dto';
+import { FindFeedbacksByChannelIdRequestDtoV2 } from './find-feedbacks-by-channel-id-request-v2.dto';
 
-export class ExportFeedbacksRequestDto extends FindFeedbacksByChannelIdRequestDto {
+export class ExportFeedbacksRequestDto extends FindFeedbacksByChannelIdRequestDtoV2 {
   @ApiProperty()
   @IsString()
   type: 'xlsx' | 'csv';
@@ -27,4 +27,9 @@ export class ExportFeedbacksRequestDto extends FindFeedbacksByChannelIdRequestDt
   @IsOptional()
   @IsArray()
   fieldIds?: number[];
+
+  @ApiProperty({ required: false, type: [Number] })
+  @IsOptional()
+  @IsArray()
+  filterFeedbackIds?: number[];
 }

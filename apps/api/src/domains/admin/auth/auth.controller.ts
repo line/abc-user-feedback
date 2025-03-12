@@ -57,7 +57,6 @@ import { UseOAuthGuard } from './guards/use-oauth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @UseGuards(UseEmailGuard)
   @ApiCreatedResponse({ type: SendEmailCodeResponseDto })
   @Post('email/code')
   async sendCode(@Body() body: EmailVerificationMailingRequestDto) {
@@ -65,7 +64,6 @@ export class AuthController {
     return SendEmailCodeResponseDto.transform({ expiredAt });
   }
 
-  @UseGuards(UseEmailGuard)
   @HttpCode(200)
   @Post('email/code/verify')
   async verifyEmailCode(@Body() body: EmailVerificationCodeRequestDto) {
@@ -107,6 +105,8 @@ export class AuthController {
   }
 
   @UseGuards(UseOAuthGuard)
+  @ApiQuery({ name: 'code', required: false })
+  @ApiOkResponse({ type: SignInResponseDto })
   @Get('signIn/oauth')
   async handleCallback(@Query() query: { code: string }) {
     return await this.authService.signInByOAuth(query.code);

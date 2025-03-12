@@ -17,12 +17,10 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
   Param,
   ParseIntPipe,
   Post,
   Put,
-  Query,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -31,13 +29,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-import { SortMethodEnum } from '@/common/enums';
 import { PermissionEnum } from '../role/permission.enum';
 import { RequirePermission } from '../role/require-permission.decorator';
 import {
   CreateMemberRequestDto,
+  GetAllMemberRequestDto,
   UpdateMemberRequestDto,
 } from './dtos/requests';
+import { DeleteManyMemberRequestDto } from './dtos/requests/delete-many-member-request.dto';
 import { GetAllMemberResponseDto } from './dtos/responses';
 import { MemberService } from './member.service';
 
@@ -49,15 +48,18 @@ export class MemberController {
 
   @RequirePermission(PermissionEnum.project_member_read)
   @ApiOkResponse({ type: GetAllMemberResponseDto })
-  @Get()
-  async getAllRolesByProjectId(
+  @Post('/search')
+  async searchMembers(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Query('createdAt') createdAtSort: SortMethodEnum,
+    @Body() body: GetAllMemberRequestDto,
   ) {
+    const { limit, page, queries, operator } = body;
     return GetAllMemberResponseDto.transform(
-      await this.memberService.findByProjectId({
+      await this.memberService.findAll({
+        options: { limit, page },
+        queries,
+        operator,
         projectId,
-        sort: { createdAt: createdAtSort },
       }),
     );
   }
@@ -84,5 +86,12 @@ export class MemberController {
   @Delete('/:memberId')
   async delete(@Param('memberId', ParseIntPipe) memberId: number) {
     await this.memberService.delete(memberId);
+  }
+
+  @RequirePermission(PermissionEnum.project_member_delete)
+  @ApiParam({ name: 'projectId', type: Number })
+  @Delete()
+  async deleteMany(@Body() body: DeleteManyMemberRequestDto) {
+    await this.memberService.deleteMany(body);
   }
 }

@@ -13,14 +13,33 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import React from 'react';
+import { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
+import { useOverlay } from '@toss/use-overlay';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE } from '@/shared';
+import {
+  DEFAULT_LOCALE,
+  NoProjectDialogInProjectCreation,
+  useAllProjects,
+} from '@/shared';
 import { CreateProject } from '@/features/create-project';
 
 const CreateProjectPage: NextPage = () => {
+  const overlay = useOverlay();
+
+  const { data } = useAllProjects();
+  const openWarningNoProjects = () => {
+    overlay.open(({ close, isOpen }) => (
+      <NoProjectDialogInProjectCreation isOpen={isOpen} close={close} />
+    ));
+  };
+
+  useEffect(() => {
+    if (!data || data.items.length > 0) return;
+    openWarningNoProjects();
+  }, [data]);
+
   return <CreateProject />;
 };
 

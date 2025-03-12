@@ -15,17 +15,19 @@
  */
 /* eslint-disable no-useless-escape */
 
-import { useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useMemo } from 'react';
+import { useTranslation } from 'next-i18next';
 
 import {
+  Button,
+  Icon,
   Popover,
+  PopoverClose,
   PopoverContent,
-  PopoverHeading,
   PopoverTrigger,
-} from '@ufb/ui';
+} from '@ufb/react';
 
-import { cn, useOAIQuery } from '@/shared';
+import { useOAIQuery } from '@/shared';
 
 import { env } from '@/env';
 
@@ -38,7 +40,6 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
   const { channelId, projectId } = props;
 
   const { t } = useTranslation();
-  const [open, setOpen] = useState(false);
 
   const { data: channelData } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
@@ -88,28 +89,30 @@ const FeedbackRequestCodePopover: React.FC<IProps> = (props) => {
     return body;
   }, [channelData]);
   return (
-    <Popover onOpenChange={setOpen} open={open} placement="bottom-end">
+    <Popover>
       <PopoverTrigger asChild>
-        <button
-          className={cn([
-            'btn btn-secondary btn-md min-w-[120px]',
-            { 'bg-fill-tertiary': open },
-          ])}
-          onClick={() => setOpen(true)}
-        >
+        <Button variant="outline">
+          <Icon name="RiCodeBlock" />
           {t('main.setting.feedback-request-code')}
-        </button>
+        </Button>
       </PopoverTrigger>
-      <PopoverContent>
-        <PopoverHeading>
-          {t('main.setting.feedback-request-code')}
-        </PopoverHeading>
+      <PopoverContent className="flex flex-col gap-5 p-5">
+        <div className="flex items-center justify-between">
+          <h5 className="text-title-h5">
+            {t('main.setting.feedback-request-code')}
+          </h5>
+          <PopoverClose asChild>
+            <Button variant="ghost">
+              <Icon name="RiCloseLine" />
+            </Button>
+          </PopoverClose>
+        </div>
         {!apiKey && (
-          <p className="text-red-primary m-5">
+          <p className="text-tint-red">
             No API KEY with Active status. Please create API KEY.
           </p>
         )}
-        <pre className="bg-fill-quaternary font-10-regular m-5 whitespace-pre-wrap rounded p-4">
+        <pre className="bg-neutral-tertiary text-small-normal whitespace-pre-wrap rounded p-4">
           {`curl --request POST ${
             env.NEXT_PUBLIC_API_BASE_URL
           }/api/projects/${projectId}/channels/${channelId}/feedbacks \\\n--header 'Content-Type: application/json' \\\n--header 'x-api-key: ${

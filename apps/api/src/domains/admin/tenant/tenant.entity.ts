@@ -18,6 +18,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 
 import { CommonEntity } from '@/common/entities';
 import { ProjectEntity } from '../project/project/project.entity';
+import { LoginButtonTypeEnum } from './entities/enums/login-button-type.enum';
 
 export interface OAuthConfig {
   clientId: string;
@@ -28,6 +29,8 @@ export interface OAuthConfig {
   userProfileRequestURL: string;
   emailKey: string;
   defatulLoginEnable?: boolean;
+  loginButtonType: LoginButtonTypeEnum | null;
+  loginButtonName: string | null;
 }
 
 @Entity('tenant')
@@ -40,12 +43,6 @@ export class TenantEntity extends CommonEntity {
 
   @Column('boolean', { default: true })
   useEmail: boolean;
-
-  @Column('boolean', { default: false })
-  isPrivate: boolean;
-
-  @Column('boolean', { default: false })
-  isRestrictDomain: boolean;
 
   @Column('simple-array', { nullable: true })
   allowDomains: string[] | null;

@@ -15,13 +15,13 @@
  */
 import { useRouter } from 'next/router';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useTranslation } from 'next-i18next';
 import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 
-import { TextInput, toast } from '@ufb/ui';
+import { Button, toast } from '@ufb/react';
 
-import { Path, useOAIMutation } from '@/shared';
+import { Path, TextInput, useOAIMutation } from '@/shared';
 
 import { requestResetPasswordWithEmailSchema } from '../request-reset-password-with-email.schema';
 
@@ -44,44 +44,39 @@ const RequestResetPasswordWithEmail: React.FC<IProps> = () => {
     queryOptions: {
       async onSuccess() {
         await router.push(Path.SIGN_IN);
-        toast.positive({ title: 'Success' });
-      },
-      onError(error) {
-        toast.negative({ title: 'Error', description: error.message });
+        toast.success(t('v2.toast.success'));
       },
     },
   });
 
   return (
     <form onSubmit={handleSubmit((data) => mutate(data))}>
-      <div className="mb-12 space-y-4">
+      <div className="mb-12 flex flex-col gap-4">
         <TextInput
           type="email"
           label="Email"
-          placeholder={t('input.placeholder.email')}
-          isSubmitted={formState.isSubmitted}
-          isSubmitting={formState.isSubmitting}
-          isValid={!formState.errors.email}
-          hint={formState.errors.email?.message}
+          placeholder={t('v2.placeholder.text')}
+          error={formState.errors.email?.message}
           {...register('email')}
-          required
         />
       </div>
       <div className="flex flex-col gap-2">
-        <button
+        <Button
+          size="medium"
           type="submit"
-          className="btn btn-primary"
-          disabled={!formState.isValid || isPending}
+          loading={isPending}
+          disabled={!formState.isValid}
         >
-          {t('auth.reset-password.button.send-email')}
-        </button>
-        <button
+          {t('v2.auth.reset-password.button.send-email')}
+        </Button>
+        <Button
+          size="medium"
+          variant="outline"
           type="button"
-          className="btn btn-secondary"
           onClick={router.back}
         >
           {t('button.back')}
-        </button>
+        </Button>
       </div>
     </form>
   );

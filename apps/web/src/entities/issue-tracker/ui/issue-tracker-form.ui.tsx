@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+
 import { useFormContext } from 'react-hook-form';
 
-import { TextInput } from '@ufb/ui';
+import { Icon, InputField, InputLabel } from '@ufb/react';
 
-import { SelectBox } from '@/shared';
+import { cn, SelectInput, TextInput } from '@/shared';
 
 import type { IssueTracker } from '../issue-tracker.type';
 
@@ -29,38 +30,39 @@ const IssueTrackerForm: React.FC<IProps> = ({ readOnly }) => {
   const { register, watch, formState } = useFormContext<IssueTracker>();
 
   return (
-    <div className="flex flex-col gap-6">
-      <SelectBox
-        options={[{ value: 'jira', label: 'JIRA' }]}
-        value={{ value: 'jira', label: 'JIRA' }}
+    <div className="flex flex-col gap-4">
+      <SelectInput
+        options={[{ value: 'jira', label: 'Jira' }]}
+        value="jira"
         label="Issue Tracking System"
-        isDisabled={readOnly}
+        disabled={readOnly}
       />
       <TextInput
         label="Base URL"
-        placeholder="example.com"
+        placeholder="https://example.com"
+        error={formState.errors.ticketDomain?.message}
         {...register('ticketDomain')}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.ticketDomain?.message}
-        isValid={!formState.errors.ticketDomain}
-        disabled={readOnly}
       />
       <TextInput
         label="Project Key"
-        placeholder="PROJECT"
-        {...register('ticketKey')}
-        isSubmitting={formState.isSubmitting}
-        isSubmitted={formState.isSubmitted}
-        hint={formState.errors.ticketKey?.message}
-        isValid={!formState.errors.ticketKey}
+        placeholder="PROJ"
+        error={formState.errors.ticketKey?.message}
         disabled={readOnly}
+        {...register('ticketKey')}
       />
-      <TextInput
-        label="Ticket URL"
-        value={`${watch('ticketDomain')}/browse/${watch('ticketKey')}-{Number}`}
-        disabled
-      />
+      <InputField>
+        <InputLabel>Preview</InputLabel>
+        <div
+          className={cn(
+            'bg-neutral-tertiary flex items-center gap-2 rounded p-4',
+            { 'opacity-50': !watch('ticketDomain') || !watch('ticketKey') },
+          )}
+        >
+          <Icon name="RiPriceTag3Fill" size={16} />
+          {/* eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing */}
+          {`${watch('ticketDomain') || 'https://example.com'}/browse/${watch('ticketKey') || 'PROJ'}-{Number}`}
+        </div>
+      </InputField>
     </div>
   );
 };

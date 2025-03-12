@@ -14,15 +14,16 @@
  * under the License.
  */
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import {
-  Badge,
-  Popover,
-  PopoverContent,
-  PopoverHeading,
-  PopoverTrigger,
-} from '@ufb/ui';
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  Icon,
+  Tag,
+} from '@ufb/react';
 
 import type { FieldOptionInfo } from '../field.type';
 
@@ -34,23 +35,19 @@ const OptionListPopover: React.FC<IProps> = ({ options }) => {
   const { t } = useTranslation();
 
   return (
-    <Popover>
-      <PopoverTrigger>
-        <span className="text-blue-primary font-12-regular cursor-pointer underline">
+    <Dropdown>
+      <DropdownTrigger asChild data-state="close">
+        <Tag onClick={(e) => e.stopPropagation()}>
           {t('main.setting.option-info')}
-        </span>
-      </PopoverTrigger>
-      <PopoverContent>
-        <PopoverHeading>{t('main.setting.option-info')}</PopoverHeading>
-        <div className="m-4 flex min-w-[200px] max-w-[340px] flex-wrap gap-2">
-          {options.map((v) => (
-            <Badge key={v.key} type="secondary">
-              {v.name}
-            </Badge>
-          ))}
-        </div>
-      </PopoverContent>
-    </Popover>
+          <Icon name="RiInformation2Line" />
+        </Tag>
+      </DropdownTrigger>
+      <DropdownContent>
+        {options.map((v) => (
+          <DropdownItem key={v.key}>{v.name}</DropdownItem>
+        ))}
+      </DropdownContent>
+    </Dropdown>
   );
 };
 

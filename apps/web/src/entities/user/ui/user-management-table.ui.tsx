@@ -14,122 +14,260 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table';
-import { useTranslation } from 'react-i18next';
+import { useMutation } from '@tanstack/react-query';
+import {
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useOverlay } from '@toss/use-overlay';
+import { useTranslation } from 'next-i18next';
 
-import { Icon } from '@ufb/ui';
+import { Badge, Button, Icon, toast } from '@ufb/react';
 
-import type { SearchItemType } from '@/shared';
+import type { TableFilter, TableFilterOperator } from '@/shared';
 import {
   BasicTable,
+  client,
+  DeleteDialog,
+  TableFilterPopover,
   TablePagination,
-  TableSearchInput,
-  useOAIQuery,
+  useAllProjects,
+  useOAIMutation,
   useSort,
 } from '@/shared';
 
 import { useUserSearch } from '../lib';
 import { getUserColumns } from '../user-columns';
-import type { UserMember } from '../user.type';
+import type { UpdateUser, UserMember } from '../user.type';
+import UpdateUserDialog from './update-user-dialog.ui';
 
-interface IProps {}
+interface IProps {
+  createButton?: React.ReactNode;
+}
 
-const UserManagementTable: React.FC<IProps> = () => {
+const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
+  const overlay = useOverlay();
 
-  const [query, setQuery] = useState({});
   const [rows, setRows] = useState<UserMember[]>([]);
 
+  const [pageCount, setPageCount] = useState(0);
+  const [rowCount, setRowCount] = useState(0);
+
+  const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
+  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const queries = useMemo(() => {
+    return tableFilters.reduce(
+      (acc, filter) => {
+        return acc.concat({
+          [filter.key]:
+            filter.key === 'projectId' || filter.key === 'type' ?
+              [filter.value]
+            : filter.value,
+          condition: filter.condition,
+        });
+      },
+      [] as Record<string, unknown>[],
+    );
+  }, [tableFilters]);
+
+  const columns = useMemo(() => getUserColumns(), []);
+
   const table = useReactTable({
-    columns: getUserColumns(),
+    columns,
     data: rows,
     getCoreRowModel: getCoreRowModel(),
-    manualSorting: true,
     getRowId: (row) => String(row.id),
-    initialState: { sorting: [{ id: 'createdAt', desc: false }] },
+    enableColumnFilters: true,
+    initialState: {
+      sorting: [{ id: 'createdAt', desc: true }],
+      pagination: { pageIndex: 0, pageSize: 20 },
+    },
+    getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    manualPagination: true,
+    pageCount,
+    rowCount,
   });
 
   const { sorting, pagination } = table.getState();
-
   const sort = useSort(sorting);
 
-  const { data } = useUserSearch({
+  const { data: projects } = useAllProjects();
+
+  const {
+    data: userData,
+    refetch,
+    isLoading,
+  } = useUserSearch({
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
-    query,
     order: sort as { createdAt: 'ASC' | 'DESC' },
+    queries,
+    operator,
+  });
+
+  const { mutateAsync: deleteUsers } = useOAIMutation({
+    method: 'delete',
+    path: '/api/admin/users',
+    queryOptions: {
+      async onSuccess() {
+        await refetch();
+        toast.success(t('v2.toast.success'));
+        table.resetRowSelection();
+      },
+      onError({ message }) {
+        toast.error(message);
+      },
+    },
+  });
+
+  const { mutateAsync: updateUser } = useMutation({
+    mutationFn: async ({ id, body }: { id: number; body: UpdateUser }) => {
+      const { data } = await client.put({
+        path: '/api/admin/users/{id}',
+        pathParams: { id },
+        body,
+      });
+      return data;
+    },
+    onSuccess: async () => {
+      await refetch();
+      toast.success(t('v2.toast.success'));
+    },
+    onError(error) {
+      toast.error(error.message);
+    },
   });
 
   useEffect(() => {
-    setRows(data?.items ?? []);
-  }, [data]);
+    if (isLoading) return;
+    setRows(userData?.items ?? []);
+    setPageCount(userData?.meta.totalPages ?? 0);
+    setRowCount(userData?.meta.totalItems ?? 0);
+  }, [userData, pagination, isLoading]);
 
-  const { data: projectData } = useOAIQuery({ path: '/api/admin/projects' });
+  useEffect(() => {
+    table.setPageIndex(0);
+    table.resetRowSelection();
+  }, [pagination.pageSize]);
 
-  const searchItems = useMemo(() => {
-    return [
-      { format: 'text', key: 'email', name: 'Email' },
-      { format: 'text', key: 'name', name: 'Name' },
-      { format: 'text', key: 'department', name: 'Department' },
-      { format: 'date', key: 'createdAt', name: 'Created' },
-      {
-        format: 'select',
-        key: 'type',
-        name: 'Type',
-        options: [
-          { key: 'GENERAL', name: 'GENERAL' },
-          { key: 'SUPER', name: 'SUPER' },
-        ],
-      },
-      {
-        format: 'select',
-        key: 'projectId',
-        name: 'Project',
-        options: projectData?.items.map((v) => ({ key: v.id, name: v.name })),
-      },
-    ] as SearchItemType[];
-  }, [projectData]);
+  const selectedRowIds = useMemo(() => {
+    return Object.entries(table.getState().rowSelection).reduce(
+      (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
+      [] as number[],
+    );
+  }, [table.getState().rowSelection]);
+
+  const openDeleteUsersDialog = () => {
+    overlay.open(({ close, isOpen }) => (
+      <DeleteDialog
+        close={close}
+        isOpen={isOpen}
+        onClickDelete={() => deleteUsers({ ids: selectedRowIds })}
+      />
+    ));
+  };
+
+  const openUpdateUserDialog = (data: UserMember) => {
+    overlay.open(({ close, isOpen }) => (
+      <UpdateUserDialog
+        close={close}
+        isOpen={isOpen}
+        data={data}
+        onSubmit={async (input) => {
+          await updateUser({ id: data.id, body: input });
+          close();
+        }}
+        onClickDelete={() => deleteUsers({ ids: [data.id] })}
+      />
+    ));
+  };
 
   return (
-    <div>
-      <div className="mb-3 flex items-center justify-between">
-        <p className="font-16-regular text-secondary">
-          {t('text.search-result')}
-          <span className="text-primary ml-2">
-            {t('text.number-count', { count: data?.meta.totalItems ?? 0 })}
-          </span>
-        </p>
-        <div className="flex gap-2">
-          <TablePagination
-            limit={pagination.pageSize}
-            nextPage={() => table.setPageIndex((page) => page + 1)}
-            prevPage={() => table.setPageIndex((page) => page - 1)}
-            disabledNextPage={
-              pagination.pageIndex + 1 >= (data?.meta.totalPages ?? 1)
-            }
-            disabledPrevPage={pagination.pageIndex < 1}
-            setLimit={table.setPageSize}
-          />
-          <TableSearchInput
-            searchItems={searchItems}
-            onChangeQuery={setQuery}
+    <>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <TableFilterPopover
+            filterFields={[
+              {
+                key: 'email',
+                format: 'string',
+                name: 'Email',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'name',
+                format: 'string',
+                name: 'Name',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'department',
+                format: 'string',
+                name: 'Department',
+                matchType: ['CONTAINS', 'IS'],
+              },
+              {
+                key: 'type',
+                format: 'select',
+                name: 'Type',
+                options: [
+                  { key: 'SUPER', name: 'Super' },
+                  { key: 'GENERAL', name: 'General' },
+                ],
+                matchType: ['IS'],
+              },
+              {
+                key: 'projectId',
+                format: 'select',
+                name: 'Project',
+                options:
+                  projects?.items.map((v) => ({
+                    key: String(v.id),
+                    name: v.name,
+                  })) ?? [],
+                matchType: ['IS'],
+              },
+              {
+                key: 'createdAt',
+                format: 'date',
+                name: 'Created',
+                matchType: ['BETWEEN', 'IS'],
+              },
+            ]}
+            tableFilters={tableFilters}
+            onSubmit={(filters, oprator) => {
+              setTableFilters(filters);
+              setOperator(oprator);
+            }}
+            table={table}
           />
         </div>
+        {selectedRowIds.length > 0 && (
+          <Button
+            variant="outline"
+            className="!text-tint-red"
+            onClick={openDeleteUsersDialog}
+          >
+            <Icon name="RiDeleteBin6Line" />
+            {t('v2.button.name.delete', { name: 'User' })}
+            <Badge variant="subtle" className="!text-tint-red">
+              {selectedRowIds.length}
+            </Badge>
+          </Button>
+        )}
       </div>
       <BasicTable
         table={table}
-        emptyComponent={
-          <div className="my-32 flex flex-col items-center justify-center gap-3">
-            <Icon
-              name="WarningTriangleFill"
-              className="text-quaternary"
-              size={32}
-            />
-            <p className="text-secondary">{t('text.no-data')}</p>
-          </div>
-        }
+        onClickRow={(_, row) => openUpdateUserDialog(row)}
+        isLoading={isLoading}
+        createButton={createButton}
       />
-    </div>
+      <TablePagination table={table} />
+    </>
   );
 };
 

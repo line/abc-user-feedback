@@ -1,0 +1,60 @@
+/**
+ * Copyright 2025 LY Corporation
+ *
+ * LY Corporation licenses this file to you under the Apache License,
+ * version 2.0 (the "License"); you may not use this file except in compliance
+ * with the License. You may obtain a copy of the License at:
+ *
+ *   https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations
+ * under the License.
+ */
+.table {
+  --table-text-cell: var(--text-neutral-primary);
+  --table-text-header: var(--text-neutral-tertiary);
+  --table-icon-cell: var(--text-neutral-primary);
+  --table-icon-header: var(--text-neutral-tertiary);
+  --table-border-default: var(--border-neutral-tertiary);
+  --table-fg-default: var(--fg-neutral-primary);
+  --table-fg-hover: var(--fg-neutral-tertiary);
+
+  @apply w-full caption-bottom border-[var(--table-border-default)];
+}
+
+.table-header {
+  @apply [&_th]:border-b [&_th]:border-b-[var(--table-border-default)];
+}
+
+.table-body {
+  @apply [&_td]:border-b [&_td]:border-b-[var(--table-border-default)] [&_tr:last-child_td]:border-0;
+}
+
+.table-footer {
+  @apply border-t border-t-[var(--table-border-default)] bg-[var(--table-fg-hover)] [&>tr]:last:border-b-0;
+}
+
+.table-row {
+  @apply border-b border-b-[var(--table-border-default)] transition-colors hover:bg-[var(--table-fg-hover)] data-[state=selected]:bg-[var(--table-fg-hover)];
+}
+
+.table-head {
+  @apply text-base-normal h-12 px-4 align-middle font-normal text-[var(--table-text-header)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-1 [&>svg]:mr-1 [&>svg]:text-[var(--table-icon-header)];
+
+  /* default */
+  @apply table-head-left;
+}
+
+.table-cell {
+  @apply text-base-normal px-4 py-3 align-middle text-[var(--table-text-cell)] [&:has([role=checkbox])]:pr-0 [&>.badge]:mr-1 [&>svg]:text-[var(--table-icon-cell)];
+
+  /* default */
+  @apply table-cell-left;
+}
+
+.table-caption {
+  @apply text-small-normal mt-1 text-[--table-text-header];
+}

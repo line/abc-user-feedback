@@ -29,6 +29,7 @@ import {
   SetupTenantDto,
   UpdateTenantDto,
 } from './dtos';
+import { LoginButtonTypeEnum } from './entities/enums/login-button-type.enum';
 import {
   TenantAlreadyExistsException,
   TenantNotFoundException,
@@ -57,6 +58,7 @@ describe('TenantService', () => {
     it('creation succeeds with valid data', async () => {
       const dto = new SetupTenantDto();
       dto.siteName = faker.string.sample();
+      dto.password = '12345678';
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);
       jest.spyOn(userRepo, 'save');
 
@@ -78,8 +80,6 @@ describe('TenantService', () => {
     const dto = new UpdateTenantDto();
     dto.siteName = faker.string.sample();
     dto.useEmail = faker.datatype.boolean();
-    dto.isPrivate = faker.datatype.boolean();
-    dto.isRestrictDomain = faker.datatype.boolean();
     dto.allowDomains = [faker.string.sample()];
     dto.useOAuth = faker.datatype.boolean();
     dto.oauthConfig = {
@@ -91,6 +91,8 @@ describe('TenantService', () => {
       userProfileRequestURL: faker.string.sample(),
       emailKey: faker.string.sample(),
       defatulLoginEnable: faker.datatype.boolean(),
+      loginButtonType: LoginButtonTypeEnum.CUSTOM,
+      loginButtonName: faker.string.sample(),
     };
 
     it('update succeeds with valid data', async () => {
@@ -99,8 +101,6 @@ describe('TenantService', () => {
       expect(tenant.id).toBeDefined();
       expect(tenant.siteName).toEqual(dto.siteName);
       expect(tenant.useEmail).toEqual(dto.useEmail);
-      expect(tenant.isPrivate).toEqual(dto.isPrivate);
-      expect(tenant.isRestrictDomain).toEqual(dto.isRestrictDomain);
       expect(tenant.allowDomains).toEqual(dto.allowDomains);
       expect(tenant.useOAuth).toEqual(dto.useOAuth);
       expect(tenant.oauthConfig).toEqual(dto.oauthConfig);
@@ -117,7 +117,7 @@ describe('TenantService', () => {
     it('finding a tenant succeeds when there is a tenant', async () => {
       const tenant = await tenantService.findOne();
 
-      expect(tenant).toEqual({ ...tenantFixture, useEmailVerification: false });
+      expect(tenant).toEqual({ ...tenantFixture });
     });
     it('finding a tenant fails when there is no tenant', async () => {
       jest.spyOn(tenantRepo, 'find').mockResolvedValue([]);

@@ -14,7 +14,9 @@
  * under the License.
  */
 
-import { cn, usePermissions } from '@/shared';
+import { Switch } from '@ufb/react';
+
+import { usePermissions } from '@/shared';
 
 import type { Webhook, WebhookInfo } from '../webhook.type';
 
@@ -28,20 +30,17 @@ const WebhookSwitch: React.FC<IProps> = (props) => {
   const perms = usePermissions();
 
   return (
-    <input
-      type="checkbox"
-      className={cn('toggle toggle-sm', {
-        'border-fill-primary bg-fill-primary': webhook.status === 'INACTIVE',
-      })}
+    <Switch
       checked={webhook.status === 'ACTIVE'}
-      onChange={(e) => {
+      onClick={(e) => e.stopPropagation()}
+      onCheckedChange={(checked) => {
         onChangeUpdate(webhook.id, {
           ...webhook,
           events: webhook.events.map((event) => ({
             ...event,
             channelIds: event.channels.map((channel) => channel.id),
           })),
-          status: e.target.checked ? 'ACTIVE' : 'INACTIVE',
+          status: checked ? 'ACTIVE' : 'INACTIVE',
         });
       }}
       disabled={!perms.includes('project_webhook_update')}

@@ -16,16 +16,17 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Brackets, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { TenantNotFoundException } from '@/domains/admin/tenant/exceptions';
+import { QueryV2ConditionsEnum } from '@/common/enums';
 import { NotAllowedDomainException } from '@/domains/admin/user/exceptions';
 import { UserService } from '@/domains/admin/user/user.service';
 import { TenantEntity } from '../../tenant/tenant.entity';
 import { RoleService } from '../role/role.service';
-import type { FindByProjectIdDto } from './dtos';
+import type { FindAllMembersDto, FindByProjectIdDto } from './dtos';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
+import { DeleteManyMemberRequestDto } from './dtos/requests/delete-many-member-request.dto';
 import {
   MemberAlreadyExistsException,
   MemberNotFoundException,
@@ -67,14 +68,18 @@ export class MemberService {
 
   async validateEmail(email: string) {
     const tenants = await this.tenantRepo.find();
-    if (tenants.length === 0) throw new TenantNotFoundException();
+    if (tenants.length === 0) return true;
 
     const tenant = {
       ...tenants[0],
-      useEmailVerification: this.configService.get<boolean>('smtp.use'),
     };
     const domain = email.split('@')[1];
-    if (tenant.isRestrictDomain && !tenant.allowDomains?.includes(domain)) {
+
+    if (
+      tenant.allowDomains &&
+      tenant.allowDomains.length > 0 &&
+      !tenant.allowDomains.includes(domain)
+    ) {
       throw new NotAllowedDomainException();
     }
     return true;
@@ -87,6 +92,102 @@ export class MemberService {
       relations: { role: true, user: true },
     });
     return { members, total };
+  }
+
+  async findAll(dto: FindAllMembersDto) {
+    const { projectId, queries = [], operator = 'AND' } = dto;
+    const page = Number(dto.options.page);
+    const limit = Number(dto.options.limit);
+
+    const queryBuilder = this.repository
+      .createQueryBuilder('members')
+      .leftJoinAndSelect('members.role', 'role')
+      .leftJoinAndSelect('members.user', 'user');
+
+    queryBuilder.andWhere('role.project_id = :projectId', { projectId });
+
+    const createdAtCondition = queries.find((query) => query.createdAt);
+    if (createdAtCondition?.createdAt) {
+      const { gte, lt } = createdAtCondition.createdAt;
+      queryBuilder.andWhere('members.created_at >= :gte', { gte });
+      queryBuilder.andWhere('members.created_at < :lt', { lt });
+    }
+
+    const method = operator === 'AND' ? 'andWhere' : 'orWhere';
+
+    queryBuilder.andWhere(
+      new Brackets((qb) => {
+        let paramIndex = 0;
+        for (const query of queries) {
+          const { condition } = query;
+          for (const [fieldKey, value] of Object.entries(query)) {
+            if (fieldKey === 'condition' || fieldKey === 'createdAt') continue;
+
+            const paramName = `value${paramIndex++}`;
+
+            if (fieldKey === 'role') {
+              qb[method](
+                `role.name ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+                {
+                  [paramName]:
+                    condition === QueryV2ConditionsEnum.IS ?
+                      value
+                    : `%${value?.toString()}%`,
+                },
+              );
+            } else if (fieldKey === 'name') {
+              qb[method](
+                `user.name ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+                {
+                  [paramName]:
+                    condition === QueryV2ConditionsEnum.IS ?
+                      value
+                    : `%${value?.toString()}%`,
+                },
+              );
+            } else if (fieldKey === 'email') {
+              qb[method](
+                `user.email ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+                {
+                  [paramName]:
+                    condition === QueryV2ConditionsEnum.IS ?
+                      value
+                    : `%${value?.toString()}%`,
+                },
+              );
+            } else if (fieldKey === 'department') {
+              qb[method](
+                `user.department ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+                {
+                  [paramName]:
+                    condition === QueryV2ConditionsEnum.IS ?
+                      value
+                    : `%${value?.toString()}%`,
+                },
+              );
+            }
+          }
+        }
+      }),
+    );
+
+    const items = await queryBuilder
+      .offset((page - 1) * limit)
+      .limit(limit)
+      .getMany();
+
+    const total = await queryBuilder.getCount();
+
+    return {
+      items,
+      meta: {
+        itemCount: items.length,
+        totalItems: total,
+        itemsPerPage: limit,
+        currentPage: page,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   @Transactional()
@@ -131,5 +232,15 @@ export class MemberService {
     const member = new MemberEntity();
     member.id = memberId;
     await this.repository.remove(member);
+  }
+
+  @Transactional()
+  async deleteMany(members: DeleteManyMemberRequestDto) {
+    await this.repository
+      .createQueryBuilder()
+      .delete()
+      .from(MemberEntity)
+      .where('id IN (:...ids)', { ids: members.memberIds })
+      .execute();
   }
 }

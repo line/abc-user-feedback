@@ -16,97 +16,37 @@
 
 import { createColumnHelper } from '@tanstack/react-table';
 import dayjs from 'dayjs';
-import { Trans } from 'next-i18next';
 
-import { Badge, Icon, toast } from '@ufb/ui';
+import { Badge } from '@ufb/react';
 
-import { DATE_TIME_FORMAT } from '@/shared';
+import { CopyIconButton, DATE_TIME_FORMAT } from '@/shared';
 
 import type { ApiKey } from './api-key.type';
-import DeleteApiKeyButton from './ui/delete-api-key-button.ui';
-import UpdateApiKeyPopover from './ui/update-api-key-popover.ui';
 
 const columnHelper = createColumnHelper<ApiKey>();
 
-export const getApiKeyColumns = (
-  onDelete?: (id: number) => void,
-  onUpdate?: (type: 'recover' | 'softDelete', apiKeyId: number) => void,
-) => [
+export const getApiKeyColumns = () => [
   columnHelper.accessor('value', {
     header: 'API KEY',
     cell: ({ getValue }) => (
-      <div className="flex items-center gap-1">
+      <div className="text-base-strong flex items-center">
         {getValue()}
-        <button
-          className="icon-btn icon-btn-sm icon-btn-tertiary"
-          onClick={async () => {
-            try {
-              await navigator.clipboard.writeText(getValue());
-              toast.positive({
-                title: <Trans i18nKey="toast.copy" />,
-                iconName: 'CopyFill',
-              });
-            } catch {
-              toast.negative({ title: 'fail' });
-            }
-          }}
-        >
-          <Icon name="Clips" size={16} className="cursor-pointer" />
-        </button>
+        <CopyIconButton data={getValue()} />
       </div>
     ),
-    size: 300,
-  }),
-
-  columnHelper.accessor('createdAt', {
-    header: 'Created',
-    cell: ({ getValue, row }) => (
-      <p className={row.original.deletedAt !== null ? 'text-tertiary' : ''}>
-        {dayjs(getValue()).format(DATE_TIME_FORMAT)}
-      </p>
-    ),
-    size: 100,
+    enableSorting: false,
   }),
   columnHelper.accessor('deletedAt', {
     header: 'Status',
     cell: ({ getValue }) => (
-      <Badge
-        color={getValue() ? 'black' : 'blue'}
-        type={getValue() ? 'secondary' : 'primary'}
-      >
-        {getValue() ?
-          <Trans i18nKey="main.setting.api-key-status.inactive" />
-        : <Trans i18nKey="main.setting.api-key-status.active" />}
+      <Badge color={getValue() === null ? 'green' : 'red'} radius="large">
+        {getValue() === null ? 'Active' : 'Inactive'}
       </Badge>
     ),
-    size: 50,
+    enableSorting: false,
   }),
-  ...(onUpdate ?
-    [
-      columnHelper.display({
-        id: 'edit',
-        header: 'Edit',
-        cell: ({ row }) => (
-          <UpdateApiKeyPopover
-            apiKeyId={row.original.id}
-            deletedAt={row.original.deletedAt}
-            onClickUpdate={onUpdate}
-          />
-        ),
-        size: 50,
-      }),
-    ]
-  : []),
-  ...(onDelete ?
-    [
-      columnHelper.display({
-        id: 'delete',
-        header: 'Delete',
-        cell: ({ row }) => (
-          <DeleteApiKeyButton onClickDelete={() => onDelete(row.original.id)} />
-        ),
-        size: 100,
-      }),
-    ]
-  : []),
+  columnHelper.accessor('createdAt', {
+    header: 'Created',
+    cell: ({ getValue }) => dayjs(getValue()).format(DATE_TIME_FORMAT),
+  }),
 ];

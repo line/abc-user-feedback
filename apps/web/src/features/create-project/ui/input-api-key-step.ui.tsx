@@ -14,8 +14,11 @@
  * under the License.
  */
 import { randomBytes } from 'crypto';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
+import { Button } from '@ufb/react';
+
+import type { ApiKeyUpdateType } from '@/entities/api-key';
 import { ApiKeyTable } from '@/entities/api-key';
 
 import { useCreateProjectStore } from '../create-project-model';
@@ -39,6 +42,19 @@ const InputApiKeyStep: React.FC<IProps> = () => {
       }),
     );
   };
+  const updateApiKey = (type: ApiKeyUpdateType, id: number) => {
+    onChangeInput(
+      'apiKeys',
+      input.apiKeys.map((apiKey) =>
+        apiKey.id === id ?
+          {
+            ...apiKey,
+            deletedAt: type === 'recover' ? null : new Date().toISOString(),
+          }
+        : apiKey,
+      ),
+    );
+  };
 
   const deleteApiKey = (id: number) => {
     onChangeInput(
@@ -50,15 +66,16 @@ const InputApiKeyStep: React.FC<IProps> = () => {
   return (
     <CreateProjectInputTemplate
       actionButton={
-        <button
-          className="btn btn-primary btn-md min-w-[120px]"
-          onClick={createApiKey}
-        >
-          {t('main.setting.button.create-api-key')}
-        </button>
+        <Button className="min-w-[120px]" onClick={createApiKey}>
+          {t('v2.button.name.create', { name: 'API Key' })}
+        </Button>
       }
     >
-      <ApiKeyTable apiKeys={input.apiKeys} onClickDelete={deleteApiKey} />
+      <ApiKeyTable
+        data={input.apiKeys}
+        onClickUpdate={updateApiKey}
+        onClickDelete={deleteApiKey}
+      />
     </CreateProjectInputTemplate>
   );
 };

@@ -13,20 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { BadgeProps } from '@ufb/ui';
-import { Badge } from '@ufb/ui';
+import { useTranslation } from 'next-i18next';
 
-import { ISSUE_COLOR_MAP } from '../issue-color.constant';
-import type { Issue } from '../issue.type';
+import type { BadgeProps } from '@ufb/react';
+import { Badge } from '@ufb/react';
 
-interface IProps extends Omit<BadgeProps, 'color' | 'type'> {
-  issue: Issue;
+import { ISSUES } from '@/shared';
+import { BADGE_COLOR_MAP } from '@/shared/constants/color-map';
+import type { BadgeColor } from '@/shared/constants/color-map';
+
+import type { Issue, IssueStatus } from '../issue.type';
+
+const ISSUE_COLOR_MAP: Record<IssueStatus, BadgeColor> = {
+  INIT: 'yellow',
+  ON_REVIEW: 'green',
+  IN_PROGRESS: 'sky',
+  RESOLVED: 'zinc',
+  PENDING: 'indigo',
+};
+interface IProps extends Omit<BadgeProps, 'color'> {
+  right?: React.ReactNode;
+  status: Issue['status'];
+  name?: string;
 }
 
-const IssueBadge: React.FC<IProps> = ({ issue, ...props }) => {
+const IssueBadge: React.FC<IProps> = ({ name, status, right, ...props }) => {
+  const { t } = useTranslation();
+
   return (
-    <Badge color={ISSUE_COLOR_MAP[issue.status]} type="secondary" {...props}>
-      {issue.name}
+    <Badge {...props} className={BADGE_COLOR_MAP[ISSUE_COLOR_MAP[status]]}>
+      {name ?? ISSUES(t).find((v) => v.key === status)?.name} {right}
     </Badge>
   );
 };

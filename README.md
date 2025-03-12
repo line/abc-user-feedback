@@ -4,11 +4,13 @@
 
 ABC User Feedback is a standalone web application that manages Voice of Customer (VoC) data. It allows you to gather and sort feedback from your customers. The product is being applied and used in services worth 10 million MAU.
 
-![sample image](./assets/main.png)
+<p align="center">
+  <video src="https://github.com/user-attachments/assets/a2ef7a1a-41ec-4cec-b7d1-bda5fbd7d48b" width="100%" />
+</p>
 
 ## Table of Contents
 
-- [Features](#Features)
+- [Features](#-features)
 - [Getting Started](#Getting-Started)
 - [Configuration](#configuration)
 - [Integration](#Integration)
@@ -16,17 +18,20 @@ ABC User Feedback is a standalone web application that manages Voice of Customer
 - [Contributing](#Contributing-Guidelines)
 - [License](#license)
 
+## ✨ Features
 
-## Features
+| ![Image 1](./assets/01-feedback-tag.png)    | ![Image 2](./assets/02-Issue-Kanban.png)  |
+| ------------------------------------------- | ----------------------------------------- |
+| ![Image 3](./assets/03-issue-tracker.png)   | ![Image 4](./assets/04-single-signon.png) |
+| ![Image 3](./assets/05-role-management.png) | ![Image 4](./assets/06-dashboard.png)     |
 
-ABC User Feedback provides the following features:
+- **Feedback Tag**: You can assign tags to each feedback to categorize them by topic.
+- **Kanban Mode**: Experience the advantage of organizing and visualizing issue groups efficiently with Kanban mode.
+- **Issue Tracker**: The Issue feature has a status indicator that lets you use it as a simple issue tracker. You can also link each issue to a ticket in your own issue tracker system.
+- **Single Sign-on**: Authentication offers OAuth to accommodate enterprise-level single sign-on (SSO) requirements.
+- **Role Management**: Role Based Access Control (RBAC)
+- **Dashboard**: Dashboard help you visualize statistical data about your feedback and issues so you can learn about them at a glance.
 
-![data field image](./assets/01-data-field.png)
-![feedback tag image](./assets/02-feedback-tag.png)
-![issue tracker image](./assets/03-issue-tracker.png)
-![single sign-on image](./assets/04-single-signon.png)
-![role management image](./assets/05-role-management.png)
-![dashboard image](./assets/06-dashboard.png)
 
 ## Getting Started
 

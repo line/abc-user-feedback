@@ -31,7 +31,7 @@ class RoleProjectDto {
   @Expose()
   updatedAt: string;
 
-  @ApiProperty()
+  @ApiProperty({ nullable: true, type: String })
   @Expose()
   deletedAt: string | null;
 
@@ -65,7 +65,11 @@ class RoleItemDto {
   @Expose()
   name: string;
 
-  @ApiProperty({ type: [PermissionEnum], enum: PermissionEnum })
+  @ApiProperty({
+    enumName: 'PermissionEnum',
+    enum: PermissionEnum,
+    type: [PermissionEnum],
+  })
   @Expose()
   permissions: PermissionEnum[];
 

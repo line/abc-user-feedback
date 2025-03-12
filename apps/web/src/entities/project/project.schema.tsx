@@ -20,11 +20,13 @@ export const projectSchema = z.object({
   id: z.number(),
   name: z
     .string()
-    .min(1, { message: i18n?.t('hint.required') })
-    .max(20, { message: i18n?.t('hint.max-length', { length: 20 }) }),
+    .trim()
+    .min(1, { message: i18n?.t('v2.error.required') })
+    .max(20, { message: i18n?.t('v2.error.lessThenNcharacters', { n: 20 }) }),
   description: z
     .string()
-    .max(50, { message: i18n?.t('hint.max-length', { length: 50 }) })
+    .trim()
+    .max(50, { message: i18n?.t('v2.error.lessThenNcharacters', { n: 50 }) })
     .nullable(),
   createdAt: z.string(),
   updatedAt: z.string(),

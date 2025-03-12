@@ -13,11 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
-import { Listbox } from '@headlessui/react';
+import { useMemo } from 'react';
 import { getCountry } from 'countries-and-timezones';
 
-import { Icon, TextInput } from '@ufb/ui';
+import { SelectSearchInput } from '@/shared';
 
 import type { Timezone } from '../project.type';
 import { getTimezoneOptions } from '../timezone.util';
@@ -28,74 +27,43 @@ const getLabel = (timezone?: Timezone) => {
   return `(${timezone.offset}) ${timezone.name}, ${country?.name}`;
 };
 
+const getSelectValue = (timezone?: Timezone) => {
+  if (!timezone) return '';
+  const country = getCountry(timezone.countryCode);
+  return `${timezone.offset}_${timezone.name}_${timezone.countryCode}_${country?.name}`;
+};
+
+const getTimezonValue = (value: string): Timezone => {
+  const [offset, name, countryCode] = value.split('_');
+  if (!offset || !name || !countryCode)
+    throw new Error('Invalid timezone value');
+  return { offset, name, countryCode };
+};
+
 interface IProps {
   value?: Timezone;
-  onChange?: (timezone: Timezone) => void;
+  onChange?: (timezone?: Timezone) => void;
   disabled?: boolean;
 }
 
 const TimezoneSelectBox: React.FC<IProps> = ({ onChange, value, disabled }) => {
-  const [query, setQuery] = useState('');
-
   const options = useMemo(() => getTimezoneOptions(), []);
 
-  const filteredOptions = useMemo(
-    () =>
-      query === '' ? options : (
-        options.filter((option) =>
-          getLabel(option).toLowerCase().includes(query.toLowerCase()),
-        )
-      ),
-    [query, options],
-  );
-
   return (
-    <div className="flex flex-col gap-2">
-      <p className="input-label">Time Zone</p>
-      <Listbox
-        as="div"
-        className="relative"
-        value={value}
-        onChange={onChange}
-        disabled={disabled}
-      >
-        <Listbox.Button className="input">
-          {({ open }) => (
-            <div className="flex w-full justify-between">
-              {getLabel(value)}
-              <Icon name={open ? 'ChevronUp' : 'ChevronDown'} size={20} />
-            </div>
-          )}
-        </Listbox.Button>
-        <Listbox.Options
-          as="div"
-          className="bg-primary absolute z-10 mt-1 w-full overflow-hidden rounded border"
-        >
-          <div className="p-2">
-            <TextInput
-              leftIconName="Search"
-              placeholder="Search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-          </div>
-          <ul className="max-h-[200px] overflow-auto">
-            {filteredOptions.map((option, index) => (
-              <Listbox.Option
-                key={index}
-                value={option}
-                className="hover:bg-fill-quaternary flex h-10 cursor-pointer items-center justify-between px-3"
-              >
-                {getLabel(option)}
-                {JSON.stringify(option) === JSON.stringify(value) && (
-                  <Icon name="Check" size={16} />
-                )}
-              </Listbox.Option>
-            ))}
-          </ul>
-        </Listbox.Options>
-      </Listbox>
-    </div>
+    <SelectSearchInput
+      label="Time Zone"
+      options={options.map((option) => ({
+        label: getLabel(option),
+        value: getSelectValue(option),
+      }))}
+      value={getSelectValue(value)}
+      onChange={(v) => {
+        if (!v) return;
+        onChange?.(getTimezonValue(v));
+      }}
+      disabled={disabled}
+      required
+    />
   );
 };
 

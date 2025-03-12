@@ -28,7 +28,7 @@ import CreateProjectInputTemplate from './create-project-input-template.ui';
 interface IProps {}
 
 const InputProjectInfo: React.FC<IProps> = () => {
-  const { onChangeInput, input } = useCreateProjectStore();
+  const { onChangeInput, input, setEditingStepIndex } = useCreateProjectStore();
 
   const methods = useForm<ProjectInfo>({
     resolver: zodResolver(projectInfoSchema),
@@ -40,6 +40,7 @@ const InputProjectInfo: React.FC<IProps> = () => {
       const newValues = projectInfoSchema.safeParse(values);
       if (!newValues.data) return;
       onChangeInput('projectInfo', newValues.data);
+      setEditingStepIndex(0);
     });
     return () => subscription.unsubscribe();
   }, []);

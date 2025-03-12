@@ -13,65 +13,101 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useTranslation } from 'next-i18next';
+import type { Table } from '@tanstack/react-table';
 
-import { Icon } from '@ufb/ui';
+import {
+  Button,
+  Dropdown,
+  DropdownContent,
+  DropdownItem,
+  DropdownTrigger,
+  Icon,
+} from '@ufb/react';
 
-interface IProps extends React.PropsWithChildren {
-  limit?: number;
-  setLimit?: (limit: number) => void;
-  prevPage: () => void;
-  nextPage: () => void;
-  disabledPrevPage: boolean;
-  disabledNextPage: boolean;
-  short?: boolean;
+import { cn } from '@/shared/utils';
+
+const PAGE_SIZES = [20, 30, 40, 50];
+
+interface IProps<T> {
+  table: Table<T>;
+  disableRowSelect?: boolean;
+  disableLimit?: boolean;
 }
 
-const TablePagination: React.FC<IProps> = (props) => {
-  const {
-    limit,
-    disabledNextPage,
-    disabledPrevPage,
-    nextPage,
-    prevPage,
-    setLimit,
-    short = false,
-  } = props;
+const TablePagination = <T,>(props: IProps<T>) => {
+  const { table, disableRowSelect, disableLimit } = props;
+  const { pagination } = table.getState();
 
-  const { t } = useTranslation();
   return (
-    <div className="flex items-center gap-3">
-      {!short && (
-        <>
-          <p className="whitespace-nowrap">{t('text.per-page')}</p>
-          <select
-            className="text-primary bg-primary"
-            value={limit}
-            onChange={(e) =>
-              setLimit && setLimit(parseInt(e.currentTarget.value))
-            }
-          >
-            <option value={10}>10</option>
-            <option value={20}>20</option>
-            <option value={50}>50</option>
-            <option value={100}>100</option>
-          </select>
-        </>
+    <div
+      className={cn('flex w-full items-center justify-between', {
+        'justify-end': disableRowSelect,
+      })}
+    >
+      {!disableRowSelect && (
+        <p className="text-neutral-tertiary">
+          {table.getSelectedRowModel().rows.length} of {table.getRowCount()}{' '}
+          row(s) selected.
+        </p>
       )}
-      <button
-        className="icon-btn icon-btn-xs icon-btn-tertiary"
-        onClick={prevPage}
-        disabled={disabledPrevPage}
-      >
-        <Icon name="ChevronLeft" />
-      </button>
-      <button
-        className="icon-btn icon-btn-xs icon-btn-tertiary"
-        onClick={nextPage}
-        disabled={disabledNextPage}
-      >
-        <Icon name="ChevronRight" />
-      </button>
+      <div className="text-neutral-tertiary flex items-center gap-2">
+        {!disableLimit && (
+          <>
+            <p>Rows per page</p>
+            <Dropdown>
+              <DropdownTrigger variant="outline">
+                {pagination.pageSize}
+                <Icon name="RiExpandUpDownFill" />
+              </DropdownTrigger>
+              <DropdownContent>
+                {PAGE_SIZES.map((pageSize) => (
+                  <DropdownItem
+                    key={pageSize}
+                    onClick={() => table.setPageSize(pageSize)}
+                  >
+                    {pageSize}
+                  </DropdownItem>
+                ))}
+              </DropdownContent>
+            </Dropdown>
+          </>
+        )}
+        <p>
+          Page {pagination.pageIndex + 1} of {table.getPageCount()}
+        </p>
+        <Button
+          size="small"
+          variant="outline"
+          onClick={table.firstPage}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <Icon name="RiArrowLeftDoubleFill" />
+        </Button>
+        <Button
+          size="small"
+          variant="outline"
+          onClick={table.previousPage}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <Icon name="RiArrowLeftSLine" />
+        </Button>
+        <Button
+          size="small"
+          variant="outline"
+          onClick={table.nextPage}
+          disabled={!table.getCanNextPage()}
+        >
+          <Icon name="RiArrowRightSLine" />
+        </Button>
+        <Button
+          size="small"
+          variant="outline"
+          onClick={table.lastPage}
+          disabled={!table.getCanNextPage()}
+        >
+          <Icon name="RiArrowRightDoubleFill" />
+        </Button>
+      </div>
     </div>
   );
 };

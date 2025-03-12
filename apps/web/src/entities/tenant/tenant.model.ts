@@ -34,6 +34,6 @@ export const useTenantStore = create<State & Action>((set) => ({
   setTenant: (tenant) => set({ tenant }),
   refetchTenant: async () => {
     const { data } = await client.get({ path: '/api/admin/tenants' });
-    set({ tenant: data });
+    set({ tenant: data as Tenant });
   },
 }));

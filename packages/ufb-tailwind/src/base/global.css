@@ -1,8 +1,0 @@
-textarea:focus,
-input:focus {
-  outline: none;
-}
-
-button {
-  display: inline-flex;
-}

@@ -14,7 +14,16 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import {
+  IsEnum,
+  IsOptional,
+  IsString,
+  MaxLength,
+  MinLength,
+} from 'class-validator';
+
+import { IssueStatusEnum } from '@/common/enums';
+import { IsNullable } from '@/domains/admin/user/decorators';
 
 export class CreateIssueRequestDto {
   @ApiProperty({ description: 'Issue name', example: 'payment issue' })
@@ -22,4 +31,35 @@ export class CreateIssueRequestDto {
   @MinLength(1)
   @MaxLength(20)
   name: string;
+
+  @ApiProperty({
+    required: false,
+    enum: IssueStatusEnum,
+    description: 'Issue status',
+    example: IssueStatusEnum.IN_PROGRESS,
+  })
+  @IsEnum(IssueStatusEnum)
+  @IsOptional()
+  status: IssueStatusEnum = IssueStatusEnum.INIT;
+
+  @ApiProperty({
+    nullable: true,
+    description: 'Issue description',
+    example: 'This is a payment issue',
+    type: String,
+  })
+  @IsString()
+  @IsNullable()
+  @MaxLength(50)
+  @IsOptional()
+  description: string | null;
+
+  @ApiProperty({
+    required: false,
+    description: 'External Issue Id',
+    example: '123',
+  })
+  @IsString()
+  @IsOptional()
+  externalIssueId: string;
 }

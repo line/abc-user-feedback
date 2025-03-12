@@ -16,29 +16,23 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { Path, useOAIQuery } from '@/shared';
+import { useAllProjects } from '@/shared';
 
 interface IProps extends React.PropsWithChildren {
   projectId: number;
 }
 
 const ProjectGuard: React.FC<IProps> = ({ children, projectId }) => {
-  const { data, status } = useOAIQuery({
-    path: '/api/admin/projects',
-    variables: { limit: 1000, page: 1 },
-  });
+  const { data } = useAllProjects();
   const router = useRouter();
 
   useEffect(() => {
     if (!data) return;
-    const project = data.items.find((v) => v.id === projectId);
-    if (!project) {
-      alert('You do not have permission for this project');
-      void router.replace(Path.MAIN);
+    if (!data.items.some((v) => v.id === projectId)) {
+      void router.replace('/403');
     }
   }, [data]);
 
-  if (status === 'pending') return <>Loading...</>;
   return children;
 };
 

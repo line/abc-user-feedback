@@ -16,27 +16,27 @@
 
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
-import type { TooltipProps } from 'recharts';
+import { useTranslation } from 'next-i18next';
 import {
+  Area,
+  AreaChart,
   CartesianGrid,
-  Line,
-  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from 'recharts';
+import type { TooltipProps } from 'recharts';
 import type {
   NameType,
   ValueType,
 } from 'recharts/types/component/DefaultTooltipContent';
 
-import ChartContainer from './chart-container';
+import ChartCard from './chart-card';
 
 interface IProps {
   title: string;
-  description?: string;
+  description: string;
   height?: number;
   data: unknown[];
   dataKeys: { color: string; name: string }[];
@@ -58,7 +58,7 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
   } = props;
 
   return (
-    <ChartContainer
+    <ChartCard
       dataKeys={dataKeys}
       description={description}
       title={title}
@@ -66,15 +66,15 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
       filterContent={filterContent}
     >
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
-        <LineChart
+        <AreaChart
           width={500}
           height={300}
           data={data}
-          margin={{ left: -5, right: 10, top: 10, bottom: 10 }}
+          margin={{ left: 0, right: 10, top: 10, bottom: 10 }}
         >
           <CartesianGrid
-            strokeDasharray="3 3"
-            stroke="var(--fill-color-secondary)"
+            vertical={false}
+            stroke="var(--border-neutral-tertiary)"
           />
           <Tooltip
             content={(props) => <CustomTooltip {...props} noLabel={noLabel} />}
@@ -82,36 +82,46 @@ const SimpleLineChart: React.FC<IProps> = (props) => {
           />
           <XAxis
             dataKey="date"
-            className="font-10-regular text-secondary"
+            className="text-neutral-tertiary text-small-normal"
             tickSize={15}
             tickLine={false}
             interval="equidistantPreserveStart"
           />
           <YAxis
             tickFormatter={(v: string) => v.toLocaleString()}
-            className="font-10-regular text-secondary"
+            className="text-neutral-tertiary text-small-normal"
             tickSize={15}
             tickLine={false}
             min={0}
+            axisLine={false}
           />
-          {dataKeys.map(({ color, name }) => (
-            <Line
+          <defs>
+            {dataKeys.map(({ color }, index) => (
+              <linearGradient
+                key={index}
+                id={String(index)}
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor={color} stopOpacity={0.8} />
+                <stop offset="95%" stopColor={color} stopOpacity={0.1} />
+              </linearGradient>
+            ))}
+          </defs>
+          {dataKeys.map(({ color, name }, index) => (
+            <Area
               key={name}
               type="linear"
               dataKey={name}
               stroke={color}
-              activeDot={{ r: 8, stroke: 'var(--background-color-tertiary)' }}
-              dot={{
-                fill: color,
-                r: 4,
-                strokeWidth: 2,
-                stroke: 'var(--background-color-tertiary)',
-              }}
+              fill={`url(#${index})`}
             />
           ))}
-        </LineChart>
+        </AreaChart>
       </ResponsiveContainer>
-    </ChartContainer>
+    </ChartCard>
   );
 };
 
@@ -134,33 +144,34 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
   }, [label]);
 
   if (!active || !payload) return null;
-
   return (
-    <div
-      className="bg-tertiary border-fill-secondary max-w-[240px] rounded border px-4 py-3"
-      style={{ boxShadow: '0px 4px 8px 0px #0000004D' }}
-    >
-      <h1 className="font-12-bold mb-3">
+    <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
+      <h1 className="text-base-strong mb-1">
         {label}
         {days && (
-          <span className="text-secondary ml-1">
+          <span className="text-neutral-secondary ml-1">
             ({t('text.days', { days })})
           </span>
         )}
       </h1>
       <div className="flex flex-col gap-1">
-        {payload.map(({ color, name, value }, i) => (
-          <div className="flex items-center justify-between gap-4" key={i}>
+        {payload.map(({ color, name, value, payload }, i) => (
+          <div
+            key={i}
+            className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
+          >
             {!noLabel && (
               <div className="flex items-center gap-2">
                 <div
                   style={{ background: color }}
                   className="h-2 w-2 flex-shrink-0 rounded-full"
                 />
-                <p className="font-12-regular break-all">{name}</p>
+                <p className="break-all">
+                  {name ? name : (payload as { date: string | undefined }).date}
+                </p>
               </div>
             )}
-            <p className="font-12-regular">{value?.toLocaleString()}</p>
+            <p>{value?.toLocaleString()}</p>
           </div>
         ))}
       </div>

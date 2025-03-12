@@ -1,21 +1,15 @@
-version: '3'
+version: "3"
 
 services:
   web:
     hostname: web
-    build:
-      context: ..
-      dockerfile: docker/web.dockerfile
-      args:
-        - TURBO_TOKEN=TURBO_TOKEN
-        - TURBO_TEAM=TURBO_TEAM
+    image: harbor.linecorp.com/abc-studio/user-feedback/web:ui
     restart: always
     ports:
       - 3000:3000
     environment:
       - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
       - NEXT_PUBLIC_MAX_DAYS=90
-      - API_BASE_URL=http://api:4000
       - SESSION_PASSWORD=sessionpasswordsessionpasswordsessionpassword
     depends_on:
       - api

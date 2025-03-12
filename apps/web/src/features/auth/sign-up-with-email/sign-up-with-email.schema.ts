@@ -15,6 +15,7 @@
  */
 import { z } from 'zod';
 
+//
 export const signUpWithEmailSchema = z
   .object({
     email: z.string().email(),
@@ -23,7 +24,15 @@ export const signUpWithEmailSchema = z
     password: z.string().min(8),
     confirmPassword: z.string().min(8),
   })
-  .refine(
-    (schema) => schema.password === schema.confirmPassword,
-    'Password not matched',
-  );
+  .refine((schema) => schema.password === schema.confirmPassword, {
+    message: 'must equal Password',
+    path: ['confirmPassword'],
+  })
+  .refine(({ password }) => /[a-zA-Z!@#$%^&*(),.?":{}|<>]/.test(password), {
+    message: 'must contain at least one letter or special character',
+    path: ['password'],
+  })
+  .refine(({ password }) => !/(.)\1/.test(password), {
+    message: 'must not contain consecutive identical characters',
+    path: ['password'],
+  });

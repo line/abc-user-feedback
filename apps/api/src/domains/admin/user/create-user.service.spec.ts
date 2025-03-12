@@ -31,7 +31,6 @@ import { SignUpMethodEnum, UserTypeEnum } from './entities/enums';
 import { UserEntity } from './entities/user.entity';
 import {
   NotAllowedDomainException,
-  NotAllowedUserCreateException,
   UserAlreadyExistsException,
 } from './exceptions';
 
@@ -61,7 +60,6 @@ describe('CreateUserService', () => {
         email: faker.internet.email(),
       };
       jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-      tenantRepo.setIsRestrictDomain(false);
 
       const user = await createUserService.createOAuthUser(dto);
 
@@ -79,22 +77,12 @@ describe('CreateUserService', () => {
       );
     });
   });
-  describe('with a private and having restrictions on domain tenant', () => {
+
+  describe('createInvitationUser', () => {
     beforeEach(() => {
-      tenantRepo.setIsPrivate(true);
-      tenantRepo.setIsRestrictDomain(true, ['linecorp.com']);
+      tenantRepo.setAllowDomains(['linecorp.com']);
     });
 
-    it('creating a user with an email fails', async () => {
-      const dto: CreateEmailUserDto = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      };
-
-      await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
-        NotAllowedUserCreateException,
-      );
-    });
     it('creating a general user having no role by an invitation succeeds with valid inputs', async () => {
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
@@ -110,6 +98,7 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
     });
+
     it('creating a super user having no role by an invitation succeeds with valid inputs', async () => {
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
@@ -125,6 +114,7 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.SUPER);
     });
+
     it('creating a general user by an invitation fails with an invalid domain email', async () => {
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@invalid.com',
@@ -137,6 +127,7 @@ describe('CreateUserService', () => {
         NotAllowedDomainException,
       );
     });
+
     it('creating a super user by an invitation fails with an invalid domain email', async () => {
       const dto: CreateInvitationUserDto = {
         email: faker.internet.email().split('@')[0] + '@invalid.com',
@@ -149,6 +140,7 @@ describe('CreateUserService', () => {
         NotAllowedDomainException,
       );
     });
+
     it('creating a general user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
       const dto: CreateInvitationUserDto = {
@@ -169,6 +161,7 @@ describe('CreateUserService', () => {
       expect(user.type).toBe(UserTypeEnum.GENERAL);
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
+
     it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
       const roleId = faker.number.int();
       const dto: CreateInvitationUserDto = {
@@ -190,98 +183,12 @@ describe('CreateUserService', () => {
       expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
   });
-  describe('with a private and no restrict on domain tenant', () => {
+
+  describe('createEmailUser', () => {
     beforeEach(() => {
-      tenantRepo.setIsPrivate(true);
-      tenantRepo.setIsRestrictDomain(false);
+      tenantRepo.setAllowDomains(['linecorp.com']);
     });
-    it('creating a user with an email fails', async () => {
-      const dto: CreateEmailUserDto = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-      };
 
-      await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
-        NotAllowedUserCreateException,
-      );
-    });
-    it('creating a general user having no role with an invitation succeeds with valid inputs', async () => {
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        type: UserTypeEnum.GENERAL,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.GENERAL);
-    });
-    it('creating a super user having no role with an invitation succeeds with valid inputs', async () => {
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        type: UserTypeEnum.SUPER,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.SUPER);
-    });
-    it('creating a general user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.number.int();
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        type: UserTypeEnum.GENERAL,
-        roleId,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save');
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
-    });
-    it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.number.int();
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email(),
-        password: faker.internet.password(),
-        type: UserTypeEnum.SUPER,
-        roleId,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save');
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('with a non-private and having restrictions on domain tenant', () => {
-    beforeEach(() => {
-      tenantRepo.setIsPrivate(false);
-      tenantRepo.setIsRestrictDomain(true, ['linecorp.com']);
-    });
     it('creating a user with an email succeeds with valid inputs', async () => {
       const dto: CreateEmailUserDto = {
         email: faker.internet.email().split('@')[0] + '@linecorp.com',
@@ -296,6 +203,7 @@ describe('CreateUserService', () => {
       expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
       expect(user.type).toBe(UserTypeEnum.GENERAL);
     });
+
     it('creating a user with an email fails with an invalid domain email', async () => {
       const dto: CreateEmailUserDto = {
         email: faker.internet.email().split('@')[0] + '@invalid.com',
@@ -306,100 +214,6 @@ describe('CreateUserService', () => {
       await expect(createUserService.createEmailUser(dto)).rejects.toThrow(
         NotAllowedDomainException,
       );
-    });
-    it('creating a general user having no role by an invitation succeeds with valid inputs', async () => {
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email().split('@')[0] + '@linecorp.com',
-        password: faker.internet.password(),
-        type: UserTypeEnum.GENERAL,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.GENERAL);
-    });
-    it('creating a general user having no role by an invitation succeeds with valid inputs', async () => {
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email().split('@')[0] + '@linecorp.com',
-        password: faker.internet.password(),
-        type: UserTypeEnum.SUPER,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.SUPER);
-    });
-    it('creating a general user by an invitation fails with an invalid domain email', async () => {
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email().split('@')[0] + '@invalid.com',
-        password: faker.internet.password(),
-        type: UserTypeEnum.GENERAL,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-
-      await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
-        NotAllowedDomainException,
-      );
-    });
-    it('creating a super user by an invitation fails with an invalid domain email', async () => {
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email().split('@')[0] + '@invalid.com',
-        password: faker.internet.password(),
-        type: UserTypeEnum.SUPER,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-
-      await expect(createUserService.createInvitationUser(dto)).rejects.toThrow(
-        NotAllowedDomainException,
-      );
-    });
-    it('creating a general user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.number.int();
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email().split('@')[0] + '@linecorp.com',
-        password: faker.internet.password(),
-        type: UserTypeEnum.GENERAL,
-        roleId,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save');
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.GENERAL);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
-    });
-    it('creating a super user having a role by an invitation succeeds with valid inputs', async () => {
-      const roleId = faker.number.int();
-      const dto: CreateInvitationUserDto = {
-        email: faker.internet.email().split('@')[0] + '@linecorp.com',
-        password: faker.internet.password(),
-        type: UserTypeEnum.SUPER,
-        roleId,
-      };
-      jest.spyOn(userRepo, 'findOneBy').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'findOne').mockResolvedValue(null);
-      jest.spyOn(memberRepo, 'save');
-
-      const user = await createUserService.createInvitationUser(dto);
-
-      expect(user.id).toBeDefined();
-      expect(user.email).toBe(dto.email);
-      expect(user.signUpMethod).toBe(SignUpMethodEnum.EMAIL);
-      expect(user.type).toBe(UserTypeEnum.SUPER);
-      expect(memberRepo.save).toHaveBeenCalledTimes(1);
     });
   });
 });
