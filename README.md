@@ -10,7 +10,7 @@ ABC User Feedback is a standalone web application that manages Voice of Customer
 
 ## Table of Contents
 
-- [Features](#Features)
+- [Features](#-features)
 - [Getting Started](#Getting-Started)
 - [Configuration](#configuration)
 - [Integration](#Integration)
