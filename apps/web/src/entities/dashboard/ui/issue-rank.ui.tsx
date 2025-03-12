@@ -23,6 +23,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import type { TFunction } from 'i18next';
+import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -67,7 +68,7 @@ const getColumns = (t: TFunction) => [
               pathname: Path.ISSUE,
               query: {
                 projectId: router.query.projectId,
-                queries: btoa(
+                queries: encode(
                   JSON.stringify([
                     { name: row.original.name, condition: 'IS' },
                   ]),

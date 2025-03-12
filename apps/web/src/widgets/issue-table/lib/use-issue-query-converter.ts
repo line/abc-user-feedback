@@ -16,6 +16,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
+import { decode, encode } from 'js-base64';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
@@ -63,10 +64,10 @@ const useIssueQueryConverter = (input: {
     'queries',
     createParser({
       parse: (value) => {
-        return JSON.parse(atob(value)) as Record<string, unknown>[];
+        return JSON.parse(decode(value)) as Record<string, unknown>[];
       },
       serialize: (value) => {
-        return btoa(JSON.stringify(value));
+        return encode(JSON.stringify(value));
       },
     }).withDefault([]),
   );
