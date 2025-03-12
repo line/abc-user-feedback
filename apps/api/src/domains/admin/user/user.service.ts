@@ -97,12 +97,12 @@ export class UserService {
     );
 
     if (order?.createdAt) {
-      queryBuilder.addOrderBy(`users.created_at`, order.createdAt);
+      queryBuilder.addOrderBy(`users.createdAt`, order.createdAt);
     }
 
     const items = await queryBuilder
-      .offset((page - 1) * limit)
-      .limit(limit)
+      .skip((page - 1) * limit)
+      .take(limit)
       .getMany();
 
     const total = await queryBuilder.getCount();
