@@ -15,7 +15,7 @@
  */
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Brackets, In, Repository } from 'typeorm';
+import { Brackets, In, Repository, SelectQueryBuilder } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
@@ -95,15 +95,20 @@ export class UserService {
         }
       }),
     );
-
     if (order?.createdAt) {
-      queryBuilder.addOrderBy(`users.created_at`, order.createdAt);
+      queryBuilder.addOrderBy(`users.createdAt`, order.createdAt);
     }
 
-    const items = await queryBuilder
-      .offset((page - 1) * limit)
-      .limit(limit)
-      .getMany();
+    if ('skip' in queryBuilder) {
+      queryBuilder.skip((page - 1) * limit).take(limit);
+    }
+    // Handle the case where offset is used in jest
+    else if ('offset' in queryBuilder) {
+      (queryBuilder as SelectQueryBuilder<UserEntity>)
+        .offset((page - 1) * limit)
+        .limit(limit);
+    }
+    const items = await queryBuilder.getMany();
 
     const total = await queryBuilder.getCount();
 

@@ -67,9 +67,11 @@ const getColumns = (t: TFunction) => [
               pathname: Path.ISSUE,
               query: {
                 projectId: router.query.projectId,
-                queries: JSON.stringify([
-                  { name: row.original.name, condition: 'IS' },
-                ]),
+                queries: btoa(
+                  JSON.stringify([
+                    { name: row.original.name, condition: 'IS' },
+                  ]),
+                ),
               },
             }}
             target="_blank"

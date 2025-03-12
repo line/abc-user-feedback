@@ -189,7 +189,7 @@ const IssueDetailSheet = (props: Props) => {
                 });
               }}
             >
-              URL Copy
+              Copy URL
             </Tag>
           </SheetTitle>
         </SheetHeader>

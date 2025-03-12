@@ -154,7 +154,7 @@ const FeedbackDetailSheet = (props: Props) => {
                 });
               }}
             >
-              URL Copy
+              Copy URL
             </Tag>
           </SheetTitle>
         </SheetHeader>

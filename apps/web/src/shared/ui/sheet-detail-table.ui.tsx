@@ -285,7 +285,7 @@ const SheetDetailTable = (props: Props) => {
           return (
             <tr key={key}>
               <th className="text-neutral-tertiary min-w-[120px] py-2.5 align-top font-normal">
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 text-left">
                   <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
                   {name}
                 </div>
