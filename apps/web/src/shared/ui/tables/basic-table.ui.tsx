@@ -45,7 +45,6 @@ import {
 
 import { cn } from '@/shared/utils';
 
-import InfiniteScrollArea from '../infinite-scroll-area.ui';
 import SortingTableHead from '../sorting-table-head.ui';
 import DraggableRow from './draggable-row.ui';
 import TableLoadingRow from './table-loading-row';
@@ -62,7 +61,6 @@ interface IProps<T> {
   onClickRow?: (index: number, row: T) => void;
   reorder?: (data: T[]) => void;
   disableRound?: boolean;
-  isInfiniteScroll?: boolean;
 }
 
 const BasicTable = <T,>(props: IProps<T>) => {
@@ -75,7 +73,6 @@ const BasicTable = <T,>(props: IProps<T>) => {
     onClickRow,
     reorder,
     disableRound,
-    isInfiniteScroll,
   } = props;
 
   // reorder rows after drag & drop
@@ -195,16 +192,6 @@ const BasicTable = <T,>(props: IProps<T>) => {
                     }
                   />
                 ))}
-                {isInfiniteScroll && (
-                  <tr>
-                    <td>
-                      <InfiniteScrollArea
-                        fetchNextPage={table.nextPage}
-                        hasNextPage={table.getCanNextPage()}
-                      />
-                    </td>
-                  </tr>
-                )}
               </SortableContext>
             }
           </TableBody>
