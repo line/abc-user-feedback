@@ -167,6 +167,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             format: 'issue',
             name: field.name,
             matchType: ['IS'],
+            visible: true,
           };
         }
         if (field.format === 'select') {

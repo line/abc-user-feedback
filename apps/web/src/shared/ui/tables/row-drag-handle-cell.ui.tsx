@@ -27,9 +27,11 @@ const RowDragHandleCell: React.FC<Props> = (props) => {
   const { attributes, listeners } = useSortable({ id: rowId });
 
   return (
-    <button {...attributes} {...listeners}>
-      <Icon name="RiDraggable" className="text-neutral-tertiary" size={16} />
-    </button>
+    <div>
+      <button {...attributes} {...listeners}>
+        <Icon name="RiDraggable" className="text-neutral-tertiary" size={16} />
+      </button>
+    </div>
   );
 };
 

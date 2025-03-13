@@ -206,7 +206,7 @@ const TableFilterPopover = (props: Props) => {
                         options={filterFields
                           .filter(
                             (v) =>
-                              v.key === 'issueIds' ||
+                              !!v.visible ||
                               (table ?
                                 table
                                   .getVisibleFlatColumns()

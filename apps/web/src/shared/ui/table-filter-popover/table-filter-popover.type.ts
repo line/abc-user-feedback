@@ -21,6 +21,7 @@ export type TableFilterOperator = 'AND' | 'OR';
 export type TableFilterField = {
   key: string;
   name: string;
+  visible?: boolean;
 } & (
   | TableFilterFieldString
   | TableFilterFieldNumber
