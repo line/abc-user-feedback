@@ -53,7 +53,7 @@ const getColumns = (t: TFunction) => [
   columnHelper.accessor('no', {
     header: 'No',
     enableSorting: false,
-    size: 100,
+    size: 30,
   }),
   columnHelper.accessor('name', {
     header: 'Issue',

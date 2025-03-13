@@ -218,7 +218,7 @@ const IssueDetailSheet = (props: Props) => {
                     query: {
                       projectId,
                       channelId: v.id,
-                      queries: btoa(
+                      queries: encode(
                         JSON.stringify([
                           { issueIds: [data.id], condition: 'IS' },
                         ]),

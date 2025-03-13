@@ -111,7 +111,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
   useEffect(() => {
     table.setPageIndex(0);
     table.resetRowSelection();
-  }, [pagination.pageSize]);
+  }, [pagination.pageSize, queries]);
 
   const rowSelectionIds = useMemo(
     () =>
@@ -229,24 +229,28 @@ const MemberSetting: React.FC<IProps> = (props) => {
       />
     ));
   };
+
   const filterFields: TableFilterField[] = [
     {
       key: 'email',
       format: 'string',
       name: 'Email',
       matchType: ['CONTAINS', 'IS'],
+      visible: true,
     },
     {
       key: 'name',
       format: 'string',
       name: 'Name',
       matchType: ['CONTAINS', 'IS'],
+      visible: true,
     },
     {
       key: 'department',
       format: 'string',
       name: 'Department',
       matchType: ['CONTAINS', 'IS'],
+      visible: true,
     },
     {
       key: 'role',
@@ -258,12 +262,14 @@ const MemberSetting: React.FC<IProps> = (props) => {
           name: role.name,
         })) ?? [],
       matchType: ['IS'],
+      visible: true,
     },
     {
       key: 'createdAt',
       format: 'date',
       name: 'Joined',
       matchType: ['IS', 'BETWEEN'],
+      visible: true,
     },
   ];
 

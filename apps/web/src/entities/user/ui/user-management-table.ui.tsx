@@ -152,7 +152,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   useEffect(() => {
     table.setPageIndex(0);
     table.resetRowSelection();
-  }, [pagination.pageSize]);
+  }, [pagination.pageSize, queries]);
 
   const selectedRowIds = useMemo(() => {
     return Object.entries(table.getState().rowSelection).reduce(

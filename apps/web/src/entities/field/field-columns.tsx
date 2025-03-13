@@ -36,7 +36,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       columnHelper.display({
         id: 'drag-handle',
         cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
-        size: 10,
+        size: 30,
         enableSorting: false,
       })
     : null,

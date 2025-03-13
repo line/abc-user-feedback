@@ -43,7 +43,7 @@ export const memberColumns = [
         onCheckedChange={(checked) => row.toggleSelected(checked)}
       />
     ),
-    size: 50,
+    size: 30,
     enableSorting: false,
   }),
   columnHelper.accessor('user.email', {
