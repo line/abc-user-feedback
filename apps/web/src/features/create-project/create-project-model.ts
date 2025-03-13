@@ -154,6 +154,6 @@ export const useCreateProjectStore = create<State & Action>()(
         set({ ...DEFAULT_STATE });
       },
     }),
-    { name: 'create-project', version: 2 },
+    { name: 'create-project', version: 2, migrate: () => DEFAULT_STATE },
   ),
 );

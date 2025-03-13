@@ -161,6 +161,10 @@ export const useCreateChannelStore = create<State & Action>()(
         set({ ...DEFAULT_STATE });
       },
     }),
-    { name: 'create-channel', version: 1 },
+    {
+      name: 'create-channel',
+      version: 2,
+      migrate: () => DEFAULT_STATE,
+    },
   ),
 );
