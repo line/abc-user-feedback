@@ -46,6 +46,12 @@ class CreateApiKeyByValueDto {
   @IsString()
   @Length(20)
   value: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  deletedAt: Date;
 }
 
 class TimezoneDto {

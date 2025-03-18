@@ -29,6 +29,8 @@ export class CreateProjectDto {
   }[];
   apiKeys?: {
     value: string;
+    createdAt: Date;
+    deletedAt: Date;
   }[];
   issueTracker?: {
     data: IssueTrackerDataDto;
