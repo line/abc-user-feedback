@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "Node10",
+    "module": "Preserve",
+    "moduleResolution": "Bundler",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,

@@ -13,5 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import i18nConfig from 'next-i18next.config';
+import { serverSideTranslations as nextServerSideTranslations } from 'next-i18next/serverSideTranslations';
 
-export const DEFAULT_LOCALE = 'en';
+const serverSideTranslations = (locale?: string) => {
+  return nextServerSideTranslations(locale ?? 'en', ['common'], i18nConfig);
+};
+
+export default serverSideTranslations;

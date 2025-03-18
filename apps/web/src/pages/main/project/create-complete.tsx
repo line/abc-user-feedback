@@ -18,7 +18,6 @@ import type { GetStaticProps, NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Accordion, Button } from '@ufb/react';
@@ -26,7 +25,6 @@ import { Accordion, Button } from '@ufb/react';
 import {
   CreateSectionTemplate,
   CreationLayout,
-  DEFAULT_LOCALE,
   Path,
   useOAIQuery,
 } from '@/shared';
@@ -37,6 +35,8 @@ import type { ProjectInfo } from '@/entities/project';
 import { ProjectInfoForm } from '@/entities/project';
 import { RoleTable } from '@/entities/role';
 import { useCreateChannelStore } from '@/features/create-channel';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const CompleteProjectCreationPage: NextPage = () => {
   const { t } = useTranslation();
@@ -140,7 +140,7 @@ const CompleteProjectCreationPage: NextPage = () => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

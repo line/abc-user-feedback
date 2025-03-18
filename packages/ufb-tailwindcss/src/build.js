@@ -1,6 +1,6 @@
-const fs = require("fs");
-const { glob } = require("glob");
-const { exec } = require("child_process");
+import fs from "fs";
+import { glob } from "glob";
+import { exec } from "child_process";
 
 function runCommand(command) {
   return new Promise((resolve, reject) => {

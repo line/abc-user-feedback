@@ -9,7 +9,7 @@ const colors = {
 };
 
 /** @type {import("tailwindcss").Config["theme"]} */
-module.exports = {
+export default {
   ...theme,
   colors,
   fill: {

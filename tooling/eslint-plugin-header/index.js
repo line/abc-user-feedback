@@ -1,6 +1,6 @@
-const header = require("./src/rules/header.js");
+import header from "./src/rules/header.js";
 
-module.exports = {
+export default {
   rules: { header },
   rulesConfig: { header: 0 },
 };

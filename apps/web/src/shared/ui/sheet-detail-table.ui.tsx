@@ -14,7 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';

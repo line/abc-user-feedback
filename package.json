@@ -2,31 +2,32 @@
   "name": "abc-user-feedback",
   "private": true,
   "scripts": {
-    "build": "turbo build",
+    "build": "turbo run build",
     "clean": "git clean -xdf node_modules",
-    "clean:workspaces": "turbo clean",
-    "dev": "turbo dev --parallel",
-    "dev:api": "turbo dev --filter=api",
-    "dev:web": "turbo dev --filter=web",
-    "format": "turbo format --continue -- --cache --cache-location node_modules/.cache/.prettiercache",
-    "format:fix": "turbo format --continue -- --write --cache --cache-location node_modules/.cache/.prettiercache",
-    "lint": "turbo lint --continue -- --cache --cache-location node_modules/.cache/.eslintcache",
-    "lint:fix": "turbo lint --continue -- --fix --cache --cache-location node_modules/.cache/.eslintcache",
+    "clean:workspaces": "turbo run clean",
+    "dev": "turbo watch dev --continue",
+    "dev:api": "turbo watch dev -F api...",
+    "dev:web": "turbo watch dev -F web...",
+    "format": "turbo run format --continue -- --cache --cache-location .cache/.prettiercache",
+    "format:fix": "turbo run format --continue -- --write --cache --cache-location .cache/.prettiercache",
+    "lint": "turbo run lint --continue -- --cache --cache-location .cache/.eslintcache",
+    "lint:fix": "turbo run lint --continue -- --fix --cache --cache-location .cache/.eslintcache",
     "lint:ws": "pnpm dlx sherif@latest",
     "postinstall": "pnpm lint:ws",
-    "typecheck": "turbo typecheck",
-    "test": "turbo test",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
     "test:e2e": "cd apps/e2e && pnpm test:e2e",
     "test:integration": "cd apps/api && pnpm test:integration"
   },
   "devDependencies": {
     "@ufb/prettier-config": "workspace:*",
-    "prettier": "^3.3.3",
-    "turbo": "^2.0.9",
-    "typescript": "^5.5.4"
+    "prettier": "catalog:",
+    "turbo": "^2.3.4",
+    "typescript": "catalog:"
   },
   "packageManager": "pnpm@9.15.9",
   "engines": {
-    "node": ">=20.11.1"
+    "node": ">=22.11.0",
+    "pnpm": "^9.15.4"
   }
 }

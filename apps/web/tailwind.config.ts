@@ -1,5 +1,6 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import type { Config } from 'tailwindcss';
+
+export default {
   darkMode: 'class',
   theme: {
     borderRadius: {
@@ -38,4 +39,4 @@ module.exports = {
     // @ts-ignore
     require('tailwind-scrollbar-hide'),
   ],
-};
+} satisfies Config;

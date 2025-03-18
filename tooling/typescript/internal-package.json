@@ -4,7 +4,8 @@
   "compilerOptions": {
     "declaration": true,
     "declarationMap": true,
+    "emitDeclarationOnly": true,
     "noEmit": false,
-    "emitDeclarationOnly": true
+    "outDir": "${configDir}/dist"
   }
 }

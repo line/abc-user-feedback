@@ -29,7 +29,6 @@ import type {
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import {
@@ -46,7 +45,6 @@ import type { TableFilterField } from '@/shared';
 import {
   BasicTable,
   DateRangePicker,
-  DEFAULT_LOCALE,
   DeleteDialog,
   TableFilterPopover,
   TablePagination,
@@ -70,6 +68,7 @@ import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
 
 import { env } from '@/env';
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -432,7 +431,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

@@ -15,12 +15,13 @@
  */
 import type { GetStaticProps } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { AnonymousTemplate, DEFAULT_LOCALE } from '@/shared';
+import { AnonymousTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { RequestResetPasswordWithEmail } from '@/features/auth/reset-password-with-email';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const ResetPasswordPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
@@ -42,7 +43,7 @@ ResetPasswordPage.getLayout = (page) => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

@@ -1,5 +1,5 @@
-const fs = require("fs");
-const os = require("os");
+import fs from "fs";
+import os from "os";
 
 // @ts-ignore
 function commentParser(text) {
@@ -177,7 +177,7 @@ function matchesLineEndings(src, num) {
   return true;
 }
 
-module.exports = {
+export default {
   meta: {
     type: "layout",
     fixable: "whitespace",

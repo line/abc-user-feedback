@@ -1,6 +1,6 @@
 const baseConfig = require('@ufb/eslint-config/base');
 
-module.exports = [
+export default [
   {
     ignores: ['dist/**', '**/*.js'],
   },

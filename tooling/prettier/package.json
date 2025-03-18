@@ -4,23 +4,22 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./index.js",
-    "./nextjs": "./nextjs.js"
+    ".": "./index.js"
   },
   "scripts": {
-    "clean": "git clean -xdf .turbo node_modules",
+    "clean": "git clean -xdf .cache .turbo node_modules",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@ianvs/prettier-plugin-sort-imports": "^4.2.1",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.0"
+    "@ianvs/prettier-plugin-sort-imports": "^4.4.1",
+    "prettier": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.6.11"
   },
   "devDependencies": {
     "@types/node": "22.13.10",
     "@ufb/tsconfig": "workspace:*",
-    "typescript": "^5.5.4"
+    "typescript": "catalog:"
   },
   "prettier": "@ufb/prettier-config"
 }

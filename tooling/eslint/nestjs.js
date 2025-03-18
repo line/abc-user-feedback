@@ -15,7 +15,8 @@
  */
 
 /** @type {Awaited<import('typescript-eslint').Config>} */
-module.exports = [
+/** @type {Awaited<import('typescript-eslint').Config>} */
+export default [
   {
     files: ['**/*.ts'],
     rules: {
