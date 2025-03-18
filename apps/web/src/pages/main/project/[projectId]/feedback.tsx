@@ -225,7 +225,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     getRowId: (row) => String(row.id),
   });
 
-  const { sorting } = table.getState();
+  const { sorting, rowSelection } = table.getState();
   const sort = useSort(sorting);
 
   const {
@@ -302,11 +302,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   });
 
   const selectedRowIds = useMemo(() => {
-    return Object.entries(table.getState().rowSelection).reduce(
+    return Object.entries(rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
       [] as number[],
     );
-  }, [table.getState().rowSelection]);
+  }, [rowSelection]);
 
   const openDeleteUsersDialog = () => {
     overlay.open(({ close, isOpen }) => (
