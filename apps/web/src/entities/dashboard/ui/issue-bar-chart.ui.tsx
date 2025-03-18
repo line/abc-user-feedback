@@ -53,7 +53,10 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
         window.open(
           Path.ISSUE.replace('[projectId]', projectId.toString()) +
             '?queries=' +
-            encode(JSON.stringify([{ status: issue?.key, condition: 'IS' }])),
+            encode(
+              JSON.stringify([{ status: issue?.key, condition: 'IS' }]),
+              true,
+            ),
           '_blank',
         );
       }}

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
 
@@ -66,10 +66,11 @@ const FieldSetting: React.FC<IProps> = (props) => {
   const perms = usePermissions(projectId);
   const overlay = useOverlay();
   const [isPreview, setIsPreview] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
 
   const [fields, setFields] = useState<FieldInfo[]>([]);
 
-  const { data, refetch } = useOAIQuery({
+  const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
   });
@@ -81,6 +82,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
     queryOptions: {
       onSuccess: async () => {
         await refetch();
+        setIsDirty(false);
         toast.success(t('v2.toast.success'));
       },
       onError(error) {
@@ -89,22 +91,22 @@ const FieldSetting: React.FC<IProps> = (props) => {
     },
   });
 
-  const isDirty = useMemo(
-    () =>
-      !(data ?
-        objectsEqual(
-          data.fields.sort((a, b) => a.order - b.order),
-          fields,
-        )
-      : true),
-    [data, fields],
-  );
+  useEffect(() => {
+    if (!data) return;
+    setIsDirty(
+      !objectsEqual(
+        data.fields.sort((a, b) => a.order - b.order),
+        fields,
+      ),
+    );
+  }, [data, fields, isRefetching]);
 
   useWarnIfUnsavedChanges(isDirty);
 
   useEffect(() => {
+    if (isDirty) return;
     setFields(data?.fields ?? []);
-  }, [data]);
+  }, [isRefetching, isDirty]);
 
   const saveFields = async () => {
     await mutateAsync({ fields });

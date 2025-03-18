@@ -47,6 +47,7 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate: create, isPending: createPending } = useOAIMutation({
@@ -76,8 +77,9 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   useEffect(() => {
-    methods.reset(data?.data ?? {});
-  }, [data, isRefetching]);
+    if (!data) return;
+    methods.reset(data.data);
+  }, [isRefetching]);
 
   const onSubmit = (input: IssueTracker) => {
     if (input.ticketDomain?.endsWith('/')) {

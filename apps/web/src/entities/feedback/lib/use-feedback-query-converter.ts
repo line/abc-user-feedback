@@ -76,7 +76,7 @@ const useFeedbackQueryConverter = (input: {
         return JSON.parse(decode(value)) as Record<string, unknown>[];
       },
       serialize: (value) => {
-        return encode(JSON.stringify(value));
+        return encode(JSON.stringify(value), true);
       },
     }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
   );

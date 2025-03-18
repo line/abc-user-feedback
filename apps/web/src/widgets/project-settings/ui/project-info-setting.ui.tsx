@@ -56,6 +56,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
   const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
     variables: { projectId },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate, isPending } = useOAIMutation({
@@ -93,7 +94,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [data, isRefetching]);
+  }, [isRefetching]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

@@ -67,7 +67,7 @@ const useIssueQueryConverter = (input: {
         return JSON.parse(decode(value)) as Record<string, unknown>[];
       },
       serialize: (value) => {
-        return encode(JSON.stringify(value));
+        return encode(JSON.stringify(value), true);
       },
     }).withDefault([]),
   );

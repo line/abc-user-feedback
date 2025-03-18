@@ -48,6 +48,7 @@ const UserProfileSetting = () => {
   const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/users/{id}',
     variables: { id: user?.id ?? 0 },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate: updateProfile, isPending: isPendingUpdateProfile } =
@@ -77,7 +78,7 @@ const UserProfileSetting = () => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [data, isRefetching]);
+  }, [isRefetching]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

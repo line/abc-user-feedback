@@ -56,6 +56,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate: updateChannel, isPending } = useOAIMutation({
@@ -85,8 +86,9 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   });
 
   useEffect(() => {
+    if (!data) return;
     methods.reset(data);
-  }, [data, isRefetching]);
+  }, [isRefetching]);
 
   const openDeleteDialog = () => {
     overlay.open(({ close, isOpen }) => (

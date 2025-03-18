@@ -72,6 +72,7 @@ const getColumns = (t: TFunction) => [
                   JSON.stringify([
                     { name: row.original.name, condition: 'IS' },
                   ]),
+                  true,
                 ),
               },
             }}

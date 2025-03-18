@@ -106,11 +106,7 @@ program
     const tomlContent = fs.readFileSync(destinationConfigPath, 'utf-8');
     const tomlConfig = load(tomlContent) as TomlConfig;
 
-    const webEnvVars = [
-      'NEXT_PUBLIC_API_BASE_URL',
-      'NEXT_PUBLIC_MAX_DAYS',
-      'SESSION_PASSWORD',
-    ];
+    const webEnvVars = ['NEXT_PUBLIC_API_BASE_URL', 'NEXT_PUBLIC_MAX_DAYS'];
 
     const apiEnvVars = [
       'JWT_SECRET',

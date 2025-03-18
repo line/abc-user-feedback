@@ -183,7 +183,7 @@ const IssueDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ name: data.name, condition: 'IS' }]))}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ name: data.name, condition: 'IS' }]), true)}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,
@@ -222,6 +222,7 @@ const IssueDetailSheet = (props: Props) => {
                         JSON.stringify([
                           { issueIds: [data.id], condition: 'IS' },
                         ]),
+                        true,
                       ),
                     },
                   }}

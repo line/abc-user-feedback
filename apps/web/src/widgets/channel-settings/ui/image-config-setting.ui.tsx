@@ -47,6 +47,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
   const { data, refetch, isRefetching } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate, isPending } = useOAIMutation({
@@ -89,12 +90,12 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         region: '',
       });
     }
-  }, [data, isRefetching]);
+  }, [isRefetching]);
+
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (input: ChannelImageConfig) => {
     if (!data) return;
-
     mutate({ ...data, imageConfig: input });
   };
 
