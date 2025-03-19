@@ -306,9 +306,11 @@ export class FeedbackMySQLService {
       .select('feedbacks')
       .where('feedbacks.channel_id = :channelId', { channelId });
 
-    const createdAtCondition = queries.find((query) => query.createdAt);
-    if (createdAtCondition?.createdAt) {
-      const { gte, lt } = createdAtCondition.createdAt;
+    const createdAtCondition = queries.find(
+      (query) => query.key === 'createdAt',
+    );
+    if (createdAtCondition?.value) {
+      const { gte, lt } = createdAtCondition.value as TimeRange;
       queryBuilder.andWhere('feedbacks.created_at >= :gte', { gte });
       queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
     }
@@ -321,115 +323,115 @@ export class FeedbackMySQLService {
       new Brackets((qb) => {
         let paramIndex = 0;
         for (const query of queries) {
-          for (const [fieldKey, value] of Object.entries(query)) {
-            if (fieldKey === 'condition' || fieldKey === 'createdAt') continue;
+          const fieldKey = query.key;
+          const value = query.value;
 
-            const paramName = `value${paramIndex++}`;
+          if (fieldKey === 'createdAt') continue;
 
-            if (fieldKey === 'id') {
-              qb[method](`feedbacks.id = :${paramName}`, {
-                [paramName]: value,
-              });
-            } else if (fieldKey === 'ids') {
-              qb[method](`feedbacks.id IN(:${paramName})`, {
-                [paramName]: value,
-              });
-            } else if (fieldKey === 'issueIds') {
-              const condition =
-                query.condition || QueryV2ConditionsEnum.CONTAINS;
-              const issueIds = value as string[];
+          const paramName = `value${paramIndex++}`;
+
+          if (fieldKey === 'id') {
+            qb[method](`feedbacks.id = :${paramName}`, {
+              [paramName]: value,
+            });
+          } else if (fieldKey === 'ids') {
+            qb[method](`feedbacks.id IN(:${paramName})`, {
+              [paramName]: value,
+            });
+          } else if (fieldKey === 'issueIds') {
+            const condition = query.condition;
+            const issueIds = value as string[];
+
+            if (condition === QueryV2ConditionsEnum.IS) {
+              queryBuilder.having(
+                "JSON_LENGTH(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id)) = :arrayLength AND JSON_CONTAINS(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id), JSON_ARRAY(:...issueIds), '$')",
+                { arrayLength: issueIds.length, issueIds },
+              );
+            } else {
+              qb[method](
+                'feedbacks_issues_issues.issues_id IN (:...issueIds)',
+                { issueIds },
+              );
+            }
+          } else if (fieldKey === 'updatedAt') {
+            const { gte, lt } = value as TimeRange;
+            qb[method](`feedbacks.updated_at >= :gte${paramName}`, {
+              [paramName]: gte,
+            });
+            qb[method](`feedbacks.updated_at < :lt${paramName}`, {
+              [paramName]: lt,
+            });
+          } else {
+            const { format }: { format: FieldFormatEnum } = fields.find(
+              (v) => v.key === fieldKey,
+            ) ?? { format: FieldFormatEnum.date };
+
+            if (format === FieldFormatEnum.select) {
+              const option =
+                options.find((option) => option.key === value) ??
+                new OptionEntity();
+
+              qb[method](
+                `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
+                { optionId: option.key },
+              );
+            } else if (format === FieldFormatEnum.multiSelect) {
+              const condition = query.condition;
+              const values = value as string[];
 
               if (condition === QueryV2ConditionsEnum.IS) {
-                queryBuilder.having(
-                  "JSON_LENGTH(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id)) = :arrayLength AND JSON_CONTAINS(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id), JSON_ARRAY(:...issueIds), '$')",
-                  { arrayLength: issueIds.length, issueIds },
+                qb[method](
+                  `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) = :arrayLength AND JSON_CONTAINS(
+                    (SELECT JSON_ARRAYAGG(jt.value) FROM JSON_TABLE(
+                      JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
+                      '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
+                    ) AS jt),
+                    JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
+                    '$'
+                  )`,
+                  { arrayLength: values.length },
                 );
               } else {
-                qb[method](
-                  'feedbacks_issues_issues.issues_id IN (:...issueIds)',
-                  { issueIds },
-                );
-              }
-            } else if (fieldKey === 'updatedAt') {
-              const { gte, lt } = value as TimeRange;
-              qb[method](`feedbacks.updated_at >= :gte${paramName}`, {
-                [paramName]: gte,
-              });
-              qb[method](`feedbacks.updated_at < :lt${paramName}`, {
-                [paramName]: lt,
-              });
-            } else {
-              const { format }: { format: FieldFormatEnum } = fields.find(
-                (v) => v.key === fieldKey,
-              ) ?? { format: FieldFormatEnum.date };
-
-              if (format === FieldFormatEnum.select) {
-                const option =
-                  options.find((option) => option.key === value) ??
-                  new OptionEntity();
-
-                qb[method](
-                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :optionId`,
-                  { optionId: option.key },
-                );
-              } else if (format === FieldFormatEnum.multiSelect) {
-                const condition = query.condition;
-                const values = value as string[];
-
-                if (condition === QueryV2ConditionsEnum.IS) {
+                if (values.length > 0) {
                   qb[method](
-                    `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) = :arrayLength AND JSON_CONTAINS(
-                      (SELECT JSON_ARRAYAGG(jt.value) FROM JSON_TABLE(
-                        JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
-                        '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
-                      ) AS jt),
-                      JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
-                      '$'
-                    )`,
-                    { arrayLength: values.length },
+                    new Brackets((subQb) => {
+                      for (const optionKey of values) {
+                        subQb.andWhere(
+                          `JSON_CONTAINS(
+                            JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
+                            '"${optionKey}"',
+                            '$'
+                          )`,
+                        );
+                      }
+                    }),
                   );
                 } else {
-                  if (values.length > 0) {
-                    qb[method](
-                      new Brackets((subQb) => {
-                        for (const optionKey of values) {
-                          subQb.andWhere(
-                            `JSON_CONTAINS(
-                              JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
-                              '"${optionKey}"',
-                              '$'
-                            )`,
-                          );
-                        }
-                      }),
-                    );
-                  } else {
-                    qb[method]('1 = 0');
-                  }
+                  qb[method]('1 = 0');
                 }
-              } else if (format === FieldFormatEnum.text) {
-                qb[method](
-                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
-                  { [paramName]: `%${value as string | number}%` },
-                );
-              } else if (format === FieldFormatEnum.date) {
-                const { gte, lt } = value as TimeRange;
-                qb[method](
-                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') >= :gte${paramName}`,
-                  { [paramName]: gte },
-                );
-                qb[method](
-                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') < :lt${paramName}`,
-                  { [paramName]: lt },
-                );
-              } else {
-                qb[method](
-                  `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :${paramName}`,
-                  {
-                    [paramName]: value,
-                  },
-                );
               }
+            } else if (format === FieldFormatEnum.text) {
+              qb[method](
+                `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') like :${paramName}`,
+                { [paramName]: `%${value as string | number}%` },
+              );
+            } else if (format === FieldFormatEnum.date) {
+              const { gte, lt } = value as TimeRange;
+              qb[method](
+                `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') >= :gte${paramName}`,
+                { [paramName]: gte },
+              );
+              qb[method](
+                `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') < :lt${paramName}`,
+                { [paramName]: lt },
+              );
+            } else {
+              qb[method](
+                `JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"') = :${paramName}`,
+                {
+                  [paramName]: value,
+                },
+              );
             }
           }
         }

@@ -167,6 +167,79 @@ export class FeedbackService {
     }
   }
 
+  private validateQueryV2(
+    queries: FindFeedbacksByChannelIdDtoV2['queries'],
+    fields: FieldEntity[],
+  ) {
+    const fieldsByKey = fields.reduce(
+      (fields: Record<string, FieldEntity>, field) => {
+        fields[field.key] = field;
+        return fields;
+      },
+      {},
+    );
+
+    if (queries === undefined) {
+      throw new BadRequestException('queries are required');
+    }
+
+    for (const query of queries) {
+      const fieldKey = query.key;
+      const fieldValue = query.value;
+
+      if (['ids', 'issueIds'].includes(fieldKey)) {
+        if (!Array.isArray(fieldValue)) {
+          throw new BadRequestException(`${fieldKey} must be array`);
+        }
+        continue;
+      }
+      if (!(fieldKey in fieldsByKey)) {
+        throw new BadRequestException(`invalid key in query: ${fieldKey}`);
+      }
+
+      switch (fieldsByKey[fieldKey].format) {
+        case FieldFormatEnum.keyword:
+          if (typeof fieldValue !== 'string')
+            throw new BadRequestException(`${fieldKey} must be string`);
+          break;
+        case FieldFormatEnum.date:
+          if (
+            typeof fieldValue !== 'object' ||
+            !(
+              Object.prototype.hasOwnProperty.call(fieldValue, 'gte') &&
+              Object.prototype.hasOwnProperty.call(fieldValue, 'lt')
+            )
+          )
+            throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
+          break;
+        case FieldFormatEnum.multiSelect:
+          if (!Array.isArray(fieldValue))
+            throw new BadRequestException(
+              `${fieldKey} must be array of string`,
+            );
+          break;
+        case FieldFormatEnum.number:
+          if (typeof fieldValue !== 'number')
+            throw new BadRequestException(`${fieldKey} must be number`);
+          break;
+        case FieldFormatEnum.select:
+          if (typeof fieldValue !== 'string')
+            throw new BadRequestException(`${fieldKey} must be string`);
+          break;
+        case FieldFormatEnum.text:
+          if (typeof fieldValue !== 'string')
+            throw new BadRequestException(`${fieldKey} must be string`);
+          break;
+        case FieldFormatEnum.images:
+          if (!Array.isArray(fieldValue))
+            throw new BadRequestException(
+              `${fieldKey} must be array of string`,
+            );
+          break;
+      }
+    }
+  }
+
   private convertFeedback(
     timezone: string,
     feedback: Feedback,
@@ -546,9 +619,7 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    for (let i = 0; i < (dto.queries?.length ?? 0); i++) {
-      this.validateQuery(dto.queries?.[i] ?? {}, fields);
-    }
+    this.validateQueryV2(dto.queries, fields);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -715,9 +786,7 @@ export class FeedbackService {
       }
     }
 
-    for (let i = 0; i < (dto.queries?.length ?? 0); i++) {
-      this.validateQuery(dto.queries?.[i] ?? {}, fields);
-    }
+    this.validateQueryV2(dto.queries, fields);
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;

@@ -20,23 +20,10 @@ import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 
 class QueryV2 {
-  @ApiProperty({
-    required: false,
-    type: TimeRange,
-    example: { gte: '2023-01-01', lt: '2023-12-31' },
-  })
-  @IsOptional()
-  createdAt?: TimeRange;
+  ids?: number[];
 
-  @ApiProperty({
-    required: false,
-    type: TimeRange,
-    example: { gte: '2023-01-01', lt: '2023-12-31' },
-  })
-  @IsOptional()
-  updatedAt?: TimeRange;
-
-  [key: string]: string | string[] | TimeRange | number | number[] | undefined;
+  key: string;
+  value: string | string[] | TimeRange | number | number[] | undefined;
 
   condition: QueryV2ConditionsEnum;
 }
