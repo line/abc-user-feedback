@@ -36,7 +36,7 @@ import type {
 } from './dtos';
 import { FindFeedbacksByChannelIdDtoV2 } from './dtos/find-feedbacks-by-channel-id-v2.dto';
 import type { OsQueryDto } from './dtos/os-query.dto';
-import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { ScrollFeedbacksDtoV2 } from './dtos/scroll-feedbacks-v2.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
@@ -57,17 +57,37 @@ export class FeedbackOSService {
     private readonly osRepository: OpensearchRepository,
   ) {}
 
-  private async issueIdsToFeedbackIds(issueIds: number[]) {
-    const feedbacks = await this.feedbackRepository.find({
-      relations: {
-        issues: true,
-      },
+  private async issueIdsToFeedbackIds(
+    issueIds: number[],
+    condition: QueryV2ConditionsEnum,
+  ) {
+    let feedbacks = await this.feedbackRepository.find({
+      relations: ['issues'],
       where: {
         issues: { id: In(issueIds) },
       },
     });
 
-    return feedbacks.map((feedback) => feedback.id);
+    feedbacks = await this.feedbackRepository.find({
+      relations: ['issues'],
+      where: {
+        id: In(feedbacks.map((feedback) => feedback.id)),
+      },
+    });
+
+    if (condition === QueryV2ConditionsEnum.IS) {
+      return feedbacks
+        .filter((feedback) => {
+          const feedbackIssueIds = feedback.issues.map((issue) => issue.id);
+          return (
+            feedbackIssueIds.length === issueIds.length &&
+            issueIds.every((id) => feedbackIssueIds.includes(id))
+          );
+        })
+        .map((feedback) => feedback.id);
+    } else {
+      return feedbacks.map((feedback) => feedback.id);
+    }
   }
 
   private isUnsortableFormat(format: FieldFormatEnum) {
@@ -481,8 +501,12 @@ export class FeedbackOSService {
 
     for (let i = 0; i < (queries?.length ?? 0); i++) {
       if (queries?.[i].issueIds) {
+        const condition =
+          queries[i].condition || QueryV2ConditionsEnum.CONTAINS;
+
         const feedbackIds = await this.issueIdsToFeedbackIds(
           queries[i].issueIds as number[],
+          condition,
         );
 
         delete queries[i].issueIds;

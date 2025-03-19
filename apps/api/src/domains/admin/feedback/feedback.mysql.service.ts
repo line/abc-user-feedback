@@ -335,9 +335,21 @@ export class FeedbackMySQLService {
                 [paramName]: value,
               });
             } else if (fieldKey === 'issueIds') {
-              qb[method]('feedbacks_issues_issues.issues_id IN(:issueIds)', {
-                issueIds: value,
-              });
+              const condition =
+                query.condition || QueryV2ConditionsEnum.CONTAINS;
+              const issueIds = value as string[];
+
+              if (condition === QueryV2ConditionsEnum.IS) {
+                queryBuilder.having(
+                  "JSON_LENGTH(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id)) = :arrayLength AND JSON_CONTAINS(JSON_ARRAYAGG(feedbacks_issues_issues.issues_id), JSON_ARRAY(:...issueIds), '$')",
+                  { arrayLength: issueIds.length, issueIds },
+                );
+              } else {
+                qb[method](
+                  'feedbacks_issues_issues.issues_id IN (:...issueIds)',
+                  { issueIds },
+                );
+              }
             } else if (fieldKey === 'updatedAt') {
               const { gte, lt } = value as TimeRange;
               qb[method](`feedbacks.updated_at >= :gte${paramName}`, {
