@@ -503,7 +503,6 @@ export class FeedbackOSService {
           condition,
         );
 
-        delete queries[i].value;
         if (queries[i].ids) {
           queries[i].ids = [...(queries[i].ids ?? []), ...feedbackIds];
         } else {
@@ -592,7 +591,6 @@ export class FeedbackOSService {
           queries[i].value as number[],
         );
 
-        delete queries[i].value;
         if (queries[i].ids) {
           queries[i].ids = [...(queries[i].ids ?? []), ...feedbackIds];
         } else {
