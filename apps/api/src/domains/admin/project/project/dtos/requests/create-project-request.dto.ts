@@ -55,7 +55,7 @@ class CreateApiKeyByValueDto {
   @ApiProperty()
   @IsDate()
   @IsOptional()
-  deletedAt: Date;
+  deletedAt?: Date;
 }
 
 class TimezoneDto {

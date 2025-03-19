@@ -31,8 +31,8 @@ class ApiKeyResponseDto {
   createdAt: Date;
 
   @Expose()
-  @ApiProperty()
-  deletedAt: Date;
+  @ApiProperty({ nullable: true })
+  deletedAt: Date | null;
 }
 
 export class CreateProjectResponseDto {
