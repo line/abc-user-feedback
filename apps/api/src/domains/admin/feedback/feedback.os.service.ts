@@ -306,14 +306,13 @@ export class FeedbackOSService {
 
       const { format, key, options } = fieldsByKey[fieldKey];
       const condition = query.condition;
-      const values = query[fieldKey] as string[];
+      const values = fieldValue as string[];
 
       if (format === FieldFormatEnum.select) {
         osQuery.bool.must.push({
           match_phrase: {
-            [key]: (options ?? []).find(
-              (option) => option.key === query[fieldKey],
-            )?.key,
+            [key]: (options ?? []).find((option) => option.key === fieldValue)
+              ?.key,
           },
         });
       } else if (format === FieldFormatEnum.multiSelect) {
@@ -374,7 +373,7 @@ export class FeedbackOSService {
         if (fieldKey === 'createdAt') return osQuery;
         osQuery.bool.must.push({
           range: {
-            [key]: query[fieldKey] as TimeRange,
+            [key]: fieldValue as TimeRange,
           },
         });
       } else if (
@@ -382,13 +381,13 @@ export class FeedbackOSService {
       ) {
         osQuery.bool.must.push({
           match_phrase: {
-            [key]: query[fieldKey] as string,
+            [key]: fieldValue as string,
           },
         });
       } else {
         osQuery.bool.must.push({
           term: {
-            [key]: query[fieldKey] as string,
+            [key]: fieldValue as string,
           },
         });
       }
