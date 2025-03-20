@@ -13,59 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
 
+import type { FeedbackEntity } from '@/domains/admin/feedback/feedback.entity';
 import { feedbackFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class FeedbackRepositoryStub {
-  feedback = feedbackFixture;
-  findOne() {
-    return this.feedback;
-  }
-
-  findOneBy() {
-    return this.feedback;
-  }
-
-  find() {
-    return [this.feedback];
-  }
-
-  findBy() {
-    return [this.feedback];
-  }
-
-  findAndCount() {
-    return [[this.feedback], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.feedback], 1];
-  }
-
-  save(feedback) {
-    const feedbackToSave = removeUndefinedValues(feedback);
-    if (Array.isArray(feedbackToSave)) {
-      return feedbackToSave.map((e) => ({
-        ...this.feedback,
-        ...e,
-        id: faker.number.int(),
-      }));
-    } else {
-      return {
-        ...this.feedback,
-        ...feedbackToSave,
-      };
-    }
-  }
-
-  count() {
-    return 1;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [this.feedback];
-    return createQueryBuilder;
+export class FeedbackRepositoryStub extends CommonRepositoryStub<FeedbackEntity> {
+  constructor() {
+    super([feedbackFixture]);
   }
 }

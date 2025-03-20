@@ -6,7 +6,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "clean": "git clean -xdf dist .turbo node_modules",
+    "clean": "git clean -xdf dist .turbo node_modules .cache",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --write --list-different .",
     "lint": "eslint",

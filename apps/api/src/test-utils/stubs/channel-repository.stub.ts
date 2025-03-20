@@ -13,62 +13,20 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { ChannelEntity } from '@/domains/admin/channel/channel/channel.entity';
+import type {
+  ChannelEntity,
+  ImageConfig,
+} from '@/domains/admin/channel/channel/channel.entity';
 import { channelFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class ChannelRepositoryStub {
-  channel: ChannelEntity | null = channelFixture;
-  findOne() {
-    return this.channel;
+export class ChannelRepositoryStub extends CommonRepositoryStub<ChannelEntity> {
+  constructor() {
+    super([channelFixture]);
   }
 
-  findOneBy() {
-    return this.channel;
-  }
-
-  find() {
-    return [this.channel];
-  }
-
-  findBy() {
-    return [this.channel];
-  }
-
-  findAndCount() {
-    return [[this.channel], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.channel], 1];
-  }
-
-  save(channel) {
-    const channelToSave = removeUndefinedValues(channel);
-    return {
-      ...this.channel,
-      ...channelToSave,
-    };
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
-  }
-
-  setImageConfig(config) {
-    if (this.channel) this.channel.imageConfig = config;
-  }
-
-  setNull() {
-    this.channel = null;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [channelFixture];
-    return createQueryBuilder;
+  setImageConfig(config: Partial<ImageConfig>) {
+    const entity = this.findOne();
+    if (entity) entity.imageConfig = { ...entity.imageConfig, ...config };
   }
 }

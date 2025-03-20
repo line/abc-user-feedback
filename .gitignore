@@ -2,7 +2,6 @@
 
 # dependencies
 node_modules
-'node_modules
 .pnp
 .pnp.js
 
@@ -13,6 +12,7 @@ coverage
 .next/
 out/
 build
+dist
 
 # misc
 .DS_Store
@@ -41,9 +41,7 @@ yarn-error.log*
 
 volumes
 
-dist
-
-tsconfig.tsbuildinfo
+.cache
 
 # playwright
 playwright-report

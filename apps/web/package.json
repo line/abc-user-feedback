@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "next build",
-    "clean": "git clean -xdf .next .turbo node_modules coverage .swc",
+    "clean": "git clean -xdf .next .turbo node_modules coverage .swc .cache",
     "dev": "next dev",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "format:fix": "prettier --write --list-different \"./src/**/*.{js,cjs,mjs,ts,tsx,md,json}\"",
