@@ -65,8 +65,8 @@ export class ApiKeyService {
       await this.validateBeforeCreation(dto);
     }
 
-    const apiKeys = dtos.map(({ projectId, value }) =>
-      ApiKeyEntity.from({ projectId, value }),
+    const apiKeys = dtos.map(({ projectId, value, createdAt, deletedAt }) =>
+      ApiKeyEntity.from({ projectId, value, createdAt, deletedAt }),
     );
 
     return await this.repository.save(apiKeys);

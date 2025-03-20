@@ -16,6 +16,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsArray,
+  IsDate,
   IsNumber,
   IsObject,
   IsOptional,
@@ -46,6 +47,15 @@ class CreateApiKeyByValueDto {
   @IsString()
   @Length(20)
   value: string;
+
+  @ApiProperty()
+  @IsDate()
+  createdAt: Date;
+
+  @ApiProperty()
+  @IsDate()
+  @IsOptional()
+  deletedAt?: Date;
 }
 
 class TimezoneDto {
