@@ -16,9 +16,8 @@
 import { useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { Trans, useTranslation } from 'next-i18next';
 import { useQueryState } from 'nuqs';
-import { Trans, useTranslation } from 'react-i18next';
 
 import {
   Badge,
@@ -30,7 +29,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { DateRangePicker, DEFAULT_LOCALE, parseAsDateRange } from '@/shared';
+import { DateRangePicker, parseAsDateRange } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
 import {
   FeedbackLineChart,
@@ -42,6 +41,8 @@ import {
 import { ProjectGuard } from '@/entities/project';
 import { DashboardCardList } from '@/widgets/dashboard-card-list';
 import { Layout } from '@/widgets/layout';
+
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -247,7 +248,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

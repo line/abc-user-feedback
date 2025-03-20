@@ -16,59 +16,31 @@
 import { faker } from '@faker-js/faker';
 
 import { UserTypeEnum } from '@/domains/admin/user/entities/enums';
+import type { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import { userFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class UserRepositoryStub {
-  user = userFixture;
-  findOne({ where: { email, signUpMethod } }) {
-    return { ...this.user, email, signUpMethod };
+export class UserRepositoryStub extends CommonRepositoryStub<UserEntity> {
+  constructor() {
+    super([userFixture]);
   }
-
-  findOneBy({ email, signUpMethod }) {
-    return { ...this.user, email, signUpMethod };
-  }
-
-  find({ where: { email, signUpMethod } }) {
-    return [{ ...this.user, email, signUpMethod }];
-  }
-
-  findBy({ email, signUpMethod }) {
-    return [{ ...this.user, email, signUpMethod }];
-  }
-
-  findAndCount({ where: { email, signUpMethod } }) {
-    return [[{ ...this.user, email, signUpMethod }], 1];
-  }
-
-  findAndCountBy({ where: { email, signUpMethod } }) {
-    return [[{ ...this.user, email, signUpMethod }], 1];
-  }
-
-  save(user) {
+  save(user: Partial<UserEntity> | Partial<UserEntity>[]) {
     const userToSave = removeUndefinedValues(user);
+    const entity = this.entities?.[0] ?? userFixture;
+
     if (Array.isArray(userToSave)) {
       return userToSave.map((e) => ({
-        ...this.user,
+        ...entity,
         ...e,
-        type: e.type || UserTypeEnum.GENERAL,
+        type: e.type ?? UserTypeEnum.GENERAL,
         id: faker.number.int(),
       }));
-    } else {
-      return {
-        ...this.user,
-        ...userToSave,
-        type: user.type || UserTypeEnum.GENERAL,
-      };
     }
-  }
-
-  count() {
-    return 1;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [this.user];
-    return createQueryBuilder;
+    return {
+      ...entity,
+      ...userToSave,
+      type: userToSave.type ?? UserTypeEnum.GENERAL,
+    };
   }
 }

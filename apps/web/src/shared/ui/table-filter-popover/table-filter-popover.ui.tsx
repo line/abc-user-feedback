@@ -13,7 +13,6 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-
 import { useEffect, useState } from 'react';
 import type { Table } from '@tanstack/react-table';
 import { useTranslation } from 'next-i18next';

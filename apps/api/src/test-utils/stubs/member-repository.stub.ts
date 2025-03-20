@@ -15,82 +15,30 @@
  */
 import { faker } from '@faker-js/faker';
 
-import { MemberEntity } from '@/domains/admin/project/member/member.entity';
+import type { MemberEntity } from '@/domains/admin/project/member/member.entity';
 import { memberFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class MemberRepositoryStub {
-  member: MemberEntity | null = memberFixture;
-  findOne() {
-    return this.member;
-  }
-
-  findOneBy() {
-    return this.member;
-  }
-
-  find() {
-    return [this.member];
-  }
-
-  findBy() {
-    return [this.member];
-  }
-
-  findAndCount() {
-    return [[this.member], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.member], 1];
-  }
-
-  save(member) {
+export class MemberRepositoryStub extends CommonRepositoryStub<MemberEntity> {
+  save(member: Partial<MemberEntity> | Partial<MemberEntity>[]) {
     const memberToSave = removeUndefinedValues(member);
+    const entity = this.entities?.[0] ?? memberFixture;
     if (Array.isArray(memberToSave)) {
       return memberToSave.map((e) => ({
-        ...this.member,
+        ...entity,
         ...e,
-        role: {
-          ...this.member?.role,
-          ...e.role,
-        },
-        user: {
-          ...this.member?.user,
-          ...e.user,
-        },
+        role: { ...entity.role, ...e.role },
+        user: { ...entity.user, ...e.user },
         id: faker.number.int(),
       }));
     } else {
       return {
-        ...this.member,
-        role: {
-          ...this.member?.role,
-          ...(memberToSave as MemberEntity).role,
-        },
-        user: {
-          ...this.member?.user,
-          ...(memberToSave as MemberEntity).user,
-        },
+        ...entity,
+        role: { ...entity.role, ...memberToSave.role },
+        user: { ...entity.user, ...memberToSave.user },
         ...memberToSave,
       };
     }
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
-  }
-
-  setNull() {
-    this.member = null;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [memberFixture];
-    return createQueryBuilder;
   }
 }

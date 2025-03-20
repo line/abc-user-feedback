@@ -35,7 +35,7 @@ Object.defineProperty(window, 'matchMedia', {
 // headless-ui
 global.ResizeObserver = require('resize-observer-polyfill');
 
-jest.mock('react-i18next', () => ({
+jest.mock('next-i18next', () => ({
   useTranslation: () => ({ t: (str: string) => str }),
 }));
 

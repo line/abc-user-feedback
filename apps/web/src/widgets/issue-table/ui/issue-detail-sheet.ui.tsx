@@ -105,16 +105,21 @@ const IssueDetailSheet = (props: Props) => {
         feedbackCount: number;
       })[];
 
-      for (const channel of channels) {
-        const { data: feeedbakData } = await client.post({
-          path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
-          pathParams: { channelId: channel.id, projectId },
-          body: { limit: 0, queries: [{ issueIds: [data.id] }] as never },
-        });
-        channel.feedbackCount = feeedbakData?.meta.totalItems ?? 0;
-      }
+      const updatedChannels = await Promise.all(
+        channels.map(async (channel) => {
+          const { data: feeedbakData } = await client.post({
+            path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+            pathParams: { channelId: channel.id, projectId },
+            body: { limit: 0, queries: [{ issueIds: [data.id] }] as never },
+          });
+          return {
+            ...channel,
+            feedbackCount: feeedbakData?.meta.totalItems ?? 0,
+          };
+        }),
+      );
 
-      return channels;
+      return updatedChannels;
     },
   });
 

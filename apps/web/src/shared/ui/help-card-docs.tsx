@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Trans } from 'react-i18next';
+import { Trans } from 'next-i18next';
 
 import { env } from '@/env';
 

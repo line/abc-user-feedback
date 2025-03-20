@@ -13,7 +13,9 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-module.exports = require("tailwindcss/plugin")(({ addBase, addComponents }) => {
+import plugin from "tailwindcss/plugin";
+
+export default plugin(({ addBase, addComponents }) => {
   addBase(require("./dist/base"));
   addComponents(require("./dist/components"));
   addComponents(require("./dist/utilities"));

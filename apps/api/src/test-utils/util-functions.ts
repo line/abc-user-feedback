@@ -261,7 +261,7 @@ export const MockOpensearchRepository = {
   getTotal: jest.fn(),
 };
 
-export function removeUndefinedValues(obj: object): object {
+export function removeUndefinedValues<T extends object>(obj: T): T {
   Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === 'object') {
       removeUndefinedValues(obj[key] as object);

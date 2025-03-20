@@ -29,7 +29,6 @@ import type {
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import {
@@ -46,7 +45,6 @@ import type { TableFilterField } from '@/shared';
 import {
   BasicTable,
   DateRangePicker,
-  DEFAULT_LOCALE,
   DeleteDialog,
   TableFilterPopover,
   TablePagination,
@@ -70,6 +68,7 @@ import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
 
 import { env } from '@/env';
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -226,7 +225,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     getRowId: (row) => String(row.id),
   });
 
-  const { sorting } = table.getState();
+  const { sorting, rowSelection } = table.getState();
   const sort = useSort(sorting);
 
   const {
@@ -303,11 +302,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   });
 
   const selectedRowIds = useMemo(() => {
-    return Object.entries(table.getState().rowSelection).reduce(
+    return Object.entries(rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
       [] as number[],
     );
-  }, [table.getState().rowSelection]);
+  }, [rowSelection]);
 
   const openDeleteUsersDialog = () => {
     overlay.open(({ close, isOpen }) => (
@@ -432,7 +431,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

@@ -1,9 +1,9 @@
-const baseConfig = require('@ufb/eslint-config/base');
-const nextjsConfig = require('@ufb/eslint-config/nextjs');
-const reactConfig = require('@ufb/eslint-config/react');
+import baseConfig from '@ufb/eslint-config/base';
+import nextjsConfig from '@ufb/eslint-config/nextjs';
+import reactConfig from '@ufb/eslint-config/react';
 
 /** @type {import('typescript-eslint').Config} */
-module.exports = [
+export default [
   {
     ignores: [
       '.next/**',

@@ -13,68 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
 
-import { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import type { RoleEntity } from '@/domains/admin/project/role/role.entity';
 import { roleFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class RoleRepositoryStub {
-  role: RoleEntity | null = roleFixture;
-  findOne() {
-    return this.role;
-  }
-
-  findOneBy() {
-    return this.role;
-  }
-
-  find() {
-    return [this.role];
-  }
-
-  findBy() {
-    return [this.role];
-  }
-
-  findAndCount() {
-    return [[this.role], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.role], 1];
-  }
-
-  save(role) {
-    const roleToSave = removeUndefinedValues(role);
-    if (Array.isArray(roleToSave)) {
-      return roleToSave.map((e) => ({
-        ...this.role,
-        ...e,
-        id: faker.number.int(),
-      }));
-    } else {
-      return {
-        ...this.role,
-        ...roleToSave,
-      };
-    }
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
-  }
-
-  setNull() {
-    this.role = null;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [roleFixture];
-    return createQueryBuilder;
+export class RoleRepositoryStub extends CommonRepositoryStub<RoleEntity> {
+  constructor() {
+    super([roleFixture]);
   }
 }

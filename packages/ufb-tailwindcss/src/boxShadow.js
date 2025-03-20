@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   sm: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
   default:
     "0px 1px 3px 0px rgba(0, 0, 0, 0.10), 0px 1px 2px 0px rgba(0, 0, 0, 0.06)",

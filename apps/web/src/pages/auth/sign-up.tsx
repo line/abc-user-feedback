@@ -16,19 +16,15 @@
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { toast } from '@ufb/react';
 
-import {
-  AnonymousTemplate,
-  DEFAULT_LOCALE,
-  Path,
-  useOAIMutation,
-} from '@/shared';
+import { AnonymousTemplate, Path, useOAIMutation } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { SignUpWithEmailForm } from '@/features/auth/sign-up-with-email';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const SignUpPage: NextPageWithLayout = () => {
   const { t } = useTranslation();
@@ -66,7 +62,7 @@ SignUpPage.getLayout = (page) => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

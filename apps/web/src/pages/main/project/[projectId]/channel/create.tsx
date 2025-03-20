@@ -14,12 +14,12 @@
  * under the License.
  */
 import type { GetServerSideProps } from 'next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import type { NextPageWithLayout } from '@/shared';
-import { DEFAULT_LOCALE } from '@/shared';
 import { ProjectGuard } from '@/entities/project';
 import { CreateChannel } from '@/features/create-channel';
+
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

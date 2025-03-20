@@ -16,14 +16,11 @@
 import { useEffect } from 'react';
 import type { GetStaticProps, NextPage } from 'next';
 import { useOverlay } from '@toss/use-overlay';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import {
-  DEFAULT_LOCALE,
-  NoProjectDialogInProjectCreation,
-  useAllProjects,
-} from '@/shared';
+import { NoProjectDialogInProjectCreation, useAllProjects } from '@/shared';
 import { CreateProject } from '@/features/create-project';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const CreateProjectPage: NextPage = () => {
   const overlay = useOverlay();
@@ -46,7 +43,7 @@ const CreateProjectPage: NextPage = () => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

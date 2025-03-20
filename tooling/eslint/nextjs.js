@@ -14,10 +14,10 @@
  * under the License.
  */
 
-const nextPlugin = require('@next/eslint-plugin-next');
+import nextPlugin from '@next/eslint-plugin-next';
 
 /** @type {Awaited<import('typescript-eslint').Config>} */
-module.exports = [
+export default [
   {
     files: ['**/*.ts', '**/*.tsx'],
     plugins: {
