@@ -272,6 +272,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     setRows(feedbackData?.items ?? []);
     setPageCount(feedbackData?.meta.totalPages ?? 0);
     setRowCount(feedbackData?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [feedbackData]);
 
   const currentFeedback = useMemo(

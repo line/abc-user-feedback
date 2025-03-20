@@ -106,6 +106,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     setRows(data?.items ?? []);
     setPageCount(data?.meta.totalPages ?? 0);
     setRowCount(data?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [data, pagination, isPending]);
 
   useEffect(() => {

@@ -147,6 +147,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     setRows(userData?.items ?? []);
     setPageCount(userData?.meta.totalPages ?? 0);
     setRowCount(userData?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [userData, pagination, isLoading]);
 
   useEffect(() => {
