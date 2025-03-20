@@ -28,27 +28,15 @@ export class MemberRepositoryStub extends CommonRepositoryStub<MemberEntity> {
       return memberToSave.map((e) => ({
         ...entity,
         ...e,
-        role: {
-          ...entity.role,
-          ...e.role,
-        },
-        user: {
-          ...entity.user,
-          ...e.user,
-        },
+        role: { ...entity.role, ...e.role },
+        user: { ...entity.user, ...e.user },
         id: faker.number.int(),
       }));
     } else {
       return {
         ...entity,
-        role: {
-          ...entity.role,
-          ...(memberToSave as MemberEntity).role,
-        },
-        user: {
-          ...entity.user,
-          ...(memberToSave as MemberEntity).user,
-        },
+        role: { ...entity.role, ...memberToSave.role },
+        user: { ...entity.user, ...memberToSave.user },
         ...memberToSave,
       };
     }

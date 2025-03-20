@@ -1,5 +1,5 @@
-const baseConfig = require('@ufb/eslint-config/base');
-const reactConfig = require('@ufb/eslint-config/react');
+import baseConfig from '@ufb/eslint-config/base';
+import reactConfig from '@ufb/eslint-config/react';
 
 /** @type {import('typescript-eslint').Config} */
 export default [

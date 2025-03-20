@@ -1,4 +1,4 @@
-const baseConfig = require('@ufb/eslint-config/base');
+import baseConfig from '@ufb/eslint-config/base';
 
 export default [
   {

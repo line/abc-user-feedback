@@ -63,7 +63,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     if (user) return;
-    setUser();
+    void setUser();
   }, [user]);
 
   useEffect(() => {

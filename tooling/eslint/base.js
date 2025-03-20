@@ -119,6 +119,7 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-interface': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/consistent-type-definitions': 'off',
     },
   },
   {

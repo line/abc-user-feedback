@@ -1,3 +1,4 @@
+import { join } from 'path';
 import type { Config } from 'tailwindcss';
 
 export default {
@@ -28,11 +29,8 @@ export default {
   },
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
-    require('path').join(__dirname, '../../packages/ufb-ui/src/**/*.{ts,tsx}'),
-    require('path').join(
-      __dirname,
-      '../../packages/ufb-react/src/**/*.{ts,tsx}',
-    ),
+    join(__dirname, '../../packages/ufb-ui/src/**/*.{ts,tsx}'),
+    join(__dirname, '../../packages/ufb-react/src/**/*.{ts,tsx}'),
   ],
   plugins: [
     require('@ufb/tailwindcss'),

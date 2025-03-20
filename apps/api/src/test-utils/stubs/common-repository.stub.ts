@@ -19,13 +19,15 @@ import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
 
 export class CommonRepositoryStub<T> {
   entities: T[] | null;
+
   constructor(entity: T[] | null) {
     this.entities = entity;
   }
-  findOne(input?: { where: T }) {
+
+  findOne(input?: { where: Partial<T> }) {
     const entity = this.entities?.[0];
     if (!entity) return null;
-    return entity;
+    return { ...entity, ...input?.where };
   }
 
   findOneBy() {
@@ -73,15 +75,11 @@ export class CommonRepositoryStub<T> {
   }
 
   count() {
-    return 1;
+    return this.entities?.length ?? 0;
   }
 
   remove({ id }: { id: number }) {
     return { id };
-  }
-
-  setNull() {
-    this.entities = null;
   }
 
   createQueryBuilder() {

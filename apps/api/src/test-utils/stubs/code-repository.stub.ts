@@ -25,18 +25,25 @@ export class CodeRepositoryStub extends CommonRepositoryStub<CodeEntity> {
     super([codeFixture]);
   }
 
+  setNull() {
+    this.entities = null;
+  }
+
   setIsVerified(bool: boolean) {
-    const entity = this.findOne();
-    if (entity) entity.isVerified = bool;
+    this.entities?.forEach((entity) => {
+      entity.isVerified = bool;
+    });
   }
 
   setType(type: CodeTypeEnum) {
-    const entity = this.findOne();
-    if (entity) entity.type = type;
+    this.entities?.forEach((entity) => {
+      entity.type = type;
+    });
   }
 
   setTryCount(tryCount: number) {
-    const entity = this.findOne();
-    if (entity) entity.tryCount = tryCount;
+    this.entities?.forEach((entity) => {
+      entity.tryCount = tryCount;
+    });
   }
 }
