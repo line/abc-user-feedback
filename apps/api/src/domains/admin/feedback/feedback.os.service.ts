@@ -587,8 +587,11 @@ export class FeedbackOSService {
 
     for (let i = 0; i < (queries?.length ?? 0); i++) {
       if (queries?.[i].key === 'issueIds') {
+        const condition = queries[i].condition;
+
         const feedbackIds = await this.issueIdsToFeedbackIds(
           queries[i].value as number[],
+          condition,
         );
 
         if (queries[i].ids) {
