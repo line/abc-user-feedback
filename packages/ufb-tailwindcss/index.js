@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-const plugin = require("tailwindcss/plugin");
+import plugin from "tailwindcss/plugin";
 
 export default plugin(({ addBase, addComponents }) => {
   addBase(require("./dist/base"));

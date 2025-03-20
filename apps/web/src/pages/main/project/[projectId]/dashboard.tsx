@@ -16,8 +16,8 @@
 import { useMemo, useState } from 'react';
 import type { GetServerSideProps } from 'next';
 import dayjs from 'dayjs';
+import { Trans, useTranslation } from 'next-i18next';
 import { useQueryState } from 'nuqs';
-import { Trans, useTranslation } from 'react-i18next';
 
 import {
   Badge,

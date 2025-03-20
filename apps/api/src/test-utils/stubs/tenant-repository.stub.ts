@@ -27,18 +27,15 @@ export class TenantRepositoryStub extends CommonRepositoryStub<TenantEntity> {
   }
 
   setAllowDomains(domains: string[] = []) {
-    const entity = this.entities?.[0];
-    if (entity) {
+    this.entities?.forEach((entity) => {
       entity.allowDomains = domains;
-    }
+    });
   }
 
-  setUseOAuth(bool: boolean, config: OAuthConfig) {
-    const entity = this.entities?.[0];
-
-    if (entity) {
+  setUseOAuth(bool: boolean, config: Partial<OAuthConfig> | null = null) {
+    this.entities?.forEach((entity) => {
       entity.useOAuth = bool;
-      entity.oauthConfig = config;
-    }
+      entity.oauthConfig = config as OAuthConfig;
+    });
   }
 }

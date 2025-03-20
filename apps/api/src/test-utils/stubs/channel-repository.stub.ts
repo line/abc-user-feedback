@@ -26,7 +26,8 @@ export class ChannelRepositoryStub extends CommonRepositoryStub<ChannelEntity> {
   }
 
   setImageConfig(config: Partial<ImageConfig>) {
-    const entity = this.findOne();
-    if (entity) entity.imageConfig = { ...entity.imageConfig, ...config };
+    this.entities?.forEach((entity) => {
+      entity.imageConfig = { ...entity.imageConfig, ...config } as ImageConfig;
+    });
   }
 }

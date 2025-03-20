@@ -1,5 +1,5 @@
-const plugin = require("tailwindcss/plugin");
-const theme = require("../theme");
+import plugin from "tailwindcss/plugin";
+import theme from "../theme";
 
 function filterDefault(values) {
   return Object.fromEntries(
