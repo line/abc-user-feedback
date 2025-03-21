@@ -348,7 +348,7 @@ importers:
         version: 4.1.3(react-hook-form@7.54.2(react@19.0.0))
       '@number-flow/react':
         specifier: ^0.5.5
-        version: 0.5.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        version: 0.5.8(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.12.0
         version: 0.12.0(typescript@5.7.3)(zod@3.24.1)
@@ -2999,8 +2999,8 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
     engines: {node: '>= 8'}
 
-  '@number-flow/react@0.5.7':
-    resolution: {integrity: sha512-Fm1ZTUx5SYFZcJ3NjNKzC513Sq0XbU//X1yIEJ33MLBNyff+S16akGvez1zD1EjBHbgRGUyyNKQP6U8u0cszvA==}
+  '@number-flow/react@0.5.8':
+    resolution: {integrity: sha512-ZHjih9W/kD5srBn7XjcASOEssRbU3vn8VcqXbngVaUeTJNBSn9358QwIg4/WFT6GJXyFAnNQsZeLSCAi6xrMfg==}
     peerDependencies:
       react: ^18 || ^19
       react-dom: ^18 || ^19
@@ -7983,8 +7983,8 @@ packages:
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
-  number-flow@0.5.5:
-    resolution: {integrity: sha512-oE+gyA3S0ar8un2dg80TlEi3hjvi/UnTewHl2bu9dGKMxU7nT8VTUdIf1X7NbRLslqyyTyxdSmIAv/QJhaq1pw==}
+  number-flow@0.5.6:
+    resolution: {integrity: sha512-3K4lWNn+zWYeWEgaJMbFIjqy6WnvIETXTVIybKnaPU0XmhsqQmdXfxXf7tmB4MybzHwrl5GN4oFT34EU/B2yhg==}
 
   nuqs@1.20.0:
     resolution: {integrity: sha512-nGVfv7eWMNxAzOJ9n8ARTo6ObqeEr1ETYZ+dIMCg/VfGUoZoPrqyTOndIvQIgUzK3pIC41mTXg10JJxh9ziEhw==}
@@ -12962,10 +12962,10 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.17.1
 
-  '@number-flow/react@0.5.7(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
+  '@number-flow/react@0.5.8(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       esm-env: 1.2.2
-      number-flow: 0.5.5
+      number-flow: 0.5.6
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
@@ -18989,7 +18989,7 @@ snapshots:
     dependencies:
       boolbase: 1.0.0
 
-  number-flow@0.5.5:
+  number-flow@0.5.6:
     dependencies:
       esm-env: 1.2.2
 
