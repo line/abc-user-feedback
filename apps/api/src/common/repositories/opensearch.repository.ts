@@ -29,7 +29,7 @@ import {
   CreateDataDto,
   CreateIndexDto, CreateKnnIndexDto,
   DeleteBulkDataDto,
-  GetDataDto,
+  GetDataDto, GetSimilarDataDto,
   PutMappingsDto,
   ScrollDto,
   UpdateDataDto,
@@ -111,6 +111,27 @@ export class OpensearchRepository {
       index: indexName,
       name: index,
     });
+  }
+
+  async searchSimilarData({ index, embedding }: GetSimilarDataDto) {
+    const { body } = await this.opensearchClient.search({
+      index: index,
+      body: {
+        query: {
+          knn: {
+            embedding: {
+              vector: embedding,
+              k: 5,
+            },
+          },
+        },
+      },
+    });
+
+    return body.hits.hits.map((v) => ({
+      id: v._id,
+      score: v._score,
+    }));
   }
 
   async putMappings({ index, mappings }: PutMappingsDto) {
