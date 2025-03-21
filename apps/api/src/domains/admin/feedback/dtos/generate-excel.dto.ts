@@ -20,16 +20,9 @@ export class GenerateExcelDto {
   projectId: number;
   channelId: number;
   queries?: {
-    createdAt?: TimeRange;
-    updatedAt?: TimeRange;
     ids?: number[];
-    [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
+    key: string;
+    value: string | string[] | TimeRange | number | number[] | undefined;
     condition: QueryV2ConditionsEnum;
   }[];
   sort?: Record<string, SortMethodEnum>;

@@ -27,12 +27,15 @@ import type { DataSource, Repository } from 'typeorm';
 import { AppModule } from '@/app.module';
 import { AuthService } from '@/domains/admin/auth/auth.service';
 import { RoleEntity } from '@/domains/admin/project/role/role.entity';
+import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
+import { TenantService } from '@/domains/admin/tenant/tenant.service';
 import type { UserDto } from '@/domains/admin/user/dtos';
 import type { GetAllUserResponseDto } from '@/domains/admin/user/dtos/responses/get-all-user-response.dto';
 import { UserStateEnum } from '@/domains/admin/user/entities/enums';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
 import {
   clearEntities,
+  createTenant,
   getRandomEnumValue,
   signInTestUser,
 } from '@/test-utils/util-functions';
@@ -44,6 +47,9 @@ describe('UserController (integration)', () => {
   let dataSource: DataSource;
   let userRepo: Repository<UserEntity>;
   let roleRepo: Repository<RoleEntity>;
+  let tenantRepo: Repository<TenantEntity>;
+
+  let tenantService: TenantService;
 
   let authService: AuthService;
   beforeAll(async () => {
@@ -60,7 +66,13 @@ describe('UserController (integration)', () => {
     dataSource = module.get(getDataSourceToken());
     userRepo = dataSource.getRepository(UserEntity);
     roleRepo = dataSource.getRepository(RoleEntity);
+    tenantRepo = dataSource.getRepository(TenantEntity);
     authService = module.get(AuthService);
+    tenantService = module.get(TenantService);
+
+    await clearEntities([tenantRepo, userRepo, roleRepo]);
+
+    await createTenant(tenantService);
   });
 
   afterAll(async () => {

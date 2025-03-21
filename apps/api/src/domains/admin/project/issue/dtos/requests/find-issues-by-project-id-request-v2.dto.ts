@@ -36,7 +36,8 @@ class QueryV2 {
   @IsOptional()
   updatedAt?: TimeRange;
 
-  [key: string]: string | string[] | TimeRange | number | number[] | undefined;
+  key: string;
+  value: string | string[] | TimeRange | number | number[] | undefined;
 
   condition: QueryV2ConditionsEnum;
 }

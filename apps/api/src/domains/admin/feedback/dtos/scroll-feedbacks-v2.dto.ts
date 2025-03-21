@@ -20,16 +20,9 @@ import type { FieldEntity } from '@/domains/admin/channel/field/field.entity';
 export class ScrollFeedbacksDtoV2 {
   channelId: number;
   queries?: {
-    createdAt?: TimeRange;
-    updatedAt?: TimeRange;
     ids?: number[];
-    [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
+    key: string;
+    value: string | string[] | TimeRange | number | number[] | undefined;
     condition: QueryV2ConditionsEnum;
   }[];
   sort?: Record<string, SortMethodEnum>;
