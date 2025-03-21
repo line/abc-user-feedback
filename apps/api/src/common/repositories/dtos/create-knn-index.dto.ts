@@ -13,11 +13,14 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export { CreateIndexDto } from './create-index.dto';
-export { CreateKnnIndexDto } from './create-knn-index.dto';
-export { PutMappingsDto } from './put-mappings.dto';
-export { CreateDataDto } from './create-data.dto';
-export { GetDataDto } from './get-data.dto';
-export { UpdateDataDto } from './update-data.dto';
-export { DeleteBulkDataDto } from './delete-bulk-data.dto';
-export { ScrollDto } from './scroll.dto';
+export class CreateKnnIndexDto {
+  index: string;
+  dimension: number;
+  spaceType: SpaceType;
+}
+
+export enum SpaceType {
+  L2 = 'l2',
+  CosineSimil = 'cosinesimilar',
+  InnerProduct = 'innerproduct',
+}

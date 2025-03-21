@@ -25,9 +25,9 @@ import {
 } from '@nestjs/common';
 import { Client, errors } from '@opensearch-project/opensearch';
 
-import type {
+import {
   CreateDataDto,
-  CreateIndexDto,
+  CreateIndexDto, CreateKnnIndexDto,
   DeleteBulkDataDto,
   GetDataDto,
   PutMappingsDto,
@@ -68,6 +68,43 @@ export class OpensearchRepository {
             },
           },
         },
+      },
+    });
+    await this.opensearchClient.indices.putAlias({
+      index: indexName,
+      name: index,
+    });
+  }
+
+  async createKnnIndex({ index, spaceType }: CreateKnnIndexDto) {
+    const indexName = 'si_' + index + '_' + spaceType.toString();
+
+    await this.opensearchClient.indices.create({
+      index: indexName,
+      body: {
+        settings: {
+            index: {
+                knn: true,
+                'knn.algo_param.ef_search': 100,
+            },
+        },
+        mappings: {
+            properties: {
+                embedding: {
+                type: 'knn_vector',
+                dimension: 3072,
+                method: {
+                    name: 'hnsw',
+                    space_type: spaceType,
+                    engine: 'nmslib',
+                    parameters: {
+                    ef_construction: 100,
+                    m: 16,
+                    },
+                },
+                },
+            },
+        }
       },
     });
     await this.opensearchClient.indices.putAlias({
