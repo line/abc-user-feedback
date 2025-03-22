@@ -453,7 +453,7 @@ importers:
         version: 0.33.5
       swiper:
         specifier: ^11.2.1
-        version: 11.2.5
+        version: 11.2.6
       tailwind-merge:
         specifier: ^3.0.0
         version: 3.0.2
@@ -9425,8 +9425,8 @@ packages:
   swagger-ui-dist@5.20.1:
     resolution: {integrity: sha512-qBPCis2w8nP4US7SvUxdJD3OwKcqiWeZmjN2VWhq2v+ESZEXOP/7n4DeiOiiZcGYTKMHAHUUrroHaTsjUWTEGw==}
 
-  swiper@11.2.5:
-    resolution: {integrity: sha512-nG0kbIyBfeE2BPFt9nPUX03qUBF75o6+enzjIT/DfCmbh8ORlwhc4eZz1+4H/yseAgb3H+OoEYzmb64i0tYNnQ==}
+  swiper@11.2.6:
+    resolution: {integrity: sha512-8aXpYKtjy3DjcbzZfz+/OX/GhcU5h+looA6PbAzHMZT6ESSycSp9nAjPCenczgJyslV+rUGse64LMGpWE3PX9Q==}
     engines: {node: '>= 4.7.0'}
 
   symbol-observable@4.0.0:
@@ -20655,7 +20655,7 @@ snapshots:
     dependencies:
       '@scarf/scarf': 1.4.0
 
-  swiper@11.2.5: {}
+  swiper@11.2.6: {}
 
   symbol-observable@4.0.0: {}
 
