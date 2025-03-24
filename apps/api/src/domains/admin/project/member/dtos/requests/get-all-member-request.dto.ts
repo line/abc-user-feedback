@@ -14,36 +14,26 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { QueryV2ConditionsEnum } from '@/common/enums';
+import { IsNullable } from '@/domains/admin/user/decorators';
 
 class MemberSearchQuery {
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
   @IsString()
-  email?: string;
+  key: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  name?: string | null;
+  @ApiProperty({ required: true })
+  @IsNullable()
+  value: string | TimeRange | null;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  department?: string | null;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  role?: string;
-
-  @ApiProperty({ required: false, type: TimeRange })
-  @IsOptional()
-  createdAt?: TimeRange;
-
+  @ApiProperty({
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
+  })
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 

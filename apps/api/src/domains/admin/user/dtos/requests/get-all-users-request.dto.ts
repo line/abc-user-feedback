@@ -25,7 +25,7 @@ import {
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
-import { ArrayDistinct } from '@/common/validators';
+import { IsNullable } from '../../decorators';
 import { UserTypeEnum } from '../../entities/enums';
 
 class UserOrder {
@@ -36,42 +36,19 @@ class UserOrder {
 }
 
 class UserSearchQuery {
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
   @IsString()
-  email?: string;
+  key: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  name?: string | null;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  department?: string | null;
+  @ApiProperty({ required: true })
+  @IsNullable()
+  value: string | string[] | number[] | TimeRange | null;
 
   @ApiProperty({
-    required: false,
-    type: [UserTypeEnum],
-    enum: UserTypeEnum,
-    enumName: 'UserTypeEnum',
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
   })
-  @IsOptional()
-  @IsEnum(UserTypeEnum, { each: true })
-  @ArrayDistinct()
-  type?: UserTypeEnum[];
-
-  @ApiProperty({ required: false, type: [Number] })
-  @IsOptional()
-  @ArrayDistinct()
-  @IsNumber({}, { each: true })
-  projectId?: number[];
-
-  @ApiProperty({ required: false, type: TimeRange })
-  @IsOptional()
-  createdAt?: TimeRange;
-
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 

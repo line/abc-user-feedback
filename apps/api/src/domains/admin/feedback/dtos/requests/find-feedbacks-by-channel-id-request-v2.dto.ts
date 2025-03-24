@@ -14,17 +14,31 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import { IsNullable } from '@/domains/admin/user/decorators';
 
 class QueryV2 {
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsArray()
   ids?: number[];
 
+  @ApiProperty({ required: true })
+  @IsString()
   key: string;
+
+  @ApiProperty({ required: true })
+  @IsNullable()
   value: string | string[] | TimeRange | number | number[] | undefined;
 
+  @ApiProperty({
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
+  })
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 
