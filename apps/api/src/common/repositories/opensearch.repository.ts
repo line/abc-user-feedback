@@ -76,8 +76,8 @@ export class OpensearchRepository {
     });
   }
 
-  async createKnnIndex({ index, spaceType }: CreateKnnIndexDto) {
-    const indexName = 'si_' + index + '_' + spaceType.toString();
+  async createKNNIndex({ index, spaceType }: CreateKnnIndexDto) {
+    const indexName = 'si_' + index.toLowerCase() + '_' + spaceType.toString().toLowerCase();
 
     await this.opensearchClient.indices.create({
       index: indexName,
