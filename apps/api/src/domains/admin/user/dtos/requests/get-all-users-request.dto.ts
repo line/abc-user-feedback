@@ -15,18 +15,11 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 import { IsNullable } from '../../decorators';
-import { UserTypeEnum } from '../../entities/enums';
 
 class UserOrder {
   @ApiProperty({ enum: SortMethodEnum })
