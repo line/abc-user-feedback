@@ -22,6 +22,6 @@ async function dropTestDatabase() {
   await connection.end();
 }
 
-module.exports = async () => {
+export default async () => {
   await dropTestDatabase();
 };

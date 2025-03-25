@@ -6,6 +6,7 @@
     "builder": "swc",
     "deleteOutDir": true,
     "assets": ["**/*.hbs"],
-    "watchAssets": true
+    "watchAssets": true,
+    "tsConfigPath": "tsconfig.json"
   }
 }

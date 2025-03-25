@@ -374,8 +374,8 @@ export class FeedbackService {
 
     const fileStream = createReadStream(tempFilePath);
 
-    fileStream.on('end', async () => {
-      await fs.unlink(tempFilePath);
+    fileStream.on('end', () => {
+      void fs.unlink(tempFilePath);
     });
 
     return { streamableFile: new StreamableFile(fileStream), feedbackIds };

@@ -90,7 +90,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     rowCount,
   });
 
-  const { sorting, pagination } = table.getState();
+  const { sorting, pagination, rowSelection } = table.getState();
   const sort = useSort(sorting);
 
   const { data: projects } = useAllProjects();
@@ -153,11 +153,11 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   }, [pagination.pageSize, queries]);
 
   const selectedRowIds = useMemo(() => {
-    return Object.entries(table.getState().rowSelection).reduce(
+    return Object.entries(rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
       [] as number[],
     );
-  }, [table.getState().rowSelection]);
+  }, [rowSelection]);
 
   const openDeleteUsersDialog = () => {
     overlay.open(({ close, isOpen }) => (

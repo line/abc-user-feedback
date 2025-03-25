@@ -13,68 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
 
-import { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/issue-tracker.entity';
+import type { IssueTrackerEntity } from '@/domains/admin/project/issue-tracker/issue-tracker.entity';
 import { issueTrackerFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class IssueTrackerRepositoryStub {
-  issueTracker: IssueTrackerEntity | null = issueTrackerFixture;
-  findOne() {
-    return this.issueTracker;
-  }
-
-  findOneBy() {
-    return this.issueTracker;
-  }
-
-  find() {
-    return [this.issueTracker];
-  }
-
-  findBy() {
-    return [this.issueTracker];
-  }
-
-  findAndCount() {
-    return [[this.issueTracker], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.issueTracker], 1];
-  }
-
-  save(issueTracker) {
-    const issueTrackerToSave = removeUndefinedValues(issueTracker);
-    if (Array.isArray(issueTrackerToSave)) {
-      return issueTrackerToSave.map((e) => ({
-        ...this.issueTracker,
-        ...e,
-        id: faker.number.int(),
-      }));
-    } else {
-      return {
-        ...this.issueTracker,
-        ...issueTrackerToSave,
-      };
-    }
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
-  }
-
-  setNull() {
-    this.issueTracker = null;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueTrackerFixture];
-    return createQueryBuilder;
+export class IssueTrackerRepositoryStub extends CommonRepositoryStub<IssueTrackerEntity> {
+  constructor() {
+    super([issueTrackerFixture]);
   }
 }

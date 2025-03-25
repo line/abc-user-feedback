@@ -75,6 +75,8 @@ const BasicTable = <T,>(props: IProps<T>) => {
     disableRound,
   } = props;
 
+  const { rows } = table.getRowModel();
+
   // reorder rows after drag & drop
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
@@ -83,7 +85,7 @@ const BasicTable = <T,>(props: IProps<T>) => {
       const newIndex = dataIds.indexOf(over.id as string);
       reorder?.(
         arrayMove(
-          table.getRowModel().rows.map((v) => v.original),
+          rows.map((v) => v.original),
           oldIndex,
           newIndex,
         ),
@@ -91,8 +93,8 @@ const BasicTable = <T,>(props: IProps<T>) => {
     }
   }
   const dataIds = useMemo(() => {
-    return table.getRowModel().rows.map((row) => row.id);
-  }, [table.getRowModel().rows]);
+    return rows.map((row) => row.id);
+  }, [rows]);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {}),

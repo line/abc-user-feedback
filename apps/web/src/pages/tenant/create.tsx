@@ -17,18 +17,11 @@ import { useEffect, useState } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import { Button, toast } from '@ufb/react';
 
-import {
-  AnonymousTemplate,
-  DEFAULT_LOCALE,
-  Path,
-  TextInput,
-  useOAIMutation,
-} from '@/shared';
+import { AnonymousTemplate, Path, TextInput, useOAIMutation } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
 import type { SignUpWithEmailType } from '@/features/auth/sign-up-with-email';
@@ -37,6 +30,7 @@ import { CreateTenantForm } from '@/features/create-tenant';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
 
 import { env } from '@/env';
+import serverSideTranslations from '@/server-side-translations';
 
 const STEPS = ['tenant', 'user', 'final'] as const;
 
@@ -142,7 +136,7 @@ CreateTenantPage.getLayout = (page) => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

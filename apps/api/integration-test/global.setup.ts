@@ -60,7 +60,7 @@ async function runMigrations() {
   await connection.close();
 }
 
-module.exports = async () => {
+export default async () => {
   await createTestDatabase();
   await runMigrations();
 };

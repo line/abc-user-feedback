@@ -15,8 +15,9 @@
  */
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import i18nConfig from 'next-i18next.config';
 
-import { DEFAULT_LOCALE, Path } from '@/shared/constants';
+import { Path } from '@/shared/constants';
 
 export function middleware(req: NextRequest) {
   if (Path.isErrorPage(req.nextUrl.pathname)) return NextResponse.next();
@@ -49,7 +50,8 @@ export function middleware(req: NextRequest) {
 
   if (req.nextUrl.locale === 'default') {
     const requestPath = `${req.nextUrl.pathname}${req.nextUrl.search}`;
-    const locale = req.cookies.get('NEXT_LOCALE')?.value ?? DEFAULT_LOCALE;
+    const locale =
+      req.cookies.get('NEXT_LOCALE')?.value ?? i18nConfig.i18n.defaultLocale;
     return NextResponse.redirect(new URL(`/${locale}${requestPath}`, req.url));
   }
 

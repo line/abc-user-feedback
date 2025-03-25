@@ -17,7 +17,6 @@ import { useEffect } from 'react';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { FormProvider, useForm } from 'react-hook-form';
 
 import { Accordion, Button, Icon } from '@ufb/react';
@@ -26,7 +25,6 @@ import type { NextPageWithLayout } from '@/shared';
 import {
   CreateSectionTemplate,
   CreationLayout,
-  DEFAULT_LOCALE,
   Path,
   useOAIQuery,
 } from '@/shared';
@@ -34,6 +32,8 @@ import { ChannelInfoForm } from '@/entities/channel';
 import type { ChannelInfo } from '@/entities/channel';
 import { FieldTable } from '@/entities/field';
 import { ProjectGuard } from '@/entities/project';
+
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -113,7 +113,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

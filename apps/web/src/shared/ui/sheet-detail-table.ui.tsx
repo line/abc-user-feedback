@@ -14,7 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
@@ -30,33 +30,33 @@ import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
 
-type PlainRow = {
+interface PlainRow {
   format: 'text' | 'keyword' | 'number' | 'date' | 'images';
-};
+}
 
-type ImageRow = {
+interface ImageRow {
   format: 'images';
   editable?: false;
-};
+}
 
-type SelectableRow = {
+interface SelectableRow {
   format: 'select' | 'multiSelect';
   options: { key: string; name: string; color?: BadgeColor }[];
-};
+}
 
-type TicketRow = {
+interface TicketRow {
   format: 'ticket';
   issueTracker?: { ticketDomain: string | null; ticketKey: string | null };
-};
-type IssueRow = {
+}
+interface IssueRow {
   format: 'issue';
   feedbackId: number;
   editable?: false;
-};
-type CategoryRow = {
+}
+interface CategoryRow {
   format: 'cateogry';
   issueId: number;
-};
+}
 
 export type SheetDetailTableRow = {
   key: string;

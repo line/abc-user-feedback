@@ -15,9 +15,7 @@
  */
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { DEFAULT_LOCALE } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import { ProjectGuard } from '@/entities/project';
@@ -37,6 +35,8 @@ import {
 } from '@/widgets/project-settings';
 import { SettingsMenuList } from '@/widgets/setting-menu';
 import type { SettingMenu, SubSettingMenu } from '@/widgets/setting-menu';
+
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -114,7 +114,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

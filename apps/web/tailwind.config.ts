@@ -1,5 +1,7 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
+import { join } from 'path';
+import type { Config } from 'tailwindcss';
+
+export default {
   darkMode: 'class',
   theme: {
     borderRadius: {
@@ -27,15 +29,12 @@ module.exports = {
   },
   content: [
     './src/**/*.{js,ts,jsx,tsx}',
-    require('path').join(__dirname, '../../packages/ufb-ui/src/**/*.{ts,tsx}'),
-    require('path').join(
-      __dirname,
-      '../../packages/ufb-react/src/**/*.{ts,tsx}',
-    ),
+    join(__dirname, '../../packages/ufb-ui/src/**/*.{ts,tsx}'),
+    join(__dirname, '../../packages/ufb-react/src/**/*.{ts,tsx}'),
   ],
   plugins: [
     require('@ufb/tailwindcss'),
     // @ts-ignore
     require('tailwind-scrollbar-hide'),
   ],
-};
+} satisfies Config;

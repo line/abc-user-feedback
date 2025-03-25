@@ -13,73 +13,30 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
 
+import type { EventTypeEnum } from '@/common/enums';
+import type { WebhookEntity } from '@/domains/admin/project/webhook/webhook.entity';
 import { webhookFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class WebhookRepositoryStub {
-  webhook = webhookFixture;
-  findOne() {
-    return this.webhook;
+export class WebhookRepositoryStub extends CommonRepositoryStub<WebhookEntity> {
+  constructor() {
+    super([webhookFixture]);
   }
 
-  findOneBy() {
-    return this.webhook;
-  }
-
-  find({ where }) {
-    if (where?.events?.type) {
-      return [
-        {
-          ...this.webhook,
-          events: this.webhook.events.filter(
-            (event) => event.type === where.events.type,
-          ),
-        },
-      ];
+  find(input?: {
+    where: { events: { type: EventTypeEnum } };
+  }): WebhookEntity[] | null {
+    if (input?.where.events.type) {
+      return (
+        this.entities?.filter(
+          (entity) =>
+            entity.events.filter(
+              (event) => event.type === input.where.events.type,
+            ).length > 0,
+        ) ?? null
+      );
     }
-    return [this.webhook];
-  }
-
-  findBy() {
-    return [this.webhook];
-  }
-
-  findAndCount() {
-    return [[this.webhook], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.webhook], 1];
-  }
-
-  save(webhook) {
-    const webhookToSave = removeUndefinedValues(webhook);
-    if (Array.isArray(webhookToSave)) {
-      return webhookToSave.map((e) => ({
-        ...this.webhook,
-        ...e,
-        id: faker.number.int(),
-      }));
-    } else {
-      return {
-        ...this.webhook,
-        ...webhookToSave,
-      };
-    }
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [webhookFixture];
-    return createQueryBuilder;
+    return this.entities;
   }
 }

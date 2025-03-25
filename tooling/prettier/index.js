@@ -19,6 +19,7 @@ const config = {
   tailwindConfig: fileURLToPath(
     new URL('../../packages/ufb-tailwindcss/index.js', import.meta.url),
   ),
+  tailwindFunctions: ['cn', 'cva'],
   importOrder: [
     '^(react/(.*)$)|^(react$)',
     '^(next/(.*)$)|^(next$)',
@@ -36,6 +37,7 @@ const config = {
     '^[./]',
   ],
   importOrderParserPlugins: ['typescript', 'jsx', 'decorators-legacy'],
+  importOrderTypeScriptVersion: '4.4.0',
 };
 
 export default config;
