@@ -106,7 +106,7 @@ const FieldSetting: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (isDirty) return;
     setFields(data?.fields ?? []);
-  }, [isRefetching, isDirty]);
+  }, [data, isRefetching, isDirty]);
 
   const saveFields = async () => {
     await mutateAsync({ fields });
