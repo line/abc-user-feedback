@@ -166,7 +166,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             key: 'issueIds',
             format: 'issue',
             name: field.name,
-            matchType: ['IS'],
+            matchType: ['IS', 'CONTAINS'],
             visible: true,
           };
         }
