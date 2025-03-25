@@ -16,7 +16,6 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { decode, encode } from 'js-base64';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
@@ -36,15 +35,36 @@ const toQuery = (
 ): Record<TableFilterFieldFotmat, (valeu: unknown) => unknown> => ({
   number: (value) => Number(value),
   issue: async (value) => {
-    const { data } = await client.post({
-      path: '/api/admin/projects/{projectId}/issues/search',
-      pathParams: { projectId },
-      body: {
-        queries: [{ key: 'name', value, condition: 'IS' }] as SearchQuery[],
-      },
-    });
-    const result = data?.items.find((v) => v.name === value);
-    return result ? [result.id] : [];
+    if (typeof value === 'string') {
+      const { data } = await client.post({
+        path: '/api/admin/projects/{projectId}/issues/search',
+        pathParams: { projectId },
+        body: {
+          queries: [{ key: 'name', value, condition: 'IS' }] as SearchQuery[],
+        },
+      });
+      const result = data?.items.find((v) => v.name === value);
+      return result ? [result.id] : [];
+    }
+    if (Array.isArray(value)) {
+      return await Promise.all(
+        value.map(async (v: string) => {
+          const issueId = parseInt(v);
+          if (!isNaN(issueId)) return issueId;
+
+          const { data } = await client.post({
+            path: '/api/admin/projects/{projectId}/issues/search',
+            pathParams: { projectId },
+            body: {
+              queries: [
+                { key: 'name', value: v, condition: 'IS' },
+              ] as SearchQuery[],
+            },
+          });
+          return data?.items.find((vv) => vv.name === v)?.id;
+        }),
+      );
+    }
   },
   string: (value) => value,
   select: (value) => value,
@@ -70,12 +90,8 @@ const useFeedbackQueryConverter = (input: {
   const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
-      parse: (value) => {
-        return JSON.parse(decode(value)) as SearchQuery[];
-      },
-      serialize: (value) => {
-        return encode(JSON.stringify(value));
-      },
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
     }).withDefault([
       { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'IS' },
     ]),

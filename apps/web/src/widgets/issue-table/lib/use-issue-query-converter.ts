@@ -16,7 +16,6 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { decode, encode } from 'js-base64';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
@@ -61,12 +60,8 @@ const useIssueQueryConverter = (input: {
   const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
-      parse: (value) => {
-        return JSON.parse(decode(value)) as SearchQuery[];
-      },
-      serialize: (value) => {
-        return encode(JSON.stringify(value));
-      },
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
     }).withDefault([]),
   );
 

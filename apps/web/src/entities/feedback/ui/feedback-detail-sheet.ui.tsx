@@ -17,7 +17,6 @@
 import { useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
-import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -148,7 +147,7 @@ const FeedbackDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ key: 'id', value: feedback.id, condition: 'IS' }]))}&channelId=${channelId}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${JSON.stringify([{ key: 'id', value: feedback.id, condition: 'IS' }])}&channelId=${channelId}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,

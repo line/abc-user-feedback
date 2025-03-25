@@ -18,19 +18,19 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useThrottle } from 'react-use';
 
-import { client, SelectSearchInput } from '@/shared';
+import { client, MultiSelectSearchInput } from '@/shared';
 
 import { useIssueSearchInfinite } from '../lib';
 
 interface Props {
-  onChange: (value?: string) => void;
-  value?: string;
+  onChange: (value?: string[]) => void;
+  value?: string[];
 }
 
 const IssueSelectBox = ({ onChange, value }: Props) => {
   const router = useRouter();
   const projectId = Number(router.query.projectId as string);
-  const [issueName, setIssueName] = useState(value);
+  const [issueNames, setIssueNames] = useState(value ?? []);
 
   const [inputValue, setInputValue] = useState('');
   const throttedValue = useThrottle(inputValue, 500);
@@ -41,30 +41,31 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
 
   useEffect(() => {
     if (!value) {
-      setIssueName(undefined);
+      setIssueNames([]);
       return;
     }
-    const issueId = parseInt(value);
-    if (isNaN(issueId)) {
-      setIssueName(value);
-      return;
-    }
-    void client
-      .get({
-        path: '/api/admin/projects/{projectId}/issues/{issueId}',
-        pathParams: { projectId, issueId },
-      })
-      .then(({ data }) => setIssueName(data.name));
+
+    void Promise.all(
+      value.map(async (v) => {
+        const issueId = parseInt(v);
+        if (isNaN(issueId)) return v;
+        const { data } = await client.get({
+          path: '/api/admin/projects/{projectId}/issues/{issueId}',
+          pathParams: { projectId, issueId },
+        });
+        return data.name;
+      }),
+    ).then((v) => setIssueNames(v));
   }, [value]);
 
   return (
-    <SelectSearchInput
+    <MultiSelectSearchInput
       options={data.pages.flatMap((page) =>
         page ?
           page.items.map(({ name }) => ({ label: name, value: name }))
         : [],
       )}
-      value={issueName}
+      value={issueNames}
       onChange={(v) => onChange(v)}
       fetchNextPage={fetchNextPage}
       hasNextPage={hasNextPage}
