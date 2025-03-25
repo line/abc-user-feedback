@@ -38,6 +38,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
         cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
         size: 30,
         enableSorting: false,
+        meta: { truncate: false },
       })
     : null,
     columnHelper.accessor('key', {
@@ -69,6 +70,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           : '-';
       },
       enableSorting: false,
+      meta: { truncate: false },
     }),
     columnHelper.accessor('property', {
       header: 'Property',
@@ -81,6 +83,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       filterFn: (row, _, value: string[]) => {
         return value.some((property) => property === row.getValue('property'));
       },
+      meta: { truncate: false },
     }),
     columnHelper.accessor('status', {
       header: 'Status',
@@ -93,6 +96,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       filterFn: (row, _, value: string[]) => {
         return value.some((status) => status === row.getValue('status'));
       },
+      meta: { truncate: false },
     }),
     columnHelper.accessor('description', {
       header: 'Description',
