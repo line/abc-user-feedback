@@ -13,8 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export enum QueryV2ConditionsEnum {
-  CONTAINS = 'CONTAINS',
-  IS = 'IS',
-  BETWEEN = 'BETWEEN',
-}
+export type SearchQuery = {
+  key: string;
+  value: unknown;
+  condition: 'IS' | 'CONTAINS' | 'BETWEEN';
+};

@@ -35,7 +35,7 @@ import {
   toast,
 } from '@ufb/react';
 
-import type { FormOverlayProps } from '@/shared';
+import type { FormOverlayProps, SearchQuery } from '@/shared';
 import {
   client,
   DeleteDialog,
@@ -109,7 +109,12 @@ const IssueDetailSheet = (props: Props) => {
         const { data: feeedbakData } = await client.post({
           path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
           pathParams: { channelId: channel.id, projectId },
-          body: { limit: 0, queries: [{ issueIds: [data.id] }] as never },
+          body: {
+            limit: 0,
+            queries: [
+              { key: 'issueIds', value: [data.id], condition: 'CONTAINS' },
+            ] as SearchQuery[],
+          },
         });
         channel.feedbackCount = feeedbakData?.meta.totalItems ?? 0;
       }
@@ -183,7 +188,7 @@ const IssueDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ name: data.name, condition: 'IS' }]))}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ key: 'name', value: data.name, condition: 'IS' }]))}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,
@@ -220,7 +225,11 @@ const IssueDetailSheet = (props: Props) => {
                       channelId: v.id,
                       queries: encode(
                         JSON.stringify([
-                          { issueIds: [data.id], condition: 'IS' },
+                          {
+                            key: 'issueIds',
+                            value: [data.id],
+                            condition: 'IS',
+                          },
                         ]),
                       ),
                     },

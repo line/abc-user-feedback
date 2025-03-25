@@ -27,7 +27,7 @@ const MemberNameCell = (props: Props) => {
   const { email } = props;
   const { t } = useTranslation();
   const { data, isLoading } = useUserSearch({
-    queries: [{ email, condition: 'IS' }] as Record<string, string>[],
+    queries: [{ key: 'email', value: email, condition: 'IS' }],
   });
   return data || isLoading ? email : (
       <div className="flex items-center gap-1">

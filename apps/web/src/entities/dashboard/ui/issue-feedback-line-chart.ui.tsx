@@ -102,7 +102,9 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     hasNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
     limit: 10,
-    queries: [{ name: throttledSearchName, condition: 'CONTAINS' }],
+    queries: [
+      { key: 'name', value: throttledSearchName, condition: 'CONTAINS' },
+    ],
   });
 
   const allIssues = useMemo(() => {

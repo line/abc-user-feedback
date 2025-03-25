@@ -70,7 +70,7 @@ const getColumns = (t: TFunction) => [
                 projectId: router.query.projectId,
                 queries: encode(
                   JSON.stringify([
-                    { name: row.original.name, condition: 'IS' },
+                    { key: 'name', value: row.original.name, condition: 'IS' },
                   ]),
                 ),
               },
@@ -131,7 +131,8 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
     sort: { feedbackCount: 'DESC' },
     limit,
     queries: currentIssueStatusList.map((v) => ({
-      status: v.key,
+      key: 'status',
+      value: v.key,
       condition: 'IS',
     })),
     operator: 'OR',

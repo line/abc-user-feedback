@@ -1045,18 +1045,11 @@ export interface components {
       items: components['schemas']['GetAllUserResponse'][];
     };
     /** @enum {string} */
-    UserTypeEnum: 'SUPER' | 'GENERAL';
-    TimeRange: {
-      'gte (UTC)': string;
-      'lt (UTC)': string;
-    };
+    QueryV2ConditionsEnum: 'CONTAINS' | 'IS' | 'BETWEEN';
     UserSearchQuery: {
-      email?: string;
-      name?: Record<string, unknown>;
-      department?: Record<string, unknown>;
-      type?: components['schemas']['UserTypeEnum'][];
-      projectId?: number[];
-      createdAt?: components['schemas']['TimeRange'];
+      key: string;
+      value: unknown;
+      condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     UserOrder: {
       /** @enum {string} */
@@ -1238,16 +1231,10 @@ export interface components {
       permissions: string[];
     };
     QueryV2: {
-      /** @example {
-       *       "gte": "2023-01-01",
-       *       "lt": "2023-12-31"
-       *     } */
-      createdAt?: components['schemas']['TimeRange'];
-      /** @example {
-       *       "gte": "2023-01-01",
-       *       "lt": "2023-12-31"
-       *     } */
-      updatedAt?: components['schemas']['TimeRange'];
+      ids?: string[];
+      key: string;
+      value: unknown;
+      condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     FindFeedbacksByChannelIdRequestDtoV2: {
       /**
@@ -1358,11 +1345,9 @@ export interface components {
       items: components['schemas']['ApiKeyResponseDto'][];
     };
     MemberSearchQuery: {
-      email?: string;
-      name?: Record<string, unknown>;
-      department?: Record<string, unknown>;
-      role?: string;
-      createdAt?: components['schemas']['TimeRange'];
+      key: string;
+      value: unknown;
+      condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     GetAllMemberRequestDto: {
       /**

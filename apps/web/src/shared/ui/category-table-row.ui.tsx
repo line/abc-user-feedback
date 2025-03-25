@@ -31,6 +31,7 @@ import { getColumnsByCategory } from '@/widgets/issue-table/issue-table-columns'
 import IssueDetailSheet from '@/widgets/issue-table/ui/issue-detail-sheet.ui';
 
 import { useOAIQuery, useSort } from '../lib';
+import type { SearchQuery } from '../types';
 import { cn } from '../utils';
 import type { TableFilterOperator } from './table-filter-popover';
 import { BasicTable, TablePagination } from './tables';
@@ -45,7 +46,7 @@ const DEFAULT_META = {
 interface Props {
   projectId: number;
   category: Category;
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
@@ -82,7 +83,9 @@ const CategoryTableRow = (props: Props) => {
   const { pagination, sorting } = table.getState();
   const sort = useSort(sorting);
   const { data, isLoading } = useIssueSearch(projectId, {
-    queries: queries.concat([{ categoryId: category.id, condition: 'IS' }]),
+    queries: queries.concat([
+      { key: 'categoryId', value: category.id, condition: 'IS' },
+    ]),
     page: pagination.pageIndex + 1,
     limit: pagination.pageSize,
     operator,

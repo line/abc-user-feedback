@@ -24,7 +24,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { Button } from '@ufb/react';
 
-import type { IssuesItem, TableFilterOperator } from '@/shared';
+import type { IssuesItem, SearchQuery, TableFilterOperator } from '@/shared';
 import { useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -47,7 +47,7 @@ interface Props {
   issueTracker?: IssueTracker;
   items: Issue[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, Issue[]>>>;
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
@@ -71,7 +71,9 @@ const IssueKanbanColumn = (props: Props) => {
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      queries: queries.concat([{ status: issue.status, condition: 'IS' }]),
+      queries: queries.concat([
+        { key: 'status', value: issue.status, condition: 'IS' },
+      ]),
       sort: { [sort.key]: sort.value },
       limit: 5,
       operator,

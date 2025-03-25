@@ -28,6 +28,7 @@ import { useTranslation } from 'next-i18next';
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
 import type {
+  SearchQuery,
   TableFilter,
   TableFilterField,
   TableFilterOperator,
@@ -68,15 +69,13 @@ const MemberSetting: React.FC<IProps> = (props) => {
   const [rowCount, setRowCount] = useState(0);
 
   const queries = useMemo(() => {
-    return tableFilters.reduce(
-      (acc, filter) => {
-        return acc.concat({
-          [filter.key]: filter.value,
-          condition: filter.condition,
-        });
-      },
-      [] as Record<string, unknown>[],
-    );
+    return tableFilters.reduce((acc, filter) => {
+      return acc.concat({
+        key: filter.key,
+        value: filter.value,
+        condition: filter.condition,
+      });
+    }, [] as SearchQuery[]);
   }, [tableFilters]);
 
   const table = useReactTable({
