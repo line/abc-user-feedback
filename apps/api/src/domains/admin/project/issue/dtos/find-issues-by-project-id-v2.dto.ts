@@ -23,9 +23,6 @@ import type {
 export class FindIssuesByProjectIdDtoV2 extends PaginationDto {
   projectId: number;
   queries?: {
-    categoryId?: number;
-    createdAt?: TimeRange;
-    updatedAt?: TimeRange;
     key: string;
     value: string | string[] | TimeRange | number | number[] | undefined;
     condition: QueryV2ConditionsEnum;

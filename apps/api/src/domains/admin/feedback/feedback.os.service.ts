@@ -180,7 +180,7 @@ export class FeedbackOSService {
               if (
                 !Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)
               ) {
-                throw new BadRequestException('bad key in query');
+                throw new BadRequestException(`bad key in query: ${fieldKey}`);
               }
 
               const { format, key, options } = fieldsByKey[fieldKey];
@@ -290,18 +290,27 @@ export class FeedbackOSService {
       const fieldKey = query.key;
       const fieldValue = query.value;
 
-      if (fieldKey === 'ids') {
+      if (fieldKey === 'issueIds' && query.ids) {
         osQuery.bool.must.push({
           ids: {
-            values: (fieldValue as number[]).map((id) => id.toString()),
+            values: query.ids.map((id) => id.toString()),
           },
         });
 
-        return osQuery;
+        if (operator === 'AND') {
+          combinedOsQuery.bool.must.push(osQuery);
+        } else if (operator === 'OR') {
+          combinedOsQuery.bool.should?.push(osQuery);
+          combinedOsQuery.bool.minimum_should_match = 1;
+        } else {
+          throw new BadRequestException('Invalid operator');
+        }
+
+        return;
       }
 
       if (!Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)) {
-        throw new BadRequestException('bad key in query');
+        throw new BadRequestException(`bad key in query: ${fieldKey}`);
       }
 
       const { format, key, options } = fieldsByKey[fieldKey];
