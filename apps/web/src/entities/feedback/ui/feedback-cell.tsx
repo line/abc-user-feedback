@@ -55,7 +55,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
                     ),
                 )
                 .map((key) => (
-                  <Badge variant="subtle">
+                  <Badge variant="subtle" key={key}>
                     {
                       (field.options?.find((option) => option.key === key)
                         ?.name ?? value) as string

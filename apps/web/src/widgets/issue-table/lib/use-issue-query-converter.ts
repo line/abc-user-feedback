@@ -159,7 +159,7 @@ const useIssueQueryConverter = (input: {
   );
 
   return {
-    queries,
+    queries: queries.filter((v) => !!v.value),
     tableFilters,
     operator,
     dateRange,

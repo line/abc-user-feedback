@@ -15,6 +15,7 @@ export default [
       ...reactPlugin.configs['jsx-runtime'].rules,
       ...hooksPlugin.configs.recommended.rules,
       'react/prop-types': 'off',
+      'react/jsx-key': 'error',
       'react-hooks/exhaustive-deps': 'off',
       'react/display-name': 'off',
       'react-hooks/rules-of-hooks': 'off',

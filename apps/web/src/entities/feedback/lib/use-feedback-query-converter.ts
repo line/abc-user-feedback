@@ -187,10 +187,13 @@ const useFeedbackQueryConverter = (input: {
   );
 
   return {
-    queries: queries.filter(
-      (v) =>
-        filterFields.some((vv) => vv.key === v.key) || v.key === 'createdAt',
-    ),
+    queries: queries
+      .filter(
+        (query) =>
+          filterFields.some((field) => field.key === query.key) ||
+          query.key === 'createdAt',
+      )
+      .filter((v) => !!v.value),
     tableFilters: tableFilters.filter((v) =>
       filterFields.some((vv) => vv.key === v.key),
     ),

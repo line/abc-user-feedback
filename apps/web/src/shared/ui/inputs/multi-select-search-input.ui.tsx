@@ -78,7 +78,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
         <ComboboxTrigger disabled={disabled} className="font-normal">
           {!!value && value.length > 0 ?
             value.map((v) => (
-              <Tag variant="outline" size="small">
+              <Tag key={v} variant="outline" size="small">
                 {v}
               </Tag>
             ))
