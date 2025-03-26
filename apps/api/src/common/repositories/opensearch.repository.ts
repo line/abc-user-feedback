@@ -113,7 +113,7 @@ export class OpensearchRepository {
     });
   }
 
-  async searchSimilarData({ index, embedding }: GetSimilarDataDto) {
+  async getSimilarData({ index, embedding }: GetSimilarDataDto) {
     const { body } = await this.opensearchClient.search({
       index: index,
       body: {
