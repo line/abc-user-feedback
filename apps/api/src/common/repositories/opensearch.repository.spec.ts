@@ -23,7 +23,7 @@ import type { Client } from '@opensearch-project/opensearch';
 import type { TextProperty } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 
 import { getMockProvider } from '@/test-utils/util-functions';
-import {CreateDataDto, CreateKnnIndexDto, PutMappingsDto} from './dtos';
+import {CreateDataDto, PutMappingsDto} from './dtos';
 import { OpensearchRepository } from './opensearch.repository';
 import {SpaceType} from "@/common/repositories/dtos/create-knn-index.dto";
 
@@ -289,11 +289,12 @@ describe('Opensearch Repository Test suite', () => {
     it('positive case', async () => {
       const index = faker.number.int().toString();
       const spaceType = SpaceType.CosineSimil;
+      const dimension = 3072;
       const indexName = 'si_' + index.toLowerCase() + '_' + spaceType.toString().toLowerCase();
       jest.spyOn(osClient.indices, 'create');
       jest.spyOn(osClient.indices, 'putAlias');
 
-      await osRepo.createIndex({ index });
+      await osRepo.createKNNIndex({ index, dimension, spaceType });
 
       expect(osClient.indices.create).toBeCalledTimes(1);
       expect(osClient.indices.create).toBeCalledWith({
