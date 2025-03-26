@@ -113,7 +113,7 @@ export class OpensearchRepository {
     });
   }
 
-  async getSimilarData({ index, embedding }: GetSimilarDataDto) {
+  async getSimilarData({ index, topK, embedding }: GetSimilarDataDto) {
     const { body } = await this.opensearchClient.search({
       index: index,
       body: {
@@ -121,7 +121,7 @@ export class OpensearchRepository {
           knn: {
             embedding: {
               vector: embedding,
-              k: 5,
+              k: topK,
             },
           },
         },

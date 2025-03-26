@@ -15,5 +15,6 @@
  */
 export class GetSimilarDataDto {
   index: string;
+  topK: number;
   embedding: number[];
 }
