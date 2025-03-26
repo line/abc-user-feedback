@@ -333,7 +333,6 @@ describe('Opensearch Repository Test suite', () => {
   })
 
   describe('getSimilarData', () => {
-    // TODO: Implement this test
     return;
   })
 });
