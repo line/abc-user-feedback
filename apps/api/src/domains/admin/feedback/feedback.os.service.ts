@@ -362,14 +362,36 @@ export class FeedbackOSService {
               bool: { must_not: [{ exists: { field: key } }] },
             });
           }
-        } else {
+        } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
           if (values.length > 0) {
             osQuery.bool.must.push({
-              terms: {
-                [key]: values.map(
-                  (value) =>
-                    (options ?? []).find((option) => option.key === value)?.key,
-                ),
+              bool: {
+                must: [
+                  {
+                    terms_set: {
+                      [key]: {
+                        terms: values.map(
+                          (value) =>
+                            (options ?? []).find(
+                              (option) => option.key === value,
+                            )?.key,
+                        ),
+                        minimum_should_match_script: {
+                          source: 'params.num_terms',
+                          params: { num_terms: values.length },
+                        },
+                      },
+                    },
+                  },
+                  {
+                    script: {
+                      script: {
+                        source: `doc['${key}'].length >= params.num_terms`,
+                        params: { num_terms: values.length },
+                      },
+                    },
+                  },
+                ],
               },
             });
           } else {

@@ -391,20 +391,18 @@ export class FeedbackMySQLService {
                   )`,
                   { arrayLength: values.length },
                 );
-              } else {
+              } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
                 if (values.length > 0) {
                   qb[method](
-                    new Brackets((subQb) => {
-                      for (const optionKey of values) {
-                        subQb.andWhere(
-                          `JSON_CONTAINS(
-                            JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
-                            '"${optionKey}"',
-                            '$'
-                          )`,
-                        );
-                      }
-                    }),
+                    `JSON_LENGTH(JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"')) >= :arrayLength AND JSON_CONTAINS(
+                      (SELECT JSON_ARRAYAGG(jt.value) FROM JSON_TABLE(
+                        JSON_EXTRACT(feedbacks.data, '$."${fieldKey}"'),
+                        '$[*]' COLUMNS(value VARCHAR(255) PATH '$')
+                      ) AS jt),
+                      JSON_ARRAY(${values.map((optionKey) => `'${optionKey}'`).join(', ')}),
+                      '$'
+                    )`,
+                    { arrayLength: values.length },
                   );
                 } else {
                   qb[method]('1 = 0');
