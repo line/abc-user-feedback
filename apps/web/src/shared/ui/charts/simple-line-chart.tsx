@@ -167,7 +167,7 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
                   className="h-2 w-2 flex-shrink-0 rounded-full"
                 />
                 <p className="break-all">
-                  {name ? name : (payload as { date: string | undefined }).date}
+                  {name ?? (payload as { date: string | undefined }).date}
                 </p>
               </div>
             )}
