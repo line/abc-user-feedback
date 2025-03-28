@@ -57,7 +57,6 @@
     "framer-motion": "^12.0.0",
     "i18next": "^24.0.0",
     "immer": "^10.0.4",
-    "js-base64": "^3.7.7",
     "jwt-decode": "^4.0.0",
     "next": "^15.0.0",
     "next-i18next": "^15.3.0",

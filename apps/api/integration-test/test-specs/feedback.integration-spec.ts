@@ -206,7 +206,8 @@ describe('FeedbackController (integration)', () => {
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
         queries: [
           {
-            [availableFieldKey]: 'test',
+            key: availableFieldKey,
+            value: 'test',
             condition: QueryV2ConditionsEnum.IS,
           },
         ],
@@ -382,7 +383,8 @@ describe('FeedbackController (integration)', () => {
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
         queries: [
           {
-            createdAt: {
+            key: 'createdAt',
+            value: {
               gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
               lt: DateTime.now().toFormat('yyyy-MM-dd'),
             },

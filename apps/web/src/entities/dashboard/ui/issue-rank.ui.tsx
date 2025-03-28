@@ -23,7 +23,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import type { TFunction } from 'i18next';
-import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -68,11 +67,9 @@ const getColumns = (t: TFunction) => [
               pathname: Path.ISSUE,
               query: {
                 projectId: router.query.projectId,
-                queries: encode(
-                  JSON.stringify([
-                    { name: row.original.name, condition: 'IS' },
-                  ]),
-                ),
+                queries: JSON.stringify([
+                  { key: 'name', value: row.original.name, condition: 'IS' },
+                ]),
               },
             }}
             target="_blank"
@@ -131,7 +128,8 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
     sort: { feedbackCount: 'DESC' },
     limit,
     queries: currentIssueStatusList.map((v) => ({
-      status: v.key,
+      key: 'status',
+      value: v.key,
       condition: 'IS',
     })),
     operator: 'OR',

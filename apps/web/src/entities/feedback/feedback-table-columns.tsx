@@ -112,6 +112,13 @@ export const getColumns = (
               value={info.getValue()}
             />
           ),
+          meta: {
+            truncate: !(
+              field.format === 'select' ||
+              field.format === 'multiSelect' ||
+              field.format === 'images'
+            ),
+          },
           enableSorting:
             field.format === 'date' &&
             (field.key === 'createdAt' || field.key === 'updatedAt'),

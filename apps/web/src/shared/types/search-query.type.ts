@@ -13,20 +13,8 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import type { TimeRange } from '@/common/dtos';
-import { PaginationDto } from '@/common/dtos';
-import type {
-  QueryV2ConditionsEnum,
-  SortMethodEnum,
-} from '../../../../../common/enums';
-
-export class FindIssuesByProjectIdDtoV2 extends PaginationDto {
-  projectId: number;
-  queries?: {
-    key: string;
-    value: string | string[] | TimeRange | number | number[] | undefined;
-    condition: QueryV2ConditionsEnum;
-  }[];
-  sort?: Record<string, SortMethodEnum>;
-  operator?: 'AND' | 'OR';
-}
+export type SearchQuery = {
+  key: string;
+  value: unknown;
+  condition: 'IS' | 'CONTAINS' | 'BETWEEN';
+};

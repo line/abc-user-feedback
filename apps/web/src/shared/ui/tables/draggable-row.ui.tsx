@@ -54,7 +54,15 @@ const DraggableRow = <T,>(props: Props<T>) => {
         <TableCell
           key={cell.id}
           style={{ width: cell.column.getSize() }}
-          className="truncate"
+          className={cn('overflow-hidden', {
+            truncate:
+              (
+                cell.column.columnDef.meta &&
+                'truncate' in cell.column.columnDef.meta
+              ) ?
+                cell.column.columnDef.meta.truncate !== false
+              : true,
+          })}
         >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>

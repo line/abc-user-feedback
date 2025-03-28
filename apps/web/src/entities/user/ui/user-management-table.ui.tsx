@@ -26,7 +26,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
-import type { TableFilter, TableFilterOperator } from '@/shared';
+import type { SearchQuery, TableFilter, TableFilterOperator } from '@/shared';
 import {
   BasicTable,
   client,
@@ -59,18 +59,16 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
   const queries = useMemo(() => {
-    return tableFilters.reduce(
-      (acc, filter) => {
-        return acc.concat({
-          [filter.key]:
-            filter.key === 'projectId' || filter.key === 'type' ?
-              [filter.value]
-            : filter.value,
-          condition: filter.condition,
-        });
-      },
-      [] as Record<string, unknown>[],
-    );
+    return tableFilters.reduce((acc, filter) => {
+      return acc.concat({
+        key: filter.key,
+        value:
+          filter.key === 'projectId' || filter.key === 'type' ?
+            [filter.value]
+          : filter.value,
+        condition: filter.condition,
+      });
+    }, [] as SearchQuery[]);
   }, [tableFilters]);
 
   const columns = useMemo(() => getUserColumns(), []);

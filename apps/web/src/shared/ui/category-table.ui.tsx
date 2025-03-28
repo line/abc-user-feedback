@@ -20,13 +20,14 @@ import { useTranslation } from 'next-i18next';
 import { Icon } from '@ufb/react';
 
 import { client } from '../lib';
+import type { SearchQuery } from '../types';
 import CategoryTableRow from './category-table-row.ui';
 import InfiniteScrollArea from './infinite-scroll-area.ui';
 import type { TableFilterOperator } from './table-filter-popover';
 
 interface Props {
   projectId: number;
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
   operator: TableFilterOperator;
 }
 

@@ -61,9 +61,9 @@ const MemberFormDialog: React.FC<Props> = (props) => {
     limit: LIMIT * page,
     page: 0,
     queries: [
-      { type: ['GENERAL'], condition: 'IS' },
-      { email: throttledInputValue, condition: 'CONTAINS' },
-    ] as Record<string, unknown>[],
+      { key: 'type', value: ['GENERAL'], condition: 'IS' },
+      { key: 'email', value: throttledInputValue, condition: 'CONTAINS' },
+    ],
   });
 
   const { setValue, handleSubmit, formState, register, getValues, watch } =

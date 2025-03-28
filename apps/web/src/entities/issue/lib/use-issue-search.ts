@@ -16,7 +16,11 @@
 import type { UseQueryOptions } from '@tanstack/react-query';
 import { useQuery } from '@tanstack/react-query';
 
-import type { OAIMutationResponse, OAIRequestBody } from '@/shared';
+import type {
+  OAIMutationResponse,
+  OAIRequestBody,
+  SearchQuery,
+} from '@/shared';
 import { client } from '@/shared';
 
 type TData = OAIMutationResponse<
@@ -29,7 +33,7 @@ interface IBody
     OAIRequestBody<'/api/admin/projects/{projectId}/issues/search', 'post'>,
     'queries'
   > {
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
 }
 
 const useIssueSearch = (

@@ -80,6 +80,7 @@ const TableFilterPopover = (props: Props) => {
             name: field.name,
             format: field.format,
             condition: field.matchType[0] ?? filter.condition,
+            value: undefined,
           }
         : filter,
       ),
@@ -94,7 +95,9 @@ const TableFilterPopover = (props: Props) => {
     const { format, key, name, matchType } = filterFields[0];
 
     if (!matchType[0]) return;
-    setFilters([{ key, condition: matchType[0], format, name }]);
+    setFilters([
+      { key, condition: matchType[0], format, name, value: undefined },
+    ]);
     setOperator('AND');
   };
 

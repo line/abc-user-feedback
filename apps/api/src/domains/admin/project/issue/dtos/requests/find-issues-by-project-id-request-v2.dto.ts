@@ -14,30 +14,24 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
 
 class QueryV2 {
-  @ApiProperty({
-    required: false,
-    type: TimeRange,
-    example: { gte: '2023-01-01', lt: '2023-12-31' },
-  })
-  @IsOptional()
-  createdAt?: TimeRange;
+  @ApiProperty({ required: true })
+  @IsString()
+  key: string;
+
+  @ApiProperty({ required: true })
+  value: string | string[] | TimeRange | number | number[] | undefined;
 
   @ApiProperty({
-    required: false,
-    type: TimeRange,
-    example: { gte: '2023-01-01', lt: '2023-12-31' },
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
   })
-  @IsOptional()
-  updatedAt?: TimeRange;
-
-  [key: string]: string | string[] | TimeRange | number | number[] | undefined;
-
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 

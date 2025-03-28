@@ -16,11 +16,11 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { decode, encode } from 'js-base64';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
   DateRangeType,
+  SearchQuery,
   TableFilter,
   TableFilterField,
   TableFilterFieldFotmat,
@@ -30,17 +30,14 @@ import { client } from '@/shared';
 
 const toQuery = (
   projectId: number,
-): Record<TableFilterFieldFotmat, (valeu: unknown) => unknown> => ({
+): Record<TableFilterFieldFotmat, (value: unknown) => unknown> => ({
   number: (value) => Number(value),
   issue: async (value) => {
     const { data } = await client.post({
       path: '/api/admin/projects/{projectId}/issues/search',
       pathParams: { projectId },
       body: {
-        queries: [{ name: value, condition: 'IS' }] as Record<
-          string,
-          unknown
-        >[],
+        queries: [{ key: 'name', value, condition: 'IS' }] as SearchQuery[],
       },
     });
     const result = data?.items.find((v) => v.name === value);
@@ -60,22 +57,18 @@ const useIssueQueryConverter = (input: {
   const { projectId, filterFields } = input;
 
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
-  const [queries, setQueries] = useQueryState<Record<string, unknown>[]>(
+  const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
-      parse: (value) => {
-        return JSON.parse(decode(value)) as Record<string, unknown>[];
-      },
-      serialize: (value) => {
-        return encode(JSON.stringify(value));
-      },
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
     }).withDefault([]),
   );
 
   const dateRange = useMemo(() => {
-    const dateQuery = queries.find((v) => v.createdAt);
+    const dateQuery = queries.find((v) => v.key === 'createdAt');
 
-    const createdAt = dateQuery?.createdAt as
+    const createdAt = dateQuery?.value as
       | { gte: string; lt: string }
       | undefined;
 
@@ -91,14 +84,17 @@ const useIssueQueryConverter = (input: {
     async (value: DateRangeType) => {
       if (!value) return;
       if (value.startDate === null || value.endDate === null) {
-        await setQueries((queries) => queries.filter((v) => !v.createdAt));
+        await setQueries((queries) =>
+          queries.filter((v) => v.key !== 'createdAt'),
+        );
         return;
       }
       await setQueries((queries) =>
         queries
-          .filter((v) => !v.createdAt)
+          .filter((v) => v.key !== 'createdAt')
           .concat({
-            createdAt: {
+            key: 'createdAt',
+            value: {
               gte: dayjs(value.startDate).toISOString(),
               lt: dayjs(value.endDate).toISOString(),
             },
@@ -112,10 +108,10 @@ const useIssueQueryConverter = (input: {
   const tableFilters = useMemo(() => {
     return queries
       .map((v) => {
-        const key = Object.keys(v)[0];
+        const key = v.key;
 
-        if (!key || typeof key !== 'string' || key === 'createdAt') return null;
-        const value = v[key];
+        if (key === 'createdAt') return null;
+        const value = v.value;
 
         const field = filterFields.find((v) => v.key === key);
         if (!field) return null;
@@ -135,7 +131,8 @@ const useIssueQueryConverter = (input: {
     async (tableFilters: TableFilter[], operator: TableFilterOperator) => {
       const result = await Promise.all(
         tableFilters.map(async ({ condition, format, key, value }) => ({
-          [key]: await toQuery(projectId)[format](value),
+          key,
+          value: await toQuery(projectId)[format](value),
           condition,
         })),
       );
@@ -144,9 +141,10 @@ const useIssueQueryConverter = (input: {
       if (dateRange) {
         await setQueries(
           result
-            .filter((v) => !v.createdAt)
+            .filter((v) => v.key !== 'createdAt')
             .concat({
-              createdAt: {
+              key: 'createdAt',
+              value: {
                 gte: dayjs(dateRange.startDate).toISOString(),
                 lt: dayjs(dateRange.endDate).toISOString(),
               },
@@ -161,7 +159,7 @@ const useIssueQueryConverter = (input: {
   );
 
   return {
-    queries,
+    queries: queries.filter((v) => !!v.value),
     tableFilters,
     operator,
     dateRange,

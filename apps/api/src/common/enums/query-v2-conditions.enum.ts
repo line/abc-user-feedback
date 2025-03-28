@@ -16,4 +16,5 @@
 export enum QueryV2ConditionsEnum {
   CONTAINS = 'CONTAINS',
   IS = 'IS',
+  BETWEEN = 'BETWEEN',
 }
