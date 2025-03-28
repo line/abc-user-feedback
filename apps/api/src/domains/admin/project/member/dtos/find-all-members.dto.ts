@@ -22,11 +22,8 @@ export class FindAllMembersDto {
   projectId: number;
   options: IPaginationOptions;
   queries?: {
-    email?: string;
-    name?: string | null;
-    department?: string | null;
-    role?: string;
-    createdAt?: TimeRange;
+    key: string;
+    value: string | TimeRange | null;
     condition: QueryV2ConditionsEnum;
   }[];
   operator?: 'AND' | 'OR';

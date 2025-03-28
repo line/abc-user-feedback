@@ -191,10 +191,7 @@ const TableFilterPopoverInput = (props: Props) => {
         />
       )}
       {filterfieid.format === 'issue' && (
-        <IssueSelectBox
-          onChange={onChange}
-          value={value ? String(value) : undefined}
-        />
+        <IssueSelectBox onChange={onChange} value={(value ?? []) as string[]} />
       )}
     </>
   );

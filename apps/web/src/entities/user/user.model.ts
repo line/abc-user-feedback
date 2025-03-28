@@ -37,8 +37,8 @@ interface Action {
   }) => Promise<void>;
   signInWithOAuth: (input: { code: string }) => Promise<void>;
   signOut: () => Promise<void>;
-  setUser: () => void;
-  _signIn: (jwt: Jwt) => void;
+  setUser: () => Promise<void>;
+  _signIn: (jwt: Jwt) => Promise<void>;
 }
 
 export const useUserStore = create<State & Action>((set, get) => ({
@@ -51,14 +51,14 @@ export const useUserStore = create<State & Action>((set, get) => ({
     });
     if (!jwt) return;
 
-    get()._signIn(jwt);
+    await get()._signIn(jwt);
   },
   signInWithOAuth: async ({ code }) => {
     const { data: jwt } = await client.get({
       path: '/api/admin/auth/signIn/oauth',
       query: { code },
     });
-    get()._signIn(jwt);
+    await get()._signIn(jwt);
   },
   signOut: async () => {
     await cookieStorage.removeItem('jwt');
@@ -85,7 +85,7 @@ export const useUserStore = create<State & Action>((set, get) => ({
       await cookieStorage.setItem('jwt', jwt);
       const broadcastChannel = new BroadcastChannel('ufb');
       broadcastChannel.postMessage({ type: 'reload', payload: get().randomId });
-      get().setUser();
+      await get().setUser();
       if (router.query.callback_url) {
         await router.push(router.query.callback_url as string);
       } else {

@@ -15,7 +15,7 @@
  */
 
 /** @type {import('next-i18next').UserConfig} */
-module.exports = {
+const i18nConfig = {
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'zh', 'de', 'ja', 'ko'],
@@ -24,4 +24,7 @@ module.exports = {
     default: ['en'],
   },
   nonExplicitSupportedLngs: true,
+  serializeConfig: false,
 };
+
+export default i18nConfig;

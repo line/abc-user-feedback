@@ -19,7 +19,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsString, useQueryState } from 'nuqs';
 
 import {
@@ -34,7 +33,7 @@ import {
   MenuItem,
 } from '@ufb/react';
 
-import { DEFAULT_LOCALE, useAllProjects } from '@/shared';
+import { useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import SideMenuLayout from '@/shared/ui/side-menu-layout.ui';
 import {
@@ -43,6 +42,8 @@ import {
   useUserStore,
 } from '@/entities/user';
 import { Layout } from '@/widgets/layout';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const ProfilePage: NextPageWithLayout = () => {
   const { t } = useTranslation();
@@ -128,7 +129,7 @@ ProfilePage.getLayout = (page) => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

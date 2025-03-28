@@ -45,6 +45,7 @@ export const memberColumns = [
     ),
     size: 30,
     enableSorting: false,
+    meta: { truncate: false },
   }),
   columnHelper.accessor('user.email', {
     header: 'Email',
@@ -69,10 +70,12 @@ export const memberColumns = [
     enableSorting: false,
     cell: ({ getValue }) =>
       getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
+    meta: { truncate: false },
   }),
   columnHelper.accessor('role.name', {
     header: 'Role',
     cell: ({ getValue }) => <Badge variant="subtle">{getValue()}</Badge>,
+    meta: { truncate: false },
     enableSorting: false,
   }),
   columnHelper.accessor('createdAt', {

@@ -22,6 +22,9 @@ import { createConnection as connect } from './database-utils';
 process.env.NODE_ENV = 'test';
 process.env.MYSQL_PRIMARY_URL =
   'mysql://root:userfeedback@localhost:13307/integration';
+process.env.MYSQL_SECONDARY_URLS = JSON.stringify([
+  'mysql://root:userfeedback@localhost:13307/integration',
+]);
 process.env.MASTER_API_KEY = 'master-api-key';
 process.env.ENABLE_AUTO_FEEDBACK_DELETION = 'true';
 process.env.AUTO_FEEDBACK_DELETION_PERIOD_DAYS = '30';
@@ -57,7 +60,7 @@ async function runMigrations() {
   await connection.close();
 }
 
-module.exports = async () => {
+export default async () => {
   await createTestDatabase();
   await runMigrations();
 };

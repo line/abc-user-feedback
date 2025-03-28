@@ -28,11 +28,23 @@ export class ApiKeyEntity extends CommonEntity {
   })
   project: Relation<ProjectEntity>;
 
-  static from({ projectId, value }: { projectId: number; value: string }) {
+  static from({
+    projectId,
+    value,
+    createdAt,
+    deletedAt,
+  }: {
+    projectId: number;
+    value: string;
+    createdAt?: Date;
+    deletedAt?: Date;
+  }) {
     const apiKey = new ApiKeyEntity();
     apiKey.project = new ProjectEntity();
     apiKey.project.id = projectId;
     apiKey.value = value;
+    if (createdAt) apiKey.createdAt = createdAt;
+    if (deletedAt) apiKey.deletedAt = deletedAt;
 
     return apiKey;
   }

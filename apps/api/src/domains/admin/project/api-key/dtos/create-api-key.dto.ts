@@ -14,6 +14,7 @@
  * under the License.
  */
 import { Expose, plainToInstance } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 
 import { ApiKeyEntity } from '../api-key.entity';
 
@@ -23,6 +24,14 @@ export class CreateApiKeyDto {
 
   @Expose()
   value: string;
+
+  @Expose()
+  @IsOptional()
+  createdAt?: Date;
+
+  @Expose()
+  @IsOptional()
+  deletedAt?: Date;
 
   public static from(params: any): CreateApiKeyDto {
     return plainToInstance(CreateApiKeyDto, params, {
@@ -34,6 +43,8 @@ export class CreateApiKeyDto {
     return ApiKeyEntity.from({
       projectId: params.projectId,
       value: params.value,
+      createdAt: params.createdAt,
+      deletedAt: params.deletedAt,
     });
   }
 }

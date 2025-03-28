@@ -67,11 +67,13 @@ describe('UserService', () => {
       };
       dto.queries = [
         {
-          projectId: [faker.number.int()],
+          key: 'projectId',
+          value: [faker.number.int()],
           condition: QueryV2ConditionsEnum.CONTAINS,
         },
         {
-          email: faker.internet.email(),
+          key: 'email',
+          value: faker.internet.email(),
           condition: QueryV2ConditionsEnum.CONTAINS,
         },
       ];

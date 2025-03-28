@@ -149,6 +149,8 @@ export class ProjectService {
         dto.apiKeys.map((apiKey) => ({
           value: apiKey.value,
           projectId: savedProject.id,
+          createdAt: apiKey.createdAt,
+          deletedAt: apiKey.deletedAt,
         })),
       );
       savedProject.apiKeys = savedApiKeys;

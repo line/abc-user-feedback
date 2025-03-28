@@ -1,10 +1,10 @@
-const baseConfig = require('@ufb/eslint-config/base');
-const nestjsConfig = require('@ufb/eslint-config/nestjs');
+import tsParser from '@typescript-eslint/parser';
+import globals from 'globals';
 
-const tsParser = require('@typescript-eslint/parser');
-const globals = require('globals');
+import baseConfig from '@ufb/eslint-config/base';
+import nestjsConfig from '@ufb/eslint-config/nestjs';
 
-module.exports = [
+export default [
   {
     ignores: ['dist/**', '**/*.js'],
   },
@@ -18,7 +18,7 @@ module.exports = [
       sourceType: 'module',
       parserOptions: {
         project: 'tsconfig.json',
-        tsconfigRootDir: __dirname,
+        tsconfigRootDir: import.meta.dirname,
       },
     },
   },

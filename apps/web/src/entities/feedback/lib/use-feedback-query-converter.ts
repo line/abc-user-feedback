@@ -16,11 +16,11 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import { decode, encode } from 'js-base64';
 import { createParser, useQueryState } from 'nuqs';
 
 import type {
   DateRangeType,
+  SearchQuery,
   TableFilter,
   TableFilterField,
   TableFilterFieldFotmat,
@@ -35,18 +35,36 @@ const toQuery = (
 ): Record<TableFilterFieldFotmat, (valeu: unknown) => unknown> => ({
   number: (value) => Number(value),
   issue: async (value) => {
-    const { data } = await client.post({
-      path: '/api/admin/projects/{projectId}/issues/search',
-      pathParams: { projectId },
-      body: {
-        queries: [{ name: value, condition: 'IS' }] as Record<
-          string,
-          unknown
-        >[],
-      },
-    });
-    const result = data?.items.find((v) => v.name === value);
-    return result ? [result.id] : [];
+    if (typeof value === 'string') {
+      const { data } = await client.post({
+        path: '/api/admin/projects/{projectId}/issues/search',
+        pathParams: { projectId },
+        body: {
+          queries: [{ key: 'name', value, condition: 'IS' }] as SearchQuery[],
+        },
+      });
+      const result = data?.items.find((v) => v.name === value);
+      return result ? [result.id] : [];
+    }
+    if (Array.isArray(value)) {
+      return await Promise.all(
+        value.map(async (v: string) => {
+          const issueId = parseInt(v);
+          if (!isNaN(issueId)) return issueId;
+
+          const { data } = await client.post({
+            path: '/api/admin/projects/{projectId}/issues/search',
+            pathParams: { projectId },
+            body: {
+              queries: [
+                { key: 'name', value: v, condition: 'IS' },
+              ] as SearchQuery[],
+            },
+          });
+          return data?.items.find((vv) => vv.name === v)?.id;
+        }),
+      );
+    }
   },
   string: (value) => value,
   select: (value) => value,
@@ -69,22 +87,20 @@ const useFeedbackQueryConverter = (input: {
   const { projectId, filterFields } = input;
 
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
-  const [queries, setQueries] = useQueryState<Record<string, unknown>[]>(
+  const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
-      parse: (value) => {
-        return JSON.parse(decode(value)) as Record<string, unknown>[];
-      },
-      serialize: (value) => {
-        return encode(JSON.stringify(value), true);
-      },
-    }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
+    }).withDefault([
+      { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'IS' },
+    ]),
   );
 
   const dateRange = useMemo(() => {
-    const dateQuery = queries.find((v) => v.createdAt);
+    const dateQuery = queries.find((v) => v.key === 'createdAt');
 
-    const createdAt = dateQuery?.createdAt as
+    const createdAt = dateQuery?.value as
       | { gte: string; lt: string }
       | undefined;
 
@@ -100,9 +116,10 @@ const useFeedbackQueryConverter = (input: {
     if (!value) return;
     await setQueries((queries) =>
       queries
-        .filter((v) => !v.createdAt)
+        .filter((v) => v.key !== 'createdAt')
         .concat({
-          createdAt: {
+          key: 'createdAt',
+          value: {
             gte: dayjs(value.startDate).toISOString(),
             lt: dayjs(value.endDate).toISOString(),
           },
@@ -114,9 +131,10 @@ const useFeedbackQueryConverter = (input: {
   const tableFilters = useMemo(() => {
     return queries
       .map((v) => {
-        const key = Object.keys(v)[0];
-        if (!key || typeof key !== 'string' || key === 'createdAt') return null;
-        const value = v[key];
+        const key = v.key;
+        if (key === 'createdAt') return null;
+        const value = v.value;
+
         const field = filterFields.find((v) => v.key === key);
         if (!field) return null;
 
@@ -135,12 +153,15 @@ const useFeedbackQueryConverter = (input: {
     async (tableFilters: TableFilter[], operator: TableFilterOperator) => {
       const result = await Promise.all(
         tableFilters.map(async ({ condition, format, key, value }) => ({
-          [key]: await toQuery(projectId)[format](value),
+          key,
+          value: await toQuery(projectId)[format](value),
           condition,
         })),
       );
       if (result.length === 0 && !dateRange) {
-        await setQueries([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]);
+        await setQueries([
+          { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'IS' },
+        ]);
         return;
       }
 
@@ -148,9 +169,10 @@ const useFeedbackQueryConverter = (input: {
       if (dateRange) {
         await setQueries(
           result
-            .filter((v) => !v.createdAt)
+            .filter((v) => v.key !== 'createdAt')
             .concat({
-              createdAt: {
+              key: 'createdAt',
+              value: {
                 gte: dayjs(dateRange.startDate).toISOString(),
                 lt: dayjs(dateRange.endDate).toISOString(),
               },
@@ -165,11 +187,13 @@ const useFeedbackQueryConverter = (input: {
   );
 
   return {
-    queries: queries.filter(
-      (v) =>
-        filterFields.some((vv) => vv.key === Object.keys(v)[0]) ||
-        Object.keys(v)[0] === 'createdAt',
-    ),
+    queries: queries
+      .filter(
+        (query) =>
+          filterFields.some((field) => field.key === query.key) ||
+          query.key === 'createdAt',
+      )
+      .filter((v) => !!v.value),
     tableFilters: tableFilters.filter((v) =>
       filterFields.some((vv) => vv.key === v.key),
     ),

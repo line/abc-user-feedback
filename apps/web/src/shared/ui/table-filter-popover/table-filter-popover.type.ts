@@ -68,7 +68,7 @@ export interface TableFilterFieldIssue {
 }
 
 export interface TableFilter {
-  value?: unknown;
+  value: unknown;
   key: string;
   name: string;
   format: TableFilterFieldFotmat;

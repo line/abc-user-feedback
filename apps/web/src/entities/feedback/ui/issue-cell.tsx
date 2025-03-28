@@ -68,7 +68,10 @@ const IssueCell: React.FC<IProps> = (props) => {
   const { data } = useFeedbackSearch(
     projectId,
     channelId,
-    { queries: [{ id: feedbackId, condition: 'IS' }], operator: 'AND' },
+    {
+      queries: [{ key: 'id', value: feedbackId, condition: 'IS' }],
+      operator: 'AND',
+    },
     { enabled: !issues },
   );
 
@@ -92,7 +95,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     hasNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
     limit: 10,
-    queries: [{ name: throttledvalue, condition: 'CONTAINS' }],
+    queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
   });
 
   const allIssues = useMemo(() => {

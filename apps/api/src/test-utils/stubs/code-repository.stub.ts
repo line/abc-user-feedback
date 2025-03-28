@@ -13,82 +13,37 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { faker } from '@faker-js/faker';
 
 import type { CodeTypeEnum } from '@/shared/code/code-type.enum';
-import { CodeEntity } from '@/shared/code/code.entity';
+import type { CodeEntity } from '@/shared/code/code.entity';
 
 import { codeFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class CodeRepositoryStub {
-  code: CodeEntity | null = codeFixture;
-  findOne() {
-    return this.code;
-  }
-
-  findOneBy() {
-    return this.code;
-  }
-
-  find() {
-    return [this.code];
-  }
-
-  findBy() {
-    return [this.code];
-  }
-
-  findAndCount() {
-    return [[this.code], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.code], 1];
-  }
-
-  save(code) {
-    const codeToSave = removeUndefinedValues(code);
-    if (Array.isArray(codeToSave)) {
-      return codeToSave.map((e) => ({
-        ...this.code,
-        ...e,
-        id: faker.number.int(),
-      }));
-    } else {
-      return {
-        ...this.code,
-        ...codeToSave,
-      };
-    }
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
+export class CodeRepositoryStub extends CommonRepositoryStub<CodeEntity> {
+  constructor() {
+    super([codeFixture]);
   }
 
   setNull() {
-    this.code = null;
+    this.entities = null;
   }
 
-  setIsVerified(bool) {
-    if (this.code) this.code.isVerified = bool;
+  setIsVerified(bool: boolean) {
+    this.entities?.forEach((entity) => {
+      entity.isVerified = bool;
+    });
   }
 
   setType(type: CodeTypeEnum) {
-    if (this.code) this.code.type = type;
+    this.entities?.forEach((entity) => {
+      entity.type = type;
+    });
   }
 
-  setTryCount(tryCount) {
-    if (this.code) this.code.tryCount = tryCount;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [codeFixture];
-    return createQueryBuilder;
+  setTryCount(tryCount: number) {
+    this.entities?.forEach((entity) => {
+      entity.tryCount = tryCount;
+    });
   }
 }

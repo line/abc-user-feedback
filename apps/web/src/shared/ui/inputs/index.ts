@@ -18,3 +18,4 @@ export { default as SelectInput } from './select-input.ui';
 export { default as SelectSearchInput } from './select-search-input.ui';
 export { default as ComboboxInputbox } from './combobox-input-box.ui';
 export { default as DatePicker } from './date-picker.ui';
+export { default as MultiSelectSearchInput } from './multi-select-search-input.ui';

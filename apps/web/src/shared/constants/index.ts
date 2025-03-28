@@ -15,6 +15,5 @@
  */
 export * from './chart-colors';
 export * from './date-format';
-export * from './i18n';
 export * from './path';
 export * from './issues';

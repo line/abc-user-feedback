@@ -20,6 +20,7 @@ import type {
   IFetchError,
   OAIMutationResponse,
   OAIRequestBody,
+  SearchQuery,
 } from '@/shared';
 import { client } from '@/shared';
 
@@ -36,7 +37,7 @@ interface IBody
     >,
     'queries'
   > {
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
 }
 
 const useFeedbackSearch = (

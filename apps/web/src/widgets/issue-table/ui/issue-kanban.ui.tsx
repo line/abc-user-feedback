@@ -25,7 +25,7 @@ import { useTranslation } from 'next-i18next';
 
 import { toast } from '@ufb/react';
 
-import type { TableFilterOperator } from '@/shared';
+import type { SearchQuery, TableFilterOperator } from '@/shared';
 import { client, ISSUES } from '@/shared';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -36,7 +36,7 @@ import IssueKanbanDndContext from './issue-kanban-dnd-context.ui';
 interface Props {
   projectId: number;
   issueTracker?: IssueTracker;
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
