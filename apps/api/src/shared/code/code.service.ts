@@ -45,8 +45,7 @@ export class CodeService {
     const code = this.createCode();
 
     let codeEntity = await this.codeRepo.findOneBy({ key, type });
-
-    if (codeEntity === null) codeEntity = new CodeEntity();
+    codeEntity ??= new CodeEntity();
 
     await this.codeRepo.save(
       Object.assign(codeEntity, {
