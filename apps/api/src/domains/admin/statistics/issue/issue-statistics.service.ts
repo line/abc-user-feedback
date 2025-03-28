@@ -249,7 +249,7 @@ export class IssueStatisticsService {
   @Transactional()
   async updateCount(dto: UpdateCountDto) {
     if (dto.count === 0) return;
-    if (!dto.count) dto.count = 1;
+    dto.count ??= 1;
 
     const project: ProjectEntity | null = await this.projectRepository.findOne({
       where: { id: dto.projectId },

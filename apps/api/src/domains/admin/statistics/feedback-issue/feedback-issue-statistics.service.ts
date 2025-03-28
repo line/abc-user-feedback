@@ -233,7 +233,7 @@ export class FeedbackIssueStatisticsService {
   @Transactional()
   async updateFeedbackCount(dto: UpdateFeedbackCountDto) {
     if (dto.feedbackCount === 0) return;
-    if (!dto.feedbackCount) dto.feedbackCount = 1;
+    dto.feedbackCount ??= 1;
 
     const project = await this.projectRepository.findOne({
       where: { issues: { id: dto.issueId } },

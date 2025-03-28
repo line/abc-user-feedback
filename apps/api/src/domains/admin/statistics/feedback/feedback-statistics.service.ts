@@ -277,7 +277,7 @@ export class FeedbackStatisticsService {
   @Transactional()
   async updateCount(dto: UpdateCountDto) {
     if (dto.count === 0) return;
-    if (!dto.count) dto.count = 1;
+    dto.count ??= 1;
 
     const project = await this.projectRepository.findOne({
       where: { channels: { id: dto.channelId } },
