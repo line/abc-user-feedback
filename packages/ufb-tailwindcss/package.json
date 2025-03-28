@@ -10,11 +10,11 @@
     "dev": "node src/build",
     "build": "node src/build",
     "build:postcss-base": "postcss --config src/base src/base/*.css --base src --dir dist",
-    "build:prejss-base": "prejss-cli dist/base.css --format commonjs",
+    "build:prejss-base": "prejss-cli dist/base.css --format es6",
     "build:postcss-utilities": "postcss --config src/utilities src/utilities/*.css --base src --dir dist",
-    "build:prejss-utilities": "prejss-cli dist/utilities.css --format commonjs",
+    "build:prejss-utilities": "prejss-cli dist/utilities.css --format es6",
     "build:postcss-components": "postcss --config src/components src/components/*.css --base src --dir dist",
-    "build:prejss-components": "prejss-cli dist/components.css --format commonjs",
+    "build:prejss-components": "prejss-cli dist/components.css --format es6",
     "clean": "rm -rf .turbo node_modules dist"
   },
   "devDependencies": {
