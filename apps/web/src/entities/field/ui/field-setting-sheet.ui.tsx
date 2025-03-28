@@ -103,6 +103,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     resolver: zodResolver(fieldInfoSchema),
     defaultValues: data ?? defaultValues,
   });
+  console.log('formState: ', formState.errors);
 
   useEffect(() => {
     if (isSameKey) setValue('name', watch('key'), { shouldDirty: true });
@@ -110,24 +111,25 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
 
   const addOption = () => {
     if (optionInput === '') return;
+
     if (
       watch('options')?.find(
         (v) => v.name.toLowerCase() === optionInput.toLowerCase(),
       )
     ) {
       setError('options', { message: 'Option Name is duplicated' });
-    } else {
-      setValue(
-        'options',
-        (watch('options') ?? []).concat({
-          name: optionInput,
-          key: optionInput,
-        }),
-        { shouldDirty: true },
-      );
-      setOptionInput('');
-      clearErrors('options');
+      return;
     }
+    setValue(
+      'options',
+      (watch('options') ?? []).concat({
+        name: optionInput,
+        key: optionInput,
+      }),
+      { shouldDirty: true },
+    );
+    setOptionInput('');
+    clearErrors('options');
   };
 
   const removeOption = (targetIndex: number) => {
@@ -240,6 +242,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   <TextInput
                     label="Select Option"
                     value={optionInput}
+                    maxLength={20}
                     onChange={(e) => setOptionInput(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {
