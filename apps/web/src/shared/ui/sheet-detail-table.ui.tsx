@@ -116,7 +116,7 @@ const SheetDetailTable = (props: Props) => {
         : '-';
     },
     multiSelect: (value, row) => (
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {((value ?? []) as string[]).length === 0 ?
           '-'
         : (value as string[])
@@ -277,20 +277,20 @@ const SheetDetailTable = (props: Props) => {
   };
 
   return (
-    <table>
+    <table className="w-full table-fixed">
       <tbody>
         {rows.map((row) => {
           const { format, key, name } = row;
           const value = data[key];
           return (
             <tr key={key}>
-              <th className="text-neutral-tertiary min-w-[120px] py-2.5 align-top font-normal">
+              <th className="text-neutral-tertiary w-1/4 py-2.5 align-top font-normal">
                 <div className="flex items-center gap-1 text-left">
                   <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
                   {name}
                 </div>
               </th>
-              <td className="w-full py-2.5">
+              <td className="w-3/4 whitespace-normal break-words py-2.5">
                 {mode === 'edit' && row.editable ?
                   renderEditModeField[format](value, row)
                 : typeof value === 'undefined' ?
