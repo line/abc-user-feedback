@@ -206,7 +206,7 @@ importers:
     devDependencies:
       '@faker-js/faker':
         specifier: ^9.0.0
-        version: 9.3.0
+        version: 9.6.0
       '@nestjs/cli':
         specifier: ^11.0.0
         version: 11.0.5(@swc/cli@0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3))(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@22.13.14)
@@ -342,7 +342,7 @@ importers:
         version: 3.2.2(react@19.0.0)
       '@faker-js/faker':
         specifier: ^9.0.0
-        version: 9.3.0
+        version: 9.6.0
       '@hookform/resolvers':
         specifier: ^4.0.0
         version: 4.1.3(react-hook-form@7.54.2(react@19.0.0))
@@ -2044,10 +2044,9 @@ packages:
     resolution: {integrity: sha512-JubJ5B2pJ4k4yGxaNLdbjrnk9d/iDz6/q8wOilpIowd6PJPgaxCuHBnBszq7Ce2TyMrywm5r4PnKm6V3iiZF+g==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@faker-js/faker@9.3.0':
-    resolution: {integrity: sha512-r0tJ3ZOkMd9xsu3VRfqlFR6cz0V/jFYRswAIpC+m/DIfAUXq7g8N7wTAlhSANySXYGKzGryfDXwtwsY8TxEIDw==}
+  '@faker-js/faker@9.6.0':
+    resolution: {integrity: sha512-3vm4by+B5lvsFPSyep3ELWmZfE3kicDtmemVpuwl1yH7tqtnHdsA6hG8fbXedMVdkzgtvzWoRgjSB4Q+FHnZiw==}
     engines: {node: '>=18.0.0', npm: '>=9.0.0'}
-    deprecated: Please update to a newer version
 
   '@fast-csv/format@4.3.5':
     resolution: {integrity: sha512-8iRn6QF3I8Ak78lNAa+Gdl5MJJBM5vRHivFtMRUWINdevNo00K7OXxS2PshawLKTejVwieIlPmK5YlLu6w4u8A==}
@@ -11952,7 +11951,7 @@ snapshots:
       '@eslint/core': 0.12.0
       levn: 0.4.1
 
-  '@faker-js/faker@9.3.0': {}
+  '@faker-js/faker@9.6.0': {}
 
   '@fast-csv/format@4.3.5':
     dependencies:
