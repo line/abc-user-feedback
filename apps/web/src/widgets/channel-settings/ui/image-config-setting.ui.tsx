@@ -44,7 +44,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
 
   const perms = usePermissions(projectId);
 
-  const { data, refetch, isRefetching } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
     queryOptions: { refetchOnWindowFocus: false },
@@ -90,7 +90,7 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         region: '',
       });
     }
-  }, [isRefetching]);
+  }, [data]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

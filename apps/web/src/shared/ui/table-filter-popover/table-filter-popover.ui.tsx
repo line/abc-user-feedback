@@ -66,7 +66,15 @@ const TableFilterPopover = (props: Props) => {
   const addFilter = () => {
     const filterField = filters[filters.length - 1];
     if (!filterField) resetFilters();
-    else setFilters([...filters, filterField]);
+
+    if (!filterFields[0]) return;
+    const { format, key, name, matchType } = filterFields[0];
+
+    if (!matchType[0]) return;
+    setFilters([
+      ...filters,
+      { key, condition: matchType[0], format, name, value: undefined },
+    ]);
   };
 
   const updateFilter = (index: number, field: TableFilterField) => {
@@ -84,6 +92,7 @@ const TableFilterPopover = (props: Props) => {
       ),
     );
   };
+
   const deleteFilter = (index: number) => {
     setFilters(filters.filter((_, i) => i !== index));
   };

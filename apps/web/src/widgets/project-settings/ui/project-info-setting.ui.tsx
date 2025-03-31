@@ -53,7 +53,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
     resolver: zodResolver(projectInfoSchema),
   });
 
-  const { data, refetch, isRefetching } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}',
     variables: { projectId },
     queryOptions: { refetchOnWindowFocus: false },
@@ -94,7 +94,7 @@ const ProjectInfoSetting: React.FC<IProps> = ({ projectId }) => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [isRefetching]);
+  }, [data]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

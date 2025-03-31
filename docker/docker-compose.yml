@@ -1,9 +1,7 @@
-version: "3"
-
 services:
   web:
     hostname: web
-    image: harbor.linecorp.com/abc-studio/user-feedback/web:ui
+    image: line/abc-user-feedback-web:latest
     restart: always
     ports:
       - 3000:3000
@@ -17,12 +15,7 @@ services:
 
   api:
     hostname: api
-    build:
-      context: ..
-      dockerfile: docker/api.dockerfile
-      args:
-        - TURBO_TOKEN=TURBO_TOKEN
-        - TURBO_TEAM=TURBO_TEAM
+    image: line/abc-user-feedback-api:latest
     restart: always
     ports:
       - 4000:4000

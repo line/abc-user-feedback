@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import dayjs from 'dayjs';
-import { createParser, useQueryState } from 'nuqs';
+import { createParser, parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import type {
   DateRangeType,
@@ -26,7 +26,7 @@ import type {
   TableFilterFieldFotmat,
   TableFilterOperator,
 } from '@/shared';
-import { client } from '@/shared';
+import { client, TableFilterOperators } from '@/shared';
 
 const toQuery = (
   projectId: number,
@@ -56,7 +56,10 @@ const useIssueQueryConverter = (input: {
 }) => {
   const { projectId, filterFields } = input;
 
-  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const [operator, setOperator] = useQueryState<TableFilterOperator>(
+    'operator',
+    parseAsStringLiteral(TableFilterOperators).withDefault('AND'),
+  );
   const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({

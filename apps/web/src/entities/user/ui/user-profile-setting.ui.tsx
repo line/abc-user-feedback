@@ -45,7 +45,7 @@ const UserProfileSetting = () => {
     resolver: zodResolver(userProfileSchema),
   });
 
-  const { data, refetch, isRefetching } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/users/{id}',
     variables: { id: user?.id ?? 0 },
     queryOptions: { refetchOnWindowFocus: false },
@@ -78,7 +78,7 @@ const UserProfileSetting = () => {
 
   useEffect(() => {
     methods.reset(data);
-  }, [isRefetching]);
+  }, [data]);
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 

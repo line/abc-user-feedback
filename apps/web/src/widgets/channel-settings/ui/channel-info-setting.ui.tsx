@@ -53,7 +53,7 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
 
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
-  const { data, refetch, isRefetching } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
     queryOptions: { refetchOnWindowFocus: false },
@@ -86,9 +86,8 @@ const ChannelInfoSetting: React.FC<IProps> = ({ channelId, projectId }) => {
   });
 
   useEffect(() => {
-    if (!data) return;
     methods.reset(data);
-  }, [isRefetching]);
+  }, [data]);
 
   const openDeleteDialog = () => {
     overlay.open(({ close, isOpen }) => (

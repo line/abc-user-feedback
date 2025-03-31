@@ -16,6 +16,7 @@
 export type TableFilterFieldFotmat = TableFilterField['format'];
 
 export type TableFilterCondition = 'CONTAINS' | 'IS' | 'BETWEEN';
+export const TableFilterOperators = ['AND', 'OR'] as const;
 export type TableFilterOperator = 'AND' | 'OR';
 
 export type TableFilterField = {
