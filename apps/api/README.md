@@ -94,6 +94,8 @@ The following is a list of environment variables used by the application, along 
 | `SMTP_PASSWORD`                      | SMTP server authentication password                            | _optional_                                    |
 | `SMTP_SENDER`                        | Email address used as sender in emails                         | _required if `SMTP_USE=true`_                 |
 | `SMTP_BASE_URL`                      | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_                 |
+| `SMTP_CIPHER_SPEC`                   | SMTP Cipher Algorithm Specification                            | `TLSv1.2`                                     |
+| `SMTP_OPPORTUNISTIC_TLS`             | Use Opportunistic TLS using STARTTLS                           | `true`                                        |
 | `OPENSEARCH_USE`                     | Flag to enable OpenSearch integration                          | `false`                                       |
 | `OPENSEARCH_NODE`                    | OpenSearch node URL                                            | _required if `OPENSEARCH_USE=true`_           |
 | `OPENSEARCH_USERNAME`                | OpenSearch username (if authentication is enabled)             | _required if `OPENSEARCH_USE=true`_           |
