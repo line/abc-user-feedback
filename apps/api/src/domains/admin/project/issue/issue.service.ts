@@ -171,6 +171,7 @@ export class IssueService {
     const {
       projectId,
       queries = [],
+      defaultQueries = [],
       sort = {},
       operator = 'AND',
       page,
@@ -182,14 +183,17 @@ export class IssueService {
       .leftJoinAndSelect('issues.category', 'category')
       .where('issues.project_id = :projectId', { projectId });
 
-    const createdAtCondition = queries.find(
-      (query) => query.key === 'createdAt',
-    );
-    if (createdAtCondition?.value) {
-      const { gte, lt } = createdAtCondition.value as TimeRange;
-      queryBuilder.andWhere('issues.created_at >= :gte', { gte });
-      queryBuilder.andWhere('issues.created_at < :lt', { lt });
-    }
+    defaultQueries.forEach((query) => {
+      const { key, value, condition } = query;
+
+      if (key === 'createdAt' && value) {
+        const { gte, lt } = value as TimeRange;
+        queryBuilder.andWhere('issues.created_at >= :gte', { gte });
+        queryBuilder.andWhere('issues.created_at < :lt', { lt });
+      } else if (key === 'status' && condition === QueryV2ConditionsEnum.IS) {
+        queryBuilder.andWhere('issues.status = :status', { status: value });
+      }
+    });
 
     const categoryIdCondition = queries.find(
       (query) => query.key === 'categoryId' && typeof query.value === 'number',
@@ -222,13 +226,6 @@ export class IssueService {
             });
             qb[method](`issues.updated_at < :lt${paramName}`, {
               [`lt${paramName}`]: lt,
-            });
-          } else if (
-            key === 'status' &&
-            condition === QueryV2ConditionsEnum.IS
-          ) {
-            qb[method](`issues.status = :${paramName}`, {
-              [paramName]: value,
             });
           } else if (
             key === 'externalIssueId' &&

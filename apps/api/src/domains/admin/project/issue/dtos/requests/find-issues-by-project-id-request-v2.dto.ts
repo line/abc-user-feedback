@@ -39,11 +39,21 @@ export class FindIssuesByProjectIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
     description: 'You can query by key-value with this object.',
-    example: { name: 'issue name' },
+    example: [{ key: 'issue', value: 'issue name', condition: 'IS' }],
     type: [QueryV2],
   })
   @IsOptional()
   queries?: QueryV2[];
+
+  @ApiProperty({
+    required: false,
+    description:
+      'You can query by key-value with this object. This queries will be applied by default.',
+    example: [{ key: 'status', value: 'RESOLVED', condition: 'IS' }],
+    type: [QueryV2],
+  })
+  @IsOptional()
+  defaultQueries?: QueryV2[];
 
   @ApiProperty({
     required: false,
