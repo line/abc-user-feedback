@@ -1409,7 +1409,7 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
-      deletedAt: string;
+      deletedAt?: string | null;
     };
     IssueTrackerDataDto: {
       ticketDomain: string | null;

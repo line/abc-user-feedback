@@ -52,7 +52,7 @@ class CreateApiKeyByValueDto {
   @IsDate()
   createdAt: Date;
 
-  @ApiProperty()
+  @ApiProperty({ required: false, nullable: true })
   @IsDate()
   @IsOptional()
   deletedAt?: Date;
