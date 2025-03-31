@@ -1406,6 +1406,10 @@ export interface components {
     };
     CreateApiKeyByValueDto: {
       value: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      deletedAt: string;
     };
     IssueTrackerDataDto: {
       ticketDomain: string | null;
@@ -1425,6 +1429,7 @@ export interface components {
     };
     CreateProjectResponseDto: {
       id: number;
+      apiKeys: components['schemas']['ApiKeyResponseDto'][];
     };
     FindProjectByIdResponseDto: {
       id: number;
@@ -1457,6 +1462,7 @@ export interface components {
     };
     UpdateProjectResponseDto: {
       id: number;
+      apiKeys: components['schemas']['ApiKeyResponseDto'][];
     };
     ImageConfigRequestDto: {
       accessKeyId: string;
@@ -1709,11 +1715,26 @@ export interface components {
       page?: number;
       /**
        * @description You can query by key-value with this object.
-       * @example {
-       *       "name": "issue name"
-       *     }
+       * @example [
+       *       {
+       *         "key": "issue",
+       *         "value": "issue name",
+       *         "condition": "IS"
+       *       }
+       *     ]
        */
       queries?: components['schemas']['QueryV2'][];
+      /**
+       * @description You can query by key-value with this object. This queries will be applied by default.
+       * @example [
+       *       {
+       *         "key": "status",
+       *         "value": "RESOLVED",
+       *         "condition": "IS"
+       *       }
+       *     ]
+       */
+      defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
       /**

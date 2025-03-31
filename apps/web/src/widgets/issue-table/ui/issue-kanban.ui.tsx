@@ -37,11 +37,12 @@ interface Props {
   projectId: number;
   issueTracker?: IssueTracker;
   queries: SearchQuery[];
+  defaultQueries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
 const IssueKanban = (props: Props) => {
-  const { projectId, issueTracker, queries, operator } = props;
+  const { projectId, issueTracker, queries, defaultQueries, operator } = props;
 
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -99,6 +100,7 @@ const IssueKanban = (props: Props) => {
               setItems={setItems}
               queries={queries}
               operator={operator}
+              defaultQueries={defaultQueries}
             />
           ))}
         </SortableContext>

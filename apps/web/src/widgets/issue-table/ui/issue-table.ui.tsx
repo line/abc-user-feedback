@@ -115,6 +115,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     tableFilters,
     updateDateRage,
     updateTableFilters,
+    defaultQueries,
   } = useIssueQueryConverter({ filterFields, projectId });
 
   const openIssueFormDialog = () => {
@@ -178,6 +179,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           issueTracker={issueTracker?.data}
           queries={queries}
           operator={operator}
+          defaultQueries={defaultQueries}
         />
       )}
       {viewType === 'list' && (
