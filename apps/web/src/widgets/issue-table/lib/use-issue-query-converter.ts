@@ -140,7 +140,7 @@ const useIssueQueryConverter = (input: {
         })),
       );
 
-      setOperator(operator);
+      await setOperator(operator);
       if (dateRange) {
         await setQueries(
           result
