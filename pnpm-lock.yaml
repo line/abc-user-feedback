@@ -618,8 +618,8 @@ importers:
         specifier: ^4.0.0
         version: 4.1.0
       lucide-react:
-        specifier: ^0.398.0
-        version: 0.398.0(react@19.0.0)
+        specifier: ^0.485.0
+        version: 0.485.0(react@19.0.0)
       react-day-picker:
         specifier: 8.10.1
         version: 8.10.1(date-fns@4.1.0)(react@19.0.0)
@@ -7468,8 +7468,8 @@ packages:
     resolution: {integrity: sha512-FbAj6lXil6t8z4z3j0E5mfRlPzxkySotzUHwRXjlpRh10vc6AI6WN62ehZj82VG7M20rqogJ0GLwar2Xa05a8Q==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
-  lucide-react@0.398.0:
-    resolution: {integrity: sha512-qwTvyiWP1iBIbq4qr5yA7fdjB9fxCy/HKDNM3og5oGZ3NRAMCMDzak7/w+yJJ39AJI3+1yPlAigdpRyF3h7gzw==}
+  lucide-react@0.485.0:
+    resolution: {integrity: sha512-NvyQJ0LKyyCxL23nPKESlr/jmz8r7fJO1bkuptSNYSy0s8VVj4ojhX0YAgmE1e0ewfxUZjIlZpvH+otfTnla8Q==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -18248,7 +18248,7 @@ snapshots:
 
   lru.min@1.1.1: {}
 
-  lucide-react@0.398.0(react@19.0.0):
+  lucide-react@0.485.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
