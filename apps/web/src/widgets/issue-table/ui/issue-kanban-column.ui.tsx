@@ -48,12 +48,21 @@ interface Props {
   items: Issue[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, Issue[]>>>;
   queries: SearchQuery[];
+  defaultQueries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
 const IssueKanbanColumn = (props: Props) => {
-  const { issue, projectId, issueTracker, items, setItems, queries, operator } =
-    props;
+  const {
+    issue,
+    projectId,
+    issueTracker,
+    items,
+    setItems,
+    queries,
+    defaultQueries,
+    operator,
+  } = props;
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
@@ -71,7 +80,8 @@ const IssueKanbanColumn = (props: Props) => {
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      queries: queries.concat([
+      queries: queries,
+      defaultQueries: defaultQueries.concat([
         { key: 'status', value: issue.status, condition: 'IS' },
       ]),
       sort: { [sort.key]: sort.value },

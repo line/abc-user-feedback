@@ -27,7 +27,6 @@ interface IProps {
 }
 const IssueMangementPage: NextPageWithLayout<IProps> = (props) => {
   const { projectId } = props;
-
   return <IssueTable projectId={projectId} />;
 };
 
