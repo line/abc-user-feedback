@@ -381,7 +381,7 @@ describe('FeedbackController (integration)', () => {
       await tenantService.deleteOldFeedbacks();
 
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
-        queries: [
+        defaultQueries: [
           {
             key: 'createdAt',
             value: {

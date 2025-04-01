@@ -180,7 +180,7 @@ export class FeedbackService {
     );
 
     if (queries === undefined) {
-      throw new BadRequestException('queries are required');
+      return;
     }
 
     for (const query of queries) {
