@@ -68,8 +68,16 @@ const useIssueQueryConverter = (input: {
     }).withDefault([]),
   );
 
+  const [defaultQueries, setDefaultQueries] = useQueryState<SearchQuery[]>(
+    'defaultQueries',
+    createParser({
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
+    }).withDefault([]),
+  );
+
   const dateRange = useMemo(() => {
-    const dateQuery = queries.find((v) => v.key === 'createdAt');
+    const dateQuery = defaultQueries.find((v) => v.key === 'createdAt');
 
     const createdAt = dateQuery?.value as
       | { gte: string; lt: string }
@@ -87,12 +95,12 @@ const useIssueQueryConverter = (input: {
     async (value: DateRangeType) => {
       if (!value) return;
       if (value.startDate === null || value.endDate === null) {
-        await setQueries((queries) =>
+        await setDefaultQueries((queries) =>
           queries.filter((v) => v.key !== 'createdAt'),
         );
         return;
       }
-      await setQueries((queries) =>
+      await setDefaultQueries((queries) =>
         queries
           .filter((v) => v.key !== 'createdAt')
           .concat({
@@ -110,22 +118,13 @@ const useIssueQueryConverter = (input: {
 
   const tableFilters = useMemo(() => {
     return queries
-      .map((v) => {
-        const key = v.key;
-
-        if (key === 'createdAt') return null;
-        const value = v.value;
-
+      .map(({ key, value, condition }) => {
         const field = filterFields.find((v) => v.key === key);
-        if (!field) return null;
 
-        return {
-          key,
-          name: field.name,
-          value,
-          format: field.format,
-          condition: v.condition,
-        };
+        if (!field) return null;
+        const { format, name } = field;
+
+        return { key, name, value, format, condition };
       })
       .filter((v) => !!v) as TableFilter[];
   }, [queries, filterFields]);
@@ -163,6 +162,7 @@ const useIssueQueryConverter = (input: {
 
   return {
     queries: queries.filter((v) => !!v.value),
+    defaultQueries,
     tableFilters,
     operator,
     dateRange,
