@@ -87,13 +87,13 @@ The following is a list of environment variables used by the application, along 
 | `APP_PORT`                           | The port that the server runs on                               | `4000`                                        |
 | `APP_ADDRESS`                        | The address that the server binds to                           | `0.0.0.0`                                     |
 | `MYSQL_SECONDARY_URLS`               | Secondary MySQL connection URLs (must be in JSON array format) | _optional_                                    |
-| `SMTP_USE`                           | Flag to enable SMTP server usage (for email verification)      | `false`                                       |
-| `SMTP_HOST`                          | SMTP server host                                               | _required if `SMTP_USE=true`_                 |
-| `SMTP_PORT`                          | SMTP server port                                               | _required if `SMTP_USE=true`_                 |
+| `SMTP_HOST`                          | SMTP server host                                               | _required_                                    |
+| `SMTP_PORT`                          | SMTP server port                                               | _required_                                    |
 | `SMTP_USERNAME`                      | SMTP server authentication username                            | _optional_                                    |
 | `SMTP_PASSWORD`                      | SMTP server authentication password                            | _optional_                                    |
-| `SMTP_SENDER`                        | Email address used as sender in emails                         | _required if `SMTP_USE=true`_                 |
-| `SMTP_BASE_URL`                      | Base URL for emails to link back to the application            | _required if `SMTP_USE=true`_                 |
+| `SMTP_SENDER`                        | Email address used as sender in emails                         | _required_                                    |
+| `SMTP_BASE_URL`                      | Base URL for emails to link back to the application            | _required_                                    |
+| `SMTP_TLS`                           | Flag to enable SMTP server with secure option                  | `false`                                       |
 | `SMTP_CIPHER_SPEC`                   | SMTP Cipher Algorithm Specification                            | `TLSv1.2`                                     |
 | `SMTP_OPPORTUNISTIC_TLS`             | Use Opportunistic TLS using STARTTLS                           | `true`                                        |
 | `OPENSEARCH_USE`                     | Flag to enable OpenSearch integration                          | `false`                                       |

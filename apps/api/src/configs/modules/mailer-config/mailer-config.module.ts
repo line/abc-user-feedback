@@ -31,6 +31,7 @@ import type { ConfigServiceType } from '@/types/config-service.type';
           port,
           username,
           sender,
+          tls,
           cipherSpec,
           opportunisticTLS,
         } = configService.get('smtp', { infer: true }) ?? {};
@@ -43,7 +44,7 @@ import type { ConfigServiceType } from '@/types/config-service.type';
               username && password ?
                 { user: username, pass: password }
               : undefined,
-            secure: port === 465,
+            secure: tls,
             pool: true,
             opportunisticTLS,
           },
