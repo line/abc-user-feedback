@@ -2,9 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: ['*']
+    branches: ["*"]
   push:
-    branches: ['main']
+    branches: ["main"]
   merge_group:
 
 concurrency:
@@ -68,6 +68,10 @@ jobs:
           echo "OPENSEARCH_NODE=http://localhost:9200" >> ./apps/api/.env.test
           echo "OPENSEARCH_USERNAME=''" >> ./apps/api/.env.test
           echo "OPENSEARCH_PASSWORD=''" >> ./apps/api/.env.test
+          echo "SMTP_HOST='localhost'" >> ./apps/api/.env.test
+          echo "SMTP_PORT=25" >> ./apps/api/.env.test
+          echo "SMTP_SENDER='user@feedback.com'" >> ./apps/api/.env.test
+          echo "SMTP_BASE_URL='http://localhost:3000'" >> ./apps/api/.env.test
 
       - name: Run Tests
         run: pnpm test
@@ -77,6 +81,10 @@ jobs:
           rm ./apps/api/.env.test
           echo "JWT_SECRET=${{ vars.TEST_JWT_SECRET }}" >> ./apps/api/.env.test
           echo "OPENSEARCH_USE=false" >> ./apps/api/.env.test
+          echo "SMTP_HOST='localhost'" >> ./apps/api/.env.test
+          echo "SMTP_PORT=25" >> ./apps/api/.env.test
+          echo "SMTP_SENDER='user@feedback.com'" >> ./apps/api/.env.test
+          echo "SMTP_BASE_URL='http://localhost:3000'" >> ./apps/api/.env.test
 
       - name: Run Tests
         run: pnpm test
