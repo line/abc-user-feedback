@@ -25,6 +25,11 @@ export class GenerateExcelDto {
     value: string | string[] | TimeRange | number | number[] | undefined;
     condition: QueryV2ConditionsEnum;
   }[];
+  defaultQueries?: {
+    key: string;
+    value: string | string[] | TimeRange | number | number[] | undefined;
+    condition: QueryV2ConditionsEnum;
+  }[];
   sort?: Record<string, SortMethodEnum>;
   operator?: 'AND' | 'OR';
   type: 'xlsx' | 'csv';

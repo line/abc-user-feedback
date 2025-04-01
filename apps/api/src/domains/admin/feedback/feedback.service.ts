@@ -276,6 +276,7 @@ export class FeedbackService {
     projectId,
     channelId,
     queries,
+    defaultQueries,
     operator,
     sort,
     fields,
@@ -286,6 +287,7 @@ export class FeedbackService {
     projectId: number;
     channelId: number;
     queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'];
     operator: FindFeedbacksByChannelIdDtoV2['operator'];
     sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
@@ -385,6 +387,7 @@ export class FeedbackService {
     projectId,
     channelId,
     queries,
+    defaultQueries,
     operator,
     sort,
     fields,
@@ -395,6 +398,7 @@ export class FeedbackService {
     projectId: number;
     channelId: number;
     queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'];
     operator: FindFeedbacksByChannelIdDtoV2['operator'];
     sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
@@ -424,6 +428,7 @@ export class FeedbackService {
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId: channelId,
           queries: queries,
+          defaultQueries: defaultQueries,
           operator: operator,
           sort: sort,
           fields: fields,
@@ -437,6 +442,7 @@ export class FeedbackService {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId: channelId,
           queries: queries,
+          defaultQueries: defaultQueries,
           operator: operator,
           sort: sort,
           fields: fields,
@@ -767,6 +773,7 @@ export class FeedbackService {
       projectId,
       channelId,
       queries,
+      defaultQueries,
       operator,
       sort,
       type,
@@ -802,6 +809,7 @@ export class FeedbackService {
           projectId,
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -814,6 +822,7 @@ export class FeedbackService {
           projectId,
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,

@@ -622,6 +622,7 @@ export class FeedbackOSService {
       channelId,
       size,
       queries,
+      defaultQueries,
       operator,
       sort,
       fields,
@@ -645,7 +646,13 @@ export class FeedbackOSService {
       }
     }
 
-    const osQuery = this.osQueryBuliderV2(queries, sort, operator, fields);
+    const osQuery = this.osQueryBuliderV2(
+      queries,
+      defaultQueries,
+      sort,
+      operator,
+      fields,
+    );
     this.logger.log(osQuery);
     return await this.osRepository.scroll({
       index: channelId.toString(),
