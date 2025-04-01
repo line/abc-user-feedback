@@ -47,15 +47,15 @@ services:
       - app_network
 
   # optional for email verification on creating user
-  smtp4dev:
-    image: rnwood/smtp4dev:v3
-    restart: always
+  mailhog:
+    image: mailhog/mailhog
     ports:
-      - 5080:80
-      - 25:25
-      - 143:143
+      - "25:1025" # SMTP Port
+      - "5080:8025" # Web Interface Port
+    environment:
+      - MH_STORAGE=maildir
     volumes:
-      - smtp4dev:/smtp4dev
+      - mailhog:/maildir
     networks:
       - app_network
 
@@ -108,5 +108,5 @@ networks:
 volumes:
   mysql:
   mysql-for-e2e:
-  smtp4dev:
+  mailhog:
   opensearch:

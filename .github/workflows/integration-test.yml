@@ -25,12 +25,11 @@ jobs:
           --health-timeout=5s
           --health-retries=3
 
-      smtp:
-        image: rnwood/smtp4dev:v3
+      mailhog:
+        image: mailhog/mailhog
         ports:
-          - 5080:80
-          - 25:25
-          - 143:143
+          - 25:1025
+          - 5080:8025
 
       opensearch:
         image: opensearchproject/opensearch:2.17.1

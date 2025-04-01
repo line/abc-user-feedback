@@ -2,7 +2,7 @@ services:
   mysql:
     hostname: mysql
     image: mysql:8.0.39
-    platform: linux/arm64/v8
+    platform: linux/x86_64
     restart: always
     command:
       [
@@ -18,7 +18,7 @@ services:
     ports:
       - 13306:3306
     volumes:
-      - ./volumes/mysql:/var/lib/mysql
+      - mysql:/var/lib/mysql
     networks:
       - app_network
 
@@ -26,7 +26,7 @@ services:
   mysql-for-e2e:
     hostname: mysql
     image: mysql:8.0.39
-    platform: linux/arm64/v8
+    platform: linux/x86_64
     restart: always
     command:
       [
@@ -42,26 +42,26 @@ services:
     ports:
       - 13307:3306
     volumes:
-      - ./volumes/mysql-for-e2e:/var/lib/mysql-for-e2e
+      - mysql-for-e2e:/var/lib/mysql-for-e2e
     networks:
       - app_network
 
   # optional for email verification on creating user
-  smtp4dev:
-    image: rnwood/smtp4dev:v3
-    restart: always
+  mailhog:
+    image: mailhog/mailhog
     ports:
-      - 5080:80
-      - 25:25
-      - 143:143
+      - '25:1025' # SMTP Port
+      - '5080:8025' # Web Interface Port
+    environment:
+      - MH_STORAGE=maildir
     volumes:
-      - ./volumes/smtp4dev:/smtp4dev
+      - mailhog:/maildir
     networks:
       - app_network
 
   # optional for better performance on searching feedbacks
   opensearch-node:
-    image: opensearchproject/opensearch:2.14.0
+    image: opensearchproject/opensearch:2.16.0
     restart: always
     container_name: opensearch-node
     environment:
@@ -80,7 +80,7 @@ services:
         soft: 65536
         hard: 65536
     volumes:
-      - ./volumes/opensearch:/usr/share/opensearch/data
+      - opensearch:/usr/share/opensearch/data
     ports:
       - 9200:9200
       - 9600:9600
@@ -89,7 +89,7 @@ services:
 
   # optional for opensearch
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:2.14.0
+    image: opensearchproject/opensearch-dashboards:2.16.0
     restart: always
     container_name: opensearch-dashboards
     ports:
@@ -104,3 +104,9 @@ services:
 
 networks:
   app_network:
+
+volumes:
+  mysql:
+  mysql-for-e2e:
+  mailhog:
+  opensearch:
