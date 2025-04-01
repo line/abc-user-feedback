@@ -291,6 +291,7 @@ export class FeedbackMySQLService {
       limit,
       channelId,
       queries = [],
+      defaultQueries = [],
       sort = {},
       operator,
       fields = [new FieldEntity()],
@@ -306,14 +307,15 @@ export class FeedbackMySQLService {
       .select('feedbacks')
       .where('feedbacks.channel_id = :channelId', { channelId });
 
-    const createdAtCondition = queries.find(
-      (query) => query.key === 'createdAt',
-    );
-    if (createdAtCondition?.value) {
-      const { gte, lt } = createdAtCondition.value as TimeRange;
-      queryBuilder.andWhere('feedbacks.created_at >= :gte', { gte });
-      queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
-    }
+    defaultQueries.forEach((query) => {
+      const { key, value } = query;
+
+      if (key === 'createdAt' && value) {
+        const { gte, lt } = value as TimeRange;
+        queryBuilder.andWhere('issues.created_at >= :gte', { gte });
+        queryBuilder.andWhere('issues.created_at < :lt', { lt });
+      }
+    });
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 

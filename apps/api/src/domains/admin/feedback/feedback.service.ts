@@ -620,6 +620,7 @@ export class FeedbackService {
     dto.fields = fields;
 
     this.validateQueryV2(dto.queries, fields);
+    this.validateQueryV2(dto.defaultQueries, fields);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?

@@ -45,12 +45,20 @@ class QueryV2 {
 export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
-    description:
-      "You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key.",
+    description: 'You can query by key-value with this object.',
     type: [QueryV2],
   })
   @IsOptional()
   queries?: QueryV2[];
+
+  @ApiProperty({
+    required: false,
+    description:
+      'You can query by key-value with this object by default (like createdAt).',
+    type: [QueryV2],
+  })
+  @IsOptional()
+  defaultQueries?: QueryV2[];
 
   @ApiProperty({
     required: false,
