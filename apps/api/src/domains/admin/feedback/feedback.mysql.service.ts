@@ -312,8 +312,10 @@ export class FeedbackMySQLService {
 
       if (key === 'createdAt' && value) {
         const { gte, lt } = value as TimeRange;
-        queryBuilder.andWhere('issues.created_at >= :gte', { gte });
-        queryBuilder.andWhere('issues.created_at < :lt', { lt });
+        if (query.condition === QueryV2ConditionsEnum.BETWEEN) {
+          queryBuilder.andWhere('feedbacks.created_at >= :gte', { gte });
+          queryBuilder.andWhere('feedbacks.created_at < :lt', { lt });
+        }
       }
     });
 

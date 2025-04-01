@@ -328,6 +328,7 @@ export class FeedbackService {
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -340,6 +341,7 @@ export class FeedbackService {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -795,6 +797,7 @@ export class FeedbackService {
     }
 
     this.validateQueryV2(dto.queries, fields);
+    this.validateQueryV2(dto.defaultQueries, fields);
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
