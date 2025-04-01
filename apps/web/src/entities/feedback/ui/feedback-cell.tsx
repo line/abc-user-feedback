@@ -15,15 +15,11 @@
  */
 import { memo } from 'react';
 import dayjs from 'dayjs';
+import Linkify from 'linkify-react';
 
 import { Badge } from '@ufb/react';
 
-import {
-  DATE_TIME_FORMAT,
-  ExpandableText,
-  ImagePreviewButton,
-  linkify,
-} from '@/shared';
+import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 
 interface IProps {
@@ -73,7 +69,20 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           {field.format === 'images' && (
             <ImagePreviewButton urls={value as string[]} />
           )}
-          {field.format === 'text' && linkify(value as string)}
+          {field.format === 'text' && (
+            <Linkify
+              options={{
+                className: 'text-blue-500 underline',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                attributes: {
+                  onClick: (e: React.MouseEvent) => e.stopPropagation(),
+                },
+              }}
+            >
+              {value as string | undefined}
+            </Linkify>
+          )}
           {field.format === 'keyword' && value}
           {field.format === 'number' && value}
         </>
