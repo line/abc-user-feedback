@@ -233,6 +233,7 @@ const IssueDetailSheet = (props: Props) => {
                           condition: 'CONTAINS',
                         },
                       ]),
+                      defaultQueries: JSON.stringify([]),
                     },
                   }}
                   target="_blank"

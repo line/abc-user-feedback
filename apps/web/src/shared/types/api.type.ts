@@ -1247,8 +1247,10 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+      /** @description You can query by key-value with this object. */
       queries?: components['schemas']['QueryV2'][];
+      /** @description You can query by key-value with this object by default (like createdAt). */
+      defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
       /**
@@ -1299,8 +1301,10 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+      /** @description You can query by key-value with this object. */
       queries?: components['schemas']['QueryV2'][];
+      /** @description You can query by key-value with this object by default (like createdAt). */
+      defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
       /**

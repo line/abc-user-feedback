@@ -381,14 +381,14 @@ describe('FeedbackController (integration)', () => {
       await tenantService.deleteOldFeedbacks();
 
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
-        queries: [
+        defaultQueries: [
           {
             key: 'createdAt',
             value: {
               gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
               lt: DateTime.now().toFormat('yyyy-MM-dd'),
             },
-            condition: QueryV2ConditionsEnum.IS,
+            condition: QueryV2ConditionsEnum.BETWEEN,
           },
         ],
         operator: 'AND',

@@ -202,6 +202,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     operator,
     updateTableFilters,
     updateDateRage,
+    defaultQueries,
   } = useFeedbackQueryConverter({
     projectId,
     filterFields,
@@ -244,10 +245,13 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
+      defaultQueries,
       sort,
     },
     {
-      enabled: currentChannelId !== -1 && queries.length > 0,
+      enabled:
+        currentChannelId !== -1 &&
+        (queries.length > 0 || defaultQueries.length > 0),
       throwOnError(error) {
         if (error.code === 'LargeWindow') {
           toast.error('Please narrow down the search range.');
@@ -260,7 +264,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   useEffect(() => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
-  }, [data]);
+  }, [data, currentChannelId]);
 
   useEffect(() => {
     table.setPageIndex(0);

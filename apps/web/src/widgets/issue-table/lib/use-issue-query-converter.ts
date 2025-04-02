@@ -89,7 +89,7 @@ const useIssueQueryConverter = (input: {
           endDate: dayjs(createdAt.lt).toDate(),
         }
       : null;
-  }, [queries]);
+  }, [defaultQueries]);
 
   const onChangeDateRange = useCallback(
     async (value: DateRangeType) => {
@@ -123,7 +123,6 @@ const useIssueQueryConverter = (input: {
 
         if (!field) return null;
         const { format, name } = field;
-
         return { key, name, value, format, condition };
       })
       .filter((v) => !!v) as TableFilter[];
@@ -140,22 +139,7 @@ const useIssueQueryConverter = (input: {
       );
 
       await setOperator(operator);
-      if (dateRange) {
-        await setQueries(
-          result
-            .filter((v) => v.key !== 'createdAt')
-            .concat({
-              key: 'createdAt',
-              value: {
-                gte: dayjs(dateRange.startDate).toISOString(),
-                lt: dayjs(dateRange.endDate).toISOString(),
-              },
-              condition: 'IS',
-            }),
-        );
-      } else {
-        await setQueries(result);
-      }
+      await setQueries(result);
     },
     [dateRange],
   );

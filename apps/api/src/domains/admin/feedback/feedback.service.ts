@@ -180,7 +180,7 @@ export class FeedbackService {
     );
 
     if (queries === undefined) {
-      throw new BadRequestException('queries are required');
+      return;
     }
 
     for (const query of queries) {
@@ -276,6 +276,7 @@ export class FeedbackService {
     projectId,
     channelId,
     queries,
+    defaultQueries,
     operator,
     sort,
     fields,
@@ -286,6 +287,7 @@ export class FeedbackService {
     projectId: number;
     channelId: number;
     queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'];
     operator: FindFeedbacksByChannelIdDtoV2['operator'];
     sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
@@ -326,6 +328,7 @@ export class FeedbackService {
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -338,6 +341,7 @@ export class FeedbackService {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -385,6 +389,7 @@ export class FeedbackService {
     projectId,
     channelId,
     queries,
+    defaultQueries,
     operator,
     sort,
     fields,
@@ -395,6 +400,7 @@ export class FeedbackService {
     projectId: number;
     channelId: number;
     queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'];
     operator: FindFeedbacksByChannelIdDtoV2['operator'];
     sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
@@ -424,6 +430,7 @@ export class FeedbackService {
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId: channelId,
           queries: queries,
+          defaultQueries: defaultQueries,
           operator: operator,
           sort: sort,
           fields: fields,
@@ -437,6 +444,7 @@ export class FeedbackService {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId: channelId,
           queries: queries,
+          defaultQueries: defaultQueries,
           operator: operator,
           sort: sort,
           fields: fields,
@@ -620,6 +628,7 @@ export class FeedbackService {
     dto.fields = fields;
 
     this.validateQueryV2(dto.queries, fields);
+    this.validateQueryV2(dto.defaultQueries, fields);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -766,6 +775,7 @@ export class FeedbackService {
       projectId,
       channelId,
       queries,
+      defaultQueries,
       operator,
       sort,
       type,
@@ -787,6 +797,7 @@ export class FeedbackService {
     }
 
     this.validateQueryV2(dto.queries, fields);
+    this.validateQueryV2(dto.defaultQueries, fields);
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
@@ -801,6 +812,7 @@ export class FeedbackService {
           projectId,
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -813,6 +825,7 @@ export class FeedbackService {
           projectId,
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,

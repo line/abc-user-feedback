@@ -254,6 +254,7 @@ export class FeedbackOSService {
 
   private osQueryBuliderV2(
     queries: FindFeedbacksByChannelIdDtoV2['queries'],
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'] = [],
     sort: FindFeedbacksByChannelIdDtoV2['sort'] = {},
     operator = 'AND',
     fields: FieldEntity[],
@@ -273,17 +274,18 @@ export class FeedbackOSService {
       },
     };
 
-    const createdAtCondition = queries?.find(
-      (query) => query.key === 'createdAt',
-    );
-    if (createdAtCondition?.value) {
-      const { gte, lt } = createdAtCondition.value as TimeRange;
-      combinedOsQuery.bool.must.push({
-        range: {
-          createdAt: { gte, lt },
-        },
-      });
-    }
+    defaultQueries.forEach((query) => {
+      const { key, value } = query;
+
+      if (key === 'createdAt' && value) {
+        const { gte, lt } = value as TimeRange;
+        combinedOsQuery.bool.must.push({
+          range: {
+            createdAt: { gte, lt },
+          },
+        });
+      }
+    });
 
     queries?.forEach((query) => {
       const osQuery: OpenSearchQuery = { bool: { must: [] } };
@@ -523,7 +525,16 @@ export class FeedbackOSService {
   async findByChannelIdV2(
     dto: FindFeedbacksByChannelIdDtoV2,
   ): Promise<Pagination<Feedback, IPaginationMeta>> {
-    const { channelId, limit, page, queries, sort, operator, fields } = dto;
+    const {
+      channelId,
+      limit,
+      page,
+      queries,
+      defaultQueries,
+      sort,
+      operator,
+      fields,
+    } = dto;
 
     for (let i = 0; i < (queries?.length ?? 0); i++) {
       if (queries?.[i].key === 'issueIds') {
@@ -544,6 +555,7 @@ export class FeedbackOSService {
 
     const osQuery = this.osQueryBuliderV2(
       queries,
+      defaultQueries,
       sort,
       operator,
       fields ?? [],
@@ -610,6 +622,7 @@ export class FeedbackOSService {
       channelId,
       size,
       queries,
+      defaultQueries,
       operator,
       sort,
       fields,
@@ -633,7 +646,13 @@ export class FeedbackOSService {
       }
     }
 
-    const osQuery = this.osQueryBuliderV2(queries, sort, operator, fields);
+    const osQuery = this.osQueryBuliderV2(
+      queries,
+      defaultQueries,
+      sort,
+      operator,
+      fields,
+    );
     this.logger.log(osQuery);
     return await this.osRepository.scroll({
       index: channelId.toString(),
