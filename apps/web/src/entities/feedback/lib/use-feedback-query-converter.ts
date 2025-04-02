@@ -92,13 +92,21 @@ const useFeedbackQueryConverter = (input: {
     createParser({
       parse: (value) => JSON.parse(value) as SearchQuery[],
       serialize: (value) => JSON.stringify(value),
+    }).withDefault([]),
+  );
+
+  const [defaultQueries, setDefaultQueries] = useQueryState<SearchQuery[]>(
+    'defaultQueries',
+    createParser({
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
     }).withDefault([
-      { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'IS' },
+      { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
     ]),
   );
 
   const dateRange = useMemo(() => {
-    const dateQuery = queries.find((v) => v.key === 'createdAt');
+    const dateQuery = defaultQueries.find((v) => v.key === 'createdAt');
 
     const createdAt = dateQuery?.value as
       | { gte: string; lt: string }
@@ -110,41 +118,31 @@ const useFeedbackQueryConverter = (input: {
           endDate: dayjs(createdAt.lt).toDate(),
         }
       : null;
-  }, [queries]);
+  }, [defaultQueries]);
 
   const onChangeDateRange = useCallback(async (value: DateRangeType) => {
     if (!value) return;
-    await setQueries((queries) =>
-      queries
-        .filter((v) => v.key !== 'createdAt')
-        .concat({
-          key: 'createdAt',
-          value: {
-            gte: dayjs(value.startDate).toISOString(),
-            lt: dayjs(value.endDate).toISOString(),
-          },
-          condition: 'IS',
-        }),
-    );
+    console.log('value: ', value);
+    await setDefaultQueries([
+      {
+        key: 'createdAt',
+        value: {
+          gte: dayjs(value.startDate).toISOString(),
+          lt: dayjs(value.endDate).toISOString(),
+        },
+        condition: 'BETWEEN',
+      },
+    ]);
   }, []);
 
   const tableFilters = useMemo(() => {
     return queries
-      .map((v) => {
-        const key = v.key;
-        if (key === 'createdAt') return null;
-        const value = v.value;
-
+      .map(({ key, value, condition }) => {
         const field = filterFields.find((v) => v.key === key);
-        if (!field) return null;
 
-        return {
-          key,
-          name: field.name,
-          value,
-          format: field.format,
-          condition: v.condition,
-        };
+        if (!field) return null;
+        const { format, name } = field;
+        return { key, name, value, format, condition };
       })
       .filter((v) => !!v) as TableFilter[];
   }, [queries, filterFields]);
@@ -158,42 +156,27 @@ const useFeedbackQueryConverter = (input: {
           condition,
         })),
       );
+
       if (result.length === 0 && !dateRange) {
-        await setQueries([
-          { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'IS' },
+        await setDefaultQueries([
+          { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
         ]);
+        await setQueries([]);
+        setOperator('AND');
         return;
       }
 
       setOperator(operator);
-      if (dateRange) {
-        await setQueries(
-          result
-            .filter((v) => v.key !== 'createdAt')
-            .concat({
-              key: 'createdAt',
-              value: {
-                gte: dayjs(dateRange.startDate).toISOString(),
-                lt: dayjs(dateRange.endDate).toISOString(),
-              },
-              condition: 'IS',
-            }),
-        );
-      } else {
-        await setQueries(result);
-      }
+      await setQueries(result);
     },
     [dateRange],
   );
 
   return {
     queries: queries
-      .filter(
-        (query) =>
-          filterFields.some((field) => field.key === query.key) ||
-          query.key === 'createdAt',
-      )
+      .filter((query) => filterFields.some((field) => field.key === query.key))
       .filter((v) => !!v.value),
+    defaultQueries,
     tableFilters: tableFilters.filter((v) =>
       filterFields.some((vv) => vv.key === v.key),
     ),
