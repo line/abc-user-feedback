@@ -302,6 +302,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     >
       <div className="flex justify-between">
         <TableFilterPopover
+          operator={operator}
           filterFields={filterFields}
           onSubmit={(tableFilters, operator) => {
             setTableFilters(tableFilters);
