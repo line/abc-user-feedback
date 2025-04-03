@@ -150,6 +150,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             clearable
           />
           <TableFilterPopover
+            operator={operator}
             filterFields={filterFields}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}

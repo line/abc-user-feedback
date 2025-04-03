@@ -44,18 +44,21 @@ interface Props {
   onSubmit: (filters: TableFilter[], operator: TableFilterOperator) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table?: Table<any>;
+  operator: TableFilterOperator;
 }
 
 const TableFilterPopover = (props: Props) => {
-  const { filterFields, onSubmit, tableFilters, table } = props;
+  const { filterFields, onSubmit, tableFilters, table, operator } = props;
 
   const { t } = useTranslation();
 
   const [filters, setFilters] = useState<TableFilter[]>(tableFilters);
   const [open, setOpen] = useState(false);
-  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const [currentOperator, setCurrentOperator] =
+    useState<TableFilterOperator>(operator);
 
   useEffect(() => {
+    setCurrentOperator(operator);
     if (tableFilters.length === 0) {
       resetFilters();
     } else {
@@ -105,7 +108,7 @@ const TableFilterPopover = (props: Props) => {
     setFilters([
       { key, condition: matchType[0], format, name, value: undefined },
     ]);
-    setOperator('AND');
+    setCurrentOperator('AND');
   };
 
   const onChangeValue = (index: number, value?: unknown) => {
@@ -155,7 +158,7 @@ const TableFilterPopover = (props: Props) => {
   };
 
   const submitFilters = () => {
-    onSubmit(filters, operator);
+    onSubmit(filters, currentOperator);
     setOpen(false);
   };
 
@@ -187,9 +190,9 @@ const TableFilterPopover = (props: Props) => {
                             { label: 'And', value: 'AND' },
                             { label: 'Or', value: 'OR' },
                           ]}
-                          value={operator}
+                          value={currentOperator}
                           onChange={(value) =>
-                            setOperator(value as TableFilterOperator)
+                            setCurrentOperator(value as TableFilterOperator)
                           }
                         />
                       : <SelectInput
@@ -197,7 +200,7 @@ const TableFilterPopover = (props: Props) => {
                             { label: 'And', value: 'AND' },
                             { label: 'Or', value: 'OR' },
                           ]}
-                          value={operator}
+                          value={currentOperator}
                           disabled
                         />
                       }

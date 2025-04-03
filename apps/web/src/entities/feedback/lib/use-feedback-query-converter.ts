@@ -90,6 +90,7 @@ const useFeedbackQueryConverter = (input: {
     'operator',
     parseAsStringLiteral(TableFilterOperators).withDefault('AND'),
   );
+
   const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
@@ -125,7 +126,7 @@ const useFeedbackQueryConverter = (input: {
 
   const onChangeDateRange = useCallback(async (value: DateRangeType) => {
     if (!value) return;
-    console.log('value: ', value);
+
     await setDefaultQueries([
       {
         key: 'createdAt',

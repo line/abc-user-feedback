@@ -384,6 +384,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
                 v.key === 'issueIds' ||
                 table.getAllColumns().some((column) => column.id === v.key),
             )}
+            operator={operator}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
             table={table}
