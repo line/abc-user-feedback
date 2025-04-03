@@ -275,8 +275,6 @@ export class IssueService {
       }
     });
 
-    console.log(queryBuilder.getQueryAndParameters());
-
     const items = await queryBuilder
       .offset((page - 1) * limit)
       .limit(limit)
