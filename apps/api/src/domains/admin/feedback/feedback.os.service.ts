@@ -86,7 +86,15 @@ export class FeedbackOSService {
         })
         .map((feedback) => feedback.id);
     } else {
-      return feedbacks.map((feedback) => feedback.id);
+      return feedbacks
+        .filter((feedback) => {
+          const feedbackIssueIds = feedback.issues.map((issue) => issue.id);
+          return (
+            feedbackIssueIds.length >= issueIds.length &&
+            issueIds.every((id) => feedbackIssueIds.includes(id))
+          );
+        })
+        .map((feedback) => feedback.id);
     }
   }
 
