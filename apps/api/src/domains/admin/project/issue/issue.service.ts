@@ -228,6 +228,13 @@ export class IssueService {
               [`lt${paramName}`]: lt,
             });
           } else if (
+            key === 'status' &&
+            condition === QueryV2ConditionsEnum.IS
+          ) {
+            qb[method](`issues.status = :${paramName}`, {
+              [`${paramName}`]: value,
+            });
+          } else if (
             key === 'externalIssueId' &&
             condition === QueryV2ConditionsEnum.IS
           ) {
@@ -267,6 +274,8 @@ export class IssueService {
         queryBuilder.addOrderBy(`issues.updated_at`, sort[fieldName]);
       }
     });
+
+    console.log(queryBuilder.getQueryAndParameters());
 
     const items = await queryBuilder
       .offset((page - 1) * limit)
