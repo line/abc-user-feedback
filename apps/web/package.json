@@ -72,7 +72,7 @@
     "react-select": "^5.8.0",
     "react-use": "^17.5.0",
     "recharts": "^2.12.6",
-    "sharp": "^0.33.0",
+    "sharp": "^0.34.0",
     "swiper": "^11.2.1",
     "tailwind-merge": "^3.0.0",
     "tailwind-scrollbar-hide": "^2.0.0",
