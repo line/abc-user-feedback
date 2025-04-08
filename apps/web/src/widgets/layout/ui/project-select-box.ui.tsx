@@ -81,7 +81,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
   };
 
   return (
-    <Tooltip>
+    <Tooltip open={!projectId}>
       <TooltipTrigger asChild>
         <Select
           type="single"
@@ -122,9 +122,7 @@ const ProjectSelectBox: React.FC<IProps> = ({ projectId }) => {
           </SelectContent>
         </Select>
       </TooltipTrigger>
-      {!projectId && (
-        <TooltipContent>{t('v2.text.select-project')}</TooltipContent>
-      )}
+      <TooltipContent>{t('v2.text.select-project')}</TooltipContent>
     </Tooltip>
   );
 };

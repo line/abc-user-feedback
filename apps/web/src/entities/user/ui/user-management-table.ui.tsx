@@ -145,6 +145,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     setRows(userData?.items ?? []);
     setPageCount(userData?.meta.totalPages ?? 0);
     setRowCount(userData?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [userData, pagination, isLoading]);
 
   useEffect(() => {
@@ -189,6 +190,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TableFilterPopover
+            operator={operator}
             filterFields={[
               {
                 key: 'email',

@@ -14,9 +14,9 @@
  * under the License.
  */
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import dayjs from 'dayjs';
-import { createParser, useQueryState } from 'nuqs';
+import { createParser, parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import type {
   DateRangeType,
@@ -26,7 +26,7 @@ import type {
   TableFilterFieldFotmat,
   TableFilterOperator,
 } from '@/shared';
-import { client } from '@/shared';
+import { client, TableFilterOperators } from '@/shared';
 
 import { env } from '@/env';
 
@@ -86,7 +86,11 @@ const useFeedbackQueryConverter = (input: {
 }) => {
   const { projectId, filterFields } = input;
 
-  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const [operator, setOperator] = useQueryState<TableFilterOperator>(
+    'operator',
+    parseAsStringLiteral(TableFilterOperators).withDefault('AND'),
+  );
+
   const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
@@ -122,7 +126,7 @@ const useFeedbackQueryConverter = (input: {
 
   const onChangeDateRange = useCallback(async (value: DateRangeType) => {
     if (!value) return;
-    console.log('value: ', value);
+
     await setDefaultQueries([
       {
         key: 'createdAt',
@@ -162,11 +166,11 @@ const useFeedbackQueryConverter = (input: {
           { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
         ]);
         await setQueries([]);
-        setOperator('AND');
+        await setOperator('AND');
         return;
       }
 
-      setOperator(operator);
+      await setOperator(operator);
       await setQueries(result);
     },
     [dateRange],

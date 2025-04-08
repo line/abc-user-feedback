@@ -44,9 +44,10 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
     resolver: zodResolver(issueTrackerSchema),
   });
 
-  const { data, refetch, isRefetching } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/issue-tracker',
     variables: { projectId },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate: create, isPending: createPending } = useOAIMutation({
@@ -76,8 +77,8 @@ const IssueTrackerSetting: React.FC<IProps> = ({ projectId }) => {
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   useEffect(() => {
-    methods.reset(data?.data ?? {});
-  }, [data, isRefetching]);
+    methods.reset(data?.data);
+  }, [data]);
 
   const onSubmit = (input: IssueTracker) => {
     if (input.ticketDomain?.endsWith('/')) {

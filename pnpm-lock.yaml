@@ -409,6 +409,12 @@ importers:
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
+      linkify:
+        specifier: ^0.2.1
+        version: 0.2.1
+      linkify-react:
+        specifier: ^4.2.0
+        version: 4.2.0(linkifyjs@4.2.0)(react@19.0.0)
       next:
         specifier: ^15.0.0
         version: 15.2.4(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(@playwright/test@1.51.1)(babel-plugin-macros@3.1.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -7331,6 +7337,18 @@ packages:
 
   linkify-it@5.0.0:
     resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
+
+  linkify-react@4.2.0:
+    resolution: {integrity: sha512-dIcDGo+n4FP2FPIHDcqB7cUE+omkcEgQJpc7sNNP4+XZ9FUhFAkKjGnHMzsZM+B4yF93sK166z9K5cKTe/JpzA==}
+    peerDependencies:
+      linkifyjs: ^4.0.0
+      react: '>= 15.0.0'
+
+  linkify@0.2.1:
+    resolution: {integrity: sha512-Esq4rfRRHmH3RTqAsnGq33MwE0HqyeNWHpNbWFsV8jEnuPKseiOPjzWvK2i3REqwZpnbCxTh1yxAKzceKKFDGQ==}
+
+  linkifyjs@4.2.0:
+    resolution: {integrity: sha512-pCj3PrQyATaoTYKHrgWRF3SJwsm61udVh+vuls/Rl6SptiDhgE7ziUIudAedRY9QEfynmM7/RmLEfPUyw1HPCw==}
 
   liquidjs@10.15.0:
     resolution: {integrity: sha512-u5lYWhW8ioT+O3FdCcp5U+hiPEGNO4xASCFlCHA+k5rMTJwDIa2c2KF111ZDKc2xGM7LXPvMoNRIrBfbLNpRBg==}
@@ -18157,6 +18175,15 @@ snapshots:
     dependencies:
       uc.micro: 2.1.0
     optional: true
+
+  linkify-react@4.2.0(linkifyjs@4.2.0)(react@19.0.0):
+    dependencies:
+      linkifyjs: 4.2.0
+      react: 19.0.0
+
+  linkify@0.2.1: {}
+
+  linkifyjs@4.2.0: {}
 
   liquidjs@10.15.0:
     dependencies:

@@ -105,6 +105,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     setRows(data?.items ?? []);
     setPageCount(data?.meta.totalPages ?? 0);
     setRowCount(data?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [data, pagination, isPending]);
 
   useEffect(() => {
@@ -301,6 +302,7 @@ const MemberSetting: React.FC<IProps> = (props) => {
     >
       <div className="flex justify-between">
         <TableFilterPopover
+          operator={operator}
           filterFields={filterFields}
           onSubmit={(tableFilters, operator) => {
             setTableFilters(tableFilters);

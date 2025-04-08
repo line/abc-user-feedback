@@ -44,31 +44,40 @@ interface Props {
   onSubmit: (filters: TableFilter[], operator: TableFilterOperator) => void;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   table?: Table<any>;
+  operator: TableFilterOperator;
 }
 
 const TableFilterPopover = (props: Props) => {
-  const { filterFields, onSubmit, tableFilters, table } = props;
+  const { filterFields, onSubmit, tableFilters, table, operator } = props;
 
   const { t } = useTranslation();
 
   const [filters, setFilters] = useState<TableFilter[]>(tableFilters);
   const [open, setOpen] = useState(false);
-  const [operator, setOperator] = useState<TableFilterOperator>('AND');
+  const [currentOperator, setCurrentOperator] =
+    useState<TableFilterOperator>(operator);
 
   useEffect(() => {
-    if (open) {
-      if (tableFilters.length === 0) {
-        resetFilters();
-      } else {
-        setFilters(tableFilters);
-      }
+    setCurrentOperator(operator);
+    if (tableFilters.length === 0) {
+      resetFilters();
+    } else {
+      setFilters(tableFilters);
     }
-  }, [open, tableFilters]);
+  }, [open]);
 
   const addFilter = () => {
     const filterField = filters[filters.length - 1];
     if (!filterField) resetFilters();
-    else setFilters([...filters, filterField]);
+
+    if (!filterFields[0]) return;
+    const { format, key, name, matchType } = filterFields[0];
+
+    if (!matchType[0]) return;
+    setFilters([
+      ...filters,
+      { key, condition: matchType[0], format, name, value: undefined },
+    ]);
   };
 
   const updateFilter = (index: number, field: TableFilterField) => {
@@ -86,6 +95,7 @@ const TableFilterPopover = (props: Props) => {
       ),
     );
   };
+
   const deleteFilter = (index: number) => {
     setFilters(filters.filter((_, i) => i !== index));
   };
@@ -98,7 +108,7 @@ const TableFilterPopover = (props: Props) => {
     setFilters([
       { key, condition: matchType[0], format, name, value: undefined },
     ]);
-    setOperator('AND');
+    setCurrentOperator('AND');
   };
 
   const onChangeValue = (index: number, value?: unknown) => {
@@ -148,7 +158,7 @@ const TableFilterPopover = (props: Props) => {
   };
 
   const submitFilters = () => {
-    onSubmit(filters, operator);
+    onSubmit(filters, currentOperator);
     setOpen(false);
   };
 
@@ -180,9 +190,9 @@ const TableFilterPopover = (props: Props) => {
                             { label: 'And', value: 'AND' },
                             { label: 'Or', value: 'OR' },
                           ]}
-                          value={operator}
+                          value={currentOperator}
                           onChange={(value) =>
-                            setOperator(value as TableFilterOperator)
+                            setCurrentOperator(value as TableFilterOperator)
                           }
                         />
                       : <SelectInput
@@ -190,7 +200,7 @@ const TableFilterPopover = (props: Props) => {
                             { label: 'And', value: 'AND' },
                             { label: 'Or', value: 'OR' },
                           ]}
-                          value={operator}
+                          value={currentOperator}
                           disabled
                         />
                       }

@@ -45,7 +45,6 @@
   "globalDependencies": ["**/.env"],
   "globalEnv": [
     "NODE_ENV",
-    "SESSION_PASSWORD",
     "NEXT_PUBLIC_API_BASE_URL",
     "OPENSEARCH_USE",
     "OPENSEARCH_NODE",

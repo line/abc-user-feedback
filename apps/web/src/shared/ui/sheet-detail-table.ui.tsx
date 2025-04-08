@@ -14,6 +14,7 @@
  * under the License.
  */
 import dayjs from 'dayjs';
+import Linkify from 'linkify-react';
 import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
@@ -25,7 +26,6 @@ import IssueCell from '@/entities/feedback/ui/issue-cell';
 import { DATE_TIME_FORMAT } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
-import { linkify } from '../utils';
 import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
@@ -97,7 +97,18 @@ const SheetDetailTable = (props: Props) => {
   const { t } = useTranslation();
 
   const renderViewModeField: RenderFieldMap<SheetDetailTableRow> = {
-    text: (value) => (value ? linkify(String(value)) : '-'),
+    text: (value) =>
+      value ?
+        <Linkify
+          options={{
+            className: 'text-blue-500 underline',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          }}
+        >
+          {String(value)}
+        </Linkify>
+      : '-',
     keyword: (value) => ((value as string | null) ? (value as string) : '-'),
     number: (value) => (value as string | null) ?? '-',
     date: (value) =>

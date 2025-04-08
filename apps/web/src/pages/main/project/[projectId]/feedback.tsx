@@ -122,7 +122,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     variables: { channelId: currentChannelId, projectId },
   });
 
-  const fields = (channelData?.fields ?? []).sort((a, b) => a.order - b.order);
+  const fields = useMemo(
+    () => (channelData?.fields ?? []).sort((a, b) => a.order - b.order),
+    [channelData],
+  );
+
   const filterFields = useMemo(() => {
     return fields
       .filter((field) => field.key !== 'createdAt' && field.format !== 'images')
@@ -271,6 +275,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     setRows(feedbackData?.items ?? []);
     setPageCount(feedbackData?.meta.totalPages ?? 0);
     setRowCount(feedbackData?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [feedbackData]);
 
   const currentFeedback = useMemo(
@@ -358,6 +363,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
               variant="outline"
               className="!text-tint-red"
               onClick={openDeleteUsersDialog}
+              disabled={!perms.includes('feedback_delete')}
             >
               <Icon name="RiDeleteBin6Line" />
               {t('v2.button.name.delete', { name: 'Feedback' })}
@@ -378,6 +384,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
                 v.key === 'issueIds' ||
                 table.getAllColumns().some((column) => column.id === v.key),
             )}
+            operator={operator}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
             table={table}

@@ -69,10 +69,15 @@ export const changePasswordSchema = z
       path: ['confirmNewPassword'],
     },
   )
+  .refine(({ newPassword }) => /[A-Za-z]/.test(newPassword), {
+    message: 'must contain at least one letter.',
+    path: ['newPassword'],
+  })
   .refine(
-    ({ newPassword }) => /[a-zA-Z!@#$%^&*(),.?":{}|<>]/.test(newPassword),
+    ({ newPassword }) =>
+      /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(newPassword),
     {
-      message: 'must contain at least one letter or special character',
+      message: 'must contain at least one special character.',
       path: ['newPassword'],
     },
   )
@@ -92,10 +97,17 @@ export const invitedUserSignupSchema = z
     message: 'must equal Password',
     path: ['confirmPassword'],
   })
-  .refine(({ password }) => /[a-zA-Z!@#$%^&*(),.?":{}|<>]/.test(password), {
-    message: 'must contain at least one letter or special character',
+  .refine(({ password }) => /[A-Za-z]/.test(password), {
+    message: 'must contain at least one letter.',
     path: ['password'],
   })
+  .refine(
+    ({ password }) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?`~]/.test(password),
+    {
+      message: 'Password must contain at least one special character.',
+      path: ['password'],
+    },
+  )
   .refine(({ password }) => !/(.)\1/.test(password), {
     message: 'must not contain consecutive identical characters',
     path: ['password'],
