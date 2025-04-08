@@ -6,7 +6,7 @@ The ABC User Feedback CLI helps you easily run web frontends and servers.
 
 ## Prerequisites
 
-- [Node.js v20 or above](https://nodejs.org/en/download/)
+- [Node.js v22 or above](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
 
 ## Running without dependency
