@@ -25,11 +25,11 @@ import {
 } from '@nestjs/common';
 import { Client, errors } from '@opensearch-project/opensearch';
 
-import type {
+import {
   CreateDataDto,
-  CreateIndexDto,
+  CreateIndexDto, CreateKnnIndexDto,
   DeleteBulkDataDto,
-  GetDataDto,
+  GetDataDto, GetSimilarDataDto,
   PutMappingsDto,
   ScrollDto,
   UpdateDataDto,
@@ -74,6 +74,64 @@ export class OpensearchRepository {
       index: indexName,
       name: index,
     });
+  }
+
+  async createKNNIndex({ index, spaceType }: CreateKnnIndexDto) {
+    const indexName = 'si_' + index.toLowerCase() + '_' + spaceType.toString().toLowerCase();
+
+    await this.opensearchClient.indices.create({
+      index: indexName,
+      body: {
+        settings: {
+            index: {
+                knn: true,
+                'knn.algo_param.ef_search': 100,
+            },
+        },
+        mappings: {
+            properties: {
+                embedding: {
+                type: 'knn_vector',
+                dimension: 3072,
+                method: {
+                    name: 'hnsw',
+                    space_type: spaceType,
+                    engine: 'nmslib',
+                    parameters: {
+                    ef_construction: 100,
+                    m: 16,
+                    },
+                },
+                },
+            },
+        }
+      },
+    });
+    await this.opensearchClient.indices.putAlias({
+      index: indexName,
+      name: index,
+    });
+  }
+
+  async getSimilarData({ index, topK, embedding }: GetSimilarDataDto) {
+    const { body } = await this.opensearchClient.search({
+      index: index,
+      body: {
+        query: {
+          knn: {
+            embedding: {
+              vector: embedding,
+              k: topK,
+            },
+          },
+        },
+      },
+    });
+
+    return body.hits.hits.map((v) => ({
+      id: v._id,
+      score: v._score,
+    }));
   }
 
   async putMappings({ index, mappings }: PutMappingsDto) {
