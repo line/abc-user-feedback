@@ -32,7 +32,6 @@ ABC User Feedback is a standalone web application that manages Voice of Customer
 - **Role Management**: Role Based Access Control (RBAC)
 - **Dashboard**: Dashboard help you visualize statistical data about your feedback and issues so you can learn about them at a glance.
 
-
 ## Getting Started
 
 The frontend is built with NextJS and the backend is built with NestJS. We provide Docker images for fast and easy setup.
@@ -43,14 +42,14 @@ The frontend is built with NextJS and the backend is built with NestJS. We provi
 
 **Required**
 
-- [Node.js v20 or above](https://nodejs.org/en/download/)
+- [Node.js v22 or above](https://nodejs.org/en/download/)
 - [Docker](https://docs.docker.com/desktop/)
 - [MySQL v8](https://www.mysql.com/downloads/)
 
 **Optional**
 
 - SMTP - for mail verification during making accounts
-- [OpenSearch v7](https://opensearch.org/) - for performance on searching feedback
+- [OpenSearch v2.16](https://opensearch.org/) - for performance on searching feedback
 
 You can use [docker-compose.infra-amd64.yml](/docker/docker-compose.infra-amd64.yml) file for requirements.
 
@@ -149,10 +148,10 @@ pnpm dev
 
 ```bash
 # web
-pnpm turbo run dev --filter=web
+pnpm dev:web
 
 # api
-pnpm turbo run dev --filter=api
+pnpm dev:api
 ```
 
 ### Build Docker Image
@@ -160,13 +159,13 @@ pnpm turbo run dev --filter=api
 For your code build, you can build docker image using docker-compose. Please refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
 
 ```
-docker-compose build
+docker compose -f docker-compose.yml build
 ```
 
 Then, run docker-compose
 
 ```
-docker-compose up -d
+docker compose -f docker-compose.yml up -d
 ```
 
 ## Contributing Guidelines
@@ -176,7 +175,7 @@ Please follow the [contributing guidelines](./CONTRIBUTING.md) to contribute to 
 ## License
 
 ```
-Copyright 2024 LY Corporation
+Copyright 2025 LY Corporation
 
 LY Corporation licenses this file to you under the Apache License,
 version 2.0 (the "License"); you may not use this file except in compliance
