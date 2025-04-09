@@ -1045,18 +1045,11 @@ export interface components {
       items: components['schemas']['GetAllUserResponse'][];
     };
     /** @enum {string} */
-    UserTypeEnum: 'SUPER' | 'GENERAL';
-    TimeRange: {
-      'gte (UTC)': string;
-      'lt (UTC)': string;
-    };
+    QueryV2ConditionsEnum: 'CONTAINS' | 'IS' | 'BETWEEN';
     UserSearchQuery: {
-      email?: string;
-      name?: Record<string, unknown>;
-      department?: Record<string, unknown>;
-      type?: components['schemas']['UserTypeEnum'][];
-      projectId?: number[];
-      createdAt?: components['schemas']['TimeRange'];
+      key: string;
+      value: unknown;
+      condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     UserOrder: {
       /** @enum {string} */
@@ -1238,16 +1231,10 @@ export interface components {
       permissions: string[];
     };
     QueryV2: {
-      /** @example {
-       *       "gte": "2023-01-01",
-       *       "lt": "2023-12-31"
-       *     } */
-      createdAt?: components['schemas']['TimeRange'];
-      /** @example {
-       *       "gte": "2023-01-01",
-       *       "lt": "2023-12-31"
-       *     } */
-      updatedAt?: components['schemas']['TimeRange'];
+      ids?: string[];
+      key: string;
+      value: unknown;
+      condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     FindFeedbacksByChannelIdRequestDtoV2: {
       /**
@@ -1260,8 +1247,10 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+      /** @description You can query by key-value with this object. */
       queries?: components['schemas']['QueryV2'][];
+      /** @description You can query by key-value with this object by default (like createdAt). */
+      defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
       /**
@@ -1312,8 +1301,10 @@ export interface components {
        * @example 1
        */
       page?: number;
-      /** @description You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key. */
+      /** @description You can query by key-value with this object. */
       queries?: components['schemas']['QueryV2'][];
+      /** @description You can query by key-value with this object by default (like createdAt). */
+      defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
       /**
@@ -1358,11 +1349,9 @@ export interface components {
       items: components['schemas']['ApiKeyResponseDto'][];
     };
     MemberSearchQuery: {
-      email?: string;
-      name?: Record<string, unknown>;
-      department?: Record<string, unknown>;
-      role?: string;
-      createdAt?: components['schemas']['TimeRange'];
+      key: string;
+      value: unknown;
+      condition: components['schemas']['QueryV2ConditionsEnum'];
     };
     GetAllMemberRequestDto: {
       /**
@@ -1421,6 +1410,10 @@ export interface components {
     };
     CreateApiKeyByValueDto: {
       value: string;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      deletedAt?: string | null;
     };
     IssueTrackerDataDto: {
       ticketDomain: string | null;
@@ -1440,6 +1433,7 @@ export interface components {
     };
     CreateProjectResponseDto: {
       id: number;
+      apiKeys: components['schemas']['ApiKeyResponseDto'][];
     };
     FindProjectByIdResponseDto: {
       id: number;
@@ -1472,6 +1466,7 @@ export interface components {
     };
     UpdateProjectResponseDto: {
       id: number;
+      apiKeys: components['schemas']['ApiKeyResponseDto'][];
     };
     ImageConfigRequestDto: {
       accessKeyId: string;
@@ -1724,11 +1719,26 @@ export interface components {
       page?: number;
       /**
        * @description You can query by key-value with this object.
-       * @example {
-       *       "name": "issue name"
-       *     }
+       * @example [
+       *       {
+       *         "key": "issue",
+       *         "value": "issue name",
+       *         "condition": "IS"
+       *       }
+       *     ]
        */
       queries?: components['schemas']['QueryV2'][];
+      /**
+       * @description You can query by key-value with this object. This queries will be applied by default.
+       * @example [
+       *       {
+       *         "key": "status",
+       *         "value": "RESOLVED",
+       *         "condition": "IS"
+       *       }
+       *     ]
+       */
+      defaultQueries?: components['schemas']['QueryV2'][];
       /** @description You can concatenate queries with 'AND' or 'OR' operators. */
       operator?: string;
       /**

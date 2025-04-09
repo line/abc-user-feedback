@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -15,15 +15,11 @@
  */
 import { memo } from 'react';
 import dayjs from 'dayjs';
+import Linkify from 'linkify-react';
 
 import { Badge } from '@ufb/react';
 
-import {
-  DATE_TIME_FORMAT,
-  ExpandableText,
-  ImagePreviewButton,
-  linkify,
-} from '@/shared';
+import { DATE_TIME_FORMAT, ExpandableText, ImagePreviewButton } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 
 interface IProps {
@@ -55,7 +51,7 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
                     ),
                 )
                 .map((key) => (
-                  <Badge variant="subtle">
+                  <Badge variant="subtle" key={key}>
                     {
                       (field.options?.find((option) => option.key === key)
                         ?.name ?? value) as string
@@ -73,7 +69,20 @@ const FeedbackCell: React.FC<IProps> = memo((props) => {
           {field.format === 'images' && (
             <ImagePreviewButton urls={value as string[]} />
           )}
-          {field.format === 'text' && linkify(value as string)}
+          {field.format === 'text' && (
+            <Linkify
+              options={{
+                className: 'text-blue-500 underline',
+                target: '_blank',
+                rel: 'noopener noreferrer',
+                attributes: {
+                  onClick: (e: React.MouseEvent) => e.stopPropagation(),
+                },
+              }}
+            >
+              {value as string | undefined}
+            </Linkify>
+          )}
           {field.format === 'keyword' && value}
           {field.format === 'number' && value}
         </>

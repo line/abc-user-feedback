@@ -95,7 +95,6 @@ export default defineConfig({
         AUTO_MIGRATION: "true",
         MASTER_API_KEY: "MASTER_API_KEY",
         NODE_ENV: "test",
-        SMTP_USE: "true",
         SMTP_HOST: "localhost",
         SMTP_PORT: "25",
         SMTP_SENDER: "abc@feedback.user",

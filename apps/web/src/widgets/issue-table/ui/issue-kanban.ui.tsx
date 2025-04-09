@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -25,7 +25,7 @@ import { useTranslation } from 'next-i18next';
 
 import { toast } from '@ufb/react';
 
-import type { TableFilterOperator } from '@/shared';
+import type { SearchQuery, TableFilterOperator } from '@/shared';
 import { client, ISSUES } from '@/shared';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -36,12 +36,13 @@ import IssueKanbanDndContext from './issue-kanban-dnd-context.ui';
 interface Props {
   projectId: number;
   issueTracker?: IssueTracker;
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
+  defaultQueries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
 const IssueKanban = (props: Props) => {
-  const { projectId, issueTracker, queries, operator } = props;
+  const { projectId, issueTracker, queries, defaultQueries, operator } = props;
 
   const { t } = useTranslation();
   const queryClient = useQueryClient();
@@ -99,6 +100,7 @@ const IssueKanban = (props: Props) => {
               setItems={setItems}
               queries={queries}
               operator={operator}
+              defaultQueries={defaultQueries}
             />
           ))}
         </SortableContext>

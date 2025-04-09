@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -17,6 +17,7 @@ import { useEffect, useState } from 'react';
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 import type { DehydratedState } from '@tanstack/react-query';
 import {
   HydrationBoundary,
@@ -26,12 +27,14 @@ import {
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { OverlayProvider } from '@toss/use-overlay';
 import { appWithTranslation } from 'next-i18next';
+import i18nConfig from 'next-i18next.config';
 import { ThemeProvider } from 'next-themes';
 
 import { Toaster, TooltipProvider } from '@ufb/react';
 
 import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
+import { useUserStore } from '@/entities/user';
 
 // NOTE: DON'T Change the following import order
 import '@/shared/styles/global.css';
@@ -39,10 +42,6 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import 'swiper/css/navigation';
 import 'swiper/css/thumbs';
-
-import { useRouter } from 'next/router';
-
-import { useUserStore } from '@/entities/user';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -64,7 +63,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   useEffect(() => {
     if (user) return;
-    setUser();
+    void setUser();
   }, [user]);
 
   useEffect(() => {
@@ -112,4 +111,4 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   );
 }
 
-export default appWithTranslation(App);
+export default appWithTranslation(App, i18nConfig);

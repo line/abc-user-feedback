@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -206,7 +206,8 @@ describe('FeedbackController (integration)', () => {
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
         queries: [
           {
-            [availableFieldKey]: 'test',
+            key: availableFieldKey,
+            value: 'test',
             condition: QueryV2ConditionsEnum.IS,
           },
         ],
@@ -380,13 +381,14 @@ describe('FeedbackController (integration)', () => {
       await tenantService.deleteOldFeedbacks();
 
       const findFeedbackDto: FindFeedbacksByChannelIdRequestDtoV2 = {
-        queries: [
+        defaultQueries: [
           {
-            createdAt: {
+            key: 'createdAt',
+            value: {
               gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
               lt: DateTime.now().toFormat('yyyy-MM-dd'),
             },
-            condition: QueryV2ConditionsEnum.IS,
+            condition: QueryV2ConditionsEnum.BETWEEN,
           },
         ],
         operator: 'AND',

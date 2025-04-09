@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -15,12 +15,13 @@
  */
 import type { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
-import { AnonymousTemplate, DEFAULT_LOCALE } from '@/shared';
+import { AnonymousTemplate } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { ResetPasswordWithEmailForm } from '@/features/auth/reset-password-with-email';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   code: string;
@@ -51,7 +52,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async ({
 }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       code: (query.code ?? '') as string,
       email: (query.email ?? '') as string,
     },

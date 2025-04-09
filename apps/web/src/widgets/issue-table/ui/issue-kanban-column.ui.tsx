@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -24,7 +24,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 import { Button } from '@ufb/react';
 
-import type { IssuesItem, TableFilterOperator } from '@/shared';
+import type { IssuesItem, SearchQuery, TableFilterOperator } from '@/shared';
 import { useIssueSearchInfinite } from '@/entities/issue';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -47,13 +47,22 @@ interface Props {
   issueTracker?: IssueTracker;
   items: Issue[];
   setItems: React.Dispatch<React.SetStateAction<Record<string, Issue[]>>>;
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
+  defaultQueries: SearchQuery[];
   operator: TableFilterOperator;
 }
 
 const IssueKanbanColumn = (props: Props) => {
-  const { issue, projectId, issueTracker, items, setItems, queries, operator } =
-    props;
+  const {
+    issue,
+    projectId,
+    issueTracker,
+    items,
+    setItems,
+    queries,
+    defaultQueries,
+    operator,
+  } = props;
 
   const [sort, setSort] = useState({ key: 'createdAt', value: 'DESC' });
   const [meta, setMeta] = useState(DEFAULT_META);
@@ -71,7 +80,10 @@ const IssueKanbanColumn = (props: Props) => {
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      queries: queries.concat([{ status: issue.status, condition: 'IS' }]),
+      queries: queries,
+      defaultQueries: defaultQueries.concat([
+        { key: 'status', value: issue.status, condition: 'IS' },
+      ]),
       sort: { [sort.key]: sort.value },
       limit: 5,
       operator,

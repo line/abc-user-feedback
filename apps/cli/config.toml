@@ -18,4 +18,3 @@ MASTER_API_KEY="MASTER_API_KEY"
 [web]
 NEXT_PUBLIC_API_BASE_URL="http://localhost:4000"
 NEXT_PUBLIC_MAX_DAYS=90
-SESSION_PASSWORD="sessionpasswordsessionpasswordsessionpassword"

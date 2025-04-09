@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -14,36 +14,26 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { QueryV2ConditionsEnum } from '@/common/enums';
+import { IsNullable } from '@/domains/admin/user/decorators';
 
 class MemberSearchQuery {
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
   @IsString()
-  email?: string;
+  key: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  name?: string | null;
+  @ApiProperty({ required: true })
+  @IsNullable()
+  value: string | TimeRange | null;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  department?: string | null;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  role?: string;
-
-  @ApiProperty({ required: false, type: TimeRange })
-  @IsOptional()
-  createdAt?: TimeRange;
-
+  @ApiProperty({
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
+  })
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 

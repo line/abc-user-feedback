@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -23,16 +23,13 @@ import type {
 export class FindIssuesByProjectIdDtoV2 extends PaginationDto {
   projectId: number;
   queries?: {
-    categoryId?: number;
-    createdAt?: TimeRange;
-    updatedAt?: TimeRange;
-    [key: string]:
-      | string
-      | string[]
-      | TimeRange
-      | number
-      | number[]
-      | undefined;
+    key: string;
+    value: string | string[] | TimeRange | number | number[] | undefined;
+    condition: QueryV2ConditionsEnum;
+  }[];
+  defaultQueries?: {
+    key: string;
+    value: string | string[] | TimeRange | number | number[] | undefined;
     condition: QueryV2ConditionsEnum;
   }[];
   sort?: Record<string, SortMethodEnum>;

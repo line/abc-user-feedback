@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -18,18 +18,19 @@ import type { GetStaticProps } from 'next';
 import Link from 'next/link';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button, toast } from '@ufb/react';
 
-import { AnonymousTemplate, DEFAULT_LOCALE, TextInput } from '@/shared';
+import { AnonymousTemplate, TextInput } from '@/shared';
 import type { IFetchError, NextPageWithLayout } from '@/shared/types';
 import { useTenantStore } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
 import { SignInWithOAuthButton } from '@/features/auth/sign-in-with-oauth';
 import { AnonymousLayout } from '@/widgets/anonymous-layout';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const signInWithEmailSchema = z.object({
   email: z.string().email(),
@@ -133,7 +134,7 @@ SignInPage.getLayout = (page) => {
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
     },
   };
 };

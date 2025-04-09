@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -29,7 +29,6 @@ import type {
 } from '@tanstack/react-table';
 import { useOverlay } from '@toss/use-overlay';
 import { useTranslation } from 'next-i18next';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import {
@@ -46,7 +45,6 @@ import type { TableFilterField } from '@/shared';
 import {
   BasicTable,
   DateRangePicker,
-  DEFAULT_LOCALE,
   DeleteDialog,
   TableFilterPopover,
   TablePagination,
@@ -70,6 +68,7 @@ import { ProjectGuard } from '@/entities/project';
 import { Layout } from '@/widgets/layout';
 
 import { env } from '@/env';
+import serverSideTranslations from '@/server-side-translations';
 
 interface IProps {
   projectId: number;
@@ -123,7 +122,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     variables: { channelId: currentChannelId, projectId },
   });
 
-  const fields = (channelData?.fields ?? []).sort((a, b) => a.order - b.order);
+  const fields = useMemo(
+    () => (channelData?.fields ?? []).sort((a, b) => a.order - b.order),
+    [channelData],
+  );
+
   const filterFields = useMemo(() => {
     return fields
       .filter((field) => field.key !== 'createdAt' && field.format !== 'images')
@@ -166,7 +169,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             key: 'issueIds',
             format: 'issue',
             name: field.name,
-            matchType: ['IS'],
+            matchType: ['IS', 'CONTAINS'],
             visible: true,
           };
         }
@@ -199,6 +202,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     operator,
     updateTableFilters,
     updateDateRage,
+    defaultQueries,
   } = useFeedbackQueryConverter({
     projectId,
     filterFields,
@@ -226,7 +230,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     getRowId: (row) => String(row.id),
   });
 
-  const { sorting } = table.getState();
+  const { sorting, rowSelection } = table.getState();
   const sort = useSort(sorting);
 
   const {
@@ -241,10 +245,13 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
       operator: operator,
       page: pagination.pageIndex + 1,
       limit: pagination.pageSize,
+      defaultQueries,
       sort,
     },
     {
-      enabled: currentChannelId !== -1 && queries.length > 0,
+      enabled:
+        currentChannelId !== -1 &&
+        (queries.length > 0 || defaultQueries.length > 0),
       throwOnError(error) {
         if (error.code === 'LargeWindow') {
           toast.error('Please narrow down the search range.');
@@ -257,7 +264,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   useEffect(() => {
     if (!data || currentChannelId !== -1) return;
     void setCurrentChannelId(data.items[0]?.id ?? null);
-  }, [data]);
+  }, [data, currentChannelId]);
 
   useEffect(() => {
     table.setPageIndex(0);
@@ -268,6 +275,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
     setRows(feedbackData?.items ?? []);
     setPageCount(feedbackData?.meta.totalPages ?? 0);
     setRowCount(feedbackData?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [feedbackData]);
 
   const currentFeedback = useMemo(
@@ -303,11 +311,11 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
   });
 
   const selectedRowIds = useMemo(() => {
-    return Object.entries(table.getState().rowSelection).reduce(
+    return Object.entries(rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
       [] as number[],
     );
-  }, [table.getState().rowSelection]);
+  }, [rowSelection]);
 
   const openDeleteUsersDialog = () => {
     overlay.open(({ close, isOpen }) => (
@@ -355,6 +363,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
               variant="outline"
               className="!text-tint-red"
               onClick={openDeleteUsersDialog}
+              disabled={!perms.includes('feedback_delete')}
             >
               <Icon name="RiDeleteBin6Line" />
               {t('v2.button.name.delete', { name: 'Feedback' })}
@@ -375,6 +384,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
                 v.key === 'issueIds' ||
                 table.getAllColumns().some((column) => column.id === v.key),
             )}
+            operator={operator}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
             table={table}
@@ -432,7 +442,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   return {
     props: {
-      ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)),
+      ...(await serverSideTranslations(locale)),
       projectId,
     },
   };

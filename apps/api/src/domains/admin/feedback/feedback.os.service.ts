@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -36,7 +36,7 @@ import type {
 } from './dtos';
 import { FindFeedbacksByChannelIdDtoV2 } from './dtos/find-feedbacks-by-channel-id-v2.dto';
 import type { OsQueryDto } from './dtos/os-query.dto';
-import type { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
+import { Feedback } from './dtos/responses/find-feedbacks-by-channel-id-response.dto';
 import { ScrollFeedbacksDtoV2 } from './dtos/scroll-feedbacks-v2.dto';
 import { isInvalidSortMethod } from './feedback.common';
 import { FeedbackEntity } from './feedback.entity';
@@ -57,17 +57,45 @@ export class FeedbackOSService {
     private readonly osRepository: OpensearchRepository,
   ) {}
 
-  private async issueIdsToFeedbackIds(issueIds: number[]) {
-    const feedbacks = await this.feedbackRepository.find({
-      relations: {
-        issues: true,
-      },
+  private async issueIdsToFeedbackIds(
+    issueIds: number[],
+    condition: QueryV2ConditionsEnum = QueryV2ConditionsEnum.CONTAINS,
+  ) {
+    let feedbacks = await this.feedbackRepository.find({
+      relations: ['issues'],
       where: {
         issues: { id: In(issueIds) },
       },
     });
 
-    return feedbacks.map((feedback) => feedback.id);
+    feedbacks = await this.feedbackRepository.find({
+      relations: ['issues'],
+      where: {
+        id: In(feedbacks.map((feedback) => feedback.id)),
+      },
+    });
+
+    if (condition === QueryV2ConditionsEnum.IS) {
+      return feedbacks
+        .filter((feedback) => {
+          const feedbackIssueIds = feedback.issues.map((issue) => issue.id);
+          return (
+            feedbackIssueIds.length === issueIds.length &&
+            issueIds.every((id) => feedbackIssueIds.includes(id))
+          );
+        })
+        .map((feedback) => feedback.id);
+    } else {
+      return feedbacks
+        .filter((feedback) => {
+          const feedbackIssueIds = feedback.issues.map((issue) => issue.id);
+          return (
+            feedbackIssueIds.length >= issueIds.length &&
+            issueIds.every((id) => feedbackIssueIds.includes(id))
+          );
+        })
+        .map((feedback) => feedback.id);
+    }
   }
 
   private isUnsortableFormat(format: FieldFormatEnum) {
@@ -160,7 +188,7 @@ export class FeedbackOSService {
               if (
                 !Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)
               ) {
-                throw new BadRequestException('bad key in query');
+                throw new BadRequestException(`bad key in query: ${fieldKey}`);
               }
 
               const { format, key, options } = fieldsByKey[fieldKey];
@@ -234,6 +262,7 @@ export class FeedbackOSService {
 
   private osQueryBuliderV2(
     queries: FindFeedbacksByChannelIdDtoV2['queries'],
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'] = [],
     sort: FindFeedbacksByChannelIdDtoV2['sort'] = {},
     operator = 'AND',
     fields: FieldEntity[],
@@ -253,129 +282,156 @@ export class FeedbackOSService {
       },
     };
 
-    const createdAtCondition = queries?.find((query) => query.createdAt);
-    if (createdAtCondition?.createdAt) {
-      const { gte, lt } = createdAtCondition.createdAt;
-      combinedOsQuery.bool.must.push({
-        range: {
-          createdAt: { gte, lt },
-        },
-      });
-    }
+    defaultQueries.forEach((query) => {
+      const { key, value } = query;
+
+      if (key === 'createdAt' && value) {
+        const { gte, lt } = value as TimeRange;
+        combinedOsQuery.bool.must.push({
+          range: {
+            createdAt: { gte, lt },
+          },
+        });
+      }
+    });
 
     queries?.forEach((query) => {
-      const osQuery = Object.keys(query).reduce(
-        (osQuery: OpenSearchQuery, fieldKey) => {
-          if (fieldKey === 'ids') {
+      const osQuery: OpenSearchQuery = { bool: { must: [] } };
+      const fieldKey = query.key;
+      const fieldValue = query.value;
+
+      if (fieldKey === 'issueIds' && query.ids) {
+        osQuery.bool.must.push({
+          ids: {
+            values: query.ids.map((id) => id.toString()),
+          },
+        });
+
+        if (operator === 'AND') {
+          combinedOsQuery.bool.must.push(osQuery);
+        } else if (operator === 'OR') {
+          combinedOsQuery.bool.should?.push(osQuery);
+          combinedOsQuery.bool.minimum_should_match = 1;
+        } else {
+          throw new BadRequestException('Invalid operator');
+        }
+
+        return;
+      }
+
+      if (!Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)) {
+        throw new BadRequestException(`bad key in query: ${fieldKey}`);
+      }
+
+      const { format, key, options } = fieldsByKey[fieldKey];
+      const condition = query.condition;
+      const values = fieldValue as string[];
+
+      if (format === FieldFormatEnum.select) {
+        osQuery.bool.must.push({
+          match_phrase: {
+            [key]: (options ?? []).find((option) => option.key === fieldValue)
+              ?.key,
+          },
+        });
+      } else if (format === FieldFormatEnum.multiSelect) {
+        if (condition === QueryV2ConditionsEnum.IS) {
+          if (values.length > 0) {
             osQuery.bool.must.push({
-              ids: {
-                values: (query[fieldKey] ?? []).map((id) => id.toString()),
-              },
-            });
-
-            return osQuery;
-          }
-
-          if (fieldKey === 'condition') return osQuery;
-
-          if (!Object.prototype.hasOwnProperty.call(fieldsByKey, fieldKey)) {
-            throw new BadRequestException('bad key in query');
-          }
-
-          const { format, key, options } = fieldsByKey[fieldKey];
-          const condition = query.condition;
-          const values = query[fieldKey] as string[];
-
-          if (format === FieldFormatEnum.select) {
-            osQuery.bool.must.push({
-              match_phrase: {
-                [key]: (options ?? []).find(
-                  (option) => option.key === query[fieldKey],
-                )?.key,
-              },
-            });
-          } else if (format === FieldFormatEnum.multiSelect) {
-            if (condition === QueryV2ConditionsEnum.IS) {
-              if (values.length > 0) {
-                osQuery.bool.must.push({
-                  bool: {
-                    must: [
-                      {
-                        terms_set: {
-                          [key]: {
-                            terms: values.map(
-                              (value) =>
-                                (options ?? []).find(
-                                  (option) => option.key === value,
-                                )?.key,
-                            ),
-                            minimum_should_match_script: {
-                              source: 'params.num_terms',
-                              params: { num_terms: values.length },
-                            },
-                          },
+              bool: {
+                must: [
+                  {
+                    terms_set: {
+                      [key]: {
+                        terms: values.map(
+                          (value) =>
+                            (options ?? []).find(
+                              (option) => option.key === value,
+                            )?.key,
+                        ),
+                        minimum_should_match_script: {
+                          source: 'params.num_terms',
+                          params: { num_terms: values.length },
                         },
                       },
-                      {
-                        script: {
-                          script: {
-                            source: `doc['${key}'].length == params.num_terms`,
-                            params: { num_terms: values.length },
-                          },
-                        },
+                    },
+                  },
+                  {
+                    script: {
+                      script: {
+                        source: `doc['${key}'].length == params.num_terms`,
+                        params: { num_terms: values.length },
                       },
-                    ],
+                    },
                   },
-                });
-              } else {
-                osQuery.bool.must.push({
-                  bool: { must_not: [{ exists: { field: key } }] },
-                });
-              }
-            } else {
-              if (values.length > 0) {
-                osQuery.bool.must.push({
-                  terms: {
-                    [key]: values.map(
-                      (value) =>
-                        (options ?? []).find((option) => option.key === value)
-                          ?.key,
-                    ),
-                  },
-                });
-              } else {
-                osQuery.bool.must.push({
-                  bool: { must_not: [{ exists: { field: key } }] },
-                });
-              }
-            }
-          } else if (format === FieldFormatEnum.date) {
-            if (fieldKey === 'createdAt') return osQuery;
-            osQuery.bool.must.push({
-              range: {
-                [key]: query[fieldKey] as TimeRange,
-              },
-            });
-          } else if (
-            [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
-          ) {
-            osQuery.bool.must.push({
-              match_phrase: {
-                [key]: query[fieldKey] as string,
+                ],
               },
             });
           } else {
             osQuery.bool.must.push({
-              term: {
-                [key]: query[fieldKey] as string,
-              },
+              bool: { must_not: [{ exists: { field: key } }] },
             });
           }
-
-          return osQuery;
-        },
-        { bool: { must: [] } },
-      );
+        } else if (condition === QueryV2ConditionsEnum.CONTAINS) {
+          if (values.length > 0) {
+            osQuery.bool.must.push({
+              bool: {
+                must: [
+                  {
+                    terms_set: {
+                      [key]: {
+                        terms: values.map(
+                          (value) =>
+                            (options ?? []).find(
+                              (option) => option.key === value,
+                            )?.key,
+                        ),
+                        minimum_should_match_script: {
+                          source: 'params.num_terms',
+                          params: { num_terms: values.length },
+                        },
+                      },
+                    },
+                  },
+                  {
+                    script: {
+                      script: {
+                        source: `doc['${key}'].length >= params.num_terms`,
+                        params: { num_terms: values.length },
+                      },
+                    },
+                  },
+                ],
+              },
+            });
+          } else {
+            osQuery.bool.must.push({
+              bool: { must_not: [{ exists: { field: key } }] },
+            });
+          }
+        }
+      } else if (format === FieldFormatEnum.date) {
+        if (fieldKey === 'createdAt') return osQuery;
+        osQuery.bool.must.push({
+          range: {
+            [key]: fieldValue as TimeRange,
+          },
+        });
+      } else if (
+        [FieldFormatEnum.text, FieldFormatEnum.images].includes(format)
+      ) {
+        osQuery.bool.must.push({
+          match_phrase: {
+            [key]: fieldValue as string,
+          },
+        });
+      } else {
+        osQuery.bool.must.push({
+          term: {
+            [key]: fieldValue as string,
+          },
+        });
+      }
 
       if (osQuery.bool.must.length === 0) return;
 
@@ -477,15 +533,26 @@ export class FeedbackOSService {
   async findByChannelIdV2(
     dto: FindFeedbacksByChannelIdDtoV2,
   ): Promise<Pagination<Feedback, IPaginationMeta>> {
-    const { channelId, limit, page, queries, sort, operator, fields } = dto;
+    const {
+      channelId,
+      limit,
+      page,
+      queries,
+      defaultQueries,
+      sort,
+      operator,
+      fields,
+    } = dto;
 
     for (let i = 0; i < (queries?.length ?? 0); i++) {
-      if (queries?.[i].issueIds) {
+      if (queries?.[i].key === 'issueIds') {
+        const condition = queries[i].condition;
+
         const feedbackIds = await this.issueIdsToFeedbackIds(
-          queries[i].issueIds as number[],
+          queries[i].value as number[],
+          condition,
         );
 
-        delete queries[i].issueIds;
         if (queries[i].ids) {
           queries[i].ids = [...(queries[i].ids ?? []), ...feedbackIds];
         } else {
@@ -496,6 +563,7 @@ export class FeedbackOSService {
 
     const osQuery = this.osQueryBuliderV2(
       queries,
+      defaultQueries,
       sort,
       operator,
       fields ?? [],
@@ -562,6 +630,7 @@ export class FeedbackOSService {
       channelId,
       size,
       queries,
+      defaultQueries,
       operator,
       sort,
       fields,
@@ -569,12 +638,14 @@ export class FeedbackOSService {
     } = dto;
 
     for (let i = 0; i < (queries?.length ?? 0); i++) {
-      if (queries?.[i].issueIds) {
+      if (queries?.[i].key === 'issueIds') {
+        const condition = queries[i].condition;
+
         const feedbackIds = await this.issueIdsToFeedbackIds(
-          queries[i].issueIds as number[],
+          queries[i].value as number[],
+          condition,
         );
 
-        delete queries[i].issueIds;
         if (queries[i].ids) {
           queries[i].ids = [...(queries[i].ids ?? []), ...feedbackIds];
         } else {
@@ -583,7 +654,13 @@ export class FeedbackOSService {
       }
     }
 
-    const osQuery = this.osQueryBuliderV2(queries, sort, operator, fields);
+    const osQuery = this.osQueryBuliderV2(
+      queries,
+      defaultQueries,
+      sort,
+      operator,
+      fields,
+    );
     this.logger.log(osQuery);
     return await this.osRepository.scroll({
       index: channelId.toString(),

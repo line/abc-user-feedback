@@ -7,11 +7,12 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "clean": "git clean -xdf dist .turbo node_modules",
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "dev": "tsc",
     "format": "prettier --check . --ignore-path ../../.gitignore",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
-    "build": "tsup src/index.ts --format cjs,esm --dts"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "prettier": "@ufb/prettier-config",
   "devDependencies": {

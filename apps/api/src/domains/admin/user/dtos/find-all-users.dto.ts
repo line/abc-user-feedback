@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -17,17 +17,12 @@ import type { IPaginationOptions } from 'nestjs-typeorm-paginate';
 
 import type { TimeRange } from '@/common/dtos';
 import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
-import type { UserTypeEnum } from '../entities/enums';
 
 export class FindAllUsersDto {
   options: IPaginationOptions;
   queries?: {
-    email?: string;
-    name?: string | null;
-    department?: string | null;
-    type?: UserTypeEnum[];
-    projectId?: number[];
-    createdAt?: TimeRange;
+    key: string;
+    value: string | string[] | number[] | TimeRange | null;
     condition: QueryV2ConditionsEnum;
   }[];
   operator?: 'AND' | 'OR';

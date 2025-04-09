@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -14,7 +14,8 @@
  * under the License.
  */
 import dayjs from 'dayjs';
-import { useTranslation } from 'react-i18next';
+import Linkify from 'linkify-react';
+import { useTranslation } from 'next-i18next';
 
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
@@ -25,38 +26,37 @@ import IssueCell from '@/entities/feedback/ui/issue-cell';
 import { DATE_TIME_FORMAT } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
-import { linkify } from '../utils';
 import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
 
-type PlainRow = {
+interface PlainRow {
   format: 'text' | 'keyword' | 'number' | 'date' | 'images';
-};
+}
 
-type ImageRow = {
+interface ImageRow {
   format: 'images';
   editable?: false;
-};
+}
 
-type SelectableRow = {
+interface SelectableRow {
   format: 'select' | 'multiSelect';
   options: { key: string; name: string; color?: BadgeColor }[];
-};
+}
 
-type TicketRow = {
+interface TicketRow {
   format: 'ticket';
   issueTracker?: { ticketDomain: string | null; ticketKey: string | null };
-};
-type IssueRow = {
+}
+interface IssueRow {
   format: 'issue';
   feedbackId: number;
   editable?: false;
-};
-type CategoryRow = {
+}
+interface CategoryRow {
   format: 'cateogry';
   issueId: number;
-};
+}
 
 export type SheetDetailTableRow = {
   key: string;
@@ -97,7 +97,18 @@ const SheetDetailTable = (props: Props) => {
   const { t } = useTranslation();
 
   const renderViewModeField: RenderFieldMap<SheetDetailTableRow> = {
-    text: (value) => (value ? linkify(String(value)) : '-'),
+    text: (value) =>
+      value ?
+        <Linkify
+          options={{
+            className: 'text-blue-500 underline',
+            target: '_blank',
+            rel: 'noopener noreferrer',
+          }}
+        >
+          {String(value)}
+        </Linkify>
+      : '-',
     keyword: (value) => ((value as string | null) ? (value as string) : '-'),
     number: (value) => (value as string | null) ?? '-',
     date: (value) =>
@@ -116,7 +127,7 @@ const SheetDetailTable = (props: Props) => {
         : '-';
     },
     multiSelect: (value, row) => (
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {((value ?? []) as string[]).length === 0 ?
           '-'
         : (value as string[])
@@ -277,20 +288,20 @@ const SheetDetailTable = (props: Props) => {
   };
 
   return (
-    <table>
+    <table className="w-full table-fixed">
       <tbody>
         {rows.map((row) => {
           const { format, key, name } = row;
           const value = data[key];
           return (
             <tr key={key}>
-              <th className="text-neutral-tertiary min-w-[120px] py-2.5 align-top font-normal">
+              <th className="text-neutral-tertiary w-1/4 py-2.5 align-top font-normal">
                 <div className="flex items-center gap-1 text-left">
                   <Icon name={FIELD_FORMAT_ICON_MAP[format]} size={16} />
                   {name}
                 </div>
               </th>
-              <td className="w-full py-2.5">
+              <td className="w-3/4 whitespace-normal break-words py-2.5">
                 {mode === 'edit' && row.editable ?
                   renderEditModeField[format](value, row)
                 : typeof value === 'undefined' ?

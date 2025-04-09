@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -103,6 +103,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     resolver: zodResolver(fieldInfoSchema),
     defaultValues: data ?? defaultValues,
   });
+  console.log('formState: ', formState.errors);
 
   useEffect(() => {
     if (isSameKey) setValue('name', watch('key'), { shouldDirty: true });
@@ -110,24 +111,25 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
 
   const addOption = () => {
     if (optionInput === '') return;
+
     if (
       watch('options')?.find(
         (v) => v.name.toLowerCase() === optionInput.toLowerCase(),
       )
     ) {
       setError('options', { message: 'Option Name is duplicated' });
-    } else {
-      setValue(
-        'options',
-        (watch('options') ?? []).concat({
-          name: optionInput,
-          key: optionInput,
-        }),
-        { shouldDirty: true },
-      );
-      setOptionInput('');
-      clearErrors('options');
+      return;
     }
+    setValue(
+      'options',
+      (watch('options') ?? []).concat({
+        name: optionInput,
+        key: optionInput,
+      }),
+      { shouldDirty: true },
+    );
+    setOptionInput('');
+    clearErrors('options');
   };
 
   const removeOption = (targetIndex: number) => {
@@ -240,6 +242,7 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
                   <TextInput
                     label="Select Option"
                     value={optionInput}
+                    maxLength={20}
                     onChange={(e) => setOptionInput(e.target.value)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter') {

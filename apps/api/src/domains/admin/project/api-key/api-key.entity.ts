@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -28,11 +28,23 @@ export class ApiKeyEntity extends CommonEntity {
   })
   project: Relation<ProjectEntity>;
 
-  static from({ projectId, value }: { projectId: number; value: string }) {
+  static from({
+    projectId,
+    value,
+    createdAt,
+    deletedAt,
+  }: {
+    projectId: number;
+    value: string;
+    createdAt?: Date;
+    deletedAt?: Date;
+  }) {
     const apiKey = new ApiKeyEntity();
     apiKey.project = new ProjectEntity();
     apiKey.project.id = projectId;
     apiKey.value = value;
+    if (createdAt) apiKey.createdAt = createdAt;
+    if (deletedAt) apiKey.deletedAt = deletedAt;
 
     return apiKey;
   }

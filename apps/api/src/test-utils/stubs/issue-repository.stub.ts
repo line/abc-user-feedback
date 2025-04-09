@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -16,85 +16,33 @@
 import { faker } from '@faker-js/faker';
 
 import { IssueStatusEnum } from '@/common/enums';
-import { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
+import type { IssueEntity } from '@/domains/admin/project/issue/issue.entity';
 import { issueFixture } from '../fixtures';
-import { createQueryBuilder, removeUndefinedValues } from '../util-functions';
+import { removeUndefinedValues } from '../util-functions';
+import { CommonRepositoryStub } from './common-repository.stub';
 
-export class IssueRepositoryStub {
-  issue: IssueEntity | null = issueFixture;
-  findOne() {
-    return this.issue;
+export class IssueRepositoryStub extends CommonRepositoryStub<IssueEntity> {
+  constructor() {
+    super([issueFixture]);
   }
 
-  findOneBy() {
-    return this.issue;
-  }
-
-  find() {
-    return [this.issue];
-  }
-
-  findBy() {
-    return [this.issue];
-  }
-
-  findAndCount() {
-    return [[this.issue], 1];
-  }
-
-  findAndCountBy() {
-    return [[this.issue], 1];
-  }
-
-  save(issue) {
+  save(issue: Partial<IssueEntity> | Partial<IssueEntity>[]) {
     const issueToSave = removeUndefinedValues(issue);
     if (Array.isArray(issueToSave)) {
       return issueToSave.map((e) => ({
-        ...this.issue,
+        ...this.entities?.[0],
         ...e,
         id: faker.number.int(),
-        status: e.status || IssueStatusEnum.INIT,
-        feedbackCount: e.feedbackCount || 0,
+        status: e.status ?? IssueStatusEnum.INIT,
+        feedbackCount: e.feedbackCount ?? 0,
       }));
     } else {
       return {
-        ...this.issue,
+        ...this.entities?.[0],
         ...issueToSave,
-        status: (issueToSave as IssueEntity).status || IssueStatusEnum.INIT,
-        feedbackCount: (issueToSave as IssueEntity).feedbackCount || 0,
+        status: issueToSave.status ?? IssueStatusEnum.INIT,
+        feedbackCount: issueToSave.feedbackCount ?? 0,
       };
     }
-  }
-
-  update(issue) {
-    const issueToUpdate = removeUndefinedValues(issue);
-    if (Array.isArray(issueToUpdate)) {
-      return issueToUpdate.map((e) => ({
-        ...this.issue,
-        ...e,
-      }));
-    } else {
-      return {
-        ...this.issue,
-        ...issueToUpdate,
-      };
-    }
-  }
-
-  count() {
-    return 1;
-  }
-
-  remove({ id }) {
-    return { id };
-  }
-
-  setNull() {
-    this.issue = null;
-  }
-
-  createQueryBuilder() {
-    createQueryBuilder.getMany = () => [issueFixture];
-    return createQueryBuilder;
   }
 }

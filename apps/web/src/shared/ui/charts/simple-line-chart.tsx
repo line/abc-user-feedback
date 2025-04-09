@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -167,7 +167,7 @@ const CustomTooltip: React.FC<ICustomTooltipProps> = (props) => {
                   className="h-2 w-2 flex-shrink-0 rounded-full"
                 />
                 <p className="break-all">
-                  {name ? name : (payload as { date: string | undefined }).date}
+                  {name ?? (payload as { date: string | undefined }).date}
                 </p>
               </div>
             )}

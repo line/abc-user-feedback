@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -16,14 +16,15 @@
 import { useEffect } from 'react';
 import type { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 import { Icon } from '@ufb/react';
 
-import { DEFAULT_LOCALE, Path, useAllProjects } from '@/shared';
+import { Path, useAllProjects } from '@/shared';
 import type { NextPageWithLayout } from '@/shared/types';
 import { TenantGuard } from '@/entities/tenant';
 import { useUserStore } from '@/entities/user';
+
+import serverSideTranslations from '@/server-side-translations';
 
 const MainIndexPage: NextPageWithLayout = () => {
   const router = useRouter();
@@ -60,7 +61,9 @@ const MainIndexPage: NextPageWithLayout = () => {
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   return {
-    props: { ...(await serverSideTranslations(locale ?? DEFAULT_LOCALE)) },
+    props: {
+      ...(await serverSideTranslations(locale)),
+    },
   };
 };
 

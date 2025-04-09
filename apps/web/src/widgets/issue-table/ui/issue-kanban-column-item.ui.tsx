@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -18,6 +18,7 @@ import { motion } from 'framer-motion';
 
 import { Badge, Icon } from '@ufb/react';
 
+import { cn, usePermissions } from '@/shared';
 import CategoryCombobox from '@/shared/ui/category-combobox.ui';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
@@ -42,6 +43,7 @@ const IssueKanbanColumnItem = (props: Props) => {
   const { item, issueTracker, onClick } = props;
   const { setNodeRef, listeners, isDragging, transform, attributes } =
     useSortable({ id: item.id });
+  const perms = usePermissions();
 
   return (
     <motion.div
@@ -102,13 +104,20 @@ const IssueKanbanColumnItem = (props: Props) => {
           </CategoryCombobox>
         }
       </div>
-      <div
-        className="hover:bg-neutral-tertiary flex w-4 items-center justify-center hover:cursor-grab active:cursor-grabbing"
+      <button
+        className={cn(
+          'hover:bg-neutral-tertiary flex w-4 items-center justify-center hover:cursor-grab active:cursor-grabbing',
+          {
+            'hover:cursor-not-allowed hover:bg-inherit active:cursor-not-allowed':
+              !perms.includes('issue_update'),
+          },
+        )}
+        disabled={!perms.includes('issue_update')}
         {...attributes}
         {...listeners}
       >
         <Icon name="RiDraggable" className="text-neutral-tertiary" />
-      </div>
+      </button>
     </motion.div>
   );
 };

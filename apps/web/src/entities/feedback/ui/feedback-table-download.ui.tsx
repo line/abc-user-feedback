@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -29,7 +29,7 @@ import {
   toast,
 } from '@ufb/react';
 
-import type { TableFilterOperator } from '@/shared';
+import type { SearchQuery, TableFilterOperator } from '@/shared';
 import type { Field } from '@/entities/field';
 
 import type { Feedback } from '../feedback.type';
@@ -37,7 +37,7 @@ import useFeedbackDownload from '../lib/use-feedback-download';
 
 interface Props {
   fields: Field[];
-  queries: Record<string, unknown>[];
+  queries: SearchQuery[];
   disabled: boolean;
   table: Table<Feedback>;
   operator: TableFilterOperator;

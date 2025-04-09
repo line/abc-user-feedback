@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -17,7 +17,6 @@
 import { useState } from 'react';
 import { useOverlay } from '@toss/use-overlay';
 import dayjs from 'dayjs';
-import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -148,7 +147,7 @@ const FeedbackDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ id: feedback.id, condition: 'IS' }]))}&channelId=${channelId}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${JSON.stringify([{ key: 'id', value: feedback.id, condition: 'IS' }])}&channelId=${channelId}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,

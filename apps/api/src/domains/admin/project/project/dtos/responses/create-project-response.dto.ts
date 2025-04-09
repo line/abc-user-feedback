@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -14,14 +14,37 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { Expose, plainToInstance } from 'class-transformer';
+import { Expose, plainToInstance, Type } from 'class-transformer';
 import { IsNumber } from 'class-validator';
+
+class ApiKeyResponseDto {
+  @Expose()
+  @ApiProperty()
+  id: number;
+
+  @Expose()
+  @ApiProperty()
+  value: string;
+
+  @Expose()
+  @ApiProperty()
+  createdAt: Date;
+
+  @Expose()
+  @ApiProperty({ nullable: true })
+  deletedAt: Date | null;
+}
 
 export class CreateProjectResponseDto {
   @ApiProperty()
   @IsNumber()
   @Expose()
   id: number;
+
+  @Expose()
+  @ApiProperty({ type: [ApiKeyResponseDto] })
+  @Type(() => ApiKeyResponseDto)
+  apiKeys: ApiKeyResponseDto[];
 
   public static transform(params: any): CreateProjectResponseDto {
     return plainToInstance(CreateProjectResponseDto, params, {

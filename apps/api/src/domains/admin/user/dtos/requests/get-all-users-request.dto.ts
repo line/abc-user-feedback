@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -15,18 +15,11 @@
  */
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsEnum, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
 import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
-import { ArrayDistinct } from '@/common/validators';
-import { UserTypeEnum } from '../../entities/enums';
+import { IsNullable } from '../../decorators';
 
 class UserOrder {
   @ApiProperty({ enum: SortMethodEnum })
@@ -36,42 +29,19 @@ class UserOrder {
 }
 
 class UserSearchQuery {
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({ required: true })
   @IsString()
-  email?: string;
+  key: string;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  name?: string | null;
-
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsString()
-  department?: string | null;
+  @ApiProperty({ required: true })
+  @IsNullable()
+  value: string | string[] | number[] | TimeRange | null;
 
   @ApiProperty({
-    required: false,
-    type: [UserTypeEnum],
-    enum: UserTypeEnum,
-    enumName: 'UserTypeEnum',
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
   })
-  @IsOptional()
-  @IsEnum(UserTypeEnum, { each: true })
-  @ArrayDistinct()
-  type?: UserTypeEnum[];
-
-  @ApiProperty({ required: false, type: [Number] })
-  @IsOptional()
-  @ArrayDistinct()
-  @IsNumber({}, { each: true })
-  projectId?: number[];
-
-  @ApiProperty({ required: false, type: TimeRange })
-  @IsOptional()
-  createdAt?: TimeRange;
-
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 

@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -26,7 +26,7 @@ import { useTranslation } from 'next-i18next';
 
 import { Badge, Button, Icon, toast } from '@ufb/react';
 
-import type { TableFilter, TableFilterOperator } from '@/shared';
+import type { SearchQuery, TableFilter, TableFilterOperator } from '@/shared';
 import {
   BasicTable,
   client,
@@ -59,18 +59,16 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const [tableFilters, setTableFilters] = useState<TableFilter[]>([]);
   const [operator, setOperator] = useState<TableFilterOperator>('AND');
   const queries = useMemo(() => {
-    return tableFilters.reduce(
-      (acc, filter) => {
-        return acc.concat({
-          [filter.key]:
-            filter.key === 'projectId' || filter.key === 'type' ?
-              [filter.value]
-            : filter.value,
-          condition: filter.condition,
-        });
-      },
-      [] as Record<string, unknown>[],
-    );
+    return tableFilters.reduce((acc, filter) => {
+      return acc.concat({
+        key: filter.key,
+        value:
+          filter.key === 'projectId' || filter.key === 'type' ?
+            [filter.value]
+          : filter.value,
+        condition: filter.condition,
+      });
+    }, [] as SearchQuery[]);
   }, [tableFilters]);
 
   const columns = useMemo(() => getUserColumns(), []);
@@ -92,7 +90,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     rowCount,
   });
 
-  const { sorting, pagination } = table.getState();
+  const { sorting, pagination, rowSelection } = table.getState();
   const sort = useSort(sorting);
 
   const { data: projects } = useAllProjects();
@@ -147,6 +145,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     setRows(userData?.items ?? []);
     setPageCount(userData?.meta.totalPages ?? 0);
     setRowCount(userData?.meta.totalItems ?? 0);
+    table.resetRowSelection();
   }, [userData, pagination, isLoading]);
 
   useEffect(() => {
@@ -155,11 +154,11 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   }, [pagination.pageSize, queries]);
 
   const selectedRowIds = useMemo(() => {
-    return Object.entries(table.getState().rowSelection).reduce(
+    return Object.entries(rowSelection).reduce(
       (acc, [key, value]) => (value ? acc.concat(Number(key)) : acc),
       [] as number[],
     );
-  }, [table.getState().rowSelection]);
+  }, [rowSelection]);
 
   const openDeleteUsersDialog = () => {
     overlay.open(({ close, isOpen }) => (
@@ -191,6 +190,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <TableFilterPopover
+            operator={operator}
             filterFields={[
               {
                 key: 'email',

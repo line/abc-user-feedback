@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -171,6 +171,7 @@ export class IssueService {
     const {
       projectId,
       queries = [],
+      defaultQueries = [],
       sort = {},
       operator = 'AND',
       page,
@@ -182,22 +183,27 @@ export class IssueService {
       .leftJoinAndSelect('issues.category', 'category')
       .where('issues.project_id = :projectId', { projectId });
 
-    const createdAtCondition = queries.find((query) => query.createdAt);
-    if (createdAtCondition?.createdAt) {
-      const { gte, lt } = createdAtCondition.createdAt;
-      queryBuilder.andWhere('issues.created_at >= :gte', { gte });
-      queryBuilder.andWhere('issues.created_at < :lt', { lt });
-    }
+    defaultQueries.forEach((query) => {
+      const { key, value, condition } = query;
+
+      if (key === 'createdAt' && value) {
+        const { gte, lt } = value as TimeRange;
+        queryBuilder.andWhere('issues.created_at >= :gte', { gte });
+        queryBuilder.andWhere('issues.created_at < :lt', { lt });
+      } else if (key === 'status' && condition === QueryV2ConditionsEnum.IS) {
+        queryBuilder.andWhere('issues.status = :status', { status: value });
+      }
+    });
 
     const categoryIdCondition = queries.find(
-      (query) => typeof query.categoryId === 'number',
+      (query) => query.key === 'categoryId' && typeof query.value === 'number',
     );
-    if (typeof categoryIdCondition?.categoryId === 'number') {
-      if (categoryIdCondition.categoryId === 0) {
+    if (typeof categoryIdCondition?.value === 'number') {
+      if (categoryIdCondition.value === 0) {
         queryBuilder.andWhere('issues.category_id is NULL');
       } else {
         queryBuilder.andWhere('issues.category_id = :categoryId', {
-          categoryId: categoryIdCondition.categoryId,
+          categoryId: categoryIdCondition.value,
         });
       }
     }
@@ -208,55 +214,45 @@ export class IssueService {
       new Brackets((qb) => {
         let paramIndex = 0;
         for (const query of queries) {
-          const { condition } = query;
-          for (const [fieldKey, value] of Object.entries(query)) {
-            if (fieldKey === 'condition') continue;
+          const { key, value, condition } = query;
+          if (key === 'createdAt' || key === 'categoryId') continue;
 
-            const paramName = `value${paramIndex++}`;
+          const paramName = `value${paramIndex++}`;
 
-            if (fieldKey === 'updatedAt') {
-              const { gte, lt } = value as TimeRange;
-              qb[method](`issues.updated_at >= :gte${paramName}`, {
-                [`gte${paramName}`]: gte,
-              });
-              qb[method](`issues.updated_at < :lt${paramName}`, {
-                [`lt${paramName}`]: lt,
-              });
-            } else if (
-              fieldKey === 'status' &&
-              condition === QueryV2ConditionsEnum.IS
-            ) {
-              qb[method](`issues.status = :${paramName}`, {
-                [paramName]: value,
-              });
-            } else if (
-              fieldKey === 'externalIssueId' &&
-              condition === QueryV2ConditionsEnum.IS
-            ) {
-              qb[method](`issues.external_issue_id = :${paramName}`, {
-                [paramName]: value,
-              });
-            } else if (['name', 'description'].includes(fieldKey)) {
-              const operator =
-                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
-              const valueFormat =
-                condition === QueryV2ConditionsEnum.IS ?
-                  value
-                : `%${value?.toString()}%`;
-              qb[method](`issues.${fieldKey} ${operator} :${paramName}`, {
-                [paramName]: valueFormat,
-              });
-            } else if (fieldKey === 'category') {
-              const operator =
-                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
-              const valueFormat =
-                condition === QueryV2ConditionsEnum.IS ?
-                  value
-                : `%${value?.toString()}%`;
-              qb[method](`category.name ${operator} :${paramName}`, {
-                [paramName]: valueFormat,
-              });
-            }
+          if (key === 'updatedAt') {
+            const { gte, lt } = value as TimeRange;
+            qb[method](`issues.updated_at >= :gte${paramName}`, {
+              [`gte${paramName}`]: gte,
+            });
+            qb[method](`issues.updated_at < :lt${paramName}`, {
+              [`lt${paramName}`]: lt,
+            });
+          } else if (
+            key === 'status' &&
+            condition === QueryV2ConditionsEnum.IS
+          ) {
+            qb[method](`issues.status = :${paramName}`, {
+              [`${paramName}`]: value,
+            });
+          } else if (
+            key === 'externalIssueId' &&
+            condition === QueryV2ConditionsEnum.IS
+          ) {
+            qb[method](`issues.external_issue_id = :${paramName}`, {
+              [paramName]: value,
+            });
+          } else if (['name', 'description', 'category'].includes(key)) {
+            const tableName =
+              key === 'category' ? 'category.name' : `issues.${key}`;
+            const operator =
+              condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+            const valueFormat =
+              condition === QueryV2ConditionsEnum.IS ?
+                value
+              : `%${value?.toString()}%`;
+            qb[method](`${tableName} ${operator} :${paramName}`, {
+              [paramName]: valueFormat,
+            });
           }
         }
       }),

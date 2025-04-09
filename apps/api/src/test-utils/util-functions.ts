@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -261,7 +261,7 @@ export const MockOpensearchRepository = {
   getTotal: jest.fn(),
 };
 
-export function removeUndefinedValues(obj: object): object {
+export function removeUndefinedValues<T extends object>(obj: T): T {
   Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === 'object') {
       removeUndefinedValues(obj[key] as object);

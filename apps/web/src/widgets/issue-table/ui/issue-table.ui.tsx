@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -115,6 +115,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
     tableFilters,
     updateDateRage,
     updateTableFilters,
+    defaultQueries,
   } = useIssueQueryConverter({ filterFields, projectId });
 
   const openIssueFormDialog = () => {
@@ -149,6 +150,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
             clearable
           />
           <TableFilterPopover
+            operator={operator}
             filterFields={filterFields}
             onSubmit={updateTableFilters}
             tableFilters={tableFilters}
@@ -178,6 +180,7 @@ const IssueTable: React.FC<IProps> = ({ projectId }) => {
           issueTracker={issueTracker?.data}
           queries={queries}
           operator={operator}
+          defaultQueries={defaultQueries}
         />
       )}
       {viewType === 'list' && (

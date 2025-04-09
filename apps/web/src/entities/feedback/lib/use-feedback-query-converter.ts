@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -14,19 +14,19 @@
  * under the License.
  */
 
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import dayjs from 'dayjs';
-import { decode, encode } from 'js-base64';
-import { createParser, useQueryState } from 'nuqs';
+import { createParser, parseAsStringLiteral, useQueryState } from 'nuqs';
 
 import type {
   DateRangeType,
+  SearchQuery,
   TableFilter,
   TableFilterField,
   TableFilterFieldFotmat,
   TableFilterOperator,
 } from '@/shared';
-import { client } from '@/shared';
+import { client, TableFilterOperators } from '@/shared';
 
 import { env } from '@/env';
 
@@ -35,18 +35,36 @@ const toQuery = (
 ): Record<TableFilterFieldFotmat, (valeu: unknown) => unknown> => ({
   number: (value) => Number(value),
   issue: async (value) => {
-    const { data } = await client.post({
-      path: '/api/admin/projects/{projectId}/issues/search',
-      pathParams: { projectId },
-      body: {
-        queries: [{ name: value, condition: 'IS' }] as Record<
-          string,
-          unknown
-        >[],
-      },
-    });
-    const result = data?.items.find((v) => v.name === value);
-    return result ? [result.id] : [];
+    if (typeof value === 'string') {
+      const { data } = await client.post({
+        path: '/api/admin/projects/{projectId}/issues/search',
+        pathParams: { projectId },
+        body: {
+          queries: [{ key: 'name', value, condition: 'IS' }] as SearchQuery[],
+        },
+      });
+      const result = data?.items.find((v) => v.name === value);
+      return result ? [result.id] : [];
+    }
+    if (Array.isArray(value)) {
+      return await Promise.all(
+        value.map(async (v: string) => {
+          const issueId = parseInt(v);
+          if (!isNaN(issueId)) return issueId;
+
+          const { data } = await client.post({
+            path: '/api/admin/projects/{projectId}/issues/search',
+            pathParams: { projectId },
+            body: {
+              queries: [
+                { key: 'name', value: v, condition: 'IS' },
+              ] as SearchQuery[],
+            },
+          });
+          return data?.items.find((vv) => vv.name === v)?.id;
+        }),
+      );
+    }
   },
   string: (value) => value,
   select: (value) => value,
@@ -68,23 +86,33 @@ const useFeedbackQueryConverter = (input: {
 }) => {
   const { projectId, filterFields } = input;
 
-  const [operator, setOperator] = useState<TableFilterOperator>('AND');
-  const [queries, setQueries] = useQueryState<Record<string, unknown>[]>(
+  const [operator, setOperator] = useQueryState<TableFilterOperator>(
+    'operator',
+    parseAsStringLiteral(TableFilterOperators).withDefault('AND'),
+  );
+
+  const [queries, setQueries] = useQueryState<SearchQuery[]>(
     'queries',
     createParser({
-      parse: (value) => {
-        return JSON.parse(decode(value)) as Record<string, unknown>[];
-      },
-      serialize: (value) => {
-        return encode(JSON.stringify(value));
-      },
-    }).withDefault([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]),
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
+    }).withDefault([]),
+  );
+
+  const [defaultQueries, setDefaultQueries] = useQueryState<SearchQuery[]>(
+    'defaultQueries',
+    createParser({
+      parse: (value) => JSON.parse(value) as SearchQuery[],
+      serialize: (value) => JSON.stringify(value),
+    }).withDefault([
+      { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
+    ]),
   );
 
   const dateRange = useMemo(() => {
-    const dateQuery = queries.find((v) => v.createdAt);
+    const dateQuery = defaultQueries.find((v) => v.key === 'createdAt');
 
-    const createdAt = dateQuery?.createdAt as
+    const createdAt = dateQuery?.value as
       | { gte: string; lt: string }
       | undefined;
 
@@ -94,39 +122,31 @@ const useFeedbackQueryConverter = (input: {
           endDate: dayjs(createdAt.lt).toDate(),
         }
       : null;
-  }, [queries]);
+  }, [defaultQueries]);
 
   const onChangeDateRange = useCallback(async (value: DateRangeType) => {
     if (!value) return;
-    await setQueries((queries) =>
-      queries
-        .filter((v) => !v.createdAt)
-        .concat({
-          createdAt: {
-            gte: dayjs(value.startDate).toISOString(),
-            lt: dayjs(value.endDate).toISOString(),
-          },
-          condition: 'IS',
-        }),
-    );
+
+    await setDefaultQueries([
+      {
+        key: 'createdAt',
+        value: {
+          gte: dayjs(value.startDate).toISOString(),
+          lt: dayjs(value.endDate).toISOString(),
+        },
+        condition: 'BETWEEN',
+      },
+    ]);
   }, []);
 
   const tableFilters = useMemo(() => {
     return queries
-      .map((v) => {
-        const key = Object.keys(v)[0];
-        if (!key || typeof key !== 'string' || key === 'createdAt') return null;
-        const value = v[key];
+      .map(({ key, value, condition }) => {
         const field = filterFields.find((v) => v.key === key);
-        if (!field) return null;
 
-        return {
-          key,
-          name: field.name,
-          value,
-          format: field.format,
-          condition: v.condition,
-        };
+        if (!field) return null;
+        const { format, name } = field;
+        return { key, name, value, format, condition };
       })
       .filter((v) => !!v) as TableFilter[];
   }, [queries, filterFields]);
@@ -135,41 +155,32 @@ const useFeedbackQueryConverter = (input: {
     async (tableFilters: TableFilter[], operator: TableFilterOperator) => {
       const result = await Promise.all(
         tableFilters.map(async ({ condition, format, key, value }) => ({
-          [key]: await toQuery(projectId)[format](value),
+          key,
+          value: await toQuery(projectId)[format](value),
           condition,
         })),
       );
+
       if (result.length === 0 && !dateRange) {
-        await setQueries([{ createdAt: DEFAULT_DATE_RANGE, condition: 'IS' }]);
+        await setDefaultQueries([
+          { key: 'createdAt', value: DEFAULT_DATE_RANGE, condition: 'BETWEEN' },
+        ]);
+        await setQueries([]);
+        await setOperator('AND');
         return;
       }
 
-      setOperator(operator);
-      if (dateRange) {
-        await setQueries(
-          result
-            .filter((v) => !v.createdAt)
-            .concat({
-              createdAt: {
-                gte: dayjs(dateRange.startDate).toISOString(),
-                lt: dayjs(dateRange.endDate).toISOString(),
-              },
-              condition: 'IS',
-            }),
-        );
-      } else {
-        await setQueries(result);
-      }
+      await setOperator(operator);
+      await setQueries(result);
     },
     [dateRange],
   );
 
   return {
-    queries: queries.filter(
-      (v) =>
-        filterFields.some((vv) => vv.key === Object.keys(v)[0]) ||
-        Object.keys(v)[0] === 'createdAt',
-    ),
+    queries: queries
+      .filter((query) => filterFields.some((field) => field.key === query.key))
+      .filter((v) => !!v.value),
+    defaultQueries,
     tableFilters: tableFilters.filter((v) =>
       filterFields.some((vv) => vv.key === v.key),
     ),

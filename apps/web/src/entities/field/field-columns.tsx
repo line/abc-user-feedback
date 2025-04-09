@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -38,6 +38,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
         cell: ({ row }) => <RowDragHandleCell rowId={row.id} />,
         size: 30,
         enableSorting: false,
+        meta: { truncate: false },
       })
     : null,
     columnHelper.accessor('key', {
@@ -69,6 +70,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
           : '-';
       },
       enableSorting: false,
+      meta: { truncate: false },
     }),
     columnHelper.accessor('property', {
       header: 'Property',
@@ -81,6 +83,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       filterFn: (row, _, value: string[]) => {
         return value.some((property) => property === row.getValue('property'));
       },
+      meta: { truncate: false },
     }),
     columnHelper.accessor('status', {
       header: 'Status',
@@ -93,6 +96,7 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
       filterFn: (row, _, value: string[]) => {
         return value.some((status) => status === row.getValue('status'));
       },
+      meta: { truncate: false },
     }),
     columnHelper.accessor('description', {
       header: 'Description',

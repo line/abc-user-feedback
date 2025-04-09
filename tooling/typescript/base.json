@@ -11,6 +11,7 @@
     "isolatedModules": true,
     "incremental": true,
     "disableSourceOfProjectReferenceRedirect": true,
+    "tsBuildInfoFile": "${configDir}/.cache/tsbuildinfo.json",
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "checkJs": true,

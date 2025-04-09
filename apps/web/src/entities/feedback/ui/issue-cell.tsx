@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -68,7 +68,10 @@ const IssueCell: React.FC<IProps> = (props) => {
   const { data } = useFeedbackSearch(
     projectId,
     channelId,
-    { queries: [{ id: feedbackId, condition: 'IS' }], operator: 'AND' },
+    {
+      queries: [{ key: 'id', value: feedbackId, condition: 'IS' }],
+      operator: 'AND',
+    },
     { enabled: !issues },
   );
 
@@ -92,7 +95,7 @@ const IssueCell: React.FC<IProps> = (props) => {
     hasNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
     limit: 10,
-    queries: [{ name: throttledvalue, condition: 'CONTAINS' }],
+    queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
   });
 
   const allIssues = useMemo(() => {

@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -19,12 +19,7 @@ import dayjs from 'dayjs';
 
 import { Badge } from '@ufb/react';
 
-import {
-  Avatar,
-  DATE_TIME_FORMAT,
-  displayString,
-  TableCheckbox,
-} from '@/shared';
+import { Avatar, DATE_TIME_FORMAT, TableCheckbox } from '@/shared';
 
 import type { UserMember } from './user.type';
 
@@ -50,6 +45,7 @@ export const getUserColumns = () => [
     ),
     size: 50,
     enableSorting: false,
+    meta: { truncate: false },
   }),
   columnHelper.accessor('email', {
     header: 'Email',
@@ -73,9 +69,11 @@ export const getUserColumns = () => [
   }),
   columnHelper.accessor('department', {
     header: 'Department',
-    cell: ({ getValue }) => displayString(getValue()),
+    cell: ({ getValue }) =>
+      getValue() ? <Badge variant="subtle">{getValue()}</Badge> : '-',
     enableSorting: false,
     size: 120,
+    meta: { truncate: false },
   }),
   columnHelper.accessor('type', {
     header: 'Type',
@@ -87,6 +85,7 @@ export const getUserColumns = () => [
     cell: ({ getValue }) => {
       return <Badge variant="subtle">{getValue()}</Badge>;
     },
+    meta: { truncate: false },
   }),
   columnHelper.accessor('members', {
     header: 'Project',
@@ -107,6 +106,7 @@ export const getUserColumns = () => [
         value.includes(String(member.role.project.id)),
       );
     },
+    meta: { truncate: false },
   }),
   columnHelper.accessor('createdAt', {
     header: 'Created',

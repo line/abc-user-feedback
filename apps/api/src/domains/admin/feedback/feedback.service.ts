@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -167,6 +167,79 @@ export class FeedbackService {
     }
   }
 
+  private validateQueryV2(
+    queries: FindFeedbacksByChannelIdDtoV2['queries'],
+    fields: FieldEntity[],
+  ) {
+    const fieldsByKey = fields.reduce(
+      (fields: Record<string, FieldEntity>, field) => {
+        fields[field.key] = field;
+        return fields;
+      },
+      {},
+    );
+
+    if (queries === undefined) {
+      return;
+    }
+
+    for (const query of queries) {
+      const fieldKey = query.key;
+      const fieldValue = query.value;
+
+      if (['ids', 'issueIds'].includes(fieldKey)) {
+        if (!Array.isArray(fieldValue)) {
+          throw new BadRequestException(`${fieldKey} must be array`);
+        }
+        continue;
+      }
+      if (!(fieldKey in fieldsByKey)) {
+        throw new BadRequestException(`invalid key in query: ${fieldKey}`);
+      }
+
+      switch (fieldsByKey[fieldKey].format) {
+        case FieldFormatEnum.keyword:
+          if (typeof fieldValue !== 'string')
+            throw new BadRequestException(`${fieldKey} must be string`);
+          break;
+        case FieldFormatEnum.date:
+          if (
+            typeof fieldValue !== 'object' ||
+            !(
+              Object.prototype.hasOwnProperty.call(fieldValue, 'gte') &&
+              Object.prototype.hasOwnProperty.call(fieldValue, 'lt')
+            )
+          )
+            throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
+          break;
+        case FieldFormatEnum.multiSelect:
+          if (!Array.isArray(fieldValue))
+            throw new BadRequestException(
+              `${fieldKey} must be array of string`,
+            );
+          break;
+        case FieldFormatEnum.number:
+          if (typeof fieldValue !== 'number')
+            throw new BadRequestException(`${fieldKey} must be number`);
+          break;
+        case FieldFormatEnum.select:
+          if (typeof fieldValue !== 'string')
+            throw new BadRequestException(`${fieldKey} must be string`);
+          break;
+        case FieldFormatEnum.text:
+          if (typeof fieldValue !== 'string')
+            throw new BadRequestException(`${fieldKey} must be string`);
+          break;
+        case FieldFormatEnum.images:
+          if (!Array.isArray(fieldValue))
+            throw new BadRequestException(
+              `${fieldKey} must be array of string`,
+            );
+          break;
+      }
+    }
+  }
+
   private convertFeedback(
     timezone: string,
     feedback: Feedback,
@@ -203,6 +276,7 @@ export class FeedbackService {
     projectId,
     channelId,
     queries,
+    defaultQueries,
     operator,
     sort,
     fields,
@@ -213,6 +287,7 @@ export class FeedbackService {
     projectId: number;
     channelId: number;
     queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'];
     operator: FindFeedbacksByChannelIdDtoV2['operator'];
     sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
@@ -253,6 +328,7 @@ export class FeedbackService {
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -265,6 +341,7 @@ export class FeedbackService {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -301,8 +378,8 @@ export class FeedbackService {
 
     const fileStream = createReadStream(tempFilePath);
 
-    fileStream.on('end', async () => {
-      await fs.unlink(tempFilePath);
+    fileStream.on('end', () => {
+      void fs.unlink(tempFilePath);
     });
 
     return { streamableFile: new StreamableFile(fileStream), feedbackIds };
@@ -312,6 +389,7 @@ export class FeedbackService {
     projectId,
     channelId,
     queries,
+    defaultQueries,
     operator,
     sort,
     fields,
@@ -322,6 +400,7 @@ export class FeedbackService {
     projectId: number;
     channelId: number;
     queries: FindFeedbacksByChannelIdDtoV2['queries'];
+    defaultQueries: FindFeedbacksByChannelIdDtoV2['defaultQueries'];
     operator: FindFeedbacksByChannelIdDtoV2['operator'];
     sort: FindFeedbacksByChannelIdDtoV2['sort'];
     fields: FieldEntity[];
@@ -351,6 +430,7 @@ export class FeedbackService {
         const { data, scrollId } = await this.feedbackOSService.scrollV2({
           channelId: channelId,
           queries: queries,
+          defaultQueries: defaultQueries,
           operator: operator,
           sort: sort,
           fields: fields,
@@ -364,6 +444,7 @@ export class FeedbackService {
         const { items } = await this.feedbackMySQLService.findByChannelIdV2({
           channelId: channelId,
           queries: queries,
+          defaultQueries: defaultQueries,
           operator: operator,
           sort: sort,
           fields: fields,
@@ -546,9 +627,8 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    for (let i = 0; i < (dto.queries?.length ?? 0); i++) {
-      this.validateQuery(dto.queries?.[i] ?? {}, fields);
-    }
+    this.validateQueryV2(dto.queries, fields);
+    this.validateQueryV2(dto.defaultQueries, fields);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -695,6 +775,7 @@ export class FeedbackService {
       projectId,
       channelId,
       queries,
+      defaultQueries,
       operator,
       sort,
       type,
@@ -715,9 +796,8 @@ export class FeedbackService {
       }
     }
 
-    for (let i = 0; i < (dto.queries?.length ?? 0); i++) {
-      this.validateQuery(dto.queries?.[i] ?? {}, fields);
-    }
+    this.validateQueryV2(dto.queries, fields);
+    this.validateQueryV2(dto.defaultQueries, fields);
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
@@ -732,6 +812,7 @@ export class FeedbackService {
           projectId,
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,
@@ -744,6 +825,7 @@ export class FeedbackService {
           projectId,
           channelId,
           queries,
+          defaultQueries,
           operator,
           sort,
           fields,

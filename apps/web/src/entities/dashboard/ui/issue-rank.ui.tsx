@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -23,7 +23,6 @@ import {
   useReactTable,
 } from '@tanstack/react-table';
 import type { TFunction } from 'i18next';
-import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -68,11 +67,9 @@ const getColumns = (t: TFunction) => [
               pathname: Path.ISSUE,
               query: {
                 projectId: router.query.projectId,
-                queries: encode(
-                  JSON.stringify([
-                    { name: row.original.name, condition: 'IS' },
-                  ]),
-                ),
+                queries: JSON.stringify([
+                  { key: 'name', value: row.original.name, condition: 'IS' },
+                ]),
               },
             }}
             target="_blank"
@@ -131,7 +128,8 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
     sort: { feedbackCount: 'DESC' },
     limit,
     queries: currentIssueStatusList.map((v) => ({
-      status: v.key,
+      key: 'status',
+      value: v.key,
       condition: 'IS',
     })),
     operator: 'OR',

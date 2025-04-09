@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -14,6 +14,7 @@
  * under the License.
  */
 import { Expose, plainToInstance } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 
 import { ApiKeyEntity } from '../api-key.entity';
 
@@ -23,6 +24,14 @@ export class CreateApiKeyDto {
 
   @Expose()
   value: string;
+
+  @Expose()
+  @IsOptional()
+  createdAt?: Date;
+
+  @Expose()
+  @IsOptional()
+  deletedAt?: Date;
 
   public static from(params: any): CreateApiKeyDto {
     return plainToInstance(CreateApiKeyDto, params, {
@@ -34,6 +43,8 @@ export class CreateApiKeyDto {
     return ApiKeyEntity.from({
       projectId: params.projectId,
       value: params.value,
+      createdAt: params.createdAt,
+      deletedAt: params.deletedAt,
     });
   }
 }

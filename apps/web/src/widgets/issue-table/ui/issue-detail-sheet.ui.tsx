@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -17,7 +17,6 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useOverlay } from '@toss/use-overlay';
-import { encode } from 'js-base64';
 import { useTranslation } from 'next-i18next';
 
 import {
@@ -35,7 +34,7 @@ import {
   toast,
 } from '@ufb/react';
 
-import type { FormOverlayProps } from '@/shared';
+import type { FormOverlayProps, SearchQuery } from '@/shared';
 import {
   client,
   DeleteDialog,
@@ -105,16 +104,25 @@ const IssueDetailSheet = (props: Props) => {
         feedbackCount: number;
       })[];
 
-      for (const channel of channels) {
-        const { data: feeedbakData } = await client.post({
-          path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
-          pathParams: { channelId: channel.id, projectId },
-          body: { limit: 0, queries: [{ issueIds: [data.id] }] as never },
-        });
-        channel.feedbackCount = feeedbakData?.meta.totalItems ?? 0;
-      }
-
-      return channels;
+      const updatedChannels = await Promise.all(
+        channels.map(async (channel) => {
+          const { data: feeedbakData } = await client.post({
+            path: '/api/admin/projects/{projectId}/channels/{channelId}/feedbacks/search',
+            pathParams: { channelId: channel.id, projectId },
+            body: {
+              limit: 0,
+              queries: [
+                { key: 'issueIds', value: [data.id], condition: 'CONTAINS' },
+              ] as SearchQuery[],
+            },
+          });
+          return {
+            ...channel,
+            feedbackCount: feeedbakData?.meta.totalItems ?? 0,
+          };
+        }),
+      );
+      return updatedChannels;
     },
   });
 
@@ -183,7 +191,7 @@ const IssueDetailSheet = (props: Props) => {
               className="cursor-pointer"
               onClick={async () => {
                 await navigator.clipboard.writeText(
-                  `${window.location.origin}/${window.location.pathname}?queries=${encode(JSON.stringify([{ name: data.name, condition: 'IS' }]))}`,
+                  `${window.location.origin}/${window.location.pathname}?queries=${JSON.stringify([{ key: 'name', value: data.name, condition: 'IS' }])}`,
                 );
                 toast(t('v2.toast.copy'), {
                   icon: <Icon name="RiCheckboxMultipleFill" />,
@@ -218,11 +226,14 @@ const IssueDetailSheet = (props: Props) => {
                     query: {
                       projectId,
                       channelId: v.id,
-                      queries: encode(
-                        JSON.stringify([
-                          { issueIds: [data.id], condition: 'IS' },
-                        ]),
-                      ),
+                      queries: JSON.stringify([
+                        {
+                          key: 'issueIds',
+                          value: [data.id],
+                          condition: 'CONTAINS',
+                        },
+                      ]),
+                      defaultQueries: JSON.stringify([]),
                     },
                   }}
                   target="_blank"

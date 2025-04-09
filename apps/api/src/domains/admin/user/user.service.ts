@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -20,6 +20,7 @@ import { Transactional } from 'typeorm-transactional';
 
 import { UserInvitationMailingService } from '@/shared/mailing/user-invitation-mailing.service';
 
+import { TimeRange } from '@/common/dtos/time-range.dto';
 import { QueryV2ConditionsEnum } from '@/common/enums';
 import { CodeTypeEnum } from '../../../shared/code/code-type.enum';
 import { CodeService } from '../../../shared/code/code.service';
@@ -53,48 +54,43 @@ export class UserService {
       .leftJoinAndSelect('members.role', 'role')
       .leftJoinAndSelect('role.project', 'project');
 
-    const createdAtCondition = queries.find((query) => query.createdAt);
-    if (createdAtCondition?.createdAt) {
-      const { gte, lt } = createdAtCondition.createdAt;
-      queryBuilder.andWhere('users.created_at >= :gte', { gte });
-      queryBuilder.andWhere('users.created_at < :lt', { lt });
-    }
-
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
     queryBuilder.andWhere(
       new Brackets((qb) => {
         let paramIndex = 0;
         for (const query of queries) {
-          const { condition } = query;
-          for (const [fieldKey, value] of Object.entries(query)) {
-            if (fieldKey === 'condition') continue;
+          const { key, value, condition } = query;
 
-            const paramName = `value${paramIndex++}`;
+          const paramName = `value${paramIndex++}`;
 
-            if (fieldKey === 'type') {
-              qb[method](`users.type IN (:...${paramName})`, {
-                [paramName]: value,
-              });
-            } else if (fieldKey === 'projectId') {
-              qb[method](`project.id IN (:...${paramName})`, {
-                [paramName]: value,
-              });
-            } else if (['email', 'name', 'department'].includes(fieldKey)) {
-              const operator =
-                condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
-              const valueFormat =
-                condition === QueryV2ConditionsEnum.IS ?
-                  value?.toString().toLowerCase()
-                : `%${value?.toString().toLowerCase()}%`;
-              qb[method](`LOWER(users.${fieldKey}) ${operator} :${paramName}`, {
-                [paramName]: valueFormat,
-              });
-            }
+          if (key === 'type') {
+            qb[method](`users.type IN (:...${paramName})`, {
+              [paramName]: value,
+            });
+          } else if (key === 'projectId') {
+            qb[method](`project.id IN (:...${paramName})`, {
+              [paramName]: value,
+            });
+          } else if (key === 'createdAt' && value instanceof Object) {
+            const { gte, lt } = value as TimeRange;
+            qb.andWhere('users.created_at >= :gte', { gte });
+            qb.andWhere('users.created_at < :lt', { lt });
+          } else if (['email', 'name', 'department'].includes(key)) {
+            const operator =
+              condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE';
+            const valueFormat =
+              condition === QueryV2ConditionsEnum.IS ?
+                value?.toString().toLowerCase()
+              : `%${value?.toString().toLowerCase()}%`;
+            qb[method](`LOWER(users.${key}) ${operator} :${paramName}`, {
+              [paramName]: valueFormat,
+            });
           }
         }
       }),
     );
+
     if (order?.createdAt) {
       queryBuilder.addOrderBy(`users.createdAt`, order.createdAt);
     }

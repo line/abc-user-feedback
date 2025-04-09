@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -14,42 +14,51 @@
  * under the License.
  */
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
+import { IsArray, IsEnum, IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto, TimeRange } from '@/common/dtos';
-import type { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import { QueryV2ConditionsEnum, SortMethodEnum } from '@/common/enums';
+import { IsNullable } from '@/domains/admin/user/decorators';
 
 class QueryV2 {
-  @ApiProperty({
-    required: false,
-    type: TimeRange,
-    example: { gte: '2023-01-01', lt: '2023-12-31' },
-  })
+  @ApiProperty({ required: false })
   @IsOptional()
-  createdAt?: TimeRange;
+  @IsArray()
+  ids?: number[];
+
+  @ApiProperty({ required: true })
+  @IsString()
+  key: string;
+
+  @ApiProperty({ required: true })
+  @IsNullable()
+  value: string | string[] | TimeRange | number | number[] | undefined;
 
   @ApiProperty({
-    required: false,
-    type: TimeRange,
-    example: { gte: '2023-01-01', lt: '2023-12-31' },
+    enum: QueryV2ConditionsEnum,
+    enumName: 'QueryV2ConditionsEnum',
   })
-  @IsOptional()
-  updatedAt?: TimeRange;
-
-  [key: string]: string | string[] | TimeRange | number | number[] | undefined;
-
+  @IsEnum(QueryV2ConditionsEnum)
   condition: QueryV2ConditionsEnum;
 }
 
 export class FindFeedbacksByChannelIdRequestDtoV2 extends PaginationRequestDto {
   @ApiProperty({
     required: false,
-    description:
-      "You can query by key-value with this object. (createdAt, updatedAt are kind of examples) If you want to search by text, you can use 'searchText' key.",
+    description: 'You can query by key-value with this object.',
     type: [QueryV2],
   })
   @IsOptional()
   queries?: QueryV2[];
+
+  @ApiProperty({
+    required: false,
+    description:
+      'You can query by key-value with this object by default (like createdAt).',
+    type: [QueryV2],
+  })
+  @IsOptional()
+  defaultQueries?: QueryV2[];
 
   @ApiProperty({
     required: false,

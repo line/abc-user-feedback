@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -25,19 +25,28 @@ import type { ConfigServiceType } from '@/types/config-service.type';
     MailerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService<ConfigServiceType>) => {
-        const { host, password, port, username, sender } =
-          configService.get('smtp', { infer: true }) ?? {};
+        const {
+          host,
+          password,
+          port,
+          username,
+          sender,
+          tls,
+          cipherSpec,
+          opportunisticTLS,
+        } = configService.get('smtp', { infer: true }) ?? {};
         return {
           transport: {
             host,
             port,
-            tls: { ciphers: 'SSLv3' },
+            tls: { ciphers: cipherSpec },
             auth:
               username && password ?
                 { user: username, pass: password }
               : undefined,
-            secure: port === 465,
+            secure: tls,
             pool: true,
+            opportunisticTLS,
           },
           defaults: { from: `"User feedback" <${sender}>` },
           template: {

@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -44,9 +44,10 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
 
   const perms = usePermissions(projectId);
 
-  const { data, refetch, isRefetching } = useOAIQuery({
+  const { data, refetch } = useOAIQuery({
     path: '/api/admin/projects/{projectId}/channels/{channelId}',
     variables: { channelId, projectId },
+    queryOptions: { refetchOnWindowFocus: false },
   });
 
   const { mutate, isPending } = useOAIMutation({
@@ -89,12 +90,12 @@ const ImageConfigSetting: React.FC<IProps> = (props) => {
         region: '',
       });
     }
-  }, [data, isRefetching]);
+  }, [data]);
+
   useWarnIfUnsavedChanges(methods.formState.isDirty);
 
   const onSubmit = (input: ChannelImageConfig) => {
     if (!data) return;
-
     mutate({ ...data, imageConfig: input });
   };
 

@@ -1,7 +1,7 @@
 /**
- * Copyright 2023 LINE Corporation
+ * Copyright 2025 LY Corporation
  *
- * LINE Corporation licenses this file to you under the Apache License,
+ * LY Corporation licenses this file to you under the Apache License,
  * version 2.0 (the "License"); you may not use this file except in compliance
  * with the License. You may obtain a copy of the License at:
  *
@@ -106,65 +106,67 @@ export class MemberService {
 
     queryBuilder.andWhere('role.project_id = :projectId', { projectId });
 
-    const createdAtCondition = queries.find((query) => query.createdAt);
-    if (createdAtCondition?.createdAt) {
-      const { gte, lt } = createdAtCondition.createdAt;
-      queryBuilder.andWhere('members.created_at >= :gte', { gte });
-      queryBuilder.andWhere('members.created_at < :lt', { lt });
-    }
-
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
     queryBuilder.andWhere(
       new Brackets((qb) => {
         let paramIndex = 0;
         for (const query of queries) {
-          const { condition } = query;
-          for (const [fieldKey, value] of Object.entries(query)) {
-            if (fieldKey === 'condition' || fieldKey === 'createdAt') continue;
+          const { key, value, condition } = query;
 
-            const paramName = `value${paramIndex++}`;
+          const paramName = `value${paramIndex++}`;
 
-            if (fieldKey === 'role') {
-              qb[method](
-                `role.name ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
-                {
-                  [paramName]:
-                    condition === QueryV2ConditionsEnum.IS ?
-                      value
-                    : `%${value?.toString()}%`,
-                },
-              );
-            } else if (fieldKey === 'name') {
-              qb[method](
-                `user.name ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
-                {
-                  [paramName]:
-                    condition === QueryV2ConditionsEnum.IS ?
-                      value
-                    : `%${value?.toString()}%`,
-                },
-              );
-            } else if (fieldKey === 'email') {
-              qb[method](
-                `user.email ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
-                {
-                  [paramName]:
-                    condition === QueryV2ConditionsEnum.IS ?
-                      value
-                    : `%${value?.toString()}%`,
-                },
-              );
-            } else if (fieldKey === 'department') {
-              qb[method](
-                `user.department ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
-                {
-                  [paramName]:
-                    condition === QueryV2ConditionsEnum.IS ?
-                      value
-                    : `%${value?.toString()}%`,
-                },
-              );
+          if (key === 'role') {
+            qb[method](
+              `role.name ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+              {
+                [paramName]:
+                  condition === QueryV2ConditionsEnum.IS ?
+                    value
+                  : `%${value?.toString()}%`,
+              },
+            );
+          } else if (key === 'name') {
+            qb[method](
+              `user.name ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+              {
+                [paramName]:
+                  condition === QueryV2ConditionsEnum.IS ?
+                    value
+                  : `%${value?.toString()}%`,
+              },
+            );
+          } else if (key === 'email') {
+            qb[method](
+              `user.email ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+              {
+                [paramName]:
+                  condition === QueryV2ConditionsEnum.IS ?
+                    value
+                  : `%${value?.toString()}%`,
+              },
+            );
+          } else if (key === 'department') {
+            qb[method](
+              `user.department ${condition === QueryV2ConditionsEnum.IS ? '=' : 'LIKE'} :${paramName}`,
+              {
+                [paramName]:
+                  condition === QueryV2ConditionsEnum.IS ?
+                    value
+                  : `%${value?.toString()}%`,
+              },
+            );
+          } else if (
+            key === 'createdAt' &&
+            value &&
+            typeof value === 'object'
+          ) {
+            const { gte, lt } = value;
+            if (gte) {
+              qb.andWhere('members.created_at >= :gte', { gte });
+            }
+            if (lt) {
+              qb.andWhere('members.created_at < :lt', { lt });
             }
           }
         }
