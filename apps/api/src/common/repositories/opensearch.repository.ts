@@ -25,6 +25,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { Client, errors } from '@opensearch-project/opensearch';
+import { Indices_PutMapping_Response } from '@opensearch-project/opensearch/api';
 
 import type {
   CreateDataDto,
@@ -78,11 +79,12 @@ export class OpensearchRepository {
       );
     } catch (error) {
       this.logger.log(`Error creating index: ${error}`);
-      if (error.meta && error.meta.body) {
+      if (error?.meta?.body) {
         this.logger.log(
           `OpenSearch error details:${JSON.stringify(error.meta.body, null, 2)}`,
         );
       }
+      throw error;
     }
     await this.opensearchClient.indices.putAlias({
       index: indexName,
@@ -96,10 +98,23 @@ export class OpensearchRepository {
     });
     if (statusCode !== 200) throw new NotFoundException('index is not found');
 
-    return await this.opensearchClient.indices.putMapping({
-      index,
-      body: { properties: mappings },
-    });
+    let response: Indices_PutMapping_Response;
+    try {
+      response = await this.opensearchClient.indices.putMapping({
+        index,
+        body: { properties: mappings },
+      });
+    } catch (error) {
+      this.logger.log(`Error put mapping: ${error}`);
+      if (error?.meta?.body) {
+        this.logger.log(
+          `OpenSearch error details:${JSON.stringify(error.meta.body, null, 2)}`,
+        );
+      }
+      throw error;
+    }
+
+    return response;
   }
 
   async createData({ id, index, data }: CreateDataDto) {
