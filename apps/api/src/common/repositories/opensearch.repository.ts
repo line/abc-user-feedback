@@ -74,6 +74,7 @@ export class OpensearchRepository {
           },
         },
       });
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (response) {
         this.logger.log(
           `Index created successfully: ${JSON.stringify(response.body, null, 2)}`,
