@@ -21,9 +21,11 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Client, errors } from '@opensearch-project/opensearch';
+import { Indices_PutMapping_Response } from '@opensearch-project/opensearch/api';
 
 import type {
   CreateDataDto,
@@ -38,6 +40,7 @@ import { LargeWindowException } from './large-window.exception';
 
 @Injectable()
 export class OpensearchRepository {
+  private logger = new Logger(OpensearchRepository.name);
   private opensearchClient: Client;
   constructor(@Inject('OPENSEARCH_CLIENT') opensearchClient: Client) {
     this.opensearchClient = opensearchClient;
@@ -45,31 +48,47 @@ export class OpensearchRepository {
 
   async createIndex({ index }: CreateIndexDto) {
     const indexName = 'channel_' + index;
-    await this.opensearchClient.indices.create({
-      index: indexName,
-      body: {
-        settings: {
-          index: { max_ngram_diff: 1 },
-          analysis: {
-            analyzer: {
-              ngram_analyzer: {
-                type: 'custom',
-                filter: ['lowercase', 'asciifolding', 'cjk_width'],
-                tokenizer: 'ngram_tokenizer',
+    try {
+      const response = await this.opensearchClient.indices.create({
+        index: indexName,
+        body: {
+          settings: {
+            index: { max_ngram_diff: 1 },
+            analysis: {
+              analyzer: {
+                ngram_analyzer: {
+                  type: 'custom',
+                  filter: ['lowercase', 'asciifolding', 'cjk_width'],
+                  tokenizer: 'ngram_tokenizer',
+                },
               },
-            },
-            tokenizer: {
-              ngram_tokenizer: {
-                type: 'ngram',
-                min_gram: 1,
-                max_gram: 2,
-                token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
+              tokenizer: {
+                ngram_tokenizer: {
+                  type: 'ngram',
+                  min_gram: 1,
+                  max_gram: 2,
+                  token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
+                },
               },
             },
           },
         },
-      },
-    });
+      });
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      if (response) {
+        this.logger.log(
+          `Index created successfully: ${JSON.stringify(response.body, null, 2)}`,
+        );
+      }
+    } catch (error) {
+      this.logger.log(`Error creating index: ${error}`);
+      if (error?.meta?.body) {
+        this.logger.log(
+          `OpenSearch error details:${JSON.stringify(error.meta.body, null, 2)}`,
+        );
+      }
+      throw error;
+    }
     await this.opensearchClient.indices.putAlias({
       index: indexName,
       name: index,
@@ -82,10 +101,23 @@ export class OpensearchRepository {
     });
     if (statusCode !== 200) throw new NotFoundException('index is not found');
 
-    return await this.opensearchClient.indices.putMapping({
-      index,
-      body: { properties: mappings },
-    });
+    let response: Indices_PutMapping_Response;
+    try {
+      response = await this.opensearchClient.indices.putMapping({
+        index,
+        body: { properties: mappings },
+      });
+    } catch (error) {
+      this.logger.log(`Error put mapping: ${error}`);
+      if (error?.meta?.body) {
+        this.logger.log(
+          `OpenSearch error details:${JSON.stringify(error.meta.body, null, 2)}`,
+        );
+      }
+      throw error;
+    }
+
+    return response;
   }
 
   async createData({ id, index, data }: CreateDataDto) {
