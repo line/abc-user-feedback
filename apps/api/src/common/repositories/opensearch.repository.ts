@@ -74,9 +74,11 @@ export class OpensearchRepository {
           },
         },
       });
-      this.logger.log(
-        `Index created successfully: ${JSON.stringify(response.body, null, 2)}`,
-      );
+      if (response) {
+        this.logger.log(
+          `Index created successfully: ${JSON.stringify(response.body, null, 2)}`,
+        );
+      }
     } catch (error) {
       this.logger.log(`Error creating index: ${error}`);
       if (error?.meta?.body) {
