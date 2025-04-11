@@ -252,7 +252,7 @@ export class FeedbackService {
         Array.isArray(feedback[key]) ?
           key === 'issues' ?
             feedback[key].map((issue) => issue.name).join(', ')
-          : feedback[key].join(', ')
+          : feedback[key].sort().join(', ')
         : (feedback[key] as string);
 
       if (fieldsByKey[key].format === FieldFormatEnum.date) {
