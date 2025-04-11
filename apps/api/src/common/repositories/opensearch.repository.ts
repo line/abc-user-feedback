@@ -21,6 +21,7 @@ import {
   Inject,
   Injectable,
   InternalServerErrorException,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { Client, errors } from '@opensearch-project/opensearch';
@@ -38,6 +39,7 @@ import { LargeWindowException } from './large-window.exception';
 
 @Injectable()
 export class OpensearchRepository {
+  private logger = new Logger(OpensearchRepository.name);
   private opensearchClient: Client;
   constructor(@Inject('OPENSEARCH_CLIENT') opensearchClient: Client) {
     this.opensearchClient = opensearchClient;
@@ -45,31 +47,43 @@ export class OpensearchRepository {
 
   async createIndex({ index }: CreateIndexDto) {
     const indexName = 'channel_' + index;
-    await this.opensearchClient.indices.create({
-      index: indexName,
-      body: {
-        settings: {
-          index: { max_ngram_diff: 1 },
-          analysis: {
-            analyzer: {
-              ngram_analyzer: {
-                type: 'custom',
-                filter: ['lowercase', 'asciifolding', 'cjk_width'],
-                tokenizer: 'ngram_tokenizer',
+    try {
+      const response = await this.opensearchClient.indices.create({
+        index: indexName,
+        body: {
+          settings: {
+            index: { max_ngram_diff: 1 },
+            analysis: {
+              analyzer: {
+                ngram_analyzer: {
+                  type: 'custom',
+                  filter: ['lowercase', 'asciifolding', 'cjk_width'],
+                  tokenizer: 'ngram_tokenizer',
+                },
               },
-            },
-            tokenizer: {
-              ngram_tokenizer: {
-                type: 'ngram',
-                min_gram: 1,
-                max_gram: 2,
-                token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
+              tokenizer: {
+                ngram_tokenizer: {
+                  type: 'ngram',
+                  min_gram: 1,
+                  max_gram: 2,
+                  token_chars: ['letter', 'digit', 'punctuation', 'symbol'],
+                },
               },
             },
           },
         },
-      },
-    });
+      });
+      this.logger.log(
+        `Index created successfully: ${JSON.stringify(response.body, null, 2)}`,
+      );
+    } catch (error) {
+      this.logger.log(`Error creating index: ${error}`);
+      if (error.meta && error.meta.body) {
+        this.logger.log(
+          `OpenSearch error details:${JSON.stringify(error.meta.body, null, 2)}`,
+        );
+      }
+    }
     await this.opensearchClient.indices.putAlias({
       index: indexName,
       name: index,
