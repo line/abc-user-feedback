@@ -93,9 +93,11 @@ const IssueCell: React.FC<IProps> = (props) => {
     refetch: allIssuesRefetch,
     fetchNextPage,
     hasNextPage,
+    isFetchingNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
     limit: 10,
     queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
+    sort: { name: 'ASC' },
   });
 
   const allIssues = useMemo(() => {
@@ -228,7 +230,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   )
                   .map((issue) => (
                     <ComboboxItem
-                      key={issue.id}
+                      key={issue.name}
                       onSelect={() => attatchIssue({ issueId: issue.id })}
                       className="flex justify-between"
                       value={issue.name}
@@ -245,6 +247,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                 <InfiniteScrollArea
                   fetchNextPage={fetchNextPage}
                   hasNextPage={hasNextPage}
+                  isFetchingNextPage={isFetchingNextPage}
                 />
               </ComboboxGroup>
             )}

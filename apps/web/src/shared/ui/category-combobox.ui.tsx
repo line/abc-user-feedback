@@ -167,12 +167,6 @@ const CategoryCombobox = (props: Props) => {
                   </span>
                 </ComboboxItem>
               ))}
-            <InfiniteScrollArea
-              fetchNextPage={() => setPage(page + 1)}
-              hasNextPage={
-                (data?.meta.itemCount ?? 0) < (data?.meta.totalItems ?? 0)
-              }
-            />
           </ComboboxGroup>
           <ComboboxGroup
             heading={
@@ -204,6 +198,7 @@ const CategoryCombobox = (props: Props) => {
               hasNextPage={
                 (data?.meta.itemCount ?? 0) < (data?.meta.totalItems ?? 0)
               }
+              isFetchingNextPage={isLoading}
             />
           </ComboboxGroup>
           {isLoading && <div className="combobox-item">Loading...</div>}

@@ -37,6 +37,7 @@ import useFeedbackDownload from '../lib/use-feedback-download';
 
 interface Props {
   fields: Field[];
+  defaultQueries: SearchQuery[];
   queries: SearchQuery[];
   disabled: boolean;
   table: Table<Feedback>;
@@ -45,7 +46,15 @@ interface Props {
 }
 
 const FeedbackTableDownload = (props: Props) => {
-  const { fields, queries, disabled, table, operator, totalItems } = props;
+  const {
+    fields,
+    queries,
+    disabled,
+    table,
+    operator,
+    totalItems,
+    defaultQueries,
+  } = props;
   const router = useRouter();
   const { channelId, projectId } = router.query;
   const { t } = useTranslation();
@@ -78,6 +87,7 @@ const FeedbackTableDownload = (props: Props) => {
       download({
         type,
         fieldIds,
+        defaultQueries,
         queries,
         operator,
         filterFeedbackIds: feedbackIds.length > 0 ? feedbackIds : undefined,

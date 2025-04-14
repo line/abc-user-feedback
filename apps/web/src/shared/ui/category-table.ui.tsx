@@ -72,6 +72,7 @@ const CategoryTable = (props: Props) => {
       <InfiniteScrollArea
         fetchNextPage={fetchNextPage}
         hasNextPage={hasNextPage}
+        isFetchingNextPage={isFetchingNextPage}
       />
       {isFetchingNextPage && (
         <div className="flex justify-center">

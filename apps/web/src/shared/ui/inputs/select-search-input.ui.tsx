@@ -45,6 +45,7 @@ interface Props {
   hasNextPage?: boolean;
   inputValue?: string;
   setInputValue?: (value: string) => void;
+  isFetchingNextPage?: boolean;
 }
 
 const SelectSearchInput: React.FC<Props> = (props) => {
@@ -60,6 +61,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     hasNextPage,
     inputValue,
     setInputValue,
+    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
@@ -116,6 +118,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
             <InfiniteScrollArea
               hasNextPage={hasNextPage}
               fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
             />
           </ComboboxList>
         </ComboboxContent>
