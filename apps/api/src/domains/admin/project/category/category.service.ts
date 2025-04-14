@@ -13,12 +13,13 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Not, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
+import { isInvalidSortMethod } from '../../feedback/feedback.common';
 import { CategoryEntity } from './category.entity';
 import {
   CreateCategoryDto,
@@ -60,6 +61,7 @@ export class CategoryService {
   async findAllByProjectId(
     dto: FindAllCategoriesByProjectIdDto,
   ): Promise<Pagination<CategoryEntity, IPaginationMeta>> {
+    const { sort = {} } = dto;
     const queryBuilder = this.repository
       .createQueryBuilder('category')
       .leftJoin('category.project', 'project')
@@ -70,6 +72,16 @@ export class CategoryService {
         categoryName: `%${dto.categoryName}%`,
       });
     }
+
+    Object.keys(sort).map((fieldName) => {
+      if (isInvalidSortMethod(sort[fieldName])) {
+        throw new BadRequestException('invalid sort method');
+      }
+
+      if (fieldName === 'name') {
+        queryBuilder.addOrderBy('category.name', sort[fieldName]);
+      }
+    });
 
     const items = await queryBuilder
       .offset((dto.page - 1) * dto.limit)

@@ -17,10 +17,20 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
 import { PaginationRequestDto } from '@/common/dtos';
+import { SortMethodEnum } from '@/common/enums';
 
 export class GetAllCategoriesRequestDto extends PaginationRequestDto {
   @ApiProperty({ required: false })
   @IsOptional()
   @IsString()
   categoryName: string;
+
+  @ApiProperty({
+    required: false,
+    description:
+      "You can sort category by specific key with sort method values: 'ASC', 'DESC'",
+    example: { name: 'ASC' },
+  })
+  @IsOptional()
+  sort?: Record<string, SortMethodEnum>;
 }

@@ -70,10 +70,10 @@ export class CategoryController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOkResponse({ type: GetAllCategoriesResponseDto })
-  @Get()
+  @Post('/search')
   async findAll(
     @Param('projectId', ParseIntPipe) projectId: number,
-    @Query() body: GetAllCategoriesRequestDto,
+    @Body() body: GetAllCategoriesRequestDto,
   ) {
     return GetAllCategoriesResponseDto.transform(
       await this.categoryService.findAllByProjectId({
