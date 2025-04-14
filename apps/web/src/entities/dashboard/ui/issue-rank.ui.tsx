@@ -110,10 +110,10 @@ interface IProps {
   to: Date;
 }
 const limitOptions = [
-  { label: '5', value: '5' },
-  { label: '10', value: '10' },
-  { label: '15', value: '15' },
-  { label: '20', value: '20' },
+  { label: 'Top 5', value: '5' },
+  { label: 'Top 10', value: '10' },
+  { label: 'Top 15', value: '15' },
+  { label: 'Top 20', value: '20' },
 ];
 
 const IssueRank: React.FC<IProps> = ({ projectId }) => {
