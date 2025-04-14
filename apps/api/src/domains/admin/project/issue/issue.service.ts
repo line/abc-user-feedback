@@ -272,6 +272,8 @@ export class IssueService {
         queryBuilder.addOrderBy(`issues.created_at`, sort[fieldName]);
       } else if (fieldName === 'updatedAt') {
         queryBuilder.addOrderBy(`issues.updated_at`, sort[fieldName]);
+      } else if (fieldName === 'name') {
+        queryBuilder.addOrderBy(`issues.name`, sort[fieldName]);
       }
     });
 
