@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
@@ -121,6 +121,10 @@ const CategoryCombobox = (props: Props) => {
       toast.error(error.message);
     },
   });
+
+  useEffect(() => {
+    setPage(1);
+  }, [throttledvalue, projectId]);
 
   return (
     <Combobox>

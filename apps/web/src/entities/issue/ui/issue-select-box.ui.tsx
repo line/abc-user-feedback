@@ -16,6 +16,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
 import { useThrottle } from 'react-use';
 
 import { client, MultiSelectSearchInput } from '@/shared';
@@ -34,6 +35,14 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
 
   const [inputValue, setInputValue] = useState('');
   const throttedValue = useThrottle(inputValue, 500);
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    void queryClient.resetQueries({
+      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
+    });
+  }, [throttedValue, projectId, queryClient]);
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useIssueSearchInfinite(projectId, {
       queries: [{ key: 'name', value: throttedValue, condition: 'CONTAINS' }],

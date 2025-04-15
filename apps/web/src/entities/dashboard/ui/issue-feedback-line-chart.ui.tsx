@@ -14,6 +14,7 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { useThrottle } from 'react-use';
@@ -95,6 +96,14 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
       })),
     })),
   );
+
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    void queryClient.resetQueries({
+      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
+    });
+  }, [throttledSearchName, projectId, queryClient]);
 
   const {
     data: allIssueData,

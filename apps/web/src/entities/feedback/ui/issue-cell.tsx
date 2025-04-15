@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
@@ -88,6 +88,12 @@ const IssueCell: React.FC<IProps> = (props) => {
     });
   };
 
+  useEffect(() => {
+    void queryClient.resetQueries({
+      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
+    });
+  }, [throttledvalue, projectId, queryClient]);
+
   const {
     data: allIssueData,
     refetch: allIssuesRefetch,
@@ -157,6 +163,14 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
+  if (feedbackId === 101) {
+    console.log('allIssueData: ', allIssueData.pageParams);
+    console.log(
+      allIssues.filter(
+        (v) => !currentIssues.some((issue) => issue.id === v.id),
+      ),
+    );
+  }
 
   return (
     <div
@@ -230,7 +244,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   )
                   .map((issue) => (
                     <ComboboxItem
-                      key={issue.name}
+                      key={issue.id + inputValue}
                       onSelect={() => attatchIssue({ issueId: issue.id })}
                       className="flex justify-between"
                       value={issue.name}
