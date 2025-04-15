@@ -15,8 +15,10 @@
  */
 
 import { PaginationDto } from '@/common/dtos';
+import type { SortMethodEnum } from '@/common/enums/sort-method.enum';
 
 export class FindAllCategoriesByProjectIdDto extends PaginationDto {
   projectId: number;
   categoryName?: string;
+  sort?: Record<string, SortMethodEnum>;
 }
