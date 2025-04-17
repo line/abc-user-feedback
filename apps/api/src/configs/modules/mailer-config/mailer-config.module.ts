@@ -25,28 +25,19 @@ import type { ConfigServiceType } from '@/types/config-service.type';
     MailerModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService<ConfigServiceType>) => {
-        const {
-          host,
-          password,
-          port,
-          username,
-          sender,
-          tls,
-          cipherSpec,
-          opportunisticTLS,
-        } = configService.get('smtp', { infer: true }) ?? {};
+        const { host, password, port, username, sender } =
+          configService.get('smtp', { infer: true }) ?? {};
         return {
           transport: {
             host,
             port,
-            tls: { ciphers: cipherSpec },
+            tls: { ciphers: 'SSLv3' },
             auth:
               username && password ?
                 { user: username, pass: password }
               : undefined,
-            secure: tls,
+            secure: port === 465,
             pool: true,
-            opportunisticTLS,
           },
           defaults: { from: `"User feedback" <${sender}>` },
           template: {
