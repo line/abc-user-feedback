@@ -31,7 +31,13 @@ import {
   toast,
 } from '@ufb/react';
 
-import { client, cn, InfiniteScrollArea, usePermissions } from '@/shared';
+import {
+  client,
+  cn,
+  commandFilter,
+  InfiniteScrollArea,
+  usePermissions,
+} from '@/shared';
 import type { Category } from '@/entities/category';
 
 import { useCategorySearchInfinite } from '../lib';
@@ -143,19 +149,7 @@ const CategoryCombobox = (props: Props) => {
           {children}
         </button>
       </ComboboxTrigger>
-      <ComboboxContent
-        commandProps={{
-          filter(value, search) {
-            value = value.toLocaleLowerCase();
-            search = search.toLocaleLowerCase();
-            return (
-              value.startsWith(search) ? 1
-              : value.includes(search) ? 0.5
-              : 0
-            );
-          },
-        }}
-      >
+      <ComboboxContent commandProps={{ filter: commandFilter }}>
         <ComboboxInput
           onClick={(e) => e.stopPropagation()}
           onValueChange={(value) => setInputValue(value)}

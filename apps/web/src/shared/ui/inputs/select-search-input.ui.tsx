@@ -31,6 +31,8 @@ import {
   InputLabel,
 } from '@ufb/react';
 
+import { commandFilter } from '@/shared/utils';
+
 import InfiniteScrollArea from '../infinite-scroll-area.ui';
 
 interface Props {
@@ -89,20 +91,7 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           {currentOption?.label ?? value ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
-        <ComboboxContent
-          align="start"
-          commandProps={{
-            filter(value, search) {
-              value = value.toLocaleLowerCase();
-              search = search.toLocaleLowerCase();
-              return (
-                value.startsWith(search) ? 1
-                : value.includes(search) ? 0.5
-                : 0
-              );
-            },
-          }}
-        >
+        <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
           <ComboboxInput
             placeholder={t('v2.placeholder.select')}
             value={inputValue}

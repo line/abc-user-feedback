@@ -27,6 +27,8 @@ import {
   Icon,
 } from '@ufb/react';
 
+import { commandFilter } from '@/shared/utils';
+
 interface Props {
   children?: React.ReactNode;
   error?: string;
@@ -53,19 +55,7 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
   return (
     <Combobox>
       <ComboboxTrigger disabled={disabled}>{children}</ComboboxTrigger>
-      <ComboboxContent
-        commandProps={{
-          filter(value, search) {
-            value = value.toLocaleLowerCase();
-            search = search.toLocaleLowerCase();
-            return (
-              value.startsWith(search) ? 1
-              : value.includes(search) ? 0.5
-              : 0
-            );
-          },
-        }}
-      >
+      <ComboboxContent commandProps={{ filter: commandFilter }}>
         <ComboboxInput
           placeholder={placeholder}
           value={inputValue}

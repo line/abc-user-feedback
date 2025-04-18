@@ -13,11 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './cn';
-export * from './parse-as-date-range';
-export * from './get-day-count';
-export * from './display-string';
-export * from './path-parsing';
-export * from './is-object-equal';
-export * from './first-letter-pascal';
-export * from './command-filter';
+export const commandFilter = (value: string, search: string) => {
+  value = value.toLocaleLowerCase();
+  search = search.toLocaleLowerCase();
+  return (
+    value.startsWith(search) ? 1
+    : value.includes(search) ? 0.5
+    : 0
+  );
+};

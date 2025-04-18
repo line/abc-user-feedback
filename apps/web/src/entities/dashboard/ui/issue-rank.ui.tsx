@@ -34,7 +34,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { DescriptionTooltip, ISSUES, Path } from '@/shared';
+import { commandFilter, DescriptionTooltip, ISSUES, Path } from '@/shared';
 import { DashboardTable } from '@/shared/ui';
 import type { IssueStatus } from '@/entities/issue';
 import { IssueBadge, useIssueSearch } from '@/entities/issue';
@@ -172,19 +172,7 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
             <Icon name="RiFilter3Line" />
             Filter
           </ComboboxTrigger>
-          <ComboboxContent
-            commandProps={{
-              filter(value, search) {
-                value = value.toLocaleLowerCase();
-                search = search.toLocaleLowerCase();
-                return (
-                  value.startsWith(search) ? 1
-                  : value.includes(search) ? 0.5
-                  : 0
-                );
-              },
-            }}
-          >
+          <ComboboxContent commandProps={{ filter: commandFilter }}>
             <ComboboxList>
               {issues.map((issue) => (
                 <ComboboxSelectItem

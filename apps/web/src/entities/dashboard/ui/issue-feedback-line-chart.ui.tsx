@@ -14,7 +14,6 @@
  * under the License.
  */
 import { useEffect, useMemo, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
 import dayjs from 'dayjs';
 import { useTranslation } from 'next-i18next';
 import { useThrottle } from 'react-use';
@@ -34,6 +33,7 @@ import {
 
 import {
   client,
+  commandFilter,
   getDayCount,
   InfiniteScrollArea,
   SimpleLineChart,
@@ -97,14 +97,6 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     })),
   );
 
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    void queryClient.resetQueries({
-      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
-    });
-  }, [throttledSearchName, projectId, queryClient]);
-
   const {
     data: allIssueData,
     fetchNextPage,
@@ -153,19 +145,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
             <Icon name="RiFilter3Line" />
             Filter
           </ComboboxTrigger>
-          <ComboboxContent
-            commandProps={{
-              filter(value, search) {
-                value = value.toLocaleLowerCase();
-                search = search.toLocaleLowerCase();
-                return (
-                  value.startsWith(search) ? 1
-                  : value.includes(search) ? 0.5
-                  : 0
-                );
-              },
-            }}
-          >
+          <ComboboxContent commandProps={{ filter: commandFilter }}>
             <ComboboxInput
               onValueChange={(value) => setSearchName(value)}
               value={searchName}

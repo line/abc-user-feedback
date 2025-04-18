@@ -34,6 +34,7 @@ import {
 import {
   client,
   cn,
+  commandFilter,
   InfiniteScrollArea,
   useOAIMutation,
   usePermissions,
@@ -184,19 +185,7 @@ const IssueCell: React.FC<IProps> = (props) => {
             )}
           </button>
         </ComboboxTrigger>
-        <ComboboxContent
-          commandProps={{
-            filter(value, search) {
-              value = value.toLocaleLowerCase();
-              search = search.toLocaleLowerCase();
-              return (
-                value.startsWith(search) ? 1
-                : value.includes(search) ? 0.5
-                : 0
-              );
-            },
-          }}
-        >
+        <ComboboxContent commandProps={{ filter: commandFilter }}>
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
