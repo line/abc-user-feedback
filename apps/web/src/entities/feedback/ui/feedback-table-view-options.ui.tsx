@@ -43,7 +43,19 @@ const FeedbackTableViewOptions = ({ table, fields }: Props) => {
         View
         <Badge variant="subtle">{table.getVisibleFlatColumns().length}</Badge>
       </ComboboxTrigger>
-      <ComboboxContent>
+      <ComboboxContent
+        commandProps={{
+          filter(value, search) {
+            value = value.toLocaleLowerCase();
+            search = search.toLocaleLowerCase();
+            return (
+              value.startsWith(search) ? 1
+              : value.includes(search) ? 0.5
+              : 0
+            );
+          },
+        }}
+      >
         <ComboboxList maxHeight="400px">
           {table
             .getAllColumns()

@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
@@ -129,12 +129,6 @@ const CategoryCombobox = (props: Props) => {
     },
   });
 
-  useEffect(() => {
-    void queryClient.resetQueries({
-      queryKey: ['/api/admin/projects/{projectId}/categories/search'],
-    });
-  }, [throttledvalue, projectId, queryClient]);
-
   return (
     <Combobox>
       <ComboboxTrigger asChild>
@@ -149,7 +143,19 @@ const CategoryCombobox = (props: Props) => {
           {children}
         </button>
       </ComboboxTrigger>
-      <ComboboxContent>
+      <ComboboxContent
+        commandProps={{
+          filter(value, search) {
+            value = value.toLocaleLowerCase();
+            search = search.toLocaleLowerCase();
+            return (
+              value.startsWith(search) ? 1
+              : value.includes(search) ? 0.5
+              : 0
+            );
+          },
+        }}
+      >
         <ComboboxInput
           onClick={(e) => e.stopPropagation()}
           onValueChange={(value) => setInputValue(value)}

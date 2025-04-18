@@ -89,7 +89,20 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           {currentOption?.label ?? value ?? t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
-        <ComboboxContent align="start">
+        <ComboboxContent
+          align="start"
+          commandProps={{
+            filter(value, search) {
+              value = value.toLocaleLowerCase();
+              search = search.toLocaleLowerCase();
+              return (
+                value.startsWith(search) ? 1
+                : value.includes(search) ? 0.5
+                : 0
+              );
+            },
+          }}
+        >
           <ComboboxInput
             placeholder={t('v2.placeholder.select')}
             value={inputValue}

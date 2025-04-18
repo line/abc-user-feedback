@@ -53,7 +53,19 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
   return (
     <Combobox>
       <ComboboxTrigger disabled={disabled}>{children}</ComboboxTrigger>
-      <ComboboxContent>
+      <ComboboxContent
+        commandProps={{
+          filter(value, search) {
+            value = value.toLocaleLowerCase();
+            search = search.toLocaleLowerCase();
+            return (
+              value.startsWith(search) ? 1
+              : value.includes(search) ? 0.5
+              : 0
+            );
+          },
+        }}
+      >
         <ComboboxInput
           placeholder={placeholder}
           value={inputValue}

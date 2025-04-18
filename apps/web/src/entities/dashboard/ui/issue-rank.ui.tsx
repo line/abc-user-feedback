@@ -172,7 +172,19 @@ const IssueRank: React.FC<IProps> = ({ projectId }) => {
             <Icon name="RiFilter3Line" />
             Filter
           </ComboboxTrigger>
-          <ComboboxContent>
+          <ComboboxContent
+            commandProps={{
+              filter(value, search) {
+                value = value.toLocaleLowerCase();
+                search = search.toLocaleLowerCase();
+                return (
+                  value.startsWith(search) ? 1
+                  : value.includes(search) ? 0.5
+                  : 0
+                );
+              },
+            }}
+          >
             <ComboboxList>
               {issues.map((issue) => (
                 <ComboboxSelectItem

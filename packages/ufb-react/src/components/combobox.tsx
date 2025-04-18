@@ -64,36 +64,43 @@ const Combobox = ({
 
 const ComboboxContent = React.forwardRef<
   React.ElementRef<typeof PopoverContent>,
-  React.ComponentPropsWithoutRef<typeof PopoverContent>
->(({ className, children, onMouseEnter, onMouseLeave, ...props }, ref) => {
-  const { trigger, setIsHover } = React.useContext(ComboboxContext);
+  React.ComponentPropsWithoutRef<typeof PopoverContent> & {
+    commandProps?: React.ComponentPropsWithoutRef<typeof CommandPrimitive>;
+  }
+>(
+  (
+    { className, children, onMouseEnter, onMouseLeave, commandProps, ...props },
+    ref,
+  ) => {
+    const { trigger, setIsHover } = React.useContext(ComboboxContext);
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (trigger === 'hover') {
-      setIsHover(true);
-    }
-    onMouseEnter?.(e);
-  };
+    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (trigger === 'hover') {
+        setIsHover(true);
+      }
+      onMouseEnter?.(e);
+    };
 
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (trigger === 'hover') {
-      setIsHover(false);
-    }
-    onMouseLeave?.(e);
-  };
+    const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (trigger === 'hover') {
+        setIsHover(false);
+      }
+      onMouseLeave?.(e);
+    };
 
-  return (
-    <PopoverContent
-      ref={ref}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      {...props}
-      className={cn('combobox-content', className)}
-    >
-      <CommandPrimitive>{children}</CommandPrimitive>
-    </PopoverContent>
-  );
-});
+    return (
+      <PopoverContent
+        ref={ref}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        {...props}
+        className={cn('combobox-content', className)}
+      >
+        <CommandPrimitive {...commandProps}>{children}</CommandPrimitive>
+      </PopoverContent>
+    );
+  },
+);
 ComboboxContent.displayName = CommandPrimitive.displayName;
 
 interface ComboboxInputProps

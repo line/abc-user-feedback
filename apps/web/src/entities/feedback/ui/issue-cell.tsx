@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
@@ -94,16 +94,10 @@ const IssueCell: React.FC<IProps> = (props) => {
     hasNextPage,
     isFetchingNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
-    limit: 10,
+    limit: 50,
     queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
     sort: { name: 'ASC' },
   });
-
-  useEffect(() => {
-    void queryClient.invalidateQueries({
-      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
-    });
-  }, [throttledvalue, projectId, queryClient]);
 
   const allIssues = useMemo(() => {
     return allIssueData.pages
@@ -161,6 +155,9 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
+  if (feedbackId === 139) {
+    console.log('allIssues: ', allIssues);
+  }
 
   return (
     <div
@@ -187,7 +184,19 @@ const IssueCell: React.FC<IProps> = (props) => {
             )}
           </button>
         </ComboboxTrigger>
-        <ComboboxContent>
+        <ComboboxContent
+          commandProps={{
+            filter(value, search) {
+              value = value.toLocaleLowerCase();
+              search = search.toLocaleLowerCase();
+              return (
+                value.startsWith(search) ? 1
+                : value.includes(search) ? 0.5
+                : 0
+              );
+            },
+          }}
+        >
           <ComboboxInput
             onClick={(e) => e.stopPropagation()}
             onValueChange={(value) => setInputValue(value)}
@@ -234,7 +243,7 @@ const IssueCell: React.FC<IProps> = (props) => {
                   )
                   .map((issue) => (
                     <ComboboxItem
-                      key={issue.id + inputValue}
+                      key={issue.id}
                       onSelect={() => attatchIssue({ issueId: issue.id })}
                       className="flex justify-between"
                       value={issue.name}

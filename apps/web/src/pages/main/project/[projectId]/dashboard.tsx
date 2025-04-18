@@ -169,7 +169,19 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               View
               <Badge variant="subtle">{viewCount}</Badge>
             </ComboboxTrigger>
-            <ComboboxContent>
+            <ComboboxContent
+              commandProps={{
+                filter(value, search) {
+                  value = value.toLocaleLowerCase();
+                  search = search.toLocaleLowerCase();
+                  return (
+                    value.startsWith(search) ? 1
+                    : value.includes(search) ? 0.5
+                    : 0
+                  );
+                },
+              }}
+            >
               <ComboboxList>
                 {viewItems.map(({ label, value }) => (
                   <ComboboxSelectItem
