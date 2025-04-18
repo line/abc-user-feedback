@@ -88,15 +88,8 @@ const IssueCell: React.FC<IProps> = (props) => {
     });
   };
 
-  useEffect(() => {
-    void queryClient.resetQueries({
-      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
-    });
-  }, [throttledvalue, projectId, queryClient]);
-
   const {
     data: allIssueData,
-    refetch: allIssuesRefetch,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -105,6 +98,12 @@ const IssueCell: React.FC<IProps> = (props) => {
     queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
     sort: { name: 'ASC' },
   });
+
+  useEffect(() => {
+    void queryClient.invalidateQueries({
+      queryKey: ['/api/admin/projects/{projectId}/issues/search'],
+    });
+  }, [throttledvalue, projectId, queryClient]);
 
   const allIssues = useMemo(() => {
     return allIssueData.pages
@@ -157,20 +156,11 @@ const IssueCell: React.FC<IProps> = (props) => {
     queryOptions: {
       async onSuccess() {
         await refetch();
-        await allIssuesRefetch();
         setInputValue('');
         toast.success(t('v2.toast.success'));
       },
     },
   });
-  if (feedbackId === 101) {
-    console.log('allIssueData: ', allIssueData.pageParams);
-    console.log(
-      allIssues.filter(
-        (v) => !currentIssues.some((issue) => issue.id === v.id),
-      ),
-    );
-  }
 
   return (
     <div

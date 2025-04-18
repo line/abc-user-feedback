@@ -19,7 +19,7 @@ import { motion } from 'framer-motion';
 import { Badge, Icon } from '@ufb/react';
 
 import { cn, usePermissions } from '@/shared';
-import CategoryCombobox from '@/shared/ui/category-combobox.ui';
+import { CategoryCombobox } from '@/entities/category';
 import type { Issue } from '@/entities/issue';
 import type { IssueTracker } from '@/entities/issue-tracker';
 

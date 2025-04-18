@@ -907,9 +907,25 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get: operations['CategoryController_findAll'];
+    get?: never;
     put?: never;
     post: operations['CategoryController_create'];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  '/api/admin/projects/{projectId}/categories/search': {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post: operations['CategoryController_findAll'];
     delete?: never;
     options?: never;
     head?: never;
@@ -1866,6 +1882,26 @@ export interface components {
        * @example 1
        */
       id: number;
+    };
+    GetAllCategoriesRequestDto: {
+      /**
+       * @default 10
+       * @example 10
+       */
+      limit?: number;
+      /**
+       * @default 1
+       * @example 1
+       */
+      page?: number;
+      categoryName?: string;
+      /**
+       * @description You can sort category by specific key with sort method values: 'ASC', 'DESC'
+       * @example {
+       *       "name": "ASC"
+       *     }
+       */
+      sort?: Record<string, unknown>;
     };
     GetAllCategoriesDto: {
       id: number;
@@ -3752,31 +3788,6 @@ export interface operations {
       };
     };
   };
-  CategoryController_findAll: {
-    parameters: {
-      query?: {
-        limit?: number;
-        page?: number;
-        categoryName?: string;
-      };
-      header?: never;
-      path: {
-        projectId: number;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          'application/json': components['schemas']['GetAllCategoriesResponseDto'];
-        };
-      };
-    };
-  };
   CategoryController_create: {
     parameters: {
       query?: never;
@@ -3798,6 +3809,31 @@ export interface operations {
         };
         content: {
           'application/json': components['schemas']['CreateCategoryResponseDto'];
+        };
+      };
+    };
+  };
+  CategoryController_findAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        projectId: number;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        'application/json': components['schemas']['GetAllCategoriesRequestDto'];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          'application/json': components['schemas']['GetAllCategoriesResponseDto'];
         };
       };
     };

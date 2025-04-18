@@ -14,7 +14,7 @@
  * under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'next-i18next';
@@ -31,18 +31,16 @@ import {
   toast,
 } from '@ufb/react';
 
+import { client, cn, InfiniteScrollArea, usePermissions } from '@/shared';
 import type { Category } from '@/entities/category';
 
-import { client, useOAIQuery, usePermissions } from '../lib';
-import { cn } from '../utils';
+import { useCategorySearchInfinite } from '../lib';
 import CategoryComboboxEditPopover from './category-combobox-edit-popover.ui';
-import InfiniteScrollArea from './infinite-scroll-area.ui';
 
 interface Props extends React.PropsWithChildren {
   category?: Category | null;
   issueId: number;
 }
-const LIMIT = 20;
 const CategoryCombobox = (props: Props) => {
   const { category, issueId, children } = props;
 
@@ -53,14 +51,22 @@ const CategoryCombobox = (props: Props) => {
 
   const [inputValue, setInputValue] = useState('');
   const throttledvalue = useThrottle(inputValue, 500);
-  const [page, setPage] = useState(1);
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useOAIQuery({
-    path: '/api/admin/projects/{projectId}/categories',
-    variables: { projectId, categoryName: throttledvalue, limit: page * LIMIT },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useCategorySearchInfinite(Number(projectId), {
+      limit: 10,
+      queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
+      sort: { name: 'ASC' },
+    });
+
+  const allcategories = useMemo(() => {
+    return data.pages
+      .map((v) => v?.items)
+      .filter((v) => !!v)
+      .flat();
+  }, [data]);
 
   const refetch = async () => {
     await queryClient.invalidateQueries({
@@ -115,6 +121,7 @@ const CategoryCombobox = (props: Props) => {
     },
     async onSuccess() {
       await refetch();
+      setInputValue('');
       toast.success(t('v2.toast.success'));
     },
     onError(error) {
@@ -123,8 +130,10 @@ const CategoryCombobox = (props: Props) => {
   });
 
   useEffect(() => {
-    setPage(1);
-  }, [throttledvalue, projectId]);
+    void queryClient.resetQueries({
+      queryKey: ['/api/admin/projects/{projectId}/categories/search'],
+    });
+  }, [throttledvalue, projectId, queryClient]);
 
   return (
     <Combobox>
@@ -154,7 +163,7 @@ const CategoryCombobox = (props: Props) => {
               </span>
             }
           >
-            {data?.items
+            {allcategories
               .filter((v) => category?.id === v.id)
               .map(({ id, name }) => (
                 <ComboboxItem
@@ -179,7 +188,7 @@ const CategoryCombobox = (props: Props) => {
               </span>
             }
           >
-            {data?.items
+            {allcategories
               .filter((v) => category?.id !== v.id)
               .map(({ id, name }) => (
                 <ComboboxItem
@@ -198,17 +207,15 @@ const CategoryCombobox = (props: Props) => {
                 </ComboboxItem>
               ))}
             <InfiniteScrollArea
-              fetchNextPage={() => setPage(page + 1)}
-              hasNextPage={
-                (data?.meta.itemCount ?? 0) < (data?.meta.totalItems ?? 0)
-              }
-              isFetchingNextPage={isLoading}
+              fetchNextPage={fetchNextPage}
+              hasNextPage={hasNextPage}
+              isFetchingNextPage={isFetchingNextPage}
             />
           </ComboboxGroup>
-          {isLoading && <div className="combobox-item">Loading...</div>}
           {!!inputValue &&
-            !data?.items.some((v) => v.name === inputValue) &&
-            !isLoading && (
+            perms.includes('issue_create') &&
+            !allcategories.some((v) => v.name === inputValue) &&
+            !allcategories.some((v) => v.id === category?.id) && (
               <div
                 className="combobox-item"
                 onClick={async () => {
