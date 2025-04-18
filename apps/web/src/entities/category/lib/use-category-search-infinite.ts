@@ -15,11 +15,7 @@
  */
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import type {
-  OAIMutationResponse,
-  OAIRequestBody,
-  SearchQuery,
-} from '@/shared';
+import type { OAIMutationResponse, OAIRequestBody } from '@/shared';
 import { client } from '@/shared';
 
 type TData = OAIMutationResponse<
@@ -28,16 +24,14 @@ type TData = OAIMutationResponse<
 >;
 
 interface IBody
-  extends Omit<
-    OAIRequestBody<'/api/admin/projects/{projectId}/categories/search', 'post'>,
-    'queries'
-  > {
-  queries: SearchQuery[];
-}
+  extends OAIRequestBody<
+    '/api/admin/projects/{projectId}/categories/search',
+    'post'
+  > {}
 
 const useCategorySearchInfinite = (
   projectId: number,
-  body: IBody = { limit: 10, page: 1, queries: [], sort: {} },
+  body: IBody = { limit: 10, page: 1, sort: {} },
 ) => {
   return useInfiniteQuery<TData>({
     queryKey: [

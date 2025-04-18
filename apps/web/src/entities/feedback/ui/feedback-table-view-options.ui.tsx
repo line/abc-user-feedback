@@ -25,7 +25,6 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { commandFilter } from '@/shared';
 import type { FieldInfo } from '@/entities/field';
 import { FieldFormatLabel } from '@/entities/field';
 
@@ -44,7 +43,7 @@ const FeedbackTableViewOptions = ({ table, fields }: Props) => {
         View
         <Badge variant="subtle">{table.getVisibleFlatColumns().length}</Badge>
       </ComboboxTrigger>
-      <ComboboxContent commandProps={{ filter: commandFilter }}>
+      <ComboboxContent>
         <ComboboxList maxHeight="400px">
           {table
             .getAllColumns()

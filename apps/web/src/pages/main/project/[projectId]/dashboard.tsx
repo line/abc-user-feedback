@@ -29,7 +29,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { commandFilter, DateRangePicker, parseAsDateRange } from '@/shared';
+import { DateRangePicker, parseAsDateRange } from '@/shared';
 import type { DateRangeType, NextPageWithLayout } from '@/shared/types';
 import {
   FeedbackLineChart,
@@ -169,7 +169,7 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
               View
               <Badge variant="subtle">{viewCount}</Badge>
             </ComboboxTrigger>
-            <ComboboxContent commandProps={{ filter: commandFilter }}>
+            <ComboboxContent>
               <ComboboxList>
                 {viewItems.map(({ label, value }) => (
                   <ComboboxSelectItem

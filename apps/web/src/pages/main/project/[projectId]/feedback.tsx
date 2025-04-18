@@ -169,7 +169,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             key: 'issueIds',
             format: 'issue',
             name: field.name,
-            matchType: ['IS', 'CONTAINS'],
+            matchType: ['CONTAINS', 'IS'],
             visible: true,
           };
         }
@@ -188,7 +188,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             name: field.name,
             format: field.format,
             options: field.options,
-            matchType: ['IS', 'CONTAINS'],
+            matchType: ['CONTAINS', 'IS'],
           };
         }
       })

@@ -27,8 +27,6 @@ import {
   Icon,
 } from '@ufb/react';
 
-import { commandFilter } from '@/shared/utils';
-
 interface Props {
   children?: React.ReactNode;
   error?: string;
@@ -55,7 +53,7 @@ const ComboboxInputBox: React.FC<Props> = (props) => {
   return (
     <Combobox>
       <ComboboxTrigger disabled={disabled}>{children}</ComboboxTrigger>
-      <ComboboxContent commandProps={{ filter: commandFilter }}>
+      <ComboboxContent>
         <ComboboxInput
           placeholder={placeholder}
           value={inputValue}

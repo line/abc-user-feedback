@@ -26,12 +26,7 @@ import {
   Icon,
 } from '@ufb/react';
 
-import {
-  commandFilter,
-  SimpleLineChart,
-  useAllChannels,
-  useOAIQuery,
-} from '@/shared';
+import { SimpleLineChart, useAllChannels, useOAIQuery } from '@/shared';
 import type { Channel } from '@/entities/channel';
 
 import { useLineChartData } from '../lib';
@@ -92,7 +87,7 @@ const FeedbackLineChartWrapper: React.FC<IProps> = (props) => {
             <Icon name="RiFilter3Line" />
             Filter
           </ComboboxTrigger>
-          <ComboboxContent commandProps={{ filter: commandFilter }}>
+          <ComboboxContent>
             <ComboboxList maxHeight="200px">
               {channels?.items.map((channel) => (
                 <ComboboxSelectItem

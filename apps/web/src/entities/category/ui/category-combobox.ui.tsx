@@ -63,7 +63,7 @@ const CategoryCombobox = (props: Props) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useCategorySearchInfinite(Number(projectId), {
       limit: 10,
-      queries: [{ key: 'name', value: throttledvalue, condition: 'CONTAINS' }],
+      categoryName: throttledvalue,
       sort: { name: 'ASC' },
     });
 
@@ -134,6 +134,16 @@ const CategoryCombobox = (props: Props) => {
       toast.error(error.message);
     },
   });
+
+  console.log(
+    '!allcategories.some((v) => v.name === inputValue): ',
+    !allcategories.some((v) => v.name === inputValue),
+  );
+  console.log('allcategories: ', allcategories);
+  console.log('throttledvalue: ', throttledvalue);
+  console.log('perms.includes(): ', perms.includes('issue_update'));
+  console.log('!!inputValue: ', !!inputValue);
+  console.log('category: ', category);
 
   return (
     <Combobox>
@@ -213,9 +223,8 @@ const CategoryCombobox = (props: Props) => {
             />
           </ComboboxGroup>
           {!!inputValue &&
-            perms.includes('issue_create') &&
-            !allcategories.some((v) => v.name === inputValue) &&
-            !allcategories.some((v) => v.id === category?.id) && (
+            perms.includes('issue_update') &&
+            !allcategories.some((v) => v.name === inputValue) && (
               <div
                 className="combobox-item"
                 onClick={async () => {
