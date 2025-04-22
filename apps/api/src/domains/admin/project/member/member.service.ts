@@ -105,6 +105,7 @@ export class MemberService {
       .leftJoinAndSelect('members.user', 'user');
 
     queryBuilder.andWhere('role.project_id = :projectId', { projectId });
+    queryBuilder.andWhere('user.type != :type', { type: 'SUPER' });
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
