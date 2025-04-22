@@ -34,10 +34,12 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
 
   const [inputValue, setInputValue] = useState('');
   const throttedValue = useThrottle(inputValue, 500);
-  const { data, fetchNextPage, hasNextPage } = useIssueSearchInfinite(
-    projectId,
-    { queries: [{ key: 'name', value: throttedValue, condition: 'CONTAINS' }] },
-  );
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useIssueSearchInfinite(projectId, {
+      queries: [{ key: 'name', value: throttedValue, condition: 'CONTAINS' }],
+      sort: { name: 'ASC' },
+    });
 
   useEffect(() => {
     if (!value) {
@@ -71,6 +73,7 @@ const IssueSelectBox = ({ onChange, value }: Props) => {
       hasNextPage={hasNextPage}
       inputValue={inputValue}
       setInputValue={setInputValue}
+      isFetchingNextPage={isFetchingNextPage}
     />
   );
 };

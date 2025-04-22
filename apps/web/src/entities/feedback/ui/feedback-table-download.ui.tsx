@@ -37,8 +37,8 @@ import useFeedbackDownload from '../lib/use-feedback-download';
 
 interface Props {
   fields: Field[];
-  queries: SearchQuery[];
   defaultQueries: SearchQuery[];
+  queries: SearchQuery[];
   disabled: boolean;
   table: Table<Feedback>;
   operator: TableFilterOperator;
@@ -87,9 +87,9 @@ const FeedbackTableDownload = (props: Props) => {
       download({
         type,
         fieldIds,
+        defaultQueries,
         queries,
         operator,
-        defaultQueries,
         filterFeedbackIds: feedbackIds.length > 0 ? feedbackIds : undefined,
       }),
       {

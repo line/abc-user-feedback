@@ -29,9 +29,8 @@ import {
   toast,
 } from '@ufb/react';
 
+import { client } from '@/shared';
 import type { Category } from '@/entities/category';
-
-import { client } from '../lib';
 
 interface Props {
   projectId: number;

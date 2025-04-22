@@ -80,7 +80,7 @@ const IssueKanbanColumn = (props: Props) => {
 
   const { data, hasNextPage, fetchNextPage, isFetching } =
     useIssueSearchInfinite(projectId, {
-      queries: queries,
+      queries,
       defaultQueries: defaultQueries.concat([
         { key: 'status', value: issue.status, condition: 'IS' },
       ]),

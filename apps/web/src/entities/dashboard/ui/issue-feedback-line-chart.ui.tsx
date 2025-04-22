@@ -33,6 +33,7 @@ import {
 
 import {
   client,
+  commandFilter,
   getDayCount,
   InfiniteScrollArea,
   SimpleLineChart,
@@ -100,11 +101,13 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
     data: allIssueData,
     fetchNextPage,
     hasNextPage,
+    isFetchingNextPage,
   } = useIssueSearchInfinite(Number(projectId), {
     limit: 10,
     queries: [
       { key: 'name', value: throttledSearchName, condition: 'CONTAINS' },
     ],
+    sort: { name: 'ASC' },
   });
 
   const allIssues = useMemo(() => {
@@ -142,7 +145,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
             <Icon name="RiFilter3Line" />
             Filter
           </ComboboxTrigger>
-          <ComboboxContent>
+          <ComboboxContent commandProps={{ filter: commandFilter }}>
             <ComboboxInput
               onValueChange={(value) => setSearchName(value)}
               value={searchName}
@@ -189,6 +192,7 @@ const IssueFeedbackLineChart: React.FC<IProps> = ({ from, projectId, to }) => {
                   <InfiniteScrollArea
                     fetchNextPage={fetchNextPage}
                     hasNextPage={hasNextPage}
+                    isFetchingNextPage={isFetchingNextPage}
                   />
                 </ComboboxGroup>
               )}

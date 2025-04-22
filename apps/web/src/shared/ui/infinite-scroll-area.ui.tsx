@@ -21,16 +21,17 @@ import { cn } from '../utils';
 interface Props {
   hasNextPage?: boolean;
   fetchNextPage?: () => void;
+  isFetchingNextPage?: boolean;
 }
 
 const InfiniteScrollArea = (props: Props) => {
-  const { hasNextPage, fetchNextPage } = props;
+  const { hasNextPage, fetchNextPage, isFetchingNextPage } = props;
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
+        if (!entry.isIntersecting || isFetchingNextPage) return;
         void fetchNextPage?.();
       });
     });

@@ -57,7 +57,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
   const [inputValue, setInputValue] = useState('');
   const throttledInputValue = useThrottle(inputValue, 1000);
 
-  const { data: userData } = useUserSearch({
+  const { data: userData, isLoading } = useUserSearch({
     limit: LIMIT * page,
     page: 0,
     queries: [
@@ -114,6 +114,7 @@ const MemberFormDialog: React.FC<Props> = (props) => {
           hasNextPage={
             (userData?.meta.itemCount ?? 0) < (userData?.meta.totalItems ?? 0)
           }
+          isFetchingNextPage={isLoading}
           inputValue={inputValue}
           setInputValue={(v) => {
             setInputValue(v);

@@ -32,6 +32,8 @@ import {
   Tag,
 } from '@ufb/react';
 
+import { commandFilter } from '@/shared/utils';
+
 import InfiniteScrollArea from '../infinite-scroll-area.ui';
 
 interface Props {
@@ -46,6 +48,7 @@ interface Props {
   hasNextPage?: boolean;
   inputValue?: string;
   setInputValue?: (value: string) => void;
+  isFetchingNextPage?: boolean;
 }
 
 const MultiSelectSearchInput: React.FC<Props> = (props) => {
@@ -61,6 +64,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
     hasNextPage,
     inputValue,
     setInputValue,
+    isFetchingNextPage,
   } = props;
 
   const { t } = useTranslation();
@@ -85,7 +89,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
           : t('v2.placeholder.select')}
           <Icon name="RiArrowDownSLine" />
         </ComboboxTrigger>
-        <ComboboxContent align="start">
+        <ComboboxContent align="start" commandProps={{ filter: commandFilter }}>
           <ComboboxInput
             placeholder={t('v2.placeholder.select')}
             value={inputValue}
@@ -118,6 +122,7 @@ const MultiSelectSearchInput: React.FC<Props> = (props) => {
             <InfiniteScrollArea
               hasNextPage={hasNextPage}
               fetchNextPage={fetchNextPage}
+              isFetchingNextPage={isFetchingNextPage}
             />
           </ComboboxList>
         </ComboboxContent>

@@ -20,13 +20,13 @@ import { useTranslation } from 'next-i18next';
 import type { IconNameType } from '@ufb/react';
 import { Badge, Icon, InputField, Tag, Textarea, TextInput } from '@ufb/react';
 
+import { CategoryCombobox } from '@/entities/category';
 import type { Category } from '@/entities/category';
 import IssueCell from '@/entities/feedback/ui/issue-cell';
 
 import { DATE_TIME_FORMAT } from '../constants';
 import type { BadgeColor } from '../constants/color-map';
 import { BADGE_COLOR_MAP } from '../constants/color-map';
-import CategoryCombobox from './category-combobox.ui';
 import ImagePreviewButton from './image-preview-button';
 import { DatePicker, SelectInput, SelectSearchInput } from './inputs';
 

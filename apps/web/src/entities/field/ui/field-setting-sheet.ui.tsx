@@ -103,7 +103,6 @@ const FieldSettingSheet: React.FC<IProps> = (props) => {
     resolver: zodResolver(fieldInfoSchema),
     defaultValues: data ?? defaultValues,
   });
-  console.log('formState: ', formState.errors);
 
   useEffect(() => {
     if (isSameKey) setValue('name', watch('key'), { shouldDirty: true });

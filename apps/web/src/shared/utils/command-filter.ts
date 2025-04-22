@@ -13,5 +13,12 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-export * from './category.type';
-export * from './ui';
+export const commandFilter = (value: string, search: string) => {
+  value = value.toLocaleLowerCase();
+  search = search.toLocaleLowerCase();
+  return (
+    value.startsWith(search) ? 1
+    : value.includes(search) ? 0.5
+    : 0
+  );
+};
