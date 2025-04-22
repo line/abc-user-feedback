@@ -28,6 +28,8 @@ import {
 import type { FieldInfo } from './field.type';
 import OptionListPopover from './ui/option-list-popover.ui';
 
+const DEFAULT_FIELD_COLUMNS_KEYS = ['id', 'createdAt', 'updatedAt', 'issues'];
+
 const columnHelper = createColumnHelper<FieldInfo>();
 
 export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
@@ -43,7 +45,15 @@ export const getFieldColumns = (reorder?: (data: FieldInfo[]) => void) =>
     : null,
     columnHelper.accessor('key', {
       header: 'Key',
-      cell: ({ getValue }) => <span>{displayString(getValue())}</span>,
+      cell: ({ getValue }) => (
+        <div className="flex items-center gap-1">
+          <span>{displayString(getValue())}</span>
+          {DEFAULT_FIELD_COLUMNS_KEYS.includes(getValue()) && (
+            <Badge variant="outline">Default</Badge>
+          )}
+        </div>
+      ),
+
       enableSorting: false,
     }),
     columnHelper.accessor('name', {
