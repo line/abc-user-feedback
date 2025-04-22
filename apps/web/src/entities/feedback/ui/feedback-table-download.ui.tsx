@@ -39,7 +39,6 @@ interface Props {
   fields: Field[];
   defaultQueries: SearchQuery[];
   queries: SearchQuery[];
-  defaultQueries: SearchQuery[];
   disabled: boolean;
   table: Table<Feedback>;
   operator: TableFilterOperator;
@@ -91,7 +90,6 @@ const FeedbackTableDownload = (props: Props) => {
         defaultQueries,
         queries,
         operator,
-        defaultQueries,
         filterFeedbackIds: feedbackIds.length > 0 ? feedbackIds : undefined,
       }),
       {
