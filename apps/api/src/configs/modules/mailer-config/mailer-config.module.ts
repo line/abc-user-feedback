@@ -31,9 +31,9 @@ import type { ConfigServiceType } from '@/types/config-service.type';
           port,
           username,
           sender,
-          tls,
           cipherSpec,
           opportunisticTLS,
+          tls,
         } = configService.get('smtp', { infer: true }) ?? {};
         return {
           transport: {
@@ -46,7 +46,6 @@ import type { ConfigServiceType } from '@/types/config-service.type';
               : undefined,
             secure: tls,
             pool: true,
-            opportunisticTLS,
           },
           defaults: { from: `"User feedback" <${sender}>` },
           template: {
@@ -54,6 +53,7 @@ import type { ConfigServiceType } from '@/types/config-service.type';
             adapter: new HandlebarsAdapter(),
             options: { strict: true },
           },
+          opportunisticTLS,
         };
       },
     }),

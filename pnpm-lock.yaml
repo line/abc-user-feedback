@@ -93,8 +93,8 @@ importers:
         specifier: ^3.0.0
         version: 3.4.0
       '@swc/cli':
-        specifier: ^0.6.0
-        version: 0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)
+        specifier: ^0.7.0
+        version: 0.7.3(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)
       '@swc/helpers':
         specifier: ^0.5.10
         version: 0.5.15
@@ -209,7 +209,7 @@ importers:
         version: 9.6.0
       '@nestjs/cli':
         specifier: ^11.0.0
-        version: 11.0.5(@swc/cli@0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3))(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@22.14.1)
+        version: 11.0.5(@swc/cli@0.7.3(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3))(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@22.14.1)
       '@nestjs/schematics':
         specifier: ^11.0.0
         version: 11.0.2(chokidar@4.0.3)(typescript@5.8.2)
@@ -624,8 +624,8 @@ importers:
         specifier: ^4.0.0
         version: 4.1.0
       lucide-react:
-        specifier: ^0.488.0
-        version: 0.488.0(react@19.0.0)
+        specifier: ^0.501.0
+        version: 0.501.0(react@19.0.0)
       react-day-picker:
         specifier: 8.10.1
         version: 8.10.1(date-fns@4.1.0)(react@19.0.0)
@@ -4165,8 +4165,8 @@ packages:
   '@swc-node/sourcemap-support@0.5.1':
     resolution: {integrity: sha512-JxIvIo/Hrpv0JCHSyRpetAdQ6lB27oFYhv0PKCNf1g2gUXOjpeR1exrXccRxLMuAV5WAmGFBwRnNOJqN38+qtg==}
 
-  '@swc/cli@0.6.0':
-    resolution: {integrity: sha512-Q5FsI3Cw0fGMXhmsg7c08i4EmXCrcl+WnAxb6LYOLHw4JFFC3yzmx9LaXZ7QMbA+JZXbigU2TirI7RAfO0Qlnw==}
+  '@swc/cli@0.7.3':
+    resolution: {integrity: sha512-rnVXNnlURjdOuPaBIwZ3TmBA44BF/eP0j154LanlgPEYfau74ige7cpKlKkZr1IBqMOG99lAnYNxQipDWA3hdg==}
     engines: {node: '>= 16.14.0'}
     hasBin: true
     peerDependencies:
@@ -7599,8 +7599,8 @@ packages:
     resolution: {integrity: sha512-Nv9KddBcQSlQopmBHXSsZVY5xsdlZkdH/Iey0BlcBYggMd4two7cZnKOK9vmy3nY0O5RGH99z1PCeTpPqszUYg==}
     engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
-  lucide-react@0.488.0:
-    resolution: {integrity: sha512-ronlL0MyKut4CEzBY/ai2ZpKPxyWO4jUqdAkm2GNK5Zn3Rj+swDz+3lvyAUXN0PNqPKIX6XM9Xadwz/skLs/pQ==}
+  lucide-react@0.501.0:
+    resolution: {integrity: sha512-E2KoyhW59fCb/yUbR3rbDer83fqn7a8NG91ZhIot2yWaPHjPyGzzsNKh40N//GezYShAuycf3TcQksRQznIsRw==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -9145,11 +9145,6 @@ packages:
 
   semver@7.6.2:
     resolution: {integrity: sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==}
-    engines: {node: '>=10'}
-    hasBin: true
-
-  semver@7.6.3:
-    resolution: {integrity: sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==}
     engines: {node: '>=10'}
     hasBin: true
 
@@ -12861,7 +12856,7 @@ snapshots:
       axios: 1.8.4
       rxjs: 7.8.2
 
-  '@nestjs/cli@11.0.5(@swc/cli@0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3))(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@22.14.1)':
+  '@nestjs/cli@11.0.5(@swc/cli@0.7.3(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3))(@swc/core@1.11.13(@swc/helpers@0.5.15))(@types/node@22.14.1)':
     dependencies:
       '@angular-devkit/core': 19.1.8(chokidar@4.0.3)
       '@angular-devkit/schematics': 19.1.8(chokidar@4.0.3)
@@ -12883,7 +12878,7 @@ snapshots:
       webpack: 5.98.0(@swc/core@1.11.13(@swc/helpers@0.5.15))
       webpack-node-externals: 3.0.0
     optionalDependencies:
-      '@swc/cli': 0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)
+      '@swc/cli': 0.7.3(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)
       '@swc/core': 1.11.13(@swc/helpers@0.5.15)
     transitivePeerDependencies:
       - '@types/node'
@@ -14354,16 +14349,16 @@ snapshots:
       source-map-support: 0.5.21
       tslib: 2.8.1
 
-  '@swc/cli@0.6.0(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)':
+  '@swc/cli@0.7.3(@swc/core@1.11.13(@swc/helpers@0.5.15))(chokidar@4.0.3)':
     dependencies:
       '@swc/core': 1.11.13(@swc/helpers@0.5.15)
       '@swc/counter': 0.1.3
       '@xhmikosr/bin-wrapper': 13.0.5
       commander: 8.3.0
-      fast-glob: 3.3.2
+      fast-glob: 3.3.3
       minimatch: 9.0.5
       piscina: 4.7.0
-      semver: 7.6.3
+      semver: 7.7.1
       slash: 3.0.0
       source-map: 0.7.4
     optionalDependencies:
@@ -18484,7 +18479,7 @@ snapshots:
 
   lru.min@1.1.2: {}
 
-  lucide-react@0.488.0(react@19.0.0):
+  lucide-react@0.501.0(react@19.0.0):
     dependencies:
       react: 19.0.0
 
@@ -20381,8 +20376,6 @@ snapshots:
   semver@6.3.1: {}
 
   semver@7.6.2: {}
-
-  semver@7.6.3: {}
 
   semver@7.7.1: {}
 

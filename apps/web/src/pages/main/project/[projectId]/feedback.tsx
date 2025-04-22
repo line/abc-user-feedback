@@ -395,6 +395,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             table={table}
             fields={fields}
             queries={queries}
+            defaultQueries={defaultQueries}
             disabled={!perms.includes('feedback_download_read')}
             operator={operator}
             totalItems={feedbackData?.meta.totalItems ?? 0}

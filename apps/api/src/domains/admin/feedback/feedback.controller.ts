@@ -139,7 +139,15 @@ export class FeedbackController {
     @Res() res: FastifyReply,
     @CurrentUser() user: UserDto,
   ) {
-    const { queries, operator, sort, type, fieldIds, filterFeedbackIds } = body;
+    const {
+      queries,
+      operator,
+      sort,
+      type,
+      fieldIds,
+      filterFeedbackIds,
+      defaultQueries,
+    } = body;
     const channel = await this.channelService.findById({ channelId });
     const projectName = channel.project.name;
     const channelName = channel.name;
@@ -154,6 +162,7 @@ export class FeedbackController {
         type,
         fieldIds,
         filterFeedbackIds,
+        defaultQueries,
       });
     const stream = streamableFile.getStream();
 
