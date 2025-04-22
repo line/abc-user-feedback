@@ -156,9 +156,6 @@ const IssueCell: React.FC<IProps> = (props) => {
       },
     },
   });
-  if (feedbackId === 139) {
-    console.log('allIssues: ', allIssues);
-  }
 
   return (
     <div

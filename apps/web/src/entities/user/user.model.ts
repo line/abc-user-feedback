@@ -92,7 +92,7 @@ export const useUserStore = create<State & Action>((set, get) => ({
         await router.push({ pathname: Path.MAIN });
       }
     } catch (error) {
-      console.log('error: ', error);
+      console.error('error: ', error);
     }
   },
 }));

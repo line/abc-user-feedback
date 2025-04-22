@@ -135,16 +135,6 @@ const CategoryCombobox = (props: Props) => {
     },
   });
 
-  console.log(
-    '!allcategories.some((v) => v.name === inputValue): ',
-    !allcategories.some((v) => v.name === inputValue),
-  );
-  console.log('allcategories: ', allcategories);
-  console.log('throttledvalue: ', throttledvalue);
-  console.log('perms.includes(): ', perms.includes('issue_update'));
-  console.log('!!inputValue: ', !!inputValue);
-  console.log('category: ', category);
-
   return (
     <Combobox>
       <ComboboxTrigger asChild>
