@@ -117,6 +117,9 @@ export class FeedbackService {
       if ('searchText' === fieldKey) {
         continue;
       }
+      if ('issueName' === fieldKey) {
+        continue;
+      }
       if ('condition' === fieldKey) {
         continue;
       }
@@ -595,6 +598,18 @@ export class FeedbackService {
       throw new BadRequestException('invalid channel');
     }
     dto.fields = fields;
+
+    if (dto.query?.issueName) {
+      const issue = await this.issueService.findByName({
+        name: dto.query.issueName as string,
+      });
+      if (issue) {
+        dto.query.issueIds = [issue.id];
+      } else {
+        dto.query.issueIds = [];
+      }
+    }
+    delete dto.query?.issueName;
 
     this.validateQuery(dto.query ?? {}, fields);
 

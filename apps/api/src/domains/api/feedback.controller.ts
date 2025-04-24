@@ -24,6 +24,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -44,6 +45,7 @@ import {
   DeleteFeedbacksRequestDto,
   FindFeedbacksByChannelIdRequestDto,
 } from '../admin/feedback/dtos/requests';
+import { GetFeedbacksByChannelIdRequestDto } from '../admin/feedback/dtos/requests/get-feedbacks-by-channel-id-request.dto';
 import {
   AddIssueResponseDto,
   FindFeedbacksByChannelIdResponseDto,
@@ -251,7 +253,7 @@ export class FeedbackController {
     description: 'Channel id',
     example: 1,
   })
-  @ApiBody({ type: FindFeedbacksByChannelIdRequestDto })
+  @ApiBody({ type: FindFeedbacksByChannelIdRequestDto, required: false })
   @ApiOkResponse({ type: FindFeedbacksByChannelIdResponseDto })
   @Post('feedbacks/search')
   async findByChannelId(
@@ -260,6 +262,41 @@ export class FeedbackController {
   ) {
     return FindFeedbacksByChannelIdResponseDto.transform(
       await this.feedbackService.findByChannelId({ ...body, channelId }),
+    );
+  }
+
+  @ApiOperation({
+    summary: 'Get Feedbacks by Channel',
+    description: `Searches for feedback entries by channel ID with keyword.`,
+  })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiOkResponse({ type: FindFeedbacksByChannelIdResponseDto })
+  @Get('feedbacks')
+  async getByChannelId(
+    @Param('channelId', ParseIntPipe) channelId: number,
+    @Query() body: GetFeedbacksByChannelIdRequestDto,
+  ) {
+    return FindFeedbacksByChannelIdResponseDto.transform(
+      await this.feedbackService.findByChannelId({
+        page: body.page,
+        limit: body.limit,
+        query: {
+          searchText: body.searchText,
+          issueName: body.issueName,
+        },
+        channelId,
+      }),
     );
   }
 
