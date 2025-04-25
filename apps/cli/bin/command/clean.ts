@@ -18,9 +18,9 @@ import { execSync } from 'child_process';
 import logger from '../utils/logger';
 
 export default () => {
-  logger.info('Stopping All containers...');
-  execSync('docker compose -p abc-user-feedback down', { stdio: 'inherit' });
-
-  logger.info('Local data are backed up to docker volumne.');
-  logger.info("For cleaning up, use 'npx auf-cli clean' command.");
+  logger.info('Deletes existing mounted docker volumes...');
+  execSync(
+    'docker volume rm $(docker volume ls --filter label=com.docker.compose.project=abc-user-feedback -q)',
+    { stdio: 'inherit' },
+  );
 };

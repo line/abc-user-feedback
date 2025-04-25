@@ -16,6 +16,7 @@
  */
 import { Command } from 'commander';
 
+import clean from './command/clean';
 import init from './command/init';
 import start from './command/start';
 import stop from './command/stop';
@@ -45,5 +46,10 @@ program
   .command('stop')
   .description('Stop the running Docker containers for app and web services')
   .action(stop);
+
+program
+  .command('clean')
+  .description('Delete existing mounted docker volumes')
+  .action(clean);
 
 program.parse(process.argv);

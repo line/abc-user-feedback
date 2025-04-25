@@ -1,9 +1,20 @@
 {
   "name": "auf-cli",
-  "version": "1.0.9",
+  "version": "1.0.10",
+  "description": "Command line interface for ABC User Feedback",
+  "repository": "https://github.com/line/abc-user-feedback/tree/main/apps/cli",
   "bin": {
     "auf-cli": "./dist/index.js"
   },
+  "author": "ABC User Feedback",
+  "keywords": [
+    "auf",
+    "cli",
+    "command-line",
+    "tool",
+    "abc-user-feedback",
+    "VOC"
+  ],
   "scripts": {
     "build": "tsc",
     "clean": "git clean -xdf dist .turbo node_modules .cache",

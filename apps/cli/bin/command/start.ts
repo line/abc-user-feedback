@@ -16,7 +16,6 @@
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import os from 'os';
-import * as path from 'path';
 import { load } from 'js-toml';
 
 import getDestinationPath from '../utils/get-destination-path';
@@ -68,7 +67,6 @@ const startDockerComposeInfra = () => {
 
   const composeFilePath = getSourcePath(composeFile);
 
-  logger.info('Starting Docker Compose Infrastructure');
   execSync(
     `docker compose -p abc-user-feedback -f ${composeFilePath.toString()} up  -d`,
     { stdio: 'inherit' },
@@ -155,7 +153,7 @@ export default () => {
     return;
   }
 
-  if (fs.existsSync(path.join(process.cwd(), 'config.toml')) === false) {
+  if (fs.existsSync(getDestinationPath('config.toml')) === false) {
     logger.error(
       'config.toml file is missing. Please run "npx auf-cli init" first.',
     );
