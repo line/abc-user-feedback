@@ -40,7 +40,7 @@ export class GetFeedbacksByChannelIdRequestDto {
   @IsOptional()
   @IsNumber()
   @Min(1)
-  limit: number;
+  limit = 10;
 
   @Transform(({ value }: { value: string }) =>
     toNumber(value, { default: 1, min: 1 }),
@@ -49,5 +49,5 @@ export class GetFeedbacksByChannelIdRequestDto {
   @IsOptional()
   @IsNumber()
   @Min(1)
-  page: number;
+  page = 1;
 }
