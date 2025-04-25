@@ -25220,7 +25220,7 @@ snapshots:
 
   mjml-cli@4.15.3:
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.27.0
       chokidar: 3.6.0
       glob: 10.3.12
       html-minifier: 4.0.0
@@ -25247,7 +25247,7 @@ snapshots:
 
   mjml-core@4.15.3:
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.27.0
       cheerio: 1.0.0-rc.12
       detect-node: 2.1.0
       html-minifier: 4.0.0
@@ -25371,7 +25371,7 @@ snapshots:
 
   mjml-migrate@4.15.3:
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.27.0
       js-beautify: 1.15.1
       lodash: 4.17.21
       mjml-core: 4.15.3
@@ -25400,7 +25400,7 @@ snapshots:
 
   mjml-preset-core@4.15.3:
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.27.0
       mjml-accordion: 4.15.3
       mjml-body: 4.15.3
       mjml-button: 4.15.3
@@ -25486,7 +25486,7 @@ snapshots:
 
   mjml-validator@4.15.3:
     dependencies:
-      '@babel/runtime': 7.26.0
+      '@babel/runtime': 7.27.0
     optional: true
 
   mjml-wrapper@4.15.3:

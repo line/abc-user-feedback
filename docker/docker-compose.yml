@@ -10,8 +10,6 @@ services:
       - NEXT_PUBLIC_MAX_DAYS=90
     depends_on:
       - api
-    networks:
-      - app_network
 
   api:
     hostname: api
@@ -29,8 +27,7 @@ services:
       - APP_ADDRESS=api
       - AUTO_MIGRATION=true
       - NODE_OPTIONS="--max_old_space_size=3072"
-    networks:
-      - app_network
-
-networks:
-  app_network:
+      - SMTP_HOST=smtp4dev
+      - SMTP_PORT=25
+      - SMTP_SENDER=user@feedback.com
+      - SMTP_BASE_URL=http://localhost:3000
