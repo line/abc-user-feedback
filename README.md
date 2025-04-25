@@ -4,31 +4,6 @@
 
 ABC User Feedback is a standalone web application designed to manage Voice of Customer (VoC) data. It enables you to efficiently gather and categorize customer feedback. The application is currently utilized in services with a reach of 10 million MAU.
 
-## Quick Start
-
-To quickly set up and run the application locally, follow these steps:
-
-1. **Clone the Repository**:
-
-   ```bash
-   git clone https://github.com/line/abc-user-feedback
-   cd abc-user-feedback
-   ```
-
-2. **Install Dependencies**:
-
-   ```bash
-   pnpm install
-   ```
-
-3. **Start the Application**:
-   ```bash
-   npx auf-cli init
-   npx auf-cli start
-   ```
-
-For more detailed setup instructions, refer to the [Getting Started](#getting-started) section.
-
 <p align="center">
   <video src="https://github.com/user-attachments/assets/a2ef7a1a-41ec-4cec-b7d1-bda5fbd7d48b" width="100%" />
 </p>
@@ -147,7 +122,7 @@ npm run migration:run
 pnpm dev
 ```
 
-### Build Docker Image
+### Option3. Build Docker Image
 
 For your code build, you can build a Docker image using Docker Compose. Refer to [remote caching](https://turbo.build/repo/docs/core-concepts/remote-caching) and [deploying with Docker](https://turbo.build/repo/docs/handbook/deploying-with-docker) using `turborepo`.
 

@@ -1,0 +1,38 @@
+---
+sidebar_position: 2
+---
+
+# From Source
+
+ABC User Feedback uses a monorepo (powered by [TurboRepo](https://turbo.build/)) with multiple apps and packages.
+
+Follow these instructions to set up a local development environment:
+
+1. **Clone the Repository and Install Dependencies**:
+
+```bash
+git clone https://github.com/line/abc-user-feedback
+cd abc-user-feedback
+pnpm install
+```
+
+2. **Spin Up Required Infrastructure** (MySQL, OpenSearch, etc.) using Docker Compose:
+
+```bash
+docker-compose -f docker/docker-compose.infra-amd64.yml up -d
+```
+
+3. **Create `.env` Files** in `apps/api` and `apps/web` by referring to `.env.example` ([web environment variables](./apps/web/README.md), [api environment variables](./apps/api/README.md)).
+
+4. **Apply Database Migrations**:
+
+```bash
+cd apps/api
+npm run migration:run
+```
+
+5. **Start Developing**: Run the `dev` target of both apps in the root directory:
+
+```bash
+pnpm dev
+```

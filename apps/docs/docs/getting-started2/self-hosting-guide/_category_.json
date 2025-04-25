@@ -1,0 +1,8 @@
+{
+  "label": "Self-Hosting Guide",
+  "position": 2,
+  "link": {
+    "description": "Learn how to set up your local development environment for Docusaurus.",
+    "type": "generated-index"
+  }
+}

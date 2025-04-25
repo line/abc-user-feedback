@@ -1,0 +1,134 @@
+---
+sidebar_position: 3
+---
+
+# Docker
+
+We publish two images to Docker Hub at every release:
+
+#### [Web Admin Frontend](https://hub.docker.com/r/line/abc-user-feedback-web)
+
+```bash
+docker pull line/abc-user-feedback-web
+```
+
+#### [API Backend](https://hub.docker.com/r/line/abc-user-feedback-api)
+
+```bash
+docker pull line/abc-user-feedback-api
+```
+
+## Docker compose
+
+### Services
+
+```yaml
+services:
+  web:
+    hostname: web
+    image: line/abc-user-feedback-web:latest
+    restart: always
+    ports:
+      - 3000:3000
+    environment:
+      - NEXT_PUBLIC_API_BASE_URL=http://localhost:4000
+      - NEXT_PUBLIC_MAX_DAYS=90
+    depends_on:
+      - api
+
+  api:
+    hostname: api
+    image: line/abc-user-feedback-api:latest
+    restart: always
+    ports:
+      - 4000:4000
+    environment:
+      - JWT_SECRET=jwtsecretjwtsecretjwtsecret
+      - MYSQL_PRIMARY_URL=mysql://userfeedback:userfeedback@mysql:3306/userfeedback
+      - BASE_URL=http://api:3000
+      - ACCESS_TOKEN_EXPIRED_TIME=10m
+      - REFESH_TOKEN_EXPIRED_TIME=1h
+      - APP_PORT=4000
+      - APP_ADDRESS=api
+      - AUTO_MIGRATION=true
+      - NODE_OPTIONS="--max_old_space_size=3072"
+```
+
+### Setup Infrastructure
+
+```yaml
+services:
+  mysql:
+    hostname: mysql
+    image: mysql:8.0.39
+    platform: linux/amd64
+    restart: always
+    command:
+      [
+        '--default-authentication-plugin=mysql_native_password',
+        '--collation-server=utf8mb4_bin',
+      ]
+    environment:
+      MYSQL_ROOT_PASSWORD: userfeedback
+      MYSQL_DATABASE: userfeedback
+      MYSQL_USER: userfeedback
+      MYSQL_PASSWORD: userfeedback
+      TZ: UTC
+    ports:
+      - 13306:3306
+    volumes:
+      - mysql:/var/lib/mysql
+
+  # optional for email verification on creating user
+  smtp4dev:
+    image: rnwood/smtp4dev:v3
+    restart: always
+    ports:
+      - 5080:80
+      - 25:25
+      - 143:143
+    volumes:
+      - smtp4dev:/smtp4dev
+
+  # optional for better performance on searching feedbacks
+  opensearch-node:
+    image: opensearchproject/opensearch:2.16.0
+    restart: always
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
+      - plugins.security.disabled=true
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=UserFeedback123!@#
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600
+
+  # optional for opensearch
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.16.0
+    restart: always
+    ports:
+      - 5601:5601
+    environment:
+      - 'OPENSEARCH_HOSTS=["http://opensearch-node:9200"]'
+      - 'DISABLE_SECURITY_DASHBOARDS_PLUGIN=true'
+    depends_on:
+      - opensearch-node
+
+volumes:
+  mysql:
+  smtp4dev:
+  opensearch:
+```

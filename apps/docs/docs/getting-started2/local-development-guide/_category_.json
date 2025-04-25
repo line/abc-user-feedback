@@ -1,0 +1,8 @@
+{
+  "label": "Local Development Guide",
+  "position": 1,
+  "link": {
+    "description": "Learn how to set up your local development environment for Docusaurus.",
+    "type": "generated-index"
+  }
+}
