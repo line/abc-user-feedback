@@ -329,7 +329,7 @@ module.exports = {
    - 필요한 포트가 사용 가능한지 확인하세요.
    - 로그 메시지에서 오류를 확인하세요.
 
-자세한 문제 해결 정보는 [문제 해결](../../06-operations-guide/04-troubleshooting.md) 문서를 참조하세요.
+자세한 문제 해결 정보는 [문제 해결](../..//06-operations-guide/04-troubleshooting.md) 문서를 참조하세요.
 
 ## 다음 단계
 

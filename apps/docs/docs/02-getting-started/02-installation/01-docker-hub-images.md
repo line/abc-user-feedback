@@ -419,7 +419,7 @@ docker-compose up -d
    - SMTP 서버 설정이 올바른지 확인하세요.
    - SMTP 서버에 연결할 수 있는지 테스트하세요.
 
-자세한 문제 해결 정보는 [문제 해결](../../06-operations-guide/04-troubleshooting.md) 문서를 참조하세요.
+자세한 문제 해결 정보는 [문제 해결](../..//06-operations-guide/04-troubleshooting.md) 문서를 참조하세요.
 
 ## 다음 단계
 

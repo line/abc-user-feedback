@@ -10,11 +10,11 @@ description: '환경 변수 구성 대한 설명입니다.'
 
 ## API 서버 환경 변수
 
-[API 서버 환경 변수](../../06-operations-guide/01-environment-variables/02-backend-config.md) 문서를 참조해주세요
+[API 서버 환경 변수](../..//06-operations-guide/01-environment-variables/02-backend-config.md) 문서를 참조해주세요
 
 ## 웹 서버 환경 변수
 
-[웹 서버 환경 변수](../../06-operations-guide/01-environment-variables/01-frontend-config.md) 문서를 참조해주세요
+[웹 서버 환경 변수](../..//06-operations-guide/01-environment-variables/01-frontend-config.md) 문서를 참조해주세요
 
 ## 환경 변수 설정 방법
 

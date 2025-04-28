@@ -91,7 +91,7 @@ ABC User Feedback은 Apache License 2.0 하에 제공됩니다. 이 라이선스
 ABC User Feedback을 시작하려면 다음 문서를 참조하세요:
 
 - [주요 기능](./02-key-features.md) - 상세한 기능 설명
-- [설치 가이드](../02-getting-started/02-installation.md) - 설치 방법
+- [설치 가이드](../02-getting-started/02-installation) - 설치 방법
 - [시스템 요구사항](../02-getting-started/01-system-requirements.md) - 필요한 환경 요구사항
 
 ---

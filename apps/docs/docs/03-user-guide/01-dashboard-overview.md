@@ -174,7 +174,7 @@ ABC User Feedback 대시보드는 사용자의 필요에 맞게 다양한 방식
 
 대시보드에서 식별된 중요한 피드백이나 이슈는 다음 단계로 진행할 수 있습니다:
 
-- [피드백 관리](../02-feedback-management/01-viewing-filtering.md): 피드백 상세 조회 및 관리
-- [이슈 트래커 사용법](../03-issue-management/01-issue-tracker.md): 이슈 추적 및 해결 관리
+- [피드백 관리](../03-user-guide/02-feedback-management/01-viewing-filtering.md): 피드백 상세 조회 및 관리
+- [이슈 트래커 사용법](../03-user-guide/03-issue-management/01-issue-tracker.md): 이슈 추적 및 해결 관리
 
 대시보드는 ABC User Feedback 시스템의 시작점으로, 효과적인 피드백 관리를 위한 중요한 도구입니다. 정기적으로 대시보드를 확인하고 데이터를 분석하여 사용자 경험을 지속적으로 개선하세요.
