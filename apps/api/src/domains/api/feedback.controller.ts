@@ -293,6 +293,7 @@ export class FeedbackController {
         limit: body.limit,
         query: {
           searchText: body.searchText,
+          fieldKey: body.fieldKey,
           issueName: body.issueName,
         },
         channelId,

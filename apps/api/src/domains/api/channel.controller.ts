@@ -31,15 +31,21 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+import { FieldStatusEnum } from '@/common/enums/field-status.enum';
 import { ApiKeyAuthGuard } from '@/domains/admin/auth/guards';
 import { ChannelService } from '../admin/channel/channel/channel.service';
+import { GetFieldsResponseDto } from '../admin/channel/field/dtos/responses/find-fields-response.dto';
+import { FieldService } from '../admin/channel/field/field.service';
 
 @ApiTags('channels')
 @Controller('/projects/:projectId/channels/:channelId')
 @ApiSecurity('apiKey')
 @UseGuards(ApiKeyAuthGuard)
 export class ChannelController {
-  constructor(private readonly channelService: ChannelService) {}
+  constructor(
+    private readonly channelService: ChannelService,
+    private readonly fieldService: FieldService,
+  ) {}
 
   @ApiOperation({
     summary: 'Get Image Upload URL',
@@ -96,5 +102,45 @@ export class ChannelController {
       bucket: channel.imageConfig.bucket,
       extension,
     });
+  }
+
+  @ApiOperation({
+    summary: 'Get Fields',
+  })
+  @ApiParam({
+    name: 'projectId',
+    type: Number,
+    description: 'Project id',
+    example: 1,
+  })
+  @ApiParam({
+    name: 'channelId',
+    type: Number,
+    description: 'Channel id',
+    example: 1,
+  })
+  @ApiOkResponse({
+    type: GetFieldsResponseDto,
+    description: 'Fields information',
+  })
+  @Get('/fields')
+  async getFields(
+    @Param('projectId', ParseIntPipe) projectId: number,
+    @Param('channelId', ParseIntPipe) channelId: number,
+  ) {
+    const channel = await this.channelService.findById({ channelId });
+    if (channel.project.id !== projectId) {
+      throw new BadRequestException('Invalid channel id');
+    }
+
+    return (await this.fieldService.findByChannelId({ channelId }))
+      .filter((field) => field.status === FieldStatusEnum.ACTIVE)
+      .map((field) => ({
+        id: field.id,
+        key: field.key,
+        name: field.name,
+        format: field.format,
+        status: field.status,
+      }));
   }
 }

@@ -21,12 +21,15 @@ import { toNumber } from '@/common/helper/cast.helper';
 
 export class GetFeedbacksByChannelIdRequestDto {
   @ApiProperty({ required: true, description: 'Keyword to search feedbacks' })
-  @IsOptional()
   @IsString()
   searchText: string;
 
+  @ApiProperty({ required: true, description: 'Field key to search feedbacks' })
+  @IsString()
+  fieldKey: string;
+
   @ApiProperty({
-    required: true,
+    required: false,
     description: 'Issue name to search related feedbacks within channel',
   })
   @IsOptional()
