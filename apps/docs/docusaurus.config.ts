@@ -54,15 +54,9 @@ const config: Config = {
       items: [
         {
           type: 'docSidebar',
-          sidebarId: 'developer',
+          sidebarId: 'docs',
           position: 'left',
-          label: 'Developer Guide',
-        },
-        {
-          type: 'docSidebar',
-          sidebarId: 'usage',
-          position: 'left',
-          label: 'How to use',
+          label: 'Docs',
         },
         {
           href: 'https://github.com/line/abc-user-feedback',
@@ -78,12 +72,8 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              href: '/docs/category/introduction',
-              label: 'Developer Guide',
-            },
-            {
-              href: '/docs/usage/overview',
-              label: 'How to use',
+              href: '/docs/category',
+              label: 'Docs',
             },
           ],
         },
