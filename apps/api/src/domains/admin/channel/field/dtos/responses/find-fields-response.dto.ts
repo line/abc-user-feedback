@@ -103,5 +103,5 @@ export class GetFieldsResponseDto {
   format: FieldFormatEnum;
 
   @ApiProperty({ enum: FieldStatusEnum })
-  status: FieldFormatEnum;
+  status: FieldStatusEnum;
 }
