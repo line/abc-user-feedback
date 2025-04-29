@@ -20,11 +20,16 @@ import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
 import { toNumber } from '@/common/helper/cast.helper';
 
 export class GetFeedbacksByChannelIdRequestDto {
-  @ApiProperty({ required: true, description: 'Keyword to search feedbacks' })
+  @ApiProperty({ required: false, description: 'Keyword to search feedbacks' })
+  @IsOptional()
   @IsString()
   searchText: string;
 
-  @ApiProperty({ required: true, description: 'Field key to search feedbacks' })
+  @ApiProperty({
+    required: false,
+    description: 'Field key to search feedbacks',
+  })
+  @IsOptional()
   @IsString()
   fieldKey: string;
 

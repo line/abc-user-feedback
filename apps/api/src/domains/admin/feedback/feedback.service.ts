@@ -624,6 +624,7 @@ export class FeedbackService {
       }
     }
     delete dto.query?.issueName;
+    if (!dto.query?.searchText) delete dto.query?.searchText;
 
     this.validateQuery(dto.query ?? {}, fields);
 
