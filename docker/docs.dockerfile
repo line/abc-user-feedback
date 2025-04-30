@@ -43,4 +43,4 @@ FROM installer AS runner
 EXPOSE 3000
 
 WORKDIR /app/apps/docs
-CMD ["pnpm", "start", "--", "--host", "0.0.0.0", "--no-open"]
+CMD ["pnpm", "start", "--host", "0.0.0.0", "--no-open"]
