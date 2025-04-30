@@ -16,8 +16,10 @@
 
 import { useTranslation } from 'next-i18next';
 
+import { Badge } from '@ufb/react';
+
 import { DescriptionTooltip } from '@/shared';
-import { useUserSearch } from '@/entities/user';
+import { useUserSearch, useUserStore } from '@/entities/user';
 
 interface Props {
   email: string;
@@ -29,15 +31,20 @@ const MemberNameCell = (props: Props) => {
   const { data, isLoading } = useUserSearch({
     queries: [{ key: 'email', value: email, condition: 'IS' }],
   });
-  return data || isLoading ? email : (
+  const { user } = useUserStore();
+
+  return data || isLoading ?
       <div className="flex items-center gap-1">
+        {email}
+        {email === user?.email && <Badge variant="outline">You</Badge>}
+      </div>
+    : <div className="flex items-center gap-1">
         <span className="text-tint-red">{email}</span>
         <DescriptionTooltip
           color="red"
           description={t('main.create-project.error-member')}
         />
-      </div>
-    );
+      </div>;
 };
 
 export default MemberNameCell;

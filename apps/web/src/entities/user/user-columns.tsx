@@ -62,7 +62,7 @@ export const getUserColumns = () => [
       return (
         <div className="flex items-center gap-1">
           {getValue()}
-          {getValue() === user?.email && <Badge variant="outline">Me</Badge>}
+          {getValue() === user?.email && <Badge variant="outline">You</Badge>}
         </div>
       );
     },
