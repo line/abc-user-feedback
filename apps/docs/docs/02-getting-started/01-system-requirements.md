@@ -152,4 +152,4 @@ docker-compose -f docker/docker-compose.infra-arm64.yml up -d
 - [CLI 도구 사용](./02-installation/02-cli-tool.md)
 - [수동 설치](./02-installation/03-manual-setup.md)
 
-문제가 발생하거나 추가 지원이 필요한 경우 [문제 해결](../06-operations-guide/04-troubleshooting.md) 문서를 참조하거나 [지원 받는 방법](../07-community-support/03-getting-help.md)을 확인하세요.
+문제가 발생하거나 추가 지원이 필요한 경우 [지원 받는 방법](../06-community-support/03-getting-help.md)을 확인하세요.

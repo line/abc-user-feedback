@@ -161,4 +161,4 @@ ABC User Feedback의 전체 기술 스택은 다음과 같습니다:
 
 ---
 
-이 문서는 ABC User Feedback의 아키텍처에 대한 개요를 제공합니다. 더 자세한 기술적 정보는 [개발자 가이드](../05-developer-guide) 섹션을 참조하세요.
+이 문서는 ABC User Feedback의 아키텍처에 대한 개요를 제공합니다. 더 자세한 기술적 정보는 [개발자 가이드](/docs/category/개발자-가이드) 섹션을 참조하세요.

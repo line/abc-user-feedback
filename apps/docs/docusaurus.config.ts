@@ -26,8 +26,8 @@ const config: Config = {
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: 'ko',
+    locales: ['ko'],
   },
 
   presets: [
@@ -37,7 +37,7 @@ const config: Config = {
         docs: {
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/line/abc-user-feedback/tree/main/packages/docs',
+            'https://github.com/line/abc-user-feedback/tree/feat/docs/apps/docs',
         },
       } satisfies Preset.Options,
     ],
@@ -72,7 +72,7 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              href: '/docs/category',
+              href: '/docs',
               label: 'Docs',
             },
           ],

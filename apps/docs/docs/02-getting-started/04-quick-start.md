@@ -163,5 +163,3 @@ curl -X POST http://localhost:4000/api/v1/projects/1/channels/1/feedbacks \
 npx auf-cli stop
 npx auf-cli start
 ```
-
-더 자세한 문제 해결 방법은 [문제 해결](../06-operations-guide/04-troubleshooting.md) 문서를 참조하세요.

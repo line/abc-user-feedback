@@ -197,4 +197,4 @@ ABC User Feedback에 처음 접속하면 테넌트 생성 및 관리자 계정 �
 - [API 개요](../04-integration-guide/01-api-overview.md): API를 통한 프로그래매틱 통합 방법 학습
 - [웹훅 설정 및 활용](../04-integration-guide/03-webhooks.md): 웹훅을 통한 외부 시스템 연동 방법 학습
 
-문제가 발생하거나 추가 지원이 필요한 경우 [문제 해결](../06-operations-guide/04-troubleshooting.md) 문서를 참조하거나 [지원 받는 방법](../07-community-support/03-getting-help.md)을 확인하세요.
+문제가 발생하거나 추가 지원이 필요한 경우 [지원 받는 방법](../06-community-support/03-getting-help.md)을 확인하세요.

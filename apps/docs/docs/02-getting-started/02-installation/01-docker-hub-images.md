@@ -419,8 +419,6 @@ docker-compose up -d
    - SMTP 서버 설정이 올바른지 확인하세요.
    - SMTP 서버에 연결할 수 있는지 테스트하세요.
 
-자세한 문제 해결 정보는 [문제 해결](../..//06-operations-guide/04-troubleshooting.md) 문서를 참조하세요.
-
 ## 다음 단계
 
 Docker Hub 이미지를 사용하여 ABC User Feedback을 성공적으로 설치했다면, 다음 단계로 [초기 설정](../03-initial-setup.md)을 진행하여 시스템을 구성하고 사용자를 추가하세요.
