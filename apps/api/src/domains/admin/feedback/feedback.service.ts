@@ -32,6 +32,7 @@ import { DateTime } from 'luxon';
 import type { IPaginationMeta, Pagination } from 'nestjs-typeorm-paginate';
 import { Transactional } from 'typeorm-transactional';
 
+import { TimeRange } from '@/common/dtos';
 import {
   EventTypeEnum,
   FieldFormatEnum,
@@ -39,6 +40,7 @@ import {
   FieldStatusEnum,
   IssueStatusEnum,
 } from '@/common/enums';
+import calculateDaysBetweenDates from '@/utils/date-utils';
 import { ChannelService } from '../channel/channel/channel.service';
 import { RESERVED_FIELD_KEYS } from '../channel/field/field.constants';
 import type { FieldEntity } from '../channel/field/field.entity';
@@ -94,6 +96,7 @@ export class FeedbackService {
   private validateQuery(
     query: FindFeedbacksByChannelIdDto['query'],
     fields: FieldEntity[],
+    searchMaxDays: number,
   ) {
     const fieldsByKey = fields.reduce(
       (fields: Record<string, FieldEntity>, field) => {
@@ -138,6 +141,18 @@ export class FeedbackService {
             )
           )
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
+
+          if (
+            searchMaxDays >= 0 &&
+            calculateDaysBetweenDates(
+              (query[fieldKey] as TimeRange).gte,
+              (query[fieldKey] as TimeRange).lt,
+            ) > searchMaxDays
+          ) {
+            throw new BadRequestException(
+              `${fieldKey} must be less than ${searchMaxDays} days`,
+            );
+          }
           break;
         case FieldFormatEnum.multiSelect:
           if (!Array.isArray(query[fieldKey]))
@@ -170,6 +185,7 @@ export class FeedbackService {
   private validateQueryV2(
     queries: FindFeedbacksByChannelIdDtoV2['queries'],
     fields: FieldEntity[],
+    searchMaxDays: number,
   ) {
     const fieldsByKey = fields.reduce(
       (fields: Record<string, FieldEntity>, field) => {
@@ -211,6 +227,18 @@ export class FeedbackService {
             )
           )
             throw new BadRequestException(`${fieldKey} must be DateTimeRange`);
+
+          if (
+            searchMaxDays >= 0 &&
+            calculateDaysBetweenDates(
+              (fieldValue as TimeRange).gte,
+              (fieldValue as TimeRange).lt,
+            ) > searchMaxDays
+          ) {
+            throw new BadRequestException(
+              `${fieldKey} must be less than ${searchMaxDays} days`,
+            );
+          }
           break;
         case FieldFormatEnum.multiSelect:
           if (!Array.isArray(fieldValue))
@@ -596,7 +624,13 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    this.validateQuery(dto.query ?? {}, fields);
+    const searchMaxDays = (
+      await this.channelService.findById({
+        channelId: dto.channelId,
+      })
+    ).searchMaxDays;
+
+    this.validateQuery(dto.query ?? {}, fields, searchMaxDays);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -627,8 +661,14 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    this.validateQueryV2(dto.queries, fields);
-    this.validateQueryV2(dto.defaultQueries, fields);
+    const searchMaxDays = (
+      await this.channelService.findById({
+        channelId: dto.channelId,
+      })
+    ).searchMaxDays;
+
+    this.validateQueryV2(dto.queries, fields, searchMaxDays);
+    this.validateQueryV2(dto.defaultQueries, fields, searchMaxDays);
 
     const feedbacksByPagination =
       this.configService.get('opensearch.use') ?
@@ -796,8 +836,15 @@ export class FeedbackService {
       }
     }
 
-    this.validateQueryV2(dto.queries, fields);
-    this.validateQueryV2(dto.defaultQueries, fields);
+    const searchMaxDays = (
+      await this.channelService.findById({
+        channelId: dto.channelId,
+      })
+    ).searchMaxDays;
+
+    this.validateQueryV2(dto.queries, fields, searchMaxDays);
+    this.validateQueryV2(dto.defaultQueries, fields, searchMaxDays);
+
     const fieldsByKey: Record<string, FieldEntity> = fields.reduce(
       (prev: Record<string, FieldEntity>, field) => {
         prev[field.key] = field;
