@@ -67,7 +67,7 @@
     "nestjs-cls": "^5.0.0",
     "nestjs-pino": "^4.0.0",
     "nestjs-typeorm-paginate": "^4.0.4",
-    "nodemailer": "^6.9.13",
+    "nodemailer": "^7.0.0",
     "passport": "^0.7.0",
     "passport-custom": "^1.1.1",
     "passport-jwt": "^4.0.1",
