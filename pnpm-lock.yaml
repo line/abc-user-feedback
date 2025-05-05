@@ -49,7 +49,7 @@ importers:
         version: 8.1.1
       '@nestjs-modules/mailer':
         specifier: ^2.0.0
-        version: 2.0.2(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.0)(nodemailer@7.0.0)
+        version: 2.0.2(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.0)(nodemailer@7.0.2)
       '@nestjs/axios':
         specifier: ^4.0.0
         version: 4.0.0(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(axios@1.9.0)(rxjs@7.8.2)
@@ -160,7 +160,7 @@ importers:
         version: 4.1.0(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(typeorm@0.3.22(mysql2@3.14.1)(reflect-metadata@0.2.2)(ts-node@10.9.2(@swc/core@1.11.24(@swc/helpers@0.5.17))(@types/node@22.15.3)(typescript@5.8.2)))
       nodemailer:
         specifier: ^7.0.0
-        version: 7.0.0
+        version: 7.0.2
       passport:
         specifier: ^0.7.0
         version: 0.7.0
@@ -351,7 +351,7 @@ importers:
         version: 0.5.9(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.0
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.3)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.4)
       '@tanstack/react-query':
         specifier: ^5.45.1
         version: 5.75.2(react@19.1.0)
@@ -465,7 +465,7 @@ importers:
         version: 2.0.0(tailwindcss@3.4.17(ts-node@10.9.2(@swc/core@1.11.24(@swc/helpers@0.5.17))(@types/node@22.15.3)(typescript@5.8.2)))
       zod:
         specifier: ^3.23.0
-        version: 3.24.3
+        version: 3.24.4
       zustand:
         specifier: ^5.0.0
         version: 5.0.4(@types/react@19.1.2)(immer@10.1.1)(react@19.1.0)(use-sync-external-store@1.4.0(react@19.1.0))
@@ -538,7 +538,7 @@ importers:
         version: 0.9.13(next@15.3.1(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       openapi-typescript:
         specifier: ^7.0.0
-        version: 7.7.0(typescript@5.8.2)
+        version: 7.7.1(typescript@5.8.2)
       postcss:
         specifier: ^8.4.38
         version: 8.5.3
@@ -8140,8 +8140,8 @@ packages:
     resolution: {integrity: sha512-7o38Yogx6krdoBf3jCAqnIN4oSQFx+fMa0I7dK1D+me9kBxx12D+/33wSb+fhOCtIxvYJ+4x4IMEhmhCKfAiOA==}
     engines: {node: '>=6.0.0'}
 
-  nodemailer@7.0.0:
-    resolution: {integrity: sha512-9QyEp969UmUWVDB2gVQvxHm1bqkyuC5YZIyX/ySJUpIVyXpuEFyBAuoFFs+G5/C2ZaUp9F5A65DPfxedfVHXXQ==}
+  nodemailer@7.0.2:
+    resolution: {integrity: sha512-SYsisPeLFYli5Q+BCGSyHT5CVvezPmQjHgINV9KVvVLV1aktuoD4E0Np9Q3ND9I481qIHzUQzVT+Tl/Tw7Ivdg==}
     engines: {node: '>=6.0.0'}
 
   nopt@5.0.0:
@@ -8247,8 +8247,8 @@ packages:
     resolution: {integrity: sha512-MVHddDVweXZF3awtlAS+6pgKLlm/JgxZ90+/NBurBoQctVOOB/zDdVjcyPzQ+0laDGbsWgrRkflI65sQeOgT9Q==}
     engines: {node: '>=8'}
 
-  openapi-typescript@7.7.0:
-    resolution: {integrity: sha512-qpWmEz3kZ8ScngXAAPr3cT7JDVWoydgJpmQblnF73B0vIFwvltDlMP/0zO3Tw0z0Xg21oDGwqjjSfNRecenOVw==}
+  openapi-typescript@7.7.1:
+    resolution: {integrity: sha512-apa45jEOxcVfYHTD9eHpW0cR8yQn7jQFTCnSWNdjKbWmyjha8CMj1LdGHdk0Z70kFSR6EfjdDuOCY7PFICrNSg==}
     hasBin: true
     peerDependencies:
       typescript: ^5.x
@@ -10413,6 +10413,9 @@ packages:
 
   zod@3.24.3:
     resolution: {integrity: sha512-HhY1oqzWCQWuUqvBFnsyrtZRhyPeR7SUGv+C4+MsisMuVfSPx8HpwWqH8tRahSlt6M3PiFAcoeFhZAqIXTxoSg==}
+
+  zod@3.24.4:
+    resolution: {integrity: sha512-OdqJE9UDRPwWsrHjLN2F8bPxvwJBK22EHLWtanu0LSYr5YqzsaaW3RMgmjwr8Rypg5k+meEJdSPXJZXE/yqOMg==}
 
   zustand@5.0.4:
     resolution: {integrity: sha512-39VFTN5InDtMd28ZhjLyuTnlytDr9HfwO512Ai4I8ZABCoyAj4F1+sr7sD1jP/+p7k77Iko0Pb5NhgBFDCX0kQ==}
@@ -13020,13 +13023,13 @@ snapshots:
       '@tybys/wasm-util': 0.9.0
     optional: true
 
-  '@nestjs-modules/mailer@2.0.2(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.0)(nodemailer@7.0.0)':
+  '@nestjs-modules/mailer@2.0.2(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.0)(nodemailer@7.0.2)':
     dependencies:
       '@css-inline/css-inline': 0.14.1
       '@nestjs/common': 11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@nestjs/core': 11.1.0(@nestjs/common@11.1.0(class-transformer@0.5.1)(class-validator@0.14.2)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.0)(reflect-metadata@0.2.2)(rxjs@7.8.2)
       glob: 10.3.12
-      nodemailer: 7.0.0
+      nodemailer: 7.0.2
     optionalDependencies:
       '@types/ejs': 3.1.5
       '@types/mjml': 4.7.4
@@ -14671,19 +14674,19 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@t3-oss/env-core@0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.3)':
+  '@t3-oss/env-core@0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.4)':
     dependencies:
       arktype: 2.1.20
     optionalDependencies:
       typescript: 5.8.2
-      zod: 3.24.3
+      zod: 3.24.4
 
-  '@t3-oss/env-nextjs@0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.3)':
+  '@t3-oss/env-nextjs@0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.4)':
     dependencies:
-      '@t3-oss/env-core': 0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.3)
+      '@t3-oss/env-core': 0.13.4(arktype@2.1.20)(typescript@5.8.2)(zod@3.24.4)
     optionalDependencies:
       typescript: 5.8.2
-      zod: 3.24.3
+      zod: 3.24.4
     transitivePeerDependencies:
       - arktype
 
@@ -19445,7 +19448,7 @@ snapshots:
   nodemailer@6.9.13:
     optional: true
 
-  nodemailer@7.0.0: {}
+  nodemailer@7.0.2: {}
 
   nopt@5.0.0:
     dependencies:
@@ -19557,7 +19560,7 @@ snapshots:
       is-wsl: 2.2.0
     optional: true
 
-  openapi-typescript@7.7.0(typescript@5.8.2):
+  openapi-typescript@7.7.1(typescript@5.8.2):
     dependencies:
       '@redocly/openapi-core': 1.34.2(supports-color@9.4.0)
       ansi-colors: 4.1.3
@@ -21983,6 +21986,8 @@ snapshots:
   zod@3.24.1: {}
 
   zod@3.24.3: {}
+
+  zod@3.24.4: {}
 
   zustand@5.0.4(@types/react@19.1.2)(immer@10.1.1)(react@19.1.0)(use-sync-external-store@1.4.0(react@19.1.0)):
     optionalDependencies:
