@@ -113,7 +113,7 @@ export const createChannel = async (
     projectId: project.id,
     name: faker.string.alphanumeric(20),
     description: faker.lorem.lines(1),
-    searchMaxDays: faker.number.int({ min: 1, max: 90 }),
+    searchMaxDays: 1000,
     fields: Array.from({
       length: faker.number.int({ min: 1, max: 10 }),
     }).map(() =>
