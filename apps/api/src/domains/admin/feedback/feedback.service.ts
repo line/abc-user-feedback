@@ -624,11 +624,16 @@ export class FeedbackService {
     }
     dto.fields = fields;
 
-    const searchMaxDays = (
+    let searchMaxDays = (
       await this.channelService.findById({
         channelId: dto.channelId,
       })
     ).searchMaxDays;
+
+    if (dto.query?.searchMaxDays) {
+      searchMaxDays = dto.query.searchMaxDays as number;
+      delete dto.query.searchMaxDays;
+    }
 
     this.validateQuery(dto.query ?? {}, fields, searchMaxDays);
 
