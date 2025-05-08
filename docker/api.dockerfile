@@ -32,7 +32,6 @@ RUN pnpm install -w source-map-support
 # Build the project and its dependencies
 COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
-COPY .turbo/ ./.turbo/
 COPY .git/ ./.git/
 
 ARG TURBO_TOKEN

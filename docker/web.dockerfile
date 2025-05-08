@@ -32,7 +32,6 @@ RUN pnpm install --frozen-lockfile
 # Build the project
 COPY --from=builder /app/out/full/ .
 COPY turbo.json ./
-COPY .turbo/ ./.turbo/
 COPY .git/ ./.git/
 
 ARG TURBO_TOKEN
