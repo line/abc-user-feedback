@@ -267,7 +267,7 @@ export class FeedbackController {
 
   @ApiOperation({
     summary: 'Get Feedbacks by Channel',
-    description: `Searches for feedback entries by channel ID with keyword.`,
+    description: `Searches for feedback entries by channel ID with keyword. You can search by specifying both fieldKey and searchText, or by specifying issueName.`,
   })
   @ApiParam({
     name: 'projectId',
@@ -287,18 +287,26 @@ export class FeedbackController {
     @Param('channelId', ParseIntPipe) channelId: number,
     @Query() body: GetFeedbacksByChannelIdRequestDto,
   ) {
-    return FindFeedbacksByChannelIdResponseDto.transform(
-      await this.feedbackService.findByChannelId({
-        page: body.page,
-        limit: body.limit,
-        query: {
-          searchText: body.searchText,
-          fieldKey: body.fieldKey,
-          issueName: body.issueName,
-        },
-        channelId,
-      }),
-    );
+    const { page, limit, searchText, fieldKey, issueName } = body;
+
+    if (issueName || (fieldKey && searchText)) {
+      return FindFeedbacksByChannelIdResponseDto.transform(
+        await this.feedbackService.findByChannelId({
+          page,
+          limit,
+          query: {
+            searchText,
+            fieldKey,
+            issueName,
+          },
+          channelId,
+        }),
+      );
+    } else {
+      throw new BadRequestException(
+        'Please provide either issueName or both fieldKey and searchText.',
+      );
+    }
   }
 
   @ApiOperation({
