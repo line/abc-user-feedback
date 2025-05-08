@@ -92,12 +92,6 @@ importers:
       '@opensearch-project/opensearch':
         specifier: ^3.0.0
         version: 3.5.1
-      '@swc/cli':
-        specifier: ^0.7.0
-        version: 0.7.3(@swc/core@1.11.24(@swc/helpers@0.5.17))(chokidar@4.0.3)
-      '@swc/helpers':
-        specifier: ^0.5.10
-        version: 0.5.17
       '@types/passport-jwt':
         specifier: ^4.0.1
         version: 4.0.1
@@ -219,9 +213,15 @@ importers:
       '@swc-node/jest':
         specifier: ^1.8.0
         version: 1.8.13(@swc/core@1.11.24(@swc/helpers@0.5.17))(@swc/types@0.1.21)(typescript@5.8.3)
+      '@swc/cli':
+        specifier: 0.7.3
+        version: 0.7.3(@swc/core@1.11.24(@swc/helpers@0.5.17))(chokidar@4.0.3)
       '@swc/core':
         specifier: ^1.4.16
         version: 1.11.24(@swc/helpers@0.5.17)
+      '@swc/helpers':
+        specifier: ^0.5.10
+        version: 0.5.17
       '@types/bcrypt':
         specifier: ^5.0.2
         version: 5.0.2
