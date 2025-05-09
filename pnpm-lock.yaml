@@ -534,8 +534,8 @@ importers:
         specifier: 1.21.7
         version: 1.21.7
       next-router-mock:
-        specifier: ^0.9.13
-        version: 0.9.13(next@15.3.2(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
+        specifier: ^1.0.0
+        version: 1.0.1(next@15.3.2(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       openapi-typescript:
         specifier: ^7.0.0
         version: 7.7.1(typescript@5.8.3)
@@ -8021,8 +8021,8 @@ packages:
       react: '>= 17.0.2'
       react-i18next: '>= 13.5.0'
 
-  next-router-mock@0.9.13:
-    resolution: {integrity: sha512-906n2RRaE6Y28PfYJbaz5XZeJ6Tw8Xz1S6E31GGwZ0sXB6/XjldD1/2azn1ZmBmRk5PQRkzjg+n+RHZe5xQzWA==}
+  next-router-mock@1.0.1:
+    resolution: {integrity: sha512-aiGitJ8ixFpMcVeDEJgpyw8CflZdZFaiabvUilDLyfXmyl7qzegkKbGlRhYgpoE+SF+bgNMxO06YS4RIjT3uyw==}
     peerDependencies:
       next: '>=10.0.0'
       react: '>=17.0.0'
@@ -19229,7 +19229,7 @@ snapshots:
       react: 19.1.0
       react-i18next: 15.5.1(i18next@25.1.2(typescript@5.8.3))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)
 
-  next-router-mock@0.9.13(next@15.3.2(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
+  next-router-mock@1.0.1(next@15.3.2(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0):
     dependencies:
       next: 15.3.2(@babel/core@7.27.1)(@opentelemetry/api@1.9.0)(@playwright/test@1.52.0)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react: 19.1.0
