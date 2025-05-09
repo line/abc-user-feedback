@@ -23,6 +23,7 @@ import { QueryV2ConditionsEnum } from '@/common/enums';
 import { NotAllowedDomainException } from '@/domains/admin/user/exceptions';
 import { UserService } from '@/domains/admin/user/user.service';
 import { TenantEntity } from '../../tenant/tenant.entity';
+import { UserTypeEnum } from '../../user/entities/enums';
 import { RoleService } from '../role/role.service';
 import type { FindAllMembersDto, FindByProjectIdDto } from './dtos';
 import { CreateMemberDto, UpdateMemberDto } from './dtos';
@@ -105,6 +106,7 @@ export class MemberService {
       .leftJoinAndSelect('members.user', 'user');
 
     queryBuilder.andWhere('role.project_id = :projectId', { projectId });
+    queryBuilder.andWhere('user.type = :type', { type: UserTypeEnum.GENERAL });
 
     const method = operator === 'AND' ? 'andWhere' : 'orWhere';
 
