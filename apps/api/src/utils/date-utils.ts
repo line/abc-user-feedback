@@ -13,20 +13,17 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
+export default function calculateDaysBetweenDates(
+  date1: string,
+  date2: string,
+): number {
+  const startDate = new Date(date1);
+  const endDate = new Date(date2);
 
-import type { ImageConfigDto } from './image-config.dto';
+  const differenceInMilliseconds = endDate.getTime() - startDate.getTime();
 
-export class UpdateChannelDto {
-  @Expose()
-  name: string;
+  const millisecondsPerDay = 24 * 60 * 60 * 1000;
+  const differenceInDays = differenceInMilliseconds / millisecondsPerDay;
 
-  @Expose()
-  description: string | null;
-
-  @Expose()
-  imageConfig: ImageConfigDto | null;
-
-  @Expose()
-  searchMaxDays: number;
+  return Math.abs(differenceInDays) + 1;
 }

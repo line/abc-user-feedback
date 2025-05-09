@@ -385,7 +385,7 @@ describe('FeedbackController (integration)', () => {
           {
             key: 'createdAt',
             value: {
-              gte: DateTime.fromJSDate(new Date(0)).toFormat('yyyy-MM-dd'),
+              gte: DateTime.now().minus({ years: 1 }).toFormat('yyyy-MM-dd'),
               lt: DateTime.now().toFormat('yyyy-MM-dd'),
             },
             condition: QueryV2ConditionsEnum.BETWEEN,
