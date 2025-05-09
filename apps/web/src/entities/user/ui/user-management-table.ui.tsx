@@ -40,6 +40,7 @@ import {
 
 import { useUserSearch } from '../lib';
 import { getUserColumns } from '../user-columns';
+import { useUserStore } from '../user.model';
 import type { UpdateUser, UserMember } from '../user.type';
 import UpdateUserDialog from './update-user-dialog.ui';
 
@@ -50,6 +51,7 @@ interface IProps {
 const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
   const { t } = useTranslation();
   const overlay = useOverlay();
+  const { user } = useUserStore();
 
   const [rows, setRows] = useState<UserMember[]>([]);
 
@@ -88,6 +90,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
     manualPagination: true,
     pageCount,
     rowCount,
+    enableRowSelection: (row) => row.original.email !== user?.email,
   });
 
   const { sorting, pagination, rowSelection } = table.getState();
@@ -181,6 +184,7 @@ const UserManagementTable: React.FC<IProps> = ({ createButton }) => {
           close();
         }}
         onClickDelete={() => deleteUsers({ ids: [data.id] })}
+        disabledDelete={user?.email === data.email}
       />
     ));
   };

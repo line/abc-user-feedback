@@ -32,7 +32,11 @@ import {
 import type { GetTenantResponseDto } from '@/domains/admin/tenant/dtos/responses';
 import { TenantEntity } from '@/domains/admin/tenant/tenant.entity';
 import { UserEntity } from '@/domains/admin/user/entities/user.entity';
-import { clearAllEntities, signInTestUser } from '@/test-utils/util-functions';
+import {
+  clearAllEntities,
+  clearEntities,
+  signInTestUser,
+} from '@/test-utils/util-functions';
 import { HttpStatusCode } from '@/types/http-status';
 
 describe('TenantController (integration)', () => {
@@ -102,7 +106,7 @@ describe('TenantController (integration)', () => {
     });
 
     afterAll(async () => {
-      await tenantRepo.delete({});
+      await clearEntities([tenantRepo]);
     });
   });
 
@@ -137,7 +141,7 @@ describe('TenantController (integration)', () => {
         });
     });
     it('should fail to find a tenant', async () => {
-      await tenantRepo.delete({});
+      await clearEntities([tenantRepo]);
 
       const dto = new UpdateTenantRequestDto();
 
@@ -166,8 +170,7 @@ describe('TenantController (integration)', () => {
   describe('/admin/tenants (GET)', () => {
     const dto = new SetupTenantRequestDto();
     beforeEach(async () => {
-      await tenantRepo.delete({});
-      await userRepo.delete({});
+      await clearEntities([tenantRepo, userRepo]);
       dto.siteName = faker.string.sample();
       dto.password = '12345678';
 

@@ -21,6 +21,7 @@ import { Badge } from '@ufb/react';
 
 import { Avatar, DATE_TIME_FORMAT, TableCheckbox } from '@/shared';
 
+import { useUserStore } from './user.model';
 import type { UserMember } from './user.type';
 
 const columnHelper = createColumnHelper<UserMember>();
@@ -31,8 +32,14 @@ export const getUserColumns = () => [
     header: ({ table }) => (
       <TableCheckbox
         checked={table.getIsAllRowsSelected()}
-        indeterminate={table.getIsSomeRowsSelected()}
-        onCheckedChange={(checked) => table.toggleAllRowsSelected(checked)}
+        indeterminate={
+          table.getIsSomeRowsSelected() && !table.getIsAllRowsSelected()
+        }
+        onCheckedChange={(checked) => {
+          console.log('checked: ', checked);
+          console.log(table.getIsAllRowsSelected());
+          table.toggleAllRowsSelected(checked);
+        }}
       />
     ),
     cell: ({ row }) => (
@@ -49,6 +56,16 @@ export const getUserColumns = () => [
   }),
   columnHelper.accessor('email', {
     header: 'Email',
+    cell: ({ getValue }) => {
+      const { user } = useUserStore();
+
+      return (
+        <div className="flex items-center gap-1">
+          {getValue()}
+          {getValue() === user?.email && <Badge variant="outline">You</Badge>}
+        </div>
+      );
+    },
     enableSorting: false,
     size: 220,
   }),
@@ -79,12 +96,9 @@ export const getUserColumns = () => [
     header: 'Type',
     enableSorting: false,
     size: 80,
-    filterFn: (row, id, value: UserMember['type'][]) => {
-      return value.includes(row.getValue(id));
-    },
-    cell: ({ getValue }) => {
-      return <Badge variant="subtle">{getValue()}</Badge>;
-    },
+    cell: ({ getValue }) => <Badge variant="subtle">{getValue()}</Badge>,
+    filterFn: (row, id, value: UserMember['type'][]) =>
+      value.includes(row.getValue(id)),
     meta: { truncate: false },
   }),
   columnHelper.accessor('members', {

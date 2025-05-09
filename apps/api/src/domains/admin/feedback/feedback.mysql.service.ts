@@ -112,43 +112,61 @@ export class FeedbackMySQLService {
       if (fieldKey === 'ids') {
         queryBuilder.andWhere('feedbacks.id IN(:value)', { value });
       } else if (fieldKey === 'searchText') {
-        const stringFields = fields.reduce((prev, field) => {
+        const searchableFields = fields.reduce((prev, field) => {
           if (
-            [FieldFormatEnum.keyword, FieldFormatEnum.text].includes(
-              field.format,
-            )
+            [
+              FieldFormatEnum.keyword,
+              FieldFormatEnum.text,
+              FieldFormatEnum.number,
+              FieldFormatEnum.select,
+              FieldFormatEnum.multiSelect,
+              FieldFormatEnum.date,
+            ].includes(field.format)
           ) {
             prev.push(field);
           }
           return prev;
         }, [] as FieldEntity[]);
 
-        if (stringFields.length > 0) {
+        if (searchableFields.length > 0) {
           queryBuilder.andWhere(
             new Brackets((qb) => {
-              for (let i = 0; i < stringFields.length; i++) {
-                if (stringFields[i].format === FieldFormatEnum.keyword) {
+              for (let i = 0; i < searchableFields.length; i++) {
+                const field = searchableFields[i];
+                const jsonExtractExpression = `JSON_EXTRACT(feedbacks.data, '$."${field.key}"')`;
+
+                if (
+                  field.format === FieldFormatEnum.keyword ||
+                  field.format === FieldFormatEnum.select ||
+                  field.format === FieldFormatEnum.date ||
+                  field.format === FieldFormatEnum.number
+                ) {
                   if (i === 0) {
-                    qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
-                      { value },
-                    );
+                    qb.where(`${jsonExtractExpression} = :value`, { value });
                   } else {
-                    qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') = :value`,
-                      { value },
-                    );
+                    qb.orWhere(`${jsonExtractExpression} = :value`, { value });
                   }
-                } else {
+                } else if (field.format === FieldFormatEnum.text) {
+                  if (i === 0) {
+                    qb.where(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  } else {
+                    qb.orWhere(`${jsonExtractExpression} like :likeValue`, {
+                      likeValue: `%${value as string | number}%`,
+                    });
+                  }
+                } else if (field.format === FieldFormatEnum.multiSelect) {
+                  const jsonValue = JSON.stringify([value]);
                   if (i === 0) {
                     qb.where(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
-                      { likeValue: `%${value as string | number}%` },
+                      `JSON_CONTAINS(${jsonExtractExpression}, :jsonValue)`,
+                      { jsonValue },
                     );
                   } else {
                     qb.orWhere(
-                      `JSON_EXTRACT(feedbacks.data, '$."${stringFields[i].key}"') like :likeValue`,
-                      { likeValue: `%${value as string | number}%` },
+                      `JSON_CONTAINS(${jsonExtractExpression}, :jsonValue)`,
+                      { jsonValue },
                     );
                   }
                 }

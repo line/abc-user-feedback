@@ -13,20 +13,22 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-import { Expose } from 'class-transformer';
+import type { MigrationInterface, QueryRunner } from 'typeorm';
 
-import type { ImageConfigDto } from './image-config.dto';
+export class AddSearchMaxDaysOnChannel1746153314386
+  implements MigrationInterface
+{
+  name = 'AddSearchMaxDaysOnChannel1746153314386';
 
-export class UpdateChannelDto {
-  @Expose()
-  name: string;
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`channels\` ADD \`search_max_days\` int NOT NULL DEFAULT '365'`,
+    );
+  }
 
-  @Expose()
-  description: string | null;
-
-  @Expose()
-  imageConfig: ImageConfigDto | null;
-
-  @Expose()
-  searchMaxDays: number;
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(
+      `ALTER TABLE \`channels\` DROP COLUMN \`search_max_days\``,
+    );
+  }
 }
