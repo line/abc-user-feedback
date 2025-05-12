@@ -47,3 +47,11 @@ export const CREATE_CHANNEL_HELP_TEXT: Record<
   field: <Trans i18nKey="help-card.field" />,
   'field-preview': <Trans i18nKey="help-card.field-preview" />,
 };
+export const CREATE_CHANNEL_REQUIRED_STEP: Record<
+  CreateChannelStepKey,
+  boolean
+> = {
+  'channel-info': true,
+  field: false,
+  'field-preview': false,
+};

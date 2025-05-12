@@ -121,6 +121,7 @@
       "today": "Heute",
       "yesterday": "Gestern",
       "before-days": "{{day, number}} Tagen",
+      "before-years": "{{day, number}} Jahren",
       "last-days": "Letzten {{day, number}} Tagen",
       "date-range-over-max-days": "Anfragezeitraum ist auf {{maxDays}} Tage begrenzt"
     },
@@ -341,8 +342,12 @@
         "member": "Es wurden noch keine Member registriert.",
         "channel": "Es wurde noch kein Channel erstellt.",
         "webhook": "Es wurde noch kein Webhook registriert.",
-        "feedback": "Es wurde noch kein Feedback gesammelt."
+        "feedback": "Es wurde noch kein Feedback gesammelt.",
+        "empty": "Es gibt keine registrierten Daten.",
+        "search": "Keine Ergebnisse gefunden."
       },
+      "required-step": "Dies ist ein Schritt, der ausgefüllt werden muss.",
+      "optional-step": "Dies ist ein Schritt, der optional ausgefüllt werden kann.",
       "create-project": "Project erstellen",
       "create-channel": "Channel erstellen",
       "name": {

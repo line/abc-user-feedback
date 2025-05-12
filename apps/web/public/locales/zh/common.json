@@ -121,6 +121,7 @@
       "today": "今天",
       "yesterday": "昨天",
       "before-days": "{{day, number}}天",
+      "before-years": "{{day, number}}年",
       "last-days": "过去{{days, number}}天",
       "date-range-over-max-days": "查询期限限制为{{maxDays}}天"
     },
@@ -341,8 +342,12 @@
         "member": "尚未注册Member。",
         "channel": "尚未创建Channel。",
         "webhook": "尚未注册Webhook。",
-        "feedback": "尚未收到Feedback。"
+        "feedback": "尚未收到Feedback。",
+        "empty": "没有注册数据。"
       },
+      "search": "未找到结果。",
+      "required-step": "这是必须填写的步骤。",
+      "optional-step": "这是可选择性填写的步骤。",
       "create-project": "创建Project",
       "create-channel": "创建Channel",
       "name": {

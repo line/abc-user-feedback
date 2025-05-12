@@ -19,7 +19,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { useTranslation } from 'next-i18next';
 
 import type { EntityTable } from '@/shared';
 import { BasicTable } from '@/shared';
@@ -35,7 +34,6 @@ interface IProps extends EntityTable<Webhook> {
 const WebhookTable: React.FC<IProps> = (props) => {
   const { isLoading, data, onUpdate, createButton, onClickRow, projectId } =
     props;
-  const { t } = useTranslation();
 
   const columns = useMemo(
     () => getWebhookColumns(projectId, onUpdate),
@@ -54,7 +52,6 @@ const WebhookTable: React.FC<IProps> = (props) => {
     <BasicTable
       isLoading={isLoading}
       table={table}
-      emptyCaption={t('v2.text.no-data.webhook')}
       createButton={createButton}
       onClickRow={onClickRow}
     />

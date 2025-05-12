@@ -48,6 +48,7 @@ import {
 import { CREATE_CHANNEL_MAIN_STEP_LIST } from '../create-channel-type';
 import {
   CREATE_CHANNEL_HELP_TEXT,
+  CREATE_CHANNEL_REQUIRED_STEP,
   CREATE_CHANNEL_STEPPER_TEXT,
 } from '../create-channel.constant';
 
@@ -156,6 +157,7 @@ const CreateChannelInputTemplate: React.FC<IProps> = (props) => {
       disableNextBtn={disableNextBtn ?? isLoading}
       helpText={CREATE_CHANNEL_HELP_TEXT[currentStep.key]}
       onClickBack={onClickBack}
+      isRequiredStep={CREATE_CHANNEL_REQUIRED_STEP[currentStep.key]}
     >
       {children}
     </CreateInputTemplate>

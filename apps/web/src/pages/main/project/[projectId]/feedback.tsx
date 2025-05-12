@@ -397,7 +397,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
         table={table}
         onClickRow={(_, row) => setOpenFeedbackId(row.id as number)}
         isLoading={isLoading}
-        emptyCaption={t('v2.text.no-data.feedback')}
+        isFiltered={queries.length > 0}
         resiable
       />
       <TablePagination table={table} />

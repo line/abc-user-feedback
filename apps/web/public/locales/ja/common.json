@@ -121,6 +121,7 @@
       "today": "今日",
       "yesterday": "昨日",
       "before-days": "{{day, number}}日",
+      "before-years": "{{day, number}}年",
       "last-days": "過去{{day, number}}日",
       "date-range-over-max-days": "照会期間は最大{{maxDays}}日まで入力可能です。"
     },
@@ -341,8 +342,12 @@
         "member": "登録されたMemberがいません。",
         "channel": "作成されたChannelがありません。",
         "webhook": "登録されたWebhookがありません。",
-        "feedback": "登録されたFeedbackありません。"
+        "feedback": "登録されたFeedbackありません。",
+        "empty": "登録されたデータはありません。",
+        "search": "結果は見つかりませんでした。"
       },
+      "required-step": "必須入力が必要なステップです。",
+      "optional-step": "任意で入力可能なステップです。",
       "create-project": "Project作成",
       "create-channel": "Channel作成",
       "name": {

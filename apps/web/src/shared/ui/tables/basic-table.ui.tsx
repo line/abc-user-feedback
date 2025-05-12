@@ -33,6 +33,7 @@ import {
 } from '@dnd-kit/sortable';
 import { flexRender } from '@tanstack/react-table';
 import type { Table as ReactTable } from '@tanstack/react-table';
+import { useTranslation } from 'next-i18next';
 
 import {
   Table,
@@ -53,7 +54,6 @@ import TableResizer from './table-resizer';
 interface IProps<T> {
   table: ReactTable<T>;
   emptyComponent?: React.ReactNode;
-  emptyCaption?: string;
   resiable?: boolean;
   isLoading?: boolean;
   createButton?: React.ReactNode;
@@ -61,19 +61,21 @@ interface IProps<T> {
   onClickRow?: (index: number, row: T) => void;
   reorder?: (data: T[]) => void;
   disableRound?: boolean;
+  isFiltered?: boolean;
 }
 
 const BasicTable = <T,>(props: IProps<T>) => {
   const {
     table,
-    emptyCaption,
     isLoading = false,
     createButton,
     className,
     onClickRow,
     reorder,
     disableRound,
+    isFiltered = false,
   } = props;
+  const { t } = useTranslation();
 
   const { rows } = table.getRowModel();
 
@@ -168,16 +170,31 @@ const BasicTable = <T,>(props: IProps<T>) => {
               <TableRow className="hover:bg-inherit">
                 <TableCell colSpan={table.getFlatHeaders().length}>
                   <div className="my-10 flex flex-col items-center justify-center gap-4 [&>button]:min-w-[120px]">
-                    <Image
-                      width={200}
-                      height={200}
-                      src="/assets/images/empty-image.png"
-                      alt="empty image"
-                    />
-                    <p className="text-small text-neutral-tertiary">
-                      {emptyCaption}
-                    </p>
-                    {createButton}
+                    {isFiltered ?
+                      <>
+                        <Image
+                          width={200}
+                          height={200}
+                          src="/assets/images/no-data-with-search.svg"
+                          alt="empty image"
+                        />
+                        <p className="text-small text-neutral-tertiary">
+                          {t('v2.text.no-data.search')}
+                        </p>
+                      </>
+                    : <>
+                        <Image
+                          width={200}
+                          height={200}
+                          src="/assets/images/no-data.svg"
+                          alt="empty image"
+                        />
+                        <p className="text-small text-neutral-tertiary">
+                          {t('v2.text.no-data.empty')}
+                        </p>
+                        {createButton}
+                      </>
+                    }
                   </div>
                 </TableCell>
               </TableRow>
