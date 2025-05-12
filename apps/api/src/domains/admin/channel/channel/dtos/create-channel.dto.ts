@@ -33,6 +33,9 @@ export class CreateChannelDto {
   imageConfig: ImageConfigDto | null;
 
   @Expose()
+  searchMaxDays: number;
+
+  @Expose()
   @Type(() => CreateFieldDto)
   fields: CreateFieldDto[];
 
@@ -48,6 +51,7 @@ export class CreateChannelDto {
       params.description,
       params.projectId,
       params.imageConfig,
+      params.searchMaxDays,
     );
   }
 }

@@ -40,6 +40,7 @@ import { ChannelController } from './channel.controller';
 import { FeedbackController } from './feedback.controller';
 import { IssueController } from './issue.controller';
 import { ProjectController } from './project.controller';
+import { FeedbackV2Controller } from './v2/feedback.controller';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { ProjectController } from './project.controller';
   ],
   controllers: [
     FeedbackController,
+    FeedbackV2Controller,
     IssueController,
     APIController,
     ChannelController,
