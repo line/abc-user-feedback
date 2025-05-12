@@ -27,6 +27,9 @@ import {
   ComboboxSelectItem,
   ComboboxTrigger,
   Icon,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@ufb/react';
 
 import { DateRangePicker, parseAsDateRange } from '@/shared';
@@ -138,7 +141,6 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
     },
   ];
 
-  const currentDate = dayjs().format('YYYY-MM-DD HH:mm');
   const viewCount = useMemo(
     () =>
       viewItems.reduce(
@@ -150,19 +152,22 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 
   return (
     <div className="flex flex-col gap-5 pb-14">
-      <div className="flex items-center justify-between">
-        <span className="text-neutral-tertiary ml-2 flex items-center gap-1">
-          <Icon name="RiRefreshLine" size={12} />
-          Updated: {currentDate}
-        </span>
+      <div className="flex items-center justify-end">
         <div className="flex items-center gap-2">
-          <DateRangePicker
-            value={dateRange}
-            onChange={onChangeDateRange}
-            maxDate={dayjs().subtract(1, 'day').toDate()}
-            options={options}
-            maxDays={365}
-          />
+          <Tooltip>
+            <TooltipTrigger>
+              <DateRangePicker
+                value={dateRange}
+                onChange={onChangeDateRange}
+                maxDate={dayjs().subtract(1, 'day').toDate()}
+                options={options}
+                maxDays={365}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              {t('tooltip.dashboard-date-picker-button')}
+            </TooltipContent>
+          </Tooltip>
           <Combobox>
             <ComboboxTrigger>
               <Icon name="RiEyeLine" />
@@ -233,8 +238,19 @@ const DashboardPage: NextPageWithLayout<IProps> = ({ projectId }) => {
 };
 
 DashboardPage.getLayout = (page: React.ReactElement<IProps>) => {
+  const currentDate = dayjs().format('YYYY-MM-DD HH:mm');
+
   return (
-    <Layout projectId={page.props.projectId} title="Dashboard">
+    <Layout
+      projectId={page.props.projectId}
+      title="Dashboard"
+      extra={
+        <span className="text-neutral-tertiary text-small-normal flex items-center gap-1">
+          <Icon name="RiRefreshLine" size={12} />
+          Updated: {currentDate}
+        </span>
+      }
+    >
       <ProjectGuard projectId={page.props.projectId}>{page}</ProjectGuard>
     </Layout>
   );

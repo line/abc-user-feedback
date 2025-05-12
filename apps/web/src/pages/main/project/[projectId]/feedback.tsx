@@ -35,10 +35,10 @@ import {
   Badge,
   Button,
   Icon,
-  Tabs,
-  TabsList,
-  TabsTrigger,
   toast,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
 } from '@ufb/react';
 
 import type { TableFilterField } from '@/shared';
@@ -57,6 +57,7 @@ import {
 import type { NextPageWithLayout } from '@/shared/types';
 import {
   FeedbackDetailSheet,
+  FeedbackTableChannelSelection,
   FeedbackTableDownload,
   FeedbackTableExpand,
   FeedbackTableViewOptions,
@@ -169,7 +170,7 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
             key: 'issueIds',
             format: 'issue',
             name: field.name,
-            matchType: ['CONTAINS', 'IS'],
+            matchType: ['IS', 'CONTAINS'],
             visible: true,
           };
         }
@@ -333,31 +334,14 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <div className="flex justify-between gap-2">
-        <Tabs
-          value={String(currentChannelId)}
-          onValueChange={(v) => setCurrentChannelId(Number(v))}
-          className="overflow-auto"
-        >
-          <TabsList>
-            {data?.items.length === 0 ?
-              <TabsTrigger value="-1">
-                {t('v2.text.no-data.channel')}
-              </TabsTrigger>
-            : data?.items.map((channel) => (
-                <TabsTrigger key={channel.id} value={String(channel.id)}>
-                  {channel.name}
-                  {currentChannelId === channel.id && (
-                    <span className="ml-1 font-bold">
-                      {feedbackData?.meta.totalItems}
-                    </span>
-                  )}
-                </TabsTrigger>
-              ))
-            }
-          </TabsList>
-        </Tabs>
-        <div className="flex gap-2 [&>button]:min-w-20">
+      <div className="flex flex-shrink justify-between gap-2">
+        <FeedbackTableChannelSelection
+          channels={data?.items ?? []}
+          currentChannelId={currentChannelId}
+          setCurrentChannelId={setCurrentChannelId}
+          totalItems={feedbackData?.meta.totalItems ?? 0}
+        />
+        <div className="flex flex-shrink-0 gap-2 [&>button]:min-w-20 [&>button]:flex-shrink-0">
           {selectedRowIds.length > 0 && (
             <Button
               variant="outline"
@@ -372,12 +356,19 @@ const FeedbackManagementPage: NextPageWithLayout<IProps> = (props) => {
               </Badge>
             </Button>
           )}
-          <DateRangePicker
-            onChange={updateDateRage}
-            value={dateRange}
-            maxDate={new Date()}
-            maxDays={env.NEXT_PUBLIC_MAX_DAYS}
-          />
+          <Tooltip>
+            <TooltipTrigger>
+              <DateRangePicker
+                onChange={updateDateRage}
+                value={dateRange}
+                maxDate={new Date()}
+                maxDays={env.NEXT_PUBLIC_MAX_DAYS}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              {t('tooltip.feedback-date-picker-button')}
+            </TooltipContent>
+          </Tooltip>
           <TableFilterPopover
             filterFields={filterFields.filter(
               (v) =>

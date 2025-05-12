@@ -203,7 +203,10 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "与此问题相关的反馈数量。"
+    "issue-feedback-count": "与此问题相关的反馈数量。",
+    "feedback-date-picker-button": "根据反馈生成的日期搜索数据。",
+    "issue-date-picker-button": "根据问题生成的日期搜索数据。",
+    "dashboard-date-picker-button": "根据反馈生成或问题注册日期搜索数据。"
   },
   "tenant-setting-menu": {
     "tenant-info": "租户信息",

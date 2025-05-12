@@ -13,18 +13,36 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
+import { useState } from 'react';
 import { useTranslation } from 'next-i18next';
 
-import { ISSUES, Path, SimpleBarChart, useOAIQuery } from '@/shared';
+import { ToggleGroup, ToggleGroupItem } from '@ufb/react';
+
+import {
+  ISSUES,
+  Path,
+  SimpleBarChart,
+  SimplePieChart,
+  useOAIQuery,
+} from '@/shared';
+import type { IssueStatus } from '@/entities/issue';
 
 interface IProps {
   projectId: number;
   from: Date;
   to: Date;
 }
+const COLOR_MAP: Record<IssueStatus, string> = {
+  INIT: '#EAB308',
+  IN_PROGRESS: '#0EA5E9',
+  ON_REVIEW: '#22C55E',
+  PENDING: '#6366F1',
+  RESOLVED: '#71717A',
+};
 
 const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
   const { t } = useTranslation();
+  const [type, setType] = useState('bar');
 
   const { data } = useOAIQuery({
     path: '/api/admin/statistics/issue/count-by-status',
@@ -38,28 +56,102 @@ const IssueBarChart: React.FC<IProps> = ({ projectId }) => {
   });
 
   return (
-    <SimpleBarChart
-      data={ISSUES(t).map(({ key, name }) => ({
-        name,
-        value: +(data?.statistics.find((v) => v.status === key)?.count ?? 0),
-      }))}
-      title={t('chart.issue-status-count.title')}
-      description={t('chart.issue-status-count.description')}
-      height={415}
-      onClick={(data) => {
-        if (!data) return;
-        const issue = ISSUES(t).find((v) => v.name === data.name);
-        window.open(
-          Path.ISSUE.replace('[projectId]', projectId.toString()) +
-            '?queries=' +
-            JSON.stringify([
-              { key: 'status', value: issue?.key, condition: 'IS' },
-            ]),
-          '_blank',
-        );
-      }}
-    />
+    <>
+      {type === 'pie' && (
+        <SimplePieChart
+          data={ISSUES(t).map(({ key, name }) => ({
+            name,
+            value: +(
+              data?.statistics.find((v) => v.status === key)?.count ?? 0
+            ),
+            color: COLOR_MAP[key],
+          }))}
+          title={t('chart.issue-status-count.title')}
+          description={t('chart.issue-status-count.description')}
+          height={415}
+          filterContent={
+            <ToggleGroup type="single" value={type} onValueChange={setType}>
+              <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
+              <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
+            </ToggleGroup>
+          }
+          onClick={(data) => {
+            if (!data) return;
+            const issue = ISSUES(t).find((v) => v.name === data.name);
+            window.open(
+              Path.ISSUE.replace('[projectId]', projectId.toString()) +
+                '?queries=' +
+                JSON.stringify([
+                  { key: 'status', value: issue?.key, condition: 'IS' },
+                ]),
+              '_blank',
+            );
+          }}
+        />
+      )}
+      {type === 'bar' && (
+        <SimpleBarChart
+          data={ISSUES(t).map(({ key, name }) => ({
+            name,
+            value: +(
+              data?.statistics.find((v) => v.status === key)?.count ?? 0
+            ),
+            color: COLOR_MAP[key],
+          }))}
+          title={t('chart.issue-status-count.title')}
+          description={t('chart.issue-status-count.description')}
+          height={415}
+          filterContent={
+            <ToggleGroup type="single" value={type} onValueChange={setType}>
+              <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
+              <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
+            </ToggleGroup>
+          }
+          onClick={(data) => {
+            if (!data) return;
+            const issue = ISSUES(t).find((v) => v.name === data.name);
+            window.open(
+              Path.ISSUE.replace('[projectId]', projectId.toString()) +
+                '?queries=' +
+                JSON.stringify([
+                  { key: 'status', value: issue?.key, condition: 'IS' },
+                ]),
+              '_blank',
+            );
+          }}
+        />
+      )}
+    </>
   );
+  // return (
+  //   <SimpleBarChart
+  //     data={ISSUES(t).map(({ key, name }) => ({
+  //       name,
+  //       value: +(data?.statistics.find((v) => v.status === key)?.count ?? 0),
+  //     }))}
+  //     title={t('chart.issue-status-count.title')}
+  //     description={t('chart.issue-status-count.description')}
+  //     height={415}
+  //     filterContent={
+  //       <ToggleGroup type="single" value={type} onValueChange={setType}>
+  //         <ToggleGroupItem value="bar">Bar</ToggleGroupItem>
+  //         <ToggleGroupItem value="pie">Pie</ToggleGroupItem>
+  //       </ToggleGroup>
+  //     }
+  //     onClick={(data) => {
+  //       if (!data) return;
+  //       const issue = ISSUES(t).find((v) => v.name === data.name);
+  //       window.open(
+  //         Path.ISSUE.replace('[projectId]', projectId.toString()) +
+  //           '?queries=' +
+  //           JSON.stringify([
+  //             { key: 'status', value: issue?.key, condition: 'IS' },
+  //           ]),
+  //         '_blank',
+  //       );
+  //     }}
+  //   />
+  // );
 };
 
 export default IssueBarChart;

@@ -17,6 +17,7 @@ import {
   Bar,
   BarChart,
   CartesianGrid,
+  Cell,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -28,6 +29,7 @@ import ChartCard from './chart-card';
 interface Data {
   name: string;
   value: number;
+  color: string;
 }
 
 interface IProps {
@@ -37,12 +39,26 @@ interface IProps {
   data: Data[];
   showLegend?: boolean;
   onClick?: (data?: Data) => void;
+  filterContent?: React.ReactNode;
 }
 
 const SimpleBarChart: React.FC<IProps> = (props) => {
-  const { data, title, description, height, showLegend, onClick } = props;
+  const {
+    data,
+    title,
+    description,
+    height,
+    showLegend,
+    onClick,
+    filterContent,
+  } = props;
   return (
-    <ChartCard description={description} title={title} showLegend={showLegend}>
+    <ChartCard
+      description={description}
+      title={title}
+      showLegend={showLegend}
+      filterContent={filterContent}
+    >
       <ResponsiveContainer width="100%" height={height ? height - 72 : '100%'}>
         <BarChart
           width={500}
@@ -63,14 +79,16 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
             cursor={{ fill: 'var(--fg-neutral-tertiary)' }}
             content={({ payload }) => (
               <div className="bg-neutral-primary border-neutral-tertiary max-w-[240px] rounded border px-4 py-3 shadow-lg">
-                {payload?.map(({ color, value, payload }, i) => (
+                {payload?.map(({ value, payload }, i) => (
                   <div
                     key={i}
                     className="text-neutral-secondary text-small-normal flex items-center justify-between gap-4"
                   >
                     <div className="flex items-center gap-2">
                       <div
-                        style={{ background: color }}
+                        style={{
+                          backgroundColor: (payload as { color: string }).color,
+                        }}
                         className="h-2 w-2 flex-shrink-0 rounded-full"
                       />
                       <p className="text-small-normal break-all">
@@ -94,7 +112,11 @@ const SimpleBarChart: React.FC<IProps> = (props) => {
             tickLine={false}
             axisLine={false}
           />
-          <Bar dataKey="value" fill="var(--sky400)" radius={[8, 8, 0, 0]} />
+          <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </ChartCard>

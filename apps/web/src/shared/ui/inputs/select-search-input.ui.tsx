@@ -79,6 +79,10 @@ const SelectSearchInput: React.FC<Props> = (props) => {
     setCurrentOption(option);
   }, [value]);
 
+  const currentOptions = options.filter(
+    (option) => option.value !== currentOption?.value,
+  );
+
   return (
     <InputField>
       {label && (
@@ -99,24 +103,51 @@ const SelectSearchInput: React.FC<Props> = (props) => {
           />
           <ComboboxList maxHeight="200px">
             <ComboboxEmpty>No results found.</ComboboxEmpty>
-            <ComboboxGroup>
-              {options.map((option) => (
+            {(currentOption?.label ?? value) && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    Selected
+                  </span>
+                }
+              >
                 <ComboboxSelectItem
-                  key={option.value}
-                  value={option.value}
-                  checked={option.value === value}
+                  value={currentOption?.label ?? value ?? undefined}
                   onSelect={() => {
-                    const newValue =
-                      option.value === value ? undefined : option.value;
-                    setCurrentOption(option);
-                    onChange?.(newValue);
-                    setOpen(false);
+                    onChange?.(undefined);
+                    setCurrentOption(undefined);
                   }}
+                  checked
                 >
-                  {option.label}
+                  {currentOption?.label ?? value}
                 </ComboboxSelectItem>
-              ))}
-            </ComboboxGroup>
+              </ComboboxGroup>
+            )}
+            {currentOptions.length > 0 && (
+              <ComboboxGroup
+                heading={
+                  <span className="text-neutral-tertiary text-base-normal">
+                    List
+                  </span>
+                }
+              >
+                {currentOptions.map((option) => (
+                  <ComboboxSelectItem
+                    key={option.value}
+                    value={option.value}
+                    checked={option.value === value}
+                    onSelect={() => {
+                      const newValue =
+                        option.value === value ? undefined : option.value;
+                      setCurrentOption(option);
+                      onChange?.(newValue);
+                    }}
+                  >
+                    {option.label}
+                  </ComboboxSelectItem>
+                ))}
+              </ComboboxGroup>
+            )}
             <InfiniteScrollArea
               hasNextPage={hasNextPage}
               fetchNextPage={fetchNextPage}

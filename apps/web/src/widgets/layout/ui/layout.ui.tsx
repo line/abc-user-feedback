@@ -21,18 +21,22 @@ import Header from './header.ui';
 interface IProps extends React.PropsWithChildren {
   projectId?: number;
   title: string;
+  extra?: React.ReactNode;
   isHeightDynamic?: boolean;
 }
 
 const Layout: React.FC<IProps> = (props) => {
-  const { children, projectId, title, isHeightDynamic } = props;
+  const { children, projectId, title, isHeightDynamic, extra } = props;
 
   return (
     <>
       <Header projectId={projectId} />
-      <main className="p-5">
-        <div className="mb-3 h-12 px-6">
-          <h1 className="text-title-h3">{title}</h1>
+      <main className="flex flex-col gap-3 p-5">
+        <div className="h-10">
+          <div className="flex h-8 items-center gap-3 px-3">
+            <h1 className="text-title-h3">{title}</h1>
+            {extra}
+          </div>
         </div>
         <div
           className={cn({

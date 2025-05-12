@@ -203,7 +203,10 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。"
+    "issue-feedback-count": "該当イシューに登録されたフィードバック数です。",
+    "feedback-date-picker-button": "フィードバック生成の日付に基づいてデータを検索します。",
+    "issue-date-picker-button": "イシュー生成の日付に基づいてデータを検索します。",
+    "dashboard-date-picker-button": "フィードバックの生成または発行登録日に基づいてデータを検索します。"
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant情報",

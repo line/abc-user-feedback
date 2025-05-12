@@ -203,7 +203,10 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Anzahl des Feedbacks, das mit diesem Problem verbunden ist."
+    "issue-feedback-count": "Anzahl des Feedbacks, das mit diesem Problem verbunden ist.",
+    "feedback-date-picker-button": "Suche nach Daten basierend auf dem Feedback-Erzeugungsdatum.",
+    "issue-date-picker-button": "Suche nach Daten basierend auf dem Problem-Erzeugungsdatum.",
+    "dashboard-date-picker-button": "Suchen Sie Daten basierend auf dem Feedback-Generation oder Ausgabe Registrierungsdatum."
   },
   "tenant-setting-menu": {
     "tenant-info": "Mandanten-Informationen",

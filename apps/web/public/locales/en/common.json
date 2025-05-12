@@ -203,7 +203,10 @@
     }
   },
   "tooltip": {
-    "issue-feedback-count": "Count of feedback associated with this issue."
+    "issue-feedback-count": "Count of feedback associated with this issue.",
+    "feedback-date-picker-button": "Search data based on the feedback generation date.",
+    "issue-date-picker-button": "Search data based on the issue registration date.",
+    "dashboard-date-picker-button": "Search data based on the feedback generation or issue registration date."
   },
   "tenant-setting-menu": {
     "tenant-info": "Tenant Information",
