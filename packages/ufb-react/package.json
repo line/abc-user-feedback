@@ -32,7 +32,7 @@
     "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "date-fns": "^4.0.0",
-    "lucide-react": "^0.509.0",
+    "lucide-react": "^0.510.0",
     "react-day-picker": "8.10.1",
     "sonner": "^2.0.0",
     "tailwind-merge": "^3.0.0"
